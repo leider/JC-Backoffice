@@ -1,0 +1,85 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+include eintrittspreise
+include kontakt
+  
+block title
+  | Veranstaltung
+
+block content
+  form#veranstaltungform(action='/veranstaltungen/submit', method='post')
+    +csrf
+    if (veranstaltung.id())
+      +hidden('id', veranstaltung.id())
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Veranstaltung <br>
+              if (veranstaltung.id())
+                small Bearbeiten
+              else
+                small Neu anlegen
+      .row
+        .col-md-6
+          legend
+            a(data-toggle='collapse' href='#event') Event
+          #event.collapse.in
+            .row
+              .col-sm-6
+                +text('titel', 'Titel/Künstler', veranstaltung.titel(), 'Titel für die Veranstaltung')
+              .col-sm-6
+                .form-group
+                  +controlLabel('url', 'URL / VA-ID', 'Eindeutig für die Veranstaltung')
+                  input.form-control#url(type='text', name='url', value=veranstaltung.url())
+            .row
+              .col-sm-6
+                .form-group
+                  label.control-label(for='ort') Ort:
+                  select#ort.form-control(name='ort')
+                    for ort in optionen.orte()
+                      option(value=ort, selected = (veranstaltung.ort() !== undefined && veranstaltung.ort() === ort)) #{ort}
+              .col-sm-6
+                .form-group
+                  label.control-label(for='eventTyp') Typ:
+                  select#eventTyp.form-control(name='eventTyp')
+                    for eventType in optionen.typen()
+                      option(value=eventType, selected = (veranstaltung.eventType() !== undefined && veranstaltung.eventType() === eventType)) #{eventType}
+            .row
+              .col-sm-6
+                .form-group
+                  label.control-label(for='ort') Kooperation:
+                  select#koop.form-control(name='koop')
+                    for koop in optionen.kooperationen()
+                      option(value=koop, selected = (veranstaltung.kooperation() !== undefined && veranstaltung.kooperation() === koop)) #{koop}
+              .col-sm-6
+                .form-group
+                  label.control-label(for='verantwortlicher') Verantwortlicher:
+                  select#verantwortlicher.form-control(name='verantwortlicher')
+                    for verantwortlicher in optionen.verantwortliche()
+                      option(value=verantwortlicher, selected = (veranstaltung.verantwortlicher() !== undefined && veranstaltung.verantwortlicher() === verantwortlicher)) #{verantwortlicher}
+            .row
+              .col-xs-6()
+                .col-xs-6(style='padding-left:0px;padding-right:3px')
+                  +date('startDate', 'Anfang', veranstaltung.startMoment().format('L'), 'Startzeitpunkt')
+                .col-xs-6(style='padding-left:3px;padding-right:0px')
+                  +time('startTime', veranstaltung.startMoment().format('LT'))
+              .col-xs-6()
+                .col-xs-6(style='padding-left:0px;padding-right:3px')
+                  +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende')
+                #dates.col-xs-6(style='padding-left:3px;padding-right:0px')
+                  +time('endTime', veranstaltung.endMoment().format('LT'))
+            +textarea('description', 'Kommentar', veranstaltung.beschreibung())
+        .col-md-6
+          +preise(veranstaltung)
+          +kontakt(veranstaltung, optionen, 'Kontakt', 'kontakt')
+
+      .row
+        .col-md-12
+          hr
+          +submitButtons()
+block scripts
+  +preiseScript
+  script(src='/clientscripts/activityDateModel.js')
+  script(src='/clientscripts/activityform-dateAdapter.js')

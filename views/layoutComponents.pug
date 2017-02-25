@@ -1,0 +1,52 @@
+mixin loginMenu(forInline)
+  li.dropdown(class=forInline ? 'visible-xs' : '')
+    a(href='#')
+      i.fa.fa-info-circle.fa-fw &nbsp;
+      if accessrights.isRegistered()
+        | #{user.member.nickname()}
+      else 
+        | #{t('general.guest')}
+    ul.dropdown-menu
+      if accessrights.isRegistered()
+        li: a(href='/members/edit/' + encodeURIComponent(user.member.nickname()))
+          i.fa.fa-edit.fa-fw
+          | &nbsp;#{t('members.edit')}
+        li: a(href='/auth/logout')
+          i.fa.fa-sign-out.fa-fw
+          | &nbsp;#{t('general.logout')}
+        li: a(href='/mailsender/resign/' + encodeURIComponent(user.member.nickname()))
+          i.fa.fa-ban.fa-fw
+          | &nbsp;#{t('members.resign')}
+      else
+        li: a(data-toggle='modal', data-target='#login', href='/loginDialog?returnUrl=' + encodeURIComponent(currentUrl ||  '/'))
+          i.fa.fa-sign-in.fa-fw
+          | &nbsp;#{t('general.login')}
+
+mixin notificationsBlock(notificationmessage)
+  -notificationmessage.kill()
+  -var contents = notificationmessage.contents()
+  #notifications(class='alert alert-block hidden-print ' + contents.type)
+    button.close(type='button', data-dismiss='alert') &times;
+    h4 #{t(contents.title)}
+    | #{t(contents.text, contents.additionalArguments)}
+
+mixin topNavbar(xs)
+  .navbar-header
+    a.navbar-brand(href='/')
+      img(src='/img/logo_weiss.png', alt='Jazzclub')
+    a.btn.btn-default.navbar-toggle(data-toggle='collapse', data-target='.collapse-top')
+      span.sr-only Toggle
+      i.fa.fa-bars.fa-lg
+
+  .navbar-collapse.collapse.collapse-top
+    ul.nav.navbar-nav.bottom
+      li(data-jcnav='veranstaltungen')
+        a(href='#')
+          i.fa.fa-calendar.fa-fw
+          span.hidden-sm &nbsp;Veranstaltungen&nbsp;
+        ul.dropdown-menu
+          li
+            a(href='/veranstaltungen/2017') 2017
+            a(href='/veranstaltungen/2016') 2016
+      
+

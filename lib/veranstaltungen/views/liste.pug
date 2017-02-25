@@ -1,0 +1,19 @@
+extends ../../../views/layout
+
+block title
+  | Veranstaltungen
+
+block content
+  .row
+    .col-md-12
+      .page-header
+        .btn-group.pull-right
+          a.btn.btn-default(href='/veranstaltungen/' + jahr + '/new', title='Neu'): i.fa.fa-file-o.fa-fw
+        h2 Veranstaltungen <br>
+          small #{jahr}
+      dl.dl-horizontal
+        for veranstaltung in veranstaltungen
+          dt
+            | #{veranstaltung.startMoment().format('ddd ll')}
+          dd
+            a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.titel()} im #{veranstaltung.ort()}

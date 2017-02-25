@@ -1,0 +1,21 @@
+include ../../../views/formComponents
+
+mixin kontakt(veranstaltung, optionen, labelForLegend, name)
+  legend
+    a(data-toggle='collapse' href='#' + name) #{labelForLegend}
+  .collapse.in(id=name)
+    .row
+      .col-sm-6
+        .form-group
+          label.control-label(for='auswahl') Auswahl:
+          select#auswahl.form-control(name=name + '[auswahl]')
+            for kontakt in optionen.kontakte()
+              option(value=kontakt.name, selected = (veranstaltung[name]() !== undefined && veranstaltung[name]().auswahl() === kontakt.auswahl)) #{kontakt.auswahl}
+      .col-sm-6
+        +text(name + '[name]', 'Name', veranstaltung[name]().name())
+    .row
+      .col-sm-6
+        +text(name + '[telefon]', 'Telefon', veranstaltung[name]().telefon())
+        +text(name + '[email]', 'E-Mail', veranstaltung[name]().email())
+      .col-sm-6
+        +textareaPure(name+ '[adresse]', 'Adresse', 'A Dress E')

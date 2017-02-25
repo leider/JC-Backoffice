@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /clientscripts/
+Disallow: /fonts/
+Disallow: /images/
+Disallow: /img/
+Disallow: /stylesheets/
+Disallow: /activities/
+Disallow: /auth/
+Disallow: /language/
+Disallow: /loginDialog/

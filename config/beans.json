@@ -1,0 +1,24 @@
+{
+  "veranstaltungenApp": {"module": "./lib/veranstaltungen"},
+  "veranstaltungenstore": {"module": "./lib/veranstaltungen/veranstaltungenstore"},
+  "veranstaltungenService": {"module": "./lib/veranstaltungen/veranstaltungenService"},
+  "veranstaltung": {"module": "./lib/veranstaltungen/veranstaltung"},
+  "eintrittspreise": {"module": "./lib/veranstaltungen/eintrittspreise"},
+  "kontakt": {"module": "./lib/veranstaltungen/kontakt"},
+  "optionValues": {"module": "./lib/veranstaltungen/optionValues"},
+
+  "siteApp": {"module": "./lib/site"},
+
+  "renderer": {"module": "./lib/commons/renderer"},
+
+  "addCsrfTokenToLocals": {"module": "./lib/middleware/addCsrfTokenToLocals"},
+  "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
+  "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
+  "misc": {"module": "./lib/commons/misc"},
+  "handle404": {"module": "./lib/middleware/handle404"},
+  "handle500": {"module": "./lib/middleware/handle500"},
+  "veranstaltungenPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "veranstaltungenstore" }
+  }
+}
