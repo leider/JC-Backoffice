@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     'public/clientscripts/global.js': [
       'node_modules/jquery/dist/jquery.js',
       'node_modules/select2/dist/js/select2.js',
-      'node_modules/autonumeric/dist/autonumeric.js',
+      'node_modules/autonumeric/dist/autoNumeric.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
       'node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
       'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
