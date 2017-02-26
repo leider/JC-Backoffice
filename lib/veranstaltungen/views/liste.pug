@@ -8,9 +8,9 @@ block content
     .col-md-12
       .page-header
         .btn-group.pull-right
-          a.btn.btn-default(href='/veranstaltungen/' + jahr + '/new', title='Neu'): i.fa.fa-file-o.fa-fw
+          a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw
         h2 Veranstaltungen <br>
-          small #{jahr}
+          small #{titel}
       dl.dl-horizontal
         for veranstaltung in veranstaltungen
           dt
