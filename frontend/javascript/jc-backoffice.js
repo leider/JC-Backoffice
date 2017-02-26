@@ -1,4 +1,4 @@
-/*global URI, moment*/
+/*global URI*/
 
 
 (function () {

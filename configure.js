@@ -1,3 +1,4 @@
+'use strict';
 process.chdir(__dirname);
 const Beans = require('CoolBeans');
 const conf = require('simple-configure');

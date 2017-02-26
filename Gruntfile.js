@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function (grunt) {
   /*eslint camelcase: 0*/
 
@@ -122,7 +123,7 @@ module.exports = function (grunt) {
     },
     eslint: {
       options: {quiet: true},
-      target: ['**/*.js']
+      target: ['./**/*.js']
     },
     karma: {
       options: {
@@ -226,7 +227,7 @@ module.exports = function (grunt) {
           requireLowerCaseTags: true,
           requireStrictEqualityOperators: true,
           validateAttributeQuoteMarks: '\'',
-          validateAttributeSeparator: ', '
+          validateAttributeSeparator: { 'separator': ', ', 'multiLineSeparator': ',\n  ' }
         },
         src: ['**/*.pug']
       }

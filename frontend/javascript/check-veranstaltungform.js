@@ -1,4 +1,4 @@
-/*global veranstaltungDateModel, endMustBeAfterBegin, urlIsNotAvailable */
+/*global veranstaltungDateModel*/
 
 // THE ORIGINAL OF THIS FILE IS IN frontend/javascript
 
