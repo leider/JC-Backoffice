@@ -1,0 +1,28 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+  
+block title
+  | Optionen
+
+block content
+  form#optionenform(action='/optionen/submit', method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Optionen <br>
+              small Bearbeiten
+      .row
+        .col-md-6
+          +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
+          +editableMultiselect('orte', 'Orte', optionen.orte(), optionen.orte())
+        .col-md-6
+          +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
+          +editableMultiselect('verantwortliche', 'Verantwortliche', optionen.verantwortliche(), optionen.verantwortliche())
+
+      .row
+        .col-md-12
+          hr
+          +submitButtons()

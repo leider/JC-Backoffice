@@ -74,6 +74,7 @@ module.exports = {
     app.use(beans.get('addCsrfTokenToLocals'));
 
     app.use('/', beans.get('siteApp'));
+    useApp(app, 'optionen', beans.get('optionenApp'));
     useApp(app, 'veranstaltungen', beans.get('veranstaltungenApp'));
 
     app.use(beans.get('handle404')());

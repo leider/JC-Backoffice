@@ -63,7 +63,7 @@ block content
             .row
               .col-xs-6()
                 .col-xs-6(style='padding-left:0px;padding-right:3px')
-                  +date('startDate', 'Anfang', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
+                  +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
                 .col-xs-6(style='padding-left:3px;padding-right:0px')
                   +time('startTime', veranstaltung.startMoment().format('LT'))
               .col-xs-6()
@@ -82,6 +82,7 @@ block content
           +submitButtons()
 block scripts
   +preiseScript
+  +kontaktScript('kontakt')
   script(src='/clientscripts/veranstaltungDateModel.js')
   script(src='/clientscripts/veranstaltungform-dateAdapter.js')
   script(src='/clientscripts/check-veranstaltungform.js')

@@ -5,7 +5,10 @@
   "veranstaltung": {"module": "./lib/veranstaltungen/veranstaltung"},
   "eintrittspreise": {"module": "./lib/veranstaltungen/eintrittspreise"},
   "kontakt": {"module": "./lib/veranstaltungen/kontakt"},
-  "optionValues": {"module": "./lib/veranstaltungen/optionValues"},
+  "optionenApp": {"module": "./lib/optionen"},
+  "optionValues": {"module": "./lib/optionen/optionValues"},
+  "optionenService": {"module": "./lib/optionen/optionenService"},
+  "optionenstore": {"module": "./lib/optionen/optionenstore"},
 
   "siteApp": {"module": "./lib/site"},
 
@@ -20,5 +23,9 @@
   "veranstaltungenPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "veranstaltungenstore" }
+  },
+  "optionenPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "optionenstore" }
   }
 }

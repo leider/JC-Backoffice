@@ -8,14 +8,40 @@ mixin kontakt(veranstaltung, optionen, labelForLegend, name)
       .col-sm-6
         .form-group
           label.control-label(for='auswahl') Auswahl:
-          select#auswahl.form-control(name=name + '[auswahl]')
+          select.form-control(name=name + '[auswahl]', id=name + '[auswahl]')
             for kontakt in optionen.kontakte()
-              option(value=kontakt.name, selected = (veranstaltung[name]() !== undefined && veranstaltung[name]().auswahl() === kontakt.auswahl)) #{kontakt.auswahl}
+              option(value=kontakt.name, selected = (veranstaltung[name]() !== undefined && veranstaltung[name]().name() === kontakt.name)) #{kontakt.name}
       .col-sm-6
         +text(name + '[name]', 'Name', veranstaltung[name]().name())
     .row
       .col-sm-6
+        +text(name + '[ansprechpartner]', 'Ansprechpartner', veranstaltung[name]().ansprechpartner())
         +text(name + '[telefon]', 'Telefon', veranstaltung[name]().telefon())
         +text(name + '[email]', 'E-Mail', veranstaltung[name]().email())
       .col-sm-6
         +textareaPure(name+ '[adresse]', 'Adresse', 'A Dress E')
+
+mixin kontaktScript(name)
+  script.
+    var auswahl = $('##{name}\\[auswahl\\]');
+    var nameText = $('##{name}\\[name\\]');
+    var ansprechpartnerText = $('##{name}\\[ansprechpartner\\]');
+    var telefonText = $('##{name}\\[telefon\\]');
+    var emailText = $('##{name}\\[email\\]');
+    var adresseText = $('##{name}\\[adresse\\]');
+
+    function updateForAuswahl() {
+      $.ajax('/optionen/#{name}ForAuswahl', {data: {auswahl: auswahl.val()}})
+       .done(function (result) {
+         if (result) {
+           nameText.val(result.name);
+           ansprechpartnerText.val(result.ansprechpartner);
+           telefonText.val(result.telefon);
+           emailText.val(result.email);
+           adresseText.val(result.adresse);
+         }
+       })
+    }
+
+    auswahl.change(updateForAuswahl);
+    

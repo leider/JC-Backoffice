@@ -8,18 +8,18 @@ mixin preise(veranstaltung)
       .col-xs-4
         +currency('eintrittspreise[regulaer]', 'Eintritt', veranstaltung.eintrittspreise().regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
       .col-xs-4
-        +currency('eintrittspreise[rabattErmaessigt]', 'Rabatt ermäßigt', veranstaltung.eintrittspreise().rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', veranstaltung.eintrittspreise().standardRabattErmaessigt() + ',00 €')
+        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', veranstaltung.eintrittspreise().rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', veranstaltung.eintrittspreise().standardRabattErmaessigt() + ',00 €')
       .col-xs-4
-        +currency('eintrittspreise[rabattMitglied]', 'Rabatt Mitglied', veranstaltung.eintrittspreise().rabattMitglied(), 'Die Reduktion für Mitglieder', veranstaltung.eintrittspreise().standardRabattMitglied() + ',00 €')
+        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', veranstaltung.eintrittspreise().rabattMitglied(), 'Die Reduktion für Mitglieder', veranstaltung.eintrittspreise().standardRabattMitglied() + ',00 €')
     .row
       .col-xs-4
         .form-group
           | &nbsp;
           +checkbox('eintrittspreise[frei]', 'Freier Eintritt', veranstaltung.eintrittspreise().frei())
       .col-xs-4
-        +currency('eintrittspreise[ermaessigt]', 'Eintritt ermäßigt', veranstaltung.eintrittspreise().ermaessigt(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', veranstaltung.eintrittspreise().ermaessigt(), undefined, '0,00 €', true)
       .col-xs-4
-        +currency('eintrittspreise[mitglied]', 'Eintritt Mitglied', veranstaltung.eintrittspreise().mitglied(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[mitglied]', '€ Mitglied', veranstaltung.eintrittspreise().mitglied(), undefined, '0,00 €', true)
 
 mixin preiseScript
   script.
