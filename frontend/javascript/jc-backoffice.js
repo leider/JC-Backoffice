@@ -77,7 +77,6 @@
     $('.datepicker').datepicker({
       autoclose: true,
       format: 'dd.mm.yyyy',
-      startDate: moment().format('DD.MM.YYYY'),
       weekStart: 1,
       viewMode: 'days',
       minViewMode: 'days',

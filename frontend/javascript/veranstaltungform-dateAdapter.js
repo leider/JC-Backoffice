@@ -1,4 +1,4 @@
-/*global activityDateModel */
+/*global veranstaltungDateModel */
 (function () {
   'use strict';
 
@@ -6,7 +6,7 @@
 
   var dateAdapter = function () {
 
-    var dateCalc = activityDateModel($('#startDate').val(), $('#startTime').val());
+    var dateCalc = veranstaltungDateModel($('#startDate').val(), $('#startTime').val());
 
     var listener = function () {
       var endStrings = dateCalc.determineNewEnd($('#startDate').val(), $('#startTime').val(), ($('#endDate').val()), $('#endTime').val());

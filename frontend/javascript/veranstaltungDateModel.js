@@ -1,19 +1,19 @@
 /*global moment */
 /*eslint no-unused-vars: 0 */
-var activityDateModel;
+var veranstaltungDateModel;
 (function () {
   'use strict';
 
   // THE ORIGINAL OF THIS FILE IS IN frontend/javascript
 
-  activityDateModel = function (initialDate, initialTime) {
+  veranstaltungDateModel = function (initialDate, initialTime) {
 
-    var toUtc = function (dateString, timeString) {
+    function toUtc(dateString, timeString) {
       if (dateString && timeString) {
         return moment.utc(dateString + ' ' + timeString, 'D.M.YYYY H:m');
       }
       return null;
-    };
+    }
 
     var oldStartDate = toUtc(initialDate, initialTime);
 

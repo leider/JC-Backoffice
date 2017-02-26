@@ -76,10 +76,25 @@ mixin memberSubmitButtons()
 mixin hidden(name, value)
   input(type='hidden', name=name, value=value)
 
-mixin date(name, label, value, tooltip)
+mixin dateOld(name, label, value, tooltip)
   .form-group
     +controlLabel(name, label, tooltip)
     input.form-control.datepicker(id=name, type='text', name=name, value=value)
+
+mixin date(name, label, value, tooltip, startDate)
+  .form-group
+    +controlLabel(name, label, tooltip)
+    input.form-control(id=name, type='text', name=name, value=value,
+      data-provide='datepicker',
+      data-date-format='dd.mm.yyyy',
+      data-date-autoclose=true,
+      data-date-week-start=1,
+      data-date-view-ode='days',
+      data-date-min-view-mode='days',
+      data-date-language='de',
+      data-date-orientation='bottom',
+      data-date-start-date=startDate
+)
 
 mixin time(name, value)
   .form-group
