@@ -44,7 +44,7 @@ const beans = conf.get('beans');
 
 // initialize winston and two concrete loggers
 /*eslint no-sync: 0 */
-const winston = require('winston-config').fromFileSync(path.join(__dirname, '../config/winston-config.json'));
+const winston = require('winston-config').fromFileSync(path.join(__dirname, 'config/winston-config.json'));
 
 const appLogger = winston.loggers.get('application');
 const httpLogger = winston.loggers.get('http');

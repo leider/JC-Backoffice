@@ -3,3 +3,5 @@ config/mongo-config.json
 node_modules/
 public/fonts/
 public/stylesheets/
+server.log
+workspace.xml
