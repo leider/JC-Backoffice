@@ -11,9 +11,13 @@ block content
           a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw
         h2 Veranstaltungen <br>
           small #{titel}
-      dl.dl-horizontal
-        for veranstaltung in veranstaltungen
-          dt
-            | #{veranstaltung.startMoment().format('ddd ll')}
-          dd
-            a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.titel()} im #{veranstaltung.ort()}
+      .table-responsive
+        table.table.table-striped.table-condensed
+          for veranstaltung in veranstaltungen
+            tr
+              th: a(href=veranstaltung.fullyQualifiedUrl() + '/kopf') #{veranstaltung.startMoment().format('ddd ll')}
+              td: a(href=veranstaltung.fullyQualifiedUrl() + '/kopf') #{veranstaltung.titel()} im #{veranstaltung.ort()}&nbsp;
+              td
+                .btn-group.pull-right
+                  a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Bearbeiten'): i.fa.fa-keyboard-o.fa-fw
+                  a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben'): i.fa.fa-eur.fa-fw

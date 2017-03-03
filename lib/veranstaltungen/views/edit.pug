@@ -29,7 +29,7 @@ block content
           #event.collapse.in
             .row
               .col-sm-6
-                +text('titel', 'Titel/Künstler', veranstaltung.titel(), 'Titel für die Veranstaltung')
+                +text('kopf[titel]', 'Titel/Künstler', veranstaltung.titel(), 'Titel für die Veranstaltung')
               .col-sm-6
                 .form-group
                   +controlLabel('url', 'URL / VA-ID', 'Eindeutig für die Veranstaltung')
@@ -38,26 +38,26 @@ block content
               .col-sm-6
                 .form-group
                   label.control-label(for='ort') Ort:
-                  select#ort.form-control(name='ort')
+                  select#ort.form-control(name='kopf[ort]')
                     for ort in optionen.orte()
                       option(value=ort, selected = (veranstaltung.ort() !== undefined && veranstaltung.ort() === ort)) #{ort}
               .col-sm-6
                 .form-group
                   label.control-label(for='eventTyp') Typ:
-                  select#eventTyp.form-control(name='eventTyp')
+                  select#eventTyp.form-control(name='kopf[eventTyp]')
                     for eventType in optionen.typen()
                       option(value=eventType, selected = (veranstaltung.eventType() !== undefined && veranstaltung.eventType() === eventType)) #{eventType}
             .row
               .col-sm-6
                 .form-group
-                  label.control-label(for='ort') Kooperation:
-                  select#koop.form-control(name='koop')
+                  label.control-label(for='koop') Kooperation:
+                  select#koop.form-control(name='kopf[koop]')
                     for koop in optionen.kooperationen()
                       option(value=koop, selected = (veranstaltung.kooperation() !== undefined && veranstaltung.kooperation() === koop)) #{koop}
               .col-sm-6
                 .form-group
                   label.control-label(for='verantwortlicher') Verantwortlicher:
-                  select#verantwortlicher.form-control(name='verantwortlicher')
+                  select#verantwortlicher.form-control(name='kopf[verantwortlicher]')
                     for verantwortlicher in optionen.verantwortliche()
                       option(value=verantwortlicher, selected = (veranstaltung.verantwortlicher() !== undefined && veranstaltung.verantwortlicher() === verantwortlicher)) #{verantwortlicher}
             .row
@@ -71,10 +71,10 @@ block content
                   +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
                 #dates.col-xs-6(style='padding-left:3px;padding-right:0px')
                   +time('endTime', veranstaltung.endMoment().format('LT'))
-            +textarea('description', 'Kommentar', veranstaltung.beschreibung())
+            +textarea('kopf[description]', 'Kommentar', veranstaltung.beschreibung())
         .col-md-6
           +preise(veranstaltung)
-          +kontakt(veranstaltung, optionen, 'Kontakt', 'kontakt')
+          +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
 
       .row
         .col-md-12
@@ -82,7 +82,7 @@ block content
           +submitButtons()
 block scripts
   +preiseScript
-  +kontaktScript('kontakt')
+  +kontaktScript('agentur')
   script(src='/clientscripts/veranstaltungDateModel.js')
   script(src='/clientscripts/veranstaltungform-dateAdapter.js')
   script(src='/clientscripts/check-veranstaltungform.js')

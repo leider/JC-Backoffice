@@ -38,11 +38,11 @@ var veranstaltung_validator;
             }
           }
         },
-        'kontakt[email]': {
+        'agentur[email]': {
           email: true
         },
-        titel: 'required',
-        ort: 'required',
+        'kopf[titel]': 'required',
+        'kopf[ort]': 'required',
         startDate: 'required',
         startTime: 'required',
         endDate: 'dateAndTime',
@@ -90,8 +90,8 @@ var veranstaltung_validator;
       };
     }
 
-    ['#veranstaltungform [name=titel]', '#veranstaltungform [name=ort]', '#veranstaltungform [name=startDate]', '#veranstaltungform [name=startTime]',
-      '#veranstaltungform [name=endDate]', '#veranstaltungform [name=endTime]', '#veranstaltungform [name=url]', '#veranstaltungform [name="kontakt[email]"]'].forEach(
+    ['#veranstaltungform [name="kopf[titel]', '#veranstaltungform [name="kopf[ort]"', '#veranstaltungform [name=startDate]', '#veranstaltungform [name=startTime]',
+      '#veranstaltungform [name=endDate]', '#veranstaltungform [name=endTime]', '#veranstaltungform [name=url]', '#veranstaltungform [name="agentur[email]"]'].forEach(
       function (each) {
         $(each).on('change', handler(each));
         $(each).keyup(handler(each));
