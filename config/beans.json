@@ -16,6 +16,9 @@
 
   "addCsrfTokenToLocals": {"module": "./lib/middleware/addCsrfTokenToLocals"},
   "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},
+  "passportInitializer": {"module": "./lib/middleware/passportInitializer"},
+  "passportSessionInitializer": {"module": "./lib/middleware/passportSessionInitializer"},
+  "secureByLogin": {"module": "./lib/middleware/secureByLogin"},
   "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
   "misc": {"module": "./lib/commons/misc"},
   "handle404": {"module": "./lib/middleware/handle404"},

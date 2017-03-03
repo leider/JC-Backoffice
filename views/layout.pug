@@ -16,12 +16,11 @@ html
       | &nbsp;- JC-Backoffice
     
   body
+    .navbar.navbar-inverse.navbar-fixed-top.hidden-print.hidden-xs(role='navigation')
+      +topNavbar
+    .navbar.navbar-inverse.navbar-top.hidden-print.visible-xs(role='navigation')
+      +topNavbar('xs')
     .container-fluid
-      .navbar.navbar-inverse.navbar-fixed-top.hidden-print.hidden-xs(role='navigation')
-        +topNavbar
-      .navbar.navbar-inverse.navbar-top.hidden-print.visible-xs(role='navigation')
-        +topNavbar('xs')
-
       .row.main
         block content
   

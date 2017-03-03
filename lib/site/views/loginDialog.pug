@@ -1,0 +1,21 @@
+include ../../../views/formComponents
+
+doctype html
+html
+  .modal-header
+    button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+    h3 Anmelden
+  .modal-body
+    form(action='/login', method='post')
+      +csrf
+      .row
+        .col-sm-6
+          +text('username', 'Benutzername', '')
+        .col-sm-6
+          .form-group
+            +controlLabel('password', 'Passwort')
+            input.form-control.trim-text(id='password', type='password', name='password', value='')
+      .row
+        .col-md-12
+          .btn-group.pull-right
+            button.btn.btn-primary(type='submit') Anmelden

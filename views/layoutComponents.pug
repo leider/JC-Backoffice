@@ -1,27 +1,3 @@
-mixin loginMenu(forInline)
-  li.dropdown(class=forInline ? 'visible-xs' : '')
-    a(href='#')
-      i.fa.fa-info-circle.fa-fw &nbsp;
-      if accessrights.isRegistered()
-        | #{user.member.nickname()}
-      else 
-        | #{t('general.guest')}
-    ul.dropdown-menu
-      if accessrights.isRegistered()
-        li: a(href='/members/edit/' + encodeURIComponent(user.member.nickname()))
-          i.fa.fa-edit.fa-fw
-          | &nbsp;#{t('members.edit')}
-        li: a(href='/auth/logout')
-          i.fa.fa-sign-out.fa-fw
-          | &nbsp;#{t('general.logout')}
-        li: a(href='/mailsender/resign/' + encodeURIComponent(user.member.nickname()))
-          i.fa.fa-ban.fa-fw
-          | &nbsp;#{t('members.resign')}
-      else
-        li: a(data-toggle='modal', data-target='#login', href='/loginDialog?returnUrl=' + encodeURIComponent(currentUrl ||  '/'))
-          i.fa.fa-sign-in.fa-fw
-          | &nbsp;#{t('general.login')}
-
 mixin notificationsBlock(notificationmessage)
   -notificationmessage.kill()
   -var contents = notificationmessage.contents()
@@ -36,7 +12,7 @@ mixin topNavbar(xs)
       img(src='/img/logo_weiss.png', alt='Jazzclub')
     a.btn.btn-default.navbar-toggle(data-toggle='collapse', data-target='.collapse-top')
       span.sr-only Toggle
-      i.fa.fa-bars.fa-lg
+      i.fa.fa-bars.fa-lg.fa-inverse
 
   .navbar-collapse.collapse.collapse-top
     ul.nav.navbar-nav.bottom
@@ -48,6 +24,18 @@ mixin topNavbar(xs)
           li
             a(href='/veranstaltungen/zukuenftige') Zukünftige
             a(href='/veranstaltungen/vergangene') Vergangene
-      li: a(href='/optionen')
+      li(data-jcnav='optionen'): a(href='/optionen')
         i.fa.fa-cogs.fa-fw
         | &nbsp;Optionen
+      li(data-jcnav='users')
+        a(href='#')
+          i.fa.fa-user.fa-fw
+          span.hidden-sm &nbsp;User&nbsp;
+        ul.dropdown-menu
+          li
+            a(href='/users')
+              i.fa.fa-users.fa-fw
+              | &nbsp;Liste
+            a(href='/logout')
+              i.fa.fa-sign-out.fa-fw
+              | &nbsp;Abmelden
