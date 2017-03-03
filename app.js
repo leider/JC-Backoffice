@@ -8,16 +8,6 @@ const morgan = require('morgan');
 const bodyparser = require('body-parser');
 const compress = require('compression');
 const csurf = require('csurf');
-const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
-
-passport.use(new Strategy(
-  function (username, password, done) {
-    if (password === 'Halo') {
-      return done(null, {id: 'any'});
-    }
-    done(null, false);
-  }));
 
 function secureAgainstClickjacking(req, res, next) {
   res.setHeader('X-Frame-Options', 'DENY');
@@ -88,6 +78,7 @@ module.exports = {
     app.use('/', beans.get('siteApp'));
     useApp(app, 'optionen', beans.get('optionenApp'));
     useApp(app, 'veranstaltungen', beans.get('veranstaltungenApp'));
+    useApp(app, 'users', beans.get('usersApp'));
 
     app.use(beans.get('handle404')());
     app.use(beans.get('handle500')(appLogger));

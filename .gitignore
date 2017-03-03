@@ -1,5 +1,6 @@
 build/
 config/mongo-config.json
+config/passwordSalt.json
 node_modules/
 public/fonts/
 public/stylesheets/

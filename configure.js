@@ -46,13 +46,7 @@ function createConfiguration() {
 
   // then, add properties from config files:
   const files = ['mongo-config.json',
-    'server-config.json',
-    'authentication-config.json',
-    'mailsender-config.json',
-    'wikirepo-config.json',
-    'activityresults-config.json',
-    'crosssite-config.json',
-    'ezmlm-config.json'];
+    'passwordSalt.json'];
   conf.addFiles(files.map(file => configdir + file));
 
   return conf;
