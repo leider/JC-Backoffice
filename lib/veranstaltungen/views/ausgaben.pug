@@ -45,12 +45,12 @@ block content
                   label.control-label(for='location') Location:
                   select#location.form-control(name='kosten[saal]')
                     for saal in optionen.kooperationen()
-                      option(value=saal, selected = (kosten.saal() !== undefined && veranstaltung.saal() === saal)) #{saal}
+                      option(value=saal, selected = (kosten.saal() !== undefined && kosten.saal() === saal)) #{saal}
               .col-sm-3
                 +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
           legend
             a(data-toggle='collapse', href='#technik') Technik
-            +currencySpan('technikPreis', 'pull-right')
+            +currencySpan('technikTotal', 'pull-right')
           #technik.collapse.in
             .row
               .col-sm-9
@@ -68,19 +68,69 @@ block content
         .col-md-6
           legend
             a(data-toggle='collapse', href='#band') Band
-            #bandPreis.pull-right
+            +currencySpan('bandTotal', 'pull-right')
           #band.collapse.in
             .row
-              .col-sm-9
-                +text('kosten[rider]', 'Rider', kosten.rider())
+              .col-xs-3(style='padding-right: 5px;')
+                +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+                .form-group
+                  label.control-label(for='gagenMWSt') MWSt:
+                  select#gagenMWSt.form-control(name='kosten[gagenMWSt]')
+                    for wert in ['ohne', '7%', '19%']
+                      option(value=wert, selected = (kosten.gagenMWSt() === wert)) #{wert}
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+                .form-group
+                  label.control-label(for='gagenAuslandSt') Ausl.St.:
+                  select#gagenAuslandSt.form-control(name='kosten[gagenAuslandSt]')
+                    for wert in ['ohne', '18,8%']
+                      option(value=wert, selected = (kosten.gagenAuslandSt() === wert)) #{wert}
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+                .form-group
+                  label.control-label(for='deal') Deal:
+                  select#deal.form-control(name='kosten[deal]')
+                    for wert in ['ohne', '100%', '90%', '80%', '70%', '60%']
+                      option(value=wert, selected = (kosten.deal() === wert)) #{wert}
+              .col-xs-3(style='padding-left: 5px;')
+                .form-group
+                  label.control-label Total:
+                  p: b
+                    +currencySpan('gagenTotal', 'form-control-static pull-right')
             .row
-              .col-sm-12
-                +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
-                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
+              .col-xs-3(style='padding-right: 5px;')
+                +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+                .form-group
+                  label.control-label(for='agenturMWSt') MWSt:
+                  select#agenturMWSt.form-control(name='kosten[agenturMWSt]')
+                    for wert in ['ohne', '7%', '19%']
+                      option(value=wert, selected = (kosten.agenturMWSt() === wert)) #{wert}
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+              .col-xs-3(style='padding-left: 5px;')
+                .form-group
+                  label.control-label Total:
+                  p: b
+                    +currencySpan('agenturTotal', 'form-control-static pull-right')
             .row
-              .col-sm-9
-              .col-sm-3
-                +currency('kosten[backlineEUR]', 'Summe Backline', kosten.backlineEUR())
+              .col-xs-3(style='padding-right: 5px;')
+                +currency('kosten[cateringEUR]', 'Catering (Kopf)', kosten.cateringEUR())
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+                .form-group
+                  label.control-label Anzahl:
+                  p 
+                    span#cateringNum.form-control-static.pull-right #{veranstaltung.numForCatering()}
+
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+              .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+              .col-xs-3(style='padding-left: 5px;')
+                .form-group
+                  label.control-label Total:
+                  p: b
+                    +currencySpan('cateringTotal', 'form-control-static pull-right')
+
+
+
 
       .row
         .col-md-12
@@ -95,21 +145,75 @@ block scripts
     var saalmiete = $('#kosten\\[saalmiete\\]');
     var technikAngebot1EUR = $('#kosten\\[technikAngebot1EUR\\]');
     var technikAngebot2EUR = $('#kosten\\[technikAngebot2EUR\\]');
+    var gagenEUR = $('#kosten\\[gagenEUR\\]');
+    var gagenMWSt = $('#gagenMWSt');
+    var gagenAuslandSt = $('#gagenAuslandSt');
+    var agenturEUR = $('#kosten\\[agenturEUR\\]');
+    var agenturMWSt = $('#agenturMWSt');
+    var cateringEUR = $('#kosten\\[cateringEUR\\]');
 
+    var gagenTotal = $('#gagenTotal');
+    var agenturTotal = $('#agenturTotal');
+    var cateringTotal = $('#cateringTotal');
+    
     function updateBacklinePreis() { $('#backlinePreis').html(backlineEUR.val()); }
     function updateSaalmietePreis() { $('#saalmietePreis').html(saalmiete.val()); }
     function updateTechnikPreis() {
       var a1 = parseFloat(technikAngebot1EUR.autoNumeric('get'), 10);
       var a2 = parseFloat(technikAngebot2EUR.autoNumeric('get'), 10);
-      
-      $('#technikPreis').autoNumeric('set', a1 + a2); 
+      $('#technikTotal').autoNumeric('set', a1 + a2); 
+    }
+    
+    function updateGagenTotal() {
+      var eur = parseFloat(gagenEUR.autoNumeric('get'), 10);
+      var mwst = parseFloat(gagenMWSt.val().replace(',', '.')) || 0;
+      var foreignTax = parseFloat(gagenAuslandSt.val().replace(',', '.')) || 0;
+      var total = eur + (eur * mwst / 100) + (eur * foreignTax / 100);
+      gagenTotal.autoNumeric('set', total);
+      gagenTotal.change();
+    }
+    
+    function updateAgenturTotal() {
+      var eur = parseFloat(agenturEUR.autoNumeric('get'), 10);
+      var mwst = parseFloat(agenturMWSt.val().replace(',', '.')) || 0;
+      var total = eur + (eur * mwst / 100);
+      agenturTotal.autoNumeric('set', total);
+      agenturTotal.change();
+    }
+    
+    function updateCateringTotal() {
+      var eur = parseFloat(cateringEUR.autoNumeric('get'), 10);
+      var num = parseInt($('#cateringNum').text(), 10) || 0;
+      var total = eur * num;
+      cateringTotal.autoNumeric('set', total);
+      cateringTotal.change();
+    }
+    
+    function updateBandTotal() {
+      var gage = parseFloat(gagenTotal.autoNumeric('get')) || 0;
+      var agentur = parseFloat(agenturTotal.autoNumeric('get')) || 0;
+      var cat = parseFloat(cateringTotal.autoNumeric('get')) || 0;
+      $('#bandTotal').autoNumeric('set', gage + agentur + cat);
     }
     
     backlineEUR.keyup(updateBacklinePreis);
     saalmiete.keyup(updateSaalmietePreis);
     technikAngebot1EUR.keyup(updateTechnikPreis);
     technikAngebot2EUR.keyup(updateTechnikPreis);
-    
+
+    gagenEUR.keyup(updateGagenTotal);
+    gagenMWSt.change(updateGagenTotal);
+    gagenAuslandSt.change(updateGagenTotal);
+    agenturEUR.keyup(updateAgenturTotal);
+    agenturMWSt.change(updateAgenturTotal);
+    cateringEUR.keyup(updateCateringTotal);
+
+    gagenTotal.change(updateBandTotal);
+
     updateBacklinePreis();
     updateSaalmietePreis();
-    updateTechnikPreis()
+    updateTechnikPreis();
+    updateGagenTotal();
+    updateAgenturTotal();
+    updateCateringTotal();
+    updateBandTotal();
