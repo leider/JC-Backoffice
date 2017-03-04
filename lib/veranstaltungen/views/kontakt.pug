@@ -19,7 +19,7 @@ mixin kontakt(veranstaltung, kontakte, labelForLegend, name)
         +text(name + '[telefon]', 'Telefon', veranstaltung[name]().telefon())
         +text(name + '[email]', 'E-Mail', veranstaltung[name]().email())
       .col-sm-6
-        +textareaPure(name+ '[adresse]', 'Adresse', 'A Dress E')
+        +textareaPure(name+ '[adresse]', 'Adresse', veranstaltung[name]().adresse())
 
 mixin kontaktScript(name)
   script.

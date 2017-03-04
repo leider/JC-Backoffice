@@ -5,6 +5,13 @@ mixin text(name, label, value, tooltip, placeholder, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.trim-text(id=name, type='text', name=name, value=value, placeholder=placeholder, disabled=readonly)
 
+mixin number(name, label, value, tooltip, min, max)
+  .form-group
+    if (readonly)
+      +hidden(name, value)
+    +controlLabel(name, label, tooltip)
+    input.form-control.trim-text(id=name, type='number', name=name, value=value, min=min, max=max)
+
 mixin textWithTags(name, label, value, tags)
   .form-group
     +controlLabel(name, label)
@@ -37,7 +44,10 @@ mixin editableMultiselect(name, label, value, tags)
 mixin currency(name, label, value, tooltip, placeholder, readonly)
   .form-group
     +controlLabel(name, label, tooltip)
-    input.form-control.currency(id=name, type='text', value=value, name=name, placeholder=placeholder, disabled=readonly, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+    input.form-control.currency(id=name, type='text', value=value, name=name, placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+
+mixin currencySpan(id, clazz)
+  span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
 mixin textareaPure(name, label, value, placeholder)
   +textareaInternal('form-control', '4', name, label, value, null, placeholder)

@@ -5,6 +5,7 @@
   "veranstaltung": {"module": "./lib/veranstaltungen/veranstaltung"},
   "eintrittspreise": {"module": "./lib/veranstaltungen/eintrittspreise"},
   "kontakt": {"module": "./lib/veranstaltungen/kontakt"},
+  "kosten": {"module": "./lib/veranstaltungen/kosten"},
 
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},

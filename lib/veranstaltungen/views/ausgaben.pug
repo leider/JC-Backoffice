@@ -1,0 +1,115 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+include eintrittspreise
+include kontakt
+
+block title
+  | Veranstaltung
+
+block content
+  -var kosten = veranstaltung.kosten()
+  form#ausgabenform(action='/veranstaltungen/submit', method='post')
+    +csrf
+    +hidden('id', veranstaltung.id())
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Kosten für #{veranstaltung.titel()} im #{veranstaltung.ort()}<br>
+              small #{veranstaltung.datumForDisplay()}
+      .row
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#backline') Backline
+            #backlinePreis.pull-right 
+          #backline.collapse.in
+            .row
+              .col-sm-12
+                +text('kosten[rider]', 'Rider', kosten.rider())
+            .row
+              .col-sm-12
+                +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
+                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
+            .row
+              .col-sm-9
+              .col-sm-3
+                +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
+          legend
+            a(data-toggle='collapse', href='#saalmiete') Saalmiete
+            #saalmietePreis.pull-right
+          #saalmiete.collapse.in
+            .row
+              .col-sm-9
+                .form-group
+                  label.control-label(for='location') Location:
+                  select#location.form-control(name='kosten[saal]')
+                    for saal in optionen.kooperationen()
+                      option(value=saal, selected = (kosten.saal() !== undefined && veranstaltung.saal() === saal)) #{saal}
+              .col-sm-3
+                +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
+          legend
+            a(data-toggle='collapse', href='#technik') Technik
+            +currencySpan('technikPreis', 'pull-right')
+          #technik.collapse.in
+            .row
+              .col-sm-9
+                +text('kosten[technikJazzclub]', 'Jazzclub', kosten.technikJazzclub())
+            .row
+              .col-sm-9
+                +text('kosten[technikAngebot1]', 'Angebot 1', kosten.technikAngebot1())
+              .col-sm-3
+                +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
+            .row
+              .col-sm-9
+                +text('kosten[technikAngebot2]', 'Angebot 2', kosten.technikAngebot2())
+              .col-sm-3
+                +currency('kosten[technikAngebot2EUR]', 'Betrag', kosten.technikAngebot2EUR())
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#band') Band
+            #bandPreis.pull-right
+          #band.collapse.in
+            .row
+              .col-sm-9
+                +text('kosten[rider]', 'Rider', kosten.rider())
+            .row
+              .col-sm-12
+                +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
+                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
+            .row
+              .col-sm-9
+              .col-sm-3
+                +currency('kosten[backlineEUR]', 'Summe Backline', kosten.backlineEUR())
+
+      .row
+        .col-md-12
+          hr
+          +submitButtons()
+block scripts
+  script.
+    $('.currency').each(function () {
+      $(this).autoNumeric('init');
+    });
+    var backlineEUR = $('#kosten\\[backlineEUR\\]');
+    var saalmiete = $('#kosten\\[saalmiete\\]');
+    var technikAngebot1EUR = $('#kosten\\[technikAngebot1EUR\\]');
+    var technikAngebot2EUR = $('#kosten\\[technikAngebot2EUR\\]');
+
+    function updateBacklinePreis() { $('#backlinePreis').html(backlineEUR.val()); }
+    function updateSaalmietePreis() { $('#saalmietePreis').html(saalmiete.val()); }
+    function updateTechnikPreis() {
+      var a1 = parseFloat(technikAngebot1EUR.autoNumeric('get'), 10);
+      var a2 = parseFloat(technikAngebot2EUR.autoNumeric('get'), 10);
+      
+      $('#technikPreis').autoNumeric('set', a1 + a2); 
+    }
+    
+    backlineEUR.keyup(updateBacklinePreis);
+    saalmiete.keyup(updateSaalmietePreis);
+    technikAngebot1EUR.keyup(updateTechnikPreis);
+    technikAngebot2EUR.keyup(updateTechnikPreis);
+    
+    updateBacklinePreis();
+    updateSaalmietePreis();
+    updateTechnikPreis()

@@ -29,7 +29,7 @@ block content
           #event.collapse.in
             .row
               .col-sm-6
-                +text('kopf[titel]', 'Titel/Künstler', veranstaltung.titel(), 'Titel für die Veranstaltung')
+                +text('kopf[titel]', 'Titel', veranstaltung.titel(), 'Titel für die Veranstaltung')
               .col-sm-6
                 .form-group
                   +controlLabel('url', 'URL / VA-ID', 'Eindeutig für die Veranstaltung')
@@ -51,7 +51,7 @@ block content
               .col-sm-6
                 .form-group
                   label.control-label(for='koop') Kooperation:
-                  select#koop.form-control(name='kopf[koop]')
+                  select#koop.form-control(name='kopf[kooperation]')
                     for koop in optionen.kooperationen()
                       option(value=koop, selected = (veranstaltung.kooperation() !== undefined && veranstaltung.kooperation() === koop)) #{koop}
               .col-sm-6
@@ -71,11 +71,30 @@ block content
                   +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
                 #dates.col-xs-6(style='padding-left:3px;padding-right:0px')
                   +time('endTime', veranstaltung.endMoment().format('LT'))
-            +textarea('kopf[description]', 'Kommentar', veranstaltung.beschreibung())
+            +textarea('kopf[beschreibung]', 'Kommentar', veranstaltung.beschreibung())
         .col-md-6
           +preise(veranstaltung)
           +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
-
+      .row
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#artist') Künstler
+          #artist.collapse.in
+            .row
+              .col-md-12
+                +text('artist[name]', 'Name', veranstaltung.artistName(), 'Muss nicht identisch mit der Veranstaltung sein')
+            .row
+              .col-md-3
+                +number('artist[numMusiker]', 'Musiker', veranstaltung.numMusiker(), null, '1', '30')
+              .col-md-3
+                +number('artist[numCrew]', 'Crew', veranstaltung.numCrew(), null, '0', '30')
+              .col-md-3
+                +checkbox('artist[isBawue]', 'aus Baden-Württemberg', veranstaltung.artistIsBawue())
+              .col-md-3
+                +checkbox('artist[isAusland]', 'aus dem Ausland', veranstaltung.artistIsAusland())
+            .row
+              .col-md-6
+              .col-md-6
       .row
         .col-md-12
           hr

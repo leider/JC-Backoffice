@@ -90,7 +90,7 @@ var veranstaltung_validator;
       };
     }
 
-    ['#veranstaltungform [name="kopf[titel]', '#veranstaltungform [name="kopf[ort]"', '#veranstaltungform [name=startDate]', '#veranstaltungform [name=startTime]',
+    ['#veranstaltungform [name="kopf[titel]"]', '#veranstaltungform [name="kopf[ort]"]', '#veranstaltungform [name=startDate]', '#veranstaltungform [name=startTime]',
       '#veranstaltungform [name=endDate]', '#veranstaltungform [name=endTime]', '#veranstaltungform [name=url]', '#veranstaltungform [name="agentur[email]"]'].forEach(
       function (each) {
         $(each).on('change', handler(each));

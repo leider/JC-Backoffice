@@ -32,9 +32,9 @@ mixin preiseScript
       $(this).autoNumeric('init');
     });
     function amountHandler() {
-      var preis = parseInt(regulaer.autoNumeric('get'), 10);
-      var rabattErmaessigtWert = parseInt(rabattErmaessigt.autoNumeric('get'), 10);
-      var rabattMitgliedWert = parseInt(rabattMitglied.autoNumeric('get'), 10);
+      var preis = parseFloat(regulaer.autoNumeric('get'), 10);
+      var rabattErmaessigtWert = parseFloat(rabattErmaessigt.autoNumeric('get'), 10);
+      var rabattMitgliedWert = parseFloat(rabattMitglied.autoNumeric('get'), 10);
       $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(rabattErmaessigtWert));
       $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(rabattMitgliedWert));
     }
