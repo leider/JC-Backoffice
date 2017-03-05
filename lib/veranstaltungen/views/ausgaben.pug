@@ -2,12 +2,48 @@ extends ../../../views/layout
 include ../../../views/formComponents
 include eintrittspreise
 include kontakt
+  
+mixin plakateRow(name, label, werte)
+  .row
+    .col-xs-3
+      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
+    .col-xs-3
+      .form-group
+        label.control-label(for=name + 'Groesse') Größe:
+        select.form-control(id=name + 'Groesse', name='werbung[' + name + 'Groesse]')
+          for wert in werte
+            option(value=wert, selected = (werbung[name + 'Groesse']() === wert)) #{wert}
+    .col-xs-3
+      .form-group
+        label.control-label Zeitraum:
+        p.form-control-static #{werbung[name + 'KW']()}
+    .col-xs-3
+      .form-group
+        label.control-label Total:
+        p: b
+          +currencySpan(name + 'Total', 'form-control-static pull-right')
 
+mixin plakateScript(name)
+  script.
+    var #{name}Num = $('#werbung\\[#{name}Num\\]');
+    var #{name}Groesse = $('#' + '#{name}Groesse');
+    function update#{name}Total() {
+      var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
+      var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor
+      $('#' + '#{name}Total').autoNumeric('set', result);
+      updatePlakateTotal();
+    }
+    #{name}Num.change(update#{name}Total);
+    #{name}Num.keyup(update#{name}Total);
+    #{name}Groesse.change(update#{name}Total);
+    update#{name}Total();
+  
 block title
   | Veranstaltung
 
 block content
   -var kosten = veranstaltung.kosten()
+  -var werbung = veranstaltung.werbung()
   form#ausgabenform(action='/veranstaltungen/submit', method='post')
     +csrf
     +hidden('id', veranstaltung.id())
@@ -25,16 +61,16 @@ block content
             #backlinePreis.pull-right 
           #backline.collapse.in
             .row
-              .col-sm-12
+              .col-sm-9
                 +text('kosten[rider]', 'Rider', kosten.rider())
             .row
-              .col-sm-12
+              .col-sm-9
                 +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
-                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
             .row
               .col-sm-9
+                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
               .col-sm-3
-                +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
+                +currency('kosten[backlineEUR]', 'Betrag Rockshop', kosten.backlineEUR())
           legend
             a(data-toggle='collapse', href='#saalmiete') Saalmiete
             #saalmietePreis.pull-right
@@ -118,8 +154,7 @@ block content
               .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
                 .form-group
                   label.control-label Anzahl:
-                  p 
-                    span#cateringNum.form-control-static.pull-right #{veranstaltung.numForCatering()}
+                  p: span#cateringNum.form-control-static.pull-right #{veranstaltung.numForCatering()}
 
               .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
               .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
@@ -128,14 +163,25 @@ block content
                   label.control-label Total:
                   p: b
                     +currencySpan('cateringTotal', 'form-control-static pull-right')
-
-
-
-
+          legend
+            a(data-toggle='collapse', href='#plakate') Plakate
+            +currencySpan('plakateTotal', 'pull-right')
+          #plakate.collapse.in
+            +plakateRow('kulturring', 'Kulturring', ['A1', 'A2'])
+            +plakateRow('gruene', 'Grüne', ['A1'])
+            +plakateRow('spitzer', 'Spitzer', ['A1'])
+            +plakateRow('ralf', 'Ralf', ['A3'])
+            .row
+              .col-md-12
+                .checkbox
+                  label
+                    input(type='checkbox', name='werbung[genehmigt]', checked=(werbung.genehmigt() ? 'true' : undefined))
+                    p: b Wir müssen <span id="anzahlPlakate">#{werbung.anzahlPlakate()}</span> Genehmigungen beantragen!
       .row
         .col-md-12
           hr
           +submitButtons()
+          
 block scripts
   script.
     $('.currency').each(function () {
@@ -217,3 +263,29 @@ block scripts
     updateAgenturTotal();
     updateCateringTotal();
     updateBandTotal();
+
+    var groessenUndFaktoren = {
+      kulturring: {A1: 1.5, A2: 1},
+      gruene: {A1: 7.5},
+      spitzer: {A1: 3.5},
+      ralf: {A3: 1}
+    }
+    function updatePlakateTotal() {
+      var kulturring = parseFloat($('#kulturringTotal').autoNumeric('get')) || 0;
+      var gruene = parseFloat($('#grueneTotal').autoNumeric('get')) || 0;
+      var spitzer = parseFloat($('#spitzerTotal').autoNumeric('get')) || 0;
+      var ralf = parseFloat($('#ralfTotal').autoNumeric('get')) || 0;
+      $('#plakateTotal').autoNumeric('set', kulturring + gruene + spitzer + ralf);
+      
+      var kulturringNum = parseInt($('#werbung\\[kulturringNum\\]').val(), 10) || 0;
+      var grueneNum = parseInt($('#werbung\\[grueneNum\\]').val(), 10) || 0;
+      var spitzerNum = parseInt($('#werbung\\[spitzerNum\\]').val(), 10) || 0;
+      var ralfNum = parseInt($('#werbung\\[ralfNum\\]').val(), 10) || 0;
+      $('#anzahlPlakate').html(kulturringNum + grueneNum + spitzerNum + ralfNum);
+    }
+
+
+  +plakateScript('kulturring')
+  +plakateScript('gruene')
+  +plakateScript('spitzer')
+  +plakateScript('ralf')

@@ -13,6 +13,7 @@ module.exports = function (grunt) {
       'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
       'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js',
       'node_modules/moment/moment.js',
+      'node_modules/moment/locale/de.js',
       'node_modules/drmonty-smartmenus/js/jquery.smartmenus.js',
       'build/javascript/jquery.smartmenus.bootstrap-patched.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
