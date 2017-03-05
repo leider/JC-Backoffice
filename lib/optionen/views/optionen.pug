@@ -20,15 +20,29 @@ block content
           +editableMultiselect('orte', 'Orte', optionen.orte(), optionen.orte())
           +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
           +editableMultiselect('verantwortliche', 'Verantwortliche', optionen.verantwortliche(), optionen.verantwortliche())
-        .col-md-6
           +editableMultiselect('backlineJazzclub', 'Backline Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
           +editableMultiselect('backlineRockshop', 'Backline Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
+        .col-md-6
           +editableMultiselect('techniker', 'Techniker', optionen.techniker(), optionen.techniker())
           +editableMultiselect('merchandise', 'Merchandise', optionen.merchandise(), optionen.merchandise())
           +editableMultiselect('kasse', 'Kasse', optionen.kasse(), optionen.kasse())
           +editableMultiselect('fremdpersonal', 'Fremdpersonal', optionen.fremdpersonal(), optionen.fremdpersonal())
+          .row
+            .col-md-4
+              +currency('technikerEUR', 'Vorgabe Technikerpreis', optionen.technikerEUR())
+            .col-md-4
+              +currency('merchandiseEUR', 'Vorgabe Merchandisepreis', optionen.merchandiseEUR())
+            .col-md-4
+              +currency('kasseEUR', 'Vorgabe Kassepreis', optionen.kasseEUR())
 
       .row
         .col-md-12
           hr
           +submitButtons()
+
+block scripts
+  script.
+    $('.currency').each(function () {
+      $(this).autoNumeric('init');
+    });
+  
