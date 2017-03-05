@@ -26,7 +26,7 @@ mixin plakateScript(name)
     var #{name}Groesse = $('#' + '#{name}Groesse');
     function update#{name}Total() {
       var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
-      var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor
+      var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor;
       $('#' + '#{name}Total').autoNumeric('set', result);
       updatePlakateTotal();
     }
@@ -55,7 +55,7 @@ mixin marketingScript(name)
     var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
     function update#{name}Total() {
       var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
-      var result = parseInt(#{name}Num.val(), 10) * eur
+      var result = parseInt(#{name}Num.val(), 10) * eur;
       $('#' + '#{name}Total').autoNumeric('set', result);
       updatePlakateTotal();
     }

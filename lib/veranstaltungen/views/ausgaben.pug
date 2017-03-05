@@ -1,6 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include werbung
+include staff
 
 block title
   | Veranstaltung
@@ -8,6 +9,8 @@ block title
 block content
   -var kosten = veranstaltung.kosten()
   -var werbung = veranstaltung.werbung()
+  -var staff = veranstaltung.staff()
+
   form#ausgabenform(action='/veranstaltungen/submit', method='post')
     +csrf
     +hidden('id', veranstaltung.id())
@@ -127,6 +130,7 @@ block content
                   p: b
                     +currencySpan('cateringTotal', 'form-control-static pull-right')
         .col-md-6
+          +staff
           legend
             a(data-toggle='collapse', href='#plakate') Marketing
             +currencySpan('werbungTotal', 'pull-right')
@@ -263,3 +267,5 @@ block scripts
   +marketingScript('flyer')
   +marketingScript('banner')
   +marketingScript('socialmedia')
+  +staffScript
+  script(src='/clientscripts/check-ausgabenform.js')
