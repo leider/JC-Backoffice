@@ -1,0 +1,65 @@
+include ../../../views/formComponents
+
+mixin plakateRow(name, label, werte)
+  .row
+    .col-xs-3
+      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
+    .col-xs-3
+      .form-group
+        label.control-label(for=name + 'Groesse') Größe:
+        select.form-control(id=name + 'Groesse', name='werbung[' + name + 'Groesse]')
+          for wert in werte
+            option(value=wert, selected = (werbung[name + 'Groesse']() === wert)) #{wert}
+    .col-xs-3
+      .form-group
+        label.control-label Zeitraum:
+        p.form-control-static #{werbung[name + 'KW']()}
+    .col-xs-3
+      .form-group
+        label.control-label Total:
+        p: b
+          +currencySpan(name + 'Total', 'form-control-static pull-right')
+
+mixin plakateScript(name)
+  script.
+    var #{name}Num = $('#werbung\\[#{name}Num\\]');
+    var #{name}Groesse = $('#' + '#{name}Groesse');
+    function update#{name}Total() {
+      var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
+      var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor
+      $('#' + '#{name}Total').autoNumeric('set', result);
+      updatePlakateTotal();
+    }
+    #{name}Num.change(update#{name}Total);
+    #{name}Num.keyup(update#{name}Total);
+    #{name}Groesse.change(update#{name}Total);
+    update#{name}Total();
+
+mixin marketingRow(name, label)
+  .row
+    .col-xs-3
+      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
+    .col-xs-3
+      .form-group
+        +currency('werbung['+ name + 'EUR]', label, werbung[name + 'EUR']())
+    .col-xs-3
+    .col-xs-3
+      .form-group
+        label.control-label Total:
+        p: b
+          +currencySpan(name + 'Total', 'form-control-static pull-right')
+
+mixin marketingScript(name)
+  script.
+    var #{name}Num = $('#werbung\\[#{name}Num\\]');
+    var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
+    function update#{name}Total() {
+      var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
+      var result = parseInt(#{name}Num.val(), 10) * eur
+      $('#' + '#{name}Total').autoNumeric('set', result);
+      updatePlakateTotal();
+    }
+    #{name}Num.change(update#{name}Total);
+    #{name}Num.keyup(update#{name}Total);
+    #{name}EUR.keyup(update#{name}Total);
+    update#{name}Total();
