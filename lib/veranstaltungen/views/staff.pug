@@ -1,0 +1,159 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+include werbung
+
+block title
+  | Veranstaltung
+
+block content
+  -var staff = veranstaltung.staff()
+  form#staffform(action='/veranstaltungen/submit', method='post')
+    +csrf
+    +hidden('id', veranstaltung.id())
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Staff für #{veranstaltung.datumForDisplay()}<br>
+              small #{veranstaltung.titel()} im #{veranstaltung.ort()}
+      .row
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#staff') Staff
+            #staffPreis.pull-right 
+          #staff.collapse.in
+            .row
+              .col-sm-9
+                +editableMultiselect('staff[techniker]', 'Techniker', staff.techniker(), optionen.techniker())
+              .col-sm-3
+                +currencySpan('staff[technikerEUR]', 'Betrag')
+            .row
+              .col-sm-9
+                +editableMultiselect('staff[merchandise]', 'Merchandise', staff.merchandise(), optionen.merchandise())
+              .col-sm-3
+                +currencySpan('staff[merchandiseEUR]', 'Betrag')
+            .row
+              .col-sm-9
+                +editableMultiselect('staff[kasse]', 'Kasse', staff.kasse(), optionen.kasse())
+              .col-sm-3
+                +currencySpan('staff[kasseEUR]', 'Betrag')
+
+      .row
+        .col-md-12
+          hr
+          +submitButtons()
+          
+block scripts
+  script.
+    $('.currency').each(function () {
+      $(this).autoNumeric('init');
+    });
+    var backlineEUR = $('#kosten\\[backlineEUR\\]');
+    var saalmiete = $('#kosten\\[saalmiete\\]');
+    var technikAngebot1EUR = $('#kosten\\[technikAngebot1EUR\\]');
+    var technikAngebot2EUR = $('#kosten\\[technikAngebot2EUR\\]');
+    var gagenEUR = $('#kosten\\[gagenEUR\\]');
+    var gagenMWSt = $('#gagenMWSt');
+    var gagenAuslandSt = $('#gagenAuslandSt');
+    var agenturEUR = $('#kosten\\[agenturEUR\\]');
+    var agenturMWSt = $('#agenturMWSt');
+    var cateringEUR = $('#kosten\\[cateringEUR\\]');
+
+    var gagenTotal = $('#gagenTotal');
+    var agenturTotal = $('#agenturTotal');
+    var cateringTotal = $('#cateringTotal');
+    
+    function updateBacklinePreis() { $('#backlinePreis').html(backlineEUR.val()); }
+    function updateSaalmietePreis() { $('#saalmietePreis').html(saalmiete.val()); }
+    function updateTechnikPreis() {
+      var a1 = parseFloat(technikAngebot1EUR.autoNumeric('get'), 10);
+      var a2 = parseFloat(technikAngebot2EUR.autoNumeric('get'), 10);
+      $('#technikTotal').autoNumeric('set', a1 + a2); 
+    }
+    
+    function updateGagenTotal() {
+      var eur = parseFloat(gagenEUR.autoNumeric('get'), 10);
+      var mwst = parseFloat(gagenMWSt.val().replace(',', '.')) || 0;
+      var foreignTax = parseFloat(gagenAuslandSt.val().replace(',', '.')) || 0;
+      var total = eur + (eur * mwst / 100) + (eur * foreignTax / 100);
+      gagenTotal.autoNumeric('set', total);
+      gagenTotal.change();
+    }
+    
+    function updateAgenturTotal() {
+      var eur = parseFloat(agenturEUR.autoNumeric('get'), 10);
+      var mwst = parseFloat(agenturMWSt.val().replace(',', '.')) || 0;
+      var total = eur + (eur * mwst / 100);
+      agenturTotal.autoNumeric('set', total);
+      agenturTotal.change();
+    }
+    
+    function updateCateringTotal() {
+      var eur = parseFloat(cateringEUR.autoNumeric('get'), 10);
+      var num = parseInt($('#cateringNum').text(), 10) || 0;
+      var total = eur * num;
+      cateringTotal.autoNumeric('set', total);
+      cateringTotal.change();
+    }
+    
+    function updateBandTotal() {
+      var gage = parseFloat(gagenTotal.autoNumeric('get')) || 0;
+      var agentur = parseFloat(agenturTotal.autoNumeric('get')) || 0;
+      var cat = parseFloat(cateringTotal.autoNumeric('get')) || 0;
+      $('#bandTotal').autoNumeric('set', gage + agentur + cat);
+    }
+    
+    backlineEUR.keyup(updateBacklinePreis);
+    saalmiete.keyup(updateSaalmietePreis);
+    technikAngebot1EUR.keyup(updateTechnikPreis);
+    technikAngebot2EUR.keyup(updateTechnikPreis);
+
+    gagenEUR.keyup(updateGagenTotal);
+    gagenMWSt.change(updateGagenTotal);
+    gagenAuslandSt.change(updateGagenTotal);
+    agenturEUR.keyup(updateAgenturTotal);
+    agenturMWSt.change(updateAgenturTotal);
+    cateringEUR.keyup(updateCateringTotal);
+
+    gagenTotal.change(updateBandTotal);
+
+    updateBacklinePreis();
+    updateSaalmietePreis();
+    updateTechnikPreis();
+    updateGagenTotal();
+    updateAgenturTotal();
+    updateCateringTotal();
+    updateBandTotal();
+
+    var groessenUndFaktoren = {
+      kulturring: {A1: 1.5, A2: 1},
+      gruene: {A1: 7.5},
+      spitzer: {A1: 3.5},
+      ralf: {A3: 1}
+    }
+    function updatePlakateTotal() {
+      var kulturring = parseFloat($('#kulturringTotal').autoNumeric('get')) || 0;
+      var gruene = parseFloat($('#grueneTotal').autoNumeric('get')) || 0;
+      var spitzer = parseFloat($('#spitzerTotal').autoNumeric('get')) || 0;
+      var ralf = parseFloat($('#ralfTotal').autoNumeric('get')) || 0;
+      var flyer = parseFloat($('#flyerTotal').autoNumeric('get')) || 0;
+      var banner = parseFloat($('#bannerTotal').autoNumeric('get')) || 0;
+      var socialmedia = parseFloat($('#socialmediaTotal').autoNumeric('get')) || 0;
+      $('#werbungTotal').autoNumeric('set', kulturring + gruene + spitzer + ralf + flyer +banner +socialmedia);
+      
+      var kulturringNum = parseInt($('#werbung\\[kulturringNum\\]').val(), 10) || 0;
+      var grueneNum = parseInt($('#werbung\\[grueneNum\\]').val(), 10) || 0;
+      var spitzerNum = parseInt($('#werbung\\[spitzerNum\\]').val(), 10) || 0;
+      var ralfNum = parseInt($('#werbung\\[ralfNum\\]').val(), 10) || 0;
+      $('#anzahlPlakate').html(kulturringNum + grueneNum + spitzerNum + ralfNum);
+    }
+
+
+  +plakateScript('kulturring')
+  +plakateScript('gruene')
+  +plakateScript('spitzer')
+  +plakateScript('ralf')
+  +marketingScript('flyer')
+  +marketingScript('banner')
+  +marketingScript('socialmedia')
