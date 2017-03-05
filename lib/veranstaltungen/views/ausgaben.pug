@@ -38,6 +38,35 @@ mixin plakateScript(name)
     #{name}Groesse.change(update#{name}Total);
     update#{name}Total();
   
+mixin marketingRow(name, label)
+  .row
+    .col-xs-3
+      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
+    .col-xs-3
+      .form-group
+        +currency('werbung['+ name + 'EUR]', label, werbung[name + 'EUR']())
+    .col-xs-3
+    .col-xs-3
+      .form-group
+        label.control-label Total:
+        p: b
+          +currencySpan(name + 'Total', 'form-control-static pull-right')
+
+mixin marketingScript(name)
+  script.
+    var #{name}Num = $('#werbung\\[#{name}Num\\]');
+    var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
+    function update#{name}Total() {
+      var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
+      var result = parseInt(#{name}Num.val(), 10) * eur
+      $('#' + '#{name}Total').autoNumeric('set', result);
+      updatePlakateTotal();
+    }
+    #{name}Num.change(update#{name}Total);
+    #{name}Num.keyup(update#{name}Total);
+    #{name}EUR.keyup(update#{name}Total);
+    update#{name}Total();
+
 block title
   | Veranstaltung
 
@@ -52,8 +81,8 @@ block content
         .col-md-12
           +submitButtons()
           .page-header
-            h2 Kosten für #{veranstaltung.titel()} im #{veranstaltung.ort()}<br>
-              small #{veranstaltung.datumForDisplay()}
+            h2 Kosten für #{veranstaltung.datumForDisplay()}<br>
+              small #{veranstaltung.titel()} im #{veranstaltung.ort()}
       .row
         .col-md-6
           legend
@@ -101,7 +130,6 @@ block content
                 +text('kosten[technikAngebot2]', 'Angebot 2', kosten.technikAngebot2())
               .col-sm-3
                 +currency('kosten[technikAngebot2EUR]', 'Betrag', kosten.technikAngebot2EUR())
-        .col-md-6
           legend
             a(data-toggle='collapse', href='#band') Band
             +currencySpan('bandTotal', 'pull-right')
@@ -163,9 +191,10 @@ block content
                   label.control-label Total:
                   p: b
                     +currencySpan('cateringTotal', 'form-control-static pull-right')
+        .col-md-6
           legend
-            a(data-toggle='collapse', href='#plakate') Plakate
-            +currencySpan('plakateTotal', 'pull-right')
+            a(data-toggle='collapse', href='#plakate') Marketing
+            +currencySpan('werbungTotal', 'pull-right')
           #plakate.collapse.in
             +plakateRow('kulturring', 'Kulturring', ['A1', 'A2'])
             +plakateRow('gruene', 'Grüne', ['A1'])
@@ -177,6 +206,10 @@ block content
                   label
                     input(type='checkbox', name='werbung[genehmigt]', checked=(werbung.genehmigt() ? 'true' : undefined))
                     p: b Wir müssen <span id="anzahlPlakate">#{werbung.anzahlPlakate()}</span> Genehmigungen beantragen!
+            hr
+            +marketingRow('flyer', 'Flyer')
+            +marketingRow('banner', 'Banner etc.')
+            +marketingRow('socialmedia', 'Social Media')
       .row
         .col-md-12
           hr
@@ -275,7 +308,10 @@ block scripts
       var gruene = parseFloat($('#grueneTotal').autoNumeric('get')) || 0;
       var spitzer = parseFloat($('#spitzerTotal').autoNumeric('get')) || 0;
       var ralf = parseFloat($('#ralfTotal').autoNumeric('get')) || 0;
-      $('#plakateTotal').autoNumeric('set', kulturring + gruene + spitzer + ralf);
+      var flyer = parseFloat($('#flyerTotal').autoNumeric('get')) || 0;
+      var banner = parseFloat($('#bannerTotal').autoNumeric('get')) || 0;
+      var socialmedia = parseFloat($('#socialmediaTotal').autoNumeric('get')) || 0;
+      $('#werbungTotal').autoNumeric('set', kulturring + gruene + spitzer + ralf + flyer +banner +socialmedia);
       
       var kulturringNum = parseInt($('#werbung\\[kulturringNum\\]').val(), 10) || 0;
       var grueneNum = parseInt($('#werbung\\[grueneNum\\]').val(), 10) || 0;
@@ -289,3 +325,6 @@ block scripts
   +plakateScript('gruene')
   +plakateScript('spitzer')
   +plakateScript('ralf')
+  +marketingScript('flyer')
+  +marketingScript('banner')
+  +marketingScript('socialmedia')
