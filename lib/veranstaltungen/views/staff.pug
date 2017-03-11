@@ -1,6 +1,6 @@
 include ../../../views/formComponents
   
-mixin staffRow(name, label)
+mixin staffRow(staff, name, label)
   .row
     .col-xs-6
       +editableMultiselect('staff[' + name + ']', label, staff[name](), optionen[name]())
@@ -29,15 +29,15 @@ mixin staffScriptFor(name)
     #{name}EUR.keyup(update#{name}Total);
     update#{name}Total();
 
-mixin staff
+mixin staff(staff)
   legend
     a(data-toggle='collapse', href='#staff') Staff
     +currencySpan('staffPreis', 'pull-right')
   #staff.collapse.in
-    +staffRow('techniker', 'Techniker')
-    +staffRow('merchandise', 'Merchandise')
-    +staffRow('kasse', 'Kasse')
-    +staffRow('fremdpersonal', 'Fremdpersonal')
+    +staffRow(staff, 'techniker', 'Techniker')
+    +staffRow(staff, 'merchandise', 'Merchandise')
+    +staffRow(staff, 'kasse', 'Kasse')
+    +staffRow(staff, 'fremdpersonal', 'Fremdpersonal')
 
 mixin staffScript
   script.

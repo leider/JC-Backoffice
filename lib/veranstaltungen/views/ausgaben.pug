@@ -129,7 +129,7 @@ block content
                   p: b
                     +currencySpan('cateringTotal', 'form-control-static pull-right')
         .col-md-6
-          +staff
+          +staff(veranstaltung.staff())
           legend
             a(data-toggle='collapse', href='#plakate') Marketing
             +currencySpan('werbungTotal', 'pull-right')
