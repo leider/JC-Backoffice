@@ -1,0 +1,135 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+include kontakt
+
+mixin bahnOderFlug(legend, bahnhof, bahnhofLabel, bahn, transferOptions)
+  legend #{legend}
+  .row
+    .col-md-12
+      +text('unterkunft[' + bahnhof + ']', bahnhofLabel, unterkunft[bahnhof]())
+  .row
+    .col-xs-6()
+      .col-xs-6(style='padding-left:0px;padding-right:3px')
+        +date('unterkunft[' + bahn + 'AnkunftDate]', 'Ankunft', unterkunft[bahn +'AnkunftMoment']().format('L'))
+      .col-xs-6(style='padding-left:3px;padding-right:0px')
+        +time('unterkunft[' + bahn + 'AnkunftTime]', unterkunft[bahn + 'AnkunftMoment']().format('LT'))
+    .col-xs-6()
+      .col-xs-6(style='padding-left:0px;padding-right:3px')
+        +date('unterkunft[' + bahn + 'AbfahrtDate]', 'Abfahrt', unterkunft[bahn + 'AbfahrtMoment']().format('L'))
+      .col-xs-6(style='padding-left:3px;padding-right:0px')
+        +time('unterkunft[' + bahn + 'AbfahrtTime]', unterkunft[bahn + 'AbfahrtMoment']().format('LT'))
+  .row
+    .col-xs-6
+      .form-group
+        label.control-label(for=bahn + 'TransferAnkunft') Transfer:
+        select.form-control(name='unterkunft[' + bahn + 'TransferAnkunft]', id=bahn + 'TransferAnkunft')
+          for option in transferOptions
+            option(value=option, selected = unterkunft[bahn + 'TransferAnkunft']() === option) #{option}
+    .col-xs-6
+      .form-group
+        label.control-label(for=bahn + 'TransferAbfahrt') Transfer:
+        select.form-control(name='unterkunft[' + bahn + 'TransferAbfahrt]', id=bahn + 'TransferAbfahrt')
+          for option in ['', 'Jazzclub Shuttle', 'Taxi']
+            option(value=option, selected = unterkunft[bahn + 'TransferAbfahrt']() === option) #{option}
+
+
+block title
+  | Veranstaltung
+
+block content
+  -var unterkunft = veranstaltung.unterkunft()
+
+  form#hotelform(action='/veranstaltungen/submit', method='post')
+    +csrf
+    +hidden('id', veranstaltung.id())
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Hotel für #{veranstaltung.datumForDisplay()}<br>
+              small #{veranstaltung.titel()} im #{veranstaltung.ort()}
+      .row
+        .col-md-6
+          +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel')
+          legend
+            a(data-toggle='collapse', href='#zimmer') Zimmer
+            +currencySpan('roomsTotal', 'pull-right')
+          #zimmer.collapse.in
+            .row
+              .col-xs-4()
+                +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate())
+                +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate())
+              .col-xs-8()
+                +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar())
+            .row
+              .col-sm-4
+                .row
+                  .col-xs-6
+                    +number('unterkunft[einzelNum]', 'Einzel', unterkunft.einzelNum(), null, '0', '80')
+                  .col-xs-6
+                    +currency('unterkunft[einzelEUR]', 'Preis', unterkunft.einzelEUR())
+              .col-sm-4
+                .row
+                  .col-xs-6
+                    +number('unterkunft[doppelNum]', 'Doppel', unterkunft.doppelNum(), null, '0', '80')
+                  .col-xs-6
+                    +currency('unterkunft[doppelEUR]', 'Preis', unterkunft.doppelEUR())
+              .col-sm-4
+                .row
+                  .col-xs-6
+                    +number('unterkunft[suiteNum]', 'Suite', unterkunft.suiteNum(), null, '0', '80')
+                  .col-xs-6
+                    +currency('unterkunft[suiteEUR]', 'Preis', unterkunft.suiteEUR())
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#transport') Transport
+          #transport.collapse.in
+            .row
+              .col-lg-6
+                +bahnOderFlug('Bahn', 'bahnhof', 'Bahnhof', 'bahn', ['', 'Jazzclub Shuttle', 'Taxi'])
+              .col-lg-6
+                +bahnOderFlug('Flug', 'flughafen', 'Flughafen / Flugnummer', 'flug', ['', 'Jazzclub Shuttle', 'Airport Shuttle', 'Bahn'])
+            .row
+              .col-md-6
+                +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
+              .col-md-6
+                +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
+      .row
+        .col-md-12
+          hr
+          +submitButtons()
+block scripts
+  +kontaktScript('hotel')
+  script.
+    $('.currency').each(function () {
+      $(this).autoNumeric('init');
+    });
+    var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
+    var einzelNum = $('#unterkunft\\[einzelNum\\]');
+    var doppelEUR = $('#unterkunft\\[doppelEUR\\]');
+    var doppelNum = $('#unterkunft\\[doppelNum\\]');
+    var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
+    var suiteNum = $('#unterkunft\\[suiteNum\\]');
+
+    var roomsTotal = $('#roomsTotal');
+    
+    function updateRoomsTotal() {
+      var EUR1 = parseFloat(einzelEUR.autoNumeric('get'), 10);
+      var Num1 = parseInt(einzelNum.val().replace(',', '.')) || 0;
+      var EUR2 = parseFloat(doppelEUR.autoNumeric('get'), 10);
+      var Num2 = parseInt(doppelNum.val().replace(',', '.')) || 0;
+      var EUR3 = parseFloat(suiteEUR.autoNumeric('get'), 10);
+      var Num3 = parseInt(suiteNum.val().replace(',', '.')) || 0;
+      var total = EUR1 * Num1 + EUR2 * Num2 + EUR3 * Num3;
+      roomsTotal.autoNumeric('set', total);
+    }
+
+    einzelEUR.keyup(updateRoomsTotal);
+    doppelEUR.keyup(updateRoomsTotal);
+    suiteEUR.keyup(updateRoomsTotal);
+    einzelNum.change(updateRoomsTotal);
+    doppelNum.change(updateRoomsTotal);
+    suiteNum.change(updateRoomsTotal);
+    
+    updateRoomsTotal();

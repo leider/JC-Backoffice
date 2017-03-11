@@ -8,6 +8,7 @@
   "kosten": {"module": "./lib/veranstaltungen/kosten"},
   "werbung": {"module": "./lib/veranstaltungen/werbung"},
   "staff": {"module": "./lib/veranstaltungen/staff"},
+  "unterkunft": {"module": "./lib/veranstaltungen/unterkunft"},
 
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},
