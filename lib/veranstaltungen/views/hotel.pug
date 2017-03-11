@@ -10,7 +10,7 @@ mixin bahnOderFlug(legend, bahnhof, bahnhofLabel, bahn, transferOptions)
   .row
     .col-xs-6()
       .col-xs-6(style='padding-left:0px;padding-right:3px')
-        +date('unterkunft[' + bahn + 'AnkunftDate]', 'Ankunft', unterkunft[bahn +'AnkunftMoment']().format('L'))
+        +date('unterkunft[' + bahn + 'AnkunftDate]', 'Ankunft', unterkunft[bahn + 'AnkunftMoment']().format('L'))
       .col-xs-6(style='padding-left:3px;padding-right:0px')
         +time('unterkunft[' + bahn + 'AnkunftTime]', unterkunft[bahn + 'AnkunftMoment']().format('LT'))
     .col-xs-6()
@@ -84,6 +84,7 @@ block content
         .col-md-6
           legend
             a(data-toggle='collapse', href='#transport') Transport
+            +currencySpan('transportTotal', 'pull-right')
           #transport.collapse.in
             .row
               .col-lg-6
@@ -112,9 +113,12 @@ block scripts
     var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
     var suiteNum = $('#unterkunft\\[suiteNum\\]');
 
-    var roomsTotal = $('#roomsTotal');
-    
+    var transportEUR = $('#unterkunft\\[transportEUR\\]');
+
+
     function updateRoomsTotal() {
+      var roomsTotal = $('#roomsTotal');
+      
       var EUR1 = parseFloat(einzelEUR.autoNumeric('get'), 10);
       var Num1 = parseInt(einzelNum.val().replace(',', '.')) || 0;
       var EUR2 = parseFloat(doppelEUR.autoNumeric('get'), 10);
@@ -131,5 +135,13 @@ block scripts
     einzelNum.change(updateRoomsTotal);
     doppelNum.change(updateRoomsTotal);
     suiteNum.change(updateRoomsTotal);
-    
+
     updateRoomsTotal();
+
+    function updateTransportTotal() {
+      var eur = parseFloat(transportEUR.autoNumeric('get'), 10);
+      $('#transportTotal').autoNumeric('set', eur)
+    }
+    transportEUR.keyup(updateTransportTotal);
+    
+    updateTransportTotal();

@@ -47,7 +47,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
     input.form-control.currency(id=name, type='text', value=value, name=name, placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
 mixin currencySpan(id, clazz)
-  span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+  span.currency.text-success(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
 mixin textareaPure(name, label, value, placeholder)
   +textareaInternal('form-control', '4', name, label, value, null, placeholder)
