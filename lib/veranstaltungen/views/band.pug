@@ -53,7 +53,7 @@ mixin band(kosten)
       .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
         .form-group
           label.control-label Anzahl:
-          p: span#cateringNum.form-control-static.pull-right #{veranstaltung.numForCatering()}
+          p: span#cateringNum.form-control-static.pull-right #{veranstaltung.artist().numForCatering()}
 
       .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
       .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
