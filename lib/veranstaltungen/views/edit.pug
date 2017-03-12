@@ -100,6 +100,14 @@ block content
 block scripts
   +preiseScript
   +kontaktScript('agentur')
-  script(src='/clientscripts/veranstaltungDateModel.js')
-  script(src='/clientscripts/veranstaltungform-dateAdapter.js')
+  script.
+    $(document).ready(function () {
+      var startDate = $('#veranstaltungform [name=startDate]');
+      var startTime = $('#veranstaltungform [name=startTime]');
+      var endDate = $('#veranstaltungform [name=endDate]');
+      var endTime = $('#veranstaltungform [name=endTime]');
+
+      dateAdapter(startDate, startTime, endDate, endTime);
+    });
+
   script(src='/clientscripts/check-veranstaltungform.js')

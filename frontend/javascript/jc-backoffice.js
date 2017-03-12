@@ -1,5 +1,77 @@
-/*global URI*/
+/* global URI, moment */
 
+/* exported eurAmount */
+function eurAmount(jqueryCurrencyField) {
+  'use strict';
+  return parseFloat(jqueryCurrencyField.autoNumeric('get'), 10) || 0;
+}
+
+/* exported intAmount */
+function intAmount(jqueryNumberField) {
+  'use strict';
+  return parseInt(jqueryNumberField.val().replace(',', '.'), 10) || 0;
+}
+
+/* exported floatAmount */
+function floatAmount(jqueryNumberField) {
+  'use strict';
+  return parseFloat(jqueryNumberField.val().replace(',', '.'), 10) || 0;
+}
+
+/* exported setEuro */
+function setEuro(jqueryCurrencyField, euro) {
+  'use strict';
+  jqueryCurrencyField.autoNumeric('set', euro);
+  jqueryCurrencyField.change();
+}
+
+/* exported toUtc */
+function toUtc(dateString, timeString) {
+  'use strict';
+  if (dateString && timeString) {
+    return moment.utc(dateString + ' ' + timeString, 'D.M.YYYY H:m');
+  }
+  return null;
+}
+
+/* exported veranstaltungDateModel */
+function veranstaltungDateModel(initialDate, initialTime) {
+  'use strict';
+
+  var oldStartDate = toUtc(initialDate, initialTime);
+
+  return {
+    determineNewEnd: function (startDate, startTime, endDate, endTime) {
+      var start = toUtc(startDate, startTime);
+      var end = toUtc(endDate, endTime);
+
+      var offset = oldStartDate && start ? start.diff(oldStartDate, 'minutes') : 0;
+      oldStartDate = start;
+      var endMoment = end ? end.add(offset, 'minutes') : null;
+      return {
+        endDate: (endMoment ? endMoment.format('DD.MM.YYYY') : ''),
+        endTime: (endMoment ? endMoment.format('HH:mm') : '')
+      };
+    }
+  };
+}
+
+/* exported dateAdapter */
+function dateAdapter(startDate, startTime, endDate, endTime) {
+  'use strict';
+  var dateCalc = veranstaltungDateModel(startDate.val(), startTime.val());
+
+  function listener() {
+    var endStrings = dateCalc.determineNewEnd(startDate.val(), startTime.val(), endDate.val(), endTime.val());
+
+    endDate.data().datepicker.update(endStrings.endDate);
+    endTime.data().timepicker.setTime(endStrings.endTime);
+    endDate.data().datepicker.update(endStrings.endDate); // to have the change fired correctly on date field
+  }
+
+  startDate.change(listener);
+  startTime.change(listener);
+}
 
 (function () {
   'use strict';
@@ -110,8 +182,6 @@
       $(this).tooltip();
     });
   }
-
-
 
   patchBootstrapPopover();
   $.event.add(window, 'resize', adaptScrollableBox);

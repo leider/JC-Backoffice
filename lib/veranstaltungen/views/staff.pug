@@ -20,9 +20,7 @@ mixin staffScriptFor(name)
       var #{name}EUR = $('#staff\\[#{name}EUR\\]');
 
       function update#{name}Total() {
-        var #{name}Anzahl = #{name}.val().length;
-        var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
-        var result = #{name}Anzahl * eur;
+        var result = #{name}.val().length * eurAmount(#{name}EUR);
         $('#' + '#{name}Total').autoNumeric('set', result);
         updateStaffTotal();
       }
@@ -46,11 +44,9 @@ mixin staff(staff)
 mixin staffScript
   script.
     function updateStaffTotal() {
-      var techniker = parseFloat($('#technikerTotal').autoNumeric('get')) || 0;
-      var merchandise = parseFloat($('#merchandiseTotal').autoNumeric('get')) || 0;
-      var kasse = parseFloat($('#kasseTotal').autoNumeric('get')) || 0;
-      var fremdpersonal = parseFloat($('#fremdpersonalTotal').autoNumeric('get')) || 0;
-      $('#staffPreis').autoNumeric('set', techniker + merchandise + kasse + fremdpersonal);
+      const summe = eurAmount($('#technikerTotal')) + eurAmount($('#merchandiseTotal'))
+        + eurAmount($('#kasseTotal')) + eurAmount($('#fremdpersonalTotal'));
+      $('#staffPreis').autoNumeric('set', summe);
     }
 
   +staffScriptFor('techniker')

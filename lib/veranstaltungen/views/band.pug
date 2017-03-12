@@ -1,0 +1,111 @@
+include ../../../views/formComponents
+  
+mixin band(kosten)
+  legend
+    a(data-toggle='collapse', href='#band') Band
+    +currencySpan('bandTotal', 'pull-right')
+  #band.collapse.in
+    .row
+      .col-xs-3(style='padding-right: 5px;')
+        +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .form-group
+          label.control-label(for='gagenMWSt') MWSt:
+          select#gagenMWSt.form-control(name='kosten[gagenMWSt]')
+            for wert in ['ohne', '7%', '19%']
+              option(value=wert, selected = (kosten.gagenMWSt() === wert)) #{wert}
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .form-group
+          label.control-label(for='gagenAuslandSt') Ausl.St.:
+          select#gagenAuslandSt.form-control(name='kosten[gagenAuslandSt]')
+            for wert in ['ohne', '18,8%']
+              option(value=wert, selected = (kosten.gagenAuslandSt() === wert)) #{wert}
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .form-group
+          label.control-label(for='deal') Deal:
+          select#deal.form-control(name='kosten[deal]')
+            for wert in ['ohne', '100%', '90%', '80%', '70%', '60%']
+              option(value=wert, selected = (kosten.deal() === wert)) #{wert}
+      .col-xs-3(style='padding-left: 5px;')
+        .form-group
+          label.control-label Total:
+          p: b
+            +currencySpan('gagenTotal', 'form-control-static pull-right')
+    .row
+      .col-xs-3(style='padding-right: 5px;')
+        +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .form-group
+          label.control-label(for='agenturMWSt') MWSt:
+          select#agenturMWSt.form-control(name='kosten[agenturMWSt]')
+            for wert in ['ohne', '7%', '19%']
+              option(value=wert, selected = (kosten.agenturMWSt() === wert)) #{wert}
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+      .col-xs-3(style='padding-left: 5px;')
+        .form-group
+          label.control-label Total:
+          p: b
+            +currencySpan('agenturTotal', 'form-control-static pull-right')
+    .row
+      .col-xs-3(style='padding-right: 5px;')
+        +currency('kosten[cateringEUR]', 'Catering (Kopf)', kosten.cateringEUR())
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .form-group
+          label.control-label Anzahl:
+          p: span#cateringNum.form-control-static.pull-right #{veranstaltung.numForCatering()}
+
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+      .col-xs-3(style='padding-left: 5px;')
+        .form-group
+          label.control-label Total:
+          p: b
+            +currencySpan('cateringTotal', 'form-control-static pull-right')
+          
+mixin bandScript
+  script.
+    $(document).ready(function () {
+      var gagenEUR = $('#kosten\\[gagenEUR\\]');
+      var gagenMWSt = $('#gagenMWSt');
+      var gagenAuslandSt = $('#gagenAuslandSt');
+      var gagenTotal = $('#gagenTotal');
+      function updateGagenTotal() {
+        var eur = eurAmount(gagenEUR);
+        var steuerAusland = (eur * floatAmount(gagenAuslandSt) / 100);
+        var mwst = (eur * floatAmount(gagenMWSt) / 100);
+        setEuro(gagenTotal, eur + mwst + steuerAusland);
+      }
+      gagenEUR.keyup(updateGagenTotal);
+      gagenMWSt.change(updateGagenTotal);
+      gagenAuslandSt.change(updateGagenTotal);
+      updateGagenTotal();
+
+      var agenturEUR = $('#kosten\\[agenturEUR\\]');
+      var agenturMWSt = $('#agenturMWSt');
+      var agenturTotal = $('#agenturTotal');
+      function updateAgenturTotal() {
+        var eur = eurAmount(agenturEUR);
+        setEuro(agenturTotal, eur + (eur * floatAmount(agenturMWSt) / 100));
+      }
+      agenturEUR.keyup(updateAgenturTotal);
+      agenturMWSt.change(updateAgenturTotal);
+      updateAgenturTotal();
+
+      var cateringEUR = $('#kosten\\[cateringEUR\\]');
+      var cateringTotal = $('#cateringTotal');
+      function updateCateringTotal() {
+        var num = parseInt($('#cateringNum').text(), 10) || 0;
+        setEuro(cateringTotal, eurAmount(cateringEUR) * num);
+      }
+      cateringEUR.keyup(updateCateringTotal);
+      updateCateringTotal();
+
+      function updateBandTotal() {
+        setEuro($('#bandTotal'), eurAmount(gagenTotal) + eurAmount(agenturTotal) + eurAmount(cateringTotal));
+      }
+      [gagenTotal, agenturTotal, cateringTotal].forEach(function (field) {
+        field.change(updateBandTotal);
+      })
+      updateBandTotal();
+    });

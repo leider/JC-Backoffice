@@ -9,14 +9,14 @@ mixin bahnOderFlug(legend, bahnhof, bahnhofLabel, bahn, transferOptions)
       +text('unterkunft[' + bahnhof + ']', bahnhofLabel, unterkunft[bahnhof]())
   .row
     .col-xs-6()
-      .col-xs-6(style='padding-left:0px;padding-right:3px')
+      .col-xs-7(style='padding-left:0px;padding-right:3px')
         +date('unterkunft[' + bahn + 'AnkunftDate]', 'Ankunft', unterkunft[bahn + 'AnkunftMoment']().format('L'))
-      .col-xs-6(style='padding-left:3px;padding-right:0px')
+      .col-xs-5(style='padding-left:3px;padding-right:0px')
         +time('unterkunft[' + bahn + 'AnkunftTime]', unterkunft[bahn + 'AnkunftMoment']().format('LT'))
     .col-xs-6()
-      .col-xs-6(style='padding-left:0px;padding-right:3px')
+      .col-xs-7(style='padding-left:0px;padding-right:3px')
         +date('unterkunft[' + bahn + 'AbfahrtDate]', 'Abfahrt', unterkunft[bahn + 'AbfahrtMoment']().format('L'))
-      .col-xs-6(style='padding-left:3px;padding-right:0px')
+      .col-xs-5(style='padding-left:3px;padding-right:0px')
         +time('unterkunft[' + bahn + 'AbfahrtTime]', unterkunft[bahn + 'AbfahrtMoment']().format('LT'))
   .row
     .col-xs-6
@@ -114,33 +114,27 @@ block scripts
       var transportEUR = $('#unterkunft\\[transportEUR\\]');
 
       function updateRoomsTotal() {
-        var roomsTotal = $('#roomsTotal');
-
-        var EUR1 = parseFloat(einzelEUR.autoNumeric('get'), 10);
-        var Num1 = parseInt(einzelNum.val().replace(',', '.')) || 0;
-        var EUR2 = parseFloat(doppelEUR.autoNumeric('get'), 10);
-        var Num2 = parseInt(doppelNum.val().replace(',', '.')) || 0;
-        var EUR3 = parseFloat(suiteEUR.autoNumeric('get'), 10);
-        var Num3 = parseInt(suiteNum.val().replace(',', '.')) || 0;
-        var total = EUR1 * Num1 + EUR2 * Num2 + EUR3 * Num3;
-        roomsTotal.autoNumeric('set', total);
+        var total = eurAmount(einzelEUR) * intAmount(einzelNum) 
+          + eurAmount(doppelEUR) * intAmount(doppelNum) 
+          + eurAmount(suiteEUR) * intAmount(suiteNum);
+        $('#roomsTotal').autoNumeric('set', total);
       }
 
-      einzelEUR.keyup(updateRoomsTotal);
-      doppelEUR.keyup(updateRoomsTotal);
-      suiteEUR.keyup(updateRoomsTotal);
-      einzelNum.change(updateRoomsTotal);
-      doppelNum.change(updateRoomsTotal);
-      suiteNum.change(updateRoomsTotal);
+      [einzelEUR, doppelEUR, suiteEUR].forEach(function(field) {
+        field.keyup(updateRoomsTotal);
+      });
+      [einzelNum, doppelNum, suiteNum].forEach(function(field) {
+        field.change(updateRoomsTotal);
+      });
 
       updateRoomsTotal();
 
       function updateTransportTotal() {
-        var eur = parseFloat(transportEUR.autoNumeric('get'), 10);
-        $('#transportTotal').autoNumeric('set', eur)
+        $('#transportTotal').autoNumeric('set', eurAmount(transportEUR))
       }
 
       transportEUR.keyup(updateTransportTotal);
 
       updateTransportTotal();
     });
+  script(src='/clientscripts/check-hotelform.js')

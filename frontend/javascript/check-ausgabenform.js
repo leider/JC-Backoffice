@@ -7,9 +7,7 @@ var ausgaben_validator;
   function initValidator() {
 
     ausgaben_validator = $('#ausgabenform').validate({
-      errorPlacement: function (error, element) {
-        error.insertAfter(element);
-      },
+      errorPlacement: function (error, element) { error.insertAfter(element); },
       errorElement: 'span',
       errorClass: 'help-block',
       highlight: function (element) { $(element).parent().addClass('has-error'); },

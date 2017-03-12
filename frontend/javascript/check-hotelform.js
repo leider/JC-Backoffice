@@ -1,15 +1,12 @@
 // THE ORIGINAL OF THIS FILE IS IN frontend/javascript
 
-var user_validator;
+var hotel_validator;
 (function () {
   'use strict';
 
   function initValidator() {
 
-    user_validator = $('#userform').validate({
-      rules: {
-        username: 'required',
-      },
+    hotel_validator = $('#hotelform').validate({
       errorPlacement: function (error, element) { error.insertAfter(element); },
       errorElement: 'span',
       errorClass: 'help-block',
@@ -17,20 +14,7 @@ var user_validator;
       unhighlight: function (element) { $(element).parent().removeClass('has-error'); }
     });
 
-    user_validator.form();
-
-    function handler(each) {
-      return function () {
-        user_validator.element(each);
-      };
-    }
-
-    ['#userform [name=username]'].forEach(
-      function (each) {
-        $(each).change(handler(each));
-        $(each).keyup(handler(each));
-      }
-    );
+    hotel_validator.form();
   }
 
   $(document).ready(initValidator);

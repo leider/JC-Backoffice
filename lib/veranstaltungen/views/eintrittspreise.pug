@@ -31,11 +31,9 @@ mixin preiseScript
       var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
 
       function amountHandler() {
-        var preis = parseFloat(regulaer.autoNumeric('get'), 10);
-        var rabattErmaessigtWert = parseFloat(rabattErmaessigt.autoNumeric('get'), 10);
-        var rabattMitgliedWert = parseFloat(rabattMitglied.autoNumeric('get'), 10);
-        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(rabattErmaessigtWert));
-        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(rabattMitgliedWert));
+        var preis = eurAmount(regulaer);
+        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(eurAmount(rabattErmaessigt)));
+        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(eurAmount(rabattMitglied)));
       }
 
       [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (field) {
