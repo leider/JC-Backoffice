@@ -16,7 +16,7 @@ block content
           for veranstaltung in veranstaltungen
             tr
               th: a(href=veranstaltung.fullyQualifiedUrl() + '/kopf') #{veranstaltung.startMoment().format('ddd ll')}
-              td: a(href=veranstaltung.fullyQualifiedUrl() + '/kopf') #{veranstaltung.titel()} im #{veranstaltung.ort()}&nbsp;
+              td: a(href=veranstaltung.fullyQualifiedUrl() + '/kopf') #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
               td
                 .btn-group.pull-right
                   a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Bearbeiten'): i.fa.fa-keyboard-o.fa-fw
