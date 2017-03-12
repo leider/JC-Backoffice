@@ -64,9 +64,9 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   function listener() {
     var endStrings = dateCalc.determineNewEnd(startDate.val(), startTime.val(), endDate.val(), endTime.val());
 
-    endDate.data().datepicker.update(endStrings.endDate);
-    endTime.data().timepicker.setTime(endStrings.endTime);
-    endDate.data().datepicker.update(endStrings.endDate); // to have the change fired correctly on date field
+    endDate.datepicker('update', (endStrings.endDate));
+    endTime.timepicker('setTime', endStrings.endTime);
+    endDate.datepicker('update', (endStrings.endDate)); // to have the change fired correctly on date field
   }
 
   startDate.change(listener);

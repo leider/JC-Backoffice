@@ -32,6 +32,18 @@ mixin bahnOderFlug(legend, bahnhof, bahnhofLabel, bahn, transferOptions)
           for option in ['', 'Jazzclub Shuttle', 'Taxi']
             option(value=option, selected = unterkunft[bahn + 'TransferAbfahrt']() === option) #{option}
 
+mixin bahnOderFlugDatesScript(bahn)
+  script.
+    $(document).ready(function () {
+      var startDate = $('#unterkunft\\[#{bahn}AnkunftDate\\]');
+      var startTime = $('#unterkunft\\[#{bahn}AnkunftTime\\]');
+      var endDate = $('#unterkunft\\[#{bahn}AbfahrtDate\\]');
+      var endTime = $('#unterkunft\\[#{bahn}AbfahrtTime\\]');
+
+      dateAdapter(startDate, startTime, endDate, endTime);
+    });
+
+
 
 block title
   | Veranstaltung
@@ -111,8 +123,6 @@ block scripts
       var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
       var suiteNum = $('#unterkunft\\[suiteNum\\]');
 
-      var transportEUR = $('#unterkunft\\[transportEUR\\]');
-
       function updateRoomsTotal() {
         var total = eurAmount(einzelEUR) * intAmount(einzelNum) 
           + eurAmount(doppelEUR) * intAmount(doppelNum) 
@@ -126,15 +136,16 @@ block scripts
       [einzelNum, doppelNum, suiteNum].forEach(function(field) {
         field.change(updateRoomsTotal);
       });
-
       updateRoomsTotal();
 
+      var transportEUR = $('#unterkunft\\[transportEUR\\]');
       function updateTransportTotal() {
         $('#transportTotal').autoNumeric('set', eurAmount(transportEUR))
       }
 
       transportEUR.keyup(updateTransportTotal);
-
       updateTransportTotal();
     });
+  +bahnOderFlugDatesScript('bahn')
+  +bahnOderFlugDatesScript('flug')
   script(src='/clientscripts/check-hotelform.js')
