@@ -103,45 +103,44 @@ block content
 block scripts
   +kontaktScript('hotel')
   script.
-    $('.currency').each(function () {
-      $(this).autoNumeric('init');
+    $(document).ready(function() {
+      var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
+      var einzelNum = $('#unterkunft\\[einzelNum\\]');
+      var doppelEUR = $('#unterkunft\\[doppelEUR\\]');
+      var doppelNum = $('#unterkunft\\[doppelNum\\]');
+      var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
+      var suiteNum = $('#unterkunft\\[suiteNum\\]');
+
+      var transportEUR = $('#unterkunft\\[transportEUR\\]');
+
+      function updateRoomsTotal() {
+        var roomsTotal = $('#roomsTotal');
+
+        var EUR1 = parseFloat(einzelEUR.autoNumeric('get'), 10);
+        var Num1 = parseInt(einzelNum.val().replace(',', '.')) || 0;
+        var EUR2 = parseFloat(doppelEUR.autoNumeric('get'), 10);
+        var Num2 = parseInt(doppelNum.val().replace(',', '.')) || 0;
+        var EUR3 = parseFloat(suiteEUR.autoNumeric('get'), 10);
+        var Num3 = parseInt(suiteNum.val().replace(',', '.')) || 0;
+        var total = EUR1 * Num1 + EUR2 * Num2 + EUR3 * Num3;
+        roomsTotal.autoNumeric('set', total);
+      }
+
+      einzelEUR.keyup(updateRoomsTotal);
+      doppelEUR.keyup(updateRoomsTotal);
+      suiteEUR.keyup(updateRoomsTotal);
+      einzelNum.change(updateRoomsTotal);
+      doppelNum.change(updateRoomsTotal);
+      suiteNum.change(updateRoomsTotal);
+
+      updateRoomsTotal();
+
+      function updateTransportTotal() {
+        var eur = parseFloat(transportEUR.autoNumeric('get'), 10);
+        $('#transportTotal').autoNumeric('set', eur)
+      }
+
+      transportEUR.keyup(updateTransportTotal);
+
+      updateTransportTotal();
     });
-    var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
-    var einzelNum = $('#unterkunft\\[einzelNum\\]');
-    var doppelEUR = $('#unterkunft\\[doppelEUR\\]');
-    var doppelNum = $('#unterkunft\\[doppelNum\\]');
-    var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
-    var suiteNum = $('#unterkunft\\[suiteNum\\]');
-
-    var transportEUR = $('#unterkunft\\[transportEUR\\]');
-
-
-    function updateRoomsTotal() {
-      var roomsTotal = $('#roomsTotal');
-      
-      var EUR1 = parseFloat(einzelEUR.autoNumeric('get'), 10);
-      var Num1 = parseInt(einzelNum.val().replace(',', '.')) || 0;
-      var EUR2 = parseFloat(doppelEUR.autoNumeric('get'), 10);
-      var Num2 = parseInt(doppelNum.val().replace(',', '.')) || 0;
-      var EUR3 = parseFloat(suiteEUR.autoNumeric('get'), 10);
-      var Num3 = parseInt(suiteNum.val().replace(',', '.')) || 0;
-      var total = EUR1 * Num1 + EUR2 * Num2 + EUR3 * Num3;
-      roomsTotal.autoNumeric('set', total);
-    }
-
-    einzelEUR.keyup(updateRoomsTotal);
-    doppelEUR.keyup(updateRoomsTotal);
-    suiteEUR.keyup(updateRoomsTotal);
-    einzelNum.change(updateRoomsTotal);
-    doppelNum.change(updateRoomsTotal);
-    suiteNum.change(updateRoomsTotal);
-
-    updateRoomsTotal();
-
-    function updateTransportTotal() {
-      var eur = parseFloat(transportEUR.autoNumeric('get'), 10);
-      $('#transportTotal').autoNumeric('set', eur)
-    }
-    transportEUR.keyup(updateTransportTotal);
-    
-    updateTransportTotal();

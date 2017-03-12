@@ -1,52 +1,55 @@
 include ../../../views/formComponents
 
 mixin preise(veranstaltung)
+  -var eintrittspreise = veranstaltung.eintrittspreise()
   legend
     a(data-toggle='collapse', href='#preise') Preise
   #preise.collapse.in
     .row
       .col-xs-4
-        +currency('eintrittspreise[regulaer]', 'Eintritt', veranstaltung.eintrittspreise().regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
+        +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
       .col-xs-4
-        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', veranstaltung.eintrittspreise().rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', veranstaltung.eintrittspreise().standardRabattErmaessigt() + ',00 €')
+        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', eintrittspreise.rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', eintrittspreise.standardRabattErmaessigt() + ',00 €')
       .col-xs-4
-        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', veranstaltung.eintrittspreise().rabattMitglied(), 'Die Reduktion für Mitglieder', veranstaltung.eintrittspreise().standardRabattMitglied() + ',00 €')
+        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', eintrittspreise.rabattMitglied(), 'Die Reduktion für Mitglieder', eintrittspreise.standardRabattMitglied() + ',00 €')
     .row
       .col-xs-4
         .form-group
           | &nbsp;
-          +checkbox('eintrittspreise[frei]', 'Freier Eintritt', veranstaltung.eintrittspreise().frei())
+          +checkbox('eintrittspreise[frei]', 'Freier Eintritt', eintrittspreise.frei())
       .col-xs-4
-        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', veranstaltung.eintrittspreise().ermaessigt(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00 €', true)
       .col-xs-4
-        +currency('eintrittspreise[mitglied]', '€ Mitglied', veranstaltung.eintrittspreise().mitglied(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00 €', true)
 
 mixin preiseScript
   script.
-    var regulaer = $('#eintrittspreise\\[regulaer\\]');
-    var rabattErmaessigt = $('#eintrittspreise\\[rabattErmaessigt\\]');
-    var rabattMitglied = $('#eintrittspreise\\[rabattMitglied\\]');
-    var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
+    function initPreiseScript() {
+      var regulaer = $('#eintrittspreise\\[regulaer\\]');
+      var rabattErmaessigt = $('#eintrittspreise\\[rabattErmaessigt\\]');
+      var rabattMitglied = $('#eintrittspreise\\[rabattMitglied\\]');
+      var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
 
-    $('.currency').each(function () {
-      $(this).autoNumeric('init');
-    });
-    function amountHandler() {
-      var preis = parseFloat(regulaer.autoNumeric('get'), 10);
-      var rabattErmaessigtWert = parseFloat(rabattErmaessigt.autoNumeric('get'), 10);
-      var rabattMitgliedWert = parseFloat(rabattMitglied.autoNumeric('get'), 10);
-      $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(rabattErmaessigtWert));
-      $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(rabattMitgliedWert));
-    }
+      function amountHandler() {
+        var preis = parseFloat(regulaer.autoNumeric('get'), 10);
+        var rabattErmaessigtWert = parseFloat(rabattErmaessigt.autoNumeric('get'), 10);
+        var rabattMitgliedWert = parseFloat(rabattMitglied.autoNumeric('get'), 10);
+        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(rabattErmaessigtWert));
+        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(rabattMitgliedWert));
+      }
 
-    $('.currency').keyup(amountHandler);
+      [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (field) {
+        field.keyup(amountHandler);
+      });
 
-    function enableDisableCurrencies() {
-      [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (each) {
-          each.prop('disabled', freierEintritt.is(':checked'));
-        }
-      )
-    }
+      function enableDisableCurrencies() {
+        [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (each) {
+            each.prop('disabled', freierEintritt.is(':checked'));
+          }
+        )
+      }
 
-    freierEintritt.change(enableDisableCurrencies);
-    enableDisableCurrencies();
+      freierEintritt.change(enableDisableCurrencies);
+      enableDisableCurrencies();
+    };
+    $(document).ready(initPreiseScript);

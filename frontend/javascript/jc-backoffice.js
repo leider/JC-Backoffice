@@ -99,6 +99,10 @@
     $('.trim-text').on('blur', function () {
       $(this).val($(this).val().trim());
     });
+
+    $('.currency').each(function () {
+      $(this).autoNumeric('init');
+    });
   }
 
   function initTooltipsAndHovers() {

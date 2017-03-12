@@ -15,19 +15,23 @@ mixin staffRow(staff, name, label)
 
 mixin staffScriptFor(name)
   script.
-    var #{name} = $('#staff\\[#{name}\\]');
-    var #{name}EUR = $('#staff\\[#{name}EUR\\]');
-    function update#{name}Total() {
-      var #{name}Anzahl = #{name}.val().length;
-      var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
-      var result = #{name}Anzahl * eur;
-      $('#' + '#{name}Total').autoNumeric('set', result);
-      updateStaffTotal();
-    }
-    #{name}.change(update#{name}Total);
-    #{name}.keyup(update#{name}Total);
-    #{name}EUR.keyup(update#{name}Total);
-    update#{name}Total();
+    $(document).ready(function() {
+      var #{name} = $('#staff\\[#{name}\\]');
+      var #{name}EUR = $('#staff\\[#{name}EUR\\]');
+
+      function update#{name}Total() {
+        var #{name}Anzahl = #{name}.val().length;
+        var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
+        var result = #{name}Anzahl * eur;
+        $('#' + '#{name}Total').autoNumeric('set', result);
+        updateStaffTotal();
+      }
+
+      #{name}.change(update#{name}Total);
+      #{name}.keyup(update#{name}Total);
+      #{name}EUR.keyup(update#{name}Total);
+      update#{name}Total();
+    });
 
 mixin staff(staff)
   legend

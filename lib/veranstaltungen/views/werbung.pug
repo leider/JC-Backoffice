@@ -22,18 +22,20 @@ mixin plakateRow(name, label, werte)
 
 mixin plakateScript(name)
   script.
-    var #{name}Num = $('#werbung\\[#{name}Num\\]');
-    var #{name}Groesse = $('#' + '#{name}Groesse');
-    function update#{name}Total() {
-      var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
-      var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor;
-      $('#' + '#{name}Total').autoNumeric('set', result);
-      updatePlakateTotal();
-    }
-    #{name}Num.change(update#{name}Total);
-    #{name}Num.keyup(update#{name}Total);
-    #{name}Groesse.change(update#{name}Total);
-    update#{name}Total();
+    $(document).ready(function() {
+      var #{name}Num = $('#werbung\\[#{name}Num\\]');
+      var #{name}Groesse = $('#' + '#{name}Groesse');
+      function update#{name}Total() {
+        var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
+        var result = parseInt(#{name}Num.val(), 10) * #{name}Faktor;
+        $('#' + '#{name}Total').autoNumeric('set', result);
+        updatePlakateTotal();
+      }
+      #{name}Num.change(update#{name}Total);
+      #{name}Num.keyup(update#{name}Total);
+      #{name}Groesse.change(update#{name}Total);
+      update#{name}Total();
+    });
 
 mixin marketingRow(name, label)
   .row
@@ -51,15 +53,19 @@ mixin marketingRow(name, label)
 
 mixin marketingScript(name)
   script.
-    var #{name}Num = $('#werbung\\[#{name}Num\\]');
-    var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
-    function update#{name}Total() {
-      var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
-      var result = parseInt(#{name}Num.val(), 10) * eur;
-      $('#' + '#{name}Total').autoNumeric('set', result);
-      updatePlakateTotal();
-    }
-    #{name}Num.change(update#{name}Total);
-    #{name}Num.keyup(update#{name}Total);
-    #{name}EUR.keyup(update#{name}Total);
-    update#{name}Total();
+    $(document).ready(function() {
+      var #{name}Num = $('#werbung\\[#{name}Num\\]');
+      var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
+
+      function update#{name}Total() {
+        var eur = parseFloat(#{name}EUR.autoNumeric('get'), 10);
+        var result = parseInt(#{name}Num.val(), 10) * eur;
+        $('#' + '#{name}Total').autoNumeric('set', result);
+        updatePlakateTotal();
+      }
+
+      #{name}Num.change(update#{name}Total);
+      #{name}Num.keyup(update#{name}Total);
+      #{name}EUR.keyup(update#{name}Total);
+      update#{name}Total();
+    });
