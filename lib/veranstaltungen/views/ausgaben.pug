@@ -16,7 +16,7 @@ block content
     fieldset
       .row
         .col-md-12
-          +submitButtons()
+          +submitButtonsFor(veranstaltung, 'ausgaben')
           .page-header
             h2 Kosten für #{veranstaltung.datumForDisplay()}<br>
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
@@ -74,8 +74,8 @@ block content
       .row
         .col-md-12
           hr
-          +submitButtons()
-          
+          +submitButtonsFor(veranstaltung, 'ausgaben')
+
 block scripts
   script.
     $(document).ready(function initAusgabenScript() {

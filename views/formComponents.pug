@@ -75,14 +75,17 @@ mixin submitButtons()
     a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
     button.btn.btn-primary(type='submit') Speichern
 
-mixin memberSubmitButtons()
+mixin submitButtonsFor(veranstaltung, current)
   .btn-group.pull-right
-    if (accessrights.isRegistered())
-      a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
-    else
-      a.btn.btn-danger(href='/auth/logout', type='cancel') Abbrechen
-    button.btn.btn-primary(type='submit') Speichern
-    
+    a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw
+    if current !== 'kopf'
+      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Allgemeines (ohne Speichern)'): i.fa.fa-keyboard-o.fa-fw
+    if current !== 'ausgaben'
+      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben (ohne Speichern)'): i.fa.fa-eur.fa-fw
+    if current !== 'hotel'
+      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotel', title='Hotel (ohne Speichern)'): i.fa.fa-bed.fa-fw
+    button.btn.btn-primary(type='submit', 'Speichern'): i.fa.fa-floppy-o.fa-fw
+
 mixin hidden(name, value)
   input(type='hidden', name=name, value=value)
 

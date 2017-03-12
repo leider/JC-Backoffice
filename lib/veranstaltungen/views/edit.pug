@@ -17,7 +17,7 @@ block content
     fieldset
       .row
         .col-md-12
-          +submitButtons()
+          +submitButtonsFor(veranstaltung, 'kopf')
           .page-header
             h2 Veranstaltung <br>
               if (veranstaltung.id())
@@ -98,7 +98,8 @@ block content
       .row
         .col-md-12
           hr
-          +submitButtons()
+          +submitButtonsFor(veranstaltung, 'kopf')
+
 block scripts
   +preiseScript
   +kontaktScript('agentur')
