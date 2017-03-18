@@ -34,6 +34,31 @@ function toUtc(dateString, timeString) {
   return null;
 }
 
+function surroundWithLink(text) {
+  'use strict';
+
+  // shamelessly stolen from http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+  var urlRegex = /(\b(https?|ftp|file):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|])/ig;
+  return text.replace(urlRegex, function (url) {
+    return '<a href="' + url + '" target="_blank">' + '<i class="fa fa-external-link"/> ' + url + '</a>';
+  });
+}
+
+function surroundTwitterName(twittername) {
+  'use strict';
+
+  if (twittername.trim().length === 0) {
+    return twittername;
+  }
+  return '<a href="http://twitter.com/' + twittername + '" target="_blank">@' + twittername + '</a>';
+}
+
+function surroundEmail(email) {
+  'use strict';
+
+  return '<a href="mailto:' + email + '">' + email + '</a>';
+}
+
 /* exported veranstaltungDateModel */
 function veranstaltungDateModel(initialDate, initialTime) {
   'use strict';
@@ -183,6 +208,20 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
   }
 
+  function createLinks() {
+    $('.urlify').each(function () {
+      $(this).html(surroundWithLink(this.innerHTML));
+    });
+
+    $('.twitterify').each(function () {
+      $(this).html(surroundTwitterName(this.innerHTML));
+    });
+
+    $('.mailtoify').each(function () {
+      $(this).html(surroundEmail(this.innerHTML));
+    });
+  }
+
   patchBootstrapPopover();
   $.event.add(window, 'resize', adaptScrollableBox);
   $(document).ready(highlightCurrentSection);
@@ -190,4 +229,5 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(initPickersAndWidgets);
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
+  $(document).ready(createLinks);
 }());

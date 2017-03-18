@@ -1,0 +1,122 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+block title
+  | Veranstaltung
+
+block content
+  -var agentur = veranstaltung.agentur()
+  -var artist = veranstaltung.artist()
+  -var eintrittspreise = veranstaltung.eintrittspreise()
+  -var kopf = veranstaltung.kopf()
+  -var kosten = veranstaltung.kosten()
+  -var staff = veranstaltung.staff()
+  -var werbung = veranstaltung.werbung()
+  .row
+    .col-md-12
+      .page-header
+        .btn-group.pull-right
+          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Allgemeines'): i.fa.fa-keyboard-o.fa-fw
+          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben'): i.fa.fa-eur.fa-fw
+          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotel', title='Hotel'): i.fa.fa-bed.fa-fw
+
+        h2 #{kopf.titel()} im #{kopf.ort()}
+          br
+          small #{veranstaltung.startMoment().format('LLLL')} #{''}
+            span(style='color:#AABB33') (#{kopf.eventType()})
+      .clearfix
+      .row
+        .col-md-6
+          if kopf.kooperation()
+            h3 Kooperation mit #{kopf.kooperation()}
+          | !{kopf.beschreibungHTML()}
+          .panel.panel-default
+            .panel-heading(style='background-color: #637743; color: #FFFFFF;')
+              a.inherit-color.chevron(data-toggle='collapse', data-target='#agentur'): b
+                i.fa.fa-toggle-down.fa-fw.blog
+                | &nbsp;Agentur: #{agentur.name()}
+            #agentur.panel-body.collapse.in
+              address
+                strong #{agentur.ansprechpartner()} <br>
+                |!{agentur.adresseHTML()} <br>
+                |Tel.: #{agentur.telefon()} <br>
+                |E-Mail: 
+                span.mailtoify #{agentur.email()}
+          .panel.panel-default
+            .panel-heading(style='background-color: #992377; color: #FFFFFF;')
+              a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt'): b
+                i.fa.fa-toggle-down.fa-fw.blog
+                | &nbsp;Eintritt
+            #eintritt.collapse.in
+              if eintrittspreise.frei()
+                .panel-body
+                  b Frei
+              else
+                table.table.table-condensed
+                  tr
+                    th(align='right', style='text-align: right;') Regulär
+                    th(align='right', style='text-align: right;') Ermäßigt
+                    th(align='right', style='text-align: right;') Mitglied
+                  tr
+                    td(align='right'): +currencySpanNormal(eintrittspreise.regulaer())
+                    td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt())
+                    td(align='right'): +currencySpanNormal(eintrittspreise.mitglied())
+        .col-md-6 
+          .panel.panel-default
+            .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
+              a.inherit-color.chevron(data-toggle='collapse', data-target='#kosten'): b
+                i.fa.fa-toggle-down.fa-fw.blog
+                | &nbsp;Kosten
+            #kosten.collapse.in
+              table.table.table-striped.table-condensed
+                tr
+                  th(colspan=2) Backline Rockshop
+                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.backlineEUR())
+                tr
+                  th(colspan=2) Saal
+                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.saalmiete())
+                tr
+                  th(colspan=2) Band
+                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.bandTotalEUR())
+                tr
+                  td(width='2%')
+                  td(width='48%') Gagen
+                  td(align='right', width='50%'): +currencySpanNormal(kosten.gagenTotalEUR())
+                tr
+                  td
+                  td Agentur
+                  td(align='right'): +currencySpanNormal(kosten.agenturTotalEUR())
+                tr
+                  td
+                  td Catering
+                  td(align='right'): +currencySpanNormal(kosten.cateringTotalEUR())
+                tr
+                  th(colspan=2) Personal
+                  th(align='right', style='text-align: right;'): +currencySpanNormal(staff.staffTotalEUR())
+                tr
+                  th(colspan=2) Marketing
+                  th(align='right', style='text-align: right;'): +currencySpanNormal(werbung.marketingTotalEUR())
+                tr
+                  td
+                  td Plakate
+                  td(align='right'): +currencySpanNormal(werbung.plakateTotalEUR())
+                tr
+                  td
+                  td Media
+                  td(align='right'): +currencySpanNormal(werbung.mediaTotalEUR())
+
+          if !werbung.genehmigt()
+            p.text-danger 
+              i.fa.fa-warning
+              | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und noch nicht genehmigen lassen.
+          else
+            p.text-success
+              i.fa.fa-check-circle
+              | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und 'bereits genehmigen lassen.
+                  
+
+block scripts
+  script.
+    $(document).ready(function () {
+      $('a.chevron').click(function() {$(this).find('i').toggleClass('fa-toggle-down fa-toggle-right')});
+    });
+

@@ -7,8 +7,9 @@ block title
   | Veranstaltung
 
 block content
-  -var kopf = veranstaltung.kopf()
   -var artist = veranstaltung.artist()
+  -var kopf = veranstaltung.kopf()
+  -var vertrag = veranstaltung.vertrag()
   form#veranstaltungform(action='/veranstaltungen/submit', method='post')
     +csrf
     if (veranstaltung.id())
@@ -95,6 +96,23 @@ block content
         .col-md-6
           +preise(veranstaltung)
           +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
+          legend
+            a(data-toggle='collapse', href='#vertrag') Vertrag
+          #vertrag.collapse.in
+            .row
+              .col-md-6
+                .form-group
+                  label.control-label(for='vertragsart') Art:
+                  select#vertragsart.form-control(name='vertrag[art]')
+                    for art in vertrag.arten()
+                      option(value=art, selected = (vertrag.art() !== undefined && vertrag.art() === art)) #{art}
+              .col-md-6
+                .form-group
+                  label.control-label(for='vertragssprache') Sprache:
+                  select#vertragssprache.form-control(name='vertrag[sprache]')
+                    for sprache in ['Deutsch', 'Englisch']
+                      option(value=sprache, selected = (vertrag.sprache() !== undefined && vertrag.sprache() === sprache)) #{sprache}
+
       .row
         .col-md-12
           hr
