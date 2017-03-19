@@ -1,0 +1,159 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+include werbung
+include staff
+include band
+
+block title
+  | Veranstaltung
+
+block content
+  -var kosten = veranstaltung.kosten()
+  -var kasse = veranstaltung.kasse()
+
+  form#kasseform(action='/veranstaltungen/submit', method='post')
+    +csrf
+    +hidden('id', veranstaltung.id())
+    fieldset
+      .row
+        .col-md-12
+          +submitButtonsFor(veranstaltung, 'kasse')
+          .page-header
+            h2 Abendkasse für #{veranstaltung.datumForDisplay()}<br>
+              small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
+      .row
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#einnahmen') Einnahmen & Besucher
+            +currencySpan('einnahmenGesamt', 'pull-right')
+          #einnahmen.collapse.in
+            .row
+              .col-sm-3.col-xs-6
+                +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[einnahmeSpendeEUR]', 'Spende', kasse.einnahmeSpendeEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[einnahmeBeitragEUR]', 'Mitgliedsbeitrag', kasse.einnahmeBeitragEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR())
+            .row
+              .col-xs-9
+                +text('kasse[einnahmeSonstigesText]', 'Sonstiges', kasse.einnahmeSonstigesText())
+              .col-xs-3
+                +currency('kasse[einnahmeSonstigesEUR]', 'Betrag', kasse.einnahmeSonstigesEUR())
+            .row
+              .col-xs-6
+                +number('kasse[anzahlBesucherGesamt]', 'Anzahl Besucher', kasse.anzahlBesucherGesamt(), null, 0, 5000)
+              .col-xs-6
+                +number('kasse[anteilBesucherMaennlich]', 'davon männl. %', kasse.anteilBesucherMaennlich(), null, 0, 100)
+
+
+        .col-md-6
+          legend
+            a(data-toggle='collapse', href='#ausgaben') Ausgaben
+            +currencySpan('ausgabenGesamt', 'pull-right')
+          #ausgaben.collapse.in
+            .row
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeMaterialEUR]', 'Material', kasse.ausgabeMaterialEUR())
+            .row
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeHotelEUR]', 'Hotel', kasse.ausgabeHotelEUR())
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeFahrtEUR]', 'Fahrt', kasse.ausgabeFahrtEUR())
+
+
+            .row
+              .col-xs-9
+                +text('kasse[ausgabeSonstigesText]', 'Sonstiges', kasse.ausgabeSonstigesText())
+              .col-xs-3
+                +currency('kasse[ausgabeSonstigesEUR]', 'Betrag', kasse.ausgabeSonstigesEUR())
+            .row
+              .col-sm-9.col-xs-6
+                +text('kasse[ausgabeBemerkung]', 'Bemerkung', kasse.ausgabeBemerkung(), null, 'Zu Material o.ä.')
+              .col-sm-3.col-xs-6
+                +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR())
+      .row
+        .col-md-12
+          .row
+            .col-sm-3.col-xs-6
+              +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR())
+            .col-sm-3.col-xs-6
+              .form-group
+                +controlLabel('endbestandEUR', 'Endbestand')
+                b: p#endbestandEUR.form-control-static.currency(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+
+      .row
+        .col-md-12
+          hr
+          +submitButtonsFor(veranstaltung, 'ausgaben')
+
+block scripts
+  script.
+    $(document).ready(function () {
+      var einnahmeBankEUR = $('#kasse\\[einnahmeBankEUR\\]');
+      var einnahmeTicketsEUR = $('#kasse\\[einnahmeTicketsEUR\\]');
+      var einnahmeSpendeEUR = $('#kasse\\[einnahmeSpendeEUR\\]');
+      var einnahmeBeitragEUR = $('#kasse\\[einnahmeBeitragEUR\\]');
+      var einnahmeSonstigesEUR = $('#kasse\\[einnahmeSonstigesEUR\\]');
+      
+      function updateEinnahmenGesamt() {
+        var einnahmenGesamt = eurAmount(einnahmeBankEUR) + 
+          eurAmount(einnahmeTicketsEUR) + eurAmount(einnahmeSpendeEUR) + 
+          eurAmount(einnahmeBeitragEUR) + eurAmount(einnahmeSonstigesEUR); 
+        setEuro($('#einnahmenGesamt'), einnahmenGesamt);
+        $('#einnahmenGesamt').change(updateEndbestand);
+      }
+
+      einnahmeBankEUR.keyup(updateEinnahmenGesamt);
+      einnahmeTicketsEUR.keyup(updateEinnahmenGesamt);
+      einnahmeSpendeEUR.keyup(updateEinnahmenGesamt);
+      einnahmeBeitragEUR.keyup(updateEinnahmenGesamt);
+      einnahmeSonstigesEUR.keyup(updateEinnahmenGesamt);
+      updateEinnahmenGesamt();
+  
+      var ausgabeGageEUR = $('#kasse\\[ausgabeGageEUR\\]');
+      var ausgabeCateringEUR = $('#kasse\\[ausgabeCateringEUR\\]');
+      var ausgabeHelferEUR = $('#kasse\\[ausgabeHelferEUR\\]');
+      var ausgabeMaterialEUR = $('#kasse\\[ausgabeMaterialEUR\\]');
+      var ausgabeSonstigesEUR = $('#kasse\\[ausgabeSonstigesEUR\\]');
+      var ausgabeBankEUR = $('#kasse\\[ausgabeBankEUR\\]');
+      var ausgabeHotelEUR = $('#kasse\\[ausgabeHotelEUR\\]');
+      var ausgabeFahrtEUR = $('#kasse\\[ausgabeFahrtEUR\\]');
+
+      function updateAusgabenGesamt() {
+        var ausgabenGesamt = eurAmount(ausgabeGageEUR) + 
+          eurAmount(ausgabeCateringEUR) + eurAmount(ausgabeHelferEUR) + 
+          eurAmount(ausgabeMaterialEUR) + eurAmount(ausgabeSonstigesEUR) +
+          eurAmount(ausgabeBankEUR)+ eurAmount(ausgabeHotelEUR) +
+          eurAmount(ausgabeFahrtEUR); 
+        setEuro($('#ausgabenGesamt'), ausgabenGesamt);
+        $('#ausgabenGesamt').change(updateEndbestand);
+      }
+
+      ausgabeGageEUR.keyup(updateAusgabenGesamt);
+      ausgabeCateringEUR.keyup(updateAusgabenGesamt);
+      ausgabeHelferEUR.keyup(updateAusgabenGesamt);
+      ausgabeMaterialEUR.keyup(updateAusgabenGesamt);
+      ausgabeSonstigesEUR.keyup(updateAusgabenGesamt);
+      ausgabeBankEUR.keyup(updateAusgabenGesamt);
+      ausgabeHotelEUR.keyup(updateAusgabenGesamt);
+      ausgabeFahrtEUR.keyup(updateAusgabenGesamt);
+      updateAusgabenGesamt();
+
+      var anfangsbestandEUR = $('#kasse\\[anfangsbestandEUR\\]');
+      function updateEndbestand() {
+        var endbestand = eurAmount(anfangsbestandEUR) +
+          eurAmount($('#einnahmenGesamt')) - eurAmount($('#ausgabenGesamt'));
+        setEuro($('#endbestandEUR'), endbestand);
+      }
+      anfangsbestandEUR.keyup(updateEndbestand);
+      updateEndbestand();
+    });
+  script(src='/clientscripts/check-kasseform.js')

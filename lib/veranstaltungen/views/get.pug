@@ -16,9 +16,7 @@ block content
     .col-md-12
       .page-header
         .btn-group.pull-right
-          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Allgemeines'): i.fa.fa-keyboard-o.fa-fw
-          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben'): i.fa.fa-eur.fa-fw
-          a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotel', title='Hotel'): i.fa.fa-bed.fa-fw
+          +submitButtonsFor(veranstaltung, '', true)
 
         h2 #{kopf.titel()} im #{kopf.ort()}
           br

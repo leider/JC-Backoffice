@@ -1,5 +1,6 @@
 extends ../../../views/layout
-
+include ../../../views/formComponents
+  
 block title
   | Veranstaltungen
 
@@ -15,10 +16,8 @@ block content
         table.table.table-striped.table-condensed
           for veranstaltung in veranstaltungen
             tr
-              th: a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.startMoment().format('ddd ll')}
-              td: a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
               td
-                .btn-group.pull-right
-                  a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Allgemeines'): i.fa.fa-keyboard-o.fa-fw
-                  a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben'): i.fa.fa-eur.fa-fw
-                  a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotel', title='Hotel'): i.fa.fa-bed.fa-fw
+                a(href=veranstaltung.fullyQualifiedUrl()) 
+                  b #{veranstaltung.startMoment().format('ddd ll')}: #{''}
+                  | #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
+                +submitButtonsFor(veranstaltung, null, true, true)

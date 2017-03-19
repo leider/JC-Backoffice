@@ -5,6 +5,7 @@
   "veranstaltung": {"module": "./lib/veranstaltungen/veranstaltung"},
   "artist": {"module": "./lib/veranstaltungen/artist"},
   "eintrittspreise": {"module": "./lib/veranstaltungen/eintrittspreise"},
+  "kasse": {"module": "./lib/veranstaltungen/kasse"},
   "kontakt": {"module": "./lib/veranstaltungen/kontakt"},
   "kopf": {"module": "./lib/veranstaltungen/kopf"},
   "kosten": {"module": "./lib/veranstaltungen/kosten"},
