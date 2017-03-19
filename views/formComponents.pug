@@ -49,7 +49,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
 mixin currencySpan(id, clazz)
   span.currency.text-success(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
-mixin currencySpanNormal(value)
+mixin currencySpanNormal(value, id)
   span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='') #{value}
 
 mixin textareaPure(name, label, value, placeholder)

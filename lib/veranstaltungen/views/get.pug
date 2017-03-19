@@ -42,23 +42,32 @@ block content
                 span.mailtoify #{agentur.email()}
           .panel.panel-default
             .panel-heading(style='background-color: #992377; color: #FFFFFF;')
-              a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt'): b
-                i.fa.fa-toggle-down.fa-fw.blog
-                | &nbsp;Eintritt
+              b
+                a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt')
+                  i.fa.fa-toggle-down.fa-fw.blog
+                  | &nbsp;Eintritt
+                .pull-right: +currencySpanNormal(0, 'eintrittGesamtEUR')
             #eintritt.collapse.in
               if eintrittspreise.frei()
                 .panel-body
                   b Frei
               else
-                table.table.table-condensed
+                table.table.table-condensed.table-striped
                   tr
+                    th
                     th(align='right', style='text-align: right;') Regulär
                     th(align='right', style='text-align: right;') Ermäßigt
                     th(align='right', style='text-align: right;') Mitglied
                   tr
-                    td(align='right'): +currencySpanNormal(eintrittspreise.regulaer())
-                    td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt())
-                    td(align='right'): +currencySpanNormal(eintrittspreise.mitglied())
+                    td
+                    td(align='right'): +currencySpanNormal(eintrittspreise.regulaer(), 'eintrittRegulaer')
+                    td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
+                    td(align='right'): +currencySpanNormal(eintrittspreise.mitglied(), 'eintrittMitglied')
+                  tr
+                    th Reservix (aktuell):
+                    td: input#reservixRegulaer.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
+                    td: input#reservixErmaessigt.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
+                    td: input#reservixMitglied.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
         .col-md-6 
           .panel.panel-default
             .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
@@ -133,5 +142,32 @@ block scripts
       $('a.chevron').click(function() { $(this).find('i').toggleClass('fa-toggle-down fa-toggle-right'); });
       $('.vertragstep').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/stepClicked'}', {data: {step: this.name, checked: this.checked}});
-      })
+      });
+      
+      function eintrittGesamtEUR() {
+        var eintrittRegulaer = $('#eintrittRegulaer');
+        var eintrittErmaessigt = $('#eintrittErmaessigt');
+        var eintrittMitglied = $('#eintrittMitglied');
+
+        var reservixRegulaer = $('#reservixRegulaer');
+        var reservixErmaessigt = $('#reservixErmaessigt');
+        var reservixMitglied = $('#reservixMitglied');
+
+        var result = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
+          intAmount(reservixErmaessigt) * eurAmount(eintrittErmaessigt) +
+          intAmount(reservixMitglied) * eurAmount(eintrittMitglied);
+
+        setEuro($('#eintrittGesamtEUR'), result);
+      }
+      function reservixChanged() {
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/reservixChanged'}', {
+          data: {
+            type: this.name,
+            value: this.value
+          }
+        }).done(eintrittGesamtEUR);
+      }
+      $('.reservix').keyup(reservixChanged);
+      $('.reservix').change(reservixChanged);
+      reservixChanged();
     });
