@@ -7,6 +7,7 @@ block content
   -var agentur = veranstaltung.agentur()
   -var artist = veranstaltung.artist()
   -var eintrittspreise = veranstaltung.eintrittspreise()
+  -var kasse = veranstaltung.kasse()
   -var kopf = veranstaltung.kopf()
   -var kosten = veranstaltung.kosten()
   -var staff = veranstaltung.staff()
@@ -28,6 +29,7 @@ block content
           if kopf.kooperation()
             h3 Kooperation mit #{kopf.kooperation()}
           | !{kopf.beschreibungHTML()}
+
           .panel.panel-default
             .panel-heading(style='background-color: #637743; color: #FFFFFF;')
               a.inherit-color.chevron(data-toggle='collapse', data-target='#agentur'): b
@@ -40,17 +42,20 @@ block content
                 |Tel.: #{agentur.telefon()} <br>
                 |E-Mail: 
                 span.mailtoify #{agentur.email()}
+
           .panel.panel-default
             .panel-heading(style='background-color: #992377; color: #FFFFFF;')
               b
                 a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt')
                   i.fa.fa-toggle-down.fa-fw.blog
-                  | &nbsp;Eintritt
+                  | &nbsp;Eintritt und Abendkasse
                 .pull-right: +currencySpanNormal(0, 'eintrittGesamtEUR')
             #eintritt.collapse.in
               if eintrittspreise.frei()
                 .panel-body
-                  b Frei
+                  p: b Freier Eintritt
+                  p: b Abendkasse (Sammelbox) Überschuss: #{''}
+                     +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
               else
                 table.table.table-condensed.table-striped
                   tr
@@ -64,10 +69,38 @@ block content
                     td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
                     td(align='right'): +currencySpanNormal(eintrittspreise.mitglied(), 'eintrittMitglied')
                   tr
-                    th Reservix (aktuell):
+                    th Reservix (aktuell)
+                      .pull-right: +currencySpanNormal(0, 'eintrittReservixEUR')
                     td: input#reservixRegulaer.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
                     td: input#reservixErmaessigt.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
                     td: input#reservixMitglied.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
+                  tr
+                    th Abendkasse Überschuss
+                      .pull-right: +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
+
+          if kosten.deal() !== 'ohne'            
+            .panel.panel-default
+              .panel-heading(style='background-color: #992377; color: #FFFFFF;')
+                b
+                  a.inherit-color.chevron(data-toggle='collapse', data-target='#deal')
+                    i.fa.fa-toggle-down.fa-fw.blog
+                    | &nbsp;Gewinnbeteiligung für Band
+                  .pull-right: +currencySpanNormal(null, 'dealUeberschussTotal')
+              #deal.collapse.in
+                table.table.table-condensed.table-striped
+                  tr
+                    th(align='right', style='text-align: right;') Einnahmen
+                    th(align='right', style='text-align: right;') Kosten
+                    th(align='right', style='text-align: right;') Überschuss
+                  tr
+                    td(align='right'): +currencySpanNormal(null, 'dealEinnahmen')
+                    td(align='right'): +currencySpanNormal(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                    td(align='right'): +currencySpanNormal(null, 'dealUeberschuss')
+                  tr
+                    th Anteilig an Band (#{kosten.deal()}):
+                    td
+                    td(align='right'): b: +currencySpanNormal(null, 'dealUeberschussAnBand')
+
         .col-md-6 
           .panel.panel-default
             .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
@@ -139,7 +172,10 @@ block content
 block scripts
   script.
     $(document).ready(function () {
-      $('a.chevron').click(function() { $(this).find('i').toggleClass('fa-toggle-down fa-toggle-right'); });
+      $('a.chevron').click(function() { 
+        $(this).find('i').toggleClass('fa-toggle-down fa-toggle-right');
+      });
+      
       $('.vertragstep').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/stepClicked'}', {data: {step: this.name, checked: this.checked}});
       });
@@ -152,13 +188,23 @@ block scripts
         var reservixRegulaer = $('#reservixRegulaer');
         var reservixErmaessigt = $('#reservixErmaessigt');
         var reservixMitglied = $('#reservixMitglied');
+        
+        var einnahmen = eurAmount($('#abendkasseEUR'));
+        if (eintrittRegulaer.length > 0) {
+          einnahmen = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
+            intAmount(reservixErmaessigt) * eurAmount(eintrittErmaessigt) +
+            intAmount(reservixMitglied) * eurAmount(eintrittMitglied);
 
-        var result = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
-          intAmount(reservixErmaessigt) * eurAmount(eintrittErmaessigt) +
-          intAmount(reservixMitglied) * eurAmount(eintrittMitglied);
-
-        setEuro($('#eintrittGesamtEUR'), result);
+          setEuro($('#eintrittReservixEUR'), einnahmen);
+        }
+        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()};
+        setEuro($('#eintrittGesamtEUR'), einnahmen);
+        setEuro($('#dealEinnahmen'), einnahmen);
+        setEuro($('#dealUeberschuss'), ueberschuss);
+        setEuro($('#dealUeberschussAnBand'), ueberschuss * #{kosten.dealAlsFaktor()});
+        setEuro($('#dealUeberschussTotal'), ueberschuss * #{kosten.dealAlsFaktor()});
       }
+      
       function reservixChanged() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/reservixChanged'}', {
           data: {
@@ -169,5 +215,5 @@ block scripts
       }
       $('.reservix').keyup(reservixChanged);
       $('.reservix').change(reservixChanged);
-      reservixChanged();
+      eintrittGesamtEUR();
     });
