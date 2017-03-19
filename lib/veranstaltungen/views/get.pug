@@ -201,8 +201,12 @@ block scripts
         setEuro($('#eintrittGesamtEUR'), einnahmen);
         setEuro($('#dealEinnahmen'), einnahmen);
         setEuro($('#dealUeberschuss'), ueberschuss);
-        setEuro($('#dealUeberschussAnBand'), ueberschuss * #{kosten.dealAlsFaktor()});
-        setEuro($('#dealUeberschussTotal'), ueberschuss * #{kosten.dealAlsFaktor()});
+        var ueberschussAbsolut = ueberschuss * #{kosten.dealAlsFaktor()};
+        if (ueberschussAbsolut < 0) {
+          ueberschussAbsolut = 0;
+        }
+        setEuro($('#dealUeberschussAnBand'), ueberschussAbsolut);
+        setEuro($('#dealUeberschussTotal'), ueberschussAbsolut);
       }
       
       function reservixChanged() {
