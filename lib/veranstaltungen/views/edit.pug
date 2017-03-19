@@ -104,7 +104,7 @@ block content
                 .form-group
                   label.control-label(for='vertragsart') Art:
                   select#vertragsart.form-control(name='vertrag[art]')
-                    for art in vertrag.arten()
+                    for art in Vertrag.arten()
                       option(value=art, selected = (vertrag.art() !== undefined && vertrag.art() === art)) #{art}
               .col-md-6
                 .form-group

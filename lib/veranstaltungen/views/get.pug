@@ -10,6 +10,7 @@ block content
   -var kopf = veranstaltung.kopf()
   -var kosten = veranstaltung.kosten()
   -var staff = veranstaltung.staff()
+  -var vertrag = veranstaltung.vertrag()
   -var werbung = veranstaltung.werbung()
   .row
     .col-md-12
@@ -63,9 +64,11 @@ block content
         .col-md-6 
           .panel.panel-default
             .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
-              a.inherit-color.chevron(data-toggle='collapse', data-target='#kosten'): b
-                i.fa.fa-toggle-down.fa-fw.blog
-                | &nbsp;Kosten
+              b
+                a.inherit-color.chevron(data-toggle='collapse', data-target='#kosten')
+                  i.fa.fa-toggle-down.fa-fw.blog
+                  | &nbsp;Kosten
+                .pull-right: +currencySpanNormal(veranstaltung.kostenGesamtEUR())
             #kosten.collapse.in
               table.table.table-striped.table-condensed
                 tr
@@ -112,11 +115,25 @@ block content
             p.text-success
               i.fa.fa-check-circle
               | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und 'bereits genehmigen lassen.
-                  
+
+          .panel.panel-default
+            .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
+              a.inherit-color.chevron(data-toggle='collapse', data-target='#vertrag'): b
+                i.fa.fa-toggle-down.fa-fw.blog
+                | &nbsp;Vertrag (#{vertrag.art()})
+            ul#vertrag.list-group.collapse.in
+              for step in vertrag.workflow()
+                li.list-group-item
+                  label
+                    input.vertragstep(type='checkbox', name=step, checked=vertrag.isChecked(step))
+                    | &nbsp;#{step}
+
 
 block scripts
   script.
     $(document).ready(function () {
-      $('a.chevron').click(function() {$(this).find('i').toggleClass('fa-toggle-down fa-toggle-right')});
+      $('a.chevron').click(function() { $(this).find('i').toggleClass('fa-toggle-down fa-toggle-right'); });
+      $('.vertragstep').click(function() {
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/stepClicked'}', {data: {step: this.name, checked: this.checked}});
+      })
     });
-
