@@ -91,7 +91,7 @@ mixin submitButtonsFor(veranstaltung, current, nosave, nolist)
     if current !== 'kasse'
       a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title='Kasse (ohne Speichern)'): i.fa.fa-money.fa-fw
     if !nosave
-      button.btn.btn-primary(type='submit', 'Speichern'): i.fa.fa-floppy-o.fa-fw
+      button.btn.btn-primary(type='submit', title='Speichern'): i.fa.fa-floppy-o.fa-fw
 
 mixin hidden(name, value)
   input(type='hidden', name=name, value=value)
