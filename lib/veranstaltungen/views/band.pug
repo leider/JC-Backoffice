@@ -1,68 +1,69 @@
 include ../../../views/formComponents
   
 mixin band(kosten)
-  legend
-    a(data-toggle='collapse', href='#band') Band
-    +currencySpan('bandTotal', 'pull-right')
-  #band.collapse.in
-    .row
-      .col-xs-3(style='padding-right: 5px;')
-        +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .form-group
-          label.control-label(for='gagenMWSt') MWSt:
-          select#gagenMWSt.form-control(name='kosten[gagenMWSt]')
-            for wert in ['ohne', '7%', '19%']
-              option(value=wert, selected = (kosten.gagenMWSt() === wert)) #{wert}
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .form-group
-          label.control-label(for='gagenAuslandSt') Ausl.St.:
-          select#gagenAuslandSt.form-control(name='kosten[gagenAuslandSt]')
-            for wert in ['ohne', '18,8%']
-              option(value=wert, selected = (kosten.gagenAuslandSt() === wert)) #{wert}
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .form-group
-          label.control-label(for='deal') Deal:
-          select#deal.form-control(name='kosten[deal]')
-            for wert in ['ohne', '100%', '90%', '80%', '70%', '60%']
-              option(value=wert, selected = (kosten.deal() === wert)) #{wert}
-      .col-xs-3(style='padding-left: 5px;')
-        .form-group
-          label.control-label Total:
-          p: b
-            +currencySpan('gagenTotal', 'form-control-static pull-right')
-    .row
-      .col-xs-3(style='padding-right: 5px;')
-        +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .form-group
-          label.control-label(for='agenturMWSt') MWSt:
-          select#agenturMWSt.form-control(name='kosten[agenturMWSt]')
-            for wert in ['ohne', '7%', '19%']
-              option(value=wert, selected = (kosten.agenturMWSt() === wert)) #{wert}
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-      .col-xs-3(style='padding-left: 5px;')
-        .form-group
-          label.control-label Total:
-          p: b
-            +currencySpan('agenturTotal', 'form-control-static pull-right')
-    .row
-      .col-xs-3(style='padding-right: 5px;')
-        +currency('kosten[cateringEUR]', 'Catering (Kopf)', kosten.cateringEUR())
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .form-group
-          label.control-label Anzahl:
-          p: span#cateringNum.form-control-static.pull-right #{veranstaltung.artist().numForCatering()}
-
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-      .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-      .col-xs-3(style='padding-left: 5px;')
-        .form-group
-          label.control-label Total:
-          p: b
-            +currencySpan('cateringTotal', 'form-control-static pull-right')
-          
+  div
+    legend
+      a(data-toggle='collapse', href='#band') Gage
+      +currencySpan('bandTotal', 'pull-right')
+    #band.collapse.in
+      .row
+        .col-xs-3(style='padding-right: 5px;')
+          +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+          .form-group
+            label.control-label(for='gagenMWSt') MWSt:
+            select#gagenMWSt.form-control(name='kosten[gagenMWSt]')
+              for wert in ['ohne', '7%', '19%']
+                option(value=wert, selected = (kosten.gagenMWSt() === wert)) #{wert}
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+          .form-group
+            label.control-label(for='gagenAuslandSt') Ausl.St.:
+            select#gagenAuslandSt.form-control(name='kosten[gagenAuslandSt]')
+              for wert in ['ohne', '18,8%']
+                option(value=wert, selected = (kosten.gagenAuslandSt() === wert)) #{wert}
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+          .form-group
+            label.control-label(for='deal') Deal:
+            select#deal.form-control(name='kosten[deal]')
+              for wert in ['ohne', '100%', '90%', '80%', '70%', '60%']
+                option(value=wert, selected = (kosten.deal() === wert)) #{wert}
+        .col-xs-3(style='padding-left: 5px;')
+          .form-group
+            label.control-label Total:
+            p: b
+              +currencySpan('gagenTotal', 'form-control-static pull-right')
+      .row
+        .col-xs-3(style='padding-right: 5px;')
+          +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+          .form-group
+            label.control-label(for='agenturMWSt') MWSt:
+            select#agenturMWSt.form-control(name='kosten[agenturMWSt]')
+              for wert in ['ohne', '7%', '19%']
+                option(value=wert, selected = (kosten.agenturMWSt() === wert)) #{wert}
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-3(style='padding-left: 5px;')
+          .form-group
+            label.control-label Total:
+            p: b
+              +currencySpan('agenturTotal', 'form-control-static pull-right')
+      .row
+        .col-xs-3(style='padding-right: 5px;')
+          +currency('kosten[cateringEUR]', 'Catering (Kopf)', kosten.cateringEUR())
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+          .form-group
+            label.control-label Anzahl:
+            p: span#cateringNum.form-control-static.pull-right #{veranstaltung.artist().numForCatering()}
+  
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-3(style='padding-left: 5px;')
+          .form-group
+            label.control-label Total:
+            p: b
+              +currencySpan('cateringTotal', 'form-control-static pull-right')
+            
 mixin bandScript
   script.
     $(document).ready(function () {

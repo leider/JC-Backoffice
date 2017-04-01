@@ -4,6 +4,7 @@ mixin preise(veranstaltung)
   -var eintrittspreise = veranstaltung.eintrittspreise()
   legend
     a(data-toggle='collapse', href='#preise') Preise
+    +currencySpan('eintrittTotal', 'pull-right')
   #preise.collapse.in
     .row
       .col-xs-4
@@ -21,6 +22,15 @@ mixin preise(veranstaltung)
         +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00 €', true)
       .col-xs-4
         +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00 €', true)
+    .row
+      .col-xs-4
+      .col-xs-4
+        +number('eintrittspreise[erwarteteBesucher]', 'Besucher (erwartet)', eintrittspreise.erwarteteBesucher())
+      .col-xs-4
+        .form-group
+          +controlLabel('erwarteteEinnahmen', 'Total')
+          p: b
+            +currencySpan('erwarteteEinnahmen', 'form-control-static pull-right')
 
 mixin preiseScript
   script.
@@ -29,16 +39,27 @@ mixin preiseScript
       var rabattErmaessigt = $('#eintrittspreise\\[rabattErmaessigt\\]');
       var rabattMitglied = $('#eintrittspreise\\[rabattMitglied\\]');
       var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
+      var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
 
       function amountHandler() {
         var preis = eurAmount(regulaer);
-        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preis - Math.abs(eurAmount(rabattErmaessigt)));
-        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preis - Math.abs(eurAmount(rabattMitglied)));
+        var preisErmaessigt = preis - Math.abs(eurAmount(rabattErmaessigt));
+        var preisMitglied = preis - Math.abs(eurAmount(rabattMitglied));
+        
+        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preisErmaessigt);
+        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preisMitglied);
+
+        var erwarteteEinnahmen = intAmount(anzahlBesucher) * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied);
+          
+        $('#erwarteteEinnahmen').autoNumeric('set', erwarteteEinnahmen);
+        $('#eintrittTotal').autoNumeric('set', erwarteteEinnahmen);
       }
 
-      [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (field) {
+      [regulaer, rabattErmaessigt, rabattMitglied, anzahlBesucher].forEach(function (field) {
         field.keyup(amountHandler);
       });
+      
+      anzahlBesucher.change(amountHandler);
 
       function enableDisableCurrencies() {
         [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (each) {
@@ -49,5 +70,6 @@ mixin preiseScript
 
       freierEintritt.change(enableDisableCurrencies);
       enableDisableCurrencies();
+      amountHandler();
     };
     $(document).ready(initPreiseScript);

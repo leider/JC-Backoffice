@@ -2,6 +2,7 @@ extends ../../../views/layout
 include ../../../views/formComponents
 include eintrittspreise
 include kontakt
+include band
   
 block title
   | Veranstaltung
@@ -10,6 +11,8 @@ block content
   -var artist = veranstaltung.artist()
   -var kopf = veranstaltung.kopf()
   -var vertrag = veranstaltung.vertrag()
+  -var kosten = veranstaltung.kosten()
+  
   form#veranstaltungform(action='/veranstaltungen/submit', method='post')
     +csrf
     if (veranstaltung.id())
@@ -38,8 +41,18 @@ block content
                   +controlLabel('url', 'URL / VA-ID', 'Eindeutig für die Veranstaltung')
                   input.form-control#url(type='text', name='url', value=veranstaltung.url())
             .row
-              .col-sm-12
-                +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
+              .col-xs-6()
+                .col-xs-6(style='padding-left:0px;padding-right:3px')
+                  +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
+                .col-xs-6(style='padding-left:3px;padding-right:0px')
+                  +time('startTime', veranstaltung.startMoment().format('LT'))
+              .col-xs-6()
+                .col-xs-6(style='padding-left:0px;padding-right:3px')
+                  +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
+                #dates.col-xs-6(style='padding-left:3px;padding-right:0px')
+                  +time('endTime', veranstaltung.endMoment().format('LT'))
+
+          +band(kosten)
           +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
           legend
             a(data-toggle='collapse', href='#vertrag') Vertrag
@@ -76,19 +89,8 @@ block content
                 +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
           +preise(veranstaltung)
           legend
-            a(data-toggle='collapse', href='#wannwo') Wann und Wo
+            a(data-toggle='collapse', href='#wannwo') Wo
           #wannwo.collapse.in
-            .row
-              .col-xs-6()
-                .col-xs-6(style='padding-left:0px;padding-right:3px')
-                  +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
-                .col-xs-6(style='padding-left:3px;padding-right:0px')
-                  +time('startTime', veranstaltung.startMoment().format('LT'))
-              .col-xs-6()
-                .col-xs-6(style='padding-left:0px;padding-right:3px')
-                  +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
-                #dates.col-xs-6(style='padding-left:3px;padding-right:0px')
-                  +time('endTime', veranstaltung.endMoment().format('LT'))
             .row
               .col-sm-6
                 .form-group
@@ -115,6 +117,9 @@ block content
                   select#verantwortlicher.form-control(name='kopf[verantwortlicher]')
                     for verantwortlicher in optionen.verantwortliche()
                       option(value=verantwortlicher, selected = (kopf.verantwortlicher() !== undefined && kopf.verantwortlicher() === verantwortlicher)) #{verantwortlicher}
+            .row
+              .col-sm-12
+                +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
 
       .row
         .col-md-12
@@ -124,6 +129,7 @@ block content
 block scripts
   +preiseScript
   +kontaktScript('agentur')
+  +bandScript
   script.
     $(document).ready(function () {
       var startDate = $('#veranstaltungform [name=startDate]');

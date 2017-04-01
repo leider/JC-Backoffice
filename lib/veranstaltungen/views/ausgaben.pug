@@ -67,7 +67,6 @@ block content
                 +text('kosten[technikAngebot2]', 'Angebot 2', kosten.technikAngebot2())
               .col-sm-3
                 +currency('kosten[technikAngebot2EUR]', 'Betrag', kosten.technikAngebot2EUR())
-          +band(kosten)
         .col-md-6
           +staff(veranstaltung.staff())
           +marketingUndPlakate(veranstaltung.werbung())
@@ -105,5 +104,4 @@ block scripts
 
   +marketingUndPlakateScripts
   +staffScript
-  +bandScript
   script(src='/clientscripts/check-ausgabenform.js')
