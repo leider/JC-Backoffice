@@ -1,6 +1,82 @@
 @import "variables";
 @import "mixins";
 
+// colors
+@color-ausgaben1: #d50f36;
+@color-ausgaben1-border: darken(@color-ausgaben1, 5%);
+
+@color-kasse1: #9185be;
+@color-kasse1-border: darken(@color-kasse1, 5%);
+
+@color-allgemein1: #05498c;
+@color-allgemein1-border: darken(@color-allgemein1, 5%);
+
+@color-hotel1: #66267b;
+@color-hotel1-border: darken(@color-hotel1, 5%);
+
+@color-sonst1: #009285;
+@color-sonst1-border: darken(@color-sonst1, 5%);
+
+@color-ausgaben2: #f07f31;
+@color-ausgaben2-border: darken(@color-ausgaben2, 5%);
+
+@color-kasse2: #dea71f;
+@color-kasse2-border: darken(@color-kasse2, 5%);
+
+@color-allgemein2: #4faee3;
+@color-allgemein2-border: darken(@color-allgemein2, 5%);
+
+@color-hotel2: #e50069;
+@color-hotel2-border: darken(@color-hotel2, 5%);
+
+@color-sonst2: #95c22e;
+@color-sonst2-border: darken(@color-sonst2, 5%);
+
+.color-costs {
+  background-color: @color-ausgaben1 !important;
+  color: #ffffff !important;
+}
+
+.color-kasse {
+  background-color: @color-kasse1 !important;
+  color: #ffffff !important;
+}
+
+.color-general {
+  background-color: @color-allgemein1 !important;
+  color: #ffffff !important;
+}
+
+.color-hotel {
+  background-color: @color-hotel1 !important;
+  color: #ffffff !important;
+}
+
+.color-misc {
+  background-color: @color-sonst1 !important;
+  color: #ffffff !important;
+}
+
+.btn-costs {
+  .button-variant(#fff; @color-ausgaben1; @color-ausgaben1-border);
+}
+
+.btn-kasse {
+  .button-variant(#fff; @color-kasse1; @color-kasse1-border);
+}
+
+.btn-general {
+  .button-variant(#fff; @color-allgemein1; @color-allgemein1-border);
+}
+
+.btn-hotel {
+  .button-variant(#fff; @color-hotel1; @color-hotel1-border);
+}
+
+.btn-misc {
+  .button-variant(#fff; @color-sonst1; @color-sonst1-border);
+}
+
 // adapt syntaxhighlighted code in textboxes to bootstrap *BEGIN*
 .syntaxhighlighter a,
 .syntaxhighlighter div,
@@ -65,7 +141,6 @@ pre code {
 .ellipsis.narrow {
   max-width: 120px;
 }
-
 
 .main {
   margin-right: auto;

@@ -83,15 +83,15 @@ mixin submitButtonsFor(veranstaltung, current, nosave, nolist)
     if !nolist
       a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw
     if current !== 'kopf'
-      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kopf', title='Allgemeines (ohne Speichern)'): i.fa.fa-keyboard-o.fa-fw
+      a.btn.btn-default.btn-general(href=veranstaltung.fullyQualifiedUrl() + '/kopf', data-toggle='tooltip', title='Allgemeines (ohne Speichern)'): i.fa.fa-keyboard-o.fa-fw
     if current !== 'ausgaben'
-      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', title='Ausgaben (ohne Speichern)'): i.fa.fa-eur.fa-fw
+      a.btn.btn-default.btn-costs(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', data-toggle='tooltip', title='Ausgaben (ohne Speichern)'): i.fa.fa-eur.fa-fw
     if current !== 'hotel'
-      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotel', title='Hotel (ohne Speichern)'): i.fa.fa-bed.fa-fw
+      a.btn.btn-default.btn-hotel(href=veranstaltung.fullyQualifiedUrl() + '/hotel', data-toggle='tooltip', title='Hotel (ohne Speichern)'): i.fa.fa-bed.fa-fw
     if current !== 'kasse'
-      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title='Kasse (ohne Speichern)'): i.fa.fa-money.fa-fw
+      a.btn.btn-default.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', data-toggle='tooltip', title='Kasse (ohne Speichern)'): i.fa.fa-money.fa-fw
     if !nosave
-      button.btn.btn-primary(type='submit', title='Speichern'): i.fa.fa-floppy-o.fa-fw
+      button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.fa.fa-floppy-o.fa-fw
 
 mixin hidden(name, value)
   input(type='hidden', name=name, value=value)

@@ -206,6 +206,11 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.tooltiplabel').each(function () {
       $(this).tooltip();
     });
+    $('[data-toggle="tooltip"]').tooltip({
+      container: 'body',
+      placement: 'auto top',
+      viewport: '.container-fluid'
+    });
   }
 
   function createLinks() {

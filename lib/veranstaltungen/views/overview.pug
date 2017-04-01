@@ -31,7 +31,7 @@ block content
           | !{kopf.beschreibungHTML()}
 
           .panel.panel-default
-            .panel-heading(style='background-color: #637743; color: #FFFFFF;')
+            .panel-heading.color-general
               a.inherit-color.chevron(data-toggle='collapse', data-target='#agentur'): b
                 i.fa.fa-toggle-down.fa-fw.blog
                 | &nbsp;Agentur: #{agentur.name()}
@@ -44,7 +44,7 @@ block content
                 span.mailtoify #{agentur.email()}
 
           .panel.panel-default
-            .panel-heading(style='background-color: #992377; color: #FFFFFF;')
+            .panel-heading.color-kasse
               b
                 a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt')
                   i.fa.fa-toggle-down.fa-fw.blog
@@ -80,7 +80,7 @@ block content
 
           if kosten.deal() !== 'ohne'            
             .panel.panel-default
-              .panel-heading(style='background-color: #992377; color: #FFFFFF;')
+              .panel-heading.color-hotel
                 b
                   a.inherit-color.chevron(data-toggle='collapse', data-target='#deal')
                     i.fa.fa-toggle-down.fa-fw.blog
@@ -103,7 +103,7 @@ block content
 
         .col-md-6 
           .panel.panel-default
-            .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
+            .panel-heading.color-costs
               b
                 a.inherit-color.chevron(data-toggle='collapse', data-target='#kosten')
                   i.fa.fa-toggle-down.fa-fw.blog
@@ -157,7 +157,7 @@ block content
               | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und 'bereits genehmigen lassen.
 
           .panel.panel-default
-            .panel-heading(style='background-color: #99AA77; color: #FFFFFF;')
+            .panel-heading.color-misc
               a.inherit-color.chevron(data-toggle='collapse', data-target='#vertrag'): b
                 i.fa.fa-toggle-down.fa-fw.blog
                 | &nbsp;Vertrag (#{vertrag.art()})
