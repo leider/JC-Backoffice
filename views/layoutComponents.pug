@@ -18,18 +18,18 @@ mixin topNavbar(xs)
     ul.nav.navbar-nav.bottom
       li(data-jcnav='veranstaltungen')
         a(href='#')
-          i.fa.fa-calendar.fa-fw
+          i.fa.fa-calendar.fa-fw.fa-lg
           span.hidden-sm &nbsp;Veranstaltungen&nbsp;
         ul.dropdown-menu
           li
             a(href='/veranstaltungen/zukuenftige') Zukünftige
             a(href='/veranstaltungen/vergangene') Vergangene
       li(data-jcnav='optionen'): a(href='/optionen')
-        i.fa.fa-cogs.fa-fw
+        i.fa.fa-cogs.fa-fw.fa-lg
         | &nbsp;Optionen
       li(data-jcnav='users')
         a(href='#')
-          i.fa.fa-user.fa-fw
+          i.fa.fa-user.fa-fw.fa-lg
           span.hidden-sm &nbsp;User&nbsp;
         ul.dropdown-menu
           li
