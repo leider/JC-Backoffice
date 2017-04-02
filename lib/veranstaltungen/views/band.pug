@@ -10,23 +10,11 @@ mixin band(kosten)
         .col-xs-3(style='padding-right: 5px;')
           +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-          .form-group
-            label.control-label(for='gagenMWSt') MWSt:
-            select#gagenMWSt.form-control(name='kosten[gagenMWSt]')
-              for wert in ['ohne', '7%', '19%']
-                option(value=wert, selected = (kosten.gagenMWSt() === wert)) #{wert}
+          +singleselect('kosten[gagenMWSt]', 'MWSt', kosten.gagenMWSt(), ['ohne', '7%', '19%'])
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-          .form-group
-            label.control-label(for='gagenAuslandSt') Ausl.St.:
-            select#gagenAuslandSt.form-control(name='kosten[gagenAuslandSt]')
-              for wert in ['ohne', '18,8%']
-                option(value=wert, selected = (kosten.gagenAuslandSt() === wert)) #{wert}
+          +singleselect('kosten[gagenAuslandSt]', 'Ausl.St', kosten.gagenAuslandSt(), ['ohne', '18,8%'])
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-          .form-group
-            label.control-label(for='deal') Deal:
-            select#deal.form-control(name='kosten[deal]')
-              for wert in ['ohne', '100%', '90%', '80%', '70%', '60%']
-                option(value=wert, selected = (kosten.deal() === wert)) #{wert}
+          +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
         .col-xs-3(style='padding-left: 5px;')
           .form-group
             label.control-label Total:
@@ -36,11 +24,7 @@ mixin band(kosten)
         .col-xs-3(style='padding-right: 5px;')
           +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-          .form-group
-            label.control-label(for='agenturMWSt') MWSt:
-            select#agenturMWSt.form-control(name='kosten[agenturMWSt]')
-              for wert in ['ohne', '7%', '19%']
-                option(value=wert, selected = (kosten.agenturMWSt() === wert)) #{wert}
+          +singleselect('kosten[agenturMWSt]', 'MWSt', kosten.agenturMWSt(), ['ohne', '7%', '19%'])
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
         .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
         .col-xs-3(style='padding-left: 5px;')
@@ -68,8 +52,8 @@ mixin bandScript
   script.
     $(document).ready(function () {
       var gagenEUR = $('#kosten\\[gagenEUR\\]');
-      var gagenMWSt = $('#gagenMWSt');
-      var gagenAuslandSt = $('#gagenAuslandSt');
+      var gagenMWSt = $('#kosten\\[gagenMWSt\\]');
+      var gagenAuslandSt = $('#kosten\\[gagenAuslandSt\\]');
       var gagenTotal = $('#gagenTotal');
       function updateGagenTotal() {
         var eur = eurAmount(gagenEUR);
@@ -83,7 +67,7 @@ mixin bandScript
       updateGagenTotal();
 
       var agenturEUR = $('#kosten\\[agenturEUR\\]');
-      var agenturMWSt = $('#agenturMWSt');
+      var agenturMWSt = $('#kosten\\[agenturMWSt\\]');
       var agenturTotal = $('#agenturTotal');
       function updateAgenturTotal() {
         var eur = eurAmount(agenturEUR);

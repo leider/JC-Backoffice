@@ -59,17 +59,9 @@ block content
           #vertrag.collapse.in
             .row
               .col-md-6
-                .form-group
-                  label.control-label(for='vertragsart') Art:
-                  select#vertragsart.form-control(name='vertrag[art]')
-                    for art in Vertrag.arten()
-                      option(value=art, selected = (vertrag.art() !== undefined && vertrag.art() === art)) #{art}
+                +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
               .col-md-6
-                .form-group
-                  label.control-label(for='vertragssprache') Sprache:
-                  select#vertragssprache.form-control(name='vertrag[sprache]')
-                    for sprache in ['Deutsch', 'Englisch']
-                      option(value=sprache, selected = (vertrag.sprache() !== undefined && vertrag.sprache() === sprache)) #{sprache}
+                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch'])
 
         .col-md-6
           legend
@@ -93,33 +85,17 @@ block content
           #wannwo.collapse.in
             .row
               .col-sm-6
-                .form-group
-                  label.control-label(for='ort') Ort:
-                  select#ort.form-control(name='kopf[ort]')
-                    for ort in optionen.orte()
-                      option(value=ort, selected = (kopf.ort() !== undefined && kopf.ort() === ort)) #{ort}
+                +singleselect('kopf[ort]', 'Ort', kopf.ort(), optionen.orte())
               .col-sm-6
-                .form-group
-                  label.control-label(for='eventTyp') Typ:
-                  select#eventTyp.form-control(name='kopf[eventTyp]')
-                    for eventType in optionen.typen()
-                      option(value=eventType, selected = (kopf.eventType() !== undefined && kopf.eventType() === eventType)) #{eventType}
+                +singleselect('kopf[eventTyp]', 'Typ', kopf.eventType(), optionen.typen())
             .row
               .col-sm-6
-                .form-group
-                  label.control-label(for='koop') Kooperation:
-                  select#koop.form-control(name='kopf[kooperation]')
-                    for koop in optionen.kooperationen()
-                      option(value=koop, selected = (kopf.kooperation() !== undefined && kopf.kooperation() === koop)) #{koop}
+                +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
               .col-sm-6
-                .form-group
-                  label.control-label(for='verantwortlicher') Verantwortlicher:
-                  select#verantwortlicher.form-control(name='kopf[verantwortlicher]')
-                    for verantwortlicher in optionen.verantwortliche()
-                      option(value=verantwortlicher, selected = (kopf.verantwortlicher() !== undefined && kopf.verantwortlicher() === verantwortlicher)) #{verantwortlicher}
+                +singleselect('kopf[verantwortlicher]', 'Verantwortlicher', kopf.verantwortlicher(), optionen.verantwortliche())
             .row
               .col-sm-12
-                +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
+                +textareaPure('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
 
       .row
         .col-md-12

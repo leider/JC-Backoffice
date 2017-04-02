@@ -7,26 +7,20 @@ mixin kontakt(veranstaltung, kontakte, labelForLegend, name)
   .collapse.in(id=name)
     .row
       .col-sm-6
-        .form-group
-          label.control-label(for='auswahl') Auswahl:
-          select.form-control(name=name + '[auswahl]', id=name + '[auswahl]')
-            for kontakt in kontakte
-              option(value=kontakt.name, selected = (derkontakt !== undefined && derkontakt.name() === kontakt.name)) #{kontakt.name}
-      .col-sm-6
+        +singleselect(name + '[auswahl]', 'Auswahl', derkontakt.name(), kontakte.map(k => k.name))
         +text(name + '[name]', 'Name', derkontakt.name())
-    .row
-      .col-sm-6
-        +text(name + '[ansprechpartner]', 'Ansprechpartner', derkontakt.ansprechpartner())
-        +text(name + '[telefon]', 'Telefon', derkontakt.telefon())
-        +text(name + '[email]', 'E-Mail', derkontakt.email())
       .col-sm-6
         +textareaPure(name+ '[adresse]', 'Adresse', derkontakt.adresse())
+    .row
+      .col-sm-6
+        +text(name + '[telefon]', 'Telefon', derkontakt.telefon())
+      .col-sm-6
+        +text(name + '[email]', 'E-Mail', derkontakt.email())
 
 mixin kontaktScript(name)
   script.
     var auswahl = $('##{name}\\[auswahl\\]');
     var nameText = $('##{name}\\[name\\]');
-    var ansprechpartnerText = $('##{name}\\[ansprechpartner\\]');
     var telefonText = $('##{name}\\[telefon\\]');
     var emailText = $('##{name}\\[email\\]');
     var adresseText = $('##{name}\\[adresse\\]');
@@ -36,7 +30,6 @@ mixin kontaktScript(name)
        .done(function (result) {
          if (result) {
            nameText.val(result.name);
-           ansprechpartnerText.val(result.ansprechpartner);
            telefonText.val(result.telefon);
            emailText.val(result.email);
            adresseText.val(result.adresse);

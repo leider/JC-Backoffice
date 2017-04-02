@@ -39,13 +39,6 @@ mixin marketingUndPlakate(werbung)
         +text('werbung[layoutingInfo]', 'Arbeitskosten', werbung.layoutingInfo(), null, 'Layouting, Sonstiges')
       .col-xs-3
         +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR())
-    hr
-    .row
-      .col-md-12
-        .checkbox
-          label
-            input(type='checkbox', name='werbung[genehmigt]', checked=(werbung.genehmigt() ? 'true' : undefined))
-            p: b Wir müssen <span id="anzahlPlakate">#{werbung.anzahlPlakate()}</span> Genehmigungen beantragen!
 
 mixin marketingUndPlakateScripts
   script.
