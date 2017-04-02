@@ -2,47 +2,14 @@ extends ../../../views/layout
 include ../../../views/formComponents
 include kontakt
 
-mixin bahnOderFlug(legend, bahnhof, bahnhofLabel, bahn, transferOptions)
-  legend #{legend}
-  .row
-    .col-md-12
-      +text('unterkunft[' + bahnhof + ']', bahnhofLabel, unterkunft[bahnhof]())
-  .row
-    .col-xs-6()
-      .col-xs-7(style='padding-left:0px;padding-right:3px')
-        +date('unterkunft[' + bahn + 'AnkunftDate]', 'Ankunft', unterkunft[bahn + 'AnkunftMoment']().format('L'))
-      .col-xs-5(style='padding-left:3px;padding-right:0px')
-        +time('unterkunft[' + bahn + 'AnkunftTime]', unterkunft[bahn + 'AnkunftMoment']().format('LT'))
-    .col-xs-6()
-      .col-xs-7(style='padding-left:0px;padding-right:3px')
-        +date('unterkunft[' + bahn + 'AbfahrtDate]', 'Abfahrt', unterkunft[bahn + 'AbfahrtMoment']().format('L'))
-      .col-xs-5(style='padding-left:3px;padding-right:0px')
-        +time('unterkunft[' + bahn + 'AbfahrtTime]', unterkunft[bahn + 'AbfahrtMoment']().format('LT'))
-  .row
-    .col-xs-6
-      .form-group
-        label.control-label(for=bahn + 'TransferAnkunft') Transfer:
-        select.form-control(name='unterkunft[' + bahn + 'TransferAnkunft]', id=bahn + 'TransferAnkunft')
-          for option in transferOptions
-            option(value=option, selected = unterkunft[bahn + 'TransferAnkunft']() === option) #{option}
-    .col-xs-6
-      .form-group
-        label.control-label(for=bahn + 'TransferAbfahrt') Transfer:
-        select.form-control(name='unterkunft[' + bahn + 'TransferAbfahrt]', id=bahn + 'TransferAbfahrt')
-          for option in ['', 'Jazzclub Shuttle', 'Taxi']
-            option(value=option, selected = unterkunft[bahn + 'TransferAbfahrt']() === option) #{option}
 
-mixin bahnOderFlugDatesScript(bahn)
-  script.
-    $(document).ready(function () {
-      var startDate = $('#unterkunft\\[#{bahn}AnkunftDate\\]');
-      var startTime = $('#unterkunft\\[#{bahn}AnkunftTime\\]');
-      var endDate = $('#unterkunft\\[#{bahn}AbfahrtDate\\]');
-      var endTime = $('#unterkunft\\[#{bahn}AbfahrtTime\\]');
-
-      dateAdapter(startDate, startTime, endDate, endTime);
-    });
-
+mixin zimmerNumEUR(name, label)
+  .col-sm-4
+    .row
+      .col-xs-6
+        +number('unterkunft[' + name + 'Num]', label, unterkunft[name + 'Num'](), null, '0', '80')
+      .col-xs-6
+        +currency('unterkunft[' + name + 'EUR]', 'Preis', unterkunft[name + 'EUR']())
 
 
 block title
@@ -75,34 +42,15 @@ block content
               .col-xs-8()
                 +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
             .row
-              .col-sm-4
-                .row
-                  .col-xs-6
-                    +number('unterkunft[einzelNum]', 'Einzel', unterkunft.einzelNum(), null, '0', '80')
-                  .col-xs-6
-                    +currency('unterkunft[einzelEUR]', 'Preis', unterkunft.einzelEUR())
-              .col-sm-4
-                .row
-                  .col-xs-6
-                    +number('unterkunft[doppelNum]', 'Doppel', unterkunft.doppelNum(), null, '0', '80')
-                  .col-xs-6
-                    +currency('unterkunft[doppelEUR]', 'Preis', unterkunft.doppelEUR())
-              .col-sm-4
-                .row
-                  .col-xs-6
-                    +number('unterkunft[suiteNum]', 'Suite', unterkunft.suiteNum(), null, '0', '80')
-                  .col-xs-6
-                    +currency('unterkunft[suiteEUR]', 'Preis', unterkunft.suiteEUR())
+              +zimmerNumEUR('einzel', 'Einzel')
+              +zimmerNumEUR('doppel', 'Doppel')
+              +zimmerNumEUR('suite', 'Suite')
         .col-md-6
           legend
             a(data-toggle='collapse', href='#transport') Transport
             +currencySpan('transportTotal', 'pull-right')
           #transport.collapse.in
-            .row
-              .col-lg-6
-                +bahnOderFlug('Bahn', 'bahnhof', 'Bahnhof', 'bahn', ['', 'Jazzclub Shuttle', 'Taxi'])
-              .col-lg-6
-                +bahnOderFlug('Flug', 'flughafen', 'Flughafen / Flugnummer', 'flug', ['', 'Jazzclub Shuttle', 'Airport Shuttle', 'Bahn'])
+            +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
             .row
               .col-md-6
                 +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
@@ -146,6 +94,4 @@ block scripts
       transportEUR.keyup(updateTransportTotal);
       updateTransportTotal();
     });
-  +bahnOderFlugDatesScript('bahn')
-  +bahnOderFlugDatesScript('flug')
   script(src='/clientscripts/check-hotelform.js')
