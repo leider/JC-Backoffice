@@ -13,7 +13,7 @@ mixin plakateRow(werbung, name, label)
     .col-xs-3
       +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
-mixin marketingUndPlakate(werbung)
+mixin marketingUndPlakate(werbung, optionen)
   legend
     a(data-toggle='collapse', href='#plakate') Werbung
     +currencySpan('werbungTotal', 'pull-right')
@@ -38,7 +38,7 @@ mixin marketingUndPlakate(werbung)
       .col-xs-9
         +text('werbung[layoutingInfo]', 'Arbeitskosten', werbung.layoutingInfo(), null, 'Layouting, Sonstiges')
       .col-xs-3
-        +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR())
+        +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR(optionen))
 
 mixin marketingUndPlakateScripts
   script.
