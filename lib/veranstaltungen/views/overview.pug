@@ -150,13 +150,15 @@ block content
                   td(align='right'): +currencySpanNormal(werbung.mediaTotalEUR())
 
           if !werbung.genehmigt()
-            p.text-danger 
+            p.text-danger.form-inline 
               i.fa.fa-warning
-              | &nbsp;Wir haben Plakate bestellt und noch nicht genehmigen lassen.
+              | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
+              input#genehmigungenEingeholt(type='checkbox')
           else
-            p.text-success
+            p.text-success.form-inline
               i.fa.fa-check-circle
-              | &nbsp;Wir haben Plakate bestellt und 'bereits genehmigen lassen.
+              | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
+              input#genehmigungenEingeholt(type='checkbox', checked = 'true')
 
           .panel.panel-default
             .panel-heading.color-misc
@@ -179,7 +181,11 @@ block scripts
       });
       
       $('.vertragstep').click(function() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/stepClicked'}', {data: {step: this.name, checked: this.checked}});
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/stepClicked"}', {data: {step: this.name, checked: this.checked}});
+      });
+      
+      $('#genehmigungenEingeholt').click(function() {
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/genehmigungenEingeholt"}', {data: {checked: this.checked}});
       });
       
       function eintrittGesamtEUR() {

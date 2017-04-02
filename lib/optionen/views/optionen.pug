@@ -32,10 +32,16 @@ block content
           legend
             a(data-toggle='collapse', href='#personal') Personal
           #personal.collapse.in
-            +editableMultiselect('techniker', 'Techniker', optionen.techniker(), optionen.techniker())
-            +editableMultiselect('merchandise', 'Merchandise', optionen.merchandise(), optionen.merchandise())
-            +editableMultiselect('kasse', 'Kasse', optionen.kasse(), optionen.kasse())
-            +editableMultiselect('fremdpersonal', 'Fremdpersonal', optionen.fremdpersonal(), optionen.fremdpersonal())
+            .row
+              .col-sm-6
+                +editableMultiselect('techniker', 'Techniker', optionen.techniker(), optionen.techniker())
+              .col-sm-6
+                +editableMultiselect('merchandise', 'Merchandise', optionen.merchandise(), optionen.merchandise())
+            .row
+              .col-sm-6
+                +editableMultiselect('kasse', 'Kasse', optionen.kasse(), optionen.kasse())
+              .col-sm-6
+                +editableMultiselect('fremdpersonal', 'Fremdpersonal', optionen.fremdpersonal(), optionen.fremdpersonal())
           legend
             a(data-toggle='collapse', href='#preise') Vorgaben Preis
           #preise.collapse.in
@@ -49,7 +55,19 @@ block content
             .row
               .col-md-4
                 +currency('layoutingEUR', 'Grafikdesign', optionen.layoutingEUR())
-
+          legend
+            a(data-toggle='collapse', href='#werb') Werbung
+          #werb.collapse.in
+            .row
+              .col-sm-6
+                +editableMultiselect('plakatNum', 'Plakate Anzahl', optionen.plakatNum(), optionen.plakatNum())
+              .col-sm-6
+                +editableMultiselect('flyerNum', 'Flyer Anzahl', optionen.flyerNum(), optionen.flyerNum())
+            .row
+              .col-sm-6
+                +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
+              .col-sm-6
+                +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
       .row
         .col-md-12
           hr

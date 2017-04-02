@@ -1,13 +1,13 @@
 include ../../../views/formComponents
 
-mixin plakateRow(werbung, name, label)
+mixin plakateRow(werbung, name, label, optionen)
   .row
     .col-xs-2
-      +singleselect('werbung[' + name + 'Num]', label, werbung[name + 'Num'](), ['', 100, 250, 500])
+      +singleselect('werbung[' + name + 'Num]', label, werbung[name + 'Num'](), optionen.plakatNum())
     .col-xs-2
-      +singleselect('werbung[' + name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), ['', 'A1', 'A2', 'A3'])
+      +singleselect('werbung[' + name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), optionen.plakatGroesse())
     .col-xs-3
-      +singleselect('werbung[' + name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), ['', 'Kulturring', 'Grüne', 'Spitzer', 'Sonstiger'])
+      +singleselect('werbung[' + name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), optionen.plakatVon())
     .col-xs-2
       +text('werbung[' + name + 'KW]', 'KW', werbung[name + 'KW']())
     .col-xs-3
@@ -18,8 +18,8 @@ mixin marketingUndPlakate(werbung, optionen)
     a(data-toggle='collapse', href='#plakate') Werbung
     +currencySpan('werbungTotal', 'pull-right')
   #plakate.collapse.in
-    +plakateRow(werbung, 'plakat1', 'Plakat')
-    +plakateRow(werbung, 'plakat2', 'Plakat')
+    +plakateRow(werbung, 'plakat1', 'Plakat', optionen)
+    +plakateRow(werbung, 'plakat2', 'Plakat', optionen)
     .row
       .col-xs-7
         +text('werbung[genehmigungenInfo]', 'Genehmigungen', werbung.genehmigungenInfo(), null, 'Wer, Was')
@@ -29,7 +29,7 @@ mixin marketingUndPlakate(werbung, optionen)
         +currency('werbung[genehmigungenEUR]', 'Betrag', werbung.genehmigungenEUR())
     .row
       .col-xs-2
-        +singleselect('werbung[flyerNum]', 'Flyer', werbung.flyerNum(), ['', 100, 250, 500, 1000, 2000, 5000])
+        +singleselect('werbung[flyerNum]', 'Flyer', werbung.flyerNum(), optionen.flyerNum())
       .col-xs-7
         +text('werbung[flyerInfo]', 'Info', werbung.flyerInfo(), null, 'Größe, Lieferant')
       .col-xs-3
