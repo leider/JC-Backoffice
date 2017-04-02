@@ -24,59 +24,55 @@ block content
       .row
         .col-md-6
           legend
-            a(data-toggle='collapse', href='#einnahmen') Einnahmen & Besucher
+            a(data-toggle='collapse', href='#einnahmen') Einnahmen
             +currencySpan('einnahmenGesamt', 'pull-right')
           #einnahmen.collapse.in
             .row
-              .col-sm-3.col-xs-6
+              .col-xs-6
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
-              .col-sm-3.col-xs-6
-                +currency('kasse[einnahmeSpendeEUR]', 'Spende', kasse.einnahmeSpendeEUR())
-              .col-sm-3.col-xs-6
-                +currency('kasse[einnahmeBeitragEUR]', 'Mitgliedsbeitrag', kasse.einnahmeBeitragEUR())
-              .col-sm-3.col-xs-6
-                +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR())
-            .row
-              .col-xs-9
-                +text('kasse[einnahmeSonstigesText]', 'Sonstiges', kasse.einnahmeSonstigesText())
-              .col-xs-3
-                +currency('kasse[einnahmeSonstigesEUR]', 'Betrag', kasse.einnahmeSonstigesEUR())
-            .row
               .col-xs-6
-                +number('kasse[anzahlBesucherGesamt]', 'Anzahl Besucher', kasse.anzahlBesucherGesamt(), null, 0, 5000)
-              .col-xs-6
-                +number('kasse[anteilBesucherMaennlich]', 'davon männl. %', kasse.anteilBesucherMaennlich(), null, 0, 100)
+                +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage')
+            .row
+              .col-xs-8
+                +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
+              .col-xs-4
+                +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR())
+            .row
+              .col-xs-8
+                +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
+              .col-xs-4
+                +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR())
 
 
         .col-md-6
           legend
-            a(data-toggle='collapse', href='#ausgaben') Ausgaben
+            a(data-toggle='collapse', href='#ausgaben') Ausgaben (Bar und mit Beleg)
             +currencySpan('ausgabenGesamt', 'pull-right')
           #ausgaben.collapse.in
             .row
-              .col-sm-3.col-xs-6
+              .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
-              .col-sm-3.col-xs-6
+              .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR())
-              .col-sm-3.col-xs-6
+              .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR())
-              .col-sm-3.col-xs-6
-                +currency('kasse[ausgabeMaterialEUR]', 'Material', kasse.ausgabeMaterialEUR())
             .row
-              .col-sm-3.col-xs-6
-                +currency('kasse[ausgabeHotelEUR]', 'Hotel', kasse.ausgabeHotelEUR())
-              .col-sm-3.col-xs-6
-                +currency('kasse[ausgabeFahrtEUR]', 'Fahrt', kasse.ausgabeFahrtEUR())
-
-
+              .col-xs-8
+                +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text())
+              .col-xs-4
+                +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR())
             .row
-              .col-xs-9
-                +text('kasse[ausgabeSonstigesText]', 'Sonstiges', kasse.ausgabeSonstigesText())
-              .col-xs-3
-                +currency('kasse[ausgabeSonstigesEUR]', 'Betrag', kasse.ausgabeSonstigesEUR())
+              .col-xs-8
+                +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text())
+              .col-xs-4
+                +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR())
+            .row
+              .col-xs-8
+                +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text())
+              .col-xs-4
+                +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR())
             .row
               .col-sm-9.col-xs-6
-                +text('kasse[ausgabeBemerkung]', 'Bemerkung', kasse.ausgabeBemerkung(), null, 'Zu Material o.ä.')
               .col-sm-3.col-xs-6
                 +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR())
       .row
@@ -99,40 +95,35 @@ block scripts
     $(document).ready(function () {
       var einnahmeBankEUR = $('#kasse\\[einnahmeBankEUR\\]');
       var einnahmeTicketsEUR = $('#kasse\\[einnahmeTicketsEUR\\]');
-      var einnahmeSpendeEUR = $('#kasse\\[einnahmeSpendeEUR\\]');
-      var einnahmeBeitragEUR = $('#kasse\\[einnahmeBeitragEUR\\]');
-      var einnahmeSonstigesEUR = $('#kasse\\[einnahmeSonstigesEUR\\]');
-      
+      var einnahmeSonstiges1EUR = $('#kasse\\[einnahmeSonstiges1EUR\\]');
+      var einnahmeSonstiges2EUR = $('#kasse\\[einnahmeSonstiges2EUR\\]');
+
       function updateEinnahmenGesamt() {
-        var einnahmenGesamt = eurAmount(einnahmeBankEUR) + 
-          eurAmount(einnahmeTicketsEUR) + eurAmount(einnahmeSpendeEUR) + 
-          eurAmount(einnahmeBeitragEUR) + eurAmount(einnahmeSonstigesEUR); 
+        var einnahmenGesamt = eurAmount(einnahmeBankEUR) + eurAmount(einnahmeTicketsEUR)
+          + eurAmount(einnahmeSonstiges1EUR) + eurAmount(einnahmeSonstiges2EUR);
         setEuro($('#einnahmenGesamt'), einnahmenGesamt);
         $('#einnahmenGesamt').change(updateEndbestand);
       }
 
       einnahmeBankEUR.keyup(updateEinnahmenGesamt);
       einnahmeTicketsEUR.keyup(updateEinnahmenGesamt);
-      einnahmeSpendeEUR.keyup(updateEinnahmenGesamt);
-      einnahmeBeitragEUR.keyup(updateEinnahmenGesamt);
-      einnahmeSonstigesEUR.keyup(updateEinnahmenGesamt);
+      einnahmeSonstiges1EUR.keyup(updateEinnahmenGesamt);
+      einnahmeSonstiges2EUR.keyup(updateEinnahmenGesamt);
       updateEinnahmenGesamt();
-  
+
       var ausgabeGageEUR = $('#kasse\\[ausgabeGageEUR\\]');
       var ausgabeCateringEUR = $('#kasse\\[ausgabeCateringEUR\\]');
       var ausgabeHelferEUR = $('#kasse\\[ausgabeHelferEUR\\]');
-      var ausgabeMaterialEUR = $('#kasse\\[ausgabeMaterialEUR\\]');
-      var ausgabeSonstigesEUR = $('#kasse\\[ausgabeSonstigesEUR\\]');
+      var ausgabeSonstiges1EUR = $('#kasse\\[ausgabeSonstiges1EUR\\]');
+      var ausgabeSonstiges2EUR = $('#kasse\\[ausgabeSonstiges2EUR\\]');
+      var ausgabeSonstiges3EUR = $('#kasse\\[ausgabeSonstiges3EUR\\]');
       var ausgabeBankEUR = $('#kasse\\[ausgabeBankEUR\\]');
-      var ausgabeHotelEUR = $('#kasse\\[ausgabeHotelEUR\\]');
-      var ausgabeFahrtEUR = $('#kasse\\[ausgabeFahrtEUR\\]');
 
       function updateAusgabenGesamt() {
-        var ausgabenGesamt = eurAmount(ausgabeGageEUR) + 
-          eurAmount(ausgabeCateringEUR) + eurAmount(ausgabeHelferEUR) + 
-          eurAmount(ausgabeMaterialEUR) + eurAmount(ausgabeSonstigesEUR) +
-          eurAmount(ausgabeBankEUR)+ eurAmount(ausgabeHotelEUR) +
-          eurAmount(ausgabeFahrtEUR); 
+        var ausgabenGesamt = eurAmount(ausgabeGageEUR) +
+          eurAmount(ausgabeCateringEUR) + eurAmount(ausgabeHelferEUR) +
+          eurAmount(ausgabeSonstiges1EUR) + eurAmount(ausgabeSonstiges2EUR) +
+          eurAmount(ausgabeSonstiges3EUR) + eurAmount(ausgabeBankEUR);
         setEuro($('#ausgabenGesamt'), ausgabenGesamt);
         $('#ausgabenGesamt').change(updateEndbestand);
       }
@@ -140,19 +131,20 @@ block scripts
       ausgabeGageEUR.keyup(updateAusgabenGesamt);
       ausgabeCateringEUR.keyup(updateAusgabenGesamt);
       ausgabeHelferEUR.keyup(updateAusgabenGesamt);
-      ausgabeMaterialEUR.keyup(updateAusgabenGesamt);
-      ausgabeSonstigesEUR.keyup(updateAusgabenGesamt);
+      ausgabeSonstiges1EUR.keyup(updateAusgabenGesamt);
+      ausgabeSonstiges2EUR.keyup(updateAusgabenGesamt);
+      ausgabeSonstiges3EUR.keyup(updateAusgabenGesamt);
       ausgabeBankEUR.keyup(updateAusgabenGesamt);
-      ausgabeHotelEUR.keyup(updateAusgabenGesamt);
-      ausgabeFahrtEUR.keyup(updateAusgabenGesamt);
       updateAusgabenGesamt();
 
       var anfangsbestandEUR = $('#kasse\\[anfangsbestandEUR\\]');
+
       function updateEndbestand() {
         var endbestand = eurAmount(anfangsbestandEUR) +
           eurAmount($('#einnahmenGesamt')) - eurAmount($('#ausgabenGesamt'));
         setEuro($('#endbestandEUR'), endbestand);
       }
+
       anfangsbestandEUR.keyup(updateEndbestand);
       updateEndbestand();
     });
