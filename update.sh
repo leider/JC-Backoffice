@@ -3,4 +3,4 @@ git pull
 npm install
 npm prune
 grunt deploy_production
-sudo svc -du JC-backoffice/
+sudo svc -du /service/JC-backoffice/
