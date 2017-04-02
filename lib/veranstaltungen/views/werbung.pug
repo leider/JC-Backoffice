@@ -1,116 +1,74 @@
 include ../../../views/formComponents
 
-mixin plakateRow(werbung, name, label, werte)
+mixin plakateRow(werbung, name, label)
   .row
     .col-xs-2
-      +singleselect('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), ['', 100, 250, 500]) 
-    .col-xs-3
-      +singleselect('werbung['+ name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), ['', 'Kulturring', 'Grüne', 'Spitzer', 'Sonstiger']) 
+      +singleselect('werbung[' + name + 'Num]', label, werbung[name + 'Num'](), ['', 100, 250, 500])
     .col-xs-2
-      +singleselect('werbung['+ name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), ['', 'A1', 'A2', 'A3']) 
+      +singleselect('werbung[' + name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), ['', 'A1', 'A2', 'A3'])
+    .col-xs-3
+      +singleselect('werbung[' + name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), ['', 'Kulturring', 'Grüne', 'Spitzer', 'Sonstiger'])
     .col-xs-2
-      +text('werbung['+ name + 'KW]', 'KW', werbung[name + 'KW']())
+      +text('werbung[' + name + 'KW]', 'KW', werbung[name + 'KW']())
     .col-xs-3
-      +currency('werbung['+ name + 'EUR]', 'Preis', werbung[name + 'EUR']()) 
-
-mixin marketingRow(werbung, name, label)
-  .row
-    .col-xs-3
-      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
-    .col-xs-3
-      .form-group
-        +currency('werbung['+ name + 'EUR]', label, werbung[name + 'EUR']())
-    .col-xs-3
-    .col-xs-3
-      .form-group
-        label.control-label Total:
-        p: b
-          +currencySpan(name + 'Total', 'form-control-static pull-right')
+      +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
 mixin marketingUndPlakate(werbung)
   legend
-    a(data-toggle='collapse', href='#plakate') Marketing
+    a(data-toggle='collapse', href='#plakate') Werbung
     +currencySpan('werbungTotal', 'pull-right')
   #plakate.collapse.in
-    +plakateRow(werbung, 'plakat1', 'Plakat 1')
-    +plakateRow(werbung, 'plakat2', 'Plakat 2')
+    +plakateRow(werbung, 'plakat1', 'Plakat')
+    +plakateRow(werbung, 'plakat2', 'Plakat')
+    .row
+      .col-xs-7
+        +text('werbung[genehmigungenInfo]', 'Genehmigungen', werbung.genehmigungenInfo(), null, 'Wer, Was')
+      .col-xs-2
+        +number('werbung[genehmigungenNum]', 'Anzahl', werbung.genehmigungenNum(), null, 0, 500)
+      .col-xs-3
+        +currency('werbung[genehmigungenEUR]', 'Betrag', werbung.genehmigungenEUR())
+    .row
+      .col-xs-2
+        +singleselect('werbung[flyerNum]', 'Flyer', werbung.flyerNum(), ['', 100, 250, 500, 1000, 2000, 5000])
+      .col-xs-7
+        +text('werbung[flyerInfo]', 'Info', werbung.flyerInfo(), null, 'Größe, Lieferant')
+      .col-xs-3
+        +currency('werbung[flyerEUR]', 'Betrag', werbung.flyerEUR())
+    .row
+      .col-xs-9
+        +text('werbung[layoutingInfo]', 'Arbeitskosten', werbung.layoutingInfo(), null, 'Layouting, Sonstiges')
+      .col-xs-3
+        +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR())
+    hr
     .row
       .col-md-12
         .checkbox
           label
             input(type='checkbox', name='werbung[genehmigt]', checked=(werbung.genehmigt() ? 'true' : undefined))
             p: b Wir müssen <span id="anzahlPlakate">#{werbung.anzahlPlakate()}</span> Genehmigungen beantragen!
-    hr
-    +marketingRow(werbung, 'flyer', 'Flyer')
-    +marketingRow(werbung, 'banner', 'Banner etc.')
-    +marketingRow(werbung, 'socialmedia', 'Social Media')
-  
-mixin marketingScript(name)
-  script.
-    $(document).ready(function() {
-      var #{name}Num = $('#werbung\\[#{name}Num\\]');
-      var #{name}EUR = $('#werbung\\[#{name}EUR\\]');
-
-      function update#{name}Total() {
-        var result = intAmount(#{name}Num) * eurAmount(#{name}EUR);
-        $('#' + '#{name}Total').autoNumeric('set', result);
-        updatePlakateTotal();
-      }
-
-      #{name}Num.change(update#{name}Total);
-      #{name}Num.keyup(update#{name}Total);
-      #{name}EUR.keyup(update#{name}Total);
-      update#{name}Total();
-    });
-    
-mixin plakateScript(name)
-  script.
-    $(document).ready(function() {
-      var #{name}Num = $('#werbung\\[#{name}Num\\]');
-      var #{name}Groesse = $('#' + '#{name}Groesse');
-      function update#{name}Total() {
-        var #{name}Faktor = groessenUndFaktoren.#{name}[#{name}Groesse.val()]
-        var result = intAmount(#{name}Num) * #{name}Faktor;
-        $('#' + '#{name}Total').autoNumeric('set', result);
-        updatePlakateTotal();
-      }
-      #{name}Num.change(update#{name}Total);
-      #{name}Num.keyup(update#{name}Total);
-      #{name}Groesse.change(update#{name}Total);
-      update#{name}Total();
-    });
 
 mixin marketingUndPlakateScripts
   script.
-    var groessenUndFaktoren = {
-      kulturring: {A1: 1.5, A2: 1},
-      gruene: {A1: 7.5},
-      spitzer: {A1: 3.5},
-      ralf: {A3: 1}
-    }
+    $(document).ready(function () {
+      function updatePlakateTotal() {
+        var plakat1EUR = $('#werbung\\[plakat1EUR\\]');
+        var plakat2EUR = $('#werbung\\[plakat2EUR\\]');
+        var flyerEUR = $('#werbung\\[flyerEUR\\]');
+        var layoutingEUR = $('#werbung\\[layoutingEUR\\]');
+        var genehmigungenEUR = $('#werbung\\[genehmigungenEUR\\]');
+        var summe = eurAmount(plakat1EUR)
+          + eurAmount(plakat2EUR)
+          + eurAmount(flyerEUR)
+          + eurAmount(layoutingEUR)
+          + eurAmount(genehmigungenEUR);
 
-    function updatePlakateTotal() {
-      var summe = eurAmount($('#kulturringTotal')) 
-        + eurAmount($('#grueneTotal')) 
-        + eurAmount($('#spitzerTotal')) 
-        + eurAmount($('#ralfTotal')) 
-        + eurAmount($('#flyerTotal')) 
-        + eurAmount($('#bannerTotal')) 
-        + eurAmount($('#socialmediaTotal'));
-      setEuro($('#werbungTotal'), summe);
+        setEuro($('#werbungTotal'), summe);
+      }
 
-      var anzahl = intAmount($('#werbung\\[kulturringNum\\]')) 
-        + intAmount($('#werbung\\[grueneNum\\]')) 
-        + intAmount($('#werbung\\[spitzerNum\\]')) 
-        + intAmount($('#werbung\\[ralfNum\\]'));
-      $('#anzahlPlakate').html(anzahl);
-    }
-
-  +plakateScript('kulturring')
-  +plakateScript('gruene')
-  +plakateScript('spitzer')
-  +plakateScript('ralf')
-  +marketingScript('flyer')
-  +marketingScript('banner')
-  +marketingScript('socialmedia')
-  
+      $('#werbung\\[plakat1EUR\\]').keyup(updatePlakateTotal);
+      $('#werbung\\[plakat2EUR\\]').keyup(updatePlakateTotal);
+      $('#werbung\\[flyerEUR\\]').keyup(updatePlakateTotal);
+      $('#werbung\\[layoutingEUR\\]').keyup(updatePlakateTotal);
+      $('#werbung\\[genehmigungenEUR\\]').keyup(updatePlakateTotal);
+      updatePlakateTotal();
+    });

@@ -68,15 +68,17 @@ block content
                     td(align='right'): +currencySpanNormal(eintrittspreise.regulaer(), 'eintrittRegulaer')
                     td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
                     td(align='right'): +currencySpanNormal(eintrittspreise.mitglied(), 'eintrittMitglied')
-                  tr
-                    th Reservix (aktuell)
-                      .pull-right: +currencySpanNormal(0, 'eintrittReservixEUR')
-                    td: input#reservixRegulaer.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
-                    td: input#reservixErmaessigt.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
-                    td: input#reservixMitglied.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
-                  tr
-                    th Abendkasse Überschuss
-                      .pull-right: +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
+                  tr.form-inline
+                    th
+                      p.form-control-static Reservix (aktuell)
+                        .pull-right.form-control-static: +currencySpanNormal(0, 'eintrittReservixEUR')
+                    td: input#reservixRegulaer.pull-right.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
+                    td: input#reservixErmaessigt.pull-right.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
+                    td: input#reservixMitglied.pull-right.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
+                  tr.form-inline
+                    th
+                      p.form-control-static Abendkasse Überschuss
+                        .pull-right.form-control-static: +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
 
           if kosten.deal() !== 'ohne'            
             .panel.panel-default
@@ -136,7 +138,7 @@ block content
                   th(colspan=2) Personal
                   th(align='right', style='text-align: right;'): +currencySpanNormal(staff.staffTotalEUR())
                 tr
-                  th(colspan=2) Marketing
+                  th(colspan=2) Werbung
                   th(align='right', style='text-align: right;'): +currencySpanNormal(werbung.marketingTotalEUR())
                 tr
                   td
@@ -144,17 +146,17 @@ block content
                   td(align='right'): +currencySpanNormal(werbung.plakateTotalEUR())
                 tr
                   td
-                  td Media
+                  td Flyer
                   td(align='right'): +currencySpanNormal(werbung.mediaTotalEUR())
 
           if !werbung.genehmigt()
             p.text-danger 
               i.fa.fa-warning
-              | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und noch nicht genehmigen lassen.
+              | &nbsp;Wir haben Plakate bestellt und noch nicht genehmigen lassen.
           else
             p.text-success
               i.fa.fa-check-circle
-              | &nbsp;Wir haben #{werbung.plakateTotal()} Plakate bestellt und 'bereits genehmigen lassen.
+              | &nbsp;Wir haben Plakate bestellt und 'bereits genehmigen lassen.
 
           .panel.panel-default
             .panel-heading.color-misc

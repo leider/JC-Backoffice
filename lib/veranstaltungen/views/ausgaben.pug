@@ -18,7 +18,7 @@ block content
         .col-md-12
           +submitButtonsFor(veranstaltung, 'ausgaben')
           .page-header
-            h2 Kosten für #{veranstaltung.datumForDisplay()}<br>
+            h2 Kosten für #{veranstaltung.datumForDisplayMitKW()}<br>
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
@@ -31,23 +31,19 @@ block content
                 +text('kosten[rider]', 'Rider', kosten.rider())
             .row
               .col-sm-9
-                +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
+                +editableMultiselect('kosten[backlineJazzclub]', 'Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
             .row
               .col-sm-9
-                +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
+                +editableMultiselect('kosten[backlineRockshop]', 'Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
               .col-sm-3
-                +currency('kosten[backlineEUR]', 'Betrag Rockshop', kosten.backlineEUR())
+                +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
           legend
             a(data-toggle='collapse', href='#saalmiete') Saalmiete
             +currencySpan('saalmietePreis', 'pull-right')
           #saalmiete.collapse.in
             .row
               .col-sm-9
-                .form-group
-                  label.control-label(for='location') Location:
-                  select#location.form-control(name='kosten[saal]')
-                    for saal in optionen.kooperationen()
-                      option(value=saal, selected = (kosten.saal() !== undefined && kosten.saal() === saal)) #{saal}
+                +singleselect('kosten[saal]', 'Location', kosten.saal(), optionen.kooperationen())
               .col-sm-3
                 +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
           legend
