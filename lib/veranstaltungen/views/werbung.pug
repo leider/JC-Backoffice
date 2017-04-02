@@ -2,23 +2,16 @@ include ../../../views/formComponents
 
 mixin plakateRow(werbung, name, label, werte)
   .row
+    .col-xs-2
+      +singleselect('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), ['', 100, 250, 500]) 
     .col-xs-3
-      +number('werbung['+ name + 'Num]', label, werbung[name + 'Num'](), '', 0, 300)
+      +singleselect('werbung['+ name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), ['', 'Kulturring', 'Grüne', 'Spitzer', 'Sonstiger']) 
+    .col-xs-2
+      +singleselect('werbung['+ name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), ['', 'A1', 'A2', 'A3']) 
+    .col-xs-2
+      +text('werbung['+ name + 'KW]', 'KW', werbung[name + 'KW']())
     .col-xs-3
-      .form-group
-        label.control-label(for=name + 'Groesse') Größe:
-        select.form-control(id=name + 'Groesse', name='werbung[' + name + 'Groesse]')
-          for wert in werte
-            option(value=wert, selected = (werbung[name + 'Groesse']() === wert)) #{wert}
-    .col-xs-3
-      .form-group
-        label.control-label Zeitraum:
-        p.form-control-static #{werbung[name + 'KW']()}
-    .col-xs-3
-      .form-group
-        label.control-label Total:
-        p: b
-          +currencySpan(name + 'Total', 'form-control-static pull-right')
+      +currency('werbung['+ name + 'EUR]', 'Preis', werbung[name + 'EUR']()) 
 
 mixin marketingRow(werbung, name, label)
   .row
@@ -39,10 +32,8 @@ mixin marketingUndPlakate(werbung)
     a(data-toggle='collapse', href='#plakate') Marketing
     +currencySpan('werbungTotal', 'pull-right')
   #plakate.collapse.in
-    +plakateRow(werbung, 'kulturring', 'Kulturring', ['A1', 'A2'])
-    +plakateRow(werbung, 'gruene', 'Grüne', ['A1'])
-    +plakateRow(werbung, 'spitzer', 'Spitzer', ['A1'])
-    +plakateRow(werbung, 'ralf', 'Ralf', ['A3'])
+    +plakateRow(werbung, 'plakat1', 'Plakat 1')
+    +plakateRow(werbung, 'plakat2', 'Plakat 2')
     .row
       .col-md-12
         .checkbox

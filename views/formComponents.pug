@@ -19,13 +19,12 @@ mixin textWithTags(name, label, value, tags)
       each tag in tags
         option(selected = value.indexOf(tag) > -1) #{tag}
 
-mixin singleselect(name, label, value, placeholder, tags)
+mixin singleselect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
     select.form-control.enhance(id=name, name=name, data-placeholder=placeholder)
-      option(value='') #{' '}
-      each tag in tags
-        option(value = tag.iso, selected = value && value.indexOf(tag.iso) === 0) #{tag.name}
+      each val in values
+        option(value = val, selected = value === val) #{val}
 
 mixin multiselect(name, label, value, tags)
   .form-group
@@ -78,18 +77,20 @@ mixin submitButtons()
     a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
     button.btn.btn-primary(type='submit') Speichern
 
+    
+mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
+  a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
+
 mixin submitButtonsFor(veranstaltung, current, nosave, nolist)
   .btn-group.pull-right
     if !nolist
       a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
-    if current !== 'kopf'
-      a.btn.btn-general(href=veranstaltung.fullyQualifiedUrl() + '/kopf', data-toggle='tooltip', title='Allgemeines (ohne Speichern)'): i.fa.fa-keyboard-o.fa-fw.fa-lg
-    if current !== 'ausgaben'
-      a.btn.btn-costs(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben', data-toggle='tooltip', title='Ausgaben (ohne Speichern)'): i.fa.fa-eur.fa-fw.fa-lg
-    if current !== 'hotel'
-      a.btn.btn-hotel(href=veranstaltung.fullyQualifiedUrl() + '/hotel', data-toggle='tooltip', title='Hotel (ohne Speichern)'): i.fa.fa-bed.fa-fw.fa-lg
-    if current !== 'kasse'
-      a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', data-toggle='tooltip', title='Kasse (ohne Speichern)'): i.fa.fa-money.fa-fw.fa-lg
+
+    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines (ohne Speichern)', 'btn-general', 'fa-keyboard-o')
+    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben (ohne Speichern)', 'btn-costs', 'fa-eur')
+    +submitButton(veranstaltung, current, 'hotel', 'Hotel (ohne Speichern)', 'btn-hotel', 'fa-bed')
+    +submitButton(veranstaltung, current, 'kasse', 'Kasse (ohne Speichern)', 'btn-kasse', 'fa-money')
+
     if !nosave
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.fa.fa-floppy-o.fa-fw.fa-lg
 

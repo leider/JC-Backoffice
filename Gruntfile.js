@@ -6,7 +6,7 @@ module.exports = function (grunt) {
   const files_de = {
     'public/clientscripts/global.js': [
       'node_modules/jquery/dist/jquery.js',
-      'node_modules/select2/dist/js/select2.js',
+      'node_modules/select2/dist/js/select2.full.js',
       'node_modules/autonumeric/dist/autoNumeric.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
       'node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       'node_modules/datatables.net-bs/css/dataTables.bootstrap.css',
       'frontend/3rd_party_css/dataTables.fontAwesome.css',
       'node_modules/select2/dist/css/select2.css',
-      'node_modules/select2-bootstrap-theme/dist/select2-bootstrap.css',
+      'build/stylesheets/less/build-select2-bootstrap.less',
       'build/stylesheets/less/jc-backoffice.less'
     ]
   };
@@ -88,6 +88,12 @@ module.exports = function (grunt) {
       },
       bootstrapMarkdownLESS: {
         src: 'node_modules/bootstrap-markdown/less/*',
+        dest: 'build/stylesheets/less',
+        expand: true,
+        flatten: true
+      },
+      bootstrapSelect2LESS: {
+        src: 'node_modules/select2-bootstrap-theme/src/select2-bootstrap.less',
         dest: 'build/stylesheets/less',
         expand: true,
         flatten: true

@@ -190,7 +190,11 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 
     $('.enhance').each(function () {
       /* eslint no-console: 0 */
-      $(this).select2({theme: 'bootstrap'});
+      $(this).select2({
+        width: null,
+        containerCssClass: ':all:',
+        minimumResultsForSearch: Infinity
+      });
     });
 
     $('.trim-text').on('blur', function () {
@@ -235,4 +239,5 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
+  $.fn.select2.defaults.set( 'theme', 'bootstrap' );
 }());
