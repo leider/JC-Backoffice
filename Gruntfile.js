@@ -16,6 +16,7 @@ module.exports = function (grunt) {
       'node_modules/moment/locale/de.js',
       'node_modules/drmonty-smartmenus/js/jquery.smartmenus.js',
       'build/javascript/jquery.smartmenus.bootstrap-patched.js',
+      'build/javascript/fullcalendar-patched.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'node_modules/jquery-validation/dist/additional-methods.js',
       'node_modules/simple-timepicker/dist/simple-timepicker.js',
@@ -24,12 +25,14 @@ module.exports = function (grunt) {
       'node_modules/jquery-validation/dist/localization/methods_de.js',
       'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js',
       'node_modules/select2/dist/js/i18n/de.js',
+      'node_modules/fullcalendar/dist/locale/de.js',
       'frontend/javascript/jc-backoffice.js'
     ]
   };
 
   const filesForCss = {
     'public/stylesheets/screen.css': [
+      'node_modules/fullcalendar/dist/fullcalendar.css',
       'build/stylesheets/less/bootstrap.less',
       'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
       'build/stylesheets/less/bootstrap-markdown-patched.less',
@@ -126,7 +129,16 @@ module.exports = function (grunt) {
         files: {
           'build/javascript/jquery.smartmenus.bootstrap-patched.js': 'node_modules/drmonty-smartmenus/js/jquery.smartmenus.bootstrap.js'
         }
+      },
+      fullcalendar: {
+        options: {
+          patch: 'frontend/3rd_party_js/fullcalendar.js.patch'
+        },
+        files: {
+          'build/javascript/fullcalendar-patched.js': 'node_modules/fullcalendar/dist/fullcalendar.js'
+        }
       }
+
     },
     eslint: {
       options: {quiet: true},

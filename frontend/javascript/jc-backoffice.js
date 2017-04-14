@@ -118,6 +118,46 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.scrollable-box').css('overflow-y', 'scroll');
   }
 
+  function initCalendar() {
+    var id = '#calendar';
+    $(id).fullCalendar({
+      header: {
+        left: 'title',
+        center: '',
+        right: 'prev,today,next'
+      },
+      timezone: 'Europe/Berlin',
+      events: '/veranstaltungen/eventsForCalendar',
+      eventMouseover: function (event) {
+        var day = event.start.day();
+        $(this).tooltip({
+          title: (event.start.format('HH:mm') + ': ') + event.title,
+          trigger: 'manual',
+          placement: (day < 4 && day > 0) ? 'right' : 'left',
+          container: 'body',
+          template: '<div class="tooltip" role="tooltip" style="max-width: 130px"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+        });
+        $(this).tooltip('show');
+      },
+      eventMouseout: function () {
+        $(this).tooltip('destroy');
+      },
+      bootstrap: true,
+      buttonIcons: {
+        prev: 'fa-caret-left',
+        next: 'fa-caret-right'
+      },
+      views: {
+        month: {
+          titleFormat: 'MMM \'YY',
+          lang: 'de',
+          fixedWeekCount: false
+        }
+      },
+      weekNumbers: true
+    });
+  }
+
   function patchBootstrapPopover() {
     var originalLeave = $.fn.popover.Constructor.prototype.leave;
     $.fn.popover.Constructor.prototype.leave = function (obj) {
@@ -239,5 +279,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
+  $(document).ready(initCalendar);
   $.fn.select2.defaults.set( 'theme', 'bootstrap' );
 }());

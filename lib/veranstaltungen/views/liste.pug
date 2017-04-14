@@ -6,7 +6,7 @@ block title
 
 block content
   .row
-    .col-md-12
+    .col-lg-8
       .page-header
         .btn-group.pull-right
           a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
@@ -15,9 +15,12 @@ block content
       .table-responsive
         table.table.table-striped.table-condensed
           for veranstaltung in veranstaltungen
-            tr
-              td
-                a(href=veranstaltung.fullyQualifiedUrl()) 
-                  b #{veranstaltung.startMoment().format('ddd ll')}: #{''}
-                  | #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
+            tr.form-inline
+              th
+                .form-control-static
+                  a(href=veranstaltung.fullyQualifiedUrl()) 
+                    | #{veranstaltung.startMoment().format('ddd ll')}: #{' '}
+                    | #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
                 +submitButtonsFor(veranstaltung, null, true, true)
+    .col-lg-4
+      #calendar
