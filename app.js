@@ -76,6 +76,7 @@ module.exports = {
     app.use(csurf());
     app.use(beans.get('addCsrfTokenToLocals'));
     app.use('/', beans.get('siteApp'));
+    useApp(app, 'mailsender', beans.get('mailsenderApp'));
     useApp(app, 'optionen', beans.get('optionenApp'));
     useApp(app, 'veranstaltungen', beans.get('veranstaltungenApp'));
     useApp(app, 'users', beans.get('usersApp'));

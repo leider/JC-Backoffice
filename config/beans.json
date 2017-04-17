@@ -39,6 +39,11 @@
   "handle404": {"module": "./lib/middleware/handle404"},
   "handle500": {"module": "./lib/middleware/handle500"},
 
+  "mailsenderApp": {"module": "./lib/mailsender"},
+  "mailtransport": {"module": "./lib/mailsender/mailtransport"},
+  "nodemailerTransport": {"module": "./lib/mailsender/nodemailerTransport"},
+  "message": {"module": "./lib/mailsender/message"},
+
   "veranstaltungenPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "veranstaltungenstore" }

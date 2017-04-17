@@ -1,0 +1,26 @@
+extends ../../../views/layout
+
+include  ../../../views/formComponents
+
+block content
+  form#mailform(action='/mailsender/send', method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons('Mail senden')
+          legend
+            | Pressemail senden
+          if (upcomingEvents)
+            h4 Für Veranstaltungen
+            for event in upcomingEvents
+              .checkbox
+                label
+                  input(type='checkbox', name='event[' + event.id() + ']')
+                  | !{event.description()}
+            h4 An Empfänger
+            for number in [1, 2, 3, 4, 5]
+              if optionen['partner' + number]()
+                +checkbox('partner[email' + number + ']', optionen['partner' + number]())
+          +hightextarea('markdown', 'Anschreiben')
+          +submitButtons('Mail senden')

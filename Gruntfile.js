@@ -93,6 +93,12 @@ module.exports = function (grunt) {
         src: 'node_modules/bootstrap/less/variables.less',
         dest: 'build/stylesheets/less/original-variables.less'
       },
+      bootstrapFileinputImages: {
+        src: 'node_modules/bootstrap-fileinput/img/*',
+        dest: 'public/img/',
+        expand: true,
+        flatten: true
+      },
       bootstrapMarkdownLESS: {
         src: 'node_modules/bootstrap-markdown/less/*',
         dest: 'build/stylesheets/less',

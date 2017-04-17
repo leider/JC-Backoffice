@@ -18,8 +18,7 @@ function createConfiguration() {
   });
 
   // then, add properties from config files:
-  const files = ['mongo-config.json',
-    'passwordSalt.json', 'server-config.json'];
+  const files = ['mailsender-config.json', 'mongo-config.json', 'passwordSalt.json', 'server-config.json'];
   conf.addFiles(files.map(file => configdir + file));
 
   return conf;

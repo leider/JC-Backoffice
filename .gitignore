@@ -4,6 +4,7 @@ config/
 !config/winston-config.json
 node_modules/
 public/
-!public/img
+!public/img/favicon.ico
+!public/img/logo_weiss.png
 server.log
 workspace.xml

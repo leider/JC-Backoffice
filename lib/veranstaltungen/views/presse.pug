@@ -1,12 +1,12 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-  
+
 block title
   | Veranstaltung
 
 block content
   -var presse = veranstaltung.presse()
-  
+
   form#presseform(action='/veranstaltungen/submitWithImage' + '?_csrf=' + encodeURIComponent(csrf_token), method='post', enctype='multipart/form-data')
     +csrf
     +hidden('id', veranstaltung.id())
@@ -33,7 +33,6 @@ block content
         .col-md-6
           if (presse.image())
             p.form-control-static: b Aktuell gewählt: #{presse.image()}
-
       .row
         .col-md-12
           hr
@@ -44,7 +43,7 @@ block scripts
     $(document).ready(function () {
       var textarea = $('#presse\\[text\\]');
       var preview = $('#preview');
-      
+
       function updateForText() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl()}/pressePreview', {data: {text: textarea.val()}})
          .done(function (result) {

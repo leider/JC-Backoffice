@@ -27,6 +27,10 @@ mixin topNavbar(xs)
       li(data-jcnav='optionen'): a(href='/optionen')
         i.fa.fa-cogs.fa-fw.fa-lg
         | &nbsp;Optionen
+      if user && (user.id === 'leider' || user.id === 'niklas')
+        li(data-jcnav='mailsender'): a(href='/mailsender')
+          i.fa.fa-envelope-o.fa-fw.fa-lg
+          | &nbsp;Mails senden
       li(data-jcnav='users')
         a(href='#')
           i.fa.fa-user.fa-fw.fa-lg
