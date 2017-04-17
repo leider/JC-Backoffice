@@ -1,10 +1,9 @@
 build/
-config/mongo-config.json
-config/passwordSalt.json
+config/
+!config/beans.json
+!config/winston-config.json
 node_modules/
-public/fonts/
-public/stylesheets/
-public/clientscripts/
+public/
+!public/img
 server.log
 workspace.xml
-public/upload

@@ -12,41 +12,14 @@ function createConfiguration() {
 
   // first, set the default values
   conf.addProperties({
-    adminListName: 'admins',
     port: '1969',
-    mongoURL: 'mongodb://localhost:27017/swk',
-    publicUrlPrefix: 'http://localhost:17124',
-    securedByLoginURLPattern: '/activityresults|' +
-    '/gallery|' +
-    '/mailsender|' +
-    '/members|' +
-    '/new|' +
-    '/edit|' +
-    '/submit|' +
-    '/subscribe|' +
-    '/mailarchive|' +
-    '/invitation|' +
-    '/addToWaitinglist|' +
-    '/addon|' +
-    '/submitAddon|' +
-    '/wiki/socrates.*/|' +
-    '/payment|' +
-    'dashboard',
-    securedBySuperuserURLPattern: '^\/administration\/',
-    secret: 'secret',
-    sessionkey: 'softwerkskammer.org',
     beans: new Beans(configdir + 'beans.json'),
     emaildomainname: 'localhost',
-    softwerkskammerURL: 'http://localhost:17124',
-    socratesURL: 'http://localhost:17224',
-    jwtSecret: 'my_very_secret',
-    reservedActivityURLs: '^socrates-|^gdcr$|^upcoming$|^past$|^ical$|^eventsForSidebar$|^new$|^newLike$|^edit$|^submit$|^checkurl$|^subscribe$|^unsubscribe$|^addToWaitinglist$|^removeFromWaitinglist$|\\+'
-
   });
 
   // then, add properties from config files:
   const files = ['mongo-config.json',
-    'passwordSalt.json'];
+    'passwordSalt.json', 'server-config.json'];
   conf.addFiles(files.map(file => configdir + file));
 
   return conf;
