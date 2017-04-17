@@ -15,12 +15,14 @@ block content
       .table-responsive
         table.table.table-striped.table-condensed
           for veranstaltung in veranstaltungen
+            -var kopf = veranstaltung.kopf()
             tr.form-inline
               th
                 .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl()) 
+                  a(href=veranstaltung.fullyQualifiedUrl())
+                    i(class=kopf.cssIconClass()) #{' '}
                     | #{veranstaltung.startMoment().format('ddd ll')}: #{' '}
-                    | #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}&nbsp;
+                    | #{kopf.titel()} im #{kopf.ort()}&nbsp;
                 +submitButtonsFor(veranstaltung, null, true, true)
     .col-lg-4
       #calendar

@@ -45,6 +45,7 @@ module.exports = function (grunt) {
       'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
       'node_modules/datatables.net-bs/css/dataTables.bootstrap.css',
       'frontend/3rd_party_css/dataTables.fontAwesome.css',
+      'additionalIcons/css/flaticon.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/less/build-select2-bootstrap.less',
       'build/stylesheets/less/jc-backoffice.less'
@@ -108,6 +109,12 @@ module.exports = function (grunt) {
       bootstrapSelect2LESS: {
         src: 'node_modules/select2-bootstrap-theme/src/select2-bootstrap.less',
         dest: 'build/stylesheets/less',
+        expand: true,
+        flatten: true
+      },
+      flaticonFONTS: {
+        src: 'additionalIcons/font/*',
+        dest: 'public/fonts',
         expand: true,
         flatten: true
       },
