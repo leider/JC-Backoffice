@@ -45,8 +45,11 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.currency(id=name, type='text', value=value, name=name, placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
-mixin currencySpan(id, clazz)
+mixin currencySpanGreen(id, clazz)
   span.currency.text-success(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+
+mixin currencySpan(id, clazz)
+  span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
 mixin currencySpanNormal(value, id)
   span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='') #{value}
@@ -189,10 +192,22 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
     if (extraclasses)
       | &nbsp; Löschen
 
-mixin legendMitBody(id, title, optionalCurrencySpan)
+mixin legendMitBodyOld(id, title, optionalCurrencySpan)
   legend&attributes(attributes)
     a(data-toggle='collapse', href='#' + id) #{title}
     if optionalCurrencySpan
       +currencySpan(optionalCurrencySpan, 'pull-right')
   .collapse.in(id = id)
     block
+
+mixin legendMitBody(id, title, optionalCurrencySpan)
+  .panel.panel-default
+    .panel-heading.color-general
+      a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
+        i.fa.fa-toggle-down.fa-fw.blog
+        | &nbsp;#{title}
+      if optionalCurrencySpan
+        b
+          +currencySpan(optionalCurrencySpan, 'pull-right')
+    .panel-body.collapse.in(id = id)
+      block
