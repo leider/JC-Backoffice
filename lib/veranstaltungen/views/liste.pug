@@ -19,8 +19,8 @@ block content
             tr.form-inline
               th
                 .form-control-static
+                  i(class=kopf.cssIconClass()) #{' '}
                   a(href=veranstaltung.fullyQualifiedUrl())
-                    i(class=kopf.cssIconClass()) #{' '}
                     | #{veranstaltung.startMoment().format('ddd ll')}: #{' '}
                     | #{kopf.titel()} im #{kopf.ort()}&nbsp;
                 +submitButtonsFor(veranstaltung, null, true, true)

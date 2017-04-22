@@ -45,7 +45,7 @@ module.exports = function (grunt) {
       'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
       'node_modules/datatables.net-bs/css/dataTables.bootstrap.css',
       'frontend/3rd_party_css/dataTables.fontAwesome.css',
-      'additionalIcons/css/flaticon.css',
+      'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/less/build-select2-bootstrap.less',
       'build/stylesheets/less/jc-backoffice.less'
@@ -113,7 +113,7 @@ module.exports = function (grunt) {
         flatten: true
       },
       flaticonFONTS: {
-        src: 'additionalIcons/font/*',
+        src: 'frontend/additionalIcons/font/*',
         dest: 'public/fonts',
         expand: true,
         flatten: true
@@ -154,8 +154,15 @@ module.exports = function (grunt) {
         files: {
           'build/javascript/fullcalendar-patched.js': 'node_modules/fullcalendar/dist/fullcalendar.js'
         }
+      },
+      flaticon: {
+        options: {
+          patch: 'frontend/additionalIcons/patchDirectory/flaticon.patch'
+        },
+        files: {
+          'build/stylesheets/flaticon-patched.css': 'frontend/additionalIcons/css/flaticon.css'
+        }
       }
-
     },
     eslint: {
       options: {quiet: true},
