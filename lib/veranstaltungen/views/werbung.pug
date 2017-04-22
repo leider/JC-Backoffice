@@ -14,10 +14,7 @@ mixin plakateRow(werbung, name, label, optionen)
       +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
 mixin marketingUndPlakate(werbung, optionen)
-  legend
-    a(data-toggle='collapse', href='#plakate') Werbung
-    +currencySpan('werbungTotal', 'pull-right')
-  #plakate.collapse.in
+  +legendMitBody('plakate', 'Werbung', 'werbungTotal')
     +plakateRow(werbung, 'plakat1', 'Plakat', optionen)
     +plakateRow(werbung, 'plakat2', 'Plakat', optionen)
     .row

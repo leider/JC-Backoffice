@@ -22,10 +22,7 @@ block content
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#einnahmen') Einnahmen
-            +currencySpan('einnahmenGesamt', 'pull-right')
-          #einnahmen.collapse.in
+          +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt')
             .row
               .col-xs-6
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
@@ -44,10 +41,7 @@ block content
 
 
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#ausgaben') Ausgaben (Bar und mit Beleg)
-            +currencySpan('ausgabenGesamt', 'pull-right')
-          #ausgaben.collapse.in
+          +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt')
             .row
               .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())

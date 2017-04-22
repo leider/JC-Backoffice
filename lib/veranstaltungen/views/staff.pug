@@ -32,10 +32,7 @@ mixin staffScriptFor(name)
     });
 
 mixin staff(staff)
-  legend
-    a(data-toggle='collapse', href='#staff') Staff
-    +currencySpan('staffPreis', 'pull-right')
-  #staff.collapse.in
+  +legendMitBody('staff', 'Staff', 'staffPreis')
     +staffRow(staff, 'techniker', 'Techniker')
     +staffRow(staff, 'merchandise', 'Merchandise')
     +staffRow(staff, 'kasse', 'Kasse')

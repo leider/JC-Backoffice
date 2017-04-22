@@ -2,10 +2,7 @@ include ../../../views/formComponents
   
 mixin band(kosten)
   div
-    legend
-      a(data-toggle='collapse', href='#band') Gage
-      +currencySpan('bandTotal', 'pull-right')
-    #band.collapse.in
+    +legendMitBody('band', 'Band', 'bandTotal')
       .row
         .col-xs-3(style='padding-right: 5px;')
           +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())

@@ -188,3 +188,11 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
     i.fa.fa-trash-o.fa-fw
     if (extraclasses)
       | &nbsp; Löschen
+
+mixin legendMitBody(id, title, optionalCurrencySpan)
+  legend&attributes(attributes)
+    a(data-toggle='collapse', href='#' + id) #{title}
+    if optionalCurrencySpan
+      +currencySpan(optionalCurrencySpan, 'pull-right')
+  .collapse.in(id = id)
+    block

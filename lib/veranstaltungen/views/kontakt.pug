@@ -2,9 +2,7 @@ include ../../../views/formComponents
 
 mixin kontakt(veranstaltung, kontakte, labelForLegend, name)
   -var derkontakt = veranstaltung[name]()
-  legend
-    a(data-toggle='collapse', href='#' + name) #{labelForLegend}
-  .collapse.in(id=name)
+  +legendMitBody(name, labelForLegend)
     .row
       .col-sm-6
         +singleselect(name + '[auswahl]', 'Auswahl', derkontakt.name(), kontakte.map(k => k.name))

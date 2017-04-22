@@ -31,10 +31,7 @@ block content
       .row
         .col-md-6
           +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel')
-          legend
-            a(data-toggle='collapse', href='#zimmer') Zimmer
-            +currencySpan('roomsTotal', 'pull-right')
-          #zimmer.collapse.in
+          +legendMitBody('zimmer', 'Zimmer', 'roomsTotal')
             .row
               .col-xs-4()
                 +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate())
@@ -46,10 +43,7 @@ block content
               +zimmerNumEUR('doppel', 'Doppel')
               +zimmerNumEUR('suite', 'Suite')
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#transport') Transport
-            +currencySpan('transportTotal', 'pull-right')
-          #transport.collapse.in
+          +legendMitBody('transport', 'Transport', 'transportTotal')
             +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
             .row
               .col-md-6

@@ -2,10 +2,7 @@ include ../../../views/formComponents
 
 mixin preise(veranstaltung)
   -var eintrittspreise = veranstaltung.eintrittspreise()
-  legend
-    a(data-toggle='collapse', href='#preise') Preise
-    +currencySpan('eintrittTotal', 'pull-right')
-  #preise.collapse.in
+  +legendMitBody('preise', 'Preise', 'eintrittTotal')
     .row
       .col-xs-4
         +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
