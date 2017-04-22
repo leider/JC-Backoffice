@@ -26,31 +26,37 @@ block content
           small
             | #{veranstaltung.startMoment().format('LLLL')} #{''}
             span (#{kopf.eventTyp()})
-      .clearfix
       .row
         .col-md-6
           if kopf.kooperation() && kopf.kooperation().length  > 1
             h3 Kooperation mit #{kopf.kooperation()}
-          | !{kopf.beschreibungHTML()}
-
-          if agentur.name()
-            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
-              address
-                strong #{agentur.ansprechpartner()} <br>
-                |!{agentur.adresseHTML()} <br>
-                |Tel.: #{agentur.telefon()} <br>
-                |E-Mail: 
-                span.mailtoify #{agentur.email()}
+          +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-eur')
+            table.table.table-striped.table-condensed
+              tr
+                th(colspan=2) Technik
+              tr
+                td(width='2%')
+                td(width='98%') #{staff.technikerText()}
+              tr
+                th(colspan=2) Kasse
+              tr
+                td(width='2%')
+                td(width='98%') #{staff.kassiererText()}
+              tr
+                th(colspan=2) Merchandising
+              tr
+                td(width='2%')
+                td(width='98%') #{staff.merchandiseText()}
+                
 
           +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse')
             if eintrittspreise.frei()
               .panel-body
                 p: b Freier Eintritt
                 p
-                  b Abendkasse (Sammelbox) Überschuss #{''}
-                  | (Aus Feld 'Kasse An Bank')
+                  b Abendkasse (Sammelbox) Überschuss (ohne Abzug Gage Cash)#{''}
                   b : #{''}
-                   +currencySpan(kasse.ausgabeBankEUR(), 'abendkasseEUR')
+                   +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
             else
               table.table.table-condensed.table-striped
                 tr
@@ -92,8 +98,12 @@ block content
                   td
                   td(align='right'): b: +currencySpan(null, 'dealUeberschussAnBand')
 
+          +panelMitBody('info', 'Informationen', null, 'color-misc')
+            .panel-body
+              | !{kopf.beschreibungHTML()}
+
         .col-md-6
-          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR())
+          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-eur')
             table.table.table-striped.table-condensed
               tr
                 th(colspan=2) Backline und Technik
@@ -124,7 +134,7 @@ block content
                 td(align='right'): +currencySpan(werbung.plakateTotalEUR())
               tr
                 td
-                td Flyer
+                td Flyer/Layout
                 td(align='right'): +currencySpan(werbung.mediaTotalEUR())
 
           if werbung.genehmigungenNum()
@@ -139,6 +149,16 @@ block content
                 | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
                 input#genehmigungenEingeholt(type='checkbox', checked = 'true')
   
+          if agentur.name()
+            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
+              .panel-body
+                address
+                  strong #{agentur.ansprechpartner()} <br>
+                  | !{agentur.adresseHTML()} <br>
+                  | Tel.: #{agentur.telefon()} <br>
+                  | E-Mail: 
+                  span.mailtoify #{agentur.email()}
+
           +panelMitBody('vertrag', 'Vertrag(' + vertrag.art() + ')', null, 'color-misc')
             ul.list-group
               for step in vertrag.workflow()

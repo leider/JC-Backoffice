@@ -191,7 +191,7 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
 
 mixin legendMitBody(id, title, optionalCurrencySpan, colorClass)
   .panel.panel-default
-    .panel-heading(class = colorClass || 'color-general')
+    .panel-heading(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
@@ -201,13 +201,17 @@ mixin legendMitBody(id, title, optionalCurrencySpan, colorClass)
     .panel-body.collapse.in(id = id)
       block
 
-mixin panelMitBody(id, title, optionalCurrencySpan, colorClass, optionalCurrency)
+mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optionalMoney, optionalEditLink, optionalEditIcon)
   .panel.panel-default
-    .panel-heading(class = colorClass || 'color-general')
+    .panel-heading(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
+      if optionalEditLink
+        | #{' '}
+        a.inherit-color(href=optionalEditLink) 
+          i(class='fa fa-fw fa-lg ' + optionalEditIcon)
       if optionalCurrencySpan
-        b: +currencySpan(optionalCurrency, optionalCurrencySpan, 'pull-right')
+        b: +currencySpan(optionalMoney, optionalCurrencySpan, 'pull-right')
     .collapse.in(id = id)
       block
