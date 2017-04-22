@@ -54,8 +54,12 @@ block content
               if eintrittspreise.frei()
                 .panel-body
                   p: b Freier Eintritt
-                  p: b Abendkasse (Sammelbox) Überschuss: #{''}
+                  p
+                    b Abendkasse (Sammelbox) Überschuss #{''}
+                    | (Aus Feld 'Kasse An Bank')
+                    b : #{''}
                      +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
+                    
               else
                 table.table.table-condensed.table-striped
                   tr

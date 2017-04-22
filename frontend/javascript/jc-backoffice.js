@@ -121,6 +121,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   function initCalendar() {
     var id = '#calendar';
     $(id).fullCalendar({
+      height: 'auto',
       header: {
         left: 'title',
         center: '',
@@ -131,7 +132,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       eventMouseover: function (event) {
         var day = event.start.day();
         $(this).tooltip({
-          title: (event.start.format('HH:mm') + ': ') + event.title,
+          title: (event.start.format('HH:mm') + ': ') + event.tooltip,
           trigger: 'manual',
           placement: (day < 4 && day > 0) ? 'right' : 'left',
           container: 'body',
@@ -140,6 +141,9 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
         $(this).tooltip('show');
       },
       eventMouseout: function () {
+        $(this).tooltip('destroy');
+      },
+      eventClick: function () {
         $(this).tooltip('destroy');
       },
       bootstrap: true,

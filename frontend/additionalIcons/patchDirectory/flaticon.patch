@@ -5,7 +5,7 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 --- additionalIcons/css/flaticon.css	(revision )
 +++ additionalIcons/css/flaticon.css	(revision )
-@@ -6,18 +6,18 @@
+@@ -6,24 +6,24 @@
  @font-face {
    font-family: "Flaticon";
 -  src: url("./Flaticon.eot");
@@ -29,3 +29,14 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 +    src: url("/fonts/Flaticon.svg#Flaticon") format("svg");
    }
  }
+ 
+ [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+ [class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+   font-family: Flaticon;
+         font-size: 20px;
+ font-style: normal;
+-margin-left: 20px;
++margin-left: 4px;
+ }
+
+

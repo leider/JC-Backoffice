@@ -32,16 +32,38 @@
 @color-sonst2: #95c22e;
 @color-sonst2-border: darken(@color-sonst2, 5%);
 
+.color-variant(@color) {
+  background-color: @color !important;
+  border-color: @color !important;
+  color: #ffffff !important;
+}
+
+.color-classix {
+  .color-variant(@color-allgemein2);
+}
+
 .text-classix {
   color: @color-allgemein2;
+}
+
+.color-concert {
+  .color-variant(darkgrey);
 }
 
 .text-concert {
   color: darkgray;
 }
 
+.color-session {
+  .color-variant(@color-kasse2);
+}
+
 .text-session {
   color: @color-kasse2;
+}
+
+.color-soulcafe {
+  .color-variant(@color-ausgaben2);
 }
 
 .text-soulcafe {
@@ -49,28 +71,23 @@
 }
 
 .color-costs {
-  background-color: @color-ausgaben1 !important;
-  color: #ffffff !important;
+  .color-variant(@color-ausgaben1);
 }
 
 .color-kasse {
-  background-color: @color-kasse1 !important;
-  color: #ffffff !important;
+  .color-variant(@color-kasse1);
 }
 
 .color-general {
-  background-color: @color-allgemein1 !important;
-  color: #ffffff !important;
+  .color-variant(@color-allgemein1);
 }
 
 .color-hotel {
-  background-color: @color-hotel1 !important;
-  color: #ffffff !important;
+  .color-variant(@color-hotel1);
 }
 
 .color-misc {
-  background-color: @color-sonst1 !important;
-  color: #ffffff !important;
+  .color-variant(@color-sonst1);
 }
 
 .btn-costs {
