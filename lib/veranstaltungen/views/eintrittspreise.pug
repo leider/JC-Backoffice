@@ -27,7 +27,7 @@ mixin preise(veranstaltung)
         .form-group
           +controlLabel('erwarteteEinnahmen', 'Total')
           p: b
-            +currencySpan('erwarteteEinnahmen', 'form-control-static pull-right text-success')
+            +currencySpan(null, 'erwarteteEinnahmen', 'form-control-static pull-right text-success')
 
 mixin preiseScript
   script.

@@ -45,13 +45,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.currency(id=name, type='text', value=value, name=name, placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
-mixin currencySpanGreen(id, clazz)
-  span.currency.text-success(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
-
-mixin currencySpan(id, clazz)
-  span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
-
-mixin currencySpanNormal(value, id)
+mixin currencySpan(value, id, clazz)
   span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='') #{value}
 
 mixin textareaPure(name, label, value, placeholder)
@@ -87,7 +81,7 @@ mixin submitButtons(text)
 mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
   a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
 
-mixin submitButtonsFor(veranstaltung, current, nosave, nolist)
+mixin submitButtonsFor(veranstaltung, current, nosave)
   +hidden('returnTo', currentUrl)
   .btn-group.pull-right
     if nosave 
@@ -195,22 +189,25 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
     if (extraclasses)
       | &nbsp; Löschen
 
-mixin legendMitBodyOld(id, title, optionalCurrencySpan)
-  legend&attributes(attributes)
-    a(data-toggle='collapse', href='#' + id) #{title}
-    if optionalCurrencySpan
-      +currencySpan(optionalCurrencySpan, 'pull-right')
-  .collapse.in(id = id)
-    block
-
-mixin legendMitBody(id, title, optionalCurrencySpan)
+mixin legendMitBody(id, title, optionalCurrencySpan, colorClass)
   .panel.panel-default
-    .panel-heading.color-general
+    .panel-heading(class = colorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
       if optionalCurrencySpan
         b
-          +currencySpan(optionalCurrencySpan, 'pull-right')
+          +currencySpan(null, optionalCurrencySpan, 'pull-right')
     .panel-body.collapse.in(id = id)
+      block
+
+mixin panelMitBody(id, title, optionalCurrencySpan, colorClass, optionalCurrency)
+  .panel.panel-default
+    .panel-heading(class = colorClass || 'color-general')
+      a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
+        i.fa.fa-toggle-down.fa-fw.blog
+        | &nbsp;#{title}
+      if optionalCurrencySpan
+        b: +currencySpan(optionalCurrency, optionalCurrencySpan, 'pull-right')
+    .collapse.in(id = id)
       block

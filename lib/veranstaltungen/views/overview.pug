@@ -19,23 +19,22 @@ block content
         .btn-group.pull-right
           +submitButtonsFor(veranstaltung, '', true)
 
-        h2 #{kopf.titel()} im #{kopf.ort()}
+        h2(class=kopf.cssTextClass())
+          i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
+          | #{kopf.titel()} im #{kopf.ort()}
           br
-          small #{veranstaltung.startMoment().format('LLLL')} #{''}
-            span(style='color:#AABB33') (#{kopf.eventTyp()})
+          small
+            | #{veranstaltung.startMoment().format('LLLL')} #{''}
+            span (#{kopf.eventTyp()})
       .clearfix
       .row
         .col-md-6
-          if kopf.kooperation()
+          if kopf.kooperation() && kopf.kooperation().length  > 1
             h3 Kooperation mit #{kopf.kooperation()}
           | !{kopf.beschreibungHTML()}
 
-          .panel.panel-default
-            .panel-heading.color-general
-              a.inherit-color.chevron(data-toggle='collapse', data-target='#agentur'): b
-                i.fa.fa-toggle-down.fa-fw.blog
-                | &nbsp;Agentur: #{agentur.name()}
-            #agentur.panel-body.collapse.in
+          if agentur.name()
+            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
               address
                 strong #{agentur.ansprechpartner()} <br>
                 |!{agentur.adresseHTML()} <br>
@@ -43,130 +42,105 @@ block content
                 |E-Mail: 
                 span.mailtoify #{agentur.email()}
 
-          .panel.panel-default
-            .panel-heading.color-kasse
-              b
-                a.inherit-color.chevron(data-toggle='collapse', data-target='#eintritt')
-                  i.fa.fa-toggle-down.fa-fw.blog
-                  | &nbsp;Eintritt und Abendkasse
-                .pull-right: +currencySpanNormal(0, 'eintrittGesamtEUR')
-            #eintritt.collapse.in
-              if eintrittspreise.frei()
-                .panel-body
-                  p: b Freier Eintritt
-                  p
-                    b Abendkasse (Sammelbox) Überschuss #{''}
-                    | (Aus Feld 'Kasse An Bank')
-                    b : #{''}
-                     +currencySpanNormal(kasse.ausgabeBankEUR(), 'abendkasseEUR')
-                    
-              else
-                table.table.table-condensed.table-striped
-                  tr
-                    th
-                    th(align='right', style='text-align: right;') Regulär
-                    th(align='right', style='text-align: right;') Ermäßigt
-                    th(align='right', style='text-align: right;') Mitglied
-                  tr
-                    td
-                    td(align='right'): +currencySpanNormal(eintrittspreise.regulaer(), 'eintrittRegulaer')
-                    td(align='right'): +currencySpanNormal(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
-                    td(align='right'): +currencySpanNormal(eintrittspreise.mitglied(), 'eintrittMitglied')
-                  tr.form-inline
-                    th
-                      p.form-control-static Reservix (aktuell)
-                        .pull-right.form-control-static: +currencySpanNormal(0, 'eintrittReservixEUR')
-                    td: input#reservixRegulaer.pull-right.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
-                    td: input#reservixErmaessigt.pull-right.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
-                    td: input#reservixMitglied.pull-right.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
-                  tr.form-inline
-                    th(colspan=3)
-                      p.form-control-static Abendkasse Überschuss (ohne Abzug Gage Cash)
-                    th
-                      .pull-right.form-control-static: +currencySpanNormal(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
-
-          if kosten.deal() !== 'ohne'            
-            .panel.panel-default
-              .panel-heading.color-hotel
-                b
-                  a.inherit-color.chevron(data-toggle='collapse', data-target='#deal')
-                    i.fa.fa-toggle-down.fa-fw.blog
-                    | &nbsp;Gewinnbeteiligung für Band
-                  .pull-right: +currencySpanNormal(null, 'dealUeberschussTotal')
-              #deal.collapse.in
-                table.table.table-condensed.table-striped
-                  tr
-                    th(align='right', style='text-align: right;') Einnahmen
-                    th(align='right', style='text-align: right;') Kosten
-                    th(align='right', style='text-align: right;') Überschuss
-                  tr
-                    td(align='right'): +currencySpanNormal(null, 'dealEinnahmen')
-                    td(align='right'): +currencySpanNormal(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                    td(align='right'): +currencySpanNormal(null, 'dealUeberschuss')
-                  tr
-                    th Anteilig an Band (#{kosten.deal()}):
-                    td
-                    td(align='right'): b: +currencySpanNormal(null, 'dealUeberschussAnBand')
-
-        .col-md-6 
-          .panel.panel-default
-            .panel-heading.color-costs
-              b
-                a.inherit-color.chevron(data-toggle='collapse', data-target='#kosten')
-                  i.fa.fa-toggle-down.fa-fw.blog
-                  | &nbsp;Kosten
-                .pull-right: +currencySpanNormal(veranstaltung.kostenGesamtEUR())
-            #kosten.collapse.in
-              table.table.table-striped.table-condensed
+          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse')
+            if eintrittspreise.frei()
+              .panel-body
+                p: b Freier Eintritt
+                p
+                  b Abendkasse (Sammelbox) Überschuss #{''}
+                  | (Aus Feld 'Kasse An Bank')
+                  b : #{''}
+                   +currencySpan(kasse.ausgabeBankEUR(), 'abendkasseEUR')
+            else
+              table.table.table-condensed.table-striped
                 tr
-                  th(colspan=2) Backline und Technik
-                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.backlineUndTechnikEUR())
-                tr
-                  th(colspan=2) Saal
-                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.saalmiete())
-                tr
-                  th(colspan=2) Band
-                  th(align='right', style='text-align: right;'): +currencySpanNormal(kosten.bandTotalEUR())
-                tr
-                  td(width='2%')
-                  td(width='48%') Gage
-                  td(align='right', width='50%'): +currencySpanNormal(kosten.gagenTotalEUR())
+                  th
+                  th(align='right', style='text-align: right;') Regulär
+                  th(align='right', style='text-align: right;') Ermäßigt
+                  th(align='right', style='text-align: right;') Mitglied
                 tr
                   td
-                  td Agentur
-                  td(align='right'): +currencySpanNormal(kosten.agenturTotalEUR())
-                tr
-                  th(colspan=2) Personal
-                  th(align='right', style='text-align: right;'): +currencySpanNormal(staff.staffTotalEUR())
-                tr
-                  th(colspan=2) Werbung
-                  th(align='right', style='text-align: right;'): +currencySpanNormal(werbung.marketingTotalEUR())
-                tr
-                  td
-                  td Plakate
-                  td(align='right'): +currencySpanNormal(werbung.plakateTotalEUR())
-                tr
-                  td
-                  td Flyer
-                  td(align='right'): +currencySpanNormal(werbung.mediaTotalEUR())
+                  td(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
+                  td(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
+                  td(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
+                tr.form-inline
+                  th
+                    p.form-control-static Reservix (aktuell)
+                      .pull-right.form-control-static: +currencySpan(0, 'eintrittReservixEUR')
+                  td: input#reservixRegulaer.pull-right.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
+                  td: input#reservixErmaessigt.pull-right.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
+                  td: input#reservixMitglied.pull-right.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
+                tr.form-inline
+                  th(colspan=3)
+                    p.form-control-static Abendkasse Überschuss (ohne Abzug Gage Cash)
+                  th
+                    .pull-right.form-control-static: +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
 
-          if !werbung.genehmigt()
-            p.text-danger.form-inline 
-              i.fa.fa-warning
-              | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
-              input#genehmigungenEingeholt(type='checkbox')
-          else
-            p.text-success.form-inline
-              i.fa.fa-check-circle
-              | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
-              input#genehmigungenEingeholt(type='checkbox', checked = 'true')
+          if kosten.deal() !== 'ohne'
+            +panelMitBody('deal', 'Gewinnbeteiligung für Band', 'dealUeberschussTotal', 'color-hotel')
+              table.table.table-condensed.table-striped
+                tr
+                  th(align='right', style='text-align: right;') Einnahmen
+                  th(align='right', style='text-align: right;') Kosten
+                  th(align='right', style='text-align: right;') Überschuss
+                tr
+                  td(align='right'): +currencySpan(null, 'dealEinnahmen')
+                  td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                  td(align='right'): +currencySpan(null, 'dealUeberschuss')
+                tr
+                  th Anteilig an Band (#{kosten.deal()}):
+                  td
+                  td(align='right'): b: +currencySpan(null, 'dealUeberschussAnBand')
 
-          .panel.panel-default
-            .panel-heading.color-misc
-              a.inherit-color.chevron(data-toggle='collapse', data-target='#vertrag'): b
-                i.fa.fa-toggle-down.fa-fw.blog
-                | &nbsp;Vertrag (#{vertrag.art()})
-            ul#vertrag.list-group.collapse.in
+        .col-md-6
+          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR())
+            table.table.table-striped.table-condensed
+              tr
+                th(colspan=2) Backline und Technik
+                th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR())
+              tr
+                th(colspan=2) Saal
+                th(align='right', style='text-align: right;'): +currencySpan(kosten.saalmiete())
+              tr
+                th(colspan=2) Band
+                th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR())
+              tr
+                td(width='2%')
+                td(width='48%') Gage
+                td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR())
+              tr
+                td
+                td Agentur
+                td(align='right'): +currencySpan(kosten.agenturTotalEUR())
+              tr
+                th(colspan=2) Personal
+                th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR())
+              tr
+                th(colspan=2) Werbung
+                th(align='right', style='text-align: right;'): +currencySpan(werbung.marketingTotalEUR())
+              tr
+                td
+                td Plakate
+                td(align='right'): +currencySpan(werbung.plakateTotalEUR())
+              tr
+                td
+                td Flyer
+                td(align='right'): +currencySpan(werbung.mediaTotalEUR())
+
+          if werbung.genehmigungenNum()
+            if !werbung.genehmigt()
+              p.text-danger.form-inline 
+                i.fa.fa-warning
+                | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
+                input#genehmigungenEingeholt(type='checkbox')
+            else
+              p.text-success.form-inline
+                i.fa.fa-check-circle
+                | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
+                input#genehmigungenEingeholt(type='checkbox', checked = 'true')
+  
+          +panelMitBody('vertrag', 'Vertrag(' + vertrag.art() + ')', null, 'color-misc')
+            ul.list-group
               for step in vertrag.workflow()
                 li.list-group-item
                   label

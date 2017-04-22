@@ -14,7 +14,7 @@ mixin band(kosten)
           .form-group
             label.control-label Total:
             p: b
-              +currencySpan('gagenTotal', 'form-control-static pull-right text-success')
+              +currencySpan(null, 'gagenTotal', 'form-control-static pull-right text-success')
       .row
         .col-xs-3(style='padding-right: 5px;')
           +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
@@ -26,7 +26,7 @@ mixin band(kosten)
           .form-group
             label.control-label Total:
             p: b
-              +currencySpan('agenturTotal', 'form-control-static pull-right text-success')
+              +currencySpan(null, 'agenturTotal', 'form-control-static pull-right text-success')
             
 mixin bandScript
   script.
