@@ -10,20 +10,27 @@ block content
       .page-header
         .btn-group.pull-right
           a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
-        h2 Veranstaltungen <br>
-          small #{titel}
+          .btn-group
+            a.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+              | #{titel} &nbsp;
+              span.caret
+            ul.dropdown-menu
+              li: a(href='/veranstaltungen/zukuenftige') Zukünftige
+              li: a(href='/veranstaltungen/vergangene') Vergangene
+        h2 Veranstaltungen
       .table-responsive
         table.table.table-striped.table-condensed
           for veranstaltung in veranstaltungen
             -var kopf = veranstaltung.kopf()
             tr.form-inline
               td
-                i(class=kopf.cssIconClass()) #{' '}
+                a(href=veranstaltung.fullyQualifiedUrl())
+                  i(class=kopf.cssIconClass()) #{' '}
               th
                 .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl())
-                    | #{veranstaltung.startMoment().format('ddd ll')}: #{' '}
-                    | #{kopf.titel()} im #{kopf.ort()}&nbsp;
-                +submitButtonsFor(veranstaltung, null, true, true)
+                  a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.startMoment().format('ddd DD MMM YY')}
+              th
+                .form-control-static
+                  a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
     .col-lg-4
       #calendar

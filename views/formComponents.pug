@@ -90,9 +90,9 @@ mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
 mixin submitButtonsFor(veranstaltung, current, nosave, nolist)
   +hidden('returnTo', currentUrl)
   .btn-group.pull-right
-    if nosave && !nolist
+    if nosave 
       a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
-    if !nolist && !nosave
+    else
       a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl()) Zurück
 
     +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard-o')

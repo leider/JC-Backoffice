@@ -17,13 +17,9 @@ mixin topNavbar(xs)
   .navbar-collapse.collapse.collapse-top
     ul.nav.navbar-nav.bottom
       li(data-jcnav='veranstaltungen')
-        a(href='#')
+        a(href='/veranstaltungen/zukuenftige')
           i.fa.fa-calendar.fa-fw.fa-lg
-          span.hidden-sm &nbsp;Veranstaltungen&nbsp;
-        ul.dropdown-menu
-          li
-            a(href='/veranstaltungen/zukuenftige') Zukünftige
-            a(href='/veranstaltungen/vergangene') Vergangene
+          | &nbsp;Veranstaltungen&nbsp;
       li(data-jcnav='optionen'): a(href='/optionen')
         i.fa.fa-cogs.fa-fw.fa-lg
         | &nbsp;Optionen
