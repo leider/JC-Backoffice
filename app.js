@@ -72,6 +72,7 @@ module.exports = {
     app.use(beans.get('passportInitializer'));
     app.use(beans.get('passportSessionInitializer'));
     app.use(beans.get('secureByLogin'));
+    app.use(beans.get('expressViewHelper'));
     app.use(secureAgainstClickjacking);
     app.use(csurf());
     app.use(beans.get('addCsrfTokenToLocals'));

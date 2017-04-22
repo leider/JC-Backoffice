@@ -22,6 +22,8 @@ html
       +topNavbar('xs')
     .container-fluid
       .row.main
+        if (statusmessage)
+          +notificationsBlock(statusmessage)
         block content
   
 script(src='/clientscripts/global.js')

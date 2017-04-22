@@ -3,8 +3,8 @@ mixin notificationsBlock(notificationmessage)
   -var contents = notificationmessage.contents()
   #notifications(class='alert alert-block hidden-print ' + contents.type)
     button.close(type='button', data-dismiss='alert') &times;
-    h4 #{t(contents.title)}
-    | #{t(contents.text, contents.additionalArguments)}
+    h4 #{contents.title}
+    | #{contents.text}
 
 mixin topNavbar(xs)
   .navbar-header
