@@ -1,8 +1,8 @@
 include ../../../views/formComponents
 
-mixin kontakt(veranstaltung, kontakte, labelForLegend, name)
+mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
   -var derkontakt = veranstaltung[name]()
-  +legendMitBody(name, labelForLegend)
+  +legendMitBody(name, labelForLegend, null, optionalColorClass)
     .row
       .col-sm-6
         +singleselect(name + '[auswahl]', 'Auswahl', derkontakt.name(), kontakte.map(k => k.name))

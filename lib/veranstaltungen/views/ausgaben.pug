@@ -22,7 +22,7 @@ block content
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
-          +legendMitBody('backline', 'Backline und Technik', 'backlinePreis')
+          +legendMitBody('backline', 'Backline und Technik', 'backlinePreis', 'color-costs')
             .row
               .col-sm-9
                 +text('kosten[rider]', 'Rider', kosten.rider())
@@ -47,7 +47,7 @@ block content
                 +text('kosten[technikAngebot2]', 'Technik Angebot 2', kosten.technikAngebot2())
               .col-sm-3
                 +currency('kosten[technikAngebot2EUR]', 'Betrag', kosten.technikAngebot2EUR())
-          +legendMitBody('saalmiete', 'Saalmiete', 'saalmietePreis')
+          +legendMitBody('saalmiete', 'Saalmiete', 'saalmietePreis', 'color-costs')
             .row
               .col-sm-9
                 +singleselect('kosten[saal]', 'Location', kosten.saal(), optionen.kooperationen())

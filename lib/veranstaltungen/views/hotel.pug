@@ -30,8 +30,8 @@ block content
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
-          +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel')
-          +legendMitBody('zimmer', 'Zimmer', 'roomsTotal')
+          +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'color-hotel')
+          +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
             .row
               .col-xs-4()
                 +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate())
@@ -43,7 +43,7 @@ block content
               +zimmerNumEUR('doppel', 'Doppel')
               +zimmerNumEUR('suite', 'Suite')
         .col-md-6
-          +legendMitBody('transport', 'Transport', 'transportTotal')
+          +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
             +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
             .row
               .col-md-6

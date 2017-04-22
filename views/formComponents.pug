@@ -189,7 +189,7 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
     if (extraclasses)
       | &nbsp; Löschen
 
-mixin legendMitBody(id, title, optionalCurrencySpan, colorClass)
+mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
   .panel.panel-default
     .panel-heading(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b

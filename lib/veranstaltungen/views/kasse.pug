@@ -22,7 +22,7 @@ block content
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
-          +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt')
+          +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt', 'color-kasse')
             .row
               .col-xs-6
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
@@ -41,7 +41,7 @@ block content
 
 
         .col-md-6
-          +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt')
+          +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'color-kasse')
             .row
               .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
