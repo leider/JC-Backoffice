@@ -13,7 +13,7 @@ mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
       .col-sm-6
         +text(name + '[telefon]', 'Telefon', derkontakt.telefon())
       .col-sm-6
-        +text(name + '[email]', 'E-Mail', derkontakt.email())
+        +email(name + '[email]', 'E-Mail', derkontakt.email())
 
 mixin kontaktScript(name)
   script.

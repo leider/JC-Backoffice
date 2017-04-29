@@ -19,11 +19,12 @@ block content
         h2 Registrierte User
       dl.dl-horizontal
         for user in users
-          dt #{user.id}
+          dt: a(href='/users/' + encodeURIComponent(user.id)) #{user.id}
+            
     .col-md-6
       .page-header
-        h2 User anlegen / bearbeiten
-      form#userform(action='/users/submit', method='post')
+        h2 User anlegen / Passwort vergeben
+      form#userform(action='/users/submitNew', method='post')
         p Einfach einen neuen oder vorhandenen Username (fürs Login) eintragen und "Speichern" klicken. Dann wird ein Passwort generiert.
         +csrf
         fieldset

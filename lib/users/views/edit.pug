@@ -1,0 +1,23 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | Users
+
+block content
+  .row
+    .col-md-6
+      .page-header
+        h2 User "#{user.id}" bearbeiten
+      form#userform(action='/users/submit', method='post')
+        +csrf
+        +hidden('id', user.id)
+        fieldset
+          +text('name', 'Voller Name', user.name)
+          +email('email', 'E-Mail', user.email)
+          +submitButtons()
+
+
+block scripts
+  script(src='/clientscripts/check-userform.js')
+      

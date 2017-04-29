@@ -83,9 +83,12 @@ block content
                 .col-sm-6
                   +text('partner' + number, 'Partner', optionen['partner' + number]())
                 .col-sm-6
-                  +text('email' + number, 'E-Mail', optionen['email' + number]())
+                  +email('email' + number, 'E-Mail', optionen['email' + number]())
       .row
         .col-md-12
           hr
           +submitButtons()
 
+block scripts
+  script(src='/clientscripts/check-optionenform.js')
+      

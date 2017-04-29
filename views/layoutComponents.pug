@@ -27,15 +27,9 @@ mixin topNavbar(xs)
         li(data-jcnav='mailsender'): a(href='/mailsender')
           i.fa.fa-envelope-o.fa-fw.fa-lg
           | &nbsp;Mails senden
-      li(data-jcnav='users')
-        a(href='#')
-          i.fa.fa-user.fa-fw.fa-lg
-          span.hidden-sm &nbsp;User&nbsp;
-        ul.dropdown-menu
-          li
-            a(href='/users')
-              i.fa.fa-users.fa-fw
-              | &nbsp;Liste
-            a(href='/logout')
-              i.fa.fa-sign-out.fa-fw
-              | &nbsp;Abmelden
+        li(data-jcnav='users'): a(href='/users')
+          i.fa.fa-users.fa-fw
+          | &nbsp;User
+      li: a(href='/logout')
+        i.fa.fa-sign-out.fa-fw
+        | &nbsp;Abmelden
