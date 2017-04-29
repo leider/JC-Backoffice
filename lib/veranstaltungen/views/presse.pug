@@ -27,7 +27,7 @@ block content
                 #preview
       .row
         .col-md-6
-          input#bildupload.file-loading(name='image', type='file', data-preview-file-type="image")
+          input#bildupload.file-loading(name='image', type='file', accept='image/*')
         .col-md-6
           if (presse.image())
             p.form-control-static: b Aktuell gewählt: #{presse.image()}
