@@ -79,10 +79,12 @@ mixin submitButtons(text)
 
     
 mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
-  a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
+  if veranstaltung.url()
+    a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
+  else
+    a(class='btn ' + btnstyle + ' active disabled', href='/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
-  +hidden('returnTo', currentUrl)
   .btn-group.pull-right
     if nosave 
       a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
@@ -147,10 +149,10 @@ mixin csrf
 
 mixin controlLabel(name, label, tooltip)
   label.control-label(for=name)
-    -if (tooltip)
+    if (tooltip)
       span.tooltiplabel(data-original-title=tooltip) #{label}:&nbsp;
         i.fa.fa-question-circle
-    -else
+    else
       | #{label}:
 
 mixin textareaInternal(classname, rowCount, name, label, value, tooltip, placeholder)
