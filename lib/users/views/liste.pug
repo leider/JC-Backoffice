@@ -5,7 +5,7 @@ block title
   | Users
 
 block content
-  if (lastSaved)
+  if lastSaved
     #notifications.alert.alert-block.alert-success.hidden-print
       button.close(type='button', data-dismiss='alert') &times;
       h4 Merke Dir das Passwort!
@@ -19,7 +19,10 @@ block content
         h2 Registrierte User
       dl.dl-horizontal
         for user in users
-          dt: a(href='/users/' + encodeURIComponent(user.id)) #{user.id}
+          dt: a(href='/users/' + encodeURIComponent(user.id)) #{user.name || user.id}
+          dd
+            span.mailtoify #{user.email}
+            b #{' '} #{user.name && '(' + user.id + ')'}
             
     .col-md-6
       .page-header
