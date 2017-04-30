@@ -18,7 +18,7 @@ block content
               li: a(href='/veranstaltungen/zukuenftige') Zukünftige
               li: a(href='/veranstaltungen/vergangene') Vergangene
         h2 Veranstaltungen
-      .table-responsive
+      .table
         table.table.table-striped.table-condensed
           for veranstaltung in veranstaltungen
             -var kopf = veranstaltung.kopf()
@@ -32,5 +32,18 @@ block content
               th
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
+                .form-control-static.pull-right
+                  .btn-group.btn-group-xs
+                    +checkedButton(veranstaltung.presse(), 'Presse', 'presse')
+                    +checkedButton(veranstaltung.kosten(), 'Kosten', 'costs')
     .col-lg-4
       #calendar
+
+mixin checkedButton(section, name, stylename)
+  if section.checked()
+    a.btn.btn-xs(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename)
+      i.fa.i.fa.fa-check.fa-fw.fa-lg
+  else
+    a.btn.btn-xs(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename)
+      i.fa.i.fa.fa-question.fa-fw.fa-lg
+  

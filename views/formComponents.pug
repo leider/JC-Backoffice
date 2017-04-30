@@ -206,8 +206,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
       if optionalCurrencySpan
-        b
-          +currencySpan(null, optionalCurrencySpan, 'pull-right')
+        b: +currencySpan(null, optionalCurrencySpan, 'pull-right')
     .panel-body.collapse.in(id = id)
       block
 

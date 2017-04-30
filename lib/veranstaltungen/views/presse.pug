@@ -21,6 +21,9 @@ block content
         .col-md-12
           +legendMitBody('event', 'Pressematerial', null, 'color-presse')
             .row
+              .col-md-12
+                +checkbox('presse[checked]', 'Ist so OK', presse.checked())
+            .row
               .col-md-6
                 +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
               .col-md-6

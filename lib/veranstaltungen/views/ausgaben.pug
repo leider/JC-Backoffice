@@ -53,6 +53,7 @@ block content
                 +singleselect('kosten[saal]', 'Location', kosten.saal(), optionen.kooperationen())
               .col-sm-3
                 +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
+          +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
         .col-md-6
           +staff(veranstaltung.staff())
           +marketingUndPlakate(veranstaltung.werbung(), optionen)
