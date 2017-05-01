@@ -144,15 +144,19 @@ block content
           if werbung.genehmigungenNum()
             if !werbung.genehmigt()
               p.text-danger.form-inline 
-                i.fa.fa-warning
-                | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
-                input#genehmigungenEingeholt(type='checkbox')
+                .checkbox.checkbox-warning
+                  input#genehmigungenEingeholt(type='checkbox')
+                  label.text-danger(for='genehmigungenEingeholt')
+                    i.fa.fa-warning
+                    | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
             else
               p.text-success.form-inline
-                i.fa.fa-check-circle
-                | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
-                input#genehmigungenEingeholt(type='checkbox', checked = 'true')
-  
+                .checkbox.checkbox-success
+                  input#genehmigungenEingeholt(type='checkbox', checked='true')
+                  label.text-success(for='genehmigungenEingeholt')
+                    i.fa.check-circle
+                    | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
+ 
           if agentur.name()
             +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
               .panel-body
@@ -167,9 +171,10 @@ block content
             ul.list-group
               for step in vertrag.workflow()
                 li.list-group-item
-                  label
-                    input.vertragstep(type='checkbox', name=step, checked=vertrag.isChecked(step))
-                    | &nbsp;#{step}
+                  .checkbox(class=vertrag.isChecked(step) && 'checkbox-success')
+                    input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
+                    label(for=step)
+                      | &nbsp;#{step}
 
 
 block scripts

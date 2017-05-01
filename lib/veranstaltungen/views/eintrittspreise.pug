@@ -2,7 +2,7 @@ include ../../../views/formComponents
 
 mixin preise(veranstaltung)
   -var eintrittspreise = veranstaltung.eintrittspreise()
-  +legendMitBody('preise', 'Preise', 'eintrittTotal')
+  +legendMitBody('preise', 'Einritt/Zuschuss', 'eintrittTotal')
     .row
       .col-xs-4
         +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
@@ -21,6 +21,7 @@ mixin preise(veranstaltung)
         +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00 €', true)
     .row
       .col-xs-4
+        +currency('eintrittspreise[zuschuss]', 'Zuschuss', eintrittspreise.zuschuss())
       .col-xs-4
         +number('eintrittspreise[erwarteteBesucher]', 'Besucher (erwartet)', eintrittspreise.erwarteteBesucher())
       .col-xs-4
@@ -37,6 +38,7 @@ mixin preiseScript
       var rabattMitglied = $('#eintrittspreise\\[rabattMitglied\\]');
       var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
       var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
+      var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
 
       function amountHandler() {
         var preis = eurAmount(regulaer);
@@ -46,13 +48,15 @@ mixin preiseScript
         $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preisErmaessigt);
         $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preisMitglied);
 
-        var erwarteteEinnahmen = intAmount(anzahlBesucher) * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied);
+        var erwarteteEinnahmen = intAmount(anzahlBesucher)
+          * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
+          + eurAmount(zuschuss);
           
         $('#erwarteteEinnahmen').autoNumeric('set', erwarteteEinnahmen);
         $('#eintrittTotal').autoNumeric('set', erwarteteEinnahmen);
       }
 
-      [regulaer, rabattErmaessigt, rabattMitglied, anzahlBesucher].forEach(function (field) {
+      [regulaer, rabattErmaessigt, rabattMitglied, anzahlBesucher, zuschuss].forEach(function (field) {
         field.keyup(amountHandler);
       });
       

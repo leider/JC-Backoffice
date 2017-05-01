@@ -14,10 +14,7 @@ block content
           if (upcomingEvents)
             h4 Für Veranstaltungen
             for event in upcomingEvents
-              .checkbox
-                label
-                  input(type='checkbox', name='event[' + event.id() + ']')
-                  | !{event.description()}
+              +checkbox('event[' + event.id() + ']', event.description())
             h4 An Empfänger
             for number in [1, 2, 3, 4, 5]
               if optionen['partner' + number]()

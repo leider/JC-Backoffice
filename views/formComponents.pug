@@ -71,7 +71,7 @@ mixin checkboxWithDescription(name, label, checked, description, optionalValue)
       -if (description)
         span.popover-highlight(rel='tooltip-in-body', data-content=description) #{label}
       -else
-        | #{label}
+        | !{label}
 
 mixin checkbox(name, label, checked, optionalValue)
   +checkboxWithDescription(name, label, checked, undefined, optionalValue)
