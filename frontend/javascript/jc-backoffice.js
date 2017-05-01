@@ -248,6 +248,11 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.currency').each(function () {
       $(this).autoNumeric('init');
     });
+    $(':checkbox').each(function() {
+      $(this).change(function() {
+        $(this).parent().toggleClass('checkbox-success');
+      });
+    });
   }
 
   function initTooltipsAndHovers() {
