@@ -30,7 +30,7 @@ block content
         .col-md-6
           if kopf.kooperation() && kopf.kooperation().length  > 1
             h3 Kooperation mit #{kopf.kooperation()}
-          +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-eur')
+          +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
             table.table.table-striped.table-condensed
               tr
                 th(colspan=2) Technik
@@ -82,17 +82,17 @@ block content
                   th
                     .pull-right.form-control-static: +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
 
-          if kosten.deal() !== 'ohne'
-            +panelMitBody('deal', 'Gewinnbeteiligung für Band', 'dealUeberschussTotal', 'color-hotel')
-              table.table.table-condensed.table-striped
-                tr
-                  th(align='right', style='text-align: right;') Einnahmen
-                  th(align='right', style='text-align: right;') Kosten
-                  th(align='right', style='text-align: right;') Überschuss
-                tr
-                  td(align='right'): +currencySpan(null, 'dealEinnahmen')
-                  td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                  td(align='right'): +currencySpan(null, 'dealUeberschuss')
+          +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-hotel')
+            table.table.table-condensed.table-striped
+              tr
+                th(align='right', style='text-align: right;') Einnahmen
+                th(align='right', style='text-align: right;') Kosten
+                th(align='right', style='text-align: right;') Überschuss
+              tr
+                td(align='right'): +currencySpan(null, 'dealEinnahmen')
+                td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                td(align='right'): +currencySpan(null, 'dealUeberschuss')
+              if kosten.deal() !== 'ohne'
                 tr
                   th Anteilig an Band (#{kosten.deal()}):
                   td
@@ -103,7 +103,7 @@ block content
               | !{kopf.beschreibungHTML()}
 
         .col-md-6
-          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-eur')
+          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
             table.table.table-striped.table-condensed
               tr
                 th(colspan=2) Backline und Technik
@@ -209,7 +209,7 @@ block scripts
           ueberschussAbsolut = 0;
         }
         setEuro($('#dealUeberschussAnBand'), ueberschussAbsolut);
-        setEuro($('#dealUeberschussTotal'), ueberschussAbsolut);
+        setEuro($('#dealUeberschussTotal'), ueberschuss);
       }
       
       function reservixChanged() {

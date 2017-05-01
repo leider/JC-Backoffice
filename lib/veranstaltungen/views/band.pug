@@ -27,7 +27,9 @@ mixin band(kosten)
             label.control-label Total:
             p: b
               +currencySpan(null, 'agenturTotal', 'form-control-static pull-right text-success')
-            
+      .row
+        .col-xs-12
+          +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
 mixin bandScript
   script.
     $(document).ready(function () {
