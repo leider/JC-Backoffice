@@ -11,6 +11,7 @@ block content
   -var kopf = veranstaltung.kopf()
   -var kosten = veranstaltung.kosten()
   -var staff = veranstaltung.staff()
+  -var unterkunft = veranstaltung.unterkunft()
   -var vertrag = veranstaltung.vertrag()
   -var werbung = veranstaltung.werbung()
   .row
@@ -122,6 +123,9 @@ block content
                 td
                 td Agentur
                 td(align='right'): +currencySpan(kosten.agenturTotalEUR())
+              tr
+                th(colspan=2) Hotel / Transport
+                th(align='right', style='text-align: right;'): +currencySpan(unterkunft.kostenTotalEUR())
               tr
                 th(colspan=2) Personal
                 th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR())
