@@ -98,6 +98,12 @@ block content
                   th Anteilig an Band (#{kosten.deal()}):
                   td
                   td(align='right'): b: +currencySpan(null, 'dealUeberschussAnBand')
+              if eintrittspreise.zuschuss() > 0
+                tr
+                  th Zuschuss:
+                  td
+                  td(align='right'): b: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
+
 
           +panelMitBody('info', 'Informationen', null, 'color-misc')
             .panel-body
@@ -209,7 +215,7 @@ block scripts
 
           setEuro($('#eintrittReservixEUR'), einnahmen);
         }
-        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()};
+        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()} + #{eintrittspreise.zuschuss()};
         setEuro($('#eintrittGesamtEUR'), einnahmen);
         setEuro($('#dealEinnahmen'), einnahmen);
         setEuro($('#dealUeberschuss'), ueberschuss);
