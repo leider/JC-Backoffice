@@ -6,5 +6,7 @@ node_modules/
 public/
 !public/img/favicon.ico
 !public/img/logo_weiss.png
+!public/files/placeholder.txt
+!public/upload/placeholder.txt
 server.log
 workspace.xml

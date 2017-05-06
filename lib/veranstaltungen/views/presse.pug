@@ -7,7 +7,7 @@ block title
 block content
   -var presse = veranstaltung.presse()
 
-  form#presseform(action='/veranstaltungen/submitWithImage' + '?_csrf=' + encodeURIComponent(csrf_token), method='post', enctype='multipart/form-data')
+  form#presseform(action='/veranstaltungen/submit', method='post')
     +csrf
     +hidden('id', veranstaltung.id())
     fieldset
@@ -30,10 +30,7 @@ block content
                 #preview
       .row
         .col-md-6
-          input#bildupload.file-loading(name='image', type='file', accept='image/*')
-        .col-md-6
-          if (presse.image())
-            p.form-control-static: b Aktuell gewählt: #{presse.image()}
+          +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
       .row
         .col-md-12
           hr
@@ -56,10 +53,4 @@ block scripts
 
       textarea.keyup(updateForText);
       updateForText();
-      $('#bildupload').fileinput({
-        language: 'de',
-        theme: 'fa',
-        showPreview: false,
-        maxFilePreviewSize: 10240
-      });
     });

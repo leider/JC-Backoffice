@@ -224,3 +224,20 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optional
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'pull-right')
     .collapse.in(id = id)
       block
+
+mixin uploader(name, label, accept, value, extradata)
+  -var istPressefoto = extradata.typ === 'pressefoto'
+  .form-group
+    +controlLabel(name, label)
+    if value
+      input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
+      data-language='de', data-theme='fa', data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
+      data-max-file-preview-size=10240, data-initial-preview-as-data='true',
+      data-max-file-count=1, data-upload-extra-data=extradata,
+      data-initial-caption=value, 
+      data-initial-preview=[(istPressefoto ? '/upload/' : '/files/') + encodeURIComponent(value)])
+    else
+      input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
+      data-language='de', data-theme='fa', data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
+      data-max-file-preview-size=10240, data-initial-preview-as-data='true',
+      data-max-file-count=1, data-upload-extra-data=extradata)

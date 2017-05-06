@@ -14,6 +14,7 @@ block content
   -var kosten = veranstaltung.kosten()
   
   form#veranstaltungform(action='/veranstaltungen/submit', method='post')
+
     +csrf
     if (veranstaltung.id())
       +hidden('id', veranstaltung.id())
@@ -58,6 +59,9 @@ block content
                 +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
               .col-md-6
                 +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch'])
+            .row
+              .col-md-12
+                +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
 
         .col-md-6
           +legendMitBody('artist', 'Künstler')

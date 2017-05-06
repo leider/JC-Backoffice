@@ -248,11 +248,25 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.currency').each(function () {
       $(this).autoNumeric('init');
     });
-    $(':checkbox').each(function() {
-      $(this).change(function() {
+
+    $(':checkbox').each(function () {
+      $(this).change(function () {
         $(this).parent().toggleClass('checkbox-success');
       });
     });
+
+    var btns = '<button type="button" class="kv-cust-btn btn btn-xs btn-default" title="Download" data-key="{dataKey}">' +
+      '<i class="glyphicon glyphicon-download"></i>' +
+      '</button>';
+    // note the tag/token {dataKey}
+    $('.file-loading').fileinput({
+      otherActionButtons: btns,
+    });
+    $('.kv-cust-btn').click(function() {
+      var url = $(this).parents('.file-thumbnail-footer').parent().children('.kv-file-content').children().attr('src');
+      window.open(url);
+    });
+
   }
 
   function initTooltipsAndHovers() {
@@ -289,5 +303,5 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
   $(document).ready(initCalendar);
-  $.fn.select2.defaults.set( 'theme', 'bootstrap' );
+  $.fn.select2.defaults.set('theme', 'bootstrap');
 }());
