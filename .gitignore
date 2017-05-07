@@ -10,3 +10,4 @@ public/
 !public/upload/placeholder.txt
 server.log
 workspace.xml
+coverage

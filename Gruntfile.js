@@ -173,7 +173,7 @@ module.exports = function (grunt) {
     },
     eslint: {
       options: {quiet: true},
-      target: ['./**/*.js']
+      target: ['**/*.js']
     },
     karma: {
       options: {

@@ -18,10 +18,9 @@ mixin band(kosten)
       .row
         .col-xs-3(style='padding-right: 5px;')
           +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
-        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
           +singleselect('kosten[agenturSteuer]', 'MWSt', kosten.agenturSteuer(), ['ohne', '7%', '19%'])
-        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
-        .col-xs-2(style='padding-left: 2px;padding-right: 2px;')
+        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
         .col-xs-3(style='padding-left: 5px;')
           .form-group
             label.control-label Total:

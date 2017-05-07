@@ -67,7 +67,7 @@ block content
           +legendMitBody('artist', 'Künstler')
             .row
               .col-md-12
-                +text('artist[name]', 'Name', artist.name(), 'Muss nicht identisch mit der Veranstaltung sein')
+                +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
             .row
               .col-xs-3
                 +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')

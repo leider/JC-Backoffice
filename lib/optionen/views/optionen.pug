@@ -16,16 +16,12 @@ block content
               small Bearbeiten
       .row
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#allgemein') Allgemein
-          #allgemein.collapse.in
+          +legendMitBody('allgemein', 'Allgemein')
             +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
             +editableMultiselect('orte', 'Orte', optionen.orte(), optionen.orte())
             +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#personal') Personal
-          #personal.collapse.in
+          +legendMitBody('personal', 'Personal')
             .row
               .col-sm-6
                 +editableMultiselect('verantwortliche', 'Verantwortliche', optionen.verantwortliche(), optionen.verantwortliche())
@@ -41,15 +37,11 @@ block content
                 +editableMultiselect('fremdpersonal', 'Fremdpersonal', optionen.fremdpersonal(), optionen.fremdpersonal())
       .row
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#backline') Backlines
-          #backline.collapse.in
+          +legendMitBody('backline', 'Backlines')
             +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
             +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#werb') Werbung
-          #werb.collapse.in
+          +legendMitBody('werb', 'Werbung')
             .row
               .col-sm-6
                 +editableMultiselect('plakatNum', 'Plakate Anzahl', optionen.plakatNum(), optionen.plakatNum())
@@ -62,9 +54,7 @@ block content
                 +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
       .row
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#preise') Vorgaben Preis
-          #preise.collapse.in
+          +legendMitBody('preise', 'Vorgaben Preis')
             .row
               .col-md-3.col-sm-6
                 +currency('technikerEUR', 'Techniker', optionen.technikerEUR())
@@ -74,10 +64,13 @@ block content
                 +currency('kasseEUR', 'Kasse', optionen.kasseEUR())
               .col-md-3.col-sm-6
                 +currency('layoutingEUR', 'Grafikdesign', optionen.layoutingEUR())
+          +legendMitBody('artists', 'Künstler')
+            .row
+              .col-sm-12
+                +editableMultiselect('artists', 'Namen', optionen.artists(), optionen.artists())
+
         .col-md-6
-          legend
-            a(data-toggle='collapse', href='#email') E-Mail Partner
-          #email.collapse.in
+          +legendMitBody('email', 'E-Mail Partner')
             for number in [1,2,3,4,5]
               .row
                 .col-sm-6

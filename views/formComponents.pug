@@ -231,19 +231,19 @@ mixin uploader(name, label, accept, value, extradata)
     +controlLabel(name, label)
     if value
       input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
-      data-language='de', data-theme='fa', 
-      data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
-      data-max-file-preview-size=10240, data-initial-preview-as-data='true',
-      data-max-file-count=1, data-upload-extra-data=extradata,
-      data-delete-url='/veranstaltungen/deletefile' + '?_csrf=' + encodeURIComponent(csrf_token), 
-      data-delete-extra-data=extradata,
-      data-initial-caption=value, 
-      data-initial-preview=[(istPressefoto ? '/upload/' : '/files/') + encodeURIComponent(value)],
-      data-initial-preview-config=[
-        {key:encodeURIComponent(value)}
-      ])
+        data-language='de', data-theme='fa',
+        data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
+        data-max-file-preview-size=10240, data-initial-preview-as-data='true',
+        data-max-file-count=1, data-upload-extra-data=extradata,
+        data-delete-url='/veranstaltungen/deletefile' + '?_csrf=' + encodeURIComponent(csrf_token),
+        data-delete-extra-data=extradata,
+        data-initial-caption=value,
+        data-initial-preview=[(istPressefoto ? '/upload/' : '/files/') + encodeURIComponent(value)],
+        data-initial-preview-config=[
+          {key:encodeURIComponent(value)}
+        ])
     else
       input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
-      data-language='de', data-theme='fa', data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
-      data-max-file-preview-size=10240, data-initial-preview-as-data='true',
-      data-max-file-count=1, data-upload-extra-data=extradata)
+        data-language='de', data-theme='fa', data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
+        data-max-file-preview-size=10240, data-initial-preview-as-data='true',
+        data-max-file-count=1, data-upload-extra-data=extradata)
