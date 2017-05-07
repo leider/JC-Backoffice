@@ -7,7 +7,7 @@ const beans = require('simple-configure').get('beans');
 const optionenstore = beans.get('optionenstore');
 const veranstaltungstore = beans.get('veranstaltungenstore');
 
-veranstaltungstore.vergangene((err, result) => {
+veranstaltungstore.zukuenftige((err, result) => {
   if (err) {
     console.log(err);
     process.exit();
