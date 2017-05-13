@@ -7,9 +7,11 @@ module.exports = function (grunt) {
     'public/clientscripts/global.js': [
       'node_modules/jquery/dist/jquery.js',
       'node_modules/select2/dist/js/select2.full.js',
-      'node_modules/autonumeric/dist/autoNumeric.js',
+      'node_modules/select2/dist/js/i18n/de.js',
+      'node_modules/autonumeric/dist/autoNumeric.min.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
       'node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
+      'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js',
       'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
       'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js',
       'node_modules/bootstrap-fileinput/js/fileinput.js',
@@ -20,15 +22,11 @@ module.exports = function (grunt) {
       'node_modules/drmonty-smartmenus/js/jquery.smartmenus.js',
       'build/javascript/jquery.smartmenus.bootstrap-patched.js',
       'build/javascript/fullcalendar-patched.js',
+      'node_modules/fullcalendar/dist/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
-      'node_modules/jquery-validation/dist/additional-methods.js',
-      'node_modules/simple-timepicker/dist/simple-timepicker.js',
-      'node_modules/urijs/src/URI.js',
       'node_modules/jquery-validation/dist/localization/messages_de.js',
       'node_modules/jquery-validation/dist/localization/methods_de.js',
-      'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js',
-      'node_modules/select2/dist/js/i18n/de.js',
-      'node_modules/fullcalendar/dist/locale/de.js',
+      'node_modules/simple-timepicker/dist/simple-timepicker.js',
       'frontend/javascript/jc-backoffice.js'
     ]
   };
@@ -43,8 +41,6 @@ module.exports = function (grunt) {
       'node_modules/font-awesome/css/font-awesome.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
-      'node_modules/datatables.net-bs/css/dataTables.bootstrap.css',
-      'frontend/3rd_party_css/dataTables.fontAwesome.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/less/build-select2-bootstrap.less',
@@ -60,24 +56,6 @@ module.exports = function (grunt) {
       options: {force: true}
     },
     copy: {
-      datatablesJS: {
-        src: 'node_modules/datatables.net/js/*.js',
-        dest: 'public/clientscripts',
-        expand: true,
-        flatten: true
-      },
-      datatablesBootstrapAndGermanJS: {
-        src: ['node_modules/datatables.net-bs/js/dataTables*', 'frontend/3rd_party_js/dataTables*'],
-        dest: 'public/clientscripts',
-        expand: true,
-        flatten: true
-      },
-      datatablesImages: {
-        src: 'node_modules/datatables.net-dt/images/*',
-        dest: 'public/images/',
-        expand: true,
-        flatten: true
-      },
       bootstrapFONTS: {
         src: 'node_modules/bootstrap/dist/fonts/*',
         dest: 'public/fonts',

@@ -1,4 +1,4 @@
-/* global URI, moment */
+/* global moment */
 
 /* exported eurAmount */
 function eurAmount(jqueryCurrencyField) {
@@ -102,9 +102,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   'use strict';
 
   function highlightCurrentSection() {
-    var result = URI.parse(window.location.href); // full URL
     $('[data-jcnav]').filter(function () {
-      return new RegExp('^\/' + $(this).attr('data-jcnav')).test(result.path);
+      return new RegExp('^\/' + $(this).attr('data-jcnav')).test(window.location.pathname);
     }).addClass('active');
   }
 
