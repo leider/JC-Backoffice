@@ -45,6 +45,8 @@ block content
               +zimmerNumEUR('einzel', 'Einzel')
               +zimmerNumEUR('doppel', 'Doppel')
               +zimmerNumEUR('suite', 'Suite')
+            .row
+              +checkbox('hotelpreise', 'Preise als Default übernehmen')
         .col-md-6
           +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
             +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
@@ -58,8 +60,19 @@ block content
           hr
           +submitButtonsFor(veranstaltung, 'hotel')
 block scripts
-  +kontaktScript('hotel')
+  +kontaktScript('hotel', 'hotelchanged')
   script.
+    var updatePreise;
+    function hotelchanged(auswahl) {
+      console.log(auswahl)
+      $.ajax('/optionen/preiseForAuswahl', {data: {auswahl: auswahl}})
+       .done(function (result) {
+         if (result) {
+           updatePreise(result);
+         }
+       })
+
+    }
     $(document).ready(function() {
       var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
       var einzelNum = $('#unterkunft\\[einzelNum\\]');
@@ -70,6 +83,12 @@ block scripts
       var startDateField = $('#unterkunft\\[anreiseDate\\]');
       var endDateField = $('#unterkunft\\[abreiseDate\\]');
 
+      updatePreise = function(preise) {
+        einzelEUR.autoNumeric('set', preise.einzelEUR);
+        doppelEUR.autoNumeric('set', preise.doppelEUR);
+        suiteEUR.autoNumeric('set', preise.suiteEUR);
+      }
+      
       function updateRoomsTotal() {
         var startDate = startDateField.datepicker('getDate');
         var endDate = endDateField.datepicker('getDate');

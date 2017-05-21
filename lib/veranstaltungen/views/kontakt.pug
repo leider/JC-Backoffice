@@ -15,25 +15,30 @@ mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
       .col-sm-6
         +email(name + '[email]', 'E-Mail', derkontakt.email())
 
-mixin kontaktScript(name)
+mixin kontaktScript(name, callbackname)
+  -var callback = callbackname || 'dummyfunc'
   script.
-    var auswahl = $('##{name}\\[auswahl\\]');
-    var nameText = $('##{name}\\[name\\]');
-    var telefonText = $('##{name}\\[telefon\\]');
-    var emailText = $('##{name}\\[email\\]');
-    var adresseText = $('##{name}\\[adresse\\]');
-
-    function updateForAuswahl() {
+    $(document).ready(function () {
+      var dummyfunc = function() {};
+      var auswahl = $('##{name}\\[auswahl\\]');
+      var nameText = $('##{name}\\[name\\]');
+      var telefonText = $('##{name}\\[telefon\\]');
+      var emailText = $('##{name}\\[email\\]');
+      var adresseText = $('##{name}\\[adresse\\]');
+      
+      function updateForAuswahl() {
       $.ajax('/optionen/#{name}ForAuswahl', {data: {auswahl: auswahl.val()}})
-       .done(function (result) {
-         if (result) {
-           nameText.val(result.name);
-           telefonText.val(result.telefon);
-           emailText.val(result.email);
-           adresseText.val(result.adresse);
-         }
-       })
-    }
-
-    auswahl.change(updateForAuswahl);
+        .done(function (result) {
+          if (result) {
+            nameText.val(result.name);
+            telefonText.val(result.telefon);
+            emailText.val(result.email);
+            adresseText.val(result.adresse);
+            #{callback}(auswahl.val());
+          }
+        })
+      }
+      
+      auswahl.change(updateForAuswahl);
+    });
     
