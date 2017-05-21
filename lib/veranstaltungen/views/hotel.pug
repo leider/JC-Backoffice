@@ -34,8 +34,11 @@ block content
           +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
             .row
               .col-xs-4()
-                +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate())
-                +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate())
+                +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
+                +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
+                label
+                  span#naechte 0
+                  span #{''} Nächte
               .col-xs-8()
                 +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
             .row
@@ -64,18 +67,25 @@ block scripts
       var doppelNum = $('#unterkunft\\[doppelNum\\]');
       var suiteEUR = $('#unterkunft\\[suiteEUR\\]');
       var suiteNum = $('#unterkunft\\[suiteNum\\]');
+      var startDateField = $('#unterkunft\\[anreiseDate\\]');
+      var endDateField = $('#unterkunft\\[abreiseDate\\]');
 
       function updateRoomsTotal() {
-        var total = eurAmount(einzelEUR) * intAmount(einzelNum) 
-          + eurAmount(doppelEUR) * intAmount(doppelNum) 
-          + eurAmount(suiteEUR) * intAmount(suiteNum);
+        var startDate = startDateField.datepicker('getDate');
+        var endDate = endDateField.datepicker('getDate');
+        var days = startDate && endDate ? moment(endDate).diff(startDate, 'days') : 0;
+        
+        var total = eurAmount(einzelEUR) * intAmount(einzelNum) * days 
+          + eurAmount(doppelEUR) * intAmount(doppelNum) * days
+          + eurAmount(suiteEUR) * intAmount(suiteNum) * days;
         $('#roomsTotal').autoNumeric('set', total);
+        $('#naechte').html(days);
       }
 
-      [einzelEUR, doppelEUR, suiteEUR].forEach(function(field) {
+      [einzelEUR, doppelEUR, suiteEUR, startDateField, endDateField].forEach(function(field) {
         field.keyup(updateRoomsTotal);
       });
-      [einzelNum, doppelNum, suiteNum].forEach(function(field) {
+      [einzelNum, doppelNum, suiteNum, startDateField, endDateField].forEach(function(field) {
         field.change(updateRoomsTotal);
       });
       updateRoomsTotal();
