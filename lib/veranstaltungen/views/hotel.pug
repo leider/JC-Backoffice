@@ -46,7 +46,16 @@ block content
               +zimmerNumEUR('doppel', 'Doppel')
               +zimmerNumEUR('suite', 'Suite')
             .row
-              +checkbox('hotelpreise', 'Preise als Default übernehmen')
+              .col-xs-12
+                +checkbox('hotelpreise', 'Preise als Default übernehmen')
+            .row
+              for step in unterkunft.workflow()
+                .col-xs-6
+                  .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                    input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
+                    label(for=step)
+                      | &nbsp;#{step}
+            
         .col-md-6
           +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
             +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
@@ -116,5 +125,14 @@ block scripts
 
       transportEUR.keyup(updateTransportTotal);
       updateTransportTotal();
+
+      $('.hotelstep').click(function () {
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/hotelStepClicked"}', {
+          data: {
+            step: this.name,
+            checked: this.checked
+          }
+        });
+      });
     });
   script(src='/clientscripts/check-hotelform.js')

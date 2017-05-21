@@ -173,12 +173,21 @@ block content
                   | E-Mail: 
                   span.mailtoify #{agentur.email()}
 
-          +panelMitBody('vertrag', 'Vertrag(' + vertrag.art() + ')', null, 'color-misc')
-            ul.list-group
+          +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-misc')
+            table.table.table-condensed
               for step in vertrag.workflow()
-                li.list-group-item
-                  .checkbox(class=vertrag.isChecked(step) && 'checkbox-success')
+                tr: td
+                  .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
                     input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
+                    label(for=step)
+                      | &nbsp;#{step}
+
+          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-misc')
+            table.table.table-condensed
+              for step in unterkunft.workflow()
+                tr: td
+                  .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                    input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
                     label(for=step)
                       | &nbsp;#{step}
 
@@ -191,7 +200,11 @@ block scripts
       });
       
       $('.vertragstep').click(function() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/stepClicked"}', {data: {step: this.name, checked: this.checked}});
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/vertragStepClicked"}', {data: {step: this.name, checked: this.checked}});
+      });
+      
+      $('.hotelstep').click(function() {
+        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/hotelStepClicked"}', {data: {step: this.name, checked: this.checked}});
       });
       
       $('#genehmigungenEingeholt').click(function() {
