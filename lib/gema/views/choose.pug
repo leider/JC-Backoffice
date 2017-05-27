@@ -1,0 +1,29 @@
+extends ../../../views/layout
+
+include  ../../../views/formComponents
+
+block content
+  form#gemavorform(action='/gema/vorab', method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          legend
+            | Vorabmeldung
+          if (upcomingEvents)
+            h4 Für Veranstaltungen
+            for event in upcomingEvents
+              +checkbox('event[' + event.id() + ']', event.description())
+          +submitButtons('Öffnen')
+  form#gemanachform(action='/gema/nach', method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          legend
+            | Nachmeldung
+          if (pastEvents)
+            h4 Für Veranstaltungen
+            for event in pastEvents
+              +checkbox('event[' + event.id() + ']', event.description())
+          +submitButtons('Öffnen')
