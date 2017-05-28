@@ -24,9 +24,11 @@ block content
         .col-md-6
           +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt', 'color-kasse')
             .row
-              .col-xs-6
+              .col-xs-4
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
-              .col-xs-6
+              .col-xs-4
+                +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 500)
+              .col-xs-4
                 +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage')
             .row
               .col-xs-8
@@ -81,7 +83,7 @@ block content
       .row
         .col-md-12
           hr
-          +submitButtonsFor(veranstaltung, 'ausgaben')
+          +submitButtonsFor(veranstaltung, 'kasse')
 
 block scripts
   script.

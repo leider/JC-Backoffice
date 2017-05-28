@@ -105,7 +105,7 @@ mixin submitButtonsFor(veranstaltung, current, nosave)
     +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper-o')
     if veranstaltung.url()
       +hidden('returnTo', currentUrl)
-      +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-copy', 'fa-files-o')
+      +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-default', 'fa-files-o')
 
     if !nosave
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.fa.fa-floppy-o.fa-fw.fa-lg
