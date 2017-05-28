@@ -73,15 +73,17 @@ block content
                 tr.form-inline
                   th
                     p.form-control-static Reservix (aktuell)
-                      .pull-right.form-control-static: +currencySpan(0, 'eintrittReservixEUR')
+                      .pull-right.form-control-static: +currencySpan(eintrittspreise.reservixEUR(), 'eintrittReservixEUR')
                   td: input#reservixRegulaer.pull-right.reservix.form-control.trim-text(type='number', name='regulaer', value=eintrittspreise.reservix('regulaer'), min=0, max=500)
                   td: input#reservixErmaessigt.pull-right.reservix.form-control.trim-text(type='number', name='ermaessigt', value=eintrittspreise.reservix('ermaessigt'), min=0, max=500)
                   td: input#reservixMitglied.pull-right.reservix.form-control.trim-text(type='number', name='mitglied', value=eintrittspreise.reservix('mitglied'), min=0, max=500)
                 tr.form-inline
-                  th(colspan=3)
-                    p.form-control-static Abendkasse Überschuss (ohne Abzug Gage Cash)
-                  th
-                    .pull-right.form-control-static: +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
+                  th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
+                  th: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+                if eintrittspreise.zuschuss() > 0
+                  tr
+                    th(colspan=3) Zuschuss
+                    th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
 
           +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-hotel')
             table.table.table-condensed.table-striped
@@ -92,17 +94,12 @@ block content
               tr
                 td(align='right'): +currencySpan(null, 'dealEinnahmen')
                 td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                td(align='right'): +currencySpan(null, 'dealUeberschuss')
+                td(align='right'): b: +currencySpan(null, 'dealUeberschuss')
               if kosten.deal() !== 'ohne'
                 tr
                   th Anteilig an Band (#{kosten.deal()}):
                   td
                   td(align='right'): b: +currencySpan(null, 'dealUeberschussAnBand')
-              if eintrittspreise.zuschuss() > 0
-                tr
-                  th Zuschuss:
-                  td
-                  td(align='right'): b: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
 
 
           +panelMitBody('info', 'Informationen', null, 'color-misc')
@@ -220,15 +217,17 @@ block scripts
         var reservixErmaessigt = $('#reservixErmaessigt');
         var reservixMitglied = $('#reservixMitglied');
         
-        var einnahmen = eurAmount($('#abendkasseEUR'));
+        var einnahmenReservix = 0;
         if (eintrittRegulaer.length > 0) {
-          einnahmen = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
+          einnahmenReservix = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
             intAmount(reservixErmaessigt) * eurAmount(eintrittErmaessigt) +
             intAmount(reservixMitglied) * eurAmount(eintrittMitglied);
 
-          setEuro($('#eintrittReservixEUR'), einnahmen);
+          setEuro($('#eintrittReservixEUR'), einnahmenReservix);
         }
-        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()} + #{eintrittspreise.zuschuss()};
+        
+        var einnahmen = eurAmount($('#abendkasseEUR')) + einnahmenReservix + #{eintrittspreise.zuschuss()};
+        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()};
         setEuro($('#eintrittGesamtEUR'), einnahmen);
         setEuro($('#dealEinnahmen'), einnahmen);
         setEuro($('#dealUeberschuss'), ueberschuss);
@@ -237,7 +236,7 @@ block scripts
           ueberschussAbsolut = 0;
         }
         setEuro($('#dealUeberschussAnBand'), ueberschussAbsolut);
-        setEuro($('#dealUeberschussTotal'), ueberschuss);
+        setEuro($('#dealUeberschussTotal'), ueberschuss - ueberschussAbsolut);
       }
       
       function reservixChanged() {
