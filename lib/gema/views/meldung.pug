@@ -19,7 +19,10 @@ block content
         | Leopoldstr. 13 <br>
         | 76133 Karlsruhe
     .col-xs-12
-      h3 Kommende Veranstaltungen
+      if nachmeldung
+        h3 Vergangene Veranstaltungen
+      else
+        h3 Kommende Veranstaltungen
       table.table.table-condensed
         tr
           th Datum
@@ -27,6 +30,9 @@ block content
           th Veranstaltungsart
           th Musikwiedergabeart
           th Eintrittspreis
+          if nachmeldung
+            th Einnahmen
+            th Anzahl Besucher
           th Raumgröße
         for veranstaltung in events
           tr
@@ -40,4 +46,7 @@ block content
               td  Kooperation mit: #{veranstaltung.kopf().kooperation()}
             else
               td: +currencySpan(veranstaltung.eintrittspreise().regulaer())
+            if nachmeldung
+              td: +currencySpan(veranstaltung.nettoUeberschussEUR())
+              td #{veranstaltung.anzahlBesucher()}
             td #{veranstaltung.kopf().flaeche()} m<sup>2</sup>
