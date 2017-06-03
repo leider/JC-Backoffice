@@ -40,4 +40,4 @@ block content
               td  Kooperation mit: #{veranstaltung.kopf().kooperation()}
             else
               td: +currencySpan(veranstaltung.eintrittspreise().regulaer())
-            td 100
+            td #{veranstaltung.kopf().flaeche()} m<sup>2</sup>

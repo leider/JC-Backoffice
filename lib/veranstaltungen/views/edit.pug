@@ -80,9 +80,11 @@ block content
           +preise(veranstaltung)
           +legendMitBody('wannwo', 'Wo')
             .row
-              .col-sm-6
+              .col-sm-4
                 +singleselect('kopf[ort]', 'Ort', kopf.ort(), optionen.orte())
-              .col-sm-6
+              .col-sm-4
+                +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+              .col-sm-4
                 +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
             .row
               .col-sm-6
@@ -92,7 +94,6 @@ block content
             .row
               .col-sm-12
                 +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
-
       .row
         .col-md-12
           hr
@@ -108,8 +109,20 @@ block scripts
       var startTime = $('#veranstaltungform [name=startTime]');
       var endDate = $('#veranstaltungform [name=endDate]');
       var endTime = $('#veranstaltungform [name=endTime]');
+      var ort = $('#kopf\\[ort\\]');
 
       dateAdapter(startDate, startTime, endDate, endTime);
+
+      function ortchanged(auswahl) {
+        $.ajax('/optionen/flaecheForOrt', {data: {ort: ort.val()}})
+         .done(function (flaeche) {
+           if (flaeche) {
+             $('#kopf\\[flaeche\\]').val(flaeche);
+           }
+         })
+      }
+      $('#kopf\\[ort\\]').change(ortchanged);
+
     });
 
   script(src='/clientscripts/check-veranstaltungform.js')

@@ -73,15 +73,14 @@ block scripts
   script.
     var updatePreise;
     function hotelchanged(auswahl) {
-      console.log(auswahl)
       $.ajax('/optionen/preiseForAuswahl', {data: {auswahl: auswahl}})
        .done(function (result) {
          if (result) {
            updatePreise(result);
          }
        })
-
     }
+
     $(document).ready(function() {
       var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
       var einzelNum = $('#unterkunft\\[einzelNum\\]');

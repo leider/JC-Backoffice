@@ -27,16 +27,16 @@ mixin kontaktScript(name, callbackname)
       var adresseText = $('##{name}\\[adresse\\]');
       
       function updateForAuswahl() {
-      $.ajax('/optionen/#{name}ForAuswahl', {data: {auswahl: auswahl.val()}})
-        .done(function (result) {
-          if (result) {
-            nameText.val(result.name);
-            telefonText.val(result.telefon);
-            emailText.val(result.email);
-            adresseText.val(result.adresse);
-            #{callback}(auswahl.val());
-          }
-        })
+        $.ajax('/optionen/#{name}ForAuswahl', {data: {auswahl: auswahl.val()}})
+          .done(function (result) {
+            if (result) {
+              nameText.val(result.name);
+              telefonText.val(result.telefon);
+              emailText.val(result.email);
+              adresseText.val(result.adresse);
+              #{callback}(auswahl.val());
+            }
+          });
       }
       
       auswahl.change(updateForAuswahl);
