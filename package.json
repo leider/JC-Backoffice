@@ -36,6 +36,8 @@
     "glob": "7.1.1",
     "iconv-lite": "0.4.17",
     "imagemagick": "0.1.3",
+    "intl": "1.2.5",
+    "intl-locales-supported": "1.0.0",
     "jquery": "3.2.1",
     "jquery-validation": "1.16.0",
     "less-plugin-clean-css": "1.5.1",
