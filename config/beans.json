@@ -30,6 +30,7 @@
 
   "renderer": {"module": "./lib/commons/renderer"},
 
+  "accessrights": {"module": "./lib/middleware/accessrights"},
   "addCsrfTokenToLocals": {"module": "./lib/middleware/addCsrfTokenToLocals"},
   "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
   "expressSessionConfigurator": {"module": "./lib/middleware/expressSessionConfigurator"},

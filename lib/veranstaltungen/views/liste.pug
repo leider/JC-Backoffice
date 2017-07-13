@@ -29,6 +29,8 @@ block content
               th
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.startMoment().format('ddd DD MMM YY')}
+                  if !veranstaltung.kopf().confirmed()
+                    span(style='color:red;') #{' '} [GEPLANT]
               th
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
