@@ -1,47 +1,50 @@
-extends ../../../views/layout
+include ../../../views/layoutComponents
 include ../../../views/formComponents
-
-block title
-  | GEMA
-
-block content
-
-  .row
-    .col-xs-6
-      address
-        strong GEMA Kundenservice <br><br>
-        | Postfach 101753 <br>
-        | 11506 Berlin
-    .col-xs-6
-      address
-        strong Jazzclub Karlsruhe e.V. <br>
-        | KDnr. 113098200 <br>
-        | Leopoldstr. 13 <br>
-        | 76133 Karlsruhe
-    .col-xs-12
-      if nachmeldung
-        h3 Vergangene Veranstaltungen
-      else
-        h3 Kommende Veranstaltungen
-      table.table.table-condensed
-        tr
-          th Datum
-          th Ort
-          th Veranstaltungsart
-          th Musikwiedergabeart
-          th Eintrittspreis
+  
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(href='public/stylesheets/screen.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+  body
+    .container
+      .row
+        .col-xs-6
+          address
+            strong GEMA Kundenservice <br><br>
+            | Postfach 101753 <br>
+            | 11506 Berlin
+        .col-xs-6
+          address
+            strong Jazzclub Karlsruhe e.V. <br>
+            | KDnr. 113098200 <br>
+            | Leopoldstr. 13 <br>
+            | 76133 Karlsruhe
+        .col-xs-12
           if nachmeldung
-            th Einnahmen
-            th Anzahl Besucher
-          th Raumgröße
-        for veranstaltung in events
-          tr
-            td #{veranstaltung.datumForDisplay()}
-            td #{veranstaltung.kopf().ort()}
-            td Jazzkonzert
-            td Musiker: #{veranstaltung.artist().name()}
-            td #{veranstaltung.preisAusweisGema()}
-            if nachmeldung
-              td: +currencySpan(veranstaltung.einnahmenEintrittEUR())
-              td #{veranstaltung.anzahlBesucher()}
-            td #{veranstaltung.kopf().flaeche()} m<sup>2</sup>
+            h3 Vergangene Veranstaltungen
+          else
+            h3 Kommende Veranstaltungen
+          table.table.table-condensed
+            tr
+              th Datum
+              th Ort
+              th Veranstaltungsart
+              th Musikwiedergabeart
+              th.text-right Eintrittspreis
+              if nachmeldung
+                th.text-right Einnahmen
+                th.text-right Anzahl Besucher
+              th.text-right Raumgröße
+            for veranstaltung in events
+              tr
+                td #{veranstaltung.datumForDisplay()}
+                td #{veranstaltung.kopf().ort()}
+                td Jazzkonzert
+                td Musiker: #{veranstaltung.artist().name()}
+                td.text-right #{veranstaltung.preisAusweisGema()}
+                if nachmeldung
+                  td.text-right #{veranstaltung.eintrittGema()}
+                  td.text-right #{veranstaltung.anzahlBesucher()}
+                td.text-right #{veranstaltung.kopf().flaeche()} m<sup>2</sup>
