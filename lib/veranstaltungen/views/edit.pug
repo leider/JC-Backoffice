@@ -31,6 +31,8 @@ block content
                 small Neu anlegen
             if accessrights.isBookingTeam()
               +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
+            else
+              +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
       .row
         .col-md-6
           +legendMitBody('event', 'Event')

@@ -10,6 +10,7 @@ block content
   form#presseform(action='/veranstaltungen/submit', method='post')
     +csrf
     +hidden('id', veranstaltung.id())
+    +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
     fieldset
       .row
         .col-md-12
