@@ -2,7 +2,7 @@
 /* eslint no-console: 0 */
 'use strict';
 
-require('./configure')
+require('./configure');
 const beans = require('simple-configure').get('beans');
 const optionenstore = beans.get('optionenstore');
 const veranstaltungstore = beans.get('veranstaltungenstore');

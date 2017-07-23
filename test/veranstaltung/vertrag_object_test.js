@@ -15,7 +15,7 @@ describe('Vertrag', () => {
     expect(vertragsarten.includes('JazzClassix')).to.be(true);
   });
 
-  it('jeder Workflow hat en "Rider geprüft" Schritt', () => {
+  it('jeder Workflow hat den "Rider geprüft" Schritt', () => {
     function riderIstInArt(art) {
       const workflow = new Vertrag({art: art}).workflow();
       expect(workflow.includes('Rider akzeptiert')).to.be(true);

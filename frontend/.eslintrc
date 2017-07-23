@@ -1,5 +1,7 @@
 {
-  "sourceType": "script",
+  "parserOptions": {
+    "sourceType": "script"
+  },
   "env": {
     "node": false,
     "es6": false

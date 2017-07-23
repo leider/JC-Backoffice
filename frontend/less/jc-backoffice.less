@@ -32,6 +32,8 @@
 @color-sonst2: #95c22e;
 @color-sonst2-border: darken(@color-sonst2, 5%);
 
+@color-festival: #9FC442;
+
 .color-variant(@color) {
   background-color: @color !important;
   border-color: @color !important;
@@ -68,6 +70,23 @@
 
 .text-soulcafe {
   color: @color-ausgaben2;
+}
+
+.color-festival {
+  .color-variant(@color-festival);
+}
+
+.text-festival {
+  color: @color-festival;
+}
+
+.logo-festival {
+  display: inline-block;
+  background-repeat:no-repeat;
+  background-image: url("/img/Festival_Icon.png");
+  height: 20px;
+  width: 24px;
+  margin: 3px;
 }
 
 .color-costs {
