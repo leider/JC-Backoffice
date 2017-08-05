@@ -60,5 +60,8 @@
   "optionenPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "optionenstore" }
-  }
+  },
+  "salesreport": {"module": "./lib/reservix/salesreport"},
+  "reservixService": {"module": "./lib/reservix/reservixService"},
+  "reservixAPI": {"module": "./lib/reservix/api"}
 }

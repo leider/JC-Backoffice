@@ -1,0 +1,55 @@
+{
+  "tsServer": "2017-08-05 12:41:38",
+  "page": 0,
+  "pageSize": 200,
+  "limit": 1,
+  "totalItems": 1,
+  "data": [
+    {
+      "eventId": 1060034,
+      "eventName": "Jazzfestival 2017 - Donnerstag - Trio de Lucs, Bänz Oester & The Rainmakers",
+      "startDate": "2017-10-26",
+      "startTime": "19:30:00",
+      "organizer": {
+        "id": 10466,
+        "name": "Jazzclub Karlsruhe e.V."
+      },
+      "venue": {
+        "name": "Zentrum für Kunst und Medien (ZKM)",
+        "street": "Lorenzstraße 19",
+        "zipCode": "76135",
+        "city": "Karlsruhe",
+        "country": "DE"
+      },
+      "sales": {
+        "dates": [
+          {
+            "date": "2017-08-01",
+            "orders": 1,
+            "reservedOrders": 1,
+            "canceledOrders": 0,
+            "orderedTickets": 2,
+            "reservedTickets": 2,
+            "canceledTickets": 0,
+            "bookingFees": 4.46,
+            "salesWithFees": 56
+          }
+        ],
+        "aggregation": {
+          "orders": 1,
+          "reservedOrders": 1,
+          "canceledOrders": 0,
+          "orderedTickets": 2,
+          "reservedTickets": 2,
+          "canceledTickets": 0,
+          "bookingFees": 4.46,
+          "salesWithFees": 56
+        }
+      },
+      "self": "/1/sale/event/salesreport",
+      "references": [
+
+      ]
+    }
+  ]
+}

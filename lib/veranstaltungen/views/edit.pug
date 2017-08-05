@@ -39,10 +39,10 @@ block content
             .row
               .col-sm-6
                 +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
-              .col-sm-6
-                .form-group
-                  +controlLabel('url', 'URL / VA-ID', 'Eindeutig für die Veranstaltung')
-                  input.form-control#url(type='text', name='url', value=veranstaltung.url())
+              .col-sm-3
+                +text('url', 'URL / VA-ID', veranstaltung.url(), 'Eindeutig für die Veranstaltung')
+              .col-sm-3
+                +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
             .row
               .col-xs-6()
                 .col-xs-6(style='padding-left:0px;padding-right:3px')
