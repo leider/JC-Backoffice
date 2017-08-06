@@ -14,6 +14,7 @@ block content
   -var unterkunft = veranstaltung.unterkunft()
   -var vertrag = veranstaltung.vertrag()
   -var werbung = veranstaltung.werbung()
+  -var salesreport = veranstaltung.salesreport()
   .row
     .col-md-12
       .page-header
@@ -50,7 +51,7 @@ block content
                 td(width='98%') #{staff.merchandiseText()}
                 
 
-          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse')
+          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR())
             if eintrittspreise.frei()
               .panel-body
                 p: b Freier Eintritt
@@ -66,24 +67,21 @@ block content
                   th(align='right', style='text-align: right;') Ermäßigt
                   th(align='right', style='text-align: right;') Mitglied
                 tr
-                  td
+                  th Preise
                   td(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
                   td(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
                   td(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
                 if veranstaltung.reservixID()
-                tr
-                  th(colspan=2): a(href=veranstaltung.fullyQualifiedUrl() + '/reservix') Reservix abrufen
-                  td: +currencySpan(salesreport.bruttoUmsatz(), 'bruttoUmsatz') 
-                  td #{salesreport.anzahlRegulaer()}
-                tr.form-inline
-                  th
-                    p.form-control-static Reservix (aktuell)
-                      .pull-right.form-control-static: +currencySpan(eintrittspreise.reservixEUR(), 'eintrittReservixEUR')
-                  for type in eintrittspreise.reservixTypes()
-                    td: +reservixInput(type)
+                  tr.form-inline
+                    th
+                      span Reservix (aktuell)
+                        .pull-right: +currencySpan(salesreport.bruttoUmsatz(), 'bruttoUmsatz')
+                    td: span.pull-right #{salesreport.anzahlRegulaer()}
+                    td
+                    td
                 tr.form-inline
                   th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
-                  th: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+                  td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
                 if eintrittspreise.zuschuss() > 0
                   tr
                     th(colspan=3) Zuschuss
@@ -96,14 +94,14 @@ block content
                 th(align='right', style='text-align: right;') Kosten
                 th(align='right', style='text-align: right;') Überschuss
               tr
-                td(align='right'): +currencySpan(null, 'dealEinnahmen')
+                td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
                 td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                td(align='right'): b: +currencySpan(null, 'dealUeberschuss')
+                td(align='right'): b: +currencySpan(veranstaltung.bruttoUerberschussEUR(), 'dealUeberschuss')
               if kosten.deal() !== 'ohne'
                 tr
                   th Anteilig an Band (#{kosten.deal()}):
                   td
-                  td(align='right'): b: +currencySpan(null, 'dealUeberschussAnBand')
+                  td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
 
 
           +panelMitBody('info', 'Informationen', null, 'color-misc')
@@ -192,11 +190,6 @@ block content
                     label(for=step)
                       | &nbsp;#{step}
 
-mixin reservixInput(name)
-  -var id = 'reservix' + name[0].toUpperCase() + name.slice(1);
-  input.pull-right.reservix.form-control.trim-text(id=id, type='number', name=name, value=eintrittspreise.reservix(name), min=0, max=500)
-  
-  
 block scripts
   script.
     $(document).ready(function () {
@@ -216,46 +209,4 @@ block scripts
         $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/genehmigungenEingeholt"}', {data: {checked: this.checked}});
       });
       
-      function eintrittGesamtEUR() {
-        var eintrittRegulaer = $('#eintrittRegulaer');
-        var eintrittErmaessigt = $('#eintrittErmaessigt');
-        var eintrittMitglied = $('#eintrittMitglied');
-
-        var reservixRegulaer = $('#reservixRegulaer');
-        var reservixErmaessigt = $('#reservixErmaessigt');
-        var reservixMitglied = $('#reservixMitglied');
-        
-        var einnahmenReservix = 0;
-        if (eintrittRegulaer.length > 0) {
-          einnahmenReservix = intAmount(reservixRegulaer) * eurAmount(eintrittRegulaer) +
-            intAmount(reservixErmaessigt) * eurAmount(eintrittErmaessigt) +
-            intAmount(reservixMitglied) * eurAmount(eintrittMitglied);
-
-          setEuro($('#eintrittReservixEUR'), einnahmenReservix);
-        }
-        
-        var einnahmen = eurAmount($('#abendkasseEUR')) + einnahmenReservix + #{eintrittspreise.zuschuss()};
-        var ueberschuss = einnahmen - #{veranstaltung.kostenGesamtEUR()};
-        setEuro($('#eintrittGesamtEUR'), einnahmen);
-        setEuro($('#dealEinnahmen'), einnahmen);
-        setEuro($('#dealUeberschuss'), ueberschuss);
-        var ueberschussAbsolut = ueberschuss * #{kosten.dealAlsFaktor()};
-        if (ueberschussAbsolut < 0) {
-          ueberschussAbsolut = 0;
-        }
-        setEuro($('#dealUeberschussAnBand'), ueberschussAbsolut);
-        setEuro($('#dealUeberschussTotal'), ueberschuss - ueberschussAbsolut);
-      }
-      
-      function reservixChanged() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + '/reservixChanged'}', {
-          data: {
-            type: this.name,
-            value: this.value
-          }
-        }).done(eintrittGesamtEUR);
-      }
-      $('.reservix').keyup(reservixChanged);
-      $('.reservix').change(reservixChanged);
-      eintrittGesamtEUR();
     });

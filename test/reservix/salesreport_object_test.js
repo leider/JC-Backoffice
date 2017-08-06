@@ -7,7 +7,7 @@ const Salesreport = beans.get('salesreport');
 
 const fullresult = require('../testdata/salesreport_1060034.json');
 
-describe.only('Reservix Salesreport', () => {
+describe('Reservix Salesreport', () => {
 
   it('can parse a result', () => {
     const obj = Salesreport.forRawResult('1060034', fullresult);
