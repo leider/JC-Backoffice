@@ -35,44 +35,44 @@ describe('Reservix Salesreport', () => {
   });
 
   describe('validation', () => {
-    it('returns null if IDs do not match', () => {
+    it('returns null Object if IDs do not match', () => {
       const obj = Salesreport.forRawResult('', fullresult);
-      expect(obj).to.be.null();
+      expect(obj.state).to.eql({});
     });
 
-    it('returns null if structure does not match', () => {
+    it('returns null Object if structure does not match', () => {
       const obj = Salesreport.forRawResult(1060034, {});
-      expect(obj).to.be.null();
+      expect(obj.state).to.eql({});
     });
 
-    it('returns null if structure does not match (2)', () => {
+    it('returns null Object if structure does not match (2)', () => {
       const obj = Salesreport.forRawResult(1060034, {data: []});
-      expect(obj).to.be.null();
+      expect(obj.state).to.eql({});
     });
 
-    it('returns null if structure does not match (3)', () => {
+    it('returns null Object if structure does not match (3)', () => {
       const obj = Salesreport.forRawResult(1060034, {data: [{}]});
-      expect(obj).to.be.null();
+      expect(obj.state).to.eql({});
     });
 
     it('returns an object if event with id exists (num/num)', () => {
       const obj = Salesreport.forRawResult(1060034, {data: [{eventId: 1060034}]});
-      expect(obj).to.be.not.null();
+      expect(obj.bruttoUmsatz()).to.be.not.null();
     });
 
     it('returns an object if event with id exists (num/str)', () => {
       const obj = Salesreport.forRawResult(1060034, {data: [{eventId: '1060034'}]});
-      expect(obj).to.be.not.null();
+      expect(obj.bruttoUmsatz()).to.be.not.null();
     });
 
     it('returns an object if event with id exists (str/num)', () => {
       const obj = Salesreport.forRawResult('1060034', {data: [{eventId: 1060034}]});
-      expect(obj).to.be.not.null();
+      expect(obj.bruttoUmsatz()).to.be.not.null();
     });
 
     it('returns an object if event with id exists (str/str)', () => {
       const obj = Salesreport.forRawResult('1060034', {data: [{eventId: '1060034'}]});
-      expect(obj).to.be.not.null();
+      expect(obj.bruttoUmsatz()).to.be.not.null();
     });
   });
 
