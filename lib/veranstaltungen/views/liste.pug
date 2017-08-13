@@ -34,6 +34,8 @@ block content
               th
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
+                    if true
+                      | &nbsp;(Reservix)
                 .form-control-static.pull-right
                   .btn-group.btn-group-xs
                     +checkedButton(veranstaltung.presse(), 'Presse', 'presse')

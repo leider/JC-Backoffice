@@ -6,10 +6,23 @@ require('./configure');
 const beans = require('simple-configure').get('beans');
 const reservixAPI = beans.get('reservixAPI');
 
-reservixAPI.salesreport('974106', result => {
+reservixAPI.allEvents(result => {
   if (!result) {
     process.exit();
   }
-  console.log(result);
+  const toshow = result.data.map(each => {
+    return {
+      id: each.id, startdate: each.startdate, starttime: each.starttime, canonicalUrl: each.canonicalUrl
+    };
+  });
+  
+  console.log(toshow);
   process.exit();
 });
+// reservixAPI.salesreport('974106', result => {
+//   if (!result) {
+//     process.exit();
+//   }
+//   console.log(result);
+//   process.exit();
+// });

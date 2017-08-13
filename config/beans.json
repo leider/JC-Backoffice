@@ -61,7 +61,12 @@
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "optionenstore" }
   },
+  "reservixPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "reservixstore" }
+  },
   "salesreport": {"module": "./lib/reservix/salesreport"},
   "reservixService": {"module": "./lib/reservix/reservixService"},
-  "reservixAPI": {"module": "./lib/reservix/api"}
+  "reservixAPI": {"module": "./lib/reservix/api"},
+  "reservixstore": {"module": "./lib/reservix/reservixstore"}
 }
