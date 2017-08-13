@@ -112,9 +112,11 @@ describe('Reservix Salesreport', () => {
       now.subtract(61, 'minutes');
       const obj = Salesreport.forRawResult('1060034', {
         tsServer: now.format('YYYY-MM-DD HH:mm:ss'),
-        data: [{eventId: 1060034}],
-        startDate: '2025-10-26',
-        startTime: '19:30:00'
+        data: [{
+          eventId: 1060034,
+          startDate: '2021-10-26',
+          startTime: '19:30:00'
+        }]
       });
       expect(obj.istVeraltet()).to.be(true);
     });
@@ -122,9 +124,11 @@ describe('Reservix Salesreport', () => {
     it('correctly checks for a past event - it is never too old', () => {
       const obj = Salesreport.forRawResult('1060034', {
         tsServer: '2017-08-05 12:41:38',
-        data: [{eventId: 1060034}],
-        startDate: '2016-10-26',
-        startTime: '19:30:00'
+        data: [{
+          eventId: 1060034,
+          startDate: '2016-10-26',
+          startTime: '19:30:00'
+        }]
       });
       expect(obj.istVeraltet()).to.be(false);
     });
@@ -133,9 +137,11 @@ describe('Reservix Salesreport', () => {
   it('knows that it is a past event', () => {
     const obj = Salesreport.forRawResult('1060034', {
       tsServer: '2022-08-05 12:41:38',
-      data: [{eventId: 1060034}],
-      startDate: '2016-10-26',
-      startTime: '19:30:00'
+      data: [{
+        eventId: 1060034,
+        startDate: '2016-10-26',
+        startTime: '19:30:00'
+      }]
     });
     expect(obj.istVergangen()).to.be(true);
   });
