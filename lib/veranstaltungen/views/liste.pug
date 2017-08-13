@@ -34,8 +34,11 @@ block content
               th
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
-                    if veranstaltung.reservixID()
-                      | &nbsp;(Reservix #{veranstaltung.salesreport().anzahlRegulaer()} Karten)
+                  if veranstaltung.reservixID()
+                    | &nbsp;
+                    span.badge(style='background-color: #F8500D !important')
+                      img(src='/img/rex_21x21.png' width='21')
+                      | &nbsp;#{veranstaltung.salesreport().anzahlRegulaer()}
                 .form-control-static.pull-right
                   .btn-group.btn-group-xs
                     +checkedButton(veranstaltung.presse(), 'Presse', 'presse')
