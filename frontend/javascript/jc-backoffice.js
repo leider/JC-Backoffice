@@ -127,6 +127,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
         right: 'prev,today,next'
       },
       timezone: 'Europe/Berlin',
+      timeFormat: 'HH:mm',
+      displayEventTime: false,
       events: '/veranstaltungen/eventsForCalendar',
       eventMouseover: function (event) {
         var day = event.start.day();
@@ -145,11 +147,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       eventClick: function () {
         $(this).tooltip('destroy');
       },
-      bootstrap: true,
-      buttonIcons: {
-        prev: 'fa-caret-left',
-        next: 'fa-caret-right'
-      },
+      themeSystem: 'bootstrap3',
       views: {
         month: {
           titleFormat: 'MMM \'YY',

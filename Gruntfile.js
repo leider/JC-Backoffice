@@ -21,7 +21,7 @@ module.exports = function (grunt) {
       'node_modules/moment/locale/de.js',
       'node_modules/drmonty-smartmenus/js/jquery.smartmenus.js',
       'build/javascript/jquery.smartmenus.bootstrap-patched.js',
-      'build/javascript/fullcalendar-patched.js',
+      'node_modules/fullcalendar/dist/fullcalendar.js',
       'node_modules/fullcalendar/dist/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'node_modules/jquery-validation/dist/localization/messages_de.js',
@@ -130,14 +130,6 @@ module.exports = function (grunt) {
         },
         files: {
           'build/javascript/jquery.smartmenus.bootstrap-patched.js': 'node_modules/drmonty-smartmenus/js/jquery.smartmenus.bootstrap.js'
-        }
-      },
-      fullcalendar: {
-        options: {
-          patch: 'frontend/3rd_party_js/fullcalendar.js.patch'
-        },
-        files: {
-          'build/javascript/fullcalendar-patched.js': 'node_modules/fullcalendar/dist/fullcalendar.js'
         }
       },
       flaticon: {
