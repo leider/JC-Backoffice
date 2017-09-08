@@ -1,6 +1,6 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-
+  
 block title
   | Teamseite
 
@@ -13,7 +13,6 @@ block content
         tr
           th Datum
           th Titel
-          th Ort
           th Kasse&nbsp;1
           th Kasse&nbsp;2
           th Technik&nbsp;1
@@ -21,9 +20,29 @@ block content
         for veranstaltung in veranstaltungen
           tr
             td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-            td(style='white-space: nowrap') #{veranstaltung.kopf().titel()}
-            td(style='white-space: nowrap') #{veranstaltung.kopf().ort()}
+            td(style='white-space: nowrap') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
             td(style='white-space: nowrap') #{veranstaltung.staff().kasseV()}
+              | &nbsp;
+              if !veranstaltung.staff().kasseV().includes(user.id)
+                a.btn.btn-success.btn-xs(href='/teamseite/addKasseV/' + veranstaltung.id()) +
+              else
+                a.btn.btn-danger.btn-xs(href='/teamseite/removeKasseV/' + veranstaltung.id()) -
             td(style='white-space: nowrap') #{veranstaltung.staff().kasse()}
+              | &nbsp;
+              if !veranstaltung.staff().kasse().includes(user.id)
+                a.btn.btn-success.btn-xs(href='/teamseite/addKasse/' + veranstaltung.id()) +
+              else
+                a.btn.btn-danger.btn-xs(href='/teamseite/removeKasse/' + veranstaltung.id()) -
             td(style='white-space: nowrap') #{veranstaltung.staff().technikerV()}
+              | &nbsp;
+              if !veranstaltung.staff().technikerV().includes(user.id)
+                a.btn.btn-success.btn-xs(href='/teamseite/addTechnikerV/' + veranstaltung.id()) +
+              else
+                a.btn.btn-danger.btn-xs(href='/teamseite/removeTechnikerV/' + veranstaltung.id()) -
             td(style='white-space: nowrap') #{veranstaltung.staff().techniker()}
+              | &nbsp;
+              if !veranstaltung.staff().techniker().includes(user.id)
+                a.btn.btn-success.btn-xs(href='/teamseite/addTechniker/' + veranstaltung.id()) +
+              else
+                a.btn.btn-danger.btn-xs(href='/teamseite/removeTechniker/' + veranstaltung.id()) -
+              
