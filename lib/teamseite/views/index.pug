@@ -20,7 +20,8 @@ block content
         for veranstaltung in veranstaltungen
           tr
             td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-            td(style='white-space: nowrap') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+            td(style='white-space: nowrap')
+              a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
             td(style='white-space: nowrap') #{veranstaltung.staff().kasseV()}
               | &nbsp;
               if !veranstaltung.staff().kasseV().includes(user.id)
@@ -45,4 +46,3 @@ block content
                 a.btn.btn-success.btn-xs(href='/teamseite/addTechniker/' + veranstaltung.id()) +
               else
                 a.btn.btn-danger.btn-xs(href='/teamseite/removeTechniker/' + veranstaltung.id()) -
-              
