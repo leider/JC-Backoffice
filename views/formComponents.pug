@@ -66,8 +66,8 @@ mixin hightextarea(name, label, value, tooltip, placeholder)
 
 mixin checkboxWithDescription(name, label, checked, description, optionalValue)
   .checkbox(class=checked && 'checkbox-success')
-    input(type='checkbox', id=name, name=name, value=optionalValue, checked=(checked ? 'true' : undefined))
-    label(for=name)
+    input(type='checkbox', id=name + optionalValue, name=name, value=optionalValue, checked=(checked ? 'true' : undefined))
+    label(for=name + optionalValue)
       -if (description)
         span.popover-highlight(rel='tooltip-in-body', data-content=description) #{label}
       -else

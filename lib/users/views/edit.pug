@@ -16,6 +16,8 @@ block content
           +text('name', 'Voller Name', user.name)
           +email('email', 'E-Mail', user.email)
           +submitButtons()
+          +checkbox('gruppen', 'Superuser', !!user.gruppen.includes('superusers'), 'superusers')
+          +checkbox('gruppen', 'Booking Team', !!user.gruppen.includes('bookingTeam'), 'bookingTeam')
 
 
 block scripts
