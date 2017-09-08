@@ -38,6 +38,10 @@ mixin topNavbar(xs)
         li(data-jcnav='mailsender'): a(href='/users/rundmail')
           i.fa.i.fa.fa-envelope.fa-fw
           | &nbsp;Rundmail an alle User
+      li(data-jcnav='teamseite')
+        a(href='/teamseite')
+          i.fa.fa-hand-paper-o.fa-fw.fa-lg
+          | &nbsp;Kasse/Technik&nbsp;
       li: a(href='/logout')
         i.fa.fa-sign-out.fa-fw
         | &nbsp;Abmelden
