@@ -24,6 +24,8 @@
   "usersService": {"module": "./lib/users/usersService"},
   "userstore": {"module": "./lib/users/userstore"},
 
+  "teamseiteApp": {"module": "./lib/teamseite"},
+
   "gemaApp": {"module": "./lib/gema"},
   
   "siteApp": {"module": "./lib/site"},

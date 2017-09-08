@@ -1,0 +1,29 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | Teamseite
+
+block content
+  .row
+    .col-xs12
+      .page-header
+        h2 Kommende Events
+      table.table.table-condensed.table-responsive
+        tr
+          th Datum
+          th Titel
+          th Ort
+          th Kasse&nbsp;1
+          th Kasse&nbsp;2
+          th Technik&nbsp;1
+          th Technik&nbsp;2
+        for veranstaltung in veranstaltungen
+          tr
+            td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
+            td(style='white-space: nowrap') #{veranstaltung.kopf().titel()}
+            td(style='white-space: nowrap') #{veranstaltung.kopf().ort()}
+            td(style='white-space: nowrap') #{veranstaltung.staff().kasseV()}
+            td(style='white-space: nowrap') #{veranstaltung.staff().kasse()}
+            td(style='white-space: nowrap') #{veranstaltung.staff().technikerV()}
+            td(style='white-space: nowrap') #{veranstaltung.staff().techniker()}
