@@ -21,7 +21,10 @@ block content
           tr
             td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
             td(style='white-space: nowrap')
-              a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+              if accessrights.hasSomeGroupAssigned()
+                a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+              else
+                | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
             td(style='white-space: nowrap') #{veranstaltung.staff().kasseV()}
               | &nbsp;
               if !veranstaltung.staff().kasseV().includes(user.id)
