@@ -84,6 +84,7 @@ module.exports = {
     useApp(app, 'users', beans.get('usersApp'));
     useApp(app, 'gema', beans.get('gemaApp'));
     useApp(app, 'teamseite', beans.get('teamseiteApp'));
+    useApp(app, 'ical', beans.get('icalApp'));
 
     app.use(beans.get('handle404')());
     app.use(beans.get('handle500')(appLogger));

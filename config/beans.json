@@ -24,6 +24,9 @@
   "usersService": {"module": "./lib/users/usersService"},
   "userstore": {"module": "./lib/users/userstore"},
 
+  "icalApp": {"module": "./lib/ical"},
+  "icalService": {"module": "./lib/ical/icalService"},
+
   "teamseiteApp": {"module": "./lib/teamseite"},
 
   "gemaApp": {"module": "./lib/gema"},
