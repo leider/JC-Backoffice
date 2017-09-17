@@ -1,6 +1,14 @@
 extends ../../../views/layout
 include ../../../views/formComponents
   
+mixin buttonFor(veranstaltung, name, nameInMethod)
+  td(style='white-space: nowrap') #{veranstaltung.staff()[name]()}
+    | &nbsp;
+    if !veranstaltung.staff()[name]().includes(user.id) && !veranstaltung.staff()[name]().includes(user.id.toLowerCase())
+      a.btn.btn-success.btn-xs(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
+    else
+      a.btn.btn-danger.btn-xs(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
+  
 block title
   | Teamseite
 
@@ -25,27 +33,8 @@ block content
                 a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
               else
                 | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-            td(style='white-space: nowrap') #{veranstaltung.staff().kasseV()}
-              | &nbsp;
-              if !veranstaltung.staff().kasseV().includes(user.id)
-                a.btn.btn-success.btn-xs(href='/teamseite/addKasseV/' + veranstaltung.id()) +
-              else
-                a.btn.btn-danger.btn-xs(href='/teamseite/removeKasseV/' + veranstaltung.id()) -
-            td(style='white-space: nowrap') #{veranstaltung.staff().kasse()}
-              | &nbsp;
-              if !veranstaltung.staff().kasse().includes(user.id)
-                a.btn.btn-success.btn-xs(href='/teamseite/addKasse/' + veranstaltung.id()) +
-              else
-                a.btn.btn-danger.btn-xs(href='/teamseite/removeKasse/' + veranstaltung.id()) -
-            td(style='white-space: nowrap') #{veranstaltung.staff().technikerV()}
-              | &nbsp;
-              if !veranstaltung.staff().technikerV().includes(user.id)
-                a.btn.btn-success.btn-xs(href='/teamseite/addTechnikerV/' + veranstaltung.id()) +
-              else
-                a.btn.btn-danger.btn-xs(href='/teamseite/removeTechnikerV/' + veranstaltung.id()) -
-            td(style='white-space: nowrap') #{veranstaltung.staff().techniker()}
-              | &nbsp;
-              if !veranstaltung.staff().techniker().includes(user.id)
-                a.btn.btn-success.btn-xs(href='/teamseite/addTechniker/' + veranstaltung.id()) +
-              else
-                a.btn.btn-danger.btn-xs(href='/teamseite/removeTechniker/' + veranstaltung.id()) -
+            +buttonFor(veranstaltung, 'kasseV', 'KasseV')
+            +buttonFor(veranstaltung, 'kasse', 'Kasse')
+            +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
+            +buttonFor(veranstaltung, 'techniker', 'Techniker')
+          
