@@ -8,29 +8,29 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    //link(href='public/stylesheets/screen.css', rel='stylesheet')
-    //link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
-    link(href='/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
+    link(href='public/stylesheets/screen.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+    //link(href='/stylesheets/screen.css', rel='stylesheet')
+    //link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
 
-  body
+  body(style='zoom: 0.7')
     .container
       .row
-        .col-xs-10
+        .col-xs-12
           .page-header
             .pull-right
               address
                 strong Jazzclub Karlsruhe e.V. <br>
                 | Leopoldstr. 13 <br>
                 | 76133 Karlsruhe
-            h1 Kassenbuch - Abendkasse
+            h1(style='white-space: nowrap') Kassenbuch - Abendkasse
               br
-              small
+              small(style='white-space: nowrap')
                 | #{veranstaltung.kopf().eventTyp()} am #{veranstaltung.datumForDisplay()}
                 if veranstaltung.artist().isBawue()
                   | &nbsp;(Baden-Württemberg)
       .row
-        .col-xs-5
+        .col-xs-6
           table.table.table-bordered
             tr
               th Name:
@@ -45,7 +45,7 @@ html
               th Besucher Abendkasse:
               td #{kasse.anzahlBesucherAK()}
 
-        .col-xs-5
+        .col-xs-6
           table.table.table-bordered
             tr
               th Anfangsbestand:
@@ -61,15 +61,11 @@ html
               td(align='right'): +currencySpan(kasse.endbestandEUR(), '')
       
       .row
-        .col-xs-10
+        .col-xs-6
           table.table.table-bordered.table-striped
             tr
               th.text-center(colspan=3) Einnahmen
-              th.text-center(colspan=3) Ausgaben
             tr
-              th Verwendungszweck
-              th Beleg-Nr.
-              th.text-right Betrag
               th Verwendungszweck
               th Beleg-Nr.
               th.text-right Betrag
@@ -77,55 +73,73 @@ html
               td Ticketverkauf
               td
               td(align='right'): +currencySpan(kasse.einnahmeTicketsEUR(), '')
-              td Gage (bar)
-              td
-              td.text-right: +currencySpan(kasse.ausgabeGageEUR(), '')
             tr
               td Bareinlage
               td
               td(align='right'): +currencySpan(kasse.einnahmeBankEUR(), '')
-              td Catering
-              td
-              td.text-right: +currencySpan(kasse.ausgabeCateringEUR(), '')
             tr
               td #{kasse.einnahmeSonstiges1Text()}
               td
               td(align='right'): +currencySpan(kasse.einnahmeSonstiges1EUR(), '')
-              td Personal
-              td
-              td.text-right: +currencySpan(kasse.ausgabeHelferEUR(), '')
             tr
               td #{kasse.einnahmeSonstiges2Text()}
               td
               td(align='right'): +currencySpan(kasse.einnahmeSonstiges2EUR(), '')
+            tr
+              td &nbsp;
+              td
+              td
+            tr
+              td &nbsp; 
+              td
+              td
+            tr
+              td &nbsp;
+              td
+              td
+        .col-xs-6
+          table.table.table-bordered.table-striped
+            tr
+              th.text-center(colspan=3) Ausgaben
+            tr
+              th Verwendungszweck
+              th Beleg-Nr.
+              th.text-right Betrag
+            tr
+              td Gage (bar)
+              td
+              td.text-right: +currencySpan(kasse.ausgabeGageEUR(), '')
+            tr
+              td Catering
+              td
+              td.text-right: +currencySpan(kasse.ausgabeCateringEUR(), '')
+            tr
+              td Personal
+              td
+              td.text-right: +currencySpan(kasse.ausgabeHelferEUR(), '')
+            tr
               td #{kasse.ausgabeSonstiges1Text()}
               td
               td.text-right: +currencySpan(kasse.ausgabeSonstiges1EUR(), '')
             tr
-              td
-              td
-              td
               td #{kasse.ausgabeSonstiges2Text()}
               td
               td.text-right: +currencySpan(kasse.ausgabeSonstiges2EUR(), '')
             tr
-              td 
-              td
-              td
               td #{kasse.ausgabeSonstiges3Text()}
               td
               td.text-right: +currencySpan(kasse.ausgabeSonstiges3EUR(), '')
             tr
-              td 
-              td
-              td
               td An Bank
               td
               td.text-right: +currencySpan(kasse.ausgabeBankEUR(), '')
-              
+      .row        
+        .col-xs-6
           p
             b Kassiererin / Kassierer:
             | &nbsp; #{kassierer}
+        .col-xs-6
           p: b Unterschrift:
 
-script(src='/clientscripts/global.js')
+script(src='public/clientscripts/global.js')
+//script(src='/clientscripts/global.js')
