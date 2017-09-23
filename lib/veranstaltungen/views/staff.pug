@@ -10,10 +10,18 @@ mixin staffRow(optionen, staff, name, label)
 
 mixin staffRowVerantwortlich(allUsers, staff, name, label)
   .row
-    .col-xs-4
+    .col-xs-3
       +editableMultiselect('staff[' + name + 'V]', 'Verantw.', staff[name + 'V'](), allUsers)
-    .col-xs-4
+    .col-xs-1
+      .form-group
+        | &nbsp;
+        +checkbox('staff[' + name + 'VNotNeeded]', '', !staff[name + 'VNotNeeded']())
+    .col-xs-3
       +editableMultiselect('staff[' + name + ']', label, staff[name](), allUsers)
+    .col-xs-1
+      .form-group
+        | &nbsp;
+        +checkbox('staff[' + name + 'NotNeeded]', '', !staff[name + 'NotNeeded']())
     .col-xs-4
       +currencyWithAlternateValue('staff[' + name + 'EUR]', 'Total', staff[name + 'EUR'](), optionen[name + 'EUR']())
 

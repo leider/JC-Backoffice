@@ -2,39 +2,47 @@ extends ../../../views/layout
 include ../../../views/formComponents
   
 mixin buttonFor(veranstaltung, name, nameInMethod)
-  td(style='white-space: nowrap') #{veranstaltung.staff()[name]()}
-    | &nbsp;
-    if !veranstaltung.staff()[name]().includes(user.id) && !veranstaltung.staff()[name]().includes(user.id.toLowerCase())
-      a.btn.btn-success.btn-xs(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
+  -var staff = veranstaltung.staff()
+  td(style='white-space: nowrap')
+    if !staff[name + 'NotNeeded']()
+      if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
+        a.btn.btn-success.btn-xs(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
+      else
+        a.btn.btn-danger.btn-xs(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
+        span.text-capitalize &nbsp; #{staff[name]()}
     else
-      a.btn.btn-danger.btn-xs(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
+      .text-warning [keine]
   
 block title
   | Teamseite
 
 block content
   .row
-    .col-xs12
+    .col-xs-12
       .page-header
+        .btn-group.pull-right
+          a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
         h2 Kommende Events
-      table.table.table-condensed.table-responsive.table-striped
-        tr
-          th Datum
-          th Titel
-          th Kasse&nbsp;1
-          th Kasse&nbsp;2
-          th Technik&nbsp;1
-          th Technik&nbsp;2
-        for veranstaltung in veranstaltungen
+        p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
+        p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
+        table.table.table-condensed.table-responsive.table-striped
           tr
-            td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-            td(style='white-space: nowrap')
-              if accessrights.hasSomeGroupAssigned()
-                a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-              else
-                | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-            +buttonFor(veranstaltung, 'kasseV', 'KasseV')
-            +buttonFor(veranstaltung, 'kasse', 'Kasse')
-            +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
-            +buttonFor(veranstaltung, 'techniker', 'Techniker')
-          
+            th Datum
+            th Titel
+            th Kasse&nbsp;1
+            th Kasse&nbsp;2
+            th Technik&nbsp;1
+            th Technik&nbsp;2
+          for veranstaltung in veranstaltungen
+            tr
+              td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
+              td(style='white-space: nowrap')
+                if accessrights.hasSomeGroupAssigned()
+                  a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+                else
+                  | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+              +buttonFor(veranstaltung, 'kasseV', 'KasseV')
+              +buttonFor(veranstaltung, 'kasse', 'Kasse')
+              +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
+              +buttonFor(veranstaltung, 'techniker', 'Techniker')
+            
