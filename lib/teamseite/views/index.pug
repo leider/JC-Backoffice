@@ -9,7 +9,7 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
         a.btn.btn-success.btn-xs(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
       else
         a.btn.btn-danger.btn-xs(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
-      span.text-capitalize &nbsp; #{staff[name]()}
+      span.text-capitalize &nbsp; #{staff[name]().join(', ')}
     else
       .text-warning [keine]
   
