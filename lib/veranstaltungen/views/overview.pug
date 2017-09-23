@@ -51,7 +51,7 @@ block content
                 td(width='98%') #{staff.merchandiseText()}
                 
 
-          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR())
+          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
             if eintrittspreise.frei()
               .panel-body
                 p: b Freier Eintritt
