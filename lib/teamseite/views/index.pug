@@ -12,7 +12,58 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
       span.text-capitalize &nbsp; #{staff[name]().join(', ')}
     else
       .text-warning [keine]
-  
+
+mixin tableForTeam(veranstaltungen)
+  table.table.table-condensed.table-responsive.table-striped
+    tr
+      th Datum
+      th Titel
+      th Kasse&nbsp;1
+      th Kasse&nbsp;2
+      th Technik&nbsp;1
+      th Technik&nbsp;2
+    for veranstaltung in veranstaltungen
+      tr
+        td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
+        td(style='white-space: nowrap')
+          if accessrights.hasSomeGroupAssigned()
+            a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+          else
+            | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+        +buttonFor(veranstaltung, 'kasseV', 'KasseV')
+        +buttonFor(veranstaltung, 'kasse', 'Kasse')
+        +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
+        +buttonFor(veranstaltung, 'techniker', 'Techniker')
+
+mixin orgaStaffField(veranstaltung, name, nameInMethod, allUsers)
+  td(style='white-space: nowrap')
+    +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
+    +editableMultiselect('staff[' + name + ']', null, veranstaltung.staff()[name](), allUsers.map(user => user.id))
+      
+mixin tableForOrga(veranstaltungen)
+  table.table.table-condensed.table-responsive.table-striped
+    tr
+      th Datum!!
+      th Titel
+      th Kasse&nbsp;1
+      th Kasse&nbsp;2
+      th Technik&nbsp;1
+      th Technik&nbsp;2
+      th
+    for veranstaltung in veranstaltungen
+      form#veranstaltungform(action='/teamseite/submit', method='post')
+        tr.form-inline
+          +hidden('id', veranstaltung.id())
+          +csrf
+          td(style='white-space: nowrap'): p.form-control-static #{veranstaltung.datumForDisplayShort()}
+          td(style='white-space: nowrap'): p.form-control-static
+            a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+          +orgaStaffField(veranstaltung, 'kasseV', 'KasseV', users)
+          +orgaStaffField(veranstaltung, 'kasse', 'Kasse', users)
+          +orgaStaffField(veranstaltung, 'technikerV', 'TechnikerV', users)
+          +orgaStaffField(veranstaltung, 'techniker', 'Techniker', users)
+          td: button.btn.btn-primary(type='submit') Speichern
+
 block title
   | Teamseite
 
@@ -25,24 +76,23 @@ block content
         h2 Kommende Events
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
-        table.table.table-condensed.table-responsive.table-striped
+        if accessrights.isSuperuser()
+          +tableForOrga(veranstaltungen)
+        else
+          +tableForTeam(veranstaltungen)
+  .row
+    .col-xs-12
+      h2 Übersicht der Benutzer
+      table.table.table-condensed.table-responsive.table-striped
           tr
-            th Datum
-            th Titel
-            th Kasse&nbsp;1
-            th Kasse&nbsp;2
-            th Technik&nbsp;1
-            th Technik&nbsp;2
-          for veranstaltung in veranstaltungen
+            th Name
+            th E-Mail
+            if accessrights.isSuperuser()
+              th Gruppen
+          for user in users
             tr
-              td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-              td(style='white-space: nowrap')
-                if accessrights.hasSomeGroupAssigned()
-                  a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-                else
-                  | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-              +buttonFor(veranstaltung, 'kasseV', 'KasseV')
-              +buttonFor(veranstaltung, 'kasse', 'Kasse')
-              +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
-              +buttonFor(veranstaltung, 'techniker', 'Techniker')
+              td #{user.name}
+              td: span.mailtoify #{user.email}
+              if accessrights.isSuperuser()
+                td #{user.gruppen.join(', ')}
             

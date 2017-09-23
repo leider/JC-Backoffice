@@ -168,7 +168,8 @@ mixin controlLabel(name, label, tooltip)
       span.tooltiplabel(data-original-title=tooltip) #{label}:&nbsp;
         i.fa.fa-question-circle
     else
-      | #{label}:
+      if label
+        | #{label}:
 
 mixin textareaInternal(classname, rowCount, name, label, value, tooltip, placeholder)
   .form-group
