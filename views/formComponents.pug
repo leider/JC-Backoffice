@@ -55,7 +55,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
 mixin currencyWithAlternateValue(name, label, value, alternate)
   .form-group
     +controlLabel(name, label)
-    input.form-control.currency(id=name, type='text', value=((value === undefined || value < 0) ? alternate : value), name=name, text-align='right', onFocus='this.select()', data-select-number-only=true, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+    input.form-control.currency(id=name, type='text', value=((value === undefined || value < 0) ? alternate : value), name=name, text-align='right', onFocus='this.select()', data-select-number-only='true', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
 
 mixin currencySpan(value, id, clazz)
   span.currency(id=id, class=clazz, data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='') #{value}
