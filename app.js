@@ -77,6 +77,7 @@ module.exports = {
     app.use(secureAgainstClickjacking);
     app.use(csurf());
     app.use(beans.get('addCsrfTokenToLocals'));
+    app.use(beans.get('wikiSubdirs'));
     app.use('/', beans.get('siteApp'));
     useApp(app, 'mailsender', beans.get('mailsenderApp'));
     useApp(app, 'optionen', beans.get('optionenApp'));
@@ -84,6 +85,7 @@ module.exports = {
     useApp(app, 'users', beans.get('usersApp'));
     useApp(app, 'gema', beans.get('gemaApp'));
     useApp(app, 'teamseite', beans.get('teamseiteApp'));
+    useApp(app, 'wiki', beans.get('wikiApp'));
     useApp(app, 'ical', beans.get('icalApp'));
 
     app.use(beans.get('handle404')());

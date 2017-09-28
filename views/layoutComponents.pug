@@ -42,6 +42,14 @@ mixin topNavbar(xs)
         a(href='/teamseite')
           i.fa.fa-hand-paper-o.fa-fw.fa-lg
           | &nbsp;Kasse/Technik&nbsp;
+      li(data-jcnav='wiki')
+        a(href='#')
+          i.fa.fa-book.fa-fw
+          span.hidden-sm &nbsp;Wiki&nbsp;
+        ul.dropdown-menu
+          for subdir in wikisubdirs
+            li: a(href='/wiki/' + subdir + '/') #{subdir}
+
       li: a(href='/logout')
         i.fa.fa-sign-out.fa-fw
         | &nbsp;Abmelden

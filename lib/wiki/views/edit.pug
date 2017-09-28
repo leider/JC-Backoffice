@@ -1,0 +1,24 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | #{pageName} : #{subdir} - Beabeiten
+
+block content
+  form(action='/wiki/' + subdir + '/' + pageName, method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons('Speichern')
+          legend
+            -var params = {pageName: pageName, subdir: subdir}
+            if page.content === ''
+              | Wiki-Seite "#{subdir}/#{pageName}" anlegen
+            else 
+              | Wiki-Seite "#{subdir}/#{pageName}" bearbeiten
+          +hightextarea('content', 'Inhalt', page.content)
+          +text('comment', 'Kommentar', page.comment, 'Commit-Kommentar', 'kein Commit-Kommentar')
+          +hidden('metadata', page.metadata)
+          input#subdir(type='hidden', name='subdir', value=subdir)
+          +submitButtons('Speichern')

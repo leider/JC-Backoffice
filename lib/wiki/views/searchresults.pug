@@ -1,0 +1,26 @@
+extends ../../../views/layout
+
+block title
+  | Suchergebnis
+
+block content
+  .row
+    .col-md-12
+      .page-header
+        h2 "#{searchtext}"&nbsp;
+          small Suchergebnis
+      if (matches.length === 0)
+        h3 Keine Ergebnisse
+      else 
+        dl
+          each match in matches
+            if (match.line)
+              dt
+                a(href='/wiki/' + match.pageName) #{match.pageName}
+                |  (Zeile #{match.line})
+              dd: em "#{match.text}"
+            else
+              dt
+                a(href='/wiki/' + match.pageName) #{match.pageName}
+                |  (im Dateinamen)
+
