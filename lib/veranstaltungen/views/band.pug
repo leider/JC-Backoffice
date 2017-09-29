@@ -27,8 +27,10 @@ mixin band(kosten)
             p: b
               +currencySpan(null, 'agenturTotal', 'form-control-static pull-right text-success')
       .row
-        .col-xs-12
+        .col-xs-6
           +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
+        .col-xs-6
+          +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 mixin bandScript
   script.
     $(document).ready(function () {

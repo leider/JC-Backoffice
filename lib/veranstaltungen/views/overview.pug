@@ -122,7 +122,12 @@ block content
                 th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR())
               tr
                 td(width='2%')
-                td(width='48%') Gage
+                td(width='48%') 
+                  if !kosten.gageBAR()
+                    | Gage
+                  else
+                    b.text-danger: i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                      i.fa.fa-exclamation-triangle
                 td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR())
               tr
                 td

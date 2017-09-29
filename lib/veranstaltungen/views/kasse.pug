@@ -9,6 +9,7 @@ block title
 
 block content
   -var kasse = veranstaltung.kasse()
+  -var kosten = veranstaltung.kosten()
 
   form#kasseform(action='/veranstaltungen/submit', method='post')
     +csrf
@@ -47,7 +48,13 @@ block content
           +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'color-kasse')
             .row
               .col-sm-4.col-xs-6
-                +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
+                if !kosten.gageBAR()
+                  +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
+                else
+                  .form-group
+                    label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                      i.fa.fa-exclamation-triangle :
+                    input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
               .col-sm-4.col-xs-6
                 +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR())
               .col-sm-4.col-xs-6
