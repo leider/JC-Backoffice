@@ -3,6 +3,7 @@ include ../../../views/formComponents
 
 
 -var kasse = veranstaltung.kasse()
+-var eintrittspreise = veranstaltung.eintrittspreise()
   
 mixin currencyOrEmpty(value)
   if veranstaltung.istVergangen()
@@ -34,6 +35,25 @@ html
                 | #{veranstaltung.kopf().eventTyp()} am #{veranstaltung.datumForDisplay()}
                 if veranstaltung.artist().isBawue()
                   | &nbsp;(Baden-Württemberg)
+      if !eintrittspreise.frei()
+        .row
+          .col-md-12
+            h4 Eintrittspreise
+              if (veranstaltung.reservixID())
+                | &nbsp;(Reservix-Scanner mitnehmen!)
+        .row
+          .col-xs-4
+            p
+              b Regulär: 
+              +currencySpan(veranstaltung.eintrittspreise().regulaer(), '')
+          .col-xs-4
+            p
+              b Ermäßigt: 
+              +currencySpan(veranstaltung.eintrittspreise().ermaessigt(), '')
+          .col-xs-4
+            p
+              b Mitglied: 
+              +currencySpan(veranstaltung.eintrittspreise().mitglied(), '')
       .row
         .col-xs-6
           table.table.table-bordered
@@ -48,7 +68,12 @@ html
               td #{veranstaltung.datumForDisplay()}
             tr
               th Besucher Abendkasse:
-              td #{kasse.anzahlBesucherAK()}
+              td
+                if veranstaltung.istVergangen()
+                  | #{kasse.anzahlBesucherAK()}
+                else
+                  | &nbsp;
+                
 
         .col-xs-6
           table.table.table-bordered
