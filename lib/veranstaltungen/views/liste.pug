@@ -46,6 +46,7 @@ block content
                     +checkedButton(veranstaltung.kosten(), 'Kosten', 'costs')
     .col-lg-4
       #calendar
+      a.btn.btn-primary(href='/ical/termine', title='Termine bearbeiten') Termine
 
 mixin checkedButton(section, name, stylename)
   if section.checked()

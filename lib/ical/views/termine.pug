@@ -1,0 +1,43 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+mixin daterow(name, value)
+  td(style='white-space: nowrap'): input.form-control(id=name, type='text', name=name, value=value,
+    style='width:100%',
+    data-provide='datepicker',
+    data-date-format= 'dd.mm.yyyy',
+    data-date-autoclose=true,
+    data-date-week-start=1,
+    data-date-view-ode='days',
+    data-date-min-view-mode='days',
+    data-date-language='de',
+    data-date-orientation='bottom'
+  )
+  
+block title
+  | Termine
+  
+block title
+  | Teamseite
+
+block content
+  .row
+    .col-xs-12
+      .page-header
+        h2 Kommende Events
+        table.table.table-condensed.table-responsive.table-striped
+          tr
+            th(width='15%') Von
+            th(width='15%') Bis
+            th(width='65%') Beschreibung
+            th(width='5%')
+          for termin in termine
+            form(action='/ical/submit', method='post')
+              tr.form-inline
+                if termin.id()
+                  +hidden('id', termin.id())
+                +csrf
+                +daterow('startDate', termin.startMoment().format('L'))
+                +daterow('endDate', termin.endMoment().format('L'))
+                td(style='white-space: nowrap'): input.form-control.trim-text(id='beschreibung', type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
+                td: button.btn.btn-primary(type='submit') Speichern

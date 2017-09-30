@@ -26,6 +26,7 @@
 
   "icalApp": {"module": "./lib/ical"},
   "icalService": {"module": "./lib/ical/icalService"},
+  "termin": {"module": "./lib/ical/termin"},
 
   "teamseiteApp": {"module": "./lib/teamseite"},
 
@@ -78,8 +79,15 @@
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "reservixstore" }
   },
+  
+  "terminPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "terminstore" }
+  },
+  
   "salesreport": {"module": "./lib/reservix/salesreport"},
   "reservixService": {"module": "./lib/reservix/reservixService"},
   "reservixAPI": {"module": "./lib/reservix/api"},
-  "reservixstore": {"module": "./lib/reservix/reservixstore"}
+  "reservixstore": {"module": "./lib/reservix/reservixstore"},
+  "terminstore": {"module": "./lib/ical/terminstore"}
 }
