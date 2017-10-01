@@ -91,6 +91,7 @@ block content
             th Name
             th E-Mail
             th T-Shirt
+            th Telefon
             if accessrights.isSuperuser()
               th Gruppen
           for user in users
@@ -99,10 +100,13 @@ block content
               td: span.mailtoify #{user.email}
               td
                 if accessrights.canEditTshirt(user.id)
-                  select.form-control(id=user.id, name = 'tshirt', style='width:100%')
+                  select.form-control(id=user.id, name='tshirt', style='width:100%')
                     -var value = user.tshirt
                     each val in shirtsizes
                       option(value = val, selected = value === val) #{val}
+              td
+                if accessrights.canEditTshirt(user.id)
+                  input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
               if accessrights.isSuperuser()
                 td #{user.gruppen.join(', ')}
             
@@ -112,7 +116,11 @@ block scripts
       function shirtsizeChanged() {
         $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
       } 
+      $('select[name="tshirt"]').change(shirtsizeChanged);
       
-      $('select[name="tshirt"]').change(shirtsizeChanged)
+      function telChanged() {
+        $.ajax('/users/tel-for', {data: {user: this.id, value: this.value}})
+      } 
+      $('input[name="tel"]').change(telChanged);
     });
   
