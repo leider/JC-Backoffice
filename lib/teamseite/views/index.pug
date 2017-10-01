@@ -42,15 +42,15 @@ mixin orgaStaffField(veranstaltung, name, nameInMethod, allUsers)
     +editableMultiselect('staff[' + name + ']', null, veranstaltung.staff()[name](), allUsers.map(user => user.id))
       
 mixin tableForOrga(veranstaltungen)
-  table.table.table-condensed.table-responsive.table-striped
+  table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
     tr
-      th Datum!!
-      th Titel
-      th Kasse&nbsp;1
-      th Kasse&nbsp;2
-      th Technik&nbsp;1
-      th Technik&nbsp;2
-      th
+      th(width='200') Datum
+      th(width='300') Titel
+      th(width='250') Kasse&nbsp;1
+      th(width='250') Kasse&nbsp;2
+      th(width='250') Technik&nbsp;1
+      th(width='250') Technik&nbsp;2
+      th(width='100')
     for veranstaltung in veranstaltungen
       form#veranstaltungform(action='/teamseite/submit', method='post')
         tr.form-inline
@@ -86,14 +86,14 @@ block content
     .col-xs-12
       h2 Übersicht der Benutzer
       -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-      table.table.table-condensed.table-responsive.table-striped
+      table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
           tr
-            th Name
-            th E-Mail
-            th T-Shirt
-            th Telefon
+            th(width='200') Name
+            th(width='200') E-Mail
+            th(width='150') T-Shirt
+            th(width='150') Telefon
             if accessrights.isSuperuser()
-              th Gruppen
+              th(width='200') Gruppen
           for user in users
             tr.form-inline
               if accessrights.isSuperuser()
