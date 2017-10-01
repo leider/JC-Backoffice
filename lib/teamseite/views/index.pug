@@ -96,7 +96,10 @@ block content
               th Gruppen
           for user in users
             tr.form-inline
-              td #{user.name}
+              if accessrights.isSuperuser()
+                td: a(href='/users/' + user.id) #{user.name}
+              else
+                td #{user.name}
               td: span.mailtoify #{user.email}
               td
                 if accessrights.canEditTshirt(user.id)
@@ -104,9 +107,13 @@ block content
                     -var value = user.tshirt
                     each val in shirtsizes
                       option(value = val, selected = value === val) #{val}
+                else
+                  | #{user.tshirt}
               td
                 if accessrights.canEditTshirt(user.id)
                   input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+                else
+                  | #{user.tel}
               if accessrights.isSuperuser()
                 td #{user.gruppen.join(', ')}
             
