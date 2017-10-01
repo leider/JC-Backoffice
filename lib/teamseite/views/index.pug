@@ -1,6 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-  
+
+
 mixin buttonFor(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
   td(style='white-space: nowrap')
@@ -68,6 +69,7 @@ block title
   | Teamseite
 
 block content
+
   .row
     .col-xs-12
       .page-header
@@ -83,16 +85,34 @@ block content
   .row
     .col-xs-12
       h2 Übersicht der Benutzer
+      -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
       table.table.table-condensed.table-responsive.table-striped
           tr
             th Name
             th E-Mail
+            th T-Shirt
             if accessrights.isSuperuser()
               th Gruppen
           for user in users
-            tr
+            tr.form-inline
               td #{user.name}
               td: span.mailtoify #{user.email}
+              td
+                if accessrights.canEditTshirt(user.id)
+                  select.form-control(id=user.id, name = 'tshirt', style='width:100%')
+                    -var value = user.tshirt
+                    each val in shirtsizes
+                      option(value = val, selected = value === val) #{val}
               if accessrights.isSuperuser()
                 td #{user.gruppen.join(', ')}
             
+block scripts
+  script.
+    $(document).ready(function () {
+      function shirtsizeChanged() {
+        $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
+      } 
+      
+      $('select[name="tshirt"]').change(shirtsizeChanged)
+    });
+  
