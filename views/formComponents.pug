@@ -236,23 +236,25 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optional
 
 mixin uploader(name, label, accept, value, extradata)
   -var istPressefoto = extradata.typ === 'pressefoto'
+  -var prefix = (istPressefoto ? '/upload/' : '/files/');
+  -var files = (value instanceof Array) ? value : [value];
+  -var previewFiles = value ? files.map(each => prefix + encodeURIComponent(each)) : [];
+  -var previewConfig = files.map(each => { return { caption: each, key: encodeURIComponent(each) } });
   .form-group
     +controlLabel(name, label)
-    if value
-      input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
-        data-language='de', data-theme='fa',
-        data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
-        data-max-file-preview-size=10240, data-initial-preview-as-data='true',
-        data-max-file-count=1, data-upload-extra-data=extradata,
-        data-delete-url='/veranstaltungen/deletefile' + '?_csrf=' + encodeURIComponent(csrf_token),
-        data-delete-extra-data=extradata,
-        data-initial-caption=value,
-        data-initial-preview=[(istPressefoto ? '/upload/' : '/files/') + encodeURIComponent(value)],
-        data-initial-preview-config=[
-          {key:encodeURIComponent(value)}
-        ])
-    else
-      input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
-        data-language='de', data-theme='fa', data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
-        data-max-file-preview-size=10240, data-initial-preview-as-data='true',
-        data-max-file-count=1, data-upload-extra-data=extradata)
+    input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
+      data-language='de', data-theme='fa',
+      data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
+      data-max-file-preview-size=10240, 
+      data-initial-preview-as-data='true',
+      data-overwrite-initial='false',
+      data-max-file-count=2, 
+      multiple, 
+      data-min-file-size=(istPressefoto ? 250 : null)
+      data-upload-async='true',
+      data-upload-extra-data=extradata,
+      data-delete-url='/veranstaltungen/deletefile' + '?_csrf=' + encodeURIComponent(csrf_token),
+      data-delete-extra-data=extradata,
+      data-initial-preview=previewFiles,
+      data-initial-preview-config=previewConfig
+    )
