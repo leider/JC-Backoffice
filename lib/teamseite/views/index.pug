@@ -96,7 +96,7 @@ block content
               th(width='200') Gruppen
           for user in users
             tr.form-inline
-              if accessrights.isSuperuser()
+              if accessrights.canEditTshirt(user.id)
                 td: a(href='/users/' + user.id) #{user.name}
               else
                 td #{user.name}

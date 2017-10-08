@@ -19,9 +19,12 @@ block content
           +text('tel', 'Tel', user.tel)
           +singleselect('tshirt', 'T-Shirt', user.tshirt, shirtsizes)
           +submitButtons()
-          +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
-          +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
-          +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
+          if accessrights.isSuperuser()
+            +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
+            +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
+            +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
+          else
+            +hidden('gruppen', user.gruppen)
 
 
 block scripts
