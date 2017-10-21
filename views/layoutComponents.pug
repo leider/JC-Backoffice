@@ -27,7 +27,7 @@ mixin topNavbar(xs)
       if user && (accessrights.isSuperuser())
         li(data-jcnav='mailsender'): a(href='/mailsender')
           i.fa.fa-envelope-o.fa-fw.fa-lg
-          | &nbsp;Mails senden
+          | &nbsp;Mails
         li(data-jcnav='users'): a(href='/users')
           i.fa.fa-users.fa-fw
           | &nbsp;User
@@ -37,11 +37,11 @@ mixin topNavbar(xs)
           | &nbsp;GEMA
         li(data-jcnav='mailsender'): a(href='/users/rundmail')
           i.fa.i.fa.fa-envelope.fa-fw
-          | &nbsp;Rundmail an alle User
+          | &nbsp;Mail an alle
       li(data-jcnav='teamseite')
         a(href='/teamseite')
           i.fa.fa-hand-paper-o.fa-fw.fa-lg
-          | &nbsp;Kasse/Technik&nbsp;
+          | &nbsp;Team&nbsp;
       li(data-jcnav='wiki')
         a(href='#')
           i.fa.fa-book.fa-fw

@@ -39,5 +39,5 @@ block content
                 +csrf
                 +daterow('startDate', termin.startMoment().format('L'))
                 +daterow('endDate', termin.endMoment().format('L'))
-                td(style='white-space: nowrap'): input.form-control.trim-text(id='beschreibung', type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
+                td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
                 td: button.btn.btn-primary(type='submit') Speichern
