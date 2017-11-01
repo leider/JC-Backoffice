@@ -29,7 +29,9 @@ block content
                   i(class=kopf.cssIconClass()) #{' '}
               th
                 .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.startMoment().format('ddd DD MMM YY')}
+                  a(href=veranstaltung.fullyQualifiedUrl())
+                    .hidden-sm.hidden-xs #{veranstaltung.startMoment().format('ddd DD MMM YY')}
+                    .hidden-md.hidden-lg #{veranstaltung.startMoment().format('DD.MM.YY')}
                   if !veranstaltung.kopf().confirmed()
                     span(style='color:red;') #{' '} [GEPLANT]
               th
