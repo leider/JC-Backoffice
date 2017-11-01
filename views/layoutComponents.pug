@@ -7,7 +7,7 @@ mixin notificationsBlock(notificationmessage)
     | #{contents.text}
 
 mixin topNavbar
-  nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-4
+  header.navbar.navbar-expand-lg.navbar-dark.bg-dark
     a.navbar-brand(href='/')
       img(src='/img/logo_weiss.png', alt='Jazzclub')
     a.btn.btn-default.navbar-toggler(data-toggle='collapse', data-target='#navbarCollapse')
@@ -15,7 +15,7 @@ mixin topNavbar
       i.fa.fa-bars.fa-lg.fa-inverse
 
     #navbarCollapse.navbar-collapse.collapse
-      ul.navbar-nav.mr-auto
+      ul.navbar-nav
         if user && (accessrights.hasSomeGroupAssigned())
           li.nav-item(data-jcnav='veranstaltungen')
             a.nav-link(href='/veranstaltungen/zukuenftige')

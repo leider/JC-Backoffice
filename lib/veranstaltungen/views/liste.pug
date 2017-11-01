@@ -7,32 +7,32 @@ block title
 block content
   .row
     .col-lg-8
-      .page-header
-        .btn-group.pull-right
-          a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
-          a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
-          .btn-group
-            a.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+      .bd-title
+        .btn-group.btn-group-lg.pull-right
+          a.btn.btn-lg.btn-light(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
+          a.btn.btn-lg.btn-light(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
+          .dropdown
+            a.btn.btn-lg.btn-light.dropdown-toggle(data-toggle='dropdown')
               | #{titel} &nbsp;
               span.caret
-            ul.dropdown-menu
-              li: a(href='/veranstaltungen/zukuenftige') Zukünftige
-              li: a(href='/veranstaltungen/vergangene') Vergangene
+            .dropdown-menu
+              a.dropdown-item(href='/veranstaltungen/zukuenftige') Zukünftige
+              a.dropdown-item(href='/veranstaltungen/vergangene') Vergangene
         h2 Veranstaltungen
       .table
-        table.table.table-striped.table-condensed
+        table.table.table-striped.table-sm
           for veranstaltung in veranstaltungen
             -var kopf = veranstaltung.kopf()
-            tr.form-inline
+            tr
               td
                 a(href=veranstaltung.fullyQualifiedUrl())
                   i(class=kopf.cssIconClass()) #{' '}
               th
-                .form-control-static
+                div
                   a(href=veranstaltung.fullyQualifiedUrl()) #{veranstaltung.startMoment().format('ddd DD MMM YY')}
                   if !veranstaltung.kopf().confirmed()
                     span(style='color:red;') #{' '} [GEPLANT]
-              th
+              th.d-flex
                 .form-control-static
                   a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
                   if veranstaltung.reservixID()
@@ -40,8 +40,9 @@ block content
                     span.badge(style='background-color: #F8500D !important')
                       img(src='/img/rex_21x21.png', width='14')
                       | &nbsp;#{veranstaltung.salesreport().anzahlRegulaer()}
-                .form-control-static.pull-right
-                  .btn-group.btn-group-xs
+              td
+                span.d-flex.justify-content-end
+                  .btn-group.btn-group-sm
                     +checkedButton(veranstaltung.presse(), 'Presse', 'presse')
                     +checkedButton(veranstaltung.kosten(), 'Kosten', 'costs')
     .col-lg-4
@@ -50,9 +51,9 @@ block content
 
 mixin checkedButton(section, name, stylename)
   if section.checked()
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename)
-      i.fa.i.fa.fa-check.fa-fw.fa-lg
+    a.btn.btn-sm(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename)
+      i.fa.i.fa.fa-check.fa-fw.fa-sm
   else
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename)
-      i.fa.i.fa.fa-question.fa-fw.fa-lg
+    a.btn.btn-sm(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename)
+      i.fa.i.fa.fa-question.fa-fw.fa-sm
   
