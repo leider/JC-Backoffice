@@ -33,7 +33,7 @@ block content
           if kopf.kooperation() && kopf.kooperation().length  > 1
             h3 Kooperation mit #{kopf.kooperation()}
           +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            table.table.table-striped.table-condensed
+            table.table.table-striped.table-sm
               tr
                 th(colspan=2) Technik
               tr
@@ -53,14 +53,14 @@ block content
 
           +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
             if eintrittspreise.frei()
-              .panel-body
+              .card-body
                 p: b Freier Eintritt
                 p
                   b Abendkasse (Sammelbox) Überschuss (ohne Abzug Gage Cash)#{''}
                   b : #{''}
                    +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
             else
-              table.table.table-condensed.table-striped
+              table.table.table-sm.table-striped
                 tr
                   th
                   th(align='right', style='text-align: right;') Regulär
@@ -79,7 +79,7 @@ block content
                     td: span.pull-right #{salesreport.anzahlRegulaer()}
                     td
                     td
-                tr.form-inline
+                tr
                   th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
                   td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
                 if eintrittspreise.zuschuss() > 0
@@ -88,7 +88,7 @@ block content
                     th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
 
           +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-hotel')
-            table.table.table-condensed.table-striped
+            table.table.table-sm.table-striped
               tr
                 th(align='right', style='text-align: right;') Einnahmen
                 th(align='right', style='text-align: right;') Kosten
@@ -105,12 +105,12 @@ block content
 
 
           +panelMitBody('info', 'Informationen', null, 'color-misc')
-            .panel-body
+            .card-body
               | !{kopf.beschreibungHTML()}
 
         .col-md-6
           +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            table.table.table-striped.table-condensed
+            table.table.table-striped.table-sm
               tr
                 th(colspan=2) Backline und Technik
                 th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR())
@@ -153,14 +153,14 @@ block content
 
           if werbung.genehmigungenNum()
             if !werbung.genehmigt()
-              p.text-danger.form-inline 
+              p.text-danger
                 .checkbox.checkbox-warning
                   input#genehmigungenEingeholt(type='checkbox')
                   label.text-danger(for='genehmigungenEingeholt')
                     i.fa.fa-warning
                     | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
             else
-              p.text-success.form-inline
+              p.text-success
                 .checkbox.checkbox-success
                   input#genehmigungenEingeholt(type='checkbox', checked='true')
                   label.text-success(for='genehmigungenEingeholt')
@@ -169,7 +169,7 @@ block content
  
           if agentur.name()
             +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
-              .panel-body
+              .span-body
                 address
                   strong #{agentur.ansprechpartner()} <br>
                   | !{agentur.adresseHTML()} <br>
@@ -178,7 +178,7 @@ block content
                   span.mailtoify #{agentur.email()}
 
           +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-misc')
-            table.table.table-condensed
+            table.table.table-sm
               for step in vertrag.workflow()
                 tr: td
                   .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
@@ -187,7 +187,7 @@ block content
                       | &nbsp;#{step}
 
           +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-misc')
-            table.table.table-condensed
+            table.table.table-sm
               for step in unterkunft.workflow()
                 tr: td
                   .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')

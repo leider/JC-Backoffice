@@ -42,7 +42,7 @@ module.exports = function (grunt) {
 //      'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
-      //      'build/stylesheets/sass/build-select2-bootstrap.scss',
+      'build/stylesheets/sass/out/select2-bootstrap.scss',
       'build/stylesheets/sass/out/awesome-bootstrap-checkbox.css',
       'build/stylesheets/sass/out/jc-backoffice.css'
     ]
@@ -160,7 +160,8 @@ module.exports = function (grunt) {
         files: {
           'build/stylesheets/sass/out/bootstrap.css': 'build/stylesheets/sass/bootstrap.scss',
           'build/stylesheets/sass/out/awesome-bootstrap-checkbox.css': 'build/stylesheets/sass/build-awesome-bootstrap-checkbox.scss',
-          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss'
+          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss',
+          'build/stylesheets/sass/out/select2-bootstrap.css': 'build/stylesheets/sass/build-select2-bootstrap.scss'
         }
       }
     },

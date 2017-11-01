@@ -26,28 +26,28 @@ block content
         .col-md-6
           +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt', 'color-kasse')
             .row
-              .col-xs-4
+              .col-4
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
-              .col-xs-4
+              .col-4
                 +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 500)
-              .col-xs-4
+              .col-4
                 +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage')
             .row
-              .col-xs-8
+              .col-8
                 +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
-              .col-xs-4
+              .col-4
                 +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR())
             .row
-              .col-xs-8
+              .col-8
                 +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
-              .col-xs-4
+              .col-4
                 +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR())
 
 
         .col-md-6
           +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'color-kasse')
             .row
-              .col-sm-4.col-xs-6
+              .col-sm-4.col-6
                 if !kosten.gageBAR()
                   +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
                 else
@@ -55,35 +55,35 @@ block content
                     label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
                       i.fa.fa-exclamation-triangle :
                     input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
-              .col-sm-4.col-xs-6
+              .col-sm-4.col-6
                 +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR())
-              .col-sm-4.col-xs-6
+              .col-sm-4.col-6
                 +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR())
             .row
-              .col-xs-8
+              .col-8
                 +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text())
-              .col-xs-4
+              .col-4
                 +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR())
             .row
-              .col-xs-8
+              .col-8
                 +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text())
-              .col-xs-4
+              .col-4
                 +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR())
             .row
-              .col-xs-8
+              .col-8
                 +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text())
-              .col-xs-4
+              .col-4
                 +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR())
             .row
-              .col-sm-9.col-xs-6
-              .col-sm-3.col-xs-6
+              .col-sm-9.col-6
+              .col-sm-3.col-6
                 +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR())
       .row
         .col-md-12
           .row
-            .col-sm-3.col-xs-6
+            .col-sm-3.col-6
               +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR())
-            .col-sm-3.col-xs-6
+            .col-sm-3.col-6
               .form-group
                 +controlLabel('endbestandEUR', 'Endbestand')
                 b: p#endbestandEUR.form-control-static.currency(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')

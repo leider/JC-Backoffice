@@ -17,12 +17,13 @@ html
   head
     meta(charset='utf-8')
     link(href='public/stylesheets/screen.css', rel='stylesheet')
+    //link(href='/stylesheets/screen.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
 
   body(style='zoom: 0.7')
     .container
       .row
-        .col-xs-12
+        .col-12
           .page-header
             .pull-right
               address
@@ -42,20 +43,20 @@ html
               if (veranstaltung.reservixID())
                 | &nbsp;(Reservix-Scanner mitnehmen!)
         .row
-          .col-xs-4
+          .col-sm-4
             p
               b Regulär: 
               +currencySpan(veranstaltung.eintrittspreise().regulaer(), '')
-          .col-xs-4
+          .col-sm-4
             p
               b Ermäßigt: 
               +currencySpan(veranstaltung.eintrittspreise().ermaessigt(), '')
-          .col-xs-4
+          .col-sm-4
             p
               b Mitglied: 
               +currencySpan(veranstaltung.eintrittspreise().mitglied(), '')
       .row
-        .col-xs-6
+        .col-6
           table.table.table-bordered
             tr
               th Name:
@@ -75,7 +76,7 @@ html
                   | &nbsp;
                 
 
-        .col-xs-6
+        .col-6
           table.table.table-bordered
             tr
               th Anfangsbestand:
@@ -94,7 +95,7 @@ html
               td(align='right')
                 +currencyOrEmpty(kasse.endbestandEUR())
       .row
-        .col-xs-6
+        .col-6
           table.table.table-bordered.table-striped
             tr
               th.text-center(colspan=3) Einnahmen
@@ -130,7 +131,7 @@ html
               td &nbsp;
               td
               td
-        .col-xs-6
+        .col-6
           table.table.table-bordered.table-striped
             tr
               th.text-center(colspan=3) Ausgaben
@@ -167,11 +168,12 @@ html
               td
               td.text-right: +currencyOrEmpty(kasse.ausgabeBankEUR())
       .row        
-        .col-xs-6
+        .col-6
           p
             b Kassiererin / Kassierer:
             | &nbsp; #{kassierer}
-        .col-xs-6
+        .col-6
           p: b Unterschrift:
 
 script(src='public/clientscripts/global.js')
+//script(src='/clientscripts/global.js')

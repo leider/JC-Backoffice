@@ -230,7 +230,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
 
     $('.enhance').each(function () {
-      /* eslint no-console: 0 */
       $(this).select2({
         width: null,
         containerCssClass: ':all:',
