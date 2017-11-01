@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       //      'build/stylesheets/sass/bootstrap-markdown-patched.less',
       'node_modules/font-awesome/css/font-awesome.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
-      'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
+//      'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       //      'build/stylesheets/sass/build-select2-bootstrap.scss',
@@ -124,14 +124,14 @@ module.exports = function (grunt) {
       }
     },
     patch: {
-      smartmenus: {
-        options: {
-          patch: 'frontend/3rd_party_js/jquery.smartmenus.bootstrap.js.patch'
-        },
-        files: {
-          'build/javascript/jquery.smartmenus.bootstrap-patched.js': 'node_modules/drmonty-smartmenus/js/jquery.smartmenus.bootstrap.js'
-        }
-      },
+      // smartmenus: {
+      //   options: {
+      //     patch: 'frontend/3rd_party_js/jquery.smartmenus.bootstrap.js.patch'
+      //   },
+      //   files: {
+      //     'build/javascript/jquery.smartmenus.bootstrap-patched.js': 'node_modules/drmonty-smartmenus/js/jquery.smartmenus.bootstrap.js'
+      //   }
+      // },
       flaticon: {
         options: {
           patch: 'frontend/additionalIcons/patchDirectory/flaticon.patch'
