@@ -54,6 +54,7 @@
     "passport": "0.4.0",
     "passport-local": "1.0.0",
     "phantomjs-prebuilt": ">2.1.5",
+    "popper.js": "1.12.6",
     "pug": "2.0.0-rc.4",
     "ramda": "0.25.0",
     "request": "2.83.0",

@@ -19,10 +19,7 @@ html
     #cheatsheet.modal.bs-modal-lg.fade(tabindex='-1')
       .modal-dialog.modal-lg
         .modal-content
-    .navbar.navbar-inverse.navbar-fixed-top.hidden-print.hidden-xs(role='navigation')
-      +topNavbar
-    .navbar.navbar-inverse.navbar-top.hidden-print.visible-xs(role='navigation')
-      +topNavbar('xs')
+    +topNavbar
     .container-fluid
       .row.main
         if (statusmessage)
