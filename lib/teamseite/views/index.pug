@@ -35,36 +35,7 @@ mixin tableForTeam(veranstaltungen)
         +buttonFor(veranstaltung, 'kasse', 'Kasse')
         +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
         +buttonFor(veranstaltung, 'techniker', 'Techniker')
-
-mixin orgaStaffField(veranstaltung, name, nameInMethod, allUsers)
-  td(style='white-space: nowrap')
-    +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
-    +editableMultiselect('staff[' + name + ']', null, veranstaltung.staff()[name](), allUsers.map(user => user.id))
       
-mixin tableForOrga(veranstaltungen)
-  table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
-    tr
-      th(width='200') Datum
-      th(width='300') Titel
-      th(width='250') Kasse&nbsp;1
-      th(width='250') Kasse&nbsp;2
-      th(width='250') Technik&nbsp;1
-      th(width='250') Technik&nbsp;2
-      th(width='100')
-    for veranstaltung in veranstaltungen
-      form#veranstaltungform(action='/teamseite/submit', method='post')
-        tr.form-inline
-          +hidden('id', veranstaltung.id())
-          +csrf
-          td(style='white-space: nowrap'): p.form-control-static #{veranstaltung.datumForDisplayShort()}
-          td(style='white-space: nowrap'): p.form-control-static
-            a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          +orgaStaffField(veranstaltung, 'kasseV', 'KasseV', users)
-          +orgaStaffField(veranstaltung, 'kasse', 'Kasse', users)
-          +orgaStaffField(veranstaltung, 'technikerV', 'TechnikerV', users)
-          +orgaStaffField(veranstaltung, 'techniker', 'Techniker', users)
-          td: button.btn.btn-primary(type='submit') Speichern
-
 block title
   | Teamseite
 
@@ -78,10 +49,7 @@ block content
         h2 Kommende Events
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
-        if accessrights.isSuperuser()
-          +tableForOrga(veranstaltungen)
-        else
-          +tableForTeam(veranstaltungen)
+        +tableForTeam(veranstaltungen)
   .row
     .col-xs-12
       h2 Übersicht der Benutzer
@@ -92,8 +60,6 @@ block content
             th(width='200') E-Mail
             th(width='150') T-Shirt
             th(width='150') Telefon
-            if accessrights.isSuperuser()
-              th(width='200') Gruppen
           for user in users
             tr.form-inline
               if accessrights.canEditTshirt(user.id)
@@ -114,8 +80,6 @@ block content
                   input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
                 else
                   | #{user.tel}
-              if accessrights.isSuperuser()
-                td #{user.gruppen.join(', ')}
             
 block scripts
   script.

@@ -38,6 +38,11 @@ mixin topNavbar(xs)
         li(data-jcnav='mailsender'): a(href='/users/rundmail')
           i.fa.i.fa.fa-envelope.fa-fw
           | &nbsp;Mail an alle
+      if user && (accessrights.isSuperuser())
+        li(data-jcnav='teamseite')
+          a(href='/teamseite/admin')
+            i.fa.fa-hand-paper-o.fa-fw.fa-lg
+            | &nbsp;TeamAdmin&nbsp;
       li(data-jcnav='teamseite')
         a(href='/teamseite')
           i.fa.fa-hand-paper-o.fa-fw.fa-lg
