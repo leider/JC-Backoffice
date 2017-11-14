@@ -11,6 +11,6 @@ html
           for veranstaltung in liste
             p
               b #{veranstaltung.kopf().titel()}<br> 
-              b: i #{veranstaltung.startMoment().format('dd DD MMM YY')} //
-              b #{' '}#{veranstaltung.startMoment().format('HH:mm')} Uhr<br>
+              b: i #{veranstaltung.startMoment().format('dd DD. MMMM')} //
+              b #{' '}#{veranstaltung.startMoment().format('HH')} Uhr<br>
               | im #{veranstaltung.kopf().ort()}
