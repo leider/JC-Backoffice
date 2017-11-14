@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(href='/stylesheets/screen.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+  body
+    .container-fluid
+      .row
+        .col-xs-12
+          for veranstaltung in liste
+            p
+              b #{veranstaltung.kopf().titel()}<br> 
+              b: i #{veranstaltung.startMoment().format('dd DD MMM YY')} //
+              b #{' '}#{veranstaltung.startMoment().format('HH:mm')} Uhr<br>
+              | im #{veranstaltung.kopf().ort()}
