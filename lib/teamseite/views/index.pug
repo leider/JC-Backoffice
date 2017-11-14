@@ -79,7 +79,7 @@ block content
                 if accessrights.canEditUser(user.id)
                   input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
                 else
-                  | #{user.tel}
+                  span.telify #{user.tel}
             
 block scripts
   script.

@@ -8,7 +8,8 @@ mixin mitarbeiterRows(collection, verantwortlich)
       td(width='98%')
         | #{user.name} &nbsp;
         span.mailtoify #{user.email}
-        | #{' '} Tel.: #{user.tel}
+        | #{' '} Tel.: 
+        span.telify #{user.tel}
         if verantwortlich
           b #{' '}(Verantwortlich)
 
@@ -184,7 +185,8 @@ block content
                 address
                   strong #{agentur.ansprechpartner()} <br>
                   | !{agentur.adresseHTML()} <br>
-                  | Tel.: #{agentur.telefon()} <br>
+                  | Tel.:#{' '}
+                  span.telify #{agentur.telefon()} <br>
                   | E-Mail: 
                   span.mailtoify #{agentur.email()}
 

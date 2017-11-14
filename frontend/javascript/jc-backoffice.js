@@ -59,6 +59,12 @@ function surroundEmail(email) {
   return '<a href="mailto:' + email + '">' + email + '</a>';
 }
 
+function surroundTel(tel) {
+  'use strict';
+
+  return '<a href="tel:' + tel + '">' + tel + '</a>';
+}
+
 /* exported veranstaltungDateModel */
 function veranstaltungDateModel(initialDate, initialTime) {
   'use strict';
@@ -288,6 +294,9 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 
     $('.mailtoify').each(function () {
       $(this).html(surroundEmail(this.innerHTML));
+    });
+    $('.telify').each(function () {
+      $(this).html(surroundTel(this.innerHTML));
     });
   }
 
