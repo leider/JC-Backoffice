@@ -14,3 +14,10 @@ html
               b: i #{veranstaltung.startMoment().format('dd DD. MMMM')} //
               b #{' '}#{veranstaltung.startMoment().format('HH')} Uhr<br>
               | im #{veranstaltung.kopf().ort()}
+      .row
+        .col-xs-12
+          h3 Bilder
+          for veranstaltung in liste
+            for bild in veranstaltung.presse().image()
+              img(src='/upload/' + encodeURIComponent(bild))
+              br
