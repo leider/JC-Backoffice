@@ -12,3 +12,5 @@ server.log
 workspace.xml
 coverage
 public/img/loadin*.gif
+jazzclubmongo.dump/jazzclub
+mongodump_jc.sh
