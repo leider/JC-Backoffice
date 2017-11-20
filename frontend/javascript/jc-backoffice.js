@@ -61,8 +61,7 @@ function surroundEmail(email) {
 
 function surroundTel(tel) {
   'use strict';
-
-  return '<a href="tel:' + tel + '">' + tel + '</a>';
+  return '<a href="tel:' + tel + '"> ' + tel + '</a>';
 }
 
 /* exported veranstaltungDateModel */
