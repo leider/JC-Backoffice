@@ -63,23 +63,23 @@ block content
           for user in users
             tr.form-inline
               if accessrights.canEditUser(user.id)
-                td: a(href='/users/' + user.id) #{user.name}
+                td: a.form-control-static(href='/users/' + user.id) #{user.name}
               else
-                td #{user.name}
-              td: span.mailtoify #{user.email}
+                td: span.form-control-static #{user.name}
+              td: span.mailtoify.form-control-static #{user.email}
               td
                 if accessrights.canEditUser(user.id)
-                  select.form-control(id=user.id, name='tshirt', style='width:100%')
+                  select.form-control.enhance(id=user.id, name='tshirt', style='width:100%')
                     -var value = user.tshirt
                     each val in shirtsizes
                       option(value = val, selected = value === val) #{val}
                 else
-                  | #{user.tshirt}
+                  span.form-control-static #{user.tshirt}
               td
                 if accessrights.canEditUser(user.id)
                   input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
                 else
-                  span.telify #{user.tel}
+                  span.telify.form-control-static #{user.tel}
             
 block scripts
   script.

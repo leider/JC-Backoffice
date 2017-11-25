@@ -58,10 +58,10 @@ block content
             th(width='200') Gruppen
           for user in users
             tr.form-inline
-              td: a(href='/users/' + user.id) #{user.name}
-              td: span.mailtoify #{user.email}
+              td: a.form-control-static(href='/users/' + user.id) #{user.name}
+              td: span.mailtoify.form-control-static #{user.email}
               td
-                select.form-control(id=user.id, name='tshirt', style='width:100%')
+                select.form-control.enhance(id=user.id, name='tshirt', style='width:100%')
                   -var value = user.tshirt
                   each val in shirtsizes
                     option(value = val, selected = value === val) #{val}
