@@ -9,6 +9,7 @@ mixin orgaStaffField(veranstaltung, name, nameInMethod, allUsers)
       
 mixin tableForOrga(veranstaltungen)
   table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
+    -var monatAlt = -1;
     tr
       th(width='200') Datum
       th(width='300') Titel
@@ -18,6 +19,10 @@ mixin tableForOrga(veranstaltungen)
       th(width='250') Technik&nbsp;2
       th(width='100')
     for veranstaltung in veranstaltungen
+      if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+        tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
+        -monatAlt = veranstaltung.startMoment().month();
+
       form#veranstaltungform(action='/teamseite/submit', method='post')
         tr.form-inline
           +hidden('id', veranstaltung.id())

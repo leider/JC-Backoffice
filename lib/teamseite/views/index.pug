@@ -16,6 +16,7 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
 
 mixin tableForTeam(veranstaltungen)
   table.table.table-condensed.table-responsive.table-striped
+    -var monatAlt = -1;
     tr
       th Datum
       th Titel
@@ -24,6 +25,10 @@ mixin tableForTeam(veranstaltungen)
       th Technik&nbsp;1
       th Technik&nbsp;2
     for veranstaltung in veranstaltungen
+      if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+        tr: th(colspan=6, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
+        -monatAlt = veranstaltung.startMoment().month();
+
       tr
         td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
         td(style='white-space: nowrap')
