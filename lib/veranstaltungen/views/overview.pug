@@ -47,21 +47,24 @@ block content
           if kopf.kooperation() && kopf.kooperation().length  > 1
             h3 Kooperation mit #{kopf.kooperation()}
           +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;
+            -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
             table.table.table-striped.table-condensed
-              tr: th(colspan=2) Technik
-              +mitarbeiterRows(mitarbeiter.technikerV, true)
-              +mitarbeiterRows(mitarbeiter.techniker, false)
-              tr: th(colspan=2) Kasse
-              +mitarbeiterRows(mitarbeiter.kasseV, true)
-              +mitarbeiterRows(mitarbeiter.kasse, false)
-              if mitarbeiter.merchandise
-                tr: th(colspan=2) Merchandising
-              +mitarbeiterRows(mitarbeiter.merchandise, false)
-              if mitarbeiter.fremdpersonal
-                tr: th(colspan=2) Sonstige
-              +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
-                
+              if veranstaltung.staff().noStaffNeeded()
+                tr: th(colspan=2) Niemand benötigt
+              else
+                tr: th(colspan=2) Technik
+                +mitarbeiterRows(mitarbeiter.technikerV, true)
+                +mitarbeiterRows(mitarbeiter.techniker, false)
+                tr: th(colspan=2) Kasse
+                +mitarbeiterRows(mitarbeiter.kasseV, true)
+                +mitarbeiterRows(mitarbeiter.kasse, false)
+                if mitarbeiter.merchandise.length > 0
+                  tr: th(colspan=2) Merchandising
+                +mitarbeiterRows(mitarbeiter.merchandise, false)
+                if mitarbeiter.fremdpersonal.length > 0
+                  tr: th(colspan=2) Sonstige
+                +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
+                  
 
           +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
             if eintrittspreise.frei()
