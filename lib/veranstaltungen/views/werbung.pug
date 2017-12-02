@@ -35,7 +35,7 @@ mixin marketingUndPlakate(werbung, optionen)
       .col-xs-9
         +text('werbung[layoutingInfo]', 'Arbeitskosten', werbung.layoutingInfo(), null, 'Layouting, Sonstiges')
       .col-xs-3
-        +currencyWithAlternateValue('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR(), optionen.layoutingEUR())
+        +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR())
 
 mixin marketingUndPlakateScripts
   script.

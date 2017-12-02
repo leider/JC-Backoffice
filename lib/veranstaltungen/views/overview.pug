@@ -219,15 +219,15 @@ block scripts
       });
       
       $('.vertragstep').click(function() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/vertragStepClicked"}', {data: {step: this.name, checked: this.checked}});
+        $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/vertragStepClicked', {data: {step: this.name, checked: this.checked}});
       });
       
       $('.hotelstep').click(function() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/hotelStepClicked"}', {data: {step: this.name, checked: this.checked}});
+        $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/hotelStepClicked', {data: {step: this.name, checked: this.checked}});
       });
       
       $('#genehmigungenEingeholt').click(function() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/genehmigungenEingeholt"}', {data: {checked: this.checked}});
+        $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/genehmigungenEingeholt', {data: {checked: this.checked}});
       });
       
     });

@@ -1,11 +1,11 @@
 include ../../../views/formComponents
 
-mixin staffRow(optionen, staff, name, label)
+mixin staffRow(allUsers, staff, name, label)
   .row
     .col-xs-8
-      +editableMultiselect('staff[' + name + ']', label, staff[name](), optionen[name]())
+      +editableMultiselect('staff[' + name + ']', label, staff[name](), allUsers)
     .col-xs-4
-      +currencyWithAlternateValue('staff[' + name + 'EUR]', 'Total', staff[name + 'EUR'](), optionen[name + 'EUR']())
+      +currency('staff[' + name + 'EUR]', 'Total', staff[name + 'EUR']())
 
 
 mixin staffRowVerantwortlich(allUsers, staff, name, label)
@@ -23,15 +23,15 @@ mixin staffRowVerantwortlich(allUsers, staff, name, label)
         | &nbsp;
         +checkbox('staff[' + name + 'NotNeeded]', '', !staff[name + 'NotNeeded']())
     .col-xs-4
-      +currencyWithAlternateValue('staff[' + name + 'EUR]', 'Total', staff[name + 'EUR'](), optionen[name + 'EUR']())
+      +currency('staff[' + name + 'EUR]', 'Total', staff[name + 'EUR']())
 
 
-mixin staff(staff, optionen, allUsers)
+mixin staff(staff, allUsers)
   +legendMitBody('staff', 'Staff', 'staffPreis', 'color-costs')
     +staffRowVerantwortlich(allUsers, staff, 'techniker', 'Techniker')
     +staffRowVerantwortlich(allUsers, staff, 'kasse', 'Kasse')
-    +staffRow(optionen, staff, 'merchandise', 'Merchandise')
-    +staffRow(optionen, staff, 'fremdpersonal', 'Fremdpersonal')
+    +staffRow(allUsers, staff, 'merchandise', 'Merchandise')
+    +staffRow(allUsers, staff, 'fremdpersonal', 'Fremdpersonal')
 
 mixin staffScript
   script.

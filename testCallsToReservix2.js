@@ -19,4 +19,4 @@ reservixAPI.allSalesSince(last14Days, result => {
   }
   console.log(result.data.map(each => salesreport.forOneResult(each.eventId, result.tsServer, each)).map(each => each.state));
   process.exit();
-})
+});

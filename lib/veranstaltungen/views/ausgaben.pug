@@ -57,7 +57,7 @@ block content
                 +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
           +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
         .col-md-6
-          +staff(veranstaltung.staff(), optionen, allUsers)
+          +staff(veranstaltung.staff(), allUsers)
           +marketingUndPlakate(veranstaltung.werbung(), optionen)
       .row
         .col-md-12

@@ -20,27 +20,9 @@ block content
             +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
             +editableMultiselect('orte', 'Orte', optionen.orte(), optionen.orte())
             +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
-        .col-md-6
-          +legendMitBody('personal', 'Personal')
-            .row
-              .col-sm-6
-                +editableMultiselect('verantwortliche', 'Verantwortliche', optionen.verantwortliche(), optionen.verantwortliche())
-              .col-sm-6
-                +editableMultiselect('techniker', 'Techniker', optionen.techniker(), optionen.techniker())
-            .row
-              .col-sm-6
-                +editableMultiselect('kasse', 'Kasse', optionen.kasse(), optionen.kasse())
-              .col-sm-6
-                +editableMultiselect('merchandise', 'Merchandise', optionen.merchandise(), optionen.merchandise())
-            .row
-              .col-sm-6
-                +editableMultiselect('fremdpersonal', 'Fremdpersonal', optionen.fremdpersonal(), optionen.fremdpersonal())
-      .row
-        .col-md-6
           +legendMitBody('backline', 'Backlines')
             +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
             +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
-        .col-md-6
           +legendMitBody('werb', 'Werbung')
             .row
               .col-sm-6
@@ -52,18 +34,6 @@ block content
                 +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
               .col-sm-6
                 +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
-      .row
-        .col-md-6
-          +legendMitBody('preise', 'Vorgaben Preis')
-            .row
-              .col-md-3.col-sm-6
-                +currency('technikerEUR', 'Techniker', optionen.technikerEUR())
-              .col-md-3.col-sm-6
-                +currency('merchandiseEUR', 'Merchandise', optionen.merchandiseEUR())
-              .col-md-3.col-sm-6
-                +currency('kasseEUR', 'Kasse', optionen.kasseEUR())
-              .col-md-3.col-sm-6
-                +currency('layoutingEUR', 'Grafikdesign', optionen.layoutingEUR())
           +legendMitBody('artists', 'Künstler')
             .row
               .col-sm-12
