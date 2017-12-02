@@ -14,6 +14,10 @@ block content
         +csrf
         +hidden('id', user.id)
         fieldset
+          .btn-group.pull-right
+            if accessrights.isSuperuser()
+              a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen
+
           +text('name', 'Voller Name', user.name)
           +email('email', 'E-Mail', user.email)
           +text('tel', 'Tel', user.tel)
