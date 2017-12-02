@@ -32,6 +32,7 @@ block content
       .row
         .col-md-6
           +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
+          +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
       .row
         .col-md-12
           hr
