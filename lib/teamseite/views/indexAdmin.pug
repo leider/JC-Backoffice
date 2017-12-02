@@ -2,7 +2,7 @@ extends ../../../views/layout
 include ../../../views/formComponents
 
 
-mixin orgaStaffField(veranstaltung, name, nameInMethod, allUsers)
+mixin orgaStaffField(veranstaltung, name, allUsers)
   td(style='white-space: nowrap')
     +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
     +editableMultiselect('staff[' + name + ']', null, veranstaltung.staff()[name](), allUsers.map(user => user.id))
@@ -11,16 +11,17 @@ mixin tableForOrga(veranstaltungen)
   table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
     -var monatAlt = -1;
     tr
-      th(width='200') Datum
+      th(width='100') Datum
       th(width='300') Titel
-      th(width='250') Kasse&nbsp;1
-      th(width='250') Kasse&nbsp;2
-      th(width='250') Technik&nbsp;1
-      th(width='250') Technik&nbsp;2
-      th(width='100')
+      th(width='200') MoD
+      th(width='200') Kasse&nbsp;1
+      th(width='200') Kasse&nbsp;2
+      th(width='200') Technik&nbsp;1
+      th(width='200') Technik&nbsp;2
+      th(width='100') Speichern
     for veranstaltung in veranstaltungen
       if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-        tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
+        tr: th(colspan=8, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
         -monatAlt = veranstaltung.startMoment().month();
 
       form#veranstaltungform(action='/teamseite/submit', method='post')
@@ -28,27 +29,24 @@ mixin tableForOrga(veranstaltungen)
           +hidden('id', veranstaltung.id())
           +csrf
           td(style='white-space: nowrap'): p.form-control-static #{veranstaltung.datumForDisplayShort()}
-          td(style='white-space: nowrap'): p.form-control-static
+          td(style='white-space: nowrap'): p.form-control-static(style='display:inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;')
             a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          +orgaStaffField(veranstaltung, 'kasseV', 'KasseV', users)
-          +orgaStaffField(veranstaltung, 'kasse', 'Kasse', users)
-          +orgaStaffField(veranstaltung, 'technikerV', 'TechnikerV', users)
-          +orgaStaffField(veranstaltung, 'techniker', 'Techniker', users)
-          td: button.btn.btn-primary(type='submit') Speichern
+          +orgaStaffField(veranstaltung, 'mod', users)
+          +orgaStaffField(veranstaltung, 'kasseV', users)
+          +orgaStaffField(veranstaltung, 'kasse', users)
+          +orgaStaffField(veranstaltung, 'technikerV', users)
+          +orgaStaffField(veranstaltung, 'techniker', users)
+          td: button.btn.btn-sm.btn-success(type='submit'): i(class='fa fa-fw fa-sm fa-floppy-o')
 
 block title
-  | Teamseite
+  | Teamadmin
 
 block content
 
   .row
     .col-xs-12
       .page-header
-        .btn-group.pull-right
-          a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
-        h2 Kommende Events
-        p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
-        p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
+        h2 Team (Admin)
         +tableForOrga(veranstaltungen)
   .row
     .col-xs-12

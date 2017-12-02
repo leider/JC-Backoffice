@@ -24,9 +24,10 @@ mixin tableForTeam(veranstaltungen)
       th Kasse&nbsp;2
       th Technik&nbsp;1
       th Technik&nbsp;2
+      th Master
     for veranstaltung in veranstaltungen
       if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-        tr: th(colspan=6, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
+        tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
         -monatAlt = veranstaltung.startMoment().month();
 
       tr
@@ -40,6 +41,7 @@ mixin tableForTeam(veranstaltungen)
         +buttonFor(veranstaltung, 'kasse', 'Kasse')
         +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
         +buttonFor(veranstaltung, 'techniker', 'Techniker')
+        +buttonFor(veranstaltung, 'mod', 'MoD')
       
 block title
   | Teamseite
@@ -51,7 +53,7 @@ block content
       .page-header
         .btn-group.pull-right
           a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
-        h2 Kommende Events
+        h2 Team
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
         +tableForTeam(veranstaltungen)
