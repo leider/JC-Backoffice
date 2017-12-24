@@ -4,8 +4,14 @@ html
     meta(charset='utf-8')
     link(href='/stylesheets/screen.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+    title Veranstaltungen eines Monats
   body
     .container-fluid
+      .row
+        .col-xs-12
+          p: a.btn.btn-primary(href='/veranstaltungen/imgzip/' + monat)
+            i.fa.fa-download.fa-fw 
+            | &nbsp;Alle Bilder als ZIP
       .row
         .col-xs-12
           for veranstaltung in liste
