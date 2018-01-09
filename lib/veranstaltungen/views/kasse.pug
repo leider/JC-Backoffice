@@ -29,7 +29,7 @@ block content
               .col-xs-4
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
               .col-xs-4
-                +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 500)
+                +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999)
               .col-xs-4
                 +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage')
             .row
