@@ -62,6 +62,7 @@
   "mailtransport": {"module": "./lib/mailsender/mailtransport"},
   "nodemailerTransport": {"module": "./lib/mailsender/nodemailerTransport"},
   "message": {"module": "./lib/mailsender/message"},
+  "hotelReminder": {"module": "./lib/mailsender/hotelReminder"},
 
   "veranstaltungenPersistence": {
     "module": "./lib/persistence/persistence",
