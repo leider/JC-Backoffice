@@ -63,6 +63,8 @@
   "nodemailerTransport": {"module": "./lib/mailsender/nodemailerTransport"},
   "message": {"module": "./lib/mailsender/message"},
   "hotelReminder": {"module": "./lib/mailsender/hotelReminder"},
+  "mailstore": {"module": "./lib/mailsender/mailstore"},
+  "mailRule": {"module": "./lib/mailsender/mailRule"},
 
   "veranstaltungenPersistence": {
     "module": "./lib/persistence/persistence",
@@ -84,6 +86,11 @@
   "terminPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "terminstore" }
+  },
+  
+  "mailPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "mailstore" }
   },
   
   "salesreport": {"module": "./lib/reservix/salesreport"},

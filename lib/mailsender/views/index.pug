@@ -1,0 +1,23 @@
+extends ../../../views/layout
+
+include  ../../../views/formComponents
+
+block content
+  fieldset
+    .row
+      .col-md-12
+        .btn-group.pull-right
+          a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
+          a.btn.btn-default(href='new/', title='Neu'): i.fa.fa-file-o.fa-fw
+        legend
+          | Mailing Regeln
+        table.table.table-striped.table-condensed
+          tr
+            th Name
+            th E-Mail
+            th Regel
+          for rule in rules
+            tr 
+              td: a(href=rule.fullyQualifiedUrl()) #{rule.name()}
+              td #{rule.email()}
+              td #{rule.rule()}

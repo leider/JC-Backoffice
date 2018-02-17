@@ -1,0 +1,33 @@
+extends ../../../views/layout
+
+include  ../../../views/formComponents
+
+block title
+  | Mailingregel
+
+block content
+  form#mailruleform(action='/mailsender/save', method='post')
+    +csrf
+    fieldset
+      if (rule.id())
+        +hidden('id', rule.id())
+
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Mailingregel <br>
+              if (rule.id())
+                small Bearbeiten
+              else
+                small Neu anlegen
+      .row
+        .col-md-4
+          +text('name', 'Name', rule.name(), 'Name des Empfängers, Teil der Adresse')
+        .col-md-4
+          +email('email', 'E-Mail', rule.email(), 'E-Mail Adresse')
+        .col-md-4
+          +singleselect('rule', 'Regel', rule.rule(), rule.rules())
+
+block scripts
+  script(src='/clientscripts/check-mailruleform.js')
