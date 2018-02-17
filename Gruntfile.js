@@ -195,7 +195,8 @@ module.exports = function (grunt) {
           check: {
             lines: 35,
             statements: 35
-          }
+          },
+          mochaOptions: ['--exit']
         }
       }
     },
