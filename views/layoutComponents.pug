@@ -25,9 +25,13 @@ mixin topNavbar(xs)
           i.fa.fa-cogs.fa-fw.fa-lg
           span.hidden-sm &nbsp;Optionen
       if user && (accessrights.isSuperuser())
-        li(data-jcnav='mailsender'): a(href='/mailsender')
-          i.fa.fa-envelope-o.fa-fw.fa-lg
-          span.hidden-sm &nbsp;Mails
+        li(data-jcnav='mailsender')
+          a(href='#')
+            i.fa.fa-envelope-o.fa-fw.fa-lg
+            span.hidden-sm &nbsp;Mails
+          ul.dropdown-menu
+            li: a(href='/mailsender') Regeln
+            li: a(href='/mailsender/compose') Manuell
         li(data-jcnav='users'): a(href='/users')
           i.fa.fa-users.fa-fw
           span.hidden-sm &nbsp;User
