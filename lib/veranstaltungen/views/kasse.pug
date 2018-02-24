@@ -24,7 +24,16 @@ block content
               small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
       .row
         .col-md-6
-          +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt', 'color-kasse')
+          +legendMitBody('einnahmenReservix', 'Einnahmen Reservix', 'reservixGesamt', 'color-misc')
+            .row
+              .col-xs-4
+                +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR())
+              .col-xs-4
+                +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR())
+              .col-xs-4
+                +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999)
+
+          +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'color-kasse')
             .row
               .col-xs-4
                 +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
@@ -113,6 +122,14 @@ block scripts
       einnahmeSonstiges1EUR.keyup(updateEinnahmenGesamt);
       einnahmeSonstiges2EUR.keyup(updateEinnahmenGesamt);
       updateEinnahmenGesamt();
+
+      var reservixBruttoEUR = $('#kasse\\[reservixBruttoEUR\\]');
+      
+      function updateReservix() {
+        setEuro($('#reservixGesamt'), eurAmount(reservixBruttoEUR));  
+      }
+      reservixBruttoEUR.keyup(updateReservix);
+      updateReservix();
 
       var ausgabeGageEUR = $('#kasse\\[ausgabeGageEUR\\]');
       var ausgabeCateringEUR = $('#kasse\\[ausgabeCateringEUR\\]');

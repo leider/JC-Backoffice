@@ -51,17 +51,17 @@ block content
                       | &nbsp;#{veranstaltung.salesreport().anzahlRegulaer()}
                 .form-control-static.pull-right
                   .btn-group.btn-group-xs
-                    +checkedButton(veranstaltung.presse(), 'Presse', 'presse')
-                    +checkedButton(veranstaltung.kosten(), 'Kosten', 'costs')
+                    +checkedButton(veranstaltung, veranstaltung.presse(), 'presse', 'presse')
+                    +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
     .col-lg-4
       #calendar
       a.btn.btn-primary(href='/ical/termine', title='Termine bearbeiten') Termine
 
-mixin checkedButton(section, name, stylename)
+mixin checkedButton(veranstaltung, section, name, stylename)
   if section.checked()
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename)
+    a.btn.btn-xs(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
       i.fa.i.fa.fa-check.fa-fw.fa-lg
   else
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename)
+    a.btn.btn-xs(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
       i.fa.i.fa.fa-question.fa-fw.fa-lg
   
