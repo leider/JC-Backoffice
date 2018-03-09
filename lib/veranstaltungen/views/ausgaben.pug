@@ -52,7 +52,7 @@ block content
           +legendMitBody('saalmiete', 'Saalmiete', 'saalmietePreis', 'color-costs')
             .row
               .col-sm-9
-                +singleselect('kosten[saal]', 'Location', kosten.saal(), optionen.kooperationen())
+                +singleselect('kosten[saal]', 'Location', kosten.saal(), optionen.orte())
               .col-sm-3
                 +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
           +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())

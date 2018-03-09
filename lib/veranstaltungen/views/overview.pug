@@ -86,14 +86,20 @@ block content
                   td(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
                   td(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
                   td(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
-                if veranstaltung.reservixID()
-                  tr.form-inline
-                    th
-                      span Reservix (aktuell)
-                        .pull-right: +currencySpan(salesreport.bruttoUmsatz(), 'bruttoUmsatz')
-                    td: span.pull-right #{salesreport.anzahlRegulaer()}
-                    td
-                    td
+                tr.form-inline
+                  th
+                    span Reservix (Brutto)
+                      .pull-right: +currencySpan(kasse.reservixBruttoEUR(), 'bruttoReservix')
+                  td
+                  td
+                  td
+                tr.form-inline
+                  th
+                    span Reservix (Bereinigt)
+                      .pull-right: +currencySpan(kasse.reservixNettoEUR(), 'nettoReservix')
+                  td: span.pull-right #{kasse.anzahlBesucherReservix()}
+                  td
+                  td
                 tr.form-inline
                   th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
                   td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
