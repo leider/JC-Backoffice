@@ -70,8 +70,13 @@ block content1
       else
         p.
           §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft().anzahlZimmer()} Betten</b> im <b>#{hotel.name()}, #{hotel.einzeiligeAdresse()}</b>.
-      p.
-        §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- € pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
+      if (buyoutInclusive)
+        p.
+          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
+      else
+        p.
+          2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person, die in der Gage bereits enthalten sind. <b>Für Getränke und Speisen hat der Künstler somit selbst aufzukommen</b>.
+
       p.
         §2.4 Zusätzlich angefallene Backline-Kosten, die nicht vor Vertragsschluss abgeklärt sind, werden dem Künstler in Rechnung gestellt und mit der zu zahlenden Gage verrechnet.
       p.
