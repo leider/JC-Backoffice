@@ -64,7 +64,7 @@ module.exports = function (grunt) {
       },
       bootstrapLESS: {
         cwd: 'node_modules/bootstrap/less/',
-        src: ['**', '!variables.less'],
+        src: ['**', '!variables.less', '!print.less'],
         dest: 'build/stylesheets/less',
         expand: true,
         flatten: false

@@ -1,0 +1,90 @@
+include ../../../views/layoutComponents
+include ../../../views/formComponents
+  
+mixin signbox(title, party, optionalText, unterschrift)
+  .row
+    .col-xs-4
+      p(style='line-height:3;') #{title}:
+    .col-xs-8
+      if (optionalText)
+        if (unterschrift)
+          p(style='line-height:3;border-bottom:1px dotted')
+            img(src='public/reporting/niklas.png', height='22')
+        else
+          p(style='line-height:3;border-bottom:1px dotted;') #{optionalText}
+      else
+        p(style='line-height:3;border-bottom:1px dotted;') &nbsp;
+      p.text-center(style='margin-top:-10px; font-size:6px;') #{party}
+
+
+mixin bild(name)
+  div(style='margin-top:40px')
+    img(src='public/reporting/' + name + '.png', height='30')
+  
+mixin sidebar
+  img(src='public/reporting/logo.png', height='80')
+  div(style='font-size:6px;margin-top:60px')
+    p
+      .blau Veranstalter
+      | Jazzclub Karlsruhe e.V.<br>
+      | Office-Adresse: Leopoldstr. 13<br>
+      | 76133 Karlsruhe<br>
+    p
+      .blau Kontakt
+      | E-Mail: vertrag@jazzclub.de<br>
+      | Web: jazzclub.de<br>
+    p
+      .blau Bankverbindung
+      | Sparkasse Karlsruhe - Ettlingen<br>
+      | IBAN: DE69 6605 0101 0010 1743 24 <br>
+      | BIC: KARSDE66XXX<br>
+    p
+      .blau Vorsitzende
+      | Niklas Braun, Torsten Antoni<br>
+    p
+      .blau Vereinsregister
+      | VR Nr.100827VR<br>
+      | Gerichtsstand ist Karlsruhe<br>
+      | Registergericht ist das Amtsgericht Karlsruhe<br>
+  +bild('union')
+  +bild('bawue')
+  +bild('stadt')
+  +bild('meka')
+  +bild('ring')
+
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(href='public/stylesheets/screen.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i')
+  body(style='font-size:8px;')
+    .container
+      #Seite1.row
+        .col-xs-9
+          #adresse(style='margin-top:120px')
+            .row
+              .col-xs-12
+                small(style='font-size:6px;')
+                  b Jazzclub Karlsruhe e.V.&nbsp;
+                  span.blau |&nbsp;
+                  | Office: Leopoldstr. 13 
+                  span.blau |&nbsp;
+                  | 76133 Karlsruhe
+                p &nbsp;
+                block adresse
+          #content1(style='margin-top:30px')
+          block content1
+        .col-xs-3
+          +sidebar
+        .col-xs-12
+          p.text-center(style='margin-top:15px') Seite 1 von 2
+
+      #Seite2.row
+        .col-xs-9
+          #content2(style='margin-top:30px')
+          block content2
+        .col-xs-3
+          +sidebar
+        .col-xs-12
+          p.text-center(style='margin-top:15px') Seite 2 von 2

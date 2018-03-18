@@ -15,6 +15,8 @@
   "unterkunft": {"module": "./lib/veranstaltungen/unterkunft"},
   "werbung": {"module": "./lib/veranstaltungen/werbung"},
 
+  "vertragApp": {"module": "./lib/vertrag"},
+  
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},
   "optionenService": {"module": "./lib/optionen/optionenService"},

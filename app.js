@@ -87,6 +87,7 @@ module.exports = {
     useApp(app, 'teamseite', beans.get('teamseiteApp'));
     useApp(app, 'wiki', beans.get('wikiApp'));
     useApp(app, 'ical', beans.get('icalApp'));
+    useApp(app, 'vertrag', beans.get('vertragApp'));
 
     app.use(beans.get('handle404')());
     app.use(beans.get('handle500')(appLogger));
