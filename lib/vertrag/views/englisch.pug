@@ -1,0 +1,132 @@
+extends briefpapier
+
+
+block adresse
+  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  p.
+    #{bandname} <br>
+    c/o #{veranstaltung.agentur().name()}<br>
+    #{veranstaltung.agentur().strasse()}<br>
+    #{veranstaltung.agentur().ort()}
+
+block content1
+  -var start = veranstaltung.startMoment();
+  -var getin = veranstaltung.getinMoment();
+  -var hotel = veranstaltung.hotel();
+  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+    
+  .row
+    .col-xs-7
+      p
+        b Concert/Performance Agreement
+      p This agreement is concluded
+    .col-xs-5
+      p.text-right Karlsruhe, #{datum.format('LL')}
+  .row
+    .col-xs-3
+      p by:<br>
+        | Represented by:<br> 
+        | Legal Address: 
+    .col-xs-9
+      p
+        b #{bandname}<br>
+        b #{veranstaltung.agentur().name()}<br>
+          | #{veranstaltung.agentur().strasse()}, #{veranstaltung.agentur().ort()}<br>
+  .row
+    .col-xs-12
+      p: i (hereafter referred to as Artist)
+  .row
+    .col-xs-3
+      p and:<br>
+        | Represented by:<br> 
+        | Legal Address: 
+    .col-xs-9
+      p
+        b Jazzclub Karlsruhe e.V.<br>
+        b Niklas Braun<br>
+          | Leopoldstr. 13, 76133 Karlsruhe<br>
+  .row
+    .col-xs-12
+      p: i (hereafter referred to as Organizer)
+
+  .row
+    .col-xs-12
+      p.
+        §1 The concert takes place at <b>#{start.format('LL')}</b> um <b>#{start.format('LT')}</b>.</br>
+        Location: <b>#{veranstaltung.kopf().ort()}</b>
+      p.
+        §1.1 Get in is at <b>#{getin.format('LT')}</b>, the organizer or his representative shall be present at this hour.
+        He shall be present during the complete performance.
+      p.
+        §1.2 Territorial Protection: the artists herby commit to not play any concert within the radius of 50 km 14 days prior or after the concert. 
+      p.
+        §2 The agreed salary is <b>#{veranstaltung.kosten().gagenTotalEURformatted()} &euro;</b>.<br>
+        The agreed amount is a gross payment and includes VAT as well as other taxes. Additional payments are precluded.
+      p.
+        §2.1 The salary is not subject to income tax and is taxable by the artist.
+        The artist agrees to issue a proper invoice for the salary, either in a paper or electronic format.
+      if (veranstaltung.unterkunft().anzahlZimmer() === 0)
+        p.
+          §2.2 The organizer will <b>not provide any accomodation</b>.
+      else
+        p.
+          §2.2 The organizer provides <b>#{veranstaltung.unterkunft().anzahlZimmer()} beds</b> at <b>#{hotel.name()}, #{hotel.einzeiligeAdresse()}</b> at his cost.
+      p.
+        §2.3 The Artists are entitled to a catering flat rate of 20 Euro per person in cash.
+        German quality tab water shall be provided free of charge by the Organizer.
+      p.
+        §2.4 Additional backline costs that are not negotiated at the date of the agreement will be invoiced to the artist and balanced with the agreed wage.
+      p.
+        §3 The salary shall be paid by electronic money transfer no later than seven days after the concert respectively receipt of proper invoice.
+      p.
+        §3.1 The payment shall be made regardless of the success of the performance.
+      p.
+        §4 The organizer is in charge of the overall management of the performance and therefore authorized to issue instructions. The artist is solely responsible for the performance and its artistic presentation.
+
+block content2
+  .row
+    .col-xs-12
+      p.
+        §5 The organizer ensures to heed all regulations, legal or other, and to arrange the performance with the given diligence.
+      p.
+        §6 The organizer shall be liable for the personal safety of the artist at the agreed venue and any damage of the equipment 
+        caused by third parties in the area of responsible of the Organizer, as stipulated by BGB.
+      p.
+        §7 Audio-visual recordings of the concert require the authorization of the artist. The artist won’t decline the authorization without good cause.
+      p.
+        §8 GEMA-royalties and the organizer’s share of the artist’s social security fund shall be borne by the organizer.
+      p.
+        §9 In the event of force majeure, both parties shall be released from their respective duties of fulfilling the contract, 
+        provided that the party affected by the event of force majeure notifies the other party thereof immediately after its 
+        occurrence and provides appropriate documents issued by the national Chamber of Commerce of the respective country.
+        This provided, neither party shall enforce claims of any kind.
+        Either party bears its incurred costs. The artist will try to schedule an alternative date for the concert.
+      p.
+        §9.1 In case the artists falls ill, he shall be released from all contractual obligations. The artist is obligated 
+        to inform the organizer about his ailment immediately. The ailment shall be verified by medical report within 10 calendar days. 
+        In case the artist falls ill, all claims to obtain salary are void.
+      p.
+        §10 The artist is obligated to return a signed version of the agreement within 10 calendar days upon receipt. 
+        Otherwise the organizer shall be entitled to reject the agreement within 10 calendar days upon return of the signed version.
+        Digital signatures are recognized.
+      p.
+        §11 In case of culpable breech of the contractual regulations, the party in fault shall be obligated to pay a penalty to the opposite party in the amount of the agreed salary.
+        The party in fault shall be responsible to prove, that no or considerably less damages are caused by his breech.
+      p.
+        §12 If any provision hereof should be invalid, ineffective or contestable, this shall not affect the validity of the remaining provisions. Cancellations or alterations are to be made in writing.
+      p.
+        §13 The agreement shall be governed by German law. Karlsruhe, Germany shall be the sole place of jurisdiction for all disputes arising from this agreement.
+      p.
+        §14 The contractual parties mutually commit themselves to maintain complete secrecy towards third parties regarding all contractual agreements.
+      p.
+        §15 The contractual parties assure by their signature, that they comprehend the agreement, that they are in full legal capacity and authorized to sign.
+
+      .row(style='margin-top:24px;')
+        .col-xs-6
+          +signbox('Place/Date', 'Artist')
+          div(style='margin-top:5px;')
+          +signbox('Place/Date', 'Organizer', 'Karlsruhe, 18. März 2018')
+        .col-xs-6
+          +signbox('Signature', 'Name of Artist')
+          div(style='margin-top:5px;')
+          +signbox('Signature', 'Name of Organizer', 'niklas', true)
