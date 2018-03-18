@@ -71,6 +71,9 @@ block content
           +legendMitBody('artist', 'Künstler')
             .row
               .col-md-12
+                +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
+            .row
+              .col-md-12
                 +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
             .row
               .col-xs-3

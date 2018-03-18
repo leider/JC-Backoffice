@@ -1,20 +1,27 @@
 extends briefpapier
 
+
 block adresse
+  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
   p.
-    BANDNAME <br>
-    c/o VERTRETER<br>
-    STRASSE<br>
-    PLZundORT
+    #{bandname} <br>
+    c/o #{veranstaltung.agentur().name()}<br>
+    #{veranstaltung.agentur().strasse()}<br>
+    #{veranstaltung.agentur().ort()}
 
 block content1
+  -var start = veranstaltung.startMoment();
+  -var getin = veranstaltung.getinMoment();
+  -var hotel = veranstaltung.hotel();
+  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+    
   .row
     .col-xs-7
       p
         b Konzertvertrag
       p Dieser Vertrag wird geschlossen
     .col-xs-5
-      p.text-right Karlsruhe, Datum
+      p.text-right Karlsruhe, #{datum.format('LL')}
   .row
     .col-xs-3
       p zwischen:<br>
@@ -22,9 +29,9 @@ block content1
         | Anschrift: 
     .col-xs-9
       p
-        b BANDNAME<br>
-        b VERTRETER<br>
-          | STRASSE, PLZundORT<br>
+        b #{bandname}<br>
+        b #{veranstaltung.agentur().name()}<br>
+          | #{veranstaltung.agentur().strasse()}, #{veranstaltung.agentur().ort()}<br>
   .row
     .col-xs-12
       p: em (nachfolgend Künstler genannt)
@@ -45,20 +52,24 @@ block content1
   .row
     .col-xs-12
       p.
-        §1 Das Konzert findet statt am <b>DATUM</b> um <b>UHRZEIT</b> Uhr.</br>
-        Spielstätte: <b>ZKM Medientheater / Lorenzstr.19 / 76135 Karlsruhe</b>
+        §1 Das Konzert findet statt am <b>#{start.format('LL')}</b> um <b>#{start.format('LT')} Uhr</b>.</br>
+        Spielstätte: <b>#{veranstaltung.kopf().ort()}</b>
       p.
-        §1.1 Get in ist <b>UHRZEIT-2h Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein. 
+        §1.1 Get in ist <b>#{getin.format('LT')} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein. 
         Seine Anwesenheit ist auch während der gesamten Veranstaltung sicher gestellt.
       p.
         §1.2 Gebietsschutz: Die Künstler verpflichten sich hiermit 14 Tage vor und nach dem Konzerttermin keine Konzerte im Umkreis von 50km zu geben.
       p.
-        §2 Die vereinbarte Gage beträgt <b>GAGE</b> &euro;.<br>
+        §2 Die vereinbarte Gage beträgt <b>#{veranstaltung.kosten().gagenTotalEURformatted()} &euro;</b>.<br>
         Der vereinbarte Betrag ist eine Bruttovergütung und schließt die MwSt. sowie sonstige Steuern ein. Nachforderungen sind ausgeschlossen.
       p.
         §2.1 Die Gage unterliegt nicht der Lohnsteuerpflicht, sondern wird vom Künstler selbst versteuert. Der Künstler verpflichtet sich zur Ausstellung einer ordnungsgemäßen Rechnung über die Gage in Papier- oder elektronischer Form.
-      p.
-        §2.2 Weiterhin stellt der Veranstalter <b>ZIMMER</b> im <b>HOTELinklANSCHRIFT</b>.
+      if (veranstaltung.unterkunft().anzahlZimmer() === 0)
+        p.
+          §2.2 Der Veranstalter stellte <b>keine Unterkunft</b>.
+      else
+        p.
+          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft().anzahlZimmer()} Zimmer</b> im <b>#{hotel.name()}, #{hotel.einzeiligeAdresse()}</b>.
       p.
         §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- € pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
       p.
