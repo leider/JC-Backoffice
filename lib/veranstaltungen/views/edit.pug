@@ -62,7 +62,12 @@ block content
               .col-md-6
                 +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
               .col-md-6
-                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch'])
+                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
+            if user && (accessrights.isBookingTeam())
+              .row
+                .col-md-12
+                  a.btn.btn-primary.pull-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                    | Vertrag generieren
             .row
               .col-md-12
                 +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
