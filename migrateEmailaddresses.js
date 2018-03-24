@@ -12,7 +12,7 @@ optionenstore.get((err1, optionen) => {
     console.log(err1);
     process.exit();
   }
-  if (!optionen.partner1) {
+  if (!optionen.state.partner1) {
     console.log('nix zu migrieren');
     process.exit();
   }
