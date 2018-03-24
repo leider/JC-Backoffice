@@ -17,6 +17,8 @@
 
   "vertragApp": {"module": "./lib/vertrag"},
   
+  "fileexportStadtKarlsruhe": {"module": "./lib/fileexportStadtKarlsruhe"},
+  
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},
   "emailAddresses": {"module": "./lib/optionen/emailAddresses"},
