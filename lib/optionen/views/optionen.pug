@@ -34,19 +34,12 @@ block content
                 +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
               .col-sm-6
                 +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
+
+        .col-md-6
           +legendMitBody('artists', 'Künstler')
             .row
               .col-sm-12
                 +editableMultiselect('artists', 'Namen', optionen.artists(), optionen.artists())
-
-        .col-md-6
-          +legendMitBody('email', 'E-Mail Partner')
-            for number in optionen.noOfEmails()
-              .row
-                .col-sm-6
-                  +text('partner' + number, 'Partner', optionen.state['partner' + number])
-                .col-sm-6
-                  +email('email' + number, 'E-Mail', optionen.state['email' + number])
       .row
         .col-md-12
           hr

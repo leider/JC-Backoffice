@@ -21,9 +21,10 @@ mixin topNavbar(xs)
           a(href='/veranstaltungen/zukuenftige')
             i.fa.fa-calendar.fa-fw.fa-lg
             span.hidden-sm &nbsp;Veranstaltungen&nbsp;
-        li(data-jcnav='optionen'): a(href='/optionen')
-          i.fa.fa-cogs.fa-fw.fa-lg
-          span.hidden-sm &nbsp;Optionen
+        li(data-jcnav='optionen')
+          a(href='/optionen')
+            i.fa.fa-cogs.fa-fw.fa-lg
+            span.hidden-sm &nbsp;Optionen
       if user && (accessrights.isSuperuser())
         li(data-jcnav='mailsender')
           a(href='#')
@@ -32,6 +33,7 @@ mixin topNavbar(xs)
           ul.dropdown-menu
             li: a(href='/mailsender') Regeln
             li: a(href='/mailsender/compose') Manuell
+            li: a(href='/optionen/emailAddresses') Emailadressen bearbeiten
         li(data-jcnav='users'): a(href='/users')
           i.fa.fa-users.fa-fw
           span.hidden-sm &nbsp;User

@@ -1,0 +1,33 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+  
+block title
+  | Email Adressen
+
+block content
+  form#optionenform(action='/optionen/submitEmailAddresses', method='post')
+    +csrf
+    fieldset
+      .row
+        .col-md-12
+          +submitButtons()
+          .page-header
+            h2 Emailadressen <br>
+              small Bearbeiten
+      .row
+        .col-md-6
+          +legendMitBody('email', 'E-Mail Partner')
+            for number in emailAddresses.noOfEmails()
+              .row
+                .col-sm-6
+                  +text('partner' + number, 'Partner', emailAddresses.state['partner' + number])
+                .col-sm-6
+                  +email('email' + number, 'E-Mail', emailAddresses.state['email' + number])
+      .row
+        .col-md-12
+          hr
+          +submitButtons()
+
+block scripts
+  script(src='/clientscripts/check-optionenform.js')
+      
