@@ -37,7 +37,7 @@ block content
 
         h2(class=kopf.cssTextClass())
           i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-          | #{kopf.titel()} im #{kopf.ort()}
+          | #{kopf.titel()} #{kopf.presseIn()}
           br
           small
             | #{veranstaltung.startMoment().format('LLLL')} #{''}

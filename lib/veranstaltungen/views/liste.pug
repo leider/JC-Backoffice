@@ -43,7 +43,7 @@ block content
                     span(style='color:red;') #{' '} [GEPLANT]
               th
                 .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} im #{kopf.ort()}
+                  a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} #{kopf.presseIn()}
                   if veranstaltung.reservixID()
                     | &nbsp;
                     span.badge(style='background-color: #F8500D !important')

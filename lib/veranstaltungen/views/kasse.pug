@@ -21,7 +21,7 @@ block content
           +submitButtonsFor(veranstaltung, 'kasse')
           .page-header
             h2 Abendkasse für #{veranstaltung.datumForDisplay()}<br>
-              small #{veranstaltung.kopf().titel()} im #{veranstaltung.kopf().ort()}
+              small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
       .row
         .col-md-6
           +legendMitBody('einnahmenReservix', 'Einnahmen Reservix', 'reservixGesamt', 'color-misc')
