@@ -5,25 +5,22 @@
 require('./configure');
 const beans = require('simple-configure').get('beans');
 const optionenstore = beans.get('optionenstore');
-const EmailAddresses = beans.get('emailAddresses');
+const Orte = beans.get('orte');
 
 optionenstore.get((err1, optionen) => {
   if (err1) {
     console.log(err1);
     process.exit();
   }
-  if (!optionen.state.partner1) {
+  if (!optionen.state.flaechen) {
     console.log('nix zu migrieren');
     process.exit();
   }
-  const emailAddresses = new EmailAddresses();
-  optionen.noOfEmails().forEach(i => {
-    emailAddresses.state['partner' + i] = optionen.state['partner' + i];
-    emailAddresses.state['email' + i] = optionen.state['email' + i];
-    delete optionen.state['partner' + i];
-    delete optionen.state['email' + i];
-  });
-  optionenstore.save(emailAddresses, err => {
+  const orte = new Orte();
+  optionen.state.flaechen.forEach(each => {
+    orte.addOrt({name: each.ort, flaeche: each.flaeche, pressename: each.ort, presseIn: each.ort});
+  })
+  optionenstore.save(orte, err => {
     if (err) {
       console.log(err);
     }

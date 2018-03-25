@@ -92,17 +92,18 @@ block content
           +preise(veranstaltung)
           +legendMitBody('wannwo', 'Wo')
             .row
-              .col-sm-4
-                +singleselect('kopf[ort]', 'Ort', kopf.ort(), optionen.orte())
-              .col-sm-4
+              .col-sm-6
+                +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
+                +hidden('kopf[pressename]', kopf.pressename())
+                +hidden('kopf[presseIn]', kopf.presseIn())
+              .col-sm-6
                 +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
               .col-sm-4
-                +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
             .row
               .col-sm-6
-                +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
+                +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
               .col-sm-6
-                +singleselect('kopf[verantwortlicher]', 'Verantwortlicher', kopf.verantwortlicher(), optionen.verantwortliche())
+                +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
             .row
               .col-sm-12
                 +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
@@ -125,15 +126,18 @@ block scripts
 
       dateAdapter(startDate, startTime, endDate, endTime);
 
+      var alleOrte = JSON.parse('!{JSON.stringify(orte.orte())}');
+      
       function ortchanged(auswahl) {
-        $.ajax('/optionen/flaecheForOrt', {data: {ort: ort.val()}})
-         .done(function (flaeche) {
-           if (flaeche) {
-             $('#kopf\\[flaeche\\]').val(flaeche);
-           }
-         })
+        var derOrt = alleOrte.find(function(o) {
+          return o.name === ort.val();
+        });
+        $('#kopf\\[flaeche\\]').val(derOrt.flaeche);
+        $('input[name="kopf\\[presseIn\\]"]').val(derOrt.presseIn);
+        $('input[name="kopf\\[pressename\\]"]').val(derOrt.pressename);
       }
       $('#kopf\\[ort\\]').change(ortchanged);
+      
 
     });
 

@@ -1,0 +1,62 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | Orte
+
+block content
+  #edit.modal.fade(tabindex='-1')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+          h3 Ort bearbeiten<br>
+            small Leerer Name löscht den Ort
+        .modal-body
+          form(action='ortChanged', method='post')
+            +csrf
+            +hidden('oldname', '')
+            .row
+              .col-sm-6
+                +text('name', 'Name', '')
+                +number('flaeche', 'Fläche in qm', 0)
+              .col-sm-6
+                +text('pressename', 'Name für Presse', '')
+                +text('presseIn', 'Name für Presse (in)', '')
+            .row
+              .col-md-12
+                .btn-group.pull-right
+                  button.btn.btn-default(data-dismiss='modal') Abbrechen
+                  button.btn.btn-primary(type='submit') Speichern
+  table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
+    tr
+      th Name
+      th Fläche
+      th Für Presse
+      th Für Presse mit "in"
+      th Bearbeiten
+    for ort in orte.orte()
+      tr
+        td #{ort.name}
+        td #{ort.flaeche}
+        td #{ort.pressename}
+        td #{ort.presseIn}
+        td: button.btn.btn-xs.btn-primary(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-presseIn=ort.presseIn, ): i.fa.fa-fw.fa-edit
+
+
+block scripts
+  script.
+    $('#edit').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      // Extract info from data-* attributes
+      var name = button.data('name');
+      var flaeche = button.data('flaeche');
+      var pressename = button.data('pressename');
+      var presseIn = button.data('presseIn');
+      var modal = $(this);
+      $('#name').val(name);
+      $('input[name="oldname"]').val(name);
+      $('#flaeche').val(flaeche);
+      $('#pressename').val(pressename);
+      $('#presseIn').val(presseIn);
+    });

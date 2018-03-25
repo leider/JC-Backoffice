@@ -22,9 +22,12 @@ mixin topNavbar(xs)
             i.fa.fa-calendar.fa-fw.fa-lg
             span.hidden-sm &nbsp;Veranstaltungen&nbsp;
         li(data-jcnav='optionen')
-          a(href='/optionen')
+          a(href='#')
             i.fa.fa-cogs.fa-fw.fa-lg
             span.hidden-sm &nbsp;Optionen
+          ul.dropdown-menu
+            li: a(href='/optionen') Optionen
+            li: a(href='/optionen/orte') Orte
       if user && (accessrights.isSuperuser())
         li(data-jcnav='mailsender')
           a(href='#')

@@ -22,6 +22,7 @@
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},
   "emailAddresses": {"module": "./lib/optionen/emailAddresses"},
+  "orte": {"module": "./lib/optionen/orte"},
   "optionenService": {"module": "./lib/optionen/optionenService"},
   "optionenstore": {"module": "./lib/optionen/optionenstore"},
 
