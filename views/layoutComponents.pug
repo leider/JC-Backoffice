@@ -25,6 +25,7 @@ mixin topNavbar(xs)
           a(href='#')
             i.fa.fa-cogs.fa-fw.fa-lg
             span.hidden-sm &nbsp;Optionen
+            span.hidden-sm.caret
           ul.dropdown-menu
             li: a(href='/optionen') Optionen
             li: a(href='/optionen/orte') Orte
@@ -36,6 +37,7 @@ mixin topNavbar(xs)
           a(href='#')
             i.fa.fa-envelope-o.fa-fw.fa-lg
             span.hidden-sm &nbsp;Mails
+            span.hidden-sm.caret
           ul.dropdown-menu
             li: a(href='/mailsender') Regeln
             li: a(href='/mailsender/compose') Manuell
@@ -44,6 +46,7 @@ mixin topNavbar(xs)
           a(href='#')
             i.fa.fa-users.fa-fw
             span.hidden-sm &nbsp;User
+            span.hidden-sm.caret
           ul.dropdown-menu
             li: a(href='(/users') Bearbeiten / Anlegen
             li: a(href='/users/rundmail') Rundmail an alle
@@ -51,6 +54,7 @@ mixin topNavbar(xs)
           a(href='#')
             i.fa.fa-hand-paper-o.fa-fw.fa-lg
             span.hidden-sm &nbsp;Team
+            span.hidden-sm.caret
           ul.dropdown-menu
             li: a(href='/teamseite/admin') Admin
             li: a(href='/teamseite') Normal
@@ -63,6 +67,7 @@ mixin topNavbar(xs)
         a(href='#')
           i.fa.fa-book.fa-fw
           span.hidden-sm &nbsp;Wiki&nbsp;
+          span.hidden-sm.caret
         ul.dropdown-menu
           for subdir in wikisubdirs
             li: a(href='/wiki/' + subdir + '/') #{subdir}

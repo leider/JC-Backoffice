@@ -44,16 +44,16 @@ mixin preiseScript
         var preis = eurAmount(regulaer);
         var preisErmaessigt = preis - Math.abs(eurAmount(rabattErmaessigt));
         var preisMitglied = preis - Math.abs(eurAmount(rabattMitglied));
-        
-        $('#eintrittspreise\\[ermaessigt\\]').autoNumeric('set', preisErmaessigt);
-        $('#eintrittspreise\\[mitglied\\]').autoNumeric('set', preisMitglied);
+
+        setEuro($('#eintrittspreise\\[ermaessigt\\]'), preisErmaessigt);
+        setEuro($('#eintrittspreise\\[mitglied\\]'), preisMitglied);
 
         var erwarteteEinnahmen = intAmount(anzahlBesucher)
           * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
           + eurAmount(zuschuss);
-          
-        $('#erwarteteEinnahmen').autoNumeric('set', erwarteteEinnahmen);
-        $('#eintrittTotal').autoNumeric('set', erwarteteEinnahmen);
+
+        setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
+        setEuro($('#eintrittTotal'), erwarteteEinnahmen);
       }
 
       [regulaer, rabattErmaessigt, rabattMitglied, anzahlBesucher, zuschuss].forEach(function (field) {

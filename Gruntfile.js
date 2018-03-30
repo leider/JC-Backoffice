@@ -19,8 +19,8 @@ module.exports = function (grunt) {
       'node_modules/bootstrap-fileinput/themes/fa/theme.js',
       'node_modules/moment/moment.js',
       'node_modules/moment/locale/de.js',
-      'node_modules/drmonty-smartmenus/js/jquery.smartmenus.js',
-      'build/javascript/jquery.smartmenus.bootstrap-patched.js',
+      'node_modules/smartmenus/dist/jquery.smartmenus.js',
+      'node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js',
       'node_modules/fullcalendar/dist/fullcalendar.js',
       'node_modules/fullcalendar/dist/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
       'build/stylesheets/less/bootstrap-markdown-patched.less',
       'node_modules/font-awesome/css/font-awesome.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
-      'node_modules/drmonty-smartmenus/css/jquery.smartmenus.bootstrap.css',
+      'node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/less/build-select2-bootstrap.less',
@@ -124,14 +124,6 @@ module.exports = function (grunt) {
       }
     },
     patch: {
-      smartmenus: {
-        options: {
-          patch: 'frontend/3rd_party_js/jquery.smartmenus.bootstrap.js.patch'
-        },
-        files: {
-          'build/javascript/jquery.smartmenus.bootstrap-patched.js': 'node_modules/drmonty-smartmenus/js/jquery.smartmenus.bootstrap.js'
-        }
-      },
       flaticon: {
         options: {
           patch: 'frontend/additionalIcons/patchDirectory/flaticon.patch'

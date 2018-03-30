@@ -105,9 +105,9 @@ block scripts
       var endDateField = $('#unterkunft\\[abreiseDate\\]');
 
       updatePreise = function(preise) {
-        einzelEUR.autoNumeric('set', preise.einzelEUR);
-        doppelEUR.autoNumeric('set', preise.doppelEUR);
-        suiteEUR.autoNumeric('set', preise.suiteEUR);
+        setEuro(einzelEUR, preise.einzelEUR);
+        setEuro(doppelEUR, preise.doppelEUR);
+        setEuro(suiteEUR, preise.suiteEUR);
       }
       
       function updateRoomsTotal() {
@@ -118,7 +118,7 @@ block scripts
         var total = eurAmount(einzelEUR) * intAmount(einzelNum) * days 
           + eurAmount(doppelEUR) * intAmount(doppelNum) * days
           + eurAmount(suiteEUR) * intAmount(suiteNum) * days;
-        $('#roomsTotal').autoNumeric('set', total);
+        setEuro($('#roomsTotal'), total);
         $('#naechte').html(days);
       }
 
@@ -132,7 +132,7 @@ block scripts
 
       var transportEUR = $('#unterkunft\\[transportEUR\\]');
       function updateTransportTotal() {
-        $('#transportTotal').autoNumeric('set', eurAmount(transportEUR))
+        setEuro($('#transportTotal'), eurAmount(transportEUR))
       }
 
       transportEUR.keyup(updateTransportTotal);

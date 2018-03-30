@@ -1,9 +1,12 @@
 /* global moment */
 
+var currencyFields = {};
+
 /* exported eurAmount */
 function eurAmount(jqueryCurrencyField) {
   'use strict';
-  return parseFloat(jqueryCurrencyField.autoNumeric('get'), 10) || 0;
+  var selector = jqueryCurrencyField.attr('id');
+  return parseFloat(currencyFields[selector].getNumericString(), 10) || 0;
 }
 
 /* exported intAmount */
@@ -21,7 +24,8 @@ function floatAmount(jqueryNumberField) {
 /* exported setEuro */
 function setEuro(jqueryCurrencyField, euro) {
   'use strict';
-  jqueryCurrencyField.autoNumeric('set', euro);
+  var selector = jqueryCurrencyField.attr('id');
+  currencyFields[selector].set(euro);
   jqueryCurrencyField.change();
 }
 
@@ -248,7 +252,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
 
     $('.currency').each(function () {
-      $(this).autoNumeric('init');
+      var selector = $(this).attr('id');
+      currencyFields[selector] = new AutoNumeric(selector);
     });
 
     $(':checkbox').each(function () {
