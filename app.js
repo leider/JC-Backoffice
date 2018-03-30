@@ -66,7 +66,7 @@ module.exports = {
     app.use(cookieParser());
     app.use(bodyparser.urlencoded({extended: true}));
     app.use(compress());
-    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 600 * 1000})); // ten minutes
+    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 10 * 60 * 60 * 1000})); // ten hours
 
     app.use(beans.get('expressSessionConfigurator'));
     app.use(beans.get('passportInitializer'));
