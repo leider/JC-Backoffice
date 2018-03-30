@@ -107,8 +107,13 @@ block content
                   tr
                     th(colspan=3) Zuschuss
                     th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
+                tr.form-inline
+                  td
+                    a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
+                      | &nbsp;Kassenzettel
 
-          +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-hotel')
+
+          +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-concert')
             table.table.table-condensed.table-striped
               tr
                 th(align='right', style='text-align: right;') Einnahmen
@@ -189,7 +194,7 @@ block content
                     | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
  
           if agentur.name()
-            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general')
+            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
               .panel-body
                 address
                   strong #{agentur.ansprechpartner()} <br>
@@ -199,7 +204,7 @@ block content
                   | E-Mail: 
                   span.mailtoify #{agentur.email()}
 
-          +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-misc')
+          +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
             table.table.table-condensed
               for step in vertrag.workflow()
                 tr: td
@@ -207,8 +212,11 @@ block content
                     input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
                     label(for=step)
                       | &nbsp;#{step}
+              tr: td
+                a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
+                  | Vertrag anzeigen
 
-          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-misc')
+          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
             table.table.table-condensed
               for step in unterkunft.workflow()
                 tr: td
