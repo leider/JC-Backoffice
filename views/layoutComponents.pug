@@ -16,7 +16,7 @@ mixin topNavbar(xs)
 
   .navbar-collapse.collapse.collapse-top
     ul.nav.navbar-nav.bottom
-      if user && (accessrights.hasSomeGroupAssigned())
+      if user && (accessrights.isOrgaTeam())
         li(data-jcnav='veranstaltungen')
           a(href='/veranstaltungen/zukuenftige')
             i.fa.fa-calendar.fa-fw.fa-lg
@@ -28,6 +28,9 @@ mixin topNavbar(xs)
           ul.dropdown-menu
             li: a(href='/optionen') Optionen
             li: a(href='/optionen/orte') Orte
+        li(data-jcnav='gema'): a(href='/gema')
+          i.fa.i.fa.i.fa.fa-pie-chart.fa-fw
+          span.hidden-sm &nbsp;GEMA
       if user && (accessrights.isSuperuser())
         li(data-jcnav='mailsender')
           a(href='#')
@@ -36,18 +39,14 @@ mixin topNavbar(xs)
           ul.dropdown-menu
             li: a(href='/mailsender') Regeln
             li: a(href='/mailsender/compose') Manuell
-            li: a(href='/optionen/emailAddresses') Emailadressen bearbeiten
-        li(data-jcnav='users'): a(href='/users')
-          i.fa.fa-users.fa-fw
-          span.hidden-sm &nbsp;User
-      if user && (accessrights.hasSomeGroupAssigned())
-        li(data-jcnav='gema'): a(href='/gema')
-          i.fa.i.fa.i.fa.fa-pie-chart.fa-fw
-          span.hidden-sm &nbsp;GEMA
-        li(data-jcnav='mailsender'): a(href='/users/rundmail')
-          i.fa.i.fa.fa-envelope.fa-fw
-          span.hidden-sm &nbsp;Mail an alle
-      if user && (accessrights.isSuperuser())
+            li: a(href='/mailsender/emailAddresses') Emailadressen bearbeiten
+        li(data-jcnav='users')
+          a(href='#')
+            i.fa.fa-users.fa-fw
+            span.hidden-sm &nbsp;User
+          ul.dropdown-menu
+            li: a(href='(/users') Bearbeiten / Anlegen
+            li: a(href='/users/rundmail') Rundmail an alle
         li(data-jcnav='teamseite')
           a(href='#')
             i.fa.fa-hand-paper-o.fa-fw.fa-lg

@@ -33,7 +33,7 @@ mixin tableForTeam(veranstaltungen)
       tr
         td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
         td(style='white-space: nowrap')
-          if accessrights.hasSomeGroupAssigned()
+          if accessrights.isOrgaTeam()
             a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
           else
             | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
