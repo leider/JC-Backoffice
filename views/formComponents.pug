@@ -12,12 +12,12 @@ mixin email(name, label, value, tooltip, placeholder, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.trim-text(id=name, type='email', name=name, value=value, placeholder=placeholder, disabled=readonly)
 
-mixin number(name, label, value, tooltip, min, max)
+mixin number(name, label, value, tooltip, min, max, readonly)
   .form-group
     if (readonly)
       +hidden(name, value)
     +controlLabel(name, label, tooltip)
-    input.form-control.trim-text(id=name, type='number', name=name, value=value, min=min, max=max)
+    input.form-control.trim-text(id=name, type='number', name=name, value=value, min=min, max=max, disabled=readonly)
 
 mixin textWithTags(name, label, value, tags)
   .form-group

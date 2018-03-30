@@ -22,13 +22,20 @@ block content
           +email('email', 'E-Mail', user.email)
           +text('tel', 'Tel', user.tel)
           +singleselect('tshirt', 'T-Shirt', user.tshirt, shirtsizes)
+          .row
+            .col-md-6
+              if accessrights.isSuperuser()
+                +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
+                +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
+                +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
+              else
+                +hidden('gruppen', user.gruppen)
+            .col-md-6
+              if accessrights.isSuperuser()
+                +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
+              else
+                +hidden('rechte', user.rechte)
           +submitButtons()
-          if accessrights.isSuperuser()
-            +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
-            +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
-            +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
-          else
-            +hidden('gruppen', user.gruppen)
 
 
 block scripts

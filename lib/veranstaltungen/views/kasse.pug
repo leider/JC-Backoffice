@@ -10,6 +10,7 @@ block title
 block content
   -var kasse = veranstaltung.kasse()
   -var kosten = veranstaltung.kosten()
+  -var freigegeben = kasse.istFreigegeben()
 
   form#kasseform(action='/veranstaltungen/submit', method='post')
     +csrf
@@ -18,39 +19,53 @@ block content
     fieldset
       .row
         .col-md-12
-          +submitButtonsFor(veranstaltung, 'kasse')
+          +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
           .page-header
             h2 Abendkasse für #{veranstaltung.datumForDisplay()}<br>
               small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+      if freigegeben
+        .row
+          .col-md-12
+            .btn-group.pull-right
+              a.btn.btn-danger(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
+                i.fa.fa-lock.fa-fw.fa-lg
+                | &nbsp;Kasse ist freigeben
+      if accessrights.darfKasseFreigeben() && !freigegeben
+        .row
+          .col-md-12
+            .btn-group.pull-right
+              a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title='Kassenfreigabe')
+                i.fa.fa-unlock.fa-fw.fa-lg
+                | &nbsp;Kasse freigeben
       .row
         .col-md-6
           +legendMitBody('einnahmenReservix', 'Einnahmen Reservix', 'reservixGesamt', 'color-misc')
             .row
               .col-xs-4
-                +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR())
+                +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
               .col-xs-4
-                +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR())
+                +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, freigegeben)
               .col-xs-4
-                +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999)
+                +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, freigegeben)
 
           +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'color-kasse')
             .row
               .col-xs-4
-                +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR())
+                +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), null, null, freigegeben)
               .col-xs-4
-                +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999)
+                +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
               .col-xs-4
-                +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage')
+                +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage', null, freigegeben)
             .row
               .col-xs-8
-                +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
+                +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
               .col-xs-4
-                +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR())
+                +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR(), null, null, freigegeben)
             .row
               .col-xs-8
-                +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.')
+                +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
               .col-xs-4
-                +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR())
+                +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
 
 
         .col-md-6
@@ -58,40 +73,40 @@ block content
             .row
               .col-sm-4.col-xs-6
                 if !kosten.gageBAR()
-                  +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR())
+                  +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
                 else
                   .form-group
                     label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
                       i.fa.fa-exclamation-triangle :
-                    input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', placeholder=placeholder, disabled=readonly, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+                    input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
               .col-sm-4.col-xs-6
-                +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR())
+                +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR(), null, null, freigegeben)
               .col-sm-4.col-xs-6
-                +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR())
+                +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR(), null, null, freigegeben)
             .row
               .col-xs-8
-                +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text())
+                +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text(), null, null, freigegeben)
               .col-xs-4
-                +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR())
+                +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR(), null, null, freigegeben)
             .row
               .col-xs-8
-                +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text())
+                +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text(), null, null, freigegeben)
               .col-xs-4
-                +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR())
+                +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR(), null, null, freigegeben)
             .row
               .col-xs-8
-                +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text())
+                +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text(), null, null, freigegeben)
               .col-xs-4
-                +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR())
+                +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR(), null, null, freigegeben)
             .row
               .col-sm-9.col-xs-6
               .col-sm-3.col-xs-6
-                +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR())
+                +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR(), null, null, freigegeben)
       .row
         .col-md-12
           .row
             .col-sm-3.col-xs-6
-              +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR())
+              +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
             .col-sm-3.col-xs-6
               .form-group
                 +controlLabel('endbestandEUR', 'Endbestand')
@@ -100,7 +115,7 @@ block content
       .row
         .col-md-12
           hr
-          +submitButtonsFor(veranstaltung, 'kasse')
+          +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
 
 block scripts
   script.

@@ -173,5 +173,12 @@ html
             | &nbsp; #{kassierer}
         .col-xs-6
           p: b Unterschrift:
+      .row(style='margin-top:20px')
+        .col-xs-6
+          p
+            b Kasse freigegeben durch:
+            | &nbsp; #{kasse.state.kassenfreigabe}
+        .col-xs-6
+          p: b Unterschrift:
 
 script(src='public/clientscripts/global.js')
