@@ -1,4 +1,4 @@
-/* global moment */
+/* global moment, AutoNumeric */
 
 var currencyFields = {};
 
@@ -253,7 +253,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 
     $('.currency').each(function () {
       var selector = $(this).attr('id');
-      currencyFields[selector] = new AutoNumeric(selector);
+      currencyFields[selector] = new AutoNumeric('#' + selector.replace('[', '\\[').replace(']', '\\]'));
     });
 
     $(':checkbox').each(function () {
