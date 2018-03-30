@@ -5,9 +5,9 @@ include ../../../views/formComponents
 -var kasse = veranstaltung.kasse()
 -var eintrittspreise = veranstaltung.eintrittspreise()
   
-mixin currencyOrEmpty(value)
+mixin currencyOrEmpty(value, id)
   if veranstaltung.istVergangen()
-    +currencySpan(value, '')
+    +currencySpan(value, id)
   else
     | &nbsp;
 
@@ -45,15 +45,15 @@ html
           .col-xs-4
             p
               b Regulär: 
-              +currencySpan(veranstaltung.eintrittspreise().regulaer(), '')
+              +currencySpan(veranstaltung.eintrittspreise().regulaer(), 'eintritRegulaer')
           .col-xs-4
             p
               b Ermäßigt: 
-              +currencySpan(veranstaltung.eintrittspreise().ermaessigt(), '')
+              +currencySpan(veranstaltung.eintrittspreise().ermaessigt(), 'eintrittErmaessigt')
           .col-xs-4
             p
               b Mitglied: 
-              +currencySpan(veranstaltung.eintrittspreise().mitglied(), '')
+              +currencySpan(veranstaltung.eintrittspreise().mitglied(), 'eintrittMitglied')
       .row
         .col-xs-6
           table.table.table-bordered
@@ -80,19 +80,19 @@ html
             tr
               th Anfangsbestand:
               td(align='right')
-                +currencyOrEmpty(kasse.anfangsbestandEUR())
+                +currencyOrEmpty(kasse.anfangsbestandEUR(), 'anfangsbestandEUR')
             tr
               th Einnahmen:
               td(align='right')
-                +currencyOrEmpty(kasse.einnahmeTotalEUR())
+                +currencyOrEmpty(kasse.einnahmeTotalEUR(), 'einnahmeTotalEUR')
             tr
               th Ausgaben:
               td(align='right')
-                +currencyOrEmpty(kasse.ausgabenTotalEUR() * -1)
+                +currencyOrEmpty(kasse.ausgabenTotalEUR() * -1, 'ausgabenTotalEUR')
             tr
               th Endbestand:
               td(align='right')
-                +currencyOrEmpty(kasse.endbestandEUR())
+                +currencyOrEmpty(kasse.endbestandEUR(), 'endbestandEUR')
       .row
         .col-xs-6
           table.table.table-bordered.table-striped
@@ -105,19 +105,19 @@ html
             tr
               td Ticketverkauf
               td
-              td(align='right'): +currencyOrEmpty(kasse.einnahmeTicketsEUR())
+              td(align='right'): +currencyOrEmpty(kasse.einnahmeTicketsEUR(), 'einnahmeTicketsEUR')
             tr
               td Bareinlage
               td
-              td(align='right'): +currencyOrEmpty(kasse.einnahmeBankEUR())
+              td(align='right'): +currencyOrEmpty(kasse.einnahmeBankEUR(), 'einnahmeBankEUR')
             tr
               td #{kasse.einnahmeSonstiges1Text()}
               td
-              td(align='right'): +currencyOrEmpty(kasse.einnahmeSonstiges1EUR())
+              td(align='right'): +currencyOrEmpty(kasse.einnahmeSonstiges1EUR(), 'einnahmeSonstiges1EUR')
             tr
               td #{kasse.einnahmeSonstiges2Text()}
               td
-              td(align='right'): +currencyOrEmpty(kasse.einnahmeSonstiges2EUR())
+              td(align='right'): +currencyOrEmpty(kasse.einnahmeSonstiges2EUR(), 'einnahmeSonstiges2EUR')
             tr
               td &nbsp;
               td
@@ -141,31 +141,31 @@ html
             tr
               td Gage (bar)
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeGageEUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeGageEUR(), 'ausgabeGageEUR')
             tr
               td Catering
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeCateringEUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeCateringEUR(), 'ausgabeCateringEUR')
             tr
               td Personal
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeHelferEUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeHelferEUR(), 'ausgabeHelferEUR')
             tr
               td #{kasse.ausgabeSonstiges1Text()}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges1EUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges1EUR(), 'ausgabeSonstiges1EUR')
             tr
               td #{kasse.ausgabeSonstiges2Text()}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges2EUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges2EUR(), 'ausgabeSonstiges2EUR')
             tr
               td #{kasse.ausgabeSonstiges3Text()}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges3EUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges3EUR(), 'ausgabeSonstiges3EUR')
             tr
               td An Bank
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeBankEUR())
+              td.text-right: +currencyOrEmpty(kasse.ausgabeBankEUR(), 'ausgabeBankEUR')
       .row        
         .col-xs-6
           p
