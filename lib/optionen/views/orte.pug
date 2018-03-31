@@ -41,7 +41,15 @@ block content
         td #{ort.flaeche}
         td #{ort.pressename}
         td #{ort.presseIn}
-        td: button.btn.btn-xs.btn-primary(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-pressein=ort.presseIn, ): i.fa.fa-fw.fa-edit
+        td: button.btn.btn-xs.btn-primary(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-pressein=ort.presseIn ): i.fa.fa-fw.fa-edit
+    tr
+      td 
+      td 
+      td 
+      td 
+      td: button.btn.btn-xs.btn-default(data-toggle='modal', data-target='#edit')
+        i.fa.fa-fw.fa-file-o
+        | &nbsp;Neu
 
 
 block scripts
