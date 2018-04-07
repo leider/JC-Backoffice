@@ -102,13 +102,13 @@ block content
                   td
                 tr.form-inline
                   th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
-                  td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+                  td: span.pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
                 if eintrittspreise.zuschuss() > 0
                   tr
                     th(colspan=3) Zuschuss
                     th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
                 tr.form-inline
-                  td
+                  td(colspan=4)
                     a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
                       | &nbsp;Kassenzettel
 
