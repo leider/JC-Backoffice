@@ -7,66 +7,66 @@ mixin notificationsBlock(notificationmessage)
     | #{contents.text}
 
 mixin topNavbar
-  nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-4
+  header.navbar.navbar-expand-lg.navbar-dark.bg-dark
     a.navbar-brand(href='/')
       img(src='/img/logo_weiss.png', alt='Jazzclub')
     a.btn.btn-default.navbar-toggler(data-toggle='collapse', data-target='#navbarCollapse')
       span.sr-only Toggle
       i.fa.fa-bars.fa-lg.fa-inverse
 
-  #navbarCollapse.navbar-collapse.collapse
-    ul.navbar-nav.mr-auto
-      if user && (accessrights.isOrgaTeam())
-        li.nav-item(data-jcnav='veranstaltungen')
-          a.nav-link(href='/veranstaltungen/zukuenftige')
-            i.fa.fa-calendar.fa-fw.fa-lg
-            span.hidden-sm &nbsp;Veranstaltungen&nbsp;
-        li.nav-item.dropdown(data-jcnav='optionen')
+    #navbarCollapse.navbar-collapse.collapse
+      ul.navbar-nav
+        if user && (accessrights.isOrgaTeam())
+          li.nav-item(data-jcnav='veranstaltungen')
+            a.nav-link(href='/veranstaltungen/zukuenftige')
+              i.fa.fa-calendar.fa-fw.fa-lg
+              span.hidden-sm &nbsp;Veranstaltungen&nbsp;
+          li.nav-item.dropdown(data-jcnav='optionen')
+            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+              i.fa.fa-cogs.fa-fw.fa-lg
+              span.hidden-sm &nbsp;Optionen
+            .dropdown-menu
+              a.dropdown-item(href='/optionen') Optionen
+              a.dropdown-item(href='/optionen/orte') Orte
+          li.nav-item(data-jcnav='gema'): a.nav-link(href='/gema')
+            i.fa.i.fa.i.fa.fa-pie-chart.fa-fw
+            span.hidden-sm &nbsp;GEMA
+        if user && (accessrights.isSuperuser())
+          li.nav-item.dropdown(data-jcnav='mailsender')
+            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+              i.fa.fa-envelope-o.fa-fw.fa-lg
+              span.hidden-sm &nbsp;Mails
+            .dropdown-menu
+              a.dropdown-item(href='/mailsender') Regeln
+              a.dropdown-item(href='/mailsender/compose') Manuell
+              a.dropdown-item(href='/mailsender/emailAddresses') Emailadressen bearbeiten
+          li.nav-item.dropwdown(data-jcnav='users')
+            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+              i.fa.fa-users.fa-fw
+              span.hidden-sm &nbsp;User
+            .dropdown-menu
+              a.dropdown-item(href='/users') Bearbeiten / Anlegen
+              a.dropdown-item(href='/users/rundmail') Rundmail an alle
+          li.nav-item.dropdown(data-jcnav='teamseite')
+            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+              i.fa.fa-hand-paper-o.fa-fw.fa-lg
+              span.hidden-sm &nbsp;Team
+            .dropdown-menu
+              a.dropdown-item(href='/teamseite/admin') Admin
+              a.dropdown-item(href='/teamseite') Normal
+        else
+          li.nav-item(data-jcnav='teamseite')
+            a.nav-link(href='/teamseite')
+              i.fa.fa-hand-paper-o.fa-fw.fa-lg
+              | &nbsp;Team&nbsp;
+        li.nav-item.dropdown(data-jcnav='wiki')
           a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-            i.fa.fa-cogs.fa-fw.fa-lg
-            span.hidden-sm &nbsp;Optionen
+            i.fa.fa-book.fa-fw
+            span.hidden-sm &nbsp;Wiki&nbsp;
           .dropdown-menu
-            a.dropdown-item(href='/optionen') Optionen
-            a.dropdown-item(href='/optionen/orte') Orte
-        li.nav-item(data-jcnav='gema'): a.nav-link(href='/gema')
-          i.fa.i.fa.i.fa.fa-pie-chart.fa-fw
-          span.hidden-sm &nbsp;GEMA
-      if user && (accessrights.isSuperuser())
-        li.nav-item.dropdown(data-jcnav='mailsender')
-          a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-            i.fa.fa-envelope-o.fa-fw.fa-lg
-            span.hidden-sm &nbsp;Mails
-          .dropdown-menu
-            a.dropdown-item(href='/mailsender') Regeln
-            a.dropdown-item(href='/mailsender/compose') Manuell
-            a.dropdown-item(href='/mailsender/emailAddresses') Emailadressen bearbeiten
-        li.nav-item.dropwdown(data-jcnav='users')
-          a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-            i.fa.fa-users.fa-fw
-            span.hidden-sm &nbsp;User
-          .dropdown-menu
-            a.dropdown-item(href='/users') Bearbeiten / Anlegen
-            a.dropdown-item(href='/users/rundmail') Rundmail an alle
-        li.nav-item.dropdown(data-jcnav='teamseite')
-          a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-            i.fa.fa-hand-paper-o.fa-fw.fa-lg
-            span.hidden-sm &nbsp;Team
-          .dropdown-menu
-            a.dropdown-item(href='/teamseite/admin') Admin
-            a.dropdown-item(href='/teamseite') Normal
-      else
-        li.nav-item(data-jcnav='teamseite')
-          a.nav-link(href='/teamseite')
-            i.fa.fa-hand-paper-o.fa-fw.fa-lg
-            span.hidden-sm &nbsp;Team&nbsp;
-      li.nav-item.dropdown(data-jcnav='wiki')
-        a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-          i.fa.fa-book.fa-fw
-          span.hidden-sm &nbsp;Wiki&nbsp;
-        .dropdown-menu
-          for subdir in wikisubdirs
-            a.dropdown-item(href='/wiki/' + subdir + '/') #{subdir}
-
-      li.nav-item: a.nav-link(href='/logout')
-        i.fa.fa-sign-out.fa-fw
-        span.hidden-sm &nbsp;Abmelden
+            for subdir in wikisubdirs
+              a.dropdown-item(href='/wiki/' + subdir + '/') #{subdir}
+    
+        li.nav-item: a.nav-link(href='/logout')
+          i.fa.fa-sign-out.fa-fw
+          | &nbsp;Abmelden

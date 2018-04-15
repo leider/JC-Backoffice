@@ -61,17 +61,6 @@ module.exports = function (grunt) {
         expand: true,
         flatten: true
       },
-      bootstrapSASS: {
-        cwd: 'node_modules/bootstrap/scss/',
-        src: ['**', '!_variables.scss'],
-        dest: 'build/stylesheets/sass',
-        expand: true,
-        flatten: false
-      },
-      bootstrapCustomVariabSASS: {
-        src: 'node_modules/bootstrap/scss/_variables.scss',
-        dest: 'build/stylesheets/sass/_original-variables.scss'
-      },
       bootstrapFileinputImages: {
         src: 'node_modules/bootstrap-fileinput/img/*',
         dest: 'public/img/',
@@ -149,8 +138,6 @@ module.exports = function (grunt) {
     sass: {
       dist: {
         files: {
-          'build/stylesheets/sass/out/bootstrap.css': 'build/stylesheets/sass/bootstrap.scss',
-          'build/stylesheets/sass/out/awesome-bootstrap-checkbox.css': 'build/stylesheets/sass/build-awesome-bootstrap-checkbox.scss',
           'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss'
         }
       }

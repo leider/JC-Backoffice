@@ -1,5 +1,6 @@
-@import "variables";
-@import "mixins.scss";
+@import "jc-variables";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
 @import "bootstrap-markdown.scss";
 
 .md-editor {
