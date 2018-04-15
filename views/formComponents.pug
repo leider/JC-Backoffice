@@ -94,9 +94,9 @@ mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.pull-right
     if nosave 
-      a.btn.btn-default(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
+      a.btn.btn-light(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
     else
-      a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl()) Zurück
+      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl()) Zurück
 
     +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard-o')
     +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-eur')
@@ -105,10 +105,10 @@ mixin submitButtonsFor(veranstaltung, current, nosave)
     +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'btn-kasse', 'fa-print')
     +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper-o')
     if veranstaltung.url() && !veranstaltung.kopf().confirmed()
-      a(class='btn btn-default', href=veranstaltung.fullyQualifiedUrl() + '/delete') Löschen
+      a(class='btn btn-light', href=veranstaltung.fullyQualifiedUrl() + '/delete') Löschen
     if veranstaltung.url()
       +hidden('returnTo', currentUrl)
-      +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-default', 'fa-files-o')
+      +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-files-o')
 
     if !nosave
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.fa.fa-floppy-o.fa-fw.fa-lg
@@ -159,7 +159,7 @@ mixin csrf
   +hidden('_csrf', csrf_token)
 
 mixin controlLabel(name, label, tooltip)
-  label.control-label(for=name)
+  label(for=name)
     if (tooltip)
       span.tooltiplabel(data-original-title=tooltip) #{label}:&nbsp;
         i.fa.fa-question-circle
@@ -204,19 +204,19 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
       | &nbsp; Löschen
 
 mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
-  .panel.panel-default
+  .card.card-default
     .panel-heading(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(null, optionalCurrencySpan, 'pull-right')
-    .panel-body.collapse.in(id = id)
+    .card-body.collapse.show(id = id)
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optionalMoney, optionalEditLink, optionalEditIcon)
-  .panel.panel-default
-    .panel-heading(class = optionalColorClass || 'color-general')
+  .card
+    .card-heading(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
@@ -226,7 +226,7 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optional
           i(class='fa fa-fw fa-lg ' + optionalEditIcon)
       if optionalCurrencySpan
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'pull-right')
-    .collapse.in(id = id)
+    .collapse.show(id = id)
       block
 
 mixin uploader(name, label, accept, value, extradata)

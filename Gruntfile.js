@@ -41,7 +41,7 @@ module.exports = function (grunt) {
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
-      //      'build/stylesheets/sass/build-select2-bootstrap.scss',
+      'build/stylesheets/sass/out/select2-bootstrap.css',
       'build/stylesheets/sass/out/awesome-bootstrap-checkbox.css',
       'build/stylesheets/sass/out/jc-backoffice.css'
     ]
@@ -73,12 +73,6 @@ module.exports = function (grunt) {
       //   expand: true,
       //   flatten: true
       // },
-      bootstrapSelect2SASS: {
-        src: 'node_modules/select2-bootstrap-theme/src/select2-bootstrap.scss',
-        dest: 'build/stylesheets/sass',
-        expand: true,
-        flatten: true
-      },
       awesomeBootstrapCheckboxSASS: {
         src: 'node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss',
         dest: 'build/stylesheets/sass',
@@ -138,7 +132,8 @@ module.exports = function (grunt) {
     sass: {
       dist: {
         files: {
-          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss'
+          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss',
+          'build/stylesheets/sass/out/select2-bootstrap.css': 'build/stylesheets/sass/build-select2-bootstrap.scss'
         }
       }
     },

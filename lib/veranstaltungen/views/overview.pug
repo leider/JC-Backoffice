@@ -37,7 +37,7 @@ block content
 
         h2(class=kopf.cssTextClass())
           i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-          | #{kopf.titel()} #{kopf.presseIn()}
+          | #{kopf.titel()} im #{kopf.ort()}
           br
           small
             | #{veranstaltung.startMoment().format('LLLL')} #{''}
@@ -48,7 +48,7 @@ block content
             h3 Kooperation mit #{kopf.kooperation()}
           +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
             -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
-            table.table.table-striped.table-condensed
+            table.table.table-striped.table-sm
               if veranstaltung.staff().noStaffNeeded()
                 tr: th(colspan=2) Niemand benötigt
               else
@@ -68,14 +68,14 @@ block content
 
           +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
             if eintrittspreise.frei()
-              .panel-body
+              .card-body
                 p: b Freier Eintritt
                 p
                   b Abendkasse (Sammelbox) Überschuss (ohne Abzug Gage Cash)#{''}
                   b : #{''}
                    +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
             else
-              table.table.table-condensed.table-striped
+              table.table.table-sm.table-striped
                 tr
                   th
                   th(align='right', style='text-align: right;') Regulär
@@ -102,7 +102,7 @@ block content
                   td
                 tr.form-inline
                   th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
-                  td: span.pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+                  td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
                 if eintrittspreise.zuschuss() > 0
                   tr
                     th(colspan=3) Zuschuss
@@ -114,7 +114,7 @@ block content
 
 
           +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-concert')
-            table.table.table-condensed.table-striped
+            table.table.table-sm.table-striped
               tr
                 th(align='right', style='text-align: right;') Einnahmen
                 th(align='right', style='text-align: right;') Kosten
@@ -131,12 +131,12 @@ block content
 
 
           +panelMitBody('info', 'Informationen', null, 'color-misc')
-            .panel-body
+            .card-body
               | !{kopf.beschreibungHTML()}
 
         .col-md-6
           +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            table.table.table-striped.table-condensed
+            table.table.table-striped.table-sm
               tr
                 th(colspan=2) Backline und Technik
                 th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR(), 'backlineUndTechnikEUR')
@@ -179,14 +179,14 @@ block content
 
           if werbung.genehmigungenNum()
             if !werbung.genehmigt()
-              p.text-danger.form-inline 
+              p.text-danger
                 .checkbox.checkbox-warning
                   input#genehmigungenEingeholt(type='checkbox')
                   label.text-danger(for='genehmigungenEingeholt')
                     i.fa.fa-warning
                     | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
             else
-              p.text-success.form-inline
+              p.text-success
                 .checkbox.checkbox-success
                   input#genehmigungenEingeholt(type='checkbox', checked='true')
                   label.text-success(for='genehmigungenEingeholt')
@@ -195,17 +195,16 @@ block content
  
           if agentur.name()
             +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
-              .panel-body
+              .span-body
                 address
                   strong #{agentur.ansprechpartner()} <br>
                   | !{agentur.adresseHTML()} <br>
-                  | Tel.:#{' '}
-                  span.telify #{agentur.telefon()} <br>
+                  | Tel.: #{agentur.telefon()} <br>
                   | E-Mail: 
                   span.mailtoify #{agentur.email()}
 
           +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
-            table.table.table-condensed
+            table.table.table-sm
               for step in vertrag.workflow()
                 tr: td
                   .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
@@ -217,7 +216,7 @@ block content
                   | Vertrag anzeigen
 
           +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
-            table.table.table-condensed
+            table.table.table-sm
               for step in unterkunft.workflow()
                 tr: td
                   .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')

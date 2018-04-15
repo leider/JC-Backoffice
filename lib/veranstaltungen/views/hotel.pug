@@ -6,9 +6,9 @@ include kontakt
 mixin zimmerNumEUR(name, label)
   .col-sm-4
     .row
-      .col-xs-6
+      .col-6
         +number('unterkunft[' + name + 'Num]', label, unterkunft[name + 'Num'](), null, '0', '80')
-      .col-xs-6
+      .col-6
         +currency('unterkunft[' + name + 'EUR]', 'Preis', unterkunft[name + 'EUR']())
 
 
@@ -46,24 +46,24 @@ block content
           +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'color-hotel')
           +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
             .row
-              .col-xs-4()
+              .col-4()
                 +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
                 +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
                 label
                   span#naechte 0
                   span #{''} Nächte
-              .col-xs-8()
+              .col-8()
                 +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
             .row
               +zimmerNumEUR('einzel', 'Einzel')
               +zimmerNumEUR('doppel', 'Doppel')
               +zimmerNumEUR('suite', 'Suite')
             .row
-              .col-xs-12
+              .col-12
                 +checkbox('hotelpreise', 'Preise als Default übernehmen')
             .row
               for step in unterkunft.workflow()
-                .col-xs-6
+                .col-6
                   .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
                     input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
                     label(for=step)

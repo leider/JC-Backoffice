@@ -4,32 +4,32 @@ mixin band(kosten)
   div
     +legendMitBody('band', 'Band', 'bandTotal')
       .row
-        .col-xs-3(style='padding-right: 5px;')
+        .col-3(style='padding-right: 5px;')
           +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
-        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
+        .col-3(style='padding-left: 2px;padding-right: 2px;')
           +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
-        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
+        .col-3(style='padding-left: 2px;padding-right: 2px;')
           +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
-        .col-xs-3(style='padding-left: 5px;')
+        .col-3(style='padding-left: 5px;')
           .form-group
             label.control-label Total:
             p: b
               +currencySpan(null, 'gagenTotal', 'form-control-static pull-right text-success')
       .row
-        .col-xs-3(style='padding-right: 5px;')
+        .col-3(style='padding-right: 5px;')
           +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
-        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
+        .col-3(style='padding-left: 2px;padding-right: 2px;')
           +singleselect('kosten[agenturSteuer]', 'MWSt', kosten.agenturSteuer(), ['ohne', '7%', '19%'])
-        .col-xs-3(style='padding-left: 2px;padding-right: 2px;')
-        .col-xs-3(style='padding-left: 5px;')
+        .col-3(style='padding-left: 2px;padding-right: 2px;')
+        .col-3(style='padding-left: 5px;')
           .form-group
             label.control-label Total:
             p: b
               +currencySpan(null, 'agenturTotal', 'form-control-static pull-right text-success')
       .row
-        .col-xs-6
+        .col-6
           +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
-        .col-xs-6
+        .col-6
           +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 mixin bandScript
   script.

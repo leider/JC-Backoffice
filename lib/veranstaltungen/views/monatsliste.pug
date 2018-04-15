@@ -8,12 +8,12 @@ html
   body
     .container-fluid
       .row
-        .col-xs-12
+        .col-12
           p: a.btn.btn-primary(href='/veranstaltungen/imgzip/' + monat)
             i.fa.fa-download.fa-fw 
             | &nbsp;Alle Bilder als ZIP
       .row
-        .col-xs-12
+        .col-12
           for veranstaltung in liste
             p
               b #{veranstaltung.kopf().titel()}<br> 
