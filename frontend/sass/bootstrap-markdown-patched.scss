@@ -1,0 +1,14 @@
+@import "variables";
+@import "mixins.scss";
+@import "bootstrap-markdown.scss";
+
+.md-editor {
+  > textarea {
+    font-size: $font-size-small;
+    background: $body-bg;
+  }
+}
+
+.has-error .md-editor {
+  border-color: $state-danger-text;
+}
