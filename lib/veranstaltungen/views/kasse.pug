@@ -1,13 +1,26 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-include werbung
-include staff
-include band
 
 block title
   | Veranstaltung
 
 block content
+  #edit.modal.fade(tabindex='-1')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+          h3 Kasse freigeben<br>
+            small Nach dem Freigeben ist keine Änderung mehr möglich!
+        .modal-body
+          .row
+            .col-md-12
+              .btn-group.pull-right
+                button.btn.btn-default(data-dismiss='modal') Abbrechen
+                a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title='Kassenfreigabe')
+                  i.fa.fa-unlock.fa-fw.fa-lg
+                  | &nbsp;Kasse freigeben
+
   -var kasse = veranstaltung.kasse()
   -var kosten = veranstaltung.kosten()
   -var freigegeben = kasse.istFreigegeben()
@@ -27,14 +40,14 @@ block content
         .row
           .col-md-12
             .btn-group.pull-right
-              a.btn.btn-danger(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
+              a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
                 i.fa.fa-lock.fa-fw.fa-lg
                 | &nbsp;Kasse ist freigeben
       if accessrights.darfKasseFreigeben() && !freigegeben
         .row
           .col-md-12
             .btn-group.pull-right
-              a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title='Kassenfreigabe')
+              a.btn.btn-success(data-toggle='modal', data-target='#edit')
                 i.fa.fa-unlock.fa-fw.fa-lg
                 | &nbsp;Kasse freigeben
       .row
