@@ -1,6 +1,5 @@
 @import "jc-variables";
 @import "../../../node_modules/bootstrap/scss/bootstrap";
-@import "awesome-bootstrap-checkbox.scss";
 
 // colors
 $color-ausgaben1: #d50f36;
@@ -278,6 +277,10 @@ a.group {
 
 a.inherit-color {
   color: inherit !important;
+}
+
+label {
+  font-weight: $font-weight-bold;
 }
 
 .label.group {

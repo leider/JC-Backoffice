@@ -42,7 +42,6 @@ module.exports = function (grunt) {
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/sass/out/select2-bootstrap.css',
-      'build/stylesheets/sass/out/awesome-bootstrap-checkbox.css',
       'build/stylesheets/sass/out/jc-backoffice.css'
     ]
   };
