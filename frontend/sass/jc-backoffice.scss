@@ -143,6 +143,7 @@ $color-festival: #9FC442;
 
 .btn-presse {
   @include button-variant($color-kasse2, $color-kasse2-border);
+  color: $yiq-text-light;
 }
 
 // adapt syntaxhighlighted code in textboxes to bootstrap *BEGIN*

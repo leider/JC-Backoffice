@@ -28,9 +28,10 @@ block content
               tr
                 th(colspan=3, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
                 th(style=' background-color: rgb(200, 200, 200)')
-                  a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
-                  | &nbsp; &nbsp;
-                  a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
+                  span.d-flex.justify-content-end
+                    a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
+                    | &nbsp; &nbsp;
+                    a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
               -monatAlt = veranstaltung.startMoment().month();
             tr
               td

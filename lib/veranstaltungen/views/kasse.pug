@@ -9,9 +9,9 @@ block content
     .modal-dialog
       .modal-content
         .modal-header
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
-          h3 Kasse freigeben<br>
+          h3.modal-title Kasse freigeben<br>
             small Nach dem Freigeben ist keine Änderung mehr möglich!
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
         .modal-body
           .row
             .col-md-12
@@ -46,8 +46,8 @@ block content
       if accessrights.darfKasseFreigeben() && !freigegeben
         .row
           .col-md-12
-            .btn-group.pull-right
-              a.btn.btn-success(data-toggle='modal', data-target='#edit')
+            .btn-group.d-flex.justify-content-end
+              a.btn.btn-success(data-toggle='modal', data-target='#edit', href='#')
                 i.fa.fa-unlock.fa-fw.fa-lg
                 | &nbsp;Kasse freigeben
       .row
