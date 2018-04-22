@@ -5,44 +5,46 @@ block title
   | Optionen
 
 block content
-  form#optionenform(action='/optionen/submit', method='post')
-    +csrf
-    fieldset
-      .row
-        .col-md-12
-          +submitButtons()
-          .page-header
-            h2 Optionen <br>
-              small Bearbeiten
-      .row
-        .col-md-6
-          +legendMitBody('allgemein', 'Allgemein')
-            +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
-            +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
-          +legendMitBody('backline', 'Backlines')
-            +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
-            +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
-          +legendMitBody('werb', 'Werbung')
-            .row
-              .col-sm-6
-                +editableMultiselect('plakatNum', 'Plakate Anzahl', optionen.plakatNum(), optionen.plakatNum())
-              .col-sm-6
-                +editableMultiselect('flyerNum', 'Flyer Anzahl', optionen.flyerNum(), optionen.flyerNum())
-            .row
-              .col-sm-6
-                +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
-              .col-sm-6
-                +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
-
-        .col-md-6
-          +legendMitBody('artists', 'Künstler')
-            .row
-              .col-sm-12
-                +editableMultiselect('artists', 'Namen', optionen.artists(), optionen.artists())
-      .row
-        .col-md-12
-          hr
-          +submitButtons()
+  .col-12
+    form#optionenform(action='/optionen/submit', method='post')
+      +csrf
+      fieldset
+        .row
+          .col-md-12
+            .page-header
+              +submitButtons()
+              .page-header
+                h2 Optionen <br>
+                  small Bearbeiten
+        .row
+          .col-md-6
+            +legendMitBody('allgemein', 'Allgemein')
+              +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
+              +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
+            +legendMitBody('backline', 'Backlines')
+              +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
+              +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
+            +legendMitBody('werb', 'Werbung')
+              .row
+                .col-sm-6
+                  +editableMultiselect('plakatNum', 'Plakate Anzahl', optionen.plakatNum(), optionen.plakatNum())
+                .col-sm-6
+                  +editableMultiselect('flyerNum', 'Flyer Anzahl', optionen.flyerNum(), optionen.flyerNum())
+              .row
+                .col-sm-6
+                  +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
+                .col-sm-6
+                  +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
+  
+          .col-md-6
+            +legendMitBody('artists', 'Künstler')
+              .row
+                .col-sm-12
+                  +editableMultiselect('artists', 'Namen', optionen.artists(), optionen.artists())
+        .row
+          .col-md-12
+            hr
+            +submitButtons()
 
 block scripts
   script(src='/clientscripts/check-optionenform.js')

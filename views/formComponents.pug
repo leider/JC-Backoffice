@@ -92,11 +92,11 @@ mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
     a(class='btn ' + btnstyle + ' active disabled', href='/' + name, data-toggle='tooltip', title=title): i(class='fa fa-fw fa-lg ' + icon)
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
-  .btn-group.pull-right
+  .btn-group.btn-group-sm.pull-right
     if nosave 
       a.btn.btn-light(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
     else
-      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl()) Zurück
+      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), title='Zurück') <
 
     +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard-o')
     +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-eur')

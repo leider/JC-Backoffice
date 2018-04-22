@@ -6,26 +6,28 @@ block title
   | Gema
 
 block content
-  .col-lg-6
-    +panelMitBody('vorab', 'Vorabmeldung', null, 'color-general')
-      form#gemavorform(action='/gema/vorab', method='post')
-        .card-body
-          +csrf
-          .card-title
-            +submitButtons('Öffnen')
-        table.table.table-sm
-          for event in upcomingEvents
-            +checkbox('event[' + event.id() + ']', event.description())
-
-  .col-lg-6
-    +panelMitBody('nach', 'Nachmeldung', null, 'color-general')
-      form#gemanachform(action='/gema/nach', method='post')
-        .card-body
-          +csrf
-          .card-title
-            +submitButtons('Öffnen')
-        table.table.table-sm
-          if (pastEvents)
-            for event in pastEvents
-              +checkbox('event[' + event.id() + ']', event.description())
+  .col-12.mt-3
+    .row
+      .col-lg-6
+        +panelMitBody('vorab', 'Vorabmeldung', null, 'color-general')
+          form#gemavorform(action='/gema/vorab', method='post')
+            .card-body
+              +csrf
+              .card-title
+                +submitButtons('Öffnen')
+            table.table.table-sm
+              for event in upcomingEvents
+                +checkbox('event[' + event.id() + ']', event.description())
+    
+      .col-lg-6
+        +panelMitBody('nach', 'Nachmeldung', null, 'color-general')
+          form#gemanachform(action='/gema/nach', method='post')
+            .card-body
+              +csrf
+              .card-title
+                +submitButtons('Öffnen')
+            table.table.table-sm
+              if (pastEvents)
+                for event in pastEvents
+                  +checkbox('event[' + event.id() + ']', event.description())
     

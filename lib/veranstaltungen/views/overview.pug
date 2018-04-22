@@ -196,7 +196,7 @@ block content
   
         if agentur.name()
           +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
-            .span-body
+            .card-body
               address
                 strong #{agentur.ansprechpartner()} <br>
                 | !{agentur.adresseHTML()} <br>
