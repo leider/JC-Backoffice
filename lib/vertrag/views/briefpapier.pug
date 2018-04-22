@@ -1,11 +1,8 @@
-include ../../../views/layoutComponents
-include ../../../views/formComponents
-  
 mixin signbox(title, party, optionalText, unterschrift)
   .row
-    .col-4
+    .col-xs-4
       p(style='line-height:3;') #{title}:
-    .col-8
+    .col-xs-8
       if (optionalText)
         if (unterschrift)
           p(style='line-height:3;border-bottom:1px dotted')
@@ -56,15 +53,15 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    link(href='public/stylesheets/screen.css', rel='stylesheet')
+    link(href='public/css4print/print.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500,i,500i')
   body(style='font-size:8px;')
     .container
       #Seite1.row
-        .col-9
+        .col-xs-9
           #adresse(style='margin-top:110px')
             .row
-              .col-12
+              .col-xs-12
                 small(style='font-size:6px;')
                   b Jazzclub Karlsruhe e.V.&nbsp;
                   span.blau |&nbsp;
@@ -75,16 +72,16 @@ html
                 block adresse
           #content1(style='margin-top:20px')
           block content1
-        .col-3
+        .col-xs-3
           +sidebar
-        .col-12
+        .col-xs-12
           p.text-center(style='margin-top:15px') Seite 1 von 2
 
       #Seite2.row
-        .col-9
+        .col-xs-9
           #content2(style='margin-top:10px')
           block content2
-        .col-3
+        .col-xs-3
           +sidebar
-        .col-12
+        .col-xs-12
           p.text-center(style='margin-top:15px') Seite 2 von 2

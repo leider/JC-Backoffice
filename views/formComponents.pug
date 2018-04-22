@@ -204,8 +204,8 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
       | &nbsp; Löschen
 
 mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
-  .card.card-default
-    .panel-heading(class = optionalColorClass || 'color-general')
+  .card.card-default.mb-2
+    h5.card-header.p-2(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}
@@ -215,8 +215,8 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optionalMoney, optionalEditLink, optionalEditIcon)
-  .card
-    .card-heading(class = optionalColorClass || 'color-general')
+  .card.mb-2
+    h5.card-header.p-2(class = optionalColorClass || 'color-general')
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         i.fa.fa-toggle-down.fa-fw.blog
         | &nbsp;#{title}

@@ -14,14 +14,14 @@ html
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
     title
       block title
-      | &nbsp;- JC-Backoffice
+      | &nbsp;- JC
     
   body
     #cheatsheet.modal.bs-modal-lg.fade(tabindex='-1')
       .modal-dialog.modal-lg
         .modal-content
     +topNavbar
-    .container
+    .container-fluid
       .row.main
         if (statusmessage)
           +notificationsBlock(statusmessage)

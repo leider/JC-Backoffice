@@ -36,7 +36,7 @@ module.exports = function (grunt) {
       'build/stylesheets/sass/out/bootstrap.css',
       'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
       'node_modules/bootstrap-fileinput/css/fileinput.css',
-      //      'build/stylesheets/sass/bootstrap-markdown-patched.less',
+      'build/stylesheets/sass/out/bootstrap-markdown-patched.css',
       'node_modules/font-awesome/css/font-awesome.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'build/stylesheets/flaticon-patched.css',
@@ -66,15 +66,9 @@ module.exports = function (grunt) {
         expand: true,
         flatten: true
       },
-      // bootstrapMarkdownSASS: {
-      //   src: 'node_modules/bootstrap-markdown/less/*',
-      //   dest: 'build/stylesheets/sass',
-      //   expand: true,
-      //   flatten: true
-      // },
-      awesomeBootstrapCheckboxSASS: {
-        src: 'node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss',
-        dest: 'build/stylesheets/sass',
+      css4print: {
+        src: 'frontend/css4print/*',
+        dest: 'public/css4print',
         expand: true,
         flatten: true
       },
@@ -132,7 +126,8 @@ module.exports = function (grunt) {
       dist: {
         files: {
           'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss',
-          'build/stylesheets/sass/out/select2-bootstrap.css': 'build/stylesheets/sass/build-select2-bootstrap.scss'
+          'build/stylesheets/sass/out/select2-bootstrap.css': 'build/stylesheets/sass/build-select2-bootstrap.scss',
+          'build/stylesheets/sass/out/bootstrap-markdown-patched.css': 'build/stylesheets/sass/bootstrap-markdown-patched.scss'
         }
       }
     },
@@ -248,6 +243,7 @@ module.exports = function (grunt) {
   grunt.registerTask('frontendtests', ['clean', 'prepare', 'sass', 'pug', 'cssmin', 'uglify:production_de', 'karma:once', 'uglify:development_de', 'karma:once', 'istanbul_check_coverage:frontend']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
   grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
+  grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['tests']);

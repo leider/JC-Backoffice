@@ -2,28 +2,30 @@ extends ../../../views/layout
 
 include  ../../../views/formComponents
 
+block title
+  | Gema
+
 block content
-  form#gemavorform(action='/gema/vorab', method='post')
-    +csrf
-    fieldset
-      .row
-        .col-md-12
-          legend
-            | Vorabmeldung
-          if (upcomingEvents)
-            h4 Für Veranstaltungen
-            for event in upcomingEvents
-              +checkbox('event[' + event.id() + ']', event.description())
-          +submitButtons('Öffnen')
-  form#gemanachform(action='/gema/nach', method='post')
-    +csrf
-    fieldset
-      .row
-        .col-md-12
-          legend
-            | Nachmeldung
+  .col-lg-6
+    +panelMitBody('vorab', 'Vorabmeldung', null, 'color-general')
+      form#gemavorform(action='/gema/vorab', method='post')
+        .card-body
+          +csrf
+          .card-title
+            +submitButtons('Öffnen')
+        table.table.table-sm
+          for event in upcomingEvents
+            +checkbox('event[' + event.id() + ']', event.description())
+
+  .col-lg-6
+    +panelMitBody('nach', 'Nachmeldung', null, 'color-general')
+      form#gemanachform(action='/gema/nach', method='post')
+        .card-body
+          +csrf
+          .card-title
+            +submitButtons('Öffnen')
+        table.table.table-sm
           if (pastEvents)
-            h4 Für Veranstaltungen
             for event in pastEvents
               +checkbox('event[' + event.id() + ']', event.description())
-          +submitButtons('Öffnen')
+    

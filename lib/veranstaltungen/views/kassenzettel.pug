@@ -1,7 +1,3 @@
-include ../../../views/layoutComponents
-include ../../../views/formComponents
-
-
 -var kasse = veranstaltung.kasse()
 -var eintrittspreise = veranstaltung.eintrittspreise()
   
@@ -11,15 +7,15 @@ mixin localCurrency(value)
   
 mixin currencyOrEmpty(value)
   if veranstaltung.istVergangen()
-    +currencySpan(value, '')
+    +localCurrency(value)
   else
     | &nbsp;
 
 mixin signbox(datum, rolle, name)
   .row
-    .col-2
+    .col-xs-2
       p(style='line-height:3;'): b #{rolle}:
-    .col-10
+    .col-xs-10
       p(style='line-height:3;border-bottom:1px dotted;') #{datum}
       p.text-center(style='margin-top:-10px; font-size:10px;') #{name}
 
@@ -27,13 +23,13 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    link(href='public/stylesheets/screen.css', rel='stylesheet')
+    link(href='public/css4print/print.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
 
   body(style='zoom: 0.7')
     .container
       .row
-        .col-12
+        .col-xs-12
           .page-header
             .pull-right
               address
@@ -46,25 +42,25 @@ html
                 | #{veranstaltung.datumForDisplay()}
       if !eintrittspreise.frei()
         .row
-          .col-md-12
+          .col-xs-12
             h4 Eintrittspreise
               if (veranstaltung.reservixID())
                 | &nbsp;(Reservix-Scanner mitnehmen!)
         .row
-          .col-sm-4
+          .col-xs-4
             p
               b Regulär: 
               +localCurrency(veranstaltung.eintrittspreise().regulaer())
-          .col-sm-4
+          .col-xs-4
             p
               b Ermäßigt: 
               +localCurrency(veranstaltung.eintrittspreise().ermaessigt())
-          .col-sm-4
+          .col-xs-4
             p
               b Mitglied: 
               +localCurrency(veranstaltung.eintrittspreise().mitglied())
       .row
-        .col-6
+        .col-xs-6
           table.table.table-bordered
             tr
               th Name:
@@ -84,7 +80,7 @@ html
                   | &nbsp;
                 
 
-        .col-6
+        .col-xs-6
           table.table.table-bordered
             tr
               th Anfangsbestand:
@@ -103,7 +99,7 @@ html
               td(align='right')
                 +currencyOrEmpty(kasse.endbestandEUR())
       .row
-        .col-6
+        .col-xs-6
           table.table.table-bordered.table-striped
             tr: th.text-center(colspan=3) Einnahmen
             tr
@@ -138,13 +134,12 @@ html
               td &nbsp;
               td
               td
-        .col-6
             tr
               th Summe
               td
               td(align='right'): b: +currencyOrEmpty(kasse.einnahmeTotalEUR())
 
-        .col-6
+        .col-xs-6
           table.table.table-bordered.table-striped
             tr: th.text-center(colspan=3) Ausgaben
             tr
@@ -185,7 +180,7 @@ html
               td(align='right'): b: +currencyOrEmpty(kasse.ausgabenTotalEUR())
 
       .row
-        .col-12
+        .col-xs-12
           table.table.table-bordered.table-striped
             tr: th.text-center(colspan=6) RESERVIX (informativ)
             tr
