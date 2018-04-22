@@ -211,7 +211,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(null, optionalCurrencySpan, 'pull-right')
-    .card-body.collapse.show(id = id).pl-1.pr-1
+    .card-body.collapse.show.pl-1.pr-1(id = id)
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optionalMoney, optionalEditLink, optionalEditIcon)

@@ -24,7 +24,7 @@ describe('Orte', () => {
   it('can update an ort', () => {
     const orte = new Orte();
     orte.addOrt({name: 'ort1', flaeche: 100});
-    orte.updateOrt('ort1', {name: 'ort2', flaeche: 300})
+    orte.updateOrt('ort1', {name: 'ort2', flaeche: 300});
     expect(orte.orte()).to.have.length(1);
     const ort = orte.orte()[0];
     expect(ort.name).to.eql('ort2');

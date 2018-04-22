@@ -174,7 +174,10 @@
     "ausgabeSonstiges3Text": "",
     "einnahmeSonstiges1Text": "",
     "einnahmeSonstiges2Text": "",
-    "anzahlBesucherAK": "0"
+    "anzahlBesucherAK": "0",
+    "reservixBruttoEUR": "0",
+    "reservixNettoEUR": "0",
+    "anzahlBesucherReservix": "0"
   },
   "vertrag": {
     "art": "Jazzclub",

@@ -2,8 +2,7 @@ extends ../../../views/layout
 include ../../../views/formComponents
 
 mixin daterow(name, value)
-  td(style='white-space: nowrap')
-    input.form-control(id=name, type='text', name=name, value=value,
+  td(style='white-space: nowrap'): input.form-control(id=name, type='text', name=name, value=value,
     style='width:100%',
     data-provide='datepicker',
     data-date-format= 'dd.mm.yyyy',

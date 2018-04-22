@@ -19,7 +19,7 @@ optionenstore.get((err1, optionen) => {
   const orte = new Orte();
   optionen.state.flaechen.forEach(each => {
     orte.addOrt({name: each.ort, flaeche: each.flaeche, pressename: each.ort, presseIn: each.ort});
-  })
+  });
   optionenstore.save(orte, err => {
     if (err) {
       console.log(err);
