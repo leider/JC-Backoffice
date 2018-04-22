@@ -1,23 +1,29 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 
+mixin editableMultiselectSmall(name, value, tags)
+  .form-group
+    select.form-control.form-control-sm.enhance(multiple, id=name, name=name, data-tags=true)
+      each tag in tags
+        option(selected = value.indexOf(tag) > -1) #{tag}
 
 mixin orgaStaffField(veranstaltung, name, allUsers)
-  td(style='white-space: nowrap')
-    +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
-    +editableMultiselect('staff[' + name + ']', null, veranstaltung.staff()[name](), allUsers.map(user => user.id))
+  td
+    .form-inline(style='width:200px!important')
+      +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
+      +editableMultiselectSmall('staff[' + name + ']', veranstaltung.staff()[name](), allUsers.map(user => user.id))
       
 mixin tableForOrga(veranstaltungen)
-  table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
+  table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
     -var monatAlt = -1;
     tr
       th(width='100') Datum
       th(width='300') Titel
-      th(width='200') MoD
-      th(width='200') Kasse&nbsp;1
-      th(width='200') Kasse&nbsp;2
-      th(width='200') Technik&nbsp;1
-      th(width='200') Technik&nbsp;2
+      th Kasse&nbsp;1
+      th Kasse&nbsp;2
+      th Technik&nbsp;1
+      th Technik&nbsp;2
+      th MoD
       th(width='100') Speichern
     for veranstaltung in veranstaltungen
       if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
@@ -25,52 +31,49 @@ mixin tableForOrga(veranstaltungen)
         -monatAlt = veranstaltung.startMoment().month();
 
       form#veranstaltungform(action='/teamseite/submit', method='post')
-        tr.form-inline
+        tr
           +hidden('id', veranstaltung.id())
           +csrf
-          td(style='white-space: nowrap'): p.form-control-static #{veranstaltung.datumForDisplayShort()}
-          td(style='white-space: nowrap'): p.form-control-static(style='display:inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;')
+          td(style='white-space: nowrap'): p.form-control-plaintext #{veranstaltung.datumForDisplayShort()}
+          td(style='white-space: nowrap'): p.form-control-plaintext(style='display:inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;')
             a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          +orgaStaffField(veranstaltung, 'mod', users)
           +orgaStaffField(veranstaltung, 'kasseV', users)
           +orgaStaffField(veranstaltung, 'kasse', users)
           +orgaStaffField(veranstaltung, 'technikerV', users)
           +orgaStaffField(veranstaltung, 'techniker', users)
-          td: button.btn.btn-sm.btn-success(type='submit'): i(class='fa fa-fw fa-sm fa-floppy-o')
+          +orgaStaffField(veranstaltung, 'mod', users)
+          td: button.btn.btn-sm.btn-success(type='submit'): i(class='fa fa-fw fa-floppy-o')
 
 block title
   | Teamadmin
 
 block content
-
-  .row
-    .col-12
-      .page-header
-        h2 Team (Admin)
-        +tableForOrga(veranstaltungen)
-  .row
-    .col-12
+  .col-12
+    .page-header
+      h2 Team (Admin)
+    +tableForOrga(veranstaltungen)
+    .page-header
       h2 Übersicht der Benutzer
-      -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-      table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
+    -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
+    table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
+        tr
+          th(width='200') Name
+          th(width='200') E-Mail
+          th(width='150') T-Shirt
+          th(width='150') Telefon
+          th(width='200') Gruppen
+        for user in users
           tr
-            th(width='200') Name
-            th(width='200') E-Mail
-            th(width='150') T-Shirt
-            th(width='150') Telefon
-            th(width='200') Gruppen
-          for user in users
-            tr.form-inline
-              td: a.form-control-static(href='/users/' + user.id) #{user.name}
-              td: span.mailtoify.form-control-static #{user.email}
-              td
-                select.form-control.enhance(id=user.id, name='tshirt', style='width:100%')
-                  -var value = user.tshirt
-                  each val in shirtsizes
-                    option(value = val, selected = value === val) #{val}
-              td
-                input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-              td #{user.gruppen.join(', ')}
+            td: a.form-control-plaintext(href='/users/' + user.id) #{user.name}
+            td: span.mailtoify.form-control-plaintext #{user.email}
+            td
+              select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
+                -var value = user.tshirt
+                each val in shirtsizes
+                  option(value = val, selected = value === val) #{val}
+            td
+              input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+            td #{user.gruppen.join(', ')}
             
 block scripts
   script.

@@ -7,15 +7,15 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
   td(style='white-space: nowrap')
     if !staff[name + 'NotNeeded']()
       if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-        a.btn.btn-success.btn-xs(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
+        a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
       else
-        a.btn.btn-danger.btn-xs(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
+        a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
       span.text-capitalize &nbsp; #{staff[name]().join(', ')}
     else
       .text-warning [keine]
 
 mixin tableForTeam(veranstaltungen)
-  table.table.table-condensed.table-responsive.table-striped
+  table.table.table-sm.table-responsive.table-striped
     -var monatAlt = -1;
     tr
       th Datum
@@ -47,47 +47,47 @@ block title
   | Teamseite
 
 block content
-
-  .row
-    .col-12
-      .page-header
-        .btn-group.pull-right
-          a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
-        h2 Team
+  .col-12
+    .row
+      .col-12
+        .page-header
+          .btn-group.pull-right
+            a.btn.btn-light(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
+          h2 Team
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
         +tableForTeam(veranstaltungen)
-  .row
-    .col-12
-      h2 Übersicht der Benutzer
-      -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-      table.table.table-condensed.table-responsive.table-striped(style='table-layout: fixed')
-          tr
-            th(width='200') Name
-            th(width='200') E-Mail
-            th(width='150') T-Shirt
-            th(width='150') Telefon
-          for user in users
-            tr.form-inline
-              if accessrights.canEditUser(user.id)
-                td: a.form-control-static(href='/users/' + user.id) #{user.name}
-              else
-                td: span.form-control-static #{user.name}
-              td: span.mailtoify.form-control-static #{user.email}
-              td
+    .row
+      .col-12
+        h2 Übersicht der Benutzer
+        -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
+        table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
+            tr
+              th(width='200') Name
+              th(width='200') E-Mail
+              th(width='150') T-Shirt
+              th(width='150') Telefon
+            for user in users
+              tr
                 if accessrights.canEditUser(user.id)
-                  select.form-control.enhance(id=user.id, name='tshirt', style='width:100%')
-                    -var value = user.tshirt
-                    each val in shirtsizes
-                      option(value = val, selected = value === val) #{val}
+                  td: a.form-control-plaintext(href='/users/' + user.id) #{user.name} (click to edit)
                 else
-                  span.form-control-static #{user.tshirt}
-              td
-                if accessrights.canEditUser(user.id)
-                  input.form-control.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-                else
-                  span.telify.form-control-static #{user.tel}
-            
+                  td: span.form-control-plaintext #{user.name}
+                td: span.mailtoify.form-control-plaintext #{user.email}
+                td
+                  if accessrights.canEditUser(user.id)
+                    select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
+                      -var value = user.tshirt
+                      each val in shirtsizes
+                        option(value = val, selected = value === val) #{val}
+                  else
+                    span.form-control-plaintext #{user.tshirt}
+                td
+                  if accessrights.canEditUser(user.id)
+                    input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+                  else
+                    span.telify.form-control-plaintext #{user.tel}
+              
 block scripts
   script.
     $(document).ready(function () {

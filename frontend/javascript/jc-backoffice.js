@@ -199,7 +199,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
               name: 'cmdHelp',
               title: 'Hilfe',
               icon: 'fa fa-question-circle',
-              callback: function () { $('#cheatsheet').modal({remote: '/cheatsheet.html'}); }
+              callback: function () { $('#cheatsheet').modal(); }
             }]
           }]],
           onPreview: function (e) {

@@ -65,9 +65,9 @@ mixin hightextarea(name, label, value, tooltip, placeholder)
   +textareaInternal('md-textarea', '30', name, label, value, tooltip, placeholder)
 
 mixin checkboxWithDescription(name, label, checked, description, optionalValue)
-  .checkbox(class=checked && 'checkbox-success')
-    input(type='checkbox', id=name + optionalValue, name=name, value=optionalValue, checked=(checked ? 'true' : undefined))
-    label(for=name + optionalValue)
+  .form-check(class=checked && 'checkbox-success')
+    input.form-check-input(type='checkbox', id=name + optionalValue, name=name, value=optionalValue, checked=(checked ? 'true' : undefined))
+    labelform-check-label(for=name + optionalValue)
       -if (description)
         span.popover-highlight(rel='tooltip-in-body', data-content=description) #{label}
       -else
@@ -78,7 +78,7 @@ mixin checkbox(name, label, checked, optionalValue)
 
 mixin submitButtons(text)
   .btn-group.pull-right
-    a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
+    a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
     if text
       button.btn.btn-primary(type='submit') #{text}
     else

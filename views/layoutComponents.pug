@@ -40,9 +40,9 @@ mixin topNavbar
               a.dropdown-item(href='/mailsender') Regeln
               a.dropdown-item(href='/mailsender/compose') Manuell
               a.dropdown-item(href='/mailsender/emailAddresses') Emailadressen bearbeiten
-          li.nav-item.dropwdown(data-jcnav='users')
+          li.nav-item.dropdown(data-jcnav='users')
             a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-              i.fa.fa-users.fa-fw
+              i.fa.fa-users.fa-fw.fa-lg
               span.hidden-sm &nbsp;User
             .dropdown-menu
               a.dropdown-item(href='/users') Bearbeiten / Anlegen
