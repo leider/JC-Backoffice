@@ -15,7 +15,7 @@ mixin mitarbeiterRows(collection, verantwortlich)
 
 
 block title
-  | Veranstaltung
+  | #{veranstaltung.kopf().titel()}
 
 block content
   -var agentur = veranstaltung.agentur()
@@ -29,201 +29,201 @@ block content
   -var vertrag = veranstaltung.vertrag()
   -var werbung = veranstaltung.werbung()
   -var salesreport = veranstaltung.salesreport()
-  .row
-    .col-md-12
-      .page-header
-        .btn-group.pull-right
-          +submitButtonsFor(veranstaltung, '', true)
-
-        h2(class=kopf.cssTextClass())
-          i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-          | #{kopf.titel()} #{kopf.presseIn()}
-          br
-          small
-            | #{veranstaltung.startMoment().format('LLLL')} #{''}
-            span (#{kopf.eventTyp()})
-      .row
-        .col-md-6
-          if kopf.kooperation() && kopf.kooperation().length  > 1
-            h3 Kooperation mit #{kopf.kooperation()}
-          +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
-            table.table.table-striped.table-condensed
-              if veranstaltung.staff().noStaffNeeded()
-                tr: th(colspan=2) Niemand benötigt
-              else
-                tr: th(colspan=2) Technik
-                +mitarbeiterRows(mitarbeiter.technikerV, true)
-                +mitarbeiterRows(mitarbeiter.techniker, false)
-                tr: th(colspan=2) Kasse
-                +mitarbeiterRows(mitarbeiter.kasseV, true)
-                +mitarbeiterRows(mitarbeiter.kasse, false)
-                if mitarbeiter.merchandise.length > 0
-                  tr: th(colspan=2) Merchandising
-                +mitarbeiterRows(mitarbeiter.merchandise, false)
-                if mitarbeiter.fremdpersonal.length > 0
-                  tr: th(colspan=2) Sonstige
-                +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
-                  
-
-          +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
-            if eintrittspreise.frei()
-              .panel-body
-                p: b Freier Eintritt
-                p
-                  b Abendkasse (Sammelbox) Überschuss (ohne Abzug Gage Cash)#{''}
-                  b : #{''}
-                   +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
+  .col-12
+    .row
+      .col-md-12
+        .page-header
+          .btn-group.pull-right
+            +submitButtonsFor(veranstaltung, '', true)
+  
+          h2(class=kopf.cssTextClass())
+            i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
+            | #{kopf.titel()} im #{kopf.ort()}
+            br
+            small
+              | #{veranstaltung.startMoment().format('LLLL')} #{''}
+              span (#{kopf.eventTyp()})
+            if kopf.kooperation() && kopf.kooperation().length  > 1
+              h3 Kooperation mit #{kopf.kooperation()}
+    .row
+      .col-md-6
+        +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+          -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
+          table.table.table-striped.table-sm
+            if veranstaltung.staff().noStaffNeeded()
+              tr: th(colspan=2) Niemand benötigt
             else
-              table.table.table-condensed.table-striped
-                tr
-                  th
-                  th(align='right', style='text-align: right;') Regulär
-                  th(align='right', style='text-align: right;') Ermäßigt
-                  th(align='right', style='text-align: right;') Mitglied
-                tr
-                  th Preise
-                  td(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
-                  td(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
-                  td(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
-                tr.form-inline
-                  th
-                    span Reservix (Brutto)
-                      .pull-right: +currencySpan(kasse.reservixBruttoEUR(), 'bruttoReservix')
-                  td
-                  td
-                  td
-                tr.form-inline
-                  th
-                    span Reservix (Bereinigt)
-                      .pull-right: +currencySpan(kasse.reservixNettoEUR(), 'nettoReservix')
-                  td: span.pull-right #{kasse.anzahlBesucherReservix()}
-                  td
-                  td
-                tr.form-inline
-                  th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
-                  td: span.pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
-                if eintrittspreise.zuschuss() > 0
-                  tr
-                    th(colspan=3) Zuschuss
-                    th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
-                tr.form-inline
-                  td(colspan=4)
-                    a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
-                      | &nbsp;Kassenzettel
-
-
-          +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-concert')
-            table.table.table-condensed.table-striped
+              tr: th(colspan=2) Technik
+              +mitarbeiterRows(mitarbeiter.technikerV, true)
+              +mitarbeiterRows(mitarbeiter.techniker, false)
+              tr: th(colspan=2) Kasse
+              +mitarbeiterRows(mitarbeiter.kasseV, true)
+              +mitarbeiterRows(mitarbeiter.kasse, false)
+              if mitarbeiter.merchandise.length > 0
+                tr: th(colspan=2) Merchandising
+              +mitarbeiterRows(mitarbeiter.merchandise, false)
+              if mitarbeiter.fremdpersonal.length > 0
+                tr: th(colspan=2) Sonstige
+              +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
+                
+  
+        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
+          if eintrittspreise.frei()
+            .card-body
+              p: b Freier Eintritt
+              p
+                b Abendkasse (Sammelbox) Überschuss (ohne Abzug Gage Cash)#{''}
+                b : #{''}
+                 +currencySpan(kasse.ausgabeBankEUR() + kasse.ausgabeGageEUR(), 'abendkasseEUR')
+          else
+            table.table.table-sm.table-striped
               tr
-                th(align='right', style='text-align: right;') Einnahmen
-                th(align='right', style='text-align: right;') Kosten
-                th(align='right', style='text-align: right;') Überschuss
+                th
+                th(align='right', style='text-align: right;') Regulär
+                th(align='right', style='text-align: right;') Ermäßigt
+                th(align='right', style='text-align: right;') Mitglied
               tr
-                td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
-                td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                td(align='right'): b: +currencySpan(veranstaltung.bruttoUerberschussEUR(), 'dealUeberschuss')
-              if kosten.deal() !== 'ohne'
-                tr
-                  th Anteilig an Band (#{kosten.deal()}):
-                  td
-                  td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
-
-
-          +panelMitBody('info', 'Informationen', null, 'color-misc')
-            .panel-body
-              | !{kopf.beschreibungHTML()}
-
-        .col-md-6
-          +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
-            table.table.table-striped.table-condensed
+                th Preise
+                td(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
+                td(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
+                td(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
               tr
-                th(colspan=2) Backline und Technik
-                th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR(), 'backlineUndTechnikEUR')
-              tr
-                th(colspan=2) Saal
-                th(align='right', style='text-align: right;'): +currencySpan(kosten.saalmiete(), 'saalmiete')
-              tr
-                th(colspan=2) Band
-                th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR(), 'bandTotalEUR')
-              tr
-                td(width='2%')
-                td(width='48%') 
-                  if !kosten.gageBAR()
-                    | Gage
-                  else
-                    b.text-danger: i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
-                      i.fa.fa-exclamation-triangle
-                td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR(), 'gagenTotalEUR')
-              tr
+                th
+                  span Reservix (Brutto)
+                    .pull-right: +currencySpan(kasse.reservixBruttoEUR(), 'bruttoReservix')
                 td
-                td Agentur
-                td(align='right'): +currencySpan(kosten.agenturTotalEUR(), 'agenturTotalEUR')
-              tr
-                th(colspan=2) Hotel / Transport
-                th(align='right', style='text-align: right;'): +currencySpan(unterkunft.kostenTotalEUR(), 'kostenTotalEUR')
-              tr
-                th(colspan=2) Personal
-                th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR(), 'staffTotalEUR')
-              tr
-                th(colspan=2) Werbung
-                th(align='right', style='text-align: right;'): +currencySpan(werbung.marketingTotalEUR(), 'marketingTotalEUR')
-              tr
                 td
-                td Plakate
-                td(align='right'): +currencySpan(werbung.plakateTotalEUR(), 'plakateTotalEUR')
-              tr
                 td
-                td Flyer/Layout
-                td(align='right'): +currencySpan(werbung.mediaTotalEUR(), 'mediaTotalEUR')
+              tr
+                th
+                  span Reservix (Bereinigt)
+                    .pull-right: +currencySpan(kasse.reservixNettoEUR(), 'nettoReservix')
+                td: span.pull-right #{kasse.anzahlBesucherReservix()}
+                td
+                td
+              tr
+                th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
+                td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+              if eintrittspreise.zuschuss() > 0
+                tr
+                  th(colspan=3) Zuschuss
+                  th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
+              tr.form-inline
+                td(colspan=4)
+                  a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
+                    | &nbsp;Kassenzettel
+  
+  
+        +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-concert')
+          table.table.table-sm.table-striped
+            tr
+              th(align='right', style='text-align: right;') Einnahmen
+              th(align='right', style='text-align: right;') Kosten
+              th(align='right', style='text-align: right;') Überschuss
+            tr
+              td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
+              td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+              td(align='right'): b: +currencySpan(veranstaltung.bruttoUerberschussEUR(), 'dealUeberschuss')
+            if kosten.deal() !== 'ohne'
+              tr
+                th Anteilig an Band (#{kosten.deal()}):
+                td
+                td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
+  
+  
+        +panelMitBody('info', 'Informationen', null, 'color-misc')
+          .card-body
+            | !{kopf.beschreibungHTML()}
+  
+      .col-md-6
+        +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+          table.table.table-striped.table-sm
+            tr
+              th(colspan=2) Backline und Technik
+              th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR(), 'backlineUndTechnikEUR')
+            tr
+              th(colspan=2) Saal
+              th(align='right', style='text-align: right;'): +currencySpan(kosten.saalmiete(), 'saalmiete')
+            tr
+              th(colspan=2) Band
+              th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR(), 'bandTotalEUR')
+            tr
+              td(width='2%')
+              td(width='48%') 
+                if !kosten.gageBAR()
+                  | Gage
+                else
+                  b.text-danger: i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                    i.fa.fa-exclamation-triangle
+              td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR(), 'gagenTotalEUR')
+            tr
+              td
+              td Agentur
+              td(align='right'): +currencySpan(kosten.agenturTotalEUR(), 'agenturTotalEUR')
+            tr
+              th(colspan=2) Hotel / Transport
+              th(align='right', style='text-align: right;'): +currencySpan(unterkunft.kostenTotalEUR(), 'kostenTotalEUR')
+            tr
+              th(colspan=2) Personal
+              th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR(), 'staffTotalEUR')
+            tr
+              th(colspan=2) Werbung
+              th(align='right', style='text-align: right;'): +currencySpan(werbung.marketingTotalEUR(), 'marketingTotalEUR')
+            tr
+              td
+              td Plakate
+              td(align='right'): +currencySpan(werbung.plakateTotalEUR(), 'plakateTotalEUR')
+            tr
+              td
+              td Flyer/Layout
+              td(align='right'): +currencySpan(werbung.mediaTotalEUR(), 'mediaTotalEUR')
 
-          if werbung.genehmigungenNum()
-            if !werbung.genehmigt()
-              p.text-danger.form-inline 
-                .checkbox.checkbox-warning
-                  input#genehmigungenEingeholt(type='checkbox')
-                  label.text-danger(for='genehmigungenEingeholt')
-                    i.fa.fa-warning
-                    | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
-            else
-              p.text-success.form-inline
-                .checkbox.checkbox-success
-                  input#genehmigungenEingeholt(type='checkbox', checked='true')
-                  label.text-success(for='genehmigungenEingeholt')
-                    i.fa.check-circle
-                    | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
- 
-          if agentur.name()
-            +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
-              .panel-body
-                address
-                  strong #{agentur.ansprechpartner()} <br>
-                  | !{agentur.adresseHTML()} <br>
-                  | Tel.:#{' '}
-                  span.telify #{agentur.telefon()} <br>
-                  | E-Mail: 
-                  span.mailtoify #{agentur.email()}
-
-          +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
-            table.table.table-condensed
-              for step in vertrag.workflow()
-                tr: td
-                  .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
-                    input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
-                    label(for=step)
-                      | &nbsp;#{step}
+        if werbung.genehmigungenNum()
+          if !werbung.genehmigt()
+            p.text-danger
+              .checkbox.checkbox-warning
+                input#genehmigungenEingeholt(type='checkbox')
+                label.text-danger(for='genehmigungenEingeholt')
+                  i.fa.fa-warning
+                  | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
+          else
+            p.text-success
+              .checkbox.checkbox-success
+                input#genehmigungenEingeholt(type='checkbox', checked='true')
+                label.text-success(for='genehmigungenEingeholt')
+                  i.fa.check-circle
+                  | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
+  
+        if agentur.name()
+          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+            .card-body
+              address
+                strong #{agentur.ansprechpartner()} <br>
+                | !{agentur.adresseHTML()} <br>
+                | Tel.: #{agentur.telefon()} <br>
+                | E-Mail: 
+                span.mailtoify #{agentur.email()}
+  
+        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+          table.table.table-sm
+            for step in vertrag.workflow()
               tr: td
-                a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
-                  | Vertrag anzeigen
-
-          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
-            table.table.table-condensed
-              for step in unterkunft.workflow()
-                tr: td
-                  .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
-                    input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
-                    label(for=step)
-                      | &nbsp;#{step}
+                .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                  input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
+                  label(for=step)
+                    | &nbsp;#{step}
+            tr: td
+              a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
+                | Vertrag anzeigen
+  
+        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
+          table.table.table-sm
+            for step in unterkunft.workflow()
+              tr: td
+                .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                  input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
+                  label(for=step)
+                    | &nbsp;#{step}
 
 block scripts
   script.

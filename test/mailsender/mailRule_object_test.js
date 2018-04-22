@@ -7,11 +7,11 @@ const MailRule = beans.get('mailRule');
 
 describe('MailRule', () => {
   const jan5 = moment('2018-01-05');
-  const jan20 = moment('2018-01-20');
+  const jan16 = moment('2018-01-16');
   const montagFeb5 = moment('2018-02-05');
   const dienstagFeb13 = moment('2018-02-13');
   const mittwochFeb14 = moment('2018-02-14');
-  const feb20 = moment('2018-02-20');
+  const feb16 = moment('2018-02-16');
   const montagFeb26 = moment('2018-02-26');
 
   describe('Regel 1 \'Mittwochs für die nächste Woche\'', () => {
@@ -82,19 +82,19 @@ describe('MailRule', () => {
       rule: MailRule.rules()[3]
     });
 
-    it('sendet nur am 20.', () => {
-      expect(rule.shouldSend(feb20)).to.be(true);
+    it('sendet nur am 16.', () => {
+      expect(rule.shouldSend(feb16)).to.be(true);
       expect(rule.shouldSend(dienstagFeb13)).to.be(false);
     });
 
     it('errechnet Beginn und Ende für Februar korrekt', () => {
-      const result = rule.startAndEndDay(jan20);
+      const result = rule.startAndEndDay(jan16);
       expect(result.start).to.eql(moment('2018-02-15'));
       expect(result.end).to.eql(moment('2018-03-15'));
     });
 
     it('errechnet Beginn und Ende für März korrekt', () => {
-      const result = rule.startAndEndDay(feb20);
+      const result = rule.startAndEndDay(feb16);
       expect(result.start).to.eql(moment('2018-03-15'));
       expect(result.end).to.eql(moment('2018-04-15'));
     });

@@ -9,6 +9,7 @@ module.exports = function (grunt) {
       'node_modules/select2/dist/js/select2.full.js',
       'node_modules/select2/dist/js/i18n/de.js',
       'node_modules/autonumeric/dist/autoNumeric.min.js',
+      'node_modules/popper.js/dist/umd/popper.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
       'node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
       'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js',
@@ -19,8 +20,6 @@ module.exports = function (grunt) {
       'node_modules/bootstrap-fileinput/themes/fa/theme.js',
       'node_modules/moment/moment.js',
       'node_modules/moment/locale/de.js',
-      'node_modules/smartmenus/dist/jquery.smartmenus.js',
-      'node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.js',
       'node_modules/fullcalendar/dist/fullcalendar.js',
       'node_modules/fullcalendar/dist/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
@@ -34,20 +33,19 @@ module.exports = function (grunt) {
   const filesForCss = {
     'public/stylesheets/screen.css': [
       'node_modules/fullcalendar/dist/fullcalendar.css',
-      'build/stylesheets/less/bootstrap.less',
+      'build/stylesheets/sass/out/bootstrap.css',
       'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
       'node_modules/bootstrap-fileinput/css/fileinput.css',
-      'build/stylesheets/less/bootstrap-markdown-patched.less',
+      'build/stylesheets/sass/out/bootstrap-markdown-patched.css',
       'node_modules/font-awesome/css/font-awesome.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
-      'node_modules/smartmenus/dist/addons/bootstrap/jquery.smartmenus.bootstrap.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
-      'build/stylesheets/less/build-select2-bootstrap.less',
-      'build/stylesheets/less/build-awesome-bootstrap-checkbox.less',
-      'build/stylesheets/less/jc-backoffice.less'
+      'build/stylesheets/sass/out/select2-bootstrap.css',
+      'build/stylesheets/sass/out/jc-backoffice.css'
     ]
   };
+
   grunt.initConfig({
     clean: {
       build: ['build', 'frontendtests/fixtures/*.html'],
@@ -62,38 +60,15 @@ module.exports = function (grunt) {
         expand: true,
         flatten: true
       },
-      bootstrapLESS: {
-        cwd: 'node_modules/bootstrap/less/',
-        src: ['**', '!variables.less', '!print.less'],
-        dest: 'build/stylesheets/less',
-        expand: true,
-        flatten: false
-      },
-      bootstrapCustomVariablesLESS: {
-        src: 'node_modules/bootstrap/less/variables.less',
-        dest: 'build/stylesheets/less/original-variables.less'
-      },
       bootstrapFileinputImages: {
         src: 'node_modules/bootstrap-fileinput/img/*',
         dest: 'public/img/',
         expand: true,
         flatten: true
       },
-      bootstrapMarkdownLESS: {
-        src: 'node_modules/bootstrap-markdown/less/*',
-        dest: 'build/stylesheets/less',
-        expand: true,
-        flatten: true
-      },
-      bootstrapSelect2LESS: {
-        src: 'node_modules/select2-bootstrap-theme/src/select2-bootstrap.less',
-        dest: 'build/stylesheets/less',
-        expand: true,
-        flatten: true
-      },
-      awesomeBootstrapCheckboxLESS: {
-        src: 'node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.less',
-        dest: 'build/stylesheets/less',
+      css4print: {
+        src: 'frontend/css4print/*',
+        dest: 'public/css4print',
         expand: true,
         flatten: true
       },
@@ -116,9 +91,9 @@ module.exports = function (grunt) {
         expand: true,
         flatten: false
       },
-      customLESS: {
-        src: 'frontend/less/*',
-        dest: 'build/stylesheets/less',
+      customSASS: {
+        src: 'frontend/sass/*',
+        dest: 'build/stylesheets/sass',
         expand: true,
         flatten: true
       }
@@ -147,16 +122,19 @@ module.exports = function (grunt) {
         singleRun: true
       }
     },
-    less: {
-      development: {
-        files: filesForCss
-      },
-      production: {
+    sass: {
+      dist: {
+        files: {
+          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss',
+          'build/stylesheets/sass/out/select2-bootstrap.css': 'build/stylesheets/sass/build-select2-bootstrap.scss',
+          'build/stylesheets/sass/out/bootstrap-markdown-patched.css': 'build/stylesheets/sass/bootstrap-markdown-patched.scss'
+        }
+      }
+    },
+    cssmin: {
+      target: {
         options: {
-          plugins: [
-            new (require('less-plugin-clean-css'))()
-          ],
-          report: 'min'
+          level: 2
         },
         files: filesForCss
       }
@@ -240,7 +218,7 @@ module.exports = function (grunt) {
           requireLowerCaseTags: true,
           requireStrictEqualityOperators: true,
           validateAttributeQuoteMarks: '\'',
-          validateAttributeSeparator: { 'separator': ', ', 'multiLineSeparator': ',\n  ' }
+          validateAttributeSeparator: {'separator': ', ', 'multiLineSeparator': ',\n  '}
         },
         src: ['**/*.pug']
       }
@@ -250,8 +228,10 @@ module.exports = function (grunt) {
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-pug');
-  grunt.loadNpmTasks('grunt-contrib-less');
+  //  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-sassjs');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-karma');
@@ -260,12 +240,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-puglint');
 
   grunt.registerTask('prepare', ['clean', 'copy', 'patch']);
-  grunt.registerTask('frontendtests', ['clean', 'prepare', 'less:development', 'pug', 'uglify:production_de', 'karma:once', 'uglify:development_de', 'karma:once', 'istanbul_check_coverage:frontend']);
+  grunt.registerTask('frontendtests', ['clean', 'prepare', 'sass', 'pug', 'cssmin', 'uglify:production_de', 'karma:once', 'uglify:development_de', 'karma:once', 'istanbul_check_coverage:frontend']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
-  grunt.registerTask('deploy_development', ['prepare', 'less:development', 'uglify:development_de']);
+  grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
+  grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['tests']);
 
-  grunt.registerTask('deploy_production', ['prepare', 'less:production', 'uglify:production_de']);
+  grunt.registerTask('deploy_production', ['prepare', 'sass', 'cssmin', 'uglify:production_de']);
 };

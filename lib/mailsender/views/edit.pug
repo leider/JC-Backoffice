@@ -6,16 +6,15 @@ block title
   | Mailingregel
 
 block content
-  form#mailruleform(action='/mailsender/save', method='post')
-    +csrf
-    fieldset
+  .col-12
+    form#mailruleform(action='/mailsender/save', method='post')
+      +csrf
       if (rule.id())
         +hidden('id', rule.id())
-
       .row
-        .col-md-12
-          +submitButtons()
+        .col-12
           .page-header
+            +submitButtons()
             h2 Mailingregel <br>
               if (rule.id())
                 small Bearbeiten

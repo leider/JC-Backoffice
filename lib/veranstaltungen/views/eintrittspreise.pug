@@ -4,27 +4,27 @@ mixin preise(veranstaltung)
   -var eintrittspreise = veranstaltung.eintrittspreise()
   +legendMitBody('preise', 'Einritt/Zuschuss', 'eintrittTotal')
     .row
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[rabattErmaessigt]', '% erm.', eintrittspreise.rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', eintrittspreise.standardRabattErmaessigt() + ',00 €')
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', eintrittspreise.rabattMitglied(), 'Die Reduktion für Mitglieder', eintrittspreise.standardRabattMitglied() + ',00 €')
     .row
-      .col-xs-4
+      .col-4
         .form-group
           | &nbsp;
           +checkbox('eintrittspreise[frei]', 'Freier Eintritt', eintrittspreise.frei())
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00 €', true)
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00 €', true)
     .row
-      .col-xs-4
+      .col-4
         +currency('eintrittspreise[zuschuss]', 'Zuschuss', eintrittspreise.zuschuss())
-      .col-xs-4
+      .col-4
         +number('eintrittspreise[erwarteteBesucher]', 'Besucher (erwartet)', eintrittspreise.erwarteteBesucher())
-      .col-xs-4
+      .col-4
         .form-group
           +controlLabel('erwarteteEinnahmen', 'Total')
           p: b

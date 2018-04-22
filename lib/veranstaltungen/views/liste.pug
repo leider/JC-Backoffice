@@ -5,63 +5,64 @@ block title
   | Veranstaltungen
 
 block content
-  .row
-    .col-lg-8
-      .page-header
+  .col-lg-8
+    .page-header
+      .bd-title
         .btn-group.pull-right
-          a.btn.btn-default(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
-          a.btn.btn-default(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
-          .btn-group
-            a.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+          a.btn.btn-light(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
+          a.btn.btn-light(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
+          .dropdown
+            a.btn.btn-light.dropdown-toggle(data-toggle='dropdown')
               | #{titel} &nbsp;
               span.caret
-            ul.dropdown-menu
-              li: a(href='/veranstaltungen/zukuenftige') Zukünftige
-              li: a(href='/veranstaltungen/vergangene') Vergangene
+            .dropdown-menu
+              a.dropdown-item(href='/veranstaltungen/zukuenftige') Zukünftige
+              a.dropdown-item(href='/veranstaltungen/vergangene') Vergangene
         h2 Veranstaltungen
-      .table
-        table.table.table-striped.table-condensed
-          -var monatAlt = -1;
-          for veranstaltung in veranstaltungen
-            -var kopf = veranstaltung.kopf()
-            if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-              tr: th(colspan=3, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
-                a.pull-right(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
-                span.pull-right &nbsp; &nbsp;
-                a.pull-right(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
-              -monatAlt = veranstaltung.startMoment().month();
-            tr.form-inline
-              td
-                a(href=veranstaltung.fullyQualifiedUrl())
-                  i(class=kopf.cssIconClass()) #{' '} 
-              th
-                .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl())
-                    .hidden-sm.hidden-xs #{veranstaltung.startMoment().format('ddd DD MMM YY')}
-                    .hidden-md.hidden-lg #{veranstaltung.startMoment().format('DD.MM.YY')}
-                  if !veranstaltung.kopf().confirmed()
-                    span(style='color:red;') #{' '} [GEPLANT]
-              th
-                .form-control-static
-                  a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} #{kopf.presseIn()}
-                  if veranstaltung.reservixID()
-                    | &nbsp;
-                    span.badge(style='background-color: #F8500D !important')
-                      img(src='/img/rex_21x21.png', width='14')
-                      | &nbsp;#{veranstaltung.salesreport().anzahlRegulaer()}
-                .form-control-static.pull-right
-                  .btn-group.btn-group-xs
-                    +checkedButton(veranstaltung, veranstaltung.presse(), 'presse', 'presse')
-                    +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
-    .col-lg-4
-      #calendar
-      a.btn.btn-primary(href='/ical/termine', title='Termine bearbeiten') Termine
+    table.table.table-striped.table-sm
+      -var monatAlt = -1;
+      for veranstaltung in veranstaltungen
+        -var kopf = veranstaltung.kopf()
+        if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+          tr
+            th(colspan=3, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMMM \'YY')}
+            th(style=' background-color: rgb(200, 200, 200)')
+              span.d-flex.justify-content-end
+                a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
+                | &nbsp; &nbsp;
+                a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
+          -monatAlt = veranstaltung.startMoment().month();
+        tr
+          td
+            a(href=veranstaltung.fullyQualifiedUrl())
+              i(class=kopf.cssIconClass()) #{' '} 
+          th
+            a(href=veranstaltung.fullyQualifiedUrl())
+              .d-none.d-md-inline #{veranstaltung.startMoment().format('ddd DD MMM YY')}
+              .d-md-none #{veranstaltung.startMoment().format('DD.MM.YY')}
+            if !veranstaltung.kopf().confirmed()
+              span(style='color:red;') #{' '} [GEPLANT]
+          th.d-flex
+            a(href=veranstaltung.fullyQualifiedUrl()) #{kopf.titel()} #{kopf.presseIn()}
+            if veranstaltung.reservixID()
+              | &nbsp;
+              span.badge(style='background-color: #F8500D !important')
+                img(src='/img/rex_21x21.png', width='14')
+                | &nbsp;#{veranstaltung.salesreport().anzahlRegulaer()}
+          td
+            span.d-flex.justify-content-end
+              .btn-group
+                +checkedButton(veranstaltung, veranstaltung.presse(), 'presse', 'presse')
+                +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
+  .col-lg-4
+    #calendar.mt-4
+    a.btn.btn-primary.mt-3.pull-right(href='/ical/termine', title='Termine bearbeiten') Termine
 
 mixin checkedButton(veranstaltung, section, name, stylename)
   if section.checked()
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
-      i.fa.i.fa.fa-check.fa-fw.fa-lg
+    a.btn.btn-sm(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
+      i.fa.fa-check.fa-fw.fa-lg
   else
-    a.btn.btn-xs(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
-      i.fa.i.fa.fa-question.fa-fw.fa-lg
+    a.btn.btn-sm(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
+      i.fa.fa-question.fa-fw.fa-lg
   

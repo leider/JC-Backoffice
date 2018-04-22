@@ -145,18 +145,17 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
           title: (event.start.format('HH:mm') + ': ') + event.tooltip,
           trigger: 'manual',
           placement: (day < 4 && day > 0) ? 'right' : 'left',
-          container: 'body',
-          template: '<div class="tooltip" role="tooltip" style="max-width: 130px"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+          container: 'body'
         });
         $(this).tooltip('show');
       },
       eventMouseout: function () {
-        $(this).tooltip('destroy');
+        $(this).tooltip('dispose');
       },
       eventClick: function () {
-        $(this).tooltip('destroy');
+        $(this).tooltip('dispose');
       },
-      themeSystem: 'bootstrap3',
+      themeSystem: 'bootstrap4',
       views: {
         month: {
           titleFormat: 'MMM \'YY',
@@ -200,7 +199,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
               name: 'cmdHelp',
               title: 'Hilfe',
               icon: 'fa fa-question-circle',
-              callback: function () { $('#cheatsheet').modal({remote: '/cheatsheet.html'}); }
+              callback: function () { $('#cheatsheet').modal(); }
             }]
           }]],
           onPreview: function (e) {
@@ -239,7 +238,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
 
     $('.enhance').each(function () {
-      /* eslint no-console: 0 */
       $(this).select2({
         width: null,
         containerCssClass: ':all:',
@@ -269,7 +267,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.file-loading').fileinput({
       otherActionButtons: btns,
     });
-    $('.kv-cust-btn').click(function() {
+    $('.kv-cust-btn').click(function () {
       var url = $(this).parents('.file-thumbnail-footer').parent().children('.kv-file-content').children().attr('src');
       window.open(url);
     });
@@ -280,10 +278,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     $('.tooltiplabel').each(function () {
       $(this).tooltip();
     });
-    $('[data-toggle="tooltip"]').tooltip({
-      container: 'body',
-      placement: 'auto top',
-      viewport: '.container-fluid'
+    $('[data-toggle="tooltip"]').each(function () {
+      $(this).tooltip();
     });
   }
 

@@ -40,23 +40,24 @@ block title
   | #{pageName} : #{subdir} - Revisionen
 
 block content
-  .page-header
-    .btn-group.pull-right
-      a.btn.btn-default(href='javascript:history.back()', type='cancel') Zurück
-      button#rev-compare.btn.btn-default(data-pageName=pageName, data-subdir=subdir)
-        i.fa.fa-stethoscope.fa-fw
-        | &nbsp; Vergleichen…
-    h2 #{subdir}/#{pageName}
-      br
-      small Revisionen
-
-  table.history.table.table-striped.table-bordered.table-hover.table-condensed
-    each item in items
-      tr
-        td
-          input(type='checkbox', value=item.fullhash)
-        td #{item.author}
-        td #{item.date().locale(language).format('ll')}
-        td #{item.comment}
-        td
-          a(href=item.url() + '?version=' + item.hashRef) #{item.hashRef || 'CURRENT'}
+  .col-12
+    .page-header
+      .btn-group.pull-right
+        a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
+        button#rev-compare.btn.btn-light(data-pageName=pageName, data-subdir=subdir)
+          i.fa.fa-stethoscope.fa-fw
+          | &nbsp; Vergleichen…
+      h2 #{subdir}/#{pageName}
+        br
+        small Revisionen
+  
+    table.history.table.table-striped.table-bordered.table-hover.table-sm
+      each item in items
+        tr
+          td
+            input(type='checkbox', value=item.fullhash)
+          td #{item.author}
+          td #{item.date().locale(language).format('ll')}
+          td #{item.comment}
+          td
+            a(href=item.url() + '?version=' + item.hashRef) #{item.hashRef || 'CURRENT'}

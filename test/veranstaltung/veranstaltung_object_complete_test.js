@@ -57,7 +57,7 @@ describe('Veranstaltung Gesamt', () => {
       veranstaltung.fillFromUI(reference);
 
       expect(agenturSpy.calledOnce).to.be(true);
-      expect(artistSpy.calledOnce).to.be(true);
+      expect(artistSpy.called).to.be(true);
       expect(eintrittspreiseSpy.calledOnce).to.be(true);
       expect(hotelSpy.calledOnce).to.be(true);
       expect(kasseSpy.calledOnce).to.be(true);

@@ -3,25 +3,26 @@ extends ../../../views/layout
 include  ../../../views/formComponents
 
 block content
-  form#mailform(action='/mailsender/send', method='post')
-    +csrf
-    fieldset
-      .row
-        .col-md-12
-          +submitButtons('Mail senden')
-          legend
-            | Pressemail senden
-          if (upcomingEvents)
-            .row
-              .col-md-6
-                h4 Für Veranstaltungen
-                for event in upcomingEvents
-                  +checkbox('event[' + event.id() + ']', event.description())
-              .col-md-6
-                h4 An Empfänger
-                for number in optionen.noOfEmails()
-                  if optionen.state['partner' + number]
-                    +checkbox('partner[email' + number + ']', optionen.state['partner' + number])
-          +text('subject', 'Subject', '[Jazzclub] Veranstaltungen für ')
-          +hightextarea('markdown', 'Anschreiben')
-          +submitButtons('Mail senden')
+  .col-12
+    form#mailform(action='/mailsender/send', method='post')
+      +csrf
+      fieldset
+        .row
+          .col-md-12
+            +submitButtons('Mail senden')
+            legend
+              | Pressemail senden
+            if (upcomingEvents)
+              .row
+                .col-md-6
+                  h4 Für Veranstaltungen
+                  for event in upcomingEvents
+                    +checkbox('event[' + event.id() + ']', event.description())
+                .col-md-6
+                  h4 An Empfänger
+                  for number in optionen.noOfEmails()
+                    if optionen.state['partner' + number]
+                      +checkbox('partner[email' + number + ']', optionen.state['partner' + number])
+            +text('subject', 'Subject', '[Jazzclub] Veranstaltungen für ')
+            +hightextarea('markdown', 'Anschreiben')
+            +submitButtons('Mail senden')

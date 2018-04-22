@@ -1,55 +1,55 @@
-@import "variables";
-@import "mixins";
+@import "jc-variables";
+@import "../../../node_modules/bootstrap/scss/bootstrap";
 
 // colors
-@color-ausgaben1: #d50f36;
-@color-ausgaben1-border: darken(@color-ausgaben1, 5%);
+$color-ausgaben1: #d50f36;
+$color-ausgaben1-border: darken($color-ausgaben1, 5%);
 
-@color-kasse1: #9185be;
-@color-kasse1-border: darken(@color-kasse1, 5%);
+$color-kasse1: #9185be;
+$color-kasse1-border: darken($color-kasse1, 5%);
 
-@color-allgemein1: #05498c;
-@color-allgemein1-border: darken(@color-allgemein1, 5%);
+$color-allgemein1: #05498c;
+$color-allgemein1-border: darken($color-allgemein1, 5%);
 
-@color-hotel1: #66267b;
-@color-hotel1-border: darken(@color-hotel1, 5%);
+$color-hotel1: #66267b;
+$color-hotel1-border: darken($color-hotel1, 5%);
 
-@color-sonst1: #009285;
-@color-sonst1-border: darken(@color-sonst1, 5%);
+$color-sonst1: #009285;
+$color-sonst1-border: darken($color-sonst1, 5%);
 
-@color-ausgaben2: #f07f31;
-@color-ausgaben2-border: darken(@color-ausgaben2, 5%);
+$color-ausgaben2: #f07f31;
+$color-ausgaben2-border: darken($color-ausgaben2, 5%);
 
-@color-kasse2: #dea71f;
-@color-kasse2-border: darken(@color-kasse2, 5%);
+$color-kasse2: #dea71f;
+$color-kasse2-border: darken($color-kasse2, 5%);
 
-@color-allgemein2: #4faee3;
-@color-allgemein2-border: darken(@color-allgemein2, 5%);
+$color-allgemein2: #4faee3;
+$color-allgemein2-border: darken($color-allgemein2, 5%);
 
-@color-hotel2: #e50069;
-@color-hotel2-border: darken(@color-hotel2, 5%);
+$color-hotel2: #e50069;
+$color-hotel2-border: darken($color-hotel2, 5%);
 
-@color-sonst2: #95c22e;
-@color-sonst2-border: darken(@color-sonst2, 5%);
+$color-sonst2: #95c22e;
+$color-sonst2-border: darken($color-sonst2, 5%);
 
-@color-festival: #9FC442;
+$color-festival: #9FC442;
 
-.color-variant(@color) {
-  background-color: @color !important;
-  border-color: @color !important;
+@mixin color-variant($color) {
+  background-color: $color !important;
+  border-color: $color !important;
   color: #ffffff !important;
 }
 
 .color-classix {
-  .color-variant(@color-allgemein2);
+  @include color-variant($color-allgemein2);
 }
 
 .text-classix {
-  color: @color-allgemein2;
+  color: $color-allgemein2;
 }
 
 .color-concert {
-  .color-variant(darkgrey);
+  @include color-variant(darkgrey);
 }
 
 .text-concert {
@@ -57,27 +57,27 @@
 }
 
 .color-session {
-  .color-variant(@color-kasse2);
+  @include color-variant($color-kasse2);
 }
 
 .text-session {
-  color: @color-kasse2;
+  color: $color-kasse2;
 }
 
 .color-soulcafe {
-  .color-variant(@color-ausgaben2);
+  @include color-variant($color-ausgaben2);
 }
 
 .text-soulcafe {
-  color: @color-ausgaben2;
+  color: $color-ausgaben2;
 }
 
 .color-festival {
-  .color-variant(@color-festival);
+  @include color-variant($color-festival);
 }
 
 .text-festival {
-  color: @color-festival;
+  color: $color-festival;
 }
 
 .logo-festival {
@@ -90,59 +90,60 @@
 }
 
 .color-costs {
-  .color-variant(@color-ausgaben1);
+  @include color-variant($color-ausgaben1);
 }
 
 .color-general {
-  .color-variant(@color-allgemein1);
+  @include color-variant($color-allgemein1);
 }
 
 .color-hotel {
-  .color-variant(@color-hotel1);
+  @include color-variant($color-hotel1);
 }
 
 .color-kasse {
-  .color-variant(@color-kasse1);
+  @include color-variant($color-kasse1);
 }
 
 .color-misc {
-  .color-variant(@color-sonst1);
+  @include color-variant($color-sonst1);
 }
 
 .color-presse {
-  .color-variant(@color-kasse2);
+  @include color-variant($color-kasse2);
 }
 
 .color-staff {
-  .color-variant(@color-kasse2);
+  @include color-variant($color-kasse2);
 }
 
 .btn-costs {
-  .button-variant(#fff; @color-ausgaben1; @color-ausgaben1-border);
+  @include button-variant($color-ausgaben1, $color-ausgaben1-border);
 }
 
 .btn-kasse {
-  .button-variant(#fff; @color-kasse1; @color-kasse1-border);
+  @include button-variant($color-kasse1, $color-kasse1-border);
 }
 
 .btn-general {
-  .button-variant(#fff; @color-allgemein1; @color-allgemein1-border);
+  @include button-variant($color-allgemein1, $color-allgemein1-border);
 }
 
 .btn-hotel {
-  .button-variant(#fff; @color-hotel1; @color-hotel1-border);
+  @include button-variant($color-hotel1, $color-hotel1-border);
 }
 
 .btn-misc {
-  .button-variant(#fff; @color-sonst1; @color-sonst1-border);
+  @include button-variant($color-sonst1, $color-sonst1-border);
 }
 
 .btn-copy {
-  .button-variant(#fff; @color-sonst2; @color-sonst2-border);
+  @include button-variant($color-sonst2, $color-sonst2-border);
 }
 
 .btn-presse {
-  .button-variant(#fff; @color-kasse2; @color-kasse2-border);
+  @include button-variant($color-kasse2, $color-kasse2-border);
+  color: $yiq-text-light;
 }
 
 // adapt syntaxhighlighted code in textboxes to bootstrap *BEGIN*
@@ -156,11 +157,11 @@
 .syntaxhighlighter table thead,
 .syntaxhighlighter table caption,
 .syntaxhighlighter textarea {
-  font-family: @font-family-monospace !important;
+  font-family: $font-family-monospace !important;
 }
 
 .gutter {
-  .clearfix();
+  @include clearfix();
 }
 
 pre code {
@@ -187,7 +188,7 @@ pre code {
 }
 
 .page-header {
-  margin-top: 0px !important;
+  margin-top: 30px !important;
 }
 
 .page-header > h2 {
@@ -217,12 +218,6 @@ pre code {
 .main {
   margin-right: auto;
   margin-left: auto;
-}
-
-@media screen {
-  body {
-    padding-top: 75px;
-  }
 }
 
 @media print {
@@ -281,12 +276,12 @@ a.group {
   color: #ffffff;
 }
 
-a.chevron {
-  color: @text-color;
-}
-
 a.inherit-color {
   color: inherit !important;
+}
+
+label {
+  font-weight: $font-weight-bold;
 }
 
 .label.group {

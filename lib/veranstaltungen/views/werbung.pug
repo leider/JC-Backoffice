@@ -2,15 +2,15 @@ include ../../../views/formComponents
 
 mixin plakateRow(werbung, name, label, optionen)
   .row
-    .col-xs-2
+    .col-2
       +singleselect('werbung[' + name + 'Num]', label, werbung[name + 'Num'](), optionen.plakatNum())
-    .col-xs-2
+    .col-2
       +singleselect('werbung[' + name + 'Groesse]', 'Größe', werbung[name + 'Groesse'](), optionen.plakatGroesse())
-    .col-xs-3
+    .col-3
       +singleselect('werbung[' + name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), optionen.plakatVon())
-    .col-xs-2
+    .col-2
       +text('werbung[' + name + 'KW]', 'KW', werbung[name + 'KW']())
-    .col-xs-3
+    .col-3
       +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
 mixin marketingUndPlakate(werbung, optionen)
@@ -18,23 +18,23 @@ mixin marketingUndPlakate(werbung, optionen)
     +plakateRow(werbung, 'plakat1', 'Plakat', optionen)
     +plakateRow(werbung, 'plakat2', 'Plakat', optionen)
     .row
-      .col-xs-7
+      .col-7
         +text('werbung[genehmigungenInfo]', 'Genehmigungen', werbung.genehmigungenInfo(), null, 'Wer, Was')
-      .col-xs-2
+      .col-2
         +number('werbung[genehmigungenNum]', 'Anzahl', werbung.genehmigungenNum(), null, 0, 500)
-      .col-xs-3
+      .col-3
         +currency('werbung[genehmigungenEUR]', 'Betrag', werbung.genehmigungenEUR())
     .row
-      .col-xs-2
+      .col-2
         +singleselect('werbung[flyerNum]', 'Flyer', werbung.flyerNum(), optionen.flyerNum())
-      .col-xs-7
+      .col-7
         +text('werbung[flyerInfo]', 'Info', werbung.flyerInfo(), null, 'Größe, Lieferant')
-      .col-xs-3
+      .col-3
         +currency('werbung[flyerEUR]', 'Betrag', werbung.flyerEUR())
     .row
-      .col-xs-9
+      .col-9
         +text('werbung[layoutingInfo]', 'Arbeitskosten', werbung.layoutingInfo(), null, 'Layouting, Sonstiges')
-      .col-xs-3
+      .col-3
         +currency('werbung[layoutingEUR]', 'Betrag', werbung.layoutingEUR())
 
 mixin marketingUndPlakateScripts

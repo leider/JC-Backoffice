@@ -4,23 +4,22 @@ block title
   | Suchergebnis
 
 block content
-  .row
-    .col-md-12
-      .page-header
-        h2 "#{searchtext}"&nbsp;
-          small Suchergebnis
-      if (matches.length === 0)
-        h3 Keine Ergebnisse
-      else 
-        dl
-          each match in matches
-            if (match.line)
-              dt
-                a(href='/wiki/' + match.pageName) #{match.pageName}
-                |  (Zeile #{match.line})
-              dd: em "#{match.text}"
-            else
-              dt
-                a(href='/wiki/' + match.pageName) #{match.pageName}
-                |  (im Dateinamen)
+  .col-12
+    .page-header
+      h2 "#{searchtext}"&nbsp;
+        small Suchergebnis
+    if (matches.length === 0)
+      h3 Keine Ergebnisse
+    else 
+      dl.row
+        each match in matches
+          if (match.line)
+            dt.col-4
+              a(href='/wiki/' + match.pageName) #{match.pageName}
+              |  (Zeile #{match.line})
+            dd.col-8: em "#{match.text}"
+          else
+            dt.col-4
+              a(href='/wiki/' + match.pageName) #{match.pageName}
+            dd.col-8 (im Dateinamen)
 

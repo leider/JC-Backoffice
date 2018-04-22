@@ -11,8 +11,7 @@ mixin daterow(name, value)
     data-date-view-ode='days',
     data-date-min-view-mode='days',
     data-date-language='de',
-    data-date-orientation='bottom'
-  )
+    data-date-orientation='bottom')
   
 block title
   | Termine
@@ -21,23 +20,22 @@ block title
   | Teamseite
 
 block content
-  .row
-    .col-xs-12
-      .page-header
-        h2 Termine
-        table.table.table-condensed.table-responsive.table-striped
+  .col-12
+    .page-header
+      h2 Termine
+    table.table.table-sm.table-striped.table-responsive
+      tr
+        th(width='15%') Startet am
+        th(width='15%') Endet am
+        th(width='65%') Beschreibung
+        th(width='5%')
+      for termin in termine
+        form(action='/ical/submit', method='post')
           tr
-            th(width='15%') Von
-            th(width='15%') Bis
-            th(width='65%') Beschreibung
-            th(width='5%')
-          for termin in termine
-            form(action='/ical/submit', method='post')
-              tr.form-inline
-                if termin.id()
-                  +hidden('id', termin.id())
-                +csrf
-                +daterow('startDate', termin.startMoment().format('L'))
-                +daterow('endDate', termin.endMoment().format('L'))
-                td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
-                td: button.btn.btn-primary(type='submit') Speichern
+            if termin.id()
+              +hidden('id', termin.id())
+            +csrf
+            +daterow('startDate', termin.startMoment().format('L'))
+            +daterow('endDate', termin.endMoment().format('L'))
+            td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
+            td: button.btn.btn-primary.pull-right(type='submit'): i.fa.fa-list.fa-fw.fa-files-o

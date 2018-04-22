@@ -1,41 +1,43 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 
+mixin submitButtonsWithDelete()
+  .btn-group.pull-right
+    a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
+    if accessrights.isSuperuser()
+      a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen
+    button.btn.btn-primary(type='submit') Speichern
+
 block title
   | Users
 
 block content
   -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-  .row
-    .col-md-6
+  .col-12
+    form#userform(action='/users/submit', method='post')
       .page-header
+        +submitButtonsWithDelete()
         h2 User "#{user.id}" bearbeiten
-      form#userform(action='/users/submit', method='post')
         +csrf
-        +hidden('id', user.id)
-        fieldset
-          .btn-group.pull-right
-            if accessrights.isSuperuser()
-              a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen
-
-          +text('name', 'Voller Name', user.name)
-          +email('email', 'E-Mail', user.email)
-          +text('tel', 'Tel', user.tel)
-          +singleselect('tshirt', 'T-Shirt', user.tshirt, shirtsizes)
-          .row
-            .col-md-6
-              if accessrights.isSuperuser()
-                +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
-                +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
-                +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
-              else
-                +hidden('gruppen', user.gruppen)
-            .col-md-6
-              if accessrights.isSuperuser()
-                +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
-              else
-                +hidden('rechte', user.rechte)
-          +submitButtons()
+      +hidden('id', user.id)
+      +text('name', 'Voller Name', user.name)
+      +email('email', 'E-Mail', user.email)
+      +text('tel', 'Tel', user.tel)
+      +singleselect('tshirt', 'T-Shirt', user.tshirt, shirtsizes)
+      .row
+        .col-md-6
+          if accessrights.isSuperuser()
+            +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
+            +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
+            +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
+          else
+            +hidden('gruppen', user.gruppen)
+        .col-md-6
+          if accessrights.isSuperuser()
+            +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
+          else
+            +hidden('rechte', user.rechte)
+      +submitButtonsWithDelete()
 
 
 block scripts
