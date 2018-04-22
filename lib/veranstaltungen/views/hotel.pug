@@ -17,70 +17,70 @@ block title
 
 block content
   -var unterkunft = veranstaltung.unterkunft()
-
-  form#hotelform(action='/veranstaltungen/submit', method='post')
-    +csrf
-    +hidden('id', veranstaltung.id())
-    +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-    fieldset
-      .row
-        .col-md-12
-          +submitButtonsFor(veranstaltung, 'hotel')
-          .page-header
-            h2 Hotel für #{veranstaltung.datumForDisplay()}<br>
-              small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
-      .row
-        .col-md-12
-          .btn-group
-            a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reminder', title='Erinnerung')
-              i.fa.fa-envelope.fa-fw.fa-lg
-              | &nbsp;Infomail an #{hotelMailReceiver}
-            a.btn.btn-default(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/preview', title='Vorschau')
-              i.fa.fa-envelope.fa-fw.fa-lg
-              | &nbsp;Reservierungsvorschau an mich
-            a.btn.btn-primary(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reservation', title='Reservierung')
-              i.fa.fa-envelope-o.fa-fw.fa-lg
-              | &nbsp;Reservierung an Hotel
-      .row
-        .col-md-6
-          +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'color-hotel')
-          +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
-            .row
-              .col-4()
-                +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
-                +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
-                label
-                  span#naechte 0
-                  span #{''} Nächte
-              .col-8()
-                +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
-            .row
-              +zimmerNumEUR('einzel', 'Einzel')
-              +zimmerNumEUR('doppel', 'Doppel')
-              +zimmerNumEUR('suite', 'Suite')
-            .row
-              .col-12
-                +checkbox('hotelpreise', 'Preise als Default übernehmen')
-            .row
-              for step in unterkunft.workflow()
-                .col-6
-                  .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
-                    input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
-                    label(for=step)
-                      | &nbsp;#{step}
-            
-        .col-md-6
-          +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
-            +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
-            .row
-              .col-md-6
-                +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
-              .col-md-6
-                +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
-      .row
-        .col-md-12
-          hr
-          +submitButtonsFor(veranstaltung, 'hotel')
+  .col-12
+    form#hotelform(action='/veranstaltungen/submit', method='post')
+      +csrf
+      +hidden('id', veranstaltung.id())
+      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
+      fieldset
+        .row
+          .col-md-12
+            .page-header
+              +submitButtonsFor(veranstaltung, 'hotel')
+              h2 Hotel für #{veranstaltung.datumForDisplay()}<br>
+                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+        .row
+          .col-md-12
+            .btn-group
+              a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reminder', title='Erinnerung')
+                i.fa.fa-envelope.fa-fw.fa-lg
+                | &nbsp;Infomail an #{hotelMailReceiver}
+              a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/preview', title='Vorschau')
+                i.fa.fa-envelope.fa-fw.fa-lg
+                | &nbsp;Reservierungsvorschau an mich
+              a.btn.btn-primary(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reservation', title='Reservierung')
+                i.fa.fa-envelope-o.fa-fw.fa-lg
+                | &nbsp;Reservierung an Hotel
+        .row
+          .col-md-6
+            +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'color-hotel')
+            +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
+              .row
+                .col-4()
+                  +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
+                  +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
+                  label
+                    span#naechte 0
+                    span #{''} Nächte
+                .col-8()
+                  +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
+              .row
+                +zimmerNumEUR('einzel', 'Einzel')
+                +zimmerNumEUR('doppel', 'Doppel')
+                +zimmerNumEUR('suite', 'Suite')
+              .row
+                .col-12
+                  +checkbox('hotelpreise', 'Preise als Default übernehmen')
+              .row
+                for step in unterkunft.workflow()
+                  .col-6
+                    .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                      input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
+                      label(for=step)
+                        | &nbsp;#{step}
+              
+          .col-md-6
+            +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
+              +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
+              .row
+                .col-md-6
+                  +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
+                .col-md-6
+                  +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
+        .row
+          .col-md-12
+            hr
+            +submitButtonsFor(veranstaltung, 'hotel')
 block scripts
   +kontaktScript('hotel', 'hotelchanged')
   script.

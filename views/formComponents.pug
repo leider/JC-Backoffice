@@ -94,9 +94,9 @@ mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.btn-group-sm.pull-right
     if nosave 
-      a.btn.btn-light(href='/', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
+      a.btn.btn-light(href='/', data-toggle='tooltip', title='Zurück zur Liste'): i.fa.fa-list.fa-fw.fa-lg
     else
-      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), title='Zurück') <
+      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fa.fa-arrow-left.fa-fw.fa-lg
 
     +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard-o')
     +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-eur')
@@ -211,7 +211,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(null, optionalCurrencySpan, 'pull-right')
-    .card-body.collapse.show(id = id)
+    .card-body.collapse.show(id = id).pl-1.pr-1
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optionalMoney, optionalEditLink, optionalEditIcon)

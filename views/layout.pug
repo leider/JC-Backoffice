@@ -21,10 +21,11 @@ html
       .modal-dialog.modal-lg
         .modal-content
     +topNavbar
-    .container-fluid
+    .container-fluid.p-0.p-md-auto
       .row.main
         if (statusmessage)
-          +notificationsBlock(statusmessage)
+          .col-12
+            +notificationsBlock(statusmessage)
         block content
   
 script(src='/clientscripts/global.js')

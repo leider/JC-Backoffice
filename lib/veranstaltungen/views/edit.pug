@@ -14,105 +14,106 @@ block content
   -var kosten = veranstaltung.kosten()
   
   form#veranstaltungform(action='/veranstaltungen/submit', method='post')
-
-    +csrf
-    if (veranstaltung.id())
-      +hidden('id', veranstaltung.id())
-    +hidden('previousUrl', veranstaltung.url())
-    fieldset
-      .row
-        .col-md-12
-          +submitButtonsFor(veranstaltung, 'kopf')
-          .page-header
-            h2 Veranstaltung <br>
+    .col-12
+      +csrf
+      if (veranstaltung.id())
+        +hidden('id', veranstaltung.id())
+      +hidden('previousUrl', veranstaltung.url())
+      fieldset
+        .row
+          .col-md-12
+            .page-header
+              +submitButtonsFor(veranstaltung, 'kopf')
               if (veranstaltung.id())
-                small Bearbeiten
+                h2 #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                  small Bearbeiten
               else
-                small Neu anlegen
-            if accessrights.isBookingTeam()
-              +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
-            else
-              +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
-      .row
-        .col-md-6
-          +legendMitBody('event', 'Event')
-            .row
-              .col-sm-6
-                +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
-              .col-sm-3
-                +text('url', 'URL / VA-ID', veranstaltung.url(), 'Eindeutig für die Veranstaltung')
-              .col-sm-3
-                +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
-            .row
-              .col-6
+                h2 Veranstaltung <br>
+                  small Neu anlegen
+              if accessrights.isBookingTeam()
+                +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
+              else
+                +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
+        .row
+          .col-md-6
+            +legendMitBody('event', 'Event')
+              .row
+                .col-sm-6
+                  +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
+                .col-sm-3
+                  +text('url', 'URL / VA-ID', veranstaltung.url(), 'Eindeutig für die Veranstaltung')
+                .col-sm-3
+                  +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
+              .row
+                .col-6
+                  .row
+                    .col-6.pl-2.pr-1
+                      +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
+                    .col-6.pl-1.pr-2
+                      +time('startTime', veranstaltung.startMoment().format('LT'))
+                .col-6
+                  .row
+                    .col-6.pl-2.pr-1
+                      +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
+                    #dates.col-6.pl-1.pr-2
+                      +time('endTime', veranstaltung.endMoment().format('LT'))
+  
+            +band(kosten)
+            +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
+            +legendMitBody('vertrag', 'Vertrag')
+              .row
+                .col-md-6
+                  +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
+                .col-md-6
+                  +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
+              if user && (accessrights.isBookingTeam())
                 .row
-                  .col-6.pl-2.pr-1
-                    +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
-                  .col-6.pl-1.pr-2
-                    +time('startTime', veranstaltung.startMoment().format('LT'))
-              .col-6
-                .row
-                  .col-6.pl-2.pr-1
-                    +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
-                  #dates.col-6.pl-1.pr-2
-                    +time('endTime', veranstaltung.endMoment().format('LT'))
-
-          +band(kosten)
-          +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
-          +legendMitBody('vertrag', 'Vertrag')
-            .row
-              .col-md-6
-                +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
-              .col-md-6
-                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
-            if user && (accessrights.isBookingTeam())
+                  .col-md-12
+                    a.btn.btn-general.pull-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                      | Vertrag generieren
               .row
                 .col-md-12
-                  a.btn.btn-general.pull-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
-                    | Vertrag generieren
-            .row
-              .col-md-12
-                +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
-
-        .col-md-6
-          +legendMitBody('artist', 'Künstler')
-            .row
-              .col-md-12
-                +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
-            .row
-              .col-md-12
-                +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
-            .row
-              .col-3
-                +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
-              .col-3
-                +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
-              .col-3
-                +checkbox('artist[isBawue]', 'aus Baden-Württemberg', artist.isBawue())
-              .col-3
-                +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
-          +preise(veranstaltung)
-          +legendMitBody('wannwo', 'Wo')
-            .row
-              .col-sm-6
-                +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
-                +hidden('kopf[pressename]', kopf.pressename())
-                +hidden('kopf[presseIn]', kopf.presseIn())
-              .col-sm-6
-                +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
-              .col-sm-4
-            .row
-              .col-sm-6
-                +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
-              .col-sm-6
-                +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
-            .row
-              .col-sm-12
-                +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
-      .row
-        .col-md-12
-          hr
-          +submitButtonsFor(veranstaltung, 'kopf')
+                  +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
+  
+          .col-md-6
+            +legendMitBody('artist', 'Künstler')
+              .row
+                .col-md-12
+                  +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
+              .row
+                .col-md-12
+                  +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
+              .row
+                .col-3
+                  +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
+                .col-3
+                  +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
+                .col-3
+                  +checkbox('artist[isBawue]', 'aus Baden-Württemberg', artist.isBawue())
+                .col-3
+                  +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
+            +preise(veranstaltung)
+            +legendMitBody('wannwo', 'Wo')
+              .row
+                .col-sm-6
+                  +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
+                  +hidden('kopf[pressename]', kopf.pressename())
+                  +hidden('kopf[presseIn]', kopf.presseIn())
+                .col-sm-6
+                  +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+                .col-sm-4
+              .row
+                .col-sm-6
+                  +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
+                .col-sm-6
+                  +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
+              .row
+                .col-sm-12
+                  +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
+        .row
+          .col-md-12
+            hr
+            +submitButtonsFor(veranstaltung, 'kopf')
 
 block scripts
   +preiseScript
