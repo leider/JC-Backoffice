@@ -52,7 +52,7 @@ block content
                   | &nbsp;Kasse freigeben
         .row
           .col-md-6
-            +legendMitBody('einnahmen', 'Einnahmen', 'einnahmenGesamt', 'color-kasse')
+            +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'color-kasse')
               .row
                 .col-4
                   +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
@@ -123,7 +123,7 @@ block content
               .col-sm-3.col-6
                 .form-group
                   +controlLabel('endbestandEUR', 'Endbestand')
-                  b: p#endbestandEUR.form-control-static.currency(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+                  b: p#endbestandEUR.form-control-plaintext.currency(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
   
         .row
           .col-md-12
