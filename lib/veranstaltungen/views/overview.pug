@@ -181,14 +181,14 @@ block content
         if werbung.genehmigungenNum()
           if !werbung.genehmigt()
             p.text-danger
-              .checkbox.checkbox-warning
+              .checkbox.abc-checkbox.abc-checkbox-danger
                 input#genehmigungenEingeholt(type='checkbox')
                 label.text-danger(for='genehmigungenEingeholt')
                   i.fa.fa-warning
                   | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
           else
             p.text-success
-              .checkbox.checkbox-success
+              .checkbox.abc-checkbox.abc-checkbox-success
                 input#genehmigungenEingeholt(type='checkbox', checked='true')
                 label.text-success(for='genehmigungenEingeholt')
                   i.fa.check-circle
@@ -208,7 +208,7 @@ block content
           table.table.table-sm
             for step in vertrag.workflow()
               tr: td
-                .checkbox(class=vertrag.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
                   input.vertragstep(type='checkbox', id=step, name=step, checked=vertrag.isChecked(step))
                   label(for=step)
                     | &nbsp;#{step}
@@ -220,7 +220,7 @@ block content
           table.table.table-sm
             for step in unterkunft.workflow()
               tr: td
-                .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
                   input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
                   label(for=step)
                     | &nbsp;#{step}

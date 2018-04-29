@@ -64,10 +64,10 @@ block content
               .row
                 for step in unterkunft.workflow()
                   .col-6
-                    .checkbox(class=unterkunft.isChecked(step) && 'checkbox-success', style='margin-top: 0; margin-bottom: 0;')
+                    .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
                       input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
                       label(for=step)
-                        | &nbsp;#{step}
+                        | #{step}
               
           .col-md-6
             +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
