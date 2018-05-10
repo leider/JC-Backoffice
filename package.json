@@ -56,7 +56,6 @@
     "phantomjs-prebuilt": ">2.1.5",
     "popper.js": "1.14.3",
     "pug": "2.0.3",
-    "puppeteer": "1.4.0",
     "ramda": "0.25.0",
     "request": "2.85.0",
     "select2": "4.0.5",
