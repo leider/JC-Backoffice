@@ -2,10 +2,10 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    link(href='public/css4print/print.css', rel='stylesheet')
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
   body
-    .container
+    .container-fluid
       .row
         .col-6
           address
@@ -13,17 +13,18 @@ html
             | Postfach 101753 <br>
             | 11506 Berlin
         .col-6
-          address
+          address.pull-right
             strong Jazzclub Karlsruhe e.V. <br>
             | KDnr. 113098200 <br>
             | Leopoldstr. 13 <br>
             | 76133 Karlsruhe
+      .row
         .col-12
           if nachmeldung
             h3 Vergangene Veranstaltungen
           else
             h3 Kommende Veranstaltungen
-          table.table.table-condensed
+          table.table.table-sm
             tr
               th Datum
               th Ort
@@ -39,7 +40,7 @@ html
                 td #{veranstaltung.datumForDisplay()}
                 td #{veranstaltung.kopf().ort()}
                 td Jazzkonzert
-                td Musiker: #{veranstaltung.artist().name()}
+                td Musiker: #{veranstaltung.artist().name().join(', ')}
                 td.text-right #{veranstaltung.preisAusweisGema()}
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
