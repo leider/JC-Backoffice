@@ -1,0 +1,3 @@
+// unset kassenfreigabe
+
+db.veranstaltungenstore.update({url: 'Soulcafé im April ´18'}, {$unset: {'kasse.kassenfreigabe':''}})
