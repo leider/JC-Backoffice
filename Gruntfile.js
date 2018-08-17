@@ -109,7 +109,7 @@ module.exports = function (grunt) {
     },
     eslint: {
       options: {quiet: true},
-      target: ['**/*.js']
+      target: ['*.js', 'lib/**/*.js', 'test/**/*.js', 'frontend/**/*.js']
     },
     karma: {
       options: {
