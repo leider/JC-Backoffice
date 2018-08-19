@@ -4,7 +4,7 @@ html
     meta(charset='utf-8')
     link(href='public/css4print/print.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
-  body
+  body(style='font-size:10px;')
     .container
       .row
         .col-6
@@ -27,21 +27,25 @@ html
             tr
               th Datum
               th Ort
+              th Kooperation Mit
               th Veranstaltungsart
               th Musikwiedergabeart
               th.text-right Eintrittspreis
               if nachmeldung
                 th.text-right Einnahmen
                 th.text-right Anzahl Besucher
+                th Rechnung An
               th.text-right Raumgröße
             for veranstaltung in events
               tr
                 td #{veranstaltung.datumForDisplay()}
                 td #{veranstaltung.kopf().ort()}
+                td #{veranstaltung.kopf().kooperation()}
                 td Jazzkonzert
-                td Musiker: #{veranstaltung.artist().name()}
+                td Musiker: #{veranstaltung.artist().name().join(', ')}
                 td.text-right #{veranstaltung.preisAusweisGema()}
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
                   td.text-right #{veranstaltung.anzahlBesucher()}
+                  td #{veranstaltung.kooperationGema() ? veranstaltung.kopf().kooperation() : 'Jazzclub'}
                 td.text-right #{veranstaltung.kopf().flaeche()} m<sup>2</sup>
