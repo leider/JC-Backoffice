@@ -37,7 +37,8 @@ module.exports = function (grunt) {
       'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
       'node_modules/bootstrap-fileinput/css/fileinput.css',
       'build/stylesheets/sass/out/bootstrap-markdown-patched.css',
-      'node_modules/font-awesome/css/font-awesome.css',
+      'node_modules/@fortawesome/fontawesome-free/css/all.css',
+      'node_modules/@fortawesome/fontawesome-free/css/v4-shims.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
@@ -78,8 +79,8 @@ module.exports = function (grunt) {
         flatten: true
       },
       fontawesomeFONTS: {
-        src: 'node_modules/font-awesome/fonts/*',
-        dest: 'public/fonts',
+        src: 'node_modules/@fortawesome/fontawesome-free/webfonts/*',
+        dest: 'public/webfonts',
         expand: true,
         flatten: true
       },
