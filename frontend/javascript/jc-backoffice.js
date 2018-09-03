@@ -260,8 +260,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       });
     });
 
-    var btns = '<button type="button" class="kv-cust-btn btn btn-xs btn-default" title="Download" data-key="{dataKey}">' +
-      '<i class="glyphicon glyphicon-download"></i>' +
+    var btns = '<button type="button" class="kv-cust-btn btn btn-sm btn-kv btn-default btn-outline-secondary" title="Download" data-key="{dataKey}">' +
+      '<i class="fa fa-download"></i>' +
       '</button>';
     // note the tag/token {dataKey}
     $('.file-loading').fileinput({
