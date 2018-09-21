@@ -6,38 +6,36 @@ block title
 
 block content
   -var presse = veranstaltung.presse()
-
-  form#presseform(action='/veranstaltungen/submit', method='post')
-    +csrf
-    +hidden('id', veranstaltung.id())
-    +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-    fieldset
-      .row
-        .col-md-12
-          +submitButtonsFor(veranstaltung, 'presse')
-          .page-header
-            h2 Pressetext für #{veranstaltung.datumForDisplay()}<br>
-              small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
-      .row
-        .col-md-12
-          +legendMitBody('event', 'Pressematerial', null, 'color-presse')
-            .row
-              .col-md-12
-                +checkbox('presse[checked]', 'Ist so OK', presse.checked())
-            .row
-              .col-md-6
-                +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
-                +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
-              .col-md-6
-                #preview
-      .row
-        .col-md-6
-          +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
-          +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
-      .row
-        .col-md-12
-          hr
-          +submitButtonsFor(veranstaltung, 'presse')
+  .col-12
+    form#presseform(action='/veranstaltungen/submit', method='post')
+      +csrf
+      +hidden('id', veranstaltung.id())
+      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
+      fieldset
+        .row
+          .col-12
+            .page-header
+              +submitButtonsFor(veranstaltung, 'presse')
+              h2 Pressetext für #{veranstaltung.datumForDisplay()}<br>
+                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+            +legendMitBody('event', 'Pressematerial', null, 'color-presse')
+              .row
+                .col-12
+                  +checkbox('presse[checked]', 'Ist so OK', presse.checked())
+              .row
+                .col-md-6
+                  +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
+                  +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
+                .col-md-6
+                  #preview
+        .row
+          .col-md-6
+            +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
+            +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
+        .row
+          .col-12
+            hr
+            +submitButtonsFor(veranstaltung, 'presse')
 
 block scripts
   script.

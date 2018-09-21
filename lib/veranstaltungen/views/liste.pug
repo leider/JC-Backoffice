@@ -8,9 +8,9 @@ block content
   .col-lg-8
     .page-header
       .bd-title
-        .btn-group.pull-right
-          a.btn.btn-light(href='/veranstaltungen/new', title='Neu'): i.fa.fa-file-o.fa-fw.fa-lg
-          a.btn.btn-light(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
+        .btn-group.float-right
+          a.btn.btn-light(href='/veranstaltungen/new', title='Neu'): i.far.fa-file.fa-fw.fa-lg
+          a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt.fa-fw.fa-lg
           .dropdown
             a.btn.btn-light.dropdown-toggle(data-toggle='dropdown')
               | #{titel} &nbsp;
@@ -56,13 +56,13 @@ block content
                 +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
   .col-lg-4
     #calendar.mt-4
-    a.btn.btn-primary.mt-3.pull-right(href='/ical/termine', title='Termine bearbeiten') Termine
+    a.btn.btn-primary.mt-3.float-right(href='/ical/termine', title='Termine bearbeiten') Termine
 
 mixin checkedButton(veranstaltung, section, name, stylename)
   if section.checked()
     a.btn.btn-sm(data-toggle='tooltip', title=name + ' OK', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
-      i.fa.fa-check.fa-fw.fa-lg
+      i.fas.fa-check.fa-fw.fa-lg
   else
     a.btn.btn-sm(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
-      i.fa.fa-question.fa-fw.fa-lg
+      i.fas.fa-question.fa-fw.fa-lg
   

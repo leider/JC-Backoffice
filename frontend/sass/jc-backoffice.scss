@@ -310,10 +310,6 @@ a {
   word-wrap: break-word;
 }
 
-.select2-container--bootstrap {
-  width: inherit !important;
-}
-
 .currency {
   text-align: right;
 }
@@ -362,3 +358,32 @@ a {
   }
 }
 
+h1 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h2 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h3 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h4 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h5 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h6 > small {
+  display: inline-block;
+  color: $text-muted;
+}

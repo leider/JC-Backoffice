@@ -7,9 +7,9 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
   td(style='white-space: nowrap')
     if !staff[name + 'NotNeeded']()
       if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-        a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) +
+        a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()): i.fas.fa-plus
       else
-        a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) -
+        a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()): i.fas.fa-minus
       span.text-capitalize &nbsp; #{staff[name]().join(', ')}
     else
       .text-warning [keine]
@@ -51,8 +51,8 @@ block content
     .row
       .col-12
         .page-header
-          .btn-group.pull-right
-            a.btn.btn-light(href=webcalURL, title='als iCal'): i.fa.fa-calendar.fa-fw
+          .btn-group.float-right
+            a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt.fa-fw
           h2 Team
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,

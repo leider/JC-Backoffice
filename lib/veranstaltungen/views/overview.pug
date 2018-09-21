@@ -31,14 +31,14 @@ block content
   -var salesreport = veranstaltung.salesreport()
   .col-12
     .row
-      .col-md-12
+      .col-12
         .page-header
-          .btn-group.pull-right
+          .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
   
           h2(class=kopf.cssTextClass())
             i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-            | #{kopf.titel()} im #{kopf.ort()}
+            | #{kopf.titel()} - #{kopf.ort()}
             br
             small
               | #{veranstaltung.startMoment().format('LLLL')} #{''}
@@ -90,24 +90,24 @@ block content
               tr
                 th
                   span Reservix (Brutto)
-                    .pull-right: +currencySpan(kasse.reservixBruttoEUR(), 'bruttoReservix')
+                    .float-right: +currencySpan(kasse.reservixBruttoEUR(), 'bruttoReservix')
                 td
                 td
                 td
               tr
                 th
                   span Reservix (Bereinigt)
-                    .pull-right: +currencySpan(kasse.reservixNettoEUR(), 'nettoReservix')
-                td: span.pull-right #{kasse.anzahlBesucherReservix()}
+                    .float-right: +currencySpan(kasse.reservixNettoEUR(), 'nettoReservix')
+                td: span.float-right #{kasse.anzahlBesucherReservix()}
                 td
                 td
               tr
                 th(colspan=3) Abendkasse Überschuss (ohne Abzug Gage Cash)
-                td: .pull-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
+                td: .float-right: +currencySpan(kasse.einnahmenNettoEUR(), 'abendkasseEUR')
               if eintrittspreise.zuschuss() > 0
                 tr
                   th(colspan=3) Zuschuss
-                  th: .pull-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
+                  th: .float-right: +currencySpan(eintrittspreise.zuschuss(), 'zuschuss')
               tr.form-inline
                 td(colspan=4)
                   a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
@@ -153,8 +153,8 @@ block content
                 if !kosten.gageBAR()
                   | Gage
                 else
-                  b.text-danger: i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
-                    i.fa.fa-exclamation-triangle
+                  b.text-danger: i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                    i.fas.fa-exclamation-triangle
               td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR(), 'gagenTotalEUR')
             tr
               td
@@ -184,14 +184,12 @@ block content
               .checkbox.abc-checkbox.abc-checkbox-danger
                 input#genehmigungenEingeholt(type='checkbox')
                 label.text-danger(for='genehmigungenEingeholt')
-                  i.fa.fa-warning
                   | &nbsp;Wir müssen noch Genehmigungen für #{werbung.genehmigungenNum()} Plakate einholen.
           else
             p.text-success
               .checkbox.abc-checkbox.abc-checkbox-success
                 input#genehmigungenEingeholt(type='checkbox', checked='true')
                 label.text-success(for='genehmigungenEingeholt')
-                  i.fa.check-circle
                   | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
   
         if agentur.name()

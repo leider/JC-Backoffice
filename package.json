@@ -43,7 +43,6 @@
     "intl-locales-supported": "1.0.0",
     "jquery": "3.3.1",
     "jquery-validation": "1.18.0",
-    "less-plugin-clean-css": "1.5.1",
     "marked": "0.5.0",
     "moment": "2.22.2",
     "moment-timezone": "0.5.21",
@@ -93,7 +92,7 @@
     "mocha": "5.2.0",
     "must-dist": "0.12.0",
     "proxyquire": "2.1.0",
-    "sinon": "6.3.3",
+    "sinon": "6.3.4",
     "supertest": "3.3.0"
   }
 }

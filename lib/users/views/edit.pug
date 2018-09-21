@@ -2,7 +2,7 @@ extends ../../../views/layout
 include ../../../views/formComponents
 
 mixin submitButtonsWithDelete()
-  .btn-group.pull-right
+  .btn-group.float-right
     a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
     if accessrights.isSuperuser()
       a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen

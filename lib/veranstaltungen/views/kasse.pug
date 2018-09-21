@@ -14,11 +14,11 @@ block content
           button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
         .modal-body
           .row
-            .col-md-12
-              .btn-group.pull-right
+            .col-12
+              .btn-group.float-right
                 button.btn.btn-light(data-dismiss='modal') Abbrechen
                 a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title='Kassenfreigabe')
-                  i.fa.fa-unlock.fa-fw.fa-lg
+                  i.fas.fa-unlock.fa-fw.fa-lg
                   | &nbsp;Kasse freigeben
 
   #entsperrendialog.modal.fade(tabindex='-1')
@@ -30,11 +30,11 @@ block content
           button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
         .modal-body
           .row
-            .col-md-12
-              .btn-group.pull-right
+            .col-12
+              .btn-group.float-right
                 button.btn.btn-light(data-dismiss='modal') Abbrechen
                 a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigaberuckgaengig', title='Rückgängig')
-                  i.fa.fa-unlock.fa-fw.fa-lg
+                  i.fas.fa-unlock.fa-fw.fa-lg
                   | &nbsp;Kassenfreigabe rückgängig
 
   -var kasse = veranstaltung.kasse()
@@ -47,32 +47,32 @@ block content
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       fieldset
         .row
-          .col-md-12
+          .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
               h2 Abendkasse für #{veranstaltung.datumForDisplay()}<br>
                 small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
         if !accessrights.darfKasseFreigeben() && freigegeben
           .row
-            .col-md-12
+            .col-12
               .btn-group.d-flex.justify-content-end
                 a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
-                  i.fa.fa-lock.fa-fw.fa-lg
+                  i.fas.fa-lock.fa-fw.fa-lg
                   | &nbsp;Kasse ist freigeben
         if accessrights.darfKasseFreigeben() 
           if !freigegeben
             .row
-              .col-md-12
+              .col-12
                 .btn-group.d-flex.justify-content-end
                   a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
-                    i.fa.fa-unlock.fa-fw.fa-lg
+                    i.fas.fa-unlock.fa-fw.fa-lg
                     | &nbsp;Kasse freigeben
           else
             .row
-              .col-md-12
+              .col-12
                 .btn-group.d-flex.justify-content-end
                   a.btn.btn-danger(data-toggle='modal', data-target='#entsperrendialog', href='#')
-                    i.fa.fa-lock.fa-fw.fa-lg
+                    i.fas.fa-lock.fa-fw.fa-lg
                     | &nbsp;Kasse ist freigeben
 
         .row
@@ -114,8 +114,8 @@ block content
                     +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
                   else
                     .form-group
-                      label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fa.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
-                        i.fa.fa-exclamation-triangle :
+                      label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                        i.fas.fa-exclamation-triangle :
                       input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
                 .col-sm-4.col-6
                   +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR(), null, null, freigegeben)
@@ -141,7 +141,7 @@ block content
                 .col-sm-3.col-6
                   +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR(), null, null, freigegeben)
         .row
-          .col-md-12
+          .col-12
             .row
               .col-sm-3.col-6
                 +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
@@ -151,7 +151,7 @@ block content
                   b: p#endbestandEUR.form-control-plaintext.currency(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
   
         .row
-          .col-md-12
+          .col-12
             hr
             +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
 

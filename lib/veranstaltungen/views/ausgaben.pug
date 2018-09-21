@@ -16,7 +16,7 @@ block content
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       fieldset
         .row
-          .col-md-12
+          .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'ausgaben')
               h2 Kosten für #{veranstaltung.datumForDisplayMitKW()}<br>
@@ -60,7 +60,7 @@ block content
             +staff(veranstaltung.staff(), allUsers)
             +marketingUndPlakate(veranstaltung.werbung(), optionen)
         .row
-          .col-md-12
+          .col-12
             hr
             +submitButtonsFor(veranstaltung, 'ausgaben')
 

@@ -13,15 +13,15 @@ block content
   -var vertrag = veranstaltung.vertrag()
   -var kosten = veranstaltung.kosten()
   
-  form#veranstaltungform(action='/veranstaltungen/submit', method='post')
-    .col-12
+  .col-12
+    form#veranstaltungform(action='/veranstaltungen/submit', method='post')
       +csrf
       if (veranstaltung.id())
         +hidden('id', veranstaltung.id())
       +hidden('previousUrl', veranstaltung.url())
       fieldset
         .row
-          .col-md-12
+          .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'kopf')
               if (veranstaltung.id())
@@ -68,20 +68,20 @@ block content
                   +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
               if user && (accessrights.isBookingTeam())
                 .row
-                  .col-md-12
-                    a.btn.btn-general.pull-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                  .col-12
+                    a.btn.btn-general.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
                       | Vertrag generieren
               .row
-                .col-md-12
+                .col-12
                   +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
   
           .col-md-6
             +legendMitBody('artist', 'Künstler')
               .row
-                .col-md-12
+                .col-12
                   +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
               .row
-                .col-md-12
+                .col-12
                   +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
               .row
                 .col-3
@@ -111,7 +111,7 @@ block content
                 .col-sm-12
                   +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
         .row
-          .col-md-12
+          .col-12
             hr
             +submitButtonsFor(veranstaltung, 'kopf')
 

@@ -23,8 +23,8 @@ block content
                   +controlLabel('password', 'Passwort')
                   input#password.form-control.trim-text(type='password', name='password', value='')
             .row
-              .col-md-12
-                .btn-group.pull-right
+              .col-12
+                .btn-group.float-right
                   button.btn.btn-primary(type='submit') Anmelden
 
   .col-12
@@ -34,5 +34,5 @@ block content
     h5 Schon wieder hier? - Nach einem Anmeldeversuch?
     p Hast Du eben erfolglos versucht, Dich anzumelden? - Überprüfe nochmals deine eingegebenen Daten, speziell auf Groß-/Kleinschreibung.
     p: button.btn.btn-primary(data-toggle='modal', data-target='#login')
-      i.fa.fa-sign-in.fa-fw.fa-lg
+      i.fas.fa-sign-in-alt.fa-fw.fa-lg
       | &nbsp;Login

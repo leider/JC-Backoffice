@@ -1,17 +1,18 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 
-mixin editableMultiselectSmall(name, value, tags)
+mixin editableMultiselectSmall(id, name, value, tags)
   .form-group
     select.form-control.form-control-sm.enhance(multiple, id=name, name=name, data-tags=true)
       each tag in tags
         option(selected = value.indexOf(tag) > -1) #{tag}
 
 mixin orgaStaffField(veranstaltung, name, allUsers)
+  -var id = 'staff[' + name + 'NotNeeded]'
   td
     .form-inline(style='width:200px!important')
-      +checkbox('staff[' + name + 'NotNeeded]', '', !veranstaltung.staff()[name + 'NotNeeded']())
-      +editableMultiselectSmall('staff[' + name + ']', veranstaltung.staff()[name](), allUsers.map(user => user.id))
+      +checkbox(id, '', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
+      +editableMultiselectSmall('staff[' + name + ']' + veranstaltung.id(), 'staff[' + name + ']', veranstaltung.staff()[name](), allUsers.map(user => user.id))
       
 mixin tableForOrga(veranstaltungen)
   table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
@@ -42,7 +43,7 @@ mixin tableForOrga(veranstaltungen)
           +orgaStaffField(veranstaltung, 'technikerV', users)
           +orgaStaffField(veranstaltung, 'techniker', users)
           +orgaStaffField(veranstaltung, 'mod', users)
-          td: button.btn.btn-sm.btn-success(type='submit'): i(class='fa fa-fw fa-floppy-o')
+          td: button.btn.btn-sm.btn-success.float-right(type='submit'): i(class='fas fa-fw fa-save fa-lg')
 
 block title
   | Teamadmin
@@ -73,7 +74,7 @@ block content
                   option(value = val, selected = value === val) #{val}
             td
               input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-            td #{user.gruppen.join(', ')}
+            td: span.form-control-plaintext #{user.gruppen.join(', ')}
             
 block scripts
   script.

@@ -102,10 +102,13 @@ html
     +topNavbar
     .container-fluid.p-0.p-md-auto
       .row.main
-        if (statusmessage)
-          .col-12
-            +notificationsBlock(statusmessage)
-        block content
+        .col-12
+          if (statusmessage)
+            .row
+              .col-12
+                +notificationsBlock(statusmessage)
+          .row
+            block content
   
 script(src='/clientscripts/global.js')
 block scripts

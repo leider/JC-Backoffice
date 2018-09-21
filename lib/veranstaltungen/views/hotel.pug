@@ -24,22 +24,22 @@ block content
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       fieldset
         .row
-          .col-md-12
+          .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'hotel')
               h2 Hotel für #{veranstaltung.datumForDisplay()}<br>
                 small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
         .row
-          .col-md-12
+          .col-12
             .btn-group
               a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reminder', title='Erinnerung')
-                i.fa.fa-envelope.fa-fw.fa-lg
+                i.fas.fa-envelope.fa-fw.fa-lg
                 | &nbsp;Infomail an #{hotelMailReceiver}
               a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/preview', title='Vorschau')
-                i.fa.fa-envelope.fa-fw.fa-lg
+                i.fas.fa-envelope.fa-fw.fa-lg
                 | &nbsp;Reservierungsvorschau an mich
               a.btn.btn-primary(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reservation', title='Reservierung')
-                i.fa.fa-envelope-o.fa-fw.fa-lg
+                i.far.fa-envelope.fa-fw.fa-lg
                 | &nbsp;Reservierung an Hotel
         .row
           .col-md-6
@@ -78,7 +78,7 @@ block content
                 .col-md-6
                   +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
         .row
-          .col-md-12
+          .col-12
             hr
             +submitButtonsFor(veranstaltung, 'hotel')
 block scripts
