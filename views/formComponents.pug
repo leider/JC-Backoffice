@@ -238,7 +238,7 @@ mixin uploader(name, label, accept, value, extradata)
   .form-group
     +controlLabel(name, label)
     input.file-loading(id= name, name='datei', type='file', accept=accept || '*',
-      data-language='de', data-theme='fa',
+      data-language='de', data-theme='fas',
       data-upload-url='/veranstaltungen/upload' + '?_csrf=' + encodeURIComponent(csrf_token),
       data-max-file-preview-size=10240,
       data-initial-preview-as-data='true',
