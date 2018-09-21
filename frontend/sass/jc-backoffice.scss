@@ -238,35 +238,14 @@ pre code {
 }
 
 @media (min-width: 768px) {
-  .navbar-nav > li > a {
-    padding-top: 10px;
-    padding-bottom: 8px;
-  }
-
-  body {
-    padding-bottom: 50px;
-  }
-
   .popover {
     max-width: 450px;
-  }
-
-  .no-left-margin {
-    padding-left: 0px !important;
   }
 }
 
 @media (max-width: 767px) {
-  .bottom {
-    padding-top: 0px;
-  }
-
-  .dl-horizontal dt {
-    margin-top: 12px;
-  }
-
-  body {
-    padding-top: 0px !important;
+  .fixed-top {
+    position: relative !important;
   }
 }
 
