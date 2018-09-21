@@ -210,7 +210,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClass)
         i.far.fa-caret-square-down.fa-fw.blog
         | &nbsp;#{title}
       if optionalCurrencySpan
-        b: +currencySpan(null, optionalCurrencySpan, 'pull-right')
+        b: +currencySpan(null, optionalCurrencySpan, 'float-right')
     .card-body.collapse.show.pl-1.pr-1(id = id)
       block
 
@@ -225,7 +225,7 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClass, optional
         a.inherit-color(href=optionalEditLink) 
           i(class='fa fa-fw fa-lg ' + optionalEditIcon)
       if optionalCurrencySpan
-        b: +currencySpan(optionalMoney, optionalCurrencySpan, 'pull-right')
+        b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
     .collapse.show(id = id)
       block
 
