@@ -9,7 +9,8 @@ block content
       fieldset
         .row
           .col-12
-            +submitButtons('Mail senden')
+            .page-header
+              +submitButtons('Mail senden')
             legend
               | Pressemail senden
             if (upcomingEvents)
