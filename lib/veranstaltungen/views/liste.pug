@@ -56,7 +56,7 @@ block content
                 +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
   .col-lg-4
     #calendar.mt-4
-    a.btn.btn-primary.mt-3.float-right(href='/ical/termine', title='Termine bearbeiten') Termine
+    a.btn.btn-light.mt-3.float-right(href='/ical/termine', title='Termine bearbeiten') Termine
 
 mixin checkedButton(veranstaltung, section, name, stylename)
   if section.checked()
