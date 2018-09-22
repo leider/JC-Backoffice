@@ -218,6 +218,10 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
         }
       );
     });
+    $('.md-header .btn-default').removeClass('btn-default').addClass('btn-light');
+    $('.md-header .fa').removeClass('fa').addClass('fas');
+    $('.md-header .fa-header').removeClass('fa-header').addClass('fa-heading');
+    $('.md-header .fa-picture-o').removeClass('fa-picture-o fas').addClass('fa-image far');
   }
 
   function initPickersAndWidgets() {
