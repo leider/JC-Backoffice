@@ -11,7 +11,7 @@ public/fonts
 public/stylesheets
 public/upload
 public/webfonts
-server.log
+*.log
 workspace.xml
 coverage
 public/img/loadin*.gif

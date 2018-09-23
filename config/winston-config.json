@@ -16,7 +16,7 @@
     },
     "http": {
       "console": {
-        "level": "error",
+        "level": "warn",
         "colorize": true
       },
       "file": {
@@ -25,7 +25,7 @@
         "filename": "log/http.log",
         "maxFiles": 5,
         "maxsize": 10485760,
-        "level": "error"
+        "level": "warn"
       }
     }
   }
