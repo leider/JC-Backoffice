@@ -165,7 +165,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       },
       weekNumbers: true
     });
-    $('.fc-right button').removeClass('btn-primary').addClass('btn-light');
   }
 
   function patchBootstrapPopover() {

@@ -367,3 +367,10 @@ h6 > small {
   display: inline-block;
   color: $text-muted;
 }
+
+// transform fullcalendar's primary to light button
+.fc-right .btn-primary {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
