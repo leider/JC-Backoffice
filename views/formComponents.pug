@@ -87,9 +87,9 @@ mixin submitButtons(text)
     
 mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
   if veranstaltung.url()
-    a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', data-trigger='hover', title=title): i(class='far fa-fw fa-lg ' + icon)
+    a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, data-toggle='tooltip', data-trigger='hover', title=title): i(class='fas fa-fw fa-lg ' + icon)
   else
-    a(class='btn ' + btnstyle + ' active disabled', href='/' + name, data-toggle='tooltip', data-trigger='hover', title=title): i(class='far fa-fw fa-lg ' + icon)
+    a(class='btn ' + btnstyle + ' active disabled', href='/' + name, data-toggle='tooltip', data-trigger='hover', title=title): i(class='fas fa-fw fa-lg ' + icon)
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.btn-group-sm.float-right

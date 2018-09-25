@@ -33,10 +33,8 @@ module.exports = function (grunt) {
   const filesForCss = {
     'public/stylesheets/screen.css': [
       'node_modules/fullcalendar/dist/fullcalendar.css',
-      'build/stylesheets/sass/out/bootstrap.css',
       'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
       'node_modules/bootstrap-fileinput/css/fileinput.css',
-      'build/stylesheets/sass/out/bootstrap-markdown-patched.css',
       'node_modules/@fortawesome/fontawesome-free/css/all.css',
       'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'build/stylesheets/flaticon-patched.css',
@@ -125,8 +123,7 @@ module.exports = function (grunt) {
     sass: {
       dist: {
         files: {
-          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss',
-          'build/stylesheets/sass/out/bootstrap-markdown-patched.css': 'build/stylesheets/sass/bootstrap-markdown-patched.scss'
+          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss'
         }
       }
     },
