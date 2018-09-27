@@ -12,12 +12,9 @@ mixin daterow(name, value)
     data-date-min-view-mode='days',
     data-date-language='de',
     data-date-orientation='bottom')
-  
+
 block title
   | Termine
-  
-block title
-  | Teamseite
 
 block content
   .col-12
@@ -39,3 +36,10 @@ block content
             +daterow('endDate', termin.endMoment().format('L'))
             td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
             td: button.btn.btn-primary.float-right(type='submit'): i.far.fa-fw.fa-copy
+
+block head
+  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
+
+block scripts
+  script(src='/clientscripts/bootstrap-datepicker.min.js')
+  script(src='/clientscripts/bootstrap-datepicker.de.min.js')

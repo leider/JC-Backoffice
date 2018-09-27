@@ -117,43 +117,44 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   }
 
   function initCalendar() {
-    var id = '#calendar';
-    $(id).fullCalendar({
-      height: 'auto',
-      header: {
-        left: 'title',
-        center: '',
-        right: 'prev,today,next'
-      },
-      timezone: 'Europe/Berlin',
-      timeFormat: 'HH:mm',
-      displayEventTime: false,
-      events: '/veranstaltungen/eventsForCalendar',
-      eventMouseover: function (event) {
-        var day = event.start.day();
-        $(this).tooltip({
-          title: (event.start.format('HH:mm') + ': ') + event.tooltip,
-          trigger: 'manual',
-          placement: (day < 4 && day > 0) ? 'right' : 'left',
-          container: 'body'
-        });
-        $(this).tooltip('show');
-      },
-      eventMouseout: function () {
-        $(this).tooltip('dispose');
-      },
-      eventClick: function () {
-        $(this).tooltip('dispose');
-      },
-      themeSystem: 'bootstrap4',
-      views: {
-        month: {
-          titleFormat: 'MMM \'YY',
-          lang: 'de',
-          fixedWeekCount: false
-        }
-      },
-      weekNumbers: true
+    $('#calendar').each(function () {
+      $(this).fullCalendar({
+        height: 'auto',
+        header: {
+          left: 'title',
+          center: '',
+          right: 'prev,today,next'
+        },
+        timezone: 'Europe/Berlin',
+        timeFormat: 'HH:mm',
+        displayEventTime: false,
+        events: '/veranstaltungen/eventsForCalendar',
+        eventMouseover: function (event) {
+          var day = event.start.day();
+          $(this).tooltip({
+            title: (event.start.format('HH:mm') + ': ') + event.tooltip,
+            trigger: 'manual',
+            placement: (day < 4 && day > 0) ? 'right' : 'left',
+            container: 'body'
+          });
+          $(this).tooltip('show');
+        },
+        eventMouseout: function () {
+          $(this).tooltip('dispose');
+        },
+        eventClick: function () {
+          $(this).tooltip('dispose');
+        },
+        themeSystem: 'bootstrap4',
+        views: {
+          month: {
+            titleFormat: 'MMM \'YY',
+            lang: 'de',
+            fixedWeekCount: false
+          }
+        },
+        weekNumbers: true
+      });
     });
   }
 
@@ -239,12 +240,16 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       '<i class="fa fa-download"></i>' +
       '</button>';
     // note the tag/token {dataKey}
-    $('.file-loading').fileinput({
-      otherActionButtons: btns,
+    $('.file-loading').each(function () {
+      $(this).fileinput({
+        otherActionButtons: btns,
+      });
     });
-    $('.kv-cust-btn').click(function () {
-      var url = $(this).parents('.file-thumbnail-footer').parent().children('.kv-file-content').children().attr('src');
-      window.open(url);
+    $('.kv-cust-btn').each(function () {
+      $(this).click(function () {
+        var url = $(this).parents('.file-thumbnail-footer').parent().children('.kv-file-content').children().attr('src');
+        window.open(url);
+      });
     });
 
   }

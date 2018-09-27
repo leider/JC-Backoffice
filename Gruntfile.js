@@ -11,35 +11,20 @@ module.exports = function (grunt) {
       'node_modules/autonumeric/dist/autoNumeric.min.js',
       'node_modules/popper.js/dist/umd/popper.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
-      'node_modules/bootstrap-datepicker/js/bootstrap-datepicker.js',
-      'node_modules/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js',
-      'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
-      'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js',
-      'node_modules/bootstrap-fileinput/js/fileinput.js',
-      'node_modules/bootstrap-fileinput/js/locales/de.js',
-      'node_modules/bootstrap-fileinput/themes/fas/theme.js',
       'node_modules/moment/moment.js',
       'node_modules/moment/locale/de.js',
-      'node_modules/fullcalendar/dist/fullcalendar.js',
-      'node_modules/fullcalendar/dist/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'node_modules/jquery-validation/dist/localization/messages_de.js',
       'node_modules/jquery-validation/dist/localization/methods_de.js',
-      'node_modules/simple-timepicker/dist/simple-timepicker.js',
       'frontend/javascript/jc-backoffice.js'
     ]
   };
 
   const filesForCss = {
     'public/stylesheets/screen.css': [
-      'node_modules/fullcalendar/dist/fullcalendar.css',
-      'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
-      'node_modules/bootstrap-fileinput/css/fileinput.css',
       'node_modules/@fortawesome/fontawesome-free/css/all.css',
-      'node_modules/node-syntaxhighlighter/lib/styles/shCoreDefault.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
-      'node_modules/select2-theme-bootstrap4/dist/select2-bootstrap.css',
       'build/stylesheets/sass/out/jc-backoffice.css'
     ]
   };
@@ -52,15 +37,40 @@ module.exports = function (grunt) {
       options: {force: true}
     },
     copy: {
-      bootstrapFONTS: {
-        src: 'node_modules/bootstrap/dist/fonts/*',
-        dest: 'public/fonts',
-        expand: true,
-        flatten: true
-      },
       bootstrapFileinputImages: {
         src: 'node_modules/bootstrap-fileinput/img/*',
         dest: 'public/img/',
+        expand: true,
+        flatten: true
+      },
+      utilJS: {
+        src: ['node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+          'node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min.js',
+          'node_modules/simple-timepicker/dist/simple-timepicker.min.js',
+          'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
+          'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js',
+          'node_modules/bootstrap-fileinput/js/fileinput.js',
+          'node_modules/bootstrap-fileinput/themes/fas/theme.js',
+          'node_modules/fullcalendar/dist/fullcalendar.js'
+        ],
+        dest: 'public/clientscripts',
+        expand: true,
+        flatten: true
+      },
+      fullcalendarLocale: {
+        src: 'node_modules/fullcalendar/dist/locale/de.js',
+        dest: 'public/clientscripts/fullcalendar.de.js'
+      },
+      fileinputLocale: {
+        src: 'node_modules/bootstrap-fileinput/js/locales/de.js',
+        dest: 'public/clientscripts/fileinput.de.js'
+      },
+      utilCSS: {
+        src: ['node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
+          'node_modules/bootstrap-fileinput/css/fileinput.css',
+          'node_modules/fullcalendar/dist/fullcalendar.css'
+        ],
+        dest: 'public/stylesheets',
         expand: true,
         flatten: true
       },

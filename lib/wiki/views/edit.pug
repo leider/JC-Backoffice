@@ -22,3 +22,8 @@ block content
         +hidden('metadata', page.metadata)
         input#subdir(type='hidden', name='subdir', value=subdir)
         +submitButtons('Speichern')
+
+block scripts
+  script(src='/clientscripts/bootstrap-markdown.js')
+  script(src='/clientscripts/bootstrap-markdown.de.js')
+  

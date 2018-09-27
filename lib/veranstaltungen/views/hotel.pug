@@ -81,7 +81,13 @@ block content
           .col-12
             hr
             +submitButtonsFor(veranstaltung, 'hotel')
+
+block head
+  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
+
 block scripts
+  script(src='/clientscripts/bootstrap-datepicker.min.js')
+  script(src='/clientscripts/bootstrap-datepicker.de.min.js')
   +kontaktScript('hotel', 'hotelchanged')
   script.
     var updatePreise;

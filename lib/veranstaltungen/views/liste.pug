@@ -66,3 +66,9 @@ mixin checkedButton(veranstaltung, section, name, stylename)
     a.btn.btn-sm(data-toggle='tooltip', title=name + ' unklar', class='btn-' + stylename, href=veranstaltung.fullyQualifiedUrl() + '/' + name)
       i.fas.fa-question.fa-fw.fa-lg
   
+block head
+  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
+
+block scripts
+  script(src='/clientscripts/fullcalendar.js')
+  script(src='/clientscripts/fullcalendar.de.js')
