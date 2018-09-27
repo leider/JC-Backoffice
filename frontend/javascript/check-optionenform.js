@@ -9,9 +9,9 @@ var optionen_validator;
     optionen_validator = $('#optionenform').validate({
       errorPlacement: function (error, element) { error.insertAfter(element); },
       errorElement: 'span',
-      errorClass: 'help-block',
-      highlight: function (element) { $(element).parent().addClass('has-error'); },
-      unhighlight: function (element) { $(element).parent().removeClass('has-error'); }
+      errorClass: 'help-block text-danger',
+      highlight: function (element) { $(element).addClass('is-invalid'); },
+      unhighlight: function (element) { $(element).removeClass('is-invalid'); }
     });
 
     optionen_validator.form();

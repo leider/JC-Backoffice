@@ -6,9 +6,17 @@ var user_validator;
 
   function initValidator() {
 
-    user_validator = $('#userform').validate({
+    user_validator = $('#passwordform').validate({
       rules: {
-        username: 'required',
+        passwort: {
+          required: true,
+          minlength: 5
+        },
+        passwort1: {
+          required: true,
+          minlength: 5,
+          equalTo: '#passwort'
+        }
       },
       errorPlacement: function (error, element) { error.insertAfter(element); },
       errorElement: 'span',
@@ -25,7 +33,7 @@ var user_validator;
       };
     }
 
-    ['#userform [name=username]'].forEach(
+    ['#userform [name=passwort]', '#userform [name=passwort1]'].forEach(
       function (each) {
         $(each).change(handler(each));
         $(each).keyup(handler(each));

@@ -9,9 +9,9 @@ var mailrule_validator;
     mailrule_validator = $('#mailruleform').validate({
       errorPlacement: function (error, element) { error.insertAfter(element); },
       errorElement: 'span',
-      errorClass: 'help-block',
-      highlight: function (element) { $(element).parent().addClass('has-error'); },
-      unhighlight: function (element) { $(element).parent().removeClass('has-error'); }
+      errorClass: 'help-block text-danger',
+      highlight: function (element) { $(element()).addClass('is-invalid'); },
+      unhighlight: function (element) { $(element()).removeClass('is-invalid'); }
     });
 
     mailrule_validator.form();

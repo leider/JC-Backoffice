@@ -59,19 +59,23 @@ var veranstaltung_validator;
         }
       },
       errorElement: 'span',
-      errorClass: 'help-block',
+      errorClass: 'help-block text-danger',
       highlight: function (element) {
         if ($(element).attr('name') === 'endDate' || $(element).attr('name') === 'endTime') {
+          $('#veranstaltungform [name=endDate]').addClass('is-invalid');
+          $('#veranstaltungform [name=endTime]').addClass('is-invalid');
+
           $('#dates').parent().addClass('has-error');
         } else {
-          $(element).parent().addClass('has-error');
+          $(element).addClass('is-invalid');
         }
       },
       unhighlight: function (element) {
         if ($(element).attr('name') === 'endDate' || $(element).attr('name') === 'endTime') {
-          $('#dates').parent().removeClass('has-error');
+          $('#veranstaltungform [name=endDate]').removeClass('is-invalid');
+          $('#veranstaltungform [name=endTime]').removeClass('is-invalid');
         } else {
-          $(element).parent().removeClass('has-error');
+          $(element).removeClass('is-invalid');
         }
       }
     });
