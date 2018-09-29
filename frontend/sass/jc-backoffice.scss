@@ -85,7 +85,7 @@ $color-festival: #9FC442;
 
 .logo-festival {
   display: inline-block;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   background-image: url("/img/Festival_Icon.png");
   height: 20px;
   width: 24px;
@@ -332,10 +332,8 @@ a {
 
 // wiki page compare *END*
 
-@media print {
-  .blau {
-    color: #118BE8;
-  }
+.blau {
+  color: #118BE8;
 }
 
 h1 > small {

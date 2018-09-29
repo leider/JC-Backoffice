@@ -41,6 +41,7 @@
   "siteApp": {"module": "./lib/site"},
 
   "renderer": {"module": "./lib/commons/renderer"},
+  "puppeteerPrinter": {"module": "./lib/commons/puppeteerPrinter"},
 
   "wikiApp": {"module": "./lib/wiki"},
   "gitDiff": {"module": "./lib/wiki/gitDiff"},

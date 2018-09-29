@@ -16,41 +16,41 @@ block content1
   -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
     
   .row
-    .col-xs-7
+    .col-7
       p
         b Concert/Performance Agreement
       p This agreement is concluded
-    .col-xs-5
+    .col-5
       p.text-right Karlsruhe, #{datum.format('LL')}
   .row
-    .col-xs-3
+    .col-3
       p by:<br>
         | Represented by:<br> 
         | Legal Address: 
-    .col-xs-9
+    .col-9
       p
         b #{bandname}<br>
         b #{veranstaltung.agentur().name()}<br>
           | #{veranstaltung.agentur().strasse()}, #{veranstaltung.agentur().ort()}<br>
   .row
-    .col-xs-12
+    .col-12
       p: i (hereafter referred to as Artist)
   .row
-    .col-xs-3
+    .col-3
       p and:<br>
         | Represented by:<br> 
         | Legal Address: 
-    .col-xs-9
+    .col-9
       p
         b Jazzclub Karlsruhe e.V.<br>
         b Niklas Braun<br>
           | Leopoldstr. 13, 76133 Karlsruhe<br>
   .row
-    .col-xs-12
+    .col-12
       p: i (hereafter referred to as Organizer)
 
   .row
-    .col-xs-12
+    .col-12
       p.
         §1 The concert takes place at <b>#{start.format('LL')}</b> um <b>#{start.format('LT')}</b>.</br>
         Location: <b>#{veranstaltung.kopf().ort()}</b>
@@ -85,7 +85,7 @@ block content1
 
 block content2
   .row
-    .col-xs-12
+    .col-12
       p.
         §5 The organizer ensures to heed all regulations, legal or other, and to arrange the performance with the given diligence.
       p.
@@ -122,11 +122,11 @@ block content2
         §15 The contractual parties assure by their signature, that they comprehend the agreement, that they are in full legal capacity and authorized to sign.
 
       .row(style='margin-top:24px;')
-        .col-xs-6
+        .col-6
           +signbox('Place/Date', 'Artist')
           div(style='margin-top:5px;')
           +signbox('Place/Date', 'Organizer', 'Karlsruhe, 18. März 2018')
-        .col-xs-6
+        .col-6
           +signbox('Signature', 'Name of Artist')
           div(style='margin-top:5px;')
           +signbox('Signature', 'Name of Organizer', 'niklas', true)

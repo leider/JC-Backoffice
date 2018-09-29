@@ -16,41 +16,41 @@ block content1
   -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
     
   .row
-    .col-xs-7
+    .col-7
       p
         b Konzertvertrag
       p Dieser Vertrag wird geschlossen
-    .col-xs-5
+    .col-5
       p.text-right Karlsruhe, #{datum.format('LL')}
   .row
-    .col-xs-3
+    .col-3
       p zwischen:<br>
         | vertreten durch:<br> 
         | Anschrift: 
-    .col-xs-9
+    .col-9
       p
         b #{bandname}<br>
         b #{veranstaltung.agentur().name()}<br>
           | #{veranstaltung.agentur().strasse()}, #{veranstaltung.agentur().ort()}<br>
   .row
-    .col-xs-12
+    .col-12
       p: i (nachfolgend Künstler genannt)
   .row
-    .col-xs-3
+    .col-3
       p und:<br>
         | vertreten durch:<br> 
         | Anschrift: 
-    .col-xs-9
+    .col-9
       p
         b Jazzclub Karlsruhe e.V.<br>
         b Niklas Braun<br>
           | Leopoldstr. 13, 76133 Karlsruhe<br>
   .row
-    .col-xs-12
+    .col-12
       p: i (nachfolgend Veranstalter genannt)
 
   .row
-    .col-xs-12
+    .col-12
       p.
         §1 Das Konzert findet statt am <b>#{start.format('LL')}</b> um <b>#{start.format('LT')} Uhr</b>.</br>
         Spielstätte: <b>#{veranstaltung.kopf().ort()}</b>
@@ -75,7 +75,7 @@ block content1
           §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
       else
         p.
-          2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person, die in der Gage bereits enthalten sind. <b>Für Getränke und Speisen hat der Künstler somit selbst aufzukommen</b>.
+          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person, die in der Gage bereits enthalten sind. <b>Für Getränke und Speisen hat der Künstler somit selbst aufzukommen</b>.
 
       p.
         §2.4 Zusätzlich angefallene Backline-Kosten, die nicht vor Vertragsschluss abgeklärt sind, werden dem Künstler in Rechnung gestellt und mit der zu zahlenden Gage verrechnet.
@@ -86,7 +86,7 @@ block content1
 
 block content2
   .row
-    .col-xs-12
+    .col-12
       p.
         §4 Die Gesamtleitung der Veranstaltung übernimmt der Veranstalter, dem insoweit ein Weisungsrecht zusteht. 
         Die Art der Darbietung sowie die künstlerische Gestaltung liegen ausschließlich beim Künstler.
@@ -129,11 +129,11 @@ block content2
         §15 Die Vertragspartner versichern durch ihre Unterschrift, dass sie den Vertrag verstanden haben, in vollem Umfang geschäftsfähig und zur Unterschrift bevollmächtigt sind
 
       .row(style='margin-top:24px;')
-        .col-xs-6
+        .col-6
           +signbox('Ort/Datum', 'Künstler')
           div(style='margin-top:5px;')
           +signbox('Ort/Datum', 'Veranstalter', 'Karlsruhe, 18. März 2018')
-        .col-xs-6
+        .col-6
           +signbox('Unterschrift', 'Name Künstler')
           div(style='margin-top:5px;')
           +signbox('Unterschrift', 'Name Veranstalter', 'niklas', true)

@@ -1,12 +1,12 @@
 mixin signbox(title, party, optionalText, unterschrift)
   .row
-    .col-xs-4
+    .col-4
       p(style='line-height:3;') #{title}:
-    .col-xs-8
+    .col-8
       if (optionalText)
         if (unterschrift)
           p(style='line-height:3;border-bottom:1px dotted')
-            img(src='public/reporting/niklas.png', height='22')
+            img(src=publicUrlPrefix + '/reporting/niklas.png', height='22')
         else
           p(style='line-height:3;border-bottom:1px dotted;') #{optionalText}
       else
@@ -16,10 +16,10 @@ mixin signbox(title, party, optionalText, unterschrift)
 
 mixin bild(name)
   div(style='margin-top:40px')
-    img(src='public/reporting/' + name + '.png', height='30')
+    img(src=publicUrlPrefix + '/reporting/' + name + '.png', height='30')
   
 mixin sidebar
-  img(src='public/reporting/logo.png', height='80')
+  img(src=publicUrlPrefix + '/reporting/logo.png', height='80')
   div(style='font-size:6px;margin-top:60px')
     p
       .blau Veranstalter
@@ -53,15 +53,19 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    link(href='public/css4print/print.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500,i,500i')
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
+    style(type='text/css').
+      p {
+        margin-bottom: 1em !important
+      }
   body(style='font-size:8px;')
-    .container
+    .container-fluid
       #Seite1.row
-        .col-xs-9
+        .col-9
           #adresse(style='margin-top:110px')
             .row
-              .col-xs-12
+              .col-12
                 small(style='font-size:6px;')
                   b Jazzclub Karlsruhe e.V.&nbsp;
                   span.blau |&nbsp;
@@ -72,16 +76,16 @@ html
                 block adresse
           #content1(style='margin-top:20px')
           block content1
-        .col-xs-3
+        .col-3
           +sidebar
-        .col-xs-12
+        .col-12
           p.text-center(style='margin-top:15px') Seite 1 von 2
 
-      #Seite2.row
-        .col-xs-9
+      #Seite2.row(style='page-break-before:always;')
+        .col-9
           #content2(style='margin-top:10px')
           block content2
-        .col-xs-3
+        .col-3
           +sidebar
-        .col-xs-12
+        .col-12
           p.text-center(style='margin-top:15px') Seite 2 von 2
