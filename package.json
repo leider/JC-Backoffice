@@ -55,6 +55,7 @@
     "passport-local": "1.0.0",
     "phantomjs-prebuilt": ">2.1.5",
     "popper.js": "1.14.4",
+    "puppeteer": "1.8.0",
     "pug": "2.0.3",
     "ramda": "0.25.0",
     "request": "2.88.0",

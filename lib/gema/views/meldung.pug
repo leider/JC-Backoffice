@@ -2,10 +2,10 @@ doctype html
 html
   head
     meta(charset='utf-8')
-    link(href='public/css4print/print.css', rel='stylesheet')
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
   body(style='font-size:10px;')
-    .container
+    .container-fluid
       .row
         .col-6
           address
@@ -13,7 +13,7 @@ html
             | Postfach 101753 <br>
             | 11506 Berlin
         .col-6
-          address
+          address.float-right
             strong Jazzclub Karlsruhe e.V. <br>
             | KDnr. 113098200 <br>
             | Leopoldstr. 13 <br>
@@ -23,7 +23,7 @@ html
             h3 Vergangene Veranstaltungen
           else
             h3 Kommende Veranstaltungen
-          table.table.table-condensed
+          table.table.table-sm
             tr
               th Datum
               th Ort
