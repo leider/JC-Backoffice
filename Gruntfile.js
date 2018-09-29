@@ -74,12 +74,6 @@ module.exports = function (grunt) {
         expand: true,
         flatten: true
       },
-      css4print: {
-        src: 'frontend/css4print/*',
-        dest: 'public/css4print',
-        expand: true,
-        flatten: true
-      },
       flaticonFONTS: {
         src: 'frontend/additionalIcons/font/*',
         dest: 'public/fonts',
