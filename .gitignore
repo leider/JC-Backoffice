@@ -5,7 +5,6 @@ config/
 !public/reporting
 node_modules/
 public/clientscripts
-public/css4print
 public/files
 public/fonts
 public/stylesheets
