@@ -16,6 +16,19 @@ module.exports = function (grunt) {
       'node_modules/jquery-validation/dist/localization/messages_de.js',
       'node_modules/jquery-validation/dist/localization/methods_de.js',
       'frontend/javascript/jc-backoffice.js'
+    ],
+    'public/clientscripts/fullcalendar.min.js': [
+      'node_modules/fullcalendar/dist/fullcalendar.js',
+      'node_modules/fullcalendar/dist/locale/de.js'
+    ],
+    'public/clientscripts/fileinput.min.js': [
+      'node_modules/bootstrap-fileinput/js/fileinput.js',
+      'node_modules/bootstrap-fileinput/js/locales/de.js',
+      'node_modules/bootstrap-fileinput/themes/fas/theme.js'
+    ],
+    'public/clientscripts/bootstrap-markdown.min.js': [
+      'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
+      'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js'
     ]
   };
 
@@ -45,24 +58,11 @@ module.exports = function (grunt) {
       utilJS: {
         src: ['node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
           'node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min.js',
-          'node_modules/simple-timepicker/dist/simple-timepicker.min.js',
-          'node_modules/bootstrap-markdown/js/bootstrap-markdown.js',
-          'node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js',
-          'node_modules/bootstrap-fileinput/js/fileinput.js',
-          'node_modules/bootstrap-fileinput/themes/fas/theme.js',
-          'node_modules/fullcalendar/dist/fullcalendar.js'
+          'node_modules/simple-timepicker/dist/simple-timepicker.min.js'
         ],
         dest: 'public/clientscripts',
         expand: true,
         flatten: true
-      },
-      fullcalendarLocale: {
-        src: 'node_modules/fullcalendar/dist/locale/de.js',
-        dest: 'public/clientscripts/fullcalendar.de.js'
-      },
-      fileinputLocale: {
-        src: 'node_modules/bootstrap-fileinput/js/locales/de.js',
-        dest: 'public/clientscripts/fileinput.de.js'
       },
       utilCSS: {
         src: ['node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
