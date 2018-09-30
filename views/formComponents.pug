@@ -53,7 +53,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
     .input-group
       input.form-control.currency.text-right(id=name, type='text', value=formatNumberTwoDigits(value), name=name, placeholder=placeholder, disabled=readonly)
       .input-group-append
-        span.input-group-text €
+        span.input-group-text.pl-1.pr-1: b €
 
 mixin currencySpan(value, id, clazz)
   span.text-right(id=id, class=clazz) #{formatReadonlyAsEuro(value)}
