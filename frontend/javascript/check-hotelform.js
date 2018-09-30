@@ -7,7 +7,20 @@ var hotel_validator;
   function initValidator() {
 
     hotel_validator = $('#hotelform').validate({
-      errorPlacement: function (error, element) { error.insertAfter(element); },
+      rules: {
+        'unterkunft[einzelEUR]': {number: true},
+        'unterkunft[doppelEUR]': {number: true},
+        'unterkunft[suiteEUR]': {number: true},
+        'unterkunft[transportEUR]': {number: true}
+      },
+
+      errorPlacement: function (error, element) {
+        if (element.hasClass('currency')) {
+          error.insertAfter(element.parent());
+        } else {
+          error.insertAfter(element);
+        }
+      },
       errorElement: 'span',
       errorClass: 'help-block text-danger',
       highlight: function (element) { $(element).addClass('is-invalid'); },
@@ -15,6 +28,19 @@ var hotel_validator;
     });
 
     hotel_validator.form();
+
+    function handler(each) {
+      return function () {
+        hotel_validator.element(each);
+      };
+    }
+
+    ['.currency'].forEach(
+      function (each) {
+        $(each).on('change', handler(each));
+        $(each).keyup(handler(each));
+      }
+    );
   }
 
   $(document).ready(initValidator);

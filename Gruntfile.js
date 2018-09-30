@@ -8,7 +8,6 @@ module.exports = function (grunt) {
       'node_modules/jquery/dist/jquery.js',
       'node_modules/select2/dist/js/select2.full.js',
       'node_modules/select2/dist/js/i18n/de.js',
-      'node_modules/autonumeric/dist/autoNumeric.min.js',
       'node_modules/popper.js/dist/umd/popper.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
       'node_modules/moment/moment.js',

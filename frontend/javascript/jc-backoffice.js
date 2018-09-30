@@ -1,13 +1,4 @@
-/* global moment, AutoNumeric */
-
-var currencyFields = {};
-
-/* exported eurAmount */
-function eurAmount(jqueryCurrencyField) {
-  'use strict';
-  var selector = jqueryCurrencyField.attr('id');
-  return parseFloat(currencyFields[selector].getNumericString(), 10) || 0;
-}
+/* global moment*/
 
 /* exported intAmount */
 function intAmount(jqueryNumberField) {
@@ -15,17 +6,27 @@ function intAmount(jqueryNumberField) {
   return parseInt(jqueryNumberField.val().replace(',', '.'), 10) || 0;
 }
 
-/* exported floatAmount */
-function floatAmount(jqueryNumberField) {
+/* exported eurAmount */
+function eurAmount(jqueryNumberField) {
   'use strict';
   return parseFloat(jqueryNumberField.val().replace(',', '.'), 10) || 0;
 }
 
-/* exported setEuro */
-function setEuro(jqueryCurrencyField, euro) {
+/* exported floatAmount */
+function floatAmount(jqueryNumberField) {
   'use strict';
-  var selector = jqueryCurrencyField.attr('id');
-  currencyFields[selector].set(euro);
+  return eurAmount(jqueryNumberField);
+}
+
+/* exported setEuro */
+function setEuro(jqueryCurrencyField, numberString) {
+  /* eslint-disable new-cap */
+  'use strict';
+  var number = Intl.NumberFormat('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(numberString || 0);
+  jqueryCurrencyField.html(number + ' €');
   jqueryCurrencyField.change();
 }
 
@@ -223,11 +224,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 
     $('.trim-text').on('blur', function () {
       $(this).val($(this).val().trim());
-    });
-
-    $('.currency').each(function () {
-      var selector = $(this).attr('id');
-      currencyFields[selector] = new AutoNumeric('#' + selector.replace('[', '\\[').replace(']', '\\]'));
     });
 
     $(':checkbox').each(function () {
