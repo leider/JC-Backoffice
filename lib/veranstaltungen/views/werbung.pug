@@ -46,11 +46,11 @@ mixin marketingUndPlakateScripts
         var flyerEUR = $('#werbung\\[flyerEUR\\]');
         var layoutingEUR = $('#werbung\\[layoutingEUR\\]');
         var genehmigungenEUR = $('#werbung\\[genehmigungenEUR\\]');
-        var summe = eurAmount(plakat1EUR)
-          + eurAmount(plakat2EUR)
-          + eurAmount(flyerEUR)
-          + eurAmount(layoutingEUR)
-          + eurAmount(genehmigungenEUR);
+        var summe = floatAmount(plakat1EUR)
+          + floatAmount(plakat2EUR)
+          + floatAmount(flyerEUR)
+          + floatAmount(layoutingEUR)
+          + floatAmount(genehmigungenEUR);
 
         setEuro($('#werbungTotal'), summe);
       }

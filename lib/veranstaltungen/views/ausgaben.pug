@@ -76,7 +76,7 @@ block scripts
       var technikAngebot2EUR = $('#kosten\\[technikAngebot2EUR\\]');
 
       function updateBacklinePreis() {
-        setEuro($('#backlinePreis'), eurAmount(backlineEUR) + eurAmount(technikAngebot1EUR) + eurAmount(technikAngebot2EUR));
+        setEuro($('#backlinePreis'), floatAmount(backlineEUR) + floatAmount(technikAngebot1EUR) + floatAmount(technikAngebot2EUR));
       }
       backlineEUR.keyup(updateBacklinePreis);
       technikAngebot1EUR.keyup(updateBacklinePreis);
@@ -85,7 +85,7 @@ block scripts
       
       var saalmiete = $('#kosten\\[saalmiete\\]');
       function updateSaalmietePreis() {
-        setEuro($('#saalmietePreis'), eurAmount(saalmiete));
+        setEuro($('#saalmietePreis'), floatAmount(saalmiete));
       }
       saalmiete.keyup(updateSaalmietePreis);
       updateSaalmietePreis();

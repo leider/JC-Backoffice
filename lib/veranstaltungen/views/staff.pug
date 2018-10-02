@@ -42,7 +42,7 @@ mixin staffScript
       var fremd = $('#staff\\[fremdpersonalEUR\\]');
 
       function updateStaffTotal() {
-        setEuro($('#staffPreis'), eurAmount(technik) + eurAmount(merch) + eurAmount(kasse) + eurAmount(fremd));
+        setEuro($('#staffPreis'), floatAmount(technik) + floatAmount(merch) + floatAmount(kasse) + floatAmount(fremd));
       }
 
       technik.keyup(updateStaffTotal);

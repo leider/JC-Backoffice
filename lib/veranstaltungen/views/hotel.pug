@@ -121,9 +121,9 @@ block scripts
         var endDate = endDateField.datepicker('getDate');
         var days = startDate && endDate ? moment(endDate).diff(startDate, 'days') : 0;
         
-        var total = eurAmount(einzelEUR) * intAmount(einzelNum) * days 
-          + eurAmount(doppelEUR) * intAmount(doppelNum) * days
-          + eurAmount(suiteEUR) * intAmount(suiteNum) * days;
+        var total = floatAmount(einzelEUR) * intAmount(einzelNum) * days 
+          + floatAmount(doppelEUR) * intAmount(doppelNum) * days
+          + floatAmount(suiteEUR) * intAmount(suiteNum) * days;
         setEuro($('#roomsTotal'), total);
         $('#naechte').html(days);
       }
@@ -138,7 +138,7 @@ block scripts
 
       var transportEUR = $('#unterkunft\\[transportEUR\\]');
       function updateTransportTotal() {
-        setEuro($('#transportTotal'), eurAmount(transportEUR))
+        setEuro($('#transportTotal'), floatAmount(transportEUR))
       }
 
       transportEUR.keyup(updateTransportTotal);

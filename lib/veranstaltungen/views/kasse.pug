@@ -164,8 +164,8 @@ block scripts
       var einnahmeSonstiges2EUR = $('#kasse\\[einnahmeSonstiges2EUR\\]');
 
       function updateEinnahmenGesamt() {
-        var einnahmenGesamt = eurAmount(einnahmeBankEUR) + eurAmount(einnahmeTicketsEUR)
-          + eurAmount(einnahmeSonstiges1EUR) + eurAmount(einnahmeSonstiges2EUR);
+        var einnahmenGesamt = floatAmount(einnahmeBankEUR) + floatAmount(einnahmeTicketsEUR)
+          + floatAmount(einnahmeSonstiges1EUR) + floatAmount(einnahmeSonstiges2EUR);
         setEuro($('#einnahmenGesamt'), einnahmenGesamt);
         $('#einnahmenGesamt').change(updateEndbestand);
       }
@@ -179,7 +179,7 @@ block scripts
       var reservixBruttoEUR = $('#kasse\\[reservixBruttoEUR\\]');
       
       function updateReservix() {
-        setEuro($('#reservixGesamt'), eurAmount(reservixBruttoEUR));  
+        setEuro($('#reservixGesamt'), floatAmount(reservixBruttoEUR));  
       }
       reservixBruttoEUR.keyup(updateReservix);
       updateReservix();
@@ -193,10 +193,10 @@ block scripts
       var ausgabeBankEUR = $('#kasse\\[ausgabeBankEUR\\]');
 
       function updateAusgabenGesamt() {
-        var ausgabenGesamt = eurAmount(ausgabeGageEUR) +
-          eurAmount(ausgabeCateringEUR) + eurAmount(ausgabeHelferEUR) +
-          eurAmount(ausgabeSonstiges1EUR) + eurAmount(ausgabeSonstiges2EUR) +
-          eurAmount(ausgabeSonstiges3EUR) + eurAmount(ausgabeBankEUR);
+        var ausgabenGesamt = floatAmount(ausgabeGageEUR) +
+          floatAmount(ausgabeCateringEUR) + floatAmount(ausgabeHelferEUR) +
+          floatAmount(ausgabeSonstiges1EUR) + floatAmount(ausgabeSonstiges2EUR) +
+          floatAmount(ausgabeSonstiges3EUR) + floatAmount(ausgabeBankEUR);
         setEuro($('#ausgabenGesamt'), ausgabenGesamt);
         $('#ausgabenGesamt').change(updateEndbestand);
       }
@@ -213,8 +213,8 @@ block scripts
       var anfangsbestandEUR = $('#kasse\\[anfangsbestandEUR\\]');
 
       function updateEndbestand() {
-        var endbestand = eurAmount(anfangsbestandEUR) +
-          eurAmount($('#einnahmenGesamt')) - eurAmount($('#ausgabenGesamt'));
+        var endbestand = floatAmount(anfangsbestandEUR) +
+          floatAmount($('#einnahmenGesamt')) - floatAmount($('#ausgabenGesamt'));
         setEuro($('#endbestandEUR'), endbestand);
       }
 

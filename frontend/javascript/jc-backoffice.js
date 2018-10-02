@@ -1,21 +1,20 @@
 /* global moment*/
 
+function germanToEnglishNumberString(string) {
+  'use strict';
+  return string.replace('.', '').replace(',', '.');
+}
+
 /* exported intAmount */
 function intAmount(jqueryNumberField) {
   'use strict';
-  return parseInt(jqueryNumberField.val().replace(',', '.'), 10) || 0;
-}
-
-/* exported eurAmount */
-function eurAmount(jqueryNumberField) {
-  'use strict';
-  return parseFloat(jqueryNumberField.val().replace(',', '.'), 10) || 0;
+  return parseInt(germanToEnglishNumberString(jqueryNumberField.val()), 10) || 0;
 }
 
 /* exported floatAmount */
 function floatAmount(jqueryNumberField) {
   'use strict';
-  return eurAmount(jqueryNumberField);
+  return parseFloat(germanToEnglishNumberString(jqueryNumberField.val()), 10) || 0;
 }
 
 /* exported setEuro */

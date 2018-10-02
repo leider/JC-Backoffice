@@ -38,7 +38,7 @@ mixin bandScript
       var gagenSteuer = $('#kosten\\[gagenSteuer\\]');
       var gagenTotal = $('#gagenTotal');
       function updateGagenTotal() {
-        var eur = eurAmount(gagenEUR);
+        var eur = floatAmount(gagenEUR);
         var mwst = (eur * floatAmount(gagenSteuer) / 100);
         setEuro(gagenTotal, eur + mwst);
       }
@@ -50,7 +50,7 @@ mixin bandScript
       var agenturSteuer = $('#kosten\\[agenturSteuer\\]');
       var agenturTotal = $('#agenturTotal');
       function updateAgenturTotal() {
-        var eur = eurAmount(agenturEUR);
+        var eur = floatAmount(agenturEUR);
         setEuro(agenturTotal, eur + (eur * floatAmount(agenturSteuer) / 100));
       }
       agenturEUR.keyup(updateAgenturTotal);
@@ -58,7 +58,7 @@ mixin bandScript
       updateAgenturTotal();
 
       function updateBandTotal() {
-        setEuro($('#bandTotal'), eurAmount(gagenTotal) + eurAmount(agenturTotal));
+        setEuro($('#bandTotal'), floatAmount(gagenTotal) + floatAmount(agenturTotal));
       }
       [gagenTotal, agenturTotal].forEach(function (field) {
         field.change(updateBandTotal);

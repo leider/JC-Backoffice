@@ -41,16 +41,16 @@ mixin preiseScript
       var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
 
       function amountHandler() {
-        var preis = eurAmount(regulaer);
-        var preisErmaessigt = preis - Math.abs(eurAmount(rabattErmaessigt));
-        var preisMitglied = preis - Math.abs(eurAmount(rabattMitglied));
+        var preis = floatAmount(regulaer);
+        var preisErmaessigt = preis - Math.abs(floatAmount(rabattErmaessigt));
+        var preisMitglied = preis - Math.abs(floatAmount(rabattMitglied));
 
         setEuro($('#eintrittspreise\\[ermaessigt\\]'), preisErmaessigt);
         setEuro($('#eintrittspreise\\[mitglied\\]'), preisMitglied);
 
         var erwarteteEinnahmen = intAmount(anzahlBesucher)
           * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
-          + eurAmount(zuschuss);
+          + floatAmount(zuschuss);
 
         setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
         setEuro($('#eintrittTotal'), erwarteteEinnahmen);
