@@ -17,6 +17,12 @@ function floatAmount(jqueryNumberField) {
   return parseFloat(germanToEnglishNumberString(jqueryNumberField.val()), 10) || 0;
 }
 
+/* exported floatAmountForSpan */
+function floatAmountForSpan(jquerySpan) {
+  'use strict';
+  return parseFloat(germanToEnglishNumberString(jquerySpan.html().replace('€', '')), 10) || 0;
+}
+
 /* exported setEuro */
 function setEuro(jqueryCurrencyField, numberString) {
   /* eslint-disable new-cap */

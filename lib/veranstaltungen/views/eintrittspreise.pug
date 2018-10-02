@@ -2,7 +2,7 @@ include ../../../views/formComponents
 
 mixin preise(veranstaltung)
   -var eintrittspreise = veranstaltung.eintrittspreise()
-  +legendMitBody('preise', 'Einritt/Zuschuss', 'eintrittTotal')
+  +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
     .row
       .col-4
         +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')

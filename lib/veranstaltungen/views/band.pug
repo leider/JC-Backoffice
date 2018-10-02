@@ -58,7 +58,7 @@ mixin bandScript
       updateAgenturTotal();
 
       function updateBandTotal() {
-        setEuro($('#bandTotal'), floatAmount(gagenTotal) + floatAmount(agenturTotal));
+        setEuro($('#bandTotal'), floatAmountForSpan(gagenTotal) + floatAmountForSpan(agenturTotal));
       }
       [gagenTotal, agenturTotal].forEach(function (field) {
         field.change(updateBandTotal);
