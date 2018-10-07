@@ -8,6 +8,8 @@ const morgan = require('morgan');
 const bodyparser = require('body-parser');
 const compress = require('compression');
 const csurf = require('csurf');
+require('./initWinston');
+const winston = require('winston');
 
 function secureAgainstClickjacking(req, res, next) {
   res.setHeader('X-Frame-Options', 'DENY');
@@ -17,7 +19,7 @@ function secureAgainstClickjacking(req, res, next) {
 function serverpathRemover(req, res, next) {
   res.locals.removeServerpaths = msg => {
     // find the path that comes before node_modules or lib:
-    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|softwerkskammer\/lib)\/)/.exec(msg);
+    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(msg);
     if (pathToBeRemoved) {
       return msg.replace(new RegExp(pathToBeRemoved[0], 'g'), '');
     }
@@ -42,10 +44,6 @@ function useApp(parent, url, child) {
 
 const conf = require('simple-configure');
 const beans = conf.get('beans');
-
-// initialize winston and two concrete loggers
-/*eslint no-sync: 0 */
-const winston = require('winston-config').fromFileSync(path.join(__dirname, 'config/winston-config.json'));
 
 const appLogger = winston.loggers.get('application');
 const httpLogger = winston.loggers.get('http');

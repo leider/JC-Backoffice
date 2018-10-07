@@ -51,7 +51,6 @@
     "nodemailer": "4.6.8",
     "passport": "0.4.0",
     "passport-local": "1.0.0",
-    "phantomjs-prebuilt": ">2.1.5",
     "popper.js": "1.14.4",
     "puppeteer": "1.9.0",
     "pug": "2.0.3",
@@ -62,8 +61,7 @@
     "serve-favicon": "2.5.0",
     "simple-configure": "0.1.6",
     "simple-timepicker": "1.1.1",
-    "winston": "2.4.2",
-    "winston-config": "0.5.1"
+    "winston": "3.1.0"
   },
   "devDependencies": {
     "chado": "0.3.1",
