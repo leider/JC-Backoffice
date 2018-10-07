@@ -20,22 +20,23 @@ block content
   .col-12
     .page-header
       h2 Termine
-    table.table.table-sm.table-striped.table-responsive
-      tr
-        th(width='15%') Startet am
-        th(width='15%') Endet am
-        th(width='65%') Beschreibung
-        th(width='5%')
-      for termin in termine
-        form(action='/ical/submit', method='post')
-          tr
-            if termin.id()
-              +hidden('id', termin.id())
-            +csrf
-            +daterow('startDate', termin.startMoment().format('L'))
-            +daterow('endDate', termin.endMoment().format('L'))
-            td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
-            td: button.btn.btn-primary.float-right(type='submit'): i.far.fa-fw.fa-copy
+    .table-responsive
+      table.table.table-sm.table-striped
+        tr
+          th(width='15%') Startet am
+          th(width='15%') Endet am
+          th(width='65%') Beschreibung
+          th(width='5%')
+        for termin in termine
+          form(action='/ical/submit', method='post')
+            tr
+              if termin.id()
+                +hidden('id', termin.id())
+              +csrf
+              +daterow('startDate', termin.startMoment().format('L'))
+              +daterow('endDate', termin.endMoment().format('L'))
+              td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%') 
+              td: button.btn.btn-primary.float-right(type='submit'): i.far.fa-fw.fa-copy
 
 block head
   link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')

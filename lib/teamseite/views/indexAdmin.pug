@@ -15,35 +15,36 @@ mixin orgaStaffField(veranstaltung, name, allUsers)
       +editableMultiselectSmall('staff[' + name + ']' + veranstaltung.id(), 'staff[' + name + ']', veranstaltung.staff()[name](), allUsers.map(user => user.id))
       
 mixin tableForOrga(veranstaltungen)
-  table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
-    -var monatAlt = -1;
-    tr
-      th(width='100') Datum
-      th(width='300') Titel
-      th Kasse&nbsp;1
-      th Kasse&nbsp;2
-      th Technik&nbsp;1
-      th Technik&nbsp;2
-      th MoD
-      th(width='100') Speichern
-    for veranstaltung in veranstaltungen
-      if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-        tr: th(colspan=8, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
-        -monatAlt = veranstaltung.startMoment().month();
-
-      form#veranstaltungform(action='/teamseite/submit', method='post')
-        tr
-          +hidden('id', veranstaltung.id())
-          +csrf
-          td(style='white-space: nowrap'): p.form-control-plaintext #{veranstaltung.datumForDisplayShort()}
-          td(style='white-space: nowrap'): p.form-control-plaintext(style='display:inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;')
-            a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          +orgaStaffField(veranstaltung, 'kasseV', users)
-          +orgaStaffField(veranstaltung, 'kasse', users)
-          +orgaStaffField(veranstaltung, 'technikerV', users)
-          +orgaStaffField(veranstaltung, 'techniker', users)
-          +orgaStaffField(veranstaltung, 'mod', users)
-          td: button.btn.btn-sm.btn-success.float-right(type='submit'): i(class='fas fa-fw fa-save fa-lg')
+  .table-responsive
+    table.table.table-sm.table-striped
+      -var monatAlt = -1;
+      tr
+        th(width='100') Datum
+        th(width='300') Titel
+        th Kasse&nbsp;1
+        th Kasse&nbsp;2
+        th Technik&nbsp;1
+        th Technik&nbsp;2
+        th MoD
+        th(width='100') Speichern
+      for veranstaltung in veranstaltungen
+        if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+          tr: th(colspan=8, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
+          -monatAlt = veranstaltung.startMoment().month();
+  
+        form#veranstaltungform(action='/teamseite/submit', method='post')
+          tr
+            +hidden('id', veranstaltung.id())
+            +csrf
+            td(style='white-space: nowrap'): p.form-control-plaintext #{veranstaltung.datumForDisplayShort()}
+            td(style='white-space: nowrap'): p.form-control-plaintext(style='display:inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;')
+              a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+            +orgaStaffField(veranstaltung, 'kasseV', users)
+            +orgaStaffField(veranstaltung, 'kasse', users)
+            +orgaStaffField(veranstaltung, 'technikerV', users)
+            +orgaStaffField(veranstaltung, 'techniker', users)
+            +orgaStaffField(veranstaltung, 'mod', users)
+            td: button.btn.btn-sm.btn-success.float-right(type='submit'): i(class='fas fa-fw fa-save fa-lg')
 
 block title
   | Teamadmin
@@ -56,7 +57,8 @@ block content
     .page-header
       h2 Übersicht der Benutzer
     -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-    table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
+    .table-responsive
+      table.table.table-sm.table-striped(style='table-layout: fixed')
         tr
           th(width='200') Name
           th(width='200') E-Mail

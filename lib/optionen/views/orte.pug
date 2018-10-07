@@ -31,28 +31,29 @@ block content
   .col-12
     .page-header
       h2 Orte
-    table.table.table-sm.table-responsive.table-striped
-      tr
-        th Name
-        th Fläche
-        th Für Presse
-        th Für Presse mit "in"
-        th Bearbeiten
-      for ort in orte.orte()
+    .table-responsive
+      table.table.table-sm.table-striped
         tr
-          td #{ort.name}
-          td #{ort.flaeche}
-          td #{ort.pressename}
-          td #{ort.presseIn}
-          td: button.btn.btn-sm.btn-primary.float-right(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-pressein=ort.presseIn ): i.far.fa-fw.fa-edit
-      tr
-        td 
-        td 
-        td 
-        td 
-        td: button.btn.btn-sm.btn-success.float-right(data-toggle='modal', data-target='#edit')
-          i.far.fa-fw.fa-file
-          | &nbsp;Neu
+          th Name
+          th Fläche
+          th Für Presse
+          th Für Presse mit "in"
+          th Bearbeiten
+        for ort in orte.orte()
+          tr
+            td #{ort.name}
+            td #{ort.flaeche}
+            td #{ort.pressename}
+            td #{ort.presseIn}
+            td: button.btn.btn-sm.btn-primary.float-right(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-pressein=ort.presseIn ): i.far.fa-fw.fa-edit
+        tr
+          td 
+          td 
+          td 
+          td 
+          td: button.btn.btn-sm.btn-success.float-right(data-toggle='modal', data-target='#edit')
+            i.far.fa-fw.fa-file
+            | &nbsp;Neu
   
 
 block scripts

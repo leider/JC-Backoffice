@@ -15,33 +15,34 @@ mixin buttonFor(veranstaltung, name, nameInMethod)
       .text-warning [keine]
 
 mixin tableForTeam(veranstaltungen)
-  table.table.table-sm.table-responsive.table-striped
-    -var monatAlt = -1;
-    tr
-      th Datum
-      th Titel
-      th Kasse&nbsp;1
-      th Kasse&nbsp;2
-      th Technik&nbsp;1
-      th Technik&nbsp;2
-      th Master
-    for veranstaltung in veranstaltungen
-      if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-        tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
-        -monatAlt = veranstaltung.startMoment().month();
-
+  .table-responsive
+    table.table.table-sm.table-striped
+      -var monatAlt = -1;
       tr
-        td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-        td(style='white-space: nowrap')
-          if accessrights.isOrgaTeam()
-            a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          else
-            | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-        +buttonFor(veranstaltung, 'kasseV', 'KasseV')
-        +buttonFor(veranstaltung, 'kasse', 'Kasse')
-        +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
-        +buttonFor(veranstaltung, 'techniker', 'Techniker')
-        +buttonFor(veranstaltung, 'mod', 'MoD')
+        th Datum
+        th Titel
+        th Kasse&nbsp;1
+        th Kasse&nbsp;2
+        th Technik&nbsp;1
+        th Technik&nbsp;2
+        th Master
+      for veranstaltung in veranstaltungen
+        if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+          tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
+          -monatAlt = veranstaltung.startMoment().month();
+  
+        tr
+          td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
+          td(style='white-space: nowrap')
+            if accessrights.isOrgaTeam()
+              a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+            else
+              | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
+          +buttonFor(veranstaltung, 'kasseV', 'KasseV')
+          +buttonFor(veranstaltung, 'kasse', 'Kasse')
+          +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
+          +buttonFor(veranstaltung, 'techniker', 'Techniker')
+          +buttonFor(veranstaltung, 'mod', 'MoD')
       
 block title
   | Teamseite
@@ -61,32 +62,33 @@ block content
       .col-12
         h2 Übersicht der Benutzer
         -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-        table.table.table-sm.table-responsive.table-striped(style='table-layout: fixed')
-            tr
-              th(width='200') Name
-              th(width='200') E-Mail
-              th(width='150') T-Shirt
-              th(width='150') Telefon
-            for user in users
+        .table-responsive
+          table.table.table-sm.table-striped(style='table-layout: fixed')
               tr
-                if accessrights.canEditUser(user.id)
-                  td: a.form-control-plaintext(href='/users/' + user.id) #{user.name} (click to edit)
-                else
-                  td: span.form-control-plaintext #{user.name}
-                td: span.mailtoify.form-control-plaintext #{user.email}
-                td
+                th(width='200') Name
+                th(width='200') E-Mail
+                th(width='150') T-Shirt
+                th(width='150') Telefon
+              for user in users
+                tr
                   if accessrights.canEditUser(user.id)
-                    select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
-                      -var value = user.tshirt
-                      each val in shirtsizes
-                        option(value = val, selected = value === val) #{val}
+                    td: a.form-control-plaintext(href='/users/' + user.id) #{user.name} (click to edit)
                   else
-                    span.form-control-plaintext #{user.tshirt}
-                td
-                  if accessrights.canEditUser(user.id)
-                    input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-                  else
-                    span.telify.form-control-plaintext #{user.tel}
+                    td: span.form-control-plaintext #{user.name}
+                  td: span.mailtoify.form-control-plaintext #{user.email}
+                  td
+                    if accessrights.canEditUser(user.id)
+                      select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
+                        -var value = user.tshirt
+                        each val in shirtsizes
+                          option(value = val, selected = value === val) #{val}
+                    else
+                      span.form-control-plaintext #{user.tshirt}
+                  td
+                    if accessrights.canEditUser(user.id)
+                      input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+                    else
+                      span.telify.form-control-plaintext #{user.tel}
               
 block scripts
   script.
