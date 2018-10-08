@@ -162,11 +162,13 @@ block scripts
       var einnahmeTicketsEUR = $('#kasse\\[einnahmeTicketsEUR\\]');
       var einnahmeSonstiges1EUR = $('#kasse\\[einnahmeSonstiges1EUR\\]');
       var einnahmeSonstiges2EUR = $('#kasse\\[einnahmeSonstiges2EUR\\]');
-
+      var einnahmenGesamtEUR;
+      var ausgabenGesamtEUR;
+      
       function updateEinnahmenGesamt() {
-        var einnahmenGesamt = floatAmount(einnahmeBankEUR) + floatAmount(einnahmeTicketsEUR)
+        einnahmenGesamtEUR = floatAmount(einnahmeBankEUR) + floatAmount(einnahmeTicketsEUR)
           + floatAmount(einnahmeSonstiges1EUR) + floatAmount(einnahmeSonstiges2EUR);
-        setEuro($('#einnahmenGesamt'), einnahmenGesamt);
+        setEuro($('#einnahmenGesamt'), einnahmenGesamtEUR);
         $('#einnahmenGesamt').change(updateEndbestand);
       }
 
@@ -193,11 +195,11 @@ block scripts
       var ausgabeBankEUR = $('#kasse\\[ausgabeBankEUR\\]');
 
       function updateAusgabenGesamt() {
-        var ausgabenGesamt = floatAmount(ausgabeGageEUR) +
+        ausgabenGesamtEUR = floatAmount(ausgabeGageEUR) +
           floatAmount(ausgabeCateringEUR) + floatAmount(ausgabeHelferEUR) +
           floatAmount(ausgabeSonstiges1EUR) + floatAmount(ausgabeSonstiges2EUR) +
           floatAmount(ausgabeSonstiges3EUR) + floatAmount(ausgabeBankEUR);
-        setEuro($('#ausgabenGesamt'), ausgabenGesamt);
+        setEuro($('#ausgabenGesamt'), ausgabenGesamtEUR);
         $('#ausgabenGesamt').change(updateEndbestand);
       }
 
@@ -214,7 +216,7 @@ block scripts
 
       function updateEndbestand() {
         var endbestand = floatAmount(anfangsbestandEUR) +
-          floatAmount($('#einnahmenGesamt')) - floatAmount($('#ausgabenGesamt'));
+          einnahmenGesamtEUR - ausgabenGesamtEUR;
         setEuro($('#endbestandEUR'), endbestand);
       }
 
