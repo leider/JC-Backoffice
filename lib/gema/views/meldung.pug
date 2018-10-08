@@ -42,7 +42,7 @@ html
                 td #{veranstaltung.kopf().ort()}
                 td #{veranstaltung.kopf().kooperation()}
                 td Jazzkonzert
-                td Musiker: #{veranstaltung.artist().name().join(', ')}
+                td #{veranstaltung.artist().bandname() || veranstaltung.artist().name().join(', ')}
                 td.text-right #{veranstaltung.preisAusweisGema()}
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
