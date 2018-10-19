@@ -36,7 +36,7 @@ block content
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
   
-          h2(class=kopf.cssTextClass())
+          h2(class='text-' + kopf.cssColorCode())
             i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
             | #{kopf.titel()} - #{kopf.ort()}
             br
@@ -47,7 +47,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        +panelMitBody('staff', 'Staff', null, 'color-staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+        +panelMitBody('staff', 'Staff', null, 'staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
           -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
@@ -67,7 +67,7 @@ block content
               +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
                 
   
-        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'color-kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
+        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
           if eintrittspreise.frei()
             .card-body
               p: b Freier Eintritt
@@ -114,7 +114,7 @@ block content
                     | &nbsp;Kassenzettel
   
   
-        +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'color-concert', veranstaltung.dealUeberschussTotal())
+        +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
           table.table.table-sm.table-striped
             tr
               th(align='right', style='text-align: right;') Einnahmen
@@ -131,12 +131,12 @@ block content
                 td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
   
   
-        +panelMitBody('info', 'Informationen', null, 'color-misc')
+        +panelMitBody('info', 'Informationen', null, 'misc')
           .card-body
             | !{kopf.beschreibungHTML()}
   
       .col-md-6
-        +panelMitBody('kosten', 'Kosten', 'costs', 'color-costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+        +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
           table.table.table-striped.table-sm
             tr
               th(colspan=2) Backline und Technik
@@ -193,7 +193,7 @@ block content
                   | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
   
         if agentur.name()
-          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
             .card-body
               address
                 strong #{agentur.ansprechpartner()} <br>
@@ -202,7 +202,7 @@ block content
                 | E-Mail: 
                 span.mailtoify #{agentur.email()}
   
-        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'color-general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
           table.table.table-sm
             for step in vertrag.workflow()
               tr: td
@@ -214,7 +214,7 @@ block content
               a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
                 | Vertrag anzeigen
   
-        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'color-hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
+        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
           table.table.table-sm
             for step in unterkunft.workflow()
               tr: td

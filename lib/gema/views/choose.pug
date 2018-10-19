@@ -9,7 +9,7 @@ block content
   .col-12.mt-3
     .row
       .col-lg-6
-        +panelMitBody('vorab', 'Vorabmeldung', null, 'color-general')
+        +panelMitBody('vorab', 'Vorabmeldung', null, 'general')
           form#gemavorform(action='/gema/vorab', method='post')
             .card-body
               +csrf
@@ -20,7 +20,7 @@ block content
                 +checkbox('event[' + event.id() + ']', event.description())
     
       .col-lg-6
-        +panelMitBody('nach', 'Nachmeldung', null, 'color-general')
+        +panelMitBody('nach', 'Nachmeldung', null, 'general')
           form#gemanachform(action='/gema/nach', method='post')
             .card-body
               +csrf

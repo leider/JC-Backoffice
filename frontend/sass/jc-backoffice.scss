@@ -43,12 +43,26 @@ $color-festival: #9FC442;
   color: #ffffff !important;
 }
 
+@mixin border-variant($color) {
+  background-color: #ffffff !important;
+  border-color: $color !important;
+  color: inherit !important;
+}
+
+.border-classix {
+  @include border-variant($color-allgemein2);
+}
+
 .color-classix {
   @include color-variant($color-allgemein2);
 }
 
 .text-classix {
   color: $color-allgemein2;
+}
+
+.border-concert {
+  @include border-variant(darkgrey);
 }
 
 .color-concert {
@@ -59,6 +73,10 @@ $color-festival: #9FC442;
   color: darkgray;
 }
 
+.border-session {
+  @include border-variant($color-kasse2);
+}
+
 .color-session {
   @include color-variant($color-kasse2);
 }
@@ -67,12 +85,20 @@ $color-festival: #9FC442;
   color: $color-kasse2;
 }
 
+.border-soulcafe {
+  @include border-variant($color-ausgaben2);
+}
+
 .color-soulcafe {
   @include color-variant($color-ausgaben2);
 }
 
 .text-soulcafe {
   color: $color-ausgaben2;
+}
+
+.border-festival {
+  @include color-variant($color-festival);
 }
 
 .color-festival {

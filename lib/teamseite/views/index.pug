@@ -1,49 +1,54 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 
-
-mixin buttonFor(veranstaltung, name, nameInMethod)
+mixin button(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
-  td(style='white-space: nowrap')
-    if !staff[name + 'NotNeeded']()
-      if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-        a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()): i.fas.fa-plus
-      else
-        a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()): i.fas.fa-minus
-      span.text-capitalize &nbsp; #{staff[name]().join(', ')}
+  if !staff[name + 'NotNeeded']()
+    if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
+      a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) Ich übernehme
     else
-      .text-warning [keine]
+      a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) Ich kann nicht
 
-mixin tableForTeam(veranstaltungen)
-  .table-responsive
-    table.table.table-sm.table-striped
-      -var monatAlt = -1;
-      tr
-        th Datum
-        th Titel
-        th Kasse&nbsp;1
-        th Kasse&nbsp;2
-        th Technik&nbsp;1
-        th Technik&nbsp;2
-        th Master
-      for veranstaltung in veranstaltungen
-        if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-          tr: th(colspan=7, style=' background-color: rgb(200, 200, 200)') #{veranstaltung.startMoment().format('MMM \'YY')}
-          -monatAlt = veranstaltung.startMoment().month();
-  
-        tr
-          td(style='white-space: nowrap') #{veranstaltung.datumForDisplayShort()}
-          td(style='white-space: nowrap')
-            if accessrights.isOrgaTeam()
-              a(href=veranstaltung.fullyQualifiedUrl() + '/ausgaben') #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-            else
-              | #{veranstaltung.kopf().titel()} (#{veranstaltung.kopf().ort()})
-          +buttonFor(veranstaltung, 'kasseV', 'KasseV')
-          +buttonFor(veranstaltung, 'kasse', 'Kasse')
-          +buttonFor(veranstaltung, 'technikerV', 'TechnikerV')
-          +buttonFor(veranstaltung, 'techniker', 'Techniker')
-          +buttonFor(veranstaltung, 'mod', 'MoD')
-      
+mixin people(veranstaltung, name, nameInMethod)
+  -var staff = veranstaltung.staff()
+  if staff[name + 'NotNeeded']()
+    span.text-warning Niemand benötigt
+  else
+    span.text-capitalize #{staff[name]().join(', ')}
+
+mixin panelView(veranstaltungen)
+  -var count = 0
+  .row
+    for veranstaltung in veranstaltungen
+      -var kopf = veranstaltung.kopf()
+      .col-xl-3.col-lg-4.col-sm-6
+        +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+          table.table.table-striped.table-sm
+            tr: td(colspan=3): h5.mb-0 Kasse
+            tr 
+              th Eins: #{' '}
+              td: +people(veranstaltung, 'kasseV', 'KasseV')
+              td: +button(veranstaltung, 'kasseV', 'KasseV')
+            tr
+              th Zwei: #{' '}
+              td: +people(veranstaltung, 'kasse', 'Kasse')
+              td: +button(veranstaltung, 'kasse', 'Kasse')
+            tr: td(colspan=3): h5.mb-0 Technik
+            tr
+              th Eins: #{' '}
+              td: +people(veranstaltung, 'technikerV', 'TechnikerV')
+              td: +button(veranstaltung, 'technikerV', 'TechnikerV')
+            tr
+              th Zwei: #{' '}
+              td: +people(veranstaltung, 'techniker', 'Techniker')
+              td: +button(veranstaltung, 'techniker', 'Techniker')
+            tr: td(colspan=3): h5.mb-0 Master
+            tr
+              th &nbsp;
+              td: +people(veranstaltung, 'mod', 'MoD')
+              td: +button(veranstaltung, 'mod', 'MoD')
+        
+
 block title
   | Teamseite
 
@@ -57,7 +62,7 @@ block content
           h2 Team
         p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
         p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
-        +tableForTeam(veranstaltungen)
+        +panelView(veranstaltungen)
     .row
       .col-12
         h2 Übersicht der Benutzer
