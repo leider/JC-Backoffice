@@ -205,7 +205,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix)
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
     h5.card-header.p-2(class = 'color-' + (optionalColorClassSuffix || 'general'))
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
-        i.far.fa-caret-square-down.fa-fw.blog
+        i.far.fa-caret-square-down.fa-fw
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(null, optionalCurrencySpan, 'float-right')
@@ -217,9 +217,9 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, op
     h5.card-header.p-2(class = 'color-' + (optionalColorClassSuffix || 'general'))
       a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
         if collapsed
-          i.far.fa-caret-square-right.fa-fw.blog
+          i.far.fa-caret-square-right.fa-fw
         else
-          i.far.fa-caret-square-down.fa-fw.blog
+          i.far.fa-caret-square-down.fa-fw
         | &nbsp;!{title}
       if optionalEditLink
         | #{' '}
@@ -227,7 +227,7 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, op
           i.fas.fa-fw.fa-lg.fa-pen-square
       if optionalCurrencySpan
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
-    .collapse(id = id, class = collapsed ? 'hide' : 'show')
+    div(id = id, class = 'collapse' + (collapsed ? '' : ' show'))
       block
 
 mixin uploader(name, label, accept, value, extradata)

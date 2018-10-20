@@ -110,10 +110,6 @@ block content
 block scripts
   script.
     $(document).ready(function () {
-      $('a.chevron').click(function () {
-        $(this).find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
-      });
-
       function shirtsizeChanged() {
         $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
       } 
