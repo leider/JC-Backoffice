@@ -1,5 +1,6 @@
 extends ../../../views/layout
 include ../../../views/formComponents
+include mixins
 
 mixin button(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
@@ -14,7 +15,7 @@ mixin people(veranstaltung, name)
 
 mixin panelView(veranstaltungen)
   -var count = 0
-  -var nearFuture = moment(); nearFuture.add(2, 'months')
+  -var nearFuture = moment(); nearFuture.add(1, 'months')
   .row
     for veranstaltung in veranstaltungen
       -var kopf = veranstaltung.kopf()
@@ -27,24 +28,24 @@ mixin panelView(veranstaltungen)
               tr: td(colspan=3): h5.mb-0 Kasse
               if !staff['kasseVNotNeeded']()
                 tr 
-                  th Eins: #{' '}
+                  th Eins:
                   td: +people(veranstaltung, 'kasseV')
                   td: +button(veranstaltung, 'kasseV', 'KasseV')
               if !staff['kasseNotNeeded']()
                 tr
-                  th Zwei: #{' '}
+                  th Zwei:
                   td: +people(veranstaltung, 'kasse')
                   td: +button(veranstaltung, 'kasse', 'Kasse')
             if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
               tr: td(colspan=3): h5.mb-0 Technik
               if !staff['technikerVNotNeeded']()
                 tr
-                  th Eins: #{' '}
+                  th Eins:
                   td: +people(veranstaltung, 'technikerV')
                   td: +button(veranstaltung, 'technikerV', 'TechnikerV')
               if !staff['technikerNotNeeded']()
                 tr
-                  th Zwei: #{' '}
+                  th Zwei:
                   td: +people(veranstaltung, 'techniker')
                   td: +button(veranstaltung, 'techniker', 'Techniker')
             if !staff['modNotNeeded']()
@@ -54,37 +55,11 @@ mixin panelView(veranstaltungen)
                 td: +people(veranstaltung, 'mod')
                 td: +button(veranstaltung, 'mod', 'MoD')
         
-mixin userpanel(user, count)
-  -var editlink = accessrights.canEditUser(user.id) ? '/users/' + user.id : null
-  .col-xl-3.col-lg-4.col-sm-6
-    +panelMitBody('user' + count, user.name, null, null, null, editlink, accessrights.memberId() !== user.id)
-      table.table.table-striped.table-sm
-        tr
-          th: .form-control-plaintext E-Mail:
-          td: .mailtoify.form-control-plaintext #{user.email}
-        if accessrights.canEditUser(user.id)
-          tr
-            th: .form-control-plaintext T-Shirt:
-            td
-              select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
-                -var value = user.tshirt
-                each val in shirtsizes
-                  option(value = val, selected = value === val) #{val}
-          tr
-            th: .form-control-plaintext Telefon:
-            td: input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-        else
-          tr
-            th: .form-control-plaintext T-Shirt:
-            td: .form-control-plaintext #{user.tshirt}
-          tr
-            th: .form-control-plaintext Telefon:
-            td: .telify.form-control-plaintext #{user.tel}
-
 block title
   | Teamseite
 
 block content
+  -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
   .col-12
     .row
       .col-12
@@ -98,8 +73,8 @@ block content
     .row
       .col-12
         hr
-        h2 Übersicht der Benutzer
-        -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
+        .page-header
+          h2 Übersicht der Benutzer
     .row
       +userpanel(accessrights.member(), ++count)
       -var count = 0;
