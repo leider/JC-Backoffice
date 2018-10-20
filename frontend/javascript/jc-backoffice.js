@@ -281,11 +281,18 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
   }
 
+  function toggleCaret() {
+    $('a.chevron').click(function () {
+      $(this).find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
+    });
+  }
+
   $(document).ready(highlightCurrentSection);
   $(document).ready(initPickersAndWidgets);
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
   $(document).ready(initCalendar);
+  $(document).ready(toggleCaret);
   $.fn.select2.defaults.set('theme', 'bootstrap');
 }());

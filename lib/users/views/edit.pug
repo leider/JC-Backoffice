@@ -8,6 +8,17 @@ mixin submitButtonsWithDelete()
       a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen
     button.btn.btn-primary(type='submit') Speichern
 
+mixin hiddenGroup(gruppo)
+  if (user.gruppen || []).includes(gruppo)
+    +hidden('gruppen', gruppo)
+
+mixin hiddenRight(right)
+  if (user.rechte || []).includes(right)
+    +hidden('rechte', right)
+
+mixin groupCheckbox(label, gruppo)
+  +checkbox('gruppen', label, !!(user.gruppen || []).includes(gruppo), gruppo)
+  
 block title
   | Users
 
@@ -27,16 +38,18 @@ block content
       .row
         .col-md-6
           if accessrights.isSuperuser()
-            +checkbox('gruppen', 'Superuser', !!(user.gruppen || []).includes('superusers'), 'superusers')
-            +checkbox('gruppen', 'Booking Team', !!(user.gruppen || []).includes('bookingTeam'), 'bookingTeam')
-            +checkbox('gruppen', 'Orga Team', !!(user.gruppen || []).includes('orgaTeam'), 'orgaTeam')
+            +groupCheckbox('Superuser', 'superusers')
+            +groupCheckbox('Booking Team', 'bookingTeam')
+            +groupCheckbox('Orga Team', 'orgaTeam')
           else
-            +hidden('gruppen', user.gruppen)
+            +hiddenGroup('superusers')
+            +hiddenGroup('bookingTeam')
+            +hiddenGroup('orgaTeam')
         .col-md-6
           if accessrights.isSuperuser()
             +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
           else
-            +hidden('rechte', user.rechte)
+            +hiddenRight('kassenfreigabe')
       +submitButtonsWithDelete()
 
 

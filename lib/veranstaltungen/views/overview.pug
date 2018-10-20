@@ -47,7 +47,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        +panelMitBody('staff', 'Staff', null, 'staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+        +panelMitBody('staff', 'Staff', null, 'staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben')
           -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
@@ -67,7 +67,7 @@ block content
               +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
                 
   
-        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse', 'fa-pencil-square-o')
+        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse')
           if eintrittspreise.frei()
             .card-body
               p: b Freier Eintritt
@@ -136,7 +136,7 @@ block content
             | !{kopf.beschreibungHTML()}
   
       .col-md-6
-        +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+        +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben')
           table.table.table-striped.table-sm
             tr
               th(colspan=2) Backline und Technik
@@ -193,7 +193,7 @@ block content
                   | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
   
         if agentur.name()
-          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf')
             .card-body
               address
                 strong #{agentur.ansprechpartner()} <br>
@@ -202,7 +202,7 @@ block content
                 | E-Mail: 
                 span.mailtoify #{agentur.email()}
   
-        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf', 'fa-pencil-square-o')
+        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf')
           table.table.table-sm
             for step in vertrag.workflow()
               tr: td
@@ -214,7 +214,7 @@ block content
               a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
                 | Vertrag anzeigen
   
-        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel', 'fa-pencil-square-o')
+        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel')
           table.table.table-sm
             for step in unterkunft.workflow()
               tr: td
@@ -226,10 +226,6 @@ block content
 block scripts
   script.
     $(document).ready(function () {
-      $('a.chevron').click(function() { 
-        $(this).find('i').toggleClass('fa-toggle-down fa-toggle-right');
-      });
-      
       $('.vertragstep').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/vertragStepClicked', {data: {step: this.name, checked: this.checked}});
       });

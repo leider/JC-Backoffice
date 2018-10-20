@@ -3,51 +3,83 @@ include ../../../views/formComponents
 
 mixin button(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
-  if !staff[name + 'NotNeeded']()
-    if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-      a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) Ich übernehme
-    else
-      a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) Ich kann nicht
-
-mixin people(veranstaltung, name, nameInMethod)
-  -var staff = veranstaltung.staff()
-  if staff[name + 'NotNeeded']()
-    span.text-warning Niemand benötigt
+  if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
+    a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + veranstaltung.id()) Ich übernehme
   else
-    span.text-capitalize #{staff[name]().join(', ')}
+    a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + veranstaltung.id()) Ich kann nicht
+
+mixin people(veranstaltung, name)
+  -var staff = veranstaltung.staff()
+  span.text-capitalize #{staff[name]().join(', ')}
 
 mixin panelView(veranstaltungen)
   -var count = 0
+  -var nearFuture = moment(); nearFuture.add(2, 'months')
   .row
     for veranstaltung in veranstaltungen
       -var kopf = veranstaltung.kopf()
+      -var staff = veranstaltung.staff()
+      -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null 
       .col-xl-3.col-lg-4.col-sm-6
-        +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, veranstaltung.fullyQualifiedUrl() + '/ausgaben', 'fa-pencil-square-o')
+        +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
           table.table.table-striped.table-sm
-            tr: td(colspan=3): h5.mb-0 Kasse
-            tr 
-              th Eins: #{' '}
-              td: +people(veranstaltung, 'kasseV', 'KasseV')
-              td: +button(veranstaltung, 'kasseV', 'KasseV')
-            tr
-              th Zwei: #{' '}
-              td: +people(veranstaltung, 'kasse', 'Kasse')
-              td: +button(veranstaltung, 'kasse', 'Kasse')
-            tr: td(colspan=3): h5.mb-0 Technik
-            tr
-              th Eins: #{' '}
-              td: +people(veranstaltung, 'technikerV', 'TechnikerV')
-              td: +button(veranstaltung, 'technikerV', 'TechnikerV')
-            tr
-              th Zwei: #{' '}
-              td: +people(veranstaltung, 'techniker', 'Techniker')
-              td: +button(veranstaltung, 'techniker', 'Techniker')
-            tr: td(colspan=3): h5.mb-0 Master
-            tr
-              th &nbsp;
-              td: +people(veranstaltung, 'mod', 'MoD')
-              td: +button(veranstaltung, 'mod', 'MoD')
+            if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
+              tr: td(colspan=3): h5.mb-0 Kasse
+              if !staff['kasseVNotNeeded']()
+                tr 
+                  th Eins: #{' '}
+                  td: +people(veranstaltung, 'kasseV')
+                  td: +button(veranstaltung, 'kasseV', 'KasseV')
+              if !staff['kasseNotNeeded']()
+                tr
+                  th Zwei: #{' '}
+                  td: +people(veranstaltung, 'kasse')
+                  td: +button(veranstaltung, 'kasse', 'Kasse')
+            if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
+              tr: td(colspan=3): h5.mb-0 Technik
+              if !staff['technikerVNotNeeded']()
+                tr
+                  th Eins: #{' '}
+                  td: +people(veranstaltung, 'technikerV')
+                  td: +button(veranstaltung, 'technikerV', 'TechnikerV')
+              if !staff['technikerNotNeeded']()
+                tr
+                  th Zwei: #{' '}
+                  td: +people(veranstaltung, 'techniker')
+                  td: +button(veranstaltung, 'techniker', 'Techniker')
+            if !staff['modNotNeeded']()
+              tr: td(colspan=3): h5.mb-0 Master
+              tr
+                th &nbsp;
+                td: +people(veranstaltung, 'mod')
+                td: +button(veranstaltung, 'mod', 'MoD')
         
+mixin userpanel(user, count)
+  -var editlink = accessrights.canEditUser(user.id) ? '/users/' + user.id : null
+  .col-xl-3.col-lg-4.col-sm-6
+    +panelMitBody('user' + count, user.name, null, null, null, editlink, accessrights.memberId() !== user.id)
+      table.table.table-striped.table-sm
+        tr
+          th: .form-control-plaintext E-Mail:
+          td: .mailtoify.form-control-plaintext #{user.email}
+        if accessrights.canEditUser(user.id)
+          tr
+            th: .form-control-plaintext T-Shirt:
+            td
+              select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
+                -var value = user.tshirt
+                each val in shirtsizes
+                  option(value = val, selected = value === val) #{val}
+          tr
+            th: .form-control-plaintext Telefon:
+            td: input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+        else
+          tr
+            th: .form-control-plaintext T-Shirt:
+            td: .form-control-plaintext #{user.tshirt}
+          tr
+            th: .form-control-plaintext Telefon:
+            td: .telify.form-control-plaintext #{user.tel}
 
 block title
   | Teamseite
@@ -65,39 +97,23 @@ block content
         +panelView(veranstaltungen)
     .row
       .col-12
+        hr
         h2 Übersicht der Benutzer
         -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-        .table-responsive
-          table.table.table-sm.table-striped(style='table-layout: fixed')
-              tr
-                th(width='200') Name
-                th(width='200') E-Mail
-                th(width='150') T-Shirt
-                th(width='150') Telefon
-              for user in users
-                tr
-                  if accessrights.canEditUser(user.id)
-                    td: a.form-control-plaintext(href='/users/' + user.id) #{user.name} (click to edit)
-                  else
-                    td: span.form-control-plaintext #{user.name}
-                  td: span.mailtoify.form-control-plaintext #{user.email}
-                  td
-                    if accessrights.canEditUser(user.id)
-                      select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
-                        -var value = user.tshirt
-                        each val in shirtsizes
-                          option(value = val, selected = value === val) #{val}
-                    else
-                      span.form-control-plaintext #{user.tshirt}
-                  td
-                    if accessrights.canEditUser(user.id)
-                      input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
-                    else
-                      span.telify.form-control-plaintext #{user.tel}
+    .row
+      +userpanel(accessrights.member(), ++count)
+      -var count = 0;
+      for user in users
+        if accessrights.memberId() !== user.id
+          +userpanel(user, ++count)
               
 block scripts
   script.
     $(document).ready(function () {
+      $('a.chevron').click(function () {
+        $(this).find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
+      });
+
       function shirtsizeChanged() {
         $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
       } 

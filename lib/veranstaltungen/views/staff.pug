@@ -27,7 +27,7 @@ mixin staffRowVerantwortlich(allUsers, staff, name, label)
 
 
 mixin staff(staff, allUsers)
-  +legendMitBody('staff', 'Staff', 'staffPreis', 'color-costs')
+  +legendMitBody('staff', 'Staff', 'staffPreis', 'costs')
     +staffRowVerantwortlich(allUsers, staff, 'techniker', 'Techniker')
     +staffRowVerantwortlich(allUsers, staff, 'kasse', 'Kasse')
     +staffRow(allUsers, staff, 'merchandise', 'Merchandise')

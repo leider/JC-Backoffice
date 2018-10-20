@@ -14,7 +14,7 @@ mixin plakateRow(werbung, name, label, optionen)
       +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
 mixin marketingUndPlakate(werbung, optionen)
-  +legendMitBody('plakate', 'Werbung', 'werbungTotal', 'color-costs')
+  +legendMitBody('plakate', 'Werbung', 'werbungTotal', 'costs')
     +plakateRow(werbung, 'plakat1', 'Plakat', optionen)
     +plakateRow(werbung, 'plakat2', 'Plakat', optionen)
     .row

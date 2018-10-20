@@ -77,7 +77,7 @@ block content
 
         .row
           .col-md-6
-            +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'color-kasse')
+            +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'kasse')
               .row
                 .col-4
                   +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
@@ -86,7 +86,7 @@ block content
                 .col-4
                   +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, freigegeben)
   
-            +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'color-kasse')
+            +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
               .row
                 .col-4
                   +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), null, null, freigegeben)
@@ -107,7 +107,7 @@ block content
   
   
           .col-md-6
-            +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'color-kasse')
+            +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
               .row
                 .col-sm-4.col-6
                   if !kosten.gageBAR()

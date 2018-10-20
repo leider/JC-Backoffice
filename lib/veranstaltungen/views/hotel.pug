@@ -43,8 +43,8 @@ block content
                 | &nbsp;Reservierung an Hotel
         .row
           .col-md-6
-            +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'color-hotel')
-            +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'color-hotel')
+            +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')
+            +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'hotel')
               .row
                 .col-4()
                   +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
@@ -70,7 +70,7 @@ block content
                         | #{step}
               
           .col-md-6
-            +legendMitBody('transport', 'Transport', 'transportTotal', 'color-hotel')
+            +legendMitBody('transport', 'Transport', 'transportTotal', 'hotel')
               +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
               .row
                 .col-md-6
