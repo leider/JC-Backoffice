@@ -18,7 +18,7 @@ mixin button(veranstaltung, name, allUsers)
       
 mixin panelView(veranstaltungen)
   -var count = 0
-  -var nearFuture = moment(); nearFuture.add(2, 'months')
+  -var nearFuture = moment(); nearFuture.add(1, 'months')
   .row
     for veranstaltung in veranstaltungen
       -var kopf = veranstaltung.kopf()
