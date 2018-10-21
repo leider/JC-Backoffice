@@ -20,9 +20,11 @@ mixin panelView(veranstaltungen)
     for veranstaltung in veranstaltungen
       -var kopf = veranstaltung.kopf()
       -var staff = veranstaltung.staff()
-      -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null 
+      -var niemandBenoetigtText = staff.noStaffNeeded() && staff.modNotNeeded() ? '<span class="bg-success">Niemand benötigt</span><br>' : ''
+      -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null
+      -var ueberschrift = niemandBenoetigtText + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ':<br>' + kopf.titel()  
       .col-xl-3.col-lg-4.col-sm-6
-        +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
+        +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
           table.table.table-striped.table-sm
             if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
               tr: td(colspan=3): h5.mb-0 Kasse
