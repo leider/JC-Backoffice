@@ -21,7 +21,7 @@ mixin panelView(veranstaltungen)
       -var kopf = veranstaltung.kopf()
       -var staff = veranstaltung.staff()
       -var niemandBenoetigtText = staff.noStaffNeeded() && staff.modNotNeeded() ? '<span class="bg-success">Niemand benötigt</span><br>' : ''
-      -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null
+      -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview';
       -var ueberschrift = niemandBenoetigtText + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ':<br>' + kopf.titel()  
       .col-xl-3.col-lg-4.col-sm-6
         +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))

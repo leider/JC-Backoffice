@@ -130,10 +130,10 @@ block content
                 td
                 td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
   
-  
-        +panelMitBody('info', 'Informationen', null, 'misc')
-          .card-body
-            | !{kopf.beschreibungHTML()}
+        if kopf.beschreibungHTML()
+          +panelMitBody('info', 'Informationen', null, 'misc')
+            .card-body
+              | !{kopf.beschreibungHTML()}
   
       .col-md-6
         +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben')
@@ -213,15 +213,15 @@ block content
             tr: td
               a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
                 | Vertrag anzeigen
-  
-        +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel')
-          table.table.table-sm
-            for step in unterkunft.workflow()
-              tr: td
-                .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
-                  input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
-                  label(for=step)
-                    | &nbsp;#{step}
+        if unterkunft.anzahlZimmer()
+          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel')
+            table.table.table-sm
+              for step in unterkunft.workflow()
+                tr: td
+                  .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
+                    input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
+                    label(for=step)
+                      | &nbsp;#{step}
 
 block scripts
   script.

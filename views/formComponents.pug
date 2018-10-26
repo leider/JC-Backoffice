@@ -96,22 +96,23 @@ mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.btn-group-sm.float-right
-    if nosave 
-      a.btn.btn-light(href='/', data-toggle='tooltip', title='Zurück zur Liste'): i.fas.fa-list.fa-fw.fa-lg
-    else
-      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw.fa-lg
-
-    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
-    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
-    +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')
+    if accessrights.isOrgaTeam()
+      if nosave 
+        a.btn.btn-light(href='/', data-toggle='tooltip', title='Zurück zur Liste'): i.fas.fa-list.fa-fw.fa-lg
+      else
+        a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw.fa-lg
+      +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
+      +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
+      +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')
     +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'btn-kasse', 'fa-money-bill-alt')
     +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'btn-kasse', 'fa-print')
-    +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper')
-    if veranstaltung.url() && !veranstaltung.kopf().confirmed()
-      a(class='btn btn-light', href=veranstaltung.fullyQualifiedUrl() + '/delete') Löschen
-    if veranstaltung.url()
-      +hidden('returnTo', currentUrl)
-      +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
+    if accessrights.isOrgaTeam()
+      +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper')
+      if veranstaltung.url() && !veranstaltung.kopf().confirmed()
+        a(class='btn btn-light', href=veranstaltung.fullyQualifiedUrl() + '/delete') Löschen
+      if veranstaltung.url()
+        +hidden('returnTo', currentUrl)
+        +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
 
     if !nosave
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.far.fa-save.fa-fw.fa-lg
@@ -209,24 +210,27 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix)
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(null, optionalCurrencySpan, 'float-right')
-    .card-body.collapse.show.pl-1.pr-1(id = id)
+    .collapse.show(id = id)
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, optionalEditLink, collapsed)
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
-    h5.card-header.p-2(class = 'color-' + (optionalColorClassSuffix || 'general'))
-      a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
-        if collapsed
-          i.far.fa-caret-square-right.fa-fw
-        else
-          i.far.fa-caret-square-down.fa-fw
-        | &nbsp;!{title}
-      if optionalEditLink
-        | #{' '}
-        a.inherit-color(href=optionalEditLink) 
-          i.fas.fa-fw.fa-lg.fa-pen-square
-      if optionalCurrencySpan
-        b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
+    .card-header.p-0(class = 'color-' + (optionalColorClassSuffix || 'general')): .row
+      .col-1
+        a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
+          if collapsed
+            i.far.fa-caret-square-right.fa-fw.fa-lg
+          else
+            i.far.fa-caret-square-down.fa-fw.fa-lg
+          if optionalEditLink
+            | #{' '}
+            a.inherit-color.float-right(href=optionalEditLink) 
+              i.fas.fa-glasses.fa-fw
+      .col-11
+        h5
+          | !{title}
+          if optionalCurrencySpan
+            b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
     div(id = id, class = 'collapse' + (collapsed ? '' : ' show'))
       block
 

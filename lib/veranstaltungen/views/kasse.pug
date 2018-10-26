@@ -91,7 +91,7 @@ block content
                 .col-4
                   +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), null, null, freigegeben)
                 .col-4
-                  +number('kasse[anzahlBesucherAK]', 'Besucher (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
+                  +number('kasse[anzahlBesucherAK]', 'Anzahl (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
                 .col-4
                   +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage', null, freigegeben)
               .row

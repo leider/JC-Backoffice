@@ -41,10 +41,12 @@ block content
             +groupCheckbox('Superuser', 'superusers')
             +groupCheckbox('Booking Team', 'bookingTeam')
             +groupCheckbox('Orga Team', 'orgaTeam')
+            +groupCheckbox('Abendkasse', 'abendkasse')
           else
             +hiddenGroup('superusers')
             +hiddenGroup('bookingTeam')
             +hiddenGroup('orgaTeam')
+            +hiddenGroup('abendkasse')
         .col-md-6
           if accessrights.isSuperuser()
             +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
