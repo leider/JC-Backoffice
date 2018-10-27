@@ -10,6 +10,7 @@ const compress = require('compression');
 const csurf = require('csurf');
 require('./initWinston');
 const winston = require('winston');
+require('express-zip');
 
 function secureAgainstClickjacking(req, res, next) {
   res.setHeader('X-Frame-Options', 'DENY');
