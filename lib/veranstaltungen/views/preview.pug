@@ -23,6 +23,7 @@ block content
   -var kopf = veranstaltung.kopf()
   -var unterkunft = veranstaltung.unterkunft()
   -var presse = veranstaltung.presse()
+  -var kosten = veranstaltung.kosten()
     
   .col-12
     .row
@@ -74,11 +75,23 @@ block content
                 td(colspan=3)
                   a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title='Abendkasse')
                       | &nbsp;Abendkasse
+
         if kopf.beschreibungHTML()
           +legendMitBody('info', 'Informationen', null, 'misc')
             .card-body
               | !{kopf.beschreibungHTML()}
           
+        -var dateien = kosten.dateirider() 
+        if dateien.length > 0
+          +legendMitBody('technik', 'Technik', null, 'costs')
+            table.table.table-sm.table-striped
+              tr: th Dateien
+              for datei in dateien
+                tr
+                  td(colspan=3)
+                    a.btn.btn-costs(href='/files/' + datei) #{datei}
+              
+            
         +legendMitBody('presse', 'Pressetext', null, 'presse')
           | !{veranstaltung.presseTextHTML()}
           if presse.firstImage() 
