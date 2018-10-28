@@ -100,9 +100,9 @@
     "constructorArgs": { "collectionName": "mailstore" }
   },
   
+  "htmlbridge": {"module": "./lib/reservix/htmlbridge"},
   "salesreport": {"module": "./lib/reservix/salesreport"},
   "reservixService": {"module": "./lib/reservix/reservixService"},
-  "reservixAPI": {"module": "./lib/reservix/api"},
   "reservixstore": {"module": "./lib/reservix/reservixstore"},
   "terminstore": {"module": "./lib/ical/terminstore"}
 }
