@@ -74,4 +74,31 @@ describe('Reservix Salesreport', () => {
       expect(obj.istVeraltet()).to.be(false);
     });
   });
+  describe('istVergangen', () => {
+    it('23 hours are in grace period', () => {
+      const now = moment();
+      now.subtract(23, 'hours');
+      const obj = new Salesreport({
+        datum: now.toDate(),
+      });
+      expect(obj.istVergangen()).to.be(false);
+    });
+
+    it('25 hours are definitely over', () => {
+      const now = moment();
+      now.subtract(25, 'hours');
+      const obj = new Salesreport({
+        datum: now.toDate(),
+      });
+      expect(obj.istVergangen()).to.be(true);
+    });
+
+    it('2017 is past', () => {
+      const obj = new Salesreport({
+        datum: new Date('2017-10-27T12:58:23.072Z')
+      });
+      expect(obj.istVergangen()).to.be(true);
+    });
+
+  });
 });
