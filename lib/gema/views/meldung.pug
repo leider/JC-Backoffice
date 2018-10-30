@@ -47,5 +47,5 @@ html
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
                   td.text-right #{veranstaltung.anzahlBesucher()}
-                  td #{veranstaltung.kooperationGema() ? veranstaltung.kopf().kooperation() : 'Jazzclub'}
+                  td #{veranstaltung.kopf().isKooperation() ? veranstaltung.kopf().kooperation() : 'Jazzclub'}
                 td.text-right #{veranstaltung.kopf().flaeche()} m<sup>2</sup>
