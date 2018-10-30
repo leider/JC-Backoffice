@@ -6,6 +6,14 @@ const moment = require('moment-timezone');
 const beans = require('../../configure').get('beans');
 const Salesreport = beans.get('salesreport');
 
+const heute = moment().add(8, 'hours').toDate();
+const tomorrow = moment().add(1, 'days').toDate();
+
+const thirtyMinutesAgo = moment().subtract(30, 'minutes').toDate();
+const oneHourAgo = moment().subtract(61, 'minutes').toDate();
+const almostOneDayOld = moment().subtract(23, 'hours').toDate();
+const moreThanOneDayOld = moment().subtract(25, 'hours').toDate();
+
 const fullresult = {
   id: '1008242',
   datum: new Date('2017-05-22T18:00:00.000Z'),
@@ -39,56 +47,43 @@ describe('Reservix Salesreport', () => {
   describe('istVeraltet', () => {
     it('correctly checks an old timestamp', () => {
       const obj = new Salesreport({
-        datum: new Date('2020-05-22T18:00:00.000Z'),
-        updated: new Date('2018-10-27T12:58:23.072Z')
+        datum: tomorrow,
+        updated: oneHourAgo
       });
       expect(obj.istVeraltet()).to.be(true);
     });
 
-    it('correctly checks a young timestamp', () => {
+    it('correctly checks a very old Veranstaltung', () => {
       const obj = new Salesreport(fullresult);
       expect(obj.istVeraltet()).to.be(false);
     });
 
     it('correctly checks an almost young timestamp', () => {
-      const now = moment();
-      now.subtract(59, 'minutes');
-      const obj = new Salesreport({updated: now.toDate()});
+      const obj = new Salesreport({updated: thirtyMinutesAgo});
       expect(obj.istVeraltet()).to.be(false);
     });
 
-    it('correctly checks a just too old timestamp', () => {
-      const now = moment();
-      now.subtract(61, 'minutes');
+    it('correctly checks for a near event - more often updates', () => {
       const obj = new Salesreport({
-        updated: now.toDate(),
-        datum: new Date('2020-10-27T12:58:23.072Z')
+        datum: heute,
+        updated: thirtyMinutesAgo
       });
       expect(obj.istVeraltet()).to.be(true);
     });
 
-    it('correctly checks for a past event - it is never too old', () => {
-      const obj = new Salesreport({
-        datum: new Date('2020-10-27T12:58:23.072Z')
-      });
-      expect(obj.istVeraltet()).to.be(false);
-    });
   });
+
   describe('istVergangen', () => {
     it('23 hours are in grace period', () => {
-      const now = moment();
-      now.subtract(23, 'hours');
       const obj = new Salesreport({
-        datum: now.toDate(),
+        datum: almostOneDayOld,
       });
       expect(obj.istVergangen()).to.be(false);
     });
 
     it('25 hours are definitely over', () => {
-      const now = moment();
-      now.subtract(25, 'hours');
       const obj = new Salesreport({
-        datum: now.toDate(),
+        datum: moreThanOneDayOld
       });
       expect(obj.istVergangen()).to.be(true);
     });
