@@ -178,12 +178,12 @@ block scripts
       einnahmeSonstiges2EUR.keyup(updateEinnahmenGesamt);
       updateEinnahmenGesamt();
 
-      var reservixBruttoEUR = $('#kasse\\[reservixBruttoEUR\\]');
+      var reservixNettoEUR = $('#kasse\\[reservixNettoEUR\\]');
       
       function updateReservix() {
-        setEuro($('#reservixGesamt'), floatAmount(reservixBruttoEUR));  
+        setEuro($('#reservixGesamt'), floatAmount(reservixNettoEUR));  
       }
-      reservixBruttoEUR.keyup(updateReservix);
+      reservixNettoEUR.keyup(updateReservix);
       updateReservix();
 
       var ausgabeGageEUR = $('#kasse\\[ausgabeGageEUR\\]');
