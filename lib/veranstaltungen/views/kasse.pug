@@ -77,14 +77,15 @@ block content
 
         .row
           .col-md-6
-            +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'kasse')
-              .row
-                .col-4
-                  +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
-                .col-4
-                  +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, freigegeben)
-                .col-4
-                  +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, freigegeben)
+            if veranstaltung.reservixID()
+              +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'kasse')
+                .row
+                  .col-4
+                    +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
+                  .col-4
+                    +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, freigegeben)
+                  .col-4
+                    +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, freigegeben)
   
             +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
               .row

@@ -132,45 +132,58 @@ block content
       .col-md-6
         +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben')
           table.table.table-striped.table-sm
-            tr
-              th(colspan=2) Backline und Technik
-              th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR(), 'backlineUndTechnikEUR')
-            tr
-              th(colspan=2) Saal
-              th(align='right', style='text-align: right;'): +currencySpan(kosten.saalmiete(), 'saalmiete')
-            tr
-              th(colspan=2) Band
-              th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR(), 'bandTotalEUR')
-            tr
-              td(width='2%')
-              td(width='48%') 
-                if !kosten.gageBAR()
-                  | Gage
-                else
-                  b.text-danger: i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
-                    i.fas.fa-exclamation-triangle
-              td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR(), 'gagenTotalEUR')
-            tr
-              td
-              td Agentur
-              td(align='right'): +currencySpan(kosten.agenturTotalEUR(), 'agenturTotalEUR')
-            tr
-              th(colspan=2) Hotel / Transport
-              th(align='right', style='text-align: right;'): +currencySpan(unterkunft.kostenTotalEUR(), 'kostenTotalEUR')
-            tr
-              th(colspan=2) Personal
-              th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR(), 'staffTotalEUR')
-            tr
-              th(colspan=2) Werbung
-              th(align='right', style='text-align: right;'): +currencySpan(werbung.marketingTotalEUR(), 'marketingTotalEUR')
-            tr
-              td
-              td Plakate
-              td(align='right'): +currencySpan(werbung.plakateTotalEUR(), 'plakateTotalEUR')
-            tr
-              td
-              td Flyer/Layout
-              td(align='right'): +currencySpan(werbung.mediaTotalEUR(), 'mediaTotalEUR')
+            if !veranstaltung.kostenGesamtEUR()
+              tr: th(colspan=3) Keine Kosten
+            else
+              if kosten.backlineUndTechnikEUR()
+                tr
+                  th(colspan=2) Backline und Technik
+                  th(align='right', style='text-align: right;'): +currencySpan(kosten.backlineUndTechnikEUR(), 'backlineUndTechnikEUR')
+              if kosten.saalmiete()
+                tr
+                  th(colspan=2) Saal
+                  th(align='right', style='text-align: right;'): +currencySpan(kosten.saalmiete(), 'saalmiete')
+              if kosten.bandTotalEUR()
+                tr
+                  th(colspan=2) Band
+                  th(align='right', style='text-align: right;'): +currencySpan(kosten.bandTotalEUR(), 'bandTotalEUR')
+              if kosten.gagenTotalEUR()
+                tr
+                  td(width='2%')
+                  td(width='48%') 
+                    if kosten.gageBAR()
+                      b.text-danger: i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                        i.fas.fa-exclamation-triangle
+                    else
+                      | Gage
+                  td(align='right', width='50%'): +currencySpan(kosten.gagenTotalEUR(), 'gagenTotalEUR')
+              if kosten.agenturTotalEUR()
+                tr
+                  td(width='2%')
+                  td(width='48%') Agentur
+                  td(align='right'): +currencySpan(kosten.agenturTotalEUR(), 'agenturTotalEUR')
+              if unterkunft.kostenTotalEUR()
+                tr
+                  th(colspan=2) Hotel / Transport
+                  th(align='right', style='text-align: right;'): +currencySpan(unterkunft.kostenTotalEUR(), 'kostenTotalEUR')
+              if staff.staffTotalEUR()
+                tr
+                  th(colspan=2) Personal
+                  th(align='right', style='text-align: right;'): +currencySpan(staff.staffTotalEUR(), 'staffTotalEUR')
+              if werbung.marketingTotalEUR()
+                tr
+                  th(colspan=2) Werbung
+                  th(align='right', style='text-align: right;'): +currencySpan(werbung.marketingTotalEUR(), 'marketingTotalEUR')
+              if werbung.plakateTotalEUR()
+                tr
+                  td(width='2%')
+                  td(width='48%') Plakate
+                  td(align='right'): +currencySpan(werbung.plakateTotalEUR(), 'plakateTotalEUR')
+              if werbung.mediaTotalEUR()
+                tr
+                  tdtd(width='2%')
+                  tdtd(width='48%') Flyer/Layout
+                  td(align='right'): +currencySpan(werbung.mediaTotalEUR(), 'mediaTotalEUR')
 
         if werbung.genehmigungenNum()
           if !werbung.genehmigt()

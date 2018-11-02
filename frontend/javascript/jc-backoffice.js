@@ -2,6 +2,9 @@
 
 function germanToEnglishNumberString(string) {
   'use strict';
+  if (!string) {
+    return;
+  }
   return string.replace('.', '').replace(',', '.');
 }
 
@@ -27,6 +30,9 @@ function floatAmountForSpan(jquerySpan) {
 function setEuro(jqueryCurrencyField, numberString) {
   /* eslint-disable new-cap */
   'use strict';
+  if (!jqueryCurrencyField.length) {
+    return;
+  }
   var number = Intl.NumberFormat('de-DE', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2

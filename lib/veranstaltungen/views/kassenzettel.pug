@@ -6,7 +6,7 @@ mixin localCurrency(value)
   span #{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value)} 
   
 mixin currencyOrEmpty(value)
-  if veranstaltung.istVergangen()
+  if veranstaltung.istVergangen() && !!value
     +localCurrency(value)
   else
     | &nbsp;
@@ -182,17 +182,17 @@ html
               th Summe
               td
               td(align='right'): b: +currencyOrEmpty(kasse.ausgabenTotalEUR())
-
-      .row
-        .col-12
-          table.table.table-bordered.table-sm
-            tr: th.text-center(colspan=6) RESERVIX (informativ)
-            tr
-              th Brutto
-              td(align='right'): +currencyOrEmpty(kasse.reservixBruttoEUR())
-              th Netto
-              td(align='right'): +currencyOrEmpty(kasse.reservixNettoEUR())
-              th Anzahl Tickets
-              td(align='right') #{kasse.anzahlBesucherReservix()}
+      if veranstaltung.reservixID()
+        .row
+          .col-12
+            table.table.table-bordered.table-sm
+              tr: th.text-center(colspan=6) RESERVIX (informativ)
+              tr
+                th Brutto
+                td(align='right'): +currencyOrEmpty(kasse.reservixBruttoEUR())
+                th Netto
+                td(align='right'): +currencyOrEmpty(kasse.reservixNettoEUR())
+                th Anzahl Tickets
+                td(align='right') #{kasse.anzahlBesucherReservix()}
       +signbox(veranstaltung.datumForDisplay(), 'Kassierer/-in', kassierer)
       +signbox(kasse.freigabeDisplayDatum(), 'Freigegeben', kasse.state.kassenfreigabe)

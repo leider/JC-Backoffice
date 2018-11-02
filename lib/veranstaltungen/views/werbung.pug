@@ -9,7 +9,7 @@ mixin plakateRow(werbung, name, label, optionen)
     .col-3
       +singleselect('werbung[' + name + 'Von]', 'Aufsteller', werbung[name + 'Von'](), optionen.plakatVon())
     .col-2
-      +text('werbung[' + name + 'KW]', 'KW', werbung[name + 'KW']())
+      +number('werbung[' + name + 'KW]', 'KW', werbung[name + 'KW'](), null, 0, 53)
     .col-3
       +currency('werbung[' + name + 'EUR]', 'Betrag', werbung[name + 'EUR']())
 
