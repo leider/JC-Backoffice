@@ -16,47 +16,54 @@ mixin people(veranstaltung, name)
 mixin panelView(veranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
-  .row
-    for veranstaltung in veranstaltungen
-      -var kopf = veranstaltung.kopf()
-      -var staff = veranstaltung.staff()
-      -var niemandBenoetigtText = staff.noStaffNeeded() && staff.modNotNeeded() ? '<span class="bg-success">Niemand benötigt</span><br>' : ''
-      -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview';
-      -var ueberschrift = niemandBenoetigtText + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ':<br>' + kopf.titel()  
-      .col-xl-3.col-lg-4.col-sm-6
-        +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
-          table.table.table-striped.table-sm
-            if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
-              tr: td(colspan=3): h5.mb-0 Kasse
-              if !staff['kasseVNotNeeded']()
-                tr 
-                  th Eins:
-                  td: +people(veranstaltung, 'kasseV')
-                  td: +button(veranstaltung, 'kasseV', 'KasseV')
-              if !staff['kasseNotNeeded']()
-                tr
-                  th Zwei:
-                  td: +people(veranstaltung, 'kasse')
-                  td: +button(veranstaltung, 'kasse', 'Kasse')
-            if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
-              tr: td(colspan=3): h5.mb-0 Technik
-              if !staff['technikerVNotNeeded']()
-                tr
-                  th Eins:
-                  td: +people(veranstaltung, 'technikerV')
-                  td: +button(veranstaltung, 'technikerV', 'TechnikerV')
-              if !staff['technikerNotNeeded']()
-                tr
-                  th Zwei:
-                  td: +people(veranstaltung, 'techniker')
-                  td: +button(veranstaltung, 'techniker', 'Techniker')
-            if !staff['modNotNeeded']()
-              tr: td(colspan=3): h5.mb-0 Master
+  -var monatAlt = -1;
+  | <div class='row'>
+  for veranstaltung in veranstaltungen
+    if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+      | </div><div class='row'>
+      .col-12
+        hr
+        h4 #{veranstaltung.startMoment().format('MMMM \'YY')}
+    -monatAlt = veranstaltung.startMoment().month();
+    -var kopf = veranstaltung.kopf()
+    -var staff = veranstaltung.staff()
+    -var niemandBenoetigtText = staff.noStaffNeeded() && staff.modNotNeeded() ? '<span class="bg-success">Niemand benötigt</span><br>' : ''
+    -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview';
+    -var ueberschrift = niemandBenoetigtText + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ':<br>' + kopf.titel()  
+    .col-xl-3.col-lg-4.col-sm-6
+      +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
+        table.table.table-striped.table-sm
+          if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
+            tr: td(colspan=3): h5.mb-0 Kasse
+            if !staff['kasseVNotNeeded']()
+              tr 
+                th Eins:
+                td: +people(veranstaltung, 'kasseV')
+                td: +button(veranstaltung, 'kasseV', 'KasseV')
+            if !staff['kasseNotNeeded']()
               tr
-                th &nbsp;
-                td: +people(veranstaltung, 'mod')
-                td: +button(veranstaltung, 'mod', 'MoD')
-        
+                th Zwei:
+                td: +people(veranstaltung, 'kasse')
+                td: +button(veranstaltung, 'kasse', 'Kasse')
+          if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
+            tr: td(colspan=3): h5.mb-0 Technik
+            if !staff['technikerVNotNeeded']()
+              tr
+                th Eins:
+                td: +people(veranstaltung, 'technikerV')
+                td: +button(veranstaltung, 'technikerV', 'TechnikerV')
+            if !staff['technikerNotNeeded']()
+              tr
+                th Zwei:
+                td: +people(veranstaltung, 'techniker')
+                td: +button(veranstaltung, 'techniker', 'Techniker')
+          if !staff['modNotNeeded']()
+            tr: td(colspan=3): h5.mb-0 Master
+            tr
+              th &nbsp;
+              td: +people(veranstaltung, 'mod')
+              td: +button(veranstaltung, 'mod', 'MoD')
+  | </div>        
 block title
   | Teamseite
 
@@ -69,9 +76,15 @@ block content
           .btn-group.float-right
             a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt.fa-fw
           h2 Team
-        p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
-        p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
-        +panelView(veranstaltungen)
+          p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
+          p Mit dem Knopf rechts kannst Du den Kalender abonnieren,
+        .row
+          .col-lg-8
+            +panelView(veranstaltungen)
+          .col-lg-4
+            #calendar.mt-4
+            a.btn.btn-light.mt-3.float-right(href='/ical/termine', title='Termine bearbeiten') Termine
+
     .row
       .col-12
         hr
@@ -84,7 +97,11 @@ block content
         if accessrights.memberId() !== user.id
           +userpanel(user, ++count)
               
+block head
+  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
+
 block scripts
+  script(src='/clientscripts/fullcalendar.min.js')
   script.
     $(document).ready(function () {
       function shirtsizeChanged() {

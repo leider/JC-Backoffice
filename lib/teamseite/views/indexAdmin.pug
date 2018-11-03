@@ -19,9 +19,16 @@ mixin button(veranstaltung, name, allUsers)
 mixin panelView(veranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
-  .row
-    for veranstaltung in veranstaltungen
-      -var kopf = veranstaltung.kopf()
+  -var monatAlt = -1;
+  | <div class='row'>
+  for veranstaltung in veranstaltungen
+    if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
+      | </div><div class='row'>
+      .col-12
+        hr
+        h4 #{veranstaltung.startMoment().format('MMMM \'YY')}
+    -monatAlt = veranstaltung.startMoment().month();
+    -var kopf = veranstaltung.kopf()
       -var staff = veranstaltung.staff()
       -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null
       form#veranstaltungform(action='/teamseite/submit', method='post').col-xl-3.col-lg-4.col-sm-6

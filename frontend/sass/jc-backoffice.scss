@@ -126,6 +126,10 @@ $color-festival: #9FC442;
   @include color-variant($color-allgemein1);
 }
 
+.text-general {
+  color: $color-allgemein1;
+}
+
 .color-hotel {
   @include color-variant($color-hotel1);
 }

@@ -223,9 +223,10 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, op
           else
             i.far.fa-caret-square-down.fa-fw.fa-lg
           if optionalEditLink
-            | #{' '}
-            a.inherit-color.float-right(href=optionalEditLink) 
-              i.fas.fa-glasses.fa-fw
+            br
+            br
+            a.inherit-color(href=optionalEditLink) 
+              i.fas.fa-glasses.fa-fw.fa-lg.text-general
       .col-11
         h5
           | !{title}
