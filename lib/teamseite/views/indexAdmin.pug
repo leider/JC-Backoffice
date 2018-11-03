@@ -27,15 +27,21 @@ mixin panelView(veranstaltungen)
       .col-12
         hr
         h4 #{veranstaltung.startMoment().format('MMMM \'YY')}
+          small.float-right
+            a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
+            | &nbsp; &nbsp;
+            a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
+
     -monatAlt = veranstaltung.startMoment().month();
     -var kopf = veranstaltung.kopf()
-      -var staff = veranstaltung.staff()
-      -var editlink = (user && accessrights.isOrgaTeam()) ? veranstaltung.fullyQualifiedUrl() + '/ausgaben' : null
+      -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview'
       form#veranstaltungform(action='/teamseite/submit', method='post').col-xl-3.col-lg-4.col-sm-6
         +hidden('id', veranstaltung.id())
         +csrf
         +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
           table.table.table-striped.table-sm
+            tr: td(colspan=3)
+              +submitButtonsFor(veranstaltung, null, true)
             tr: td(colspan=3): h5.mb-0 Kasse
             tr
               th: .form-control-plaintext Eins:
@@ -54,8 +60,9 @@ mixin panelView(veranstaltungen)
               th: .form-control-plaintext Zwei:
               td: +people(veranstaltung, 'techniker', users)
               td: +button(veranstaltung, 'techniker', users)
+            tr: td(colspan=3): h5.mb-0 Master
             tr
-              th: .form-control-plaintext: h5.mb-0 Master
+              th: .form-control-plaintext &nbsp;
               td: +people(veranstaltung, 'mod', users)
               td: +button(veranstaltung, 'mod', users)
             tr: td(colspan=3)
@@ -65,9 +72,13 @@ block title
   | Teamadmin
 
 block content
-  -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
   .col-12
     .page-header
+      .btn-group.float-right
+        if accessrights.isOrgaTeam()
+          a.btn.btn-light(href='/teamseite/', title='normal')
+            i.far.fa-hand-paper.fa-fw
+            | &nbsp;Normal
       h2 Team (Admin)
     +panelView(veranstaltungen)
     .row

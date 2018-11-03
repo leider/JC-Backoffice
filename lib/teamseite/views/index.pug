@@ -24,6 +24,11 @@ mixin panelView(veranstaltungen)
       .col-12
         hr
         h4 #{veranstaltung.startMoment().format('MMMM \'YY')}
+          small.float-right
+            a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
+            | &nbsp; &nbsp;
+            a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
+
     -monatAlt = veranstaltung.startMoment().month();
     -var kopf = veranstaltung.kopf()
     -var staff = veranstaltung.staff()
@@ -68,13 +73,16 @@ block title
   | Teamseite
 
 block content
-  -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
   .col-12
     .row
       .col-12
         .page-header
           .btn-group.float-right
             a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt.fa-fw
+            if accessrights.isOrgaTeam()
+              a.btn.btn-light(href='/teamseite/admin', title='administration')
+                i.fas.fa-edit.fa-fw
+                | &nbsp;Admin
           h2 Team
           p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
           p Mit dem Knopf rechts kannst Du den Kalender abonnieren,

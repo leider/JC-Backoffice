@@ -47,7 +47,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        +panelMitBody('staff', 'Staff', null, 'staff', null, veranstaltung.fullyQualifiedUrl() + '/ausgaben')
+        +legendMitBody('staff', 'Staff', null, 'staff')
           -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
@@ -67,7 +67,7 @@ block content
               +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
                 
   
-        +panelMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kasse')
+        +legendMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR())
           if eintrittspreise.frei()
             .card-body
               p: b Freier Eintritt
@@ -108,7 +108,7 @@ block content
                     | &nbsp;Kassenzettel
   
   
-        +panelMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
+        +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
           table.table.table-sm.table-striped
             tr
               th(align='right', style='text-align: right;') Einnahmen
@@ -125,12 +125,12 @@ block content
                 td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
   
         if kopf.beschreibungHTML()
-          +panelMitBody('info', 'Informationen', null, 'misc')
+          +legendMitBody('info', 'Informationen', null, 'misc')
             .card-body
               | !{kopf.beschreibungHTML()}
   
       .col-md-6
-        +panelMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/ausgaben')
+        +legendMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR())
           table.table.table-striped.table-sm
             if !veranstaltung.kostenGesamtEUR()
               tr: th(colspan=3) Keine Kosten
@@ -200,7 +200,7 @@ block content
                   | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
   
         if agentur.name()
-          +panelMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf')
+          +legendMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR())
             .card-body
               address
                 strong #{agentur.ansprechpartner()} <br>
@@ -209,7 +209,7 @@ block content
                 | E-Mail: 
                 span.mailtoify #{agentur.email()}
   
-        +panelMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/kopf')
+        +legendMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR())
           table.table.table-sm
             for step in vertrag.workflow()
               tr: td
@@ -221,7 +221,7 @@ block content
               a.btn.btn-general(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag anzeigen')
                 | Vertrag anzeigen
         if unterkunft.anzahlZimmer()
-          +panelMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR(), veranstaltung.fullyQualifiedUrl() + '/hotel')
+          +legendMitBody('hotelbuchung', 'Hotelbuchung', null, 'hotel', veranstaltung.kostenGesamtEUR())
             table.table.table-sm
               for step in unterkunft.workflow()
                 tr: td
