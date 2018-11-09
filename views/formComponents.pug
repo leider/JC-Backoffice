@@ -202,22 +202,25 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
     if (extraclasses)
       | &nbsp; Löschen
 
-mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney)
+mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, collapsed)
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
     h5.card-header.p-2(class = 'color-' + (optionalColorClassSuffix || 'general'))
-      a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
-        i.far.fa-caret-square-down.fa-fw
+      a.inherit-color(data-toggle='collapse', data-target='#' + id): b
+        if collapsed
+          i.far.fa-caret-square-right.fa-fw.fa-lg
+        else
+          i.far.fa-caret-square-down.fa-fw.fa-lg
         | &nbsp;#{title}
       if optionalCurrencySpan
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
-    .collapse.show(id = id)
+    div(id = id, class = 'collapse' + (collapsed ? '' : ' show'))
       block
 
 mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, optionalEditLink, collapsed)
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
     .card-header.p-0(class = 'color-' + (optionalColorClassSuffix || 'general')): .row
       .col-1
-        a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
+        a.inherit-color(data-toggle='collapse', data-target='#' + id)
           if collapsed
             i.far.fa-caret-square-right.fa-fw.fa-lg
           else
@@ -232,7 +235,7 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, op
           | !{title}
           if optionalCurrencySpan
             b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
-    div(id = id, class = 'collapse' + (collapsed ? '' : ' show'))
+    div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
       block
 
 mixin uploader(name, label, accept, value, extradata)

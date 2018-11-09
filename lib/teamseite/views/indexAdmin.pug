@@ -82,6 +82,11 @@ block content
             i.far.fa-hand-paper.fa-fw
             | &nbsp;Normal
       h2 Team (Admin)
+    .row
+      .col-12
+        .btn-group.float-right
+          a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show') Alle Zuklappen
+          a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)') Alle Aufklappen
     +panelView(veranstaltungen)
     .row
       .col-12
