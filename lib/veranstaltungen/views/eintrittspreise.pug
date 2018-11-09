@@ -5,20 +5,20 @@ mixin preise(veranstaltung)
   +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
     .row
       .col-4
-        +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00 €')
+        +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00')
       .col-4
-        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', eintrittspreise.rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', eintrittspreise.standardRabattErmaessigt() + ',00 €')
+        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', eintrittspreise.rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', eintrittspreise.standardRabattErmaessigt() + ',00')
       .col-4
-        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', eintrittspreise.rabattMitglied(), 'Die Reduktion für Mitglieder', eintrittspreise.standardRabattMitglied() + ',00 €')
+        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', eintrittspreise.rabattMitglied(), 'Die Reduktion für Mitglieder', eintrittspreise.standardRabattMitglied() + ',00')
     .row
       .col-4
         .form-group
           | &nbsp;
           +checkbox('eintrittspreise[frei]', 'Freier Eintritt', eintrittspreise.frei())
       .col-4
-        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00', true)
       .col-4
-        +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00 €', true)
+        +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00', true)
     .row
       .col-4
         +currency('eintrittspreise[zuschuss]', 'Zuschuss', eintrittspreise.zuschuss())

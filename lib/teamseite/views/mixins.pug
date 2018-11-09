@@ -2,7 +2,7 @@ mixin userpanel(user, count, fromAdminPage)
   -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
   -var editlink = accessrights.canEditUser(user.id) ? '/users/' + user.id : null
   .col-xl-3.col-lg-4.col-sm-6
-    +panelMitBody('user' + count, user.name + ' (' + gruppenUndRechteText(user) + ')', null, null, null, editlink, !(fromAdminPage || accessrights.memberId() === user.id))
+    +panelMitBody('user' + count, user.name + ' (' + gruppenUndRechteText(user) + ')', null, null, null, editlink, fromAdminPage || accessrights.memberId() !== user.id)
       table.table.table-striped.table-sm
         tr
           th: .form-control-plaintext E-Mail:
