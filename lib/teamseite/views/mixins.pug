@@ -26,7 +26,16 @@ mixin userpanel(user, count, fromAdminPage)
             th: .form-control-plaintext Telefon:
             td: .telify.form-control-plaintext #{user.tel}
 
-
+mixin checkedButton(veranstaltung, section, name, stylename)
+  if section.checked()
+    .text-capitalize.text-success
+      i.fas.fa-check.fa-fw
+      | #{' ' + name}
+  else
+    .text-capitalize.text-danger
+      i.fas.fa-exclamation-circle.fa-fw
+      | #{' ' + name}
+      
 mixin zuAufButtons
   .row
     .col-12

@@ -42,6 +42,10 @@ mixin panelView(veranstaltungen)
           table.table.table-striped.table-sm
             tr: td(colspan=3)
               +submitButtonsFor(veranstaltung, null, true)
+            tr: td(colspan=3)
+              +checkedButton(veranstaltung, veranstaltung.presse(), 'presse', 'presse')
+              +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben', 'costs')
+
             tr: td(colspan=3): h5.mb-0 Kasse
             tr
               th: .form-control-plaintext Eins:
