@@ -31,6 +31,19 @@ mixin zuAufButtons
   .row
     .col-12
       .btn-group.float-right
-        a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show') Alle Zu
-        a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)') Alle Auf
+        a#closeAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show') Alle Zu
+        a#openAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)') Alle Auf
+
+mixin zuAufButtonsScript
+  script.
+    $(document).ready(function () {
+      $('#openAll').click(function () {
+        $('a.chevron i').removeClass('fa-caret-square-right')
+        $('a.chevron i').addClass('fa-caret-square-down')
+      });
+      $('#closeAll').click(function () {
+        $('a.chevron i').removeClass('fa-caret-square-down')
+        $('a.chevron i').addClass('fa-caret-square-right')
+      });
+    });
 
