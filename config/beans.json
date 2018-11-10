@@ -29,6 +29,7 @@
   "usersApp": {"module": "./lib/users"},
   "usersService": {"module": "./lib/users/usersService"},
   "userstore": {"module": "./lib/users/userstore"},
+  "users": {"module": "./lib/users/users"},
 
   "icalApp": {"module": "./lib/ical"},
   "icalService": {"module": "./lib/ical/icalService"},

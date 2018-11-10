@@ -2,14 +2,30 @@ extends ../../../views/layout
 
 include  ../../../views/formComponents
 
+block title
+  | Rundmail
+
 block content
   .col-12
     form#mailform(action='/users/rundmail', method='post')
       +csrf
       .page-header
-        +submitButtons('Mail senden')
-        h3 Rundmail an Alle senden
-      +hightextarea('markdown', 'Anschreiben')
-      +submitButtons('Mail senden')
+        +submitButtons('Mail senden an')
+        h3 Rundmail senden
+      .row
+        .col-md-6
+          +checkbox('group', 'Alle', false, 'alle')
+          +checkbox('group', 'Orga Team', false, 'orgaTeam')
+          +checkbox('group', 'Booking Team', false, 'bookingTeam')
+        .col-md-6
+          for user in users
+            +checkbox('user', user.name, false, user.id)
+      .row
+        .col-12
+          hr
+          +text('subject', 'Subject', null, null, 'Bitte ausfüllen')
+          +hightextarea('markdown', 'Anschreiben')
+          +submitButtons('Mail senden')
+
 block scripts
   script(src='/clientscripts/bootstrap-markdown.min.js')
