@@ -205,7 +205,7 @@ mixin reallyDeleteButtonOnly(header, options, extraclasses)
 mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, collapsed)
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
     h5.card-header.p-2(class = 'color-' + (optionalColorClassSuffix || 'general'))
-      a.inherit-color(data-toggle='collapse', data-target='#' + id): b
+      a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id): b
         if collapsed
           i.far.fa-caret-square-right.fa-fw.fa-lg
         else
@@ -220,7 +220,7 @@ mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, op
   .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
     .card-header.p-0(class = 'color-' + (optionalColorClassSuffix || 'general')): .row
       .col-1
-        a.inherit-color(data-toggle='collapse', data-target='#' + id)
+        a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
           if collapsed
             i.far.fa-caret-square-right.fa-fw.fa-lg
           else
