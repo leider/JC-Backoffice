@@ -35,7 +35,7 @@ mixin panelView(veranstaltungen)
     -monatAlt = veranstaltung.startMoment().month();
     -var kopf = veranstaltung.kopf()
       -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview'
-      form#veranstaltungform(action='/teamseite/submit', method='post').col-xl-3.col-lg-4.col-sm-6
+      form#veranstaltungform(action='/teamseite/submit', method='post').col-xl-4.col-md-6
         +hidden('id', veranstaltung.id())
         +csrf
         +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
