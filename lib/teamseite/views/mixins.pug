@@ -25,3 +25,12 @@ mixin userpanel(user, count, fromAdminPage)
           tr
             th: .form-control-plaintext Telefon:
             td: .telify.form-control-plaintext #{user.tel}
+
+
+mixin zuAufButtons
+  .row
+    .col-12
+      .btn-group.float-right
+        a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show') Alle Zu
+        a.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)') Alle Auf
+
