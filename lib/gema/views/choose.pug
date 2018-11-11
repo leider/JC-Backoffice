@@ -22,7 +22,7 @@ mixin eventsTable(events)
         -monatJahr = event.month() + '-' + event.year() + '-' + event.istVergangen()
         tr: th.bg-secondary.text-white
           .form-check.form-check-inline.abc-checkbox.abc-checkbox-success
-            input.form-check-input(type='checkbox', id=monatJahr, onClick='selectCheckboxesForMonth("' + monatJahr + '")')
+            input.form-check-input(type='checkbox', id=monatJahr, onClick='selectCheckboxesForMonth("' + monatJahr + '", this)')
             label.form-check-label(for=monatJahr) #{event.startMoment().format('MMMM \'YY')}
 
       tr: td: +checkEvent('event[' + event.id() + ']', event.description(), monatJahr)
@@ -49,7 +49,7 @@ block content
 
 block scripts
   script.
-    function selectCheckboxesForMonth(month) {
-      const state = $('.' + month).prop('checked');
-      $('.' + month).prop('checked', !state);
+    function selectCheckboxesForMonth(month, button) {
+      const state = $(button).prop('checked');
+      $('.' + month).prop('checked', state);
     }
