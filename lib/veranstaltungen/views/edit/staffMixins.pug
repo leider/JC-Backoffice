@@ -1,4 +1,4 @@
-include ../../../views/formComponents
+include ../../../../views/formComponents
 
 mixin staffRow(allUsers, staff, name, label)
   .row
@@ -27,7 +27,7 @@ mixin staffRowVerantwortlich(allUsers, staff, name, label)
 
 
 mixin staff(staff, allUsers)
-  +legendMitBody('staff', 'Staff', 'staffPreis', 'costs')
+  +legendMitBody('staff.pug', 'Staff', 'staffPreis', 'costs')
     +staffRowVerantwortlich(allUsers, staff, 'techniker', 'Techniker')
     +staffRowVerantwortlich(allUsers, staff, 'kasse', 'Kasse')
     +staffRow(allUsers, staff, 'merchandise', 'Merchandise')
