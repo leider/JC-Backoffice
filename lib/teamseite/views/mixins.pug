@@ -35,24 +35,57 @@ mixin checkedButton(veranstaltung, section, name, stylename)
     .text-capitalize.text-danger
       i.fas.fa-exclamation-circle.fa-fw
       | #{' ' + name}
-      
+
+mixin monatHeadline(veranstaltung)
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startMoment().format('MMMM \'YY')}
+    .btn-group.float-right
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM'))
+        i.far.fa-file-alt.fa-fw
+        | #{' '} Presseexte
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM'))
+        i.fas.fa-align-justify.fa-fw
+        | #{' '} Übersicht
+
+mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, optionalEditLink, collapsed)
+  .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
+    .card-header.p-0(class = 'color-' + (optionalColorClassSuffix || 'general')): .row
+      .col-1
+        a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
+          if collapsed
+            i.far.fa-caret-square-right.fa-fw.fa-lg
+          else
+            i.far.fa-caret-square-down.fa-fw.fa-lg
+          if optionalEditLink
+            br
+            br
+            a.inherit-color(href=optionalEditLink)
+              i.fas.fa-glasses.fa-fw.fa-lg.text-general
+      .col-11
+        h5
+          | !{title}
+          if optionalCurrencySpan
+            b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
+    div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
+      block
+
 mixin zuAufButtons
   .row
     .col-12
-      .btn-group.float-right
-        a#closeAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show') Alle Zu
-        a#openAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)') Alle Auf
+      .btn-group
+        a#closeAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show', onClick='aufZuClicked(this)')
+          i.far.fa-minus-square.fa-fw-fw-sm
+          | #{' '} Alle Zu
+        a#openAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)', onClick='aufZuClicked(this)')
+          i.far.fa-plus-square.fa-fw-fw-sm
+          | #{' '} Alle Auf
 
 mixin zuAufButtonsScript
   script.
-    $(document).ready(function () {
-      $('#openAll').click(function () {
-        $('a.chevron i').removeClass('fa-caret-square-right')
-        $('a.chevron i').addClass('fa-caret-square-down')
-      });
-      $('#closeAll').click(function () {
-        $('a.chevron i').removeClass('fa-caret-square-down')
-        $('a.chevron i').addClass('fa-caret-square-right')
-      });
-    });
+    function aufZuClicked(button) {
+      if (button.text.includes('Auf')) {
+        $('a.chevron.panel i').removeClass('fa-caret-square-right').addClass('fa-caret-square-down');
+      } else {
+        $('a.chevron.panel i').removeClass('fa-caret-square-down').addClass('fa-caret-square-right');
+      }
+    }
 

@@ -22,12 +22,7 @@ mixin panelView(veranstaltungen)
     if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
       | </div><div class='row'>
       .col-12
-        hr
-        h4 #{veranstaltung.startMoment().format('MMMM \'YY')}
-          small.float-right
-            a(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM')) Als Texte
-            | &nbsp; &nbsp;
-            a(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM')) Als Liste
+        +monatHeadline(veranstaltung)
 
     -monatAlt = veranstaltung.startMoment().month();
     -var kopf = veranstaltung.kopf()
