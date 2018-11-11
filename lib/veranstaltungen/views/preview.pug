@@ -40,7 +40,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        +legendMitBody('staffMixins.pug', 'Staff', null, 'staffMixins.pug')
+        +legendMitBody('staff', 'Staff', null, 'staff')
           -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
@@ -62,14 +62,14 @@ block content
   
         +legendMitBody('eintritt', 'Eintritt und Abendkasse', null, 'kasse')
           table.table.table-sm.table-striped
-            if eintrittspreiseMixins.frei()
+            if eintrittspreise.frei()
               tr
                 th(align='right') Freier Eintritt (Sammelbox)
             else
               tr
-                th(align='right'): +currencySpan(eintrittspreiseMixins.regulaer(), 'eintrittRegulaer')
-                th(align='right'): +currencySpan(eintrittspreiseMixins.ermaessigt(), 'eintrittErmaessigt')
-                th(align='right'): +currencySpan(eintrittspreiseMixins.mitglied(), 'eintrittMitglied')
+                th(align='right'): +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
+                th(align='right'): +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
+                th(align='right'): +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
             if accessrights.isAbendkasse()
               tr
                 td(colspan=3)

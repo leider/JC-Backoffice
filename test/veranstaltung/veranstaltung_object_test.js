@@ -11,30 +11,30 @@ describe('Veranstaltung', () => {
     const parts = {
       agentur: 'agentur',
       artist: 'artist',
-      eintrittspreise: 'eintrittspreiseMixins.pug',
+      eintrittspreise: 'eintrittspreise',
       hotel: 'hotel',
       kasse: 'kasse',
       kopf: 'kopf',
       kosten: 'kosten',
       presse: 'presse',
-      staff: 'staffMixins.pug',
+      staff: 'staff',
       unterkunft: 'unterkunft',
       vertrag: 'vertrag',
-      werbung: 'werbungMixins.pug'
+      werbung: 'werbung'
     };
     const veranstaltung = new Veranstaltung(parts);
     expect(veranstaltung.state.agentur).to.be('agentur');
     expect(veranstaltung.state.artist).to.be('artist');
-    expect(veranstaltung.state.eintrittspreise).to.be('eintrittspreiseMixins.pug');
+    expect(veranstaltung.state.eintrittspreise).to.be('eintrittspreise');
     expect(veranstaltung.state.hotel).to.be('hotel');
     expect(veranstaltung.state.kasse).to.be('kasse');
     expect(veranstaltung.state.kopf).to.be('kopf');
     expect(veranstaltung.state.kosten).to.be('kosten');
     expect(veranstaltung.state.presse).to.be('presse');
-    expect(veranstaltung.state.staff).to.be('staffMixins.pug');
+    expect(veranstaltung.state.staff).to.be('staff');
     expect(veranstaltung.state.unterkunft).to.be('unterkunft');
     expect(veranstaltung.state.vertrag).to.be('vertrag');
-    expect(veranstaltung.state.werbung).to.be('werbungMixins.pug');
+    expect(veranstaltung.state.werbung).to.be('werbung');
   });
 
   it('initialisiert die Unterobjekte', () => {

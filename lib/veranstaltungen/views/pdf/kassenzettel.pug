@@ -44,7 +44,7 @@ html
               br
               small(style='white-space: nowrap')
                 | #{veranstaltung.datumForDisplay()}
-      if !eintrittspreiseMixins.frei()
+      if !eintrittspreise.frei()
         .row
           .col-12
             h4 Eintrittspreise

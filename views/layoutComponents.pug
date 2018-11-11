@@ -1,7 +1,7 @@
 mixin notificationsBlock(notificationmessage)
   -notificationmessage.kill()
   -var contents = notificationmessage.contents()
-  #notifications(class='alert alert-block hidden-print ' + contents.type)
+  #notifications.mt-5(class='alert alert-block hidden-print ' + contents.type)
     button.close(type='button', data-dismiss='alert') &times;
     h4 #{contents.title}
     | #{contents.text}
