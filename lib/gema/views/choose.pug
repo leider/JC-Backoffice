@@ -2,32 +2,54 @@ extends ../../../views/layout
 
 include  ../../../views/formComponents
 
+
+mixin checkEvent(name, label, month)
+  .form-check.abc-checkbox.abc-checkbox-success
+    input(type='checkbox', id=name, name=name, class='form-check-input ' + month)
+    label.form-check-label(for=name) !{label}
+
+
+
+mixin eventsTable(events)
+  -var monatAlt = -1;
+  -var monatJahr;
+  +csrf
+  +submitButtons('Öffnen')
+  table.table.table-sm.table-striped
+    for event in events
+      if monatAlt === -1 || monatAlt !== event.month()
+        -monatAlt = event.month();
+        -monatJahr = event.month() + '-' + event.year() + '-' + event.istVergangen()
+        tr: th.bg-secondary.text-white
+          .form-check.form-check-inline.abc-checkbox.abc-checkbox-success
+            input.form-check-input(type='checkbox', id=monatJahr, onClick='selectCheckboxesForMonth("' + monatJahr + '")')
+            label.form-check-label(for=monatJahr) #{event.startMoment().format('MMMM \'YY')}
+
+      tr: td: +checkEvent('event[' + event.id() + ']', event.description(), monatJahr)
+
 block title
   | Gema
 
 block content
   .col-12.mt-3
+    .page-header
+      h2 Gema
+
     .row
       .col-lg-6
-        +panelMitBody('vorab', 'Vorabmeldung', null, 'general')
+        +legendMitBody('vorab', 'Vorabmeldung', null, 'general')
           form#gemavorform(action='/gema/vorab', method='post')
-            .card-body
-              +csrf
-              .card-title
-                +submitButtons('Öffnen')
-            table.table.table-sm
-              for event in upcomingEvents
-                +checkbox('event[' + event.id() + ']', event.description())
-    
-      .col-lg-6
-        +panelMitBody('nach', 'Nachmeldung', null, 'general')
-          form#gemanachform(action='/gema/nach', method='post')
-            .card-body
-              +csrf
-              .card-title
-                +submitButtons('Öffnen')
-            table.table.table-sm
-              if (pastEvents)
-                for event in pastEvents
-                  +checkbox('event[' + event.id() + ']', event.description())
-    
+            +eventsTable(upcomingEvents)
+
+      if (pastEvents)
+        .col-lg-6
+          +legendMitBody('nach', 'Nachmeldung', null, 'general')
+            form#gemanachform(action='/gema/nach', method='post')
+              +eventsTable(pastEvents)
+
+block scripts
+  script.
+    function selectCheckboxesForMonth(month) {
+      const state = $('.' + month).prop('checked');
+      $('.' + month).prop('checked', !state);
+    }
