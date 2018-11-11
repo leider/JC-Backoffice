@@ -88,16 +88,6 @@ block content
       .col-lg-4
         #calendar.mt-4
         a.btn.btn-light.mt-3.float-right(href='/ical/termine', title='Termine bearbeiten') Termine
-
-    .row
-      .col-12
-        hr
-        .page-header
-          h2 Übersicht der Benutzer
-    .row
-      -var count = 0;
-      for user in users
-        +userpanel(user, ++count, true)
             
 block head
   link(rel='stylesheet', href='/stylesheets/fullcalendar.css')

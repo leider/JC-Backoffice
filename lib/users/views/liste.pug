@@ -1,38 +1,34 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-
+include userMixins
 block title
   | Users
 
 block content
   .col-12
     if lastSaved
-      #notifications.alert.alert-block.alert-success.hidden-print
+      #notifications.alert.alert-block.alert-success.hidden-print.mt-5
         button.close(type='button', data-dismiss='alert') &times;
         h4 Merke Dir das Passwort!
         p.
           Wenn Du es Dir nicht merkst, ist es unwiederbringlich verloren und Du musst ein neues generieren! - 
           Du kannst ein anderes generieren, indem Du diese Seite jetzt neu lädst. 
         p Das neue Passwort für "#{lastSaved.id}" ist:<br> <b>#{lastSaved.password}</b>
+    .page-header
+      h2 Registrierte User
     .row
-      .col-md-6
-        .page-header
-          h2 Registrierte User
-        dl.row
-          for user in users
-            dt.col-5: a(href='/users/' + encodeURIComponent(user.id)) #{user.name || '---'}
-            dd.col-7
-              span.mailtoify #{user.email || ''}
-              b #{' '} #{(user.name || ' ') && '(' + user.id + ')'}
-              
-      .col-md-6
-        .page-header
-          h2 User anlegen / Passwort vergeben
-        form#userform(action='/users/submitNew', method='post')
-          p Einfach einen neuen oder vorhandenen Username (fürs Login) eintragen und "Speichern" klicken. Dann wird ein Passwort generiert.
-          +csrf
-          +text('username', 'Benutzername')
-          +submitButtons()
+      -var count = 0;
+      for user in users
+        +userpanel(user, ++count, true)
+
+    hr              
+    .page-header
+      h2 User anlegen / Passwort vergeben
+    form#userform(action='/users/submitNew', method='post')
+      p Einfach einen neuen oder vorhandenen Username (fürs Login) eintragen und "Speichern" klicken. Dann wird ein Passwort generiert.
+      +csrf
+      +text('username', 'Benutzername')
+      +submitButtons()
 
 
 block scripts

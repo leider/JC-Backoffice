@@ -1,6 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include mixins
+include ../../users/views/userMixins
 
 mixin button(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
