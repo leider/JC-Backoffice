@@ -2,7 +2,8 @@ extends ../../../views/layout
 include ../../../views/formComponents
 include mixins
 include ../../users/views/userMixins
-
+include ../../veranstaltungen/views/veranstaltungMixins
+  
 mixin button(veranstaltung, name, nameInMethod)
   -var staff = veranstaltung.staff()
   if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
@@ -81,7 +82,7 @@ block content
         .page-header
           .btn-group.float-right
             if accessrights.isOrgaTeam()
-              a.btn.btn-light(href='/teamseite/admin', title='administration')
+              a.btn.btn-light(href='/veranstaltungen/zukuenftige', title='administration')
                 i.fas.fa-edit.fa-fw
                 | &nbsp;Admin
           h2 Team
@@ -111,7 +112,6 @@ block head
 
 block scripts
   script(src='/clientscripts/fullcalendar.min.js')
-  +zuAufButtonsScript
   script.
     $(document).ready(function () {
       function shirtsizeChanged() {

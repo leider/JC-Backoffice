@@ -98,7 +98,7 @@ $color-festival: #9FC442;
 }
 
 .border-festival {
-  @include color-variant($color-festival);
+  @include border-variant($color-festival);
 }
 
 .color-festival {

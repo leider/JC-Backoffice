@@ -12,9 +12,9 @@ html
           p: a.btn.btn-primary(href='/veranstaltungen/imgzip/' + monat)
             i.fas.fa-download.fa-fw 
             | &nbsp;Alle Bilder als ZIP
-      .row
-        .col-md-6
           h3 Pressetexte
-          for veranstaltung in liste
+      .row
+        for veranstaltung in liste
+          .col-lg-6
             | !{veranstaltung.presseTextHTML()}
             hr

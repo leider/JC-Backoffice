@@ -1,6 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include mixins
+include ../../veranstaltungen/views/veranstaltungMixins
   
 mixin editableMultiselectSmall(id, name, value, tags)
   .form-group
@@ -19,6 +20,7 @@ mixin button(veranstaltung, name, allUsers)
 mixin panelView(veranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
+  -var nearPast = moment(); nearPast.subtract(1, 'months')
   -var monatAlt = -1;
   | <div class='row'>
   for veranstaltung in veranstaltungen
@@ -28,12 +30,15 @@ mixin panelView(veranstaltungen)
         +monatHeadline(veranstaltung)
 
     -monatAlt = veranstaltung.startMoment().month();
+    -var shouldCollapse = veranstaltung.startMoment().isAfter(nearFuture) || veranstaltung.startMoment().isBefore(nearPast)
     -var kopf = veranstaltung.kopf()
-      -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview'
-      form#veranstaltungform(action='/teamseite/submit', method='post').col-xl-4.col-md-6
+    -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview'
+      form#veranstaltungform(action='/veranstaltungen/updateStaff', method='post').col-xl-4.col-md-6
         +hidden('id', veranstaltung.id())
         +csrf
-        +panelMitBody('panel' + ++count, veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :<br>' + kopf.titel(), null, kopf.cssColorCode(), null, editlink, veranstaltung.startMoment().isAfter(nearFuture))
+        - var reservixSymbol = veranstaltung.reservixID() ? '<span class="badge float-right" style="background-color: #F8500D !important"><img src="/img/rex_21x21.png" width="14">&nbsp;' + veranstaltung.kasse().anzahlBesucherReservix() + '</span>' : ''
+        -var ueberschrift = (!veranstaltung.kopf().confirmed() ? '<span class="text-danger">[GEPLANT] ': '') + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :' + reservixSymbol + '<br>' + kopf.titel() + (!veranstaltung.kopf().confirmed() ? '</span>' : '')
+        +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, shouldCollapse)
           table.table.table-striped.table-sm
             tr: td(colspan=3)
               +submitButtonsFor(veranstaltung, null, true)
@@ -70,7 +75,7 @@ mixin panelView(veranstaltungen)
 
 
 block title
-  | Teamadmin
+  | Veranstaltungen
 
 block content
   .col-12
@@ -78,11 +83,17 @@ block content
       .col-lg-8
         .page-header
           .btn-group.float-right
-            if accessrights.isOrgaTeam()
-              a.btn.btn-light(href='/teamseite/', title='normal')
-                i.far.fa-hand-paper.fa-fw
-                | &nbsp;Normal
-          h2 Team (Admin)
+            a.btn.btn-light(href='/veranstaltungen/new', title='Neu'): i.far.fa-file.fa-fw
+            a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt
+            .dropdown
+              a.btn.btn-light.dropdown-toggle(data-toggle='dropdown')
+                | #{titel} &nbsp;
+                span.caret
+              .dropdown-menu
+                a.dropdown-item(href='/veranstaltungen/zukuenftige') Zukünftige
+                a.dropdown-item(href='/veranstaltungen/vergangene') Vergangene
+
+          h2 Veranstaltungen
         +zuAufButtons
         +panelView(veranstaltungen)
       .col-lg-4
@@ -94,7 +105,6 @@ block head
 
 block scripts
   script(src='/clientscripts/fullcalendar.min.js')
-  +zuAufButtonsScript
   script.
     $(document).ready(function () {
       function shirtsizeChanged() {

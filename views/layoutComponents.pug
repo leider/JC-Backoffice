@@ -47,18 +47,10 @@ mixin topNavbar
             .dropdown-menu
               a.dropdown-item(href='/users') Bearbeiten / Anlegen
               a.dropdown-item(href='/users/rundmail') Rundmail
-          li.nav-item.dropdown(data-jcnav='teamseite')
-            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
-              i.far.fa-hand-paper.fa-fw.fa-lg
-              span &nbsp;Team
-            .dropdown-menu
-              a.dropdown-item(href='/teamseite/admin') Admin
-              a.dropdown-item(href='/teamseite') Normal
-        else
-          li.nav-item(data-jcnav='teamseite')
-            a.nav-link(href='/teamseite')
-              i.far.fa-hand-paper.fa-fw.fa-lg
-              | &nbsp;Team&nbsp;
+        li.nav-item(data-jcnav='teamseite')
+          a.nav-link(href='/teamseite')
+            i.far.fa-hand-paper.fa-fw.fa-lg
+            | &nbsp;Team&nbsp;
         li.nav-item.dropdown(data-jcnav='wiki')
           a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
             i.fas.fa-book.fa-fw.fa-lg
