@@ -1,3 +1,5 @@
+/* global FullCalendar */
+
 function germanToEnglishNumberString(string) {
   'use strict';
   if (!string) {
@@ -165,45 +167,53 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   }
 
   function initCalendar() {
-    $('#calendar').each(function () {
-      $(this).fullCalendar({
-        height: 'auto',
-        header: {
-          left: 'title',
-          center: '',
-          right: 'prev,today,next'
-        },
-        timezone: 'Europe/Berlin',
-        timeFormat: 'HH:mm',
-        displayEventTime: false,
-        events: '/veranstaltungen/eventsForCalendar',
-        eventMouseover: function (event) {
-          var day = event.start.day();
-          $(this).tooltip({
-            title: (event.start.format('HH:mm') + ': ') + event.tooltip,
-            trigger: 'manual',
-            placement: (day < 4 && day > 0) ? 'right' : 'left',
-            container: 'body'
-          });
-          $(this).tooltip('show');
-        },
-        eventMouseout: function () {
-          $(this).tooltip('dispose');
-        },
-        eventClick: function () {
-          $(this).tooltip('dispose');
-        },
-        themeSystem: 'bootstrap4',
-        views: {
-          month: {
-            titleFormat: 'MMM \'YY',
-            lang: 'de',
-            fixedWeekCount: false
-          }
-        },
-        weekNumbers: true
-      });
-    });
+    var calElement = document.getElementById('calendar');
+    if (!calElement) { return; }
+    var calendar;
+    var options = {
+      header: {
+        left: 'title',
+        center: '',
+        right: 'prev,today,next'
+      },
+      timezone: 'Europe/Berlin',
+      timeFormat: 'HH:mm',
+      displayEventTime: false,
+      events: '/veranstaltungen/eventsForCalendar',
+      eventMouseEnter: function (mouseEnterInfo) {
+        var event = mouseEnterInfo.event;
+        var day = event.start.getDay();
+        $(mouseEnterInfo.el).tooltip({
+          title: new Intl.DateTimeFormat('de').format(event.start, {hour: 'numeric', minute: 'numeric'}) + ': ' + event.title,
+          trigger: 'manual',
+          placement: (day < 4 && day > 0) ? 'right' : 'left',
+          container: 'body',
+          template: '<div class="tooltip" role="tooltip" style="max-width: 130px"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+        });
+        $(mouseEnterInfo.el).tooltip('show');
+      },
+      eventMouseLeave: function (mouseLeaveInfo) {
+        $(mouseLeaveInfo.el).tooltip('dispose');
+      },
+      eventClick: function (eventClickInfo) {
+        $(eventClickInfo.el).tooltip('dispose');
+      },
+      themeSystem: 'bootstrap4',
+      //aspectRatio: 1.2,
+      height: 'auto',
+      //locale: fc_lang,
+      views: {
+        month: {
+          titleFormat: {month: 'short', year: '2-digit'},
+          lang: 'de',
+          fixedWeekCount: false,
+          showNonCurrentDates: false
+        }
+      },
+      weekNumbers: true
+    };
+    calendar = new FullCalendar.Calendar(calElement, options);
+    calendar.render();
   }
 
   function addHelpButtonToTextarea() {

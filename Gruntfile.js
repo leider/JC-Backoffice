@@ -16,8 +16,9 @@ module.exports = function (grunt) {
       'frontend/javascript/jc-backoffice.js'
     ],
     'public/clientscripts/fullcalendar.min.js': [
+      'node_modules/superagent/superagent.js',
       'node_modules/fullcalendar/dist/fullcalendar.js',
-      'node_modules/fullcalendar/dist/locale/de.js'
+      'node_modules/fullcalendar/dist/locales/de.js'
     ],
     'public/clientscripts/fileinput.min.js': [
       'node_modules/bootstrap-fileinput/js/fileinput.js',
