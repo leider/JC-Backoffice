@@ -31,7 +31,7 @@ block content
         .page-header
           h2(class='text-' + kopf.cssColorCode())
             i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-            | #{kopf.titel()} - #{kopf.ort()}
+            | #{kopf.titel()} #{kopf.presseIn()}
             br
             small
               | #{veranstaltung.startMoment().format('LLLL')} #{''}

@@ -29,7 +29,7 @@ mixin panelView(veranstaltungen)
     -monatAlt = veranstaltung.startMoment().month();
     -var kopf = veranstaltung.kopf()
     -var staff = veranstaltung.staff()
-    -var infotext = staff.noStaffNeeded() && staff.modNotNeeded() ? '<div class="alert-success text-center"><i class="fas fa-check-circle"></i> Niemand benötigt</div>' : (veranstaltung.personalFehlt() ? '<div class="alert-danger text-center"><i class="fas fa-exclamation-circle"></i> Kasse gesucht!</div>' : '')
+    -var infotext = staff.noStaffNeeded() && staff.modNotNeeded() ? '<div class="alert-success text-center"><i class="fas fa-check-circle"></i> Niemand benötigt</div>' : (veranstaltung.kasseFehlt() ? '<div class="alert-danger text-center"><i class="fas fa-exclamation-circle"></i> Kasse gesucht!</div>' : '')
     -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview';
     -var ueberschrift = veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ':<br>' + kopf.titel() + infotext  
     .col-xl-3.col-lg-4.col-sm-6

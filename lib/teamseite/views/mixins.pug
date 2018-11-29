@@ -24,10 +24,10 @@ mixin zuAufButtons
   .row
     .col-12
       .btn-group.btn-group-sm
-        a#closeAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent.show', onClick='aufZuClicked(this)')
+        a#closeAll.btn.btn-light(href='#', data-toggle='collapse', data-target='.cardcontent.show', onClick='aufZuClicked(this)')
           i.far.fa-minus-square.fa-fw-fw-sm
           | #{' '} Alle Zu
-        a#openAll.btn.btn-light(href='#' data-toggle='collapse', data-target='.cardcontent:not(.show)', onClick='aufZuClicked(this)')
+        a#openAll.btn.btn-light(href='#', data-toggle='collapse', data-target='.cardcontent:not(.show)', onClick='aufZuClicked(this)')
           i.far.fa-plus-square.fa-fw-fw-sm
           | #{' '} Alle Auf
   script.

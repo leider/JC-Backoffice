@@ -48,7 +48,7 @@ describe('Users can extract receivers for mails', () => {
     const groupsFromBody = ['bookingTeam', 'orgaTeam'];
     const userFromBody = [];
     const result = users.filterReceivers(groupsFromBody, userFromBody);
-    expect(result).to.have.length(6)
+    expect(result).to.have.length(6);
     expect(result).to.contain(user1);
     expect(result).to.contain(user2);
     expect(result).to.contain(user3);

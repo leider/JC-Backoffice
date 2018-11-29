@@ -33,10 +33,10 @@ mixin panelView(veranstaltungen)
     -var shouldCollapse = veranstaltung.startMoment().isAfter(nearFuture) || veranstaltung.startMoment().isBefore(nearPast)
     -var kopf = veranstaltung.kopf()
     -var editlink = veranstaltung.fullyQualifiedUrl() + '/preview'
-      form#veranstaltungform(action='/veranstaltungen/updateStaff', method='post').col-xl-4.col-md-6
+      form#veranstaltungform.col-xl-4.col-md-6(action='/veranstaltungen/updateStaff', method='post')
         +hidden('id', veranstaltung.id())
         +csrf
-        - var reservixSymbol = veranstaltung.reservixID() ? '<span class="badge float-right" style="background-color: #F8500D !important"><img src="/img/rex_21x21.png" width="14">&nbsp;' + veranstaltung.kasse().anzahlBesucherReservix() + '</span>' : ''
+        -var reservixSymbol = veranstaltung.reservixID() ? '<span class="badge float-right" style="background-color: #F8500D !important"><img src="/img/rex_21x21.png" width="14">&nbsp;' + veranstaltung.kasse().anzahlBesucherReservix() + '</span>' : ''
         -var ueberschrift = (!veranstaltung.kopf().confirmed() ? '<span class="text-danger">[GEPLANT] ': '') + veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn() + ' :' + reservixSymbol + '<br>' + kopf.titel() + (!veranstaltung.kopf().confirmed() ? '</span>' : '')
         +panelMitBody('panel' + ++count, ueberschrift, null, kopf.cssColorCode(), null, editlink, shouldCollapse)
           table.table.table-striped.table-sm
