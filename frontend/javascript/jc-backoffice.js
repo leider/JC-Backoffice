@@ -201,7 +201,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       themeSystem: 'bootstrap4',
       //aspectRatio: 1.2,
       height: 'auto',
-      //locale: fc_lang,
+      locale: 'de',
       views: {
         month: {
           titleFormat: {month: 'short', year: '2-digit'},
