@@ -10,8 +10,6 @@ module.exports = function (grunt) {
       'node_modules/select2/dist/js/i18n/de.js',
       'node_modules/popper.js/dist/umd/popper.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
-      'node_modules/moment/moment.js',
-      'node_modules/moment/locale/de.js',
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'node_modules/jquery-validation/dist/localization/messages_de.js',
       'node_modules/jquery-validation/dist/localization/methods_de.js',

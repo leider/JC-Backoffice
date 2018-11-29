@@ -1,5 +1,3 @@
-/* global moment*/
-
 function germanToEnglishNumberString(string) {
   'use strict';
   if (!string) {
@@ -44,8 +42,19 @@ function setEuro(jqueryCurrencyField, numberString) {
 /* exported toUtc */
 function toUtc(dateString, timeString) {
   'use strict';
+  // expects German strings like "30.11.1987" "12:30"
+  // returns javascript Date or null
+  function stringToInt(each) {
+    var result = parseInt(each, 10);
+    return isNaN(result) ? 0 : result;
+  }
+
   if (dateString && timeString) {
-    return moment.utc(dateString + ' ' + timeString, 'D.M.YYYY H:m');
+    var dateArray = dateString.split('.').map(stringToInt);
+    var timeArray = timeString.split(':').map(stringToInt);
+    if (dateArray.length === 3 && timeArray.length === 2) {
+      return new Date(Date.UTC(dateArray[2], dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1]));
+    }
   }
   return null;
 }
@@ -87,18 +96,45 @@ function veranstaltungDateModel(initialDate, initialTime) {
   var oldStartDate = toUtc(initialDate, initialTime);
 
   return {
-    determineNewEnd: function (startDate, startTime, endDate, endTime) {
-      var start = toUtc(startDate, startTime);
-      var end = toUtc(endDate, endTime);
-
-      var offset = oldStartDate && start ? start.diff(oldStartDate, 'minutes') : 0;
-      oldStartDate = start;
-      var endMoment = end ? end.add(offset, 'minutes') : null;
+    convertInputs: function (startDate, startTime, endDate, endTime) {
       return {
-        endDate: (endMoment ? endMoment.format('DD.MM.YYYY') : ''),
-        endTime: (endMoment ? endMoment.format('HH:mm') : '')
+        start: toUtc(startDate, startTime),
+        end: toUtc(endDate, endTime)
       };
+    },
+
+    calculateNewEnd: function (currentTimes) {
+      var offsetMillis = oldStartDate && currentTimes.start
+        ? currentTimes.start.getTime() - oldStartDate.getTime()
+        : 0;
+
+      oldStartDate = currentTimes.start;
+
+      return currentTimes.end
+        ? new Date(currentTimes.end.getTime() + offsetMillis)
+        : null;
+    },
+
+    createDateAndTimeStrings: function (jsDate) {
+      var dateformat = new Intl.DateTimeFormat('de', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: 'UTC'
+      });
+      var timeformat = new Intl.DateTimeFormat('de', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'});
+      return {
+        endDate: jsDate ? dateformat.format(jsDate) : '',
+        endTime: jsDate ? timeformat.format(jsDate) : ''
+      };
+    },
+
+    determineNewEnd: function (startDate, startTime, endDate, endTime) {
+      var inputDateTimes = this.convertInputs(startDate, startTime, endDate, endTime);
+      var newEndDateTime = this.calculateNewEnd(inputDateTimes);
+      return this.createDateAndTimeStrings(newEndDateTime);
     }
+
   };
 }
 

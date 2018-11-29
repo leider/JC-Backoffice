@@ -15,7 +15,7 @@ var veranstaltung_validator;
 
       var start = toUtc(startDate, startTime);
       var end = toUtc(endDate, endTime);
-      return endDate !== '' && endTime !== '' && end.diff(start, 'minutes') > 0;
+      return endDate !== '' && endTime !== '' && end && start && end.getTime() - start.getTime() > 0;
     }
 
     $.validator.addMethod('dateAndTime', validateDateAndTime, 'Das Ende muss gefüllt sein und nach dem Beginn liegen.');
