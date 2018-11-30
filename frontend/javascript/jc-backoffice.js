@@ -179,12 +179,34 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       timezone: 'Europe/Berlin',
       timeFormat: 'HH:mm',
       displayEventTime: false,
-      events: '/veranstaltungen/eventsForCalendar',
+      eventSources: [
+        '/veranstaltungen/eventsForCalendar',
+        '/ical/eventsForCalendar',
+        {
+          color: '#c1c3ff',
+          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/ferien/2018/de/baden-wuerttemberg')
+        },
+        {
+          color: '#c1c3ff',
+          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/feiertage/2018/de/baden-wuerttemberg')
+        },
+        {
+          color: '#c1c3ff',
+          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/ferien/2019/de/baden-wuerttemberg')
+        },
+        {
+          color: '#c1c3ff',
+          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/feiertage/2019/de/baden-wuerttemberg')
+        }
+      ],
       eventMouseEnter: function (mouseEnterInfo) {
         var event = mouseEnterInfo.event;
         var day = event.start.getDay();
         $(mouseEnterInfo.el).tooltip({
-          title: new Intl.DateTimeFormat('de').format(event.start, {hour: 'numeric', minute: 'numeric'}) + ': ' + event.title,
+          title: new Intl.DateTimeFormat('de').format(event.start, {
+            hour: 'numeric',
+            minute: 'numeric'
+          }) + ': ' + event.title,
           trigger: 'manual',
           placement: (day < 4 && day > 0) ? 'right' : 'left',
           container: 'body',
