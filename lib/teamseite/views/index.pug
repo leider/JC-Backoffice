@@ -93,8 +93,7 @@ block content
         +zuAufButtons
         +panelView(veranstaltungen)
       .col-lg-4
-        #calendar.mt-4
-
+        +calendar(icals)
     .row
       .col-12
         hr
@@ -111,7 +110,6 @@ block head
   link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
 
 block scripts
-  script(src='/clientscripts/fullcalendar.min.js')
   script.
     $(document).ready(function () {
       function shirtsizeChanged() {

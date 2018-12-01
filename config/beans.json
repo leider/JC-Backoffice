@@ -23,6 +23,7 @@
   "optionValues": {"module": "./lib/optionen/optionValues"},
   "emailAddresses": {"module": "./lib/optionen/emailAddresses"},
   "orte": {"module": "./lib/optionen/orte"},
+  "ferienIcals": {"module": "./lib/optionen/ferienIcals"},
   "optionenService": {"module": "./lib/optionen/optionenService"},
   "optionenstore": {"module": "./lib/optionen/optionenstore"},
 

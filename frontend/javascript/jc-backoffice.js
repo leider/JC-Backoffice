@@ -1,5 +1,3 @@
-/* global FullCalendar */
-
 function germanToEnglishNumberString(string) {
   'use strict';
   if (!string) {
@@ -166,78 +164,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     }).addClass('active');
   }
 
-  function initCalendar() {
-    var calElement = document.getElementById('calendar');
-    if (!calElement) { return; }
-    var calendar;
-    var options = {
-      header: {
-        left: 'title',
-        center: '',
-        right: 'prev,today,next'
-      },
-      timezone: 'Europe/Berlin',
-      timeFormat: 'HH:mm',
-      displayEventTime: false,
-      eventSources: [
-        '/veranstaltungen/eventsForCalendar',
-        '/ical/eventsForCalendar',
-        {
-          color: '#c1c3ff',
-          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/ferien/2018/de/baden-wuerttemberg')
-        },
-        {
-          color: '#c1c3ff',
-          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/feiertage/2018/de/baden-wuerttemberg')
-        },
-        {
-          color: '#c1c3ff',
-          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/ferien/2019/de/baden-wuerttemberg')
-        },
-        {
-          color: '#c1c3ff',
-          url: '/ical/eventsFromIcalURL/' + encodeURIComponent('https://www.ferienwiki.de/exports/feiertage/2019/de/baden-wuerttemberg')
-        }
-      ],
-      eventMouseEnter: function (mouseEnterInfo) {
-        var event = mouseEnterInfo.event;
-        var day = event.start.getDay();
-        $(mouseEnterInfo.el).tooltip({
-          title: new Intl.DateTimeFormat('de').format(event.start, {
-            hour: 'numeric',
-            minute: 'numeric'
-          }) + ': ' + event.title,
-          trigger: 'manual',
-          placement: (day < 4 && day > 0) ? 'right' : 'left',
-          container: 'body',
-          template: '<div class="tooltip" role="tooltip" style="max-width: 130px"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-        });
-        $(mouseEnterInfo.el).tooltip('show');
-      },
-      eventMouseLeave: function (mouseLeaveInfo) {
-        $(mouseLeaveInfo.el).tooltip('dispose');
-      },
-      eventClick: function (eventClickInfo) {
-        $(eventClickInfo.el).tooltip('dispose');
-      },
-      themeSystem: 'bootstrap4',
-      //aspectRatio: 1.2,
-      height: 'auto',
-      locale: 'de',
-      views: {
-        month: {
-          titleFormat: {month: 'short', year: '2-digit'},
-          lang: 'de',
-          fixedWeekCount: false,
-          showNonCurrentDates: false
-        }
-      },
-      weekNumbers: true
-    };
-    calendar = new FullCalendar.Calendar(calElement, options);
-    calendar.render();
-  }
-
   function addHelpButtonToTextarea() {
     $('.md-textarea').each(function () {
       $(this).markdown({
@@ -366,7 +292,6 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
-  $(document).ready(initCalendar);
   $(document).ready(toggleCaret);
   $.fn.select2.defaults.set('theme', 'bootstrap');
 }());

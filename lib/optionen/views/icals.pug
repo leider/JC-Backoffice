@@ -1,0 +1,67 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | Ferienkalender
+
+block content
+  #edit.modal.fade(tabindex='-1')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h3.modal-title Kalender bearbeiten<br>
+            small Leerer Name löscht den Kalender
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+        .modal-body
+          form(action='icalChanged', method='post')
+            +csrf
+            +hidden('oldname', '')
+            .row
+              .col-sm-6
+                +text('name', 'Name', '')
+              .col-sm-6
+                +text('url', 'URL', '')
+                +text('typ', 'Typ', '')
+            .row
+              .col-12
+                .btn-group.float-right
+                  button.btn.btn-light(data-dismiss='modal') Abbrechen
+                  button.btn.btn-primary(type='submit') Speichern
+  .col-12
+    .page-header
+      h2 Ferienkalender
+    .table-responsive
+      table.table.table-sm.table-striped
+        tr
+          th Name
+          th URL
+          th Typ
+          th Bearbeiten
+        for ical in icals.icals()
+          tr
+            td #{ical.name}
+            td #{ical.url}
+            td #{ical.typ}
+            td: button.btn.btn-sm.btn-primary.float-right(data-toggle='modal', data-target='#edit', data-name=ical.name, data-url=ical.url, data-typ=ical.typ): i.far.fa-fw.fa-edit
+        tr
+          td 
+          td 
+          td 
+          td: button.btn.btn-sm.btn-success.float-right(data-toggle='modal', data-target='#edit')
+            i.far.fa-fw.fa-file
+            | &nbsp;Neu
+  
+
+block scripts
+  script.
+    $('#edit').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      // Extract info from data-* attributes
+      var name = button.data('name');
+      var url = button.data('url');
+      var typ = button.data('typ');
+      $('#name').val(name);
+      $('input[name="oldname"]').val(name);
+      $('#url').val(url);
+      $('#typ').val(typ);
+    });
