@@ -35,7 +35,6 @@ module.exports = function (grunt) {
 
   const filesForCss = {
     'public/stylesheets/screen.css': [
-      'node_modules/@fortawesome/fontawesome-free/css/all.css',
       'build/stylesheets/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/sass/out/jc-backoffice.css'

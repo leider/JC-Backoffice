@@ -283,7 +283,8 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 
   function toggleCaret() {
     $('a.chevron').click(function () {
-      $(this).find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
+      var target = $(this).attr('data-target');
+      $('a[data-target="' + target + '"]').find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
     });
   }
 
