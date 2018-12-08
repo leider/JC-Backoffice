@@ -19,24 +19,17 @@ mixin number(name, label, value, tooltip, min, max, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.trim-text(id=name, type='number', name=name, value=value, min=min, max=max, disabled=readonly, style='text-align: right;')
 
-mixin textWithTags(name, label, value, tags)
-  .form-group
-    +controlLabel(name, label)
-    select.form-control.enhance(multiple, id=name, name=name, data-tags=true, data-token-separators=[',', ', '])
-      each tag in tags
-        option(selected = value.indexOf(tag) > -1) #{tag}
-
 mixin singleselect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.enhance(id=name, name=name, data-placeholder=placeholder)
+    select.form-control.selectpicker(id=name, name=name, data-placeholder=placeholder)
       each val in values
         option(value = val, selected = value === val) #{val}
 
 mixin multiselect(name, label, value, tags)
   .form-group
     +controlLabel(name, label)
-    select.form-control.enhance(multiple, id=name, name=name)
+    select.form-control.selectpicker(multiple, id=name, name=name, data-selected-text-format='count > 2')
       each tag in tags
         option(selected = value.indexOf(tag) > -1) #{tag}
 

@@ -3,6 +3,8 @@
 @import "../../../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";
 @import "../../../node_modules/select2-theme-bootstrap4/src/select2-bootstrap.scss";
 @import "bootstrap-markdown-patched";
+@import "../../../node_modules/bootstrap-select/sass/variables.scss";
+@import "../../../node_modules/bootstrap-select/sass/bootstrap-select.scss";
 
 // colors
 $color-ausgaben1: #d50f36;
@@ -413,4 +415,9 @@ input[type=number]::-webkit-outer-spin-button {
   padding-top: 2px;
 }
 
-
+// patch bootstrap select
+.bootstrap-select {
+  & .dropdown-menu {
+    z-index: $zindex-select-dropdown;
+  }
+}

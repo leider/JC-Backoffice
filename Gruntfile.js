@@ -13,6 +13,8 @@ module.exports = function (grunt) {
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'node_modules/jquery-validation/dist/localization/messages_de.js',
       'node_modules/jquery-validation/dist/localization/methods_de.js',
+      'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+      'node_modules/bootstrap-select/dist/js/i18n/defaults-de_DE.js',
       'frontend/javascript/jc-backoffice.js'
     ],
     'public/clientscripts/fullcalendar.min.js': [

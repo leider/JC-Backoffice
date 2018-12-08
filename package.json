@@ -23,6 +23,7 @@
     "bootstrap-datepicker": "1.8.0",
     "bootstrap-fileinput": "4.5.1",
     "bootstrap-markdown": "2.10.0",
+    "bootstrap-select": "1.13.3",
     "cheerio": "^1.0.0-rc.2",
     "compression": "1.7.3",
     "connect-ensure-login": "0.1.1",
