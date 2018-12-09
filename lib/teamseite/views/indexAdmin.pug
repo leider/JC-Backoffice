@@ -28,7 +28,6 @@ mixin button(veranstaltung, name, allUsers)
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.btn-group-sm.float-right
-    a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw
     +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
     +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
     +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')

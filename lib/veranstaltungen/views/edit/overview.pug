@@ -49,7 +49,7 @@ block content
     .row
       .col-md-6
         +legendMitBody('staff', 'Staff', null, 'staff')
-          -var mitarbeiter = veranstaltung.staff().state.mitarbeiterTransient;  
+          -var mitarbeiter = veranstaltung.staff().mitarbeiterTransient();  
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
               tr: th(colspan=2) Niemand benötigt

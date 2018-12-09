@@ -23,7 +23,7 @@ function load(datumString, results, callback) {
   });
 }
 
-load('01.01.2015', [], results => {
+load('01.07.2018', [], results => {
   const now = new Date();
   const resultsToSave = results.map(each => {
     each.datum = each.datum.toDate();
