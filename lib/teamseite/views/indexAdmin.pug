@@ -1,7 +1,6 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include mixins
-include ../../veranstaltungen/views/veranstaltungMixins
   
 mixin checkedButton(veranstaltung, section, name)
   if section.checked()
@@ -26,7 +25,18 @@ mixin button(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
   .form-control-plaintext
     +checkbox(id, 'Benötigt', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
-    
+
+mixin submitButtonsFor(veranstaltung, current, nosave)
+  .btn-group.btn-group-sm.float-right
+    a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw
+    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
+    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
+    +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')
+    +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'btn-kasse', 'fa-money-bill-alt')
+    +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'btn-kasse', 'fa-print')
+    +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper')
+    +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
+
 mixin panelView(veranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
@@ -51,6 +61,14 @@ mixin panelView(veranstaltungen)
       .card.mb-2(class = 'border-' + (kopf.cssColorCode() || 'general'))
         .card-header.p-0(class = 'color-' + (kopf.cssColorCode() || 'general'))
           table(width='100%')
+            if !veranstaltung.kopf().confirmed()
+              tr: td.p-0(colspan=2)
+                h5.m-0.alert-danger.text-center
+                  i.fas.fa-exclamation-circle.fa-fw
+                  | #{' '} UNBESTÄTIGT #{' '}
+                  i.fas.fa-exclamation-circle.fa-fw
+
+          table(width='100%')
             tr.align-top
               td.text-left: .btn-group-vertical
                 a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
@@ -69,7 +87,8 @@ mixin panelView(veranstaltungen)
                 a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
             tr
               td
-              td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}
+              td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id)
+                h5 #{kopf.titel()}
           table(width='100%')
             tr
               td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')

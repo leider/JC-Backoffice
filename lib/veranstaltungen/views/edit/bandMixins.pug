@@ -31,6 +31,7 @@ mixin band(kosten)
           +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
         .col-6
           +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
+
 mixin bandScript
   script.
     $(document).ready(function () {
