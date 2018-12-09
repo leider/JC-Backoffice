@@ -1,13 +1,3 @@
-mixin checkedButton(veranstaltung, section, name, stylename)
-  if section.checked()
-    .text-capitalize.text-success
-      i.fas.fa-check.fa-fw
-      | #{' ' + name}
-  else
-    .text-capitalize.text-danger
-      i.fas.fa-exclamation-circle.fa-fw
-      | #{' ' + name}
-
 mixin monatHeadline(veranstaltung)
   h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startMoment().format('MMMM \'YY')}
     .btn-group.btn-group-sm.float-right

@@ -21,38 +21,43 @@ mixin panelView(veranstaltungen)
   -var monatAlt = -1;
   | <div class='row'>
   for veranstaltung in veranstaltungen
+    -var kopf = veranstaltung.kopf()
+    -var staff = veranstaltung.staff()
+    -var id = 'panel' + ++count
+    -var collapsed = veranstaltung.startMoment().isAfter(nearFuture)
+
     if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
       | </div><div class='row'>
       .col-12
         +monatHeadline(veranstaltung)
-
     -monatAlt = veranstaltung.startMoment().month();
-    -var kopf = veranstaltung.kopf()
-    -var staff = veranstaltung.staff()
-    -var infotext = staff.noStaffNeeded() && staff.modNotNeeded() ? '<div class="alert-success text-center"><i class="fas fa-check-circle"></i> Niemand benötigt</div>' : (veranstaltung.kasseFehlt() ? '<div class="alert-danger text-center"><i class="fas fa-exclamation-circle"></i> Kasse gesucht!</div>' : '')
+
     .col-xl-4.col-md-6
-      -var id = 'panel' + ++count
-      -var collapsed = veranstaltung.startMoment().isAfter(nearFuture)
       .card.mb-2(class = 'border-' + (kopf.cssColorCode() || 'general'))
         .card-header.p-0(class = 'color-' + (kopf.cssColorCode() || 'general'))
-          table(width='100%'): tr.align-top
-            td.text-left: .btn-group-vertical
-              a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
-                if collapsed
-                  i.far.fa-caret-square-right.fa-fw.fa-lg
-                else
-                  i.far.fa-caret-square-down.fa-fw.fa-lg
-            td: a.chevron(data-toggle='collapse', data-target='#' + id)
-              h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()}:<br> 
-                h5 #{kopf.titel()}
-            td.text-right: .btn-group-vertical
-              a.py-0.px-1.text-white.bg-secondary(href=veranstaltung.fullyQualifiedUrl() + '/preview')
-                i.fas.fa-eye.fa-lg
+          table(width='100%')
+            tr.align-top
+              td.text-left: .btn-group-vertical
+                a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
+                  if collapsed
+                    i.far.fa-caret-square-right.fa-fw.fa-lg
+                  else
+                    i.far.fa-caret-square-down.fa-fw.fa-lg
+              td: a.chevron(data-toggle='collapse', data-target='#' + id)
+                h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()} 
+              td.text-right: .btn-group
+                if veranstaltung.reservixID()
+                  .btn.py-0.px-1(style='background-color: #F8500D !important')
+                    i.logo-reservix
+                    | &nbsp; #{veranstaltung.kasse().anzahlBesucherReservix()}
+                a.py-0.px-1.text-white.bg-secondary(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
+            tr
+              td
+              td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}
           if veranstaltung.kasseFehlt()
             h4.alert-danger.p-1.mb-0: i.fas.fa-exclamation-circle #{' '} Kasse gesucht!
           if staff.noStaffNeeded() && staff.modNotNeeded()
             h4.alert-success.p-1.mb-0: i.fas.fa-check-circle #{' '} Kooperation
-
 
         if !staff.noStaffNeeded() || !staff.modNotNeeded()
           div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')

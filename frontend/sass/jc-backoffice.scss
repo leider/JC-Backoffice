@@ -123,6 +123,14 @@ $color-festival: #9FC442;
   margin: 3px;
 }
 
+.logo-reservix {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-image: url("/img/rex_21x21.png");
+  height: 14px;
+  width: 14px;
+}
+
 .color-costs {
   @include color-variant($color-ausgaben1);
 }

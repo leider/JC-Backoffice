@@ -1,25 +1,3 @@
-mixin panelMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, optionalMoney, optionalEditLink, collapsed)
-  .card.mb-2(class = 'border-' + (optionalColorClassSuffix || 'general'))
-    .card-header.p-0(class = 'color-' + (optionalColorClassSuffix || 'general')): .row
-      .col-1
-        a.inherit-color.chevron(data-toggle='collapse', data-target='#' + id)
-          if collapsed
-            i.far.fa-caret-square-right.fa-fw.fa-lg
-          else
-            i.far.fa-caret-square-down.fa-fw.fa-lg
-        if optionalEditLink
-          br
-          br
-          a.inherit-color(href=optionalEditLink)
-            i.fas.fa-eye.fa-fw.fa-lg.text-general
-      .col-11
-        h5
-          | !{title}
-          if optionalCurrencySpan
-            b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
-    div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
-      block
-
 mixin zuAufButtons
   .row
     .col-12
