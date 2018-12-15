@@ -1,7 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include mixins
-  
+
 mixin checkedButton(veranstaltung, section, name)
   if section.checked()
     .text-capitalize.alert-success: a.inherit-color(href=veranstaltung.fullyQualifiedUrl() + '/' + name)
@@ -20,7 +20,7 @@ mixin multiselectSmall(id, name, value, tags)
 mixin people(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
   +multiselectSmall('staff[' + name + ']' + veranstaltung.id(), 'staff[' + name + ']', veranstaltung.staff()[name](), allUsers.map(user => user.id))
-      
+
 mixin button(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
   .form-control-plaintext
@@ -76,11 +76,11 @@ mixin panelView(veranstaltungen)
                   else
                     i.far.fa-caret-square-down.fa-fw.fa-lg
               td: a.chevron(data-toggle='collapse', data-target='#' + id)
-                h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()} 
-                  
+                h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()}
+
               td.text-right: .btn-group
                 if veranstaltung.reservixID()
-                  .btn.py-0.px-1(style='background-color: #F8500D !important')
+                  .btn.py-0.px-1.color-reservix
                     i.logo-reservix
                     | &nbsp; #{veranstaltung.kasse().anzahlBesucherReservix()}
                 a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
@@ -151,7 +151,7 @@ block content
         +panelView(veranstaltungen)
       .col-lg-4
         +calendar(icals)
-            
+
 block head
   link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
 
@@ -160,12 +160,12 @@ block scripts
     $(document).ready(function () {
       function shirtsizeChanged() {
         $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
-      } 
+      }
       $('select[name="tshirt"]').change(shirtsizeChanged);
-      
+
       function telChanged() {
         $.ajax('/users/tel-for', {data: {user: this.id, value: this.value}})
-      } 
+      }
       $('input[name="tel"]').change(telChanged);
     });
-  
+

@@ -60,7 +60,7 @@ block content
                 a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
                   i.fas.fa-lock.fa-fw.fa-lg
                   | &nbsp;Kasse ist freigeben
-        if accessrights.darfKasseFreigeben() 
+        if accessrights.darfKasseFreigeben()
           if !freigegeben
             .row
               .col-12
@@ -79,15 +79,15 @@ block content
         .row
           .col-md-6
             if veranstaltung.reservixID()
-              +legendMitBody('reservix', 'Einnahmen Reservix', 'reservixGesamt', 'kasse')
+              +legendMitBody('reservix', '<i class="logo-reservix"></i> Einnahmen Reservix', 'reservixGesamt', 'reservix')
                 .row
                   .col-4
-                    +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, freigegeben)
+                    +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, true)
                   .col-4
-                    +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, freigegeben)
+                    +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, true)
                   .col-4
-                    +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, freigegeben)
-  
+                    +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, true)
+
             +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
               .row
                 .col-4
@@ -106,8 +106,8 @@ block content
                   +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
                 .col-4
                   +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
-  
-  
+
+
           .col-md-6
             +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
               .row
@@ -151,7 +151,7 @@ block content
                 .form-group
                   +controlLabel('endbestandEUR', 'Endbestand')
                   b: p#endbestandEUR.form-control-plaintext.text-right(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
-  
+
         .row
           .col-12
             hr
@@ -166,7 +166,7 @@ block scripts
       var einnahmeSonstiges2EUR = $('#kasse\\[einnahmeSonstiges2EUR\\]');
       var einnahmenGesamtEUR;
       var ausgabenGesamtEUR;
-      
+
       function updateEinnahmenGesamt() {
         einnahmenGesamtEUR = floatAmount(einnahmeBankEUR) + floatAmount(einnahmeTicketsEUR)
           + floatAmount(einnahmeSonstiges1EUR) + floatAmount(einnahmeSonstiges2EUR);
@@ -181,9 +181,9 @@ block scripts
       updateEinnahmenGesamt();
 
       var reservixNettoEUR = $('#kasse\\[reservixNettoEUR\\]');
-      
+
       function updateReservix() {
-        setEuro($('#reservixGesamt'), floatAmount(reservixNettoEUR));  
+        setEuro($('#reservixGesamt'), floatAmount(reservixNettoEUR));
       }
       reservixNettoEUR.keyup(updateReservix);
       updateReservix();

@@ -123,6 +123,10 @@ $color-festival: #9FC442;
   margin: 3px;
 }
 
+.color-reservix {
+  @include color-variant(#F8500D);
+}
+
 .logo-reservix {
   display: inline-block;
   background-repeat: no-repeat;

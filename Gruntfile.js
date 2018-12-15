@@ -44,7 +44,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     clean: {
       build: ['build', 'frontendtests/fixtures/*.html'],
-      coverage: ['coverage', 'coverageWithDB', 'karma-coverage'],
+      coverage: ['coverage', 'coverageWithDB'],
       public: ['public/clientscripts', 'public/fonts', 'public/img/bootstrap-colorpicker', 'public/images', 'public/stylesheets'],
       options: {force: true}
     },
@@ -113,16 +113,6 @@ module.exports = function (grunt) {
       options: {quiet: true},
       target: ['*.js', 'lib/**/*.js', 'test/**/*.js', 'frontend/**/*.js']
     },
-    karma: {
-      options: {
-        configFile: 'karma.conf.js'
-      },
-      once: {
-        browsers: ['PhantomJS'],
-        runnerPort: 6666,
-        singleRun: true
-      }
-    },
     sass: {
       dist: {
         files: {
@@ -179,15 +169,6 @@ module.exports = function (grunt) {
           }
         }
       },
-      frontend: {
-        options: {
-          coverageFolder: 'karma-coverage',
-          check: {
-            lines: 93,
-            statements: 93
-          }
-        }
-      }
     },
     pug: {
       compile: {
@@ -232,13 +213,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-sassjs');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-eslint');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-patcher');
   grunt.loadNpmTasks('grunt-puglint');
 
   grunt.registerTask('prepare', ['clean', 'copy', 'patch']);
-  grunt.registerTask('frontendtests', ['clean', 'prepare', 'sass', 'pug', 'cssmin', 'uglify:production_de', 'karma:once', 'uglify:development_de', 'karma:once', 'istanbul_check_coverage:frontend']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
   grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
   grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);
