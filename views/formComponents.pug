@@ -22,14 +22,21 @@ mixin number(name, label, value, tooltip, min, max, readonly)
 mixin singleselect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid')
+    select.form-control.selectpicker(id=name, name=name)
+      each val in values
+        option(value = val, selected = value === val) #{val}
+
+mixin singleselectStartingEmpty(name, label, value, values)
+  .form-group
+    +controlLabel(name, label)
+    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen')
       each val in values
         option(value = val, selected = value === val) #{val}
 
 mixin multiselect(name, label, value, tags)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(multiple, id=name, name=name, data-container='.container-fluid', data-selected-text-format='count > 2')
+    select.form-control.selectpicker(multiple, id=name, name=name, data-selected-text-format='count > 2')
       each tag in tags
         option(selected = value.indexOf(tag) > -1) #{tag}
 
@@ -80,7 +87,7 @@ mixin submitButtons(text)
     else
       button.btn.btn-primary(type='submit') Speichern
 
-    
+
 mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
   if veranstaltung.url()
     a(class='btn ' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title): i(class='fas fa-fw ' + icon)

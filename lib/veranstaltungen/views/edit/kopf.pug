@@ -4,7 +4,7 @@ include eintrittspreiseMixins
 include kontaktMixins
 include bandMixins
 include mixins
-  
+
 block title
   | Veranstaltung
 
@@ -13,7 +13,7 @@ block content
   -var kopf = veranstaltung.kopf()
   -var vertrag = veranstaltung.vertrag()
   -var kosten = veranstaltung.kosten()
-  
+
   .col-12
     form#veranstaltungform(action='/veranstaltungen/submit', method='post')
       +csrf
@@ -41,10 +41,19 @@ block content
               .row
                 .col-sm-6
                   +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
-                .col-sm-3
+                .col-sm-6
                   +text('url', 'URL / VA-ID', veranstaltung.url(), 'Eindeutig für die Veranstaltung')
+              .row
                 .col-sm-3
                   +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
+                .col-sm-3
+                  +singleselectStartingEmpty('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
+                .col-sm-3
+                  +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
+                .col-sm-3
+                  .form-group
+                    | &nbsp;
+                    +checkbox('kopf[rechnungAnKooperation]', 'Rechnung an Koop', kopf.rechnungAnKooperation())
               .row
                 .col-6
                   .row
@@ -58,8 +67,7 @@ block content
                       +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
                     #dates.col-6.pl-1.pr-2
                       +time('endTime', veranstaltung.endMoment().format('LT'))
-  
-            +band(kosten)
+
             +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
             +legendMitBody('vertrag', 'Vertrag')
               .row
@@ -75,7 +83,7 @@ block content
               .row
                 .col-12
                   +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
-  
+
           .col-md-6
             +legendMitBody('artist', 'Künstler')
               .row
@@ -97,7 +105,8 @@ block content
                   .form-group
                     | &nbsp;
                     +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
-            +preise(veranstaltung)
+            +band(kosten)
+            +preise(veranstaltung, optionen)
             +legendMitBody('wannwo', 'Wo')
               .row
                 .col-sm-6
@@ -106,15 +115,6 @@ block content
                   +hidden('kopf[presseIn]', kopf.presseIn())
                 .col-sm-6
                   +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
-              .row
-                .col-sm-4
-                  +singleselect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
-                .col-sm-4
-                  +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
-                .col-sm-4
-                  .form-group
-                    | &nbsp;
-                    +checkbox('kopf[rechnungAnKooperation]', 'Rechnung an Koop', kopf.rechnungAnKooperation())
               .row
                 .col-sm-12
                   +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
@@ -133,7 +133,7 @@ block scripts
   script(src='/clientscripts/bootstrap-datepicker.de.min.js')
   script(src='/clientscripts/simple-timepicker.min.js')
   script(src='/clientscripts/bootstrap-markdown.min.js')
-  +preiseScript
+  +preiseScript(veranstaltung)
   +kontaktScript('agentur')
   +bandScript
   script.
@@ -147,7 +147,7 @@ block scripts
       dateAdapter(startDate, startTime, endDate, endTime);
 
       var alleOrte = JSON.parse('!{JSON.stringify(orte.orte())}');
-      
+
       function ortchanged(auswahl) {
         var derOrt = alleOrte.find(function(o) {
           return o.name === ort.val();
@@ -157,7 +157,7 @@ block scripts
         $('input[name="kopf\\[pressename\\]"]').val(derOrt.pressename);
       }
       $('#kopf\\[ort\\]').change(ortchanged);
-      
+
 
     });
 

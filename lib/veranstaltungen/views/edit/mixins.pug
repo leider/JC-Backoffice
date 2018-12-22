@@ -20,5 +20,6 @@ mixin submitButtonsFor(veranstaltung, current, nosave)
         +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
 
     if !nosave
+      +hidden('returnTo', current)
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.far.fa-save.fa-fw
 

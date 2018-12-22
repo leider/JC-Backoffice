@@ -1,7 +1,7 @@
 extends ../../../../views/layout
 include ../../../../views/formComponents
 include mixins
-  
+
 mixin mitarbeiterRows(collection, verantwortlich)
   for user in collection || []
     tr
@@ -9,7 +9,7 @@ mixin mitarbeiterRows(collection, verantwortlich)
       td(width='98%')
         | #{user.name} &nbsp;
         span.mailtoify #{user.email}
-        | #{' '} Tel.: 
+        | #{' '} Tel.:
         span.telify #{user.tel}
         if verantwortlich
           b #{' '}(Verantwortlich)
@@ -29,16 +29,15 @@ block content
   -var unterkunft = veranstaltung.unterkunft()
   -var vertrag = veranstaltung.vertrag()
   -var werbung = veranstaltung.werbung()
-  -var salesreport = veranstaltung.salesreport()
   .col-12
     .row
       .col-12
         .page-header
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
-  
+
           h2(class='text-' + kopf.cssColorCode())
-            i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
+            i(class=kopf.cssIconClass(), style='font-weight:normal') #{''}
             | #{kopf.titel()} - #{kopf.ort()}
             br
             small
@@ -49,7 +48,7 @@ block content
     .row
       .col-md-6
         +legendMitBody('staff', 'Staff', null, 'staff')
-          -var mitarbeiter = veranstaltung.staff().mitarbeiterTransient();  
+          -var mitarbeiter = veranstaltung.staff().mitarbeiterTransient();
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
               tr: th(colspan=2) Niemand benötigt
@@ -66,8 +65,8 @@ block content
               if mitarbeiter.fremdpersonal.length > 0
                 tr: th(colspan=2) Sonstige
               +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
-                
-  
+
+
         +legendMitBody('eintritt', 'Eintritt und Abendkasse', 'eintrittGesamtEUR', 'kasse', veranstaltung.einnahmenGesamtEUR())
           if eintrittspreise.frei()
             .card-body
@@ -107,8 +106,8 @@ block content
                 td(colspan=4)
                   a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
                     | &nbsp;Kassenzettel
-  
-  
+
+
         +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
           table.table.table-sm.table-striped
             tr
@@ -124,12 +123,12 @@ block content
                 th Anteilig an Band (#{kosten.deal()}):
                 td
                 td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
-  
+
         if kopf.beschreibungHTML()
           +legendMitBody('info', 'Informationen', null, 'misc')
             .card-body
               | !{kopf.beschreibungHTML()}
-  
+
       .col-md-6
         +legendMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR())
           table.table.table-striped.table-sm
@@ -151,7 +150,7 @@ block content
               if kosten.gagenTotalEUR()
                 tr
                   td(width='2%')
-                  td(width='48%') 
+                  td(width='48%')
                     if kosten.gageBAR()
                       b.text-danger: i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
                         i.fas.fa-exclamation-triangle
@@ -199,7 +198,7 @@ block content
                 input#genehmigungenEingeholt(type='checkbox', checked='true')
                 label.text-success(for='genehmigungenEingeholt')
                   | &nbsp;Wir haben die Genehmigungen für #{werbung.genehmigungenNum()} Plakate eingeholt.
-  
+
         if agentur.name()
           +legendMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'general', veranstaltung.kostenGesamtEUR())
             .card-body
@@ -207,9 +206,9 @@ block content
                 strong #{agentur.ansprechpartner()} <br>
                 | !{agentur.adresseHTML()} <br>
                 | Tel.: #{agentur.telefon()} <br>
-                | E-Mail: 
+                | E-Mail:
                 span.mailtoify #{agentur.email()}
-  
+
         +legendMitBody('vertrag', 'Vertrag (' + vertrag.art() + ')', null, 'general', veranstaltung.kostenGesamtEUR())
           table.table.table-sm
             for step in vertrag.workflow()
@@ -237,13 +236,13 @@ block scripts
       $('.vertragstep').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/vertragStepClicked', {data: {step: this.name, checked: this.checked}});
       });
-      
+
       $('.hotelstep').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/hotelStepClicked', {data: {step: this.name, checked: this.checked}});
       });
-      
+
       $('#genehmigungenEingeholt').click(function() {
         $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/genehmigungenEingeholt', {data: {checked: this.checked}});
       });
-      
+
     });

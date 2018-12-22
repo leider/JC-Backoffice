@@ -38,12 +38,8 @@ var veranstaltung_validator;
         },
         'kosten[gagenEUR]': {number: true},
         'kosten[agenturEUR]': {number: true},
-        'eintrittspreise[regulaer]': {number: true},
-        'eintrittspreise[rabattErmaessigt]': {number: true},
-        'eintrittspreise[rabattMitglied]': {number: true},
-        'eintrittspreise[ermaessigt]': {number: true},
-        'eintrittspreise[mitglied]': {number: true},
-        'eintrittspreise[zuschuss]': {number: true},
+        'eintrittspreise[preisprofil]': 'required',
+        'kopf[eventTyp]': 'required',
         'agentur[email]': {
           email: true
         },
@@ -62,6 +58,8 @@ var veranstaltung_validator;
       errorPlacement: function (error, element) {
         if (element.attr('name') === 'endDate' || element.attr('name') === 'endTime') {
           error.insertAfter('#dates');
+        } else if (element.attr('name') === 'eintrittspreise[preisprofil]' || element.attr('name') === 'kopf[eventTyp]') {
+          error.insertAfter(element.parent());
         } else if (element.hasClass('currency')) {
           error.insertAfter(element.parent());
         } else {
@@ -69,26 +67,25 @@ var veranstaltung_validator;
         }
       },
       errorElement: 'span',
-      errorClass:
-        'help-block text-danger',
-      highlight:
-
-        function (element) {
+      errorClass: 'help-block text-danger',
+      highlight: function (element) {
           if ($(element).attr('name') === 'endDate' || $(element).attr('name') === 'endTime') {
             $('#veranstaltungform [name=endDate]').addClass('is-invalid');
             $('#veranstaltungform [name=endTime]').addClass('is-invalid');
 
             $('#dates').parent().addClass('has-error');
+          } else if ($(element).attr('name') === 'eintrittspreise[preisprofil]' || $(element).attr('name') === 'kopf[eventTyp]') {
+            $(element).parent().addClass('is-invalid');
           } else {
             $(element).addClass('is-invalid');
           }
-        }
-
-      ,
+        },
       unhighlight: function (element) {
         if ($(element).attr('name') === 'endDate' || $(element).attr('name') === 'endTime') {
           $('#veranstaltungform [name=endDate]').removeClass('is-invalid');
           $('#veranstaltungform [name=endTime]').removeClass('is-invalid');
+        } else if ($(element).attr('name') === 'eintrittspreise[preisprofil]' || $(element).attr('name') === 'kopf[eventTyp]') {
+          $(element).parent().removeClass('is-invalid');
         } else {
           $(element).removeClass('is-invalid');
         }
@@ -108,7 +105,8 @@ var veranstaltung_validator;
     }
 
     ['.currency', '#veranstaltungform [name="kopf[titel]"]', '#veranstaltungform [name="kopf[ort]"]', '#veranstaltungform [name=startDate]', '#veranstaltungform [name=startTime]',
-      '#veranstaltungform [name=endDate]', '#veranstaltungform [name=endTime]', '#veranstaltungform [name=url]', '#veranstaltungform [name="agentur[email]"]'].forEach(
+      '#veranstaltungform [name=endDate]', '#veranstaltungform [name=endTime]', '#veranstaltungform [name=url]', '#veranstaltungform [name="agentur[email]"]',
+      '#veranstaltungform [name="eintrittspreise[preisprofil]"]', '#veranstaltungform [name="kopf[eventTyp]"]'].forEach(
       function (each) {
         $(each).on('change', handler(each));
         $(each).keyup(handler(each));

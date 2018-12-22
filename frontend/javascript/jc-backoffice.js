@@ -39,6 +39,21 @@ function setEuro(jqueryCurrencyField, numberString) {
   jqueryCurrencyField.change();
 }
 
+/* exported setEuroInput */
+function setEuroInput(jqueryCurrencyField, numberString) {
+  /* eslint-disable new-cap */
+  'use strict';
+  if (!jqueryCurrencyField.length) {
+    return;
+  }
+  var number = Intl.NumberFormat('de-DE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(numberString || 0);
+  jqueryCurrencyField.val(number);
+  jqueryCurrencyField.change();
+}
+
 /* exported toUtc */
 function toUtc(dateString, timeString) {
   'use strict';

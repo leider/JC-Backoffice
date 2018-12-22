@@ -1,52 +1,67 @@
 include ../../../../views/formComponents
 
-mixin preise(veranstaltung)
+mixin singleselectPreis(name, label, value, values)
+  .form-group
+    +controlLabel(name, label)
+    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true title='Bitte wählen')
+      if value.name === 'Individuell (Alt)'
+        option(value = {name: 'Individuell (Alt)'}, selected = true) Individuell (Alt)
+      each val in values
+        -var subtext = '(' + val.regulaer + ',00, ' + (val.regulaer - val.rabattErmaessigt) + ',00, ' + (val.regulaer - val.rabattMitglied) + ',00)'
+        option(data-subtext=subtext, value = val, selected = value.name === val.name) #{val.name}
+
+
+
+mixin preise(veranstaltung, optionen)
   -var eintrittspreise = veranstaltung.eintrittspreise()
   +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
     .row
-      .col-4
-        +currency('eintrittspreise[regulaer]', 'Eintritt', eintrittspreise.regulaer(), 'Der Standardpreis für VVK / Abendkasse', '0,00')
-      .col-4
-        +currency('eintrittspreise[rabattErmaessigt]', '% erm.', eintrittspreise.rabattErmaessigt(), 'Die Reduktion für normale Ermäßigung', eintrittspreise.standardRabattErmaessigt() + ',00')
-      .col-4
-        +currency('eintrittspreise[rabattMitglied]', '% Mitgl.', eintrittspreise.rabattMitglied(), 'Die Reduktion für Mitglieder', eintrittspreise.standardRabattMitglied() + ',00')
-    .row
-      .col-4
+      .col-3
+        +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile())
+      .col-3
         .form-group
-          | &nbsp;
-          +checkbox('eintrittspreise[frei]', 'Freier Eintritt', eintrittspreise.frei())
-      .col-4
-        +currency('eintrittspreise[ermaessigt]', '€ ermäßigt', eintrittspreise.ermaessigt(), undefined, '0,00', true)
-      .col-4
-        +currency('eintrittspreise[mitglied]', '€ Mitglied', eintrittspreise.mitglied(), undefined, '0,00', true)
+          label.float-right Reg.:
+          b: +currencySpan(eintrittspreise.regulaer(), 'eintrittspreise[regulaer]', 'form-control-plaintext float-right')
+      .col-3
+        .form-group
+          label.float-right Erm.:
+          b: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittspreise[ermaessigt]', 'form-control-plaintext float-right')
+      .col-3
+        .form-group
+          label.float-right Mitgl.:
+          b: +currencySpan(eintrittspreise.mitglied(), 'eintrittspreise[mitglied]', 'form-control-plaintext float-right')
     .row
       .col-4
         +currency('eintrittspreise[zuschuss]', 'Zuschuss', eintrittspreise.zuschuss())
       .col-4
-        +number('eintrittspreise[erwarteteBesucher]', 'Besucher (erwartet)', eintrittspreise.erwarteteBesucher())
+        +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
       .col-4
         .form-group
-          +controlLabel('erwarteteEinnahmen', 'Total')
-          p: b
-            +currencySpan(null, 'erwarteteEinnahmen', 'form-control-static float-right text-success')
+          label.float-right  Total:
+          b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
 
-mixin preiseScript
+mixin preiseScript(veranstaltung)
+  -var eintrittspreise = veranstaltung.eintrittspreise()
   script.
     function initPreiseScript() {
+      var preisprofilFeld = $('#eintrittspreise\\[preisprofil\\]');
       var regulaer = $('#eintrittspreise\\[regulaer\\]');
-      var rabattErmaessigt = $('#eintrittspreise\\[rabattErmaessigt\\]');
-      var rabattMitglied = $('#eintrittspreise\\[rabattMitglied\\]');
-      var freierEintritt = $(':checkbox[name*="eintrittspreise[frei]"]');
+      var ermaessigt = $('#eintrittspreise\\[ermaessigt\\]');
+      var mitglied = $('#eintrittspreise\\[mitglied\\]');
       var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
       var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
 
       function amountHandler() {
-        var preis = floatAmount(regulaer);
-        var preisErmaessigt = preis - Math.abs(floatAmount(rabattErmaessigt));
-        var preisMitglied = preis - Math.abs(floatAmount(rabattMitglied));
+        if (!preisprofilFeld.val()) return;
+        var preisprofil = JSON.parse(preisprofilFeld.val());
+        var altes = preisprofil.name === 'Individuell (Alt)';
+        var preis = altes ? #{eintrittspreise.regulaer()} : preisprofil.regulaer;
+        var preisErmaessigt = altes ? #{eintrittspreise.ermaessigt()} : (preis - preisprofil.rabattErmaessigt);
+        var preisMitglied = altes ? #{eintrittspreise.mitglied()} : (preis - preisprofil.rabattMitglied);
 
-        setEuro($('#eintrittspreise\\[ermaessigt\\]'), preisErmaessigt);
-        setEuro($('#eintrittspreise\\[mitglied\\]'), preisMitglied);
+        setEuro(regulaer, preis);
+        setEuro(ermaessigt, preisErmaessigt);
+        setEuro(mitglied, preisMitglied);
 
         var erwarteteEinnahmen = intAmount(anzahlBesucher)
           * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
@@ -56,21 +71,14 @@ mixin preiseScript
         setEuro($('#eintrittTotal'), erwarteteEinnahmen);
       }
 
-      [regulaer, rabattErmaessigt, rabattMitglied, anzahlBesucher, zuschuss].forEach(function (field) {
+      [anzahlBesucher, zuschuss].forEach(function (field) {
         field.keyup(amountHandler);
       });
-      
-      anzahlBesucher.change(amountHandler);
 
-      function enableDisableCurrencies() {
-        [regulaer, rabattErmaessigt, rabattMitglied].forEach(function (each) {
-            each.prop('disabled', freierEintritt.is(':checked'));
-          }
-        )
-      }
+      [anzahlBesucher, preisprofilFeld].forEach(function (field) {
+        field.change(amountHandler);
+      });
 
-      freierEintritt.change(enableDisableCurrencies);
-      enableDisableCurrencies();
       amountHandler();
     };
     $(document).ready(initPreiseScript);

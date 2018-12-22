@@ -18,3 +18,4 @@ mongodump_jc.sh
 dump.zip
 mongorestore_jc.sh
 jazzclubmongo*
+*.gz
