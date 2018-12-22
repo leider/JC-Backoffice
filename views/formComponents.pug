@@ -26,13 +26,6 @@ mixin singleselect(name, label, value, values)
       each val in values
         option(value = val, selected = value === val) #{val}
 
-mixin singleselectStartingEmpty(name, label, value, values)
-  .form-group
-    +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen')
-      each val in values
-        option(value = val, selected = value === val) #{val}
-
 mixin multiselect(name, label, value, tags)
   .form-group
     +controlLabel(name, label)

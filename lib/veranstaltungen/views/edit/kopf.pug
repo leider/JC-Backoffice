@@ -5,6 +5,14 @@ include kontaktMixins
 include bandMixins
 include mixins
 
+mixin eventTypSelect(name, label, value, values)
+  .form-group
+    +controlLabel(name, label)
+    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen')
+      each val in values
+        option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + "</span>") #{val}
+
+
 block title
   | Veranstaltung
 
@@ -47,7 +55,7 @@ block content
                 .col-sm-3
                   +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
                 .col-sm-3
-                  +singleselectStartingEmpty('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
+                  +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
                 .col-sm-3
                   +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
                 .col-sm-3

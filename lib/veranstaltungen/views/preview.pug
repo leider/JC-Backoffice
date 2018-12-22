@@ -1,7 +1,7 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 include edit/mixins
-  
+
 mixin mitarbeiterRows(collection, verantwortlich)
   for user in collection || []
     tr
@@ -9,7 +9,7 @@ mixin mitarbeiterRows(collection, verantwortlich)
       td(width='98%')
         | #{user.name} &nbsp;
         span.mailtoify #{user.email}
-        | #{' '} Tel.: 
+        | #{' '} Tel.:
         span.telify #{user.tel}
         if verantwortlich
           b #{' '}(Verantwortlich)
@@ -29,7 +29,7 @@ block content
   -var kasse = veranstaltung.kasse()
   -var staff = veranstaltung.staff()
   -var werbung = veranstaltung.werbung()
-    
+
   .col-12
     .row
       .col-12
@@ -37,9 +37,9 @@ block content
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
 
-          h2(class='text-' + kopf.cssColorCode())
-            i(class=kopf.cssIconClass(), style='font-weight:normal') #{''} 
-            | #{kopf.titel()} #{kopf.presseIn()}
+          h2(class='text-' + cssColorCode(kopf.eventTyp()))
+            span(class=cssIconClass(kopf.eventTyp()), style='font-weight:normal') #{''}
+            | #{' '}#{kopf.titel()} #{kopf.presseIn()}
             br
             small
               | #{veranstaltung.startMoment().format('LLLL')} #{''}
@@ -68,8 +68,8 @@ block content
               if mitarbeiter.fremdpersonal.length > 0
                 tr: th(colspan=2) Sonstige
                 +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
-                
-  
+
+
         +legendMitBody('eintritt', 'Eintritt und Abendkasse', null, 'kasse')
           table.table.table-sm.table-striped
             if eintrittspreise.frei()
@@ -102,18 +102,18 @@ block content
         if kopf.beschreibungHTML()
           +legendMitBody('info', 'Informationen', null, 'misc')
             .card-body !{kopf.beschreibungHTML()}
-          
-        -var dateien = kosten.dateirider() 
+
+        -var dateien = kosten.dateirider()
         if dateien.length > 0
           +legendMitBody('technik', 'Technik', null, 'costs')
             table.table.table-sm.table-striped
               tr: th Dateien
               for datei in dateien
                 tr: td.text-right: a.btn.btn-costs(href='/files/' + datei) #{datei}
-            
+
         +legendMitBody('presse', 'Pressetext', null, 'presse')
           | !{veranstaltung.presseTextHTML()}
-          if presse.firstImage() 
+          if presse.firstImage()
             img(src=presse.imageURLpure(), width = '100%')
 
       .col-md-6
@@ -124,18 +124,18 @@ block content
                 strong #{agentur.ansprechpartner()} <br>
                 | !{agentur.adresseHTML()} <br>
                 | Tel.: #{agentur.telefon()} <br>
-                | E-Mail: 
+                | E-Mail:
                 span.mailtoify #{agentur.email()}
-          
+
         if unterkunft.anzahlZimmer()
-          -var hoteltitel = hotel.name() + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte' 
+          -var hoteltitel = hotel.name() + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte'
           +legendMitBody('hotelbuchung', hoteltitel, null, 'hotel')
             .card-body
               address
                 strong #{hotel.name()} - #{hotel.ansprechpartner()} <br>
                 | !{hotel.adresseHTML()} <br>
                 | Tel.: #{hotel.telefon()} <br>
-                | E-Mail: 
+                | E-Mail:
                 span.mailtoify #{hotel.email()}
 
         +legendMitBody('kosten', 'Kosten', 'costs', 'costs', veranstaltung.kostenGesamtEUR())
@@ -208,4 +208,4 @@ block content
                 th Anteilig an Band (#{kosten.deal()}):
                 td
                 td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
-        
+

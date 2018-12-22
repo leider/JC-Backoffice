@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 
   const filesForCss = {
     'public/stylesheets/screen.css': [
-      'build/stylesheets/flaticon-patched.css',
+      'frontend/3rd_party_css/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
       'build/stylesheets/sass/out/jc-backoffice.css'
     ]
@@ -74,7 +74,7 @@ module.exports = function (grunt) {
         flatten: true
       },
       flaticonFONTS: {
-        src: 'frontend/additionalIcons/font/*',
+        src: ['frontend/additionalIcons/font/*', '!frontend/additionalIcons/font/*css', '!frontend/additionalIcons/font/*html'],
         dest: 'public/fonts',
         expand: true,
         flatten: true
@@ -97,16 +97,6 @@ module.exports = function (grunt) {
         dest: 'build/stylesheets/sass',
         expand: true,
         flatten: true
-      }
-    },
-    patch: {
-      flaticon: {
-        options: {
-          patch: 'frontend/additionalIcons/patchDirectory/flaticon.patch'
-        },
-        files: {
-          'build/stylesheets/flaticon-patched.css': 'frontend/additionalIcons/css/flaticon.css'
-        }
       }
     },
     eslint: {
@@ -214,10 +204,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
-  grunt.loadNpmTasks('grunt-patcher');
   grunt.loadNpmTasks('grunt-puglint');
 
-  grunt.registerTask('prepare', ['clean', 'copy', 'patch']);
+  grunt.registerTask('prepare', ['clean', 'copy']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
   grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
   grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);

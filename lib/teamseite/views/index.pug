@@ -32,8 +32,8 @@ mixin panelView(veranstaltungen)
     -monatAlt = veranstaltung.startMoment().month();
 
     .col-xl-4.col-md-6
-      .card.mb-2(class = 'border-' + (kopf.cssColorCode() || 'general'))
-        .card-header.p-0(class = 'color-' + (kopf.cssColorCode() || 'general'))
+      .card.mb-2(class = 'border-' + cssColorCode(kopf.eventTyp()))
+        .card-header.p-0(class = 'color-' + cssColorCode(kopf.eventTyp()))
           table(width='100%')
             tr.align-top
               td.text-left: .btn-group-vertical

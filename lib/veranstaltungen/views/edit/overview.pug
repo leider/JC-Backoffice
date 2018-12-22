@@ -36,8 +36,8 @@ block content
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
 
-          h2(class='text-' + kopf.cssColorCode())
-            i(class=kopf.cssIconClass(), style='font-weight:normal') #{''}
+          h2(class='text-' + cssColorCode(kopf.eventTyp()))
+            i(class=cssIconClass(kopf.eventTyp()), style='font-weight:normal') #{''}
             | #{kopf.titel()} - #{kopf.ort()}
             br
             small
