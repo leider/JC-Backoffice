@@ -23,8 +23,7 @@ mixin people(veranstaltung, name, allUsers)
 
 mixin button(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
-  .form-control-plaintext
-    +checkbox(id, 'Benötigt', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
+  +checkbox(id, 'Benötigt', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
   .btn-group.btn-group-sm.float-right

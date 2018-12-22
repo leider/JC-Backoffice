@@ -68,7 +68,7 @@ mixin hightextarea(name, label, value, tooltip, placeholder)
   +textareaInternal('md-textarea', '30', name, label, value, tooltip, placeholder)
 
 mixin checkboxWithDescription(name, label, checked, description, optionalValue)
-  .form-check.abc-checkbox.abc-checkbox-success.d-block
+  .form-check.abc-checkbox.abc-checkbox-success.d-block(style='padding-top:.4rem')
     input.form-check-input(type='checkbox', id=name + optionalValue, name=name, value=optionalValue, checked=(checked ? 'true' : undefined))
     label.form-check-label(for=name + optionalValue || '')
       -if (description)

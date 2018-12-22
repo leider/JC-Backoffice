@@ -436,3 +436,8 @@ input[type=number]::-webkit-outer-spin-button {
     z-index: $zindex-select-dropdown;
   }
 }
+
+// patch bootstrap btn
+.btn {
+  white-space: nowrap;
+}

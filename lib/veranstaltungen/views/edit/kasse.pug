@@ -56,7 +56,7 @@ block content
         if !accessrights.darfKasseFreigeben() && freigegeben
           .row
             .col-12
-              .btn-group.d-flex.justify-content-end
+              .btn-group.float-right
                 a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
                   i.fas.fa-lock.fa-fw.fa-lg
                   | &nbsp;Kasse ist freigeben
@@ -64,14 +64,14 @@ block content
           if !freigegeben
             .row
               .col-12
-                .btn-group.d-flex.justify-content-end
+                .btn-group.float-right
                   a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
                     i.fas.fa-unlock.fa-fw.fa-lg
                     | &nbsp;Kasse freigeben
           else
             .row
               .col-12
-                .btn-group.d-flex.justify-content-end
+                .btn-group.float-right
                   a.btn.btn-danger(data-toggle='modal', data-target='#entsperrendialog', href='#')
                     i.fas.fa-lock.fa-fw.fa-lg
                     | &nbsp;Kasse ist freigeben

@@ -21,6 +21,7 @@ block content
               +submitButtonsFor(veranstaltung, 'ausgaben')
               h2 Kosten für #{veranstaltung.datumForDisplayMitKW()}<br>
                 small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+              +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
         .row
           .col-md-6
             +legendMitBody('backline', 'Backline und Technik', 'backlinePreis', 'costs')
@@ -55,7 +56,6 @@ block content
                   +text('kosten[saal]', 'Location (von anderer Seite)', veranstaltung.kopf().ort(), null,null, true)
                 .col-sm-3
                   +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
-            +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
           .col-md-6
             +staff(veranstaltung.staff(), allUsers)
             +marketingUndPlakate(veranstaltung.werbung(), optionen)
@@ -82,7 +82,7 @@ block scripts
       technikAngebot1EUR.keyup(updateBacklinePreis);
       technikAngebot2EUR.keyup(updateBacklinePreis);
       updateBacklinePreis();
-      
+
       var saalmiete = $('#kosten\\[saalmiete\\]');
       function updateSaalmietePreis() {
         setEuro($('#saalmietePreis'), floatAmount(saalmiete));

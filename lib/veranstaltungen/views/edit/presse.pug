@@ -19,10 +19,8 @@ block content
               +submitButtonsFor(veranstaltung, 'presse')
               h2 Pressetext für #{veranstaltung.datumForDisplay()}<br>
                 small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+              +checkbox('presse[checked]', 'Ist so OK', presse.checked())
             +legendMitBody('event', 'Pressematerial', null, 'presse')
-              .row
-                .col-12
-                  +checkbox('presse[checked]', 'Ist so OK', presse.checked())
               .row
                 .col-md-6
                   +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
