@@ -69,12 +69,15 @@ block content
                       +time('endTime', veranstaltung.endMoment().format('LT'))
 
               .row
-                .col-8
+                .col-4
                   +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
                   +hidden('kopf[pressename]', kopf.pressename())
                   +hidden('kopf[presseIn]', kopf.presseIn())
                 .col-4
                   +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+                .col-4
+                  +currency('kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+
               .row
                 .col-4
                   .form-group
