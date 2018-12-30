@@ -1,5 +1,5 @@
 include ../../../../views/formComponents
-  
+
 mixin band(kosten)
   div
     +legendMitBody('band', 'Band', 'bandTotal')
@@ -27,8 +27,6 @@ mixin band(kosten)
             p: b
               +currencySpan(null, 'agenturTotal', 'form-control-static float-right text-success')
       .row
-        .col-6
-          +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
         .col-6
           +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 

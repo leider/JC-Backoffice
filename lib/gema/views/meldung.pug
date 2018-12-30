@@ -34,7 +34,7 @@ html
               if nachmeldung
                 th.text-right Einnahmen
                 th.text-right Anzahl Besucher
-                th Rechnung An
+              th Rechnung An
               th.text-right Raumgröße
             for veranstaltung in events
               -var kopf = veranstaltung.kopf()
@@ -48,5 +48,5 @@ html
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
                   td.text-right #{veranstaltung.anzahlBesucher()}
-                  td #{kopf.rechnungAnKooperation() ? kopf.kooperation() : 'Jazzclub'}
+                td #{kopf.rechnungAnKooperation() ? kopf.kooperation() : 'Jazzclub'}
                 td.text-right #{kopf.flaeche()} m<sup>2</sup>

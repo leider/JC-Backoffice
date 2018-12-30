@@ -5,7 +5,8 @@ mixin singleselectPreis(name, label, value, values)
     +controlLabel(name, label)
     select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true title='Bitte wählen')
       if value.name === 'Individuell (Alt)'
-        option(value = {name: 'Individuell (Alt)'}, selected = true) Individuell (Alt)
+        -var subtext = '(' + value.regulaer + ',00, ' + (value.regulaer - value.rabattErmaessigt) + ',00, ' + (value.regulaer - value.rabattMitglied) + ',00)'
+        option(data-subtext=subtext, value = value, selected = true) Individuell (Alt)
       each val in values
         -var subtext = '(' + val.regulaer + ',00, ' + (val.regulaer - val.rabattErmaessigt) + ',00, ' + (val.regulaer - val.rabattMitglied) + ',00)'
         option(data-subtext=subtext, value = val, selected = value.name === val.name) #{val.name}

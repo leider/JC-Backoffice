@@ -21,24 +21,24 @@ block content
   -var kopf = veranstaltung.kopf()
   -var vertrag = veranstaltung.vertrag()
   -var kosten = veranstaltung.kosten()
+  -var eintrittspreise = veranstaltung.eintrittspreise()
 
   .col-12
     form#veranstaltungform(action='/veranstaltungen/submit', method='post')
       +csrf
       if (veranstaltung.id())
         +hidden('id', veranstaltung.id())
-      +hidden('previousUrl', veranstaltung.url())
+        +hidden('previousUrl', veranstaltung.url())
+        +hidden('url', veranstaltung.url())
       fieldset
         .row
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'kopf')
               if (veranstaltung.id())
-                h2 #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
-                  small Bearbeiten
+                h2 #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}
               else
-                h2 Veranstaltung <br>
-                  small Neu anlegen
+                h2 Neue Veranstaltung
               if accessrights.isBookingTeam()
                 +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
               else
@@ -49,19 +49,11 @@ block content
               .row
                 .col-sm-6
                   +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
-                .col-sm-6
-                  +text('url', 'URL / VA-ID', veranstaltung.url(), 'Eindeutig für die Veranstaltung')
-              .row
-                .col-sm-3
-                  +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
-                .col-sm-3
+                .col-6.col-sm-3
                   +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
-                .col-sm-3
-                  +singleselect('kopf[kooperation]', 'Kooperation', kopf.kooperation(), optionen.kooperationen())
-                .col-sm-3
-                  .form-group
-                    | &nbsp;
-                    +checkbox('kopf[rechnungAnKooperation]', 'Rechnung an Koop', kopf.rechnungAnKooperation())
+                .col-6.col-sm-3
+                  +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
+
               .row
                 .col-6
                   .row
@@ -76,7 +68,66 @@ block content
                     #dates.col-6.pl-1.pr-2
                       +time('endTime', veranstaltung.endMoment().format('LT'))
 
-            +kontakt(veranstaltung, optionen.agenturen(), 'Agentur', 'agentur')
+              .row
+                .col-8
+                  +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
+                  +hidden('kopf[pressename]', kopf.pressename())
+                  +hidden('kopf[presseIn]', kopf.presseIn())
+                .col-4
+                  +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+              .row
+                .col-4
+                  .form-group
+                    label(for='kopf[kooperation]')
+                      span.tooltiplabel(data-original-title='Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll') Koop (Rechnung):&nbsp;
+                        i.fas.fa-question-circle
+                    .input-group
+                      select.form-control.selectpicker(id='kopf[kooperation]', name='kopf[kooperation]')
+                        each val in optionen.kooperationen()
+                          option(value = val, selected = kopf.kooperation() === val) #{val}
+                      .input-group-append
+                        .input-group-text.pl-1.pr-0
+                          .form-check.abc-checkbox.abc-checkbox-success
+                            -var checkID = 'kopf[rechnungAnKooperation]'
+                            input.form-check-input(type='checkbox', id=checkID, name=checkID, checked=(kopf.rechnungAnKooperation() ? 'true' : undefined))
+                            label.form-check-label(for=checkID) #{''}
+
+                .col-4
+                  +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
+                .col-4
+                  +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres())
+
+              .row
+                .col-12
+                  hr
+            +legendMitBody('artist', 'Künstler')
+              .row
+                .col-6
+                  +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
+                .col-3
+                  +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
+                .col-3
+                  +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
+              .row
+                .col-8
+                  +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
+                .col-4
+                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+              .row
+                .col-6.col-sm-4
+                  +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue())
+                .col-6.col-sm-4
+                  +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
+                .col-6.col-sm-4
+                  +checkbox('brauchtHotel', 'Braucht Hotel', veranstaltung.brauchtHotel())
+
+            +legendMitBody('kommentar', 'Kommentar')
+              .row
+                .col-sm-12
+                  +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
+
+          .col-md-6
+            +kontakt(veranstaltung, optionen.agenturen(), 'Agentur / Verantwortlicher', 'agentur')
             +legendMitBody('vertrag', 'Vertrag')
               .row
                 .col-md-6
@@ -91,41 +142,6 @@ block content
               .row
                 .col-12
                   +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
-
-          .col-md-6
-            +legendMitBody('artist', 'Künstler')
-              .row
-                .col-12
-                  +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
-              .row
-                .col-12
-                  +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
-              .row
-                .col-3
-                  +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
-                .col-3
-                  +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
-                .col-3
-                  .form-group
-                    | &nbsp;
-                    +checkbox('artist[isBawue]', 'aus BaWü', artist.isBawue())
-                .col-3
-                  .form-group
-                    | &nbsp;
-                    +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
-            +band(kosten)
-            +preise(veranstaltung, optionen)
-            +legendMitBody('wannwo', 'Wo')
-              .row
-                .col-sm-6
-                  +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
-                  +hidden('kopf[pressename]', kopf.pressename())
-                  +hidden('kopf[presseIn]', kopf.presseIn())
-                .col-sm-6
-                  +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
-              .row
-                .col-sm-12
-                  +textarea('kopf[beschreibung]', 'Kommentar', kopf.beschreibung())
         .row
           .col-12
             hr
@@ -141,9 +157,7 @@ block scripts
   script(src='/clientscripts/bootstrap-datepicker.de.min.js')
   script(src='/clientscripts/simple-timepicker.min.js')
   script(src='/clientscripts/bootstrap-markdown.min.js')
-  +preiseScript(veranstaltung)
   +kontaktScript('agentur')
-  +bandScript
   script.
     $(document).ready(function () {
       var startDate = $('#veranstaltungform [name=startDate]');

@@ -21,35 +21,27 @@ block content
               +submitButtonsFor(veranstaltung, 'ausgaben')
               h2 Kosten für #{veranstaltung.datumForDisplayMitKW()}<br>
                 small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
-              +checkbox('kosten[checked]', 'Ist so OK', kosten.checked())
+              +checkbox('kosten[checked]', 'Technik ist geklärt', kosten.checked())
         .row
           .col-md-6
             +legendMitBody('backline', 'Backline und Technik', 'backlinePreis', 'costs')
               .row
                 .col-sm-9
-                  +text('kosten[rider]', 'Rider', kosten.rider())
+                  +checkbox('kosten[fluegel]', 'Flügel stimmen', kosten.checked())
                   +uploader('riderupload', 'Datei', null, kosten.dateirider(), {id: veranstaltung.id(), typ: 'rider'})
               .row
                 .col-sm-9
-                  +editableMultiselect('kosten[backlineJazzclub]', 'Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
+                  +editableMultiselect('kosten[backlineJazzclub]', 'Backline Jazzclub', kosten.backlineJazzclub(), optionen.backlineJazzclub())
               .row
                 .col-sm-9
-                  +editableMultiselect('kosten[backlineRockshop]', 'Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
+                  +editableMultiselect('kosten[backlineRockshop]', 'Backline Rockshop', kosten.backlineRockshop(), optionen.backlineRockshop())
                 .col-sm-3
                   +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
               .row
                 .col-sm-9
-                  +text('kosten[technikJazzclub]', 'Technik Jazzclub', kosten.technikJazzclub())
-              .row
-                .col-sm-9
-                  +text('kosten[technikAngebot1]', 'Technik Angebot 1', kosten.technikAngebot1())
+                  +text('kosten[technikAngebot1]', 'Technik Zumietung', kosten.technikAngebot1())
                 .col-sm-3
                   +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
-              .row
-                .col-sm-9
-                  +text('kosten[technikAngebot2]', 'Technik Angebot 2', kosten.technikAngebot2())
-                .col-sm-3
-                  +currency('kosten[technikAngebot2EUR]', 'Betrag', kosten.technikAngebot2EUR())
             +legendMitBody('saalmiete', 'Saalmiete', 'saalmietePreis', 'costs')
               .row
                 .col-sm-9
@@ -57,7 +49,6 @@ block content
                 .col-sm-3
                   +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
           .col-md-6
-            +staff(veranstaltung.staff(), allUsers)
             +marketingUndPlakate(veranstaltung.werbung(), optionen)
         .row
           .col-12

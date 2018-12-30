@@ -1,3 +1,6 @@
 // unset kassenfreigabe
 
 db.veranstaltungenstore.update({url: 'Soulcafé im April ´18'}, {$unset: {'kasse.kassenfreigabe':''}})
+
+preisprofil löschen
+db.getCollection('veranstaltungenstore').update({'eintrittspreise.preisprofil.name': 'Individuell (Alt)'}, {$unset: {'eintrittspreise.preisprofil': ''}}, {multi: true})

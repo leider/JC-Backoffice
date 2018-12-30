@@ -1,6 +1,6 @@
 extends ../../../views/layout
 include ../../../views/formComponents
-  
+
 block title
   | Optionen
 
@@ -21,6 +21,7 @@ block content
             +legendMitBody('allgemein', 'Allgemein')
               +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
               +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
+              +editableMultiselect('genres', 'Genres', optionen.genres(), optionen.genres())
             +legendMitBody('backline', 'Backlines')
               +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
               +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
@@ -35,7 +36,7 @@ block content
                   +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
                 .col-sm-6
                   +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
-  
+
           .col-md-6
             +legendMitBody('artists', 'Künstler')
               .row
@@ -48,4 +49,4 @@ block content
 
 block scripts
   script(src='/clientscripts/check-optionenform.js')
-      
+
