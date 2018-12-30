@@ -16,9 +16,9 @@
   "werbung": {"module": "./lib/veranstaltungen/object/werbung"},
 
   "vertragApp": {"module": "./lib/vertrag"},
-  
+
   "fileexportStadtKarlsruhe": {"module": "./lib/fileexportStadtKarlsruhe"},
-  
+
   "optionenApp": {"module": "./lib/optionen"},
   "optionValues": {"module": "./lib/optionen/optionValues"},
   "emailAddresses": {"module": "./lib/optionen/emailAddresses"},
@@ -31,6 +31,7 @@
   "usersService": {"module": "./lib/users/usersService"},
   "userstore": {"module": "./lib/users/userstore"},
   "users": {"module": "./lib/users/users"},
+  "user": {"module": "./lib/users/user"},
 
   "icalApp": {"module": "./lib/ical"},
   "icalService": {"module": "./lib/ical/icalService"},
@@ -39,7 +40,7 @@
   "teamseiteApp": {"module": "./lib/teamseite"},
 
   "gemaApp": {"module": "./lib/gema"},
-  
+
   "siteApp": {"module": "./lib/site"},
 
   "renderer": {"module": "./lib/commons/renderer"},
@@ -91,17 +92,17 @@
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "reservixstore" }
   },
-  
+
   "terminPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "terminstore" }
   },
-  
+
   "mailPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "mailstore" }
   },
-  
+
   "htmlbridge": {"module": "./lib/reservix/htmlbridge"},
   "salesreport": {"module": "./lib/reservix/salesreport"},
   "reservixService": {"module": "./lib/reservix/reservixService"},
