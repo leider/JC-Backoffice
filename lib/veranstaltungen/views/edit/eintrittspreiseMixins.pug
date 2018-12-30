@@ -3,7 +3,7 @@ include ../../../../views/formComponents
 mixin singleselectPreis(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true title='Bitte wählen')
+    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true, title='Bitte wählen')
       if value.name === 'Individuell (Alt)'
         -var subtext = '(' + value.regulaer + ',00, ' + (value.regulaer - value.rabattErmaessigt) + ',00, ' + (value.regulaer - value.rabattMitglied) + ',00)'
         option(data-subtext=subtext, value = value, selected = true) Individuell (Alt)

@@ -10,7 +10,7 @@ mixin eventTypSelect(name, label, value, values)
     +controlLabel(name, label)
     select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen')
       each val in values
-        option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + "</span>") #{val}
+        option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + '</span>') #{val}
 
 
 block title
