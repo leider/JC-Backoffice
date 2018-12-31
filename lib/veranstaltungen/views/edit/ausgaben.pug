@@ -37,37 +37,7 @@ block content
                 small.text-costs Kalkulation
         .row
           .col-md-6
-            +legendMitBody('ausgaben', 'Ausgaben', 'ausgabenTotal', 'costs')
-              .row
-                .col-3(style='padding-right: 5px;')
-                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
-                .col-3(style='padding-left: 2px;padding-right: 2px;')
-                  +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
-                .col-3(style='padding-left: 2px;padding-right: 2px;')
-                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
-                .col-3(style='padding-left: 5px;')
-                  .form-group
-                    label.control-label Total:
-                    p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
-              +labelCurrencyRow('backlineEUR', 'kosten[backlineEUR]', 'Backline Rockshop', kosten.backlineRockshop())
-              +labelCurrencyRow('technikAngebot1EUR', 'kosten[technikAngebot1EUR]', 'Technik Zumietung', kosten.technikAngebot1EUR())
-              +labelCurrencyRow('saalmiete', 'kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
-              +labelCurrencyRow('werbung1', 'kosten[werbung1]', 'Werbung 1', kosten.werbung1())
-              +labelCurrencyRow('werbung2', 'kosten[werbung2]', 'Werbung 2', kosten.werbung2())
-              +labelCurrencyRow('werbung3', 'kosten[werbung3]', 'Werbung 3', kosten.werbung3())
-              +labelCurrencyRow('personal', 'kosten[personal]', 'Personal (unbar)', kosten.personal())
-              if kasse.istFreigegeben()
-                .form-group.row
-                  .col-sm-3
-                  label.col-6.col-form-label Abendkasse (ohne Gage)
-                  .col-6.col-sm-3
-                    b: +currencySpan(kasse.ausgabenOhneGage(), 'kasseAusgaben', 'form-control-plaintext float-right')
-              .row
-                .col-12
-                  +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
-
-          .col-md-6
-            +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
+            +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal')
               .row
                 .col-3.col-sm-6
                   +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
@@ -133,9 +103,40 @@ block content
                   td(align='right'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
                 if kosten.deal() !== 'ohne'
                   tr
-                    th Anteilig an Band (#{kosten.deal()}):
+                    th Anteilig an Band:
                     td
                     td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
+
+
+          .col-md-6
+            +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'costs')
+              .row
+                .col-3(style='padding-right: 5px;')
+                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+                .col-3(style='padding-left: 2px;padding-right: 2px;')
+                  +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
+                .col-3(style='padding-left: 2px;padding-right: 2px;')
+                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+                .col-3(style='padding-left: 5px;')
+                  .form-group
+                    label.control-label Total:
+                    p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
+              +labelCurrencyRow('backlineEUR', 'kosten[backlineEUR]', 'Backline Rockshop', kosten.backlineEUR())
+              +labelCurrencyRow('technikAngebot1EUR', 'kosten[technikAngebot1EUR]', 'Technik Zumietung', kosten.technikAngebot1EUR())
+              +labelCurrencyRow('saalmiete', 'kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+              +labelCurrencyRow('werbung1', 'kosten[werbung1]', 'Werbung 1', kosten.werbung1())
+              +labelCurrencyRow('werbung2', 'kosten[werbung2]', 'Werbung 2', kosten.werbung2())
+              +labelCurrencyRow('werbung3', 'kosten[werbung3]', 'Werbung 3', kosten.werbung3())
+              +labelCurrencyRow('personal', 'kosten[personal]', 'Personal (unbar)', kosten.personal())
+              if kasse.istFreigegeben()
+                .form-group.row
+                  .col-sm-3
+                  label.col-6.col-form-label Abendkasse (ohne Gage)
+                  .col-6.col-sm-3
+                    b: +currencySpan(kasse.ausgabenOhneGage(), 'kasseAusgaben', 'form-control-plaintext float-right')
+              .row
+                .col-12
+                  +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 
 
         .row
@@ -161,7 +162,7 @@ block scripts
       var gagenTotal = $('#gagenTotal');
 
       function updateAusgabenTotal() {
-        var summe = floatAmount(backlineEUR) + floatAmount(technikAngebot1EUR) + floatAmount(saalmiete)
+        var summe = #{kasse.ausgabenOhneGage()} + floatAmount(backlineEUR) + floatAmount(technikAngebot1EUR) + floatAmount(saalmiete)
           + floatAmount(werbung1) + floatAmount(werbung2) + floatAmount(werbung3) + floatAmount(personal)
           + floatAmountForSpan(gagenTotal);
         setEuro(ausgabenTotal, summe);
@@ -192,6 +193,7 @@ block scripts
       var mitglied = $('#eintrittspreise\\[mitglied\\]');
       var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
       var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
+      var eintrittTotal = $('#eintrittTotal');
 
       function amountHandler() {
         if (!preisprofilFeld.val()) return;
@@ -211,7 +213,7 @@ block scripts
         );
 
         setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
-        setEuro($('#eintrittTotal'), erwarteteEinnahmen + #{salesreport.nettoUmsatz()});
+        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport.nettoUmsatz()});
       }
 
       [anzahlBesucher, zuschuss].forEach(function (field) {
@@ -223,6 +225,35 @@ block scripts
       });
 
       amountHandler();
+
+      // Deal
+      var dealEinnahmen = $('#dealEinnahmen');
+      var dealKosten = $('#dealKosten');
+      var dealUeberschuss = $('#dealUeberschuss');
+      var dealUeberschussAnBand = $('#dealUeberschussAnBand');
+      var dealUeberschussTotal = $('#dealUeberschussTotal');
+      var dealProzent = $('#kosten\\[deal\\]')
+
+      function dealHandler() {
+        var ein = floatAmountForSpan(eintrittTotal) - floatAmount(zuschuss);
+        var aus = floatAmountForSpan(ausgabenTotal);
+        var ueberschuss = ein - aus;
+        setEuro(dealEinnahmen, ein);
+        setEuro(dealKosten, aus);
+        setEuro(dealUeberschuss, ueberschuss);
+        if (ueberschuss > 0) {
+          var dealFaktor = (parseFloat(germanToEnglishNumberString(dealProzent.val()), 10) || 0) / 100;
+          setEuro(dealUeberschussAnBand, ueberschuss * dealFaktor);
+          setEuro(dealUeberschussTotal, ueberschuss - ueberschuss * dealFaktor);
+        } else {
+          setEuro(dealUeberschussTotal, ueberschuss);
+        }
+      }
+
+      [dealProzent, ausgabenTotal, eintrittTotal].forEach(function (field) {
+        field.change(dealHandler);
+      })
+
     });
 
 

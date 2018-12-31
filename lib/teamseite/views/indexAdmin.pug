@@ -81,7 +81,7 @@ mixin panelView(veranstaltungen)
                 if veranstaltung.reservixID()
                   .btn.py-0.px-1.color-reservix
                     i.logo-reservix
-                    | &nbsp; #{veranstaltung.kasse().anzahlBesucherReservix()}
+                    | &nbsp; #{veranstaltung.salesreport().anzahlRegulaer()}
                 a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
             tr
               td

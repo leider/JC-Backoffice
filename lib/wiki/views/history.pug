@@ -50,14 +50,14 @@ block content
       h2 #{subdir}/#{pageName}
         br
         small Revisionen
-  
+
     table.history.table.table-striped.table-bordered.table-hover.table-sm
       each item in items
         tr
           td
             input(type='checkbox', value=item.fullhash)
           td #{item.author}
-          td #{item.date().locale(language).format('ll')}
+          td #{item.date().format('llll')}
           td #{item.comment}
           td
             a(href=item.url() + '?version=' + item.hashRef) #{item.hashRef || 'CURRENT'}

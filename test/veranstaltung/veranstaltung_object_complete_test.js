@@ -50,7 +50,6 @@ describe('Veranstaltung Gesamt', () => {
       staffSpy = sinon.spy(veranstaltung, 'staff');
       unterkunftSpy = sinon.spy(veranstaltung, 'unterkunft');
       vertragSpy = sinon.spy(veranstaltung, 'vertrag');
-      werbungSpy = sinon.spy(veranstaltung, 'werbung');
     });
 
     it('ist zusammengesetzt aus Unterobjekten', () => {
@@ -67,7 +66,6 @@ describe('Veranstaltung Gesamt', () => {
       expect(staffSpy.calledOnce).to.be(true);
       expect(unterkunftSpy.calledOnce).to.be(true);
       expect(vertragSpy.calledOnce).to.be(true);
-      expect(werbungSpy.calledOnce).to.be(true);
     });
 
     it('ohne kopf oder ohne id bleiben die vorherigen Felder', () => {

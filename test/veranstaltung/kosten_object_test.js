@@ -13,7 +13,7 @@ describe('Kosten', () => {
     expect(kosten.agenturSteuer()).to.be.undefined();
 
     expect(kosten.agenturTotalEUR()).to.be(0);
-    expect(kosten.bandTotalEUR()).to.be(0);
+    expect(kosten.gagenTotalEUR()).to.be(0);
     expect(kosten.backlineUndTechnikEUR()).to.be(0);
     expect(kosten.totalEUR()).to.be(0);
 

@@ -51,8 +51,8 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
-              h2 Abendkasse für #{veranstaltung.datumForDisplay()}<br>
-                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+              h2.text-kasse #{veranstaltung.kopf().titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                small.text-kasse Abendkasse
         if !accessrights.darfKasseFreigeben() && freigegeben
           .row
             .col-12
@@ -81,7 +81,7 @@ block content
             +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
               .row
                 .col-4
-                  +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), null, null, freigegeben)
+                  +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), 'Alles hier eingegebene gilt als Einnahme für "Deal"', null, freigegeben)
                 .col-4
                   +number('kasse[anzahlBesucherAK]', 'Anzahl (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
                 .col-4
@@ -138,9 +138,7 @@ block content
               .col-sm-3.col-6
                 +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
               .col-sm-3.col-6
-                .form-group
-                  +controlLabel('endbestandEUR', 'Endbestand')
-                  b: p#endbestandEUR.form-control-plaintext.text-right(data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+                +currency('endbestandEUR', 'Endbestand', kasse.endbestandEUR(), null, null, true)
 
         .row
           .col-12

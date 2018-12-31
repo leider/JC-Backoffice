@@ -13,7 +13,6 @@
   "staff": {"module": "./lib/veranstaltungen/object/staff"},
   "vertrag": {"module": "./lib/veranstaltungen/object/vertrag"},
   "unterkunft": {"module": "./lib/veranstaltungen/object/unterkunft"},
-  "werbung": {"module": "./lib/veranstaltungen/object/werbung"},
 
   "vertragApp": {"module": "./lib/vertrag"},
 
