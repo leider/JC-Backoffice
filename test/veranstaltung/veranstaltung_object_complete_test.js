@@ -36,7 +36,6 @@ describe('Veranstaltung Gesamt', () => {
     let staffSpy;
     let unterkunftSpy;
     let vertragSpy;
-    let werbungSpy;
 
     beforeEach(() => {
       agenturSpy = sinon.spy(veranstaltung, 'agentur');

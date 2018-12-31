@@ -19,9 +19,9 @@ describe('Veranstaltung', () => {
       presse: 'presse',
       staff: 'staff',
       unterkunft: 'unterkunft',
-      vertrag: 'vertrag',
-      werbung: 'werbung'
+      vertrag: 'vertrag'
     };
+
     const veranstaltung = new Veranstaltung(parts);
     expect(veranstaltung.state.agentur).to.be('agentur');
     expect(veranstaltung.state.artist).to.be('artist');
@@ -34,7 +34,6 @@ describe('Veranstaltung', () => {
     expect(veranstaltung.state.staff).to.be('staff');
     expect(veranstaltung.state.unterkunft).to.be('unterkunft');
     expect(veranstaltung.state.vertrag).to.be('vertrag');
-    expect(veranstaltung.state.werbung).to.be('werbung');
   });
 
   it('initialisiert die Unterobjekte', () => {
@@ -50,7 +49,6 @@ describe('Veranstaltung', () => {
     expect(veranstaltung.state.staff).to.eql({});
     expect(veranstaltung.state.unterkunft).to.eql({});
     expect(veranstaltung.state.vertrag).to.eql({});
-    expect(veranstaltung.state.werbung).to.eql({});
   });
 
   it('hat auch noch eigene Felder', () => {

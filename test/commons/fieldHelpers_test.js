@@ -197,14 +197,14 @@ describe('parseToMomentUsingTimezone function', () => {
     expect(result.format()).to.equal('2013-08-02T03:04:00+02:00');
   });
 
-  it('parses near future time in summer', () => {
+  it('parses far future time in summer', () => {
     const result = fieldHelpers.parseToMomentUsingTimezone('2.8.2033', '3:04', 'Europe/Berlin');
     expect(result.format()).to.equal('2033-08-02T03:04:00+02:00');
   });
 
-  it('parses far future time in summer', () => {
+  it('parses near future time in summer', () => {
     const result = fieldHelpers.parseToMomentUsingTimezone('2.8.2113', '3:04', 'Europe/Berlin');
-    expect(result.format()).to.equal('2113-08-02T03:04:00+01:00'); // not in data of moment-timezone
+    expect(result.format()).to.equal('2113-08-02T03:04:00+02:00');
   });
 
   it('parses date with null time', () => {
