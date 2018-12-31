@@ -78,16 +78,6 @@ block content
 
         .row
           .col-md-6
-            if veranstaltung.reservixID()
-              +legendMitBody('reservix', '<i class="logo-reservix"></i> Einnahmen Reservix', 'reservixGesamt', 'reservix')
-                .row
-                  .col-4
-                    +currency('kasse[reservixBruttoEUR]', 'Tickets Brutto (Reservix)', kasse.reservixBruttoEUR(), null, null, true)
-                  .col-4
-                    +currency('kasse[reservixNettoEUR]', 'Tickets Netto (Reservix)', kasse.reservixNettoEUR(), null, null, true)
-                  .col-4
-                    +number('kasse[anzahlBesucherReservix]', 'Besucher (Reservix)', kasse.anzahlBesucherReservix(), 'Anzahl der Reservix-Tickets', 0, 999, true)
-
             +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
               .row
                 .col-4
@@ -179,14 +169,6 @@ block scripts
       einnahmeSonstiges1EUR.keyup(updateEinnahmenGesamt);
       einnahmeSonstiges2EUR.keyup(updateEinnahmenGesamt);
       updateEinnahmenGesamt();
-
-      var reservixNettoEUR = $('#kasse\\[reservixNettoEUR\\]');
-
-      function updateReservix() {
-        setEuro($('#reservixGesamt'), floatAmount(reservixNettoEUR));
-      }
-      reservixNettoEUR.keyup(updateReservix);
-      updateReservix();
 
       var ausgabeGageEUR = $('#kasse\\[ausgabeGageEUR\\]');
       var ausgabeCateringEUR = $('#kasse\\[ausgabeCateringEUR\\]');

@@ -9,17 +9,12 @@ var ausgaben_validator;
       rules: {
         'kosten[backlineEUR]': {number: true},
         'kosten[technikAngebot1EUR]': {number: true},
-        'kosten[technikAngebot2EUR]': {number: true},
         'kosten[saalmiete]': {number: true},
-        'staff[technikerEUR]': {number: true},
-        'staff[kasseEUR]': {number: true},
-        'staff[merchandiseEUR]': {number: true},
-        'staff[fremdpersonalEUR]': {number: true},
-        'werbung[plakat1EUR]': {number: true},
-        'werbung[plakat2EUR]': {number: true},
-        'werbung[genehmigungenEUR]': {number: true},
-        'werbung[flyerEUR]': {number: true},
-        'werbung[layoutingEUR]': {number: true}
+        'kosten[werbung1]': {number: true},
+        'kosten[werbung2]': {number: true},
+        'kosten[werbung3]': {number: true},
+        'kosten[personal]': {number: true},
+        'kosten[gagenEUR]': {number: true}
       },
 
       errorPlacement: function (error, element) {

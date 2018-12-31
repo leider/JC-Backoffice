@@ -20,7 +20,8 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'technik')
-              h2 Technik für #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}
+              h2.text-misc #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                small.text-misc Technik
               +checkbox('kosten[checked]', 'Technik ist geklärt', kosten.checked())
             +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'misc')
               .row
@@ -40,7 +41,7 @@ block content
                       +text('kosten[technikAngebot1]', 'Technik Zumietung', kosten.technikAngebot1())
                     .col-sm-3
                       +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
-                  +checkbox('kosten[fluegel]', 'Flügel stimmen', kosten.checked())
+                  +checkbox('kosten[fluegel]', 'Flügel stimmen', kosten.fluegel())
             +submitButtonsFor(veranstaltung, 'technik')
 
 block head

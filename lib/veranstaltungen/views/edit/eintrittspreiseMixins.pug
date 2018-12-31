@@ -1,9 +1,9 @@
 include ../../../../views/formComponents
 
-mixin singleselectPreis(name, label, value, values)
+mixin singleselectPreis(name, label, value, values, readonly)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true, title='Bitte wählen')
+    select.form-control.selectpicker(id=name, name=name, data-container='.container-fluid', data-show-subtext=true, title='Bitte wählen', disabled=readonly)
       if value.name === 'Individuell (Alt)'
         -var subtext = '(' + value.regulaer + ',00, ' + (value.regulaer - value.rabattErmaessigt) + ',00, ' + (value.regulaer - value.rabattMitglied) + ',00)'
         option(data-subtext=subtext, value = value, selected = true) Individuell (Alt)
@@ -13,73 +13,3 @@ mixin singleselectPreis(name, label, value, values)
 
 
 
-mixin preise(veranstaltung, optionen)
-  -var eintrittspreise = veranstaltung.eintrittspreise()
-  +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
-    .row
-      .col-3
-        +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile())
-      .col-3
-        .form-group
-          label.float-right Reg.:
-          b: +currencySpan(eintrittspreise.regulaer(), 'eintrittspreise[regulaer]', 'form-control-plaintext float-right')
-      .col-3
-        .form-group
-          label.float-right Erm.:
-          b: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittspreise[ermaessigt]', 'form-control-plaintext float-right')
-      .col-3
-        .form-group
-          label.float-right Mitgl.:
-          b: +currencySpan(eintrittspreise.mitglied(), 'eintrittspreise[mitglied]', 'form-control-plaintext float-right')
-    .row
-      .col-4
-        +currency('eintrittspreise[zuschuss]', 'Zuschuss', eintrittspreise.zuschuss())
-      .col-4
-        +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
-      .col-4
-        .form-group
-          label.float-right  Total:
-          b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
-
-mixin preiseScript(veranstaltung)
-  -var eintrittspreise = veranstaltung.eintrittspreise()
-  script.
-    function initPreiseScript() {
-      var preisprofilFeld = $('#eintrittspreise\\[preisprofil\\]');
-      var regulaer = $('#eintrittspreise\\[regulaer\\]');
-      var ermaessigt = $('#eintrittspreise\\[ermaessigt\\]');
-      var mitglied = $('#eintrittspreise\\[mitglied\\]');
-      var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
-      var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
-
-      function amountHandler() {
-        if (!preisprofilFeld.val()) return;
-        var preisprofil = JSON.parse(preisprofilFeld.val());
-        var altes = preisprofil.name === 'Individuell (Alt)';
-        var preis = altes ? #{eintrittspreise.regulaer()} : preisprofil.regulaer;
-        var preisErmaessigt = altes ? #{eintrittspreise.ermaessigt()} : (preis - preisprofil.rabattErmaessigt);
-        var preisMitglied = altes ? #{eintrittspreise.mitglied()} : (preis - preisprofil.rabattMitglied);
-
-        setEuro(regulaer, preis);
-        setEuro(ermaessigt, preisErmaessigt);
-        setEuro(mitglied, preisMitglied);
-
-        var erwarteteEinnahmen = intAmount(anzahlBesucher)
-          * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
-          + floatAmount(zuschuss);
-
-        setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
-        setEuro($('#eintrittTotal'), erwarteteEinnahmen);
-      }
-
-      [anzahlBesucher, zuschuss].forEach(function (field) {
-        field.keyup(amountHandler);
-      });
-
-      [anzahlBesucher, preisprofilFeld].forEach(function (field) {
-        field.change(amountHandler);
-      });
-
-      amountHandler();
-    };
-    $(document).ready(initPreiseScript);

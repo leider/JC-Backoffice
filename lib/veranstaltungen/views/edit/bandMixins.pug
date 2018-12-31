@@ -16,17 +16,6 @@ mixin band(kosten)
             p: b
               +currencySpan(null, 'gagenTotal', 'form-control-static float-right text-success')
       .row
-        .col-3(style='padding-right: 5px;')
-          +currency('kosten[agenturEUR]', 'Agentur', kosten.agenturEUR())
-        .col-3(style='padding-left: 2px;padding-right: 2px;')
-          +singleselect('kosten[agenturSteuer]', 'MWSt', kosten.agenturSteuer(), ['ohne', '7%', '19%'])
-        .col-3(style='padding-left: 2px;padding-right: 2px;')
-        .col-3(style='padding-left: 5px;')
-          .form-group
-            label.control-label Total:
-            p: b
-              +currencySpan(null, 'agenturTotal', 'form-control-static float-right text-success')
-      .row
         .col-6
           +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 
@@ -45,21 +34,10 @@ mixin bandScript
       gagenSteuer.change(updateGagenTotal);
       updateGagenTotal();
 
-      var agenturEUR = $('#kosten\\[agenturEUR\\]');
-      var agenturSteuer = $('#kosten\\[agenturSteuer\\]');
-      var agenturTotal = $('#agenturTotal');
-      function updateAgenturTotal() {
-        var eur = floatAmount(agenturEUR);
-        setEuro(agenturTotal, eur + (eur * floatAmount(agenturSteuer) / 100));
-      }
-      agenturEUR.keyup(updateAgenturTotal);
-      agenturSteuer.change(updateAgenturTotal);
-      updateAgenturTotal();
-
       function updateBandTotal() {
-        setEuro($('#bandTotal'), floatAmountForSpan(gagenTotal) + floatAmountForSpan(agenturTotal));
+        setEuro($('#bandTotal'), floatAmountForSpan(gagenTotal));
       }
-      [gagenTotal, agenturTotal].forEach(function (field) {
+      [gagenTotal].forEach(function (field) {
         field.change(updateBandTotal);
       })
       updateBandTotal();

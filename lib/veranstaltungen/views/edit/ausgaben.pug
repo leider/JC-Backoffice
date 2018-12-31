@@ -1,14 +1,28 @@
 extends ../../../../views/layout
 include ../../../../views/formComponents
-include werbungMixins
-include staffMixins
 include mixins
+include eintrittspreiseMixins
+
+
+mixin labelCurrencyRow(id, name, label, value)
+  .form-group.row
+    .col-sm-3
+    label.col-6.col-form-label(for=name) #{label}
+    .col-6.col-sm-3
+      .input-group
+        input.form-control.currency.text-right(id=id, type='text', value=formatNumberTwoDigits(value), name=name)
+        .input-group-append
+          span.input-group-text.pl-1.pr-1: b €
 
 block title
   | Veranstaltung
 
 block content
   -var kosten = veranstaltung.kosten()
+  -var kopf = veranstaltung.kopf()
+  -var salesreport = veranstaltung.salesreport()
+  -var eintrittspreise = veranstaltung.eintrittspreise()
+  -var kasse = veranstaltung.kasse()
   .col-12
     form#ausgabenform(action='/veranstaltungen/submit', method='post')
       +csrf
@@ -19,51 +33,198 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'ausgaben')
-              h2 Kosten für #{veranstaltung.datumForDisplayMitKW()}<br>
-                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
-              +checkbox('kosten[checked]', 'Technik ist geklärt', kosten.checked())
+              h2.text-costs #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                small.text-costs Kalkulation
         .row
           .col-md-6
-            +legendMitBody('saalmiete', 'Saalmiete', 'saalmietePreis', 'costs')
+            +legendMitBody('ausgaben', 'Ausgaben', 'ausgabenTotal', 'costs')
               .row
-                .col-sm-9
-                  +text('kosten[saal]', 'Location (von anderer Seite)', veranstaltung.kopf().ort(), null,null, true)
-                .col-sm-3
-                  +currency('kosten[saalmiete]', 'Betrag', kosten.saalmiete())
+                .col-3(style='padding-right: 5px;')
+                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+                .col-3(style='padding-left: 2px;padding-right: 2px;')
+                  +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
+                .col-3(style='padding-left: 2px;padding-right: 2px;')
+                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+                .col-3(style='padding-left: 5px;')
+                  .form-group
+                    label.control-label Total:
+                    p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
+              +labelCurrencyRow('backlineEUR', 'kosten[backlineEUR]', 'Backline Rockshop', kosten.backlineRockshop())
+              +labelCurrencyRow('technikAngebot1EUR', 'kosten[technikAngebot1EUR]', 'Technik Zumietung', kosten.technikAngebot1EUR())
+              +labelCurrencyRow('saalmiete', 'kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+              +labelCurrencyRow('werbung1', 'kosten[werbung1]', 'Werbung 1', kosten.werbung1())
+              +labelCurrencyRow('werbung2', 'kosten[werbung2]', 'Werbung 2', kosten.werbung2())
+              +labelCurrencyRow('werbung3', 'kosten[werbung3]', 'Werbung 3', kosten.werbung3())
+              +labelCurrencyRow('personal', 'kosten[personal]', 'Personal (unbar)', kosten.personal())
+              if kasse.istFreigegeben()
+                .form-group.row
+                  .col-sm-3
+                  label.col-6.col-form-label Abendkasse (ohne Gage)
+                  .col-6.col-sm-3
+                    b: +currencySpan(kasse.ausgabenOhneGage(), 'kasseAusgaben', 'form-control-plaintext float-right')
+              .row
+                .col-12
+                  +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
+
           .col-md-6
-            +marketingUndPlakate(veranstaltung.werbung(), optionen)
+            +legendMitBody('preise', 'Eintritt/Zuschuss', 'eintrittTotal')
+              .row
+                .col-3.col-sm-6
+                  +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
+                .col-3.col-sm-2
+                  .form-group
+                    label.float-right Reg.:
+                    b: +currencySpan(eintrittspreise.regulaer(), 'eintrittspreise[regulaer]', 'form-control-plaintext float-right')
+                .col-3.col-sm-2
+                  .form-group
+                    label.float-right Erm.:
+                    b: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittspreise[ermaessigt]', 'form-control-plaintext float-right')
+                .col-3.col-sm-2
+                  .form-group
+                    label.float-right Mitgl.:
+                    b: +currencySpan(eintrittspreise.mitglied(), 'eintrittspreise[mitglied]', 'form-control-plaintext float-right')
+              if kasse.istFreigegeben()
+                .row
+                  .col-4
+                    +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                  .col-4
+                    .form-group
+                      label.float-right Abendkasse (Tickets):
+                      b: +currencySpan(kasse.einnahmeTicketsEUR(), 'kasseTickets', 'form-control-plaintext float-right')
+                  .col-4
+                    .form-group
+                      label.float-right  Total:
+                      b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
+              else
+                .row
+                  .col-4
+                    +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                  .col-4
+                    +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
+                  .col-4
+                    .form-group
+                      label.float-right  Total:
+                      b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
+
+              if veranstaltung.reservixID()
+                .row
+                  .col-4
+                    .form-group
+                      label.float-right Besucher (Reservix):
+                      b: span#anzahlBesucherReservix.text-right.float-right.form-control-plaintext #{salesreport.anzahlRegulaer()}
+                  .col-4
+                    .form-group
+                      label.float-right Tickets Brutto (Reservix):
+                      b: +currencySpan(salesreport.bruttoUmsatz(), 'reservixBrutto', 'form-control-plaintext float-right')
+                  .col-4
+                    .form-group
+                      label.float-right Tickets Netto (Reservix):
+                      b: +currencySpan(salesreport.nettoUmsatz(), 'reservixNetto', 'form-control-plaintext float-right text-success')
+
+            +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
+              table.table.table-sm.table-striped
+                tr
+                  th(align='right', style='text-align: right;') Einnahmen
+                  th(align='right', style='text-align: right;') Kosten
+                  th(align='right', style='text-align: right;') Überschuss
+                tr
+                  td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
+                  td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                  td(align='right'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
+                if kosten.deal() !== 'ohne'
+                  tr
+                    th Anteilig an Band (#{kosten.deal()}):
+                    td
+                    td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
+
+
         .row
           .col-12
-            hr
             +submitButtonsFor(veranstaltung, 'ausgaben')
-
-block head
-  link(rel='stylesheet', href='/stylesheets/fileinput.css')
 
 block scripts
   script(src='/clientscripts/fileinput.min.js')
+  -var showKasse = kasse.istFreigegeben()
   script.
-    $(document).ready(function initAusgabenScript() {
-      var backlineEUR = $('#kosten\\[backlineEUR\\]');
-      var technikAngebot1EUR = $('#kosten\\[technikAngebot1EUR\\]');
-      var technikAngebot2EUR = $('#kosten\\[technikAngebot2EUR\\]');
+    $(document).ready(function initKalkulationScript() {
+      var backlineEUR = $('#backlineEUR');
+      var technikAngebot1EUR = $('#technikAngebot1EUR');
+      var saalmiete = $('#saalmiete');
+      var werbung1 = $('#werbung1');
+      var werbung2 = $('#werbung2');
+      var werbung3 = $('#werbung3');
+      var personal = $('#personal');
+      var ausgabenTotal = $('#ausgabenTotal');
 
-      function updateBacklinePreis() {
-        setEuro($('#backlinePreis'), floatAmount(backlineEUR) + floatAmount(technikAngebot1EUR) + floatAmount(technikAngebot2EUR));
-      }
-      backlineEUR.keyup(updateBacklinePreis);
-      technikAngebot1EUR.keyup(updateBacklinePreis);
-      technikAngebot2EUR.keyup(updateBacklinePreis);
-      updateBacklinePreis();
+      var gagenEUR = $('#kosten\\[gagenEUR\\]');
+      var gagenSteuer = $('#kosten\\[gagenSteuer\\]');
+      var gagenTotal = $('#gagenTotal');
 
-      var saalmiete = $('#kosten\\[saalmiete\\]');
-      function updateSaalmietePreis() {
-        setEuro($('#saalmietePreis'), floatAmount(saalmiete));
+      function updateAusgabenTotal() {
+        var summe = floatAmount(backlineEUR) + floatAmount(technikAngebot1EUR) + floatAmount(saalmiete)
+          + floatAmount(werbung1) + floatAmount(werbung2) + floatAmount(werbung3) + floatAmount(personal)
+          + floatAmountForSpan(gagenTotal);
+        setEuro(ausgabenTotal, summe);
       }
-      saalmiete.keyup(updateSaalmietePreis);
-      updateSaalmietePreis();
+
+      function updateGagenTotal() {
+        var eur = floatAmount(gagenEUR);
+        var mwst = (eur * floatAmount(gagenSteuer) / 100);
+        setEuro(gagenTotal, eur + mwst);
+      }
+
+      gagenEUR.keyup(updateGagenTotal);
+      gagenSteuer.change(updateGagenTotal);
+      gagenTotal.change(updateAusgabenTotal);
+
+      [backlineEUR, technikAngebot1EUR, saalmiete, werbung1, werbung2, werbung3, personal].forEach(function (field) {
+        field.keyup(updateAusgabenTotal);
+      });
+
+      updateGagenTotal();
+      updateAusgabenTotal();
+
+
+      // Einnahmen
+      var preisprofilFeld = $('#eintrittspreise\\[preisprofil\\]');
+      var regulaer = $('#eintrittspreise\\[regulaer\\]');
+      var ermaessigt = $('#eintrittspreise\\[ermaessigt\\]');
+      var mitglied = $('#eintrittspreise\\[mitglied\\]');
+      var anzahlBesucher = $('#eintrittspreise\\[erwarteteBesucher\\]');
+      var zuschuss = $('#eintrittspreise\\[zuschuss\\]');
+
+      function amountHandler() {
+        if (!preisprofilFeld.val()) return;
+        var preisprofil = JSON.parse(preisprofilFeld.val());
+        var altes = preisprofil.name === 'Individuell (Alt)';
+        var preis = altes ? #{eintrittspreise.regulaer()} : preisprofil.regulaer;
+        var preisErmaessigt = altes ? #{eintrittspreise.ermaessigt()} : (preis - preisprofil.rabattErmaessigt);
+        var preisMitglied = altes ? #{eintrittspreise.mitglied()} : (preis - preisprofil.rabattMitglied);
+
+        setEuro(regulaer, preis);
+        setEuro(ermaessigt, preisErmaessigt);
+        setEuro(mitglied, preisMitglied);
+
+        var erwarteteEinnahmen = floatAmount(zuschuss) + (#{showKasse}
+            ? #{kasse.einnahmeTicketsEUR()}
+            : intAmount(anzahlBesucher) * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
+        );
+
+        setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
+        setEuro($('#eintrittTotal'), erwarteteEinnahmen + #{salesreport.nettoUmsatz()});
+      }
+
+      [anzahlBesucher, zuschuss].forEach(function (field) {
+        field.keyup(amountHandler);
+      });
+
+      [anzahlBesucher, preisprofilFeld].forEach(function (field) {
+        field.change(amountHandler);
+      });
+
+      amountHandler();
     });
 
-  +marketingUndPlakateScripts
-  +staffScript
+
+
   script(src='/clientscripts/check-ausgabenform.js')

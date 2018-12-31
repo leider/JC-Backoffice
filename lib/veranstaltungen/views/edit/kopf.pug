@@ -36,7 +36,8 @@ block content
             .page-header
               +submitButtonsFor(veranstaltung, 'kopf')
               if (veranstaltung.id())
-                h2 #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}
+                h2.text-general #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                  small.text-general Allgemein
               else
                 h2 Neue Veranstaltung
               if accessrights.isBookingTeam()
@@ -112,10 +113,12 @@ block content
                 .col-3
                   +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
               .row
-                .col-8
+                .col-sm-6
                   +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
-                .col-4
-                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+                .col-6.col-sm-3
+                  +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR())
+                .col-6.col-sm-3
+                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
               .row
                 .col-6.col-sm-4
                   +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue())
@@ -147,7 +150,6 @@ block content
                   +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
         .row
           .col-12
-            hr
             +submitButtonsFor(veranstaltung, 'kopf')
 
 block head

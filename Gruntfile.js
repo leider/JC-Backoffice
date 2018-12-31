@@ -206,7 +206,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-puglint');
 
-  grunt.registerTask('prepare', ['clean', 'copy']);
+  grunt.registerTask('prepare', ['eslint', 'puglint', 'clean', 'copy']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
   grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
   grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);
