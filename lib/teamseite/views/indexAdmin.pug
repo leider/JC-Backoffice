@@ -90,7 +90,7 @@ mixin panelView(veranstaltungen)
           table(width='100%')
             tr
               td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')
-              td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.kosten(), 'ausgaben')
+              td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.kosten(), 'technik')
 
 
         div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
