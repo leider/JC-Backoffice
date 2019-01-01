@@ -101,11 +101,10 @@ block content
                   td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
                   td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
                   td(align='right'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
-                if kosten.deal() !== 'ohne'
-                  tr
-                    th Anteilig an Band:
-                    td
-                    td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
+                tr#dealrow
+                  th Anteilig an Band:
+                  td
+                  td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
 
 
           .col-md-6
@@ -250,10 +249,20 @@ block scripts
         }
       }
 
-      [dealProzent, ausgabenTotal, eintrittTotal].forEach(function (field) {
+      function dealProzentHandler() {
+        if (dealProzent.val() === 'ohne') {
+          $('#dealrow').hide();
+        } else {
+          $('#dealrow').show();
+        }
+        dealHandler();
+      }
+
+      dealProzent.change(dealProzentHandler);
+      [ausgabenTotal, eintrittTotal].forEach(function (field) {
         field.change(dealHandler);
       })
-
+      dealProzentHandler();
     });
 
 

@@ -17,8 +17,8 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'presse')
-              h2 Pressetext für #{veranstaltung.datumForDisplay()}<br>
-                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
+              h2.text-presse #{veranstaltung.kopf().titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                small.text-presse Presse
               +checkbox('presse[checked]', 'Ist so OK', presse.checked())
             +legendMitBody('event', 'Pressematerial', null, 'presse')
               .row

@@ -71,7 +71,6 @@
   "mailtransport": {"module": "./lib/mailsender/mailtransport"},
   "nodemailerTransport": {"module": "./lib/mailsender/nodemailerTransport"},
   "message": {"module": "./lib/mailsender/message"},
-  "hotelMails": {"module": "./lib/mailsender/hotelMails"},
   "mailstore": {"module": "./lib/mailsender/mailstore"},
   "mailRule": {"module": "./lib/mailsender/mailRule"},
 

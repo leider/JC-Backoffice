@@ -28,20 +28,8 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'hotel')
-              h2 Hotel für #{veranstaltung.datumForDisplay()}<br>
-                small #{veranstaltung.kopf().titel()} #{veranstaltung.kopf().presseIn()}
-        .row
-          .col-12
-            .btn-group
-              a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reminder', title='Erinnerung')
-                i.fas.fa-envelope.fa-fw.fa-lg
-                | &nbsp;Infomail an #{hotelMailReceiver}
-              a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/preview', title='Vorschau')
-                i.fas.fa-envelope.fa-fw.fa-lg
-                | &nbsp;Reservierungsvorschau an mich
-              a.btn.btn-primary(href=veranstaltung.fullyQualifiedUrl() + '/hotelMail/reservation', title='Reservierung')
-                i.far.fa-envelope.fa-fw.fa-lg
-                | &nbsp;Reservierung an Hotel
+              h2.text-hotel #{veranstaltung.kopf().titel()} am #{veranstaltung.datumForDisplayShort()}<br>
+                small.text-hotel Hotel / Transport
         .row
           .col-md-6
             +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')
@@ -62,14 +50,7 @@ block content
               .row
                 .col-12
                   +checkbox('hotelpreise', 'Preise als Default übernehmen')
-              .row
-                for step in unterkunft.workflow()
-                  .col-6
-                    .checkbox.abc-checkbox.abc-checkbox-success(style='margin-top: 0; margin-bottom: 0;')
-                      input.hotelstep(type='checkbox', id=step, name=step, checked=unterkunft.isChecked(step))
-                      label(for=step)
-                        | #{step}
-              
+
           .col-md-6
             +legendMitBody('transport', 'Transport', 'transportTotal', 'hotel')
               +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
@@ -78,9 +59,18 @@ block content
                   +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
                 .col-md-6
                   +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
+            .row
+              .col-6
+                +checkbox('unterkunft[angefragt]', 'Hotel Angefragt', unterkunft.angefragt())
+              .col-6
+                +checkbox('unterkunft[bestaetigt]', 'Hotel Bestätigt', unterkunft.bestaetigt())
+            .row
+              .col-12
+                p #{''}
+                a#reservierungsmail.btn.btn-success(href='#') Reservierungsmail
+
         .row
           .col-12
-            hr
             +submitButtonsFor(veranstaltung, 'hotel')
 
 block head
@@ -101,7 +91,7 @@ block scripts
        })
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       var einzelEUR = $('#unterkunft\\[einzelEUR\\]');
       var einzelNum = $('#unterkunft\\[einzelNum\\]');
       var doppelEUR = $('#unterkunft\\[doppelEUR\\]');
@@ -111,33 +101,38 @@ block scripts
       var startDateField = $('#unterkunft\\[anreiseDate\\]');
       var endDateField = $('#unterkunft\\[abreiseDate\\]');
 
-      updatePreise = function(preise) {
-        setEuro(einzelEUR, preise.einzelEUR);
-        setEuro(doppelEUR, preise.doppelEUR);
-        setEuro(suiteEUR, preise.suiteEUR);
+      updatePreise = function (preise) {
+        setEuroInput(einzelEUR, preise.einzelEUR);
+        setEuroInput(doppelEUR, preise.doppelEUR);
+        setEuroInput(suiteEUR, preise.suiteEUR);
       }
-      
-      function updateRoomsTotal() {
+
+      function anzahlTage() {
         var startDate = startDateField.datepicker('getDate');
         var endDate = endDateField.datepicker('getDate');
-        var days = startDate && endDate ? moment(endDate).diff(startDate, 'days') : 0;
-        
-        var total = floatAmount(einzelEUR) * intAmount(einzelNum) * days 
+
+        return startDate && endDate ? Math.round((endDate.getTime() - startDate.getTime()) / 86400000) : 0;
+      }
+
+      function updateRoomsTotal() {
+        var days = anzahlTage();
+        var total = floatAmount(einzelEUR) * intAmount(einzelNum) * days
           + floatAmount(doppelEUR) * intAmount(doppelNum) * days
           + floatAmount(suiteEUR) * intAmount(suiteNum) * days;
         setEuro($('#roomsTotal'), total);
         $('#naechte').html(days);
       }
 
-      [einzelEUR, doppelEUR, suiteEUR, startDateField, endDateField].forEach(function(field) {
+      [einzelEUR, doppelEUR, suiteEUR, startDateField, endDateField].forEach(function (field) {
         field.keyup(updateRoomsTotal);
       });
-      [einzelNum, doppelNum, suiteNum, startDateField, endDateField].forEach(function(field) {
+      [einzelNum, doppelNum, suiteNum, startDateField, endDateField].forEach(function (field) {
         field.change(updateRoomsTotal);
       });
       updateRoomsTotal();
 
       var transportEUR = $('#unterkunft\\[transportEUR\\]');
+
       function updateTransportTotal() {
         setEuro($('#transportTotal'), floatAmount(transportEUR))
       }
@@ -145,13 +140,34 @@ block scripts
       transportEUR.keyup(updateTransportTotal);
       updateTransportTotal();
 
-      $('.hotelstep').click(function () {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl() + "/hotelStepClicked"}', {
-          data: {
-            step: this.name,
-            checked: this.checked
-          }
-        });
+      $('#reservierungsmail').click(function () {
+        var hotelEmail = $('#hotel\\[email\\]');
+        var hotelName = $('#hotel\\[name\\]');
+        var anzahlEinzel = intAmount(einzelNum);
+        var anzahlDoppel = intAmount(doppelNum);
+        var anzahlSuite = intAmount(suiteNum);
+        var tage = anzahlTage();
+        var gaeste = $('#unterkunft\\[kommentar\\]').val();
+
+        var startDate = new Intl.DateTimeFormat('de-de').format(startDateField.datepicker('getDate'));
+        var endDate = new Intl.DateTimeFormat('de-de').format(endDateField.datepicker('getDate'));
+
+        var email = encodeURIComponent(hotelName.val() + '<' + hotelEmail.val() + '>');
+        var subject = encodeURIComponent('Jazzclub Reservierungsanfrage für ' + startDate);
+        var body = encodeURIComponent(
+          'Sehr geehrte Damen und Herren,\r\n' +
+          'bitte reservieren Sie für den Jazzclub Karlsruhe e.V.:\r\n' +
+          (!!anzahlEinzel ? (anzahlEinzel + ' Einzelzimmer,\r\n') : '') +
+          (!!anzahlDoppel ? (anzahlDoppel + ' Doppelzimmer,\r\n') : '') +
+          (!!anzahlSuite ? (anzahlSuite + ' Suite(n),\r\n') : '') +
+          '\r\nfür ' + tage + ' Nächte.\r\n' +
+          'Anreise: ' + startDate + '\r\n' +
+          'Abreise: ' + endDate + '\r\n' +
+          '\r\nGäste:\r\n' + gaeste
+        );
+
+        var href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
+        window.location.href = href;
       });
     });
   script(src='/clientscripts/check-hotelform.js')
