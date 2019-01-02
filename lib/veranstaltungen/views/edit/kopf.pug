@@ -36,121 +36,123 @@ block content
             .page-header
               +submitButtonsFor(veranstaltung, 'kopf')
               if (veranstaltung.id())
-                h2.text-general #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
-                  small.text-general Allgemein
+                h2.text-general #{kopf.titel()} <br>
+                  small.text-general am #{veranstaltung.datumForDisplayShort()}
               else
-                h2 Neue Veranstaltung
-              if accessrights.isBookingTeam()
-                +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
-              else
-                +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
-        .row
-          .col-md-6
-            +legendMitBody('event', 'Event')
-              .row
-                .col-sm-6
-                  +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
-                .col-6.col-sm-3
-                  +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
-                .col-6.col-sm-3
-                  +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
-
-              .row
-                .col-6
-                  .row
-                    .col-6.pl-2.pr-1
-                      +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
-                    .col-6.pl-1.pr-2
-                      +time('startTime', veranstaltung.startMoment().format('LT'))
-                .col-6
-                  .row
-                    .col-6.pl-2.pr-1
-                      +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
-                    #dates.col-6.pl-1.pr-2
-                      +time('endTime', veranstaltung.endMoment().format('LT'))
-
-              .row
-                .col-4
-                  +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
-                  +hidden('kopf[pressename]', kopf.pressename())
-                  +hidden('kopf[presseIn]', kopf.presseIn())
-                .col-4
-                  +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
-                .col-4
-                  +currency('kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
-
-              .row
-                .col-4
-                  .form-group
-                    label(for='kopf[kooperation]')
-                      span.tooltiplabel(data-original-title='Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll') Koop (Rechnung):&nbsp;
-                        i.fas.fa-question-circle
-                    .input-group
-                      select.form-control.selectpicker(id='kopf[kooperation]', name='kopf[kooperation]')
-                        each val in optionen.kooperationen()
-                          option(value = val, selected = kopf.kooperation() === val) #{val}
-                      .input-group-append
-                        .input-group-text.pl-1.pr-0
-                          .form-check.abc-checkbox.abc-checkbox-success
-                            -var checkID = 'kopf[rechnungAnKooperation]'
-                            input.form-check-input(type='checkbox', id=checkID, name=checkID, checked=(kopf.rechnungAnKooperation() ? 'true' : undefined))
-                            label.form-check-label(for=checkID) #{''}
-
-                .col-4
-                  +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
-                .col-4
-                  +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres())
-
-              .row
-                .col-12
-                  hr
-            +legendMitBody('artist', 'Künstler')
-              .row
-                .col-6
-                  +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
-                .col-3
-                  +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
-                .col-3
-                  +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
-              .row
-                .col-sm-6
-                  +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
-                .col-6.col-sm-3
-                  +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR())
-                .col-6.col-sm-3
-                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
-              .row
-                .col-6.col-sm-4
-                  +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue())
-                .col-6.col-sm-4
-                  +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
-                .col-6.col-sm-4
-                  +checkbox('artist[brauchtHotel]', 'Braucht Hotel', artist.brauchtHotel())
-
-            +legendMitBody('kommentar', 'Kommentar')
-              .row
-                .col-sm-12
-                  +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
-
-          .col-md-6
-            +kontakt(veranstaltung, optionen.agenturen(), 'Agentur / Verantwortlicher', 'agentur')
-            +legendMitBody('vertrag', 'Vertrag')
-              .row
-                .col-md-6
-                  +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
-                .col-md-6
-                  +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
-              if user && (accessrights.isBookingTeam())
+                h2.text-general Neue Veranstaltung
+            +tabsFor(veranstaltung, 'kopf')
+            .tab-content
+              .tab-pane.show.active
                 .row
-                  .col-12
-                    a.btn.btn-general.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
-                      | Vertrag generieren
-              .row
-                .col-12
-                  +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
-        .row
-          .col-12
-            +submitButtonsFor(veranstaltung, 'kopf')
+                  .col-md-6
+                    +legendMitBody('event', 'Event')
+                      .row
+                        .col-sm-6
+                          +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
+                        .col-6.col-sm-3
+                          +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
+                        .col-6.col-sm-3
+                          +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
+
+                      .row
+                        .col-6
+                          .row
+                            .col-6.pl-2.pr-1
+                              +date('startDate', 'Start', veranstaltung.startMoment().format('L'), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().format('L'))
+                            .col-6.pl-1.pr-2
+                              +time('startTime', veranstaltung.startMoment().format('LT'))
+                        .col-6
+                          .row
+                            .col-6.pl-2.pr-1
+                              +date('endDate', 'Ende', veranstaltung.endMoment().format('L'), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().format('L'))
+                            #dates.col-6.pl-1.pr-2
+                              +time('endTime', veranstaltung.endMoment().format('LT'))
+
+                      .row
+                        .col-4
+                          +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
+                          +hidden('kopf[pressename]', kopf.pressename())
+                          +hidden('kopf[presseIn]', kopf.presseIn())
+                        .col-4
+                          +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+                        .col-4
+                          +currency('kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+
+                      .row
+                        .col-4
+                          .form-group
+                            label(for='kopf[kooperation]')
+                              span.tooltiplabel(data-original-title='Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll') Koop (Rechnung):&nbsp;
+                                i.fas.fa-question-circle
+                            .input-group
+                              select.form-control.selectpicker(id='kopf[kooperation]', name='kopf[kooperation]')
+                                each val in optionen.kooperationen()
+                                  option(value = val, selected = kopf.kooperation() === val) #{val}
+                              .input-group-append
+                                .input-group-text.pl-1.pr-0
+                                  .form-check.abc-checkbox.abc-checkbox-success
+                                    -var checkID = 'kopf[rechnungAnKooperation]'
+                                    input.form-check-input(type='checkbox', id=checkID, name=checkID, checked=(kopf.rechnungAnKooperation() ? 'true' : undefined))
+                                    label.form-check-label(for=checkID) #{''}
+
+                        .col-4
+                          +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
+                        .col-4
+                          +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres())
+
+                      .row
+                        .col-12
+                          .row
+                            .col-md-6
+                              if accessrights.isBookingTeam()
+                                +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
+                              else
+                                +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
+
+                    +legendMitBody('artist', 'Künstler')
+                      .row
+                        .col-6
+                          +text('artist[bandname]', 'Bandname', artist.bandname(), 'wird für den Vertrag benötigt')
+                        .col-3
+                          +number('artist[numMusiker]', 'Musiker', artist.numMusiker(), null, '1', '30')
+                        .col-3
+                          +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
+                      .row
+                        .col-sm-6
+                          +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
+                        .col-6.col-sm-3
+                          +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR())
+                        .col-6.col-sm-3
+                          +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+                      .row
+                        .col-6.col-sm-4
+                          +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue())
+                        .col-6.col-sm-4
+                          +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
+                        .col-6.col-sm-4
+                          +checkbox('artist[brauchtHotel]', 'Braucht Hotel', artist.brauchtHotel())
+
+                    +legendMitBody('kommentar', 'Kommentar')
+                      .row
+                        .col-sm-12
+                          +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
+
+                  .col-md-6
+                    +kontakt(veranstaltung, optionen.agenturen(), 'Agentur / Verantwortlicher', 'agentur')
+                    +legendMitBody('vertrag', 'Vertrag')
+                      .row
+                        .col-md-6
+                          +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
+                        .col-md-6
+                          +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
+                      if user && (accessrights.isBookingTeam())
+                        .row
+                          .col-12
+                            a.btn.btn-general.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                              | Vertrag generieren
+                      .row
+                        .col-12
+                          +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
 
 block head
   link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')

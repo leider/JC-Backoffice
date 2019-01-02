@@ -51,99 +51,97 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
-              h2.text-kasse #{veranstaltung.kopf().titel()} am #{veranstaltung.datumForDisplayShort()}<br>
-                small.text-kasse Abendkasse
-        if !accessrights.darfKasseFreigeben() && freigegeben
-          .row
-            .col-12
-              .btn-group.float-right
-                a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
-                  i.fas.fa-lock.fa-fw.fa-lg
-                  | &nbsp;Kasse ist freigeben
-        if accessrights.darfKasseFreigeben()
-          if !freigegeben
-            .row
-              .col-12
-                .btn-group.float-right
-                  a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
-                    i.fas.fa-unlock.fa-fw.fa-lg
-                    | &nbsp;Kasse freigeben
-          else
-            .row
-              .col-12
-                .btn-group.float-right
-                  a.btn.btn-danger(data-toggle='modal', data-target='#entsperrendialog', href='#')
-                    i.fas.fa-lock.fa-fw.fa-lg
-                    | &nbsp;Kasse ist freigeben
-
-        .row
-          .col-md-6
-            +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
-              .row
-                .col-4
-                  +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), 'Alles hier eingegebene gilt als Einnahme für "Deal"', null, freigegeben)
-                .col-4
-                  +number('kasse[anzahlBesucherAK]', 'Anzahl (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
-                .col-4
-                  +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage', null, freigegeben)
-              .row
-                .col-8
-                  +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
-                .col-4
-                  +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR(), null, null, freigegeben)
-              .row
-                .col-8
-                  +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
-                .col-4
-                  +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
-
-
-          .col-md-6
-            +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
-              .row
-                .col-sm-4.col-6
-                  if !kosten.gageBAR()
-                    +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
+              h2.text-kasse #{veranstaltung.kopf().titel()} <br>
+                small.text-kasse am #{veranstaltung.datumForDisplayShort()}
+            +tabsFor(veranstaltung, 'kasse')
+            .tab-content
+              .tab-pane.show.active
+                if !accessrights.darfKasseFreigeben() && freigegeben
+                  .row
+                    .col-12
+                      .btn-group.float-right
+                        a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
+                          i.fas.fa-lock.fa-fw.fa-lg
+                          | &nbsp;Kasse ist freigeben
+                if accessrights.darfKasseFreigeben()
+                  if !freigegeben
+                    .row
+                      .col-12
+                        .btn-group.float-right
+                          a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
+                            i.fas.fa-unlock.fa-fw.fa-lg
+                            | &nbsp;Kasse freigeben
                   else
-                    .form-group
-                      label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
-                        i.fas.fa-exclamation-triangle :
-                      input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
-                .col-sm-4.col-6
-                  +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR(), null, null, freigegeben)
-                .col-sm-4.col-6
-                  +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR(), null, null, freigegeben)
-              .row
-                .col-8
-                  +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text(), null, null, freigegeben)
-                .col-4
-                  +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR(), null, null, freigegeben)
-              .row
-                .col-8
-                  +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text(), null, null, freigegeben)
-                .col-4
-                  +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR(), null, null, freigegeben)
-              .row
-                .col-8
-                  +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text(), null, null, freigegeben)
-                .col-4
-                  +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR(), null, null, freigegeben)
-              .row
-                .col-sm-9.col-6
-                .col-sm-3.col-6
-                  +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR(), null, null, freigegeben)
-        .row
-          .col-12
-            .row
-              .col-sm-3.col-6
-                +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
-              .col-sm-3.col-6
-                +currency('endbestandEUR', 'Endbestand', kasse.endbestandEUR(), null, null, true)
+                    .row
+                      .col-12
+                        .btn-group.float-right
+                          a.btn.btn-danger(data-toggle='modal', data-target='#entsperrendialog', href='#')
+                            i.fas.fa-lock.fa-fw.fa-lg
+                            | &nbsp;Kasse ist freigeben
 
-        .row
-          .col-12
-            hr
-            +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
+                .row
+                  .col-md-6
+                    +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
+                      .row
+                        .col-4
+                          +currency('kasse[einnahmeTicketsEUR]', 'Tickets (AK)', kasse.einnahmeTicketsEUR(), 'Alles hier eingegebene gilt als Einnahme für "Deal"', null, freigegeben)
+                        .col-4
+                          +number('kasse[anzahlBesucherAK]', 'Anzahl (AK)', kasse.anzahlBesucherAK(), 'Anzahl der bar bezahlten Tickets', 0, 999, freigegeben)
+                        .col-4
+                          +currency('kasse[einnahmeBankEUR]', 'Bareinlage', kasse.einnahmeBankEUR(), 'z.B. Gage', null, freigegeben)
+                      .row
+                        .col-8
+                          +text('kasse[einnahmeSonstiges1Text]', 'Sonstiges', kasse.einnahmeSonstiges1Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
+                        .col-4
+                          +currency('kasse[einnahmeSonstiges1EUR]', 'Betrag', kasse.einnahmeSonstiges1EUR(), null, null, freigegeben)
+                      .row
+                        .col-8
+                          +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
+                        .col-4
+                          +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
+
+
+                  .col-md-6
+                    +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
+                      .row
+                        .col-sm-4.col-6
+                          if !kosten.gageBAR()
+                            +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
+                          else
+                            .form-group
+                              label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                                i.fas.fa-exclamation-triangle :
+                              input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+                        .col-sm-4.col-6
+                          +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR(), null, null, freigegeben)
+                        .col-sm-4.col-6
+                          +currency('kasse[ausgabeHelferEUR]', 'Personal', kasse.ausgabeHelferEUR(), null, null, freigegeben)
+                      .row
+                        .col-8
+                          +text('kasse[ausgabeSonstiges1Text]', 'Sonstiges', kasse.ausgabeSonstiges1Text(), null, null, freigegeben)
+                        .col-4
+                          +currency('kasse[ausgabeSonstiges1EUR]', 'Betrag', kasse.ausgabeSonstiges1EUR(), null, null, freigegeben)
+                      .row
+                        .col-8
+                          +text('kasse[ausgabeSonstiges2Text]', 'Sonstiges', kasse.ausgabeSonstiges2Text(), null, null, freigegeben)
+                        .col-4
+                          +currency('kasse[ausgabeSonstiges2EUR]', 'Betrag', kasse.ausgabeSonstiges2EUR(), null, null, freigegeben)
+                      .row
+                        .col-8
+                          +text('kasse[ausgabeSonstiges3Text]', 'Sonstiges', kasse.ausgabeSonstiges3Text(), null, null, freigegeben)
+                        .col-4
+                          +currency('kasse[ausgabeSonstiges3EUR]', 'Betrag', kasse.ausgabeSonstiges3EUR(), null, null, freigegeben)
+                      .row
+                        .col-sm-9.col-6
+                        .col-sm-3.col-6
+                          +currency('kasse[ausgabeBankEUR]', 'An Bank', kasse.ausgabeBankEUR(), null, null, freigegeben)
+                .row
+                  .col-12
+                    .row
+                      .col-sm-3.col-6
+                        +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
+                      .col-sm-3.col-6
+                        +currency('endbestandEUR', 'Endbestand', kasse.endbestandEUR(), null, null, true)
 
 block scripts
   script.

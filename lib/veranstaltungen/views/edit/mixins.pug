@@ -7,21 +7,37 @@ mixin submitButtonsFor(veranstaltung, current, nosave)
         a.btn.btn-light(href='/veranstaltungen/zukünftige', data-toggle='tooltip', title='Zurück zur Liste'): i.fas.fa-list.fa-fw
       else
         a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl(), data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw
-      +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
-      +submitButton(veranstaltung, current, 'technik', 'Technik', 'btn-misc', 'fa-microphone-alt')
-      +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
-      if veranstaltung.artist().brauchtHotel()
-        +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')
-    +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'btn-kasse', 'fa-money-bill-alt')
-    +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'btn-kasse', 'fa-print')
     if accessrights.isOrgaTeam()
-      +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper')
       if veranstaltung.url() && !veranstaltung.kopf().confirmed()
         a(class='btn btn-light', href=veranstaltung.fullyQualifiedUrl() + '/delete') Löschen
       if veranstaltung.url()
-        +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
+        +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'light', 'fa-copy ')
 
     if !nosave
       +hidden('returnTo', current)
       button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.far.fa-save.fa-fw
 
+mixin tabsFor(veranstaltung, current)
+  ul.nav.nav-tabs
+    if accessrights.isOrgaTeam()
+      +tab(veranstaltung, current, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
+      +tab(veranstaltung, current, 'technik', 'Technik', 'misc', 'fa-microphone-alt')
+      +tab(veranstaltung, current, 'ausgaben', 'Kalkulation', 'costs', 'fa-euro-sign')
+      if veranstaltung.artist().brauchtHotel()
+        +tab(veranstaltung, current, 'hotel', 'Hotel', 'hotel', 'fa-bed')
+    +tab(veranstaltung, current, 'kasse', 'Abendkasse', 'kasse', 'fa-money-bill-alt')
+    +tab(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'kasse', 'fa-print')
+    if accessrights.isOrgaTeam()
+      +tab(veranstaltung, current, 'presse', 'Presse', 'presse', 'fa-newspaper')
+
+mixin tab(veranstaltung, current, name, title, btnstyle, icon)
+  if veranstaltung.url()
+    li(class='nav-item' + (current === name ? ' text-' : ' color-') + btnstyle )
+      a(class='nav-link inherit-color' + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
+        i(class='fas fa-fw ' + icon)
+        b.d-none.d-md-inline #{' '} #{title}
+  else
+    li(class='nav-item color-' + btnstyle)
+      a.nav-link.inherit-color(href='/' + name, title=title)
+        i(class='fas fa-fw ' + icon)
+        b.d-none.d-md-inline #{' '}  #{title}

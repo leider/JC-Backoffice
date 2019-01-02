@@ -42,6 +42,34 @@ $color-sonst2-border: darken($color-sonst2, 5%);
 
 $color-festival: #9FC442;
 
+$jc_colors: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$jc_colors: map-merge(
+                (
+                        "classix": $color-allgemein2,
+                        "concert": $gray-600,
+                        "costs": $color-ausgaben1,
+                        "festival": $color-festival,
+                        "general": $color-allgemein1,
+                        "hotel": $color-hotel1,
+                        "kasse": $color-kasse1,
+                        "misc": $color-sonst1,
+                        "presse": $color-sonst2,
+                        "session": $color-kasse2,
+                        "soulcafe": $color-ausgaben2,
+                        "staff": $color-kasse2
+                ),
+                $jc_colors
+);
+
+.btn-copy {
+  @include button-variant($color-sonst2, $color-sonst2-border);
+}
+
+.btn-presse {
+  color: $yiq-text-light !important;
+}
+
 @mixin color-variant($color) {
   background-color: $color !important;
   border-color: $color !important;
@@ -54,64 +82,20 @@ $color-festival: #9FC442;
   color: inherit !important;
 }
 
-.border-classix {
-  @include border-variant($color-allgemein2);
-}
+@each $color, $value in $jc_colors {
+  .border-#{$color} {
+    @include border-variant($value);
+  }
+  .color-#{$color} {
+    @include color-variant($value);
+  }
+  .text-#{$color} {
+    color: $value;
+  }
+  .btn-#{$color} {
+    @include button-variant($value, darken($value, 5%));
+  }
 
-.color-classix {
-  @include color-variant($color-allgemein2);
-}
-
-.text-classix {
-  color: $color-allgemein2;
-}
-
-.border-concert {
-  @include border-variant(darkgrey);
-}
-
-.color-concert {
-  @include color-variant(darkgrey);
-}
-
-.text-concert {
-  color: darkgray;
-}
-
-.border-session {
-  @include border-variant($color-kasse2);
-}
-
-.color-session {
-  @include color-variant($color-kasse2);
-}
-
-.text-session {
-  color: $color-kasse2;
-}
-
-.border-soulcafe {
-  @include border-variant($color-ausgaben2);
-}
-
-.color-soulcafe {
-  @include color-variant($color-ausgaben2);
-}
-
-.text-soulcafe {
-  color: $color-ausgaben2;
-}
-
-.border-festival {
-  @include border-variant($color-festival);
-}
-
-.color-festival {
-  @include color-variant($color-festival);
-}
-
-.text-festival {
-  color: $color-festival;
 }
 
 .logo-festival {
@@ -135,86 +119,7 @@ $color-festival: #9FC442;
   width: 14px;
 }
 
-.color-costs {
-  @include color-variant($color-ausgaben1);
-}
 
-.text-costs {
-  color: $color-ausgaben1;
-}
-
-.color-general {
-  @include color-variant($color-allgemein1);
-}
-
-.text-general {
-  color: $color-allgemein1;
-}
-
-.color-hotel {
-  @include color-variant($color-hotel1);
-}
-
-.text-hotel {
-  color: $color-hotel1;
-}
-
-.color-kasse {
-  @include color-variant($color-kasse1);
-}
-
-.text-kasse {
-  color: $color-kasse1;
-}
-
-.color-misc {
-  @include color-variant($color-sonst1);
-}
-
-.text-misc {
-  color: $color-sonst1;
-}
-
-.color-presse {
-  @include color-variant($color-kasse2);
-}
-
-.text-presse {
-  color: $color-kasse2;
-}
-
-.color-staff {
-  @include color-variant($color-kasse2);
-}
-
-.btn-costs {
-  @include button-variant($color-ausgaben1, $color-ausgaben1-border);
-}
-
-.btn-kasse {
-  @include button-variant($color-kasse1, $color-kasse1-border);
-}
-
-.btn-general {
-  @include button-variant($color-allgemein1, $color-allgemein1-border);
-}
-
-.btn-hotel {
-  @include button-variant($color-hotel1, $color-hotel1-border);
-}
-
-.btn-misc {
-  @include button-variant($color-sonst1, $color-sonst1-border);
-}
-
-.btn-copy {
-  @include button-variant($color-sonst2, $color-sonst2-border);
-}
-
-.btn-presse {
-  @include button-variant($color-kasse2, $color-kasse2-border);
-  color: $yiq-text-light;
-}
 
 // adapt syntaxhighlighted code in textboxes to bootstrap *BEGIN*
 .syntaxhighlighter a,

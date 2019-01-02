@@ -43,7 +43,7 @@ mixin panelView(veranstaltungen)
                   else
                     i.far.fa-caret-square-down.fa-fw.fa-lg
               td: a.chevron(data-toggle='collapse', data-target='#' + id)
-                h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()}
+                h6 #{veranstaltung.datumForDisplayShort()}<br>#{ kopf.presseIn()}
               td.text-right: .btn-group
                 if veranstaltung.reservixID()
                   .btn.py-0.px-1.color-reservix

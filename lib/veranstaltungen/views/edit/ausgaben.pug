@@ -33,114 +33,112 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'ausgaben')
-              h2.text-costs #{kopf.titel()} am #{veranstaltung.datumForDisplayShort()}<br>
-                small.text-costs Kalkulation
-        .row
-          .col-md-6
-            +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal')
-              .row
-                .col-3.col-sm-6
-                  +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
-                .col-3.col-sm-2
-                  .form-group
-                    label.float-right Reg.:
-                    b: +currencySpan(eintrittspreise.regulaer(), 'eintrittspreise[regulaer]', 'form-control-plaintext float-right')
-                .col-3.col-sm-2
-                  .form-group
-                    label.float-right Erm.:
-                    b: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittspreise[ermaessigt]', 'form-control-plaintext float-right')
-                .col-3.col-sm-2
-                  .form-group
-                    label.float-right Mitgl.:
-                    b: +currencySpan(eintrittspreise.mitglied(), 'eintrittspreise[mitglied]', 'form-control-plaintext float-right')
-              if kasse.istFreigegeben()
+              h2.text-costs #{kopf.titel()} <br>
+                small.text-costs am #{veranstaltung.datumForDisplayShort()}
+            +tabsFor(veranstaltung, 'ausgaben')
+            .tab-content
+              .tab-pane.show.active
                 .row
-                  .col-4
-                    +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
-                  .col-4
-                    .form-group
-                      label.float-right Abendkasse (Tickets):
-                      b: +currencySpan(kasse.einnahmeTicketsEUR(), 'kasseTickets', 'form-control-plaintext float-right')
-                  .col-4
-                    .form-group
-                      label.float-right  Total:
-                      b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
-              else
-                .row
-                  .col-4
-                    +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
-                  .col-4
-                    +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
-                  .col-4
-                    .form-group
-                      label.float-right  Total:
-                      b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
+                  .col-md-6
+                    +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal')
+                      .row
+                        .col-3.col-sm-6
+                          +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
+                        .col-3.col-sm-2
+                          .form-group
+                            label.float-right Reg.:
+                            b: +currencySpan(eintrittspreise.regulaer(), 'eintrittspreise[regulaer]', 'form-control-plaintext float-right')
+                        .col-3.col-sm-2
+                          .form-group
+                            label.float-right Erm.:
+                            b: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittspreise[ermaessigt]', 'form-control-plaintext float-right')
+                        .col-3.col-sm-2
+                          .form-group
+                            label.float-right Mitgl.:
+                            b: +currencySpan(eintrittspreise.mitglied(), 'eintrittspreise[mitglied]', 'form-control-plaintext float-right')
+                      if kasse.istFreigegeben()
+                        .row
+                          .col-4
+                            +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                          .col-4
+                            .form-group
+                              label.float-right Abendkasse (Tickets):
+                              b: +currencySpan(kasse.einnahmeTicketsEUR(), 'kasseTickets', 'form-control-plaintext float-right')
+                          .col-4
+                            .form-group
+                              label.float-right  Total:
+                              b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
+                      else
+                        .row
+                          .col-4
+                            +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                          .col-4
+                            +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
+                          .col-4
+                            .form-group
+                              label.float-right  Total:
+                              b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
 
-              if veranstaltung.reservixID()
-                .row
-                  .col-4
-                    .form-group
-                      label.float-right Besucher (Reservix):
-                      b: span#anzahlBesucherReservix.text-right.float-right.form-control-plaintext #{salesreport.anzahlRegulaer()}
-                  .col-4
-                    .form-group
-                      label.float-right Tickets Brutto (Reservix):
-                      b: +currencySpan(salesreport.bruttoUmsatz(), 'reservixBrutto', 'form-control-plaintext float-right')
-                  .col-4
-                    .form-group
-                      label.float-right Tickets Netto (Reservix):
-                      b: +currencySpan(salesreport.nettoUmsatz(), 'reservixNetto', 'form-control-plaintext float-right text-success')
+                      if veranstaltung.reservixID()
+                        .row
+                          .col-4
+                            .form-group
+                              label.float-right Besucher (Reservix):
+                              b: span#anzahlBesucherReservix.text-right.float-right.form-control-plaintext #{salesreport.anzahlRegulaer()}
+                          .col-4
+                            .form-group
+                              label.float-right Tickets Brutto (Reservix):
+                              b: +currencySpan(salesreport.bruttoUmsatz(), 'reservixBrutto', 'form-control-plaintext float-right')
+                          .col-4
+                            .form-group
+                              label.float-right Tickets Netto (Reservix):
+                              b: +currencySpan(salesreport.nettoUmsatz(), 'reservixNetto', 'form-control-plaintext float-right text-success')
 
-            +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
-              table.table.table-sm.table-striped
-                tr
-                  th(align='right', style='text-align: right;') Einnahmen
-                  th(align='right', style='text-align: right;') Kosten
-                  th(align='right', style='text-align: right;') Überschuss
-                tr
-                  td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
-                  td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                  td(align='right'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
-                tr#dealrow
-                  th Anteilig an Band:
-                  td
-                  td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
-
-
-          .col-md-6
-            +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'costs')
-              .row
-                .col-3(style='padding-right: 5px;')
-                  +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
-                .col-3(style='padding-left: 2px;padding-right: 2px;')
-                  +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
-                .col-3(style='padding-left: 2px;padding-right: 2px;')
-                  +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
-                .col-3(style='padding-left: 5px;')
-                  .form-group
-                    label.control-label Total:
-                    p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
-              +labelCurrencyRow('backlineEUR', 'kosten[backlineEUR]', 'Backline Rockshop', kosten.backlineEUR())
-              +labelCurrencyRow('technikAngebot1EUR', 'kosten[technikAngebot1EUR]', 'Technik Zumietung', kosten.technikAngebot1EUR())
-              +labelCurrencyRow('saalmiete', 'kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
-              +labelCurrencyRow('werbung1', 'kosten[werbung1]', 'Werbung 1', kosten.werbung1())
-              +labelCurrencyRow('werbung2', 'kosten[werbung2]', 'Werbung 2', kosten.werbung2())
-              +labelCurrencyRow('werbung3', 'kosten[werbung3]', 'Werbung 3', kosten.werbung3())
-              +labelCurrencyRow('personal', 'kosten[personal]', 'Personal (unbar)', kosten.personal())
-              if kasse.istFreigegeben()
-                .form-group.row
-                  .col-sm-3
-                  label.col-6.col-form-label Abendkasse (ohne Gage)
-                  .col-6.col-sm-3
-                    b: +currencySpan(kasse.ausgabenOhneGage(), 'kasseAusgaben', 'form-control-plaintext float-right')
-              .row
-                .col-12
-                  +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
+                    +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
+                      table.table.table-sm.table-striped
+                        tr
+                          th(align='right', style='text-align: right;') Einnahmen
+                          th(align='right', style='text-align: right;') Kosten
+                          th(align='right', style='text-align: right;') Überschuss
+                        tr
+                          td(align='right'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
+                          td(align='right'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                          td(align='right'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
+                        tr#dealrow
+                          th Anteilig an Band:
+                          td
+                          td(align='right'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
 
 
-        .row
-          .col-12
-            +submitButtonsFor(veranstaltung, 'ausgaben')
+                  .col-md-6
+                    +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'costs')
+                      .row
+                        .col-3(style='padding-right: 5px;')
+                          +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+                        .col-3(style='padding-left: 2px;padding-right: 2px;')
+                          +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
+                        .col-3(style='padding-left: 2px;padding-right: 2px;')
+                          +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+                        .col-3(style='padding-left: 5px;')
+                          .form-group
+                            label.control-label Total:
+                            p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
+                      +labelCurrencyRow('backlineEUR', 'kosten[backlineEUR]', 'Backline Rockshop', kosten.backlineEUR())
+                      +labelCurrencyRow('technikAngebot1EUR', 'kosten[technikAngebot1EUR]', 'Technik Zumietung', kosten.technikAngebot1EUR())
+                      +labelCurrencyRow('saalmiete', 'kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+                      +labelCurrencyRow('werbung1', 'kosten[werbung1]', 'Werbung 1', kosten.werbung1())
+                      +labelCurrencyRow('werbung2', 'kosten[werbung2]', 'Werbung 2', kosten.werbung2())
+                      +labelCurrencyRow('werbung3', 'kosten[werbung3]', 'Werbung 3', kosten.werbung3())
+                      +labelCurrencyRow('personal', 'kosten[personal]', 'Personal (unbar)', kosten.personal())
+                      if kasse.istFreigegeben()
+                        .form-group.row
+                          .col-sm-3
+                          label.col-6.col-form-label Abendkasse (ohne Gage)
+                          .col-6.col-sm-3
+                            b: +currencySpan(kasse.ausgabenOhneGage(), 'kasseAusgaben', 'form-control-plaintext float-right')
+                      .row
+                        .col-12
+                          +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 
 block scripts
   script(src='/clientscripts/fileinput.min.js')

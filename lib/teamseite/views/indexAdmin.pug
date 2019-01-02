@@ -25,15 +25,15 @@ mixin button(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
   +checkbox(id, 'Benötigt', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
 
-mixin submitButtonsFor(veranstaltung, current, nosave)
+mixin submitButtonsFor(veranstaltung, current)
   .btn-group.btn-group-sm.float-right
-    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'btn-general', 'fa-keyboard')
-    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'btn-costs', 'fa-euro-sign')
-    +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'btn-hotel', 'fa-bed')
-    +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'btn-kasse', 'fa-money-bill-alt')
-    +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'btn-kasse', 'fa-print')
-    +submitButton(veranstaltung, current, 'presse', 'Presse', 'btn-presse', 'fa-newspaper')
-    +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'btn-light', 'fa-copy ')
+    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
+    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'costs', 'fa-euro-sign')
+    +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'hotel', 'fa-bed')
+    +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'kasse', 'fa-money-bill-alt')
+    +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'kasse', 'fa-print')
+    +submitButton(veranstaltung, current, 'presse', 'Presse', 'presse', 'fa-newspaper')
+    +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'light', 'fa-copy ')
 
 mixin panelView(veranstaltungen)
   -var count = 0
@@ -75,7 +75,7 @@ mixin panelView(veranstaltungen)
                   else
                     i.far.fa-caret-square-down.fa-fw.fa-lg
               td: a.chevron(data-toggle='collapse', data-target='#' + id)
-                h6 #{veranstaltung.datumForDisplayShort() + ' ' + kopf.presseIn()}
+                h6 #{veranstaltung.datumForDisplayShort()}<br>#{kopf.presseIn()}
 
               td.text-right: .btn-group
                 if veranstaltung.reservixID()

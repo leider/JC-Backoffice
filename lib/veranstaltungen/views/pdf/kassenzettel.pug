@@ -53,15 +53,15 @@ html
         .row
           .col-4
             p
-              b Regulär:
+              b Regulär:#{' '}
               +localCurrency(veranstaltung.eintrittspreise().regulaer())
           .col-4
             p
-              b Ermäßigt:
+              b Ermäßigt:#{' '}
               +localCurrency(veranstaltung.eintrittspreise().ermaessigt())
           .col-4
             p
-              b Mitglied:
+              b Mitglied:#{' '}
               +localCurrency(veranstaltung.eintrittspreise().mitglied())
       .row
         .col-6

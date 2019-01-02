@@ -17,24 +17,21 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'presse')
-              h2.text-presse #{veranstaltung.kopf().titel()} am #{veranstaltung.datumForDisplayShort()}<br>
-                small.text-presse Presse
-              +checkbox('presse[checked]', 'Ist so OK', presse.checked())
-            +legendMitBody('event', 'Pressematerial', null, 'presse')
-              .row
-                .col-md-6
-                  +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
-                  +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
-                .col-md-6
-                  #preview
-        .row
-          .col-md-6
-            +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
-            +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
-        .row
-          .col-12
-            hr
-            +submitButtonsFor(veranstaltung, 'presse')
+              h2.text-presse #{veranstaltung.kopf().titel()} <br>
+                small.text-presse am #{veranstaltung.datumForDisplayShort()}
+            +tabsFor(veranstaltung, 'presse')
+            .tab-content
+              .tab-pane.show.active
+                +legendMitBody('event', 'Pressematerial', null, 'presse')
+                  .row
+                    .col-md-6
+                      +checkbox('presse[checked]', 'Ist so OK', presse.checked())
+                      +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
+                      +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
+                      +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
+                      +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
+                    .col-md-6
+                      #preview
 
 block head
   link(rel='stylesheet', href='/stylesheets/fileinput.css')
