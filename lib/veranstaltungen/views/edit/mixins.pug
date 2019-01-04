@@ -27,12 +27,12 @@ mixin tabsFor(veranstaltung, current)
 
 mixin tab(veranstaltung, current, name, title, btnstyle, icon)
   if veranstaltung.url()
-    li(class='nav-item' + (current !== name ? ' text-' : ' color-') + btnstyle )
-      a(class='nav-link inherit-color' + (current === name ? ' disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
-        i(class='fas fa-fw ' + icon)
+    li(class='nav-item' + (current !== name ? ' tab-' : ' color-') + btnstyle )
+      a(class='px-2 py-1 py-md-2 nav-link inherit-color' + (current === name ? ' disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
+        i(class='fas fa-fw fa-lg ' + icon)
         b.d-none.d-md-inline #{' '} #{title}
   else
-    li(class='nav-item color-' + btnstyle)
-      a.nav-link.inherit-color(href='/' + name, title=title)
+    li(class='nav-item' + (name !== 'kopf' ? ' tab-' : ' color-') + btnstyle )
+      a(class='px-2 py-1 py-md-2 nav-link inherit-color disabled', href='#', title=title)
         i(class='fas fa-fw ' + icon)
-        b.d-none.d-md-inline #{' '}  #{title}
+        b.d-none.d-md-inline #{' '} #{title}

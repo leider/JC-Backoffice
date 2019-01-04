@@ -77,6 +77,13 @@ $jc_colors: (
   .text-#{$color} {
     color: $value;
   }
+  .tab-#{$color} {
+    color: $value;
+    border-color: $value !important;
+    border: 1px solid;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+  }
   .btn-#{$color} {
     @include button-variant($value, darken($value, 5%));
   }
