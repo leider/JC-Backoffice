@@ -16,7 +16,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'presse')
+              +submitButtonsFor(veranstaltung, 'presse', true)
               h2.text-presse #{veranstaltung.kopf().titel()} <br>
                 small.text-presse am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'presse')

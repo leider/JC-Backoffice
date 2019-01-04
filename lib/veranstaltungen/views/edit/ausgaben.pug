@@ -32,7 +32,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'ausgaben')
+              +submitButtonsFor(veranstaltung, 'ausgaben', true)
               h2.text-costs #{kopf.titel()} <br>
                 small.text-costs am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'ausgaben')

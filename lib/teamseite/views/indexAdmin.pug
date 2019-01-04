@@ -25,15 +25,19 @@ mixin button(veranstaltung, name, allUsers)
   -var id = 'staff[' + name + 'NotNeeded]'
   +checkbox(id, 'Benötigt', !veranstaltung.staff()[name + 'NotNeeded'](), veranstaltung.id())
 
-mixin submitButtonsFor(veranstaltung, current)
-  .btn-group.btn-group-sm.float-right
-    +submitButton(veranstaltung, current, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
-    +submitButton(veranstaltung, current, 'ausgaben', 'Ausgaben', 'costs', 'fa-euro-sign')
-    +submitButton(veranstaltung, current, 'hotel', 'Hotel', 'hotel', 'fa-bed')
-    +submitButton(veranstaltung, current, 'kasse', 'Kasse', 'kasse', 'fa-money-bill-alt')
-    +submitButton(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'kasse', 'fa-print')
-    +submitButton(veranstaltung, current, 'presse', 'Presse', 'presse', 'fa-newspaper')
-    +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'light', 'fa-copy ')
+mixin submitButtonsFor(veranstaltung)
+  .btn-group.btn-group-sm.float-right.m-1
+    +submitButton(veranstaltung, null, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
+    +submitButton(veranstaltung, null, 'technik', 'Technik', 'technik', 'fa-microphone-alt')
+    +submitButton(veranstaltung, null, 'ausgaben', 'Ausgaben', 'costs', 'fa-euro-sign')
+    if veranstaltung.artist().brauchtHotel()
+      +submitButton(veranstaltung, null, 'hotel', 'Hotel', 'hotel', 'fa-bed')
+    +submitButton(veranstaltung, null, 'kasse', 'Kasse', 'kasse', 'fa-money-bill-alt')
+    +submitButton(veranstaltung, null, 'presse', 'Presse', 'presse', 'fa-newspaper')
+    if veranstaltung.url() && !veranstaltung.kopf().confirmed()
+      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/delete', title='Löschen')
+        i.fas.fa-fw.fa-trash-alt.text-danger
+    +submitButton(veranstaltung, null, 'copy', 'Kopieren', 'secondary', 'fa-copy')
 
 mixin panelView(veranstaltungen)
   -var count = 0
@@ -96,10 +100,8 @@ mixin panelView(veranstaltungen)
 
 
         div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
+          +submitButtonsFor(veranstaltung)
           table.table.table-striped.table-sm
-            tr: td(colspan=3)
-              +submitButtonsFor(veranstaltung, null, true)
-
             tr: td(colspan=3): h5.mb-0 Kasse
             tr
               th(width='20em'): .form-control-plaintext Eins:

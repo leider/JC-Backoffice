@@ -50,7 +50,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'kasse', freigegeben)
+              +submitButtonsFor(veranstaltung, 'kasse', !freigegeben)
               h2.text-kasse #{veranstaltung.kopf().titel()} <br>
                 small.text-kasse am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'kasse')

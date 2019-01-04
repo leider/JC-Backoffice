@@ -17,7 +17,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'technik')
+              +submitButtonsFor(veranstaltung, 'technik', true)
               h2.text-technik #{kopf.titel()} <br>
                 small.text-technik am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'technik')

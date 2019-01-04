@@ -27,7 +27,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'hotel')
+              +submitButtonsFor(veranstaltung, 'hotel', true)
               h2.text-hotel #{veranstaltung.kopf().titel()} <br>
                 small.text-hotel am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'hotel')

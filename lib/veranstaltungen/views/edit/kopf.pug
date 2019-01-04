@@ -34,7 +34,7 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'kopf')
+              +submitButtonsFor(veranstaltung, 'kopf', true)
               if (veranstaltung.id())
                 h2.text-general #{kopf.titel()} <br>
                   small.text-general am #{veranstaltung.datumForDisplayShort()}
