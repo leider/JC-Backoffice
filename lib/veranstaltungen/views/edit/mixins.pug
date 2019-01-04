@@ -1,7 +1,7 @@
 include ../../../../views/formComponents
 
 mixin submitButtonsFor(veranstaltung, current, nosave)
-  .btn-group.btn-group-sm.float-right
+  .btn-group.btn-group.float-right
     if accessrights.isOrgaTeam()
       if nosave
         a.btn.btn-light(href='/veranstaltungen/zukünftige', data-toggle='tooltip', title='Zurück zur Liste'): i.fas.fa-list.fa-fw
@@ -21,7 +21,7 @@ mixin tabsFor(veranstaltung, current)
   ul.nav.nav-tabs
     if accessrights.isOrgaTeam()
       +tab(veranstaltung, current, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
-      +tab(veranstaltung, current, 'technik', 'Technik', 'misc', 'fa-microphone-alt')
+      +tab(veranstaltung, current, 'technik', 'Technik', 'technik', 'fa-microphone-alt')
       +tab(veranstaltung, current, 'ausgaben', 'Kalkulation', 'costs', 'fa-euro-sign')
       if veranstaltung.artist().brauchtHotel()
         +tab(veranstaltung, current, 'hotel', 'Hotel', 'hotel', 'fa-bed')

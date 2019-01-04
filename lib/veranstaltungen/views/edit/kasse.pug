@@ -77,6 +77,17 @@ block content
                           +text('kasse[einnahmeSonstiges2Text]', 'Sonstiges', kasse.einnahmeSonstiges2Text(), null, 'Spende, Mitgliedsbeitrag, etc.', freigegeben)
                         .col-4
                           +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
+                    .row
+                      .col-12
+                        .btn-group.float-right
+                          if freigegeben
+                            a(class='btn btn-danger' + (!accessrights.darfKasseFreigeben() ? ' disabled' : ''), data-toggle='modal', data-target='#entsperrendialog', href='#')
+                              i.fas.fa-lock.fa-fw.fa-lg
+                              | &nbsp;Kasse ist freigegeben
+                          else if accessrights.darfKasseFreigeben()
+                            a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
+                              i.fas.fa-unlock.fa-fw.fa-lg
+                              | &nbsp;Kasse freigeben
 
 
                   .col-md-6
@@ -120,29 +131,6 @@ block content
                         +currency('kasse[anfangsbestandEUR]', 'Anfangsbestand', kasse.anfangsbestandEUR(), null, null, freigegeben)
                       .col-sm-3.col-6
                         +currency('endbestandEUR', 'Endbestand', kasse.endbestandEUR(), null, null, true)
-                if !accessrights.darfKasseFreigeben() && freigegeben
-                  .row
-                    .col-12
-                      .btn-group.float-right
-                        a.btn.btn-danger.disabled(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Kassenzettel anzeigen')
-                          i.fas.fa-lock.fa-fw.fa-lg
-                          | &nbsp;Kasse ist freigegeben
-                if accessrights.darfKasseFreigeben()
-                  if !freigegeben
-                    .row
-                      .col-12
-                        .btn-group.float-right
-                          a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
-                            i.fas.fa-unlock.fa-fw.fa-lg
-                            | &nbsp;Kasse freigeben
-                  else
-                    .row
-                      .col-12
-                        .btn-group.float-right
-                          a.btn.btn-danger(data-toggle='modal', data-target='#entsperrendialog', href='#')
-                            i.fas.fa-lock.fa-fw.fa-lg
-                            | &nbsp;Kasse ist freigegeben
-
 
 block scripts
   script.

@@ -23,9 +23,11 @@ block content
             .tab-content
               .tab-pane.show.active
                 +legendMitBody('event', 'Pressematerial', null, 'presse')
+                  .row.mb-3
+                    .col-12.col-md-3
+                      +checkbox('presse[checked]', 'Ist so OK', presse.checked())
                   .row
                     .col-md-6
-                      +checkbox('presse[checked]', 'Ist so OK', presse.checked())
                       +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
                       +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
                       +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})

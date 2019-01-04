@@ -188,7 +188,10 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
               name: 'cmdHelp',
               title: 'Hilfe',
               icon: 'fa fa-question-circle',
-              callback: function () { $('#cheatsheet').modal(); }
+              callback: function () {
+                $('#cheatsheet .modal-content').load('/cheatsheet.html');
+                $('#cheatsheet').modal();
+              }
             }]
           }]],
           onPreview: function (e) {

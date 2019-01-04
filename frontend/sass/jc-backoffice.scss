@@ -11,59 +11,44 @@
 
 // colors
 $color-ausgaben1: #d50f36;
-$color-ausgaben1-border: darken($color-ausgaben1, 5%);
 
 $color-kasse1: #9185be;
-$color-kasse1-border: darken($color-kasse1, 5%);
 
 $color-allgemein1: #05498c;
-$color-allgemein1-border: darken($color-allgemein1, 5%);
 
 $color-hotel1: #66267b;
-$color-hotel1-border: darken($color-hotel1, 5%);
 
 $color-sonst1: #009285;
-$color-sonst1-border: darken($color-sonst1, 5%);
 
 $color-ausgaben2: #f07f31;
-$color-ausgaben2-border: darken($color-ausgaben2, 5%);
 
 $color-kasse2: #dea71f;
-$color-kasse2-border: darken($color-kasse2, 5%);
 
 $color-allgemein2: #4faee3;
-$color-allgemein2-border: darken($color-allgemein2, 5%);
 
 $color-hotel2: #e50069;
-$color-hotel2-border: darken($color-hotel2, 5%);
 
 $color-sonst2: #95c22e;
-$color-sonst2-border: darken($color-sonst2, 5%);
 
 $color-festival: #9FC442;
 
-$jc_colors: () !default;
-
-$jc_colors: map-merge(
-                (
-                        "classix": $color-allgemein2,
-                        "concert": $gray-600,
-                        "costs": $color-ausgaben1,
-                        "festival": $color-festival,
-                        "general": $color-allgemein1,
-                        "hotel": $color-hotel1,
-                        "kasse": $color-kasse1,
-                        "misc": $color-sonst1,
-                        "presse": $color-sonst2,
-                        "session": $color-kasse2,
-                        "soulcafe": $color-ausgaben2,
-                        "staff": $color-kasse2
-                ),
-                $jc_colors
+$jc_colors: (
+        "classix": $color-allgemein2,
+        "concert": $gray-600,
+        "costs": $color-ausgaben1,
+        "festival": $color-festival,
+        "general": $color-allgemein1,
+        "hotel": $color-hotel1,
+        "kasse": $color-kasse1,
+        "technik": $color-sonst1,
+        "presse": $color-sonst2,
+        "session": $color-kasse2,
+        "soulcafe": $color-ausgaben2,
+        "staff": $color-kasse2
 );
 
 .btn-copy {
-  @include button-variant($color-sonst2, $color-sonst2-border);
+  @include button-variant($color-sonst2, darken($color-sonst2, 5%));
 }
 
 .btn-presse {
@@ -118,7 +103,6 @@ $jc_colors: map-merge(
   height: 14px;
   width: 14px;
 }
-
 
 .color-geplant {
   color: red !important;

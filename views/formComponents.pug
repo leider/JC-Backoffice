@@ -176,7 +176,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, o
         | &nbsp;!{title}
       if optionalCurrencySpan
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
-    div(id = id, class = 'collapse' + (collapsed ? '' : ' show'))
+    div(id = id, class = 'p-1 collapse' + (collapsed ? '' : ' show'))
       block
 
 mixin uploader(name, label, accept, value, extradata)

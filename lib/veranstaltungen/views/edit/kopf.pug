@@ -46,6 +46,15 @@ block content
                 .row
                   .col-md-6
                     +legendMitBody('event', 'Event')
+                      .row.mb-3
+                        .col-12.col-md-3
+                          if accessrights.isBookingTeam()
+                            +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
+                          else
+                            +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
+                        .col-12.col-md-3
+                          +checkbox('artist[brauchtHotel]', 'Braucht Hotel', artist.brauchtHotel())
+
                       .row
                         .col-sm-6
                           +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
@@ -100,15 +109,6 @@ block content
                         .col-4
                           +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres())
 
-                      .row
-                        .col-12
-                          .row
-                            .col-md-6
-                              if accessrights.isBookingTeam()
-                                +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
-                              else
-                                +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
-
                     +legendMitBody('artist', 'Künstler')
                       .row
                         .col-6
@@ -129,8 +129,6 @@ block content
                           +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue())
                         .col-6.col-sm-4
                           +checkbox('artist[isAusland]', 'aus dem Ausland', artist.isAusland())
-                        .col-6.col-sm-4
-                          +checkbox('artist[brauchtHotel]', 'Braucht Hotel', artist.brauchtHotel())
 
                     +legendMitBody('kommentar', 'Kommentar')
                       .row

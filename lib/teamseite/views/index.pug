@@ -54,9 +54,13 @@ mixin panelView(veranstaltungen)
               td
               td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}
           if veranstaltung.kasseFehlt()
-            h4.alert-danger.p-1.mb-0: i.fas.fa-exclamation-circle #{' '} Kasse gesucht!
+            h5.alert-danger.p-1.mb-0
+              i.fas.fa-exclamation-circle
+              | #{' '} Kasse gesucht!
           if staff.noStaffNeeded() && staff.modNotNeeded()
-            h4.alert-success.p-1.mb-0: i.fas.fa-check-circle #{' '} Kooperation
+            h5.alert-success.p-1.mb-0
+              i.fas.fa-check-circle
+              | #{' '} Kooperation
 
         if !staff.noStaffNeeded() || !staff.modNotNeeded()
           div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')

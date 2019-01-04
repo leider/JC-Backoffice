@@ -18,12 +18,18 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'technik')
-              h2.text-misc #{kopf.titel()} <br>
-                small.text-misc am #{veranstaltung.datumForDisplayShort()}
+              h2.text-technik #{kopf.titel()} <br>
+                small.text-technik am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'technik')
             .tab-content
               .tab-pane.show.active
-                +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'misc')
+                +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'technik')
+                  .row.mb-3
+                    .col-12.col-md-3
+                      +checkbox('kosten[checked]', 'Technik ist geklärt', kosten.checked())
+                    .col-12.col-md-3
+                      +checkbox('kosten[fluegel]', 'Flügel stimmen', kosten.fluegel())
+
                   .row
                     .col-xl-6
                       +uploader('riderupload', 'Rider', null, kosten.dateirider(), {id: veranstaltung.id(), typ: 'rider'})
@@ -41,8 +47,6 @@ block content
                           +text('kosten[technikAngebot1]', 'Technik Zumietung', kosten.technikAngebot1())
                         .col-sm-3
                           +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
-                      +checkbox('kosten[fluegel]', 'Flügel stimmen', kosten.fluegel())
-                      +checkbox('kosten[checked]', 'Technik ist geklärt', kosten.checked())
 
 block head
   link(rel='stylesheet', href='/stylesheets/fileinput.css')
