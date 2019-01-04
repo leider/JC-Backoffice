@@ -40,7 +40,7 @@ block content
               .tab-pane.show.active
                 .row
                   .col-md-6
-                    +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal')
+                    +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'costs')
                       .row
                         .col-3.col-sm-6
                           +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())

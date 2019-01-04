@@ -43,7 +43,7 @@ $color-sonst2-border: darken($color-sonst2, 5%);
 $color-festival: #9FC442;
 
 $jc_colors: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
+
 $jc_colors: map-merge(
                 (
                         "classix": $color-allgemein2,
@@ -120,74 +120,8 @@ $jc_colors: map-merge(
 }
 
 
-
-// adapt syntaxhighlighted code in textboxes to bootstrap *BEGIN*
-.syntaxhighlighter a,
-.syntaxhighlighter div,
-.syntaxhighlighter code,
-.syntaxhighlighter table,
-.syntaxhighlighter table td,
-.syntaxhighlighter table tr,
-.syntaxhighlighter table tbody,
-.syntaxhighlighter table thead,
-.syntaxhighlighter table caption,
-.syntaxhighlighter textarea {
-  font-family: $font-family-monospace !important;
-}
-
-.gutter {
-  @include clearfix();
-}
-
-pre code {
-  white-space: nowrap;
-}
-
-// adapt syntaxhighlight *END*
-
-.bottom {
-  padding-top: 20px;
-  margin-bottom: 0px;
-}
-
-.navbar-brand.no-padding {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  height: 60px;
-}
-
-.navbar-right {
-  margin-right: 0 !important;
-}
-
-.page-header {
-  margin-top: 30px !important;
-}
-
-.page-header > h2 {
-  margin-top: 0px;
-}
-
-.verySmall {
-  font-size: .8em;
-  line-height: 1.1em;
-}
-
 .color-geplant {
   color: red !important;
-}
-
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 300px;
-}
-
-.ellipsis.narrow {
-  max-width: 120px;
 }
 
 .main {
@@ -214,20 +148,15 @@ pre code {
   .popover {
     max-width: 450px;
   }
+  .page-header {
+    margin-top: 30px !important;
+  }
 }
 
 @media (max-width: 767px) {
   .fixed-top {
     position: relative !important;
   }
-}
-
-.popover-highlight {
-  border-bottom: 1px dotted;
-}
-
-a.group {
-  color: #ffffff;
 }
 
 a.inherit-color {
@@ -238,33 +167,8 @@ label {
   font-weight: $font-weight-bold;
 }
 
-.label.group {
-  padding: .3em .4em .2em .4em;
-  position: absolute;
-  font-size: 0.8em;
-}
-
-ul.nav-tabs {
-  margin-bottom: 20px;
-}
-
-ul.align-with-table-header {
-  padding-left: 1.5em;
-}
-
-.dashboard-line {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-a {
-  word-wrap: break-word;
-}
-
 .fc-day-grid-event .fc-content { /* force events to be one-line tall */
   white-space: inherit !important;
-  overflow: inherit !important;
 }
 
 // wiki page compare *BEGIN*
@@ -339,10 +243,6 @@ h6 > small {
   color: #212529;
   background-color: #f8f9fa;
   border-color: #f8f9fa;
-}
-
-.table {
-  margin-bottom: 0 !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,
