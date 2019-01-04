@@ -78,7 +78,10 @@ block content
                         .col-4
                           +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
                     .row
-                      .col-12
+                      .col-12.mb-2
+                        a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Abendkasse')
+                          i.fas.fa-fw.fa-print
+                          | #{' '} Kassenzettel
                         .btn-group.float-right
                           if freigegeben
                             a(class='btn btn-danger' + (!accessrights.darfKasseFreigeben() ? ' disabled' : ''), data-toggle='modal', data-target='#entsperrendialog', href='#')
@@ -98,7 +101,9 @@ block content
                             +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
                           else
                             .form-group
-                              label.control-label.text-danger(for='kasse[ausgabeGageEUR]'): i.fas.fa-exclamation-triangle &nbsp; Gage BAR &nbsp;
+                              label.control-label.text-danger(for='kasse[ausgabeGageEUR]')
+                                i.fas.fa-exclamation-triangle
+                                | &nbsp; Gage BAR &nbsp;
                                 i.fas.fa-exclamation-triangle :
                               input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
                         .col-sm-4.col-6

@@ -89,8 +89,10 @@ mixin panelView(veranstaltungen)
                 h5 #{kopf.titel()}
           table(width='100%')
             tr
-              td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')
-              td.p-0(width='50%'): +checkedButton(veranstaltung, veranstaltung.kosten(), 'technik')
+              td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')
+              td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.kosten(), 'technik')
+              if veranstaltung.artist().brauchtHotel()
+                td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.unterkunft(), 'hotel')
 
 
         div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')

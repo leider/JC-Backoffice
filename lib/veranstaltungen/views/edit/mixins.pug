@@ -26,7 +26,6 @@ mixin tabsFor(veranstaltung, current)
       if veranstaltung.artist().brauchtHotel()
         +tab(veranstaltung, current, 'hotel', 'Hotel', 'hotel', 'fa-bed')
     +tab(veranstaltung, current, 'kasse', 'Abendkasse', 'kasse', 'fa-money-bill-alt')
-    +tab(veranstaltung, current, 'kassenzettel', 'Kassenzettel', 'kasse', 'fa-print')
     if accessrights.isOrgaTeam()
       +tab(veranstaltung, current, 'presse', 'Presse', 'presse', 'fa-newspaper')
 
