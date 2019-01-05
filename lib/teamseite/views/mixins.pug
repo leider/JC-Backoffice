@@ -84,3 +84,28 @@ mixin monatHeadline(veranstaltung)
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 
+mixin standardCardTitle(veranstaltung, id)
+  -var kopf = veranstaltung.kopf()
+  table(width='100%')
+    tr.align-top
+      td.text-left
+        a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
+          if collapsed
+            i.far.fa-caret-square-right.fa-fw.fa-lg
+          else
+            i.far.fa-caret-square-down.fa-fw.fa-lg
+      td: a.chevron(data-toggle='collapse', data-target='#' + id)
+        h6 #{veranstaltung.datumForDisplayShort()}
+
+      td.text-right: .btn-group
+        if veranstaltung.reservixID()
+          .btn.py-0.px-1.color-reservix
+            i.logo-reservix
+            | &nbsp; #{veranstaltung.salesreport().anzahlRegulaer()}
+        a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
+    tr
+      td
+      td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h6 #{kopf.presseIn()}
+    tr
+      td
+      td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}

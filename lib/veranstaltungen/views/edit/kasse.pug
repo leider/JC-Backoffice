@@ -191,7 +191,7 @@ block scripts
       function updateEndbestand() {
         var endbestand = floatAmount(anfangsbestandEUR) +
           einnahmenGesamtEUR - ausgabenGesamtEUR;
-        setEuro($('#endbestandEUR'), endbestand);
+        setEuroInput($('#endbestandEUR'), endbestand);
       }
 
       anfangsbestandEUR.keyup(updateEndbestand);

@@ -17,85 +17,62 @@ mixin people(veranstaltung, name)
 mixin panelView(veranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
-  -var monatAlt = -1;
-  | <div class='row'>
-  for veranstaltung in veranstaltungen
-    -var kopf = veranstaltung.kopf()
-    -var staff = veranstaltung.staff()
-    -var id = 'panel' + ++count
-    -var collapsed = veranstaltung.startMoment().isAfter(nearFuture)
-
-    if monatAlt === -1 || monatAlt !== veranstaltung.startMoment().month()
-      | </div><div class='row'>
+  for month in Object.keys(groupedVeranstaltungen)
+    -var veranstOfMonth = groupedVeranstaltungen[month]
+    .row
       .col-12
-        +monatHeadline(veranstaltung)
-    -monatAlt = veranstaltung.startMoment().month();
+        +monatHeadline(veranstOfMonth[0])
+      for veranstaltung in veranstOfMonth
+        -var collapsed = veranstaltung.startMoment().isAfter(nearFuture)
+        -var kopf = veranstaltung.kopf()
+        -var id = 'panel' + ++count
+        -var staff = veranstaltung.staff()
+        .col-xl-4.col-md-6
+          .card.mb-2(class = 'border-' + cssColorCode(kopf.eventTyp()))
+            .card-header.p-0(class = 'color-' + cssColorCode(kopf.eventTyp()))
+              +standardCardTitle(veranstaltung, id)
+              if veranstaltung.kasseFehlt()
+                h5.alert-danger.p-1.mb-0
+                  i.fas.fa-exclamation-circle
+                  | #{' '} Kasse gesucht!
+              if staff.noStaffNeeded() && staff.modNotNeeded()
+                h5.alert-success.p-1.mb-0
+                  i.fas.fa-check-circle
+                  | #{' '} Kooperation
 
-    .col-xl-4.col-md-6
-      .card.mb-2(class = 'border-' + cssColorCode(kopf.eventTyp()))
-        .card-header.p-0(class = 'color-' + cssColorCode(kopf.eventTyp()))
-          table(width='100%')
-            tr.align-top
-              td.text-left: .btn-group-vertical
-                a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
-                  if collapsed
-                    i.far.fa-caret-square-right.fa-fw.fa-lg
-                  else
-                    i.far.fa-caret-square-down.fa-fw.fa-lg
-              td: a.chevron(data-toggle='collapse', data-target='#' + id)
-                h6 #{veranstaltung.datumForDisplayShort()}<br>#{ kopf.presseIn()}
-              td.text-right: .btn-group
-                if veranstaltung.reservixID()
-                  .btn.py-0.px-1.color-reservix
-                    i.logo-reservix
-                    | &nbsp; #{veranstaltung.salesreport().anzahlRegulaer()}
-                a.py-0.px-1.text-white.bg-secondary(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
-            tr
-              td
-              td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}
-          if veranstaltung.kasseFehlt()
-            h5.alert-danger.p-1.mb-0
-              i.fas.fa-exclamation-circle
-              | #{' '} Kasse gesucht!
-          if staff.noStaffNeeded() && staff.modNotNeeded()
-            h5.alert-success.p-1.mb-0
-              i.fas.fa-check-circle
-              | #{' '} Kooperation
-
-        if !staff.noStaffNeeded() || !staff.modNotNeeded()
-          div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
-            table.table.table-striped.table-sm
-              if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
-                tr: td(colspan=3): h5.mb-0 Kasse
-                if !staff['kasseVNotNeeded']()
-                  tr
-                    th: .mt-1 Eins:
-                    td: +people(veranstaltung, 'kasseV')
-                    td.text-right: +button(veranstaltung, 'kasseV', 'KasseV')
-                if !staff['kasseNotNeeded']()
-                  tr
-                    th: .mt-1 Zwei:
-                    td: +people(veranstaltung, 'kasse')
-                    td.text-right: +button(veranstaltung, 'kasse', 'Kasse')
-              if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
-                tr: td(colspan=3): h5.mb-0 Technik
-                if !staff['technikerVNotNeeded']()
-                  tr
-                    th: .mt-1 Eins:
-                    td: +people(veranstaltung, 'technikerV')
-                    td.text-right: +button(veranstaltung, 'technikerV', 'TechnikerV')
-                if !staff['technikerNotNeeded']()
-                  tr
-                    th: .mt-1 Zwei:
-                    td: +people(veranstaltung, 'techniker')
-                    td.text-right: +button(veranstaltung, 'techniker', 'Techniker')
-              if !staff['modNotNeeded']()
-                tr: td(colspan=3): h5.mb-0 Master
-                tr
-                  th &nbsp;
-                  td: +people(veranstaltung, 'mod')
-                  td.text-right: +button(veranstaltung, 'mod', 'MoD')
-  | </div>
+            if !staff.noStaffNeeded() || !staff.modNotNeeded()
+              div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
+                table.table.table-striped.table-sm
+                  if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
+                    tr: td(colspan=3): h5.mb-0 Kasse
+                    if !staff['kasseVNotNeeded']()
+                      tr
+                        th: .mt-1 Eins:
+                        td: +people(veranstaltung, 'kasseV')
+                        td.text-right: +button(veranstaltung, 'kasseV', 'KasseV')
+                    if !staff['kasseNotNeeded']()
+                      tr
+                        th: .mt-1 Zwei:
+                        td: +people(veranstaltung, 'kasse')
+                        td.text-right: +button(veranstaltung, 'kasse', 'Kasse')
+                  if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
+                    tr: td(colspan=3): h5.mb-0 Technik
+                    if !staff['technikerVNotNeeded']()
+                      tr
+                        th: .mt-1 Eins:
+                        td: +people(veranstaltung, 'technikerV')
+                        td.text-right: +button(veranstaltung, 'technikerV', 'TechnikerV')
+                    if !staff['technikerNotNeeded']()
+                      tr
+                        th: .mt-1 Zwei:
+                        td: +people(veranstaltung, 'techniker')
+                        td.text-right: +button(veranstaltung, 'techniker', 'Techniker')
+                  if !staff['modNotNeeded']()
+                    tr: td(colspan=3): h5.mb-0 Master
+                    tr
+                      th &nbsp;
+                      td: +people(veranstaltung, 'mod')
+                      td.text-right: +button(veranstaltung, 'mod', 'MoD')
 
 
 block title

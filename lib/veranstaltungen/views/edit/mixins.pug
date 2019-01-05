@@ -2,7 +2,7 @@ include ../../../../views/formComponents
 
 mixin submitButtonsFor(veranstaltung, current, withsave)
   .btn-group.btn-group.float-right
-    a.btn.btn-light(href='/', data-toggle='tooltip', title='Zurück'): i.fas.fa-arrow-left.fa-fw
+    a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-arrow-left.fa-fw
     if accessrights.isOrgaTeam()
       if veranstaltung.url() && !veranstaltung.kopf().confirmed()
         a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/delete', title='Löschen')
@@ -11,7 +11,7 @@ mixin submitButtonsFor(veranstaltung, current, withsave)
         +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'light', 'fa-copy ')
     if withsave
       +hidden('returnTo', current)
-      button.btn.btn-success(type='submit', data-toggle='tooltip', title='Speichern'): i.far.fa-save.fa-fw
+      button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
 
 mixin tabsFor(veranstaltung, current)
   ul.nav.nav-tabs
