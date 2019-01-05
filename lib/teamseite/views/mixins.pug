@@ -84,7 +84,7 @@ mixin monatHeadline(veranstaltung)
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 
-mixin standardCardTitle(veranstaltung, id)
+mixin standardCardTitle(veranstaltung, id, collapsed)
   -var kopf = veranstaltung.kopf()
   table(width='100%')
     tr.align-top

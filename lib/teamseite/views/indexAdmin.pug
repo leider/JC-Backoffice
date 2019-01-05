@@ -68,7 +68,7 @@ mixin panelView(veranstaltungen)
                       i.fas.fa-exclamation-circle.fa-fw
                       | #{' '} UNBESTÄTIGT #{' '}
                       i.fas.fa-exclamation-circle.fa-fw
-              +standardCardTitle(veranstaltung, id)
+              +standardCardTitle(veranstaltung, id, collapsed)
               table(width='100%')
                 tr
                   td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')

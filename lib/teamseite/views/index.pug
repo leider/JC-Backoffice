@@ -30,7 +30,7 @@ mixin panelView(veranstaltungen)
         .col-xl-4.col-md-6
           .card.mb-2(class = 'border-' + cssColorCode(kopf.eventTyp()))
             .card-header.p-0(class = 'color-' + cssColorCode(kopf.eventTyp()))
-              +standardCardTitle(veranstaltung, id)
+              +standardCardTitle(veranstaltung, id, collapsed)
               if veranstaltung.kasseFehlt()
                 h5.alert-danger.p-1.mb-0
                   i.fas.fa-exclamation-circle
