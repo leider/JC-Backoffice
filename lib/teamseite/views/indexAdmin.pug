@@ -37,7 +37,7 @@ mixin submitButtonsFor(veranstaltung)
     +submitButton(veranstaltung, null, 'kasse', 'Kasse', 'kasse', 'fa-money-bill-alt')
     +submitButton(veranstaltung, null, 'presse', 'Presse', 'presse', 'fa-newspaper')
     if !veranstaltung.kopf().confirmed()
-      a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/delete', title='Löschen')
+      span.btn.btn-light.modaldialog(data-toggle='modal', data-target='#loeschdialog', data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url()))
         i.fas.fa-fw.fa-trash-alt.text-danger
     +submitButton(veranstaltung, null, 'copy', 'Kopieren', 'secondary', 'fa-copy')
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')

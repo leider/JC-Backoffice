@@ -1,0 +1,12 @@
+.modal-header
+  h3.modal-title Veranstaltung löschen<br>
+    small Bist Du sicher?
+  button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+.modal-body
+  .row
+    .col-12
+      .btn-group.float-right
+        button.btn.btn-light(data-dismiss='modal') Abbrechen
+        a.btn.btn-danger.text(href=veranstaltung.fullyQualifiedUrl() + '/delete', title='Löschen')
+          i.fas.fa-trash.fa-fw.fa-lg
+          | &nbsp;Löschen

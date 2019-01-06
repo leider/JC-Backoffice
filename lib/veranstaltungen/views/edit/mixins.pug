@@ -2,16 +2,17 @@ include ../../../../views/formComponents
 
 mixin submitButtonsFor(veranstaltung, current, withsave)
   .btn-group.btn-group.float-right
-    a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-arrow-left.fa-fw
+    a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-home.fa-fw
     if accessrights.isOrgaTeam()
       if veranstaltung.url() && !veranstaltung.kopf().confirmed()
-        a.btn.btn-light(href=veranstaltung.fullyQualifiedUrl() + '/delete', title='Löschen')
+        span.btn.btn-light.modaldialog(data-toggle='modal', data-target='#loeschdialog', data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url()))
           i.fas.fa-fw.fa-trash-alt.text-danger
       if veranstaltung.url()
         +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'light', 'fa-copy ')
     if withsave
       +hidden('returnTo', current)
       button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
+
 
 mixin tabsFor(veranstaltung, current)
   ul.nav.nav-tabs

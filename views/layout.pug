@@ -21,6 +21,9 @@ html
     #cheatsheet.modal.fade(tabindex='-1')
       .modal-dialog.modal-lg
         .modal-content
+    #loeschdialog.modal.fade(tabindex='-1')
+      .modal-dialog
+        .modal-content
 
     +topNavbar
     .container-fluid.p-0.p-md-auto
@@ -31,4 +34,14 @@ html
         block content
 
 script(src='/clientscripts/global.js')
+script.
+  $(document).ready(function () {
+    $('.modaldialog').click(function (e) {
+      var data = e.currentTarget.dataset;
+      var target = data.target;
+      var url = data.link;
+      $(target + ' .modal-content').load(url);
+    });
+  })
+
 block scripts
