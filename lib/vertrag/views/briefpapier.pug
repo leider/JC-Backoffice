@@ -17,7 +17,7 @@ mixin signbox(title, party, optionalText, unterschrift)
 mixin bild(name)
   div(style='margin-top:40px')
     img(src=publicUrlPrefix + '/reporting/' + name + '.png', height='30')
-  
+
 mixin sidebar
   img(src=publicUrlPrefix + '/reporting/logo.png', height='80')
   div(style='font-size:6px;margin-top:60px')
@@ -61,7 +61,7 @@ html
       }
   body(style='font-size:8px;')
     .container-fluid
-      #Seite1.row
+      #Seite1.row(stlye='page-break-after: always;')
         .col-9
           #adresse(style='margin-top:110px')
             .row
@@ -69,7 +69,7 @@ html
                 small(style='font-size:6px;')
                   b Jazzclub Karlsruhe e.V.&nbsp;
                   span.blau |&nbsp;
-                  | Office: Leopoldstr. 13 
+                  | Office: Leopoldstr. 13
                   span.blau |&nbsp;
                   | 76133 Karlsruhe
                 p &nbsp;
@@ -81,7 +81,7 @@ html
         .col-12
           p.text-center(style='margin-top:15px') Seite 1 von 2
 
-      #Seite2.row(style='page-break-before:always;')
+      #Seite2.row
         .col-9
           #content2(style='margin-top:10px')
           block content2
