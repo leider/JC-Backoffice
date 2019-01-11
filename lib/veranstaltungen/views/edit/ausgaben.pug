@@ -28,6 +28,9 @@ block content
       +csrf
       +hidden('id', veranstaltung.id())
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
+      +hidden('kosten[checked]', kosten.checked())
+      +hidden('kosten[fluegel]', kosten.fluegel())
+
       fieldset
         .row
           .col-12

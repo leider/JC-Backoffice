@@ -30,6 +30,9 @@ block content
         +hidden('id', veranstaltung.id())
         +hidden('previousUrl', veranstaltung.url())
         +hidden('url', veranstaltung.url())
+        +hidden('kosten[checked]', kosten.checked())
+        +hidden('kosten[fluegel]', kosten.fluegel())
+
       fieldset
         .row
           .col-12
