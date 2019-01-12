@@ -1,10 +1,12 @@
 mixin notificationsBlock(notificationmessage)
   -notificationmessage.kill()
   -var contents = notificationmessage.contents()
-  #notifications.mt-5(class='alert alert-block hidden-print ' + contents.type)
-    button.close(type='button', data-dismiss='alert') &times;
-    h4 #{contents.title}
-    | #{contents.text}
+  div(class='toast ' + contents.type, data-delay=2000, style='position: fixed;' + '  top: 2rem;' + '  left: 2rem;' + '  z-index: 1050;' + '  width: 100%;')
+    .toast-header
+      h2.mr-auto #{contents.title}
+      button.ml-2.mb-1.close(type='button', data-dismiss='toast') &times;
+    .toast-body
+      | #{contents.text}
 
 mixin topNavbar
   header.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top

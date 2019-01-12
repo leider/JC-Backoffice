@@ -25,12 +25,11 @@ html
       .modal-dialog
         .modal-content
 
+    if (statusmessage)
+      +notificationsBlock(statusmessage)
     +topNavbar
     .container-fluid.p-0.p-md-auto
       .row.main
-        if (statusmessage)
-          .col-12
-            +notificationsBlock(statusmessage)
         block content
 
 script(src='/clientscripts/global.js')
@@ -42,6 +41,7 @@ script.
       var url = data.link;
       $(target + ' .modal-content').load(url);
     });
+    $('.toast').toast('show')
   })
 
 block scripts
