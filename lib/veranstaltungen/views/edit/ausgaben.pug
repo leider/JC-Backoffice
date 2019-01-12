@@ -19,6 +19,7 @@ block title
 
 block content
   -var kosten = veranstaltung.kosten()
+  -var technik = veranstaltung.technik()
   -var kopf = veranstaltung.kopf()
   -var salesreport = veranstaltung.salesreport()
   -var eintrittspreise = veranstaltung.eintrittspreise()
@@ -28,8 +29,8 @@ block content
       +csrf
       +hidden('id', veranstaltung.id())
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-      +hidden('kosten[checked]', kosten.checked())
-      +hidden('kosten[fluegel]', kosten.fluegel())
+      +hidden('technik[checked]', technik.checked())
+      +hidden('technik[fluegel]', technik.fluegel())
 
       fieldset
         .row

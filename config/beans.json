@@ -9,6 +9,7 @@
   "kontakt": {"module": "./lib/veranstaltungen/object/kontakt"},
   "kopf": {"module": "./lib/veranstaltungen/object/kopf"},
   "kosten": {"module": "./lib/veranstaltungen/object/kosten"},
+  "technik": {"module": "./lib/veranstaltungen/object/technik"},
   "presse": {"module": "./lib/veranstaltungen/object/presse"},
   "staff": {"module": "./lib/veranstaltungen/object/staff"},
   "vertrag": {"module": "./lib/veranstaltungen/object/vertrag"},

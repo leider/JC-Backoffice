@@ -39,7 +39,6 @@ block content
                   | &nbsp;Kassenfreigabe rückgängig
 
   -var kasse = veranstaltung.kasse()
-  -var kosten = veranstaltung.kosten()
   -var freigegeben = kasse.istFreigegeben()
   .col-12
     form#kasseform(action='/veranstaltungen/submit', method='post')
@@ -97,7 +96,7 @@ block content
                     +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
                       .row
                         .col-sm-4.col-6
-                          if !kosten.gageBAR()
+                          if !veranstaltung.kosten().gageBAR()
                             +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
                           else
                             .form-group

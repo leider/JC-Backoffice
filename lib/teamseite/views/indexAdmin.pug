@@ -72,7 +72,7 @@ mixin panelView(veranstaltungen)
               table(width='100%')
                 tr
                   td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')
-                  td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.kosten(), 'technik')
+                  td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.technik(), 'technik')
                   if veranstaltung.artist().brauchtHotel()
                     td.p-0(width='33%'): +checkedButton(veranstaltung, veranstaltung.unterkunft(), 'hotel')
 

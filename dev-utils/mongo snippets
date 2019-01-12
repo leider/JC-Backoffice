@@ -5,3 +5,6 @@ db.veranstaltungenstore.update({url: 'Soulcafé im April ´18'}, {$unset: {'kass
 preisprofil löschen
 db.getCollection('veranstaltungenstore').update({'eintrittspreise.preisprofil.name': 'Individuell (Alt)'}, {$unset: {'eintrittspreise.preisprofil': ''}}, {multi: true})
 db.getCollection('veranstaltungenstore').find({'eintrittspreise.preisprofil.name': 'Individuell (Alt)'})
+
+// Werbung löschen
+db.getCollection('veranstaltungenstore').update({}, {$unset: {'werbung': ''}}, {multi: true})

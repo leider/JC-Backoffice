@@ -21,6 +21,7 @@ block content
   -var kopf = veranstaltung.kopf()
   -var vertrag = veranstaltung.vertrag()
   -var kosten = veranstaltung.kosten()
+  -var technik = veranstaltung.technik()
   -var eintrittspreise = veranstaltung.eintrittspreise()
 
   .col-12
@@ -30,8 +31,8 @@ block content
         +hidden('id', veranstaltung.id())
         +hidden('previousUrl', veranstaltung.url())
         +hidden('url', veranstaltung.url())
-        +hidden('kosten[checked]', kosten.checked())
-        +hidden('kosten[fluegel]', kosten.fluegel())
+        +hidden('technik[checked]', technik.checked())
+        +hidden('technik[fluegel]', technik.fluegel())
 
       fieldset
         .row

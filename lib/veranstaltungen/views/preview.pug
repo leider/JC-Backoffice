@@ -95,19 +95,19 @@ block content
             .card-body !{allgemeines.beschreibungHTML()}
 
         +legendMitBody('technik', 'Technik', null, 'technik')
-          -var dateien = kosten.dateirider()
+          -var dateien = technik.dateirider()
           table.table.table-sm.table-striped
-            if kosten.fluegel()
+            if technik.fluegel()
               tr: th(colspan=2) Flügel stimmen!
-            if kosten.backlineJazzclub().length
+            if technik.backlineJazzclub().length
               tr: th(colspan=2) Backline Jazzclub
-              for item in kosten.backlineJazzclub()
+              for item in technik.backlineJazzclub()
                 tr
                   td(width='2%')
                   td(width='98%') #{item}
-            if kosten.backlineRockshop().length
+            if technik.backlineRockshop().length
               tr: th(colspan=2) Backline Rockshop
-              for item in kosten.backlineRockshop()
+              for item in technik.backlineRockshop()
                 tr
                   td(width='2%')
                   td(width='98%') #{item}
