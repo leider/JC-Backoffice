@@ -40,13 +40,13 @@ html
               -var kopf = veranstaltung.kopf()
               tr
                 td #{veranstaltung.datumForDisplay()}
-                td #{kopf.ort()}
-                td #{kopf.kooperation()}
+                td #{allgemeines.ort()}
+                td #{allgemeines.kooperation()}
                 td Jazzkonzert
                 td #{veranstaltung.artist().bandname() || veranstaltung.artist().name().join(', ')}
                 td.text-right #{veranstaltung.preisAusweisGema()}
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
                   td.text-right #{veranstaltung.anzahlBesucher()}
-                td #{kopf.rechnungAnKooperation() ? kopf.kooperation() : 'Jazzclub'}
-                td.text-right #{kopf.flaeche()} m<sup>2</sup>
+                td #{allgemeines.rechnungAnKooperation() ? allgemeines.kooperation() : 'Jazzclub'}
+                td.text-right #{allgemeines.flaeche()} m<sup>2</sup>

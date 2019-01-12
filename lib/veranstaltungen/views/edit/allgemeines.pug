@@ -37,13 +37,13 @@ block content
         .row
           .col-12
             .page-header
-              +submitButtonsFor(veranstaltung, 'kopf', true)
+              +submitButtonsFor(veranstaltung, 'allgemeines', true)
               if (veranstaltung.id())
-                h2.text-general #{kopf.titel()} <br>
-                  small.text-general am #{veranstaltung.datumForDisplayShort()}
+                h2.text-allgemeines #{kopf.titel()} <br>
+                  small.text-allgemeines am #{veranstaltung.datumForDisplayShort()}
               else
-                h2.text-general Neue Veranstaltung
-            +tabsFor(veranstaltung, 'kopf')
+                h2.text-allgemeines Neue Veranstaltung
+            +tabsFor(veranstaltung, 'allgemeines')
             .tab-content
               .tab-pane.show.active
                 .row
@@ -149,7 +149,7 @@ block content
                       if user && (accessrights.isBookingTeam())
                         .row
                           .col-12
-                            a.btn.btn-general.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                            a.btn.btn-allgemeines.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
                               | Vertrag generieren
                       .row
                         .col-12

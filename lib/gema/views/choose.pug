@@ -37,13 +37,13 @@ block content
 
     .row
       .col-lg-6
-        +legendMitBody('vorab', 'Vorabmeldung', null, 'general')
+        +legendMitBody('vorab', 'Vorabmeldung', null, 'allgemeines')
           form#gemavorform(action='/gema/vorab', method='post')
             +eventsTable(upcomingEvents)
 
       if (pastEvents)
         .col-lg-6
-          +legendMitBody('nach', 'Nachmeldung', null, 'general')
+          +legendMitBody('nach', 'Nachmeldung', null, 'allgemeines')
             form#gemanachform(action='/gema/nach', method='post')
               +eventsTable(pastEvents)
 

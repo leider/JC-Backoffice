@@ -35,21 +35,18 @@ $color-festival: #9FC442;
 $jc_colors: (
         "classix": $color-allgemein2,
         "concert": $gray-600,
-        "costs": $color-ausgaben1,
+        "ausgaben": $color-ausgaben1,
         "festival": $color-festival,
-        "general": $color-allgemein1,
+        "allgemeines": $color-allgemein1,
         "hotel": $color-hotel1,
         "kasse": $color-kasse1,
         "technik": $color-sonst1,
         "presse": $color-sonst2,
         "session": $color-kasse2,
         "soulcafe": $color-ausgaben2,
-        "staff": $color-kasse2
+        "staff": $color-kasse2,
+        "copy": theme-color("secondary")
 );
-
-.btn-copy {
-  @include button-variant($color-sonst2, darken($color-sonst2, 5%));
-}
 
 .btn-presse {
   color: $yiq-text-light !important;

@@ -36,14 +36,14 @@ block content
           .col-12
             .page-header
               +submitButtonsFor(veranstaltung, 'ausgaben', true)
-              h2.text-costs #{kopf.titel()} <br>
-                small.text-costs am #{veranstaltung.datumForDisplayShort()}
+              h2.text-ausgaben #{kopf.titel()} <br>
+                small.text-ausgaben am #{veranstaltung.datumForDisplayShort()}
             +tabsFor(veranstaltung, 'ausgaben')
             .tab-content
               .tab-pane.show.active
                 .row
                   .col-md-6
-                    +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'costs')
+                    +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'ausgaben')
                       .row
                         .col-3.col-sm-6
                           +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
@@ -114,7 +114,7 @@ block content
 
 
                   .col-md-6
-                    +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'costs')
+                    +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'ausgaben')
                       .row
                         .col-3(style='padding-right: 5px;')
                           +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())

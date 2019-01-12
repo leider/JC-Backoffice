@@ -29,17 +29,17 @@ mixin peopleAndButton(veranstaltung, name, allUsers)
 
 mixin submitButtonsFor(veranstaltung)
   .btn-group.btn-group-sm.float-right.m-1
-    +submitButton(veranstaltung, null, 'kopf', 'Allgemeines', 'general', 'fa-keyboard')
-    +submitButton(veranstaltung, null, 'technik', 'Technik', 'technik', 'fa-microphone-alt')
-    +submitButton(veranstaltung, null, 'ausgaben', 'Ausgaben', 'costs', 'fa-euro-sign')
+    +submitButton(veranstaltung, null, 'allgemeines', 'Allgemeines', 'fa-keyboard')
+    +submitButton(veranstaltung, null, 'technik', 'Technik', 'fa-microphone-alt')
+    +submitButton(veranstaltung, null, 'ausgaben', 'Ausgaben', 'fa-euro-sign')
     if veranstaltung.artist().brauchtHotel()
-      +submitButton(veranstaltung, null, 'hotel', 'Hotel', 'hotel', 'fa-bed')
-    +submitButton(veranstaltung, null, 'kasse', 'Kasse', 'kasse', 'fa-money-bill-alt')
-    +submitButton(veranstaltung, null, 'presse', 'Presse', 'presse', 'fa-newspaper')
+      +submitButton(veranstaltung, null, 'hotel', 'Hotel', 'fa-bed')
+    +submitButton(veranstaltung, null, 'kasse', 'Kasse', 'fa-money-bill-alt')
+    +submitButton(veranstaltung, null, 'presse', 'Presse', 'fa-newspaper')
     if !veranstaltung.kopf().confirmed()
       span.btn.btn-light.modaldialog(data-toggle='modal', data-target='#loeschdialog', data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url()))
         i.fas.fa-fw.fa-trash-alt.text-danger
-    +submitButton(veranstaltung, null, 'copy', 'Kopieren', 'secondary', 'fa-copy')
+    +submitButton(veranstaltung, null, 'copy', 'Kopieren', 'fa-copy')
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')
 
 

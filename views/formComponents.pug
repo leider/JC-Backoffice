@@ -74,11 +74,11 @@ mixin submitButtons(text)
       button.btn.btn-primary(type='submit') Speichern
 
 
-mixin submitButton(veranstaltung, current, name, title, btnstyle, icon)
+mixin submitButton(veranstaltung, current, name, title, icon)
   if veranstaltung.url()
-    a(class='btn btn-' + btnstyle + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title): i(class='fas fa-fw ' + icon)
+    a(class='btn btn-' + name + (current === name ? ' active disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title): i(class='fas fa-fw ' + icon)
   else
-    a(class='btn btn-' + btnstyle + ' active disabled', href='/' + name, title=title): i(class='fas fa-fw ' + icon)
+    a(class='btn btn-' + name + ' active disabled', href='/' + name, title=title): i(class='fas fa-fw ' + icon)
 
 mixin hidden(name, value)
   input(type='hidden', name=name, value=value)
