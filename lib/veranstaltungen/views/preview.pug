@@ -25,7 +25,7 @@ block content
   -var unterkunft = veranstaltung.unterkunft()
   -var hotel = veranstaltung.hotel()
   -var presse = veranstaltung.presse()
-  -var kosten = veranstaltung.kosten()
+  -var technik = veranstaltung.technik()
   -var staff = veranstaltung.staff()
   -var salesreport = veranstaltung.salesreport()
 
@@ -34,17 +34,17 @@ block content
       .col-12
         .page-header
           .btn-group.float-right
-            +submitButtonsFor(veranstaltung, '', false)
+            +submitButtonsFor(veranstaltung, '', true)
 
-          h2(class='text-' + cssColorCode(allgemeines.eventTyp()))
-            span(class=cssIconClass(allgemeines.eventTyp()), style='font-weight:normal') #{''}
-            | #{' '}#{allgemeines.titel()} #{allgemeines.presseIn()}
+          h2(class='text-' + cssColorCode(kopf.eventTyp()))
+            span(class=cssIconClass(kopf.eventTyp()), style='font-weight:normal') #{''}
+            | #{' '}#{kopf.titel()} #{kopf.presseIn()}
             br
             small
               | #{veranstaltung.startMoment().format('LLLL')} #{''}
-              span (#{allgemeines.eventTyp()})
-            if allgemeines.kooperation() && allgemeines.kooperation().length  > 1
-              h3 Kooperation mit #{allgemeines.kooperation()}
+              span (#{kopf.eventTyp()})
+            if kopf.kooperation() && kopf.kooperation().length  > 1
+              h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
         -var mitarbeiter = staff.mitarbeiterTransient();
@@ -90,9 +90,9 @@ block content
             if accessrights.isAbendkasse()
               tr: td.text-right(colspan=3): a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title='Abendkasse') &nbsp;Abendkasse
 
-        if allgemeines.beschreibungHTML()
+        if kopf.beschreibungHTML()
           +legendMitBody('info', 'Informationen', null, 'allgemeines')
-            .card-body !{allgemeines.beschreibungHTML()}
+            .card-body !{kopf.beschreibungHTML()}
 
         +legendMitBody('technik', 'Technik', null, 'technik')
           -var dateien = technik.dateirider()
