@@ -73,6 +73,12 @@ mixin panelView(veranstaltungen)
                       th &nbsp;
                       td: +people(veranstaltung, 'mod')
                       td.text-right: +button(veranstaltung, 'mod', 'MoD')
+                  if !staff['merchandiseNotNeeded']()
+                    tr: td(colspan=3): h5.mb-0 Merchandise
+                    tr
+                      th &nbsp;
+                      td: +people(veranstaltung, 'merchandise')
+                      td.text-right: +button(veranstaltung, 'merchandise', 'Merchandise')
 
 
 block title
