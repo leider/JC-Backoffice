@@ -1,6 +1,6 @@
 include ../../../../views/formComponents
 
-mixin submitButtonsFor(veranstaltung, current, withsave)
+mixin submitButtonsFor(veranstaltung, section, readonly)
   .btn-group.btn-group.float-right
     a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-home.fa-fw
     if accessrights.isOrgaTeam()
@@ -8,31 +8,49 @@ mixin submitButtonsFor(veranstaltung, current, withsave)
         span.btn.btn-light.modaldialog(data-toggle='modal', data-target='#loeschdialog', data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url()))
           i.fas.fa-fw.fa-trash-alt.text-danger
       if veranstaltung.url()
-        +submitButton(veranstaltung, current, 'copy', 'Kopieren', 'fa-copy ')
-    if withsave
-      +hidden('returnTo', current)
+        +submitButton(veranstaltung, section, 'copy', 'Kopieren', 'fa-copy ')
+    unless readonly
+      +hidden('returnTo', section)
       button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
 
+mixin iconLabel(icon, title)
+  i(class='fas fa-fw ' + icon)
+  b.d-none.d-md-inline #{' '} #{title}
 
-mixin tabsFor(veranstaltung, current)
-  ul.nav.nav-tabs
-    if accessrights.isOrgaTeam()
-      +tab(veranstaltung, current, 'allgemeines', 'Allgemeines', 'fa-keyboard')
-      +tab(veranstaltung, current, 'technik', 'Technik', 'fa-microphone-alt')
-      +tab(veranstaltung, current, 'ausgaben', 'Kalkulation', 'fa-euro-sign')
-      if veranstaltung.artist().brauchtHotel()
-        +tab(veranstaltung, current, 'hotel', 'Hotel', 'fa-bed')
-    +tab(veranstaltung, current, 'kasse', 'Abendkasse', 'fa-money-bill-alt')
-    if accessrights.isOrgaTeam()
-      +tab(veranstaltung, current, 'presse', 'Presse', 'fa-newspaper')
 
-mixin tab(veranstaltung, current, name, title, icon)
-  li(class='nav-item' + (current !== name ? ' tab-' : ' color-') + name )
+mixin tab(veranstaltung, section, name, title, icon)
+  li(class='nav-item' + (section !== name ? ' tab-' : ' color-') + name )
     if veranstaltung.url()
-      a(class='px-2 py-1 py-md-2 nav-link inherit-color' + (current === name ? ' disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
-        i(class='fas fa-fw ' + icon)
-        b.d-none.d-md-inline #{' '} #{title}
+      a(class='px-2 py-1 py-md-2 nav-link inherit-color' + (section === name ? ' disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
+        +iconLabel(icon, title)
     else
       a(class='px-2 py-1 py-md-2 nav-link inherit-color disabled', href='#', title=title)
-        i(class='fas fa-fw ' + icon)
-        b.d-none.d-md-inline #{' '} #{title}
+        +iconLabel(icon, title)
+
+mixin tabsFor(veranstaltung, section)
+  ul.nav.nav-tabs
+    if accessrights.isOrgaTeam()
+      +tab(veranstaltung, section, 'allgemeines', 'Allgemeines', 'fa-keyboard')
+      +tab(veranstaltung, section, 'technik', 'Technik', 'fa-microphone-alt')
+      +tab(veranstaltung, section, 'ausgaben', 'Kalkulation', 'fa-euro-sign')
+      if veranstaltung.artist().brauchtHotel()
+        +tab(veranstaltung, section, 'hotel', 'Hotel', 'fa-bed')
+    +tab(veranstaltung, section, 'kasse', 'Abendkasse', 'fa-money-bill-alt')
+    if accessrights.isOrgaTeam()
+      +tab(veranstaltung, section, 'presse', 'Presse', 'fa-newspaper')
+
+mixin editHeader(veranstaltung, section, readonly)
+  .row
+    .col-12
+      .page-header
+        +submitButtonsFor(veranstaltung, section, readonly)
+        if (veranstaltung.id())
+          h2(class='text-' + section) #{veranstaltung.kopf().titel()} <br>
+            small(class='text-' + section) am #{veranstaltung.datumForDisplayShort()}
+        else
+          h2(class='text-' + section) Neue Veranstaltung
+      +tabsFor(veranstaltung, section)
+      .tab-content
+        .tab-pane.show.active
+          .row
+            block

@@ -23,54 +23,44 @@ block content
       +csrf
       +hidden('id', veranstaltung.id())
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-      fieldset
-        .row
-          .col-12
-            .page-header
-              +submitButtonsFor(veranstaltung, 'hotel', true)
-              h2.text-hotel #{veranstaltung.kopf().titel()} <br>
-                small.text-hotel am #{veranstaltung.datumForDisplayShort()}
-            +tabsFor(veranstaltung, 'hotel')
-            .tab-content
-              .tab-pane.show.active
-                .row
-                  .col-md-6
-                    +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')
-                    +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'hotel')
-                      .row
-                        .col-4()
-                          +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
-                          +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
-                          label
-                            span#naechte 0
-                            span #{''} Nächte
-                        .col-8()
-                          +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
-                      .row
-                        +zimmerNumEUR('einzel', 'Einzel')
-                        +zimmerNumEUR('doppel', 'Doppel')
-                        +zimmerNumEUR('suite', 'Suite')
-                      .row
-                        .col-12
-                          +checkbox('hotelpreise', 'Preise als Default übernehmen')
+      +editHeader(veranstaltung, 'hotel')
+        .col-md-6
+          +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')
+          +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'hotel')
+            .row
+              .col-4()
+                +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
+                +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
+                label
+                  span#naechte 0
+                  span #{''} Nächte
+              .col-8()
+                +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
+            .row
+              +zimmerNumEUR('einzel', 'Einzel')
+              +zimmerNumEUR('doppel', 'Doppel')
+              +zimmerNumEUR('suite', 'Suite')
+            .row
+              .col-12
+                +checkbox('hotelpreise', 'Preise als Default übernehmen')
 
-                  .col-md-6
-                    +legendMitBody('transport', 'Transport', 'transportTotal', 'hotel')
-                      +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
-                      .row
-                        .col-md-6
-                          +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
-                        .col-md-6
-                          +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
-                    .row
-                      .col-6
-                        +checkbox('unterkunft[angefragt]', 'Hotel Angefragt', unterkunft.angefragt())
-                      .col-6
-                        +checkbox('unterkunft[bestaetigt]', 'Hotel Bestätigt', unterkunft.bestaetigt())
-                    .row
-                      .col-12
-                        p #{''}
-                        a#reservierungsmail.btn.btn-success(href='#') Reservierungsmail
+        .col-md-6
+          +legendMitBody('transport', 'Transport', 'transportTotal', 'hotel')
+            +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
+            .row
+              .col-md-6
+                +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
+              .col-md-6
+                +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
+          .row
+            .col-6
+              +checkbox('unterkunft[angefragt]', 'Hotel Angefragt', unterkunft.angefragt())
+            .col-6
+              +checkbox('unterkunft[bestaetigt]', 'Hotel Bestätigt', unterkunft.bestaetigt())
+          .row
+            .col-12
+              p #{''}
+              a#reservierungsmail.btn.btn-success(href='#') Reservierungsmail
 
 block head
   link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')

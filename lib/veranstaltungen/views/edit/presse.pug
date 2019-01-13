@@ -12,29 +12,21 @@ block content
       +csrf
       +hidden('id', veranstaltung.id())
       +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-      fieldset
-        .row
-          .col-12
-            .page-header
-              +submitButtonsFor(veranstaltung, 'presse', true)
-              h2.text-presse #{veranstaltung.kopf().titel()} <br>
-                small.text-presse am #{veranstaltung.datumForDisplayShort()}
-            +tabsFor(veranstaltung, 'presse')
-            .tab-content
-              .tab-pane.show.active
-                +legendMitBody('event', 'Pressematerial', null, 'presse')
-                  .row.mb-3
-                    .col-12.col-md-3
-                      +checkbox('presse[checked]', 'Ist so OK', presse.checked())
-                  .row
-                    .col-md-6
-                      +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
-                      +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
-                      +textarea('presse[originalText]', 'Unredigierter Text', presse.originalText(), 'Text, wie er unredigiert vorliegt')
-                      +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
-                      +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
-                    .col-md-6
-                      #preview
+      +editHeader(veranstaltung, 'presse')
+        .col-12
+          +legendMitBody('event', 'Pressematerial', null, 'presse')
+            .row.mb-3
+              .col-12.col-md-3
+                +checkbox('presse[checked]', 'Ist so OK', presse.checked())
+            .row
+              .col-md-6
+                +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
+                +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
+                +textarea('presse[originalText]', 'Unredigierter Text', presse.originalText(), 'Text, wie er unredigiert vorliegt')
+                +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
+                +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
+              .col-md-6
+                #preview
 
 block head
   link(rel='stylesheet', href='/stylesheets/fileinput.css')
