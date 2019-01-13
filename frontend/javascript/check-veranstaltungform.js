@@ -25,17 +25,6 @@ var veranstaltung_validator;
   function initValidator() {
     veranstaltung_validator = $('#veranstaltungform').validate({
       rules: {
-        url: {
-          required: true,
-          remote: {
-            url: '/veranstaltungen/checkurl',
-            data: {
-              previousUrl: function () {
-                return $('#veranstaltungform [name=previousUrl]').val();
-              }
-            }
-          }
-        },
         'kosten[gagenEUR]': {number: true},
         'kosten[agenturEUR]': {number: true},
         'eintrittspreise[preisprofil]': 'required',

@@ -20,9 +20,6 @@ block content
   -var unterkunft = veranstaltung.unterkunft()
   .col-12
     form#hotelform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      +hidden('id', veranstaltung.id())
-      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       +editHeader(veranstaltung, 'hotel')
         .col-md-6
           +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')

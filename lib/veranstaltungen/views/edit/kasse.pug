@@ -42,9 +42,6 @@ block content
   -var freigegeben = kasse.istFreigegeben()
   .col-12
     form#kasseform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      +hidden('id', veranstaltung.id())
-      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       +editHeader(veranstaltung, 'kasse', freigegeben)
         .col-md-6
           +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')

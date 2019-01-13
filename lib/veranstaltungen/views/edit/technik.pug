@@ -10,9 +10,6 @@ block content
   -var technik = veranstaltung.technik()
   .col-12
     form#ausgabenform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      +hidden('id', veranstaltung.id())
-      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       +editHeader(veranstaltung, 'technik')
         .col-12
           +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'technik')

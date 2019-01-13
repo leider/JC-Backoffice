@@ -26,11 +26,6 @@ block content
   -var kasse = veranstaltung.kasse()
   .col-12
     form#ausgabenform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      +hidden('id', veranstaltung.id())
-      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
-      +hidden('technik[checked]', technik.checked())
-      +hidden('technik[fluegel]', technik.fluegel())
       +editHeader(veranstaltung, 'ausgaben')
         .col-md-6
           +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'ausgaben')

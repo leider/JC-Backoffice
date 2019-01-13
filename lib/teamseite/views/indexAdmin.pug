@@ -98,6 +98,11 @@ mixin panelView(veranstaltungen)
                 tr
                   th: .form-control-plaintext &nbsp;
                   td: +peopleAndButton(veranstaltung, 'mod', users)
+                tr: td(colspan=3): h5.mb-0 Merchandise
+                tr
+                  th: .form-control-plaintext &nbsp;
+                  td: +peopleAndButton(veranstaltung, 'merchandise', users)
+
 
 
 block title

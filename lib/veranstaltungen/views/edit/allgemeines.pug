@@ -26,14 +26,6 @@ block content
 
   .col-12
     form#veranstaltungform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      if (veranstaltung.id())
-        +hidden('id', veranstaltung.id())
-        +hidden('previousUrl', veranstaltung.url())
-        +hidden('url', veranstaltung.url())
-        +hidden('technik[checked]', technik.checked())
-        +hidden('technik[fluegel]', technik.fluegel())
-
       +editHeader(veranstaltung, 'allgemeines')
         .col-md-6
           +legendMitBody('event', 'Event')
@@ -137,7 +129,7 @@ block content
             if user && (accessrights.isBookingTeam())
               .row
                 .col-12
-                  a.btn.btn-allgemeines.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                  a.btn.btn-primary.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
                     | Vertrag generieren
             .row
               .col-12

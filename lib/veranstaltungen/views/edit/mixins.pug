@@ -40,6 +40,20 @@ mixin tabsFor(veranstaltung, section)
       +tab(veranstaltung, section, 'presse', 'Presse', 'fa-newspaper')
 
 mixin editHeader(veranstaltung, section, readonly)
+  +csrf
+  if (veranstaltung.id())
+    +hidden('id', veranstaltung.id())
+    +hidden('url', veranstaltung.url())
+
+  unless section === 'technik'
+    +hidden('technik[checked]', veranstaltung.technik().checked() ? 'on' : undefined)
+    +hidden('technik[fluegel]', veranstaltung.technik().fluegel() ? 'on' : undefined)
+  unless section === 'allgemeines'
+    +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
+    +hidden('kopf[rechnungAnKooperation]', veranstaltung.kopf().rechnungAnKooperation() ? 'on' : undefined)
+  unless section === 'ausgaben'
+    +hidden('kosten[gageBAR]', veranstaltung.kosten().gageBAR() ? 'on' : undefined)
+
   .row
     .col-12
       .page-header

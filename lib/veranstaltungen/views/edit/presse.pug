@@ -9,9 +9,6 @@ block content
   -var presse = veranstaltung.presse()
   .col-12
     form#presseform(action='/veranstaltungen/submit', method='post')
-      +csrf
-      +hidden('id', veranstaltung.id())
-      +hidden('kopf[confirmed]', veranstaltung.kopf().confirmed() ? 'on' : undefined)
       +editHeader(veranstaltung, 'presse')
         .col-12
           +legendMitBody('event', 'Pressematerial', null, 'presse')

@@ -8,3 +8,6 @@ db.getCollection('veranstaltungenstore').find({'eintrittspreise.preisprofil.name
 
 // Werbung löschen
 db.getCollection('veranstaltungenstore').update({}, {$unset: {'werbung': ''}}, {multi: true})
+
+// Staff bereinigen
+db.getCollection('veranstaltungenstore').update({}, {$unset: {'staff.fremdpersonal': '', 'staff.technikerEUR': '', 'staff.merchandiseEUR': '', 'staff.kasseEUR': '', 'staff.fremdpersonalEUR': ''}}, {multi: true})

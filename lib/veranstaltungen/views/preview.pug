@@ -64,9 +64,6 @@ block content
               if mitarbeiter.merchandise.length > 0
                 tr: th(colspan=2) Merchandising
                 +mitarbeiterRows(mitarbeiter.merchandise, false)
-              if mitarbeiter.fremdpersonal.length > 0
-                tr: th(colspan=2) Sonstige
-                +mitarbeiterRows(mitarbeiter.fremdpersonal, false)
 
 
         +legendMitBody('eintritt', 'Eintritt und Abendkasse', null, 'kasse')
