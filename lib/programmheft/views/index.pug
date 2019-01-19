@@ -1,0 +1,14 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+
+block title
+  | Programmheft
+
+block content
+  .col-12
+    .page-header
+      h1 Programmheftüberblick
+    ul
+      for date in dates
+        li: a(href=date) Heft #{date}

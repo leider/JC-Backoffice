@@ -15,6 +15,8 @@
   "vertrag": {"module": "./lib/veranstaltungen/object/vertrag"},
   "unterkunft": {"module": "./lib/veranstaltungen/object/unterkunft"},
 
+  "programmheftApp": {"module": "./lib/programmheft"},
+
   "vertragApp": {"module": "./lib/vertrag"},
 
   "fileexportStadtKarlsruhe": {"module": "./lib/fileexportStadtKarlsruhe"},

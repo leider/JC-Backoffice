@@ -14,7 +14,7 @@ mixin people(veranstaltung, name)
   -var staff = veranstaltung.staff()
   .mt-1: span.text-capitalize #{staff[name]().join(', ')}
 
-mixin panelView(veranstaltungen)
+mixin panelView(groupedVeranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
   for month in Object.keys(groupedVeranstaltungen)
@@ -100,7 +100,7 @@ block content
             a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt
             | #{' '} Hiermit kannst Du den Kalender abonnieren.
         +zuAufButtons
-        +panelView(veranstaltungen)
+        +panelView(groupedVeranstaltungen)
       .col-lg-4
         +calendar(icals)
     .row
@@ -115,8 +115,6 @@ block content
         if accessrights.memberId() !== user.id
           +userpanel(user, ++count)
 
-block head
-  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
 
 block scripts
   script.

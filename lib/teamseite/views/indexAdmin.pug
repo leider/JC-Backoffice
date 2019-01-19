@@ -43,7 +43,7 @@ mixin submitButtonsFor(veranstaltung)
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')
 
 
-mixin panelView(veranstaltungen)
+mixin panelView(groupedVeranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')
   -var nearPast = moment(); nearPast.subtract(1, 'months')
@@ -126,10 +126,8 @@ block content
 
           h2 Veranstaltungen
         +zuAufButtons
-        +panelView(veranstaltungen)
+        +panelView(groupedVeranstaltungen)
       .col-lg-4
         +calendar(icals)
 
-block head
-  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
 

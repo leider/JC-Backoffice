@@ -19,6 +19,7 @@ mixin zuAufButtons
 
 mixin calendar(icals)
   #calendar.mt-4
+  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
   script(src='/clientscripts/fullcalendar.min.js')
   script.
     document.addEventListener('DOMContentLoaded', function () {
