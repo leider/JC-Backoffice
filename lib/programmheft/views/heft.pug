@@ -7,6 +7,8 @@ mixin panelView(groupedVeranstaltungen)
   for month in Object.keys(groupedVeranstaltungen)
     -var veranstOfMonth = groupedVeranstaltungen[month]
     .row
+      .col-12
+        h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startMoment().format('MMMM \'YY')}
       for veranstaltung in veranstOfMonth
         -var kopf = veranstaltung.kopf()
         -var id = 'panel' + ++count
@@ -24,10 +26,77 @@ block title
 
 block content
   .col-12
-    .page-header
-      h1 Programmheft #{date}
+    form#termineform(action='/programmheft/submit', method='post')
+      .page-header
+        .btn-group.float-right
+          button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
+        h2 Programmheft<br>
+          small #{start.format('MMM')} - #{nextMonth.format('MMM YYYY')}
+      +csrf
+      +hidden('id', start.format('YYYY/MM'))
+      .row
+        .col-lg-8.col-sm-12
+          .row
+            .col-6
+              #termine1
+            .col-6
+              #termine2
+          .row.mt-4
+            .col-12
+              h4 Farben Hilfe
+              p
+                | Du kannst entweder eine #{' '}
+                a(href='https://www.w3schools.com/colors/colors_names.asp', target='_blank') Farbe mit Namen eintragen #{' '}
+                | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
+        .col-lg-4.col-sm-12
+          +hightextarea('text', 'Termine', kalender.text())
     if (unconfirmedVeranstaltungen.length > 0)
       h2.text-danger Es gibt noch unbestätigte Veranstaltungen
       for veranstaltung in unconfirmedVeranstaltungen
-        p.text-danger #{veranstaltung.kopf().titel()}
+        p: a.text-danger(href=veranstaltung.fullyQualifiedUrl() + '/allgemeines') #{veranstaltung.kopf().titel()}
     +panelView(groupedVeranstaltungen)
+
+block head
+  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
+
+block scripts
+  script(src='/clientscripts/fullcalendar.min.js')
+  script(src='/clientscripts/bootstrap-markdown.min.js')
+  script.
+    $(document).ready(function () {
+      function initCalendar(id, date) {
+        var options = {
+          defaultDate: date,
+          header: {
+            left: 'title',
+            center: '',
+            right: ''
+          },
+          timezone: 'Europe/Berlin',
+          timeFormat: 'HH:mm',
+          displayEventTime: false,
+          events: '/programmheft/kalenderFor',
+          themeSystem: 'bootstrap4',
+          aspectRatio: 1.2,
+          height: 'auto',
+          locale: 'de',
+          views: {
+            month: {
+              titleFormat: {month: 'long'},
+              lang: 'de',
+              fixedWeekCount: false,
+              showNonCurrentDates: false
+            }
+          }
+        };
+        var calElement = document.getElementById(id);
+        if (!calElement) { return; }
+        var calendar = new FullCalendar.Calendar(calElement, options);
+        calendar.render();
+      }
+
+
+      initCalendar('termine1', '#{start.format('YYYY-MM-DD')}');
+      initCalendar('termine2', '#{nextMonth.format('YYYY-MM-DD')}');
+    });
+

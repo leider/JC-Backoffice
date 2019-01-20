@@ -42,6 +42,20 @@ mixin submitButtonsFor(veranstaltung)
     +submitButton(veranstaltung, null, 'copy', 'Kopieren', 'fa-copy')
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')
 
+mixin monatHeadline(veranstaltung)
+  -var isProgrammheftmonat = veranstaltung.startMoment().month() % 2 === 0
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startMoment().format('MMMM \'YY')}
+    .btn-group.btn-group-sm.float-right
+      if isProgrammheftmonat
+        a.btn.btn-secondary.btn-sm(href='/programmheft/' + veranstaltung.startMoment().format('YYYY/MM'))
+          i.far.fa-newspaper.fa-fw
+          | #{' '} Programmheft
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM'))
+        i.far.fa-file-alt.fa-fw
+        | #{' '} Presseexte
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM'))
+        i.fas.fa-align-justify.fa-fw
+        | #{' '} Übersicht
 
 mixin panelView(groupedVeranstaltungen)
   -var count = 0

@@ -14,6 +14,16 @@ mixin people(veranstaltung, name)
   -var staff = veranstaltung.staff()
   .mt-1: span.text-capitalize #{staff[name]().join(', ')}
 
+mixin monatHeadline(veranstaltung)
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startMoment().format('MMMM \'YY')}
+    .btn-group.btn-group-sm.float-right
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM'))
+        i.far.fa-file-alt.fa-fw
+        | #{' '} Presseexte
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM'))
+        i.fas.fa-align-justify.fa-fw
+        | #{' '} Übersicht
+
 mixin panelView(groupedVeranstaltungen)
   -var count = 0
   -var nearFuture = moment(); nearFuture.add(1, 'months')

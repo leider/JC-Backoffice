@@ -16,6 +16,8 @@
   "unterkunft": {"module": "./lib/veranstaltungen/object/unterkunft"},
 
   "programmheftApp": {"module": "./lib/programmheft"},
+  "kalenderstore": {"module": "./lib/programmheft/kalenderstore"},
+  "kalender": {"module": "./lib/programmheft/kalender"},
 
   "vertragApp": {"module": "./lib/vertrag"},
 
@@ -102,6 +104,11 @@
   "mailPersistence": {
     "module": "./lib/persistence/persistence",
     "constructorArgs": { "collectionName": "mailstore" }
+  },
+
+  "kalenderPersistence": {
+    "module": "./lib/persistence/persistence",
+    "constructorArgs": { "collectionName": "kalenderstore" }
   },
 
   "htmlbridge": {"module": "./lib/reservix/htmlbridge"},
