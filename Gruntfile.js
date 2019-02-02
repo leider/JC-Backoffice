@@ -10,9 +10,6 @@ module.exports = function (grunt) {
       'node_modules/select2/dist/js/i18n/de.js',
       'node_modules/popper.js/dist/umd/popper.js',
       'node_modules/bootstrap/dist/js/bootstrap.js',
-      'node_modules/jquery-validation/dist/jquery.validate.js',
-      'node_modules/jquery-validation/dist/localization/messages_de.js',
-      'node_modules/jquery-validation/dist/localization/methods_de.js',
       'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
       'node_modules/bootstrap-select/dist/js/i18n/defaults-de_DE.js',
       'frontend/javascript/jc-backoffice.js'

@@ -9,13 +9,13 @@ function germanToEnglishNumberString(string) {
 /* exported intAmount */
 function intAmount(jqueryNumberField) {
   'use strict';
-  return parseInt(germanToEnglishNumberString(jqueryNumberField.val()), 10) || 0;
+  return parseInt(jqueryNumberField.val(), 10) || 0;
 }
 
 /* exported floatAmount */
 function floatAmount(jqueryNumberField) {
   'use strict';
-  return parseFloat(germanToEnglishNumberString(jqueryNumberField.val()), 10) || 0;
+  return parseFloat(jqueryNumberField.val(), 10) || 0;
 }
 
 /* exported floatAmountForSpan */
@@ -46,9 +46,10 @@ function setEuroInput(jqueryCurrencyField, numberString) {
   if (!jqueryCurrencyField.length) {
     return;
   }
-  var number = Intl.NumberFormat('de-DE', {
+  var number = Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
+    useGrouping: false
   }).format(numberString || 0);
   jqueryCurrencyField.val(number);
   jqueryCurrencyField.change();
@@ -306,11 +307,27 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     });
   }
 
+  function validateViaBootstrap() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    Array.prototype.filter.call(forms, function (form) {
+      form.addEventListener('submit', function (event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }
+
   $(document).ready(highlightCurrentSection);
   $(document).ready(initPickersAndWidgets);
   $(document).ready(addHelpButtonToTextarea);
   $(document).ready(initTooltipsAndHovers);
   $(document).ready(createLinks);
   $(document).ready(toggleCaret);
+  $(document).ready(validateViaBootstrap);
   $.fn.select2.defaults.set('theme', 'bootstrap');
 }());

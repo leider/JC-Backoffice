@@ -19,7 +19,7 @@ block title
 block content
   -var unterkunft = veranstaltung.unterkunft()
   .col-12
-    form#hotelform(action='/veranstaltungen/submit', method='post')
+    form#hotelform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
       +editHeader(veranstaltung, 'hotel')
         .col-md-6
           +kontakt(veranstaltung, optionen.hotels(), 'Hotel', 'hotel', 'hotel')
@@ -156,4 +156,3 @@ block scripts
         window.location.href = href;
       });
     });
-  script(src='/clientscripts/check-hotelform.js')

@@ -8,7 +8,7 @@ include mixins
 mixin eventTypSelect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen')
+    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen', required)
       each val in values
         option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + '</span>') #{val}
 
@@ -24,7 +24,7 @@ block content
   -var eintrittspreise = veranstaltung.eintrittspreise()
 
   .col-12
-    form#veranstaltungform(action='/veranstaltungen/submit', method='post')
+    form#veranstaltungform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
       +editHeader(veranstaltung, 'allgemeines')
         .col-md-6
           +legendMitBody('event', 'Event')
@@ -39,7 +39,7 @@ block content
 
             .row
               .col-sm-6
-                +text('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
+                +textRequired('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
               .col-6.col-sm-3
                 +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
               .col-6.col-sm-3
@@ -61,7 +61,7 @@ block content
 
             .row
               .col-4
-                +singleselect('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
+                +singleselectRequired('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
                 +hidden('kopf[pressename]', kopf.pressename())
                 +hidden('kopf[presseIn]', kopf.presseIn())
               .col-4
@@ -167,7 +167,27 @@ block scripts
       }
       $('#kopf\\[ort\\]').change(ortchanged);
 
+      function validateDateAndTime() {
+        var startDateVal = $('#veranstaltungform [name=startDate]').val();
+        var startTimeVal = $('#veranstaltungform [name=startTime]').val();
+        var endDateVal = $('#veranstaltungform [name=endDate]').val();
+        var endTimeVal = $('#veranstaltungform [name=endTime]').val();
 
+        var start = toUtc(startDateVal, startTimeVal);
+        var end = toUtc(endDateVal, endTimeVal);
+        var isValid = endDate !== '' && endTime !== '' && end && start && end.getTime() - start.getTime() > 0;
+        if (isValid) {
+          startDate.removeClass('is-invalid');
+          startTime.removeClass('is-invalid');
+          endDate.removeClass('is-invalid');
+          endTime.removeClass('is-invalid');
+        } else {
+          startDate.addClass('is-invalid');
+          startTime.addClass('is-invalid');
+          endDate.addClass('is-invalid');
+          endTime.addClass('is-invalid');
+        }
+      }
+      endDate.change(validateDateAndTime);
+      endTime.change(validateDateAndTime);
     });
-
-  script(src='/clientscripts/check-veranstaltungform.js')

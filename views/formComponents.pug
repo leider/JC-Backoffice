@@ -5,6 +5,14 @@ mixin text(name, label, value, tooltip, placeholder, readonly)
     +controlLabel(name, label, tooltip)
     input.form-control.trim-text(id=name, type='text', name=name, value=value, placeholder=placeholder, disabled=readonly)
 
+mixin textRequired(name, label, value, tooltip, placeholder, readonly)
+  .form-group
+    if (readonly)
+      +hidden(name, value)
+    +controlLabel(name, label, tooltip)
+    input.form-control.trim-text(id=name, type='text', name=name, value=value, placeholder=placeholder, disabled=readonly, required)
+    .invalid-feedback Pflichtfeld
+
 mixin email(name, label, value, tooltip, placeholder, readonly)
   .form-group
     if (readonly)
@@ -17,12 +25,20 @@ mixin number(name, label, value, tooltip, min, max, readonly)
     if (readonly)
       +hidden(name, value)
     +controlLabel(name, label, tooltip)
-    input.form-control.trim-text(id=name, type='number', name=name, value=value, min=min, max=max, disabled=readonly, style='text-align: right;')
+    input.form-control(id=name, type='number', name=name, value=value, min=min, max=max, disabled=readonly, style='text-align: right;')
+    .invalid-feedback Bitte eine deutsche Zahl eingeben
 
 mixin singleselect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
     select.form-control.selectpicker(id=name, name=name)
+      each val in values
+        option(value = val, selected = value === val) #{val}
+
+mixin singleselectRequired(name, label, value, values)
+  .form-group
+    +controlLabel(name, label)
+    select.form-control.selectpicker(id=name, name=name, required)
       each val in values
         option(value = val, selected = value === val) #{val}
 
@@ -44,9 +60,10 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
   .form-group
     +controlLabel(name, label, tooltip)
     .input-group
-      input.form-control.currency.text-right(id=name, type='text', value=formatNumberTwoDigits(value), name=name, placeholder=placeholder, disabled=readonly)
+      input.form-control.currency.text-right(id=name, type='number', step=0.01, value=formatNumberTwoDigitsEnglish(value), name=name, placeholder=placeholder, disabled=readonly)
       .input-group-append
         span.input-group-text.pl-1.pr-1: b €
+      .invalid-feedback Bitte eine deutsche Zahl eingeben
 
 mixin currencySpan(value, id, clazz)
   span.text-right(id=id, class=clazz) #{formatReadonlyAsEuro(value)}
@@ -86,7 +103,7 @@ mixin hidden(name, value)
 mixin date(name, label, value, tooltip, startDate)
   .form-group
     +controlLabel(name, label, tooltip)
-    input.form-control(id=name, type='text', name=name, value=value,
+    input.form-control(id=name, type='date', name=name, value=value,
       data-provide='datepicker',
       data-date-format= 'dd.mm.yyyy',
       data-date-autoclose=true,

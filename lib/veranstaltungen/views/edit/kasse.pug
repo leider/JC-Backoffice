@@ -41,7 +41,7 @@ block content
   -var kasse = veranstaltung.kasse()
   -var freigegeben = kasse.istFreigegeben()
   .col-12
-    form#kasseform(action='/veranstaltungen/submit', method='post')
+    form#kasseform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
       +editHeader(veranstaltung, 'kasse', freigegeben)
         .col-md-6
           +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
@@ -182,4 +182,3 @@ block scripts
       anfangsbestandEUR.keyup(updateEndbestand);
       updateEndbestand();
     });
-  script(src='/clientscripts/check-kasseform.js')

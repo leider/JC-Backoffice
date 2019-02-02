@@ -10,9 +10,10 @@ mixin labelCurrencyRow(id, name, label, value)
     label.col-6.col-form-label(for=name) #{label}
     .col-6.col-sm-3
       .input-group
-        input.form-control.currency.text-right(id=id, type='text', value=formatNumberTwoDigits(value), name=name)
+        input.form-control.currency.text-right(id=name, type='number', step=0.01, value=formatNumberTwoDigitsEnglish(value), name=name)
         .input-group-append
           span.input-group-text.pl-1.pr-1: b €
+        .invalid-feedback Bitte eine deutsche Zahl eingeben
 
 block title
   | Veranstaltung
@@ -23,7 +24,7 @@ block content
   -var eintrittspreise = veranstaltung.eintrittspreise()
   -var kasse = veranstaltung.kasse()
   .col-12
-    form#ausgabenform(action='/veranstaltungen/submit', method='post')
+    form#ausgabenform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
       +editHeader(veranstaltung, 'ausgaben')
         .col-md-6
           +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'ausgaben')
@@ -248,7 +249,3 @@ block scripts
       })
       dealProzentHandler();
     });
-
-
-
-  script(src='/clientscripts/check-ausgabenform.js')

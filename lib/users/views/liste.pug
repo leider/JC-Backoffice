@@ -11,8 +11,8 @@ block content
         button.close(type='button', data-dismiss='alert') &times;
         h4 Merke Dir das Passwort!
         p.
-          Wenn Du es Dir nicht merkst, ist es unwiederbringlich verloren und Du musst ein neues generieren! - 
-          Du kannst ein anderes generieren, indem Du diese Seite jetzt neu lädst. 
+          Wenn Du es Dir nicht merkst, ist es unwiederbringlich verloren und Du musst ein neues generieren! -
+          Du kannst ein anderes generieren, indem Du diese Seite jetzt neu lädst.
         p Das neue Passwort für "#{lastSaved.id}" ist:<br> <b>#{lastSaved.password}</b>
     .page-header
       h2 Registrierte User
@@ -21,16 +21,11 @@ block content
       for user in users
         +userpanel(user, ++count, true)
 
-    hr              
+    hr
     .page-header
       h2 User anlegen / Passwort vergeben
-    form#userform(action='/users/submitNew', method='post')
+    form#userform.needs-validation(action='/users/submitNew', method='post', novalidate)
       p Einfach einen neuen oder vorhandenen Username (fürs Login) eintragen und "Speichern" klicken. Dann wird ein Passwort generiert.
       +csrf
-      +text('username', 'Benutzername')
+      +textRequired('username', 'Benutzername')
       +submitButtons()
-
-
-block scripts
-  script(src='/clientscripts/check-userform.js')
-      
