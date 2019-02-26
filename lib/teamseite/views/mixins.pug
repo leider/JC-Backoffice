@@ -27,6 +27,11 @@ mixin calendar(icals)
       if (!calElement) { return; }
       var calendar;
       var options = {
+        plugins: ['bootstrap', 'dayGrid'],
+        defaultView: 'dayGridMonth',
+        themeSystem: 'bootstrap',
+        locales: ['de'],
+        locale: 'de',
         header: {
           left: 'title',
           center: '',
@@ -57,14 +62,10 @@ mixin calendar(icals)
         eventClick: function (eventClickInfo) {
           $(eventClickInfo.el).tooltip('dispose');
         },
-        themeSystem: 'bootstrap4',
-        //aspectRatio: 1.2,
         height: 'auto',
-        locale: 'de',
         views: {
           month: {
             titleFormat: {month: 'short', year: '2-digit'},
-            lang: 'de',
             fixedWeekCount: false,
             showNonCurrentDates: false
           }

@@ -66,6 +66,11 @@ block scripts
     $(document).ready(function () {
       function initCalendar(id, date) {
         var options = {
+          plugins: ['bootstrap', 'dayGrid'],
+          defaultView: 'dayGridMonth',
+          themeSystem: 'bootstrap',
+          locales: ['de'],
+          locale: 'de',
           defaultDate: date,
           header: {
             left: 'title',
@@ -76,14 +81,11 @@ block scripts
           timeFormat: 'HH:mm',
           displayEventTime: false,
           events: '/programmheft/kalenderFor',
-          themeSystem: 'bootstrap4',
           aspectRatio: 1.2,
           height: 'auto',
-          locale: 'de',
           views: {
             month: {
               titleFormat: {month: 'long'},
-              lang: 'de',
               fixedWeekCount: false,
               showNonCurrentDates: false
             }
