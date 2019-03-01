@@ -103,7 +103,7 @@ mixin hidden(name, value)
 mixin date(name, label, value, tooltip, startDate)
   .form-group
     +controlLabel(name, label, tooltip)
-    input.form-control(id=name, type='date', name=name, value=value,
+    input.form-control(id=name, type='text', name=name, value=value,
       data-provide='datepicker',
       data-date-format= 'dd.mm.yyyy',
       data-date-autoclose=true,
