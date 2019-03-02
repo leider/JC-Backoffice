@@ -131,7 +131,7 @@ block content
             a.btn.btn-light(href='/veranstaltungen/new', title='Neu'): i.far.fa-file.fa-fw
             a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt
             .dropdown
-              a.btn.btn-light.dropdown-toggle(data-toggle='dropdown')
+              button.btn.btn-light.dropdown-toggle(type='button', data-toggle='dropdown')
                 | #{titel} &nbsp;
                 span.caret
               .dropdown-menu
