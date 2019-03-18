@@ -74,12 +74,45 @@ describe('MailRule', () => {
 
   });
 
-  describe('Regel 3 \'Am 20. den Folgemonat ab 15.\'', () => {
+  describe('Regel 3 \'Am 5. zwei Folgemonate\'', () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
       rule: MailRule.rules()[3]
+    });
+
+    it('sendet nur am 5.', () => {
+      expect(rule.shouldSend(montagFeb5)).to.be(true);
+      expect(rule.shouldSend(dienstagFeb13)).to.be(false);
+    });
+
+    it('errechnet Beginn und Ende für Februar korrekt', () => {
+      const result = rule.startAndEndDay(jan5);
+      expect(result.start).to.eql(moment('2018-02-01'));
+      expect(result.end).to.eql(moment('2018-03-31'));
+    });
+
+    it('errechnet Beginn und Ende für März korrekt', () => {
+      const result = rule.startAndEndDay(montagFeb5);
+      expect(result.start).to.eql(moment('2018-03-01'));
+      expect(result.end).to.eql(moment('2018-04-30'));
+    });
+
+    it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
+      const result = rule.startAndEndDay(dienstagFeb13);
+      expect(result.start).to.eql(dienstagFeb13);
+      expect(result.end).to.eql(dienstagFeb13);
+    });
+
+  });
+
+  describe('Regel 4 \'Am 20. den Folgemonat ab 15.\'', () => {
+    const rule = new MailRule({
+      id: 'someID',
+      name: 'test',
+      email: 'aa@bb.cc',
+      rule: MailRule.rules()[4]
     });
 
     it('sendet nur am 16.', () => {
@@ -107,12 +140,12 @@ describe('MailRule', () => {
 
   });
 
-  describe('Regel 4 \'Montags die Folgewoche ab Freitag\'', () => {
+  describe('Regel 5 \'Montags die Folgewoche ab Freitag\'', () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
-      rule: MailRule.rules()[4]
+      rule: MailRule.rules()[5]
     });
 
     it('sendet nur Montags', () => {
@@ -139,29 +172,30 @@ describe('MailRule', () => {
     });
 
   });
-  describe('Regel 5 \'Am 5. zwei Folgemonate\'', () => {
+
+  describe('Regel 6 \'Montags die übernächste Folgewoche\'', () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
-      rule: MailRule.rules()[5]
+      rule: MailRule.rules()[6]
     });
 
-    it('sendet nur am 5.', () => {
+    it('sendet nur Montags', () => {
       expect(rule.shouldSend(montagFeb5)).to.be(true);
       expect(rule.shouldSend(dienstagFeb13)).to.be(false);
     });
 
-    it('errechnet Beginn und Ende für Februar korrekt', () => {
-      const result = rule.startAndEndDay(jan5);
-      expect(result.start).to.eql(moment('2018-02-01'));
-      expect(result.end).to.eql(moment('2018-03-31'));
+    it('errechnet Beginn und Ende im Februar korrekt', () => {
+      const result = rule.startAndEndDay(montagFeb5);
+      expect(result.start).to.eql(moment('2018-02-19'));
+      expect(result.end).to.eql(moment('2018-02-26'));
     });
 
-    it('errechnet Beginn und Ende für März korrekt', () => {
-      const result = rule.startAndEndDay(montagFeb5);
-      expect(result.start).to.eql(moment('2018-03-01'));
-      expect(result.end).to.eql(moment('2018-04-30'));
+    it('errechnet Beginn und Ende monatsübergreifend korrekt', () => {
+      const result = rule.startAndEndDay(montagFeb26);
+      expect(result.start).to.eql(moment('2018-03-12'));
+      expect(result.end).to.eql(moment('2018-03-19'));
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
