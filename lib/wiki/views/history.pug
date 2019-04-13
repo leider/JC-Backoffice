@@ -5,6 +5,7 @@ block scripts
     $(document).ready(function () {
       var checkboxes = $('.history td:first-child :checkbox');
       var compareButton = $('#rev-compare');
+
       function toggleCompareCheckboxes() {
         var checkedCheckboxes = $('.history td:first-child :checked');
         if (checkboxes.length === 1) {
@@ -21,6 +22,7 @@ block scripts
           compareButton.attr({'disabled': 'disabled'});
         }
       }
+
       toggleCompareCheckboxes();
       checkboxes.on('click', function () {
         toggleCompareCheckboxes();

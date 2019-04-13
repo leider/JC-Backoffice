@@ -20,7 +20,10 @@ block content
                 +text('presse[jazzclubURL]', 'URL-Suffix bei jazzclub.de', presse.jazzclubURL())
                 +hightextarea('presse[text]', 'Text', presse.text(), 'Formatierter Text für die Pressemitteilung')
                 +textarea('presse[originalText]', 'Unredigierter Text', presse.originalText(), 'Text, wie er unredigiert vorliegt')
-                +uploader('imageupload', 'Datei', 'image/*', presse.image(), {id: veranstaltung.id(), typ: 'pressefoto'})
+                +uploader('imageupload', 'Datei', 'image/*', presse.image(), {
+                  id: veranstaltung.id(),
+                  typ: 'pressefoto'
+                })
                 +singleselect('presse[existingbild]', 'Vorhandene Bilder', null, bildernamen)
               .col-md-6
                 #preview
@@ -38,7 +41,12 @@ block scripts
       var preview = $('#preview');
 
       function updateForText() {
-        $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/pressePreview', {data: {text: textarea.val(), jazzclubURL: jazzclubURL.val()}})
+        $.ajax('#{veranstaltung.fullyQualifiedUrl().replace('\'', '\\\'')}' + '/pressePreview', {
+          data: {
+            text: textarea.val(),
+            jazzclubURL: jazzclubURL.val()
+          }
+        })
          .done(function (result) {
            if (result) {
              preview.html(result);

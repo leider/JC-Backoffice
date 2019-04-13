@@ -132,11 +132,13 @@ block scripts
       function shirtsizeChanged() {
         $.ajax('/users/tshirt-size-for', {data: {user: this.id, value: this.value}})
       }
+
       $('select[name="tshirt"]').change(shirtsizeChanged);
 
       function telChanged() {
         $.ajax('/users/tel-for', {data: {user: this.id, value: this.value}})
       }
+
       $('input[name="tel"]').change(telChanged);
     });
 

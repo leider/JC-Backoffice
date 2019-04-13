@@ -43,7 +43,7 @@ block content
             small
               | #{veranstaltung.startMoment().format('LLLL')} #{''}
               span (#{kopf.eventTyp()})
-            if kopf.kooperation() && kopf.kooperation().length  > 1
+            if kopf.kooperation() && kopf.kooperation().length > 1
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6

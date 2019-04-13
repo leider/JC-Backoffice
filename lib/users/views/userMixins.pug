@@ -2,7 +2,7 @@ mixin userpanel(user, count, expandAll)
   -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
   -var editlink = accessrights.canEditUser(user.id) ? '/users/' + encodeURIComponent(user.id) : null
   .col-xl-3.col-lg-4.col-sm-6
-    +legendMitBody('user' + count, user.name + ' (' + user.id+ ')' + ' <small>Gruppen: ' + gruppenUndRechteText(user) + '</small>', null, null, null, !expandAll && accessrights.memberId() !== user.id)
+    +legendMitBody('user' + count, user.name + ' (' + user.id + ')' + ' <small>Gruppen: ' + gruppenUndRechteText(user) + '</small>', null, null, null, !expandAll && accessrights.memberId() !== user.id)
       table.table.table-striped.table-sm
         if accessrights.canEditUser(user.id)
           tr: td(colspan=2): a.btn.btn-sm.btn-primary.float-right(href=editlink, title='Bearbeiten'): i.fas.fa-fw.fa-edit
@@ -28,5 +28,5 @@ mixin userpanel(user, count, expandAll)
             th: .form-control-plaintext Telefon:
             td: .telify.form-control-plaintext #{user.tel}
 
-              
+
 

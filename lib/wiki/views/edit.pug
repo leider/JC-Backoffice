@@ -15,7 +15,7 @@ block content
           -var params = {pageName: pageName, subdir: subdir}
           if page.content === ''
             | Wiki-Seite "#{subdir}/#{pageName}" anlegen
-          else 
+          else
             | Wiki-Seite "#{subdir}/#{pageName}" bearbeiten
         +hightextarea('content', 'Inhalt', page.content)
         +text('comment', 'Kommentar', page.comment, 'Commit-Kommentar', 'kein Commit-Kommentar')
@@ -25,4 +25,4 @@ block content
 
 block scripts
   script(src='/clientscripts/bootstrap-markdown.min.js')
-  
+

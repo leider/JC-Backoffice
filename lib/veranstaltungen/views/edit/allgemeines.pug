@@ -158,13 +158,14 @@ block scripts
       var alleOrte = JSON.parse('!{JSON.stringify(orte.orte())}');
 
       function ortchanged(auswahl) {
-        var derOrt = alleOrte.find(function(o) {
+        var derOrt = alleOrte.find(function (o) {
           return o.name === ort.val();
         });
         $('#kopf\\[flaeche\\]').val(derOrt.flaeche);
         $('input[name="kopf\\[presseIn\\]"]').val(derOrt.presseIn);
         $('input[name="kopf\\[pressename\\]"]').val(derOrt.pressename);
       }
+
       $('#kopf\\[ort\\]').change(ortchanged);
 
       function validateDateAndTime() {
@@ -188,6 +189,7 @@ block scripts
           endTime.addClass('is-invalid');
         }
       }
+
       endDate.change(validateDateAndTime);
       endTime.change(validateDateAndTime);
     });

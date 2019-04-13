@@ -25,11 +25,13 @@ mixin bandScript
       var gagenEUR = $('#kosten\\[gagenEUR\\]');
       var gagenSteuer = $('#kosten\\[gagenSteuer\\]');
       var gagenTotal = $('#gagenTotal');
+
       function updateGagenTotal() {
         var eur = floatAmount(gagenEUR);
         var mwst = (eur * floatAmount(gagenSteuer) / 100);
         setEuro(gagenTotal, eur + mwst);
       }
+
       gagenEUR.keyup(updateGagenTotal);
       gagenSteuer.change(updateGagenTotal);
       updateGagenTotal();
@@ -37,6 +39,7 @@ mixin bandScript
       function updateBandTotal() {
         setEuro($('#bandTotal'), floatAmountForSpan(gagenTotal));
       }
+
       [gagenTotal].forEach(function (field) {
         field.change(updateBandTotal);
       })
