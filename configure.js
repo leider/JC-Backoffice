@@ -23,5 +23,6 @@ function createConfiguration() {
 
   return conf;
 }
+
 module.exports = createConfiguration();
 
