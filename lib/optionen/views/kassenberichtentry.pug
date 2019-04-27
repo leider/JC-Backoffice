@@ -1,0 +1,16 @@
+extends ../../../views/layout
+include ../../../views/formComponents
+
+block title
+  | Kassenbericht
+
+block content
+  .col-12
+    .page-header
+      h2 Kassenberichte
+      -var ersterMonat = now.clone().subtract(6, 'months');
+      -var n=1
+      while n < 13
+        p: a(href='/optionen/kassenbericht/' + ersterMonat.format('YYYY/MM')) Kassenbericht #{ersterMonat.format('MMM YY')}
+        -ersterMonat.add(1, 'months')
+        -n++
