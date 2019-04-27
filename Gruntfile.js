@@ -90,13 +90,6 @@ module.exports = function (grunt) {
         expand: true,
         flatten: true
       },
-      customJS: {
-        cwd: 'frontend/javascript/',
-        src: ['*', '!jc-backoffice.js'],
-        dest: 'public/clientscripts',
-        expand: true,
-        flatten: false
-      },
       customSASS: {
         src: 'frontend/sass/*',
         dest: 'build/stylesheets/sass',
