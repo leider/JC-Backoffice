@@ -49,6 +49,7 @@
 
   "renderer": {"module": "./lib/commons/renderer"},
   "puppeteerPrinter": {"module": "./lib/commons/puppeteerPrinter"},
+  "DatumUhrzeit": {"module": "./lib/commons/DatumUhrzeit"},
 
   "wikiApp": {"module": "./lib/wiki"},
   "gitDiff": {"module": "./lib/wiki/gitDiff"},
