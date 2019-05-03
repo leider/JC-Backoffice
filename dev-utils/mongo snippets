@@ -11,3 +11,5 @@ db.getCollection('veranstaltungenstore').update({}, {$unset: {'werbung': ''}}, {
 
 // Staff bereinigen
 db.getCollection('veranstaltungenstore').update({}, {$unset: {'staff.fremdpersonal': '', 'staff.technikerEUR': '', 'staff.merchandiseEUR': '', 'staff.kasseEUR': '', 'staff.fremdpersonalEUR': ''}}, {multi: true})
+
+db.veranstaltungenstore.update({'salesrep.datum': ISODate("1970-01-01T00:00:00Z")}, {$unset: {'salesrep':''}}, {multi:true})
