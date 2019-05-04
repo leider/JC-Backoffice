@@ -31,7 +31,7 @@ describe('Reservix Salesreport', () => {
     expect(obj.gebuehren()).to.eql(5296 - 4782.55);
     expect(obj.anzahlRegulaer()).to.eql(220);
     expect(obj.id()).to.eql('1008242');
-    expect(obj.timestamp()).to.eql('2018-10-28T13:58:23+01:00');
+    expect(obj.updated().toLocalDateTimeString()).to.eql('28.10.2018, 13:58:23');
   });
 
   it('handles non-existing bruttoUmsatz', () => {
