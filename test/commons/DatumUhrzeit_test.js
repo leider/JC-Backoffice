@@ -78,7 +78,6 @@ describe('DatumUhrzeit', () => {
     });
   });
 
-
   describe('plus und minus (Uhrzeit)', () => {
     const vorSommerzeit = DatumUhrzeit.forISOString('2019-03-30 23:00:00');
     const plus10Minuten = DatumUhrzeit.forISOString('2019-03-30 23:10:00');
@@ -97,6 +96,16 @@ describe('DatumUhrzeit', () => {
     });
   });
 
+  describe('Differenz', () => {
+    const januar01 = DatumUhrzeit.forISOString('2019-01-01');
+    const januar31 = DatumUhrzeit.forISOString('2019-01-31');
+
+    it('in Tagen', () => {
+      expect(januar31.differenzInTagen(januar01)).to.eql(30);
+      expect(januar01.differenzInTagen(januar31)).to.eql(-30);
+    });
+  });
+
   describe('formatting', () => {
     const januar01 = DatumUhrzeit.forISOString('2019-01-01');
 
@@ -106,6 +115,10 @@ describe('DatumUhrzeit', () => {
 
     it('formatiert Standard Tag Monat Jahr', () => {
       expect(januar01.tagMonatJahrLang()).to.eql('1. Januar 2019');
+    });
+
+    it('formatiert Tag Monat Jahr kopakt', () => {
+      expect(januar01.tagMonatJahrKompakt()).to.eql('01.01.2019');
     });
 
     it('formatiert Monat Jahr kompakt', () => {
