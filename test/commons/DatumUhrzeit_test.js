@@ -119,7 +119,11 @@ describe('DatumUhrzeit', () => {
       expect(januar01.monatLang()).to.eql('Januar');
     });
 
-    it('formatiert Standard Tag Monat Jahr', () => {
+    it('formatiert nur den Monat kompakt', () => {
+      expect(januar01.monatKompakt()).to.eql('Jan.');
+    });
+
+    it('formatiert Tag Monat Jahr', () => {
       expect(januar01.tagMonatJahrLang()).to.eql('1. Januar 2019');
     });
 
@@ -129,6 +133,14 @@ describe('DatumUhrzeit', () => {
 
     it('formatiert Monat Jahr kompakt', () => {
       expect(januar01.monatJahrKompakt()).to.eql("Jan. '19");
+    });
+
+    it('formatiert für Kalender Anzeige', () => {
+      expect(januar01.fuerKalenderViews()).to.eql('2019/01');
+    });
+
+    it('formatiert für Calendar Widget', () => {
+      expect(januar01.fuerCalendarWidget()).to.eql('2019-01-01');
     });
   });
 
