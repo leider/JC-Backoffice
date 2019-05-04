@@ -47,8 +47,10 @@ describe('DatumUhrzeit', () => {
 
   describe('plus und minus (Datum) mit immutability', () => {
     const januar01 = DatumUhrzeit.forISOString('2019-01-01');
+    const januar15 = DatumUhrzeit.forISOString('2019-01-15');
     const januar0129 = DatumUhrzeit.forISOString('2029-01-01');
     const februar01 = DatumUhrzeit.forISOString('2019-02-01');
+    const februar14 = DatumUhrzeit.forISOString('2019-02-14');
     const januar31 = DatumUhrzeit.forISOString('2019-01-31');
     const februar28 = DatumUhrzeit.forISOString('2019-02-28');
     const maerz31 = DatumUhrzeit.forISOString('2019-03-31');
@@ -63,6 +65,11 @@ describe('DatumUhrzeit', () => {
     it('rechnet mit Monaten am Monatsletzten', () => {
       expect(januar31.plus({ monate: 1 })).to.eql(februar28);
       expect(maerz31.minus({ monate: 1 })).to.eql(februar28);
+    });
+
+    it('rechnet mit Wochen', () => {
+      expect(januar01.plus({ wochen: 2 })).to.eql(januar15);
+      expect(januar31.plus({ wochen: 2 })).to.eql(februar14);
     });
 
     it('rechnet mit Tagen', () => {
@@ -214,6 +221,23 @@ describe('DatumUhrzeit', () => {
       expect(
         DatumUhrzeit.forISOString('2020-11-30').naechsterUngeraderMonat()
       ).to.eql(DatumUhrzeit.forISOString('2021-01-30'));
+    });
+  });
+
+  describe('getSet', () => {
+
+    it('zugriff auf felder', () => {
+      const januar01 = DatumUhrzeit.forISOString('2019-01-01');
+      expect(januar01.monat()).to.eql(0); // zero based
+      expect(januar01.wochentag()).to.eql(2); // Montag ist 1
+      expect(januar01.tag()).to.eql(1);
+      expect(januar01.kw()).to.eql(1);
+    });
+
+    it('setzen der felder', () => {
+      const januar01 = DatumUhrzeit.forISOString('2019-01-01');
+      const januar05 = DatumUhrzeit.forISOString('2019-01-05');
+      expect(januar01.setTag(5)).to.eql(januar05);
     });
   });
 });
