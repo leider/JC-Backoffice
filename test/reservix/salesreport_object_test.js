@@ -1,18 +1,20 @@
 'use strict';
 
 const expect = require('must-dist');
-const moment = require('moment-timezone');
 
 const beans = require('../../configure').get('beans');
+const DatumUhrzeit = beans.get('DatumUhrzeit');
+
 const Salesreport = beans.get('salesreport');
 
-const heute = moment().add(8, 'hours').toDate();
-const tomorrow = moment().add(1, 'days').toDate();
+const now = new DatumUhrzeit();
+const heute = now.plus({stunden: 8}).toJSDate();
+const tomorrow = now.plus({tage: 1}).toJSDate();
 
-const thirtyMinutesAgo = moment().subtract(30, 'minutes').toDate();
-const oneHourAgo = moment().subtract(61, 'minutes').toDate();
-const almostOneDayOld = moment().subtract(23, 'hours').toDate();
-const moreThanOneDayOld = moment().subtract(25, 'hours').toDate();
+const thirtyMinutesAgo = now.minus({minuten: 30}).toJSDate();
+const oneHourAgo = now.minus({minuten: 61}).toJSDate();
+const almostOneDayOld = now.minus({stunden: 23}).toJSDate();
+const moreThanOneDayOld = now.minus({stunden: 25}).toJSDate();
 
 const fullresult = {
   id: '1008242',
