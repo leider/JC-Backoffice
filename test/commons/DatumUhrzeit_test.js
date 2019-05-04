@@ -21,11 +21,17 @@ describe('DatumUhrzeit', () => {
       expect(new DatumUhrzeit(festesDatum).toLocalDateTimeString()).to.eql(
         '30.04.2019, 13:43:30'
       );
-      expect(new DatumUhrzeit(festesDatum).toJSDate()).to.be(festesDatum);
+      expect(new DatumUhrzeit(festesDatum).toJSDate()).to.eql(festesDatum);
     });
 
     it('kann mit String "YYMM" erzeugt werden', () => {
       expect(DatumUhrzeit.forYYMM('1903').toLocalDateTimeString()).to.eql(
+        '01.03.2019, 00:00:00'
+      );
+    });
+
+    it('kann mit String "YYYYMM" erzeugt werden', () => {
+      expect(DatumUhrzeit.forYYYYMM('201903').toLocalDateTimeString()).to.eql(
         '01.03.2019, 00:00:00'
       );
     });
@@ -51,7 +57,7 @@ describe('DatumUhrzeit', () => {
     it('rechnet mit Monaten', () => {
       expect(januar01.plus({ monate: 1 })).to.eql(februar01);
       expect(februar01.minus({ monate: 1 })).to.eql(januar01);
-      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 01:00:00');
+      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 00:00:00');
     });
 
     it('rechnet mit Monaten am Monatsletzten', () => {
@@ -62,19 +68,19 @@ describe('DatumUhrzeit', () => {
     it('rechnet mit Tagen', () => {
       expect(januar01.plus({ tage: 31 })).to.eql(februar01);
       expect(februar01.plus({ tage: 31 })).to.eql(maerz04);
-      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 01:00:00');
+      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 00:00:00');
     });
 
     it('rechnet mit Monaten und Tagen', () => {
       expect(januar31.plus({ monate: 1, tage: 4 })).to.eql(maerz04);
       expect(maerz04.minus({ monate: 1, tage: 4 })).to.eql(januar31);
-      expect(januar31.toLocalDateTimeString()).to.eql('31.01.2019, 01:00:00');
+      expect(januar31.toLocalDateTimeString()).to.eql('31.01.2019, 00:00:00');
     });
 
     it('rechnet mit Jahren', () => {
       expect(januar01.plus({ jahre: 10 })).to.eql(januar0129);
       expect(januar0129.minus({ jahre: 10 })).to.eql(januar01);
-      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 01:00:00');
+      expect(januar01.toLocalDateTimeString()).to.eql('01.01.2019, 00:00:00');
     });
   });
 
@@ -140,6 +146,62 @@ describe('DatumUhrzeit', () => {
 
     it('formatiert Monat Jahr kompakt', () => {
       expect(januar01.monatJahrKompakt()).to.eql("Jan. '19");
+    });
+  });
+
+  describe('Spezialmethoden', () => {
+    it('findet vorhergehenden oder aktuellen ungeraden Monat', () => {
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-04-30'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-03-30'));
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-03-20'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-03-20'));
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-02-29'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-01-29'));
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-01-20'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-01-20'));
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-12-31'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-11-30'));
+      expect(
+        DatumUhrzeit.forISOString(
+          '2020-11-20'
+        ).vorigerOderAktuellerUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-11-20'));
+    });
+
+    it('findet mächsten ungeraden Monat', () => {
+      expect(
+        DatumUhrzeit.forISOString('2020-04-30').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-05-30'));
+      expect(
+        DatumUhrzeit.forISOString('2020-03-31').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-05-31'));
+      expect(
+        DatumUhrzeit.forISOString('2020-02-29').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-03-29'));
+      expect(
+        DatumUhrzeit.forISOString('2020-01-31').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2020-03-31'));
+      expect(
+        DatumUhrzeit.forISOString('2020-12-31').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2021-01-31'));
+      expect(
+        DatumUhrzeit.forISOString('2020-11-30').naechsterUngeraderMonat()
+      ).to.eql(DatumUhrzeit.forISOString('2021-01-30'));
     });
   });
 });

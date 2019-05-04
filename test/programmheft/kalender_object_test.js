@@ -2,10 +2,9 @@
 
 const expect = require('must-dist');
 
-const moment = require('moment-timezone');
-
 const beans = require('../../configure').get('beans');
 const Kalender = beans.get('kalender');
+const DatumUhrzeit = beans.get('DatumUhrzeit');
 
 describe('Kalender', () => {
 
@@ -127,7 +126,8 @@ describe('Kalender', () => {
         'Irgendwas | Irgendwer | Green   | 11.12. | \n' +
         'Irgendwas | Irgendwer | Green   | 13.12. | andreas@andreas.as | 14\n'
     });
-    const emailEvents = kalender.eventsToSend(moment('2020-11-29T00:00:00.000Z'));
+    const sendeDatum = DatumUhrzeit.forISOString('2020-11-29T00:00:00.000Z');
+    const emailEvents = kalender.eventsToSend(sendeDatum);
     expect(emailEvents).to.have.length(1);
 
     const emailEvent = emailEvents[0];
@@ -141,7 +141,7 @@ describe('Kalender', () => {
       was: 'Irgendwas',
       wer: 'Irgendwer'
     });
-    expect(emailEvent.momentToSend()).to.eql(moment('2020-11-29T00:00:00.000Z'));
+    expect(emailEvent.datumUhrzeitToSend()).to.eql(sendeDatum);
     expect(emailEvent.email()).to.eql('andreas@andreas.as');
     expect(emailEvent.body()).to.eql('Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub');
   });
