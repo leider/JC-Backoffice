@@ -1,5 +1,3 @@
-'use strict';
-
 const expect = require('must-dist');
 const beans = require('../../configure').get('beans');
 const MailRule = beans.get('mailRule');

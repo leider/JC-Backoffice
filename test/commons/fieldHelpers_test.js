@@ -1,5 +1,3 @@
-'use strict';
-
 const beans = require('../../configure').get('beans');
 const fieldHelpers = beans.get('fieldHelpers');
 const expect = require('must-dist');

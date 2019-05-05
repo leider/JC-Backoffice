@@ -1,6 +1,3 @@
-'use strict';
-
-// const path = require('path');
 const {format, loggers, transports} = require('winston');
 
 function console() {
