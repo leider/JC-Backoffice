@@ -2,24 +2,6 @@ const beans = require('../../configure').get('beans');
 const fieldHelpers = beans.get('fieldHelpers');
 const expect = require('must-dist');
 
-describe('Activity application', () => {
-  it('removes all special characters from the id string', () => {
-    const id = fieldHelpers.createLinkFrom([
-      'assignedGroup',
-      'title',
-      'startDate'
-    ]);
-    expect(id).to.equal('assignedGroup_title_startDate');
-
-    const tmpId = fieldHelpers.createLinkFrom([
-      'assignedGroup',
-      '?!tit le?!',
-      '2012-11-11'
-    ]);
-    expect(tmpId).to.equal('assignedGroup___tit_le___2012-11-11');
-  });
-});
-
 describe('Replace email addresses from text', () => {
   it('returns the input if it is null or undefined', () => {
     expect(fieldHelpers.replaceMailAddresses(null)).to.equal(null);

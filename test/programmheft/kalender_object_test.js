@@ -5,7 +5,6 @@ const Kalender = beans.get('kalender');
 const DatumUhrzeit = beans.get('DatumUhrzeit');
 
 describe('Kalender', () => {
-
   describe('geht korrekt mit id und text um', () => {
     it('initial', () => {
       const kalender = new Kalender();
@@ -22,13 +21,13 @@ describe('Kalender', () => {
     });
 
     it('parses date correctly', () => {
-      const kalender = new Kalender({id: '2020/12'});
+      const kalender = new Kalender({ id: '2020/12' });
       expect(kalender.id()).to.eql('2020/12');
       expect(kalender.year()).to.eql('2020');
     });
 
     it('parses broken date correctly', () => {
-      const kalender = new Kalender({id: 'Peter/'});
+      const kalender = new Kalender({ id: 'Peter/' });
       expect(kalender.id()).is.undefined();
       expect(kalender.year()).is.undefined();
     });
@@ -45,11 +44,11 @@ describe('Kalender', () => {
     it('parses old style default text correctly', () => {
       const kalender = new Kalender({
         id: '2020/12',
-        text: 'Was | Wer | Farbe | Wann\n' +
-          '--- | --- | ---   | ---\n'
+        text: 'Was | Wer | Farbe | Wann\n' + '--- | --- | ---   | ---\n'
       });
-      expect(kalender.text()).to.eql('Was | Wer | Farbe | Wann\n' +
-        '--- | --- | ---   | ---\n');
+      expect(kalender.text()).to.eql(
+        'Was | Wer | Farbe | Wann\n' + '--- | --- | ---   | ---\n'
+      );
       expect(kalender.asEvents()).to.eql([]);
     });
   });
@@ -58,21 +57,25 @@ describe('Kalender', () => {
     it('parses old style filled text correctly', () => {
       const kalender = new Kalender({
         id: '2020/12',
-        text: 'Was | Wer | Farbe | Wann\n' +
-          'Irgendwas | Irgendwer | Green   | 13.12.\n'
+        text:
+          'Was | Wer | Farbe | Wann\n' +
+          'Irgendwas | Irgendwer | Green   | 13.12.2020\n'
       });
-      expect(kalender.asEvents()).to.eql([{
-        start: '2020-12-13T00:00:00.000Z',
-        end: '2020-12-13T22:00:00.000Z',
-        title: 'Irgendwas (Irgendwer)',
-        color: 'Green'
-      }]);
+      expect(kalender.asEvents()).to.eql([
+        {
+          start: '2020-12-12T23:00:00.000Z',
+          end: '2020-12-13T21:00:00.000Z',
+          title: 'Irgendwas (Irgendwer)',
+          color: 'Green'
+        }
+      ]);
     });
 
     it('parses broken date text correctly (e.g. empty)', () => {
       const kalender = new Kalender({
         id: '2020/12',
-        text: 'Was | Wer | Farbe | Wann\n' +
+        text:
+          'Was | Wer | Farbe | Wann\n' +
           'Irgendwas | Irgendwer | Green   | 33.\n'
       });
       expect(kalender.asEvents()).to.eql([]);
@@ -83,65 +86,76 @@ describe('Kalender', () => {
     it('parses new style filled text correctly (email)', () => {
       const kalender = new Kalender({
         id: '2020/12',
-        text: 'Was | Wer | Farbe | Wann | Email\n' +
-          'Irgendwas | Irgendwer | Green   | 13.12. | andreas@andreas.as\n'
+        text:
+          'Was | Wer | Farbe | Wann | Email\n' +
+          'Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as\n'
       });
-      expect(kalender.asEvents()).to.eql([{
-        start: '2020-12-13T00:00:00.000Z',
-        end: '2020-12-13T22:00:00.000Z',
-        title: 'Irgendwas (Irgendwer)',
-        color: 'Green',
-        email: 'andreas@andreas.as',
-        emailOffset: 7,
-        was: 'Irgendwas',
-        wer: 'Irgendwer'
-      }]);
+      expect(kalender.asEvents()).to.eql([
+        {
+          start: '2020-12-12T23:00:00.000Z',
+          end: '2020-12-13T21:00:00.000Z',
+          title: 'Irgendwas (Irgendwer)',
+          color: 'Green',
+          email: 'andreas@andreas.as',
+          emailOffset: 7,
+          was: 'Irgendwas',
+          wer: 'Irgendwer'
+        }
+      ]);
     });
 
     it('parses new style filled text correctly (email und offset)', () => {
       const kalender = new Kalender({
         id: '2020/12',
-        text: 'Was | Wer | Farbe | Wann | Email | Tage vorher\n' +
-          'Irgendwas | Irgendwer | Green   | 13.12. | andreas@andreas.as | 14\n'
+        text:
+          'Was | Wer | Farbe | Wann | Email | Tage vorher\n' +
+          'Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14\n'
       });
-      expect(kalender.asEvents()).to.eql([{
-        start: '2020-12-13T00:00:00.000Z',
-        end: '2020-12-13T22:00:00.000Z',
-        title: 'Irgendwas (Irgendwer)',
-        color: 'Green',
-        email: 'andreas@andreas.as',
-        emailOffset: 14,
-        was: 'Irgendwas',
-        wer: 'Irgendwer'
-      }]);
+      expect(kalender.asEvents()).to.eql([
+        {
+          start: '2020-12-12T23:00:00.000Z',
+          end: '2020-12-13T21:00:00.000Z',
+          title: 'Irgendwas (Irgendwer)',
+          color: 'Green',
+          email: 'andreas@andreas.as',
+          emailOffset: 14,
+          was: 'Irgendwas',
+          wer: 'Irgendwer'
+        }
+      ]);
     });
   });
 
   describe('findet Events mit E-Mail Adresse', () => {
     const kalender = new Kalender({
       id: '2020/12',
-      text: 'Was | Wer | Farbe | Wann | Email | Tage vorher\n' +
-        'Irgendwas | Irgendwer | Green   | 11.12. | \n' +
-        'Irgendwas | Irgendwer | Green   | 13.12. | andreas@andreas.as | 14\n'
+      text:
+        'Was | Wer | Farbe | Wann | Email | Tage vorher\n' +
+        'Irgendwas | Irgendwer | Green   | 11.12.2020 | \n' +
+        'Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14\n'
     });
-    const sendeDatum = DatumUhrzeit.forISOString('2020-11-29T00:00:00.000Z');
-    const emailEvents = kalender.eventsToSend(sendeDatum);
-    expect(emailEvents).to.have.length(1);
+    const sendeDatum = DatumUhrzeit.forISOString('2020-11-29');
 
-    const emailEvent = emailEvents[0];
-    expect(emailEvent.event).to.eql({
-      start: '2020-12-13T00:00:00.000Z',
-      end: '2020-12-13T22:00:00.000Z',
-      title: 'Irgendwas (Irgendwer)',
-      color: 'Green',
-      email: 'andreas@andreas.as',
-      emailOffset: 14,
-      was: 'Irgendwas',
-      wer: 'Irgendwer'
+    it('und berücksichtigt den Offset', () => {
+      const emailEvents = kalender.eventsToSend(sendeDatum);
+      expect(emailEvents).to.have.length(1);
+
+      const emailEvent = emailEvents[0];
+      expect(emailEvent.event).to.eql({
+        start: '2020-12-12T23:00:00.000Z',
+        end: '2020-12-13T21:00:00.000Z',
+        title: 'Irgendwas (Irgendwer)',
+        color: 'Green',
+        email: 'andreas@andreas.as',
+        emailOffset: 14,
+        was: 'Irgendwas',
+        wer: 'Irgendwer'
+      });
+      expect(emailEvent.datumUhrzeitToSend()).to.eql(sendeDatum);
+      expect(emailEvent.email()).to.eql('andreas@andreas.as');
+      expect(emailEvent.body()).to.eql(
+        'Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub'
+      );
     });
-    expect(emailEvent.datumUhrzeitToSend()).to.eql(sendeDatum);
-    expect(emailEvent.email()).to.eql('andreas@andreas.as');
-    expect(emailEvent.body()).to.eql('Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub');
   });
 });
-
