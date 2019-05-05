@@ -15,25 +15,25 @@ mixin people(veranstaltung, name)
   .mt-1: span.text-capitalize #{staff[name]().join(', ')}
 
 mixin monatHeadline(veranstaltung)
-  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startMoment().format('MMMM \'YY')}
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt()}
     .btn-group.btn-group-sm.float-right
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startMoment().format('YYMM'))
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
         i.far.fa-file-alt.fa-fw
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startMoment().format('YYMM'))
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 
 mixin panelView(groupedVeranstaltungen)
   -var count = 0
-  -var nearFuture = moment(); nearFuture.add(1, 'months')
+  -var nearFuture = new DatumUhrzeit().plus({monate: 1})
   for month in Object.keys(groupedVeranstaltungen)
     -var veranstOfMonth = groupedVeranstaltungen[month]
     .row
       .col-12
         +monatHeadline(veranstOfMonth[0])
       for veranstaltung in veranstOfMonth
-        -var collapsed = veranstaltung.startMoment().isAfter(nearFuture)
+        -var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture)
         -var kopf = veranstaltung.kopf()
         -var id = 'panel' + ++count
         -var staff = veranstaltung.staff()

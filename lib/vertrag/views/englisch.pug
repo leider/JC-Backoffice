@@ -10,8 +10,8 @@ block adresse
     #{veranstaltung.agentur().ort()}
 
 block content1
-  -var start = veranstaltung.startMoment();
-  -var getin = veranstaltung.getinMoment();
+  -var start = veranstaltung.startDatumUhrzeit();
+  -var getin = veranstaltung.getinDatumUhrzeit();
   -var hotel = veranstaltung.hotel();
   -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
 
@@ -52,10 +52,10 @@ block content1
   .row
     .col-12
       p.
-        §1 The concert takes place at <b>#{start.format('LL')}</b> um <b>#{start.format('LT')}</b>.</br>
+        §1 The concert takes place at <b>#{start.tagMonatJahrLang()}</b> um <b>#{start.uhrzeitKompakt()}</b>.</br>
         Location: <b>#{veranstaltung.kopf().ort()}</b>
       p.
-        §1.1 Get in is at <b>#{getin.format('LT')}</b>, the organizer or his representative shall be present at this hour.
+        §1.1 Get in is at <b>#{getin.uhrzeitKompakt()}</b>, the organizer or his representative shall be present at this hour.
         He shall be present during the complete performance.
       p.
         §1.2 Territorial Protection: the artists herby commit to not play any concert within the radius of 50 km 14 days prior or after the concert.

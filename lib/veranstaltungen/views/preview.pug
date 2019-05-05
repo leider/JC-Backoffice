@@ -41,7 +41,7 @@ block content
             | #{' '}#{kopf.titel()} #{kopf.presseIn()}
             br
             small
-              | #{veranstaltung.startMoment().format('LLLL')} #{''}
+              | #{veranstaltung.startDatumUhrzeit().lesbareLangform()} #{''}
               span (#{kopf.eventTyp()})
             if kopf.kooperation() && kopf.kooperation().length > 1
               h3 Kooperation mit #{kopf.kooperation()}

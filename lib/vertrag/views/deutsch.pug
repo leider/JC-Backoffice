@@ -10,8 +10,8 @@ block adresse
     #{veranstaltung.agentur().ort()}
 
 block content1
-  -var start = veranstaltung.startMoment();
-  -var getin = veranstaltung.getinMoment();
+  -var start = veranstaltung.startDatumUhrzeit();
+  -var getin = veranstaltung.getinDatumUhrzeit();
   -var hotel = veranstaltung.hotel();
   -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
 
@@ -52,10 +52,10 @@ block content1
   .row
     .col-12
       p.
-        §1 Das Konzert findet statt am <b>#{start.format('LL')}</b> um <b>#{start.format('LT')} Uhr</b>.</br>
+        §1 Das Konzert findet statt am <b>#{start.tagMonatJahrLang()}</b> um <b>#{start.uhrzeitKompakt()} Uhr</b>.</br>
         Spielstätte: <b>#{veranstaltung.kopf().ort()}</b>
       p.
-        §1.1 Get in ist <b>#{getin.format('LT')} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein.
+        §1.1 Get in ist <b>#{getin.uhrzeitKompakt()} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein.
         Seine Anwesenheit ist auch während der gesamten Veranstaltung sicher gestellt.
       p.
         §1.2 Gebietsschutz: Die Künstler verpflichten sich hiermit 14 Tage vor und nach dem Konzerttermin keine Konzerte im Umkreis von 50km zu geben.

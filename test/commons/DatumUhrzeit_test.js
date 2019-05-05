@@ -146,12 +146,20 @@ describe('DatumUhrzeit', () => {
       expect(januar01.tagMonatJahrLang()).to.eql('1. Januar 2019');
     });
 
-    it('formatiert Tag Monat Jahr kopakt', () => {
+    it('formatiert Wochentag Tag und Monat mit KW', () => {
+      expect(januar01.tagMonatJahrLangMitKW()).to.eql('1. Januar 2019 (KW 01)');
+    });
+
+    it('formatiert Tag Monat Jahr kompakt', () => {
       expect(januar01.tagMonatJahrKompakt()).to.eql('01.01.2019');
     });
 
     it('formatiert Monat Jahr kompakt', () => {
       expect(januar01.monatJahrKompakt()).to.eql("Jan. '19");
+    });
+
+    it('formatiert Monat lang Jahr kompakt', () => {
+      expect(januar01.monatLangJahrKompakt()).to.eql("Januar '19");
     });
 
     it('formatiert für Kalender Anzeige', () => {
@@ -160,6 +168,34 @@ describe('DatumUhrzeit', () => {
 
     it('formatiert für Calendar Widget', () => {
       expect(januar01.fuerCalendarWidget()).to.eql('2019-01-01');
+    });
+
+    it('formatiert mit Uhrzeit', () => {
+      expect(januar01.mitUhrzeitNumerisch()).to.eql('01.01.19 00:00');
+    });
+
+    it('formatiert fuer Unterseiten der Veranstaltungen', () => {
+      expect(januar01.fuerUnterseiten()).to.eql('1901');
+    });
+
+    it('formatiert die Uhrzeit', () => {
+      expect(januar01.uhrzeitKompakt()).to.eql('00:00');
+    });
+
+    it('formatiert alles', () => {
+      expect(januar01.lesbareLangform()).to.eql('Dienstag, 1. Januar 2019 00:00');
+    });
+
+    it('formatiert alles kompakt', () => {
+      expect(januar01.lesbareKurzform()).to.eql('Di., 1. Jan. 2019 00:00');
+    });
+
+    it('formatiert Wochentag Tag und Monat', () => {
+      expect(januar01.wochentagTagMonat()).to.eql('Di. 01. Januar');
+    });
+
+    it('formatiert für Presse', () => {
+      expect(januar01.fuerPresse()).to.eql('Dienstag, 1. Januar 2019 um 00:00');
     });
   });
 
@@ -239,7 +275,9 @@ describe('DatumUhrzeit', () => {
   describe('getSet', () => {
     it('zugriff auf felder', () => {
       const januar01 = DatumUhrzeit.forISOString('2019-01-01');
+
       expect(januar01.monat()).to.eql(0); // zero based
+      expect(januar01.jahr()).to.eql(2019); // zero based
       expect(januar01.wochentag()).to.eql(2); // Montag ist 1
       expect(januar01.tag()).to.eql(1);
       expect(januar01.kw()).to.eql(1);
@@ -248,7 +286,11 @@ describe('DatumUhrzeit', () => {
     it('setzen der felder', () => {
       const januar01 = DatumUhrzeit.forISOString('2019-01-01');
       const januar05 = DatumUhrzeit.forISOString('2019-01-05');
+
       expect(januar01.setTag(5)).to.eql(januar05);
+      expect(januar01.setUhrzeit(5, 23)).to.eql(
+        DatumUhrzeit.forISOString('2019-01-01 05:23:00')
+      );
     });
   });
 });

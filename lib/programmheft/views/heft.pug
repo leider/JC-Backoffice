@@ -7,7 +7,7 @@ mixin panelView(groupedVeranstaltungen)
     -var veranstOfMonth = groupedVeranstaltungen[month]
     .row
       .col-12
-        h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startMoment().format('MMMM \'YY')}
+        h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startDatumUhrzeit().monatLangJahrKompakt()}
       for veranstaltung in veranstOfMonth
         -var kopf = veranstaltung.kopf()
         -var id = 'panel' + ++count

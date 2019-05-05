@@ -4,9 +4,6 @@ const Beans = require('CoolBeans');
 const conf = require('simple-configure');
 const path = require('path');
 
-const moment = require('moment-timezone');
-moment.locale('de');
-
 function createConfiguration() {
   const configdir = path.join(__dirname, '/config/');
 
