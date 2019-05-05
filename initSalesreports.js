@@ -14,7 +14,7 @@ function load(datumString, results, callback) {
       if (results && results.length > 0 && lastrow.id === lastrowAbsolute.id) {
         return callback(results);
       }
-      const newDatumString = lastrow.datum.format('L');
+      const newDatumString = lastrow.datum.tagMonatJahrKompakt();
       results = results.concat(rawresults);
       load(newDatumString, results, callback);
     } else {
@@ -26,7 +26,7 @@ function load(datumString, results, callback) {
 load('01.07.2018', [], results => {
   const now = new Date();
   const resultsToSave = results.map(each => {
-    each.datum = each.datum.toDate();
+    each.datum = each.datum.toJSDate();
     each.updated = now;
     return each;
   });
