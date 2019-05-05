@@ -43,6 +43,18 @@ describe('DatumUhrzeit', () => {
         ).toLocalDateTimeString()
       ).to.eql('01.03.2019, 00:00:00');
     });
+
+    it('kann mit deutschem String erzeugt werden', () => {
+      expect(
+        DatumUhrzeit.forGermanString('1.3.2019', '3:04').toLocalDateTimeString()
+      ).to.eql('01.03.2019, 03:04:00');
+
+      expect(
+        DatumUhrzeit.forGermanString('1.3.2019').toLocalDateTimeString()
+      ).to.eql('01.03.2019, 00:00:00');
+
+      expect(DatumUhrzeit.forGermanString()).to.be(undefined);
+    });
   });
 
   describe('plus und minus (Datum) mit immutability', () => {
@@ -225,7 +237,6 @@ describe('DatumUhrzeit', () => {
   });
 
   describe('getSet', () => {
-
     it('zugriff auf felder', () => {
       const januar01 = DatumUhrzeit.forISOString('2019-01-01');
       expect(januar01.monat()).to.eql(0); // zero based

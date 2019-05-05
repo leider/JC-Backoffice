@@ -35,8 +35,8 @@ block content
               if termin.id()
                 +hidden('id', termin.id())
               +csrf
-              +date_td('startDate', termin.startMoment().format('L'))
-              +date_td('endDate', termin.endMoment().format('L'))
+              +date_td('startDate', termin.startDatumUhrzeit().tagMonatJahrKompakt())
+              +date_td('endDate', termin.endDatumUhrzeit().tagMonatJahrKompakt())
               td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%')
               td(style='white-space: nowrap'): input#typ.form-control.trim-text(type='text', name='typ', value=termin.typ(), style='width:100%')
               td: a.btn.btn-danger.float-right(href='/ical/delete/' + encodeURIComponent(termin.id())): i.far.fa-fw.fa-trash-alt

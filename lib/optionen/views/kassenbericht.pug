@@ -11,7 +11,7 @@ mixin signbox(datum, rolle, name)
 
 doctype html
 html
-  -var heute = now.format('LL')
+  -var heute = now.tagMonatJahrLang()
   head
     meta(charset='utf-8')
     link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
@@ -31,7 +31,7 @@ html
                 strong Jazzclub Karlsruhe e.V. <br>
                 | Leopoldstr. 13 <br>
                 | 76133 Karlsruhe
-            h1(style='white-space: nowrap') Kassenabrechnung #{datum.format('MMMM YYYY')}
+            h1(style='white-space: nowrap') Kassenabrechnung #{datum.monatJahrKompakt()}
       .row
         .col-6
           table.table.table-bordered.table-sm
