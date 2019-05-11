@@ -71,6 +71,23 @@ describe('Kalender', () => {
       ]);
     });
 
+    it('ohne Jahr - parses old style filled text correctly', () => {
+      const kalender = new Kalender({
+        id: '2020/12',
+        text:
+          'Was | Wer | Farbe | Wann\n' +
+          'Irgendwas | Irgendwer | Green   | 13.12.\n'
+      });
+      expect(kalender.asEvents()).to.eql([
+        {
+          start: '2020-12-12T23:00:00.000Z',
+          end: '2020-12-13T21:00:00.000Z',
+          title: 'Irgendwas (Irgendwer)',
+          color: 'Green'
+        }
+      ]);
+    });
+
     it('parses broken date text correctly (e.g. empty)', () => {
       const kalender = new Kalender({
         id: '2020/12',

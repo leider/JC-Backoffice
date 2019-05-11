@@ -15,11 +15,13 @@ describe('DatumUhrzeit', () => {
       expect(new DatumUhrzeit().monatLang()).to.eql(aktMonat);
     });
 
-    it('kann mit Parameter erzeugt werden', () => {
-      expect(new DatumUhrzeit(festesDatum).toLocalDateTimeString()).to.eql(
-        '30.04.2019, 13:43:30'
+    it('kann mit jsDate erzeugt werden', () => {
+      expect(
+        DatumUhrzeit.forJSDate(festesDatum).toLocalDateTimeString()
+      ).to.eql('30.04.2019, 13:43:30');
+      expect(DatumUhrzeit.forJSDate(festesDatum).toJSDate()).to.eql(
+        festesDatum
       );
-      expect(new DatumUhrzeit(festesDatum).toJSDate()).to.eql(festesDatum);
     });
 
     it('kann mit String "YYMM" erzeugt werden', () => {
@@ -44,11 +46,14 @@ describe('DatumUhrzeit', () => {
 
     it('kann mit deutschem String erzeugt werden', () => {
       expect(
-        DatumUhrzeit.forGermanString('1.3.2019', '3:04').toLocalDateTimeString()
+        DatumUhrzeit.forGermanString(
+          '01.03.2019',
+          '03:04'
+        ).toLocalDateTimeString()
       ).to.eql('01.03.2019, 03:04:00');
 
       expect(
-        DatumUhrzeit.forGermanString('1.3.2019').toLocalDateTimeString()
+        DatumUhrzeit.forGermanString('01.03.2019').toLocalDateTimeString()
       ).to.eql('01.03.2019, 00:00:00');
 
       expect(DatumUhrzeit.forGermanString()).to.be(undefined);
@@ -102,10 +107,10 @@ describe('DatumUhrzeit', () => {
   });
 
   describe('plus und minus (Uhrzeit)', () => {
-    const vorSommerzeit = DatumUhrzeit.forISOString('2019-03-30 23:00:00');
-    const plus10Minuten = DatumUhrzeit.forISOString('2019-03-30 23:10:00');
-    const plus1Stunde = DatumUhrzeit.forISOString('2019-03-31 00:00:00');
-    const plus4Stunden = DatumUhrzeit.forISOString('2019-03-31 04:00:00');
+    const vorSommerzeit = DatumUhrzeit.forISOString('2019-03-30T23:00:00');
+    const plus10Minuten = DatumUhrzeit.forISOString('2019-03-30T23:10:00');
+    const plus1Stunde = DatumUhrzeit.forISOString('2019-03-31T00:00:00');
+    const plus4Stunden = DatumUhrzeit.forISOString('2019-03-31T04:00:00');
 
     it('rechnet mit Minuten', () => {
       expect(vorSommerzeit.plus({ minuten: 10 })).to.eql(plus10Minuten);
@@ -181,11 +186,13 @@ describe('DatumUhrzeit', () => {
     });
 
     it('formatiert alles', () => {
-      expect(januar01.lesbareLangform()).to.eql('Dienstag, 1. Januar 2019 00:00');
+      expect(januar01.lesbareLangform()).to.eql(
+        'Dienstag, 1. Januar 2019 00:00'
+      );
     });
 
     it('formatiert alles kompakt', () => {
-      expect(januar01.lesbareKurzform()).to.eql('Di., 1. Jan. 2019 00:00');
+      expect(januar01.lesbareKurzform()).to.eql('Di., 1. Jan. 2019, 00:00');
     });
 
     it('formatiert Wochentag Tag und Monat', () => {
@@ -268,14 +275,23 @@ describe('DatumUhrzeit', () => {
         DatumUhrzeit.forISOString('2020-11-30').naechsterUngeraderMonat()
       ).to.eql(DatumUhrzeit.forISOString('2021-01-30'));
     });
+
+    it('findet gerade Monate', () => {
+      expect(
+        DatumUhrzeit.forISOString('2020-04-30').istGeraderMonat()
+      ).to.be(true);
+      expect(
+        DatumUhrzeit.forISOString('2020-11-30').istGeraderMonat()
+      ).to.be(false);
+    });
   });
 
   describe('getSet', () => {
     it('zugriff auf felder', () => {
       const januar01 = DatumUhrzeit.forISOString('2019-01-01');
 
-      expect(januar01.monat()).to.eql(0); // zero based
-      expect(januar01.jahr()).to.eql(2019); // zero based
+      expect(januar01.monat()).to.eql(1); // zero based
+      expect(januar01.jahr()).to.eql(2019);
       expect(januar01.wochentag()).to.eql(2); // Montag ist 1
       expect(januar01.tag()).to.eql(1);
       expect(januar01.kw()).to.eql(1);
@@ -287,7 +303,7 @@ describe('DatumUhrzeit', () => {
 
       expect(januar01.setTag(5)).to.eql(januar05);
       expect(januar01.setUhrzeit(5, 23)).to.eql(
-        DatumUhrzeit.forISOString('2019-01-01 05:23:00')
+        DatumUhrzeit.forISOString('2019-01-01T05:23:00')
       );
     });
   });

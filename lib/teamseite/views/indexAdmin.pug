@@ -43,10 +43,9 @@ mixin submitButtonsFor(veranstaltung)
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')
 
 mixin monatHeadline(veranstaltung)
-  -var isProgrammheftmonat = veranstaltung.startDatumUhrzeit().monat() % 2 === 0
   h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt()}
     .btn-group.btn-group-sm.float-right
-      if isProgrammheftmonat
+      if !veranstaltung.startDatumUhrzeit().istGeraderMonat()
         a.btn.btn-secondary.btn-sm(href='/programmheft/' + veranstaltung.startDatumUhrzeit().fuerKalenderViews())
           i.far.fa-newspaper.fa-fw
           | #{' '} Programmheft
