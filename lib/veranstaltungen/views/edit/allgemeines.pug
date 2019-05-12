@@ -192,4 +192,14 @@ block scripts
 
       endDate.change(validateDateAndTime);
       endTime.change(validateDateAndTime);
+
+      var koopFeld = $('#kopf\\[rechnungAnKooperation\\]');
+      function updatePreisForKooperation() {
+        if(koopFeld.is(':checked')) {
+          var preisprofilFeld = $('#eintrittspreise\\[preisprofil\\]');
+          preisprofilFeld.selectpicker('val', '{"name":"Kooperation","regulaer":0,"rabattErmaessigt":0,"rabattMitglied":0}');
+        }
+      }
+
+      koopFeld.change(updatePreisForKooperation);
     });
