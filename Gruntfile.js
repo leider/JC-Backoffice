@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   /*eslint camelcase: 0*/
 
   // filesets for uglify
@@ -50,14 +50,8 @@ module.exports = function(grunt) {
     clean: {
       build: ['build', 'frontendtests/fixtures/*.html'],
       coverage: ['coverage', 'coverageWithDB'],
-      public: [
-        'public/clientscripts',
-        'public/fonts',
-        'public/img/bootstrap-colorpicker',
-        'public/images',
-        'public/stylesheets'
-      ],
-      options: { force: true }
+      public: ['public/clientscripts', 'public/fonts', 'public/img/bootstrap-colorpicker', 'public/images', 'public/stylesheets'],
+      options: {force: true}
     },
     copy: {
       bootstrapFileinputImages: {
@@ -67,8 +61,7 @@ module.exports = function(grunt) {
         flatten: true
       },
       utilJS: {
-        src: [
-          'node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+        src: ['node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
           'node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min.js',
           'node_modules/simple-timepicker/dist/simple-timepicker.min.js'
         ],
@@ -77,8 +70,7 @@ module.exports = function(grunt) {
         flatten: true
       },
       utilCSS: {
-        src: [
-          'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
+        src: ['node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css',
           'node_modules/bootstrap-fileinput/css/fileinput.css'
         ],
         dest: 'public/stylesheets',
@@ -86,11 +78,7 @@ module.exports = function(grunt) {
         flatten: true
       },
       flaticonFONTS: {
-        src: [
-          'frontend/additionalIcons/font/*',
-          '!frontend/additionalIcons/font/*css',
-          '!frontend/additionalIcons/font/*html'
-        ],
+        src: ['frontend/additionalIcons/font/*', '!frontend/additionalIcons/font/*css', '!frontend/additionalIcons/font/*html'],
         dest: 'public/fonts',
         expand: true,
         flatten: true
@@ -109,14 +97,13 @@ module.exports = function(grunt) {
       }
     },
     eslint: {
-      options: { quiet: true },
+      options: {quiet: true},
       target: ['*.js', 'lib/**/*.js', 'test/**/*.js', 'frontend/**/*.js']
     },
     sass: {
       dist: {
         files: {
-          'build/stylesheets/sass/out/jc-backoffice.css':
-            'build/stylesheets/sass/jc-backoffice.scss'
+          'build/stylesheets/sass/out/jc-backoffice.css': 'build/stylesheets/sass/jc-backoffice.scss'
         }
       }
     },
@@ -174,19 +161,18 @@ module.exports = function(grunt) {
             statements: 77
           }
         }
-      }
+      },
     },
     pug: {
       compile: {
         options: {
           pretty: true,
-          data: function() {
+          data: function () {
             return require('./frontendtests/fixtures/locals');
           }
         },
         files: {
-          'frontendtests/fixtures/forms.html':
-            'frontendtests/fixtures/forms.pug'
+          'frontendtests/fixtures/forms.html': 'frontendtests/fixtures/forms.pug'
         }
       }
     },
@@ -204,11 +190,8 @@ module.exports = function(grunt) {
           requireIdLiteralsBeforeAttributes: true,
           requireLowerCaseTags: true,
           requireStrictEqualityOperators: true,
-          validateAttributeQuoteMarks: "'",
-          validateAttributeSeparator: {
-            separator: ', ',
-            multiLineSeparator: ',\n  '
-          }
+          validateAttributeQuoteMarks: '\'',
+          validateAttributeSeparator: {'separator': ', ', 'multiLineSeparator': ',\n  '}
         },
         src: ['**/*.pug']
       }
@@ -230,21 +213,11 @@ module.exports = function(grunt) {
 
   grunt.registerTask('prepare', ['eslint', 'puglint', 'clean', 'copy']);
   grunt.registerTask('tests', ['eslint', 'puglint', 'mocha_istanbul']);
-  grunt.registerTask('deploy_development', [
-    'prepare',
-    'sass',
-    'cssmin',
-    'uglify:development_de'
-  ]);
+  grunt.registerTask('deploy_development', ['prepare', 'sass', 'cssmin', 'uglify:development_de']);
   grunt.registerTask('css_only', ['prepare', 'sass', 'cssmin']);
 
   // Default task.
   grunt.registerTask('default', ['tests']);
 
-  grunt.registerTask('deploy_production', [
-    'prepare',
-    'sass',
-    'cssmin',
-    'uglify:production_de'
-  ]);
+  grunt.registerTask('deploy_production', ['prepare', 'sass', 'cssmin', 'uglify:production_de']);
 };

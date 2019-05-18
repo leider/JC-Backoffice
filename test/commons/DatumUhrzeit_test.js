@@ -277,12 +277,12 @@ describe('DatumUhrzeit', () => {
     });
 
     it('findet gerade Monate', () => {
-      expect(DatumUhrzeit.forISOString('2020-04-30').istGeraderMonat()).to.be(
-        true
-      );
-      expect(DatumUhrzeit.forISOString('2020-11-30').istGeraderMonat()).to.be(
-        false
-      );
+      expect(
+        DatumUhrzeit.forISOString('2020-04-30').istGeraderMonat()
+      ).to.be(true);
+      expect(
+        DatumUhrzeit.forISOString('2020-11-30').istGeraderMonat()
+      ).to.be(false);
     });
   });
 
