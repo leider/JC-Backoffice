@@ -21,7 +21,12 @@ function floatAmount(jqueryNumberField) {
 /* exported floatAmountForSpan */
 function floatAmountForSpan(jquerySpan) {
   'use strict';
-  return parseFloat(germanToEnglishNumberString(jquerySpan.html().replace('€', '')), 10) || 0;
+  return (
+    parseFloat(
+      germanToEnglishNumberString(jquerySpan.html().replace('€', '')),
+      10
+    ) || 0
+  );
 }
 
 /* exported setEuro */
@@ -69,7 +74,15 @@ function toUtc(dateString, timeString) {
     var dateArray = dateString.split('.').map(stringToInt);
     var timeArray = timeString.split(':').map(stringToInt);
     if (dateArray.length === 3 && timeArray.length === 2) {
-      return new Date(Date.UTC(dateArray[2], dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1]));
+      return new Date(
+        Date.UTC(
+          dateArray[2],
+          dateArray[1] - 1,
+          dateArray[0],
+          timeArray[0],
+          timeArray[1]
+        )
+      );
     }
   }
   return null;
@@ -79,9 +92,16 @@ function surroundWithLink(text) {
   'use strict';
 
   // shamelessly stolen from http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
-  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
-  return text.replace(urlRegex, function (url) {
-    return '<a href="' + url + '" target="_blank">' + '<i class="fa fa-external-link"/> ' + url + '</a>';
+  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
+  return text.replace(urlRegex, function(url) {
+    return (
+      '<a href="' +
+      url +
+      '" target="_blank">' +
+      '<i class="fa fa-external-link"/> ' +
+      url +
+      '</a>'
+    );
   });
 }
 
@@ -91,7 +111,13 @@ function surroundTwitterName(twittername) {
   if (twittername.trim().length === 0) {
     return twittername;
   }
-  return '<a href="http://twitter.com/' + twittername + '" target="_blank">@' + twittername + '</a>';
+  return (
+    '<a href="http://twitter.com/' +
+    twittername +
+    '" target="_blank">@' +
+    twittername +
+    '</a>'
+  );
 }
 
 function surroundEmail(email) {
@@ -112,17 +138,18 @@ function veranstaltungDateModel(initialDate, initialTime) {
   var oldStartDate = toUtc(initialDate, initialTime);
 
   return {
-    convertInputs: function (startDate, startTime, endDate, endTime) {
+    convertInputs: function(startDate, startTime, endDate, endTime) {
       return {
         start: toUtc(startDate, startTime),
         end: toUtc(endDate, endTime)
       };
     },
 
-    calculateNewEnd: function (currentTimes) {
-      var offsetMillis = oldStartDate && currentTimes.start
-        ? currentTimes.start.getTime() - oldStartDate.getTime()
-        : 0;
+    calculateNewEnd: function(currentTimes) {
+      var offsetMillis =
+        oldStartDate && currentTimes.start
+          ? currentTimes.start.getTime() - oldStartDate.getTime()
+          : 0;
 
       oldStartDate = currentTimes.start;
 
@@ -131,26 +158,34 @@ function veranstaltungDateModel(initialDate, initialTime) {
         : null;
     },
 
-    createDateAndTimeStrings: function (jsDate) {
+    createDateAndTimeStrings: function(jsDate) {
       var dateformat = new Intl.DateTimeFormat('de', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         timeZone: 'UTC'
       });
-      var timeformat = new Intl.DateTimeFormat('de', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'});
+      var timeformat = new Intl.DateTimeFormat('de', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'UTC'
+      });
       return {
         endDate: jsDate ? dateformat.format(jsDate) : '',
         endTime: jsDate ? timeformat.format(jsDate) : ''
       };
     },
 
-    determineNewEnd: function (startDate, startTime, endDate, endTime) {
-      var inputDateTimes = this.convertInputs(startDate, startTime, endDate, endTime);
+    determineNewEnd: function(startDate, startTime, endDate, endTime) {
+      var inputDateTimes = this.convertInputs(
+        startDate,
+        startTime,
+        endDate,
+        endTime
+      );
       var newEndDateTime = this.calculateNewEnd(inputDateTimes);
       return this.createDateAndTimeStrings(newEndDateTime);
     }
-
   };
 }
 
@@ -160,64 +195,97 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   var dateCalc = veranstaltungDateModel(startDate.val(), startTime.val());
 
   function listener() {
-    var endStrings = dateCalc.determineNewEnd(startDate.val(), startTime.val(), endDate.val(), endTime.val());
+    var endStrings = dateCalc.determineNewEnd(
+      startDate.val(),
+      startTime.val(),
+      endDate.val(),
+      endTime.val()
+    );
 
-    endDate.datepicker('update', (endStrings.endDate));
+    endDate.datepicker('update', endStrings.endDate);
     endTime.timepicker('setTime', endStrings.endTime);
-    endDate.datepicker('update', (endStrings.endDate)); // to have the change fired correctly on date field
+    endDate.datepicker('update', endStrings.endDate); // to have the change fired correctly on date field
   }
 
   startDate.change(listener);
   startTime.change(listener);
 }
 
-(function () {
+(function() {
   'use strict';
 
   function highlightCurrentSection() {
-    $('[data-jcnav]').filter(function () {
-      return new RegExp('^/' + $(this).attr('data-jcnav')).test(window.location.pathname);
-    }).addClass('active');
+    $('[data-jcnav]')
+      .filter(function() {
+        return new RegExp('^/' + $(this).attr('data-jcnav')).test(
+          window.location.pathname
+        );
+      })
+      .addClass('active');
   }
 
   function addHelpButtonToTextarea() {
-    $('.md-textarea').each(function () {
+    $('.md-textarea').each(function() {
       $(this).markdown({
-          additionalButtons: [[{
-            name: 'groupCustom',
-            data: [{
-              name: 'cmdHelp',
-              title: 'Hilfe',
-              icon: 'fa fa-question-circle',
-              callback: function () {
-                $('#cheatsheet .modal-content').load('/cheatsheet.html');
-                $('#cheatsheet').modal();
-              }
-            }]
-          }]],
-          onPreview: function (e) {
-            $.post('/preview', {
-                data: e.getContent(),
-                subdir: ($('[name=subdir]').val() || $('[name=assignedGroup]').val() || $('[name=id]').val()),
-                '_csrf': $('[name=_csrf]').val()
-              },
-              function (data) { e.$element.parent().find('.md-preview').html(data); });
-            return ''; // to clearly indicate the loading...
-          },
-          iconlibrary: 'fa',
-          language: 'de',
-          resize: 'vertical'
-        }
-      );
+        additionalButtons: [
+          [
+            {
+              name: 'groupCustom',
+              data: [
+                {
+                  name: 'cmdHelp',
+                  title: 'Hilfe',
+                  icon: 'fa fa-question-circle',
+                  callback: function() {
+                    $('#cheatsheet .modal-content').load('/cheatsheet.html');
+                    $('#cheatsheet').modal();
+                  }
+                }
+              ]
+            }
+          ]
+        ],
+        onPreview: function(e) {
+          $.post(
+            '/preview',
+            {
+              data: e.getContent(),
+              subdir:
+                $('[name=subdir]').val() ||
+                $('[name=assignedGroup]').val() ||
+                $('[name=id]').val(),
+              _csrf: $('[name=_csrf]').val()
+            },
+            function(data) {
+              e.$element
+                .parent()
+                .find('.md-preview')
+                .html(data);
+            }
+          );
+          return ''; // to clearly indicate the loading...
+        },
+        iconlibrary: 'fa',
+        language: 'de',
+        resize: 'vertical'
+      });
     });
-    $('.md-header .btn-default').removeClass('btn-default').addClass('btn-light');
-    $('.md-header .fa').removeClass('fa').addClass('fas');
-    $('.md-header .fa-header').removeClass('fa-header').addClass('fa-heading');
-    $('.md-header .fa-picture-o').removeClass('fa-picture-o fas').addClass('fa-image far');
+    $('.md-header .btn-default')
+      .removeClass('btn-default')
+      .addClass('btn-light');
+    $('.md-header .fa')
+      .removeClass('fa')
+      .addClass('fas');
+    $('.md-header .fa-header')
+      .removeClass('fa-header')
+      .addClass('fa-heading');
+    $('.md-header .fa-picture-o')
+      .removeClass('fa-picture-o fas')
+      .addClass('fa-image far');
   }
 
   function initPickersAndWidgets() {
-    $('.datepicker').each(function () {
+    $('.datepicker').each(function() {
       $(this).datepicker({
         autoclose: true,
         format: 'dd.mm.yyyy',
@@ -229,7 +297,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       });
     });
 
-    $('.timepicker').each(function () {
+    $('.timepicker').each(function() {
       $(this).timepicker({
         template: false,
         minuteStep: 15,
@@ -238,7 +306,7 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       });
     });
 
-    $('.enhance').each(function () {
+    $('.enhance').each(function() {
       $(this).select2({
         width: null,
         containerCssClass: ':all:',
@@ -246,64 +314,77 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       });
     });
 
-    $('.trim-text').on('blur', function () {
-      $(this).val($(this).val().trim());
+    $('.trim-text').on('blur', function() {
+      $(this).val(
+        $(this)
+          .val()
+          .trim()
+      );
     });
 
-    $(':checkbox').each(function () {
-      $(this).change(function () {
-        $(this).parent().toggleClass('checkbox-success');
+    $(':checkbox').each(function() {
+      $(this).change(function() {
+        $(this)
+          .parent()
+          .toggleClass('checkbox-success');
       });
     });
 
-    var btns = '<button type="button" class="kv-cust-btn btn btn-sm btn-kv btn-default btn-outline-secondary" title="Download" data-key="{dataKey}">' +
+    var btns =
+      '<button type="button" class="kv-cust-btn btn btn-sm btn-kv btn-default btn-outline-secondary" title="Download" data-key="{dataKey}">' +
       '<i class="fa fa-download"></i>' +
       '</button>';
     // note the tag/token {dataKey}
-    $('.file-loading').each(function () {
+    $('.file-loading').each(function() {
       $(this).fileinput({
-        otherActionButtons: btns,
+        otherActionButtons: btns
       });
     });
-    $('.kv-cust-btn').each(function () {
-      $(this).click(function () {
-        var url = $(this).parents('.file-thumbnail-footer').parent().children('.kv-file-content').children().attr('src');
+    $('.kv-cust-btn').each(function() {
+      $(this).click(function() {
+        var url = $(this)
+          .parents('.file-thumbnail-footer')
+          .parent()
+          .children('.kv-file-content')
+          .children()
+          .attr('src');
         window.open(url);
       });
     });
-
   }
 
   function initTooltipsAndHovers() {
-    $('.tooltiplabel').each(function () {
+    $('.tooltiplabel').each(function() {
       $(this).tooltip();
     });
-    $('[data-toggle="tooltip"]').each(function () {
+    $('[data-toggle="tooltip"]').each(function() {
       $(this).tooltip();
     });
   }
 
   function createLinks() {
-    $('.urlify').each(function () {
+    $('.urlify').each(function() {
       $(this).html(surroundWithLink(this.innerHTML));
     });
 
-    $('.twitterify').each(function () {
+    $('.twitterify').each(function() {
       $(this).html(surroundTwitterName(this.innerHTML));
     });
 
-    $('.mailtoify').each(function () {
+    $('.mailtoify').each(function() {
       $(this).html(surroundEmail(this.innerHTML));
     });
-    $('.telify').each(function () {
+    $('.telify').each(function() {
       $(this).html(surroundTel(this.innerHTML));
     });
   }
 
   function toggleCaret() {
-    $('a.chevron').click(function () {
+    $('a.chevron').click(function() {
       var target = $(this).attr('data-target');
-      $('a[data-target="' + target + '"]').find('i').toggleClass('fa-caret-square-down fa-caret-square-right');
+      $('a[data-target="' + target + '"]')
+        .find('i')
+        .toggleClass('fa-caret-square-down fa-caret-square-right');
     });
   }
 
@@ -311,14 +392,18 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.getElementsByClassName('needs-validation');
     // Loop over them and prevent submission
-    Array.prototype.filter.call(forms, function (form) {
-      form.addEventListener('submit', function (event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-      }, false);
+    Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener(
+        'submit',
+        function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        },
+        false
+      );
     });
   }
 
@@ -330,4 +415,4 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(toggleCaret);
   $(document).ready(validateViaBootstrap);
   $.fn.select2.defaults.set('theme', 'bootstrap');
-}());
+})();
