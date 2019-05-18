@@ -66,22 +66,21 @@ describe('Veranstaltung Gesamt', () => {
     });
 
     it('ohne kopf oder ohne id bleiben die vorherigen Felder', () => {
-      veranstaltung.fillFromUI({agentur: {}});
+      veranstaltung.fillFromUI({ agentur: {} });
 
       expect(veranstaltung.agentur().name()).to.eql(reference.agentur.name);
     });
 
     it('mit kopf werden die vorherigen Felder überschrieben', () => {
-      veranstaltung.fillFromUI({kopf: {}, agentur: {}});
+      veranstaltung.fillFromUI({ kopf: {}, agentur: {} });
 
       expect(veranstaltung.agentur().name()).to.be(undefined);
     });
 
     it('mit id werden die vorherigen Felder überschrieben', () => {
-      veranstaltung.fillFromUI({id: 'id', agentur: {}});
+      veranstaltung.fillFromUI({ id: 'id', agentur: {} });
 
       expect(veranstaltung.agentur().name()).to.be(undefined);
     });
-
   });
 });

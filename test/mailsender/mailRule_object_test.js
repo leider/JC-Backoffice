@@ -12,7 +12,7 @@ describe('MailRule', () => {
   const feb16 = DatumUhrzeit.forISOString('2018-02-16');
   const montagFeb26 = DatumUhrzeit.forISOString('2018-02-26');
 
-  describe('Regel 1 \'Mittwochs für die nächste Woche\'', () => {
+  describe("Regel 1 'Mittwochs für die nächste Woche'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -36,10 +36,9 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
 
-  describe('Regel 2 \'Am 5. den Folgemonat\'', () => {
+  describe("Regel 2 'Am 5. den Folgemonat'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -69,10 +68,9 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
 
-  describe('Regel 3 \'Am 5. zwei Folgemonate\'', () => {
+  describe("Regel 3 'Am 5. zwei Folgemonate'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -102,10 +100,9 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
 
-  describe('Regel 4 \'Am 20. den Folgemonat ab 15.\'', () => {
+  describe("Regel 4 'Am 20. den Folgemonat ab 15.'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -135,10 +132,9 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
 
-  describe('Regel 5 \'Montags die Folgewoche ab Freitag\'', () => {
+  describe("Regel 5 'Montags die Folgewoche ab Freitag'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -168,10 +164,9 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
 
-  describe('Regel 6 \'Montags die übernächste Folgewoche\'', () => {
+  describe("Regel 6 'Montags die übernächste Folgewoche'", () => {
     const rule = new MailRule({
       id: 'someID',
       name: 'test',
@@ -201,7 +196,5 @@ describe('MailRule', () => {
       expect(result.start).to.eql(dienstagFeb13);
       expect(result.end).to.eql(dienstagFeb13);
     });
-
   });
-
 });

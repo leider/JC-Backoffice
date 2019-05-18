@@ -31,7 +31,13 @@
     "zustand": null,
     "confirmed": true
   },
-  "artist": { "name": [ "Horst" ], "numMusiker": "3", "numCrew": "1", "isBawue": false, "isAusland": false },
+  "artist": {
+    "name": ["Horst"],
+    "numMusiker": "3",
+    "numCrew": "1",
+    "isBawue": false,
+    "isAusland": false
+  },
   "kosten": {
     "auswahl": null,
     "name": null,
@@ -43,8 +49,14 @@
     "technikAngebot1EUR": "1200",
     "technikAngebot2EUR": "0",
     "rider": null,
-    "backlineJazzclub": [ "Drumset", "Flügel(Tholey)", "Rhodes", "Panflöte", "Alles mögliche" ],
-    "backlineRockshop": [ ],
+    "backlineJazzclub": [
+      "Drumset",
+      "Flügel(Tholey)",
+      "Rhodes",
+      "Panflöte",
+      "Alles mögliche"
+    ],
+    "backlineRockshop": [],
     "saal": null,
     "technikJazzclub": null,
     "technikAngebot1": null,
@@ -99,14 +111,14 @@
     "plakat2Von": ""
   },
   "staff": {
-    "techniker": [ ],
-    "merchandise": [ ],
-    "kasse": [ ],
+    "techniker": [],
+    "merchandise": [],
+    "kasse": [],
     "technikerEUR": "100",
     "merchandiseEUR": "20",
     "kasseEUR": "10",
     "fremdpersonalEUR": "100",
-    "fremdpersonal": [ ]
+    "fremdpersonal": []
   },
   "hotel": {
     "auswahl": "Weißer Hase",
@@ -138,7 +150,7 @@
     "flughafen": "Ffm",
     "flugAnkunftDate": "2017-03-14T10:54:00.000Z",
     "flugAbfahrtDate": "2017-03-18T20:54:00.000Z",
-    "sonstiges": [ "Stromanschluss" ],
+    "sonstiges": ["Stromanschluss"],
     "transportEUR": "122,26",
     "transportText": "",
     "bestätigt": true,

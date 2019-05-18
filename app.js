@@ -18,7 +18,9 @@ function secureAgainstClickjacking(req, res, next) {
 function serverpathRemover(req, res, next) {
   res.locals.removeServerpaths = msg => {
     // find the path that comes before node_modules or lib:
-    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(msg);
+    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(
+      msg
+    );
     if (pathToBeRemoved) {
       return msg.replace(new RegExp(pathToBeRemoved[0], 'g'), '');
     }
@@ -29,7 +31,9 @@ function serverpathRemover(req, res, next) {
 
 function useApp(parent, url, child) {
   function ensureRequestedUrlEndsWithSlash(req, res, next) {
-    if (!(/\/$/).test(req.url)) { return res.redirect(req.url + '/'); }
+    if (!/\/$/.test(req.url)) {
+      return res.redirect(req.url + '/');
+    }
     next();
   }
 
@@ -59,11 +63,15 @@ module.exports = {
     app.set('view engine', 'pug');
     app.set('views', path.join(__dirname, 'views'));
     app.use(favicon(path.join(__dirname, 'public/img/favicon.ico')));
-    app.use(morgan('combined', {stream: winstonStream}));
+    app.use(morgan('combined', { stream: winstonStream }));
     app.use(cookieParser());
-    app.use(bodyparser.urlencoded({extended: true}));
+    app.use(bodyparser.urlencoded({ extended: true }));
     app.use(compress());
-    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 10 * 60 * 60 * 1000})); // ten hours
+    app.use(
+      express.static(path.join(__dirname, 'public'), {
+        maxAge: 10 * 60 * 60 * 1000
+      })
+    ); // ten hours
     //app.use(express.static(path.join(__dirname, 'public'), {maxAge: 60 * 1000})); // one minute
 
     app.use(beans.get('expressSessionConfigurator'));
@@ -100,15 +108,25 @@ module.exports = {
 
     this.server = http.createServer(app);
     this.server.listen(port, () => {
-      appLogger.info('Server running at port ' + port + ' in ' + process.env.NODE_ENV + ' MODE');
-      if (done) { done(); }
+      appLogger.info(
+        'Server running at port ' +
+          port +
+          ' in ' +
+          process.env.NODE_ENV +
+          ' MODE'
+      );
+      if (done) {
+        done();
+      }
     });
   },
 
   stop: function stop(done) {
     this.server.close(() => {
       appLogger.info('Server stopped');
-      if (done) { done(); }
+      if (done) {
+        done();
+      }
     });
   }
 };
