@@ -6,13 +6,13 @@ const DatumUhrzeit = beans.get('DatumUhrzeit');
 const Salesreport = beans.get('salesreport');
 
 const now = new DatumUhrzeit();
-const heute = now.plus({stunden: 8}).toJSDate();
-const tomorrow = now.plus({tage: 1}).toJSDate();
+const heute = now.plus({ stunden: 8 }).toJSDate();
+const tomorrow = now.plus({ tage: 1 }).toJSDate();
 
-const thirtyMinutesAgo = now.minus({minuten: 30}).toJSDate();
-const oneHourAgo = now.minus({minuten: 61}).toJSDate();
-const almostOneDayOld = now.minus({stunden: 23}).toJSDate();
-const moreThanOneDayOld = now.minus({stunden: 25}).toJSDate();
+const thirtyMinutesAgo = now.minus({ minuten: 30 }).toJSDate();
+const oneHourAgo = now.minus({ minuten: 61 }).toJSDate();
+const almostOneDayOld = now.minus({ stunden: 23 }).toJSDate();
+const moreThanOneDayOld = now.minus({ stunden: 25 }).toJSDate();
 
 const fullresult = {
   id: '1008242',
@@ -31,7 +31,9 @@ describe('Reservix Salesreport', () => {
     expect(obj.gebuehren()).to.eql(5296 - 4782.55);
     expect(obj.anzahlRegulaer()).to.eql(220);
     expect(obj.id()).to.eql('1008242');
-    expect(obj.updated().toLocalDateTimeString()).to.eql('28.10.2018, 13:58:23');
+    expect(obj.updated().toLocalDateTimeString()).to.eql(
+      '28.10.2018, 13:58:23'
+    );
   });
 
   it('handles non-existing bruttoUmsatz', () => {
@@ -59,7 +61,7 @@ describe('Reservix Salesreport', () => {
     });
 
     it('correctly checks an almost young timestamp', () => {
-      const obj = new Salesreport({updated: thirtyMinutesAgo});
+      const obj = new Salesreport({ updated: thirtyMinutesAgo });
       expect(obj.istVeraltet()).to.be(false);
     });
 
@@ -70,13 +72,12 @@ describe('Reservix Salesreport', () => {
       });
       expect(obj.istVeraltet()).to.be(true);
     });
-
   });
 
   describe('istVergangen', () => {
     it('23 hours are in grace period', () => {
       const obj = new Salesreport({
-        datum: almostOneDayOld,
+        datum: almostOneDayOld
       });
       expect(obj.istVergangen()).to.be(false);
     });
@@ -94,6 +95,5 @@ describe('Reservix Salesreport', () => {
       });
       expect(obj.istVergangen()).to.be(true);
     });
-
   });
 });

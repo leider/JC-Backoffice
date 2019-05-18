@@ -24,19 +24,23 @@ store.allUsers((err, result) => {
     }
   });
 
-  async.each(result, (user, callback) => {
-    user.gruppen = [];
-    if (config.get('superusers').includes(user.id)) {
-      user.gruppen.push('superusers');
+  async.each(
+    result,
+    (user, callback) => {
+      user.gruppen = [];
+      if (config.get('superusers').includes(user.id)) {
+        user.gruppen.push('superusers');
+      }
+      if (config.get('bookingTeam').includes(user.id)) {
+        user.gruppen.push('bookingTeam');
+      }
+      store.save(user, callback);
+    },
+    err1 => {
+      if (err1) {
+        console.log(err1);
+      }
+      process.exit();
     }
-    if (config.get('bookingTeam').includes(user.id)) {
-      user.gruppen.push('bookingTeam');
-    }
-    store.save(user, callback);
-  }, err1 => {
-    if (err1) {
-      console.log(err1);
-    }
-    process.exit();
-  });
+  );
 });

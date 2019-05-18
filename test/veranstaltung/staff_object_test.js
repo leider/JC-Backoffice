@@ -4,7 +4,6 @@ const beans = require('../../configure').get('beans');
 const Staff = beans.get('staff');
 
 describe('Staff', () => {
-
   describe('kann sagen, ob jemand für die Kasse fehlt', () => {
     it('initial', () => {
       const staff = new Staff({});
@@ -48,5 +47,4 @@ describe('Staff', () => {
       expect(staff.kasseFehlt()).to.be(false);
     });
   });
-
 });

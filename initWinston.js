@@ -1,4 +1,4 @@
-const {format, loggers, transports} = require('winston');
+const { format, loggers, transports } = require('winston');
 
 function console() {
   const consoleformat = format.combine(
@@ -8,7 +8,7 @@ function console() {
     format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
   );
 
-  return new transports.Console({format: consoleformat});
+  return new transports.Console({ format: consoleformat });
 }
 
 function fileNamed(name) {
@@ -27,34 +27,18 @@ function fileNamed(name) {
 }
 
 loggers.add('application', {
-    level: 'info',
-    transports: [
-      console(),
-      fileNamed('server')
-    ]
-  }
-);
+  level: 'info',
+  transports: [console(), fileNamed('server')]
+});
 loggers.add('scripts', {
-    level: 'info',
-    transports: [
-      console(),
-      fileNamed('scripts')
-    ]
-  }
-);
+  level: 'info',
+  transports: [console(), fileNamed('scripts')]
+});
 loggers.add('transactions', {
-    level: 'info',
-    transports: [
-      console(),
-      fileNamed('transactions')
-    ]
-  }
-);
+  level: 'info',
+  transports: [console(), fileNamed('transactions')]
+});
 loggers.add('http', {
-    level: 'warn',
-    transports: [
-      console(),
-      fileNamed('http')
-    ]
-  }
-);
+  level: 'warn',
+  transports: [console(), fileNamed('http')]
+});

@@ -4,7 +4,6 @@ const beans = require('../../configure').get('beans');
 const Veranstaltung = beans.get('veranstaltung');
 
 describe('Veranstaltung', () => {
-
   it('ist zusammengesetzt aus Unterobjekten', () => {
     const parts = {
       agentur: 'agentur',
@@ -61,5 +60,4 @@ describe('Veranstaltung', () => {
     expect(veranstaltung.state.startDate).to.be('start');
     expect(veranstaltung.state.endDate).to.be('end');
   });
-
 });

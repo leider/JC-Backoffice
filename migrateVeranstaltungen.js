@@ -15,16 +15,25 @@ store.alle((err1, veranstaltungen) => {
     const kosten = ver.state.kosten;
     ver.state.technik = ver.state.technik || {};
     const technik = ver.state.technik;
-    ['dateirider', 'technikJazzclub', 'technikAngebot1', 'backlineJazzclub', 'backlineRockshop', 'checked', 'fluegel'].forEach(field => {
+    [
+      'dateirider',
+      'technikJazzclub',
+      'technikAngebot1',
+      'backlineJazzclub',
+      'backlineRockshop',
+      'checked',
+      'fluegel'
+    ].forEach(field => {
       if (kosten[field]) {
         technik[field] = kosten[field];
       }
       delete kosten[field];
     });
-
   });
   async.each(veranstaltungen, store.saveVeranstaltung, err => {
-    if (err) { console.log(err); }
+    if (err) {
+      console.log(err);
+    }
     process.exit();
   });
 });
