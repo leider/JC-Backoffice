@@ -58,6 +58,12 @@ describe('DatumUhrzeit', () => {
 
       expect(DatumUhrzeit.forGermanString()).to.be(undefined);
     });
+
+    it('kann aus Reservix Strings erzeugt werden', () => {
+      expect(
+        DatumUhrzeit.forReservixString('So, 12.05.2019', '20:00 Uhr').toLocalDateTimeString()
+      ).to.eql('12.05.2019, 20:00:00');
+    });
   });
 
   describe('plus und minus (Datum) mit immutability', () => {
