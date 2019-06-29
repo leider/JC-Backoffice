@@ -61,7 +61,7 @@ html
       }
   body(style='font-size:8px;')
     .container-fluid
-      #Seite1.row(stlye='page-break-after: always;')
+      #Seite1.row(style='page-break-inside: avoid;')
         .col-9
           #adresse(style='margin-top:110px')
             .row
@@ -81,7 +81,7 @@ html
         .col-12
           p.text-center(style='margin-top:15px') Seite 1 von 2
 
-      #Seite2.row
+      #Seite2.row(style='page-break-inside: avoid;')
         .col-9
           #content2(style='margin-top:10px')
           block content2
