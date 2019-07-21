@@ -57,7 +57,7 @@
     "ramda": "0.26.1",
     "request": "2.88.0",
     "rfs": "8.0.4",
-    "select2": "4.0.7",
+    "select2": "4.0.8",
     "select2-theme-bootstrap4": "0.2.0-beta.3",
     "serve-favicon": "2.5.0",
     "simple-configure": "0.1.6",
