@@ -1,7 +1,7 @@
 include ../../../../views/formComponents
 
 mixin submitButtonsFor(veranstaltung, section, readonly)
-  .btn-group.btn-group.float-right
+  .btn-group.float-right
     a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-home.fa-fw
     if accessrights.isOrgaTeam()
       if veranstaltung.url() && !veranstaltung.kopf().confirmed()
