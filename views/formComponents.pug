@@ -62,7 +62,7 @@ mixin currency(name, label, value, tooltip, placeholder, readonly)
     .input-group
       input.form-control.currency.text-right(id=name, type='number', step=0.01, value=formatNumberTwoDigitsEnglish(value), name=name, placeholder=placeholder, disabled=readonly)
       .input-group-append
-        span.input-group-text.pl-1.pr-1: b €
+        span.input-group-text.px-1: b €
       .invalid-feedback Bitte eine deutsche Zahl eingeben
 
 mixin currencySpan(value, id, clazz)

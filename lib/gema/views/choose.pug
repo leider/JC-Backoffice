@@ -14,7 +14,11 @@ mixin eventsTable(events)
   -var monatAlt = -1;
   -var monatJahr;
   +csrf
-  +submitButtons('Öffnen')
+  .row
+    .col-sm-6
+      +singleselect('dateiart', 'PDF / CSV', 'PDF', ['PDF', 'CSV'])
+    .col-sm-6
+      +submitButtons('Öffnen')
   table.table.table-sm.table-striped
     for event in events
       if monatAlt === -1 || monatAlt !== event.month()
