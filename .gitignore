@@ -19,3 +19,4 @@ dump.zip
 mongorestore_jc.sh
 jazzclubmongo*
 *.gz
+/frontend/sass/out/jc-backoffice.css

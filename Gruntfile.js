@@ -34,7 +34,7 @@ module.exports = function(grunt) {
     'public/stylesheets/screen.css': [
       'frontend/3rd_party_css/flaticon-patched.css',
       'node_modules/select2/dist/css/select2.css',
-      'build/stylesheets/sass/out/jc-backoffice.css'
+      'frontend/sass/out/jc-backoffice.css'
     ]
   };
 
@@ -48,7 +48,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
-      build: ['build', 'frontendtests/fixtures/*.html'],
       coverage: ['coverage', 'coverageWithDB'],
       public: [
         'public/clientscripts',
@@ -100,12 +99,6 @@ module.exports = function(grunt) {
         dest: 'public/webfonts',
         expand: true,
         flatten: true
-      },
-      customSASS: {
-        src: 'frontend/sass/*',
-        dest: 'build/stylesheets/sass',
-        expand: true,
-        flatten: true
       }
     },
     eslint: {
@@ -115,8 +108,8 @@ module.exports = function(grunt) {
     sass: {
       dist: {
         files: {
-          'build/stylesheets/sass/out/jc-backoffice.css':
-            'build/stylesheets/sass/jc-backoffice.scss'
+          'frontend/sass/out/jc-backoffice.css':
+            'frontend/sass/jc-backoffice.scss'
         }
       }
     },
