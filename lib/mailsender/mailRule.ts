@@ -23,7 +23,7 @@ export default class MailRule {
     this.state = object ? object : <MailRuleRaw>{};
   }
 
-  static rules() {
+  static rules() : Rule[] {
     return [
       '',
       'Mittwochs für die nächste Woche',

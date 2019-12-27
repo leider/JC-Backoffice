@@ -9,16 +9,6 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
 };
 
 export default {
-  formatNumberWithCurrentLocale: function formatNumberWithCurrentLocale(
-    res: express.Response,
-    number: number
-  ) {
-    return new Intl.NumberFormat(res.locals.language, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(number || 0);
-  },
-
   formatNumberTwoDigits: function formatNumberTwoDigits(number: any) {
     if (typeof number === 'string') {
       return number;

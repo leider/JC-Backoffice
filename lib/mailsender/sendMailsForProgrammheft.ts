@@ -7,7 +7,7 @@ import DatumUhrzeit from '../commons/DatumUhrzeit';
 import Kalender, { EmailEvent } from '../programmheft/kalender';
 
 export function remindForProgrammheft(
-  now: DatumUhrzeit,
+  now: DatumUhrzeit = new DatumUhrzeit(),
   callback: ErrorCallback<Error>
 ) {
   function sendMail(

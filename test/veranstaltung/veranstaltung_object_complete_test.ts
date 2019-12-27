@@ -1,13 +1,15 @@
 const expect = require('must-dist');
 
-const sinon = require('sinon').createSandbox();
+import sin from 'sinon';
+const sinon = sin.createSandbox();
 
 import Veranstaltung from '../../lib/veranstaltungen/object/veranstaltung';
-const demo = require('../testdata/veranstaltung.json');
+
+import demo from '../testdata/demo_veranstaltung';
 const reference = JSON.parse(JSON.stringify(demo));
 
 describe('Veranstaltung Gesamt', () => {
-  let veranstaltung;
+  let veranstaltung: Veranstaltung;
 
   beforeEach(() => {
     veranstaltung = new Veranstaltung(demo);
@@ -21,17 +23,17 @@ describe('Veranstaltung Gesamt', () => {
   });
 
   describe('fillFromUI', () => {
-    let agenturSpy;
-    let artistSpy;
-    let eintrittspreiseSpy;
-    let hotelSpy;
-    let kasseSpy;
-    let kopfSpy;
-    let kostenSpy;
-    let presseSpy;
-    let staffSpy;
-    let unterkunftSpy;
-    let vertragSpy;
+    let agenturSpy: any;
+    let artistSpy: any;
+    let eintrittspreiseSpy: any;
+    let hotelSpy: any;
+    let kasseSpy: any;
+    let kopfSpy: any;
+    let kostenSpy: any;
+    let presseSpy: any;
+    let staffSpy: any;
+    let unterkunftSpy: any;
+    let vertragSpy: any;
 
     beforeEach(() => {
       agenturSpy = sinon.spy(veranstaltung, 'agentur');

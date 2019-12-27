@@ -33,7 +33,7 @@ describe('Veranstaltung', () => {
   });
 
   it('initialisiert die Unterobjekte', () => {
-    const veranstaltung = new Veranstaltung();
+    const veranstaltung = new Veranstaltung({});
     expect(veranstaltung.state.agentur).to.eql({});
     expect(veranstaltung.state.artist).to.eql({});
     expect(veranstaltung.state.eintrittspreise).to.eql({});

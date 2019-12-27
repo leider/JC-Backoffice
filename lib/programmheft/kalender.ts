@@ -84,7 +84,7 @@ function eventsToObject(contents?: string, jahrMonat?: string) {
 }
 
 export class EmailEvent {
-  private event: any;
+  event: any;
 
   constructor(event: any) {
     this.event = event;
@@ -116,7 +116,7 @@ Der Backoffice-Mailautomat vom Jazzclub`;
 export default class Kalender {
   state: any;
 
-  constructor(object: any) {
+  constructor(object?: any) {
     if (object && object.id && object.id.split('/').length === 2) {
       const splits = object.id.split('/');
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {

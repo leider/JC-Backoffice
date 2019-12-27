@@ -42,11 +42,11 @@ describe('DatumUhrzeit', () => {
     it('kann mit deutschem String erzeugt werden', () => {
       expect(
         DatumUhrzeit.forGermanString('01.03.2019', '03:04')
-          .toLocalDateTimeString
+          ?.toLocalDateTimeString
       ).to.eql('01.03.2019, 03:04:00');
 
       expect(
-        DatumUhrzeit.forGermanString('01.03.2019').toLocalDateTimeString
+        DatumUhrzeit.forGermanString('01.03.2019')?.toLocalDateTimeString
       ).to.eql('01.03.2019, 00:00:00');
 
       expect(DatumUhrzeit.forGermanString()).to.be(undefined);
@@ -55,7 +55,7 @@ describe('DatumUhrzeit', () => {
     it('kann aus Reservix Strings erzeugt werden', () => {
       expect(
         DatumUhrzeit.forReservixString('So, 12.05.2019', '20:00 Uhr')
-          .toLocalDateTimeString
+          ?.toLocalDateTimeString
       ).to.eql('12.05.2019, 20:00:00');
     });
   });

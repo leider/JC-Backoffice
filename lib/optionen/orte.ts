@@ -7,8 +7,8 @@ const sortByNameCaseInsensitive = R.sortBy(
 interface Ort {
   name: string;
   flaeche: string;
-  presseIn: string;
-  pressename: string;
+  presseIn?: string;
+  pressename?: string;
 }
 
 export default class Orte {
@@ -32,7 +32,7 @@ export default class Orte {
     return this.orte().find(ort => ort.name === name);
   }
 
-  addOrt(object: any) {
+  addOrt(object: Ort & { oldname?: string }) {
     delete object.oldname;
     if (this.forName(object.name)) {
       return this.updateOrt(object.name, object);
