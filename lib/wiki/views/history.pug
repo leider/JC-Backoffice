@@ -59,7 +59,7 @@ block content
           td
             input(type='checkbox', value=item.fullhash)
           td #{item.author}
-          td #{item.date().toLocalDateTimeString()}
+          td #{item.date.toLocalDateTimeString}
           td #{item.comment}
           td
-            a(href=item.url() + '?version=' + item.hashRef) #{item.hashRef || 'CURRENT'}
+            a(href=item.url + '?version=' + item.hashRef) #{item.hashRef || 'CURRENT'}

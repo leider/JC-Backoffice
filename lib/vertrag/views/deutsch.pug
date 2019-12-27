@@ -21,7 +21,7 @@ block content1
         b Konzertvertrag
       p Dieser Vertrag wird geschlossen
     .col-5
-      p.text-right Karlsruhe, #{datum.tagMonatJahrLang()}
+      p.text-right Karlsruhe, #{datum.tagMonatJahrLang}
   .row
     .col-3
       p zwischen:<br>
@@ -52,10 +52,10 @@ block content1
   .row
     .col-12
       p.
-        §1 Das Konzert findet statt am <b>#{start.tagMonatJahrLang()}</b> um <b>#{start.uhrzeitKompakt()} Uhr</b>.</br>
+        §1 Das Konzert findet statt am <b>#{start.tagMonatJahrLang}</b> um <b>#{start.uhrzeitKompakt} Uhr</b>.</br>
         Spielstätte: <b>#{veranstaltung.kopf().ort()}</b>
       p.
-        §1.1 Get in ist <b>#{getin.uhrzeitKompakt()} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein.
+        §1.1 Get in ist <b>#{getin.uhrzeitKompakt} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein.
         Seine Anwesenheit ist auch während der gesamten Veranstaltung sicher gestellt.
       p.
         §1.2 Gebietsschutz: Die Künstler verpflichten sich hiermit 14 Tage vor und nach dem Konzerttermin keine Konzerte im Umkreis von 50km zu geben.

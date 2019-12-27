@@ -1,8 +1,7 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const Kalender = beans.get('kalender');
-const DatumUhrzeit = beans.get('DatumUhrzeit');
+import Kalender from '../../lib/programmheft/kalender';
+import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
 
 describe('Kalender', () => {
   describe('geht korrekt mit id und text um', () => {

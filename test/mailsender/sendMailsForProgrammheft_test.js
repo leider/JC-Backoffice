@@ -1,13 +1,11 @@
 const sinon = require('sinon').createSandbox();
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const DatumUhrzeit = beans.get('DatumUhrzeit');
-const kalenderstore = beans.get('kalenderstore');
-const Kalender = beans.get('kalender');
-const mailtransport = beans.get('mailtransport');
-
-const sendMailsForProgrammheft = require('../../lib/mailsender/sendMailsForProgrammheft');
+import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
+import kalenderstore from '../../lib/programmheft/kalenderstore';
+import Kalender from '../../lib/programmheft/kalender';
+import mailtransport from '../../lib/mailsender/mailtransport';
+import {remindForProgrammheft} from '../../lib/mailsender/sendMailsForProgrammheft';
 
 describe('Programmheft Mailsender', () => {
   const april12 = DatumUhrzeit.forGermanString('12.04.2019');
@@ -51,7 +49,7 @@ describe('Programmheft Mailsender', () => {
   });
 
   it('runs correctly on a day where notificatons lie', done => {
-    sendMailsForProgrammheft.remindForProgrammheft(april12, err => {
+    remindForProgrammheft(april12, err => {
       sinon.assert.calledOnce(mailcheck);
       const message = mailcheck.args[0][0];
       expect(message.senderAddress).to.be('bo@jazzclub.de');
@@ -61,7 +59,7 @@ describe('Programmheft Mailsender', () => {
   });
 
   it('runs correctly on a day where no notificatons lie', done => {
-    sendMailsForProgrammheft.remindForProgrammheft(april13, err => {
+    remindForProgrammheft(april13, err => {
       sinon.assert.notCalled(mailcheck);
       done(err);
     });

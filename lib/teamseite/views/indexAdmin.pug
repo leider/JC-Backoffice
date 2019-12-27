@@ -43,16 +43,16 @@ mixin submitButtonsFor(veranstaltung)
     button.btn.btn-sm.btn-success(type='submit'): i.fas.fa-fw.fa-save(title='Speichern')
 
 mixin monatHeadline(veranstaltung)
-  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt()}
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt}
     .btn-group.btn-group-sm.float-right
-      if !veranstaltung.startDatumUhrzeit().istGeraderMonat()
-        a.btn.btn-secondary.btn-sm(href='/programmheft/' + veranstaltung.startDatumUhrzeit().fuerKalenderViews())
+      if !veranstaltung.startDatumUhrzeit().istGeraderMonat
+        a.btn.btn-secondary.btn-sm(href='/programmheft/' + veranstaltung.startDatumUhrzeit().fuerKalenderViews)
           i.far.fa-newspaper.fa-fw
           | #{' '} Programmheft
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
         i.far.fa-file-alt.fa-fw
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 

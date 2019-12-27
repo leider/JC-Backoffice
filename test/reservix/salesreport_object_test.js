@@ -1,18 +1,16 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const DatumUhrzeit = beans.get('DatumUhrzeit');
-
-const Salesreport = beans.get('salesreport');
+import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
+import Salesreport from '../../lib/reservix/salesreport';
 
 const now = new DatumUhrzeit();
-const heute = now.plus({ stunden: 8 }).toJSDate();
-const tomorrow = now.plus({ tage: 1 }).toJSDate();
+const heute = now.plus({ stunden: 8 }).toJSDate;
+const tomorrow = now.plus({ tage: 1 }).toJSDate;
 
-const thirtyMinutesAgo = now.minus({ minuten: 30 }).toJSDate();
-const oneHourAgo = now.minus({ minuten: 61 }).toJSDate();
-const almostOneDayOld = now.minus({ stunden: 23 }).toJSDate();
-const moreThanOneDayOld = now.minus({ stunden: 25 }).toJSDate();
+const thirtyMinutesAgo = now.minus({ minuten: 30 }).toJSDate;
+const oneHourAgo = now.minus({ minuten: 61 }).toJSDate;
+const almostOneDayOld = now.minus({ stunden: 23 }).toJSDate;
+const moreThanOneDayOld = now.minus({ stunden: 25 }).toJSDate;
 
 const fullresult = {
   id: '1008242',

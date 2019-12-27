@@ -11,6 +11,6 @@ block content
       -var ersterMonat = now.minus({monate: 6});
       -var n=1
       while n < 13
-        p: a(href='/optionen/kassenbericht/' + ersterMonat.fuerKalenderViews()) Kassenbericht #{ersterMonat.monatJahrKompakt()}
+        p: a(href='/optionen/kassenbericht/' + ersterMonat.fuerKalenderViews()) Kassenbericht #{ersterMonat.monatJahrKompakt}
         -ersterMonat = ersterMonat.plus({monate: 1})
         -n++

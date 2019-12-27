@@ -15,12 +15,12 @@ mixin people(veranstaltung, name)
   .mt-1: span.text-capitalize #{staff[name]().join(', ')}
 
 mixin monatHeadline(veranstaltung)
-  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt()}
+  h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt}
     .btn-group.btn-group-sm.float-right
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
         i.far.fa-file-alt.fa-fw
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten())
+      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 

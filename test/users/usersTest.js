@@ -1,7 +1,6 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const Users = beans.get('users');
+import Users from '../../lib/users/users';
 
 const user1 = {
   id: 'user1',

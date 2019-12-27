@@ -1,7 +1,6 @@
 const expect = require('must-dist');
-const beans = require('../../configure').get('beans');
-const MailRule = beans.get('mailRule');
-const DatumUhrzeit = beans.get('DatumUhrzeit');
+import MailRule from '../../lib/mailsender/mailRule';
+import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
 
 describe('MailRule', () => {
   const jan5 = DatumUhrzeit.forISOString('2018-01-05');

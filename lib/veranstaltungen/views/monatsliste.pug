@@ -17,8 +17,8 @@ html
           for veranstaltung in liste
             p
               b #{veranstaltung.kopf().titel()}<br>
-              b: i #{veranstaltung.startDatumUhrzeit().wochentagTagMonat()}
-              b #{' '} // #{veranstaltung.startDatumUhrzeit().uhrzeitKompakt()} Uhr<br>
+              b: i #{veranstaltung.startDatumUhrzeit().wochentagTagMonat}
+              b #{' '} // #{veranstaltung.startDatumUhrzeit().uhrzeitKompakt} Uhr<br>
               | #{veranstaltung.kopf().presseIn()}
       .row
         .col-md-6

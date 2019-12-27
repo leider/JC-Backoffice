@@ -49,15 +49,15 @@ block content
               .col-6
                 .row
                   .col-6.pl-2.pr-1
-                    +date('startDate', 'Start', veranstaltung.startDatumUhrzeit().tagMonatJahrKompakt(), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt())
+                    +date('startDate', 'Start', veranstaltung.startDatumUhrzeit().tagMonatJahrKompakt, 'Startzeitpunkt', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt)
                   .col-6.pl-1.pr-2
-                    +time('startTime', veranstaltung.startDatumUhrzeit().uhrzeitKompakt())
+                    +time('startTime', veranstaltung.startDatumUhrzeit().uhrzeitKompakt)
               .col-6
                 .row
                   .col-6.pl-2.pr-1
-                    +date('endDate', 'Ende', veranstaltung.endDatumUhrzeit().tagMonatJahrKompakt(), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt())
+                    +date('endDate', 'Ende', veranstaltung.endDatumUhrzeit().tagMonatJahrKompakt, 'Erwartetes Ende', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt)
                   #dates.col-6.pl-1.pr-2
-                    +time('endTime', veranstaltung.endDatumUhrzeit().uhrzeitKompakt())
+                    +time('endTime', veranstaltung.endDatumUhrzeit().uhrzeitKompakt)
 
             .row
               .col-4

@@ -1,5 +1,4 @@
-const beans = require('../../configure').get('beans');
-const fieldHelpers = beans.get('fieldHelpers');
+import fieldHelpers from '../../lib/commons/fieldHelpers';
 const expect = require('must-dist');
 
 describe('formatNumberWithCurrentLocale', () => {
