@@ -3,7 +3,7 @@ Settings.defaultLocale = 'de';
 
 export default class DatumUhrzeit {
   private locale: string;
-  private dateTime: DateTime;
+  dateTime: DateTime;
 
   constructor(dateTime?: DateTime) {
     this.locale = 'de-DE';

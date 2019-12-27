@@ -1,6 +1,5 @@
 const expect = require('must-dist');
-const beans = require('../../configure').get('beans');
-const Orte = beans.get('orte');
+import Orte from '../../lib/optionen/orte';
 
 describe('Orte', () => {
   it('is properly initialized', () => {

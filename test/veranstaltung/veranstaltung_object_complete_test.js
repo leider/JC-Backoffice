@@ -2,9 +2,7 @@ const expect = require('must-dist');
 
 const sinon = require('sinon').createSandbox();
 
-const beans = require('../../configure').get('beans');
-const Veranstaltung = beans.get('veranstaltung');
-
+import Veranstaltung from '../../lib/veranstaltungen/object/veranstaltung';
 const demo = require('../testdata/veranstaltung.json');
 const reference = JSON.parse(JSON.stringify(demo));
 

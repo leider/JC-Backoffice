@@ -77,7 +77,7 @@ describe('DatumUhrzeit', () => {
 
     it('rechnet mit Monaten', () => {
       expect(januar01.plus({ monate: 1 })).to.eql(februar01);
-      expect(februar01.minus({ monate: 1 })).to.eql(januar01);
+      expect(februar01.minus({ monate: 1 }).dateTime).to.eql(januar01.dateTime);
       expect(januar01.toLocalDateTimeString).to.eql('01.01.2019, 00:00:00');
     });
 

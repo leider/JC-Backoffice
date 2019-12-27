@@ -1,7 +1,6 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const Staff = beans.get('staff');
+import Staff from '../../lib/veranstaltungen/object/staff';
 
 describe('Staff', () => {
   describe('kann sagen, ob jemand für die Kasse fehlt', () => {

@@ -1,7 +1,6 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const Kosten = beans.get('kosten');
+import Kosten from '../../lib/veranstaltungen/object/kosten';
 
 describe('Kosten', () => {
   it('funktioniert auf allen Methoden auch mit "null" values', () => {

@@ -1,7 +1,6 @@
 const expect = require('must-dist');
 
-const beans = require('../../configure').get('beans');
-const Veranstaltung = beans.get('veranstaltung');
+import Veranstaltung from '../../lib/veranstaltungen/object/veranstaltung';
 
 describe('Veranstaltung', () => {
   it('ist zusammengesetzt aus Unterobjekten', () => {

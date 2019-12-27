@@ -167,7 +167,7 @@ describe('Kalender', () => {
         was: 'Irgendwas',
         wer: 'Irgendwer'
       });
-      expect(emailEvent.datumUhrzeitToSend()).to.eql(sendeDatum);
+      expect(emailEvent.datumUhrzeitToSend().dateTime).to.eql(sendeDatum.dateTime);
       expect(emailEvent.email()).to.eql('andreas@andreas.as');
       expect(emailEvent.body()).to.eql(
         'Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub'
