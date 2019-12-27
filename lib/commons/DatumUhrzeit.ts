@@ -3,7 +3,7 @@ Settings.defaultLocale = 'de';
 
 export default class DatumUhrzeit {
   private locale: string;
-  dateTime: DateTime;
+  private dateTime: DateTime;
 
   constructor(dateTime?: DateTime) {
     this.locale = 'de-DE';
@@ -225,5 +225,9 @@ export default class DatumUhrzeit {
 
   get istGeraderMonat() {
     return this.monat % 2 === 0;
+  }
+
+  get value() {
+    return this.dateTime;
   }
 }

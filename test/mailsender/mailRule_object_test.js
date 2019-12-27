@@ -26,14 +26,14 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende korrekt', () => {
       const result = rule.startAndEndDay(mittwochFeb14);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-19'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-02-25'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-19').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-02-25').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 
@@ -52,20 +52,20 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende für Februar korrekt', () => {
       const result = rule.startAndEndDay(jan5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-01'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-02-28'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-01').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-02-28').value);
     });
 
     it('errechnet Beginn und Ende für März korrekt', () => {
       const result = rule.startAndEndDay(montagFeb5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-03-01'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-03-31'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-03-01').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-03-31').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 
@@ -84,20 +84,20 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende für Februar korrekt', () => {
       const result = rule.startAndEndDay(jan5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-01'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-03-31'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-01').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-03-31').value);
     });
 
     it('errechnet Beginn und Ende für März korrekt', () => {
       const result = rule.startAndEndDay(montagFeb5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-03-01'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-04-30'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-03-01').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-04-30').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 
@@ -116,20 +116,20 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende für Februar korrekt', () => {
       const result = rule.startAndEndDay(jan16);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-15'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-03-15'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-15').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-03-15').value);
     });
 
     it('errechnet Beginn und Ende für März korrekt', () => {
       const result = rule.startAndEndDay(feb16);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-03-15'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-04-15'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-03-15').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-04-15').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 
@@ -148,20 +148,20 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende im Februar korrekt', () => {
       const result = rule.startAndEndDay(montagFeb5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-09'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-02-16'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-09').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-02-16').value);
     });
 
     it('errechnet Beginn und Ende monatsübergreifend korrekt', () => {
       const result = rule.startAndEndDay(montagFeb26);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-03-02'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-03-09'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-03-02').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-03-09').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 
@@ -180,20 +180,20 @@ describe('MailRule', () => {
 
     it('errechnet Beginn und Ende im Februar korrekt', () => {
       const result = rule.startAndEndDay(montagFeb5);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-02-19'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-02-26'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-02-19').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-02-26').value);
     });
 
     it('errechnet Beginn und Ende monatsübergreifend korrekt', () => {
       const result = rule.startAndEndDay(montagFeb26);
-      expect(result.start).to.eql(DatumUhrzeit.forISOString('2018-03-12'));
-      expect(result.end).to.eql(DatumUhrzeit.forISOString('2018-03-19'));
+      expect(result.start.value).to.eql(DatumUhrzeit.forISOString('2018-03-12').value);
+      expect(result.end.value).to.eql(DatumUhrzeit.forISOString('2018-03-19').value);
     });
 
     it('gibt das Eingabedatum zurück, wenn nichts gesendet werden soll', () => {
       const result = rule.startAndEndDay(dienstagFeb13);
-      expect(result.start).to.eql(dienstagFeb13);
-      expect(result.end).to.eql(dienstagFeb13);
+      expect(result.start.value).to.eql(dienstagFeb13.value);
+      expect(result.end.value).to.eql(dienstagFeb13.value);
     });
   });
 });
