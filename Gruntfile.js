@@ -56,6 +56,7 @@ module.exports = function(grunt) {
         'public/images',
         'public/stylesheets'
       ],
+      compiledTypescript: ['lib/**/*.js', 'test/**/*.js', 'start.js', 'app.js', 'configure.js', 'initWinston.js'],
       options: { force: true }
     },
     copy: {

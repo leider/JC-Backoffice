@@ -2,8 +2,6 @@ import R from 'ramda';
 import misc from '../commons/misc';
 import store from './kalenderstore';
 
-const conf = require('simple-configure');
-
 import veranstaltungenstore from '../veranstaltungen/veranstaltungenstore';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 import Kalender from './kalender';
@@ -37,9 +35,9 @@ app.get('/:year/:month', (req, res, next) => {
     return res.redirect('/');
   }
   const year = req.params.year;
-  const month: number = parseInt(req.params.month);
+  const month = req.params.month;
   const start = DatumUhrzeit.forYYYYMM(year + '' + month);
-  if (month % 2 === 0) {
+  if (parseInt(month) % 2 === 0) {
     return res.redirect(
       '/programmheft/' +
         DatumUhrzeit.forYYYYMM(year + '' + month).naechsterUngeraderMonat
@@ -48,36 +46,39 @@ app.get('/:year/:month', (req, res, next) => {
   }
   const end = start.plus({ monate: 2 });
 
-  store.getKalender(year + '/' + month, (err: Error | null, kalender: Kalender) => {
-    if (err) {
-      return next(err);
-    }
-    veranstaltungenstore.byDateRangeInAscendingOrder(
-      start,
-      end,
-      (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
-        if (err1) {
-          return next(err1);
-        }
-        const filteredVeranstaltungen = veranstaltungen.filter(v =>
-          v.kopf().confirmed()
-        );
-        const unconfirmedVeranstaltungen = veranstaltungen.filter(
-          v => !v.kopf().confirmed()
-        );
-        const groupedVeranstaltungen = R.groupBy(
-          veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt,
-          filteredVeranstaltungen
-        );
-        res.render('heft', {
-          unconfirmedVeranstaltungen,
-          groupedVeranstaltungen,
-          start,
-          kalender
-        });
+  store.getKalender(
+    year + '/' + month,
+    (err: Error | null, kalender: Kalender) => {
+      if (err) {
+        return next(err);
       }
-    );
-  });
+      veranstaltungenstore.byDateRangeInAscendingOrder(
+        start,
+        end,
+        (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
+          if (err1) {
+            return next(err1);
+          }
+          const filteredVeranstaltungen = veranstaltungen.filter(v =>
+            v.kopf().confirmed()
+          );
+          const unconfirmedVeranstaltungen = veranstaltungen.filter(
+            v => !v.kopf().confirmed()
+          );
+          const groupedVeranstaltungen = R.groupBy(
+            veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt,
+            filteredVeranstaltungen
+          );
+          res.render('heft', {
+            unconfirmedVeranstaltungen,
+            groupedVeranstaltungen,
+            start,
+            kalender
+          });
+        }
+      );
+    }
+  );
 });
 
 app.post('/submit', (req, res, next) => {

@@ -23,20 +23,20 @@ block content
     .table-responsive
       table.table.table-sm.table-striped
         tr
-          th(width='15%') Startet am
-          th(width='15%') Endet am
-          th(width='45%') Beschreibung
-          th(width='15%') Typ
-          th(width='5%')
-          th(width='5%')
+          th(style='width:15%') Startet am
+          th(style='width:15%') Endet am
+          th(style='width:45%') Beschreibung
+          th(style='width:15%') Typ
+          th(style='width:5%')
+          th(style='width:5%')
         for termin in termine
           form(action='/ical/submit', method='post')
             tr
               if termin.id()
                 +hidden('id', termin.id())
               +csrf
-              +date_td('startDate', termin.startDatumUhrzeit().tagMonatJahrKompakt())
-              +date_td('endDate', termin.endDatumUhrzeit().tagMonatJahrKompakt())
+              +date_td('startDate', termin.startDatumUhrzeit().tagMonatJahrKompakt)
+              +date_td('endDate', termin.endDatumUhrzeit().tagMonatJahrKompakt)
               td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung(), style='width:100%')
               td(style='white-space: nowrap'): input#typ.form-control.trim-text(type='text', name='typ', value=termin.typ(), style='width:100%')
               td: a.btn.btn-danger.float-right(href='/ical/delete/' + encodeURIComponent(termin.id())): i.far.fa-fw.fa-trash-alt
