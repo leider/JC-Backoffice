@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import express from 'express';
-import * as path from 'path';
-import * as fs from 'fs';
+import path from 'path';
+import fs from 'fs';
 import passport from 'passport';
 import Renderer from '../commons/renderer';
 

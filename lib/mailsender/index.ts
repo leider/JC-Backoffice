@@ -1,10 +1,8 @@
 import mailstore from './mailstore';
 
-const beans = require('simple-configure').get('beans');
-
-const optionenService = beans.get('optionenService');
-const store = beans.get('veranstaltungenstore');
-const optionenstore = beans.get('optionenstore');
+import optionenService from '../optionen/optionenService';
+import store from '../veranstaltungen/veranstaltungenstore';
+import optionenstore from '../optionen/optionenstore';
 
 import misc from '../commons/misc';
 import MailRule from './mailRule';

@@ -20,3 +20,9 @@ mongorestore_jc.sh
 jazzclubmongo*
 *.gz
 /frontend/sass/out/jc-backoffice.css
+lib/**/*.js
+test/**/*.js
+app.js
+configure.js
+initWinston.js
+start.js

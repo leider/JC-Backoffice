@@ -6,10 +6,9 @@ import store from '../veranstaltungen/veranstaltungenstore';
 import User from '../users/user';
 import userstore from '../users/userstore';
 import Veranstaltung from '../veranstaltungen/object/veranstaltung';
+import optionenservice from '../optionen/optionenService';
 
 const conf = require('simple-configure');
-const beans = conf.get('beans');
-const optionenservice = beans.get('optionenService');
 
 const app: express.Express = misc.expressAppIn(__dirname);
 

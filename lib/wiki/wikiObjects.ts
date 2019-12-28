@@ -1,5 +1,5 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
-import * as path from 'path';
+import path from 'path';
 
 export class Metadata {
   name!: string;

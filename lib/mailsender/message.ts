@@ -1,5 +1,5 @@
 import pug from 'pug';
-import * as path from 'path';
+import path from 'path';
 import Renderer from '../commons/renderer';
 
 const conf = require('simple-configure');

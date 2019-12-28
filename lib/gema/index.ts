@@ -3,12 +3,11 @@ import express from 'express';
 import misc from '../commons/misc';
 import puppeteerPrinter from '../commons/puppeteerPrinter';
 
-const conf = require('simple-configure');
-const beans = conf.get('beans');
-const store = beans.get('veranstaltungenstore');
+import store from '../veranstaltungen/veranstaltungenstore';
 
 const app = misc.expressAppIn(__dirname);
 
+const conf = require('simple-configure');
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
 const printoptions = {
@@ -54,6 +53,7 @@ function createResult(
   selector: string,
   nachmeldung: boolean
 ) {
+  // @ts-ignore
   store[selector]((err: Error | null, veranstaltungen: Array<any>) => {
     if (err) {
       return next(err);

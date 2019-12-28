@@ -30,7 +30,7 @@ import handle404 from './lib/middleware/handle404';
 import handle500 from './lib/middleware/handle500';
 import secureByLogin from './lib/middleware/secureByLogin';
 import wikiSubdirs from './lib/middleware/wikiSubdirs';
-import * as path from 'path';
+import path from 'path';
 
 function secureAgainstClickjacking(
   req: express.Request,
@@ -80,7 +80,6 @@ function useApp(parent: express.Express, url: string, child: express.Express) {
 }
 
 const conf = require('simple-configure');
-const beans = conf.get('beans');
 
 const appLogger = loggers.get('application');
 const httpLogger = loggers.get('http');

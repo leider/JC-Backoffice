@@ -5,9 +5,7 @@ import icalService from './icalService';
 import express from 'express';
 import Termin from './termin';
 
-const conf = require('simple-configure');
-const beans = conf.get('beans');
-const store = beans.get('veranstaltungenstore');
+import store from '../veranstaltungen/veranstaltungenstore';
 
 const app = misc.expressAppIn(__dirname);
 

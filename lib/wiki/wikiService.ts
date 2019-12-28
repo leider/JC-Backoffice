@@ -1,8 +1,8 @@
-import * as fs from 'fs';
+import fs from 'fs';
 
 import Git from './gitmech';
 import Diff from './gitDiff';
-import * as path from 'path';
+import path from 'path';
 import { Metadata } from './wikiObjects';
 import childProcess from "child_process";
 

@@ -119,7 +119,6 @@
     "test": "grunt tests",
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly --icu-data-dir=node_modules/full-icu ./start.ts",
-    "prod-build": "tsc && NODE_ENV=production node --icu-data-dir=node_modules/full-icu ./build/start.js",
-    "prod": "node -r ts-node/register/transpile-only --icu-data-dir=node_modules/full-icu ./start.ts"
+    "prod-build": "tsc && NODE_ENV=production node --icu-data-dir=node_modules/full-icu ./start.js"
   }
 }
