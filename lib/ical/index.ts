@@ -3,9 +3,10 @@ import DatumUhrzeit from '../commons/DatumUhrzeit';
 import terminstore from './terminstore';
 import icalService from './icalService';
 import express from 'express';
-import Termin from './termin';
+import Termin, { TerminEvent } from './termin';
 
 import store from '../veranstaltungen/veranstaltungenstore';
+import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 
 const app = misc.expressAppIn(__dirname);
 
@@ -20,13 +21,13 @@ function sendCalendarStringNamedToResult(
 }
 
 app.get('/', (req, res, next) => {
-  store.alle((err: Error | null, veranstaltungen: any) => {
+  store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err || !veranstaltungen) {
       return next(err);
     }
     sendCalendarStringNamedToResult(
       icalService.icalForVeranstaltungen(
-        veranstaltungen.filter((v: any) => v.kopf().confirmed())
+        veranstaltungen.filter(v => v.kopf().confirmed())
       ),
       'events',
       res
@@ -50,7 +51,7 @@ app.get('/eventsForCalendar', (req, res, next) => {
   icalService.termineAsEventsBetween(
     start,
     end,
-    (err: Error | null, events: any) => {
+    (err: Error | null, events: TerminEvent[]) => {
       if (err) {
         return next(err);
       }
@@ -61,12 +62,15 @@ app.get('/eventsForCalendar', (req, res, next) => {
 
 app.get('/eventsFromIcalURL/:url', (req, res, next) => {
   const url = req.params.url;
-  icalService.termineFromIcalURL(url, (err: Error | null, events: any) => {
-    if (err) {
-      return next(err);
+  icalService.termineFromIcalURL(
+    url,
+    (err: Error | null, events: TerminEvent) => {
+      if (err) {
+        return next(err);
+      }
+      res.end(JSON.stringify(events));
     }
-    res.end(JSON.stringify(events));
-  });
+  );
 });
 
 app.get('/delete/:id', (req, res, next) => {

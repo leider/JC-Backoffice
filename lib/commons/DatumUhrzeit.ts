@@ -1,6 +1,15 @@
 import { Settings, DateTime } from 'luxon';
 Settings.defaultLocale = 'de';
 
+type AdditionOptions = {
+  jahre?: number;
+  monate?: number;
+  wochen?: number;
+  tage?: number;
+  stunden?: number;
+  minuten?: number;
+};
+
 export default class DatumUhrzeit {
   private locale: string;
   private dateTime: DateTime;
@@ -39,6 +48,18 @@ export default class DatumUhrzeit {
     return undefined;
   }
 
+  static forGermanStringOrNow(dateString?: string, timeString?: string) {
+    if (dateString) {
+      return new DatumUhrzeit(
+        DateTime.fromFormat(
+          dateString + ' ' + (timeString || '00:00'),
+          'dd.MM.yy HH:mm'
+        )
+      );
+    }
+    return new DatumUhrzeit();
+  }
+
   static forReservixString(dateString: string, timeString: string) {
     // z.B. So, 12.05.2019, 20:00 Uhr
     if (dateString) {
@@ -55,7 +76,7 @@ export default class DatumUhrzeit {
   }
 
   // Rechnen
-  plus(options: any) {
+  plus(options: AdditionOptions) {
     const d = this.dateTime.plus({
       years: options.jahre,
       months: options.monate,
@@ -67,7 +88,7 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(d);
   }
 
-  minus(options: any) {
+  minus(options: AdditionOptions) {
     const d = this.dateTime.minus({
       years: options.jahre,
       months: options.monate,

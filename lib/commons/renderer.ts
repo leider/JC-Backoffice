@@ -2,8 +2,8 @@ import marked from 'marked';
 import crypto from 'crypto';
 import iconv from 'iconv-lite';
 
-function normalize(str: any) {
-  if (typeof str !== 'string' || str.trim() === '') {
+function normalize(str: string) {
+  if (str.trim() === '') {
     return '';
   }
   // iconv-lite cannot do this yet, so we do it manually:
@@ -78,7 +78,7 @@ function enhanceTableTag(rendered: string) {
 }
 
 export default {
-  render: function render(content: any, subdir?: string) {
+  render: function render(content?: string, subdir?: string) {
     if (content === undefined || content === null) {
       return '';
     }
@@ -87,7 +87,7 @@ export default {
   },
   normalize,
   titleAndRenderedTail: function titleAndRenderedTail(
-    content: any,
+    content: string,
     subdir?: string
   ) {
     const tokens = marked.lexer(evalTags(content, subdir));

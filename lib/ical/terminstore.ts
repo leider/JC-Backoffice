@@ -1,24 +1,28 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
 import ramda from 'ramda';
-import Termin from './termin';
+import Termin, { TerminRaw } from './termin';
 import misc from '../commons/misc';
 
 import pers from '../persistence/persistence';
 const persistence = pers('terminstore');
 
-function toTermin(callback: Function, err: Error | null, jsobject: any) {
-  return misc.toObject(Termin, callback, err, jsobject);
+function toTermin(callback: Function, err: Error | null, jsobject: TerminRaw) {
+  return misc.toObject2(Termin, callback, err, jsobject);
 }
 
-function toTerminList(callback: Function, err: Error | null, jsobjects: any) {
-  return misc.toObjectList(Termin, callback, err, jsobjects);
+function toTerminList(
+  callback: Function,
+  err: Error | null,
+  jsobjects: TerminRaw[]
+) {
+  return misc.toObjectList2(Termin, callback, err, jsobjects);
 }
 
 function byDateRange(
   rangeFrom: DatumUhrzeit,
   rangeTo: DatumUhrzeit,
-  sortOrder: any,
+  sortOrder: object,
   callback: Function
 ) {
   // ranges are DatumUhrzeit
@@ -47,7 +51,7 @@ export default {
   },
 
   save: function save(termin: Termin, callback: Function) {
-    persistence.save(termin.state, callback);
+    persistence.save(termin.toJSON(), callback);
   },
 
   termineBetween: function termineBetween(

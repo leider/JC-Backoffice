@@ -2,12 +2,20 @@ import DatumUhrzeit from '../commons/DatumUhrzeit';
 
 export type TerminType = 'Sonstiges' | 'Feiertag' | 'Ferien' | 'Vermietung';
 
-type TerminRaw = {
-  id?: string;
+export type TerminRaw = {
+  id: string;
   beschreibung?: string;
   typ: TerminType;
   startDate?: Date;
   endDate?: Date;
+};
+
+export type TerminEvent = {
+  color: string;
+  start: string;
+  end: string;
+  title: string;
+  tooltip: string;
 };
 
 interface TerminUI {
@@ -19,9 +27,18 @@ interface TerminUI {
 }
 
 export default class Termin {
-  state: TerminRaw;
-  constructor(object?: TerminRaw) {
-    this.state = object ? object : { typ: 'Sonstiges' };
+  id: string = new DatumUhrzeit().toLocalDateTimeString;
+  beschreibung?: string;
+  typ: TerminType = 'Sonstiges';
+  startDate: Date = new DatumUhrzeit().toJSDate;
+  endDate: Date = this.startDate;
+
+  static fromJSON(object?: TerminRaw): Termin {
+    return Object.assign(new Termin(), object);
+  }
+
+  toJSON(): TerminRaw {
+    return Object.assign({}, this);
   }
 
   static typen() {
@@ -38,56 +55,34 @@ export default class Termin {
   }
 
   fillFromUI(object: TerminUI) {
-    // @ts-ignore
-    this.state.startDate = DatumUhrzeit.forGermanString(
+    this.startDate = DatumUhrzeit.forGermanStringOrNow(
       object.startDate
     ).toJSDate;
-    // @ts-ignore
-    this.state.endDate = DatumUhrzeit.forGermanString(
+    this.endDate = DatumUhrzeit.forGermanStringOrNow(
       object.endDate,
       '12:00'
     ).toJSDate;
-    this.state.id = object.id || new DatumUhrzeit().toLocalDateTimeString;
-    this.state.beschreibung = object.beschreibung;
-    this.state.typ = object.typ || Termin.typen()[0];
+    this.id = object.id || new DatumUhrzeit().toLocalDateTimeString;
+    this.beschreibung = object.beschreibung;
+    this.typ = object.typ || Termin.typen()[0];
     return this;
   }
 
-  id() {
-    return this.state.id;
-  }
-
-  beschreibung() {
-    return this.state.beschreibung;
-  }
-
   startDatumUhrzeit() {
-    return DatumUhrzeit.forJSDate(this.startDate());
+    return DatumUhrzeit.forJSDate(this.startDate);
   }
 
   endDatumUhrzeit() {
-    return DatumUhrzeit.forJSDate(this.endDate());
+    return DatumUhrzeit.forJSDate(this.endDate);
   }
 
-  startDate() {
-    return this.state.startDate || new DatumUhrzeit().toJSDate;
-  }
-
-  endDate() {
-    return this.state.endDate || this.startDate();
-  }
-
-  typ() {
-    return this.state.typ;
-  }
-
-  asEvent() {
+  asEvent(): TerminEvent {
     return {
-      color: Termin.colorForType(this.typ()),
-      start: this.startDate().toISOString(),
-      end: this.endDate().toISOString(),
-      title: this.beschreibung(),
-      tooltip: this.beschreibung()
+      color: Termin.colorForType(this.typ),
+      start: this.startDate.toISOString(),
+      end: this.endDate.toISOString(),
+      title: this.beschreibung || '',
+      tooltip: this.beschreibung || ''
     };
   }
 }

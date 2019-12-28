@@ -10,7 +10,42 @@ export default class Misc {
     return !!number || number === 0;
   }
 
-  static toObject(Constructor: any, callback: Function, err: Error | null, jsobject?: any) {
+  static toObject2(
+    Constructor: any,
+    callback: Function,
+    err: Error | null,
+    jsobject?: any
+  ) {
+    if (err) {
+      return callback(err);
+    }
+    if (jsobject) {
+      return callback(null, Constructor.fromJSON(jsobject));
+    }
+    callback(null, null);
+  }
+
+  static toObjectList2(
+    Constructor: any,
+    callback: Function,
+    err: Error | null,
+    jsobjects: Array<any>
+  ) {
+    if (err) {
+      return callback(err);
+    }
+    callback(
+      null,
+      jsobjects.map(each => Constructor.fromJSON(each))
+    );
+  }
+
+  static toObject(
+    Constructor: any,
+    callback: Function,
+    err: Error | null,
+    jsobject?: any
+  ) {
     if (err) {
       return callback(err);
     }
@@ -73,13 +108,12 @@ export default class Misc {
     return R.filter(R.identity, array || []);
   }
 
-  static pushImage(images: any, image: string) {
-    let result = images;
-    if (!images) {
-      result = [];
-    }
+  static pushImage(images: string | Array<string>, image: string) {
+    let result: string[];
     if (typeof images === 'string') {
       result = [images];
+    } else {
+      result = images;
     }
     if (result.indexOf(image) === -1) {
       result.push(image);
@@ -88,14 +122,11 @@ export default class Misc {
     return false;
   }
 
-  static dropImage(images: any, image: string) {
-    let result: string[] = images || [];
-    if (!images) {
-      result = [];
-    }
+  static dropImage(images: string | Array<string>, image: string) {
     if (typeof images === 'string') {
       return [];
+    } else {
+      return R.reject(each => each === image, images);
     }
-    return R.reject((each: string) => each === image, result);
   }
 }

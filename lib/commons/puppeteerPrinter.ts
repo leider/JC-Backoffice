@@ -1,9 +1,9 @@
 import express from 'express';
-import puppeteer from 'puppeteer';
+import puppeteer, { PDFOptions } from 'puppeteer';
 
 export default {
   generatePdf: function generatePdf(
-    options: any,
+    options: PDFOptions,
     res: express.Response,
     next: express.NextFunction
   ) {

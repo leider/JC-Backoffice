@@ -1,6 +1,3 @@
-/* eslint no-underscore-dangle: 0 */
-import express from 'express';
-
 const cssMap: { [index: string]: { color: string; icon: string } } = {
   Soulcafé: { color: 'soulcafe', icon: 'flaticon-play text-soulcafe' },
   JazzClassix: { color: 'classix', icon: 'flaticon-music-1 text-classix' },
@@ -9,7 +6,7 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
 };
 
 export default {
-  formatNumberTwoDigits: function formatNumberTwoDigits(number: any) {
+  formatNumberTwoDigits: function formatNumberTwoDigits(number: string | number) {
     if (typeof number === 'string') {
       return number;
     }
@@ -24,7 +21,7 @@ export default {
   },
 
   formatNumberTwoDigitsEnglish: function formatNumberTwoDigitsEnglish(
-    number: any
+    number: string | number
   ) {
     if (typeof number === 'string') {
       return number;
@@ -40,11 +37,8 @@ export default {
   },
 
   parseNumberWithCurrentLocale: function parseNumberWithCurrentLocale(
-    numberString: any
+    numberString: string
   ) {
-    if (!numberString && numberString !== 0) {
-      return null;
-    }
     return parseFloat(numberString.replace('.', '').replace(',', '.'));
   },
 

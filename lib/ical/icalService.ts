@@ -1,14 +1,14 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
+import req, { Response } from 'request';
+import Termin, { TerminEvent } from './termin';
+import terminstore from './terminstore';
+import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 
 const icalendar = require('icalendar');
-import req, { Response } from 'request';
-import Termin from './termin';
 
 const request = req.defaults({ jar: true });
 
-import terminstore from './terminstore';
-
-function asICal(veranstaltung: any) {
+function asICal(veranstaltung: Veranstaltung) {
   const event = new icalendar.VEvent(veranstaltung.url());
   event.setSummary(veranstaltung.kopf().titel());
   event.setDescription(veranstaltung.tooltipInfos());
@@ -20,8 +20,8 @@ function asICal(veranstaltung: any) {
       .replace(/\r\n/g, '\n')
   );
   event.setDate(
-    veranstaltung.startDatumUhrzeit().toJSDate(),
-    veranstaltung.endDatumUhrzeit().toJSDate()
+    veranstaltung.startDatumUhrzeit().toJSDate,
+    veranstaltung.endDatumUhrzeit().toJSDate
   );
   return event;
 }
@@ -38,17 +38,18 @@ function termineFromIcalURL(url: string, callback: Function) {
     }
     // END HACK
 
-    const events = icalendar
+    const events: TerminEvent = icalendar
       .parse_calendar(body)
       .events()
       .map((each: any) => {
+        const calprops = each.properties;
         return {
-          start: each.properties.DTSTART[0].value.toISOString(),
-          end: each.properties.DTEND
-            ? each.properties.DTEND[0].value.toISOString()
-            : each.properties.DTSTART[0].value.toISOString(),
-          title: each.properties.SUMMARY[0].value,
-          tooltip: each.properties.SUMMARY[0].value
+          start: calprops.DTSTART[0].value.toISOString(),
+          end: calprops.DTEND
+            ? calprops.DTEND[0].value.toISOString()
+            : calprops.DTSTART[0].value.toISOString(),
+          title: calprops.SUMMARY[0].value,
+          tooltip: calprops.SUMMARY[0].value
         };
       });
     callback(null, events);
@@ -67,8 +68,10 @@ function termineAsEventsBetween(
       if (err2) {
         return callback(err2);
       }
-      const terminEvents = termine.map(termin => termin.asEvent());
-      callback(null, terminEvents);
+      callback(
+        null,
+        termine.map(termin => termin.asEvent())
+      );
     }
   );
 }
@@ -76,10 +79,9 @@ function termineAsEventsBetween(
 export default {
   asICal,
 
-  icalForVeranstaltungen: function(veranstaltungen: any) {
-    /* eslint new-cap: 0 */
+  icalForVeranstaltungen: function(veranstaltungen: Veranstaltung[]) {
     const ical = new icalendar.iCalendar();
-    veranstaltungen.forEach((veranstaltung: any) =>
+    veranstaltungen.forEach(veranstaltung =>
       ical.addComponent(asICal(veranstaltung))
     );
     return ical;

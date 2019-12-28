@@ -4,13 +4,14 @@ import misc from '../commons/misc';
 import puppeteerPrinter from '../commons/puppeteerPrinter';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 import Veranstaltung from '../veranstaltungen/object/veranstaltung';
+import { PDFOptions } from 'puppeteer';
 
 const app = misc.expressAppIn(__dirname);
 
 const conf = require('simple-configure');
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
-const printoptions = {
+const printoptions: PDFOptions = {
   format: 'A4',
   landscape: false, // portrait or landscape
   scale: 1.31,

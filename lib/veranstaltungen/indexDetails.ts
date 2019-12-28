@@ -14,13 +14,14 @@ import puppeteerPrinter from '../commons/puppeteerPrinter';
 import User from '../users/user';
 import OptionValues from '../optionen/optionValues';
 import Orte from '../optionen/orte';
+import { PDFOptions } from 'puppeteer';
 
 const conf = require('simple-configure');
 const uploadDir = path.join(__dirname, '../../public/upload');
 const filesDir = path.join(__dirname, '../../public/files');
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
-const printoptions = {
+const printoptions: PDFOptions = {
   format: 'A4',
   landscape: false, // portrait or landscape
   scale: 1.1,

@@ -7,13 +7,14 @@ import DatumUhrzeit from '../commons/DatumUhrzeit';
 import OptionValues from './optionValues';
 import Orte from './orte';
 import FerienIcals from './ferienIcals';
+import { PDFOptions } from 'puppeteer';
 
 const conf = require('simple-configure');
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
 const app = misc.expressAppIn(__dirname);
 
-const printoptions = {
+const printoptions: PDFOptions = {
   format: 'A4',
   landscape: false, // portrait or landscape
   scale: 1.1,

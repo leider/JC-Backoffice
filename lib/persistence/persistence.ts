@@ -1,4 +1,4 @@
-import mongodb from 'mongodb';
+import mongodb, { FilterQuery, FindOneOptions } from 'mongodb';
 import { ErrorCallback } from 'async';
 
 const conf = require('simple-configure');
@@ -85,22 +85,26 @@ export default function(collectionName: string) {
       this.collectionName = collectionName;
     }
 
-    list(sortOrder: any, callback: Function) {
+    list(sortOrder: object, callback: Function) {
       this.listByField({}, sortOrder, callback);
     }
 
-    listByIds(list: string[], sortOrder: any, callback: Function) {
+    listByIds(list: string[], sortOrder: object, callback: Function) {
       this.listByField({ id: { $in: list } }, sortOrder, callback);
     }
 
-    listByField(searchObject: any, sortOrder: any, callback: Function) {
+    listByField(
+      searchObject: FilterQuery<any>,
+      sortOrder: object,
+      callback: Function
+    ) {
       this.listByFieldWithOptions(searchObject, {}, sortOrder, callback);
     }
 
     listByFieldWithOptions(
-      searchObject: any,
-      options: any,
-      sortOrder: any,
+      searchObject: FilterQuery<any>,
+      options: FindOneOptions,
+      sortOrder: object,
       callback: Function
     ) {
       performInDB((err: Error | null, db: mongodb.Db) => {
@@ -134,7 +138,7 @@ export default function(collectionName: string) {
       this.getByField({ id }, callback);
     }
 
-    getByField(fieldAsObject: any, callback: Function) {
+    getByField(fieldAsObject: FilterQuery<any>, callback: Function) {
       performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
@@ -150,11 +154,15 @@ export default function(collectionName: string) {
       });
     }
 
-    save(object: any, callback: Function) {
+    save(object: object & { id: string }, callback: Function) {
       this.update(object, object.id, callback);
     }
 
-    update(object: any, storedId: string, callback: Function) {
+    update(
+      object: object & { id: string },
+      storedId: string,
+      callback: Function
+    ) {
       if (object.id === null || object.id === undefined) {
         return callback(new Error('Given object has no valid id'));
       }
@@ -208,10 +216,10 @@ export default function(collectionName: string) {
       });
     }
 
-    saveAll(objects: Array<any>, outerCallback: Function) {
+    saveAll(objects: Array<object & {id: string}>, outerCallback: Function) {
       async.each(
         objects,
-        (each: any, callback: ErrorCallback) => {
+        (each, callback: ErrorCallback) => {
           this.save(each, callback);
         },
         // @ts-ignore
