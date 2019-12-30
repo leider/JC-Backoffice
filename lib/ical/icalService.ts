@@ -4,6 +4,7 @@ import Termin, { TerminEvent } from './termin';
 import terminstore from './terminstore';
 import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const icalendar = require('icalendar');
 
 const request = req.defaults({ jar: true });
@@ -80,6 +81,7 @@ export default {
   asICal,
 
   icalForVeranstaltungen: function(veranstaltungen: Veranstaltung[]) {
+    // eslint-disable-next-line new-cap
     const ical = new icalendar.iCalendar();
     veranstaltungen.forEach(veranstaltung =>
       ical.addComponent(asICal(veranstaltung))

@@ -19,29 +19,18 @@ block content
         .row
           .col-md-6
             +legendMitBody('allgemein', 'Allgemein')
-              +editableMultiselect('typen', 'Typen', optionen.typen(), optionen.typen())
-              +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen(), optionen.kooperationen())
-              +editableMultiselect('genres', 'Genres', optionen.genres(), optionen.genres())
+              +editableMultiselect('typen', 'Typen', optionen.typen, optionen.typen)
+              +editableMultiselect('kooperationen', 'Kooperationen', optionen.kooperationen, optionen.kooperationen)
+              +editableMultiselect('genres', 'Genres', optionen.genres, optionen.genres)
             +legendMitBody('backline', 'Backlines')
-              +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub(), optionen.backlineJazzclub())
-              +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop(), optionen.backlineRockshop())
-            +legendMitBody('werb', 'Werbung')
-              .row
-                .col-sm-6
-                  +editableMultiselect('plakatNum', 'Plakate Anzahl', optionen.plakatNum(), optionen.plakatNum())
-                .col-sm-6
-                  +editableMultiselect('flyerNum', 'Flyer Anzahl', optionen.flyerNum(), optionen.flyerNum())
-              .row
-                .col-sm-6
-                  +editableMultiselect('plakatGroesse', 'Plakate Größe', optionen.plakatGroesse(), optionen.plakatGroesse())
-                .col-sm-6
-                  +editableMultiselect('plakatVon', 'Aufsteller', optionen.plakatVon(), optionen.plakatVon())
+              +editableMultiselect('backlineJazzclub', 'Jazzclub', optionen.backlineJazzclub, optionen.backlineJazzclub)
+              +editableMultiselect('backlineRockshop', 'Rockshop', optionen.backlineRockshop, optionen.backlineRockshop)
 
           .col-md-6
             +legendMitBody('artists', 'Künstler')
               .row
                 .col-sm-12
-                  +editableMultiselect('artists', 'Namen', optionen.artists(), optionen.artists())
+                  +editableMultiselect('artists', 'Namen', optionen.artists, optionen.artists)
         .row
           .col-12
             hr

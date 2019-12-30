@@ -34,7 +34,7 @@ Liebe Grüße vom Jazzclub Team.`;
         subject: rule.subject(now),
         markdown: markdownToSend
       });
-      const mailAddress = Message.formatEMailAddress(rule.name(), rule.email());
+      const mailAddress = Message.formatEMailAddress(rule.name, rule.email);
       logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
       message.setTo(mailAddress);
       counter++;

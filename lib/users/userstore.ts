@@ -18,6 +18,7 @@ export default {
   },
 
   save: function save(user: User, callback: Function) {
+    delete user.password;
     persistence.save(user, callback);
   },
 

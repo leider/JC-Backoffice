@@ -1,6 +1,5 @@
 import crypto from 'crypto';
-
-const conf = require('simple-configure');
+import conf from './simpleConfigure';
 
 export function genSalt() {
   const length = 64;

@@ -79,7 +79,7 @@ function useApp(parent: express.Express, url: string, child: express.Express) {
   return child;
 }
 
-const conf = require('simple-configure');
+import conf from './lib/commons/simpleConfigure';
 
 const appLogger = loggers.get('application');
 const httpLogger = loggers.get('http');

@@ -1,5 +1,5 @@
 import misc from '../../commons/misc';
-const configure = require('simple-configure');
+import configure from '../../commons/simpleConfigure';
 const prefix = configure.get('publicUrlPrefix');
 
 export default class Presse {

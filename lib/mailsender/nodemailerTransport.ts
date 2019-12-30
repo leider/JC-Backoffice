@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
+import conf from '../commons/simpleConfigure';
 
 export default nodemailer.createTransport(
-  require('simple-configure').get('transport-options')
+  conf.get('transport-options')
 );

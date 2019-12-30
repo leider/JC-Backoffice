@@ -2,6 +2,7 @@ import express from 'express';
 import { ensureLoggedIn } from 'connect-ensure-login';
 const eLI = ensureLoggedIn('/login');
 import store from '../users/userstore';
+import User from '../users/user';
 
 export default function secureByLogin(
   req: express.Request,
@@ -11,7 +12,7 @@ export default function secureByLogin(
   if (/\/upload|ical/.test(req.originalUrl)) {
     return next();
   }
-  store.allUsers((err: Error | null, users: any) => {
+  store.allUsers((err: Error | null, users: User[]) => {
     if (err) {
       return next(err);
     }
@@ -20,4 +21,4 @@ export default function secureByLogin(
     }
     next();
   });
-};
+}

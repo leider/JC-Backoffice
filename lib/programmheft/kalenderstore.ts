@@ -23,7 +23,7 @@ export default {
   },
 
   saveKalender: function saveKalender(kalender: Kalender, callback: Function) {
-    persistence.save(kalender.state, callback);
+    persistence.save(kalender, callback);
   },
 
   getCurrentKalender: function getCurrentKalender(

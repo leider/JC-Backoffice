@@ -1,7 +1,6 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
 type MailRuleRaw = {
-  [index: string]: string;
   id: string;
   name: string;
   email: string;
@@ -17,32 +16,175 @@ type Rule =
   | 'Montags die Folgewoche ab Freitag'
   | 'Montags die übernächste Folgewoche';
 
-export default class MailRule {
-  state: MailRuleRaw;
-  constructor(object?: MailRuleRaw) {
-    this.state = object ? object : <MailRuleRaw>{};
+const rules: Rule[] = [
+  '',
+  'Mittwochs für die nächste Woche',
+  'Am 5. den Folgemonat',
+  'Am 5. zwei Folgemonate',
+  'Am 16. den Folgemonat ab 15.',
+  'Montags die Folgewoche ab Freitag',
+  'Montags die übernächste Folgewoche'
+];
+
+interface RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean;
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit };
+}
+
+class RuleLogic1 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.wochentag === 3;
   }
 
-  static rules() : Rule[] {
-    return [
-      '',
-      'Mittwochs für die nächste Woche',
-      'Am 5. den Folgemonat',
-      'Am 5. zwei Folgemonate',
-      'Am 16. den Folgemonat ab 15.',
-      'Montags die Folgewoche ab Freitag',
-      'Montags die übernächste Folgewoche'
-    ];
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ tage: 5 }), // nächster Montag
+      end: datumUhrzeit.plus({ tage: 11 }) // übernächster Sonntag
+    };
+  }
+}
+
+class RuleLogic2 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.tag === 5;
+  }
+
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
+      end: datumUhrzeit
+        .plus({ monate: 2 })
+        .setTag(1)
+        .minus({ tage: 1 })
+    };
+  }
+}
+
+class RuleLogic3 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.tag === 5;
+  }
+
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
+      end: datumUhrzeit
+        .plus({ monate: 3 })
+        .setTag(1)
+        .minus({ tage: 1 })
+    };
+  }
+}
+
+class RuleLogic4 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.tag === 16;
+  }
+
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ monate: 1 }).setTag(15),
+      end: datumUhrzeit.plus({ monate: 2 }).setTag(15)
+    };
+  }
+}
+
+class RuleLogic5 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.wochentag === 1;
+  }
+
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ tage: 4 }),
+      end: datumUhrzeit.plus({ tage: 11 })
+    };
+  }
+}
+
+class RuleLogic6 implements RuleLogic {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return datumUhrzeit.wochentag === 1;
+  }
+
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    if (!this.shouldSend(datumUhrzeit)) {
+      return { start: datumUhrzeit, end: datumUhrzeit };
+    }
+    return {
+      start: datumUhrzeit.plus({ tage: 14 }),
+      end: datumUhrzeit.plus({ tage: 21 })
+    };
+  }
+}
+
+const logicArray: { [index: string]: RuleLogic } = {
+  'Mittwochs für die nächste Woche': new RuleLogic1(),
+  'Am 5. den Folgemonat': new RuleLogic2(),
+  'Am 5. zwei Folgemonate': new RuleLogic3(),
+  'Am 16. den Folgemonat ab 15.': new RuleLogic4(),
+  'Montags die Folgewoche ab Freitag': new RuleLogic5(),
+  'Montags die übernächste Folgewoche': new RuleLogic6()
+};
+
+export default class MailRule {
+  id = '';
+  name = '';
+  email = '';
+  rule: Rule = '';
+
+  static fromJSON(object: MailRuleRaw): MailRule {
+    return new MailRule(object);
+  }
+
+  toJSON(): MailRuleRaw {
+    return Object.assign({}, this);
+  }
+
+  static rules() {
+    return rules;
+  }
+
+  constructor(object: MailRuleRaw = {id: '', name: '', email: '', rule: ''}) {
+    this.id = object.id;
+    this.name = object.name;
+    this.email = object.email;
+    this.rule = object.rule;
   }
 
   fillFromUI(object: MailRuleRaw) {
-    ['id', 'name', 'email', 'rule'].forEach(field => {
-      this.state[field] = object[field];
-    });
-    if (!this.state.id) {
-      this.state.id = encodeURIComponent(
-        this.state.name + this.state.email + this.state.rule
-      );
+    Object.assign(this, object);
+    if (!this.id) {
+      this.id = encodeURIComponent(this.name + this.email + this.rule);
     }
     return this;
   }
@@ -52,23 +194,7 @@ export default class MailRule {
   }
 
   fullyQualifiedUrl() {
-    return '/mailsender/' + encodeURIComponent(this.id());
-  }
-
-  id() {
-    return this.state.id;
-  }
-
-  name() {
-    return this.state.name || '';
-  }
-
-  email() {
-    return this.state.email;
-  }
-
-  rule() {
-    return this.state.rule;
+    return '/mailsender/' + encodeURIComponent(this.id);
   }
 
   subject(datumUhrzeit: DatumUhrzeit) {
@@ -90,82 +216,15 @@ export default class MailRule {
     return false;
   }
 
+  logic() {
+    return logicArray[this.rule];
+  }
+
   shouldSend(datumUhrzeit: DatumUhrzeit) {
-    const rule = this.rule();
-    const rules = MailRule.rules();
-    if (rule === rules[1]) {
-      // 'Mittwochs für die nächste Woche'
-      return datumUhrzeit.wochentag === 3;
-    }
-    if (rule === rules[2] || rule === rules[3]) {
-      // 'Am 5. den Folgemonat' oder 'Am 5. zwei Folgemonate'
-      return datumUhrzeit.tag === 5;
-    }
-    if (rule === rules[4]) {
-      // 'Am 16. den Folgemonat ab 15.'
-      return datumUhrzeit.tag === 16;
-    }
-    if (rule === rules[5] || rule === rules[6]) {
-      // 'Montags die Folgewoche ab Freitag' oder 'Montags die übernächste Folgewoche'
-      return datumUhrzeit.wochentag === 1;
-    }
-    return false;
+    return this.logic().shouldSend(datumUhrzeit);
   }
 
   startAndEndDay(datumUhrzeit: DatumUhrzeit) {
-    if (!this.shouldSend(datumUhrzeit)) {
-      return { start: datumUhrzeit, end: datumUhrzeit };
-    }
-    const rule = this.rule();
-    const rules = MailRule.rules();
-    if (rule === rules[1]) {
-      // 'Mittwochs für die nächste Woche'
-      return {
-        start: datumUhrzeit.plus({ tage: 5 }), // nächster Montag
-        end: datumUhrzeit.plus({ tage: 11 }) // übernächster Sonntag
-      };
-    }
-    if (rule === rules[2]) {
-      // 'Am 5. den Folgemonat'
-      return {
-        start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
-        end: datumUhrzeit
-          .plus({ monate: 2 })
-          .setTag(1)
-          .minus({ tage: 1 })
-      };
-    }
-    if (rule === rules[3]) {
-      // 'Am 5. zwei Folgemonate'
-      return {
-        start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
-        end: datumUhrzeit
-          .plus({ monate: 3 })
-          .setTag(1)
-          .minus({ tage: 1 })
-      };
-    }
-    if (rule === rules[4]) {
-      // 'Am 16. den Folgemonat ab 15.'
-      return {
-        start: datumUhrzeit.plus({ monate: 1 }).setTag(15),
-        end: datumUhrzeit.plus({ monate: 2 }).setTag(15)
-      };
-    }
-    if (rule === rules[5]) {
-      // 'Montags die Folgewoche ab Freitag'
-      return {
-        start: datumUhrzeit.plus({ tage: 4 }),
-        end: datumUhrzeit.plus({ tage: 11 })
-      };
-    }
-    if (rule === rules[6]) {
-      // 'Montags die übernächste Folgewoche'
-      return {
-        start: datumUhrzeit.plus({ tage: 14 }),
-        end: datumUhrzeit.plus({ tage: 21 })
-      };
-    }
-    return { start: datumUhrzeit, end: datumUhrzeit };
+    return this.logic().startAndEndDay(datumUhrzeit);
   }
 }

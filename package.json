@@ -67,6 +67,8 @@
   },
   "devDependencies": {
     "@prettier/plugin-pug": "1.1.1",
+    "@typescript-eslint/eslint-plugin": "2.9.0",
+    "@typescript-eslint/parser": "2.13.0",
     "@types/async": "3.0.3",
     "@types/body-parser": "1.17.1",
     "@types/cheerio": "0.22.15",

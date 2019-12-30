@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import request from 'request';
 const requester = request.defaults({ jar: true });
 import cheerio from 'cheerio';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const baseURL = 'https://system.reservix.de';
 
 const loginURL =

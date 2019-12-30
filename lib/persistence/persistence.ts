@@ -1,7 +1,6 @@
 import mongodb, { FilterQuery, FindOneOptions } from 'mongodb';
 import { ErrorCallback } from 'async';
-
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 import async from 'async';
 import { loggers } from 'winston';
 const logger = loggers.get('transactions');
@@ -16,20 +15,6 @@ export default function(collectionName: string) {
     if (collectionName === 'optionenstore') {
       scriptLogger.info(logMessage);
     }
-  }
-
-  function performInDB(callback: Function) {
-    if (ourDBConnectionState === DBSTATE.OPEN) {
-      logInfo('connection is open');
-      return callback(null, ourDB);
-    }
-    logInfo(
-      'connection is ' + ourDBConnectionState + ', opening it and retrying'
-    );
-    openDB();
-    setTimeout(function() {
-      performInDB(callback);
-    }, 100);
   }
 
   function openDB() {
@@ -47,7 +32,7 @@ export default function(collectionName: string) {
       conf.get('mongoURL'),
       { useNewUrlParser: true, useUnifiedTopology: true },
       (err, client) => {
-        var db = client.db('jazzclub');
+        const db = client.db('jazzclub');
         logInfo('In connect callback');
         if (err) {
           logInfo('An error occurred: ' + err);
@@ -61,6 +46,20 @@ export default function(collectionName: string) {
     );
   }
 
+  function performInDB(callback: Function) {
+    if (ourDBConnectionState === DBSTATE.OPEN) {
+      logInfo('connection is open');
+      return callback(null, ourDB);
+    }
+    logInfo(
+      'connection is ' + ourDBConnectionState + ', opening it and retrying'
+    );
+    openDB();
+    setTimeout(function() {
+      performInDB(callback);
+    }, 100);
+  }
+  // eslint-disable-next-line no-unused-vars
   function closeDB(callback: Function) {
     if (ourDBConnectionState === DBSTATE.CLOSED) {
       if (callback) {
@@ -81,8 +80,8 @@ export default function(collectionName: string) {
   class Persistence {
     private collectionName: string;
 
-    constructor(collectionName: string) {
-      this.collectionName = collectionName;
+    constructor(collName: string) {
+      this.collectionName = collName;
     }
 
     list(sortOrder: object, callback: Function) {
@@ -216,14 +215,13 @@ export default function(collectionName: string) {
       });
     }
 
-    saveAll(objects: Array<object & {id: string}>, outerCallback: Function) {
+    saveAll(objects: Array<object & { id: string }>, outerCallback: Function) {
       async.each(
         objects,
         (each, callback: ErrorCallback) => {
           this.save(each, callback);
         },
-        // @ts-ignore
-        outerCallback
+        outerCallback as ErrorCallback
       );
     }
 

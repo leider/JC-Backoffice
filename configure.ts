@@ -1,16 +1,14 @@
 process.chdir(__dirname);
-const Beans = require('CoolBeans');
+import conf from './lib/commons/simpleConfigure';
+import path from 'path';
 
 function createConfiguration() {
-  const conf = require('simple-configure');
-  const path = require('path');
   const configdir = path.join(__dirname, 'config/');
 
   // first, set the default values
   conf.addProperties({
-    port: '1969',
-    beans: new Beans(configdir + 'beans.json'),
-    emaildomainname: 'localhost'
+    'port': '1969',
+    'emaildomainname': 'localhost'
   });
 
   // then, add properties from config files:

@@ -4,18 +4,18 @@ import OptionValues from './optionValues';
 
 function kontaktForAuswahl(
   auswahl: string,
-  kontaktTyp: string,
+  kontaktTyp: 'agenturen' | 'hotels',
   callback: Function
 ) {
   store.get((err: Error | null, optionen: OptionValues) => {
     if (err) {
       return callback(err);
     }
+    const ourCollection =
+      kontaktTyp === 'agenturen' ? optionen.agenturen : optionen.hotels;
     callback(
       null,
-      optionen.state[kontaktTyp].find(
-        (kontakt: any) => kontakt.name === auswahl
-      )
+      ourCollection.find((kontakt: any) => kontakt.name === auswahl)
     );
   });
 }

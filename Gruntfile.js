@@ -104,7 +104,7 @@ module.exports = function(grunt) {
     },
     eslint: {
       options: { quiet: true },
-      target: ['*.js', 'lib/**/*.js', 'test/**/*.js', 'frontend/**/*.js']
+      target: ['*.ts', 'lib/**/*.ts', 'test/**/*.ts', 'frontend/**/*.js']
     },
     sass: {
       dist: {

@@ -12,7 +12,7 @@ describe('MailRule', () => {
   const montagFeb26 = DatumUhrzeit.forISOString('2018-02-26');
 
   describe("Regel 1 'Mittwochs für die nächste Woche'", () => {
-    const rule = new MailRule({
+    const rule =  MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
@@ -38,7 +38,7 @@ describe('MailRule', () => {
   });
 
   describe("Regel 2 'Am 5. den Folgemonat'", () => {
-    const rule = new MailRule({
+    const rule = MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
@@ -70,7 +70,7 @@ describe('MailRule', () => {
   });
 
   describe("Regel 3 'Am 5. zwei Folgemonate'", () => {
-    const rule = new MailRule({
+    const rule = MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
@@ -102,7 +102,7 @@ describe('MailRule', () => {
   });
 
   describe("Regel 4 'Am 20. den Folgemonat ab 15.'", () => {
-    const rule = new MailRule({
+    const rule = MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
@@ -134,7 +134,7 @@ describe('MailRule', () => {
   });
 
   describe("Regel 5 'Montags die Folgewoche ab Freitag'", () => {
-    const rule = new MailRule({
+    const rule = MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',
@@ -166,7 +166,7 @@ describe('MailRule', () => {
   });
 
   describe("Regel 6 'Montags die übernächste Folgewoche'", () => {
-    const rule = new MailRule({
+    const rule = MailRule.fromJSON({
       id: 'someID',
       name: 'test',
       email: 'aa@bb.cc',

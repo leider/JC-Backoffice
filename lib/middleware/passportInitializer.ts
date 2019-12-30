@@ -2,19 +2,19 @@ import passport from 'passport';
 import { Strategy } from 'passport-local';
 
 import { loggers } from 'winston';
-const appLogger =   loggers.get('application');
+const appLogger = loggers.get('application');
 
-const beans = require('simple-configure').get('beans');
 import store from '../users/userstore';
-const { hashPassword } = beans.get('hashPassword');
+import User from '../users/user';
+import { hashPassword } from '../commons/hashPassword';
 
 passport.use(
   new Strategy((username, password, done) => {
-    store.forId(username, (err: any, user: any) => {
+    store.forId(username, (err: Error | null, user: User) => {
       appLogger.info('Login for: ' + username);
       if (err || !user) {
         appLogger.error('Login error for: ' + username);
-        appLogger.error(err);
+        appLogger.error(err?.message || '');
         return done(err);
       }
       if (hashPassword(password, user.salt) === user.hashedPassword) {
@@ -25,12 +25,12 @@ passport.use(
   })
 );
 
-function serializeUser(user: any, done: Function) {
+function serializeUser(user: User, done: Function) {
   return done(null, user.id);
 }
 
 function deserializeUser(id: string, done: Function) {
-  store.forId(id, (err: any, user: any) => {
+  store.forId(id, (err: Error | null, user: User) => {
     done(err, user);
   });
 }

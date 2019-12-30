@@ -91,7 +91,7 @@ app.post('/submit', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    kalender.setText(body.text);
+    kalender.text = body.text;
     store.saveKalender(kalender, (err1: Error | null) => {
       if (err1) {
         return next(err1);

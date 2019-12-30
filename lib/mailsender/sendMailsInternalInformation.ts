@@ -1,7 +1,5 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
-
-const config = require('simple-configure');
-const beans = config.get('beans');
+import config from '../commons/simpleConfigure';
 import { loggers } from 'winston';
 const logger = loggers.get('application');
 
@@ -14,7 +12,7 @@ import misc from '../commons/misc';
 import MailRule from './mailRule';
 import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 import User from '../users/user';
-const usersService = beans.get('usersService');
+import usersService from '../users/usersService';
 
 export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function) {
   const start = now;
@@ -183,27 +181,33 @@ ${veranstaltungenMitFluegel
       markdown: markdownToSend
     });
 
-    usersService.emailsAllerBookingUser((err:Error|null, bookingAddresses: string[]) => {
-      if (err) {
-        return callback(err);
+    usersService.emailsAllerBookingUser(
+      (err: Error | null, bookingAddresses: string[]) => {
+        if (err) {
+          return callback(err);
+        }
+        logger.info(`Email Adressen für Flügelstimmen: ${bookingAddresses}`);
+        message.setTo([Message.formatEMailAddress(stimmerName, stimmerEmail)]);
+        message.setBcc(bookingAddresses);
+        mailtransport.sendMail(message, callbackInner);
       }
-      logger.info(`Email Adressen für Flügelstimmen: ${bookingAddresses}`);
-      message.setTo([Message.formatEMailAddress(stimmerName, stimmerEmail)]);
-      message.setBcc(bookingAddresses);
-      mailtransport.sendMail(message, callbackInner);
-    });
+    );
   }
 
-  store.byDateRangeInAscendingOrder(start, end, (err1: Error|null, veranstaltungen: Veranstaltung[]) => {
-    if (err1) {
-      return;
+  store.byDateRangeInAscendingOrder(
+    start,
+    end,
+    (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
+      if (err1) {
+        return;
+      }
+      const zuSendende = veranstaltungen.filter(veranstaltung =>
+        veranstaltung.technik().fluegel()
+      );
+      if (zuSendende.length === 0) {
+        return callback();
+      }
+      sendMail(zuSendende, callback);
     }
-    const zuSendende = veranstaltungen.filter(veranstaltung =>
-      veranstaltung.technik().fluegel()
-    );
-    if (zuSendende.length === 0) {
-      return callback();
-    }
-    sendMail(zuSendende, callback);
-  });
+  );
 }

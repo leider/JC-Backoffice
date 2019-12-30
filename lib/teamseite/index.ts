@@ -8,7 +8,7 @@ import userstore from '../users/userstore';
 import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 import optionenservice from '../optionen/optionenService';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 
 const app: express.Express = misc.expressAppIn(__dirname);
 
@@ -25,8 +25,7 @@ function addStaff(
         return next(err);
       }
       const section = veranstaltung.staff()[sectionOfStaff]();
-      // @ts-ignore
-      section.push(req.user.id);
+      section.push((req.user as User).id);
       store.saveVeranstaltung(veranstaltung, (err1: Error) => {
         if (err1) {
           return next(err1);
@@ -50,8 +49,7 @@ function removeStaff(
         return next(err);
       }
       const section = veranstaltung.staff()[sectionOfStaff]();
-      // @ts-ignore
-      const index = section.indexOf(req.user.id);
+      const index = section.indexOf((req.user as User).id);
       section.splice(index, 1);
       store.saveVeranstaltung(veranstaltung, (err1: Error) => {
         if (err1) {

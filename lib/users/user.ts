@@ -1,8 +1,6 @@
 import { genSalt, hashPassword } from '../commons/hashPassword';
 
 export default class User {
-  state: any;
-
   id: string;
   name!: string;
   email!: string;
@@ -16,7 +14,6 @@ export default class User {
   password!: string; // transient
 
   constructor(object: any) {
-    this.state = object ? object : {};
     this.id = object.id;
     this.name = object.name;
     this.email = object.email;

@@ -1,60 +1,87 @@
 import R from 'ramda';
 const sortByNameCaseInsensitive = R.sortBy(R.toLower);
-
-const beans = require('simple-configure').get('beans');
 import fieldHelpers from '../commons/fieldHelpers';
 import misc from '../commons/misc';
 
-export default class OptionValues {
-  state: any;
-  constructor(object: any) {
-    this.state = object ? object : {};
-    this.state.id = 'instance';
+type Kontakt = {
+  auswahl: string;
+  name: string;
+  ansprechpartner: string;
+  telefon: string;
+  email: string;
+  adresse: string;
+};
 
-    [
-      'plakatNum',
-      'flyerNum',
-      'plakatGroesse',
-      'plakatVon',
-      'hotelpreise',
-      'genres'
-    ].forEach(field => {
-      this.state[field] = object[field] || [];
-    });
-    [
-      'typen',
-      'kooperationen',
-      'backlineJazzclub',
-      'backlineRockshop',
-      'artists'
-    ].forEach(field => {
-      this.state[field] = sortByNameCaseInsensitive(object[field] || []);
-    });
-    this.state.agenturen = this.state.agenturen || [];
-    this.state.hotels = this.state.hotels || [];
+type Hotelpreise = {
+  name: string;
+  einzelEUR: number;
+  doppelEUR: number;
+  suiteEUR: number;
+};
+
+export default class OptionValues {
+  id = 'instance';
+  hotelpreise: Hotelpreise[];
+  genres: string[];
+  typen: string[];
+  kooperationen: string[];
+  backlineJazzclub: string[];
+  backlineRockshop: string[];
+  artists: string[];
+  agenturen: Kontakt[];
+  hotels: Kontakt[];
+
+  static fromJSON(object?: any): OptionValues {
+    return Object.assign(
+      new OptionValues(
+        object.hotelpreise,
+        object.genres,
+        object.typen,
+        object.kooperationen,
+        object.backlineJazzclub,
+        object.backlineRockshop,
+        object.artists,
+        object.agenturen,
+        object.hotels
+      ),
+      object
+    );
+  }
+
+  toJSON(): any {
+    return Object.assign({}, this);
+  }
+
+  constructor(
+    hotelpreise: Hotelpreise[],
+    genres: string[],
+    typen: string[],
+    kooperationen: string[],
+    backlineJazzclub: string[],
+    backlineRockshop: string[],
+    artists: string[],
+    agenturen: Kontakt[],
+    hotels: Kontakt[]
+  ) {
+    this.hotelpreise = hotelpreise;
+    this.genres = genres;
+    this.typen = sortByNameCaseInsensitive(typen);
+    this.kooperationen = sortByNameCaseInsensitive(kooperationen);
+    this.backlineJazzclub = sortByNameCaseInsensitive(backlineJazzclub);
+    this.backlineRockshop = sortByNameCaseInsensitive(backlineRockshop);
+    this.artists = sortByNameCaseInsensitive(artists);
+    this.agenturen = agenturen;
+    this.hotels = hotels;
   }
 
   fillFromUI(object: any) {
-    [
-      'typen',
-      'kooperationen',
-      'backlineJazzclub',
-      'backlineRockshop',
-      'plakatNum',
-      'flyerNum',
-      'plakatGroesse',
-      'plakatVon',
-      'artists',
-      'hotelpreise',
-      'genres'
-    ].forEach(field => {
-      this.state[field] = misc.toArray(object[field]);
-    });
+    this.genres = misc.toArray(object.genres);
+    this.typen = misc.toArray(object.typen);
+    this.kooperationen = misc.toArray(object.kooperationen);
+    this.backlineJazzclub = misc.toArray(object.backlineJazzclub);
+    this.backlineRockshop = misc.toArray(object.backlineRockshop);
+    this.artists = misc.toArray(object.artists);
     return this;
-  }
-
-  genres() {
-    return this.state.genres;
   }
 
   preisprofile() {
@@ -91,66 +118,42 @@ export default class OptionValues {
     return R.range(1, 16);
   }
 
-  artists() {
-    return this.state.artists;
+  agenturenForSelection() {
+    return [{ name: '[temporär]' }, { name: '[neu]' }].concat(this.agenturen);
   }
 
-  typen() {
-    return this.state.typen;
+  hotelsForSelection() {
+    return [{ name: '[temporär]' }, { name: '[neu]' }].concat(this.hotels);
   }
 
-  kooperationen() {
-    return this.state.kooperationen;
-  }
-
-  kontakte(kontaktKey: any) {
-    return [{ name: '[temporär]' }, { name: '[neu]' }].concat(
-      this.state[kontaktKey]
-    );
-  }
-
-  agenturen() {
-    return this.kontakte('agenturen');
-  }
-
-  hotels() {
-    return this.kontakte('hotels');
-  }
-
-  backlineJazzclub() {
-    return this.state.backlineJazzclub;
-  }
-
-  backlineRockshop() {
-    return this.state.backlineRockshop;
-  }
-
-  addOrUpdateKontakt(kontaktKey: any, kontakt: any) {
+  addOrUpdateKontakt(kontaktKey: 'agenturen' | 'hotels', kontakt: Kontakt) {
+    const ourCollection =
+      kontaktKey === 'agenturen' ? this.agenturen : this.hotels;
     if (kontakt.auswahl.match(/\[temporär\]/)) {
       delete kontakt.auswahl;
       return;
     }
     if (kontakt.auswahl.match(/\[neu\]/)) {
       delete kontakt.auswahl;
-      this.state[kontaktKey].push(kontakt);
+      ourCollection.push(kontakt);
       return;
     }
     delete kontakt.auswahl;
-    const existingKontakt = this.state[kontaktKey].find(
-      (k: any) => k.name === kontakt.name
-    );
-    existingKontakt.ansprechpartner = kontakt.ansprechpartner;
-    existingKontakt.telefon = kontakt.telefon;
-    existingKontakt.email = kontakt.email;
-    existingKontakt.adresse = kontakt.adresse;
+    const existingKontakt = ourCollection.find(k => k.name === kontakt.name);
+    if (existingKontakt) {
+      existingKontakt.ansprechpartner = kontakt.ansprechpartner;
+      existingKontakt.telefon = kontakt.telefon;
+      existingKontakt.email = kontakt.email;
+      existingKontakt.adresse = kontakt.adresse;
+    }
   }
 
-  updateHotelpreise(hotel: any, unterkunft: any) {
-    if (!this.hotels().find(h => h.name === hotel.name)) {
+  updateHotelpreise(hotel: Kontakt, unterkunft: any) {
+    if (!this.hotels.find(h => h.name === hotel.name)) {
       // kein Hotel gefunden
       return;
     }
-    const existingPreise = this.state.hotelpreise.find(
+    const existingPreise = this.hotelpreise.find(
       (p: any) => p.name === hotel.name
     );
     if (existingPreise) {
@@ -164,7 +167,7 @@ export default class OptionValues {
         unterkunft.suiteEUR
       );
     } else {
-      this.state.hotelpreise.push({
+      this.hotelpreise.push({
         name: hotel.name,
         einzelEUR: fieldHelpers.parseNumberWithCurrentLocale(
           unterkunft.einzelEUR
@@ -177,36 +180,41 @@ export default class OptionValues {
     }
   }
 
-  updateBackline(backlineKey: any, backline: any) {
-    this.updateCollection('backline' + backlineKey, backline);
+  updateBackline(backlineKey: 'Jazzclub' | 'Rockshop', backline: string[]) {
+    const key =
+      backlineKey === 'Jazzclub' ? 'backlineJazzclub' : 'backlineRockshop';
+    this.updateCollection(key, backline);
   }
 
-  updateCollection(key: any, updatedCollection: any) {
-    if (!this.state[key]) {
-      this.state[key] = [];
+  updateCollection(
+    key: 'backlineJazzclub' | 'backlineRockshop' | 'artists',
+    updatedCollection: string | string[]
+  ) {
+    let ourCollection: string[];
+    switch (key) {
+      case 'artists':
+        if (!this.artists) {
+          this.artists = [];
+        }
+        ourCollection = this.artists;
+        break;
+      case 'backlineJazzclub':
+        if (!this.backlineJazzclub) {
+          this.backlineJazzclub = [];
+        }
+        ourCollection = this.backlineJazzclub;
+        break;
+      case 'backlineRockshop':
+        if (!this.backlineRockshop) {
+          this.backlineRockshop = [];
+        }
+        ourCollection = this.backlineRockshop;
+        break;
     }
-    const existingEntry = this.state[key];
     misc.toArray(updatedCollection).forEach(item => {
-      if (existingEntry.indexOf(item) < 0) {
-        existingEntry.push(item);
+      if (ourCollection.indexOf(item) < 0) {
+        ourCollection.push(item);
       }
     });
   }
-
-  plakatNum() {
-    return this.state.plakatNum || [];
-  }
-
-  flyerNum() {
-    return this.state.flyerNum || [];
-  }
-
-  plakatGroesse() {
-    return this.state.plakatGroesse || [];
-  }
-
-  plakatVon() {
-    return this.state.plakatVon || [];
-  }
 }
-

@@ -1,3 +1,3 @@
 import './configure';
-import app from  './app';
-new app().start();
+import TheApp from './app';
+new TheApp().start();

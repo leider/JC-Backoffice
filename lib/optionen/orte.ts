@@ -12,24 +12,27 @@ interface Ort {
 }
 
 export default class Orte {
-  state: any;
+  id = 'orte';
+  orte: Ort[];
 
-  constructor(object: any) {
-    this.state = object ? object : {};
-    this.state.id = 'orte';
-    this.state.orte = object && sortByNameCaseInsensitive(object.orte || []);
+  static fromJSON(object: any): Orte {
+    return new Orte(object);
   }
 
-  orte(): Ort[] {
-    return this.state.orte;
+  toJSON(): any {
+    return Object.assign({}, this);
+  }
+
+  constructor(object: any) {
+    this.orte = sortByNameCaseInsensitive(object.orte || []);
   }
 
   alleNamen() {
-    return this.orte().map(ort => ort.name);
+    return this.orte.map(ort => ort.name);
   }
 
   forName(name: string): Ort | undefined {
-    return this.orte().find(ort => ort.name === name);
+    return this.orte.find(ort => ort.name === name);
   }
 
   addOrt(object: Ort & { oldname?: string }) {
@@ -37,13 +40,13 @@ export default class Orte {
     if (this.forName(object.name)) {
       return this.updateOrt(object.name, object);
     }
-    this.state.orte.push(object);
-    this.state.orte = sortByNameCaseInsensitive(this.orte());
+    this.orte.push(object);
+    this.orte = sortByNameCaseInsensitive(this.orte);
   }
 
   deleteOrt(name?: string) {
     if (name) {
-      this.state.orte = R.reject(R.propEq('name', name))(this.orte());
+      this.orte = R.reject(R.propEq('name', name))(this.orte);
     }
   }
 

@@ -2,7 +2,7 @@ import Message from './message';
 import winston from 'winston';
 
 const logger = winston.loggers.get('application');
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const testLocal = conf.get('doNotSendMails') || false;
 
 import transport from './nodemailerTransport';
@@ -16,7 +16,7 @@ function sendMail(message: Message, callback: Function) {
   }
   transport.sendMail(message.toTransportObject(), (err: Error | null) => {
     if (err) {
-      logger.error(err.stack as any);
+      logger.error(err.stack as string);
     }
     callback(err);
   });

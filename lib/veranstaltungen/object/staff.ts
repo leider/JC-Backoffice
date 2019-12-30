@@ -161,7 +161,7 @@ export default class Staff {
     if (!users) {
       return;
     }
-    const filledUsers = {};
+    const filledUsers: { [index: string]: any } = {};
     [
       'techniker',
       'technikerV',
@@ -171,7 +171,6 @@ export default class Staff {
       'mod'
     ].forEach(field => {
       if (this.state[field]) {
-        // @ts-ignore
         filledUsers[field] = users.filter(u =>
           R.includes(u.id, this.state[field])
         );

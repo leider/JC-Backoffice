@@ -1,6 +1,6 @@
 import childProcess from 'child_process';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const workTree = conf.get('wikipath');
 
 import misc from '../commons/misc';

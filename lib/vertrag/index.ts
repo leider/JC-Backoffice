@@ -8,7 +8,7 @@ import { PDFOptions } from 'puppeteer';
 
 const app = misc.expressAppIn(__dirname);
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
 const printoptions: PDFOptions = {

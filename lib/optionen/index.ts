@@ -8,8 +8,7 @@ import OptionValues from './optionValues';
 import Orte from './orte';
 import FerienIcals from './ferienIcals';
 import { PDFOptions } from 'puppeteer';
-
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const publicUrlPrefix = conf.get('publicUrlPrefix');
 
 const app = misc.expressAppIn(__dirname);

@@ -27,8 +27,7 @@ function eventsToObject(contents?: string, jahrMonat?: string) {
       const day = padLeftWithZero(dayMonth[0]);
       const month = padLeftWithZero(dayMonth[1]);
       const dateString = `${day}.${month}.${datum.jahr}`;
-      // @ts-ignore
-      return DatumUhrzeit.forGermanString(dateString, stunde).toJSDate;
+      return DatumUhrzeit.forGermanStringOrNow(dateString, stunde).toJSDate;
     }
 
     function dates(element: string) {
@@ -114,46 +113,35 @@ Der Backoffice-Mailautomat vom Jazzclub`;
 }
 
 export default class Kalender {
-  state: any;
+  id: string;
+  text = `Was | Wer | Farbe | Wann | Email | Tage vorher
+--- | --- | --- | --- | --- | ---
+`;
 
   constructor(object?: any) {
     if (object && object.id && object.id.split('/').length === 2) {
       const splits = object.id.split('/');
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
-        this.state = object;
+        this.id = object.id;
+        if (object.text !== '') {
+          this.text = object.text;
+        }
         return;
       }
     }
-    this.state = {};
-  }
-
-  id() {
-    // JahrMonat als String "YYYY/MM"
-    return this.state.id;
+    this.id = '2018/01';
   }
 
   year() {
-    return this.state.id && this.state.id.split('/')[0];
-  }
-
-  text() {
-    return (
-      this.state.text ||
-      'Was | Wer | Farbe | Wann | Email | Tage vorher\n' +
-        '--- | --- | --- | --- | --- | ---\n'
-    );
-  }
-
-  setText(text: string) {
-    this.state.text = text;
+    return this.id && this.id.split('/')[0];
   }
 
   asEvents() {
-    return eventsToObject(this.text(), this.id());
+    return eventsToObject(this.text, this.id);
   }
 
   eventsToSend(aDatumUhrzeit: DatumUhrzeit) {
-    const events = eventsToObject(this.text(), this.id())
+    const events = this.asEvents()
       .filter(e => !!e.email)
       .map(e => new EmailEvent(e));
     return events.filter(

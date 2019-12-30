@@ -1,5 +1,4 @@
 import '../../configure';
-/*eslint no-sync: 0 */
 import '../../initWinston';
 import async from 'async';
 import R from 'ramda';
@@ -13,18 +12,16 @@ import mailtransport from '../mailsender/mailtransport';
 import User from '../users/user';
 
 const receiver = 'leider';
+import sendMailsNightly from '../mailsender/sendMailsNightly';
 
-const sendMailsNightly = require('../mailsender/sendMailsNightly');
-
-/* eslint no-console: 0 */
 function closeAndExit(err: Error | undefined) {
-  /* eslint no-process-exit: 0 */
   if (err) {
     console.log('Error in nightjob...');
     console.log(err.message);
   } else {
     console.log('Terminating nightjob...');
   }
+  // eslint-disable-next-line no-process-exit
   process.exit();
 }
 
@@ -64,6 +61,6 @@ async.parallel(
     ])
   },
   (err: Error | undefined, results) => {
-    informAdmin(err, results.send);
+    informAdmin(err, results.send as number);
   }
 );

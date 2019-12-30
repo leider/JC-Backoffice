@@ -7,28 +7,28 @@ describe('Kalender', () => {
   describe('geht korrekt mit id und text um', () => {
     it('initial', () => {
       const kalender = new Kalender();
-      expect(kalender.id()).is.undefined();
-      expect(kalender.year()).is.undefined();
-      expect(kalender.text()).is.not.undefined();
+      expect(kalender.id).to.eql('2018/01');
+      expect(kalender.year()).to.eql('2018')
+      expect(kalender.text).is.not.undefined();
       expect(kalender.asEvents()).to.eql([]);
     });
 
     it('parses non existing id correctly', () => {
       const kalender = new Kalender({});
-      expect(kalender.id()).is.undefined();
-      expect(kalender.year()).is.undefined();
+      expect(kalender.id).to.eql('2018/01');
+      expect(kalender.year()).to.eql('2018')
     });
 
     it('parses date correctly', () => {
       const kalender = new Kalender({ id: '2020/12' });
-      expect(kalender.id()).to.eql('2020/12');
+      expect(kalender.id).to.eql('2020/12');
       expect(kalender.year()).to.eql('2020');
     });
 
     it('parses broken date correctly', () => {
       const kalender = new Kalender({ id: 'Peter/' });
-      expect(kalender.id()).is.undefined();
-      expect(kalender.year()).is.undefined();
+      expect(kalender.id).to.eql('2018/01');
+      expect(kalender.year()).to.eql('2018');
     });
 
     it('parses empty text correctly', () => {
@@ -36,7 +36,7 @@ describe('Kalender', () => {
         id: '2020/12',
         text: ''
       });
-      expect(kalender.text()).to.not.eql('');
+      expect(kalender.text).to.not.eql('');
       expect(kalender.asEvents()).to.eql([]);
     });
 
@@ -45,7 +45,7 @@ describe('Kalender', () => {
         id: '2020/12',
         text: 'Was | Wer | Farbe | Wann\n' + '--- | --- | ---   | ---\n'
       });
-      expect(kalender.text()).to.eql(
+      expect(kalender.text).to.eql(
         'Was | Wer | Farbe | Wann\n' + '--- | --- | ---   | ---\n'
       );
       expect(kalender.asEvents()).to.eql([]);

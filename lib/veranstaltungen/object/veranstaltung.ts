@@ -1,4 +1,4 @@
-const config = require('simple-configure');
+import config from '../../commons/simpleConfigure';
 import fieldHelpers from '../../commons/fieldHelpers';
 import Renderer from '../../commons/renderer';
 import DatumUhrzeit from '../../commons/DatumUhrzeit';
@@ -52,13 +52,11 @@ export default class Veranstaltung {
     if (object.kopf) {
       if (object.startDate) {
         this.state.reservixID = object.reservixID;
-        // @ts-ignore
-        this.state.startDate = DatumUhrzeit.forGermanString(
+        this.state.startDate = DatumUhrzeit.forGermanStringOrNow(
           object.startDate,
           object.startTime
         ).toJSDate;
-        // @ts-ignore
-        this.state.endDate = DatumUhrzeit.forGermanString(
+        this.state.endDate = DatumUhrzeit.forGermanStringOrNow(
           object.endDate,
           object.endTime
         ).toJSDate;
@@ -84,6 +82,7 @@ export default class Veranstaltung {
       'vertrag'
     ].forEach(field => {
       if (object[field]) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         this[field]().fillFromUI(object[field]);
       }

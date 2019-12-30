@@ -4,7 +4,7 @@ import Git from './gitmech';
 import Diff from './gitDiff';
 import path from 'path';
 import { Metadata } from './wikiObjects';
-import childProcess from "child_process";
+import childProcess from 'child_process';
 
 export default {
   BLOG_ENTRY_FILE_PATTERN: 'blog_*',

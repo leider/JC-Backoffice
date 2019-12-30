@@ -2,8 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import childProcess from 'child_process';
-
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 let workTree = conf.get('wikipath');
 
 let gitCommands: string[] = [];

@@ -2,7 +2,7 @@
 import R from 'ramda';
 import express from 'express';
 import path from 'path';
-const conf = require('simple-configure');
+import conf from './simpleConfigure';
 
 export default class Misc {
   static isNumber(aString: string) {

@@ -1,6 +1,7 @@
 import express from 'express';
+import { Logger } from 'winston';
 
-export default function handle404(logger: any) {
+export default function handle404(logger: Logger) {
   return (req: express.Request, res: express.Response) => {
     logger.warn('404 by requesting URL: ' + req.originalUrl);
     res.status(404);

@@ -1,6 +1,10 @@
 import express from 'express';
 
-export default function accessrights(req: express.Request, res: express.Response, next: express.NextFunction) {
+export default function accessrights(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   res.locals.accessrights = {
     req,
 
@@ -49,4 +53,4 @@ export default function accessrights(req: express.Request, res: express.Response
     }
   };
   next();
-};
+}

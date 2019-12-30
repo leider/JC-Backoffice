@@ -16,7 +16,7 @@ import OptionValues from '../optionen/optionValues';
 import Orte from '../optionen/orte';
 import { PDFOptions } from 'puppeteer';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 const uploadDir = path.join(__dirname, '../../public/upload');
 const filesDir = path.join(__dirname, '../../public/files');
 const publicUrlPrefix = conf.get('publicUrlPrefix');

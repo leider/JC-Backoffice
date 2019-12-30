@@ -48,7 +48,7 @@ block content
                 a(href='https://www.w3schools.com/colors/colors_names.asp', target='_blank') Farbe mit Namen eintragen #{' '}
                 | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
         .col-lg-4.col-sm-12
-          +hightextarea('text', 'Termine', kalender.text())
+          +hightextarea('text', 'Termine', kalender.text)
     if (unconfirmedVeranstaltungen.length > 0)
       h2.text-danger Es gibt noch unbestätigte Veranstaltungen
       for veranstaltung in unconfirmedVeranstaltungen

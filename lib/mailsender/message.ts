@@ -2,7 +2,7 @@ import pug from 'pug';
 import path from 'path';
 import Renderer from '../commons/renderer';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 
 export default class Message {
   private subject!: string;

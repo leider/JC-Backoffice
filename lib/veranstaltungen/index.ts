@@ -1,7 +1,8 @@
 import { salesreportFor } from '../reservix/reservixService';
 
-const conf = require('simple-configure');
+import conf from '../commons/simpleConfigure';
 import fs from 'fs';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const zipstream = require('zip-stream');
 import express from 'express';
 import async from 'async';
@@ -21,7 +22,6 @@ import OptionValues from '../optionen/optionValues';
 import Orte from '../optionen/orte';
 import User from '../users/user';
 import Salesreport from '../reservix/salesreport';
-import e from 'express';
 
 const app = misc.expressAppIn(__dirname);
 
@@ -316,7 +316,9 @@ app.post('/updateStaff', (req, res, next) => {
   );
 });
 
-require('./indexDetails').addRoutesTo(app);
+import { addRoutesTo } from './indexDetails';
+
+addRoutesTo(app);
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {
 //   fileexportStadtKarlsruhe.send(req.params.url, (err, result) => {

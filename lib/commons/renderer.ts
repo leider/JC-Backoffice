@@ -39,13 +39,13 @@ function evalTags(text: string, subdir?: string) {
   // The rules are the same for Gollum https://github.com/github/gollum
   const matches = result.match(/(.?)\[\[(.+?)\]\]([^[]?)/g);
   if (matches) {
-    for (let match of matches) {
+    matches.forEach(match => {
       const tag = /(.?)\[\[(.+?)\]\](.?)/.exec(match.trim());
       if (!tag) {
-        continue;
+        return;
       }
       if (tag[1] === "'") {
-        continue;
+        return;
       }
       const id = crypto
         .createHash('sha1')
@@ -53,7 +53,7 @@ function evalTags(text: string, subdir?: string) {
         .digest('hex');
       tagmap[id] = tag[2] || '';
       result = result.replace(tag[0] || '', id);
-    }
+    });
   }
   Object.keys(tagmap).forEach(key => {
     const parts = tagmap[key].split('|');

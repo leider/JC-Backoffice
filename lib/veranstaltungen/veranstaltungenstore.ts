@@ -1,9 +1,8 @@
-const beans = require('simple-configure').get('beans');
 import R from 'ramda';
 
 import misc from '../commons/misc';
-
-const logger = require('winston').loggers.get('transactions');
+import winston from 'winston';
+const logger = winston.loggers.get('transactions');
 import pers from '../persistence/persistence';
 const persistence = pers('veranstaltungenstore');
 import Veranstaltung from './object/veranstaltung';
@@ -27,7 +26,6 @@ function byDateRange(
   sortOrder: any,
   callback: Function
 ) {
-  // ranges are DatumUhrzeit
   persistence.listByField(
     {
       $and: [
@@ -102,6 +100,7 @@ export default {
     veranstaltung: Veranstaltung,
     callback: Function
   ) {
+    // @ts-ignore
     persistence.save(veranstaltung.state, callback);
   },
 

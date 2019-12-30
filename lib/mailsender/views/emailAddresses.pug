@@ -19,9 +19,9 @@ block content
               for number in emailAddresses.noOfEmails()
                 .row
                   .col-sm-6
-                    +text('partner' + number, 'Partner', emailAddresses.state['partner' + number])
+                    +text('partner' + number, 'Partner', emailAddresses['partner' + number])
                   .col-sm-6
-                    +email('email' + number, 'E-Mail', emailAddresses.state['email' + number])
+                    +email('email' + number, 'E-Mail', emailAddresses['email' + number])
         .row
           .col-12
             hr

@@ -7,7 +7,7 @@ import store from './userstore';
 import Message from '../mailsender/message';
 import mailtransport from '../mailsender/mailtransport';
 import statusmessage from '../commons/statusmessage';
-import Users from './users';
+import users from './users';
 import User from './user';
 
 const app = misc.expressAppIn(__dirname);
@@ -46,15 +46,14 @@ app.post('/rundmail', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const validUsers = new Users(users)
-      .filterReceivers(req.body.group, req.body.user)
+    const validUsers = users
+      .filterReceivers(users, req.body.group, req.body.user)
       .filter(user => !!user.email);
     const emails = validUsers.map(user =>
       Message.formatEMailAddress(user.name, user.email)
     );
     const markdownToSend = req.body.markdown;
-    // @ts-ignore
-    const currentUser = users.find(user => user.id === req.user.id);
+    const currentUser = users.find(user => user.id === (req.user as User).id);
     if (!validUsers || !currentUser) {
       return next(new Error('Fehler beim Senden'));
     }
