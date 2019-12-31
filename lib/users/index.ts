@@ -7,7 +7,7 @@ import store from './userstore';
 import Message from '../mailsender/message';
 import mailtransport from '../mailsender/mailtransport';
 import statusmessage from '../commons/statusmessage';
-import users from './users';
+import usersFilter from './users';
 import User from './user';
 
 const app = misc.expressAppIn(__dirname);
@@ -16,23 +16,40 @@ function showListe(
   res: express.Response,
   next: express.NextFunction,
   optionalLastSavedUser?: User
-) {
+): void {
   store.allUsers((err: Error | null, users: User[]) => {
     if (err) {
       return next(err);
     }
-    res.render('liste', {
+    return res.render('liste', {
       users: R.sortBy(R.prop('name'), users),
       lastSaved: optionalLastSavedUser
     });
   });
 }
 
+function updateUserWith(
+  setter: Function,
+  req: express.Request,
+  res: express.Response
+): void {
+  const userid = req.query.user;
+  const value = req.query.value;
+  store.forId(userid, (err: Error | null, user: User) => {
+    if (err) {
+      return res.send(false);
+    }
+    setter(user, value);
+    return store.save(user, (err1: Error | null) => {
+      res.send(!err1);
+    });
+  });
+}
 app.get('/', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  showListe(res, next);
+  return showListe(res, next);
 });
 
 app.get('/rundmail', (req, res) => {
@@ -46,7 +63,7 @@ app.post('/rundmail', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const validUsers = users
+    const validUsers = usersFilter
       .filterReceivers(users, req.body.group, req.body.user)
       .filter(user => !!user.email);
     const emails = validUsers.map(user =>
@@ -66,7 +83,7 @@ app.post('/rundmail', (req, res, next) => {
       currentUser.email
     );
     message.setBcc(emails);
-    mailtransport.sendMail(message, (err1: Error | null) => {
+    return mailtransport.sendMail(message, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
@@ -79,37 +96,23 @@ app.post('/rundmail', (req, res, next) => {
 });
 
 app.get('/tshirt-size-for', (req, res) => {
-  const userid = req.query.user;
-  const value = req.query.value;
-  store.forId(userid, (err: Error | null, user: User) => {
-    if (err) {
-      return res.send(false);
-    }
-    user.tshirt = value;
-    store.save(user, (err1: Error | null) => {
-      if (err1) {
-        return res.send(false);
-      }
-      res.send(true);
-    });
-  });
+  updateUserWith(
+    (user: User, value: string): void => {
+      user.tshirt = value;
+    },
+    req,
+    res
+  );
 });
 
 app.get('/tel-for', (req, res) => {
-  const userid = req.query.user;
-  const value = req.query.value;
-  store.forId(userid, (err: Error | null, user: User) => {
-    if (err) {
-      return res.send(false);
-    }
-    user.tel = value;
-    store.save(user, (err1: Error | null) => {
-      if (err1) {
-        return res.send(false);
-      }
-      res.send(true);
-    });
-  });
+  updateUserWith(
+    (user: User, value: string): void => {
+      user.tel = value;
+    },
+    req,
+    res
+  );
 });
 
 app.get('/changePassword/:id', (req, res, next) => {
@@ -119,11 +122,11 @@ app.get('/changePassword/:id', (req, res, next) => {
   ) {
     return res.redirect('/');
   }
-  store.forId(req.params.id, (err: Error | null, user: User) => {
+  return store.forId(req.params.id, (err: Error | null, user: User) => {
     if (err) {
       return next(err);
     }
-    res.render('changePassword', { user: user });
+    return res.render('changePassword', { user: user });
   });
 });
 
@@ -134,11 +137,11 @@ app.get('/:id', (req, res, next) => {
   ) {
     return res.redirect('/');
   }
-  store.forId(req.params.id, (err: Error | null, user: User) => {
+  return store.forId(req.params.id, (err: Error | null, user: User) => {
     if (err) {
       return next(err);
     }
-    res.render('edit', { user: user });
+    return res.render('edit', { user: user });
   });
 });
 
@@ -147,11 +150,11 @@ app.get('/:id/delete', (req, res, next) => {
     return res.redirect('/');
   }
 
-  store.deleteUser(req.params.id, (err: Error | null) => {
+  return store.deleteUser(req.params.id, (err: Error | null) => {
     if (err) {
       return next(err);
     }
-    res.redirect('/users');
+    return res.redirect('/users');
   });
 });
 
@@ -163,7 +166,7 @@ app.post('/submit', (req, res, next) => {
     return res.redirect('/');
   }
   const userid = req.body.id;
-  store.forId(userid, (err: Error | null, user: User) => {
+  return store.forId(userid, (err: Error | null, user: User) => {
     if (err) {
       return next(err);
     }
@@ -173,11 +176,11 @@ app.post('/submit', (req, res, next) => {
     user.tshirt = req.body.tshirt;
     user.gruppen = misc.toArray(req.body.gruppen);
     user.rechte = misc.toArray(req.body.rechte);
-    store.save(user, (err1: Error | null) => {
+    return store.save(user, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
-      showListe(res, next);
+      return showListe(res, next);
     });
   });
 });
@@ -189,14 +192,14 @@ app.post('/newPassword', (req, res, next) => {
   ) {
     return res.redirect('/');
   }
-  service.updatePassword(
+  return service.updatePassword(
     req.body.id,
     req.body.passwort,
     (err: Error | null, user: User) => {
       if (err) {
         return next(err);
       }
-      showListe(res, next, user);
+      return showListe(res, next, user);
     }
   );
 });
@@ -205,11 +208,11 @@ app.post('/submitNew', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  service.saveNewUser(req.body.username, (err: Error | null, user: User) => {
+  return service.saveNewUser(req.body.username, (err: Error | null, user: User) => {
     if (err) {
       return next(err);
     }
-    showListe(res, next, user);
+    return showListe(res, next, user);
   });
 });
 

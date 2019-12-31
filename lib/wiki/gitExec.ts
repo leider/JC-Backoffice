@@ -51,7 +51,7 @@ function gitExec(
         stderr: string
       ) => void)
     | undefined
-) {
+): void {
   childProcess.exec(
     'git ' + gitCommands.concat(commands).join(' '),
     { cwd: workTree },

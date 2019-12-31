@@ -3,7 +3,7 @@ const sortByNameCaseInsensitive = R.sortBy(R.toLower);
 import fieldHelpers from '../commons/fieldHelpers';
 import misc from '../commons/misc';
 
-type Kontakt = {
+export type Kontakt = {
   auswahl: string;
   name: string;
   ansprechpartner: string;
@@ -12,11 +12,18 @@ type Kontakt = {
   adresse: string;
 };
 
-type Hotelpreise = {
+export type Hotelpreise = {
   name: string;
   einzelEUR: number;
   doppelEUR: number;
   suiteEUR: number;
+};
+
+export type Preisprofil = {
+  name: string;
+  regulaer: number;
+  rabattErmaessigt: number;
+  rabattMitglied: number;
 };
 
 export default class OptionValues {
@@ -48,7 +55,7 @@ export default class OptionValues {
     );
   }
 
-  toJSON(): any {
+  toJSON(): object {
     return Object.assign({}, this);
   }
 
@@ -74,7 +81,7 @@ export default class OptionValues {
     this.hotels = hotels;
   }
 
-  fillFromUI(object: any) {
+  fillFromUI(object: any): OptionValues {
     this.genres = misc.toArray(object.genres);
     this.typen = misc.toArray(object.typen);
     this.kooperationen = misc.toArray(object.kooperationen);
@@ -84,7 +91,7 @@ export default class OptionValues {
     return this;
   }
 
-  preisprofile() {
+  preisprofile(): Preisprofil[] {
     return [
       {
         name: 'Kooperation',
@@ -114,7 +121,7 @@ export default class OptionValues {
     ];
   }
 
-  noOfEmails() {
+  noOfEmails(): number[] {
     return R.range(1, 16);
   }
 

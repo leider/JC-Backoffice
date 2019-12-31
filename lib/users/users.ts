@@ -8,7 +8,7 @@ class Users {
     userscollection: User[],
     groupsFromBody: string[],
     userFromBody: string[]
-  ) {
+  ): User[] {
     if (groupsFromBody && groupsFromBody.length > 0) {
       if (misc.toArray(groupsFromBody).includes('alle')) {
         return userscollection;

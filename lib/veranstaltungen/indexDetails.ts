@@ -28,12 +28,12 @@ const printoptions: PDFOptions = {
   margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
 };
 
-export function addRoutesTo(app: express.Express) {
+export function addRoutesTo(app: express.Express): void {
   function copyFile(
     src: string,
     dest: string,
     callback: (...args: any[]) => void
-  ) {
+  ): void {
     const readStream = fs.createReadStream(src);
     readStream.once('error', callback);
     readStream.once('end', callback);
@@ -53,12 +53,12 @@ export function addRoutesTo(app: express.Express) {
           }
           return res.redirect('/veranstaltungen/zukuenftige');
         }
-        userstore.allUsers((err1: Error | null, users?: User[]) => {
+        return userstore.allUsers((err1: Error | null, users?: User[]) => {
           if (err1) {
             return next(err1);
           }
           veranstaltung.staff().enrichUsers(users);
-          res.render('preview', { veranstaltung });
+          return res.render('preview', { veranstaltung });
         });
       }
     );
@@ -75,7 +75,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.getVeranstaltung(
+    return store.getVeranstaltung(
       req.params.url,
       (err: Error | null, veranstaltung?: Veranstaltung) => {
         if (err) {
@@ -85,11 +85,11 @@ export function addRoutesTo(app: express.Express) {
           return res.redirect('/veranstaltungen/zukuenftige');
         }
         veranstaltung.reset();
-        store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
+        return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
           if (err1) {
             return next(err1);
           }
-          res.redirect(
+          return res.redirect(
             '/veranstaltungen/' + veranstaltung.url() + '/allgemeines'
           );
         });
@@ -101,13 +101,13 @@ export function addRoutesTo(app: express.Express) {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect('/');
     }
-    store.getVeranstaltung(
+    return store.getVeranstaltung(
       req.params.url,
       (err: Error | null, veranstaltung?: Veranstaltung) => {
         if (err) {
           return next(err);
         }
-        res.render('edit/deleteVeranstaltungDialog', { veranstaltung });
+        return res.render('edit/deleteVeranstaltungDialog', { veranstaltung });
       }
     );
   });
@@ -117,11 +117,11 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.deleteVeranstaltung(req.params.url, (err: Error | null) => {
+    return store.deleteVeranstaltung(req.params.url, (err: Error | null) => {
       if (err) {
         return next(err);
       }
-      res.redirect('/veranstaltungen/zukuenftige');
+      return res.redirect('/veranstaltungen/zukuenftige');
     });
   });
 
@@ -130,12 +130,12 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    optionenService.optionenUndOrte(
+    return optionenService.optionenUndOrte(
       (err: Error | null, optionen: OptionValues, orte: Orte) => {
         if (err) {
           return next(err);
         }
-        store.getVeranstaltung(
+        return store.getVeranstaltung(
           req.params.url,
           (err1: Error | null, veranstaltung?: Veranstaltung) => {
             if (err1) {
@@ -144,7 +144,7 @@ export function addRoutesTo(app: express.Express) {
             if (!veranstaltung) {
               return res.redirect('/veranstaltungen/zukuenftige');
             }
-            res.render('edit/allgemeines', {
+            return res.render('edit/allgemeines', {
               veranstaltung: veranstaltung,
               optionen,
               orte,
@@ -161,11 +161,11 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    optionenService.optionen((err: Error | null, optionen: OptionValues) => {
+    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
       if (err) {
         return next(err);
       }
-      store.getVeranstaltung(
+      return store.getVeranstaltung(
         req.params.url,
         (err1: Error | null, veranstaltung?: Veranstaltung) => {
           if (err1) {
@@ -174,7 +174,7 @@ export function addRoutesTo(app: express.Express) {
           if (!veranstaltung) {
             return res.redirect('/veranstaltungen/zukuenftige');
           }
-          userstore.allUsers((err2: Error | null, users: User[]) => {
+          return userstore.allUsers((err2: Error | null, users: User[]) => {
             res.render('edit/ausgaben', {
               veranstaltung,
               optionen,
@@ -191,11 +191,11 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    optionenService.optionen((err: Error | null, optionen: OptionValues) => {
+    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
       if (err) {
         return next(err);
       }
-      store.getVeranstaltung(
+      return store.getVeranstaltung(
         req.params.url,
         (err1: Error | null, veranstaltung?: Veranstaltung) => {
           if (err1) {
@@ -204,7 +204,7 @@ export function addRoutesTo(app: express.Express) {
           if (!veranstaltung) {
             return res.redirect('/veranstaltungen/zukuenftige');
           }
-          res.render('edit/hotel', {
+          return res.render('edit/hotel', {
             veranstaltung: veranstaltung,
             optionen: optionen
           });
@@ -218,11 +218,11 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    optionenService.optionen((err: Error | null, optionen: OptionValues) => {
+    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
       if (err) {
         return next(err);
       }
-      veranstaltungenService.getVeranstaltungMitReservix(
+      return veranstaltungenService.getVeranstaltungMitReservix(
         req.params.url,
         (err1: Error | null, veranstaltung?: Veranstaltung) => {
           if (err1) {
@@ -231,7 +231,7 @@ export function addRoutesTo(app: express.Express) {
           if (!veranstaltung) {
             return res.redirect('/veranstaltungen/zukuenftige');
           }
-          res.render('edit/kasse', {
+          return res.render('edit/kasse', {
             veranstaltung: veranstaltung,
             optionen: optionen
           });
@@ -245,11 +245,11 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    optionenService.optionen((err: Error | null, optionen: OptionValues) => {
+    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
       if (err) {
         return next(err);
       }
-      veranstaltungenService.getVeranstaltungMitReservix(
+      return veranstaltungenService.getVeranstaltungMitReservix(
         req.params.url,
         (err1: Error | null, veranstaltung?: Veranstaltung) => {
           if (err1) {
@@ -258,7 +258,7 @@ export function addRoutesTo(app: express.Express) {
           if (!veranstaltung) {
             return res.redirect('/veranstaltungen/zukuenftige');
           }
-          res.render('edit/technik', {
+          return res.render('edit/technik', {
             veranstaltung: veranstaltung,
             optionen: optionen
           });
@@ -272,7 +272,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    veranstaltungenService.getVeranstaltungMitReservix(
+    return veranstaltungenService.getVeranstaltungMitReservix(
       req.params.url,
       (err: Error | null, veranstaltung?: Veranstaltung) => {
         if (err) {
@@ -281,7 +281,7 @@ export function addRoutesTo(app: express.Express) {
         if (!veranstaltung) {
           return res.redirect('/veranstaltungen/zukuenftige');
         }
-        userstore.forId(
+        return userstore.forId(
           veranstaltung.staff().kasseV()[0],
           (err1: Error | null, user: User) => {
             const kassierer = user && user.name;
@@ -304,7 +304,7 @@ export function addRoutesTo(app: express.Express) {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect('/');
     }
-    veranstaltungenService.alleBildNamen(
+    return veranstaltungenService.alleBildNamen(
       (err: Error | null, bildernamen: Array<string | null>) => {
         store.getVeranstaltung(
           req.params.url,
@@ -316,7 +316,7 @@ export function addRoutesTo(app: express.Express) {
               return res.redirect('/veranstaltungen/zukuenftige');
             }
             bildernamen.unshift(null);
-            res.render('edit/presse', {
+            return res.render('edit/presse', {
               veranstaltung: veranstaltung,
               bildernamen
             });
@@ -331,7 +331,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.getVeranstaltung(
+    return store.getVeranstaltung(
       req.params.url,
       (err1: Error | null, veranstaltung?: Veranstaltung) => {
         if (err1) {
@@ -340,7 +340,7 @@ export function addRoutesTo(app: express.Express) {
         if (!veranstaltung) {
           return res.redirect('/veranstaltungen/zukuenftige');
         }
-        res.send(
+        return res.send(
           veranstaltung.presseTextHTML(req.query.text, req.query.jazzclubURL)
         );
       }
@@ -352,7 +352,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.getVeranstaltung(
+    return store.getVeranstaltung(
       req.params.url,
       (err: Error | null, veranstaltung?: Veranstaltung) => {
         if (err) {
@@ -365,11 +365,11 @@ export function addRoutesTo(app: express.Express) {
         veranstaltung
           .kasse()
           .freigabeErfolgtDurch(res.locals.accessrights.member().name);
-        store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
+        return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
           if (err1) {
             return next(err1);
           }
-          res.redirect(veranstaltung.fullyQualifiedUrl() + '/kasse');
+          return res.redirect(veranstaltung.fullyQualifiedUrl() + '/kasse');
         });
       }
     );
@@ -380,7 +380,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.getVeranstaltung(
+    return store.getVeranstaltung(
       req.params.url,
       (err: Error | null, veranstaltung?: Veranstaltung) => {
         if (err) {
@@ -391,11 +391,11 @@ export function addRoutesTo(app: express.Express) {
         }
 
         veranstaltung.kasse().freigabeRueckgaengig();
-        store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
+        return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
           if (err1) {
             return next(err1);
           }
-          res.redirect(veranstaltung.fullyQualifiedUrl() + '/kasse');
+          return res.redirect(veranstaltung.fullyQualifiedUrl() + '/kasse');
         });
       }
     );
@@ -413,7 +413,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    store.getVeranstaltungForId(
+    return store.getVeranstaltungForId(
       body.id,
       (err: Error | null, result?: Veranstaltung) => {
         if (err) {
@@ -421,11 +421,11 @@ export function addRoutesTo(app: express.Express) {
         }
         const veranstaltung = result || new Veranstaltung({});
         veranstaltung.fillFromUI(body);
-        store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
+        return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
           if (err1) {
             return next(err1);
           }
-          optionenService.saveStuffFromVeranstaltung(
+          return optionenService.saveStuffFromVeranstaltung(
             body,
             (err2: Error | null) => {
               if (err2) {
@@ -437,7 +437,7 @@ export function addRoutesTo(app: express.Express) {
                   'Deine Änderungen wurden gespeichert'
                 )
                 .putIntoSession(req);
-              res.redirect(
+              return res.redirect(
                 veranstaltung.fullyQualifiedUrl() + '/' + (body.returnTo || '')
               );
             }
@@ -452,7 +452,7 @@ export function addRoutesTo(app: express.Express) {
       return res.redirect('/');
     }
 
-    new Form().parse(req, (err, fields, files) => {
+    return new Form().parse(req, (err, fields, files) => {
       if (err) {
         return res.send({ error: err });
       }
@@ -461,14 +461,14 @@ export function addRoutesTo(app: express.Express) {
         const dateiname = datei.originalFilename.replace(/[()]/g, '_');
         const istPressefoto = fields.typ[0] === 'pressefoto';
         const pfad = datei.path;
-        copyFile(
+        return copyFile(
           pfad,
           path.join(istPressefoto ? uploadDir : filesDir, dateiname),
           errC => {
             if (errC) {
               return res.send({ error: errC });
             }
-            store.getVeranstaltungForId(
+            return store.getVeranstaltungForId(
               fields.id[0],
               (err1: Error | null, veranstaltung?: Veranstaltung) => {
                 if (err1) {
@@ -498,18 +498,18 @@ export function addRoutesTo(app: express.Express) {
                     });
                   }
                 }
-                store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
+                return store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
                   if (err2) {
                     return res.send({ error: err2 });
                   }
-                  res.send({});
+                  return res.send({});
                 });
               }
             );
           }
         );
       } else {
-        res.send({ error: 'keine Datei' });
+        return res.send({ error: 'keine Datei' });
       }
     });
   });
@@ -523,7 +523,7 @@ export function addRoutesTo(app: express.Express) {
     const filename = decodeURIComponent(body.key);
     const istPressefoto = body.typ === 'pressefoto';
 
-    store.getVeranstaltungForId(
+    return store.getVeranstaltungForId(
       body.id,
       (err1: Error | null, veranstaltung?: Veranstaltung) => {
         if (err1) {
@@ -541,11 +541,11 @@ export function addRoutesTo(app: express.Express) {
         if (body.typ === 'rider') {
           veranstaltung.technik().removeDateirider(filename);
         }
-        store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
+        return store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
           if (err2) {
             return res.send({ error: err2 });
           }
-          res.send({});
+          return res.send({});
         });
       }
     );

@@ -79,20 +79,20 @@ export default class EmailAddresses {
     return Object.assign({}, this);
   }
 
-  fillFromUI(object: EmailAddressesRaw) {
+  fillFromUI(object: EmailAddressesRaw): EmailAddresses {
     return Object.assign(this, object);
   }
 
-  noOfEmails() {
+  noOfEmails(): number[] {
     return R.range(1, 16);
   }
 
-  partnerForIndex(index: number) {
+  partnerForIndex(index: number): string {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     return this['partner' + index];
   }
-  emailForIndex(index: number) {
+  emailForIndex(index: number): string {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     return this['email' + index];

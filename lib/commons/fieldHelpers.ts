@@ -6,7 +6,9 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
 };
 
 export default {
-  formatNumberTwoDigits: function formatNumberTwoDigits(number: string | number) {
+  formatNumberTwoDigits: function formatNumberTwoDigits(
+    number: string | number
+  ): string {
     if (typeof number === 'string') {
       return number;
     }
@@ -22,7 +24,7 @@ export default {
 
   formatNumberTwoDigitsEnglish: function formatNumberTwoDigitsEnglish(
     number: string | number
-  ) {
+  ): string {
     if (typeof number === 'string') {
       return number;
     }
@@ -38,15 +40,15 @@ export default {
 
   parseNumberWithCurrentLocale: function parseNumberWithCurrentLocale(
     numberString: string
-  ) {
+  ): number {
     return parseFloat(numberString.replace('.', '').replace(',', '.'));
   },
 
-  cssColorCode: function cssColorCode(typ: string) {
+  cssColorCode: function cssColorCode(typ: string): string {
     return ((cssMap[typ] as { color: string }) || { color: 'concert' }).color;
   },
 
-  cssIconClass: function cssIconClass(typ: string) {
+  cssIconClass: function cssIconClass(typ: string): string {
     return (cssMap[typ] || { icon: 'flaticon-null text-concert' }).icon;
   }
 };

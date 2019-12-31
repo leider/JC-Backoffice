@@ -1,26 +1,26 @@
 import store from './optionenstore';
 import Orte from './orte';
-import OptionValues from './optionValues';
+import OptionValues, { Hotelpreise } from './optionValues';
 
 function kontaktForAuswahl(
   auswahl: string,
   kontaktTyp: 'agenturen' | 'hotels',
   callback: Function
-) {
+): void {
   store.get((err: Error | null, optionen: OptionValues) => {
     if (err) {
       return callback(err);
     }
     const ourCollection =
       kontaktTyp === 'agenturen' ? optionen.agenturen : optionen.hotels;
-    callback(
+    return callback(
       null,
       ourCollection.find((kontakt: any) => kontakt.name === auswahl)
     );
   });
 }
 
-function optionenUndOrte(callback: Function) {
+function optionenUndOrte(callback: Function): void {
   store.get((err: Error | null, optionen: OptionValues) => {
     store.orte((err1: Error | null, orte: Orte) => {
       callback(err || err1, optionen, orte);
@@ -29,50 +29,50 @@ function optionenUndOrte(callback: Function) {
 }
 
 export default {
-  optionen: function optionen(callback: Function) {
+  optionen: function optionen(callback: Function): void {
     store.get(callback);
   },
 
   optionenUndOrte: optionenUndOrte,
 
-  emailAddresses: function emailAddresses(callback: Function) {
+  emailAddresses: function emailAddresses(callback: Function): void {
     store.emailAddresses(callback);
   },
 
-  orte: function orte(callback: Function) {
+  orte: function orte(callback: Function): void {
     store.orte(callback);
   },
 
-  icals: function icals(callback: Function) {
+  icals: function icals(callback: Function): void {
     store.icals(callback);
   },
 
   agenturForAuswahl: function agenturForAuswahl(
     auswahl: string,
     callback: Function
-  ) {
+  ): void {
     kontaktForAuswahl(auswahl, 'agenturen', callback);
   },
 
   hotelForAuswahl: function hotelForAuswahl(
     auswahl: string,
     callback: Function
-  ) {
+  ): void {
     kontaktForAuswahl(auswahl, 'hotels', callback);
   },
 
   preiseForAuswahl: function preiseForAuswahl(
     auswahl: string,
     callback: Function
-  ) {
-    store.get((err: Error | null, optionen: any) => {
+  ): void {
+    store.get((err: Error | null, optionen: OptionValues) => {
       if (err) {
         return callback(err);
       }
-      callback(
+      return callback(
         null,
-        optionen.state.hotelpreise.find(
-          (preise: any) => preise.name === auswahl
+        optionen.hotelpreise.find(
+          (preise: Hotelpreise) => preise.name === auswahl
         )
       );
     });
@@ -81,7 +81,7 @@ export default {
   saveStuffFromVeranstaltung: function saveStuffFromVeranstaltung(
     body: any,
     callback: Function
-  ) {
+  ): void {
     const stuff = {
       agentur: body.agentur,
       hotel: body.hotel,
@@ -117,7 +117,7 @@ export default {
       if (stuff.kopf) {
         orte.updateFlaeche(stuff.kopf);
       }
-      store.save(optionen, (err1: Error | null) => {
+      return store.save(optionen, (err1: Error | null) => {
         store.save(orte, (err2: Error | null) => {
           callback(err1 || err2);
         });

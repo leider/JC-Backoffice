@@ -9,7 +9,7 @@ const icalendar = require('icalendar');
 
 const request = req.defaults({ jar: true });
 
-function asICal(veranstaltung: Veranstaltung) {
+function asICal(veranstaltung: Veranstaltung): object {
   const event = new icalendar.VEvent(veranstaltung.url());
   event.setSummary(veranstaltung.kopf().titel());
   event.setDescription(veranstaltung.tooltipInfos());
@@ -27,8 +27,8 @@ function asICal(veranstaltung: Veranstaltung) {
   return event;
 }
 
-function termineFromIcalURL(url: string, callback: Function) {
-  request(url, (err: Error | null, resp: Response, body: any) => {
+function termineFromIcalURL(url: string, callback: Function): void {
+  request(url, (err: Error | null, resp: Response, body: string) => {
     if (err) {
       return callback(err);
     }
@@ -53,7 +53,7 @@ function termineFromIcalURL(url: string, callback: Function) {
           tooltip: calprops.SUMMARY[0].value
         };
       });
-    callback(null, events);
+    return callback(null, events);
   });
 }
 
@@ -61,15 +61,15 @@ function termineAsEventsBetween(
   start: DatumUhrzeit,
   end: DatumUhrzeit,
   callback: Function
-) {
+): void {
   terminstore.termineBetween(
     start,
     end,
-    (err2: Error | null, termine: Termin[]) => {
+    (err2: Error | null, termine: Termin[]): void => {
       if (err2) {
         return callback(err2);
       }
-      callback(
+      return callback(
         null,
         termine.map(termin => termin.asEvent())
       );
@@ -80,7 +80,7 @@ function termineAsEventsBetween(
 export default {
   asICal,
 
-  icalForVeranstaltungen: function(veranstaltungen: Veranstaltung[]) {
+  icalForVeranstaltungen: function(veranstaltungen: Veranstaltung[]): object {
     // eslint-disable-next-line new-cap
     const ical = new icalendar.iCalendar();
     veranstaltungen.forEach(veranstaltung =>

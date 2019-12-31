@@ -1,6 +1,6 @@
 mixin notificationsBlock(notificationmessage)
   -notificationmessage.kill()
-  -var contents = notificationmessage.contents()
+  -var contents = notificationmessage
   div(class='toast ' + contents.type, data-delay=2000, style='position: fixed;' + '  top: 2rem;' + '  left: 2rem;' + '  z-index: 1050;' + '  width: 100%;')
     .toast-header
       h2.mr-auto #{contents.title}

@@ -13,6 +13,7 @@ const loginURL =
 const username = conf.get('reservix-username');
 import fieldHelpers from '../commons/fieldHelpers';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
+import optionenService from '../optionen/optionenService';
 
 const tablepositions = {
   datum: 0,
@@ -29,7 +30,7 @@ const tablepositions = {
   brutto: 18
 };
 
-function prepareInputsForPost(forminputs: any, $: CheerioStatic) {
+function prepareInputsForPost(forminputs: any, $: CheerioStatic): any {
   return forminputs
     .filter(function() {
       // @ts-ignore
@@ -48,8 +49,8 @@ function prepareInputsForPost(forminputs: any, $: CheerioStatic) {
 function parseTable(
   headersAndLines: { headers: Array<any>; lines: Array<any> },
   callback: Function
-) {
-  function moneyStringToFloat(string: string) {
+): void {
+  function moneyStringToFloat(string: string): number {
     // remove € and change from german string to float
     return fieldHelpers.parseNumberWithCurrentLocale(string.replace(' €', ''));
   }
@@ -75,9 +76,9 @@ function parseTable(
   callback(null, lineobjects);
 }
 
-function extractResultTableLines(htmlString: string, callback: Function) {
+function extractResultTableLines(htmlString: string, callback: Function): void {
   const $ = cheerio.load(htmlString);
-  function asFields() {
+  function asFields(): any[] {
     return {
       // @ts-ignore
       row: $(this)
@@ -103,7 +104,7 @@ function openAuswertungPage(
   location: string,
   optionalDateString: string | null,
   callback: Function
-) {
+): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
@@ -114,7 +115,7 @@ function openAuswertungPage(
       $('#id_eventdatumvon').val(optionalDateString);
     }
 
-    request.post(
+    return request.post(
       {
         url: baseURL + '/sales/' + $('#searchForm').attr('action'),
         formData: prepareInputsForPost($('#searchForm :input'), $)
@@ -123,7 +124,7 @@ function openAuswertungPage(
         if (err1) {
           return callback(err1);
         }
-        request(baseURL + logoutURL, () => {
+        return request(baseURL + logoutURL, () => {
           // logout then parse
           extractResultTableLines(body1.toString(), callback);
         });
@@ -136,7 +137,7 @@ function openVerwaltungPage(
   location: string,
   optionalDateString: string | null,
   callback: Function
-) {
+): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
@@ -152,7 +153,7 @@ function openVerwaltungPage(
       })
       .attr('href');
 
-    openAuswertungPage(baseURL + auswertungUrl, optionalDateString, callback);
+    return openAuswertungPage(baseURL + auswertungUrl, optionalDateString, callback);
   });
 }
 
@@ -160,7 +161,7 @@ function openWelcomePage(
   location: string,
   optionalDateString: string | null,
   callback: Function
-) {
+): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
@@ -176,7 +177,7 @@ function openWelcomePage(
       })
       .attr('href');
 
-    openVerwaltungPage(baseURL + verwaltungUrl, optionalDateString, callback);
+    return openVerwaltungPage(baseURL + verwaltungUrl, optionalDateString, callback);
   });
 }
 
@@ -192,27 +193,27 @@ export interface Lineobject {
 export function loadSalesreports(
   optionalDateString: string | null,
   callback: Function
-) {
-  requester(loginURL, (err, resp, body) => {
+): void {
+  requester(loginURL, (err, resp, body): void => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
     $('#id_mitarbeiterpw').val(username);
     const inputs = prepareInputsForPost($('#login input'), $);
-    request.post(
+    return request.post(
       // @ts-ignore
       { url: $('#login').attr('action'), formData: inputs },
-      (err1: Error | null, resp1: Response) => {
+      (err1: Error | null, resp1: Response): void => {
         if (err1) {
-          return callback(err1);
-        }
-        openWelcomePage(
-          // @ts-ignore
-          baseURL + resp1.headers.location,
-          optionalDateString,
-          callback
-        );
+          callback(err1);
+        } else
+        {openWelcomePage(
+           // @ts-ignore
+           baseURL + resp1.headers.location,
+           optionalDateString,
+           callback
+         );}
       }
     );
   });

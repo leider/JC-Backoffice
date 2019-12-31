@@ -1,9 +1,9 @@
 import fs from 'fs';
 /* eslint-disable no-sync */
-class SimpleConfigure {
-  storage: { [index: string]: any } = {};
+export class SimpleConfigure {
+  storage: { [index: string]: string | number } = {};
 
-  addFiles(files: string[]) {
+  addFiles(files: string[]): void {
     if (!files) {
       return;
     }
@@ -15,7 +15,7 @@ class SimpleConfigure {
     });
   }
 
-  addProperties(properties: { [index: string]: any }) {
+  addProperties(properties: { [index: string]: string | number }): void {
     if (!properties) {
       return;
     }
@@ -24,11 +24,11 @@ class SimpleConfigure {
     });
   }
 
-  get(property: string) {
+  get(property: string): string | number {
     return this.storage[property];
   }
 
-  reset() {
+  reset(): void {
     this.storage = {};
   }
 }

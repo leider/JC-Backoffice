@@ -41,11 +41,11 @@ export default class Termin {
     return Object.assign({}, this);
   }
 
-  static typen() {
+  static typen(): string[] {
     return ['Sonstiges', 'Feiertag', 'Ferien'];
   }
 
-  static colorForType(typ: TerminType) {
+  static colorForType(typ: TerminType): string {
     return {
       Sonstiges: '#d6bdff',
       Feiertag: '#c1c3ff',
@@ -54,7 +54,7 @@ export default class Termin {
     }[typ];
   }
 
-  fillFromUI(object: TerminUI) {
+  fillFromUI(object: TerminUI): Termin {
     this.startDate = DatumUhrzeit.forGermanStringOrNow(
       object.startDate
     ).toJSDate;
@@ -68,11 +68,11 @@ export default class Termin {
     return this;
   }
 
-  startDatumUhrzeit() {
+  startDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.startDate);
   }
 
-  endDatumUhrzeit() {
+  endDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.endDate);
   }
 

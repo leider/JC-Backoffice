@@ -30,12 +30,12 @@ export default class User {
     }
   }
 
-  updatePassword(newPass: string) {
+  updatePassword(newPass: string): void {
     this.salt = genSalt();
     this.hashedPassword = hashPassword(newPass, this.salt);
   }
 
-  get asGitAuthor() {
+  get asGitAuthor(): string {
     return `${this.name} <${this.email}>`;
   }
 }

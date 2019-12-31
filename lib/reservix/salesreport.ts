@@ -1,37 +1,46 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
+type ReservixState = {
+  id: string;
+  anzahl: number;
+  brutto: number;
+  netto: number;
+  updated: Date;
+  datum: Date;
+};
+
 export default class Salesreport {
   private now = new DatumUhrzeit(); // lebt nur kurz!
-  state: any;
-  constructor(object = {}) {
+  state: ReservixState;
+  constructor(object: ReservixState) {
     this.state = object;
   }
 
-  id() {
+  id(): string {
     return this.state.id;
   }
 
-  anzahlRegulaer() {
+  anzahlRegulaer(): number {
     return this.state.anzahl || 0;
   }
 
-  bruttoUmsatz() {
+  bruttoUmsatz(): number {
     return this.state.brutto || 0;
   }
 
-  nettoUmsatz() {
+  nettoUmsatz(): number {
     return this.state.netto || 0;
   }
 
-  gebuehren() {
+  gebuehren(): number {
     return this.bruttoUmsatz() - this.nettoUmsatz();
   }
 
-  updated() {
+  updated(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.state.updated);
   }
 
-  istVeraltet() {
+  istVeraltet(): boolean {
     const lastUpdated = this.updated();
     return (
       !this.istVergangen() &&
@@ -41,11 +50,11 @@ export default class Salesreport {
     );
   }
 
-  startDatumUhrzeit() {
+  startDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.state.datum);
   }
 
-  istVergangen() {
+  istVergangen(): boolean {
     if (!this.state.datum || this.state.datum.getTime() === 0) {
       return false;
     }
@@ -54,7 +63,7 @@ export default class Salesreport {
       .istVor(this.now);
   }
 
-  beginntInZwoelfStunden() {
+  beginntInZwoelfStunden(): boolean {
     if (!this.state.datum) {
       return false;
     }

@@ -14,7 +14,7 @@ import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 export function loadRulesAndProcess(
   now: DatumUhrzeit,
   callbackOuter: Function
-) {
+): void {
   const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
 Diese Mail ist automatisch generiert. Bitte informieren Sie uns über Verbesserungen oder Änderungswünsche, speziell bzgl. des Sendedatums, der Sendeperiode und des Anfangs- und Endezeitraums.
 
@@ -22,10 +22,13 @@ Liebe Grüße vom Jazzclub Team.`;
 
   let counter = 0;
 
-  function processRule(rule: MailRule, callback: Function) {
+  function processRule(rule: MailRule, callback: Function): void {
     const startAndEndDay = rule.startAndEndDay(now);
 
-    function sendMail(selected: Veranstaltung[], callbackInner: Function) {
+    function sendMail(
+      selected: Veranstaltung[],
+      callbackInner: Function
+    ): void {
       const markdownToSend =
         markdownForRules +
         '\n\n---\n' +
@@ -52,9 +55,10 @@ Liebe Grüße vom Jazzclub Team.`;
           veranstaltung.isSendable()
         );
         if (zuSendende.length === 0) {
-          return callback();
+          callback();
+        } else {
+          sendMail(zuSendende, callback);
         }
-        sendMail(zuSendende, callback);
       }
     );
   }

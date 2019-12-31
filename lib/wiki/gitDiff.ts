@@ -4,11 +4,16 @@ export default class Diff {
     this.diff = diffString;
   }
 
-  asLines() {
+  asLines(): {
+    text: string;
+    ldln: string;
+    rdln: string;
+    class: string;
+  }[] {
     let ldln = 0;
     let rdln = 0;
 
-    function leftDiffLineNumber(id: number, line: string) {
+    function leftDiffLineNumber(id: number, line: string): string {
       if (line.slice(0, 2) === '@@') {
         const match = line.match(/-(\d+)/);
         if (!match) {
@@ -22,10 +27,10 @@ export default class Diff {
         return '';
       }
       rdln = rdln + 1;
-      return ldln - 1;
+      return (ldln - 1).toString();
     }
 
-    function rightDiffLineNumber(id: number, line: string) {
+    function rightDiffLineNumber(id: number, line: string): string {
       if (line.slice(0, 2) === '@@') {
         const match = line.match(/\+(\d+)/);
         if (!match) {
@@ -39,10 +44,10 @@ export default class Diff {
         return ' ';
       }
       rdln = rdln + 1;
-      return rdln - 1;
+      return (rdln - 1).toString();
     }
 
-    function lineClass(line: string) {
+    function lineClass(line: string): string {
       if (line.slice(0, 2) === '@@') {
         return 'gc';
       }
@@ -52,9 +57,15 @@ export default class Diff {
       if (line.slice(0, 1) === '+') {
         return 'gi';
       }
+      return '';
     }
 
-    const lines: any[] = [];
+    const lines: {
+      text: string;
+      ldln: string;
+      rdln: string;
+      class: string;
+    }[] = [];
     this.diff
       .split('\n')
       .slice(4)

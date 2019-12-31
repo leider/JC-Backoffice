@@ -36,7 +36,7 @@ function secureAgainstClickjacking(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   res.setHeader('X-Frame-Options', 'DENY');
   next();
 }
@@ -45,8 +45,8 @@ function serverpathRemover(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
-  res.locals.removeServerpaths = (msg: string) => {
+): void {
+  res.locals.removeServerpaths = (msg: string): string => {
     // find the path that comes before node_modules or lib:
     const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(
       msg
@@ -59,16 +59,21 @@ function serverpathRemover(
   next();
 }
 
-function useApp(parent: express.Express, url: string, child: express.Express) {
+function useApp(
+  parent: express.Express,
+  url: string,
+  child: express.Express
+): express.Express {
   function ensureRequestedUrlEndsWithSlash(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ) {
+  ): void {
     if (!/\/$/.test(req.url)) {
-      return res.redirect(req.url + '/');
+      res.redirect(req.url + '/');
+    } else {
+      next();
     }
-    next();
   }
 
   if (process.env.NODE_ENV !== 'production') {
@@ -80,20 +85,21 @@ function useApp(parent: express.Express, url: string, child: express.Express) {
 }
 
 import conf from './lib/commons/simpleConfigure';
+import { Logger } from 'winston';
 
 const appLogger = loggers.get('application');
 const httpLogger = loggers.get('http');
 
 // stream the log messages of express to winston, remove line breaks on message
 const winstonStream = {
-  write: (message: string) =>
+  write: (message: string): Logger =>
     httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, ''))
 };
 
 export default class TheApp {
   server!: Server;
 
-  create() {
+  create(): express.Express {
     const app = express();
     app.use(serverpathRemover);
     app.set('view engine', 'pug');
@@ -137,7 +143,7 @@ export default class TheApp {
     return app;
   }
 
-  start(done?: Function) {
+  start(done?: Function): void {
     const port = conf.get('port');
     const app = this.create();
 
@@ -156,7 +162,7 @@ export default class TheApp {
     });
   }
 
-  stop(done: Function) {
+  stop(done: Function): void {
     this.server.close(() => {
       appLogger.info('Server stopped');
       if (done) {

@@ -4,6 +4,11 @@ const sortByNameCaseInsensitive = R.sortBy(
   R.compose(R.toLower, R.prop('name'))
 );
 
+interface Kopf {
+  flaeche: string;
+  ort: string;
+}
+
 interface Ort {
   name: string;
   flaeche: string;
@@ -15,19 +20,19 @@ export default class Orte {
   id = 'orte';
   orte: Ort[];
 
-  static fromJSON(object: any): Orte {
+  static fromJSON(object: {orte: Ort[]}): Orte {
     return new Orte(object);
   }
 
-  toJSON(): any {
+  toJSON(): object {
     return Object.assign({}, this);
   }
 
-  constructor(object: any) {
+  constructor(object: {orte: Ort[]}) {
     this.orte = sortByNameCaseInsensitive(object.orte || []);
   }
 
-  alleNamen() {
+  alleNamen(): string[] {
     return this.orte.map(ort => ort.name);
   }
 
@@ -35,22 +40,23 @@ export default class Orte {
     return this.orte.find(ort => ort.name === name);
   }
 
-  addOrt(object: Ort & { oldname?: string }) {
+  addOrt(object: Ort & { oldname?: string }): void {
     delete object.oldname;
     if (this.forName(object.name)) {
-      return this.updateOrt(object.name, object);
+      this.updateOrt(object.name, object);
+      return;
     }
     this.orte.push(object);
     this.orte = sortByNameCaseInsensitive(this.orte);
   }
 
-  deleteOrt(name?: string) {
+  deleteOrt(name?: string): void {
     if (name) {
       this.orte = R.reject(R.propEq('name', name))(this.orte);
     }
   }
 
-  updateOrt(name: string, object: Ort) {
+  updateOrt(name: string, object: Ort): void {
     const ort = this.forName(name);
     if (!ort) {
       return;
@@ -61,7 +67,7 @@ export default class Orte {
     ort.pressename = object.pressename;
   }
 
-  updateFlaeche(kopf: any) {
+  updateFlaeche(kopf: Kopf): void {
     if (kopf.ort && kopf.flaeche) {
       const existingOrt = this.forName(kopf.ort);
       if (existingOrt) {

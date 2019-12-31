@@ -1,4 +1,9 @@
-import mongodb, { FilterQuery, FindOneOptions } from 'mongodb';
+import mongodb, {
+  FilterQuery,
+  FindOneOptions,
+  MongoCallback,
+  UpdateWriteOpResult
+} from 'mongodb';
 import { ErrorCallback } from 'async';
 import conf from '../commons/simpleConfigure';
 import async from 'async';
@@ -11,13 +16,13 @@ let ourDB: mongodb.Db | null;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
 export default function(collectionName: string) {
-  function logInfo(logMessage: string) {
+  function logInfo(logMessage: string): void {
     if (collectionName === 'optionenstore') {
       scriptLogger.info(logMessage);
     }
   }
 
-  function openDB() {
+  function openDB(): void {
     if (ourDBConnectionState !== DBSTATE.CLOSED) {
       logInfo('connection state is ' + ourDBConnectionState + '. Returning.');
       return;
@@ -29,7 +34,7 @@ export default function(collectionName: string) {
     const MongoClient = mongodb.MongoClient;
     logInfo('Connecting to Mongo');
     MongoClient.connect(
-      conf.get('mongoURL'),
+      conf.get('mongoURL') as string,
       { useNewUrlParser: true, useUnifiedTopology: true },
       (err, client) => {
         const db = client.db('jazzclub');
@@ -41,40 +46,24 @@ export default function(collectionName: string) {
         }
         ourDB = db;
         ourDBConnectionState = DBSTATE.OPEN;
-        logInfo('DB state is now OPEN, db = ' + db);
+        return logInfo('DB state is now OPEN, db = ' + db);
       }
     );
   }
 
-  function performInDB(callback: Function) {
+  function performInDB(callback: Function): void {
     if (ourDBConnectionState === DBSTATE.OPEN) {
       logInfo('connection is open');
-      return callback(null, ourDB);
+      callback(null, ourDB);
+    } else {
+      logInfo(
+        'connection is ' + ourDBConnectionState + ', opening it and retrying'
+      );
+      openDB();
+      setTimeout(function() {
+        performInDB(callback);
+      }, 100);
     }
-    logInfo(
-      'connection is ' + ourDBConnectionState + ', opening it and retrying'
-    );
-    openDB();
-    setTimeout(function() {
-      performInDB(callback);
-    }, 100);
-  }
-  // eslint-disable-next-line no-unused-vars
-  function closeDB(callback: Function) {
-    if (ourDBConnectionState === DBSTATE.CLOSED) {
-      if (callback) {
-        callback();
-      }
-      return;
-    }
-    performInDB(() => {
-      ourDB = null;
-      ourDBConnectionState = DBSTATE.CLOSED;
-      logInfo('connection closed');
-      if (callback) {
-        callback();
-      }
-    });
   }
 
   class Persistence {
@@ -84,11 +73,11 @@ export default function(collectionName: string) {
       this.collectionName = collName;
     }
 
-    list(sortOrder: object, callback: Function) {
+    list(sortOrder: object, callback: Function): void {
       this.listByField({}, sortOrder, callback);
     }
 
-    listByIds(list: string[], sortOrder: object, callback: Function) {
+    listByIds(list: string[], sortOrder: object, callback: Function): void {
       this.listByField({ id: { $in: list } }, sortOrder, callback);
     }
 
@@ -96,7 +85,7 @@ export default function(collectionName: string) {
       searchObject: FilterQuery<any>,
       sortOrder: object,
       callback: Function
-    ) {
+    ): void {
       this.listByFieldWithOptions(searchObject, {}, sortOrder, callback);
     }
 
@@ -105,7 +94,7 @@ export default function(collectionName: string) {
       options: FindOneOptions,
       sortOrder: object,
       callback: Function
-    ) {
+    ): void {
       performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
@@ -114,7 +103,7 @@ export default function(collectionName: string) {
           .collection(this.collectionName)
           .find(searchObject, options)
           .sort(sortOrder);
-        cursor.count((err1, result) => {
+        return cursor.count((err1, result) => {
           if (err1) {
             return callback(err1);
           }
@@ -123,37 +112,34 @@ export default function(collectionName: string) {
             return callback(null, []);
           }
           cursor.batchSize(result);
-          cursor.toArray((err2, result1) => {
-            if (err2) {
-              return callback(err2);
-            }
-            callback(null, result1);
-          });
+          return cursor.toArray(callback as MongoCallback<any>);
         });
       });
     }
 
-    getById(id: string, callback: Function) {
+    getById(id: string, callback: Function): void {
       this.getByField({ id }, callback);
     }
 
-    getByField(fieldAsObject: FilterQuery<any>, callback: Function) {
+    getByField(fieldAsObject: FilterQuery<any>, callback: Function): void {
       performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
         }
-        db.collection(collectionName)
+        return db
+          .collection(collectionName)
           .find(fieldAsObject)
           .toArray((err1, result) => {
             if (err1) {
-              return callback(err1);
+              callback(err1);
+            } else {
+              callback(err1, result[0]);
             }
-            callback(err1, result[0]);
           });
       });
     }
 
-    save(object: object & { id: string }, callback: Function) {
+    save(object: object & { id: string }, callback: Function): void {
       this.update(object, object.id, callback);
     }
 
@@ -161,61 +147,58 @@ export default function(collectionName: string) {
       object: object & { id: string },
       storedId: string,
       callback: Function
-    ) {
+    ): void {
       if (object.id === null || object.id === undefined) {
         return callback(new Error('Given object has no valid id'));
       }
-      performInDB((err: Error | null, db: mongodb.Db) => {
+      return performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
         }
         const collection = db.collection(collectionName);
-        collection.updateOne(
+        return collection.updateOne(
           { id: storedId },
           { $set: object },
           { upsert: true },
-          err1 => {
-            if (err1) {
-              return callback(err1);
-            }
-            //logger.info(object.constructor.name + ' saved: ' + JSON.stringify(object));
-            callback(null);
-          }
+          callback as MongoCallback<UpdateWriteOpResult>
         );
       });
     }
 
-    removeByUrl(url: string, callback: Function) {
+    removeByUrl(url: string, callback: Function): void {
       if (url === null || url === undefined) {
         return callback(new Error('Given object has no valid url'));
       }
-      performInDB((err: Error | null, db: mongodb.Db) => {
+      return performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
         }
         const collection = db.collection(collectionName);
-        collection.remove({ url: url }, { w: 1 }, err1 => {
+        return collection.deleteOne({ url: url }, { w: 1 }, err1 => {
           callback(err1);
         });
       });
     }
 
-    removeById(id: string, callback: Function) {
+    removeById(id: string, callback: Function): void {
       if (id === null || id === undefined) {
         return callback(new Error('Given object has no valid id'));
       }
-      performInDB((err: Error | null, db: mongodb.Db) => {
+      return performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
         }
         const collection = db.collection(collectionName);
-        collection.remove({ id: id }, { w: 1 }, err1 => {
+        return collection.deleteOne({ id: id }, { w: 1 }, err1 => {
           callback(err1);
         });
       });
     }
 
-    saveAll(objects: Array<object & { id: string }>, outerCallback: Function) {
+    saveAll(
+      objects: Array<object & { id: string }>,
+      outerCallback: Function
+    ): void {
       async.each(
         objects,
         (each, callback: ErrorCallback) => {
@@ -223,18 +206,6 @@ export default function(collectionName: string) {
         },
         outerCallback as ErrorCallback
       );
-    }
-
-    drop(callback: Function) {
-      performInDB((err: Error | null, db: mongodb.Db) => {
-        if (err) {
-          return callback(err);
-        }
-        logger.info('Drop ' + collectionName + ' called!');
-        db.dropCollection(collectionName, err1 => {
-          callback(err1);
-        });
-      });
     }
   }
 

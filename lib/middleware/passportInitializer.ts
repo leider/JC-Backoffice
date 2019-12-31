@@ -20,16 +20,16 @@ passport.use(
       if (hashPassword(password, user.salt) === user.hashedPassword) {
         return done(null, { id: username });
       }
-      done(null, false);
+      return done(null, false);
     });
   })
 );
 
-function serializeUser(user: User, done: Function) {
+function serializeUser(user: User, done: Function): void {
   return done(null, user.id);
 }
 
-function deserializeUser(id: string, done: Function) {
+function deserializeUser(id: string, done: Function): void {
   store.forId(id, (err: Error | null, user: User) => {
     done(err, user);
   });

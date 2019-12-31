@@ -1,6 +1,7 @@
 import { format, loggers, transports } from 'winston';
+import { ConsoleTransportInstance, FileTransportInstance } from 'winston/lib/winston/transports';
 
-function consoleForWinston() {
+function consoleForWinston(): ConsoleTransportInstance {
   const consoleformat = format.combine(
     format.colorize(),
     format.timestamp(),
@@ -11,7 +12,7 @@ function consoleForWinston() {
   return new transports.Console({ format: consoleformat });
 }
 
-function fileNamed(name: string) {
+function fileNamed(name: string): FileTransportInstance {
   const fileformat = format.combine(
     format.timestamp(),
     format.prettyPrint(),

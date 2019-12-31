@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect('/teamseite');
   }
-  res.redirect('/veranstaltungen');
+  return res.redirect('/veranstaltungen');
 });
 
 app.get('/robots.txt', (req, res, next) => {
@@ -26,7 +26,7 @@ app.get('/robots.txt', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.send(data);
+      return res.send(data);
     }
   );
 });

@@ -19,22 +19,18 @@ class StatusMessage {
     this.additionalArguments = additionalArguments;
   }
 
-  contents() {
-    return this;
-  }
-
-  kill() {
+  kill(): void {
     if (this.req && this.req.session) {
       delete this.req.session.statusmessage;
     }
   }
 
-  putIntoSession(req: express.Request, res?: express.Response) {
+  putIntoSession(req: express.Request, res?: express.Response): void {
     if (!req.session) {
       return;
     }
     if (!req.session.statusmessage) {
-      req.session.statusmessage = this.contents();
+      req.session.statusmessage = this;
     }
     if (res) {
       this.req = req;
@@ -48,7 +44,7 @@ function statusMessage(
   title: string,
   text: string,
   additionalArguments?: string
-) {
+): StatusMessage {
   return new StatusMessage(type, title, text, additionalArguments);
 }
 
@@ -58,7 +54,7 @@ export default {
     title: string;
     text: string;
     additionalArguments?: string;
-  }) {
+  }): StatusMessage {
     return statusMessage(
       object.type,
       object.title,
@@ -71,7 +67,7 @@ export default {
     title: string,
     text: string,
     additionalArguments?: string
-  ) {
+  ): StatusMessage {
     return statusMessage('alert-danger', title, text, additionalArguments);
   },
 
@@ -79,7 +75,7 @@ export default {
     title: string,
     text: string,
     additionalArguments?: string
-  ) {
+  ): StatusMessage {
     return statusMessage('alert-success', title, text, additionalArguments);
   }
 };

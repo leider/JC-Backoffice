@@ -17,23 +17,26 @@ export default {
       stdout: string,
       stderr: string
     ) => void
-  ) {
+  ): void {
     Git.readFile(completePageName + '.md', pageVersion, callback);
   },
 
-  pageEdit: function pageEdit(completePageName: string, callback: Function) {
+  pageEdit: function pageEdit(
+    completePageName: string,
+    callback: Function
+  ): void {
     fs.exists(Git.absPath(completePageName + '.md'), exists => {
       if (!exists) {
         return callback(null, '', ['NEW']);
       }
-      Git.readFile(
+      return Git.readFile(
         completePageName + '.md',
         'HEAD',
         (err: Error | null, content: string) => {
           if (err) {
             return callback(err);
           }
-          Git.log(
+          return Git.log(
             completePageName + '.md',
             'HEAD',
             1,
@@ -52,7 +55,7 @@ export default {
     pageNameNew: string,
     user: string,
     callback: Function
-  ) {
+  ): void {
     const completePageNameOld = subdir + '/' + pageNameOld + '.md';
     const completePageNameNew = subdir + '/' + pageNameNew + '.md';
     Git.mv(
@@ -69,25 +72,26 @@ export default {
   pageSave: function pageSave(
     subdir: string,
     pageName: string,
-    body: { content: any; metadata: any; comment: string | any[] },
+    body: { content: string; metadata: string; comment: string },
     user: string,
     callback: Function
-  ) {
-    fs.exists(Git.absPath(subdir), function(exists) {
+  ): void {
+    fs.exists(Git.absPath(subdir), exists => {
       if (!exists) {
-        fs.mkdir(Git.absPath(subdir), err => {
-          if (err) {
-            return callback(err);
-          }
-        });
+        try {
+          // eslint-disable-next-line no-sync
+          fs.mkdirSync(Git.absPath(subdir));
+        } catch (e) {
+          return callback(e);
+        }
       }
       const completePageName = subdir + '/' + pageName + '.md';
       const pageFile = Git.absPath(completePageName);
-      fs.writeFile(pageFile, body.content, err => {
+      return fs.writeFile(pageFile, body.content, err => {
         if (err) {
           return callback(err);
         }
-        Git.log(
+        return Git.log(
           completePageName,
           'HEAD',
           1,
@@ -113,12 +117,12 @@ export default {
   pageHistory: function pageHistory(
     completePageName: string,
     callback: Function
-  ) {
+  ): void {
     Git.readFile(completePageName + '.md', 'HEAD', (err: Error | null) => {
       if (err) {
         return callback(err);
       }
-      Git.log(
+      return Git.log(
         completePageName + '.md',
         'HEAD',
         30,
@@ -133,7 +137,7 @@ export default {
     completePageName: string,
     revisions: string,
     callback: Function
-  ) {
+  ): void {
     Git.diff(
       completePageName + '.md',
       revisions,
@@ -141,12 +145,12 @@ export default {
         if (err) {
           return callback(err);
         }
-        callback(null, new Diff(diff));
+        return callback(null, new Diff(diff));
       }
     );
   },
 
-  pageList: function pageList(subdir: string, callback: Function) {
+  pageList: function pageList(subdir: string, callback: Function): void {
     Git.ls(subdir, (err: Error | null, list: string[]) => {
       if (err) {
         return callback(err);
@@ -158,11 +162,11 @@ export default {
           name: path.basename(rowWithoutEnding)
         };
       });
-      callback(null, items);
+      return callback(null, items);
     });
   },
 
-  search: function search(searchtext: string, callback: Function) {
+  search: function search(searchtext: string, callback: Function): void {
     Git.grep(searchtext, (err: Error | null, items: string[]) => {
       if (err) {
         return callback(err);
@@ -177,7 +181,7 @@ export default {
             text: record.slice(2).join('')
           };
         });
-      callback(null, result);
+      return callback(null, result);
     });
   }
 };

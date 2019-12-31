@@ -14,11 +14,14 @@ import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 import User from '../users/user';
 import usersService from '../users/usersService';
 
-export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function) {
+export function checkPressetexte(
+  now: DatumUhrzeit,
+  callbackOuter: Function
+): void {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
-  function processRules(rules: MailRule[], callback: Function) {
+  function processRules(rules: MailRule[], callback: Function): void {
     const maxDay = rules
       .map(rule => rule.startAndEndDay(end).end)
       .reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
@@ -26,7 +29,7 @@ export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function) {
     function sendMail(
       kaputteVeranstaltungen: Veranstaltung[],
       callbackInner: Function
-    ) {
+    ): void {
       const markdownToSend = `## Folgende Veranstaltungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
@@ -61,9 +64,10 @@ ${kaputteVeranstaltungen
             veranstaltung.kopf().confirmed()
         );
         if (zuSendende.length === 0) {
-          return callback();
+          callback();
+        } else {
+          sendMail(zuSendende, callback);
         }
-        sendMail(zuSendende, callback);
       }
     );
   }
@@ -79,14 +83,14 @@ ${kaputteVeranstaltungen
   });
 }
 
-export function checkKasse(now: DatumUhrzeit, callback: Function) {
+export function checkKasse(now: DatumUhrzeit, callback: Function): void {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
   function sendMail(
     kaputteVeranstaltungen: Veranstaltung[],
     callbackInner: Function
-  ) {
+  ): void {
     const markdownToSend = `## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:
 
 ---
@@ -123,7 +127,7 @@ ${kaputteVeranstaltungen
       );
       logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
       message.setBcc(emails);
-      mailtransport.sendMail(message, callbackInner);
+      return mailtransport.sendMail(message, callbackInner);
     });
   }
 
@@ -138,14 +142,15 @@ ${kaputteVeranstaltungen
         veranstaltung.kasseFehlt()
       );
       if (zuSendende.length === 0) {
-        return callback();
+        callback();
+      } else {
+        sendMail(zuSendende, callback);
       }
-      sendMail(zuSendende, callback);
     }
   );
 }
 
-export function checkFluegel(now: DatumUhrzeit, callback: Function) {
+export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
   if (now.wochentag !== 7) {
     // Sonntag
     return callback();
@@ -161,7 +166,7 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function) {
   function sendMail(
     veranstaltungenMitFluegel: Veranstaltung[],
     callbackInner: Function
-  ) {
+  ): void {
     const markdownToSend = `## Bei folgenden Veranstaltungen brauchen wir einen Klavierstimmer:
 
 ---
@@ -181,20 +186,25 @@ ${veranstaltungenMitFluegel
       markdown: markdownToSend
     });
 
-    usersService.emailsAllerBookingUser(
+    return usersService.emailsAllerBookingUser(
       (err: Error | null, bookingAddresses: string[]) => {
         if (err) {
           return callback(err);
         }
         logger.info(`Email Adressen für Flügelstimmen: ${bookingAddresses}`);
-        message.setTo([Message.formatEMailAddress(stimmerName, stimmerEmail)]);
+        message.setTo([
+          Message.formatEMailAddress(
+            stimmerName as string,
+            stimmerEmail as string
+          )
+        ]);
         message.setBcc(bookingAddresses);
-        mailtransport.sendMail(message, callbackInner);
+        return mailtransport.sendMail(message, callbackInner);
       }
     );
   }
 
-  store.byDateRangeInAscendingOrder(
+  return store.byDateRangeInAscendingOrder(
     start,
     end,
     (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
@@ -205,9 +215,10 @@ ${veranstaltungenMitFluegel
         veranstaltung.technik().fluegel()
       );
       if (zuSendende.length === 0) {
-        return callback();
+        callback();
+      } else {
+        sendMail(zuSendende, callback);
       }
-      sendMail(zuSendende, callback);
     }
   );
 }

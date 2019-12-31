@@ -30,21 +30,22 @@ export default class FerienIcals {
     return this.icals.find(ical => ical.name === name);
   }
 
-  addIcal(object: Ical) {
+  addIcal(object: Ical): void {
     delete object.oldname;
     if (this.forName(object.name)) {
-      return this.updateIcal(object.name, object);
+      this.updateIcal(object.name, object);
+    } else {
+      this.icals.push(object);
     }
-    this.icals.push(object);
   }
 
-  deleteIcal(name: string) {
+  deleteIcal(name: string): void {
     if (name) {
       this.icals = R.reject(R.propEq('name', name))(this.icals);
     }
   }
 
-  updateIcal(oldname: string, object: Ical) {
+  updateIcal(oldname: string, object: Ical): void {
     const ical = this.forName(oldname);
     if (!ical) {
       return;
@@ -54,7 +55,7 @@ export default class FerienIcals {
     ical.typ = object.typ;
   }
 
-  forCalendar() {
+  forCalendar(): { color: string; url: string }[] {
     return this.icals.map(ical => {
       return {
         color: Termin.colorForType(ical.typ),

@@ -17,11 +17,11 @@ app.get('/', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  mailstore.all((err: Error | null, rules: MailRule[]) => {
+  return mailstore.all((err: Error | null, rules: MailRule[]) => {
     if (err) {
       return next(err);
     }
-    res.render('index', { rules: rules });
+    return res.render('index', { rules: rules });
   });
 });
 
@@ -29,7 +29,7 @@ app.get('/new', (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  res.render('edit', { rule: new MailRule() });
+  return res.render('edit', { rule: new MailRule() });
 });
 
 app.get('/compose', (req, res, next) => {
@@ -37,17 +37,17 @@ app.get('/compose', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  optionenService.emailAddresses(
+  return optionenService.emailAddresses(
     (err: Error | null, emailAddresses: EmailAddresses) => {
       if (err) {
         return next(err);
       }
-      store.zukuenftige(
+      return store.zukuenftige(
         (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
           if (err1) {
             return next(err1);
           }
-          res.render('compose', {
+          return res.render('compose', {
             upcomingEvents: veranstaltungen,
             optionen: emailAddresses
           });
@@ -62,12 +62,12 @@ app.get('/emailAddresses', (req, res, next) => {
     return res.redirect('/');
   }
 
-  optionenService.emailAddresses(
+  return optionenService.emailAddresses(
     (err: Error | null, emailAddresses: EmailAddresses) => {
       if (err) {
         return next(err);
       }
-      res.render('emailAddresses', { emailAddresses });
+      return res.render('emailAddresses', { emailAddresses });
     }
   );
 });
@@ -76,11 +76,11 @@ app.get('/:id', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  mailstore.forId(req.params.id, (err: Error | null, rule: MailRule) => {
+  return mailstore.forId(req.params.id, (err: Error | null, rule: MailRule) => {
     if (err) {
       return next(err);
     }
-    res.render('edit', { rule: rule });
+    return res.render('edit', { rule: rule });
   });
 });
 
@@ -88,17 +88,17 @@ app.post('/submitEmailAddresses', (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect('/');
   }
-  optionenService.emailAddresses(
+  return optionenService.emailAddresses(
     (err: Error | null, emailAddresses: EmailAddresses) => {
       if (err) {
         return next(err);
       }
       emailAddresses.fillFromUI(req.body);
-      optionenstore.save(emailAddresses, (err1: Error | null) => {
+      return optionenstore.save(emailAddresses, (err1: Error | null) => {
         if (err1) {
           return next(err1);
         }
-        res.redirect('/');
+        return res.redirect('/');
       });
     }
   );
@@ -108,7 +108,7 @@ app.post('/save', (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect('/');
   }
-  mailstore.forId(req.body.id, (err: Error | null, rule: MailRule) => {
+  return mailstore.forId(req.body.id, (err: Error | null, rule: MailRule) => {
     if (err) {
       return next(err);
     }
@@ -116,10 +116,10 @@ app.post('/save', (req, res, next) => {
     ruleToSave.fillFromUI(req.body);
     mailstore.save(ruleToSave, (err1: Error | null) => {
       if (err1) {
-        return next(err1);
+        next(err1);
       }
     });
-    res.redirect('/mailsender');
+    return res.redirect('/mailsender');
   });
 });
 
@@ -131,7 +131,7 @@ app.post('/send', (req, res, next) => {
     return res.redirect('/veranstaltungen/zukuenftige');
   }
 
-  optionenService.emailAddresses(
+  return optionenService.emailAddresses(
     (err: Error | null, emailAddresses: EmailAddresses) => {
       if (err) {
         return next(err);
@@ -145,7 +145,7 @@ app.post('/send', (req, res, next) => {
         );
       });
 
-      store.zukuenftige(
+      return store.zukuenftige(
         (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
           if (err1) {
             return next(err1);
@@ -165,7 +165,7 @@ app.post('/send', (req, res, next) => {
             markdown: markdownToSend
           });
           message.setTo(emails);
-          mailtransport.sendMail(message, (err2: Error | null) => {
+          return mailtransport.sendMail(message, (err2: Error | null) => {
             if (err2) {
               return next(err2);
             }

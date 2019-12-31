@@ -1,8 +1,8 @@
 process.chdir(__dirname);
-import conf from './lib/commons/simpleConfigure';
+import conf, { SimpleConfigure } from './lib/commons/simpleConfigure';
 import path from 'path';
 
-function createConfiguration() {
+function createConfiguration(): SimpleConfigure {
   const configdir = path.join(__dirname, 'config/');
 
   // first, set the default values

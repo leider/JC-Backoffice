@@ -5,7 +5,7 @@ import { hashPassword, genSalt } from '../commons/hashPassword';
 import User from './user';
 
 export default {
-  saveNewUser: function saveNewUser(username: string, callback: Function) {
+  saveNewUser: function saveNewUser(username: string, callback: Function): void {
     const password = generate({
       excludeSimilarCharacters: true,
       length: 10,
@@ -25,7 +25,7 @@ export default {
           hashedPassword: hashPassword(password, newSalt),
           gruppen: []
         });
-      store.save(user, (err1: Error | null) => {
+      return store.save(user, (err1: Error | null) => {
         user.password = password; // to give UI feedback, called after save!
         callback(err1, user);
       });
@@ -36,20 +36,20 @@ export default {
     username: string,
     password: string,
     callback: Function
-  ) {
+  ): void {
     store.forId(username, (err: Error | null, existingUser?: User) => {
       if (err || !existingUser) {
         return callback(err);
       }
       existingUser.updatePassword(password);
-      store.save(existingUser, (err1: Error | null) => {
+      return store.save(existingUser, (err1: Error | null) => {
         existingUser.password = password; // to give UI feedback, called after save!
         callback(err1, existingUser);
       });
     });
   },
 
-  emailsAllerBookingUser: function emailsAllerBookingUser(callback: Function) {
+  emailsAllerBookingUser: function emailsAllerBookingUser(callback: Function): void {
     store.allUsers((err: Error | null, users: User[]) => {
       const emails = users
         .filter(

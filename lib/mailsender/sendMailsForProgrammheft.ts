@@ -9,17 +9,17 @@ import Kalender, { EmailEvent } from '../programmheft/kalender';
 export function remindForProgrammheft(
   now: DatumUhrzeit = new DatumUhrzeit(),
   callback: ErrorCallback<Error>
-) {
+): void {
   function sendMail(
     eventsForToday: EmailEvent[],
     callbackInner: ErrorCallback<Error>
-  ) {
+  ): void {
     const messages = eventsForToday.map(e => {
       const message = new Message({
         subject: 'Programmheft Action Reminder',
         markdown: e.body()
       });
-      message.setTo([e.email()]);
+      message.setTo(e.email());
       return message;
     });
     async.each(messages, mailtransport.sendMail, callbackInner);
@@ -41,7 +41,7 @@ export function remindForProgrammheft(
         (arr: EmailEvent[], each) => arr.concat(each.eventsToSend(now)),
         []
       );
-      sendMail(events, callback);
+      return sendMail(events, callback);
     }
   );
 }

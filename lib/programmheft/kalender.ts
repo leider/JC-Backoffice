@@ -1,22 +1,33 @@
 import misc from '../commons/misc';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
-function eventsToObject(contents?: string, jahrMonat?: string) {
+type Event = {
+  start: string;
+  end: string;
+  title: string;
+  color: string;
+  email?: string;
+  emailOffset?: number;
+  was?: string;
+  wer?: string;
+};
+
+function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
   if (!contents || !jahrMonat) {
     return [];
   }
   const jmArray = jahrMonat.split('/');
 
-  function lineToObject(line: string) {
+  function lineToObject(line: string): Event | undefined {
     const datum = DatumUhrzeit.forYYYYMM(jmArray[0] + jmArray[1]).minus({
       monate: 2
     });
 
-    function padLeftWithZero(aNumberString: string) {
+    function padLeftWithZero(aNumberString: string): string {
       return (aNumberString.length === 1 ? '0' : '') + aNumberString;
     }
 
-    function toDate(dayMonthString: string, stunde = '00:00') {
+    function toDate(dayMonthString: string, stunde = '00:00'): Date | null {
       const dayMonth = dayMonthString ? dayMonthString.split('.') : [];
       if (dayMonth.length < 2) {
         return null;
@@ -30,7 +41,7 @@ function eventsToObject(contents?: string, jahrMonat?: string) {
       return DatumUhrzeit.forGermanStringOrNow(dateString, stunde).toJSDate;
     }
 
-    function dates(element: string) {
+    function dates(element: string): string[] | null {
       if (element.trim()) {
         const fromAndUntil = misc.compact(
           element.split('-').map(each => each.trim())
@@ -40,8 +51,8 @@ function eventsToObject(contents?: string, jahrMonat?: string) {
         if (from && until) {
           return [from.toISOString(), until.toISOString()];
         }
-        return null;
       }
+      return null;
     }
 
     const elements = line.split('|');
@@ -79,29 +90,29 @@ function eventsToObject(contents?: string, jahrMonat?: string) {
   }
 
   const lines = contents.split(/[\n\r]/);
-  return misc.compact(lines.map(lineToObject));
+  return misc.compact(lines.map(lineToObject)) as Event[];
 }
 
 export class EmailEvent {
-  event: any;
+  event: Event;
 
-  constructor(event: any) {
+  constructor(event: Event) {
     this.event = event;
   }
 
-  datumUhrzeitToSend() {
+  datumUhrzeitToSend(): DatumUhrzeit {
     return this.start().minus({ tage: this.event.emailOffset });
   }
 
-  start() {
+  start(): DatumUhrzeit {
     return DatumUhrzeit.forISOString(this.event.start);
   }
 
-  email() {
+  email(): string | undefined {
     return this.event.email;
   }
 
-  body() {
+  body(): string {
     return `Hallo ${this.event.wer}
 Hier eine automatische Erinnerungsmail, dass Deine Aufgabe "${
       this.event.was
@@ -118,7 +129,7 @@ export default class Kalender {
 --- | --- | --- | --- | --- | ---
 `;
 
-  constructor(object?: any) {
+  constructor(object?: { id: string; text: string }) {
     if (object && object.id && object.id.split('/').length === 2) {
       const splits = object.id.split('/');
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
@@ -132,15 +143,15 @@ export default class Kalender {
     this.id = '2018/01';
   }
 
-  year() {
+  year(): string {
     return this.id && this.id.split('/')[0];
   }
 
-  asEvents() {
+  asEvents(): Event[] {
     return eventsToObject(this.text, this.id);
   }
 
-  eventsToSend(aDatumUhrzeit: DatumUhrzeit) {
+  eventsToSend(aDatumUhrzeit: DatumUhrzeit): EmailEvent[] {
     const events = this.asEvents()
       .filter(e => !!e.email)
       .map(e => new EmailEvent(e));

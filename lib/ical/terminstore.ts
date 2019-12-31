@@ -7,7 +7,7 @@ import misc from '../commons/misc';
 import pers from '../persistence/persistence';
 const persistence = pers('terminstore');
 
-function toTermin(callback: Function, err: Error | null, jsobject: TerminRaw) {
+function toTermin(callback: Function, err: Error | null, jsobject: TerminRaw): void {
   return misc.toObject2(Termin, callback, err, jsobject);
 }
 
@@ -15,7 +15,7 @@ function toTerminList(
   callback: Function,
   err: Error | null,
   jsobjects: TerminRaw[]
-) {
+): void {
   return misc.toObjectList2(Termin, callback, err, jsobjects);
 }
 
@@ -24,7 +24,7 @@ function byDateRange(
   rangeTo: DatumUhrzeit,
   sortOrder: object,
   callback: Function
-) {
+): void {
   // ranges are DatumUhrzeit
   persistence.listByField(
     {
@@ -39,18 +39,18 @@ function byDateRange(
 }
 
 export default {
-  forId: function forId(id: string, callback: Function) {
+  forId: function forId(id: string, callback: Function): void {
     persistence.getById(id, ramda.partial(toTermin, [callback]));
   },
 
-  alle: function alle(callback: Function) {
+  alle: function alle(callback: Function): void {
     persistence.list(
       { startDate: -1 },
       ramda.partial(toTerminList, [callback])
     );
   },
 
-  save: function save(termin: Termin, callback: Function) {
+  save: function save(termin: Termin, callback: Function): void {
     persistence.save(termin.toJSON(), callback);
   },
 
@@ -58,11 +58,11 @@ export default {
     rangeFrom: DatumUhrzeit,
     rangeTo: DatumUhrzeit,
     callback: Function
-  ) {
+  ): void {
     byDateRange(rangeFrom, rangeTo, { startDate: 1 }, callback);
   },
 
-  remove: function remove(id: string, callback: Function) {
+  remove: function remove(id: string, callback: Function): void {
     persistence.removeById(id, callback);
   }
 };

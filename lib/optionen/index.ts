@@ -4,7 +4,7 @@ import store from './optionenstore';
 import puppeteerPrinter from '../commons/puppeteerPrinter';
 
 import DatumUhrzeit from '../commons/DatumUhrzeit';
-import OptionValues from './optionValues';
+import OptionValues, { Hotelpreise, Kontakt } from './optionValues';
 import Orte from './orte';
 import FerienIcals from './ferienIcals';
 import { PDFOptions } from 'puppeteer';
@@ -25,11 +25,11 @@ app.get('/', (req, res, next) => {
     return res.redirect('/');
   }
 
-  service.optionen((err: Error | null, optionen: OptionValues) => {
+  return service.optionen((err: Error | null, optionen: OptionValues) => {
     if (err) {
       return next(err);
     }
-    res.render('optionen', { optionen: optionen });
+    return res.render('optionen', { optionen: optionen });
   });
 });
 
@@ -46,7 +46,7 @@ app.get('/kassenbericht/:year/:month', (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect('/');
   }
-  app.render(
+  return app.render(
     'kassenbericht',
     { datum, now, publicUrlPrefix },
     puppeteerPrinter.generatePdf(printoptions, res, next)
@@ -58,11 +58,11 @@ app.get('/orte', (req, res, next) => {
     return res.redirect('/');
   }
 
-  service.orte((err: Error | null, orte: Orte) => {
+  return service.orte((err: Error | null, orte: Orte) => {
     if (err) {
       return next(err);
     }
-    res.render('orte', { orte });
+    return res.render('orte', { orte });
   });
 });
 
@@ -71,32 +71,32 @@ app.get('/icals', (req, res, next) => {
     return res.redirect('/');
   }
 
-  service.icals((err: Error | null, icals: FerienIcals) => {
+  return service.icals((err: Error | null, icals: FerienIcals) => {
     if (err) {
       return next(err);
     }
-    res.render('icals', { icals: icals || {} });
+    return res.render('icals', { icals: icals || {} });
   });
 });
 
 app.get('/agenturForAuswahl', (req, res) => {
   service.agenturForAuswahl(
     req.query.auswahl,
-    (err: Error | null, kontakt: any) => res.send(kontakt)
+    (err: Error | null, kontakt: Kontakt) => res.send(kontakt)
   );
 });
 
 app.get('/hotelForAuswahl', (req, res) => {
   service.hotelForAuswahl(
     req.query.auswahl,
-    (err: Error | null, kontakt: any) => res.send(kontakt)
+    (err: Error | null, kontakt: Kontakt) => res.send(kontakt)
   );
 });
 
 app.get('/preiseForAuswahl', (req, res) => {
   service.preiseForAuswahl(
     req.query.auswahl,
-    (err: Error | null, preise: any) => res.send(preise)
+    (err: Error | null, preise: Hotelpreise) => res.send(preise)
   );
 });
 
@@ -107,7 +107,7 @@ app.post('/ortChanged', (req, res, next) => {
   const ort = req.body;
   // eslint-disable-next-line no-underscore-dangle
   delete ort._csrf;
-  service.orte((err: Error | null, orte: Orte) => {
+  return service.orte((err: Error | null, orte: Orte) => {
     if (err) {
       return next(err);
     }
@@ -123,11 +123,11 @@ app.post('/ortChanged', (req, res, next) => {
       //löschen
       orte.deleteOrt(ort.oldname);
     }
-    store.save(orte, (err1: Error | null) => {
+    return store.save(orte, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
-      res.redirect('orte');
+      return res.redirect('orte');
     });
   });
 });
@@ -139,7 +139,7 @@ app.post('/icalChanged', (req, res, next) => {
   const ical = req.body;
   // eslint-disable-next-line no-underscore-dangle
   delete ical._csrf;
-  service.icals((err: Error | null, icals: FerienIcals) => {
+  return service.icals((err: Error | null, icals: FerienIcals) => {
     if (err) {
       return next(err);
     }
@@ -155,11 +155,11 @@ app.post('/icalChanged', (req, res, next) => {
       //löschen
       icals.deleteIcal(ical.oldname);
     }
-    store.save(icals, (err1: Error | null) => {
+    return store.save(icals, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
-      res.redirect('icals');
+      return res.redirect('icals');
     });
   });
 });
@@ -168,16 +168,16 @@ app.post('/submit', (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect('/');
   }
-  service.optionen((err: Error | null, optionen: OptionValues) => {
+  return service.optionen((err: Error | null, optionen: OptionValues) => {
     if (err) {
       return next(err);
     }
     optionen.fillFromUI(req.body);
-    store.save(optionen, (err1: Error | null) => {
+    return store.save(optionen, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
-      res.redirect('/');
+      return res.redirect('/');
     });
   });
 });

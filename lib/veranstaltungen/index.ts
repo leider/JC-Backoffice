@@ -23,39 +23,62 @@ import Orte from '../optionen/orte';
 import User from '../users/user';
 import Salesreport from '../reservix/salesreport';
 
+import { addRoutesTo } from './indexDetails';
+import FerienIcals from '../optionen/ferienIcals';
+
 const app = misc.expressAppIn(__dirname);
 
 const uploadDir = path.join(__dirname, '../../public/upload');
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 
+type CalendarEvent = {
+  start: string;
+  end: string;
+  url: string;
+  title: string;
+  tooltip: string;
+  className: string;
+}
+
 function filterUnbestaetigteFuerJedermann(
   veranstaltungen: Veranstaltung[],
   res: express.Response
-) {
+): Veranstaltung[] {
   if (res.locals.accessrights.isBookingTeam()) {
     return veranstaltungen;
   }
   return veranstaltungen.filter(v => v.kopf().confirmed());
 }
 
-function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction, res: express.Response, titel: string) {
+function veranstaltungenForDisplay(
+  fetcher: Function,
+  next: express.NextFunction,
+  res: express.Response,
+  titel: string
+): void {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect('/teamseite/');
   }
 
-  function associateReservix(veranstaltung: Veranstaltung, callback: Function) {
+  function associateReservix(
+    veranstaltung: Veranstaltung,
+    callback: Function
+  ): void {
     if (
       veranstaltung.reservixID() &&
       (!veranstaltung.salesreport() ||
         !veranstaltung.salesreport()?.istVergangen())
     ) {
-      salesreportFor(veranstaltung.reservixID(), (salesreport?: Salesreport) => {
-        veranstaltung.associateSalesreport(salesreport);
-        store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
-          return callback(err, veranstaltung);
-        });
-      });
+      salesreportFor(
+        veranstaltung.reservixID(),
+        (salesreport?: Salesreport) => {
+          veranstaltung.associateSalesreport(salesreport);
+          store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
+            callback(err, veranstaltung);
+          });
+        }
+      );
     } else {
       callback(null, veranstaltung);
     }
@@ -65,22 +88,20 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
     if (err) {
       return next(err);
     }
-    async.parallel(
+    return async.parallel(
       {
         users: callback => userstore.allUsers(callback),
         icals: callback => optionenService.icals(callback)
       },
-      (err1, results: any) => {
+      (err1, results) => {
         if (err1) {
           return next(err1);
         }
-        async.each(veranstaltungen, associateReservix, err2 => {
+        return async.each(veranstaltungen, associateReservix, err2 => {
           if (err2) {
             return next(err2);
           }
-          const icals = results.icals.forCalendar();
-          icals.unshift('/veranstaltungen/eventsForCalendar');
-          icals.unshift('/ical/eventsForCalendar');
+          const icals = (results.icals as FerienIcals).forCalendar();
 
           const filteredVeranstaltungen = filterUnbestaetigteFuerJedermann(
             veranstaltungen,
@@ -90,7 +111,7 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
             veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt,
             filteredVeranstaltungen
           );
-          res.render('../../teamseite/views/indexAdmin', {
+          return res.render('../../teamseite/views/indexAdmin', {
             titel,
             users: R.sortBy(R.prop('name'), results.users as User[]),
             icals,
@@ -109,7 +130,7 @@ function veranstaltungenForExport(
   fetcher: Function,
   next: express.NextFunction,
   res: express.Response
-) {
+): void {
   if (!res.locals.accessrights.isBookingTeam()) {
     return res.redirect('/');
   }
@@ -119,7 +140,7 @@ function veranstaltungenForExport(
       return next(err);
     }
     const lines = veranstaltungen.map(veranstaltung => veranstaltung.toCSV());
-    res.set('Content-Type', 'text/csv').send(lines);
+    return res.set('Content-Type', 'text/csv').send(lines);
   });
 }
 
@@ -128,8 +149,10 @@ function eventsBetween(
   end: DatumUhrzeit,
   res: express.Response,
   callback: Function
-) {
-  function asCalendarEvent(veranstaltung: Veranstaltung) {
+): void {
+  function asCalendarEvent(
+    veranstaltung: Veranstaltung
+  ): CalendarEvent {
     const urlSuffix = res.locals.accessrights.isOrgaTeam()
       ? '/allgemeines'
       : '/preview';
@@ -154,7 +177,7 @@ function eventsBetween(
       if (err) {
         return callback(err);
       }
-      callback(
+      return callback(
         null,
         filterUnbestaetigteFuerJedermann(veranstaltungen, res).map(
           asCalendarEvent
@@ -192,12 +215,12 @@ app.get('/new', (req, res, next) => {
     return res.redirect('/');
   }
 
-  optionenService.optionenUndOrte(
+  return optionenService.optionenUndOrte(
     (err: Error | null, optionen: OptionValues, orte: Orte) => {
       if (err) {
         return next(err);
       }
-      res.render('edit/allgemeines', {
+      return res.render('edit/allgemeines', {
         veranstaltung: new Veranstaltung({}),
         optionen,
         orte,
@@ -218,7 +241,7 @@ app.get('/monat/:monat', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.render('monatsliste', { liste: result, monat: yymm });
+      return res.render('monatsliste', { liste: result, monat: yymm });
     }
   );
 });
@@ -250,7 +273,7 @@ app.get('/imgzip/:monat', (req, res, next) => {
       const zip = zipstream({ level: 1 });
       zip.pipe(res); // res is a writable stream
 
-      async.forEachSeries(
+      return async.forEachSeries(
         images,
         (file, cb) => {
           zip.entry(fs.createReadStream(file.path), { name: file.name }, cb);
@@ -259,7 +282,7 @@ app.get('/imgzip/:monat', (req, res, next) => {
           if (err1) {
             return next(err1);
           }
-          zip.finalize();
+          return zip.finalize();
         }
       );
     }
@@ -277,7 +300,7 @@ app.get('/texte/:monat', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.render('pressetexte', { liste: result, monat: yymm });
+      return res.render('pressetexte', { liste: result, monat: yymm });
     }
   );
 });
@@ -285,11 +308,11 @@ app.get('/texte/:monat', (req, res, next) => {
 app.get('/eventsForCalendar', (req, res, next) => {
   const start = DatumUhrzeit.forISOString(req.query.start);
   const end = DatumUhrzeit.forISOString(req.query.end);
-  eventsBetween(start, end, res, (err1: Error | null, events: any[]) => {
+  eventsBetween(start, end, res, (err1: Error | null, events: CalendarEvent[]) => {
     if (err1) {
       return next(err1);
     }
-    res.end(JSON.stringify(events));
+    return res.end(JSON.stringify(events));
   });
 });
 
@@ -299,24 +322,22 @@ app.post('/updateStaff', (req, res, next) => {
   }
 
   const body = req.body;
-  store.getVeranstaltungForId(
+  return store.getVeranstaltungForId(
     body.id,
     (err: Error | null, veranstaltung: Veranstaltung) => {
       if (err || !veranstaltung) {
         return next(err);
       }
       veranstaltung.staff().updateStaff(body.staff || {});
-      store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
+      return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
         if (err1 || !veranstaltung) {
           return next(err1);
         }
-        res.redirect('/');
+        return res.redirect('/');
       });
     }
   );
 });
-
-import { addRoutesTo } from './indexDetails';
 
 addRoutesTo(app);
 

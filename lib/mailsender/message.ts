@@ -3,6 +3,7 @@ import path from 'path';
 import Renderer from '../commons/renderer';
 
 import conf from '../commons/simpleConfigure';
+import Mail from 'nodemailer/lib/mailer';
 
 export default class Message {
   private subject!: string;
@@ -28,11 +29,14 @@ export default class Message {
     return this;
   }
 
-  static formatEMailAddress(name: string, email: string) {
+  static formatEMailAddress(name: string, email: string): string {
     return `"${name}" <${email}>`;
   }
 
-  setTo(toAddresses?: string | string[]) {
+  setTo(toAddresses?: string | string[]): void {
+    if (toAddresses === undefined) {
+      return;
+    }
     if (typeof toAddresses === 'string') {
       this.to = toAddresses;
     } else {
@@ -40,7 +44,7 @@ export default class Message {
     }
   }
 
-  setBcc(toAddresses: string | string[]) {
+  setBcc(toAddresses: string | string[]): void {
     if (typeof toAddresses === 'string') {
       this.bcc = toAddresses;
     } else {
@@ -48,7 +52,7 @@ export default class Message {
     }
   }
 
-  toTransportObject() {
+  toTransportObject(): Mail.Options {
     const renderingOptions = {
       pretty: true,
       content: Renderer.render(this.markdown),

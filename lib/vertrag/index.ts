@@ -24,11 +24,11 @@ function renderVertrag(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   if (!res.locals.accessrights.isBookingTeam()) {
     return res.redirect('/');
   }
-  store.getVeranstaltung(
+  return store.getVeranstaltung(
     req.params.url,
     (err1: Error | null, veranstaltung?: Veranstaltung) => {
       if (err1) {
@@ -37,7 +37,7 @@ function renderVertrag(
       if (!veranstaltung) {
         return res.redirect('/');
       }
-      app.render(
+      return app.render(
         language,
         {
           veranstaltung,

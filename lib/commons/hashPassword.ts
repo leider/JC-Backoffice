@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import conf from './simpleConfigure';
 
-export function genSalt() {
+export function genSalt(): string {
   const length = 64;
   return crypto
     .randomBytes(Math.ceil(length / 2))
@@ -9,7 +9,7 @@ export function genSalt() {
     .slice(0, length); // return required number of characters
 }
 
-export function hashPassword(password: string, givenSalt?: string) {
+export function hashPassword(password: string, givenSalt?: string): string {
   const salt = givenSalt || conf.get('salt') || '1234567890';
   /*eslint no-sync: 0 */
   return crypto

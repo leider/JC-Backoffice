@@ -25,7 +25,7 @@ app.get('/kalenderFor', (req, res, next) => {
       if (!kalender) {
         return res.end('{}');
       }
-      res.end(JSON.stringify(kalender.asEvents()));
+      return res.end(JSON.stringify(kalender.asEvents()));
     }
   );
 });
@@ -46,13 +46,13 @@ app.get('/:year/:month', (req, res, next) => {
   }
   const end = start.plus({ monate: 2 });
 
-  store.getKalender(
+  return store.getKalender(
     year + '/' + month,
     (err: Error | null, kalender: Kalender) => {
       if (err) {
         return next(err);
       }
-      veranstaltungenstore.byDateRangeInAscendingOrder(
+      return veranstaltungenstore.byDateRangeInAscendingOrder(
         start,
         end,
         (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
@@ -69,7 +69,7 @@ app.get('/:year/:month', (req, res, next) => {
             veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt,
             filteredVeranstaltungen
           );
-          res.render('heft', {
+          return res.render('heft', {
             unconfirmedVeranstaltungen,
             groupedVeranstaltungen,
             start,
@@ -87,16 +87,16 @@ app.post('/submit', (req, res, next) => {
   }
 
   const body = req.body;
-  store.getKalender(body.id, (err: Error | null, kalender: Kalender) => {
+  return store.getKalender(body.id, (err: Error | null, kalender: Kalender) => {
     if (err) {
       return next(err);
     }
     kalender.text = body.text;
-    store.saveKalender(kalender, (err1: Error | null) => {
+    return store.saveKalender(kalender, (err1: Error | null) => {
       if (err1) {
         return next(err1);
       }
-      res.redirect(body.id);
+      return res.redirect(body.id);
     });
   });
 });

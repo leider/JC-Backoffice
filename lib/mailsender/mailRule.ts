@@ -170,18 +170,18 @@ export default class MailRule {
     return Object.assign({}, this);
   }
 
-  static rules() {
+  static rules(): Rule[] {
     return rules;
   }
 
-  constructor(object: MailRuleRaw = {id: '', name: '', email: '', rule: ''}) {
+  constructor(object: MailRuleRaw = { id: '', name: '', email: '', rule: '' }) {
     this.id = object.id;
     this.name = object.name;
     this.email = object.email;
     this.rule = object.rule;
   }
 
-  fillFromUI(object: MailRuleRaw) {
+  fillFromUI(object: MailRuleRaw): MailRule {
     Object.assign(this, object);
     if (!this.id) {
       this.id = encodeURIComponent(this.name + this.email + this.rule);
@@ -189,22 +189,22 @@ export default class MailRule {
     return this;
   }
 
-  rules() {
+  rules(): Rule[] {
     return MailRule.rules();
   }
 
-  fullyQualifiedUrl() {
+  fullyQualifiedUrl(): string {
     return '/mailsender/' + encodeURIComponent(this.id);
   }
 
-  subject(datumUhrzeit: DatumUhrzeit) {
+  subject(datumUhrzeit: DatumUhrzeit): string {
     const startAndEnd = this.startAndEndDay(datumUhrzeit);
     const startKW = startAndEnd.start.kw;
     const endKW = startAndEnd.end.kw;
     return '[Jazzclub Karlsruhe] KW ' + startKW + ' bis ' + endKW;
   }
 
-  shouldSendUntil(now: DatumUhrzeit, other: DatumUhrzeit) {
+  shouldSendUntil(now: DatumUhrzeit, other: DatumUhrzeit): boolean {
     let day = now;
     const end = other.plus({ tage: 1 });
     while (day.istVor(end)) {
@@ -216,15 +216,17 @@ export default class MailRule {
     return false;
   }
 
-  logic() {
+  logic(): RuleLogic {
     return logicArray[this.rule];
   }
 
-  shouldSend(datumUhrzeit: DatumUhrzeit) {
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
     return this.logic().shouldSend(datumUhrzeit);
   }
 
-  startAndEndDay(datumUhrzeit: DatumUhrzeit) {
+  startAndEndDay(
+    datumUhrzeit: DatumUhrzeit
+  ): { start: DatumUhrzeit; end: DatumUhrzeit } {
     return this.logic().startAndEndDay(datumUhrzeit);
   }
 }

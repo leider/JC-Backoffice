@@ -5,7 +5,7 @@ import path from 'path';
 import conf from './simpleConfigure';
 
 export default class Misc {
-  static isNumber(aString: string) {
+  static isNumber(aString: string): boolean {
     const number = Number.parseInt(aString);
     return !!number || number === 0;
   }
@@ -14,27 +14,27 @@ export default class Misc {
     Constructor: any,
     callback: Function,
     err: Error | null,
-    jsobject?: any
-  ) {
+    jsobject?: object
+  ): void {
     if (err) {
       return callback(err);
     }
     if (jsobject) {
       return callback(null, Constructor.fromJSON(jsobject));
     }
-    callback(null, null);
+    return callback(null, null);
   }
 
   static toObjectList2(
     Constructor: any,
     callback: Function,
     err: Error | null,
-    jsobjects: Array<any>
-  ) {
+    jsobjects: object[]
+  ): void {
     if (err) {
       return callback(err);
     }
-    callback(
+    return callback(
       null,
       jsobjects.map(each => Constructor.fromJSON(each))
     );
@@ -44,33 +44,33 @@ export default class Misc {
     Constructor: any,
     callback: Function,
     err: Error | null,
-    jsobject?: any
-  ) {
+    jsobject?: object
+  ): void {
     if (err) {
       return callback(err);
     }
     if (jsobject) {
       return callback(null, new Constructor(jsobject));
     }
-    callback(null, null);
+    return callback(null, null);
   }
 
   static toObjectList(
     Constructor: any,
     callback: Function,
     err: Error | null,
-    jsobjects?: any
-  ) {
+    jsobjects?: object[]
+  ): void {
     if (err) {
       return callback(err);
     }
-    callback(
+    return callback(
       null,
-      jsobjects.map((each: any) => new Constructor(each))
+      (jsobjects || []).map((each: object) => new Constructor(each))
     );
   }
 
-  static toArray(elem: any) {
+  static toArray(elem: any): Array<any> {
     if (!elem) {
       return [];
     }
@@ -83,8 +83,8 @@ export default class Misc {
     return [elem];
   }
 
-  static toFullQualifiedUrl(prefix: string, localUrl: string) {
-    function trimLeadingAndTrailingSlash(string: string) {
+  static toFullQualifiedUrl(prefix: string, localUrl: string): string {
+    function trimLeadingAndTrailingSlash(string: string): string {
       return string.replace(/(^\/)|(\/$)/g, '');
     }
 
@@ -97,18 +97,18 @@ export default class Misc {
     );
   }
 
-  static expressAppIn(directory: string) {
+  static expressAppIn(directory: string): express.Express {
     const app = express();
     app.set('views', path.join(directory, 'views'));
     app.set('view engine', 'pug');
     return app;
   }
 
-  static compact(array: Array<any>) {
-    return R.filter(R.identity, array || []);
+  static compact<T>(array: T[]): T[] {
+    return R.filter(a => !!a, array || []);
   }
 
-  static pushImage(images: string | Array<string>, image: string) {
+  static pushImage(images: string | Array<string>, image: string): boolean {
     let result: string[];
     if (typeof images === 'string') {
       result = [images];
@@ -117,12 +117,12 @@ export default class Misc {
     }
     if (result.indexOf(image) === -1) {
       result.push(image);
-      return result;
+      return true;
     }
     return false;
   }
 
-  static dropImage(images: string | Array<string>, image: string) {
+  static dropImage(images: string | Array<string>, image: string): string[] {
     if (typeof images === 'string') {
       return [];
     } else {

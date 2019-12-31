@@ -14,7 +14,7 @@ function showPage(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   const normalizedPageName = renderer.normalize(pageName);
   const completePageName = subdir + '/' + normalizedPageName;
   wikiService.showPage(
@@ -28,7 +28,7 @@ function showPage(
         return next();
       }
       const headerAndBody = renderer.titleAndRenderedTail(content, subdir);
-      res.render('get', {
+      return res.render('get', {
         content: headerAndBody.body,
         title: headerAndBody.title,
         pageName: normalizedPageName,
@@ -53,7 +53,7 @@ app.get('/versions/:subdir/:page', (req, res, next) => {
       if (err || !metadata) {
         return next(err);
       }
-      res.render('history', {
+      return res.render('history', {
         pageName,
         subdir,
         items: metadata
@@ -74,7 +74,7 @@ app.get('/compare/:subdir/:page/:revisions', (req, res, next) => {
       if (err || !diff) {
         return next();
       }
-      res.render('compare', {
+      return res.render('compare', {
         pageName,
         subdir,
         lines: diff.asLines()
@@ -95,7 +95,7 @@ app.get('/edit/:subdir/:page', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.render('edit', {
+      return res.render('edit', {
         page: { content, comment: '', metadata: metadata[0].fullhash },
         subdir,
         pageName
@@ -158,7 +158,7 @@ app.post('/rename/:subdir/:page', (req, res, next) => {
           'Deine Änderungen wurden gespeichert.'
         )
         .putIntoSession(req);
-      res.redirect('/wiki/' + subdir + '/' + pageNameNew);
+      return res.redirect('/wiki/' + subdir + '/' + pageNameNew);
     }
   );
 });
@@ -167,12 +167,15 @@ app.post('/rename/:subdir/:page', (req, res, next) => {
 
 app.get('/list/:subdir/', (req, res, next) => {
   const subdir = req.params.subdir;
-  wikiService.pageList(subdir, (err: Error | null, items: Array<any>) => {
-    if (err) {
-      return next(err);
+  wikiService.pageList(
+    subdir,
+    (err: Error | null, items: Array<{ fullname: string; name: string }>) => {
+      if (err) {
+        return next(err);
+      }
+      return res.render('list', { items, subdir });
     }
-    res.render('list', { items, subdir });
-  });
+  );
 });
 
 app.get('/modal/:subdir/:page', (req, res, next) => {
@@ -185,7 +188,7 @@ app.get('/modal/:subdir/:page', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.render('modal', {
+      return res.render('modal', {
         content: content && renderer.render(content, subdir),
         subdir
       });
@@ -221,12 +224,18 @@ app.post('/search', (req, res, next) => {
       .putIntoSession(req);
     return res.redirect(req.headers.referer || '/wiki/alle/index');
   }
-  wikiService.search(searchtext, (err: Error | null, matches: Array<any>) => {
-    if (err) {
-      return next(err);
+  return wikiService.search(
+    searchtext,
+    (
+      err: Error | null,
+      matches: Array<{ pageNAme: string; line: string; text: string }>
+    ) => {
+      if (err) {
+        return next(err);
+      }
+      return res.render('searchresults', { searchtext, matches });
     }
-    res.render('searchresults', { searchtext, matches });
-  });
+  );
 });
 
 export default app;

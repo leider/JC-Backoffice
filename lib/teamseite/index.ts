@@ -17,20 +17,21 @@ function addStaff(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   store.getVeranstaltungForId(
     req.params.id,
-    (err: Error, veranstaltung: any) => {
+    (err: Error, veranstaltung: Veranstaltung) => {
       if (err) {
         return next(err);
       }
+      // @ts-ignore
       const section = veranstaltung.staff()[sectionOfStaff]();
       section.push((req.user as User).id);
-      store.saveVeranstaltung(veranstaltung, (err1: Error) => {
+      return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
         if (err1) {
           return next(err1);
         }
-        res.redirect('/teamseite');
+        return res.redirect('/teamseite');
       });
     }
   );
@@ -41,21 +42,22 @@ function removeStaff(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   store.getVeranstaltungForId(
     req.params.id,
-    (err: Error, veranstaltung: any) => {
+    (err: Error, veranstaltung: Veranstaltung) => {
       if (err) {
         return next(err);
       }
+      // @ts-ignore
       const section = veranstaltung.staff()[sectionOfStaff]();
       const index = section.indexOf((req.user as User).id);
       section.splice(index, 1);
-      store.saveVeranstaltung(veranstaltung, (err1: Error) => {
+      return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
         if (err1) {
           return next(err1);
         }
-        res.redirect('/teamseite');
+        return res.redirect('/teamseite');
       });
     }
   );
@@ -64,28 +66,26 @@ function removeStaff(
 app.get('/', (req, res, next) => {
   async.parallel(
     {
-      veranstaltungen: (callback: any) => store.zukuenftigeMitGestern(callback),
-      users: (callback: any) => userstore.allUsers(callback),
-      icals: (callback: any) => optionenservice.icals(callback)
+      veranstaltungen: (callback: Function) => store.zukuenftigeMitGestern(callback),
+      users: (callback: Function) => userstore.allUsers(callback),
+      icals: (callback: Function) => optionenservice.icals(callback)
     },
     (err: Error | undefined, results: any) => {
       if (err) {
         return next(err);
       }
       const icals = results.icals.forCalendar();
-      icals.unshift('/veranstaltungen/eventsForCalendar');
-      icals.unshift('/ical/eventsForCalendar');
-      const filteredVeranstaltungen = results.veranstaltungen.filter(
+      const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter(
         (v: Veranstaltung) => v.kopf().confirmed()
       );
       const groupedVeranstaltungen = R.groupBy(
-        (veranst: any) => veranst.startDatumUhrzeit().monatLangJahrKompakt,
+        veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt,
         filteredVeranstaltungen
       );
       const users = (results.users as User[]).sort((a, b) =>
         a.name > b.name ? 1 : -1
       );
-      res.render('index', {
+      return res.render('index', {
         groupedVeranstaltungen,
         users,
         icals,

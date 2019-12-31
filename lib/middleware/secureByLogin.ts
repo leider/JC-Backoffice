@@ -8,17 +8,17 @@ export default function secureByLogin(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-) {
+): void {
   if (/\/upload|ical/.test(req.originalUrl)) {
     return next();
   }
-  store.allUsers((err: Error | null, users: User[]) => {
+  return store.allUsers((err: Error | null, users: User[]) => {
     if (err) {
       return next(err);
     }
     if (users && users.length && !/\/login/.test(req.originalUrl)) {
       return eLI(req, res, next);
     }
-    next();
+    return next();
   });
 }

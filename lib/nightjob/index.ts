@@ -14,7 +14,7 @@ import User from '../users/user';
 const receiver = 'leider';
 import sendMailsNightly from '../mailsender/sendMailsNightly';
 
-function closeAndExit(err: Error | undefined) {
+function closeAndExit(err: Error | undefined): void {
   if (err) {
     console.log('Error in nightjob...');
     console.log(err.message);
@@ -25,11 +25,11 @@ function closeAndExit(err: Error | undefined) {
   process.exit();
 }
 
-function informAdmin(err: Error | undefined, counter?: number) {
+function informAdmin(err: Error | undefined, counter?: number): void {
   if (!err && !counter) {
     return closeAndExit(err);
   }
-  userstore.forId(receiver, (err1: Error | null, user: User) => {
+  return userstore.forId(receiver, (err1: Error | null, user: User) => {
     if (err1) {
       return closeAndExit(err1);
     }
@@ -40,7 +40,7 @@ Anzahl: ${counter}
 Error: ${err ? err.message : 'keiner'}`
     });
     message.setTo(user.email);
-    mailtransport.sendMail(message, (err2: Error | undefined) => {
+    return mailtransport.sendMail(message, (err2: Error | undefined) => {
       closeAndExit(err2);
     });
   });

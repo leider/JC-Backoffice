@@ -20,23 +20,26 @@ export default class DatumUhrzeit {
   }
 
   // Konstruktoren
-  static forYYMM(YYMM: string) {
+  static forYYMM(YYMM: string): DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromFormat(YYMM, 'yyMM'));
   }
 
-  static forYYYYMM(YYYYMM: string) {
+  static forYYYYMM(YYYYMM: string): DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromFormat(YYYYMM, 'yyyyMM'));
   }
 
-  static forISOString(ISO: string) {
+  static forISOString(ISO: string): DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromISO(ISO));
   }
 
-  static forJSDate(jsDate: Date) {
+  static forJSDate(jsDate: Date): DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromJSDate(jsDate));
   }
 
-  static forGermanString(dateString?: string, timeString?: string) {
+  static forGermanString(
+    dateString?: string,
+    timeString?: string
+  ): DatumUhrzeit | undefined {
     if (dateString) {
       return new DatumUhrzeit(
         DateTime.fromFormat(
@@ -48,7 +51,10 @@ export default class DatumUhrzeit {
     return undefined;
   }
 
-  static forGermanStringOrNow(dateString?: string, timeString?: string) {
+  static forGermanStringOrNow(
+    dateString?: string,
+    timeString?: string
+  ): DatumUhrzeit {
     if (dateString) {
       return new DatumUhrzeit(
         DateTime.fromFormat(
@@ -60,7 +66,10 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit();
   }
 
-  static forReservixString(dateString: string, timeString: string) {
+  static forReservixString(
+    dateString: string,
+    timeString: string
+  ): DatumUhrzeit | undefined {
     // z.B. So, 12.05.2019, 20:00 Uhr
     if (dateString) {
       return new DatumUhrzeit(
@@ -76,7 +85,7 @@ export default class DatumUhrzeit {
   }
 
   // Rechnen
-  plus(options: AdditionOptions) {
+  plus(options: AdditionOptions): DatumUhrzeit {
     const d = this.dateTime.plus({
       years: options.jahre,
       months: options.monate,
@@ -88,7 +97,7 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(d);
   }
 
-  minus(options: AdditionOptions) {
+  minus(options: AdditionOptions): DatumUhrzeit {
     const d = this.dateTime.minus({
       years: options.jahre,
       months: options.monate,
@@ -100,126 +109,126 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(d);
   }
 
-  differenzInTagen(other: DatumUhrzeit) {
+  differenzInTagen(other: DatumUhrzeit): number {
     return this.dateTime.diff(other.dateTime, 'days').days;
   }
 
   // Vergleiche
-  istVor(other: DatumUhrzeit) {
+  istVor(other: DatumUhrzeit): boolean {
     return this.dateTime < other.dateTime;
   }
 
-  istNach(other: DatumUhrzeit) {
+  istNach(other: DatumUhrzeit): boolean {
     return this.dateTime > other.dateTime;
   }
 
   // getter
-  get monat() {
+  get monat(): number {
     return this.dateTime.month;
   }
 
-  get jahr() {
+  get jahr(): number {
     return this.dateTime.year;
   }
 
-  get tag() {
+  get tag(): number {
     return this.dateTime.day;
   }
 
-  get kw() {
+  get kw(): number {
     return this.dateTime.weekNumber;
   }
 
-  get wochentag() {
+  get wochentag(): number {
     return this.dateTime.weekday;
   }
 
   // pseudosetter
 
-  setTag(tag: number) {
+  setTag(tag: number): DatumUhrzeit {
     return new DatumUhrzeit(this.dateTime.set({ day: tag }));
   }
 
-  setUhrzeit(stunde: number, minuten: number) {
+  setUhrzeit(stunde: number, minuten: number): DatumUhrzeit {
     return new DatumUhrzeit(
       this.dateTime.set({ hour: stunde, minute: minuten })
     );
   }
 
   // Formatierungen
-  get monatLang() {
+  get monatLang(): string {
     return this.format('MMMM');
   }
 
-  get monatKompakt() {
+  get monatKompakt(): string {
     return this.format('MMM');
   }
 
-  get wochentagTagMonat() {
+  get wochentagTagMonat(): string {
     return this.format('ccc. dd. MMMM');
   }
 
-  get tagMonatJahrKompakt() {
+  get tagMonatJahrKompakt(): string {
     return this.format('dd.LL.yyyy');
   }
 
-  get uhrzeitKompakt() {
+  get uhrzeitKompakt(): string {
     return this.format('T');
   }
 
-  get tagMonatJahrLang() {
+  get tagMonatJahrLang(): string {
     return this.format('DDD');
   }
 
-  get tagMonatJahrLangMitKW() {
+  get tagMonatJahrLangMitKW(): string {
     return this.format("DDD (K'W' WW)");
   }
 
-  get lesbareLangform() {
+  get lesbareLangform(): string {
     return this.format('DDDD t');
   }
 
-  get lesbareKurzform() {
+  get lesbareKurzform(): string {
     return this.format('ccc., ff');
   }
 
-  get monatJahrKompakt() {
+  get monatJahrKompakt(): string {
     return this.format('MMM') + " '" + this.format('yy');
   }
 
-  get monatLangJahrKompakt() {
+  get monatLangJahrKompakt(): string {
     return this.format('MMMM') + " '" + this.format('yy');
   }
 
-  get fuerKalenderViews() {
+  get fuerKalenderViews(): string {
     return this.format('yyyy/MM');
   }
 
-  get fuerCalendarWidget() {
+  get fuerCalendarWidget(): string {
     return this.format('yyyy-MM-dd');
   }
 
-  get fuerCsvExport() {
+  get fuerCsvExport(): string {
     return this.format("yyyy-MM-dd'T'HH:mm");
   }
 
-  get mitUhrzeitNumerisch() {
+  get mitUhrzeitNumerisch(): string {
     return this.format('dd.MM.yy HH:mm');
   }
 
-  get fuerUnterseiten() {
+  get fuerUnterseiten(): string {
     return this.format('yyMM');
   }
 
-  get fuerPresse() {
+  get fuerPresse(): string {
     return this.format("cccc, DDD 'um' HH:mm");
   }
 
-  format(options: string) {
+  format(options: string): string {
     return this.dateTime.toFormat(options);
   }
 
-  get toLocalDateTimeString() {
+  get toLocalDateTimeString(): string {
     const options = {
       year: 'numeric',
       month: '2-digit',
@@ -231,24 +240,24 @@ export default class DatumUhrzeit {
     return new Intl.DateTimeFormat(this.locale, options).format(this.toJSDate);
   }
 
-  get toJSDate() {
+  get toJSDate(): Date {
     return this.dateTime.toJSDate();
   }
 
   // special
-  get vorigerOderAktuellerUngeraderMonat() {
+  get vorigerOderAktuellerUngeraderMonat(): DatumUhrzeit {
     return this.minus({ monate: this.istGeraderMonat ? 1 : 0 });
   }
 
-  get naechsterUngeraderMonat() {
+  get naechsterUngeraderMonat(): DatumUhrzeit {
     return this.plus({ monate: this.istGeraderMonat ? 1 : 2 });
   }
 
-  get istGeraderMonat() {
+  get istGeraderMonat(): boolean {
     return this.monat % 2 === 0;
   }
 
-  get value() {
+  get value(): DateTime {
     return this.dateTime;
   }
 }
