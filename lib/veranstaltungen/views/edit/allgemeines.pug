@@ -118,7 +118,7 @@ block content
                 +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
 
         .col-md-6
-          +kontakt(veranstaltung, optionen.agenturen, 'Agentur / Verantwortlicher', 'agentur')
+          +kontakt(veranstaltung, optionen.agenturenForSelection(), 'Agentur / Verantwortlicher', 'agentur')
           +legendMitBody('vertrag', 'Vertrag')
             .row
               .col-md-6

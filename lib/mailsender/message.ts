@@ -6,10 +6,10 @@ import conf from '../commons/simpleConfigure';
 import Mail from 'nodemailer/lib/mailer';
 
 export default class Message {
-  private subject!: string;
-  private markdown!: string;
-  private senderName!: string;
-  private senderAddress!: string;
+  private readonly subject!: string;
+  private readonly markdown!: string;
+  private readonly senderName!: string;
+  private readonly senderAddress!: string;
   private to!: string;
   private bcc!: string;
 
@@ -23,8 +23,8 @@ export default class Message {
       this.markdown = subjectWithText.markdown;
       this.senderName = optionalSenderName
         ? optionalSenderName + ' via backoffice.jazzclub.de'
-        : conf.get('sender-name');
-      this.senderAddress = optionalSenderAddress || conf.get('sender-address');
+        : conf.get('sender-name') as string;
+      this.senderAddress = optionalSenderAddress || conf.get('sender-address') as string;
     }
     return this;
   }

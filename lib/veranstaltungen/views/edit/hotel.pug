@@ -22,7 +22,7 @@ block content
     form#hotelform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
       +editHeader(veranstaltung, 'hotel')
         .col-md-6
-          +kontakt(veranstaltung, optionen.hotels, 'Hotel', 'hotel', 'hotel')
+          +kontakt(veranstaltung, optionen.hotelsForSelection(), 'Hotel', 'hotel', 'hotel')
           +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'hotel')
             .row
               .col-4()

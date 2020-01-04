@@ -1,5 +1,5 @@
+import { expect } from 'chai';
 import fieldHelpers from '../../lib/commons/fieldHelpers';
-const expect = require('must-dist');
 
 describe('formatNumberWithCurrentLocale', () => {
   it('formats for "de"', () => {

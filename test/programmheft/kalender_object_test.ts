@@ -1,4 +1,5 @@
-const expect = require('must-dist');
+/* eslint-disable no-unused-expressions*/
+import { expect } from 'chai';
 
 import Kalender from '../../lib/programmheft/kalender';
 import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
@@ -8,25 +9,19 @@ describe('Kalender', () => {
     it('initial', () => {
       const kalender = new Kalender();
       expect(kalender.id).to.eql('2018/01');
-      expect(kalender.year()).to.eql('2018')
-      expect(kalender.text).is.not.undefined();
+      expect(kalender.year()).to.eql('2018');
+      expect(kalender.text).is.not.undefined;
       expect(kalender.asEvents()).to.eql([]);
     });
 
-    it('parses non existing id correctly', () => {
-      const kalender = new Kalender({});
-      expect(kalender.id).to.eql('2018/01');
-      expect(kalender.year()).to.eql('2018')
-    });
-
     it('parses date correctly', () => {
-      const kalender = new Kalender({ id: '2020/12' });
+      const kalender = new Kalender({ id: '2020/12', text: '' });
       expect(kalender.id).to.eql('2020/12');
       expect(kalender.year()).to.eql('2020');
     });
 
     it('parses broken date correctly', () => {
-      const kalender = new Kalender({ id: 'Peter/' });
+      const kalender = new Kalender({ id: 'Peter/', text: '' });
       expect(kalender.id).to.eql('2018/01');
       expect(kalender.year()).to.eql('2018');
     });

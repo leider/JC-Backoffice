@@ -39,7 +39,7 @@ type CalendarEvent = {
   title: string;
   tooltip: string;
   className: string;
-}
+};
 
 function filterUnbestaetigteFuerJedermann(
   veranstaltungen: Veranstaltung[],
@@ -65,20 +65,19 @@ function veranstaltungenForDisplay(
     veranstaltung: Veranstaltung,
     callback: Function
   ): void {
+    const reservixID = veranstaltung.reservixID();
     if (
-      veranstaltung.reservixID() &&
+      reservixID &&
       (!veranstaltung.salesreport() ||
         !veranstaltung.salesreport()?.istVergangen())
     ) {
-      salesreportFor(
-        veranstaltung.reservixID(),
-        (salesreport?: Salesreport) => {
-          veranstaltung.associateSalesreport(salesreport);
-          store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
-            callback(err, veranstaltung);
-          });
-        }
-      );
+      console.log(`salesreport for : ${reservixID} ${Date.now()}`);
+      salesreportFor(reservixID, (salesreport?: Salesreport) => {
+        veranstaltung.associateSalesreport(salesreport);
+        store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
+          callback(err, veranstaltung);
+        });
+      });
     } else {
       callback(null, veranstaltung);
     }
@@ -117,8 +116,10 @@ function veranstaltungenForDisplay(
             icals,
             groupedVeranstaltungen,
             webcalURL:
-              conf.get('publicUrlPrefix').replace(/https|http/, 'webcal') +
-              '/ical/'
+              (conf.get('publicUrlPrefix') as string).replace(
+                /https|http/,
+                'webcal'
+              ) + '/ical/'
           });
         });
       }
@@ -150,9 +151,7 @@ function eventsBetween(
   res: express.Response,
   callback: Function
 ): void {
-  function asCalendarEvent(
-    veranstaltung: Veranstaltung
-  ): CalendarEvent {
+  function asCalendarEvent(veranstaltung: Veranstaltung): CalendarEvent {
     const urlSuffix = res.locals.accessrights.isOrgaTeam()
       ? '/allgemeines'
       : '/preview';
@@ -221,7 +220,7 @@ app.get('/new', (req, res, next) => {
         return next(err);
       }
       return res.render('edit/allgemeines', {
-        veranstaltung: new Veranstaltung({}),
+        veranstaltung: new Veranstaltung(),
         optionen,
         orte,
         Vertrag
@@ -308,12 +307,17 @@ app.get('/texte/:monat', (req, res, next) => {
 app.get('/eventsForCalendar', (req, res, next) => {
   const start = DatumUhrzeit.forISOString(req.query.start);
   const end = DatumUhrzeit.forISOString(req.query.end);
-  eventsBetween(start, end, res, (err1: Error | null, events: CalendarEvent[]) => {
-    if (err1) {
-      return next(err1);
+  eventsBetween(
+    start,
+    end,
+    res,
+    (err1: Error | null, events: CalendarEvent[]) => {
+      if (err1) {
+        return next(err1);
+      }
+      return res.end(JSON.stringify(events));
     }
-    return res.end(JSON.stringify(events));
-  });
+  );
 });
 
 app.post('/updateStaff', (req, res, next) => {

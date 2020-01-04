@@ -1,28 +1,47 @@
 import misc from '../../commons/misc';
 
-export default class Vertrag {
-  state: any;
+export type Sprache = 'Deutsch' | 'Englisch' | 'Regional';
+export type Vertragsart = 'Jazzclub' | 'Agentur/Künstler' | 'JazzClassix';
 
-  static arten() {
+export interface VertragRaw {
+  art: Vertragsart;
+  sprache: Sprache;
+  datei: string[];
+}
+
+export default class Vertrag {
+  state: VertragRaw;
+
+  static arten(): Vertragsart[] {
     return ['Jazzclub', 'Agentur/Künstler', 'JazzClassix'];
   }
 
-  constructor(object: any) {
-    this.state = object || {};
+  toJSON(): VertragRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    ['art', 'sprache'].forEach(field => {
-      this.state[field] = object[field];
-    });
+  constructor(object: VertragRaw | undefined) {
+    this.state = object || {
+      art: 'Jazzclub',
+      sprache: 'Deutsch',
+      datei: []
+    };
+    if (!this.state.datei) {
+      this.state.datei = [];
+    }
+  }
+
+  fillFromUI(object: VertragRaw): Vertrag {
+    this.state.art = object.art;
+    this.state.sprache = object.sprache;
     return this;
   }
 
-  art() {
-    return this.state.art || 'noch nicht gewählt';
+  art(): Vertragsart {
+    return this.state.art;
   }
 
-  updateDatei(datei: string) {
+  updateDatei(datei: string): boolean {
     const imagePushed = misc.pushImage(this.state.datei, datei);
     if (imagePushed) {
       this.state.datei = imagePushed;
@@ -31,15 +50,15 @@ export default class Vertrag {
     return false;
   }
 
-  removeDatei(datei: string) {
+  removeDatei(datei: string): void {
     this.state.datei = misc.dropImage(this.state.datei, datei);
   }
 
-  datei() {
-    return this.state.datei || [];
+  datei(): string[] {
+    return this.state.datei;
   }
 
-  sprache() {
-    return this.state.sprache || 'Deutsch';
+  sprache(): string {
+    return this.state.sprache;
   }
 }

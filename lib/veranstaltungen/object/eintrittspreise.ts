@@ -1,13 +1,45 @@
-import fieldHelpers from '../../commons/fieldHelpers';
+import { Preisprofil } from '../../optionen/optionValues';
+
+export interface EintrittspreiseRaw {
+  preisprofil: Preisprofil;
+  regulaer: number;
+  rabattErmaessigt: number;
+  rabattMitglied: number;
+  erwarteteBesucher: number;
+  zuschuss: number;
+  frei?: boolean;
+}
+
+export interface EintrittspreiseUI {
+  preisprofil: string;
+  erwarteteBesucher?: string;
+  zuschuss?: string;
+}
 
 export default class Eintrittspreise {
-  state: any;
+  state: EintrittspreiseRaw;
 
-  constructor(object: any) {
-    this.state = object;
+  toJSON(): EintrittspreiseRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
+  constructor(object: EintrittspreiseRaw | undefined) {
+    this.state = object || {
+      preisprofil: {
+        name: 'Freier Eintritt',
+        regulaer: 0,
+        rabattErmaessigt: 0,
+        rabattMitglied: 0
+      },
+      regulaer: 0,
+      rabattErmaessigt: 0,
+      rabattMitglied: 0,
+      erwarteteBesucher: 0,
+      zuschuss: 0
+    };
+  }
+
+  fillFromUI(object: EintrittspreiseUI): Eintrittspreise {
     if (object.preisprofil) {
       this.state.preisprofil = JSON.parse(object.preisprofil);
       if (this.state.preisprofil.name !== 'Individuell (Alt)') {
@@ -15,39 +47,32 @@ export default class Eintrittspreise {
         this.state.rabattErmaessigt = this.preisprofil().rabattErmaessigt;
         this.state.rabattMitglied = this.preisprofil().rabattMitglied;
       }
-      if (!this.frei()) {
-        ['erwarteteBesucher'].forEach(field => {
-          this.state[field] = fieldHelpers.parseNumberWithCurrentLocale(
-            object[field]
-          );
-        });
-      }
-      ['zuschuss'].forEach(field => {
-        this.state[field] = parseFloat(object[field]);
-      });
-      return this;
     }
+    this.state.erwarteteBesucher =
+      parseInt(object.erwarteteBesucher || '') || 0;
+    this.state.zuschuss = parseFloat(object.zuschuss || '') || 0;
+    return this;
   }
 
-  standardRabattErmaessigt() {
+  standardRabattErmaessigt(): number {
     return 2;
   }
 
-  standardRabattMitglied() {
+  standardRabattMitglied(): number {
     return 5;
   }
 
-  frei() {
+  frei(): boolean {
     return this.state.preisprofil
       ? this.preisprofil().regulaer === 0
-      : this.state.frei;
+      : !!this.state.frei;
   }
 
-  istKooperation() {
+  istKooperation(): boolean {
     return this.state.preisprofil && this.preisprofil().name === 'Kooperation';
   }
 
-  legacyPreisprofil() {
+  legacyPreisprofil(): Preisprofil {
     return this.state.frei
       ? {
           name: 'Freier Eintritt',
@@ -55,49 +80,47 @@ export default class Eintrittspreise {
           rabattErmaessigt: 0,
           rabattMitglied: 0
         }
-      : this.state.regulaer !== undefined // da stand ein preis drin aus der Zeit vor den Profilen
-      ? {
+      : {
           name: 'Individuell (Alt)',
           regulaer: this.state.regulaer,
           rabattErmaessigt: this.state.rabattErmaessigt,
           rabattMitglied: this.state.rabattMitglied
-        }
-      : {};
+        };
   }
 
-  preisprofil() {
+  preisprofil(): Preisprofil {
     return this.state.preisprofil || this.legacyPreisprofil();
   }
 
-  regulaer() {
-    return this.state.regulaer || 0;
+  regulaer(): number {
+    return this.state.regulaer;
   }
 
-  rabattErmaessigt() {
+  rabattErmaessigt(): number {
     return this.state.rabattErmaessigt || this.standardRabattErmaessigt();
   }
 
-  rabattMitglied() {
+  rabattMitglied(): number {
     return this.state.rabattMitglied || this.standardRabattMitglied();
   }
 
-  ermaessigt() {
+  ermaessigt(): number {
     return this.regulaer() - Math.abs(this.rabattErmaessigt());
   }
 
-  erwarteteBesucher() {
-    return this.state.erwarteteBesucher || 0;
+  erwarteteBesucher(): number {
+    return this.state.erwarteteBesucher;
   }
 
-  mitglied() {
+  mitglied(): number {
     return this.regulaer() - Math.abs(this.rabattMitglied());
   }
 
-  zuschuss() {
-    return this.state.zuschuss || 0;
+  zuschuss(): number {
+    return this.state.zuschuss;
   }
 
-  alsPressetext(kooperationspartner: string) {
+  alsPressetext(kooperationspartner: string): string {
     return this.istKooperation()
       ? `Gemäß Kooperationspartner (${kooperationspartner})`
       : this.frei()

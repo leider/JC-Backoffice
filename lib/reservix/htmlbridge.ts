@@ -13,7 +13,6 @@ const loginURL =
 const username = conf.get('reservix-username');
 import fieldHelpers from '../commons/fieldHelpers';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
-import optionenService from '../optionen/optionenService';
 
 const tablepositions = {
   datum: 0,
@@ -199,7 +198,7 @@ export function loadSalesreports(
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
-    $('#id_mitarbeiterpw').val(username);
+    $('#id_mitarbeiterpw').val(username as string);
     const inputs = prepareInputsForPost($('#login input'), $);
     return request.post(
       // @ts-ignore

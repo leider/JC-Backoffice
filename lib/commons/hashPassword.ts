@@ -13,6 +13,6 @@ export function hashPassword(password: string, givenSalt?: string): string {
   const salt = givenSalt || conf.get('salt') || '1234567890';
   /*eslint no-sync: 0 */
   return crypto
-    .pbkdf2Sync(password, salt, 100000, 512, 'sha512')
+    .pbkdf2Sync(password, salt as string, 100000, 512, 'sha512')
     .toString('hex');
 }

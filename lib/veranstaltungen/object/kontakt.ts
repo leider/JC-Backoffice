@@ -1,11 +1,40 @@
+export interface KontaktRaw {
+  name: string;
+  ansprechpartner: string;
+  telefon: string;
+  email: string;
+  adresse: string;
+}
+
+export interface KontaktUI {
+  auswahl: string;
+  name: string;
+  ansprechpartner: string;
+  telefon: string;
+  email: string;
+  adresse: string;
+}
+
 export default class Kontakt {
-  state: any;
-  constructor(object: any) {
-    this.state = object;
+  state: KontaktRaw;
+  auswahl = '';
+
+  toJSON(): KontaktRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    this.state.auswahl = object.auswahl;
+  constructor(object: KontaktRaw | undefined) {
+    this.state = object || {
+      name: '',
+      ansprechpartner: '',
+      telefon: '',
+      email: '',
+      adresse: ''
+    };
+  }
+
+  fillFromUI(object: KontaktUI): Kontakt {
+    this.auswahl = object.auswahl;
     this.state.name = object.name;
     this.state.ansprechpartner = object.ansprechpartner;
     this.state.telefon = object.telefon;
@@ -14,31 +43,27 @@ export default class Kontakt {
     return this;
   }
 
-  auswahl() {
-    return this.state.auswahl;
-  }
-
-  name() {
+  name(): string {
     return this.state.name;
   }
 
-  telefon() {
+  telefon(): string {
     return this.state.telefon;
   }
 
-  email() {
+  email(): string {
     return this.state.email;
   }
 
-  ansprechpartner() {
+  ansprechpartner(): string {
     return this.state.ansprechpartner;
   }
 
-  adresse() {
+  adresse(): string {
     return this.state.adresse;
   }
 
-  strasse() {
+  strasse(): string {
     if (this.adresse()) {
       const lines = this.adresse().split('\r\n');
       return lines[0] || '-';
@@ -46,7 +71,7 @@ export default class Kontakt {
     return '-';
   }
 
-  ort() {
+  ort(): string {
     if (this.adresse()) {
       const lines = this.adresse().split('\r\n');
       return lines[1] || '-';
@@ -54,14 +79,14 @@ export default class Kontakt {
     return '-';
   }
 
-  einzeiligeAdresse() {
+  einzeiligeAdresse(): string {
     if (this.adresse()) {
       return this.state.adresse.replace('\r\n', ', ');
     }
     return '-';
   }
 
-  adresseHTML() {
+  adresseHTML(): string {
     return this.state.adresse.replace('\r\n', '<br>');
   }
 }

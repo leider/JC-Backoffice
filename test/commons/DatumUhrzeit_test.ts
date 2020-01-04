@@ -1,4 +1,5 @@
-const expect = require('must-dist');
+/* eslint-disable no-unused-expressions*/
+import { expect } from 'chai';
 import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
 
 describe('DatumUhrzeit', () => {
@@ -49,7 +50,7 @@ describe('DatumUhrzeit', () => {
         DatumUhrzeit.forGermanString('01.03.2019')?.toLocalDateTimeString
       ).to.eql('01.03.2019, 00:00:00');
 
-      expect(DatumUhrzeit.forGermanString()).to.be(undefined);
+      expect(DatumUhrzeit.forGermanString()).to.be.null;
     });
 
     it('kann aus Reservix Strings erzeugt werden', () => {
@@ -219,11 +220,11 @@ describe('DatumUhrzeit', () => {
     const februar01 = DatumUhrzeit.forISOString('2019-02-01');
 
     it('kleiner', () => {
-      expect(januar01.istVor(februar01)).to.be(true);
+      expect(januar01.istVor(februar01)).to.be.true;
     });
 
     it('grösser', () => {
-      expect(februar01.istNach(januar01)).to.be(true);
+      expect(februar01.istNach(januar01)).to.be.true;
     });
 
     it('formatiert Monat Jahr kompakt', () => {
@@ -281,12 +282,10 @@ describe('DatumUhrzeit', () => {
     });
 
     it('findet gerade Monate', () => {
-      expect(DatumUhrzeit.forISOString('2020-04-30').istGeraderMonat).to.be(
-        true
-      );
-      expect(DatumUhrzeit.forISOString('2020-11-30').istGeraderMonat).to.be(
-        false
-      );
+      expect(DatumUhrzeit.forISOString('2020-04-30').istGeraderMonat).to.be
+        .true;
+      expect(DatumUhrzeit.forISOString('2020-11-30').istGeraderMonat).to.be
+        .false;
     });
   });
 

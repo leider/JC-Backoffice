@@ -24,7 +24,7 @@ export class SimpleConfigure {
     });
   }
 
-  get(property: string): string | number {
+  get(property: string): string | number | object {
     return this.storage[property];
   }
 

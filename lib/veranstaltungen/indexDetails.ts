@@ -419,7 +419,7 @@ export function addRoutesTo(app: express.Express): void {
         if (err) {
           return next(err);
         }
-        const veranstaltung = result || new Veranstaltung({});
+        const veranstaltung = result || new Veranstaltung();
         veranstaltung.fillFromUI(body);
         return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
           if (err1) {

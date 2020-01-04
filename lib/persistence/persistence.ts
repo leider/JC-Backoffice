@@ -16,6 +16,7 @@ let ourDB: mongodb.Db | null;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
 export default function(collectionName: string) {
+  let logOpenOnceOnly = 0;
   function logInfo(logMessage: string): void {
     if (collectionName === 'optionenstore') {
       scriptLogger.info(logMessage);
@@ -53,7 +54,10 @@ export default function(collectionName: string) {
 
   function performInDB(callback: Function): void {
     if (ourDBConnectionState === DBSTATE.OPEN) {
-      logInfo('connection is open');
+      if (logOpenOnceOnly === 0) {
+        logInfo('connection is open');
+        logOpenOnceOnly++;
+      }
       callback(null, ourDB);
     } else {
       logInfo(
@@ -139,13 +143,13 @@ export default function(collectionName: string) {
       });
     }
 
-    save(object: object & { id: string }, callback: Function): void {
+    save(object: object & { id?: string }, callback: Function): void {
       this.update(object, object.id, callback);
     }
 
     update(
-      object: object & { id: string },
-      storedId: string,
+      object: object & { id?: string },
+      storedId: string | undefined,
       callback: Function
     ): void {
       if (object.id === null || object.id === undefined) {
@@ -196,7 +200,7 @@ export default function(collectionName: string) {
     }
 
     saveAll(
-      objects: Array<object & { id: string }>,
+      objects: Array<object & { id?: string }>,
       outerCallback: Function
     ): void {
       async.each(

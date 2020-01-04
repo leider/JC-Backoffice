@@ -196,7 +196,7 @@ block scripts
         );
 
         setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
-        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport.nettoUmsatz()});
+        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport ? salesreport.nettoUmsatz(): 0});
       }
 
       [anzahlBesucher, zuschuss].forEach(function (field) {

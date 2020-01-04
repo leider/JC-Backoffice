@@ -108,7 +108,7 @@ export default class Misc {
     return R.filter(a => !!a, array || []);
   }
 
-  static pushImage(images: string | Array<string>, image: string): boolean {
+  static pushImage(images: string | Array<string>, image: string): string[] {
     let result: string[];
     if (typeof images === 'string') {
       result = [images];
@@ -117,9 +117,9 @@ export default class Misc {
     }
     if (result.indexOf(image) === -1) {
       result.push(image);
-      return true;
+      return result;
     }
-    return false;
+    return result;
   }
 
   static dropImage(images: string | Array<string>, image: string): string[] {

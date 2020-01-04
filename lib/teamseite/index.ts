@@ -9,11 +9,12 @@ import Veranstaltung from '../veranstaltungen/object/veranstaltung';
 import optionenservice from '../optionen/optionenService';
 
 import conf from '../commons/simpleConfigure';
+import { StaffType } from '../veranstaltungen/object/staff';
 
 const app: express.Express = misc.expressAppIn(__dirname);
 
 function addStaff(
-  sectionOfStaff: string,
+  sectionOfStaff: StaffType,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -24,8 +25,7 @@ function addStaff(
       if (err) {
         return next(err);
       }
-      // @ts-ignore
-      const section = veranstaltung.staff()[sectionOfStaff]();
+      const section = veranstaltung.staff().getStaffCollection(sectionOfStaff);
       section.push((req.user as User).id);
       return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
         if (err1) {
@@ -38,7 +38,7 @@ function addStaff(
 }
 
 function removeStaff(
-  sectionOfStaff: string,
+  sectionOfStaff: StaffType,
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -49,8 +49,7 @@ function removeStaff(
       if (err) {
         return next(err);
       }
-      // @ts-ignore
-      const section = veranstaltung.staff()[sectionOfStaff]();
+      const section = veranstaltung.staff().getStaffCollection(sectionOfStaff);
       const index = section.indexOf((req.user as User).id);
       section.splice(index, 1);
       return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
@@ -90,7 +89,7 @@ app.get('/', (req, res, next) => {
         users,
         icals,
         webcalURL:
-          conf.get('publicUrlPrefix').replace(/https|http/, 'webcal') + '/ical/'
+          (conf.get('publicUrlPrefix') as string).replace(/https|http/, 'webcal') + '/ical/'
       });
     }
   );

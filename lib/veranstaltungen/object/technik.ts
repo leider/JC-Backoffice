@@ -1,30 +1,55 @@
 import misc from '../../commons/misc';
 
+export interface TechnikRaw {
+  dateirider: string[];
+  technikAngebot1?: string;
+  backlineJazzclub: string[];
+  backlineRockshop: string[];
+  checked: boolean;
+  fluegel: boolean;
+}
+
+export interface TechnikUI {
+  dateirider?: string[];
+  technikAngebot1?: string;
+  backlineJazzclub: string | string[];
+  backlineRockshop: string | string[];
+  checked?: string;
+  fluegel?: string;
+}
+
 export default class Technik {
-  state: any;
-  constructor(object: any) {
-    this.state = object || {};
-    ['backlineJazzclub', 'backlineRockshop'].forEach(field => {
-      this.state[field] = object[field] || [];
-    });
+  state: TechnikRaw;
+
+  toJSON(): TechnikRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    ['rider', 'technikJazzclub', 'technikAngebot1'].forEach(field => {
-      this.state[field] = object[field] || this.state[field]; // keep old value if not delivered
-    });
-    ['backlineJazzclub', 'backlineRockshop'].forEach(field => {
-      if (object[field]) {
-        this.state[field] = misc.toArray(object[field]);
-      }
-    });
-    ['checked', 'fluegel'].forEach(field => {
-      this.state[field] = object[field] === 'on'; // handle undefined for checkbox
-    });
+  constructor(object: TechnikRaw | undefined) {
+    this.state = object || {
+      dateirider: [],
+      backlineJazzclub: [],
+      backlineRockshop: [],
+      checked: false,
+      fluegel: false
+    };
+    if (!this.state.dateirider) {
+      this.state.dateirider = [];
+    }
+  }
+
+  fillFromUI(object: TechnikUI): Technik {
+    this.state.dateirider = object.dateirider || this.state.dateirider;
+    this.state.technikAngebot1 =
+      object.technikAngebot1 || this.state.technikAngebot1;
+    this.state.backlineJazzclub = misc.toArray(object.backlineJazzclub);
+    this.state.backlineRockshop = misc.toArray(object.backlineRockshop);
+    this.state.checked = !!object.checked;
+    this.state.fluegel = !!object.fluegel;
     return this;
   }
 
-  updateDateirider(datei: string) {
+  updateDateirider(datei: string): boolean {
     const imagePushed = misc.pushImage(this.state.dateirider, datei);
     if (imagePushed) {
       this.state.dateirider = imagePushed;
@@ -33,35 +58,31 @@ export default class Technik {
     return false;
   }
 
-  removeDateirider(datei: string) {
+  removeDateirider(datei: string): void {
     this.state.dateirider = misc.dropImage(this.state.dateirider, datei);
   }
 
-  dateirider() {
-    return this.state.dateirider || [];
+  dateirider(): string[] {
+    return this.state.dateirider;
   }
 
-  backlineJazzclub() {
+  backlineJazzclub(): string[] {
     return this.state.backlineJazzclub;
   }
 
-  backlineRockshop() {
+  backlineRockshop(): string[] {
     return this.state.backlineRockshop;
   }
 
-  technikJazzclub() {
-    return this.state.technikJazzclub;
+  technikAngebot1(): string {
+    return this.state.technikAngebot1 || '';
   }
 
-  technikAngebot1() {
-    return this.state.technikAngebot1;
-  }
-
-  fluegel() {
+  fluegel(): boolean {
     return this.state.fluegel;
   }
 
-  checked() {
+  checked(): boolean {
     return this.state.checked;
   }
 }

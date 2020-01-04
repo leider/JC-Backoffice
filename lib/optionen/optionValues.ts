@@ -125,22 +125,25 @@ export default class OptionValues {
     return R.range(1, 16);
   }
 
-  agenturenForSelection() {
+  agenturenForSelection(): { name: string }[] {
     return [{ name: '[temporär]' }, { name: '[neu]' }].concat(this.agenturen);
   }
 
-  hotelsForSelection() {
+  hotelsForSelection(): { name: string }[] {
     return [{ name: '[temporär]' }, { name: '[neu]' }].concat(this.hotels);
   }
 
-  addOrUpdateKontakt(kontaktKey: 'agenturen' | 'hotels', kontakt: Kontakt) {
+  addOrUpdateKontakt(
+    kontaktKey: 'agenturen' | 'hotels',
+    kontakt: Kontakt
+  ): void {
     const ourCollection =
       kontaktKey === 'agenturen' ? this.agenturen : this.hotels;
-    if (kontakt.auswahl.match(/\[temporär\]/)) {
+    if (kontakt.auswahl.match(/\[temporär]/)) {
       delete kontakt.auswahl;
       return;
     }
-    if (kontakt.auswahl.match(/\[neu\]/)) {
+    if (kontakt.auswahl.match(/\[neu]/)) {
       delete kontakt.auswahl;
       ourCollection.push(kontakt);
       return;
@@ -155,13 +158,20 @@ export default class OptionValues {
     }
   }
 
-  updateHotelpreise(hotel: Kontakt, unterkunft: any) {
+  updateHotelpreise(
+    hotel: Kontakt,
+    unterkunft: {
+      einzelEUR: string;
+      doppelEUR: string;
+      suiteEUR: string;
+    }
+  ): void {
     if (!this.hotels.find(h => h.name === hotel.name)) {
       // kein Hotel gefunden
       return;
     }
     const existingPreise = this.hotelpreise.find(
-      (p: any) => p.name === hotel.name
+      (p: Hotelpreise) => p.name === hotel.name
     );
     if (existingPreise) {
       existingPreise.einzelEUR = fieldHelpers.parseNumberWithCurrentLocale(
@@ -187,7 +197,7 @@ export default class OptionValues {
     }
   }
 
-  updateBackline(backlineKey: 'Jazzclub' | 'Rockshop', backline: string[]) {
+  updateBackline(backlineKey: 'Jazzclub' | 'Rockshop', backline: string[]): void {
     const key =
       backlineKey === 'Jazzclub' ? 'backlineJazzclub' : 'backlineRockshop';
     this.updateCollection(key, backline);
@@ -196,7 +206,7 @@ export default class OptionValues {
   updateCollection(
     key: 'backlineJazzclub' | 'backlineRockshop' | 'artists',
     updatedCollection: string | string[]
-  ) {
+  ): void {
     let ourCollection: string[];
     switch (key) {
       case 'artists':

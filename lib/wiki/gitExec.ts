@@ -3,7 +3,7 @@ import fs from 'fs';
 
 import childProcess from 'child_process';
 import conf from '../commons/simpleConfigure';
-let workTree = conf.get('wikipath');
+let workTree = conf.get('wikipath') as string;
 
 let gitCommands: string[] = [];
 

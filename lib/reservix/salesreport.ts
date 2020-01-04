@@ -1,13 +1,13 @@
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
-type ReservixState = {
+export interface ReservixState {
   id: string;
-  anzahl: number;
-  brutto: number;
-  netto: number;
-  updated: Date;
-  datum: Date;
-};
+  anzahl?: number;
+  brutto?: number;
+  netto?: number;
+  updated?: Date;
+  datum?: Date;
+}
 
 export default class Salesreport {
   private now = new DatumUhrzeit(); // lebt nur kurz!
@@ -37,7 +37,7 @@ export default class Salesreport {
   }
 
   updated(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.state.updated);
+    return DatumUhrzeit.forJSDate(this.state.updated || new Date());
   }
 
   istVeraltet(): boolean {
@@ -51,7 +51,7 @@ export default class Salesreport {
   }
 
   startDatumUhrzeit(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.state.datum);
+    return DatumUhrzeit.forJSDate(this.state.datum || new Date());
   }
 
   istVergangen(): boolean {

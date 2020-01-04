@@ -12,7 +12,7 @@ type AdditionOptions = {
 
 export default class DatumUhrzeit {
   private locale: string;
-  private dateTime: DateTime;
+  private readonly dateTime: DateTime;
 
   constructor(dateTime?: DateTime) {
     this.locale = 'de-DE';
@@ -39,7 +39,7 @@ export default class DatumUhrzeit {
   static forGermanString(
     dateString?: string,
     timeString?: string
-  ): DatumUhrzeit | undefined {
+  ): DatumUhrzeit | null {
     if (dateString) {
       return new DatumUhrzeit(
         DateTime.fromFormat(
@@ -48,7 +48,7 @@ export default class DatumUhrzeit {
         )
       );
     }
-    return undefined;
+    return null;
   }
 
   static forGermanStringOrNow(

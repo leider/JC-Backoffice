@@ -1,60 +1,85 @@
 import misc from '../../commons/misc';
-import fieldHelpers from '../../commons/fieldHelpers';
+
+export interface ArtistRaw {
+  bandname: string;
+  name: string[];
+  numMusiker: number;
+  numCrew: number;
+  isBawue: boolean;
+  isAusland: boolean;
+  brauchtHotel: boolean;
+}
+
+export interface ArtistUI {
+  bandname?: string;
+  name?: string[];
+  numMusiker?: string;
+  numCrew?: string;
+  isBawue?: string;
+  isAusland?: string;
+  brauchtHotel?: string;
+}
 
 export default class Artist {
-  state!: any;
+  state: ArtistRaw;
 
-  constructor(object: any) {
-    this.state = object || {};
+  toJSON(): ArtistRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    ['bandname'].forEach(field => {
-      this.state[field] = object[field];
-    });
-    ['name'].forEach(field => {
-      this.state[field] = misc.toArray(object[field]);
-    });
-    ['numMusiker', 'numCrew'].forEach(field => {
-      this.state[field] = fieldHelpers.parseNumberWithCurrentLocale(
-        object[field]
-      );
-    });
-    ['isBawue', 'isAusland', 'brauchtHotel'].forEach(field => {
-      this.state[field] = !!object[field];
-    });
+  constructor(object: ArtistRaw | undefined) {
+    this.state = object || {
+      bandname: '',
+      name: [],
+      numMusiker: 1,
+      numCrew: 0,
+      isBawue: false,
+      isAusland: false,
+      brauchtHotel: false
+    };
+    this.state.name = misc.toArray(this.state.name); // legacy, was text before
+  }
+
+  fillFromUI(object: ArtistUI): Artist {
+    this.state.bandname = object.bandname || '';
+    this.state.name = misc.toArray(object.name);
+    this.state.numCrew = parseFloat(object.numCrew || '') || 0;
+    this.state.numMusiker = parseFloat(object.numMusiker || '') || 0;
+    this.state.isAusland = !!object.isAusland;
+    this.state.isBawue = !!object.isBawue;
+    this.state.brauchtHotel = !!object.brauchtHotel;
     return this;
   }
 
-  isAusland() {
+  isAusland(): boolean {
     return this.state.isAusland;
   }
 
-  isBawue() {
+  isBawue(): boolean {
     return this.state.isBawue;
   }
 
-  brauchtHotel() {
-    return !!this.state.brauchtHotel;
+  brauchtHotel(): boolean {
+    return this.state.brauchtHotel;
   }
 
-  bandname() {
+  bandname(): string {
     return this.state.bandname;
   }
 
-  name() {
-    return misc.toArray(this.state.name); // legacy, was text before
+  name(): string[] {
+    return this.state.name;
   }
 
-  numMusiker() {
-    return this.state.numMusiker || 1;
+  numMusiker(): number {
+    return this.state.numMusiker;
   }
 
-  numCrew() {
+  numCrew(): number {
     return this.state.numCrew || 0;
   }
 
-  numForCatering() {
+  numForCatering(): number {
     return this.numMusiker() + this.numCrew();
   }
 }

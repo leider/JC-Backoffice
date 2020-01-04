@@ -1,48 +1,147 @@
+/*eslint no-underscore-dangle: 0 */
 import config from '../../commons/simpleConfigure';
 import fieldHelpers from '../../commons/fieldHelpers';
 import Renderer from '../../commons/renderer';
 import DatumUhrzeit from '../../commons/DatumUhrzeit';
 
-import Artist from './artist';
-import Eintrittspreise from './eintrittspreise';
-import Kasse from './kasse';
-import Kontakt from './kontakt';
-import Kopf from './kopf';
-import Kosten from './kosten';
-import Presse from './presse';
-import Staff from './staff';
-import Technik from './technik';
-import Unterkunft from './unterkunft';
-import Vertrag from './vertrag';
-import Salesreport from '../../reservix/salesreport';
+import Artist, { ArtistRaw, ArtistUI } from './artist';
+import Eintrittspreise, {
+  EintrittspreiseRaw,
+  EintrittspreiseUI
+} from './eintrittspreise';
+import Kasse, { KasseRaw, KasseUI } from './kasse';
+import Kontakt, { KontaktRaw, KontaktUI } from './kontakt';
+import Kopf, { KopfRaw, KopfUI } from './kopf';
+import Kosten, { KostenRaw, KostenUI } from './kosten';
+import Presse, { PresseRaw, PresseUI } from './presse';
+import Staff, { StaffRaw, StaffUI } from './staff';
+import Technik, { TechnikRaw, TechnikUI } from './technik';
+import Unterkunft, { UnterkunftRaw, UnterkunftUI } from './unterkunft';
+import Vertrag, { VertragRaw } from './vertrag';
+import Salesreport, { ReservixState } from '../../reservix/salesreport';
+import R from 'ramda';
+
+interface VeranstaltungRaw {
+  id?: string;
+  startDate: Date;
+  endDate: Date;
+  url: string;
+  reservixID?: string;
+
+  agentur?: KontaktRaw;
+  artist?: ArtistRaw;
+  eintrittspreise?: EintrittspreiseRaw;
+  hotel?: KontaktRaw;
+  kasse?: KasseRaw;
+  kopf: KopfRaw;
+  kosten?: KostenRaw;
+  presse?: PresseRaw;
+  staff?: StaffRaw;
+  technik?: TechnikRaw;
+  unterkunft?: UnterkunftRaw;
+  vertrag?: VertragRaw;
+  salesrep?: ReservixState;
+}
+
+interface VeranstaltungUI {
+  id?: string;
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  url?: string;
+  reservixID?: string;
+
+  agentur?: KontaktUI;
+  artist?: ArtistUI;
+  eintrittspreise?: EintrittspreiseUI;
+  hotel?: KontaktUI;
+  kasse?: KasseUI;
+  kopf?: KopfUI;
+  kosten?: KostenUI;
+  presse?: PresseUI;
+  staff?: StaffUI;
+  technik?: TechnikUI;
+  unterkunft?: UnterkunftUI;
+  vertrag?: VertragRaw;
+}
 
 export default class Veranstaltung {
-  state: { [index: string]: any };
+  state: VeranstaltungRaw;
 
-  constructor(object: any) {
-    this.state = object ? object : {};
-    [
-      'agentur',
-      'artist',
-      'eintrittspreise',
-      'hotel',
-      'kasse',
-      'kopf',
-      'kosten',
-      'presse',
-      'staff',
-      'technik',
-      'unterkunft',
-      'vertrag',
-      'salesrep'
-    ].forEach(field => {
-      this.state[field] = this.state[field] || {};
-    });
+  static fromJSON(object: VeranstaltungRaw): Veranstaltung {
+    return new Veranstaltung(object);
   }
 
-  fillFromUI(object: any) {
+  toJSON(): VeranstaltungRaw {
+    if (this.state.agentur) {
+      this.state.agentur = this.agentur().toJSON();
+    }
+    if (this.state.artist) {
+      this.state.artist = this.artist().toJSON();
+    }
+    if (this.state.eintrittspreise) {
+      this.state.eintrittspreise = this.eintrittspreise().toJSON();
+    }
+    if (this.state.hotel) {
+      this.state.hotel = this.hotel().toJSON();
+    }
+    if (this.state.kasse) {
+      this.state.kasse = this.kasse().toJSON();
+    }
+    this.state.kopf = this.kopf().toJSON();
+    if (this.state.kosten) {
+      this.state.kosten = this.kosten().toJSON();
+    }
+    if (this.state.presse) {
+      this.state.presse = this.presse().toJSON();
+    }
+    if (this.state.staff) {
+      this.state.staff = this.staff().toJSON();
+    }
+    if (this.state.technik) {
+      this.state.technik = this.technik().toJSON();
+    }
+    if (this.state.unterkunft) {
+      this.state.unterkunft = this.unterkunft().toJSON();
+    }
+    if (this.state.vertrag) {
+      this.state.vertrag = this.vertrag().toJSON();
+    }
+    const salesreport1 = this.salesreport();
+    if (salesreport1 !== null) {
+      this.state.salesrep = salesreport1.state;
+    }
+    return this.state;
+  }
+
+  constructor(object?: VeranstaltungRaw) {
+    this.state = object
+      ? object
+      : {
+          startDate: new Date(),
+          endDate: new Date(),
+          url: '',
+
+          kopf: {
+            beschreibung: '',
+            eventTyp: '',
+            flaeche: '',
+            kooperation: '_',
+            ort: 'Jubez',
+            titel: '',
+            pressename: '',
+            presseIn: '',
+            genre: '',
+            confirmed: false,
+            rechnungAnKooperation: false
+          }
+        };
+  }
+
+  fillFromUI(object: VeranstaltungUI): Veranstaltung {
     if (!object.kopf && !object.id) {
-      return;
+      return this;
     }
 
     if (object.id) {
@@ -66,32 +165,48 @@ export default class Veranstaltung {
           object.url || this.state.startDate.toISOString() + object.kopf.titel;
       }
     }
-
-    [
-      'agentur',
-      'artist',
-      'eintrittspreise',
-      'hotel',
-      'kasse',
-      'kopf',
-      'kosten',
-      'presse',
-      'staff',
-      'technik',
-      'unterkunft',
-      'vertrag'
-    ].forEach(field => {
-      if (object[field]) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        this[field]().fillFromUI(object[field]);
-      }
-    });
+    if (object.agentur) {
+      this.state.agentur = this.agentur().fillFromUI(object.agentur).toJSON();
+    }
+    if (object.artist) {
+      this.state.artist = this.artist().fillFromUI(object.artist).toJSON();
+    }
+    if (object.eintrittspreise) {
+      this.state.eintrittspreise = this.eintrittspreise().fillFromUI(object.eintrittspreise).toJSON();
+    }
+    if (object.hotel) {
+      this.state.hotel = this.hotel().fillFromUI(object.hotel).toJSON();
+    }
+    if (object.kasse) {
+      this.state.kasse = this.kasse().fillFromUI(object.kasse).toJSON();
+    }
+    if (object.kopf) {
+      this.kopf().fillFromUI(object.kopf);
+    }
+    if (object.kosten) {
+      this.state.kosten = this.kosten().fillFromUI(object.kosten).toJSON();
+    }
+    if (object.presse) {
+      this.state.presse = this.presse().fillFromUI(object.presse).toJSON();
+    }
+    if (object.staff) {
+      this.state.staff = this.staff().fillFromUI(object.staff).toJSON();
+    }
+    if (object.technik) {
+      this.state.technik = this.technik().fillFromUI(object.technik).toJSON();
+    }
+    if (object.unterkunft) {
+      this.state.unterkunft = this.unterkunft().fillFromUI(object.unterkunft).toJSON();
+    }
+    if (object.vertrag) {
+      this.state.vertrag = this.vertrag().fillFromUI(object.vertrag).toJSON();
+    }
     return this;
   }
 
-  reset() {
-    /*eslint no-underscore-dangle: 0 */
+  reset(): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
     delete this.state._id;
     this.state.id = this.state.id + 'copy';
     this.state.url = this.state.url + 'copy';
@@ -99,111 +214,122 @@ export default class Veranstaltung {
     delete this.state.endDate;
     delete this.state.reservixID;
     delete this.state.salesrep;
-    delete this.state.staff.techniker;
-    delete this.state.staff.technikerV;
-    delete this.state.staff.kasse;
-    delete this.state.staff.kasseV;
-    delete this.state.staff.mod;
-    delete this.state.staff.merchandise;
+    const staff1 = this.state.staff;
+    if (staff1) {
+      delete staff1.techniker;
+      delete staff1.technikerV;
+      delete staff1.kasse;
+      delete staff1.kasseV;
+      delete staff1.mod;
+      delete staff1.merchandise;
+    }
   }
 
-  associateSalesreport(salesreport?: Salesreport) {
+  associateSalesreport(salesreport?: Salesreport): void {
     if (salesreport) {
       this.state.salesrep = salesreport.state;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       delete this.state.salesrep._id;
     }
   }
 
-  fullyQualifiedUrl() {
+  fullyQualifiedUrl(): string {
     return '/veranstaltungen/' + encodeURIComponent(this.url());
   }
 
-  fullyQualifiedUrlForVertrag() {
+  fullyQualifiedUrlForVertrag(): string {
     return '/vertrag/' + encodeURIComponent(this.url());
   }
 
   // subobjects
 
-  agentur() {
-    return new Kontakt(this.state.agentur);
+  undefinedOrValue<T>(value?: T): T | undefined {
+    return value && !R.isEmpty(value) ? value : undefined;
   }
 
-  artist() {
-    return new Artist(this.state.artist);
+  agentur(): Kontakt {
+    return new Kontakt(this.undefinedOrValue(this.state.agentur));
   }
 
-  eintrittspreise() {
-    return new Eintrittspreise(this.state.eintrittspreise);
+  artist(): Artist {
+    return new Artist(this.undefinedOrValue(this.state.artist));
   }
 
-  hotel() {
+  eintrittspreise(): Eintrittspreise {
+    return new Eintrittspreise(
+      this.undefinedOrValue(this.state.eintrittspreise)
+    );
+  }
+
+  hotel(): Kontakt {
     return new Kontakt(this.state.hotel);
   }
 
-  kasse() {
-    return new Kasse(this.state.kasse);
+  kasse(): Kasse {
+    return new Kasse(this.undefinedOrValue(this.state.kasse));
   }
 
-  kopf() {
+  kopf(): Kopf {
     return new Kopf(this.state.kopf);
   }
 
-  kosten() {
-    return new Kosten(this.state.kosten);
+  kosten(): Kosten {
+    return new Kosten(this.undefinedOrValue(this.state.kosten));
   }
 
-  presse() {
-    return new Presse(this.state.presse);
+  presse(): Presse {
+    return new Presse(this.undefinedOrValue(this.state.presse));
   }
 
-  salesreport() {
+  salesreport(): Salesreport | null {
     if (this.state.salesrep) {
       return new Salesreport(this.state.salesrep);
     }
     return null;
   }
 
-  staff() {
-    return new Staff(this.state.staff);
+  staff(): Staff {
+    return new Staff(this.undefinedOrValue(this.state.staff));
   }
 
-  technik() {
-    return new Technik(this.state.technik);
+  technik(): Technik {
+    return new Technik(this.undefinedOrValue(this.state.technik));
   }
 
-  unterkunft() {
+  unterkunft(): Unterkunft {
     return new Unterkunft(
-      this.state.unterkunft,
+      this.undefinedOrValue(this.state.unterkunft),
       this.startDatumUhrzeit(),
       this.artist().name()
     );
   }
 
-  vertrag() {
-    return new Vertrag(this.state.vertrag);
+  vertrag(): Vertrag {
+    return new Vertrag(this.undefinedOrValue(this.state.vertrag));
   }
 
   // end subobjects
 
-  id() {
-    return this.state.id;
+  id(): string {
+    return this.state.id || '';
   }
 
-  url() {
-    return this.state.url || '';
+  url(): string {
+    return this.state.url;
   }
 
-  reservixID() {
+  reservixID(): string | undefined {
     return this.state.reservixID;
   }
 
-  startDate() {
+  startDate(): Date {
     return (
       this.state.startDate || new DatumUhrzeit().setUhrzeit(20, 0).toJSDate
     );
   }
 
-  endDate() {
+  endDate(): Date {
     return (
       this.state.endDate ||
       this.startDatumUhrzeit().plus({ stunden: 3 }).toJSDate
@@ -212,7 +338,7 @@ export default class Veranstaltung {
 
   // Money - GEMA - Reservix
 
-  kostenGesamtEUR() {
+  kostenGesamtEUR(): number {
     return (
       this.kosten().totalEUR() +
       this.unterkunft().kostenTotalEUR() +
@@ -220,83 +346,83 @@ export default class Veranstaltung {
     );
   }
 
-  einnahmenGesamtEUR() {
+  einnahmenGesamtEUR(): number {
     return (
-      this.salesreport()?.nettoUmsatz() + this.kasse().einnahmeTicketsEUR()
+      this.salesreport()?.nettoUmsatz() || 0 + this.kasse().einnahmeTicketsEUR()
     );
   }
 
-  dealAbsolutEUR() {
+  dealAbsolutEUR(): number {
     return Math.max(
       this.bruttoUeberschussEUR() * this.kosten().dealAlsFaktor(),
       0
     );
   }
 
-  bruttoUeberschussEUR() {
+  bruttoUeberschussEUR(): number {
     return this.einnahmenGesamtEUR() - this.kostenGesamtEUR();
   }
 
-  dealUeberschussTotal() {
+  dealUeberschussTotal(): number {
     return this.bruttoUeberschussEUR() - this.dealAbsolutEUR();
   }
 
   // Display Dates and Times
 
-  month() {
+  month(): number {
     return this.startDatumUhrzeit().monat;
   }
 
-  year() {
+  year(): number {
     return this.startDatumUhrzeit().jahr;
   }
 
-  datumForDisplayShort() {
+  datumForDisplayShort(): string {
     return this.startDatumUhrzeit().lesbareKurzform;
   }
 
-  datumForDisplay() {
+  datumForDisplay(): string {
     return this.startDatumUhrzeit().tagMonatJahrLang;
   }
 
-  datumForDisplayMitKW() {
+  datumForDisplayMitKW(): string {
     return this.startDatumUhrzeit().tagMonatJahrLangMitKW;
   }
 
-  startDatumUhrzeit() {
+  startDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.startDate());
   }
 
-  getinDatumUhrzeit() {
+  getinDatumUhrzeit(): DatumUhrzeit {
     return this.startDatumUhrzeit().minus({ stunden: 2 });
   }
 
-  minimalStartForEdit() {
+  minimalStartForEdit(): DatumUhrzeit {
     return this.startDatumUhrzeit().istVor(new DatumUhrzeit())
       ? this.startDatumUhrzeit()
       : new DatumUhrzeit();
   }
 
-  endDatumUhrzeit() {
+  endDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.endDate());
   }
 
-  istVergangen() {
+  istVergangen(): boolean {
     return this.startDatumUhrzeit().istVor(new DatumUhrzeit());
   }
 
   // utility
-  presseTemplate() {
+  presseTemplate(): string {
     return `### ${this.kopf().titel()}
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf().presseIn()}
 **Eintritt:** ${this.eintrittspreise().alsPressetext(
-      this.kopf().isKooperation() ? this.kopf().kooperation() : null
+      this.kopf().isKooperation() ? this.kopf().kooperation() : ''
     )}
 
 `;
   }
 
-  presseTemplateInternal() {
+  presseTemplateInternal(): string {
     // für interne Mails
     return `### [${this.kopf().titel()}](${config.get(
       'publicUrlPrefix'
@@ -306,7 +432,7 @@ export default class Veranstaltung {
 `;
   }
 
-  presseTextHTML(optionalText: string, optionalJazzclubURL: string) {
+  presseTextHTML(optionalText: string, optionalJazzclubURL: string): string {
     return Renderer.render(
       this.presseTemplate() +
         (optionalText || this.presse().text()) +
@@ -315,11 +441,11 @@ export default class Veranstaltung {
     );
   }
 
-  renderedPresseText() {
+  renderedPresseText(): string {
     return Renderer.render(this.presse().text());
   }
 
-  presseTextForMail() {
+  presseTextForMail(): string {
     return (
       this.presseTemplate() +
       this.presse().text() +
@@ -327,67 +453,68 @@ export default class Veranstaltung {
       (this.presse().firstImage() ? this.presse().imageURL() : '') +
       '\n\n' +
       (this.presse().jazzclubURL()
-        ? '**URL:** ' + this.presse().fullyQualifiedJazzclubURL()
+        ? `**URL:** ${this.presse().fullyQualifiedJazzclubURL()}`
         : '')
     );
   }
 
-  description() {
-    return this.datumForDisplayMitKW() + ' <b>' + this.kopf().titel() + '</b>';
+  description(): string {
+    return `${this.datumForDisplayMitKW()} <b>${this.kopf().titel()}</b>`;
   }
 
   // GEMA
-  preisAusweisGema() {
+  preisAusweisGema(): string {
     if (this.eintrittspreise().frei() || this.kooperationGema()) {
       return '-';
     }
-    return (
-      fieldHelpers.formatNumberTwoDigits(this.eintrittspreise().regulaer()) +
-      ' €'
-    );
+    return `${fieldHelpers.formatNumberTwoDigits(
+      this.eintrittspreise().regulaer()
+    )} €`;
   }
 
-  kooperationGema() {
+  kooperationGema(): boolean {
     return this.kopf().rechnungAnKooperation();
   }
 
-  einnahmenEintrittEUR() {
+  einnahmenEintrittEUR(): number {
     return (
-      this.kasse().einnahmeTicketsEUR() + this.salesreport()?.bruttoUmsatz()
+      this.kasse().einnahmeTicketsEUR() +
+      (this.salesreport()?.bruttoUmsatz() || 0)
     );
   }
 
-  eintrittGema() {
+  eintrittGema(): string {
     if (this.eintrittspreise().frei() || this.kooperationGema()) {
       return '-';
     }
-    return (
-      fieldHelpers.formatNumberTwoDigits(this.einnahmenEintrittEUR()) + ' €'
-    );
+    return `${fieldHelpers.formatNumberTwoDigits(
+      this.einnahmenEintrittEUR()
+    )} €`;
   }
 
-  anzahlBesucher() {
+  anzahlBesucher(): number {
     return (
-      this.kasse().anzahlBesucherAK() + this.salesreport()?.anzahlRegulaer()
+      this.kasse().anzahlBesucherAK() +
+      (this.salesreport()?.anzahlRegulaer() || 0)
     );
   }
 
   // iCal
-  tooltipInfos() {
+  tooltipInfos(): string {
     return this.kopf().ort() + this.staff().tooltipInfos();
   }
 
   // Mailsend check
-  isSendable() {
+  isSendable(): boolean {
     return this.presse().checked() && this.kopf().confirmed();
   }
 
-  kasseFehlt() {
+  kasseFehlt(): boolean {
     return this.staff().kasseFehlt() && this.kopf().confirmed();
   }
 
   // CSV Export
-  toCSV() {
+  toCSV(): string {
     return `${this.kopf().titel()};${this.kopf().eventTyp()};${
       this.startDatumUhrzeit().fuerCsvExport
     }`;

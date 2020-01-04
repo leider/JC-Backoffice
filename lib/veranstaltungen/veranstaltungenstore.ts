@@ -8,24 +8,28 @@ const persistence = pers('veranstaltungenstore');
 import Veranstaltung from './object/veranstaltung';
 import DatumUhrzeit from '../commons/DatumUhrzeit';
 
-function toVeranstaltung(callback: Function, err: Error | null, jsobject: any) {
-  return misc.toObject(Veranstaltung, callback, err, jsobject);
+function toVeranstaltung(
+  callback: Function,
+  err: Error | null,
+  jsobject: object
+): void {
+  return misc.toObject2(Veranstaltung, callback, err, jsobject);
 }
 
 function toVeranstaltungenList(
   callback: Function,
   err: Error | null,
-  jsobjects: any
-) {
-  return misc.toObjectList(Veranstaltung, callback, err, jsobjects);
+  jsobjects: object[]
+): void {
+  return misc.toObjectList2(Veranstaltung, callback, err, jsobjects);
 }
 
 function byDateRange(
   rangeFrom: DatumUhrzeit,
   rangeTo: DatumUhrzeit,
-  sortOrder: any,
+  sortOrder: object,
   callback: Function
-) {
+): void {
   persistence.listByField(
     {
       $and: [
@@ -42,7 +46,7 @@ function byDateRangeInAscendingOrder(
   rangeFrom: DatumUhrzeit,
   rangeTo: DatumUhrzeit,
   callback: Function
-) {
+): void {
   byDateRange(rangeFrom, rangeTo, { startDate: 1 }, callback);
 }
 
@@ -50,12 +54,14 @@ function byDateRangeInDescendingOrder(
   rangeFrom: DatumUhrzeit,
   rangeTo: DatumUhrzeit,
   callback: Function
-) {
+): void {
   byDateRange(rangeFrom, rangeTo, { startDate: -1 }, callback);
 }
 
 export default {
-  zukuenftigeMitGestern: function zukuenftigeMitGestern(callback: Function) {
+  zukuenftigeMitGestern: function zukuenftigeMitGestern(
+    callback: Function
+  ): void {
     const now = new DatumUhrzeit();
     byDateRangeInAscendingOrder(
       now.minus({ tage: 1 }),
@@ -64,17 +70,17 @@ export default {
     );
   },
 
-  zukuenftige: function zukuenftige(callback: Function) {
+  zukuenftige: function zukuenftige(callback: Function): void {
     const now = new DatumUhrzeit();
     byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }), callback);
   },
 
-  vergangene: function vergangene(callback: Function) {
+  vergangene: function vergangene(callback: Function): void {
     const now = new DatumUhrzeit();
     byDateRangeInDescendingOrder(now.minus({ jahre: 100 }), now, callback);
   },
 
-  alle: function alle(callback: Function) {
+  alle: function alle(callback: Function): void {
     const now = new DatumUhrzeit();
     byDateRangeInAscendingOrder(
       now.minus({ jahre: 20 }),
@@ -85,29 +91,31 @@ export default {
 
   byDateRangeInAscendingOrder,
 
-  getVeranstaltung: function getVeranstaltung(url: string, callback: Function) {
+  getVeranstaltung: function getVeranstaltung(
+    url: string,
+    callback: Function
+  ): void {
     persistence.getByField({ url }, R.partial(toVeranstaltung, [callback]));
   },
 
   getVeranstaltungForId: function getVeranstaltungForId(
     id: string,
     callback: Function
-  ) {
+  ): void {
     persistence.getById(id, R.partial(toVeranstaltung, [callback]));
   },
 
   saveVeranstaltung: function saveVeranstaltung(
     veranstaltung: Veranstaltung,
     callback: Function
-  ) {
-    // @ts-ignore
-    persistence.save(veranstaltung.state, callback);
+  ): void {
+    persistence.save(veranstaltung.toJSON(), callback);
   },
 
   deleteVeranstaltung: function removeVeranstaltung(
     url: string,
     callback: Function
-  ) {
+  ): void {
     persistence.removeByUrl(url, (err: Error | null) => {
       logger.info('Veranstaltung removed:' + JSON.stringify(url));
       callback(err);

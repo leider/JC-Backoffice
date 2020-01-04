@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase, camelcase */
 module.exports = function(grunt) {
-  /*eslint camelcase: 0*/
-
   // filesets for uglify
   const files_de = {
     'public/clientscripts/global.js': [
@@ -56,7 +55,14 @@ module.exports = function(grunt) {
         'public/images',
         'public/stylesheets'
       ],
-      compiledTypescript: ['lib/**/*.js', 'test/**/*.js', 'start.js', 'app.js', 'configure.js', 'initWinston.js'],
+      compiledTypescript: [
+        'lib/**/*.js',
+        'test/**/*.js',
+        'start.js',
+        'app.js',
+        'configure.js',
+        'initWinston.js'
+      ],
       options: { force: true }
     },
     copy: {

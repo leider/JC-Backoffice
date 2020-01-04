@@ -1,6 +1,6 @@
 import store from './optionenstore';
 import Orte from './orte';
-import OptionValues, { Hotelpreise } from './optionValues';
+import OptionValues, { Hotelpreise, Kontakt } from './optionValues';
 
 function kontaktForAuswahl(
   auswahl: string,
@@ -15,7 +15,7 @@ function kontaktForAuswahl(
       kontaktTyp === 'agenturen' ? optionen.agenturen : optionen.hotels;
     return callback(
       null,
-      ourCollection.find((kontakt: any) => kontakt.name === auswahl)
+      ourCollection.find((kontakt: Kontakt) => kontakt.name === auswahl)
     );
   });
 }
@@ -92,7 +92,7 @@ export default {
       hotelpreise: body.hotelpreise,
       kopf: body.kopf
     };
-    optionenUndOrte((err: Error | null, optionen: any, orte: Orte) => {
+    optionenUndOrte((err: Error | null, optionen: OptionValues, orte: Orte) => {
       if (err) {
         return callback(err);
       }

@@ -1,86 +1,126 @@
+import R from 'ramda';
+
 import Renderer from '../../commons/renderer';
 
+export interface KopfRaw {
+  beschreibung: string;
+  eventTyp: string;
+  flaeche: string;
+  kooperation: string;
+  ort: string;
+  titel: string;
+  pressename: string;
+  presseIn: string;
+  genre: string;
+  confirmed: boolean;
+  rechnungAnKooperation: boolean;
+}
+
+export interface KopfUI {
+  beschreibung?: string;
+  eventTyp?: string;
+  flaeche?: string;
+  kooperation?: string;
+  ort?: string;
+  titel?: string;
+  pressename?: string;
+  presseIn?: string;
+  genre?: string;
+  confirmed?: string;
+  rechnungAnKooperation?: string;
+}
+
 export default class Kopf {
-  state: any;
-  constructor(object: any) {
-    this.state = object || {};
+  state: KopfRaw;
+
+  toJSON(): KopfRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    [
-      'beschreibung',
-      'eventTyp',
-      'flaeche',
-      'kooperation',
-      'ort',
-      'titel',
-      'verantwortlicher',
-      'pressename',
-      'presseIn',
-      'genre'
-    ].forEach(field => {
-      this.state[field] = object[field] || this.state[field];
-    });
-    this.state.confirmed = object.confirmed === 'on';
-    this.state.rechnungAnKooperation = object.rechnungAnKooperation === 'on';
+  constructor(object: KopfRaw) {
+    this.state = R.isEmpty(object)
+      ? {
+          beschreibung: '',
+          eventTyp: '',
+          flaeche: '',
+          kooperation: '_',
+          ort: 'Jubez',
+          titel: '',
+          pressename: '',
+          presseIn: '',
+          genre: '',
+          confirmed: false,
+          rechnungAnKooperation: false
+        }
+      : object;
+  }
+
+  fillFromUI(object: KopfUI): Kopf {
+    this.state.beschreibung = object.beschreibung || this.state.beschreibung;
+    this.state.eventTyp = object.eventTyp || this.state.eventTyp;
+    this.state.flaeche = object.flaeche || this.state.flaeche;
+    this.state.kooperation = object.kooperation || this.state.kooperation;
+    this.state.ort = object.ort || this.state.ort;
+    this.state.titel = object.titel || this.state.titel;
+    this.state.pressename = object.pressename || this.state.pressename;
+    this.state.presseIn = object.presseIn || this.state.presseIn;
+    this.state.genre = object.genre || this.state.genre;
+    this.state.confirmed = !!object.confirmed;
+    this.state.rechnungAnKooperation = !!object.rechnungAnKooperation;
     return this;
   }
 
-  beschreibung() {
+  beschreibung(): string {
     return this.state.beschreibung;
   }
 
-  beschreibungHTML() {
+  beschreibungHTML(): string {
     return Renderer.render(this.beschreibung());
   }
 
-  confirmed() {
-    return this.state.confirmed || this.state.confirmed === undefined;
+  confirmed(): boolean {
+    return this.state.confirmed;
   }
 
-  eventTyp() {
+  eventTyp(): string {
     return this.state.eventTyp;
   }
 
-  genre() {
+  genre(): string {
     return this.state.genre;
   }
 
-  kooperation() {
+  kooperation(): string {
     return this.state.kooperation || '_';
   }
 
-  isKooperation() {
-    return !!this.kooperation && this.kooperation() !== '_';
+  isKooperation(): boolean {
+    return !!this.kooperation() && this.kooperation() !== '_';
   }
 
-  rechnungAnKooperation() {
-    return this.state.rechnungAnKooperation === undefined
+  rechnungAnKooperation(): boolean {
+    return !this.state.rechnungAnKooperation
       ? this.isKooperation()
       : this.state.rechnungAnKooperation;
   }
 
-  ort() {
-    return this.state.ort || 'Jubez';
+  ort(): string {
+    return this.state.ort;
   }
 
-  flaeche() {
-    return this.state.flaeche || 0;
+  flaeche(): string {
+    return this.state.flaeche;
   }
 
-  pressename() {
+  pressename(): string {
     return this.state.pressename || this.ort();
   }
 
-  presseIn() {
+  presseIn(): string {
     return this.state.presseIn || this.pressename();
   }
 
-  titel() {
+  titel(): string {
     return this.state.titel;
-  }
-
-  verantwortlicher() {
-    return this.state.verantwortlicher || 'NB';
   }
 }

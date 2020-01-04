@@ -1,4 +1,4 @@
-const expect = require('must-dist');
+import { expect } from 'chai';
 
 import users from '../../lib/users/users';
 import User from '../../lib/users/user';

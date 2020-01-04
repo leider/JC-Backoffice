@@ -1,89 +1,106 @@
 import misc from '../../commons/misc';
 import configure from '../../commons/simpleConfigure';
+
 const prefix = configure.get('publicUrlPrefix');
 
+export interface PresseRaw {
+  originalText: string;
+  text: string;
+  image: string[];
+  checked: boolean;
+  jazzclubURL: string;
+}
+
+export interface PresseUI {
+  originalText?: string;
+  text?: string;
+  existingbild?: string;
+  checked?: boolean;
+  jazzclubURL?: string;
+}
+
 export default class Presse {
-  state: any;
-  constructor(object: any) {
-    this.state = object || {};
-    ['originalText', 'text', 'image', 'checked', 'jazzclubURL'].forEach(
-      field => {
-        this.state[field] = object[field];
-      }
-    );
+  state: PresseRaw;
+
+  toJSON(): PresseRaw {
+    return this.state;
   }
 
-  fillFromUI(object: any) {
-    ['originalText', 'text', 'jazzclubURL'].forEach(field => {
-      if (Array.isArray(object[field])) {
-        this.state[field] = object[field][0];
-      } else {
-        this.state[field] = object[field] || this.state[field]; // keep old values
-      }
-    });
-    ['checked'].forEach(field => {
-      this.state[field] = !!object[field]; // handle undefined for checkbox
-    });
+  constructor(object: PresseRaw | undefined) {
+    this.state = object || {
+      originalText: '',
+      text: '',
+      image: [],
+      checked: false,
+      jazzclubURL: ''
+    };
+  }
+
+  fillFromUI(object: PresseUI): Presse {
+    this.state.originalText = object.originalText || this.state.originalText;
+    this.state.text = object.text || this.state.text;
+    this.state.jazzclubURL = object.jazzclubURL || this.state.jazzclubURL;
+    this.state.checked = !!object.checked;
     if (object.existingbild) {
       this.updateImage(object.existingbild);
     }
     return this;
   }
 
-  updateImage(image: string) {
+  updateImage(image: string): boolean {
     const imagePushed = misc.pushImage(this.state.image, image);
-    if (imagePushed) {
+    if (imagePushed.length > 0) {
       this.state.image = imagePushed;
       return true;
     }
     return false;
   }
 
-  removeImage(image: string) {
+  removeImage(image: string): void {
     this.state.image = misc.dropImage(this.state.image, image);
   }
 
-  image() {
+  image(): string[] {
     return misc.toArray(this.state.image) || [];
   }
 
-  firstImage() {
+  firstImage(): string {
     return this.image()[0];
   }
 
-  imageURL() {
+  imageURL(): string {
     if (this.image().length > 0) {
       return '**Pressephoto:**\n' + this.imageURLpure();
     }
     return '';
   }
 
-  imageURLpure() {
+  imageURLpure(): string {
     if (this.image().length > 0) {
       return prefix + '/upload/' + encodeURIComponent(this.firstImage());
     }
     return '';
   }
 
-  checked() {
+  checked(): boolean {
     return this.state.checked;
   }
 
-  jazzclubURL() {
-    return this.state.jazzclubURL || '';
+  jazzclubURL(): string {
+    return this.state.jazzclubURL;
   }
 
-  fullyQualifiedJazzclubURL(optionalURL?: string) {
+  fullyQualifiedJazzclubURL(optionalURL?: string): string {
     return (
       'http://www.jazzclub.de/event/' + (optionalURL || this.jazzclubURL())
     );
   }
 
-  text() {
-    return this.state.text || '';
+  text(): string {
+    return this.state.text;
   }
 
-  originalText() {
-    return this.state.originalText || '';
+  originalText(): string {
+    return this.state.originalText;
   }
 }

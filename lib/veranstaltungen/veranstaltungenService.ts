@@ -8,7 +8,7 @@ import Salesreport from '../reservix/salesreport';
 
 const uploadDir = path.join(__dirname, '../../public/upload');
 
-function getVeranstaltungMitReservix(url: string, callback: Function) {
+function getVeranstaltungMitReservix(url: string, callback: Function): void {
   store.getVeranstaltung(
     url,
     (err: Error | null, veranstaltung?: Veranstaltung) => {
@@ -18,7 +18,7 @@ function getVeranstaltungMitReservix(url: string, callback: Function) {
       if (!veranstaltung) {
         return callback(null, null);
       }
-      salesreportFor(
+      return salesreportFor(
         veranstaltung.reservixID(),
         (salesreport?: Salesreport) => {
           veranstaltung.associateSalesreport(salesreport);
@@ -32,7 +32,7 @@ function getVeranstaltungMitReservix(url: string, callback: Function) {
 export default {
   getVeranstaltungMitReservix,
 
-  alleBildNamen: function alleBildNamen(callback: Function) {
+  alleBildNamen: function alleBildNamen(callback: Function): void {
     fs.readdir(uploadDir, (err, files) => {
       callback(err, files.sort());
     });

@@ -8,11 +8,11 @@ import Kalender, { EmailEvent } from '../programmheft/kalender';
 
 export function remindForProgrammheft(
   now: DatumUhrzeit = new DatumUhrzeit(),
-  callback: ErrorCallback<Error>
+  callback: ErrorCallback
 ): void {
   function sendMail(
     eventsForToday: EmailEvent[],
-    callbackInner: ErrorCallback<Error>
+    callbackInner: ErrorCallback
   ): void {
     const messages = eventsForToday.map(e => {
       const message = new Message({

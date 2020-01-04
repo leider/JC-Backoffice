@@ -9,14 +9,14 @@ let sessionStore;
 if (!conf.get('dontUsePersistentSessions')) {
   const MongoStore = connectMongo(expressSession);
   sessionStore = new MongoStore({
-    url: conf.get('mongoURL'),
+    url: conf.get('mongoURL') as string,
     touchAfter: oneHour,
     mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
   });
 }
 
 export default expressSession({
-  secret: conf.get('secret'),
+  secret: conf.get('secret') as string,
   cookie: { maxAge: sevenDays },
   store: sessionStore,
   resave: false,

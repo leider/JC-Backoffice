@@ -13,6 +13,7 @@ export default class User {
   rechte!: string[];
   password!: string; // transient
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object: any) {
     this.id = object.id;
     this.name = object.name;

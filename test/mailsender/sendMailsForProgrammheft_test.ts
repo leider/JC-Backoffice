@@ -1,7 +1,7 @@
+import { expect } from 'chai';
 import sin from 'sinon';
 const sinon = sin.createSandbox();
 
-const expect = require('must-dist');
 import '../../configure';
 
 import DatumUhrzeit from '../../lib/commons/DatumUhrzeit';
@@ -27,6 +27,7 @@ describe('Programmheft Mailsender', () => {
       'Putzen | Jeder | green | 15.06.19 | x@y.z | 3'
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mailcheck: any;
 
   beforeEach(() => {
@@ -52,17 +53,17 @@ describe('Programmheft Mailsender', () => {
   });
 
   it('runs correctly on a day where notificatons lie', done => {
-    remindForProgrammheft(april12, (err: Error | null | undefined) => {
+    remindForProgrammheft(april12 as DatumUhrzeit, (err: Error | null | undefined) => {
       sinon.assert.calledOnce(mailcheck);
       const message = mailcheck.args[0][0];
-      expect(message.senderAddress).to.be('bo@jazzclub.de');
-      expect(message.subject).to.be('Programmheft Action Reminder');
+      expect(message.senderAddress).to.equal('bo@jazzclub.de');
+      expect(message.subject).to.equal('Programmheft Action Reminder');
       done(err);
     });
   });
 
   it('runs correctly on a day where no notificatons lie', done => {
-    remindForProgrammheft(april13, (err: Error | null | undefined) => {
+    remindForProgrammheft(april13 as DatumUhrzeit, (err: Error | null | undefined) => {
       sinon.assert.notCalled(mailcheck);
       done(err);
     });
