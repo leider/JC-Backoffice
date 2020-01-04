@@ -4,7 +4,7 @@ include ../../../views/formComponents
 
 mixin checkEvent(name, label, month)
   .form-check.abc-checkbox.abc-checkbox-success
-    input(type="checkbox", id=name, name=name, class='form-check-input ' + month)
+    input.form-check-input(type="checkbox", id=name, name=name, class=month)
     label.form-check-label(for=name) !{label}
 
 mixin eventsTable(events)

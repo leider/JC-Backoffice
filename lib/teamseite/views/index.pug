@@ -51,7 +51,7 @@ mixin panelView(groupedVeranstaltungen)
                   | #{' '} Kooperation
 
             if !staff.noStaffNeeded() || !staff.modNotNeeded()
-              div(id=id, class=`collapse${collapsed ? '' : ' show'} cardcontent`)
+              .collapse.cardcontent(id=id, class=collapsed ? '' : ' show')
                 table.table.table-striped.table-sm
                   if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
                     tr: td(colspan=3): h5.mb-0 Kasse

@@ -48,14 +48,7 @@ export default {
         const logdata = data ? data.split("\n\n") : [];
         const metadata = misc.compact(logdata).map(chunk => {
           const group = chunk.split("\n");
-          return new Metadata({
-            hashRef: group[0],
-            fullhash: group[1],
-            author: group[2],
-            date: group[3],
-            comment: group[4],
-            name: group[5]
-          });
+          return new Metadata(group);
         });
         if (metadata[0]) {
           metadata[0].hashRef = "HEAD"; // This can be used linking this version, but needs to be empty for HEAD

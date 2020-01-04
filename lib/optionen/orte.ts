@@ -1,4 +1,5 @@
 import R from "ramda";
+import { KopfUI } from "../veranstaltungen/object/kopf";
 
 const sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop("name")));
 
@@ -65,7 +66,7 @@ export default class Orte {
     ort.pressename = object.pressename;
   }
 
-  updateFlaeche(kopf: Kopf): void {
+  updateFlaeche(kopf: KopfUI): void {
     if (kopf.ort && kopf.flaeche) {
       const existingOrt = this.forName(kopf.ort);
       if (existingOrt) {

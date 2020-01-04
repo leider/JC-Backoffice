@@ -39,6 +39,7 @@ function termineFromIcalURL(url: string, callback: Function): void {
     const events: TerminEvent = icalendar
       .parse_calendar(body)
       .events()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((each: any) => {
         const calprops = each.properties;
         return {

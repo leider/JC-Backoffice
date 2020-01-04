@@ -56,7 +56,6 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
   function associateReservix(veranstaltung: Veranstaltung, callback: Function): void {
     const reservixID = veranstaltung.reservixID();
     if (reservixID && (!veranstaltung.salesreport() || !veranstaltung.salesreport()?.istVergangen())) {
-      console.log(`salesreport for : ${reservixID} ${Date.now()}`);
       salesreportFor(reservixID, (salesreport?: Salesreport) => {
         veranstaltung.associateSalesreport(salesreport);
         store.saveVeranstaltung(veranstaltung, (err: Error | null) => {

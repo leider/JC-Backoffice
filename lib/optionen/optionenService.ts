@@ -1,6 +1,9 @@
 import store from "./optionenstore";
 import Orte from "./orte";
-import OptionValues, { Hotelpreise, Kontakt } from "./optionValues";
+import OptionValues, { Hotelpreise } from "./optionValues";
+import { VeranstaltungUI } from "../veranstaltungen/object/veranstaltung";
+import { KontaktUI } from "../veranstaltungen/object/kontakt";
+import { UnterkunftUI } from "../veranstaltungen/object/unterkunft";
 
 function kontaktForAuswahl(auswahl: string, kontaktTyp: "agenturen" | "hotels", callback: Function): void {
   store.get((err: Error | null, optionen: OptionValues) => {
@@ -10,7 +13,7 @@ function kontaktForAuswahl(auswahl: string, kontaktTyp: "agenturen" | "hotels", 
     const ourCollection = kontaktTyp === "agenturen" ? optionen.agenturen : optionen.hotels;
     return callback(
       null,
-      ourCollection.find((kontakt: Kontakt) => kontakt.name === auswahl)
+      ourCollection.find((kontakt: KontaktUI) => kontakt.name === auswahl)
     );
   });
 }
@@ -62,12 +65,12 @@ export default {
     });
   },
 
-  saveStuffFromVeranstaltung: function saveStuffFromVeranstaltung(body: any, callback: Function): void {
+  saveStuffFromVeranstaltung: function saveStuffFromVeranstaltung(body: VeranstaltungUI, callback: Function): void {
     const stuff = {
       agentur: body.agentur,
       hotel: body.hotel,
-      backlineJazzclub: body.technik && body.technik.backlineJazzclub,
-      backlineRockshop: body.technik && body.technik.backlineRockshop,
+      backlineJazzclub: body.technik && (body.technik.backlineJazzclub as string[]),
+      backlineRockshop: body.technik && (body.technik.backlineRockshop as string[]),
       artists: body.artist && body.artist.name,
       unterkunft: body.unterkunft,
       hotelpreise: body.hotelpreise,
@@ -93,7 +96,7 @@ export default {
         optionen.updateCollection("artists", stuff.artists);
       }
       if (stuff.hotelpreise) {
-        optionen.updateHotelpreise(stuff.hotel, stuff.unterkunft);
+        optionen.updateHotelpreise(stuff.hotel as KontaktUI, stuff.unterkunft as UnterkunftUI);
       }
       if (stuff.kopf) {
         orte.updateFlaeche(stuff.kopf);

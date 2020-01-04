@@ -53,6 +53,7 @@ app.get("/", (req, res, next) => {
       users: (callback: Function) => userstore.allUsers(callback),
       icals: (callback: Function) => optionenservice.icals(callback)
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (err: Error | undefined, results: any) => {
       if (err) {
         return next(err);

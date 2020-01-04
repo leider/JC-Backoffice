@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongodb, { FilterQuery, FindOneOptions, MongoCallback, UpdateWriteOpResult } from "mongodb";
 import { ErrorCallback } from "async";
 import conf from "../commons/simpleConfigure";

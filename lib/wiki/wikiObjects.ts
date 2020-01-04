@@ -9,13 +9,13 @@ export class Metadata {
   datestring: string;
   comment: string;
 
-  constructor(object: any) {
-    this.name = object.name;
-    this.hashRef = object.hashRef;
-    this.fullhash = object.fullhash;
-    this.author = object.author;
-    this.datestring = object.date;
-    this.comment = object.comment;
+  constructor(object: string[]) {
+    this.hashRef = object[0];
+    this.fullhash = object[1];
+    this.author = object[2];
+    this.datestring = object[3];
+    this.comment = object[4];
+    this.name = object[5];
   }
 
   get date(): DatumUhrzeit {

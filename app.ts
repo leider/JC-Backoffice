@@ -1,99 +1,80 @@
-import loggers from './initWinston';
+import loggers from "./initWinston";
 
-import express from 'express';
-import { Server, createServer } from 'http';
-import cookieParser from 'cookie-parser';
-import favicon from 'serve-favicon';
-import morgan from 'morgan';
-import bodyparser from 'body-parser';
-import csurf from 'csurf';
-import compress from 'compression';
+import express from "express";
+import { Server, createServer } from "http";
+import cookieParser from "cookie-parser";
+import favicon from "serve-favicon";
+import morgan from "morgan";
+import bodyparser from "body-parser";
+import csurf from "csurf";
+import compress from "compression";
 
-import gemaApp from './lib/gema/index';
-import icalApp from './lib/ical';
-import mailsenderApp from './lib/mailsender';
-import optionenApp from './lib/optionen';
-import programmheftApp from './lib/programmheft';
-import siteApp from './lib/site';
-import teamseiteApp from './lib/teamseite';
-import usersApp from './lib/users';
-import veranstaltungenApp from './lib/veranstaltungen';
-import vertragApp from './lib/vertrag';
-import wikiApp from './lib/wiki';
+import gemaApp from "./lib/gema/index";
+import icalApp from "./lib/ical";
+import mailsenderApp from "./lib/mailsender";
+import optionenApp from "./lib/optionen";
+import programmheftApp from "./lib/programmheft";
+import siteApp from "./lib/site";
+import teamseiteApp from "./lib/teamseite";
+import usersApp from "./lib/users";
+import veranstaltungenApp from "./lib/veranstaltungen";
+import vertragApp from "./lib/vertrag";
+import wikiApp from "./lib/wiki";
 
-import expressViewHelper from './lib/middleware/expressViewHelper';
-import expressSessionConfigurator from './lib/middleware/expressSessionConfigurator';
-import passportInitializer from './lib/middleware/passportInitializer';
-import accessrights from './lib/middleware/accessrights';
-import addCsrfTokenToLocals from './lib/middleware/addCsrfTokenToLocals';
-import handle404 from './lib/middleware/handle404';
-import handle500 from './lib/middleware/handle500';
-import secureByLogin from './lib/middleware/secureByLogin';
-import wikiSubdirs from './lib/middleware/wikiSubdirs';
-import path from 'path';
+import expressViewHelper from "./lib/middleware/expressViewHelper";
+import expressSessionConfigurator from "./lib/middleware/expressSessionConfigurator";
+import passportInitializer from "./lib/middleware/passportInitializer";
+import accessrights from "./lib/middleware/accessrights";
+import addCsrfTokenToLocals from "./lib/middleware/addCsrfTokenToLocals";
+import handle404 from "./lib/middleware/handle404";
+import handle500 from "./lib/middleware/handle500";
+import secureByLogin from "./lib/middleware/secureByLogin";
+import wikiSubdirs from "./lib/middleware/wikiSubdirs";
+import path from "path";
 
-function secureAgainstClickjacking(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-): void {
-  res.setHeader('X-Frame-Options', 'DENY');
+function secureAgainstClickjacking(req: express.Request, res: express.Response, next: express.NextFunction): void {
+  res.setHeader("X-Frame-Options", "DENY");
   next();
 }
 
-function serverpathRemover(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-): void {
+function serverpathRemover(req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.removeServerpaths = (msg: string): string => {
     // find the path that comes before node_modules or lib:
-    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(
-      msg
-    );
+    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(msg);
     if (pathToBeRemoved) {
-      return msg.replace(new RegExp(pathToBeRemoved[0], 'g'), '');
+      return msg.replace(new RegExp(pathToBeRemoved[0], "g"), "");
     }
     return msg;
   };
   next();
 }
 
-function useApp(
-  parent: express.Express,
-  url: string,
-  child: express.Express
-): express.Express {
-  function ensureRequestedUrlEndsWithSlash(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ): void {
+function useApp(parent: express.Express, url: string, child: express.Express): express.Express {
+  function ensureRequestedUrlEndsWithSlash(req: express.Request, res: express.Response, next: express.NextFunction): void {
     if (!/\/$/.test(req.url)) {
-      res.redirect(req.url + '/');
+      res.redirect(req.url + "/");
     } else {
       next();
     }
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     child.locals.pretty = true;
   }
-  parent.get('/' + url, ensureRequestedUrlEndsWithSlash);
-  parent.use('/' + url + '/', child);
+  parent.get("/" + url, ensureRequestedUrlEndsWithSlash);
+  parent.use("/" + url + "/", child);
   return child;
 }
 
-import conf from './lib/commons/simpleConfigure';
-import { Logger } from 'winston';
+import conf from "./lib/commons/simpleConfigure";
+import { Logger } from "winston";
 
-const appLogger = loggers.get('application');
-const httpLogger = loggers.get('http');
+const appLogger = loggers.get("application");
+const httpLogger = loggers.get("http");
 
 // stream the log messages of express to winston, remove line breaks on message
 const winstonStream = {
-  write: (message: string): Logger =>
-    httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, ''))
+  write: (message: string): Logger => httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, ""))
 };
 
 export default class TheApp {
@@ -102,15 +83,15 @@ export default class TheApp {
   create(): express.Express {
     const app = express();
     app.use(serverpathRemover);
-    app.set('view engine', 'pug');
-    app.set('views', path.join(__dirname, 'views'));
-    app.use(favicon(path.join(__dirname, 'public/', 'img/favicon.ico')));
-    app.use(morgan('combined', { stream: winstonStream }));
+    app.set("view engine", "pug");
+    app.set("views", path.join(__dirname, "views"));
+    app.use(favicon(path.join(__dirname, "public/", "img/favicon.ico")));
+    app.use(morgan("combined", { stream: winstonStream }));
     app.use(cookieParser());
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(compress());
     app.use(
-      express.static(path.join(__dirname, 'public'), {
+      express.static(path.join(__dirname, "public"), {
         maxAge: 10 * 60 * 60 * 1000
       })
     ); // ten hours
@@ -125,17 +106,17 @@ export default class TheApp {
     app.use(csurf());
     app.use(addCsrfTokenToLocals);
     app.use(wikiSubdirs);
-    app.use('/', siteApp);
-    useApp(app, 'mailsender', mailsenderApp);
-    useApp(app, 'optionen', optionenApp);
-    useApp(app, 'veranstaltungen', veranstaltungenApp);
-    useApp(app, 'users', usersApp);
-    useApp(app, 'gema', gemaApp);
-    useApp(app, 'teamseite', teamseiteApp);
-    useApp(app, 'wiki', wikiApp);
-    useApp(app, 'ical', icalApp);
-    useApp(app, 'vertrag', vertragApp);
-    useApp(app, 'programmheft', programmheftApp);
+    app.use("/", siteApp);
+    useApp(app, "mailsender", mailsenderApp);
+    useApp(app, "optionen", optionenApp);
+    useApp(app, "veranstaltungen", veranstaltungenApp);
+    useApp(app, "users", usersApp);
+    useApp(app, "gema", gemaApp);
+    useApp(app, "teamseite", teamseiteApp);
+    useApp(app, "wiki", wikiApp);
+    useApp(app, "ical", icalApp);
+    useApp(app, "vertrag", vertragApp);
+    useApp(app, "programmheft", programmheftApp);
 
     app.use(handle404(httpLogger));
     app.use(handle500(appLogger));
@@ -144,18 +125,12 @@ export default class TheApp {
   }
 
   start(done?: Function): void {
-    const port = conf.get('port');
+    const port = conf.get("port");
     const app = this.create();
 
     this.server = createServer(app);
     this.server.listen(port, () => {
-      appLogger.info(
-        'Server running at port ' +
-          port +
-          ' in ' +
-          process.env.NODE_ENV +
-          ' MODE'
-      );
+      appLogger.info("Server running at port " + port + " in " + process.env.NODE_ENV + " MODE");
       if (done) {
         done();
       }
@@ -164,7 +139,7 @@ export default class TheApp {
 
   stop(done: Function): void {
     this.server.close(() => {
-      appLogger.info('Server stopped');
+      appLogger.info("Server stopped");
       if (done) {
         done();
       }

@@ -1,4 +1,4 @@
-/*eslint no-unused-vars: 0 */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import R from "ramda";
 import express from "express";
 import path from "path";

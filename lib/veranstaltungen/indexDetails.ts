@@ -29,6 +29,7 @@ const printoptions: PDFOptions = {
 };
 
 export function addRoutesTo(app: express.Express): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function copyFile(src: string, dest: string, callback: (...args: any[]) => void): void {
     const readStream = fs.createReadStream(src);
     readStream.once("error", callback);
@@ -426,7 +427,7 @@ export function addRoutesTo(app: express.Express): void {
           });
         });
       } else {
-        return res.send({ error: "keine Datei" });
+        res.send({ error: "keine Datei" });
       }
     });
   });

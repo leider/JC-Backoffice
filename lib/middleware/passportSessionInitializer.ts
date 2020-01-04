@@ -1,5 +1,6 @@
 import express from "express";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function passportSessionInitializer(req: any, res: express.Response, next: express.NextFunction): void {
   /* eslint no-underscore-dangle: 0 */
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore

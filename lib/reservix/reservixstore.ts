@@ -4,6 +4,7 @@ import misc from "../commons/misc";
 import pers from "../persistence/persistence";
 const persistence = pers("reservixstore");
 import Salesreport from "./salesreport";
+import { Lineobject } from "./htmlbridge";
 
 function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
   return misc.toObject(Salesreport, callback, err, jsobject);
@@ -14,7 +15,7 @@ export default {
     persistence.getById(id, R.partial(toOptionValues, [callback]));
   },
 
-  saveAll: function(objects: Array<any>, callback: Function): void {
+  saveAll: function(objects: Array<Lineobject>, callback: Function): void {
     persistence.saveAll(objects, callback);
   }
 };

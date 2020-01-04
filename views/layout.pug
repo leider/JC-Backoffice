@@ -3,25 +3,25 @@ include layoutComponents
 doctype html
 html
   head
-    meta(charset='utf-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='format-detection', content='telephone=no')
-    link(rel='apple-touch-icon', href='/img/apple-touch-icon-60x60-precomposed.png')
-    link(rel='apple-touch-icon', href='/img/apple-touch-icon-76x76-precomposed.png')
-    link(rel='apple-touch-icon', href='/img/apple-touch-icon-120x120-precomposed.png')
-    link(rel='apple-touch-icon', href='/img/apple-touch-icon-152x152-precomposed.png')
-    link(href='/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="format-detection", content="telephone=no")
+    link(rel="apple-touch-icon", href="/img/apple-touch-icon-60x60-precomposed.png")
+    link(rel="apple-touch-icon", href="/img/apple-touch-icon-76x76-precomposed.png")
+    link(rel="apple-touch-icon", href="/img/apple-touch-icon-120x120-precomposed.png")
+    link(rel="apple-touch-icon", href="/img/apple-touch-icon-152x152-precomposed.png")
+    link(href="/stylesheets/screen.css", rel="stylesheet")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat")
     block head
     title
       block title
       | &nbsp;- JC
 
   body.pt-sm-5
-    #cheatsheet.modal.fade(tabindex='-1')
+    #cheatsheet.modal.fade(tabindex="-1")
       .modal-dialog.modal-lg
         .modal-content
-    #loeschdialog.modal.fade(tabindex='-1')
+    #loeschdialog.modal.fade(tabindex="-1")
       .modal-dialog
         .modal-content
 
@@ -32,7 +32,7 @@ html
       .row.main
         block content
 
-script(src='/clientscripts/global.js')
+script(src="/clientscripts/global.js")
 script.
   $(document).ready(function () {
     $('.modaldialog').click(function (e) {

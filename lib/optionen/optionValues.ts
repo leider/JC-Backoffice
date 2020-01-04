@@ -2,15 +2,7 @@ import R from "ramda";
 const sortByNameCaseInsensitive = R.sortBy(R.toLower);
 import fieldHelpers from "../commons/fieldHelpers";
 import misc from "../commons/misc";
-
-export type Kontakt = {
-  auswahl: string;
-  name: string;
-  ansprechpartner: string;
-  telefon: string;
-  email: string;
-  adresse: string;
-};
+import { KontaktUI } from "../veranstaltungen/object/kontakt";
 
 export type Hotelpreise = {
   name: string;
@@ -35,8 +27,8 @@ export default class OptionValues {
   backlineJazzclub: string[];
   backlineRockshop: string[];
   artists: string[];
-  agenturen: Kontakt[];
-  hotels: Kontakt[];
+  agenturen: KontaktUI[];
+  hotels: KontaktUI[];
 
   static fromJSON(object?: any): OptionValues {
     return Object.assign(
@@ -67,8 +59,8 @@ export default class OptionValues {
     backlineJazzclub: string[],
     backlineRockshop: string[],
     artists: string[],
-    agenturen: Kontakt[],
-    hotels: Kontakt[]
+    agenturen: KontaktUI[],
+    hotels: KontaktUI[]
   ) {
     this.hotelpreise = hotelpreise;
     this.genres = genres;
@@ -133,7 +125,7 @@ export default class OptionValues {
     return [{ name: "[temporär]" }, { name: "[neu]" }].concat(this.hotels);
   }
 
-  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt): void {
+  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: KontaktUI): void {
     const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
     if (kontakt.auswahl.match(/\[temporär]/)) {
       delete kontakt.auswahl;
@@ -155,7 +147,7 @@ export default class OptionValues {
   }
 
   updateHotelpreise(
-    hotel: Kontakt,
+    hotel: KontaktUI,
     unterkunft: {
       einzelEUR: string;
       doppelEUR: string;

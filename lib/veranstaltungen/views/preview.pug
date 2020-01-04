@@ -35,7 +35,7 @@ block content
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
 
-          h2(class='text-' + cssColorCode(kopf.eventTyp()))
+          h2(class=`text-${cssColorCode(kopf.eventTyp())}`)
             span(class=cssIconClass(kopf.eventTyp()), style="font-weight:normal") #{''}
             | #{' '}#{kopf.titel()} #{kopf.presseIn()}
             br

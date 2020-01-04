@@ -69,8 +69,8 @@ block content
                 | #{' '} Kassenzettel
               .btn-group.float-right
                 if freigegeben
-                  a(
-                    class='btn btn-danger' + (!accessrights.darfKasseFreigeben() ? ' disabled' : ''),
+                  a.btn.btn-danger(
+                    class=!accessrights.darfKasseFreigeben() ? 'disabled' : '',
                     data-toggle="modal",
                     data-target="#entsperrendialog",
                     href="#"
@@ -94,8 +94,7 @@ block content
                       i.fas.fa-exclamation-triangle
                       | &nbsp; Gage BAR &nbsp;
                       i.fas.fa-exclamation-triangle :
-                    input.form-control.currency(
-                      id='kasse[ausgabeGageEUR]',
+                    input#kasse[ausgabeGageEUR].form-control.currency(,
                       type="text",
                       value=kasse.ausgabeGageEUR(),
                       name="kasse[ausgabeGageEUR]",

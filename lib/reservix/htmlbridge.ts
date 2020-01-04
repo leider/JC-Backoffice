@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable @typescript-eslint/ban-ts-ignore, @typescript-eslint/no-explicit-any */
 import request from "request";
 const requester = request.defaults({ jar: true });
 import cheerio from "cheerio";

@@ -1,88 +1,91 @@
 mixin notificationsBlock(notificationmessage)
-  -notificationmessage.kill()
-  -var contents = notificationmessage
-  div(class='toast ' + contents.type, data-delay=2000, style='position: fixed;' + '  top: 2rem;' + '  left: 2rem;' + '  z-index: 1050;' + '  width: 100%;')
+  - notificationmessage.kill();
+  - var contents = notificationmessage;
+  .toast(
+    class=contents.type,
+    data-delay=2000,
+    style="position: fixed;' + '  top: 2rem;' + '  left: 2rem;' + '  z-index: 1050;' + '  width: 100%;"
+  )
     .toast-header
       h2.mr-auto #{contents.title}
-      button.ml-2.mb-1.close(type='button', data-dismiss='toast') &times;
+      button.ml-2.mb-1.close(type="button", data-dismiss="toast") &times;
     .toast-body
       | #{contents.text}
 
 mixin topNavbar
   header.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
-    a.navbar-brand(href='/')
-      img(src='/img/logo_weiss.png', alt='Jazzclub')
-    button.navbar-toggler(type='button', data-toggle='collapse', data-target='.collapse-top')
+    a.navbar-brand(href="/")
+      img(src="/img/logo_weiss.png", alt="Jazzclub")
+    button.navbar-toggler(type="button", data-toggle="collapse", data-target=".collapse-top")
       span.sr-only Toggle
       i.fas.fa-bars.fa-lg.fa-inverse
-
     .navbar-collapse.collapse.collapse-top.align-self-end
       ul.navbar-nav
         if user && (accessrights.isOrgaTeam())
-          li.nav-item(data-jcnav='veranstaltungen')
-            a.nav-link(href='/veranstaltungen/zukuenftige')
+          li.nav-item(data-jcnav="veranstaltungen")
+            a.nav-link(href="/veranstaltungen/zukuenftige")
               i.far.fa-calendar-alt.fa-fw.fa-lg
               span &nbsp;Veranstaltungen&nbsp;
-          li.nav-item(data-jcnav='programmheft')
-            a.nav-link(href='/programmheft')
+          li.nav-item(data-jcnav="programmheft")
+            a.nav-link(href="/programmheft")
               i.far.fa-newspaper.fa-fw.fa-lg
               span &nbsp;Programmheft&nbsp;
-          li.nav-item.dropdown(data-jcnav='optionen')
-            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+          li.nav-item.dropdown(data-jcnav="optionen")
+            a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-cogs.fa-fw.fa-lg
               span &nbsp;Optionen
             .dropdown-menu
-              a.dropdown-item(href='/optionen') Optionen
-              a.dropdown-item(href='/optionen/orte') Orte
-              a.dropdown-item(href='/optionen/icals') Ferienkalender
-              a.dropdown-item(href='/ical/termine') Termine
-              a.dropdown-item(href='/optionen/kassenbericht') Kassenberichte
-          li.nav-item(data-jcnav='gema'): a.nav-link(href='/gema')
+              a.dropdown-item(href="/optionen") Optionen
+              a.dropdown-item(href="/optionen/orte") Orte
+              a.dropdown-item(href="/optionen/icals") Ferienkalender
+              a.dropdown-item(href="/ical/termine") Termine
+              a.dropdown-item(href="/optionen/kassenbericht") Kassenberichte
+          li.nav-item(data-jcnav="gema"): a.nav-link(href="/gema")
             i.fas.fa-chart-pie.fa-fw.fa-lg
             span &nbsp;GEMA
         if user && (accessrights.isSuperuser())
-          li.nav-item.dropdown(data-jcnav='mailsender')
-            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+          li.nav-item.dropdown(data-jcnav="mailsender")
+            a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-envelope.fa-fw.fa-lg
               span &nbsp;Mails
             .dropdown-menu
-              a.dropdown-item(href='/mailsender') Regeln
-              a.dropdown-item(href='/mailsender/compose') Manuell
-              a.dropdown-item(href='/mailsender/emailAddresses') Emailadressen bearbeiten
-          li.nav-item.dropdown(data-jcnav='users')
-            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+              a.dropdown-item(href="/mailsender") Regeln
+              a.dropdown-item(href="/mailsender/compose") Manuell
+              a.dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
+          li.nav-item.dropdown(data-jcnav="users")
+            a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-users.fa-fw.fa-lg
               span &nbsp;User
             .dropdown-menu
-              a.dropdown-item(href='/users') Bearbeiten / Anlegen
-              a.dropdown-item(href='/users/rundmail') Rundmail
-        li.nav-item(data-jcnav='teamseite')
-          a.nav-link(href='/teamseite')
+              a.dropdown-item(href="/users") Bearbeiten / Anlegen
+              a.dropdown-item(href="/users/rundmail") Rundmail
+        li.nav-item(data-jcnav="teamseite")
+          a.nav-link(href="/teamseite")
             i.far.fa-hand-paper.fa-fw.fa-lg
             | &nbsp;Team&nbsp;
-        li.nav-item.dropdown(data-jcnav='wiki')
-          a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+        li.nav-item.dropdown(data-jcnav="wiki")
+          a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
             i.fas.fa-book.fa-fw.fa-lg
             span &nbsp;Wiki&nbsp;
           .dropdown-menu
-            for subdir in wikisubdirs
-              a.dropdown-item(href='/wiki/' + subdir + '/') #{subdir}
+            each subdir in wikisubdirs
+              a.dropdown-item(href="/wiki/' + subdir + '/") #{subdir}
       if user
         ul.navbar-nav.ml-md-auto.d-flex.mr-3
           li.nav-item.dropdown
-            a.nav-link.dropdown-toggle(href='#', data-toggle='dropdown')
+            a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-user.fa-fw.fa-lg
               span &nbsp;Profil
             .dropdown-menu.dropdown-menu-right
               a.dropdown-item(href='/users/changePassword/' + user.id)
                 i.fas.fa-key.fa-fw.fa-lg
                 | &nbsp;Passwort ändern
-              a.dropdown-item(href='/logout')
+              a.dropdown-item(href="/logout")
                 i.fas.fa-sign-out-alt.fa-fw.fa-lg
                 | &nbsp;Abmelden
 
       else
         ul.navbar-nav.ml-md-auto.d-none.d-md-flex.mr-3
-          li.nav-item: a.nav-link(href='/logout')
+          li.nav-item: a.nav-link(href="/logout")
             i.fas.fa-sign-out-alt.fa-fw.fa-lg
             | &nbsp;Abmelden

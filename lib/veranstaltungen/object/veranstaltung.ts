@@ -17,6 +17,7 @@ import Unterkunft, { UnterkunftRaw, UnterkunftUI } from "./unterkunft";
 import Vertrag, { VertragRaw } from "./vertrag";
 import Salesreport, { ReservixState } from "../../reservix/salesreport";
 import R from "ramda";
+import { Hotelpreise } from "../../optionen/optionValues";
 
 interface VeranstaltungRaw {
   id?: string;
@@ -40,7 +41,7 @@ interface VeranstaltungRaw {
   salesrep?: ReservixState;
 }
 
-interface VeranstaltungUI {
+export interface VeranstaltungUI {
   id?: string;
   startDate?: string;
   endDate?: string;
@@ -61,6 +62,7 @@ interface VeranstaltungUI {
   technik?: TechnikUI;
   unterkunft?: UnterkunftUI;
   vertrag?: VertragRaw;
+  hotelpreise?: Hotelpreise;
 }
 
 export default class Veranstaltung {
