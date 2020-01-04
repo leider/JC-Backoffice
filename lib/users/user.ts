@@ -1,4 +1,4 @@
-import { genSalt, hashPassword } from '../commons/hashPassword';
+import { genSalt, hashPassword } from "../commons/hashPassword";
 
 export default class User {
   id: string;

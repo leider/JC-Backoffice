@@ -1,4 +1,4 @@
-import misc from '../../commons/misc';
+import misc from "../../commons/misc";
 
 export interface ArtistRaw {
   bandname: string;
@@ -29,7 +29,7 @@ export default class Artist {
 
   constructor(object: ArtistRaw | undefined) {
     this.state = object || {
-      bandname: '',
+      bandname: "",
       name: [],
       numMusiker: 1,
       numCrew: 0,
@@ -41,10 +41,10 @@ export default class Artist {
   }
 
   fillFromUI(object: ArtistUI): Artist {
-    this.state.bandname = object.bandname || '';
+    this.state.bandname = object.bandname || "";
     this.state.name = misc.toArray(object.name);
-    this.state.numCrew = parseFloat(object.numCrew || '') || 0;
-    this.state.numMusiker = parseFloat(object.numMusiker || '') || 0;
+    this.state.numCrew = parseFloat(object.numCrew || "") || 0;
+    this.state.numMusiker = parseFloat(object.numMusiker || "") || 0;
     this.state.isAusland = !!object.isAusland;
     this.state.isBawue = !!object.isBawue;
     this.state.brauchtHotel = !!object.brauchtHotel;

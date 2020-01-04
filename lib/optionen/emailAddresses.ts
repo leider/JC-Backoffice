@@ -1,4 +1,4 @@
-import R from 'ramda';
+import R from "ramda";
 
 interface EmailAddressesRaw {
   id: string;
@@ -37,7 +37,7 @@ interface EmailAddressesRaw {
 }
 
 export default class EmailAddresses {
-  id = 'emailaddresses';
+  id = "emailaddresses";
   partner1?: string;
   partner2?: string;
   partner3?: string;
@@ -90,11 +90,11 @@ export default class EmailAddresses {
   partnerForIndex(index: number): string {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    return this['partner' + index];
+    return this["partner" + index];
   }
   emailForIndex(index: number): string {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    return this['email' + index];
+    return this["email" + index];
   }
 }

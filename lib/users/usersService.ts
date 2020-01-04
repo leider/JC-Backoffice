@@ -1,8 +1,8 @@
-import { generate } from 'generate-password';
+import { generate } from "generate-password";
 
-import store from './userstore';
-import { hashPassword, genSalt } from '../commons/hashPassword';
-import User from './user';
+import store from "./userstore";
+import { hashPassword, genSalt } from "../commons/hashPassword";
+import User from "./user";
 
 export default {
   saveNewUser: function saveNewUser(username: string, callback: Function): void {
@@ -32,11 +32,7 @@ export default {
     });
   },
 
-  updatePassword: function updatePassword(
-    username: string,
-    password: string,
-    callback: Function
-  ): void {
+  updatePassword: function updatePassword(username: string, password: string, callback: Function): void {
     store.forId(username, (err: Error | null, existingUser?: User) => {
       if (err || !existingUser) {
         return callback(err);
@@ -52,11 +48,7 @@ export default {
   emailsAllerBookingUser: function emailsAllerBookingUser(callback: Function): void {
     store.allUsers((err: Error | null, users: User[]) => {
       const emails = users
-        .filter(
-          user =>
-            (user.gruppen || []).includes('bookingTeam') ||
-            (user.gruppen || []).includes('superusers')
-        )
+        .filter(user => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
         .filter(user => !!user.email)
         .map(u => u.email);
       callback(err, emails);

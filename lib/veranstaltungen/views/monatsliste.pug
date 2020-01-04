@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    meta(charset='utf-8')
-    link(href='/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+    meta(charset="utf-8")
+    link(href="/stylesheets/screen.css", rel="stylesheet")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat:p,500")
     title Veranstaltungen eines Monats
   body
     .container-fluid
@@ -14,7 +14,7 @@ html
             | &nbsp;Alle Bilder als ZIP
       .row
         .col-12
-          for veranstaltung in liste
+          each veranstaltung in liste
             p
               b #{veranstaltung.kopf().titel()}<br>
               b: i #{veranstaltung.startDatumUhrzeit().wochentagTagMonat}
@@ -23,9 +23,9 @@ html
       .row
         .col-md-6
           h3 Bilder
-          for veranstaltung in liste
+          each veranstaltung in liste
             p &nbsp;
             p: b #{veranstaltung.kopf().titel()}
-            for bild in veranstaltung.presse().image()
-              img(src='/upload/' + encodeURIComponent(bild), width='100%')
+            each bild in veranstaltung.presse().image()
+              img(src='/upload/' + encodeURIComponent(bild), width="100%")
               br

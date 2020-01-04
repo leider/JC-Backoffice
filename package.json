@@ -107,7 +107,7 @@
     "grunt-contrib-uglify": "4.0.1",
     "grunt-eslint": "22.0.0",
     "grunt-mocha-istanbul": "5.0.2",
-    "grunt-puglint": "1.0.0",
+    "grunt-ts": "6.0.0-beta.22",
     "istanbul": "0.4.5",
     "mocha": "6.2.2",
     "prettier": "1.19.1",

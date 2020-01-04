@@ -1,4 +1,4 @@
-import { Preisprofil } from '../../optionen/optionValues';
+import { Preisprofil } from "../../optionen/optionValues";
 
 export interface EintrittspreiseRaw {
   preisprofil: Preisprofil;
@@ -26,7 +26,7 @@ export default class Eintrittspreise {
   constructor(object: EintrittspreiseRaw | undefined) {
     this.state = object || {
       preisprofil: {
-        name: 'Freier Eintritt',
+        name: "Freier Eintritt",
         regulaer: 0,
         rabattErmaessigt: 0,
         rabattMitglied: 0
@@ -42,15 +42,14 @@ export default class Eintrittspreise {
   fillFromUI(object: EintrittspreiseUI): Eintrittspreise {
     if (object.preisprofil) {
       this.state.preisprofil = JSON.parse(object.preisprofil);
-      if (this.state.preisprofil.name !== 'Individuell (Alt)') {
+      if (this.state.preisprofil.name !== "Individuell (Alt)") {
         this.state.regulaer = this.preisprofil().regulaer;
         this.state.rabattErmaessigt = this.preisprofil().rabattErmaessigt;
         this.state.rabattMitglied = this.preisprofil().rabattMitglied;
       }
     }
-    this.state.erwarteteBesucher =
-      parseInt(object.erwarteteBesucher || '') || 0;
-    this.state.zuschuss = parseFloat(object.zuschuss || '') || 0;
+    this.state.erwarteteBesucher = parseInt(object.erwarteteBesucher || "") || 0;
+    this.state.zuschuss = parseFloat(object.zuschuss || "") || 0;
     return this;
   }
 
@@ -63,25 +62,23 @@ export default class Eintrittspreise {
   }
 
   frei(): boolean {
-    return this.state.preisprofil
-      ? this.preisprofil().regulaer === 0
-      : !!this.state.frei;
+    return this.state.preisprofil ? this.preisprofil().regulaer === 0 : !!this.state.frei;
   }
 
   istKooperation(): boolean {
-    return this.state.preisprofil && this.preisprofil().name === 'Kooperation';
+    return this.state.preisprofil && this.preisprofil().name === "Kooperation";
   }
 
   legacyPreisprofil(): Preisprofil {
     return this.state.frei
       ? {
-          name: 'Freier Eintritt',
+          name: "Freier Eintritt",
           regulaer: 0,
           rabattErmaessigt: 0,
           rabattMitglied: 0
         }
       : {
-          name: 'Individuell (Alt)',
+          name: "Individuell (Alt)",
           regulaer: this.state.regulaer,
           rabattErmaessigt: this.state.rabattErmaessigt,
           rabattMitglied: this.state.rabattMitglied
@@ -124,7 +121,7 @@ export default class Eintrittspreise {
     return this.istKooperation()
       ? `Gemäß Kooperationspartner (${kooperationspartner})`
       : this.frei()
-      ? 'freier Eintritt'
+      ? "freier Eintritt"
       : `${this.regulaer()},- (Ermässigt: ${this.ermaessigt()},-, Mitglieder: ${this.mitglied()},-) €`;
   }
 }

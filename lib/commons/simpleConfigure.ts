@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from "fs";
 /* eslint-disable no-sync */
 export class SimpleConfigure {
   storage: { [index: string]: string | number } = {};
@@ -9,7 +9,7 @@ export class SimpleConfigure {
     }
     files.forEach(file => {
       if (fs.existsSync(file)) {
-        const theFile = fs.readFileSync(file, { encoding: 'UTF-8' });
+        const theFile = fs.readFileSync(file, { encoding: "UTF-8" });
         this.addProperties(JSON.parse(theFile));
       }
     });

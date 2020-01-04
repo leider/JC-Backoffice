@@ -1,7 +1,7 @@
-import misc from '../../commons/misc';
-import configure from '../../commons/simpleConfigure';
+import misc from "../../commons/misc";
+import configure from "../../commons/simpleConfigure";
 
-const prefix = configure.get('publicUrlPrefix');
+const prefix = configure.get("publicUrlPrefix");
 
 export interface PresseRaw {
   originalText: string;
@@ -28,11 +28,11 @@ export default class Presse {
 
   constructor(object: PresseRaw | undefined) {
     this.state = object || {
-      originalText: '',
-      text: '',
+      originalText: "",
+      text: "",
       image: [],
       checked: false,
-      jazzclubURL: ''
+      jazzclubURL: ""
     };
   }
 
@@ -70,16 +70,16 @@ export default class Presse {
 
   imageURL(): string {
     if (this.image().length > 0) {
-      return '**Pressephoto:**\n' + this.imageURLpure();
+      return "**Pressephoto:**\n" + this.imageURLpure();
     }
-    return '';
+    return "";
   }
 
   imageURLpure(): string {
     if (this.image().length > 0) {
-      return prefix + '/upload/' + encodeURIComponent(this.firstImage());
+      return prefix + "/upload/" + encodeURIComponent(this.firstImage());
     }
-    return '';
+    return "";
   }
 
   checked(): boolean {
@@ -91,9 +91,7 @@ export default class Presse {
   }
 
   fullyQualifiedJazzclubURL(optionalURL?: string): string {
-    return (
-      'http://www.jazzclub.de/event/' + (optionalURL || this.jazzclubURL())
-    );
+    return "http://www.jazzclub.de/event/" + (optionalURL || this.jazzclubURL());
   }
 
   text(): string {

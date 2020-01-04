@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    meta(charset='utf-8')
-    link(href='/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+    meta(charset="utf-8")
+    link(href="/stylesheets/screen.css", rel="stylesheet")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat:p,500")
     title Veranstaltungen eines Monats
   body
     .container-fluid
@@ -14,7 +14,7 @@ html
             | &nbsp;Alle Bilder als ZIP
           h3 Pressetexte
       .row
-        for veranstaltung in liste
+        each veranstaltung in liste
           .col-lg-6
             | !{veranstaltung.presseTextHTML()}
             hr

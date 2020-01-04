@@ -1,9 +1,9 @@
-import misc from '../commons/misc';
-import R from 'ramda';
-import MailRule from './mailRule';
+import misc from "../commons/misc";
+import R from "ramda";
+import MailRule from "./mailRule";
 
-import pers from '../persistence/persistence';
-const persistence = pers('mailstore');
+import pers from "../persistence/persistence";
+const persistence = pers("mailstore");
 
 function toMailRule(callback: Function, err: Error | null, jsobject: object): void {
   return misc.toObject2(MailRule, callback, err, jsobject);

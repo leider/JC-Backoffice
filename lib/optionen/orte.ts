@@ -1,8 +1,6 @@
-import R from 'ramda';
+import R from "ramda";
 
-const sortByNameCaseInsensitive = R.sortBy(
-  R.compose(R.toLower, R.prop('name'))
-);
+const sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop("name")));
 
 interface Kopf {
   flaeche: string;
@@ -17,10 +15,10 @@ interface Ort {
 }
 
 export default class Orte {
-  id = 'orte';
+  id = "orte";
   orte: Ort[];
 
-  static fromJSON(object: {orte: Ort[]}): Orte {
+  static fromJSON(object: { orte: Ort[] }): Orte {
     return new Orte(object);
   }
 
@@ -28,7 +26,7 @@ export default class Orte {
     return Object.assign({}, this);
   }
 
-  constructor(object: {orte: Ort[]}) {
+  constructor(object: { orte: Ort[] }) {
     this.orte = sortByNameCaseInsensitive(object.orte || []);
   }
 
@@ -52,7 +50,7 @@ export default class Orte {
 
   deleteOrt(name?: string): void {
     if (name) {
-      this.orte = R.reject(R.propEq('name', name))(this.orte);
+      this.orte = R.reject(R.propEq("name", name))(this.orte);
     }
   }
 

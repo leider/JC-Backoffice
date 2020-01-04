@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All Tests" type="mocha-javascript-test-runner">
+  <configuration default="false" name="All Tests TS" type="mocha-javascript-test-runner">
     <node-interpreter>$PROJECT_DIR$/node_modules/.bin/ts-node-dev</node-interpreter>
     <node-options>--icu-data-dir=node_modules/full-icu</node-options>
     <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
@@ -8,7 +8,7 @@
     <ui>bdd</ui>
     <extra-mocha-options />
     <test-kind>PATTERN</test-kind>
-    <test-pattern>$PROJECT_DIR$/test/**/*.[j|t]s</test-pattern>
+    <test-pattern>$PROJECT_DIR$/test/**/*.ts</test-pattern>
     <method v="2" />
   </configuration>
 </component>

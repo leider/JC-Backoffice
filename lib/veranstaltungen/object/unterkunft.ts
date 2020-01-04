@@ -1,11 +1,9 @@
-import DatumUhrzeit from '../../commons/DatumUhrzeit';
-import misc from '../../commons/misc';
+import DatumUhrzeit from "../../commons/DatumUhrzeit";
+import misc from "../../commons/misc";
 
 function parseToDate(dateString: string, timeString?: string): Date | null {
   if (dateString) {
-    return (
-      DatumUhrzeit.forGermanString(dateString, timeString)?.toJSDate || null
-    );
+    return DatumUhrzeit.forGermanString(dateString, timeString)?.toJSDate || null;
   }
   return null;
 }
@@ -53,11 +51,7 @@ export default class Unterkunft {
     return this.state;
   }
 
-  constructor(
-    object: UnterkunftRaw | undefined,
-    veranstaltungstagAsDatumUhrzeit: DatumUhrzeit,
-    kuenstlerListe: string[]
-  ) {
+  constructor(object: UnterkunftRaw | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
     this.state = object || {
       einzelNum: 0,
       doppelNum: 0,
@@ -66,8 +60,8 @@ export default class Unterkunft {
       doppelEUR: 0,
       suiteEUR: 0,
       transportEUR: 0,
-      kommentar: '',
-      transportText: '',
+      kommentar: "",
+      transportText: "",
       sonstiges: [],
       angefragt: false,
       bestaetigt: false
@@ -129,21 +123,20 @@ export default class Unterkunft {
 
   anreiseDisplayDate(): string {
     const date = this.anreiseDate();
-    return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : '';
+    return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
   minimalStartForHotel(): string {
-    return this.veranstaltungstagAsDatumUhrzeit.minus({ tage: 7 })
-      .tagMonatJahrKompakt;
+    return this.veranstaltungstagAsDatumUhrzeit.minus({ tage: 7 }).tagMonatJahrKompakt;
   }
 
   abreiseDisplayDate(): string {
     const date = this.abreiseDate();
-    return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : '';
+    return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
   kommentar(): string {
-    return this.state.kommentar || this.kuenstlerListe.join('\r\n');
+    return this.state.kommentar || this.kuenstlerListe.join("\r\n");
   }
 
   einzelNum(): number {
@@ -185,11 +178,7 @@ export default class Unterkunft {
   anzahlNaechte(): number {
     const abreiseDate1 = this.abreiseDate();
     const anreiseDate1 = this.anreiseDate();
-    return abreiseDate1 && anreiseDate1
-      ? DatumUhrzeit.forJSDate(abreiseDate1).differenzInTagen(
-          DatumUhrzeit.forJSDate(anreiseDate1)
-        )
-      : 0;
+    return abreiseDate1 && anreiseDate1 ? DatumUhrzeit.forJSDate(abreiseDate1).differenzInTagen(DatumUhrzeit.forJSDate(anreiseDate1)) : 0;
   }
 
   anzahlZimmer(): number {

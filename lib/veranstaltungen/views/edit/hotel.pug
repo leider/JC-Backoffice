@@ -3,7 +3,6 @@ include ../../../../views/formComponents
 include kontaktMixins
 include mixins
 
-
 mixin zimmerNumEUR(name, label)
   .col-sm-4
     .row
@@ -12,26 +11,25 @@ mixin zimmerNumEUR(name, label)
       .col-6
         +currency('unterkunft[' + name + 'EUR]', 'Preis', unterkunft[name + 'EUR']())
 
-
 block title
   | Veranstaltung
 
 block content
-  -var unterkunft = veranstaltung.unterkunft()
+  - var unterkunft = veranstaltung.unterkunft();
   .col-12
-    form#hotelform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
+    form#hotelform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'hotel')
         .col-md-6
           +kontakt(veranstaltung, optionen.hotelsForSelection(), 'Hotel', 'hotel', 'hotel')
           +legendMitBody('zimmer', 'Zimmer', 'roomsTotal', 'hotel')
             .row
-              .col-4()
+              .col-4
                 +date('unterkunft[anreiseDate]', 'Anreise', unterkunft.anreiseDisplayDate(), 'Diese Werte haben Einfluß auf den berechneten Preis', unterkunft.minimalStartForHotel())
                 +date('unterkunft[abreiseDate]', 'Abreise', unterkunft.abreiseDisplayDate(), null, unterkunft.minimalStartForHotel())
                 label
                   span#naechte 0
                   span #{''} Nächte
-              .col-8()
+              .col-8
                 +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
             .row
               +zimmerNumEUR('einzel', 'Einzel')
@@ -57,14 +55,14 @@ block content
           .row
             .col-12
               p #{''}
-              a#reservierungsmail.btn.btn-success(href='#') Reservierungsmail
+              a#reservierungsmail.btn.btn-success(href="#") Reservierungsmail
 
 block head
-  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
+  link(rel="stylesheet", href="/stylesheets/bootstrap-datepicker3.css")
 
 block scripts
-  script(src='/clientscripts/bootstrap-datepicker.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.de.min.js')
+  script(src="/clientscripts/bootstrap-datepicker.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.de.min.js")
   +kontaktScript('hotel', 'hotelchanged')
   script.
     var updatePreise;

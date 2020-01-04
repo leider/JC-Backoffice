@@ -1,8 +1,8 @@
-import R from 'ramda';
-import misc from '../commons/misc';
-import User from './user';
-import pers from '../persistence/persistence';
-const persistence = pers('userstore');
+import R from "ramda";
+import misc from "../commons/misc";
+import User from "./user";
+import pers from "../persistence/persistence";
+const persistence = pers("userstore");
 
 function toUserObject(callback: Function, err: Error | null, jsobject?: object): void {
   return misc.toObject(User, callback, err, jsobject);

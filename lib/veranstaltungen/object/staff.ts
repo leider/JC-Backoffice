@@ -1,14 +1,8 @@
-import misc from '../../commons/misc';
-import R from 'ramda';
-import User from '../../users/user';
+import misc from "../../commons/misc";
+import R from "ramda";
+import User from "../../users/user";
 
-export type StaffType =
-  | 'techniker'
-  | 'technikerV'
-  | 'merchandise'
-  | 'kasse'
-  | 'kasseV'
-  | 'mod';
+export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
 
 interface StaffTypeCollections {
   techniker: string[];
@@ -159,25 +153,18 @@ export default class Staff {
   }
 
   technikerText(): string {
-    return this.technikerAlle().length > 0
-      ? this.technikerAlle().join(', ')
-      : '-';
+    return this.technikerAlle().length > 0 ? this.technikerAlle().join(", ") : "-";
   }
 
   kassiererText(): string {
-    return this.kasseAlle().length > 0 ? this.kasseAlle().join(', ') : '-';
+    return this.kasseAlle().length > 0 ? this.kasseAlle().join(", ") : "-";
   }
 
   tooltipInfos(): string {
     if (this.noStaffNeeded()) {
-      return '';
+      return "";
     }
-    return (
-      ' Kasse: ' +
-      this.kassiererText() +
-      ' | Techniker: ' +
-      this.technikerText()
-    );
+    return " Kasse: " + this.kassiererText() + " | Techniker: " + this.technikerText();
   }
 
   enrichUsers(users?: User[]): void {
@@ -185,24 +172,15 @@ export default class Staff {
       return;
     }
     const filledUsers: { [index: string]: User[] } = {};
-    filledUsers.techniker = users.filter(u =>
-      R.includes(u.id, this.state.techniker)
-    );
-    filledUsers.technikerV = users.filter(u =>
-      R.includes(u.id, this.state.technikerV)
-    );
+    filledUsers.techniker = users.filter(u => R.includes(u.id, this.state.techniker));
+    filledUsers.technikerV = users.filter(u => R.includes(u.id, this.state.technikerV));
     filledUsers.kasse = users.filter(u => R.includes(u.id, this.state.kasse));
     filledUsers.kasseV = users.filter(u => R.includes(u.id, this.state.kasseV));
-    filledUsers.merchandiseV = users.filter(u =>
-      R.includes(u.id, this.state.merchandise)
-    );
+    filledUsers.merchandiseV = users.filter(u => R.includes(u.id, this.state.merchandise));
     this.mitarbeiterTransient = filledUsers;
   }
 
   kasseFehlt(): boolean {
-    return (
-      (!this.kasseNotNeeded() && this.kasse().length === 0) ||
-      (!this.kasseVNotNeeded() && this.kasseV().length === 0)
-    );
+    return (!this.kasseNotNeeded() && this.kasse().length === 0) || (!this.kasseVNotNeeded() && this.kasseV().length === 0);
   }
 }

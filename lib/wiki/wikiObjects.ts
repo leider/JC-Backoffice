@@ -1,5 +1,5 @@
-import DatumUhrzeit from '../commons/DatumUhrzeit';
-import path from 'path';
+import DatumUhrzeit from "../commons/DatumUhrzeit";
+import path from "path";
 
 export class Metadata {
   name: string;
@@ -23,9 +23,6 @@ export class Metadata {
   }
 
   get url(): string {
-    return `/wiki/${path.dirname(this.name)}/${path.basename(
-      this.name,
-      '.md'
-    )}`;
+    return `/wiki/${path.dirname(this.name)}/${path.basename(this.name, ".md")}`;
   }
 }

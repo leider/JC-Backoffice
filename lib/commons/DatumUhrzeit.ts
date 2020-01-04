@@ -1,5 +1,5 @@
-import { Settings, DateTime } from 'luxon';
-Settings.defaultLocale = 'de';
+import { Settings, DateTime } from "luxon";
+Settings.defaultLocale = "de";
 
 type AdditionOptions = {
   jahre?: number;
@@ -15,17 +15,17 @@ export default class DatumUhrzeit {
   private readonly dateTime: DateTime;
 
   constructor(dateTime?: DateTime) {
-    this.locale = 'de-DE';
+    this.locale = "de-DE";
     this.dateTime = dateTime || DateTime.local();
   }
 
   // Konstruktoren
   static forYYMM(YYMM: string): DatumUhrzeit {
-    return new DatumUhrzeit(DateTime.fromFormat(YYMM, 'yyMM'));
+    return new DatumUhrzeit(DateTime.fromFormat(YYMM, "yyMM"));
   }
 
   static forYYYYMM(YYYYMM: string): DatumUhrzeit {
-    return new DatumUhrzeit(DateTime.fromFormat(YYYYMM, 'yyyyMM'));
+    return new DatumUhrzeit(DateTime.fromFormat(YYYYMM, "yyyyMM"));
   }
 
   static forISOString(ISO: string): DatumUhrzeit {
@@ -36,49 +36,25 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromJSDate(jsDate));
   }
 
-  static forGermanString(
-    dateString?: string,
-    timeString?: string
-  ): DatumUhrzeit | null {
+  static forGermanString(dateString?: string, timeString?: string): DatumUhrzeit | null {
     if (dateString) {
-      return new DatumUhrzeit(
-        DateTime.fromFormat(
-          dateString + ' ' + (timeString || '00:00'),
-          'dd.MM.yy HH:mm'
-        )
-      );
+      return new DatumUhrzeit(DateTime.fromFormat(dateString + " " + (timeString || "00:00"), "dd.MM.yy HH:mm"));
     }
     return null;
   }
 
-  static forGermanStringOrNow(
-    dateString?: string,
-    timeString?: string
-  ): DatumUhrzeit {
+  static forGermanStringOrNow(dateString?: string, timeString?: string): DatumUhrzeit {
     if (dateString) {
-      return new DatumUhrzeit(
-        DateTime.fromFormat(
-          dateString + ' ' + (timeString || '00:00'),
-          'dd.MM.yy HH:mm'
-        )
-      );
+      return new DatumUhrzeit(DateTime.fromFormat(dateString + " " + (timeString || "00:00"), "dd.MM.yy HH:mm"));
     }
     return new DatumUhrzeit();
   }
 
-  static forReservixString(
-    dateString: string,
-    timeString: string
-  ): DatumUhrzeit | undefined {
+  static forReservixString(dateString: string, timeString: string): DatumUhrzeit | undefined {
     // z.B. So, 12.05.2019, 20:00 Uhr
     if (dateString) {
       return new DatumUhrzeit(
-        DateTime.fromFormat(
-          dateString.replace(/^[a-zA-Z]*, /, '') +
-            ' ' +
-            (timeString || '00:00 Uhr'),
-          "dd.MM.yy HH:mm 'Uhr'"
-        )
+        DateTime.fromFormat(dateString.replace(/^[a-zA-Z]*, /, "") + " " + (timeString || "00:00 Uhr"), "dd.MM.yy HH:mm 'Uhr'")
       );
     }
     return undefined;
@@ -110,7 +86,7 @@ export default class DatumUhrzeit {
   }
 
   differenzInTagen(other: DatumUhrzeit): number {
-    return this.dateTime.diff(other.dateTime, 'days').days;
+    return this.dateTime.diff(other.dateTime, "days").days;
   }
 
   // Vergleiche
@@ -150,34 +126,32 @@ export default class DatumUhrzeit {
   }
 
   setUhrzeit(stunde: number, minuten: number): DatumUhrzeit {
-    return new DatumUhrzeit(
-      this.dateTime.set({ hour: stunde, minute: minuten })
-    );
+    return new DatumUhrzeit(this.dateTime.set({ hour: stunde, minute: minuten }));
   }
 
   // Formatierungen
   get monatLang(): string {
-    return this.format('MMMM');
+    return this.format("MMMM");
   }
 
   get monatKompakt(): string {
-    return this.format('MMM');
+    return this.format("MMM");
   }
 
   get wochentagTagMonat(): string {
-    return this.format('ccc. dd. MMMM');
+    return this.format("ccc. dd. MMMM");
   }
 
   get tagMonatJahrKompakt(): string {
-    return this.format('dd.LL.yyyy');
+    return this.format("dd.LL.yyyy");
   }
 
   get uhrzeitKompakt(): string {
-    return this.format('T');
+    return this.format("T");
   }
 
   get tagMonatJahrLang(): string {
-    return this.format('DDD');
+    return this.format("DDD");
   }
 
   get tagMonatJahrLangMitKW(): string {
@@ -185,27 +159,27 @@ export default class DatumUhrzeit {
   }
 
   get lesbareLangform(): string {
-    return this.format('DDDD t');
+    return this.format("DDDD t");
   }
 
   get lesbareKurzform(): string {
-    return this.format('ccc., ff');
+    return this.format("ccc., ff");
   }
 
   get monatJahrKompakt(): string {
-    return this.format('MMM') + " '" + this.format('yy');
+    return this.format("MMM") + " '" + this.format("yy");
   }
 
   get monatLangJahrKompakt(): string {
-    return this.format('MMMM') + " '" + this.format('yy');
+    return this.format("MMMM") + " '" + this.format("yy");
   }
 
   get fuerKalenderViews(): string {
-    return this.format('yyyy/MM');
+    return this.format("yyyy/MM");
   }
 
   get fuerCalendarWidget(): string {
-    return this.format('yyyy-MM-dd');
+    return this.format("yyyy-MM-dd");
   }
 
   get fuerCsvExport(): string {
@@ -213,11 +187,11 @@ export default class DatumUhrzeit {
   }
 
   get mitUhrzeitNumerisch(): string {
-    return this.format('dd.MM.yy HH:mm');
+    return this.format("dd.MM.yy HH:mm");
   }
 
   get fuerUnterseiten(): string {
-    return this.format('yyMM');
+    return this.format("yyMM");
   }
 
   get fuerPresse(): string {
@@ -230,12 +204,12 @@ export default class DatumUhrzeit {
 
   get toLocalDateTimeString(): string {
     const options = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
     };
     return new Intl.DateTimeFormat(this.locale, options).format(this.toJSDate);
   }

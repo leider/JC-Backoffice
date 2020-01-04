@@ -1,108 +1,95 @@
-import misc from '../commons/misc';
-import service from './optionenService';
-import store from './optionenstore';
-import puppeteerPrinter from '../commons/puppeteerPrinter';
+import misc from "../commons/misc";
+import service from "./optionenService";
+import store from "./optionenstore";
+import puppeteerPrinter from "../commons/puppeteerPrinter";
 
-import DatumUhrzeit from '../commons/DatumUhrzeit';
-import OptionValues, { Hotelpreise, Kontakt } from './optionValues';
-import Orte from './orte';
-import FerienIcals from './ferienIcals';
-import { PDFOptions } from 'puppeteer';
-import conf from '../commons/simpleConfigure';
-const publicUrlPrefix = conf.get('publicUrlPrefix');
+import DatumUhrzeit from "../commons/DatumUhrzeit";
+import OptionValues, { Hotelpreise, Kontakt } from "./optionValues";
+import Orte from "./orte";
+import FerienIcals from "./ferienIcals";
+import { PDFOptions } from "puppeteer";
+import conf from "../commons/simpleConfigure";
+const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const app = misc.expressAppIn(__dirname);
 
 const printoptions: PDFOptions = {
-  format: 'A4',
+  format: "A4",
   landscape: false, // portrait or landscape
   scale: 1.1,
-  margin: { top: '10mm', bottom: '10mm', left: '10mm', right: '10mm' }
+  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" }
 };
 
-app.get('/', (req, res, next) => {
+app.get("/", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
 
   return service.optionen((err: Error | null, optionen: OptionValues) => {
     if (err) {
       return next(err);
     }
-    return res.render('optionen', { optionen: optionen });
+    return res.render("optionen", { optionen: optionen });
   });
 });
 
-app.get('/kassenbericht', (req, res) => {
+app.get("/kassenbericht", (req, res) => {
   const now = new DatumUhrzeit();
-  res.render('kassenberichtentry', { now });
+  res.render("kassenberichtentry", { now });
 });
 
-app.get('/kassenbericht/:year/:month', (req, res, next) => {
+app.get("/kassenbericht/:year/:month", (req, res, next) => {
   const month = req.params.month;
   const year = req.params.year;
-  const datum = DatumUhrzeit.forYYYYMM(year + '' + month);
+  const datum = DatumUhrzeit.forYYYYMM(year + "" + month);
   const now = new DatumUhrzeit();
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
-  return app.render(
-    'kassenbericht',
-    { datum, now, publicUrlPrefix },
-    puppeteerPrinter.generatePdf(printoptions, res, next)
-  );
+  return app.render("kassenbericht", { datum, now, publicUrlPrefix }, puppeteerPrinter.generatePdf(printoptions, res, next));
 });
 
-app.get('/orte', (req, res, next) => {
+app.get("/orte", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
 
   return service.orte((err: Error | null, orte: Orte) => {
     if (err) {
       return next(err);
     }
-    return res.render('orte', { orte });
+    return res.render("orte", { orte });
   });
 });
 
-app.get('/icals', (req, res, next) => {
+app.get("/icals", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
 
   return service.icals((err: Error | null, icals: FerienIcals) => {
     if (err) {
       return next(err);
     }
-    return res.render('icals', { icals: icals || {} });
+    return res.render("icals", { icals: icals || {} });
   });
 });
 
-app.get('/agenturForAuswahl', (req, res) => {
-  service.agenturForAuswahl(
-    req.query.auswahl,
-    (err: Error | null, kontakt: Kontakt) => res.send(kontakt)
-  );
+app.get("/agenturForAuswahl", (req, res) => {
+  service.agenturForAuswahl(req.query.auswahl, (err: Error | null, kontakt: Kontakt) => res.send(kontakt));
 });
 
-app.get('/hotelForAuswahl', (req, res) => {
-  service.hotelForAuswahl(
-    req.query.auswahl,
-    (err: Error | null, kontakt: Kontakt) => res.send(kontakt)
-  );
+app.get("/hotelForAuswahl", (req, res) => {
+  service.hotelForAuswahl(req.query.auswahl, (err: Error | null, kontakt: Kontakt) => res.send(kontakt));
 });
 
-app.get('/preiseForAuswahl', (req, res) => {
-  service.preiseForAuswahl(
-    req.query.auswahl,
-    (err: Error | null, preise: Hotelpreise) => res.send(preise)
-  );
+app.get("/preiseForAuswahl", (req, res) => {
+  service.preiseForAuswahl(req.query.auswahl, (err: Error | null, preise: Hotelpreise) => res.send(preise));
 });
 
-app.post('/ortChanged', (req, res, next) => {
+app.post("/ortChanged", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
   const ort = req.body;
   // eslint-disable-next-line no-underscore-dangle
@@ -127,14 +114,14 @@ app.post('/ortChanged', (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      return res.redirect('orte');
+      return res.redirect("orte");
     });
   });
 });
 
-app.post('/icalChanged', (req, res, next) => {
+app.post("/icalChanged", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
   const ical = req.body;
   // eslint-disable-next-line no-underscore-dangle
@@ -159,14 +146,14 @@ app.post('/icalChanged', (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      return res.redirect('icals');
+      return res.redirect("icals");
     });
   });
 });
 
-app.post('/submit', (req, res, next) => {
+app.post("/submit", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
   return service.optionen((err: Error | null, optionen: OptionValues) => {
     if (err) {
@@ -177,7 +164,7 @@ app.post('/submit', (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      return res.redirect('/');
+      return res.redirect("/");
     });
   });
 });

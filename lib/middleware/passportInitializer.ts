@@ -1,20 +1,20 @@
-import passport from 'passport';
-import { Strategy } from 'passport-local';
+import passport from "passport";
+import { Strategy } from "passport-local";
 
-import { loggers } from 'winston';
-const appLogger = loggers.get('application');
+import { loggers } from "winston";
+const appLogger = loggers.get("application");
 
-import store from '../users/userstore';
-import User from '../users/user';
-import { hashPassword } from '../commons/hashPassword';
+import store from "../users/userstore";
+import User from "../users/user";
+import { hashPassword } from "../commons/hashPassword";
 
 passport.use(
   new Strategy((username, password, done) => {
     store.forId(username, (err: Error | null, user: User) => {
-      appLogger.info('Login for: ' + username);
+      appLogger.info("Login for: " + username);
       if (err || !user) {
-        appLogger.error('Login error for: ' + username);
-        appLogger.error(err?.message || '');
+        appLogger.error("Login error for: " + username);
+        appLogger.error(err?.message || "");
         return done(err);
       }
       if (hashPassword(password, user.salt) === user.hashedPassword) {

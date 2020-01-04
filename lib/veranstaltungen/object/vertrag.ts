@@ -1,7 +1,7 @@
-import misc from '../../commons/misc';
+import misc from "../../commons/misc";
 
-export type Sprache = 'Deutsch' | 'Englisch' | 'Regional';
-export type Vertragsart = 'Jazzclub' | 'Agentur/Künstler' | 'JazzClassix';
+export type Sprache = "Deutsch" | "Englisch" | "Regional";
+export type Vertragsart = "Jazzclub" | "Agentur/Künstler" | "JazzClassix";
 
 export interface VertragRaw {
   art: Vertragsart;
@@ -13,7 +13,7 @@ export default class Vertrag {
   state: VertragRaw;
 
   static arten(): Vertragsart[] {
-    return ['Jazzclub', 'Agentur/Künstler', 'JazzClassix'];
+    return ["Jazzclub", "Agentur/Künstler", "JazzClassix"];
   }
 
   toJSON(): VertragRaw {
@@ -22,8 +22,8 @@ export default class Vertrag {
 
   constructor(object: VertragRaw | undefined) {
     this.state = object || {
-      art: 'Jazzclub',
-      sprache: 'Deutsch',
+      art: "Jazzclub",
+      sprache: "Deutsch",
       datei: []
     };
     if (!this.state.datei) {

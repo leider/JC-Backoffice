@@ -1,5 +1,5 @@
-import { format, loggers, transports } from 'winston';
-import { ConsoleTransportInstance, FileTransportInstance } from 'winston/lib/winston/transports';
+import { format, loggers, transports } from "winston";
+import { ConsoleTransportInstance, FileTransportInstance } from "winston/lib/winston/transports";
 
 function consoleForWinston(): ConsoleTransportInstance {
   const consoleformat = format.combine(
@@ -27,21 +27,21 @@ function fileNamed(name: string): FileTransportInstance {
   });
 }
 
-loggers.add('application', {
-  level: 'info',
-  transports: [consoleForWinston(), fileNamed('server')]
+loggers.add("application", {
+  level: "info",
+  transports: [consoleForWinston(), fileNamed("server")]
 });
-loggers.add('scripts', {
-  level: 'info',
-  transports: [consoleForWinston(), fileNamed('scripts')]
+loggers.add("scripts", {
+  level: "info",
+  transports: [consoleForWinston(), fileNamed("scripts")]
 });
-loggers.add('transactions', {
-  level: 'info',
-  transports: [consoleForWinston(), fileNamed('transactions')]
+loggers.add("transactions", {
+  level: "info",
+  transports: [consoleForWinston(), fileNamed("transactions")]
 });
-loggers.add('http', {
-  level: 'warn',
-  transports: [consoleForWinston(), fileNamed('http')]
+loggers.add("http", {
+  level: "warn",
+  transports: [consoleForWinston(), fileNamed("http")]
 });
 
 export default loggers;

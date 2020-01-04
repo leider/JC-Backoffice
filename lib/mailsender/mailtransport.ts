@@ -1,18 +1,18 @@
-import Message from './message';
-import winston from 'winston';
+import Message from "./message";
+import winston from "winston";
 
-const logger = winston.loggers.get('application');
-import conf from '../commons/simpleConfigure';
-const testLocal = conf.get('doNotSendMails') || false;
+const logger = winston.loggers.get("application");
+import conf from "../commons/simpleConfigure";
+const testLocal = conf.get("doNotSendMails") || false;
 
-import transport from './nodemailerTransport';
+import transport from "./nodemailerTransport";
 
 function sendMail(message: Message, callback: Function): void {
   if (testLocal) {
     // eslint-disable-next-line no-console
     console.log(message.toTransportObject());
     message.setTo();
-    message.setBcc('derleider@web.de');
+    message.setBcc("derleider@web.de");
   }
   transport.sendMail(message.toTransportObject(), (err: Error | null) => {
     if (err) {

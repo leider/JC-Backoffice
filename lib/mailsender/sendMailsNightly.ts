@@ -1,10 +1,6 @@
-import {
-  checkPressetexte,
-  checkFluegel,
-  checkKasse
-} from './sendMailsInternalInformation';
-import { loadRulesAndProcess } from './sendMailsForRules';
-import { remindForProgrammheft } from './sendMailsForProgrammheft';
+import { checkPressetexte, checkFluegel, checkKasse } from "./sendMailsInternalInformation";
+import { loadRulesAndProcess } from "./sendMailsForRules";
+import { remindForProgrammheft } from "./sendMailsForProgrammheft";
 
 export default {
   loadRulesAndProcess,

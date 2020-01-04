@@ -1,4 +1,4 @@
-import misc from '../../commons/misc';
+import misc from "../../commons/misc";
 
 export interface TechnikRaw {
   dateirider: string[];
@@ -40,8 +40,7 @@ export default class Technik {
 
   fillFromUI(object: TechnikUI): Technik {
     this.state.dateirider = object.dateirider || this.state.dateirider;
-    this.state.technikAngebot1 =
-      object.technikAngebot1 || this.state.technikAngebot1;
+    this.state.technikAngebot1 = object.technikAngebot1 || this.state.technikAngebot1;
     this.state.backlineJazzclub = misc.toArray(object.backlineJazzclub);
     this.state.backlineRockshop = misc.toArray(object.backlineRockshop);
     this.state.checked = !!object.checked;
@@ -75,7 +74,7 @@ export default class Technik {
   }
 
   technikAngebot1(): string {
-    return this.state.technikAngebot1 || '';
+    return this.state.technikAngebot1 || "";
   }
 
   fluegel(): boolean {

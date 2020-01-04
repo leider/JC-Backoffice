@@ -6,10 +6,10 @@ block title
   | Veranstaltung
 
 block content
-  -var kosten = veranstaltung.kosten()
-  -var technik = veranstaltung.technik()
+  - var kosten = veranstaltung.kosten();
+  - var technik = veranstaltung.technik();
   .col-12
-    form#ausgabenform(action='/veranstaltungen/submit', method='post')
+    form#ausgabenform(action="/veranstaltungen/submit", method="post")
       +editHeader(veranstaltung, 'technik')
         .col-12
           +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'technik')
@@ -38,10 +38,10 @@ block content
                     +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
 
 block head
-  link(rel='stylesheet', href='/stylesheets/fileinput.css')
+  link(rel="stylesheet", href="/stylesheets/fileinput.css")
 
 block scripts
-  script(src='/clientscripts/fileinput.min.js')
+  script(src="/clientscripts/fileinput.min.js")
   script.
     $(document).ready(function initAusgabenScript() {
       var backlineEUR = $('#kosten\\[backlineEUR\\]');
@@ -64,4 +64,3 @@ block scripts
       saalmiete.keyup(updateSaalmietePreis);
       updateSaalmietePreis();
     });
-

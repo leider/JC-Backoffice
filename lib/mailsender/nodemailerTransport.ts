@@ -1,6 +1,4 @@
-import nodemailer from 'nodemailer';
-import conf from '../commons/simpleConfigure';
+import nodemailer from "nodemailer";
+import conf from "../commons/simpleConfigure";
 
-export default nodemailer.createTransport(
-  conf.get('transport-options') as object
-);
+export default nodemailer.createTransport(conf.get("transport-options") as object);

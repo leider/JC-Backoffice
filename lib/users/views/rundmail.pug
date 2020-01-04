@@ -1,13 +1,13 @@
 extends ../../../views/layout
 
-include  ../../../views/formComponents
+include ../../../views/formComponents
 
 block title
   | Rundmail
 
 block content
   .col-12
-    form#mailform(action='/users/rundmail', method='post')
+    form#mailform(action="/users/rundmail", method="post")
       +csrf
       .page-header
         +submitButtons('Mail senden an')
@@ -18,7 +18,7 @@ block content
           +checkbox('group', 'Orga Team', false, 'orgaTeam')
           +checkbox('group', 'Booking Team', false, 'bookingTeam')
         .col-md-6
-          for user in users
+          each user in users
             +checkbox('user', user.name, false, user.id)
       .row
         .col-12
@@ -28,4 +28,4 @@ block content
           +submitButtons('Mail senden')
 
 block scripts
-  script(src='/clientscripts/bootstrap-markdown.min.js')
+  script(src="/clientscripts/bootstrap-markdown.min.js")

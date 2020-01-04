@@ -1,26 +1,25 @@
 mixin signbox(title, party, optionalText, unterschrift)
   .row
     .col-4
-      p(style='line-height:3;') #{title}:
+      p(style="line-height:3;") #{title}:
     .col-8
       if (optionalText)
         if (unterschrift)
-          p(style='line-height:3;border-bottom:1px dotted')
-            img(src=publicUrlPrefix + '/reporting/niklas.png', height='22')
+          p(style="line-height:3;border-bottom:1px dotted")
+            img(src=publicUrlPrefix + '/reporting/niklas.png', height="22")
         else
-          p(style='line-height:3;border-bottom:1px dotted;') #{optionalText}
+          p(style="line-height:3;border-bottom:1px dotted;") #{optionalText}
       else
-        p(style='line-height:3;border-bottom:1px dotted;') &nbsp;
-      p.text-center(style='margin-top:-10px; font-size:6px;') #{party}
-
+        p(style="line-height:3;border-bottom:1px dotted;") &nbsp;
+      p.text-center(style="margin-top:-10px; font-size:6px;") #{party}
 
 mixin bild(name)
-  div(style='margin-top:40px')
-    img(src=publicUrlPrefix + '/reporting/' + name + '.png', height='30')
+  div(style="margin-top:40px")
+    img(src=publicUrlPrefix + '/reporting/' + name + '.png', height="30")
 
 mixin sidebar
-  img(src=publicUrlPrefix + '/reporting/logo.png', height='80')
-  div(style='font-size:6px;margin-top:60px')
+  img(src=publicUrlPrefix + '/reporting/logo.png', height="80")
+  div(style="font-size:6px;margin-top:60px")
     p
       .blau Veranstalter
       | Jazzclub Karlsruhe e.V.<br>
@@ -52,21 +51,21 @@ mixin sidebar
 doctype html
 html
   head
-    meta(charset='utf-8')
-    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat')
-    style(type='text/css').
+    meta(charset="utf-8")
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat")
+    style(type="text/css").
       p {
         margin-bottom: 1em !important
       }
-  body(style='font-size:8px;')
+  body(style="font-size:8px;")
     .container-fluid
-      #Seite1.row(style='page-break-inside: avoid;')
+      #Seite1.row(style="page-break-inside: avoid;")
         .col-9
-          #adresse(style='margin-top:110px')
+          #adresse(style="margin-top:110px")
             .row
               .col-12
-                small(style='font-size:6px;')
+                small(style="font-size:6px;")
                   b Jazzclub Karlsruhe e.V.&nbsp;
                   span.blau |&nbsp;
                   | Office: Leopoldstr. 13&nbsp;
@@ -74,18 +73,18 @@ html
                   | 76133 Karlsruhe
                 p &nbsp;
                 block adresse
-          #content1(style='margin-top:20px')
+          #content1(style="margin-top:20px")
           block content1
         .col-3
           +sidebar
         .col-12
-          p.text-center(style='margin-top:15px') Seite 1 von 2
+          p.text-center(style="margin-top:15px") Seite 1 von 2
 
-      #Seite2.row(style='page-break-inside: avoid;')
+      #Seite2.row(style="page-break-inside: avoid;")
         .col-9
-          #content2(style='margin-top:10px')
+          #content2(style="margin-top:10px")
           block content2
         .col-3
           +sidebar
         .col-12
-          p.text-center(style='margin-top:15px') Seite 2 von 2
+          p.text-center(style="margin-top:15px") Seite 2 von 2

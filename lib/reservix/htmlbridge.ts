@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-import request from 'request';
+import request from "request";
 const requester = request.defaults({ jar: true });
-import cheerio from 'cheerio';
+import cheerio from "cheerio";
 
-import conf from '../commons/simpleConfigure';
-const baseURL = 'https://system.reservix.de';
+import conf from "../commons/simpleConfigure";
+const baseURL = "https://system.reservix.de";
 
-const loginURL =
-  baseURL +
-  '/off/login_check.php?deeplink=0&id=' +
-  conf.get('reservix-deeplink');
-const username = conf.get('reservix-username');
-import fieldHelpers from '../commons/fieldHelpers';
-import DatumUhrzeit from '../commons/DatumUhrzeit';
+const loginURL = baseURL + "/off/login_check.php?deeplink=0&id=" + conf.get("reservix-deeplink");
+const username = conf.get("reservix-username");
+import fieldHelpers from "../commons/fieldHelpers";
+import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 const tablepositions = {
   datum: 0,
@@ -36,22 +33,16 @@ function prepareInputsForPost(forminputs: any, $: CheerioStatic): any {
       return !!$(this).val();
     })
     .serializeArray()
-    .reduce(
-      (acc: { [x: string]: string }, curr: { name: string; value: string }) => {
-        acc[curr.name] = curr.value;
-        return acc;
-      },
-      {}
-    );
+    .reduce((acc: { [x: string]: string }, curr: { name: string; value: string }) => {
+      acc[curr.name] = curr.value;
+      return acc;
+    }, {});
 }
 
-function parseTable(
-  headersAndLines: { headers: Array<any>; lines: Array<any> },
-  callback: Function
-): void {
+function parseTable(headersAndLines: { headers: Array<any>; lines: Array<any> }, callback: Function): void {
   function moneyStringToFloat(string: string): number {
     // remove € and change from german string to float
-    return fieldHelpers.parseNumberWithCurrentLocale(string.replace(' €', ''));
+    return fieldHelpers.parseNumberWithCurrentLocale(string.replace(" €", ""));
   }
 
   // check headers TODO
@@ -60,14 +51,9 @@ function parseTable(
     .map(each => {
       const row = each.row;
       return {
-        datum: DatumUhrzeit.forReservixString(
-          row[tablepositions.datum],
-          row[tablepositions.uhrzeit]
-        ),
+        datum: DatumUhrzeit.forReservixString(row[tablepositions.datum], row[tablepositions.uhrzeit]),
         id: row[tablepositions.event].match(/\((\w+)\)$/)[1], // search event id between (...)
-        anzahl:
-          parseInt(row[tablepositions.gesamt], 10) +
-          parseInt(row[tablepositions.freikarten], 10),
+        anzahl: parseInt(row[tablepositions.gesamt], 10) + parseInt(row[tablepositions.freikarten], 10),
         netto: moneyStringToFloat(row[tablepositions.netto]),
         brutto: moneyStringToFloat(row[tablepositions.brutto])
       };
@@ -81,7 +67,7 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
     return {
       // @ts-ignore
       row: $(this)
-        .find('td')
+        .find("td")
         .map(function() {
           // @ts-ignore
           return $(this).text();
@@ -89,35 +75,31 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
         .toArray()
     };
   }
-  const headers = $('.tablelines tr')
-    .not('.rxrow')
+  const headers = $(".tablelines tr")
+    .not(".rxrow")
     .map(asFields)
     .toArray();
-  const lines = $('.tablelines .rxrow')
+  const lines = $(".tablelines .rxrow")
     .map(asFields)
     .toArray();
   parseTable({ headers, lines }, callback);
 }
 
-function openAuswertungPage(
-  location: string,
-  optionalDateString: string | null,
-  callback: Function
-): void {
+function openAuswertungPage(location: string, optionalDateString: string | null, callback: Function): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
-    const logoutURL = $('#page_header_logout a').attr('href');
+    const logoutURL = $("#page_header_logout a").attr("href");
     if (optionalDateString) {
-      $('#id_eventdatumvon').val(optionalDateString);
+      $("#id_eventdatumvon").val(optionalDateString);
     }
 
     return request.post(
       {
-        url: baseURL + '/sales/' + $('#searchForm').attr('action'),
-        formData: prepareInputsForPost($('#searchForm :input'), $)
+        url: baseURL + "/sales/" + $("#searchForm").attr("action"),
+        formData: prepareInputsForPost($("#searchForm :input"), $)
       },
       (err1, resp1, body1) => {
         if (err1) {
@@ -132,17 +114,13 @@ function openAuswertungPage(
   });
 }
 
-function openVerwaltungPage(
-  location: string,
-  optionalDateString: string | null,
-  callback: Function
-): void {
+function openVerwaltungPage(location: string, optionalDateString: string | null, callback: Function): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
-    const auswertungUrl = $('#content ul li a')
+    const auswertungUrl = $("#content ul li a")
       // @ts-ignore
       .filter(function() {
         // @ts-ignore
@@ -150,23 +128,19 @@ function openVerwaltungPage(
           .html()
           .match(/Detailauswertung/);
       })
-      .attr('href');
+      .attr("href");
 
     return openAuswertungPage(baseURL + auswertungUrl, optionalDateString, callback);
   });
 }
 
-function openWelcomePage(
-  location: string,
-  optionalDateString: string | null,
-  callback: Function
-): void {
+function openWelcomePage(location: string, optionalDateString: string | null, callback: Function): void {
   request(location, (err, resp, body) => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
-    const verwaltungUrl = $('#page_header_middle ul li a')
+    const verwaltungUrl = $("#page_header_middle ul li a")
       // @ts-ignore
       .filter(function() {
         // @ts-ignore
@@ -174,7 +148,7 @@ function openWelcomePage(
           .html()
           .match(/Verwaltung/);
       })
-      .attr('href');
+      .attr("href");
 
     return openVerwaltungPage(baseURL + verwaltungUrl, optionalDateString, callback);
   });
@@ -189,30 +163,28 @@ export interface Lineobject {
   brutto: number;
 }
 
-export function loadSalesreports(
-  optionalDateString: string | null,
-  callback: Function
-): void {
+export function loadSalesreports(optionalDateString: string | null, callback: Function): void {
   requester(loginURL, (err, resp, body): void => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
-    $('#id_mitarbeiterpw').val(username as string);
-    const inputs = prepareInputsForPost($('#login input'), $);
+    $("#id_mitarbeiterpw").val(username as string);
+    const inputs = prepareInputsForPost($("#login input"), $);
     return request.post(
       // @ts-ignore
-      { url: $('#login').attr('action'), formData: inputs },
+      { url: $("#login").attr("action"), formData: inputs },
       (err1: Error | null, resp1: Response): void => {
         if (err1) {
           callback(err1);
-        } else
-        {openWelcomePage(
-           // @ts-ignore
-           baseURL + resp1.headers.location,
-           optionalDateString,
-           callback
-         );}
+        } else {
+          openWelcomePage(
+            // @ts-ignore
+            baseURL + resp1.headers.location,
+            optionalDateString,
+            callback
+          );
+        }
       }
     );
   });

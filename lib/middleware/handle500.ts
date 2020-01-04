@@ -1,5 +1,5 @@
-import express from 'express';
-import { Logger } from 'winston';
+import express from "express";
+import { Logger } from "winston";
 
 export default function handle500(logger: Logger) {
   /* eslint no-unused-vars: 0 */
@@ -12,15 +12,13 @@ export default function handle500(logger: Logger) {
   ): void => {
     // express needs four arguments!
     logger.error(req.originalUrl);
-    logger.error(error.stack || '');
-    if (
-      /InternalOpenIDError|BadRequestError|InternalOAuthError/.test(error.name)
-    ) {
-      return res.render('errorPages/authenticationError.pug', {
+    logger.error(error.stack || "");
+    if (/InternalOpenIDError|BadRequestError|InternalOAuthError/.test(error.name)) {
+      return res.render("errorPages/authenticationError.pug", {
         error,
         status: req.statusCode
       });
     }
-    return res.render('errorPages/500.pug', { error, status: req.statusCode });
+    return res.render("errorPages/500.pug", { error, status: req.statusCode });
   };
 }

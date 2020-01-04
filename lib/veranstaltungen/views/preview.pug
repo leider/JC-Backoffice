@@ -3,10 +3,10 @@ include ../../../views/formComponents
 include edit/mixins
 
 mixin mitarbeiterRows(collection, verantwortlich)
-  for user in collection || []
+  each user in collection || []
     tr
-      td(width='2%')
-      td(width='98%')
+      td(width="2%")
+      td(width="98%")
         | #{user.name} &nbsp;
         span.mailtoify #{user.email}
         | #{' '} Tel.:
@@ -14,20 +14,19 @@ mixin mitarbeiterRows(collection, verantwortlich)
         if verantwortlich
           b #{' '}(Verantwortlich)
 
-
 block title
   | #{veranstaltung.kopf().titel()}
 
 block content
-  -var agentur = veranstaltung.agentur()
-  -var eintrittspreise = veranstaltung.eintrittspreise()
-  -var kopf = veranstaltung.kopf()
-  -var unterkunft = veranstaltung.unterkunft()
-  -var hotel = veranstaltung.hotel()
-  -var presse = veranstaltung.presse()
-  -var technik = veranstaltung.technik()
-  -var staff = veranstaltung.staff()
-  -var salesreport = veranstaltung.salesreport()
+  - var agentur = veranstaltung.agentur();
+  - var eintrittspreise = veranstaltung.eintrittspreise();
+  - var kopf = veranstaltung.kopf();
+  - var unterkunft = veranstaltung.unterkunft();
+  - var hotel = veranstaltung.hotel();
+  - var presse = veranstaltung.presse();
+  - var technik = veranstaltung.technik();
+  - var staff = veranstaltung.staff();
+  - var salesreport = veranstaltung.salesreport();
 
   .col-12
     .row
@@ -37,7 +36,7 @@ block content
             +submitButtonsFor(veranstaltung, '', true)
 
           h2(class='text-' + cssColorCode(kopf.eventTyp()))
-            span(class=cssIconClass(kopf.eventTyp()), style='font-weight:normal') #{''}
+            span(class=cssIconClass(kopf.eventTyp()), style="font-weight:normal") #{''}
             | #{' '}#{kopf.titel()} #{kopf.presseIn()}
             br
             small
@@ -47,7 +46,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        -var mitarbeiter = staff.mitarbeiterTransient;
+        - var mitarbeiter = staff.mitarbeiterTransient;
         +legendMitBody('staff', 'Staff', null, 'staff')
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()
@@ -65,12 +64,11 @@ block content
                 tr: th(colspan=2) Merchandising
                 +mitarbeiterRows(mitarbeiter.merchandise, false)
 
-
         +legendMitBody('eintritt', 'Eintritt und Abendkasse', null, 'kasse')
           table.table.table-sm.table-striped
             if eintrittspreise.frei()
               tr
-                th(align='right') Freier Eintritt (Sammelbox)
+                th(align="right") Freier Eintritt (Sammelbox)
             else
               tr
                 th.text-right: +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
@@ -80,44 +78,44 @@ block content
                 tr
                   th
                     | Reservix #{' '}
-                    img(src='/img/rex_14x14.png')
+                    img(src="/img/rex_14x14.png")
                   th.text-right #{salesreport.anzahlRegulaer()}
                   th.text-right #{formatReadonlyAsEuro(salesreport.nettoUmsatz())}
 
             if accessrights.isAbendkasse()
-              tr: td.text-right(colspan=3): a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title='Abendkasse') &nbsp;Abendkasse
+              tr: td.text-right(colspan=3): a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title="Abendkasse") &nbsp;Abendkasse
 
         if kopf.beschreibungHTML()
           +legendMitBody('info', 'Informationen', null, 'allgemeines')
             .card-body !{kopf.beschreibungHTML()}
 
         +legendMitBody('technik', 'Technik', null, 'technik')
-          -var dateien = technik.dateirider()
+          - var dateien = technik.dateirider();
           table.table.table-sm.table-striped
             if technik.fluegel()
               tr: th(colspan=2) Flügel stimmen!
             if technik.backlineJazzclub().length
               tr: th(colspan=2) Backline Jazzclub
-              for item in technik.backlineJazzclub()
+              each item in technik.backlineJazzclub()
                 tr
-                  td(width='2%')
-                  td(width='98%') #{item}
+                  td(width="2%")
+                  td(width="98%") #{item}
             if technik.backlineRockshop().length
               tr: th(colspan=2) Backline Rockshop
-              for item in technik.backlineRockshop()
+              each item in technik.backlineRockshop()
                 tr
-                  td(width='2%')
-                  td(width='98%') #{item}
+                  td(width="2%")
+                  td(width="98%") #{item}
             if dateien.length > 0
               tr: th(colspan=2) Dateien
-              for datei in dateien
+              each datei in dateien
                 tr: td.text-right(colspan=2): a.btn.btn-ausgaben(href='/files/' + datei) #{datei}
 
       .col-md-6
         +legendMitBody('presse', 'Pressetext', null, 'presse')
           | !{veranstaltung.presseTextHTML()}
           if presse.firstImage()
-            img(src=presse.imageURLpure(), width = '100%')
+            img(src=presse.imageURLpure(), width="100%")
 
         if agentur.name()
           +legendMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'allgemeines')
@@ -130,7 +128,7 @@ block content
                 span.mailtoify #{agentur.email()}
 
         if unterkunft.anzahlZimmer()
-          -var hoteltitel = hotel.name() + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte'
+          - var hoteltitel = hotel.name() + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte';
           +legendMitBody('hotelbuchung', hoteltitel, null, 'hotel')
             .card-body
               address
@@ -139,4 +137,3 @@ block content
                 | Tel.: #{hotel.telefon()} <br>
                 | E-Mail:
                 span.mailtoify #{hotel.email()}
-

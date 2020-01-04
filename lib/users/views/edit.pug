@@ -1,12 +1,12 @@
 extends ../../../views/layout
 include ../../../views/formComponents
 
-mixin submitButtonsWithDelete()
+mixin submitButtonsWithDelete
   .btn-group.float-right
-    a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
+    a.btn.btn-light(href="javascript:history.back()", type="cancel") Zurück
     if accessrights.isSuperuser()
-      a.btn.btn-danger(href='/users/' + user.id + '/delete') Löschen
-    button.btn.btn-primary(type='submit') Speichern
+      a.btn.btn-danger(href="/users/' + user.id + '/delete") Löschen
+    button.btn.btn-primary(type="submit") Speichern
 
 mixin hiddenGroup(gruppo)
   if (user.gruppen || []).includes(gruppo)
@@ -23,11 +23,11 @@ block title
   | Users
 
 block content
-  -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
+  - var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', "Ladies' XS", "Ladies' S", "Ladies' M", "Ladies' L", "Ladies' XL", "Ladies' XXL"];
   .col-12
-    form#userform.needs-validation(action='/users/submit', method='post', novalidate)
+    form#userform.needs-validation(action="/users/submit", method="post", novalidate)
       .page-header
-        +submitButtonsWithDelete()
+        +submitButtonsWithDelete
         h2 User "#{user.id}" bearbeiten
         +csrf
       +hidden('id', user.id)
@@ -52,4 +52,4 @@ block content
             +checkbox('rechte', 'Kassenfreigabe', !!(user.rechte || []).includes('kassenfreigabe'), 'kassenfreigabe')
           else
             +hiddenRight('kassenfreigabe')
-      +submitButtonsWithDelete()
+      +submitButtonsWithDelete

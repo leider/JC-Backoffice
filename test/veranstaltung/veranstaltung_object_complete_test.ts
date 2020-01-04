@@ -1,22 +1,22 @@
-import { expect } from 'chai';
-import Veranstaltung from '../../lib/veranstaltungen/object/veranstaltung';
-import { Sprache, Vertragsart } from '../../lib/veranstaltungen/object/vertrag';
+import { expect } from "chai";
+import Veranstaltung from "../../lib/veranstaltungen/object/veranstaltung";
+import { Sprache, Vertragsart } from "../../lib/veranstaltungen/object/vertrag";
 
 const demo = {
-  id: 'Peterchen',
+  id: "Peterchen",
   startDate: new Date(),
   endDate: new Date(),
-  url: '',
+  url: "",
   agentur: {
-    auswahl: '',
-    name: '',
-    ansprechpartner: '',
-    telefon: '',
-    email: '',
-    adresse: ''
+    auswahl: "",
+    name: "",
+    ansprechpartner: "",
+    telefon: "",
+    email: "",
+    adresse: ""
   },
   artist: {
-    bandname: '',
+    bandname: "",
     name: [],
     numMusiker: 1,
     numCrew: 0,
@@ -26,7 +26,7 @@ const demo = {
   },
   eintrittspreise: {
     preisprofil: {
-      name: 'Freier Eintritt',
+      name: "Freier Eintritt",
       regulaer: 0,
       rabattErmaessigt: 0,
       rabattMitglied: 0
@@ -38,12 +38,12 @@ const demo = {
     zuschuss: 0
   },
   hotel: {
-    auswahl: '',
-    name: '',
-    ansprechpartner: '',
-    telefon: '',
-    email: '',
-    adresse: ''
+    auswahl: "",
+    name: "",
+    ansprechpartner: "",
+    telefon: "",
+    email: "",
+    adresse: ""
   },
   kasse: {
     anfangsbestandEUR: 500,
@@ -58,23 +58,23 @@ const demo = {
     einnahmeSonstiges1EUR: 0,
     einnahmeTicketsEUR: 0,
     einnahmeSonstiges2EUR: 0,
-    ausgabeSonstiges1Text: '',
-    ausgabeSonstiges2Text: '',
-    ausgabeSonstiges3Text: '',
-    einnahmeSonstiges1Text: '',
-    einnahmeSonstiges2Text: '',
-    anzahlBesucherAK: ''
+    ausgabeSonstiges1Text: "",
+    ausgabeSonstiges2Text: "",
+    ausgabeSonstiges3Text: "",
+    einnahmeSonstiges1Text: "",
+    einnahmeSonstiges2Text: "",
+    anzahlBesucherAK: ""
   },
   kopf: {
-    beschreibung: '',
-    eventTyp: '',
-    flaeche: '',
-    kooperation: '_',
-    ort: 'Jubez',
-    titel: '',
-    pressename: '',
-    presseIn: '',
-    genre: '',
+    beschreibung: "",
+    eventTyp: "",
+    flaeche: "",
+    kooperation: "_",
+    ort: "Jubez",
+    titel: "",
+    pressename: "",
+    presseIn: "",
+    genre: "",
     confirmed: false,
     rechnungAnKooperation: false
   },
@@ -92,11 +92,11 @@ const demo = {
     gageBAR: false
   },
   presse: {
-    originalText: '',
-    text: '',
+    originalText: "",
+    text: "",
     image: [],
     checked: false,
-    jazzclubURL: ''
+    jazzclubURL: ""
   },
   staff: {
     techniker: [],
@@ -127,44 +127,44 @@ const demo = {
     doppelEUR: 0,
     suiteEUR: 0,
     transportEUR: 0,
-    kommentar: '',
-    transportText: '',
+    kommentar: "",
+    transportText: "",
     sonstiges: [],
     angefragt: false,
     bestaetigt: false
   },
   vertrag: {
-    art: 'Jazzclub' as Vertragsart,
-    sprache: 'Deutsch' as Sprache,
+    art: "Jazzclub" as Vertragsart,
+    sprache: "Deutsch" as Sprache,
     datei: []
   },
-  salesrep: { id: '' }
+  salesrep: { id: "" }
 };
 const reference = JSON.parse(JSON.stringify(demo));
 const emptyKontakt = {
-  auswahl: '',
-  name: 'name',
-  ansprechpartner: '',
-  telefon: '',
-  email: '',
-  adresse: ''
+  auswahl: "",
+  name: "name",
+  ansprechpartner: "",
+  telefon: "",
+  email: "",
+  adresse: ""
 };
-describe('Veranstaltung Gesamt', () => {
+describe("Veranstaltung Gesamt", () => {
   let veranstaltung: Veranstaltung;
 
   beforeEach(() => {
     veranstaltung = new Veranstaltung(demo);
   });
 
-  it('hat noch eigene Attribute', () => {
+  it("hat noch eigene Attribute", () => {
     expect(veranstaltung.id()).to.eql(reference.id);
     expect(veranstaltung.url()).to.eql(reference.url);
     expect(veranstaltung.startDate().toISOString()).to.eql(reference.startDate);
     expect(veranstaltung.endDate().toISOString()).to.eql(reference.endDate);
   });
 
-  describe('fillFromUI', () => {
-    it('ohne kopf oder ohne id bleiben die vorherigen Felder', () => {
+  describe("fillFromUI", () => {
+    it("ohne kopf oder ohne id bleiben die vorherigen Felder", () => {
       veranstaltung.fillFromUI({
         agentur: emptyKontakt
       });
@@ -172,14 +172,14 @@ describe('Veranstaltung Gesamt', () => {
       expect(veranstaltung.agentur().name()).to.eql(reference.agentur.name);
     });
 
-    it('mit kopf werden die vorherigen Felder überschrieben', () => {
+    it("mit kopf werden die vorherigen Felder überschrieben", () => {
       veranstaltung.fillFromUI({ kopf: {}, agentur: emptyKontakt });
 
       expect(veranstaltung.agentur().name()).to.eql(emptyKontakt.name);
     });
 
-    it('mit id werden die vorherigen Felder überschrieben', () => {
-      veranstaltung.fillFromUI({ id: 'id', agentur: emptyKontakt });
+    it("mit id werden die vorherigen Felder überschrieben", () => {
+      veranstaltung.fillFromUI({ id: "id", agentur: emptyKontakt });
 
       expect(veranstaltung.agentur().name()).to.eql(emptyKontakt.name);
     });

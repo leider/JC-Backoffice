@@ -1,7 +1,7 @@
-import fieldHelpers from '../../commons/fieldHelpers';
+import fieldHelpers from "../../commons/fieldHelpers";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
-  return parseFloat(textWithNumberOrNull || '') || 0;
+  return parseFloat(textWithNumberOrNull || "") || 0;
 }
 
 export interface KostenRaw {

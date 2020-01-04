@@ -6,13 +6,13 @@ block title
 
 block content
   .col-12
-    form#optionenform(action='/optionen/submit', method='post')
+    form#optionenform(action="/optionen/submit", method="post")
       +csrf
       fieldset
         .row
           .col-12
             .page-header
-              +submitButtons()
+              +submitButtons
               .page-header
                 h2 Optionen <br>
                   small Bearbeiten
@@ -34,4 +34,4 @@ block content
         .row
           .col-12
             hr
-            +submitButtons()
+            +submitButtons

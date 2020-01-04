@@ -8,7 +8,7 @@ block content
   .col-12
     if lastSaved
       #notifications.alert.alert-block.alert-success.hidden-print.mt-5
-        button.close(type='button', data-dismiss='alert') &times;
+        button.close(type="button", data-dismiss="alert") &times;
         h4 Merke Dir das Passwort!
         p.
           Wenn Du es Dir nicht merkst, ist es unwiederbringlich verloren und Du musst ein neues generieren! -
@@ -17,15 +17,15 @@ block content
     .page-header
       h2 Registrierte User
     .row
-      -var count = 0;
-      for user in users
+      - var count = 0;
+      each user in users
         +userpanel(user, ++count, true)
 
     hr
     .page-header
       h2 User anlegen / Passwort vergeben
-    form#userform.needs-validation(action='/users/submitNew', method='post', novalidate)
+    form#userform.needs-validation(action="/users/submitNew", method="post", novalidate)
       p Einfach einen neuen oder vorhandenen Username (fürs Login) eintragen und "Speichern" klicken. Dann wird ein Passwort generiert.
       +csrf
       +textRequired('username', 'Benutzername')
-      +submitButtons()
+      +submitButtons

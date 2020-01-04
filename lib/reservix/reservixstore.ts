@@ -1,9 +1,9 @@
-import R from 'ramda';
+import R from "ramda";
 
-import misc from '../commons/misc';
-import pers from '../persistence/persistence';
-const persistence = pers('reservixstore');
-import Salesreport from './salesreport';
+import misc from "../commons/misc";
+import pers from "../persistence/persistence";
+const persistence = pers("reservixstore");
+import Salesreport from "./salesreport";
 
 function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
   return misc.toObject(Salesreport, callback, err, jsobject);

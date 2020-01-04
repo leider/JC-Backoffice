@@ -14,50 +14,50 @@ export default class Diff {
     let rdln = 0;
 
     function leftDiffLineNumber(id: number, line: string): string {
-      if (line.slice(0, 2) === '@@') {
+      if (line.slice(0, 2) === "@@") {
         const match = line.match(/-(\d+)/);
         if (!match) {
-          return '';
+          return "";
         }
         const li = match[1];
         ldln = parseInt(li, 10);
-        return '...';
+        return "...";
       }
-      if (line.slice(0, 1) === '+') {
-        return '';
+      if (line.slice(0, 1) === "+") {
+        return "";
       }
       rdln = rdln + 1;
       return (ldln - 1).toString();
     }
 
     function rightDiffLineNumber(id: number, line: string): string {
-      if (line.slice(0, 2) === '@@') {
+      if (line.slice(0, 2) === "@@") {
         const match = line.match(/\+(\d+)/);
         if (!match) {
-          return '';
+          return "";
         }
         const ri = match[1];
         rdln = parseInt(ri, 10);
-        return '...';
+        return "...";
       }
-      if (line.slice(0, 1) === '-') {
-        return ' ';
+      if (line.slice(0, 1) === "-") {
+        return " ";
       }
       rdln = rdln + 1;
       return (rdln - 1).toString();
     }
 
     function lineClass(line: string): string {
-      if (line.slice(0, 2) === '@@') {
-        return 'gc';
+      if (line.slice(0, 2) === "@@") {
+        return "gc";
       }
-      if (line.slice(0, 1) === '-') {
-        return 'gd';
+      if (line.slice(0, 1) === "-") {
+        return "gd";
       }
-      if (line.slice(0, 1) === '+') {
-        return 'gi';
+      if (line.slice(0, 1) === "+") {
+        return "gi";
       }
-      return '';
+      return "";
     }
 
     const lines: {
@@ -67,10 +67,10 @@ export default class Diff {
       class: string;
     }[] = [];
     this.diff
-      .split('\n')
+      .split("\n")
       .slice(4)
       .forEach(line => {
-        if (line.slice(0, 1) !== '\\') {
+        if (line.slice(0, 1) !== "\\") {
           lines.push({
             text: line,
             ldln: leftDiffLineNumber(0, line),

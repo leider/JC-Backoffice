@@ -1,9 +1,9 @@
-import pug from 'pug';
-import path from 'path';
-import Renderer from '../commons/renderer';
+import pug from "pug";
+import path from "path";
+import Renderer from "../commons/renderer";
 
-import conf from '../commons/simpleConfigure';
-import Mail from 'nodemailer/lib/mailer';
+import conf from "../commons/simpleConfigure";
+import Mail from "nodemailer/lib/mailer";
 
 export default class Message {
   private readonly subject!: string;
@@ -13,18 +13,12 @@ export default class Message {
   private to!: string;
   private bcc!: string;
 
-  constructor(
-    subjectWithText: { subject: string; markdown: string },
-    optionalSenderName?: string,
-    optionalSenderAddress?: string
-  ) {
+  constructor(subjectWithText: { subject: string; markdown: string }, optionalSenderName?: string, optionalSenderAddress?: string) {
     if (subjectWithText) {
       this.subject = subjectWithText.subject;
       this.markdown = subjectWithText.markdown;
-      this.senderName = optionalSenderName
-        ? optionalSenderName + ' via backoffice.jazzclub.de'
-        : conf.get('sender-name') as string;
-      this.senderAddress = optionalSenderAddress || conf.get('sender-address') as string;
+      this.senderName = optionalSenderName ? optionalSenderName + " via backoffice.jazzclub.de" : (conf.get("sender-name") as string);
+      this.senderAddress = optionalSenderAddress || (conf.get("sender-address") as string);
     }
     return this;
   }
@@ -37,18 +31,18 @@ export default class Message {
     if (toAddresses === undefined) {
       return;
     }
-    if (typeof toAddresses === 'string') {
+    if (typeof toAddresses === "string") {
       this.to = toAddresses;
     } else {
-      this.to = (toAddresses || []).join(',');
+      this.to = (toAddresses || []).join(",");
     }
   }
 
   setBcc(toAddresses: string | string[]): void {
-    if (typeof toAddresses === 'string') {
+    if (typeof toAddresses === "string") {
       this.bcc = toAddresses;
     } else {
-      this.bcc = toAddresses.join(',');
+      this.bcc = toAddresses.join(",");
     }
   }
 
@@ -58,11 +52,8 @@ export default class Message {
       content: Renderer.render(this.markdown),
       plain: this.markdown
     };
-    const filename = path.join(__dirname, 'views/mailtemplate.pug');
-    const filenameTextonly = path.join(
-      __dirname,
-      'views/mailtemplate-textonly.pug'
-    );
+    const filename = path.join(__dirname, "views/mailtemplate.pug");
+    const filenameTextonly = path.join(__dirname, "views/mailtemplate-textonly.pug");
 
     return {
       from: Message.formatEMailAddress(this.senderName, this.senderAddress),

@@ -45,7 +45,7 @@ block content
   .col-12
     .page-header
       .btn-group.float-right
-        a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
+        a.btn.btn-light(href="javascript:history.back()", type="cancel") Zurück
         button#rev-compare.btn.btn-light(data-pageName=pageName, data-subdir=subdir)
           i.fas.fa-stethoscope.fa-fw
           | &nbsp; Vergleichen…
@@ -57,7 +57,7 @@ block content
       each item in items
         tr
           td
-            input(type='checkbox', value=item.fullhash)
+            input(type="checkbox", value=item.fullhash)
           td #{item.author}
           td #{item.date.toLocalDateTimeString}
           td #{item.comment}

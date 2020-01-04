@@ -17,7 +17,7 @@ export interface KontaktUI {
 
 export default class Kontakt {
   state: KontaktRaw;
-  auswahl = '';
+  auswahl = "";
 
   toJSON(): KontaktRaw {
     return this.state;
@@ -25,11 +25,11 @@ export default class Kontakt {
 
   constructor(object: KontaktRaw | undefined) {
     this.state = object || {
-      name: '',
-      ansprechpartner: '',
-      telefon: '',
-      email: '',
-      adresse: ''
+      name: "",
+      ansprechpartner: "",
+      telefon: "",
+      email: "",
+      adresse: ""
     };
   }
 
@@ -65,28 +65,28 @@ export default class Kontakt {
 
   strasse(): string {
     if (this.adresse()) {
-      const lines = this.adresse().split('\r\n');
-      return lines[0] || '-';
+      const lines = this.adresse().split("\r\n");
+      return lines[0] || "-";
     }
-    return '-';
+    return "-";
   }
 
   ort(): string {
     if (this.adresse()) {
-      const lines = this.adresse().split('\r\n');
-      return lines[1] || '-';
+      const lines = this.adresse().split("\r\n");
+      return lines[1] || "-";
     }
-    return '-';
+    return "-";
   }
 
   einzeiligeAdresse(): string {
     if (this.adresse()) {
-      return this.state.adresse.replace('\r\n', ', ');
+      return this.state.adresse.replace("\r\n", ", ");
     }
-    return '-';
+    return "-";
   }
 
   adresseHTML(): string {
-    return this.state.adresse.replace('\r\n', '<br>');
+    return this.state.adresse.replace("\r\n", "<br>");
   }
 }

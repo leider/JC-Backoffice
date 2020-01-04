@@ -1,25 +1,22 @@
 /*eslint no-underscore-dangle: 0 */
-import config from '../../commons/simpleConfigure';
-import fieldHelpers from '../../commons/fieldHelpers';
-import Renderer from '../../commons/renderer';
-import DatumUhrzeit from '../../commons/DatumUhrzeit';
+import config from "../../commons/simpleConfigure";
+import fieldHelpers from "../../commons/fieldHelpers";
+import Renderer from "../../commons/renderer";
+import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
-import Artist, { ArtistRaw, ArtistUI } from './artist';
-import Eintrittspreise, {
-  EintrittspreiseRaw,
-  EintrittspreiseUI
-} from './eintrittspreise';
-import Kasse, { KasseRaw, KasseUI } from './kasse';
-import Kontakt, { KontaktRaw, KontaktUI } from './kontakt';
-import Kopf, { KopfRaw, KopfUI } from './kopf';
-import Kosten, { KostenRaw, KostenUI } from './kosten';
-import Presse, { PresseRaw, PresseUI } from './presse';
-import Staff, { StaffRaw, StaffUI } from './staff';
-import Technik, { TechnikRaw, TechnikUI } from './technik';
-import Unterkunft, { UnterkunftRaw, UnterkunftUI } from './unterkunft';
-import Vertrag, { VertragRaw } from './vertrag';
-import Salesreport, { ReservixState } from '../../reservix/salesreport';
-import R from 'ramda';
+import Artist, { ArtistRaw, ArtistUI } from "./artist";
+import Eintrittspreise, { EintrittspreiseRaw, EintrittspreiseUI } from "./eintrittspreise";
+import Kasse, { KasseRaw, KasseUI } from "./kasse";
+import Kontakt, { KontaktRaw, KontaktUI } from "./kontakt";
+import Kopf, { KopfRaw, KopfUI } from "./kopf";
+import Kosten, { KostenRaw, KostenUI } from "./kosten";
+import Presse, { PresseRaw, PresseUI } from "./presse";
+import Staff, { StaffRaw, StaffUI } from "./staff";
+import Technik, { TechnikRaw, TechnikUI } from "./technik";
+import Unterkunft, { UnterkunftRaw, UnterkunftUI } from "./unterkunft";
+import Vertrag, { VertragRaw } from "./vertrag";
+import Salesreport, { ReservixState } from "../../reservix/salesreport";
+import R from "ramda";
 
 interface VeranstaltungRaw {
   id?: string;
@@ -121,18 +118,18 @@ export default class Veranstaltung {
       : {
           startDate: new Date(),
           endDate: new Date(),
-          url: '',
+          url: "",
 
           kopf: {
-            beschreibung: '',
-            eventTyp: '',
-            flaeche: '',
-            kooperation: '_',
-            ort: 'Jubez',
-            titel: '',
-            pressename: '',
-            presseIn: '',
-            genre: '',
+            beschreibung: "",
+            eventTyp: "",
+            flaeche: "",
+            kooperation: "_",
+            ort: "Jubez",
+            titel: "",
+            pressename: "",
+            presseIn: "",
+            genre: "",
             confirmed: false,
             rechnungAnKooperation: false
           }
@@ -151,55 +148,69 @@ export default class Veranstaltung {
     if (object.kopf) {
       if (object.startDate) {
         this.state.reservixID = object.reservixID;
-        this.state.startDate = DatumUhrzeit.forGermanStringOrNow(
-          object.startDate,
-          object.startTime
-        ).toJSDate;
-        this.state.endDate = DatumUhrzeit.forGermanStringOrNow(
-          object.endDate,
-          object.endTime
-        ).toJSDate;
-        this.state.id =
-          object.id || object.kopf.titel + ' am ' + this.datumForDisplay();
-        this.state.url =
-          object.url || this.state.startDate.toISOString() + object.kopf.titel;
+        this.state.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate, object.startTime).toJSDate;
+        this.state.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, object.endTime).toJSDate;
+        this.state.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
+        this.state.url = object.url || this.state.startDate.toISOString() + object.kopf.titel;
       }
     }
     if (object.agentur) {
-      this.state.agentur = this.agentur().fillFromUI(object.agentur).toJSON();
+      this.state.agentur = this.agentur()
+        .fillFromUI(object.agentur)
+        .toJSON();
     }
     if (object.artist) {
-      this.state.artist = this.artist().fillFromUI(object.artist).toJSON();
+      this.state.artist = this.artist()
+        .fillFromUI(object.artist)
+        .toJSON();
     }
     if (object.eintrittspreise) {
-      this.state.eintrittspreise = this.eintrittspreise().fillFromUI(object.eintrittspreise).toJSON();
+      this.state.eintrittspreise = this.eintrittspreise()
+        .fillFromUI(object.eintrittspreise)
+        .toJSON();
     }
     if (object.hotel) {
-      this.state.hotel = this.hotel().fillFromUI(object.hotel).toJSON();
+      this.state.hotel = this.hotel()
+        .fillFromUI(object.hotel)
+        .toJSON();
     }
     if (object.kasse) {
-      this.state.kasse = this.kasse().fillFromUI(object.kasse).toJSON();
+      this.state.kasse = this.kasse()
+        .fillFromUI(object.kasse)
+        .toJSON();
     }
     if (object.kopf) {
       this.kopf().fillFromUI(object.kopf);
     }
     if (object.kosten) {
-      this.state.kosten = this.kosten().fillFromUI(object.kosten).toJSON();
+      this.state.kosten = this.kosten()
+        .fillFromUI(object.kosten)
+        .toJSON();
     }
     if (object.presse) {
-      this.state.presse = this.presse().fillFromUI(object.presse).toJSON();
+      this.state.presse = this.presse()
+        .fillFromUI(object.presse)
+        .toJSON();
     }
     if (object.staff) {
-      this.state.staff = this.staff().fillFromUI(object.staff).toJSON();
+      this.state.staff = this.staff()
+        .fillFromUI(object.staff)
+        .toJSON();
     }
     if (object.technik) {
-      this.state.technik = this.technik().fillFromUI(object.technik).toJSON();
+      this.state.technik = this.technik()
+        .fillFromUI(object.technik)
+        .toJSON();
     }
     if (object.unterkunft) {
-      this.state.unterkunft = this.unterkunft().fillFromUI(object.unterkunft).toJSON();
+      this.state.unterkunft = this.unterkunft()
+        .fillFromUI(object.unterkunft)
+        .toJSON();
     }
     if (object.vertrag) {
-      this.state.vertrag = this.vertrag().fillFromUI(object.vertrag).toJSON();
+      this.state.vertrag = this.vertrag()
+        .fillFromUI(object.vertrag)
+        .toJSON();
     }
     return this;
   }
@@ -208,8 +219,8 @@ export default class Veranstaltung {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     delete this.state._id;
-    this.state.id = this.state.id + 'copy';
-    this.state.url = this.state.url + 'copy';
+    this.state.id = this.state.id + "copy";
+    this.state.url = this.state.url + "copy";
     delete this.state.startDate;
     delete this.state.endDate;
     delete this.state.reservixID;
@@ -235,11 +246,11 @@ export default class Veranstaltung {
   }
 
   fullyQualifiedUrl(): string {
-    return '/veranstaltungen/' + encodeURIComponent(this.url());
+    return "/veranstaltungen/" + encodeURIComponent(this.url());
   }
 
   fullyQualifiedUrlForVertrag(): string {
-    return '/vertrag/' + encodeURIComponent(this.url());
+    return "/vertrag/" + encodeURIComponent(this.url());
   }
 
   // subobjects
@@ -257,9 +268,7 @@ export default class Veranstaltung {
   }
 
   eintrittspreise(): Eintrittspreise {
-    return new Eintrittspreise(
-      this.undefinedOrValue(this.state.eintrittspreise)
-    );
+    return new Eintrittspreise(this.undefinedOrValue(this.state.eintrittspreise));
   }
 
   hotel(): Kontakt {
@@ -298,11 +307,7 @@ export default class Veranstaltung {
   }
 
   unterkunft(): Unterkunft {
-    return new Unterkunft(
-      this.undefinedOrValue(this.state.unterkunft),
-      this.startDatumUhrzeit(),
-      this.artist().name()
-    );
+    return new Unterkunft(this.undefinedOrValue(this.state.unterkunft), this.startDatumUhrzeit(), this.artist().name());
   }
 
   vertrag(): Vertrag {
@@ -312,7 +317,7 @@ export default class Veranstaltung {
   // end subobjects
 
   id(): string {
-    return this.state.id || '';
+    return this.state.id || "";
   }
 
   url(): string {
@@ -324,39 +329,25 @@ export default class Veranstaltung {
   }
 
   startDate(): Date {
-    return (
-      this.state.startDate || new DatumUhrzeit().setUhrzeit(20, 0).toJSDate
-    );
+    return this.state.startDate || new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   }
 
   endDate(): Date {
-    return (
-      this.state.endDate ||
-      this.startDatumUhrzeit().plus({ stunden: 3 }).toJSDate
-    );
+    return this.state.endDate || this.startDatumUhrzeit().plus({ stunden: 3 }).toJSDate;
   }
 
   // Money - GEMA - Reservix
 
   kostenGesamtEUR(): number {
-    return (
-      this.kosten().totalEUR() +
-      this.unterkunft().kostenTotalEUR() +
-      this.kasse().ausgabenOhneGage()
-    );
+    return this.kosten().totalEUR() + this.unterkunft().kostenTotalEUR() + this.kasse().ausgabenOhneGage();
   }
 
   einnahmenGesamtEUR(): number {
-    return (
-      this.salesreport()?.nettoUmsatz() || 0 + this.kasse().einnahmeTicketsEUR()
-    );
+    return this.salesreport()?.nettoUmsatz() || 0 + this.kasse().einnahmeTicketsEUR();
   }
 
   dealAbsolutEUR(): number {
-    return Math.max(
-      this.bruttoUeberschussEUR() * this.kosten().dealAlsFaktor(),
-      0
-    );
+    return Math.max(this.bruttoUeberschussEUR() * this.kosten().dealAlsFaktor(), 0);
   }
 
   bruttoUeberschussEUR(): number {
@@ -398,9 +389,7 @@ export default class Veranstaltung {
   }
 
   minimalStartForEdit(): DatumUhrzeit {
-    return this.startDatumUhrzeit().istVor(new DatumUhrzeit())
-      ? this.startDatumUhrzeit()
-      : new DatumUhrzeit();
+    return this.startDatumUhrzeit().istVor(new DatumUhrzeit()) ? this.startDatumUhrzeit() : new DatumUhrzeit();
   }
 
   endDatumUhrzeit(): DatumUhrzeit {
@@ -415,18 +404,14 @@ export default class Veranstaltung {
   presseTemplate(): string {
     return `### ${this.kopf().titel()}
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf().presseIn()}
-**Eintritt:** ${this.eintrittspreise().alsPressetext(
-      this.kopf().isKooperation() ? this.kopf().kooperation() : ''
-    )}
+**Eintritt:** ${this.eintrittspreise().alsPressetext(this.kopf().isKooperation() ? this.kopf().kooperation() : "")}
 
 `;
   }
 
   presseTemplateInternal(): string {
     // für interne Mails
-    return `### [${this.kopf().titel()}](${config.get(
-      'publicUrlPrefix'
-    )}${this.fullyQualifiedUrl()}/presse)
+    return `### [${this.kopf().titel()}](${config.get("publicUrlPrefix")}${this.fullyQualifiedUrl()}/presse)
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf().presseIn()}
 
 `;
@@ -434,10 +419,7 @@ export default class Veranstaltung {
 
   presseTextHTML(optionalText: string, optionalJazzclubURL: string): string {
     return Renderer.render(
-      this.presseTemplate() +
-        (optionalText || this.presse().text()) +
-        '\n\n' +
-        this.presse().fullyQualifiedJazzclubURL(optionalJazzclubURL)
+      this.presseTemplate() + (optionalText || this.presse().text()) + "\n\n" + this.presse().fullyQualifiedJazzclubURL(optionalJazzclubURL)
     );
   }
 
@@ -449,12 +431,10 @@ export default class Veranstaltung {
     return (
       this.presseTemplate() +
       this.presse().text() +
-      '\n\n' +
-      (this.presse().firstImage() ? this.presse().imageURL() : '') +
-      '\n\n' +
-      (this.presse().jazzclubURL()
-        ? `**URL:** ${this.presse().fullyQualifiedJazzclubURL()}`
-        : '')
+      "\n\n" +
+      (this.presse().firstImage() ? this.presse().imageURL() : "") +
+      "\n\n" +
+      (this.presse().jazzclubURL() ? `**URL:** ${this.presse().fullyQualifiedJazzclubURL()}` : "")
     );
   }
 
@@ -465,11 +445,9 @@ export default class Veranstaltung {
   // GEMA
   preisAusweisGema(): string {
     if (this.eintrittspreise().frei() || this.kooperationGema()) {
-      return '-';
+      return "-";
     }
-    return `${fieldHelpers.formatNumberTwoDigits(
-      this.eintrittspreise().regulaer()
-    )} €`;
+    return `${fieldHelpers.formatNumberTwoDigits(this.eintrittspreise().regulaer())} €`;
   }
 
   kooperationGema(): boolean {
@@ -477,26 +455,18 @@ export default class Veranstaltung {
   }
 
   einnahmenEintrittEUR(): number {
-    return (
-      this.kasse().einnahmeTicketsEUR() +
-      (this.salesreport()?.bruttoUmsatz() || 0)
-    );
+    return this.kasse().einnahmeTicketsEUR() + (this.salesreport()?.bruttoUmsatz() || 0);
   }
 
   eintrittGema(): string {
     if (this.eintrittspreise().frei() || this.kooperationGema()) {
-      return '-';
+      return "-";
     }
-    return `${fieldHelpers.formatNumberTwoDigits(
-      this.einnahmenEintrittEUR()
-    )} €`;
+    return `${fieldHelpers.formatNumberTwoDigits(this.einnahmenEintrittEUR())} €`;
   }
 
   anzahlBesucher(): number {
-    return (
-      this.kasse().anzahlBesucherAK() +
-      (this.salesreport()?.anzahlRegulaer() || 0)
-    );
+    return this.kasse().anzahlBesucherAK() + (this.salesreport()?.anzahlRegulaer() || 0);
   }
 
   // iCal
@@ -515,8 +485,6 @@ export default class Veranstaltung {
 
   // CSV Export
   toCSV(): string {
-    return `${this.kopf().titel()};${this.kopf().eventTyp()};${
-      this.startDatumUhrzeit().fuerCsvExport
-    }`;
+    return `${this.kopf().titel()};${this.kopf().eventTyp()};${this.startDatumUhrzeit().fuerCsvExport}`;
   }
 }

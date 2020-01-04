@@ -2,16 +2,21 @@ extends ../../../views/layout
 include ../../../views/formComponents
 
 mixin date_td(name, value)
-  td(style='white-space: nowrap'): input.form-control(id=name, type='text', name=name, value=value,
-    style='width:100%',
-    data-provide='datepicker',
-    data-date-format= 'dd.mm.yyyy',
-    data-date-autoclose=true,
+  td(style="white-space: nowrap"): input.form-control(
+    id=name,
+    type="text",
+    name=name,
+    value=value,
+    style="width:100%",
+    data-provide="datepicker",
+    data-date-format="dd.mm.yyyy",
+    data-date-autoclose,
     data-date-week-start=1,
-    data-date-view-ode='days',
-    data-date-min-view-mode='days',
-    data-date-language='de',
-    data-date-orientation='bottom')
+    data-date-view-ode="days",
+    data-date-min-view-mode="days",
+    data-date-language="de",
+    data-date-orientation="bottom"
+  )
 
 block title
   | Termine
@@ -23,28 +28,33 @@ block content
     .table-responsive
       table.table.table-sm.table-striped
         tr
-          th(style='width:15%') Startet am
-          th(style='width:15%') Endet am
-          th(style='width:45%') Beschreibung
-          th(style='width:15%') Typ
-          th(style='width:5%')
-          th(style='width:5%')
-        for termin in termine
-          form(action='/ical/submit', method='post')
+          th(style="width:15%") Startet am
+          th(style="width:15%") Endet am
+          th(style="width:45%") Beschreibung
+          th(style="width:15%") Typ
+          th(style="width:5%")
+          th(style="width:5%")
+        each termin in termine
+          form(action="/ical/submit", method="post")
             tr
               if termin.id
                 +hidden('id', termin.id)
               +csrf
               +date_td('startDate', termin.startDatumUhrzeit().tagMonatJahrKompakt)
               +date_td('endDate', termin.endDatumUhrzeit().tagMonatJahrKompakt)
-              td(style='white-space: nowrap'): input#beschreibung.form-control.trim-text(type='text', name='beschreibung', value=termin.beschreibung, style='width:100%')
-              td(style='white-space: nowrap'): input#typ.form-control.trim-text(type='text', name='typ', value=termin.typ, style='width:100%')
+              td(style="white-space: nowrap"): input#beschreibung.form-control.trim-text(
+                type="text",
+                name="beschreibung",
+                value=termin.beschreibung,
+                style="width:100%"
+              )
+              td(style="white-space: nowrap"): input#typ.form-control.trim-text(type="text", name="typ", value=termin.typ, style="width:100%")
               td: a.btn.btn-danger.float-right(href='/ical/delete/' + encodeURIComponent(termin.id)): i.far.fa-fw.fa-trash-alt
-              td: button.btn.btn-primary.float-right(type='submit'): i.far.fa-fw.fa-copy
+              td: button.btn.btn-primary.float-right(type="submit"): i.far.fa-fw.fa-copy
 
 block head
-  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
+  link(rel="stylesheet", href="/stylesheets/bootstrap-datepicker3.css")
 
 block scripts
-  script(src='/clientscripts/bootstrap-datepicker.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.de.min.js')
+  script(src="/clientscripts/bootstrap-datepicker.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.de.min.js")

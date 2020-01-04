@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions*/
-import { expect } from 'chai';
+import { expect } from "chai";
 
-import Staff from '../../lib/veranstaltungen/object/staff';
+import Staff from "../../lib/veranstaltungen/object/staff";
 
-describe('Staff', () => {
-  describe('kann sagen, ob jemand für die Kasse fehlt', () => {
+describe("Staff", () => {
+  describe("kann sagen, ob jemand für die Kasse fehlt", () => {
     let staff: Staff;
     beforeEach(() => {
       staff = new Staff({
@@ -22,11 +22,11 @@ describe('Staff', () => {
         merchandiseNotNeeded: false
       });
     });
-    it('initial', () => {
+    it("initial", () => {
       expect(staff.kasseFehlt()).to.be.true;
     });
 
-    it('wenn nur einer gebraucht wird', () => {
+    it("wenn nur einer gebraucht wird", () => {
       staff.state.kasseVNotNeeded = true;
       expect(staff.kasseFehlt()).to.be.true;
 
@@ -35,25 +35,25 @@ describe('Staff', () => {
       expect(staff.kasseFehlt()).to.be.true;
     });
 
-    it('wenn nur einer fehlt', () => {
-      staff.state.kasse.push('Peter');
+    it("wenn nur einer fehlt", () => {
+      staff.state.kasse.push("Peter");
       expect(staff.kasseFehlt()).to.be.true;
     });
 
-    it('wenn beide da sind', () => {
-      staff.state.kasse.push('Peter');
-      staff.state.kasseV.push('Peter');
+    it("wenn beide da sind", () => {
+      staff.state.kasse.push("Peter");
+      staff.state.kasseV.push("Peter");
       expect(staff.kasseFehlt()).to.be.false;
     });
 
-    it('normal gebraucht, einer da', () => {
-      staff.state.kasse.push('Peter');
+    it("normal gebraucht, einer da", () => {
+      staff.state.kasse.push("Peter");
       staff.state.kasseVNotNeeded = true;
       expect(staff.kasseFehlt()).to.be.false;
     });
 
-    it('verantwortlich gebraucht, einer da', () => {
-      staff.state.kasseV.push('Peter');
+    it("verantwortlich gebraucht, einer da", () => {
+      staff.state.kasseV.push("Peter");
       staff.state.kasseNotNeeded = true;
       expect(staff.kasseFehlt()).to.be.false;
     });

@@ -1,8 +1,8 @@
-import { expect } from 'chai';
+import { expect } from "chai";
 
-import Kosten from '../../lib/veranstaltungen/object/kosten';
+import Kosten from "../../lib/veranstaltungen/object/kosten";
 
-describe('Kosten', () => {
+describe("Kosten", () => {
   it('funktioniert auf allen Methoden auch mit "null" values', () => {
     const kosten = new Kosten({
       backlineEUR: 0,

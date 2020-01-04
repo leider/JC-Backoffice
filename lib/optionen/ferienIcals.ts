@@ -1,6 +1,6 @@
-import R from 'ramda';
+import R from "ramda";
 
-import Termin, { TerminType } from '../ical/termin';
+import Termin, { TerminType } from "../ical/termin";
 
 interface Ical {
   oldname?: string;
@@ -15,7 +15,7 @@ interface FerienIcalsRaw {
 }
 
 export default class FerienIcals {
-  id = 'ferienIcals';
+  id = "ferienIcals";
   icals: Ical[] = [];
 
   static fromJSON(object?: FerienIcalsRaw): FerienIcals {
@@ -41,7 +41,7 @@ export default class FerienIcals {
 
   deleteIcal(name: string): void {
     if (name) {
-      this.icals = R.reject(R.propEq('name', name))(this.icals);
+      this.icals = R.reject(R.propEq("name", name))(this.icals);
     }
   }
 
@@ -59,7 +59,7 @@ export default class FerienIcals {
     return this.icals.map(ical => {
       return {
         color: Termin.colorForType(ical.typ),
-        url: '/ical/eventsFromIcalURL/' + encodeURIComponent(ical.url)
+        url: "/ical/eventsFromIcalURL/" + encodeURIComponent(ical.url)
       };
     });
   }

@@ -1,7 +1,7 @@
-import DatumUhrzeit from '../../commons/DatumUhrzeit';
+import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
-  return parseFloat(textWithNumberOrNull || '') || 0;
+  return parseFloat(textWithNumberOrNull || "") || 0;
 }
 
 export interface KasseRaw {
@@ -71,12 +71,12 @@ export default class Kasse {
       einnahmeSonstiges1EUR: 0,
       einnahmeTicketsEUR: 0,
       einnahmeSonstiges2EUR: 0,
-      ausgabeSonstiges1Text: '',
-      ausgabeSonstiges2Text: '',
-      ausgabeSonstiges3Text: '',
-      einnahmeSonstiges1Text: '',
-      einnahmeSonstiges2Text: '',
-      anzahlBesucherAK: ''
+      ausgabeSonstiges1Text: "",
+      ausgabeSonstiges2Text: "",
+      ausgabeSonstiges3Text: "",
+      einnahmeSonstiges1Text: "",
+      einnahmeSonstiges2Text: "",
+      anzahlBesucherAK: ""
     };
   }
 
@@ -90,12 +90,8 @@ export default class Kasse {
     this.state.ausgabeSonstiges2EUR = floatAmount(object.ausgabeSonstiges2EUR);
     this.state.ausgabeSonstiges3EUR = floatAmount(object.ausgabeSonstiges3EUR);
     this.state.einnahmeBankEUR = floatAmount(object.einnahmeBankEUR);
-    this.state.einnahmeSonstiges1EUR = floatAmount(
-      object.einnahmeSonstiges1EUR
-    );
-    this.state.einnahmeSonstiges2EUR = floatAmount(
-      object.einnahmeSonstiges2EUR
-    );
+    this.state.einnahmeSonstiges1EUR = floatAmount(object.einnahmeSonstiges1EUR);
+    this.state.einnahmeSonstiges2EUR = floatAmount(object.einnahmeSonstiges2EUR);
     this.state.einnahmeTicketsEUR = floatAmount(object.einnahmeTicketsEUR);
     this.state.ausgabeSonstiges1Text = object.ausgabeSonstiges1Text;
     this.state.ausgabeSonstiges2Text = object.ausgabeSonstiges2Text;
@@ -103,8 +99,7 @@ export default class Kasse {
     this.state.einnahmeSonstiges1Text = object.einnahmeSonstiges1Text;
     this.state.einnahmeSonstiges2Text = object.einnahmeSonstiges2Text;
     this.state.anzahlBesucherAK = object.anzahlBesucherAK;
-    this.state.kassenfreigabe =
-      object.kassenfreigabe || this.state.kassenfreigabe; // kann nicht mehr gelöscht werden
+    this.state.kassenfreigabe = object.kassenfreigabe || this.state.kassenfreigabe; // kann nicht mehr gelöscht werden
     return this;
   }
 
@@ -167,9 +162,7 @@ export default class Kasse {
   }
 
   ausgabenTotalEUR(): number {
-    return (
-      this.ausgabeBankEUR() + this.ausgabeGageEUR() + this.ausgabenOhneGage()
-    );
+    return this.ausgabeBankEUR() + this.ausgabeGageEUR() + this.ausgabenOhneGage();
   }
 
   einnahmeBankEUR(): number {
@@ -197,20 +190,11 @@ export default class Kasse {
   }
 
   einnahmeTotalEUR(): number {
-    return (
-      this.einnahmeBankEUR() +
-      this.einnahmeSonstiges1EUR() +
-      this.einnahmeSonstiges2EUR() +
-      this.einnahmeTicketsEUR()
-    );
+    return this.einnahmeBankEUR() + this.einnahmeSonstiges1EUR() + this.einnahmeSonstiges2EUR() + this.einnahmeTicketsEUR();
   }
 
   endbestandEUR(): number {
-    return (
-      this.anfangsbestandEUR() +
-      this.einnahmeTotalEUR() -
-      this.ausgabenTotalEUR()
-    );
+    return this.anfangsbestandEUR() + this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
   }
 
   // FREIGABE
@@ -230,8 +214,6 @@ export default class Kasse {
   }
 
   freigabeDisplayDatum(): string {
-    return this.state.kassenfreigabeAm
-      ? DatumUhrzeit.forJSDate(this.state.kassenfreigabeAm).tagMonatJahrLang
-      : '';
+    return this.state.kassenfreigabeAm ? DatumUhrzeit.forJSDate(this.state.kassenfreigabeAm).tagMonatJahrLang : "";
   }
 }

@@ -1,20 +1,20 @@
 extends ../../../views/layout
 
-include  ../../../views/formComponents
+include ../../../views/formComponents
 
 block title
   | Mailingregel
 
 block content
   .col-12
-    form#mailruleform(action='/mailsender/save', method='post')
+    form#mailruleform(action="/mailsender/save", method="post")
       +csrf
       if (rule.id)
         +hidden('id', rule.id)
       .row
         .col-12
           .page-header
-            +submitButtons()
+            +submitButtons
             h2 Mailingregel <br>
               if (rule.id)
                 small Bearbeiten
@@ -27,4 +27,3 @@ block content
           +email('email', 'E-Mail', rule.email, 'E-Mail Adresse')
         .col-md-4
           +singleselect('rule', 'Regel', rule.rule, rule.rules())
-

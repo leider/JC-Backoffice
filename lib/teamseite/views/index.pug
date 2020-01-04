@@ -4,42 +4,42 @@ include mixins
 include ../../users/views/userMixins
 
 mixin button(veranstaltung, name, nameInMethod)
-  -var staff = veranstaltung.staff()
+  - var staff = veranstaltung.staff();
   if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-    a.btn.btn-success.btn-sm(href='/teamseite/add' + nameInMethod + '/' + encodeURIComponent(veranstaltung.id()), title='Ich kann'): i.fa-fw.fa-lg.fas.fa-plus-circle
+    a.btn.btn-success.btn-sm(href=`/teamseite/add${nameInMethod}/${encodeURIComponent(veranstaltung.id())}`, title="Ich kann"): i.fa-fw.fa-lg.fas.fa-plus-circle
   else
-    a.btn.btn-danger.btn-sm(href='/teamseite/remove' + nameInMethod + '/' + encodeURIComponent(veranstaltung.id()), title='Ich kann nicht'): i.fa-fw.fa-lg.fas.fa-minus-circle
+    a.btn.btn-danger.btn-sm(href=`/teamseite/remove${nameInMethod}/${encodeURIComponent(veranstaltung.id())}`, title="Ich kann nicht"): i.fa-fw.fa-lg.fas.fa-minus-circle
 
 mixin people(veranstaltung, name)
-  -var staff = veranstaltung.staff()
+  - var staff = veranstaltung.staff();
   .mt-1: span.text-capitalize #{staff[name]().join(', ')}
 
 mixin monatHeadline(veranstaltung)
   h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt}
     .btn-group.btn-group-sm.float-right
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/texte/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
+      a.btn.btn-secondary.btn-sm(href=`/veranstaltungen/texte/${veranstaltung.startDatumUhrzeit().fuerUnterseiten}`)
         i.far.fa-file-alt.fa-fw
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(href='/veranstaltungen/monat/' + veranstaltung.startDatumUhrzeit().fuerUnterseiten)
+      a.btn.btn-secondary.btn-sm(href=`/veranstaltungen/monat/${veranstaltung.startDatumUhrzeit().fuerUnterseiten}`)
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
 
 mixin panelView(groupedVeranstaltungen)
-  -var count = 0
-  -var nearFuture = new DatumUhrzeit().plus({monate: 1})
-  for month in Object.keys(groupedVeranstaltungen)
-    -var veranstOfMonth = groupedVeranstaltungen[month]
+  - var count = 0;
+  - var nearFuture = new DatumUhrzeit().plus({ monate: 1 });
+  each month in Object.keys(groupedVeranstaltungen)
+    - var veranstOfMonth = groupedVeranstaltungen[month];
     .row
       .col-12
         +monatHeadline(veranstOfMonth[0])
-      for veranstaltung in veranstOfMonth
-        -var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture)
-        -var kopf = veranstaltung.kopf()
-        -var id = 'panel' + ++count
-        -var staff = veranstaltung.staff()
+      each veranstaltung in veranstOfMonth
+        - var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture);
+        - var kopf = veranstaltung.kopf();
+        - var id = `panel${++count}`;
+        - var staff = veranstaltung.staff();
         .col-xl-4.col-md-6
-          .card.mb-2(class = 'border-' + cssColorCode(kopf.eventTyp()))
-            .card-header.p-0(class = 'color-' + cssColorCode(kopf.eventTyp()))
+          .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp())}`)
+            .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp())}`)
               +standardCardTitle(veranstaltung, id, collapsed)
               if veranstaltung.kasseFehlt()
                 h5.alert-danger.p-1.mb-0
@@ -51,7 +51,7 @@ mixin panelView(groupedVeranstaltungen)
                   | #{' '} Kooperation
 
             if !staff.noStaffNeeded() || !staff.modNotNeeded()
-              div(id = id, class = 'collapse' + (collapsed ? '' : ' show') + ' cardcontent')
+              div(id=id, class=`collapse${collapsed ? '' : ' show'} cardcontent`)
                 table.table.table-striped.table-sm
                   if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
                     tr: td(colspan=3): h5.mb-0 Kasse
@@ -90,7 +90,6 @@ mixin panelView(groupedVeranstaltungen)
                       td: +people(veranstaltung, 'merchandise')
                       td.text-right: +button(veranstaltung, 'merchandise', 'Merchandise')
 
-
 block title
   | Teamseite
 
@@ -101,13 +100,13 @@ block content
         .page-header
           .btn-group.float-right
             if accessrights.isOrgaTeam()
-              a.btn.btn-light(href='/veranstaltungen/zukuenftige', title='administration')
+              a.btn.btn-light(href="/veranstaltungen/zukuenftige", title="administration")
                 i.fas.fa-edit.fa-fw
                 | &nbsp;Admin
           h2 Team
           p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
           p
-            a.btn.btn-light(href=webcalURL, title='als iCal'): i.far.fa-calendar-alt
+            a.btn.btn-light(href=webcalURL, title="als iCal"): i.far.fa-calendar-alt
             | #{' '} Hiermit kannst Du den Kalender abonnieren.
         +zuAufButtons
         +panelView(groupedVeranstaltungen)
@@ -120,11 +119,10 @@ block content
           h2 Übersicht der Benutzer
     .row
       +userpanel(accessrights.member(), ++count)
-      -var count = 0;
-      for user in users
+      - var count = 0;
+      each user in users
         if accessrights.memberId() !== user.id
           +userpanel(user, ++count)
-
 
 block scripts
   script.
@@ -141,4 +139,3 @@ block scripts
 
       $('input[name="tel"]').change(telChanged);
     });
-

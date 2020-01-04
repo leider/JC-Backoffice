@@ -8,9 +8,9 @@ block content
   .col-12
     .page-header
       h2 Kassenberichte
-      -var ersterMonat = now.minus({monate: 6});
-      -var n=1
+      - var ersterMonat = now.minus({ monate: 6 });
+      - var n = 1;
       while n < 13
         p: a(href='/optionen/kassenbericht/' + ersterMonat.fuerKalenderViews) Kassenbericht #{ersterMonat.monatJahrKompakt}
-        -ersterMonat = ersterMonat.plus({monate: 1})
-        -n++
+        - ersterMonat = ersterMonat.plus({ monate: 1 });
+        - n++;

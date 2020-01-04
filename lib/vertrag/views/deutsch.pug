@@ -1,19 +1,18 @@
 extends briefpapier
 
-
 block adresse
-  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
   p.
-    #{bandname} <br>
+  #{bandname} <br>
     c/o #{veranstaltung.agentur().name()}<br>
-    #{veranstaltung.agentur().strasse()}<br>
-    #{veranstaltung.agentur().ort()}
+  | #{veranstaltung.agentur().strasse()}<br>
+  | #{veranstaltung.agentur().ort()}
 
 block content1
-  -var start = veranstaltung.startDatumUhrzeit();
-  -var getin = veranstaltung.getinDatumUhrzeit();
-  -var hotel = veranstaltung.hotel();
-  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var start = veranstaltung.startDatumUhrzeit();
+  - var getin = veranstaltung.getinDatumUhrzeit();
+  - var hotel = veranstaltung.hotel();
+  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
 
   .row
     .col-7
@@ -128,12 +127,12 @@ block content2
       p.
         §15 Die Vertragspartner versichern durch ihre Unterschrift, dass sie den Vertrag verstanden haben, in vollem Umfang geschäftsfähig und zur Unterschrift bevollmächtigt sind
 
-      .row(style='margin-top:24px;')
+      .row(style="margin-top:24px;")
         .col-6
           +signbox('Ort/Datum', 'Künstler')
-          div(style='margin-top:5px;')
+          div(style="margin-top:5px;")
           +signbox('Ort/Datum', 'Veranstalter', 'Karlsruhe, 18. März 2018')
         .col-6
           +signbox('Unterschrift', 'Name Künstler')
-          div(style='margin-top:5px;')
+          div(style="margin-top:5px;")
           +signbox('Unterschrift', 'Name Veranstalter', 'niklas', true)

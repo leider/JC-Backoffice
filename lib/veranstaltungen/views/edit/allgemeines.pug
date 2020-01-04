@@ -8,23 +8,26 @@ include mixins
 mixin eventTypSelect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen', required)
+    select.form-control.selectpicker(id=name, name=name, title="Bitte wählen", required)
       each val in values
-        option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + '</span>') #{val}
-
+        option(
+          value=val,
+          selected=value === val,
+          data-content=`<span class="${cssIconClass(val)}"></span><span class="text-${cssColorCode(val)}"> ${val}</span>`
+        ) #{val}
 
 block title
   | Veranstaltung
 
 block content
-  -var artist = veranstaltung.artist()
-  -var kopf = veranstaltung.kopf()
-  -var vertrag = veranstaltung.vertrag()
-  -var kosten = veranstaltung.kosten()
-  -var eintrittspreise = veranstaltung.eintrittspreise()
+  - var artist = veranstaltung.artist();
+  - var kopf = veranstaltung.kopf();
+  - var vertrag = veranstaltung.vertrag();
+  - var kosten = veranstaltung.kosten();
+  - var eintrittspreise = veranstaltung.eintrittspreise();
 
   .col-12
-    form#veranstaltungform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
+    form#veranstaltungform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'allgemeines')
         .col-md-6
           +legendMitBody('event', 'Event')
@@ -72,18 +75,23 @@ block content
             .row
               .col-4
                 .form-group
-                  label(for='kopf[kooperation]')
-                    span.tooltiplabel(data-original-title='Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll') Koop (Rechnung):&nbsp;
+                  label(for="kopf[kooperation]")
+                    span.tooltiplabel(data-original-title="Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll") Koop (Rechnung):&nbsp;
                       i.fas.fa-question-circle
                   .input-group
-                    select.form-control.selectpicker(id='kopf[kooperation]', name='kopf[kooperation]')
+                    select.form-control.selectpicker(id="kopf[kooperation]", name="kopf[kooperation]")
                       each val in optionen.kooperationen
-                        option(value = val, selected = kopf.kooperation() === val) #{val}
+                        option(value=val, selected=kopf.kooperation() === val) #{val}
                     .input-group-append
                       .input-group-text.pl-1.pr-0
                         .form-check.abc-checkbox.abc-checkbox-success
-                          -var checkID = 'kopf[rechnungAnKooperation]'
-                          input.form-check-input(type='checkbox', id=checkID, name=checkID, checked=(kopf.rechnungAnKooperation() ? 'true' : undefined))
+                          - var checkID = 'kopf[rechnungAnKooperation]';
+                          input.form-check-input(
+                            type="checkbox",
+                            id=checkID,
+                            name=checkID,
+                            checked=kopf.rechnungAnKooperation() ? 'true' : undefined
+                          )
                           label.form-check-label(for=checkID) #{''}
 
               .col-4
@@ -128,22 +136,25 @@ block content
             if user && (accessrights.isBookingTeam())
               .row
                 .col-12
-                  a.btn.btn-primary.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                  a.btn.btn-primary.float-right(
+                    href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(),
+                    title="Vertrag generieren"
+                  )
                     | Vertrag generieren
             .row
               .col-12
                 +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
 
 block head
-  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
-  link(rel='stylesheet', href='/stylesheets/fileinput.css')
+  link(rel="stylesheet", href="/stylesheets/bootstrap-datepicker3.css")
+  link(rel="stylesheet", href="/stylesheets/fileinput.css")
 
 block scripts
-  script(src='/clientscripts/fileinput.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.de.min.js')
-  script(src='/clientscripts/simple-timepicker.min.js')
-  script(src='/clientscripts/bootstrap-markdown.min.js')
+  script(src="/clientscripts/fileinput.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.de.min.js")
+  script(src="/clientscripts/simple-timepicker.min.js")
+  script(src="/clientscripts/bootstrap-markdown.min.js")
   +kontaktScript('agentur')
   script.
     $(document).ready(function () {
@@ -166,13 +177,13 @@ block scripts
         $('input[name="kopf\\[pressename\\]"]').val(derOrt.pressename);
       }
 
-      $('#kopf\\[ort\\]').change(ortchanged);
+      ort.change(ortchanged);
 
       function validateDateAndTime() {
-        var startDateVal = $('#veranstaltungform [name=startDate]').val();
-        var startTimeVal = $('#veranstaltungform [name=startTime]').val();
-        var endDateVal = $('#veranstaltungform [name=endDate]').val();
-        var endTimeVal = $('#veranstaltungform [name=endTime]').val();
+        var startDateVal = startDate.val();
+        var startTimeVal = startTime.val();
+        var endDateVal = endDate.val();
+        var endTimeVal = endTime.val();
 
         var start = toUtc(startDateVal, startTimeVal);
         var end = toUtc(endDateVal, endTimeVal);

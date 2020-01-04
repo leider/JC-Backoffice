@@ -1,8 +1,8 @@
 /*eslint no-unused-vars: 0 */
-import R from 'ramda';
-import express from 'express';
-import path from 'path';
-import conf from './simpleConfigure';
+import R from "ramda";
+import express from "express";
+import path from "path";
+import conf from "./simpleConfigure";
 
 export default class Misc {
   static isNumber(aString: string): boolean {
@@ -10,12 +10,7 @@ export default class Misc {
     return !!number || number === 0;
   }
 
-  static toObject2(
-    Constructor: any,
-    callback: Function,
-    err: Error | null,
-    jsobject?: object
-  ): void {
+  static toObject2(Constructor: any, callback: Function, err: Error | null, jsobject?: object): void {
     if (err) {
       return callback(err);
     }
@@ -25,12 +20,7 @@ export default class Misc {
     return callback(null, null);
   }
 
-  static toObjectList2(
-    Constructor: any,
-    callback: Function,
-    err: Error | null,
-    jsobjects: object[]
-  ): void {
+  static toObjectList2(Constructor: any, callback: Function, err: Error | null, jsobjects: object[]): void {
     if (err) {
       return callback(err);
     }
@@ -40,12 +30,7 @@ export default class Misc {
     );
   }
 
-  static toObject(
-    Constructor: any,
-    callback: Function,
-    err: Error | null,
-    jsobject?: object
-  ): void {
+  static toObject(Constructor: any, callback: Function, err: Error | null, jsobject?: object): void {
     if (err) {
       return callback(err);
     }
@@ -55,12 +40,7 @@ export default class Misc {
     return callback(null, null);
   }
 
-  static toObjectList(
-    Constructor: any,
-    callback: Function,
-    err: Error | null,
-    jsobjects?: object[]
-  ): void {
+  static toObjectList(Constructor: any, callback: Function, err: Error | null, jsobjects?: object[]): void {
     if (err) {
       return callback(err);
     }
@@ -77,30 +57,24 @@ export default class Misc {
     if (elem instanceof Array) {
       return elem;
     }
-    if (typeof elem === 'string') {
-      return elem.split(',');
+    if (typeof elem === "string") {
+      return elem.split(",");
     }
     return [elem];
   }
 
   static toFullQualifiedUrl(prefix: string, localUrl: string): string {
     function trimLeadingAndTrailingSlash(string: string): string {
-      return string.replace(/(^\/)|(\/$)/g, '');
+      return string.replace(/(^\/)|(\/$)/g, "");
     }
 
-    return (
-      conf.get('publicUrlPrefix') +
-      '/' +
-      trimLeadingAndTrailingSlash(prefix) +
-      '/' +
-      trimLeadingAndTrailingSlash(localUrl)
-    );
+    return conf.get("publicUrlPrefix") + "/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
   }
 
   static expressAppIn(directory: string): express.Express {
     const app = express();
-    app.set('views', path.join(directory, 'views'));
-    app.set('view engine', 'pug');
+    app.set("views", path.join(directory, "views"));
+    app.set("view engine", "pug");
     return app;
   }
 
@@ -110,7 +84,7 @@ export default class Misc {
 
   static pushImage(images: string | Array<string>, image: string): string[] {
     let result: string[];
-    if (typeof images === 'string') {
+    if (typeof images === "string") {
       result = [images];
     } else {
       result = images;
@@ -123,7 +97,7 @@ export default class Misc {
   }
 
   static dropImage(images: string | Array<string>, image: string): string[] {
-    if (typeof images === 'string') {
+    if (typeof images === "string") {
       return [];
     } else {
       return R.reject(each => each === image, images);

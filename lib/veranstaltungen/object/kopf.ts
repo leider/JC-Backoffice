@@ -1,6 +1,6 @@
-import R from 'ramda';
+import R from "ramda";
 
-import Renderer from '../../commons/renderer';
+import Renderer from "../../commons/renderer";
 
 export interface KopfRaw {
   beschreibung: string;
@@ -40,15 +40,15 @@ export default class Kopf {
   constructor(object: KopfRaw) {
     this.state = R.isEmpty(object)
       ? {
-          beschreibung: '',
-          eventTyp: '',
-          flaeche: '',
-          kooperation: '_',
-          ort: 'Jubez',
-          titel: '',
-          pressename: '',
-          presseIn: '',
-          genre: '',
+          beschreibung: "",
+          eventTyp: "",
+          flaeche: "",
+          kooperation: "_",
+          ort: "Jubez",
+          titel: "",
+          pressename: "",
+          presseIn: "",
+          genre: "",
           confirmed: false,
           rechnungAnKooperation: false
         }
@@ -91,17 +91,15 @@ export default class Kopf {
   }
 
   kooperation(): string {
-    return this.state.kooperation || '_';
+    return this.state.kooperation || "_";
   }
 
   isKooperation(): boolean {
-    return !!this.kooperation() && this.kooperation() !== '_';
+    return !!this.kooperation() && this.kooperation() !== "_";
   }
 
   rechnungAnKooperation(): boolean {
-    return !this.state.rechnungAnKooperation
-      ? this.isKooperation()
-      : this.state.rechnungAnKooperation;
+    return !this.state.rechnungAnKooperation ? this.isKooperation() : this.state.rechnungAnKooperation;
   }
 
   ort(): string {

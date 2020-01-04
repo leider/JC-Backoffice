@@ -1,4 +1,4 @@
-import DatumUhrzeit from '../commons/DatumUhrzeit';
+import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 export interface ReservixState {
   id: string;
