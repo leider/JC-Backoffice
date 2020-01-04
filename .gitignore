@@ -26,3 +26,6 @@ app.js
 configure.js
 initWinston.js
 start.js
+*.map
+.tscache/
+reservixLoad.js
