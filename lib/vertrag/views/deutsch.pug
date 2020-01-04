@@ -3,10 +3,10 @@ extends briefpapier
 block adresse
   - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
   p.
-  #{bandname} <br>
+    #{bandname} <br>
     c/o #{veranstaltung.agentur().name()}<br>
-  | #{veranstaltung.agentur().strasse()}<br>
-  | #{veranstaltung.agentur().ort()}
+    #{veranstaltung.agentur().strasse()}<br>
+    #{veranstaltung.agentur().ort()}
 
 block content1
   - var start = veranstaltung.startDatumUhrzeit();

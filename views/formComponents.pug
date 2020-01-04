@@ -203,7 +203,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, o
           i.far.fa-caret-square-right.fa-fw
         else
           i.far.fa-caret-square-down.fa-fw
-        | &nbsp;!{title}
+        | !{` ${title}`}
       if optionalCurrencySpan
         b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
     .p-1.collapse(id=id, class=collapsed ? '' : ' show')
