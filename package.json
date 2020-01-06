@@ -82,6 +82,7 @@
     "@types/marked": "0.7.2",
     "@types/mocha": "5.2.7",
     "@types/mongodb": "3.3.14",
+    "@types/mongoose": "5.5.38",
     "@types/morgan": "1.7.37",
     "@types/multiparty": "0.0.32",
     "@types/nodemailer": "6.4.0",

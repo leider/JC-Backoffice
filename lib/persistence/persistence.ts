@@ -11,6 +11,7 @@ const DBSTATE = { OPEN: "OPEN", CLOSED: "CLOSED", OPENING: "OPENING" };
 let ourDB: mongodb.Db | null;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default function(collectionName: string) {
   let logOpenOnceOnly = 0;
   function logInfo(logMessage: string): void {

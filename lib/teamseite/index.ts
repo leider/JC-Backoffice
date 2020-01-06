@@ -10,6 +10,7 @@ import optionenservice from "../optionen/optionenService";
 
 import conf from "../commons/simpleConfigure";
 import { StaffType } from "../veranstaltungen/object/staff";
+import FerienIcals from "../optionen/ferienIcals";
 
 const app: express.Express = misc.expressAppIn(__dirname);
 
@@ -53,12 +54,14 @@ app.get("/", (req, res, next) => {
       users: (callback: Function) => userstore.allUsers(callback),
       icals: (callback: Function) => optionenservice.icals(callback)
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (err: Error | undefined, results: any) => {
+    (err: Error | undefined, results) => {
       if (err) {
         return next(err);
       }
-      const icals = results.icals.forCalendar();
+      const icals = (results.icals as FerienIcals).forCalendar();
+      icals.unshift("/veranstaltungen/eventsForCalendar");
+      icals.unshift("/ical/eventsForCalendar");
+
       const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter((v: Veranstaltung) => v.kopf().confirmed());
       const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
       const users = (results.users as User[]).sort((a, b) => (a.name > b.name ? 1 : -1));

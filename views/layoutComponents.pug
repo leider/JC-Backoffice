@@ -1,11 +1,7 @@
 mixin notificationsBlock(notificationmessage)
   - notificationmessage.kill();
   - var contents = notificationmessage;
-  .toast(
-    class=contents.type,
-    data-delay=2000,
-    style="position: fixed;' + '  top: 2rem;' + '  left: 2rem;' + '  z-index: 1050;' + '  width: 100%;"
-  )
+  .toast(class=contents.type, data-delay=2000, style="position: fixed;  top: 2rem;  left: 2rem;  z-index: 1050;  width: 100%;")
     .toast-header
       h2.mr-auto #{contents.title}
       button.ml-2.mb-1.close(type="button", data-dismiss="toast") &times;
@@ -69,7 +65,7 @@ mixin topNavbar
             span &nbsp;Wiki&nbsp;
           .dropdown-menu
             each subdir in wikisubdirs
-              a.dropdown-item(href="/wiki/' + subdir + '/") #{subdir}
+              a.dropdown-item(href=`/wiki/${subdir}/`) #{subdir}
       if user
         ul.navbar-nav.ml-md-auto.d-flex.mr-3
           li.nav-item.dropdown

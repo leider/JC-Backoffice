@@ -85,6 +85,8 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
             return next(err2);
           }
           const icals = (results.icals as FerienIcals).forCalendar();
+          icals.unshift("/veranstaltungen/eventsForCalendar");
+          icals.unshift("/ical/eventsForCalendar");
 
           const filteredVeranstaltungen = filterUnbestaetigteFuerJedermann(veranstaltungen, res);
           const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);

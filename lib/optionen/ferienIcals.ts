@@ -13,6 +13,7 @@ interface FerienIcalsRaw {
   id: string;
   icals: Ical[];
 }
+type CalSource = string | { color: string; url: string };
 
 export default class FerienIcals {
   id = "ferienIcals";
@@ -55,7 +56,7 @@ export default class FerienIcals {
     ical.typ = object.typ;
   }
 
-  forCalendar(): { color: string; url: string }[] {
+  forCalendar(): Array<CalSource> {
     return this.icals.map(ical => {
       return {
         color: Termin.colorForType(ical.typ),

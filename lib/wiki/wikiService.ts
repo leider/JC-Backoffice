@@ -18,17 +18,16 @@ export default {
   },
 
   pageEdit: function pageEdit(completePageName: string, callback: Function): void {
-    fs.exists(Git.absPath(completePageName + ".md"), exists => {
-      if (!exists) {
-        return callback(null, "", ["NEW"]);
+    // eslint-disable-next-line no-sync
+    if (!fs.existsSync(Git.absPath(completePageName + ".md"))) {
+      return callback(null, "", ["NEW"]);
+    }
+    Git.readFile(completePageName + ".md", "HEAD", (err: Error | null, content: string) => {
+      if (err) {
+        return callback(err);
       }
-      return Git.readFile(completePageName + ".md", "HEAD", (err: Error | null, content: string) => {
-        if (err) {
-          return callback(err);
-        }
-        return Git.log(completePageName + ".md", "HEAD", 1, (ignoredErr: Error | number, metadata: Metadata[]) => {
-          callback(null, content, metadata);
-        });
+      Git.log(completePageName + ".md", "HEAD", 1, (ignoredErr: Error | number, metadata: Metadata[]) => {
+        callback(null, content, metadata);
       });
     });
   },

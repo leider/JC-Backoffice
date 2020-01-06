@@ -30,6 +30,7 @@ export default class OptionValues {
   agenturen: KontaktUI[];
   hotels: KontaktUI[];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(object?: any): OptionValues {
     return Object.assign(
       new OptionValues(
@@ -73,6 +74,7 @@ export default class OptionValues {
     this.hotels = hotels;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fillFromUI(object: any): OptionValues {
     this.genres = misc.toArray(object.genres);
     this.typen = misc.toArray(object.typen);
