@@ -1,7 +1,7 @@
 include ../../../../views/formComponents
 
 mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
-  -var derkontakt = veranstaltung[name]()
+  - var derkontakt = veranstaltung[name]();
   +legendMitBody(name, labelForLegend, null, optionalColorClass)
     .row
       .col-sm-6
@@ -16,7 +16,7 @@ mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
         +email(name + '[email]', 'E-Mail', derkontakt.email())
 
 mixin kontaktScript(name, callbackname)
-  -var callback = callbackname || 'dummyfunc'
+  - var callback = callbackname || 'dummyfunc';
   script.
     $(document).ready(function () {
       var dummyfunc = function () {};
@@ -41,4 +41,3 @@ mixin kontaktScript(name, callbackname)
 
       auswahl.change(updateForAuswahl);
     });
-

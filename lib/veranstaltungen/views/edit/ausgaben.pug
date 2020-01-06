@@ -3,14 +3,13 @@ include ../../../../views/formComponents
 include mixins
 include eintrittspreiseMixins
 
-
 mixin labelCurrencyRow(id, name, label, value)
   .form-group.row
     .col-sm-3
     label.col-6.col-form-label(for=name) #{label}
     .col-6.col-sm-3
       .input-group
-        input.form-control.currency.text-right(id=name, type='number', step=0.01, value=formatNumberTwoDigitsEnglish(value), name=name)
+        input.form-control.currency.text-right(id=name, type="number", step=0.01, value=formatNumberTwoDigitsEnglish(value), name=name)
         .input-group-append
           span.input-group-text.pl-1.pr-1: b €
         .invalid-feedback Bitte eine deutsche Zahl eingeben
@@ -19,12 +18,12 @@ block title
   | Veranstaltung
 
 block content
-  -var kosten = veranstaltung.kosten()
-  -var salesreport = veranstaltung.salesreport()
-  -var eintrittspreise = veranstaltung.eintrittspreise()
-  -var kasse = veranstaltung.kasse()
+  - var kosten = veranstaltung.kosten();
+  - var salesreport = veranstaltung.salesreport();
+  - var eintrittspreise = veranstaltung.eintrittspreise();
+  - var kasse = veranstaltung.kasse();
   .col-12
-    form#ausgabenform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
+    form#ausgabenform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'ausgaben')
         .col-md-6
           +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'ausgaben')
@@ -53,7 +52,7 @@ block content
                     b: +currencySpan(kasse.einnahmeTicketsEUR(), 'kasseTickets', 'form-control-plaintext float-right')
                 .col-4
                   .form-group
-                    label.float-right  Total:
+                    label.float-right Total:
                     b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
             else
               .row
@@ -63,7 +62,7 @@ block content
                   +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
                 .col-4
                   .form-group
-                    label.float-right  Total:
+                    label.float-right Total:
                     b: +currencySpan(null, 'erwarteteEinnahmen', 'form-control-plaintext float-right text-success')
 
             if veranstaltung.reservixID()
@@ -81,32 +80,31 @@ block content
                     label.float-right Tickets Netto (Reservix):
                     b: +currencySpan(salesreport.nettoUmsatz(), 'reservixNetto', 'form-control-plaintext float-right text-success')
 
-          +legendMitBody('deal', 'Kostenübersicht /  Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
+          +legendMitBody('deal', 'Kostenübersicht / Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
             table.table.table-sm.table-striped
               tr
-                th(style='text-align: right;') Einnahmen
-                th(style='text-align: right;') Kosten
-                th(style='text-align: right;') Überschuss
+                th(style="text-align: right;") Einnahmen
+                th(style="text-align: right;") Kosten
+                th(style="text-align: right;") Überschuss
               tr
-                td(style='text-align: right;'): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
-                td(style='text-align: right;'): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                td(style='text-align: right;'): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
+                td(style="text-align: right;"): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
+                td(style="text-align: right;"): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                td(style="text-align: right;"): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
               tr#dealrow
                 th Anteilig an Band:
                 td
-                td(style='text-align: right;'): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
-
+                td(style="text-align: right;"): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
 
         .col-md-6
           +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'ausgaben')
             .row
-              .col-3(style='padding-right: 5px;')
+              .col-3(style="padding-right: 5px;")
                 +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
-              .col-3(style='padding-left: 2px;padding-right: 2px;')
+              .col-3(style="padding-left: 2px;padding-right: 2px;")
                 +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
-              .col-3(style='padding-left: 2px;padding-right: 2px;')
+              .col-3(style="padding-left: 2px;padding-right: 2px;")
                 +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
-              .col-3(style='padding-left: 5px;')
+              .col-3(style="padding-left: 5px;")
                 .form-group
                   label.control-label Total:
                   p: b: +currencySpan(null, 'gagenTotal', 'form-control-plaintext float-right text-success')
@@ -128,8 +126,8 @@ block content
                 +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
 
 block scripts
-  script(src='/clientscripts/fileinput.min.js')
-  -var showKasse = kasse.istFreigegeben()
+  script(src="/clientscripts/fileinput.min.js")
+  - var showKasse = kasse.istFreigegeben();
   script.
     $(document).ready(function initKalkulationScript() {
       var backlineEUR = $('#kosten\\[backlineEUR\\]');
@@ -196,7 +194,7 @@ block scripts
         );
 
         setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
-        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport.nettoUmsatz()});
+        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport ? salesreport.nettoUmsatz(): 0});
       }
 
       [anzahlBesucher, zuschuss].forEach(function (field) {

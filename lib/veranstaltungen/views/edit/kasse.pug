@@ -6,42 +6,42 @@ block title
   | Veranstaltung
 
 block content
-  #freigebendialog.modal.fade(tabindex='-1')
+  #freigebendialog.modal.fade(tabindex="-1")
     .modal-dialog
       .modal-content
         .modal-header
           h3.modal-title Kasse freigeben<br>
             small Nach dem Freigeben ist keine Änderung mehr möglich!
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
         .modal-body
           .row
             .col-12
               .btn-group.float-right
-                button.btn.btn-light(data-dismiss='modal') Abbrechen
-                a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title='Kassenfreigabe')
+                button.btn.btn-light(data-dismiss="modal") Abbrechen
+                a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigabe', title="Kassenfreigabe")
                   i.fas.fa-unlock.fa-fw.fa-lg
                   | &nbsp;Kasse freigeben
 
-  #entsperrendialog.modal.fade(tabindex='-1')
+  #entsperrendialog.modal.fade(tabindex="-1")
     .modal-dialog
       .modal-content
         .modal-header
           h3.modal-title Kassenfreigabe rückgängig<br>
             small Bist Du sicher?
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
         .modal-body
           .row
             .col-12
               .btn-group.float-right
-                button.btn.btn-light(data-dismiss='modal') Abbrechen
-                a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigaberuckgaengig', title='Rückgängig')
+                button.btn.btn-light(data-dismiss="modal") Abbrechen
+                a.btn.btn-success(href=veranstaltung.fullyQualifiedUrl() + '/kassenfreigaberuckgaengig', title="Rückgängig")
                   i.fas.fa-unlock.fa-fw.fa-lg
                   | &nbsp;Kassenfreigabe rückgängig
 
-  -var kasse = veranstaltung.kasse()
-  -var freigegeben = kasse.istFreigegeben()
+  - var kasse = veranstaltung.kasse();
+  - var freigegeben = kasse.istFreigegeben();
   .col-12
-    form#kasseform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
+    form#kasseform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'kasse', freigegeben)
         .col-md-6
           +legendMitBody('einnahmen', 'Einnahmen Abendkasse', 'einnahmenGesamt', 'kasse')
@@ -64,19 +64,23 @@ block content
                 +currency('kasse[einnahmeSonstiges2EUR]', 'Betrag', kasse.einnahmeSonstiges2EUR(), null, null, freigegeben)
           .row
             .col-12.mb-2
-              a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title='Abendkasse')
+              a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kassenzettel', title="Abendkasse")
                 i.fas.fa-fw.fa-print
                 | #{' '} Kassenzettel
               .btn-group.float-right
                 if freigegeben
-                  a(class='btn btn-danger' + (!accessrights.darfKasseFreigeben() ? ' disabled' : ''), data-toggle='modal', data-target='#entsperrendialog', href='#')
+                  a.btn.btn-danger(
+                    class=!accessrights.darfKasseFreigeben() ? 'disabled' : '',
+                    data-toggle="modal",
+                    data-target="#entsperrendialog",
+                    href="#"
+                  )
                     i.fas.fa-lock.fa-fw.fa-lg
                     | &nbsp;Kasse ist freigegeben
                 else if accessrights.darfKasseFreigeben()
-                  a.btn.btn-success(data-toggle='modal', data-target='#freigebendialog', href='#')
+                  a.btn.btn-success(data-toggle="modal", data-target="#freigebendialog", href="#")
                     i.fas.fa-unlock.fa-fw.fa-lg
                     | &nbsp;Kasse freigeben
-
 
         .col-md-6
           +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
@@ -86,11 +90,21 @@ block content
                   +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR(), null, null, freigegeben)
                 else
                   .form-group
-                    label.control-label.text-danger(for='kasse[ausgabeGageEUR]')
+                    label.control-label.text-danger(for="kasse[ausgabeGageEUR]")
                       i.fas.fa-exclamation-triangle
                       | &nbsp; Gage BAR &nbsp;
                       i.fas.fa-exclamation-triangle :
-                    input.form-control.currency(id='kasse[ausgabeGageEUR]', type='text', value=kasse.ausgabeGageEUR(), name='kasse[ausgabeGageEUR]', disabled=freigegebe, text-align='right', data-currency-symbol=' €', data-currency-symbol-placement='s', data-decimal-character=',', data-digit-group-separator='')
+                    input#kasse[ausgabeGageEUR].form-control.currency(,
+                      type="text",
+                      value=kasse.ausgabeGageEUR(),
+                      name="kasse[ausgabeGageEUR]",
+                      disabled=freigegebe,
+                      text-align="right",
+                      data-currency-symbol=" €",
+                      data-currency-symbol-placement="s",
+                      data-decimal-character=",",
+                      data-digit-group-separator=""
+                    )
               .col-sm-4.col-6
                 +currency('kasse[ausgabeCateringEUR]', 'Catering', kasse.ausgabeCateringEUR(), null, null, freigegeben)
               .col-sm-4.col-6

@@ -8,23 +8,26 @@ include mixins
 mixin eventTypSelect(name, label, value, values)
   .form-group
     +controlLabel(name, label)
-    select.form-control.selectpicker(id=name, name=name, title = 'Bitte wählen', required)
+    select.form-control.selectpicker(id=name, name=name, title="Bitte wählen", required)
       each val in values
-        option(value = val, selected = value === val, data-content='<span class="' + cssIconClass(val) + '"></span><span class="text-' + cssColorCode(val) + '"> ' + val + '</span>') #{val}
-
+        option(
+          value=val,
+          selected=value === val,
+          data-content=`<span class="${cssIconClass(val)}"></span><span class="text-${cssColorCode(val)}"> ${val}</span>`
+        ) #{val}
 
 block title
   | Veranstaltung
 
 block content
-  -var artist = veranstaltung.artist()
-  -var kopf = veranstaltung.kopf()
-  -var vertrag = veranstaltung.vertrag()
-  -var kosten = veranstaltung.kosten()
-  -var eintrittspreise = veranstaltung.eintrittspreise()
+  - var artist = veranstaltung.artist();
+  - var kopf = veranstaltung.kopf();
+  - var vertrag = veranstaltung.vertrag();
+  - var kosten = veranstaltung.kosten();
+  - var eintrittspreise = veranstaltung.eintrittspreise();
 
   .col-12
-    form#veranstaltungform.needs-validation(action='/veranstaltungen/submit', method='post', novalidate)
+    form#veranstaltungform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'allgemeines')
         .col-md-6
           +legendMitBody('event', 'Event')
@@ -41,7 +44,7 @@ block content
               .col-sm-6
                 +textRequired('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
               .col-6.col-sm-3
-                +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen())
+                +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen)
               .col-6.col-sm-3
                 +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
 
@@ -49,15 +52,15 @@ block content
               .col-6
                 .row
                   .col-6.pl-2.pr-1
-                    +date('startDate', 'Start', veranstaltung.startDatumUhrzeit().tagMonatJahrKompakt(), 'Startzeitpunkt', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt())
+                    +date('startDate', 'Start', veranstaltung.startDatumUhrzeit().tagMonatJahrKompakt, 'Startzeitpunkt', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt)
                   .col-6.pl-1.pr-2
-                    +time('startTime', veranstaltung.startDatumUhrzeit().uhrzeitKompakt())
+                    +time('startTime', veranstaltung.startDatumUhrzeit().uhrzeitKompakt)
               .col-6
                 .row
                   .col-6.pl-2.pr-1
-                    +date('endDate', 'Ende', veranstaltung.endDatumUhrzeit().tagMonatJahrKompakt(), 'Erwartetes Ende', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt())
+                    +date('endDate', 'Ende', veranstaltung.endDatumUhrzeit().tagMonatJahrKompakt, 'Erwartetes Ende', veranstaltung.minimalStartForEdit().tagMonatJahrKompakt)
                   #dates.col-6.pl-1.pr-2
-                    +time('endTime', veranstaltung.endDatumUhrzeit().uhrzeitKompakt())
+                    +time('endTime', veranstaltung.endDatumUhrzeit().uhrzeitKompakt)
 
             .row
               .col-4
@@ -72,24 +75,29 @@ block content
             .row
               .col-4
                 .form-group
-                  label(for='kopf[kooperation]')
-                    span.tooltiplabel(data-original-title='Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll') Koop (Rechnung):&nbsp;
+                  label(for="kopf[kooperation]")
+                    span.tooltiplabel(data-original-title="Anhaken, wenn die Rechnung an den Kooperationspartner gehen soll") Koop (Rechnung):&nbsp;
                       i.fas.fa-question-circle
                   .input-group
-                    select.form-control.selectpicker(id='kopf[kooperation]', name='kopf[kooperation]')
-                      each val in optionen.kooperationen()
-                        option(value = val, selected = kopf.kooperation() === val) #{val}
+                    select.form-control.selectpicker(id="kopf[kooperation]", name="kopf[kooperation]")
+                      each val in optionen.kooperationen
+                        option(value=val, selected=kopf.kooperation() === val) #{val}
                     .input-group-append
                       .input-group-text.pl-1.pr-0
                         .form-check.abc-checkbox.abc-checkbox-success
-                          -var checkID = 'kopf[rechnungAnKooperation]'
-                          input.form-check-input(type='checkbox', id=checkID, name=checkID, checked=(kopf.rechnungAnKooperation() ? 'true' : undefined))
+                          - var checkID = 'kopf[rechnungAnKooperation]';
+                          input.form-check-input(
+                            type="checkbox",
+                            id=checkID,
+                            name=checkID,
+                            checked=kopf.rechnungAnKooperation() ? 'true' : undefined
+                          )
                           label.form-check-label(for=checkID) #{''}
 
               .col-4
                 +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
               .col-4
-                +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres())
+                +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres)
 
           +legendMitBody('artist', 'Künstler')
             .row
@@ -101,7 +109,7 @@ block content
                 +number('artist[numCrew]', 'Crew', artist.numCrew(), null, '0', '30')
             .row
               .col-sm-6
-                +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists())
+                +editableMultiselect('artist[name]', 'Namen', artist.name(), optionen.artists)
               .col-6.col-sm-3
                 +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR())
               .col-6.col-sm-3
@@ -118,7 +126,7 @@ block content
                 +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
 
         .col-md-6
-          +kontakt(veranstaltung, optionen.agenturen(), 'Agentur / Verantwortlicher', 'agentur')
+          +kontakt(veranstaltung, optionen.agenturenForSelection(), 'Agentur / Verantwortlicher', 'agentur')
           +legendMitBody('vertrag', 'Vertrag')
             .row
               .col-md-6
@@ -128,22 +136,25 @@ block content
             if user && (accessrights.isBookingTeam())
               .row
                 .col-12
-                  a.btn.btn-primary.float-right(href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(), title='Vertrag generieren')
+                  a.btn.btn-primary.float-right(
+                    href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(),
+                    title="Vertrag generieren"
+                  )
                     | Vertrag generieren
             .row
               .col-12
                 +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id(), typ: 'vertrag'})
 
 block head
-  link(rel='stylesheet', href='/stylesheets/bootstrap-datepicker3.css')
-  link(rel='stylesheet', href='/stylesheets/fileinput.css')
+  link(rel="stylesheet", href="/stylesheets/bootstrap-datepicker3.css")
+  link(rel="stylesheet", href="/stylesheets/fileinput.css")
 
 block scripts
-  script(src='/clientscripts/fileinput.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.min.js')
-  script(src='/clientscripts/bootstrap-datepicker.de.min.js')
-  script(src='/clientscripts/simple-timepicker.min.js')
-  script(src='/clientscripts/bootstrap-markdown.min.js')
+  script(src="/clientscripts/fileinput.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.min.js")
+  script(src="/clientscripts/bootstrap-datepicker.de.min.js")
+  script(src="/clientscripts/simple-timepicker.min.js")
+  script(src="/clientscripts/bootstrap-markdown.min.js")
   +kontaktScript('agentur')
   script.
     $(document).ready(function () {
@@ -155,7 +166,7 @@ block scripts
 
       dateAdapter(startDate, startTime, endDate, endTime);
 
-      var alleOrte = JSON.parse('!{JSON.stringify(orte.orte())}');
+      var alleOrte = JSON.parse('!{JSON.stringify(orte.orte)}');
 
       function ortchanged(auswahl) {
         var derOrt = alleOrte.find(function (o) {
@@ -166,13 +177,13 @@ block scripts
         $('input[name="kopf\\[pressename\\]"]').val(derOrt.pressename);
       }
 
-      $('#kopf\\[ort\\]').change(ortchanged);
+      ort.change(ortchanged);
 
       function validateDateAndTime() {
-        var startDateVal = $('#veranstaltungform [name=startDate]').val();
-        var startTimeVal = $('#veranstaltungform [name=startTime]').val();
-        var endDateVal = $('#veranstaltungform [name=endDate]').val();
-        var endTimeVal = $('#veranstaltungform [name=endTime]').val();
+        var startDateVal = startDate.val();
+        var startTimeVal = startTime.val();
+        var endDateVal = endDate.val();
+        var endTimeVal = endTime.val();
 
         var start = toUtc(startDateVal, startTimeVal);
         var end = toUtc(endDateVal, endTimeVal);

@@ -6,13 +6,13 @@ block title
 
 block content
   .col-12
-    form(action='/wiki/' + subdir + '/' + pageName, method='post')
+    form(action='/wiki/' + subdir + '/' + pageName, method="post")
       +csrf
       fieldset
         .page-header
           +submitButtons('Speichern')
         h2
-          -var params = {pageName: pageName, subdir: subdir}
+          - var params = { pageName: pageName, subdir: subdir };
           if page.content === ''
             | Wiki-Seite "#{subdir}/#{pageName}" anlegen
           else
@@ -20,9 +20,8 @@ block content
         +hightextarea('content', 'Inhalt', page.content)
         +text('comment', 'Kommentar', page.comment, 'Commit-Kommentar', 'kein Commit-Kommentar')
         +hidden('metadata', page.metadata)
-        input#subdir(type='hidden', name='subdir', value=subdir)
+        input#subdir(type="hidden", name="subdir", value=subdir)
         +submitButtons('Speichern')
 
 block scripts
-  script(src='/clientscripts/bootstrap-markdown.min.js')
-
+  script(src="/clientscripts/bootstrap-markdown.min.js")

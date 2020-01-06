@@ -4,25 +4,25 @@ mixin localCurrency(value)
 mixin signbox(datum, rolle, name)
   .row
     .col-2
-      p(style='line-height:3;'): b #{rolle}:
+      p(style="line-height:3;"): b #{rolle}:
     .col-10
-      p(style='line-height:3;border-bottom:1px dotted;') #{datum}
-      p.text-center(style='margin-top:-10px; font-size:10px;') #{name}
+      p(style="line-height:3;border-bottom:1px dotted;") #{datum}
+      p.text-center(style="margin-top:-10px; font-size:10px;") #{name}
 
 doctype html
 html
-  -var heute = now.tagMonatJahrLang()
+  - var heute = now.tagMonatJahrLang;
   head
-    meta(charset='utf-8')
-    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel='stylesheet')
-    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Montserrat:p,500')
+    meta(charset="utf-8")
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat:p,500")
 
   body
     .container-fluid
       .row
         .col-12
           .float-right
-            img(src=publicUrlPrefix + '/reporting/logo.png', height='80')
+            img(src=publicUrlPrefix + '/reporting/logo.png', height="80")
       .row
         .col-12
           .page-header
@@ -31,11 +31,11 @@ html
                 strong Jazzclub Karlsruhe e.V. <br>
                 | Leopoldstr. 13 <br>
                 | 76133 Karlsruhe
-            h1(style='white-space: nowrap') Kassenabrechnung #{datum.monatJahrKompakt()}
+            h1(style="white-space: nowrap") Kassenabrechnung #{datum.monatJahrKompakt}
       .row
         .col-6
           table.table.table-bordered.table-sm
-            -var n = 0;
+            - var n = 0;
             tr: th.text-center(colspan=3) Einnahmen
             tr
               th Verwendungszweck
@@ -46,7 +46,7 @@ html
                 td &nbsp;
                 td
                 td
-                -n++
+                - n++;
             tr
               th Summe
               td
@@ -54,7 +54,7 @@ html
 
         .col-6
           table.table.table-bordered.table-sm
-            -var n = 0;
+            - var n = 0;
             tr: th.text-center(colspan=3) Ausgaben
             tr
               th Verwendungszweck
@@ -65,7 +65,7 @@ html
                 td &nbsp;
                 td
                 td
-                -n++
+                - n++;
             tr
               td An Bank
               td

@@ -1,6 +1,6 @@
 extends ../../../views/layout
 
-include  ../../../views/formComponents
+include ../../../views/formComponents
 
 block content
   .col-12
@@ -9,16 +9,16 @@ block content
         .col-12
           .page-header
             .btn-group.float-right
-              a.btn.btn-light(href='javascript:history.back()', type='cancel') Zurück
-              a.btn.btn-success(href='new/', title='Neu'): i.far.fa-file.fa-fw
+              a.btn.btn-light(href="javascript:history.back()", type="cancel") Zurück
+              a.btn.btn-success(href="new/", title="Neu"): i.far.fa-file.fa-fw
             h2 Mailing Regeln
           table.table.table-striped.table-condensed
             tr
               th Name
               th E-Mail
               th Regel
-            for rule in rules
+            each rule in rules
               tr
-                td: a(href=rule.fullyQualifiedUrl()) #{rule.name()}
-                td #{rule.email()}
-                td #{rule.rule()}
+                td: a(href=rule.fullyQualifiedUrl()) #{rule.name}
+                td #{rule.email}
+                td #{rule.rule}

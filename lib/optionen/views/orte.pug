@@ -5,15 +5,15 @@ block title
   | Orte
 
 block content
-  #edit.modal.fade(tabindex='-1')
+  #edit.modal.fade(tabindex="-1")
     .modal-dialog
       .modal-content
         .modal-header
           h3.modal-title Ort bearbeiten<br>
             small Leerer Name löscht den Ort
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') &times;
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
         .modal-body
-          form(action='ortChanged', method='post')
+          form(action="ortChanged", method="post")
             +csrf
             +hidden('oldname', '')
             .row
@@ -26,8 +26,8 @@ block content
             .row
               .col-12
                 .btn-group.float-right
-                  button.btn.btn-light(data-dismiss='modal') Abbrechen
-                  button.btn.btn-primary(type='submit') Speichern
+                  button.btn.btn-light(data-dismiss="modal") Abbrechen
+                  button.btn.btn-primary(type="submit") Speichern
   .col-12
     .page-header
       h2 Orte
@@ -39,22 +39,28 @@ block content
           th Für Presse
           th Für Presse mit "in"
           th Bearbeiten
-        for ort in orte.orte()
+        each ort in orte.orte
           tr
             td #{ort.name}
             td #{ort.flaeche}
             td #{ort.pressename}
             td #{ort.presseIn}
-            td: button.btn.btn-sm.btn-primary.float-right(data-toggle='modal', data-target='#edit', data-name=ort.name, data-flaeche=ort.flaeche, data-pressename=ort.pressename, data-pressein=ort.presseIn ): i.far.fa-fw.fa-edit
+            td: button.btn.btn-sm.btn-primary.float-right(
+              data-toggle="modal",
+              data-target="#edit",
+              data-name=ort.name,
+              data-flaeche=ort.flaeche,
+              data-pressename=ort.pressename,
+              data-pressein=ort.presseIn
+            ): i.far.fa-fw.fa-edit
         tr
           td
           td
           td
           td
-          td: button.btn.btn-sm.btn-success.float-right(data-toggle='modal', data-target='#edit')
+          td: button.btn.btn-sm.btn-success.float-right(data-toggle="modal", data-target="#edit")
             i.far.fa-fw.fa-file
             | &nbsp;Neu
-
 
 block scripts
   script.

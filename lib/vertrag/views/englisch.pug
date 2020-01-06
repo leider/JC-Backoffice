@@ -1,8 +1,7 @@
 extends briefpapier
 
-
 block adresse
-  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
   p.
     #{bandname} <br>
     c/o #{veranstaltung.agentur().name()}<br>
@@ -10,10 +9,10 @@ block adresse
     #{veranstaltung.agentur().ort()}
 
 block content1
-  -var start = veranstaltung.startDatumUhrzeit();
-  -var getin = veranstaltung.getinDatumUhrzeit();
-  -var hotel = veranstaltung.hotel();
-  -var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var start = veranstaltung.startDatumUhrzeit();
+  - var getin = veranstaltung.getinDatumUhrzeit();
+  - var hotel = veranstaltung.hotel();
+  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
 
   .row
     .col-7
@@ -21,7 +20,7 @@ block content1
         b Concert/Performance Agreement
       p This agreement is concluded
     .col-5
-      p.text-right Karlsruhe, #{datum.tagMonatJahrLang()}
+      p.text-right Karlsruhe, #{datum.tagMonatJahrLang}
   .row
     .col-3
       p by:<br>
@@ -52,10 +51,10 @@ block content1
   .row
     .col-12
       p.
-        §1 The concert takes place at <b>#{start.tagMonatJahrLang()}</b> um <b>#{start.uhrzeitKompakt()}</b>.</br>
+        §1 The concert takes place at <b>#{start.tagMonatJahrLang}</b> at <b>#{start.uhrzeitKompakt}</b>.</br>
         Location: <b>#{veranstaltung.kopf().ort()}</b>
       p.
-        §1.1 Get in is at <b>#{getin.uhrzeitKompakt()}</b>, the organizer or his representative shall be present at this hour.
+        §1.1 Get in is at <b>#{getin.uhrzeitKompakt}</b>, the organizer or his representative shall be present at this hour.
         He shall be present during the complete performance.
       p.
         §1.2 Territorial Protection: the artists herby commit to not play any concert within the radius of 50 km 14 days prior or after the concert.
@@ -121,12 +120,12 @@ block content2
       p.
         §15 The contractual parties assure by their signature, that they comprehend the agreement, that they are in full legal capacity and authorized to sign.
 
-      .row(style='margin-top:24px;')
+      .row(style="margin-top:24px;")
         .col-6
           +signbox('Place/Date', 'Artist')
-          div(style='margin-top:5px;')
+          div(style="margin-top:5px;")
           +signbox('Place/Date', 'Organizer', 'Karlsruhe, 18. März 2018')
         .col-6
           +signbox('Signature', 'Name of Artist')
-          div(style='margin-top:5px;')
+          div(style="margin-top:5px;")
           +signbox('Signature', 'Name of Organizer', 'niklas', true)

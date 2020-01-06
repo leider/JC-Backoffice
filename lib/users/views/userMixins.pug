@@ -1,11 +1,11 @@
 mixin userpanel(user, count, expandAll)
-  -var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', 'Ladies\' XS', 'Ladies\' S', 'Ladies\' M', 'Ladies\' L', 'Ladies\' XL', 'Ladies\' XXL' ]
-  -var editlink = accessrights.canEditUser(user.id) ? '/users/' + encodeURIComponent(user.id) : null
+  - var shirtsizes = ['', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'No Shirt', "Ladies' XS", "Ladies' S", "Ladies' M", "Ladies' L", "Ladies' XL", "Ladies' XXL"];
+  - var editlink = accessrights.canEditUser(user.id) ? `/users/${encodeURIComponent(user.id)}` : null;
   .col-xl-3.col-lg-4.col-sm-6
     +legendMitBody('user' + count, user.name + ' (' + user.id + ')' + ' <small>Gruppen: ' + gruppenUndRechteText(user) + '</small>', null, null, null, !expandAll && accessrights.memberId() !== user.id)
       table.table.table-striped.table-sm
         if accessrights.canEditUser(user.id)
-          tr: td(colspan=2): a.btn.btn-sm.btn-primary.float-right(href=editlink, title='Bearbeiten'): i.fas.fa-fw.fa-edit
+          tr: td(colspan=2): a.btn.btn-sm.btn-primary.float-right(href=editlink, title="Bearbeiten"): i.fas.fa-fw.fa-edit
         tr
           th: .form-control-plaintext E-Mail:
           td: .mailtoify.form-control-plaintext #{user.email}
@@ -13,13 +13,13 @@ mixin userpanel(user, count, expandAll)
           tr
             th: .form-control-plaintext T-Shirt:
             td
-              select.form-control.form-control-sm.enhance(id=user.id, name='tshirt', style='width:100%')
-                -var value = user.tshirt
+              select.form-control.form-control-sm.enhance(id=user.id, name="tshirt", style="width:100%")
+                - var value = user.tshirt;
                 each val in shirtsizes
-                  option(value = val, selected = value === val) #{val}
+                  option(value=val, selected=value === val) #{val}
           tr
             th: .form-control-plaintext Telefon:
-            td: input.form-control.form-control-sm.trim-text(id=user.id, type='text', name='tel', value=user.tel, style='width:100%')
+            td: input.form-control.form-control-sm.trim-text(id=user.id, type="text", name="tel", value=user.tel, style="width:100%")
         else
           tr
             th: .form-control-plaintext T-Shirt:
@@ -27,6 +27,3 @@ mixin userpanel(user, count, expandAll)
           tr
             th: .form-control-plaintext Telefon:
             td: .telify.form-control-plaintext #{user.tel}
-
-
-

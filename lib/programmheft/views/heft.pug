@@ -2,15 +2,15 @@ extends ../../../views/layout
 include ../../../views/formComponents
 
 mixin panelView(groupedVeranstaltungen)
-  -var count = 0
-  for month in Object.keys(groupedVeranstaltungen)
-    -var veranstOfMonth = groupedVeranstaltungen[month]
+  - var count = 0;
+  each month in Object.keys(groupedVeranstaltungen)
+    - var veranstOfMonth = groupedVeranstaltungen[month];
     .row
       .col-12
-        h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startDatumUhrzeit().monatLangJahrKompakt()}
-      for veranstaltung in veranstOfMonth
-        -var kopf = veranstaltung.kopf()
-        -var id = 'panel' + ++count
+        h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startDatumUhrzeit().monatLangJahrKompakt}
+      each veranstaltung in veranstOfMonth
+        - var kopf = veranstaltung.kopf();
+        - var id = 'panel' + ++count;
         .col-xl-4.col-md-6
           .card.mb-2
             a(href=veranstaltung.fullyQualifiedUrl() + '/presse')
@@ -25,14 +25,14 @@ block title
 
 block content
   .col-12
-    form#termineform(action='/programmheft/submit', method='post')
+    form#termineform(action="/programmheft/submit", method="post")
       .page-header
         .btn-group.float-right
-          button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
+          button.btn.btn-success(type="submit", title="Speichern"): i.far.fa-save.fa-fw
         h2 Programmheft<br>
-          small #{start.monatKompakt()} - #{start.plus({monate: 1}).monatJahrKompakt()}
+          small #{start.monatKompakt} - #{start.plus({monate: 1}).monatJahrKompakt}
       +csrf
-      +hidden('id', start.fuerKalenderViews())
+      +hidden('id', start.fuerKalenderViews)
       .row
         .col-lg-8.col-sm-12
           .row
@@ -45,22 +45,22 @@ block content
               h4 Farben Hilfe
               p
                 | Du kannst entweder eine #{' '}
-                a(href='https://www.w3schools.com/colors/colors_names.asp', target='_blank') Farbe mit Namen eintragen #{' '}
+                a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{' '}
                 | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
         .col-lg-4.col-sm-12
-          +hightextarea('text', 'Termine', kalender.text())
+          +hightextarea('text', 'Termine', kalender.text)
     if (unconfirmedVeranstaltungen.length > 0)
       h2.text-danger Es gibt noch unbestätigte Veranstaltungen
-      for veranstaltung in unconfirmedVeranstaltungen
+      each veranstaltung in unconfirmedVeranstaltungen
         p: a.text-danger(href=veranstaltung.fullyQualifiedUrl() + '/allgemeines') #{veranstaltung.kopf().titel()}
     +panelView(groupedVeranstaltungen)
 
 block head
-  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
+  link(rel="stylesheet", href="/stylesheets/fullcalendar.css")
 
 block scripts
-  script(src='/clientscripts/fullcalendar.min.js')
-  script(src='/clientscripts/bootstrap-markdown.min.js')
+  script(src="/clientscripts/fullcalendar.min.js")
+  script(src="/clientscripts/bootstrap-markdown.min.js")
   script.
     $(document).ready(function () {
       function initCalendar(id, date) {
@@ -96,7 +96,6 @@ block scripts
         calendar.render();
       }
 
-      initCalendar('termine1', '#{start.minus({monate: 2}).fuerCalendarWidget()}');
-      initCalendar('termine2', '#{start.minus({monate: 1}).fuerCalendarWidget()}');
+      initCalendar('termine1', '#{start.minus({monate: 2}).fuerCalendarWidget}');
+      initCalendar('termine2', '#{start.minus({monate: 1}).fuerCalendarWidget}');
     });
-

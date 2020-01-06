@@ -16,10 +16,10 @@ block content
           if (match.line)
             dt.col-4
               a(href='/wiki/' + match.pageName) #{match.pageName}
-              |  (Zeile #{match.line})
+              |
+              | (Zeile #{match.line})
             dd.col-8: em "#{match.text}"
           else
             dt.col-4
               a(href='/wiki/' + match.pageName) #{match.pageName}
             dd.col-8 (im Dateinamen)
-

@@ -1,57 +1,52 @@
 function germanToEnglishNumberString(string) {
-  'use strict';
+  "use strict";
   if (!string) {
     return;
   }
-  return string.replace('.', '').replace(',', '.');
+  return string.replace(".", "").replace(",", ".");
 }
 
 /* exported intAmount */
 function intAmount(jqueryNumberField) {
-  'use strict';
+  "use strict";
   return parseInt(jqueryNumberField.val(), 10) || 0;
 }
 
 /* exported floatAmount */
 function floatAmount(jqueryNumberField) {
-  'use strict';
+  "use strict";
   return parseFloat(jqueryNumberField.val(), 10) || 0;
 }
 
 /* exported floatAmountForSpan */
 function floatAmountForSpan(jquerySpan) {
-  'use strict';
-  return (
-    parseFloat(
-      germanToEnglishNumberString(jquerySpan.html().replace('€', '')),
-      10
-    ) || 0
-  );
+  "use strict";
+  return parseFloat(germanToEnglishNumberString(jquerySpan.html().replace("€", "")), 10) || 0;
 }
 
 /* exported setEuro */
 function setEuro(jqueryCurrencyField, numberString) {
   /* eslint-disable new-cap */
-  'use strict';
+  "use strict";
   if (!jqueryCurrencyField.length) {
     return;
   }
-  var number = Intl.NumberFormat('de-DE', {
+  var number = Intl.NumberFormat("de-DE", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(numberString || 0);
-  jqueryCurrencyField.html(number + ' €');
+  jqueryCurrencyField.html(number + " €");
   jqueryCurrencyField.change();
 }
 
 /* exported setEuroInput */
 function setEuroInput(jqueryCurrencyField, numberString) {
   /* eslint-disable new-cap */
-  'use strict';
+  "use strict";
   if (!jqueryCurrencyField.length) {
     return;
   }
-  var number = Intl.NumberFormat('en-US', {
+  var number = Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
     useGrouping: false
@@ -62,7 +57,7 @@ function setEuroInput(jqueryCurrencyField, numberString) {
 
 /* exported toUtc */
 function toUtc(dateString, timeString) {
-  'use strict';
+  "use strict";
   // expects German strings like "30.11.1987" "12:30"
   // returns javascript Date or null
   function stringToInt(each) {
@@ -71,69 +66,48 @@ function toUtc(dateString, timeString) {
   }
 
   if (dateString && timeString) {
-    var dateArray = dateString.split('.').map(stringToInt);
-    var timeArray = timeString.split(':').map(stringToInt);
+    var dateArray = dateString.split(".").map(stringToInt);
+    var timeArray = timeString.split(":").map(stringToInt);
     if (dateArray.length === 3 && timeArray.length === 2) {
-      return new Date(
-        Date.UTC(
-          dateArray[2],
-          dateArray[1] - 1,
-          dateArray[0],
-          timeArray[0],
-          timeArray[1]
-        )
-      );
+      return new Date(Date.UTC(dateArray[2], dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1]));
     }
   }
   return null;
 }
 
 function surroundWithLink(text) {
-  'use strict';
+  "use strict";
 
   // shamelessly stolen from http://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
   var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
   return text.replace(urlRegex, function(url) {
-    return (
-      '<a href="' +
-      url +
-      '" target="_blank">' +
-      '<i class="fa fa-external-link"/> ' +
-      url +
-      '</a>'
-    );
+    return '<a href="' + url + '" target="_blank">' + '<i class="fa fa-external-link"/> ' + url + "</a>";
   });
 }
 
 function surroundTwitterName(twittername) {
-  'use strict';
+  "use strict";
 
   if (twittername.trim().length === 0) {
     return twittername;
   }
-  return (
-    '<a href="http://twitter.com/' +
-    twittername +
-    '" target="_blank">@' +
-    twittername +
-    '</a>'
-  );
+  return '<a href="http://twitter.com/' + twittername + '" target="_blank">@' + twittername + "</a>";
 }
 
 function surroundEmail(email) {
-  'use strict';
+  "use strict";
 
-  return '<a href="mailto:' + email + '">' + email + '</a>';
+  return '<a href="mailto:' + email + '">' + email + "</a>";
 }
 
 function surroundTel(tel) {
-  'use strict';
-  return '<a href="tel:' + tel + '"> ' + tel + '</a>';
+  "use strict";
+  return '<a href="tel:' + tel + '"> ' + tel + "</a>";
 }
 
 /* exported veranstaltungDateModel */
 function veranstaltungDateModel(initialDate, initialTime) {
-  'use strict';
+  "use strict";
 
   var oldStartDate = toUtc(initialDate, initialTime);
 
@@ -146,43 +120,33 @@ function veranstaltungDateModel(initialDate, initialTime) {
     },
 
     calculateNewEnd: function(currentTimes) {
-      var offsetMillis =
-        oldStartDate && currentTimes.start
-          ? currentTimes.start.getTime() - oldStartDate.getTime()
-          : 0;
+      var offsetMillis = oldStartDate && currentTimes.start ? currentTimes.start.getTime() - oldStartDate.getTime() : 0;
 
       oldStartDate = currentTimes.start;
 
-      return currentTimes.end
-        ? new Date(currentTimes.end.getTime() + offsetMillis)
-        : null;
+      return currentTimes.end ? new Date(currentTimes.end.getTime() + offsetMillis) : null;
     },
 
     createDateAndTimeStrings: function(jsDate) {
-      var dateformat = new Intl.DateTimeFormat('de', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        timeZone: 'UTC'
+      var dateformat = new Intl.DateTimeFormat("de", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "UTC"
       });
-      var timeformat = new Intl.DateTimeFormat('de', {
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZone: 'UTC'
+      var timeformat = new Intl.DateTimeFormat("de", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "UTC"
       });
       return {
-        endDate: jsDate ? dateformat.format(jsDate) : '',
-        endTime: jsDate ? timeformat.format(jsDate) : ''
+        endDate: jsDate ? dateformat.format(jsDate) : "",
+        endTime: jsDate ? timeformat.format(jsDate) : ""
       };
     },
 
     determineNewEnd: function(startDate, startTime, endDate, endTime) {
-      var inputDateTimes = this.convertInputs(
-        startDate,
-        startTime,
-        endDate,
-        endTime
-      );
+      var inputDateTimes = this.convertInputs(startDate, startTime, endDate, endTime);
       var newEndDateTime = this.calculateNewEnd(inputDateTimes);
       return this.createDateAndTimeStrings(newEndDateTime);
     }
@@ -191,20 +155,15 @@ function veranstaltungDateModel(initialDate, initialTime) {
 
 /* exported dateAdapter */
 function dateAdapter(startDate, startTime, endDate, endTime) {
-  'use strict';
+  "use strict";
   var dateCalc = veranstaltungDateModel(startDate.val(), startTime.val());
 
   function listener() {
-    var endStrings = dateCalc.determineNewEnd(
-      startDate.val(),
-      startTime.val(),
-      endDate.val(),
-      endTime.val()
-    );
+    var endStrings = dateCalc.determineNewEnd(startDate.val(), startTime.val(), endDate.val(), endTime.val());
 
-    endDate.datepicker('update', endStrings.endDate);
-    endTime.timepicker('setTime', endStrings.endTime);
-    endDate.datepicker('update', endStrings.endDate); // to have the change fired correctly on date field
+    endDate.datepicker("update", endStrings.endDate);
+    endTime.timepicker("setTime", endStrings.endTime);
+    endDate.datepicker("update", endStrings.endDate); // to have the change fired correctly on date field
   }
 
   startDate.change(listener);
@@ -212,33 +171,31 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
 }
 
 (function() {
-  'use strict';
+  "use strict";
 
   function highlightCurrentSection() {
-    $('[data-jcnav]')
+    $("[data-jcnav]")
       .filter(function() {
-        return new RegExp('^/' + $(this).attr('data-jcnav')).test(
-          window.location.pathname
-        );
+        return new RegExp("^/" + $(this).attr("data-jcnav")).test(window.location.pathname);
       })
-      .addClass('active');
+      .addClass("active");
   }
 
   function addHelpButtonToTextarea() {
-    $('.md-textarea').each(function() {
+    $(".md-textarea").each(function() {
       $(this).markdown({
         additionalButtons: [
           [
             {
-              name: 'groupCustom',
+              name: "groupCustom",
               data: [
                 {
-                  name: 'cmdHelp',
-                  title: 'Hilfe',
-                  icon: 'fa fa-question-circle',
+                  name: "cmdHelp",
+                  title: "Hilfe",
+                  icon: "fa fa-question-circle",
                   callback: function() {
-                    $('#cheatsheet .modal-content').load('/cheatsheet.html');
-                    $('#cheatsheet').modal();
+                    $("#cheatsheet .modal-content").load("/cheatsheet.html");
+                    $("#cheatsheet").modal();
                   }
                 }
               ]
@@ -247,57 +204,54 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
         ],
         onPreview: function(e) {
           $.post(
-            '/preview',
+            "/preview",
             {
               data: e.getContent(),
-              subdir:
-                $('[name=subdir]').val() ||
-                $('[name=assignedGroup]').val() ||
-                $('[name=id]').val(),
-              _csrf: $('[name=_csrf]').val()
+              subdir: $("[name=subdir]").val() || $("[name=assignedGroup]").val() || $("[name=id]").val(),
+              _csrf: $("[name=_csrf]").val()
             },
             function(data) {
               e.$element
                 .parent()
-                .find('.md-preview')
+                .find(".md-preview")
                 .html(data);
             }
           );
-          return ''; // to clearly indicate the loading...
+          return ""; // to clearly indicate the loading...
         },
-        iconlibrary: 'fa',
-        language: 'de',
-        resize: 'vertical'
+        iconlibrary: "fa",
+        language: "de",
+        resize: "vertical"
       });
     });
-    $('.md-header .btn-default')
-      .removeClass('btn-default')
-      .addClass('btn-light');
-    $('.md-header .fa')
-      .removeClass('fa')
-      .addClass('fas');
-    $('.md-header .fa-header')
-      .removeClass('fa-header')
-      .addClass('fa-heading');
-    $('.md-header .fa-picture-o')
-      .removeClass('fa-picture-o fas')
-      .addClass('fa-image far');
+    $(".md-header .btn-default")
+      .removeClass("btn-default")
+      .addClass("btn-light");
+    $(".md-header .fa")
+      .removeClass("fa")
+      .addClass("fas");
+    $(".md-header .fa-header")
+      .removeClass("fa-header")
+      .addClass("fa-heading");
+    $(".md-header .fa-picture-o")
+      .removeClass("fa-picture-o fas")
+      .addClass("fa-image far");
   }
 
   function initPickersAndWidgets() {
-    $('.datepicker').each(function() {
+    $(".datepicker").each(function() {
       $(this).datepicker({
         autoclose: true,
-        format: 'dd.mm.yyyy',
+        format: "dd.mm.yyyy",
         weekStart: 1,
-        viewMode: 'days',
-        minViewMode: 'days',
-        language: 'de',
-        orientation: 'bottom'
+        viewMode: "days",
+        minViewMode: "days",
+        language: "de",
+        orientation: "bottom"
       });
     });
 
-    $('.timepicker').each(function() {
+    $(".timepicker").each(function() {
       $(this).timepicker({
         template: false,
         minuteStep: 15,
@@ -306,15 +260,15 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       });
     });
 
-    $('.enhance').each(function() {
+    $(".enhance").each(function() {
       $(this).select2({
         width: null,
-        containerCssClass: ':all:',
+        containerCssClass: ":all:",
         minimumResultsForSearch: Infinity
       });
     });
 
-    $('.trim-text').on('blur', function() {
+    $(".trim-text").on("blur", function() {
       $(this).val(
         $(this)
           .val()
@@ -322,39 +276,39 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
       );
     });
 
-    $(':checkbox').each(function() {
+    $(":checkbox").each(function() {
       $(this).change(function() {
         $(this)
           .parent()
-          .toggleClass('checkbox-success');
+          .toggleClass("checkbox-success");
       });
     });
 
     var btns =
       '<button type="button" class="kv-cust-btn btn btn-sm btn-kv btn-default btn-outline-secondary" title="Download" data-key="{dataKey}">' +
       '<i class="fa fa-download"></i>' +
-      '</button>';
+      "</button>";
     // note the tag/token {dataKey}
-    $('.file-loading').each(function() {
+    $(".file-loading").each(function() {
       $(this).fileinput({
         otherActionButtons: btns
       });
     });
-    $('.kv-cust-btn').each(function() {
+    $(".kv-cust-btn").each(function() {
       $(this).click(function() {
         var url = $(this)
-          .parents('.file-thumbnail-footer')
+          .parents(".file-thumbnail-footer")
           .parent()
-          .children('.kv-file-content')
+          .children(".kv-file-content")
           .children()
-          .attr('src');
+          .attr("src");
         window.open(url);
       });
     });
   }
 
   function initTooltipsAndHovers() {
-    $('.tooltiplabel').each(function() {
+    $(".tooltiplabel").each(function() {
       $(this).tooltip();
     });
     $('[data-toggle="tooltip"]').each(function() {
@@ -363,44 +317,44 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   }
 
   function createLinks() {
-    $('.urlify').each(function() {
+    $(".urlify").each(function() {
       $(this).html(surroundWithLink(this.innerHTML));
     });
 
-    $('.twitterify').each(function() {
+    $(".twitterify").each(function() {
       $(this).html(surroundTwitterName(this.innerHTML));
     });
 
-    $('.mailtoify').each(function() {
+    $(".mailtoify").each(function() {
       $(this).html(surroundEmail(this.innerHTML));
     });
-    $('.telify').each(function() {
+    $(".telify").each(function() {
       $(this).html(surroundTel(this.innerHTML));
     });
   }
 
   function toggleCaret() {
-    $('a.chevron').click(function() {
-      var target = $(this).attr('data-target');
+    $("a.chevron").click(function() {
+      var target = $(this).attr("data-target");
       $('a[data-target="' + target + '"]')
-        .find('i')
-        .toggleClass('fa-caret-square-down fa-caret-square-right');
+        .find("i")
+        .toggleClass("fa-caret-square-down fa-caret-square-right");
     });
   }
 
   function validateViaBootstrap() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.getElementsByClassName('needs-validation');
+    var forms = document.getElementsByClassName("needs-validation");
     // Loop over them and prevent submission
     Array.prototype.filter.call(forms, function(form) {
       form.addEventListener(
-        'submit',
+        "submit",
         function(event) {
           if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
           }
-          form.classList.add('was-validated');
+          form.classList.add("was-validated");
         },
         false
       );
@@ -414,5 +368,5 @@ function dateAdapter(startDate, startTime, endDate, endTime) {
   $(document).ready(createLinks);
   $(document).ready(toggleCaret);
   $(document).ready(validateViaBootstrap);
-  $.fn.select2.defaults.set('theme', 'bootstrap');
+  $.fn.select2.defaults.set("theme", "bootstrap");
 })();

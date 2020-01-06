@@ -2,29 +2,36 @@ include ../../../../views/formComponents
 
 mixin submitButtonsFor(veranstaltung, section, readonly)
   .btn-group.float-right
-    a.btn.btn-light(href='/', title='Zurück'): i.fas.fa-home.fa-fw
+    a.btn.btn-light(href="/", title="Zurück"): i.fas.fa-home.fa-fw
     if accessrights.isOrgaTeam()
       if veranstaltung.url() && !veranstaltung.kopf().confirmed()
-        span.btn.btn-light.modaldialog(data-toggle='modal', data-target='#loeschdialog', data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url()))
+        span.btn.btn-light.modaldialog(
+          data-toggle="modal",
+          data-target="#loeschdialog",
+          data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url())
+        )
           i.fas.fa-fw.fa-trash-alt.text-danger
       if veranstaltung.url()
         +submitButton(veranstaltung, section, 'copy', 'Kopieren', 'fa-copy ')
     unless readonly
       +hidden('returnTo', section)
-      button.btn.btn-success(type='submit', title='Speichern'): i.far.fa-save.fa-fw
+      button.btn.btn-success(type="submit", title="Speichern"): i.far.fa-save.fa-fw
 
 mixin iconLabel(icon, title)
-  i(class='fas fa-fw ' + icon)
+  i.fas.fa-fw(class=icon)
   b.d-none.d-md-inline #{' '} #{title}
 
-
 mixin tab(veranstaltung, section, name, title, icon)
-  li(class='nav-item' + (section !== name ? ' tab-' : ' color-') + name )
+  li.nav-item(class=(section !== name ? ' tab-' : ' color-') + name)
     if veranstaltung.url()
-      a(class='px-2 py-1 py-md-2 nav-link inherit-color' + (section === name ? ' disabled' : ''), href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title)
+      a.px-2.py-1.py.md-2.nav-link.inherit-color(
+        class=section === name ? ' disabled' : '',
+        href=veranstaltung.fullyQualifiedUrl() + '/' + name,
+        title=title
+      )
         +iconLabel(icon, title)
     else
-      a(class='px-2 py-1 py-md-2 nav-link inherit-color disabled', href='#', title=title)
+      a.px-2.py-1.py-md-2.nav-link.inherit-color.disabled(href="#", title=title)
         +iconLabel(icon, title)
 
 mixin tabsFor(veranstaltung, section)
@@ -59,10 +66,10 @@ mixin editHeader(veranstaltung, section, readonly)
       .page-header
         +submitButtonsFor(veranstaltung, section, readonly)
         if (veranstaltung.id())
-          h2(class='text-' + section) #{veranstaltung.kopf().titel()} <br>
-            small(class='text-' + section) am #{veranstaltung.datumForDisplayShort()}
+          h2(class=`text-${section}`) #{veranstaltung.kopf().titel()} <br>
+            small(class=`text-${section}`) am #{veranstaltung.datumForDisplayShort()}
         else
-          h2(class='text-' + section) Neue Veranstaltung
+          h2(class=`text-${section}`) Neue Veranstaltung
       +tabsFor(veranstaltung, section)
       .tab-content
         .tab-pane.show.active

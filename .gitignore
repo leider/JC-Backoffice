@@ -1,6 +1,5 @@
 build/
 config/
-!config/beans.json
 !public/reporting
 node_modules/
 public/clientscripts
@@ -20,3 +19,12 @@ mongorestore_jc.sh
 jazzclubmongo*
 *.gz
 /frontend/sass/out/jc-backoffice.css
+lib/**/*.js
+test/**/*.js
+app.js
+configure.js
+initWinston.js
+start.js
+*.map
+.tscache/
+reservixLoad.js

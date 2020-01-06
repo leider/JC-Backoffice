@@ -2,10 +2,10 @@ mixin zuAufButtons
   .row
     .col-12
       .btn-group.btn-group-sm
-        a#closeAll.btn.btn-light(href='#', data-toggle='collapse', data-target='.cardcontent.show', onClick='aufZuClicked(this)')
+        a#closeAll.btn.btn-light(href="#", data-toggle="collapse", data-target=".cardcontent.show", onClick="aufZuClicked(this)")
           i.far.fa-minus-square.fa-fw-fw-sm
           | #{' '} Alle Zu
-        a#openAll.btn.btn-light(href='#', data-toggle='collapse', data-target='.cardcontent:not(.show)', onClick='aufZuClicked(this)')
+        a#openAll.btn.btn-light(href="#", data-toggle="collapse", data-target=".cardcontent:not(.show)", onClick="aufZuClicked(this)")
           i.far.fa-plus-square.fa-fw-fw-sm
           | #{' '} Alle Auf
   script.
@@ -19,8 +19,8 @@ mixin zuAufButtons
 
 mixin calendar(icals)
   #calendar.mt-4
-  link(rel='stylesheet', href='/stylesheets/fullcalendar.css')
-  script(src='/clientscripts/fullcalendar.min.js')
+  link(rel="stylesheet", href="/stylesheets/fullcalendar.css")
+  script(src="/clientscripts/fullcalendar.min.js")
   script.
     document.addEventListener('DOMContentLoaded', function () {
       var calElement = document.getElementById('calendar');
@@ -74,16 +74,16 @@ mixin calendar(icals)
     });
 
 mixin standardCardTitle(veranstaltung, id, collapsed)
-  -var kopf = veranstaltung.kopf()
-  table(width='100%')
+  - var kopf = veranstaltung.kopf();
+  table(width="100%")
     tr.align-top
       td.text-left
-        a.inherit-color.chevron.panel(data-toggle='collapse', data-target='#' + id)
+        a.inherit-color.chevron.panel(data-toggle="collapse", data-target='#' + id)
           if collapsed
             i.far.fa-caret-square-right.fa-fw.fa-lg
           else
             i.far.fa-caret-square-down.fa-fw.fa-lg
-      td: a.chevron(data-toggle='collapse', data-target='#' + id)
+      td: a.chevron(data-toggle="collapse", data-target='#' + id)
         h6 #{veranstaltung.datumForDisplayShort()}
 
       td.text-right: .btn-group
@@ -94,7 +94,7 @@ mixin standardCardTitle(veranstaltung, id, collapsed)
         a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
     tr
       td
-      td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h6 #{kopf.presseIn()}
+      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h6 #{kopf.presseIn()}
     tr
       td
-      td(colspan=2): a.chevron(data-toggle='collapse', data-target='#' + id): h5 #{kopf.titel()}
+      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h5 #{kopf.titel()}

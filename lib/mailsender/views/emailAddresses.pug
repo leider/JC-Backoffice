@@ -6,23 +6,23 @@ block title
 
 block content
   .col-12
-    form#optionenform(action='/mailsender/submitEmailAddresses', method='post')
+    form#optionenform(action="/mailsender/submitEmailAddresses", method="post")
       +csrf
       fieldset
         .row
           .col-12
             .page-header
-              +submitButtons()
+              +submitButtons
               h2 Emailadressen <br>
                 small Bearbeiten
             +legendMitBody('email', 'E-Mail Partner')
-              for number in emailAddresses.noOfEmails()
+              each number in emailAddresses.noOfEmails()
                 .row
                   .col-sm-6
-                    +text('partner' + number, 'Partner', emailAddresses.state['partner' + number])
+                    +text('partner' + number, 'Partner', emailAddresses['partner' + number])
                   .col-sm-6
-                    +email('email' + number, 'E-Mail', emailAddresses.state['email' + number])
+                    +email('email' + number, 'E-Mail', emailAddresses['email' + number])
         .row
           .col-12
             hr
-            +submitButtons()
+            +submitButtons
