@@ -83,17 +83,17 @@ block content
           +legendMitBody('deal', 'Kostenübersicht / Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
             table.table.table-sm.table-striped
               tr
-                th(align="right", style="text-align: right;") Einnahmen
-                th(align="right", style="text-align: right;") Kosten
-                th(align="right", style="text-align: right;") Überschuss
+                th(style="text-align: right;") Einnahmen
+                th(style="text-align: right;") Kosten
+                th(style="text-align: right;") Überschuss
               tr
-                td(align="right"): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
-                td(align="right"): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
-                td(align="right"): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
+                td(style="text-align: right;"): +currencySpan(veranstaltung.einnahmenGesamtEUR(), 'dealEinnahmen')
+                td(style="text-align: right;"): +currencySpan(veranstaltung.kostenGesamtEUR(), 'dealKosten')
+                td(style="text-align: right;"): b: +currencySpan(veranstaltung.bruttoUeberschussEUR(), 'dealUeberschuss')
               tr#dealrow
                 th Anteilig an Band:
                 td
-                td(align="right"): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
+                td(style="text-align: right;"): b: +currencySpan(veranstaltung.dealAbsolutEUR(), 'dealUeberschussAnBand')
 
         .col-md-6
           +legendMitBody('ausgaben', 'Kosten / Ausgaben', 'ausgabenTotal', 'ausgaben')
@@ -130,13 +130,13 @@ block scripts
   - var showKasse = kasse.istFreigegeben();
   script.
     $(document).ready(function initKalkulationScript() {
-      var backlineEUR = $('#backlineEUR');
-      var technikAngebot1EUR = $('#technikAngebot1EUR');
-      var saalmiete = $('#saalmiete');
-      var werbung1 = $('#werbung1');
-      var werbung2 = $('#werbung2');
-      var werbung3 = $('#werbung3');
-      var personal = $('#personal');
+      var backlineEUR = $('#kosten\\[backlineEUR\\]');
+      var technikAngebot1EUR = $('#kosten\\[technikAngebot1EUR\\]');
+      var saalmiete = $('#kosten\\[saalmiete\\]');
+      var werbung1 = $('#kosten\\[werbung1\\]');
+      var werbung2 = $('#kosten\\[werbung2\\]');
+      var werbung3 = $('#kosten\\[werbung3\\]');
+      var personal = $('#kosten\\[personal\\]');
       var ausgabenTotal = $('#ausgabenTotal');
 
       var gagenEUR = $('#kosten\\[gagenEUR\\]');

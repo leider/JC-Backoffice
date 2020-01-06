@@ -4,11 +4,12 @@ import store from "./optionenstore";
 import puppeteerPrinter from "../commons/puppeteerPrinter";
 
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import OptionValues, { Hotelpreise, Kontakt } from "./optionValues";
+import OptionValues, { Hotelpreise } from "./optionValues";
 import Orte from "./orte";
 import FerienIcals from "./ferienIcals";
 import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
+import Kontakt from "../veranstaltungen/object/kontakt";
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const app = misc.expressAppIn(__dirname);

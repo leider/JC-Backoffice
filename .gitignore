@@ -1,6 +1,5 @@
 build/
 config/
-!config/beans.json
 !public/reporting
 node_modules/
 public/clientscripts

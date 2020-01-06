@@ -31,6 +31,17 @@ interface RuleLogic {
   startAndEndDay(datumUhrzeit: DatumUhrzeit): { start: DatumUhrzeit; end: DatumUhrzeit };
 }
 
+class RuleLogicEmpty implements RuleLogic {
+  // eslint-disable-next-line no-unused-vars
+  shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
+    return false;
+  }
+
+  startAndEndDay(datumUhrzeit: DatumUhrzeit): { start: DatumUhrzeit; end: DatumUhrzeit } {
+    return { start: datumUhrzeit, end: datumUhrzeit };
+  }
+}
+
 class RuleLogic1 implements RuleLogic {
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
     return datumUhrzeit.wochentag === 3;
@@ -203,7 +214,7 @@ export default class MailRule {
   }
 
   logic(): RuleLogic {
-    return logicArray[this.rule];
+    return logicArray[this.rule] || new RuleLogicEmpty();
   }
 
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean {

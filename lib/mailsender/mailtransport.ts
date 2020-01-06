@@ -9,7 +9,6 @@ import transport from "./nodemailerTransport";
 
 function sendMail(message: Message, callback: Function): void {
   if (testLocal) {
-    // eslint-disable-next-line no-console
     console.log(message.toTransportObject());
     message.setTo();
     message.setBcc("derleider@web.de");
