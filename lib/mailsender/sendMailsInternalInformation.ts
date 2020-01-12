@@ -61,7 +61,7 @@ ${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal()).join("
 
 export function checkKasse(now: DatumUhrzeit, callback: Function): void {
   const start = now;
-  const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
+  const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
 
   function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function): void {
     const markdownToSend = `## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:
