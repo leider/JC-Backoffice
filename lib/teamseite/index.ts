@@ -64,7 +64,7 @@ app.get("/", (req, res, next) => {
 
       const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter((v: Veranstaltung) => v.kopf().confirmed());
       const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
-      const users = (results.users as User[]).sort((a, b) => (a.name > b.name ? 1 : -1));
+      const users = (results.users as User[]);
       return res.render("index", {
         groupedVeranstaltungen,
         users,

@@ -189,7 +189,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-ts");
 
   grunt.registerTask("prepare", ["eslint", "clean", "copy"]);
-  grunt.registerTask("tests", ["eslint", "mocha_istanbul"]);
+  grunt.registerTask("tests", ["eslint", "ts", "mocha_istanbul"]);
   grunt.registerTask("deploy_development", ["prepare", "sass", "cssmin", "uglify:development_de"]);
   grunt.registerTask("css_only", ["prepare", "sass", "cssmin"]);
 

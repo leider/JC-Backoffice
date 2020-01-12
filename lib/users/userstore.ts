@@ -14,12 +14,19 @@ function toUserList(callback: Function, err: Error | null, jsobjects?: object[])
 
 export default {
   allUsers: function allUsers(callback: Function): void {
-    persistence.list({ id: 1 }, R.partial(toUserList, [callback]));
+    persistence.list({ name: 1 }, R.partial(toUserList, [callback]));
   },
 
   save: function save(user: User, callback: Function): void {
     delete user.password;
     persistence.save(user, callback);
+  },
+
+  saveAll: function saveAll(users: User[], callback: Function): void {
+    users.forEach(u => {
+      delete u.password;
+    });
+    persistence.saveAll(users, callback);
   },
 
   forId: function forId(id: string, callback: Function): void {

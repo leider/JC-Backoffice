@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import users from "../../lib/users/users";
+import Users from "../../lib/users/users";
 import User from "../../lib/users/user";
 
 const user1 = new User({
@@ -31,12 +31,13 @@ const user5 = new User({
   id: "user5",
   name: "Name of User5",
   email: "user5@jazzclub.de",
-  gruppen: ["bookingTeam", "orgaTeam", "superusers"]
+  gruppen: ["bookingTeam", "orgaTeam", "superusers"],
+  mailinglisten: ["liste1"]
 });
-const user6 = new User({
-  id: "user6",
+const superuser = new User({
+  id: "superuser",
   name: "Name of User6",
-  email: "user6@jazzclub.de",
+  email: "superuser@jazzclub.de",
   gruppen: ["superusers"]
 });
 const user7 = new User({
@@ -46,76 +47,82 @@ const user7 = new User({
   gruppen: []
 });
 
-const userCollection = [user1, user2, user3, user4, user5, user6, user7];
+const userCollection = [user1, user2, user3, user4, user5, superuser, user7];
 
 describe("Users can extract receivers for mails", () => {
   it("when nothing is provided", () => {
     const groupsFromBody: string[] = [];
     const userFromBody: string[] = [];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.eql([]);
   });
 
   it("when orgaTeam provided", () => {
     const groupsFromBody = ["orgaTeam"];
     const userFromBody: string[] = [];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.contain(user1);
     expect(result).to.contain(user2);
     expect(result).to.contain(user4);
     expect(result).to.contain(user5);
-    expect(result).to.contain(user6);
+    expect(result).to.contain(superuser);
   });
 
   it("when bookingTeam provided", () => {
     const groupsFromBody = ["bookingTeam"];
     const userFromBody: string[] = [];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.contain(user3);
     expect(result).to.contain(user4);
     expect(result).to.contain(user5);
-    expect(result).to.contain(user6);
+    expect(result).to.contain(superuser);
   });
 
   it("when orageTeam AND bookingTeam provided", () => {
     const groupsFromBody = ["bookingTeam", "orgaTeam"];
     const userFromBody: string[] = [];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.have.length(6);
     expect(result).to.contain(user1);
     expect(result).to.contain(user2);
     expect(result).to.contain(user3);
     expect(result).to.contain(user4);
     expect(result).to.contain(user5);
-    expect(result).to.contain(user6);
+    expect(result).to.contain(superuser);
   });
 
-  it("when any non-existing team provided userFromBody is ignored and superuser always taken", () => {
+  it("when any non-existing team provided superuser is always added", () => {
     const groupsFromBody = ["weired"];
     const userFromBody = ["user1"];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
-    expect(result).to.not.contain(user1);
-    expect(result).to.contain(user6);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
+    expect(result).to.contain(user1);
+    expect(result).to.contain(superuser);
   });
 
   it('when "alle" provided', () => {
     const groupsFromBody = ["alle"];
     const userFromBody = ["user1"];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.contain(user1);
     expect(result).to.contain(user2);
     expect(result).to.contain(user3);
     expect(result).to.contain(user4);
     expect(result).to.contain(user5);
-    expect(result).to.contain(user6);
+    expect(result).to.contain(superuser);
     expect(result).to.contain(user7);
   });
 
   it("when no team provided userFromBody is taken", () => {
     const groupsFromBody: string[] = [];
     const userFromBody = ["user1", "user4"];
-    const result = users.filterReceivers(userCollection, groupsFromBody, userFromBody);
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
     expect(result).to.contain(user1);
     expect(result).to.contain(user4);
+  });
+
+  it("when a list is provided finds the according user", () => {
+    const groupsFromBody: string[] = [];
+    const result = new Users(userCollection).filterReceivers(groupsFromBody, [], ["liste1"]);
+    expect(result).to.contain(user5);
   });
 });

@@ -5,12 +5,13 @@ export default class User {
   name!: string;
   email!: string;
   tel!: string;
-  hashedPassword: string;
-  salt: string;
+  hashedPassword!: string;
+  salt!: string;
   tshirt!: string;
 
   gruppen: string[];
-  rechte!: string[];
+  rechte: string[];
+  mailinglisten: string[];
   password!: string; // transient
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,6 +27,8 @@ export default class User {
     this.gruppen = object.gruppen || [];
     this.rechte = object.rechte || [];
 
+    this.mailinglisten = object.mailinglisten || [];
+
     if (object.password) {
       this.updatePassword(object.password);
     }
@@ -38,5 +41,16 @@ export default class User {
 
   get asGitAuthor(): string {
     return `${this.name} <${this.email}>`;
+  }
+
+  unsubscribeFromList(oldlistname: string | undefined) {
+    if (oldlistname) {
+      this.mailinglisten = this.mailinglisten.filter(name => name !== oldlistname);
+    }
+
+  }
+
+  subscribeList(listname: string) {
+    this.mailinglisten.push(listname);
   }
 }
