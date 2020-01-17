@@ -46,7 +46,7 @@ block content
               h3 Kooperation mit #{kopf.kooperation()}
     .row
       .col-md-6
-        - var mitarbeiter = staff.mitarbeiterTransient;
+        - var mitarbeiter = staff.state.mitarbeiterTransient;
         +legendMitBody('staff', 'Staff', null, 'staff')
           table.table.table-striped.table-sm
             if veranstaltung.staff().noStaffNeeded()

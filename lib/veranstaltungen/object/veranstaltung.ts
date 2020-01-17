@@ -301,7 +301,11 @@ export default class Veranstaltung {
   }
 
   staff(): Staff {
-    return new Staff(this.undefinedOrValue(this.state.staff));
+    const potentiallyUndefined = this.undefinedOrValue(this.state.staff);
+    if (!potentiallyUndefined) {
+      this.state.staff = new Staff(potentiallyUndefined).toJSON();
+    }
+    return new Staff(this.state.staff);
   }
 
   technik(): Technik {

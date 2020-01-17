@@ -20,6 +20,7 @@ export interface StaffRaw extends StaffTypeCollections {
   kasseVNotNeeded: boolean;
   modNotNeeded: boolean;
   merchandiseNotNeeded: boolean;
+  mitarbeiterTransient?: { [p: string]: User[] };
 }
 
 export interface StaffUI extends StaffTypeCollections {
@@ -33,9 +34,9 @@ export interface StaffUI extends StaffTypeCollections {
 
 export default class Staff {
   state: StaffRaw;
-  private mitarbeiterTransient!: { [p: string]: User[] };
 
   toJSON(): StaffRaw {
+    delete this.state.mitarbeiterTransient;
     return this.state;
   }
 
@@ -176,8 +177,9 @@ export default class Staff {
     filledUsers.technikerV = users.filter(u => R.includes(u.id, this.state.technikerV));
     filledUsers.kasse = users.filter(u => R.includes(u.id, this.state.kasse));
     filledUsers.kasseV = users.filter(u => R.includes(u.id, this.state.kasseV));
-    filledUsers.merchandiseV = users.filter(u => R.includes(u.id, this.state.merchandise));
-    this.mitarbeiterTransient = filledUsers;
+    filledUsers.merchandise = users.filter(u => R.includes(u.id, this.state.merchandise));
+    filledUsers.mod = users.filter(u => R.includes(u.id, this.state.mod));
+    this.state.mitarbeiterTransient = filledUsers;
   }
 
   kasseFehlt(): boolean {
