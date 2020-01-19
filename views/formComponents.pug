@@ -99,7 +99,7 @@ mixin submitButtons(text)
       button.btn.btn-primary(type="submit") Speichern
 
 mixin submitButton(veranstaltung, current, name, title, icon)
-  if veranstaltung.url()
+  if veranstaltung.url
     a.btn(class=`btn-${name}${current === name ? ' active disabled' : ''}`, href=veranstaltung.fullyQualifiedUrl() + '/' + name, title=title): i.fas.fa-fw(
       class=icon
     )

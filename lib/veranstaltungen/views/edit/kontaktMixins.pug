@@ -1,19 +1,19 @@
 include ../../../../views/formComponents
 
 mixin kontakt(veranstaltung, kontakte, labelForLegend, name, optionalColorClass)
-  - var derkontakt = veranstaltung[name]();
+  - var derkontakt = veranstaltung[name];
   +legendMitBody(name, labelForLegend, null, optionalColorClass)
     .row
       .col-sm-6
-        +singleselect(name + '[auswahl]', 'Auswahl', derkontakt.name(), kontakte.map(k => k.name))
-        +text(name + '[name]', 'Name', derkontakt.name())
+        +singleselect(name + '[auswahl]', 'Auswahl', derkontakt.name, kontakte.map(k => k.name))
+        +text(name + '[name]', 'Name', derkontakt.name)
       .col-sm-6
-        +textareaPure(name + '[adresse]', 'Adresse', derkontakt.adresse())
+        +textareaPure(name + '[adresse]', 'Adresse', derkontakt.adresse)
     .row
       .col-sm-6
-        +text(name + '[telefon]', 'Telefon', derkontakt.telefon())
+        +text(name + '[telefon]', 'Telefon', derkontakt.telefon)
       .col-sm-6
-        +email(name + '[email]', 'E-Mail', derkontakt.email())
+        +email(name + '[email]', 'E-Mail', derkontakt.email)
 
 mixin kontaktScript(name, callbackname)
   - var callback = callbackname || 'dummyfunc';

@@ -31,7 +31,7 @@ interface VeranstaltungRaw {
   eintrittspreise?: EintrittspreiseRaw;
   hotel?: KontaktRaw;
   kasse?: KasseRaw;
-  kopf: KopfRaw;
+  kopf?: KopfRaw;
   kosten?: KostenRaw;
   presse?: PresseRaw;
   staff?: StaffRaw;
@@ -66,7 +66,17 @@ export interface VeranstaltungUI {
 }
 
 export default class Veranstaltung {
-  state: VeranstaltungRaw;
+  state: VeranstaltungRaw = { startDate: new Date(), endDate: new Date(), url: "" };
+
+  id?: string;
+  startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
+  endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
+  url = "";
+  reservixID?: string;
+
+  agentur = new Kontakt();
+  artist = new Artist();
+  hotel = new Kontakt();
   kopf = new Kopf();
   presse = new Presse();
   technik = new Technik();
@@ -76,77 +86,69 @@ export default class Veranstaltung {
   }
 
   toJSON(): VeranstaltungRaw {
-    if (this.state.agentur) {
-      this.state.agentur = this.agentur().toJSON();
+    const result = this.state;
+    result.id = this.id;
+    result.startDate = this.startDate;
+    result.endDate = this.endDate;
+    result.url = this.url;
+    result.reservixID = this.reservixID;
+
+    result.agentur = this.agentur.toJSON();
+    result.artist = this.artist.toJSON();
+    result.hotel = this.hotel.toJSON();
+    result.kopf = this.kopf.toJSON();
+    result.presse = this.presse.toJSON();
+    result.technik = this.technik.toJSON();
+
+    if (result.eintrittspreise) {
+      result.eintrittspreise = this.eintrittspreise().toJSON();
     }
-    if (this.state.artist) {
-      this.state.artist = this.artist().toJSON();
+    if (result.kasse) {
+      result.kasse = this.kasse().toJSON();
     }
-    if (this.state.eintrittspreise) {
-      this.state.eintrittspreise = this.eintrittspreise().toJSON();
+    if (result.kosten) {
+      result.kosten = this.kosten().toJSON();
     }
-    if (this.state.hotel) {
-      this.state.hotel = this.hotel().toJSON();
+    if (result.staff) {
+      result.staff = this.staff().toJSON();
     }
-    if (this.state.kasse) {
-      this.state.kasse = this.kasse().toJSON();
+    if (result.unterkunft) {
+      result.unterkunft = this.unterkunft().toJSON();
     }
-    this.state.kopf = this.kopf.toJSON();
-    if (this.state.kosten) {
-      this.state.kosten = this.kosten().toJSON();
-    }
-    if (this.presse) {
-      this.state.presse = this.presse.toJSON();
-    }
-    if (this.state.staff) {
-      this.state.staff = this.staff().toJSON();
-    }
-    if (this.technik) {
-      this.state.technik = this.technik.toJSON();
-    }
-    if (this.state.unterkunft) {
-      this.state.unterkunft = this.unterkunft().toJSON();
-    }
-    if (this.state.vertrag) {
-      this.state.vertrag = this.vertrag().toJSON();
+    if (result.vertrag) {
+      result.vertrag = this.vertrag().toJSON();
     }
     const salesreport1 = this.salesreport();
     if (salesreport1 !== null) {
-      this.state.salesrep = salesreport1.state;
+      result.salesrep = salesreport1.state;
     }
-    return this.state;
+    return result;
   }
 
   constructor(object?: VeranstaltungRaw) {
     if (object) {
-      this.state = object;
-      this.kopf = new Kopf(object.kopf);
-      if (object.technik) {
-        this.technik = new Technik(object.technik);
-      }
-      if (object.presse) {
-        this.presse = new Presse(object.presse);
-      }
-    } else {
-      this.state = {
-        startDate: new Date(),
-        endDate: new Date(),
-        url: "",
+      this.id = object.id;
+      this.startDate = object.startDate;
+      this.endDate = object.endDate;
+      this.url = object.url;
+      this.reservixID = object.reservixID;
 
-        kopf: {
-          beschreibung: "",
-          eventTyp: "",
-          flaeche: "",
-          kooperation: "_",
-          ort: "Jubez",
-          titel: "",
-          pressename: "",
-          presseIn: "",
-          genre: "",
-          confirmed: false,
-          rechnungAnKooperation: false
-        }
-      };
+      this.kopf = new Kopf(object.kopf);
+
+      this.agentur = new Kontakt(object.agentur);
+      this.artist = new Artist(object.artist);
+      this.hotel = new Kontakt(object.hotel);
+      this.technik = new Technik(object.technik);
+      this.presse = new Presse(object.presse);
+
+      delete object.agentur;
+      delete object.artist;
+      delete object.hotel;
+      delete object.kopf;
+      delete object.presse;
+      delete object.technik;
+
+      this.state = object;
     }
   }
 
@@ -167,16 +169,13 @@ export default class Veranstaltung {
         this.state.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
         this.state.url = object.url || this.state.startDate.toISOString() + object.kopf.titel;
       }
+      this.kopf.fillFromUI(object.kopf);
     }
     if (object.agentur) {
-      this.state.agentur = this.agentur()
-        .fillFromUI(object.agentur)
-        .toJSON();
+      this.agentur.fillFromUI(object.agentur).toJSON();
     }
     if (object.artist) {
-      this.state.artist = this.artist()
-        .fillFromUI(object.artist)
-        .toJSON();
+      this.artist.fillFromUI(object.artist).toJSON();
     }
     if (object.eintrittspreise) {
       this.state.eintrittspreise = this.eintrittspreise()
@@ -184,17 +183,12 @@ export default class Veranstaltung {
         .toJSON();
     }
     if (object.hotel) {
-      this.state.hotel = this.hotel()
-        .fillFromUI(object.hotel)
-        .toJSON();
+      this.hotel.fillFromUI(object.hotel).toJSON();
     }
     if (object.kasse) {
       this.state.kasse = this.kasse()
         .fillFromUI(object.kasse)
         .toJSON();
-    }
-    if (object.kopf) {
-      this.kopf.fillFromUI(object.kopf);
     }
     if (object.kosten) {
       this.state.kosten = this.kosten()
@@ -256,11 +250,11 @@ export default class Veranstaltung {
   }
 
   fullyQualifiedUrl(): string {
-    return "/veranstaltungen/" + encodeURIComponent(this.url());
+    return "/veranstaltungen/" + encodeURIComponent(this.url);
   }
 
   fullyQualifiedUrlForVertrag(): string {
-    return "/vertrag/" + encodeURIComponent(this.url());
+    return "/vertrag/" + encodeURIComponent(this.url);
   }
 
   // subobjects
@@ -269,20 +263,8 @@ export default class Veranstaltung {
     return value && !R.isEmpty(value) ? value : undefined;
   }
 
-  agentur(): Kontakt {
-    return new Kontakt(this.undefinedOrValue(this.state.agentur));
-  }
-
-  artist(): Artist {
-    return new Artist(this.undefinedOrValue(this.state.artist));
-  }
-
   eintrittspreise(): Eintrittspreise {
     return new Eintrittspreise(this.undefinedOrValue(this.state.eintrittspreise));
-  }
-
-  hotel(): Kontakt {
-    return new Kontakt(this.state.hotel);
   }
 
   kasse(): Kasse {
@@ -309,7 +291,7 @@ export default class Veranstaltung {
   }
 
   unterkunft(): Unterkunft {
-    return new Unterkunft(this.undefinedOrValue(this.state.unterkunft), this.startDatumUhrzeit(), this.artist().name());
+    return new Unterkunft(this.undefinedOrValue(this.state.unterkunft), this.startDatumUhrzeit(), this.artist.name);
   }
 
   vertrag(): Vertrag {
@@ -317,26 +299,6 @@ export default class Veranstaltung {
   }
 
   // end subobjects
-
-  id(): string {
-    return this.state.id || "";
-  }
-
-  url(): string {
-    return this.state.url;
-  }
-
-  reservixID(): string | undefined {
-    return this.state.reservixID;
-  }
-
-  startDate(): Date {
-    return this.state.startDate || new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
-  }
-
-  endDate(): Date {
-    return this.state.endDate || this.startDatumUhrzeit().plus({ stunden: 3 }).toJSDate;
-  }
 
   // Money - GEMA - Reservix
 
@@ -383,7 +345,7 @@ export default class Veranstaltung {
   }
 
   startDatumUhrzeit(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.startDate());
+    return DatumUhrzeit.forJSDate(this.startDate);
   }
 
   getinDatumUhrzeit(): DatumUhrzeit {
@@ -395,7 +357,7 @@ export default class Veranstaltung {
   }
 
   endDatumUhrzeit(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.endDate());
+    return DatumUhrzeit.forJSDate(this.endDate);
   }
 
   istVergangen(): boolean {

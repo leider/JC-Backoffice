@@ -26,7 +26,7 @@ mixin eventsTable(events)
             input.form-check-input(type="checkbox", id=monatJahr, onClick=`selectCheckboxesForMonth("${monatJahr}", this)`)
             label.form-check-label(for=monatJahr) #{event.startDatumUhrzeit().monatLangJahrKompakt}
 
-      tr: td: +checkEvent('event[' + event.id() + ']', event.description(), monatJahr)
+      tr: td: +checkEvent('event[' + event.id + ']', event.description(), monatJahr)
 
 block title
   | Gema

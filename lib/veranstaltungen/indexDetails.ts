@@ -79,7 +79,7 @@ export function addRoutesTo(app: express.Express): void {
         if (err1) {
           return next(err1);
         }
-        return res.redirect("/veranstaltungen/" + veranstaltung.url() + "/allgemeines");
+        return res.redirect("/veranstaltungen/" + veranstaltung.url + "/allgemeines");
       });
     });
   });

@@ -54,7 +54,7 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
   }
 
   function associateReservix(veranstaltung: Veranstaltung, callback: Function): void {
-    const reservixID = veranstaltung.reservixID();
+    const reservixID = veranstaltung.reservixID;
     if (reservixID && (!veranstaltung.salesreport() || !veranstaltung.salesreport()?.istVergangen())) {
       salesreportFor(reservixID, (salesreport?: Salesreport) => {
         veranstaltung.associateSalesreport(salesreport);
@@ -122,8 +122,8 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
     const urlSuffix = res.locals.accessrights.isOrgaTeam() ? "/allgemeines" : "/preview";
 
     return {
-      start: veranstaltung.startDate().toISOString(),
-      end: veranstaltung.endDate().toISOString(),
+      start: veranstaltung.startDate.toISOString(),
+      end: veranstaltung.endDate.toISOString(),
       url: veranstaltung.fullyQualifiedUrl() + urlSuffix,
       title: veranstaltung.kopf.titel,
       tooltip: veranstaltung.tooltipInfos(),

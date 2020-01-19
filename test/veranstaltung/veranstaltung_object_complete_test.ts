@@ -157,10 +157,10 @@ describe("Veranstaltung Gesamt", () => {
   });
 
   it("hat noch eigene Attribute", () => {
-    expect(veranstaltung.id()).to.eql(reference.id);
-    expect(veranstaltung.url()).to.eql(reference.url);
-    expect(veranstaltung.startDate().toISOString()).to.eql(reference.startDate);
-    expect(veranstaltung.endDate().toISOString()).to.eql(reference.endDate);
+    expect(veranstaltung.id).to.eql(reference.id);
+    expect(veranstaltung.url).to.eql(reference.url);
+    expect(veranstaltung.startDate.toISOString()).to.eql(reference.startDate);
+    expect(veranstaltung.endDate.toISOString()).to.eql(reference.endDate);
   });
 
   describe("fillFromUI", () => {
@@ -169,19 +169,19 @@ describe("Veranstaltung Gesamt", () => {
         agentur: emptyKontakt
       });
 
-      expect(veranstaltung.agentur().name()).to.eql(reference.agentur.name);
+      expect(veranstaltung.agentur.name).to.eql(reference.agentur.name);
     });
 
     it("mit kopf werden die vorherigen Felder überschrieben", () => {
       veranstaltung.fillFromUI({ kopf: {}, agentur: emptyKontakt });
 
-      expect(veranstaltung.agentur().name()).to.eql(emptyKontakt.name);
+      expect(veranstaltung.agentur.name).to.eql(emptyKontakt.name);
     });
 
     it("mit id werden die vorherigen Felder überschrieben", () => {
       veranstaltung.fillFromUI({ id: "id", agentur: emptyKontakt });
 
-      expect(veranstaltung.agentur().name()).to.eql(emptyKontakt.name);
+      expect(veranstaltung.agentur.name).to.eql(emptyKontakt.name);
     });
   });
 });

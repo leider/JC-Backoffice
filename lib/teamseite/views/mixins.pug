@@ -87,7 +87,7 @@ mixin standardCardTitle(veranstaltung, id, collapsed)
         h6 #{veranstaltung.datumForDisplayShort()}
 
       td.text-right: .btn-group
-        if veranstaltung.reservixID()
+        if veranstaltung.reservixID
           .btn.py-0.px-1.color-reservix
             i.logo-reservix
             | &nbsp; #{veranstaltung.salesreport().anzahlRegulaer()}

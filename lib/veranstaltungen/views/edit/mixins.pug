@@ -4,14 +4,14 @@ mixin submitButtonsFor(veranstaltung, section, readonly)
   .btn-group.float-right
     a.btn.btn-light(href="/", title="Zurück"): i.fas.fa-home.fa-fw
     if accessrights.isOrgaTeam()
-      if veranstaltung.url() && !veranstaltung.kopf.confirmed
+      if veranstaltung.url && !veranstaltung.kopf.confirmed
         span.btn.btn-light.modaldialog(
           data-toggle="modal",
           data-target="#loeschdialog",
-          data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url())
+          data-link='/veranstaltungen/deleteVeranstaltungDialog/' + encodeURIComponent(veranstaltung.url)
         )
           i.fas.fa-fw.fa-trash-alt.text-danger
-      if veranstaltung.url()
+      if veranstaltung.url
         +submitButton(veranstaltung, section, 'copy', 'Kopieren', 'fa-copy ')
     unless readonly
       +hidden('returnTo', section)
@@ -23,7 +23,7 @@ mixin iconLabel(icon, title)
 
 mixin tab(veranstaltung, section, name, title, icon)
   li.nav-item(class=(section !== name ? ' tab-' : ' color-') + name)
-    if veranstaltung.url()
+    if veranstaltung.url
       a.px-2.py-1.py.md-2.nav-link.inherit-color(
         class=section === name ? ' disabled' : '',
         href=veranstaltung.fullyQualifiedUrl() + '/' + name,
@@ -40,7 +40,7 @@ mixin tabsFor(veranstaltung, section)
       +tab(veranstaltung, section, 'allgemeines', 'Allgemeines', 'fa-keyboard')
       +tab(veranstaltung, section, 'technik', 'Technik', 'fa-microphone-alt')
       +tab(veranstaltung, section, 'ausgaben', 'Kalkulation', 'fa-euro-sign')
-      if veranstaltung.artist().brauchtHotel()
+      if veranstaltung.artist.brauchtHotel
         +tab(veranstaltung, section, 'hotel', 'Hotel', 'fa-bed')
     +tab(veranstaltung, section, 'kasse', 'Abendkasse', 'fa-money-bill-alt')
     if accessrights.isOrgaTeam()
@@ -48,9 +48,9 @@ mixin tabsFor(veranstaltung, section)
 
 mixin editHeader(veranstaltung, section, readonly)
   +csrf
-  if (veranstaltung.id())
-    +hidden('id', veranstaltung.id())
-    +hidden('url', veranstaltung.url())
+  if (veranstaltung.id)
+    +hidden('id', veranstaltung.id)
+    +hidden('url', veranstaltung.url)
 
   unless section === 'technik'
     +hidden('technik[checked]', veranstaltung.technik.checked ? 'on' : undefined)
@@ -65,7 +65,7 @@ mixin editHeader(veranstaltung, section, readonly)
     .col-12
       .page-header
         +submitButtonsFor(veranstaltung, section, readonly)
-        if (veranstaltung.id())
+        if (veranstaltung.id)
           h2(class=`text-${section}`) #{veranstaltung.kopf.titel} <br>
             small(class=`text-${section}`) am #{veranstaltung.datumForDisplayShort()}
         else

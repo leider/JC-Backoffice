@@ -138,7 +138,7 @@ app.post("/send", (req, res, next) => {
         return next(err1);
       }
       const event = Object.keys(req.body.event);
-      const selected = veranstaltungen.filter(veranst => event.includes(veranst.id()));
+      const selected = veranstaltungen.filter(veranst => event.includes(veranst.id || ""));
       const markdownToSend = req.body.markdown + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail()).join("\n\n---\n");
       const message = new Message({
         subject: req.body.subject,

@@ -1,18 +1,18 @@
 extends briefpapier
 
 block adresse
-  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var bandname = veranstaltung.artist.bandname || 'Band ohne Namen';
   p.
     #{bandname} <br>
-    c/o #{veranstaltung.agentur().name()}<br>
-    #{veranstaltung.agentur().strasse()}<br>
-    #{veranstaltung.agentur().ort()}
+    c/o #{veranstaltung.agentur.name}<br>
+    #{veranstaltung.agentur.strasse()}<br>
+    #{veranstaltung.agentur.ort()}
 
 block content1
   - var start = veranstaltung.startDatumUhrzeit();
   - var getin = veranstaltung.getinDatumUhrzeit();
-  - var hotel = veranstaltung.hotel();
-  - var bandname = veranstaltung.artist().bandname() || 'Band ohne Namen';
+  - var hotel = veranstaltung.hotel;
+  - var bandname = veranstaltung.artist.bandname || 'Band ohne Namen';
 
   .row
     .col-7
@@ -29,8 +29,8 @@ block content1
     .col-9
       p
         b #{bandname}<br>
-        b #{veranstaltung.agentur().name()}<br>
-          | #{veranstaltung.agentur().strasse()}, #{veranstaltung.agentur().ort()}<br>
+        b #{veranstaltung.agentur.name}<br>
+          | #{veranstaltung.agentur.strasse()}, #{veranstaltung.agentur.ort()}<br>
   .row
     .col-12
       p: i (nachfolgend Künstler genannt)
@@ -68,7 +68,7 @@ block content1
           §2.2 Der Veranstalter stellt <b>keine Unterkunft</b>.
       else
         p.
-          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft().anzahlZimmer()} Betten</b> im <b>#{hotel.name()}, #{hotel.einzeiligeAdresse()}</b>.
+          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft().anzahlZimmer()} Betten</b> im <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b>.
       if (buyoutInclusive)
         p.
           §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.

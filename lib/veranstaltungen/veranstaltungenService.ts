@@ -16,7 +16,7 @@ function getVeranstaltungMitReservix(url: string, callback: Function): void {
     if (!veranstaltung) {
       return callback(null, null);
     }
-    return salesreportFor(veranstaltung.reservixID(), (salesreport?: Salesreport) => {
+    return salesreportFor(veranstaltung.reservixID, (salesreport?: Salesreport) => {
       veranstaltung.associateSalesreport(salesreport);
       callback(null, veranstaltung);
     });

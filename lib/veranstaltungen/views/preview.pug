@@ -18,11 +18,11 @@ block title
   | #{veranstaltung.kopf.titel}
 
 block content
-  - var agentur = veranstaltung.agentur();
+  - var agentur = veranstaltung.agentur;
   - var eintrittspreise = veranstaltung.eintrittspreise();
   - var kopf = veranstaltung.kopf;
   - var unterkunft = veranstaltung.unterkunft();
-  - var hotel = veranstaltung.hotel();
+  - var hotel = veranstaltung.hotel;
   - var presse = veranstaltung.presse;
   - var technik = veranstaltung.technik;
   - var staff = veranstaltung.staff();
@@ -74,7 +74,7 @@ block content
                 th.text-right: +currencySpan(eintrittspreise.regulaer(), 'eintrittRegulaer')
                 th.text-right: +currencySpan(eintrittspreise.ermaessigt(), 'eintrittErmaessigt')
                 th.text-right: +currencySpan(eintrittspreise.mitglied(), 'eintrittMitglied')
-              if veranstaltung.reservixID()
+              if veranstaltung.reservixID
                 tr
                   th
                     | Reservix #{' '}
@@ -117,23 +117,23 @@ block content
           if presse.firstImage()
             img(src=presse.imageURLpure(), width="100%")
 
-        if agentur.name()
-          +legendMitBody('agentur', 'Agentur: ' + agentur.name(), null, 'allgemeines')
+        if agentur.name
+          +legendMitBody('agentur', 'Agentur: ' + agentur.name, null, 'allgemeines')
             .card-body
               address
-                strong #{agentur.ansprechpartner()} <br>
+                strong #{agentur.ansprechpartner} <br>
                 | !{agentur.adresseHTML()} <br>
-                | Tel.: #{agentur.telefon()} <br>
+                | Tel.: #{agentur.telefon} <br>
                 | E-Mail:
-                span.mailtoify #{agentur.email()}
+                span.mailtoify #{agentur.email}
 
         if unterkunft.anzahlZimmer()
-          - var hoteltitel = hotel.name() + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte';
+          - var hoteltitel = hotel.name + ': ' + unterkunft.anzahlZimmer() + ' Zimmer / ' + unterkunft.anzahlNaechte() + ' Nächte';
           +legendMitBody('hotelbuchung', hoteltitel, null, 'hotel')
             .card-body
               address
-                strong #{hotel.name()} - #{hotel.ansprechpartner()} <br>
+                strong #{hotel.name} - #{hotel.ansprechpartner} <br>
                 | !{hotel.adresseHTML()} <br>
-                | Tel.: #{hotel.telefon()} <br>
+                | Tel.: #{hotel.telefon} <br>
                 | E-Mail:
-                span.mailtoify #{hotel.email()}
+                span.mailtoify #{hotel.email}

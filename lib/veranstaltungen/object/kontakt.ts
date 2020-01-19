@@ -15,78 +15,65 @@ export interface KontaktUI {
   adresse: string;
 }
 
-export default class Kontakt {
-  state: KontaktRaw;
+export default class Kontakt implements KontaktRaw {
+  adresse = "";
+  ansprechpartner = "";
+  email = "";
+  name = "";
+  telefon = "";
   auswahl = "";
 
   toJSON(): KontaktRaw {
-    return this.state;
+    const result = new Kontakt() ;
+    Object.assign(result, this);
+    delete result.auswahl;
+    return result;
   }
 
-  constructor(object: KontaktRaw | undefined) {
-    this.state = object || {
-      name: "",
-      ansprechpartner: "",
-      telefon: "",
-      email: "",
-      adresse: ""
-    };
+  constructor(object?: KontaktRaw) {
+    if (object) {
+      this.adresse = object.adresse;
+      this.ansprechpartner = object.ansprechpartner;
+      this.email = object.email;
+      this.name = object.name;
+      this.telefon = object.telefon;
+    }
   }
 
   fillFromUI(object: KontaktUI): Kontakt {
     this.auswahl = object.auswahl;
-    this.state.name = object.name;
-    this.state.ansprechpartner = object.ansprechpartner;
-    this.state.telefon = object.telefon;
-    this.state.email = object.email;
-    this.state.adresse = object.adresse;
+    this.name = object.name;
+    this.ansprechpartner = object.ansprechpartner;
+    this.telefon = object.telefon;
+    this.email = object.email;
+    this.adresse = object.adresse;
     return this;
   }
 
-  name(): string {
-    return this.state.name;
-  }
-
-  telefon(): string {
-    return this.state.telefon;
-  }
-
-  email(): string {
-    return this.state.email;
-  }
-
-  ansprechpartner(): string {
-    return this.state.ansprechpartner;
-  }
-
-  adresse(): string {
-    return this.state.adresse;
-  }
-
   strasse(): string {
-    if (this.adresse()) {
-      const lines = this.adresse().split("\r\n");
+    if (this.adresse) {
+      const lines = this.adresse.split("\r\n");
       return lines[0] || "-";
     }
     return "-";
   }
 
   ort(): string {
-    if (this.adresse()) {
-      const lines = this.adresse().split("\r\n");
+    if (this.adresse) {
+      const lines = this.adresse.split("\r\n");
       return lines[1] || "-";
     }
     return "-";
   }
 
   einzeiligeAdresse(): string {
-    if (this.adresse()) {
-      return this.state.adresse.replace("\r\n", ", ");
+    if (this.adresse) {
+      return this.adresse.replace("\r\n", ", ");
     }
     return "-";
   }
 
   adresseHTML(): string {
-    return this.state.adresse.replace("\r\n", "<br>");
+    return this.adresse.replace("\r\n", "<br>");
   }
 }

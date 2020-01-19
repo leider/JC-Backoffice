@@ -6,9 +6,9 @@ include ../../users/views/userMixins
 mixin button(veranstaltung, name, nameInMethod)
   - var staff = veranstaltung.staff();
   if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
-    a.btn.btn-success.btn-sm(href=`/teamseite/add${nameInMethod}/${encodeURIComponent(veranstaltung.id())}`, title="Ich kann"): i.fa-fw.fa-lg.fas.fa-plus-circle
+    a.btn.btn-success.btn-sm(href=`/teamseite/add${nameInMethod}/${encodeURIComponent(veranstaltung.id)}`, title="Ich kann"): i.fa-fw.fa-lg.fas.fa-plus-circle
   else
-    a.btn.btn-danger.btn-sm(href=`/teamseite/remove${nameInMethod}/${encodeURIComponent(veranstaltung.id())}`, title="Ich kann nicht"): i.fa-fw.fa-lg.fas.fa-minus-circle
+    a.btn.btn-danger.btn-sm(href=`/teamseite/remove${nameInMethod}/${encodeURIComponent(veranstaltung.id)}`, title="Ich kann nicht"): i.fa-fw.fa-lg.fas.fa-minus-circle
 
 mixin people(veranstaltung, name)
   - var staff = veranstaltung.staff();

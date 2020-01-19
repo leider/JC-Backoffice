@@ -20,66 +20,43 @@ export interface ArtistUI {
   brauchtHotel?: string;
 }
 
-export default class Artist {
-  state: ArtistRaw;
+export default class Artist implements  ArtistRaw {
+  bandname = "";
+  name: string[] = [];
+  numMusiker = 1;
+  numCrew = 0;
+  isBawue = false;
+  isAusland = false;
+  brauchtHotel = false;
 
   toJSON(): ArtistRaw {
-    return this.state;
-  }
-
-  constructor(object: ArtistRaw | undefined) {
-    this.state = object || {
-      bandname: "",
-      name: [],
-      numMusiker: 1,
-      numCrew: 0,
-      isBawue: false,
-      isAusland: false,
-      brauchtHotel: false
-    };
-    this.state.name = misc.toArray(this.state.name); // legacy, was text before
-  }
-
-  fillFromUI(object: ArtistUI): Artist {
-    this.state.bandname = object.bandname || "";
-    this.state.name = misc.toArray(object.name);
-    this.state.numCrew = parseFloat(object.numCrew || "") || 0;
-    this.state.numMusiker = parseFloat(object.numMusiker || "") || 0;
-    this.state.isAusland = !!object.isAusland;
-    this.state.isBawue = !!object.isBawue;
-    this.state.brauchtHotel = !!object.brauchtHotel;
     return this;
   }
 
-  isAusland(): boolean {
-    return this.state.isAusland;
+  constructor(object?: ArtistRaw) {
+    if (object) {
+      this.bandname = object.bandname;
+      this.name = misc.toArray(object.name); // legacy, was text before
+      this.numMusiker = object.numMusiker;
+      this.numCrew = object.numCrew;
+      this.isBawue = object.isBawue;
+      this.isAusland = object.isAusland;
+      this.brauchtHotel = object.brauchtHotel;
+    }
   }
 
-  isBawue(): boolean {
-    return this.state.isBawue;
-  }
-
-  brauchtHotel(): boolean {
-    return this.state.brauchtHotel;
-  }
-
-  bandname(): string {
-    return this.state.bandname;
-  }
-
-  name(): string[] {
-    return this.state.name;
-  }
-
-  numMusiker(): number {
-    return this.state.numMusiker;
-  }
-
-  numCrew(): number {
-    return this.state.numCrew || 0;
+  fillFromUI(object: ArtistUI): Artist {
+    this.bandname = object.bandname || "";
+    this.name = misc.toArray(object.name);
+    this.numCrew = parseFloat(object.numCrew || "") || 0;
+    this.numMusiker = parseFloat(object.numMusiker || "") || 0;
+    this.isAusland = !!object.isAusland;
+    this.isBawue = !!object.isBawue;
+    this.brauchtHotel = !!object.brauchtHotel;
+    return this;
   }
 
   numForCatering(): number {
-    return this.numMusiker() + this.numCrew();
+    return this.numMusiker + this.numCrew;
   }
 }

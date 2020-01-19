@@ -1,5 +1,3 @@
-import R from "ramda";
-
 import Renderer from "../../commons/renderer";
 
 export interface KopfRaw {

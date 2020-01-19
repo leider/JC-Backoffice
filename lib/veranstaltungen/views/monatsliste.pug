@@ -26,6 +26,6 @@ html
           each veranstaltung in liste
             p &nbsp;
             p: b #{veranstaltung.kopf.titel}
-            each bild in veranstaltung.presse.image()
+            each bild in veranstaltung.presse.image
               img(src='/upload/' + encodeURIComponent(bild), width="100%")
               br

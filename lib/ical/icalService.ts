@@ -10,7 +10,7 @@ const icalendar = require("icalendar");
 const request = req.defaults({ jar: true });
 
 function asICal(veranstaltung: Veranstaltung): object {
-  const event = new icalendar.VEvent(veranstaltung.url());
+  const event = new icalendar.VEvent(veranstaltung.url);
   event.setSummary(veranstaltung.kopf.titel);
   event.setDescription(veranstaltung.tooltipInfos());
   event.addProperty(

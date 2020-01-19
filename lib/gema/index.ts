@@ -23,12 +23,7 @@ function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
     nachmeldung ? "Einnahmen;" : ""
   }Anzahl Besucher;Rechnung An;Raumgröße\n`;
   const zeilen = events.map(e => {
-    const wiedergabeart =
-      e.artist().bandname() ||
-      e
-        .artist()
-        .name()
-        .join(", ");
+    const wiedergabeart = e.artist.bandname || e.artist.name.join(", ");
     const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
     return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
       nachmeldung ? e.eintrittGema() + ";" : ""
@@ -54,7 +49,7 @@ function createResult(
       return next(err);
     }
     const event = Object.keys(req.body.event);
-    const selected = veranstaltungen.filter(veranst => event.includes(veranst.id()));
+    const selected = veranstaltungen.filter(veranst => event.includes(veranst.id || ""));
     const dateiart = req.body.dateiart;
     if (dateiart === "PDF") {
       return app.render(

@@ -70,7 +70,7 @@ export function checkKasse(now: DatumUhrzeit, callback: Function): void {
 ${kaputteVeranstaltungen
   .map(
     veranst =>
-      `<a href="${misc.toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url()))}">` +
+      `<a href="${misc.toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url))}">` +
       `${veranst.kopf.titel} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
   )
   .join("\n\n---\n")}
