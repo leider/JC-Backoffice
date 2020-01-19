@@ -28,7 +28,7 @@ interface VeranstaltungRaw {
 
   agentur?: KontaktRaw;
   artist?: ArtistRaw;
-  eintrittspreise?: EintrittspreiseRaw;
+  eintrittspreise?: EintrittspreiseRaw | Eintrittspreise;
   hotel?: KontaktRaw;
   kasse?: KasseRaw;
   kopf?: KopfRaw;
@@ -76,6 +76,7 @@ export default class Veranstaltung {
 
   agentur = new Kontakt();
   artist = new Artist();
+  eintrittspreise = new Eintrittspreise();
   hotel = new Kontakt();
   kopf = new Kopf();
   presse = new Presse();
@@ -95,14 +96,12 @@ export default class Veranstaltung {
 
     result.agentur = this.agentur.toJSON();
     result.artist = this.artist.toJSON();
+    result.eintrittspreise = this.eintrittspreise.toJSON();
     result.hotel = this.hotel.toJSON();
     result.kopf = this.kopf.toJSON();
     result.presse = this.presse.toJSON();
     result.technik = this.technik.toJSON();
 
-    if (result.eintrittspreise) {
-      result.eintrittspreise = this.eintrittspreise().toJSON();
-    }
     if (result.kasse) {
       result.kasse = this.kasse().toJSON();
     }
@@ -137,12 +136,14 @@ export default class Veranstaltung {
 
       this.agentur = new Kontakt(object.agentur);
       this.artist = new Artist(object.artist);
+      this.eintrittspreise = new Eintrittspreise(object.eintrittspreise as EintrittspreiseRaw);
       this.hotel = new Kontakt(object.hotel);
       this.technik = new Technik(object.technik);
       this.presse = new Presse(object.presse);
 
       delete object.agentur;
       delete object.artist;
+      delete object.eintrittspreise;
       delete object.hotel;
       delete object.kopf;
       delete object.presse;
@@ -178,9 +179,7 @@ export default class Veranstaltung {
       this.artist.fillFromUI(object.artist).toJSON();
     }
     if (object.eintrittspreise) {
-      this.state.eintrittspreise = this.eintrittspreise()
-        .fillFromUI(object.eintrittspreise)
-        .toJSON();
+      this.eintrittspreise.fillFromUI(object.eintrittspreise).toJSON();
     }
     if (object.hotel) {
       this.hotel.fillFromUI(object.hotel).toJSON();
@@ -261,10 +260,6 @@ export default class Veranstaltung {
 
   undefinedOrValue<T>(value?: T): T | undefined {
     return value && !R.isEmpty(value) ? value : undefined;
-  }
-
-  eintrittspreise(): Eintrittspreise {
-    return new Eintrittspreise(this.undefinedOrValue(this.state.eintrittspreise));
   }
 
   kasse(): Kasse {
@@ -368,7 +363,7 @@ export default class Veranstaltung {
   presseTemplate(): string {
     return `### ${this.kopf.titel}
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
-**Eintritt:** ${this.eintrittspreise().alsPressetext(this.kopf.isKooperation() ? this.kopf.kooperation : "")}
+**Eintritt:** ${this.eintrittspreise.alsPressetext(this.kopf.isKooperation() ? this.kopf.kooperation : "")}
 
 `;
   }
@@ -408,10 +403,10 @@ export default class Veranstaltung {
 
   // GEMA
   preisAusweisGema(): string {
-    if (this.eintrittspreise().frei() || this.kooperationGema()) {
+    if (this.eintrittspreise.frei() || this.kooperationGema()) {
       return "-";
     }
-    return `${fieldHelpers.formatNumberTwoDigits(this.eintrittspreise().regulaer())} €`;
+    return `${fieldHelpers.formatNumberTwoDigits(this.eintrittspreise.regulaer())} €`;
   }
 
   kooperationGema(): boolean {
@@ -423,7 +418,7 @@ export default class Veranstaltung {
   }
 
   eintrittGema(): string {
-    if (this.eintrittspreise().frei() || this.kooperationGema()) {
+    if (this.eintrittspreise.frei() || this.kooperationGema()) {
       return "-";
     }
     return `${fieldHelpers.formatNumberTwoDigits(this.einnahmenEintrittEUR())} €`;

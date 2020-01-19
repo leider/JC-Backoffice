@@ -24,7 +24,7 @@ block content
   - var kopf = veranstaltung.kopf;
   - var vertrag = veranstaltung.vertrag();
   - var kosten = veranstaltung.kosten();
-  - var eintrittspreise = veranstaltung.eintrittspreise();
+  - var eintrittspreise = veranstaltung.eintrittspreise;
 
   .col-12
     form#veranstaltungform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
@@ -95,7 +95,7 @@ block content
                           label.form-check-label(for=checkID) #{''}
 
               .col-4
-                +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
+                +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil, optionen.preisprofile())
               .col-4
                 +singleselect('kopf[genre]', 'Genre', kopf.genre, optionen.genres)
 

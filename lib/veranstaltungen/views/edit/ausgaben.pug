@@ -20,7 +20,7 @@ block title
 block content
   - var kosten = veranstaltung.kosten();
   - var salesreport = veranstaltung.salesreport();
-  - var eintrittspreise = veranstaltung.eintrittspreise();
+  - var eintrittspreise = veranstaltung.eintrittspreise;
   - var kasse = veranstaltung.kasse();
   .col-12
     form#ausgabenform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
@@ -29,7 +29,7 @@ block content
           +legendMitBody('preise', 'Einnahmen / Eintritt / Zuschuss', 'eintrittTotal', 'ausgaben')
             .row
               .col-3.col-sm-6
-                +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil(), optionen.preisprofile(), kasse.istFreigegeben())
+                +singleselectPreis('eintrittspreise[preisprofil]', 'Profil', eintrittspreise.preisprofil, optionen.preisprofile(), kasse.istFreigegeben())
               .col-3.col-sm-2
                 .form-group
                   label.float-right Reg.:
@@ -45,7 +45,7 @@ block content
             if kasse.istFreigegeben()
               .row
                 .col-4
-                  +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                  +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss)
                 .col-4
                   .form-group
                     label.float-right Abendkasse (Tickets):
@@ -57,9 +57,9 @@ block content
             else
               .row
                 .col-4
-                  +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss())
+                  +currency('eintrittspreise[zuschuss]', 'Zuschüsse', eintrittspreise.zuschuss)
                 .col-4
-                  +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher())
+                  +number('eintrittspreise[erwarteteBesucher]', 'Gäste (erw.)', eintrittspreise.erwarteteBesucher)
                 .col-4
                   .form-group
                     label.float-right Total:

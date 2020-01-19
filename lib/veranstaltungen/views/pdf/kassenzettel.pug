@@ -1,5 +1,5 @@
 - var kasse = veranstaltung.kasse();
-- var eintrittspreise = veranstaltung.eintrittspreise();
+- var eintrittspreise = veranstaltung.eintrittspreise;
 
 mixin localCurrency(value)
   span #{new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'EUR'}).format(value)}
