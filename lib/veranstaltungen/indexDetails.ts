@@ -398,7 +398,7 @@ export function addRoutesTo(app: express.Express): void {
               return res.send({ error: "technisches Problem" });
             }
             if (istPressefoto) {
-              if (!veranstaltung.presse().updateImage(dateiname)) {
+              if (!veranstaltung.presse.updateImage(dateiname)) {
                 return res.send({
                   error: "Datei schon vorhanden. Bitte Seite neu laden."
                 });
@@ -412,7 +412,7 @@ export function addRoutesTo(app: express.Express): void {
               }
             }
             if (fields.typ[0] === "rider") {
-              if (!veranstaltung.technik().updateDateirider(dateiname)) {
+              if (!veranstaltung.technik.updateDateirider(dateiname)) {
                 return res.send({
                   error: "Datei schon vorhanden. Bitte Seite neu laden."
                 });
@@ -449,13 +449,13 @@ export function addRoutesTo(app: express.Express): void {
         return res.send({ error: "technisches Problem" });
       }
       if (istPressefoto) {
-        veranstaltung.presse().removeImage(filename);
+        veranstaltung.presse.removeImage(filename);
       }
       if (body.typ === "vertrag") {
         veranstaltung.vertrag().removeDatei(filename);
       }
       if (body.typ === "rider") {
-        veranstaltung.technik().removeDateirider(filename);
+        veranstaltung.technik.removeDateirider(filename);
       }
       return store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
         if (err2) {

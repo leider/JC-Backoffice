@@ -45,7 +45,7 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res:
   if (res.locals.accessrights.isBookingTeam()) {
     return veranstaltungen;
   }
-  return veranstaltungen.filter(v => v.kopf().confirmed());
+  return veranstaltungen.filter(v => v.kopf.confirmed);
 }
 
 function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction, res: express.Response, titel: string): void {
@@ -125,12 +125,12 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
       start: veranstaltung.startDate().toISOString(),
       end: veranstaltung.endDate().toISOString(),
       url: veranstaltung.fullyQualifiedUrl() + urlSuffix,
-      title: veranstaltung.kopf().titel(),
+      title: veranstaltung.kopf.titel,
       tooltip: veranstaltung.tooltipInfos(),
       className:
-        (!veranstaltung.kopf().confirmed() ? "color-geplant " : "") +
+        (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
         "verySmall color-" +
-        fieldHelpers.cssColorCode(veranstaltung.kopf().eventTyp())
+        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)
     };
   }
 
@@ -190,7 +190,7 @@ app.get("/imgzip/:monat", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const images = R.flatten(result.map(veranst => veranst.presse().image())).map(filename => {
+    const images = R.flatten(result.map(veranst => veranst.presse.image)).map(filename => {
       return { path: uploadDir + "/" + filename, name: filename };
     });
     const filename = "Jazzclub Bilder " + start.monatJahrKompakt + ".zip";

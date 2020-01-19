@@ -74,7 +74,7 @@ mixin calendar(icals)
     });
 
 mixin standardCardTitle(veranstaltung, id, collapsed)
-  - var kopf = veranstaltung.kopf();
+  - var kopf = veranstaltung.kopf;
   table(width="100%")
     tr.align-top
       td.text-left
@@ -94,7 +94,7 @@ mixin standardCardTitle(veranstaltung, id, collapsed)
         a.btn.btn-secondary.py-0.px-1(href=veranstaltung.fullyQualifiedUrl() + '/preview'): i.fas.fa-eye.fa-lg
     tr
       td
-      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h6 #{kopf.presseIn()}
+      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h6 #{kopf.presseInEcht()}
     tr
       td
-      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h5 #{kopf.titel()}
+      td(colspan=2): a.chevron(data-toggle="collapse", data-target='#' + id): h5 #{kopf.titel}

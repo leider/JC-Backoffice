@@ -7,7 +7,7 @@ block title
 
 block content
   - var kosten = veranstaltung.kosten();
-  - var technik = veranstaltung.technik();
+  - var technik = veranstaltung.technik;
   .col-12
     form#ausgabenform(action="/veranstaltungen/submit", method="post")
       +editHeader(veranstaltung, 'technik')
@@ -15,25 +15,25 @@ block content
           +legendMitBody('backline', 'Rider und Backline', 'backlinePreis', 'technik')
             .row.mb-3
               .col-12.col-md-3
-                +checkbox('technik[checked]', 'Technik ist geklärt', technik.checked())
+                +checkbox('technik[checked]', 'Technik ist geklärt', technik.checked)
               .col-12.col-md-3
-                +checkbox('technik[fluegel]', 'Flügel stimmen', technik.fluegel())
+                +checkbox('technik[fluegel]', 'Flügel stimmen', technik.fluegel)
 
             .row
               .col-xl-6
-                +uploader('riderupload', 'Rider', null, technik.dateirider(), {id: veranstaltung.id(), typ: 'rider'})
+                +uploader('riderupload', 'Rider', null, technik.dateirider, {id: veranstaltung.id(), typ: 'rider'})
               .col-xl-6
                 .row
                   .col-sm-9
-                    +editableMultiselect('technik[backlineJazzclub]', 'Backline Jazzclub', technik.backlineJazzclub(), optionen.backlineJazzclub)
+                    +editableMultiselect('technik[backlineJazzclub]', 'Backline Jazzclub', technik.backlineJazzclub, optionen.backlineJazzclub)
                 .row
                   .col-sm-9
-                    +editableMultiselect('technik[backlineRockshop]', 'Backline Rockshop', technik.backlineRockshop(), optionen.backlineRockshop)
+                    +editableMultiselect('technik[backlineRockshop]', 'Backline Rockshop', technik.backlineRockshop, optionen.backlineRockshop)
                   .col-sm-3
                     +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
                 .row
                   .col-sm-9
-                    +text('technik[technikAngebot1]', 'Technik Zumietung', technik.technikAngebot1())
+                    +text('technik[technikAngebot1]', 'Technik Zumietung', technik.technikAngebot1)
                   .col-sm-3
                     +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
 

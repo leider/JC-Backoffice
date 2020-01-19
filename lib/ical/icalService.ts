@@ -11,13 +11,13 @@ const request = req.defaults({ jar: true });
 
 function asICal(veranstaltung: Veranstaltung): object {
   const event = new icalendar.VEvent(veranstaltung.url());
-  event.setSummary(veranstaltung.kopf().titel());
+  event.setSummary(veranstaltung.kopf.titel);
   event.setDescription(veranstaltung.tooltipInfos());
   event.addProperty(
     "LOCATION",
     veranstaltung
-      .kopf()
-      .ort()
+      .kopf
+      .ort
       .replace(/\r\n/g, "\n")
   );
   event.setDate(veranstaltung.startDatumUhrzeit().toJSDate, veranstaltung.endDatumUhrzeit().toJSDate);

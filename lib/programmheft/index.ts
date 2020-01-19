@@ -47,8 +47,8 @@ app.get("/:year/:month", (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      const filteredVeranstaltungen = veranstaltungen.filter(v => v.kopf().confirmed());
-      const unconfirmedVeranstaltungen = veranstaltungen.filter(v => !v.kopf().confirmed());
+      const filteredVeranstaltungen = veranstaltungen.filter(v => v.kopf.confirmed);
+      const unconfirmedVeranstaltungen = veranstaltungen.filter(v => !v.kopf.confirmed);
       const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
       return res.render("heft", {
         unconfirmedVeranstaltungen,

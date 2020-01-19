@@ -37,16 +37,16 @@ html
               th Rechnung An
               th.text-right Raumgröße
             each veranstaltung in events
-              - var kopf = veranstaltung.kopf();
+              - var kopf = veranstaltung.kopf;
               tr
                 td #{veranstaltung.datumForDisplay()}
-                td #{kopf.ort()}
-                td #{kopf.kooperation()}
+                td #{kopf.ort}
+                td #{kopf.kooperation}
                 td Jazzkonzert
                 td #{veranstaltung.artist().bandname() || veranstaltung.artist().name().join(', ')}
                 td.text-right #{veranstaltung.preisAusweisGema()}
                 if nachmeldung
                   td.text-right #{veranstaltung.eintrittGema()}
                   td.text-right #{veranstaltung.anzahlBesucher()}
-                td #{kopf.rechnungAnKooperation() ? kopf.kooperation() : 'Jazzclub'}
-                td.text-right #{kopf.flaeche()} m<sup>2</sup>
+                td #{kopf.rechnungAnKooperationspartner() ? kopf.kooperation : 'Jazzclub'}
+                td.text-right #{kopf.flaeche} m<sup>2</sup>

@@ -30,95 +30,71 @@ export interface KopfUI {
   rechnungAnKooperation?: string;
 }
 
-export default class Kopf {
-  state: KopfRaw;
+export default class Kopf implements KopfRaw {
+  beschreibung = "";
+  eventTyp = "";
+  flaeche = "";
+  kooperation = "";
+  ort = "Jubez";
+  titel = "";
+  pressename = "";
+  presseIn = "";
+  genre = "";
+  confirmed = false;
+  rechnungAnKooperation = false;
 
   toJSON(): KopfRaw {
-    return this.state;
-  }
-
-  constructor(object: KopfRaw) {
-    this.state = R.isEmpty(object)
-      ? {
-          beschreibung: "",
-          eventTyp: "",
-          flaeche: "",
-          kooperation: "_",
-          ort: "Jubez",
-          titel: "",
-          pressename: "",
-          presseIn: "",
-          genre: "",
-          confirmed: false,
-          rechnungAnKooperation: false
-        }
-      : object;
-  }
-
-  fillFromUI(object: KopfUI): Kopf {
-    this.state.beschreibung = object.beschreibung || this.state.beschreibung;
-    this.state.eventTyp = object.eventTyp || this.state.eventTyp;
-    this.state.flaeche = object.flaeche || this.state.flaeche;
-    this.state.kooperation = object.kooperation || this.state.kooperation;
-    this.state.ort = object.ort || this.state.ort;
-    this.state.titel = object.titel || this.state.titel;
-    this.state.pressename = object.pressename || this.state.pressename;
-    this.state.presseIn = object.presseIn || this.state.presseIn;
-    this.state.genre = object.genre || this.state.genre;
-    this.state.confirmed = !!object.confirmed;
-    this.state.rechnungAnKooperation = !!object.rechnungAnKooperation;
     return this;
   }
 
-  beschreibung(): string {
-    return this.state.beschreibung;
+  constructor(object?: KopfRaw) {
+    if (object) {
+      this.beschreibung = object.beschreibung;
+      this.eventTyp = object.eventTyp;
+      this.flaeche = object.flaeche;
+      this.kooperation = object.kooperation;
+      this.ort = object.ort;
+      this.titel = object.titel;
+      this.pressename = object.pressename;
+      this.presseIn = object.presseIn;
+      this.genre = object.genre;
+      this.confirmed = object.confirmed;
+      this.rechnungAnKooperation = object.rechnungAnKooperation;
+    }
+  }
+
+  fillFromUI(object: KopfUI): Kopf {
+    this.beschreibung = object.beschreibung || this.beschreibung;
+    this.eventTyp = object.eventTyp || this.eventTyp;
+    this.flaeche = object.flaeche || this.flaeche;
+    this.kooperation = object.kooperation || this.kooperation;
+    this.ort = object.ort || this.ort;
+    this.titel = object.titel || this.titel;
+    this.pressename = object.pressename || this.pressename;
+    this.presseIn = object.presseIn || this.presseIn;
+    this.genre = object.genre || this.genre;
+    this.confirmed = !!object.confirmed;
+    this.rechnungAnKooperation = !!object.rechnungAnKooperation;
+    return this;
   }
 
   beschreibungHTML(): string {
-    return Renderer.render(this.beschreibung());
-  }
-
-  confirmed(): boolean {
-    return this.state.confirmed;
-  }
-
-  eventTyp(): string {
-    return this.state.eventTyp;
-  }
-
-  genre(): string {
-    return this.state.genre;
-  }
-
-  kooperation(): string {
-    return this.state.kooperation || "_";
+    return Renderer.render(this.beschreibung);
   }
 
   isKooperation(): boolean {
-    return !!this.kooperation() && this.kooperation() !== "_";
+    return !!this.kooperation && this.kooperation !== "_";
   }
 
-  rechnungAnKooperation(): boolean {
-    return !this.state.rechnungAnKooperation ? this.isKooperation() : this.state.rechnungAnKooperation;
+  rechnungAnKooperationspartner(): boolean {
+    return !this.rechnungAnKooperation ? this.isKooperation() : this.rechnungAnKooperation;
   }
 
-  ort(): string {
-    return this.state.ort;
+  pressenameEcht(): string {
+    return this.pressename || this.ort;
   }
 
-  flaeche(): string {
-    return this.state.flaeche;
-  }
-
-  pressename(): string {
-    return this.state.pressename || this.ort();
-  }
-
-  presseIn(): string {
-    return this.state.presseIn || this.pressename();
-  }
-
-  titel(): string {
-    return this.state.titel;
+  presseInEcht(): string {
+    return this.presseIn || this.pressenameEcht();
   }
 }

@@ -62,7 +62,7 @@ app.get("/", (req, res, next) => {
       icals.unshift("/veranstaltungen/eventsForCalendar");
       icals.unshift("/ical/eventsForCalendar");
 
-      const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter((v: Veranstaltung) => v.kopf().confirmed());
+      const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter((v: Veranstaltung) => v.kopf.confirmed);
       const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
       const users = (results.users as User[]);
       return res.render("index", {

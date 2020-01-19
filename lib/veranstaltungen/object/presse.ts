@@ -19,28 +19,38 @@ export interface PresseUI {
   jazzclubURL?: string;
 }
 
-export default class Presse {
-  state: PresseRaw;
+export default class Presse implements PresseRaw {
+  originalText: string;
+  text: string;
+  image: string[];
+  checked: boolean;
+  jazzclubURL: string;
 
   toJSON(): PresseRaw {
-    return this.state;
+    return this;
   }
 
-  constructor(object: PresseRaw | undefined) {
-    this.state = object || {
-      originalText: "",
-      text: "",
-      image: [],
-      checked: false,
-      jazzclubURL: ""
-    };
+  constructor(object?: PresseRaw) {
+    if (object) {
+      this.originalText = object.originalText;
+      this.text = object.text;
+      this.image = misc.toArray(object.image);
+      this.checked = object.checked;
+      this.jazzclubURL = object.jazzclubURL;
+    } else {
+      this.originalText = "";
+      this.text = "";
+      this.image = [];
+      this.checked = false;
+      this.jazzclubURL = "";
+    }
   }
 
   fillFromUI(object: PresseUI): Presse {
-    this.state.originalText = object.originalText || this.state.originalText;
-    this.state.text = object.text || this.state.text;
-    this.state.jazzclubURL = object.jazzclubURL || this.state.jazzclubURL;
-    this.state.checked = !!object.checked;
+    this.originalText = object.originalText || this.originalText;
+    this.text = object.text || this.text;
+    this.jazzclubURL = object.jazzclubURL || this.jazzclubURL;
+    this.checked = !!object.checked;
     if (object.existingbild) {
       this.updateImage(object.existingbild);
     }
@@ -48,57 +58,37 @@ export default class Presse {
   }
 
   updateImage(image: string): boolean {
-    const imagePushed = misc.pushImage(this.state.image, image);
+    const imagePushed = misc.pushImage(this.image, image);
     if (imagePushed.length > 0) {
-      this.state.image = imagePushed;
+      this.image = imagePushed;
       return true;
     }
     return false;
   }
 
   removeImage(image: string): void {
-    this.state.image = misc.dropImage(this.state.image, image);
-  }
-
-  image(): string[] {
-    return misc.toArray(this.state.image) || [];
+    this.image = misc.dropImage(this.image, image);
   }
 
   firstImage(): string {
-    return this.image()[0];
+    return this.image[0];
   }
 
   imageURL(): string {
-    if (this.image().length > 0) {
+    if (this.image.length > 0) {
       return "**Pressephoto:**\n" + this.imageURLpure();
     }
     return "";
   }
 
   imageURLpure(): string {
-    if (this.image().length > 0) {
+    if (this.image.length > 0) {
       return prefix + "/upload/" + encodeURIComponent(this.firstImage());
     }
     return "";
   }
 
-  checked(): boolean {
-    return this.state.checked;
-  }
-
-  jazzclubURL(): string {
-    return this.state.jazzclubURL;
-  }
-
   fullyQualifiedJazzclubURL(optionalURL?: string): string {
-    return "http://www.jazzclub.de/event/" + (optionalURL || this.jazzclubURL());
-  }
-
-  text(): string {
-    return this.state.text;
-  }
-
-  originalText(): string {
-    return this.state.originalText;
+    return "http://www.jazzclub.de/event/" + (optionalURL || this.jazzclubURL);
   }
 }

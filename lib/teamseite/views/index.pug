@@ -34,12 +34,12 @@ mixin panelView(groupedVeranstaltungen)
         +monatHeadline(veranstOfMonth[0])
       each veranstaltung in veranstOfMonth
         - var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture);
-        - var kopf = veranstaltung.kopf();
+        - var kopf = veranstaltung.kopf;
         - var id = `panel${++count}`;
         - var staff = veranstaltung.staff();
         .col-xl-4.col-md-6
-          .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp())}`)
-            .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp())}`)
+          .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp)}`)
+            .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp)}`)
               +standardCardTitle(veranstaltung, id, collapsed)
               if veranstaltung.kasseFehlt()
                 h5.alert-danger.p-1.mb-0

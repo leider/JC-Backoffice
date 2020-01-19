@@ -21,7 +21,7 @@ block title
 
 block content
   - var artist = veranstaltung.artist();
-  - var kopf = veranstaltung.kopf();
+  - var kopf = veranstaltung.kopf;
   - var vertrag = veranstaltung.vertrag();
   - var kosten = veranstaltung.kosten();
   - var eintrittspreise = veranstaltung.eintrittspreise();
@@ -34,17 +34,17 @@ block content
             .row.mb-3
               .col-12.col-md-3
                 if accessrights.isBookingTeam()
-                  +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed())
+                  +checkbox('kopf[confirmed]', 'Ist bestätigt', kopf.confirmed)
                 else
-                  +hidden('kopf[confirmed]', kopf.confirmed() ? 'on' : undefined)
+                  +hidden('kopf[confirmed]', kopf.confirmed ? 'on' : undefined)
               .col-12.col-md-3
                 +checkbox('artist[brauchtHotel]', 'Braucht Hotel', artist.brauchtHotel())
 
             .row
               .col-sm-6
-                +textRequired('kopf[titel]', 'Titel', kopf.titel(), 'Titel für die Veranstaltung')
+                +textRequired('kopf[titel]', 'Titel', kopf.titel, 'Titel für die Veranstaltung')
               .col-6.col-sm-3
-                +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp(), optionen.typen)
+                +eventTypSelect('kopf[eventTyp]', 'Typ', kopf.eventTyp, optionen.typen)
               .col-6.col-sm-3
                 +text('reservixID', 'Reservix ID', veranstaltung.reservixID(), 'Die EventID von Reservix')
 
@@ -64,13 +64,13 @@ block content
 
             .row
               .col-4
-                +singleselectRequired('kopf[ort]', 'Ort', kopf.ort(), orte.alleNamen())
-                +hidden('kopf[pressename]', kopf.pressename())
-                +hidden('kopf[presseIn]', kopf.presseIn())
+                +singleselectRequired('kopf[ort]', 'Ort', kopf.ort, orte.alleNamen())
+                +hidden('kopf[pressename]', kopf.pressenameEcht())
+                +hidden('kopf[presseIn]', kopf.presseInEcht())
               .col-4
-                +number('kopf[flaeche]', 'Fläche', kopf.flaeche(), null, 0, 1000)
+                +number('kopf[flaeche]', 'Fläche', kopf.flaeche, null, 0, 1000)
               .col-4
-                +currency('kosten[saalmiete]', 'Saalmiete', kosten.saalmiete())
+                +currency('kosten[saalmiete]', 'Saalmiete', kosten.saalmiete)
 
             .row
               .col-4
@@ -81,7 +81,7 @@ block content
                   .input-group
                     select.form-control.selectpicker(id="kopf[kooperation]", name="kopf[kooperation]")
                       each val in optionen.kooperationen
-                        option(value=val, selected=kopf.kooperation() === val) #{val}
+                        option(value=val, selected=kopf.kooperation === val) #{val}
                     .input-group-append
                       .input-group-text.pl-1.pr-0
                         .form-check.abc-checkbox.abc-checkbox-success
@@ -90,14 +90,14 @@ block content
                             type="checkbox",
                             id=checkID,
                             name=checkID,
-                            checked=kopf.rechnungAnKooperation() ? 'true' : undefined
+                            checked=kopf.rechnungAnKooperationspartner() ? 'true' : undefined
                           )
                           label.form-check-label(for=checkID) #{''}
 
               .col-4
                 +singleselectPreis('eintrittspreise[preisprofil]', 'Preisprofil', eintrittspreise.preisprofil(), optionen.preisprofile())
               .col-4
-                +singleselect('kopf[genre]', 'Genre', kopf.genre(), optionen.genres)
+                +singleselect('kopf[genre]', 'Genre', kopf.genre, optionen.genres)
 
           +legendMitBody('artist', 'Künstler')
             .row
@@ -123,7 +123,7 @@ block content
           +legendMitBody('kommentar', 'Kommentar')
             .row
               .col-sm-12
-                +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung())
+                +hightextarea('kopf[beschreibung]', 'Notizen / Gäste / Reservierung, etc.', kopf.beschreibung)
 
         .col-md-6
           +kontakt(veranstaltung, optionen.agenturenForSelection(), 'Agentur / Verantwortlicher', 'agentur')

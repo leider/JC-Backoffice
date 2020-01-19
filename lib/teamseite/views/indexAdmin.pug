@@ -3,7 +3,7 @@ include ../../../views/formComponents
 include mixins
 
 mixin checkedButton(veranstaltung, section, name)
-  if section.checked()
+  if section.checked
     .text-capitalize.alert-success: a.inherit-color(href=`${veranstaltung.fullyQualifiedUrl()}/${name}`)
       i.fas.fa-check.fa-fw
       | #{` ${name}`}
@@ -41,7 +41,7 @@ mixin submitButtonsFor(veranstaltung)
       +submitButton(veranstaltung, null, 'hotel', 'Hotel', 'fa-bed')
     +submitButton(veranstaltung, null, 'kasse', 'Kasse', 'fa-money-bill-alt')
     +submitButton(veranstaltung, null, 'presse', 'Presse', 'fa-newspaper')
-    if !veranstaltung.kopf().confirmed()
+    if !veranstaltung.kopf.confirmed
       span.btn.btn-light.modaldialog(
         data-toggle="modal",
         data-target="#loeschdialog",
@@ -76,15 +76,15 @@ mixin panelView(groupedVeranstaltungen)
         +monatHeadline(veranstOfMonth[0])
       each veranstaltung in veranstOfMonth
         - var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture) || veranstaltung.startDatumUhrzeit().istVor(nearPast);
-        - var kopf = veranstaltung.kopf();
+        - var kopf = veranstaltung.kopf;
         - var id = 'panel' + ++count;
         form#veranstaltungform.col-xl-4.col-md-6(action="/veranstaltungen/updateStaff", method="post")
           +hidden('id', veranstaltung.id())
           +csrf
-          .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp())}`)
-            .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp())}`)
+          .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp)}`)
+            .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp)}`)
               table(width="100%")
-                if !veranstaltung.kopf().confirmed()
+                if !veranstaltung.kopf.confirmed
                   tr: td.p-0(colspan=2)
                     h5.m-0.alert-danger.text-center
                       i.fas.fa-exclamation-circle.fa-fw
@@ -93,8 +93,8 @@ mixin panelView(groupedVeranstaltungen)
               +standardCardTitle(veranstaltung, id, collapsed)
               table(width="100%")
                 tr
-                  td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.presse(), 'presse')
-                  td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.technik(), 'technik')
+                  td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.presse, 'presse')
+                  td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.technik, 'technik')
                   if veranstaltung.artist().brauchtHotel()
                     td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.unterkunft(), 'hotel')
 

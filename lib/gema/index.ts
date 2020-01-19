@@ -29,10 +29,10 @@ function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
         .artist()
         .name()
         .join(", ");
-    const rechnungAn = e.kopf().rechnungAnKooperation() ? e.kopf().kooperation() : "Jazzclub";
-    return `${e.datumForDisplay()};${e.kopf().ort()};${e.kopf().kooperation()};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
+    const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
+    return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
       nachmeldung ? e.eintrittGema() + ";" : ""
-    }${e.anzahlBesucher()};${rechnungAn};${e.kopf().flaeche()}\n`;
+    }${e.anzahlBesucher()};${rechnungAn};${e.kopf.flaeche}\n`;
   });
   let result = header;
   zeilen.forEach(z => {

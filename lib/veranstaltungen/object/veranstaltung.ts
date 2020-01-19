@@ -67,6 +67,9 @@ export interface VeranstaltungUI {
 
 export default class Veranstaltung {
   state: VeranstaltungRaw;
+  kopf = new Kopf();
+  presse = new Presse();
+  technik = new Technik();
 
   static fromJSON(object: VeranstaltungRaw): Veranstaltung {
     return new Veranstaltung(object);
@@ -88,18 +91,18 @@ export default class Veranstaltung {
     if (this.state.kasse) {
       this.state.kasse = this.kasse().toJSON();
     }
-    this.state.kopf = this.kopf().toJSON();
+    this.state.kopf = this.kopf.toJSON();
     if (this.state.kosten) {
       this.state.kosten = this.kosten().toJSON();
     }
-    if (this.state.presse) {
-      this.state.presse = this.presse().toJSON();
+    if (this.presse) {
+      this.state.presse = this.presse.toJSON();
     }
     if (this.state.staff) {
       this.state.staff = this.staff().toJSON();
     }
-    if (this.state.technik) {
-      this.state.technik = this.technik().toJSON();
+    if (this.technik) {
+      this.state.technik = this.technik.toJSON();
     }
     if (this.state.unterkunft) {
       this.state.unterkunft = this.unterkunft().toJSON();
@@ -115,27 +118,36 @@ export default class Veranstaltung {
   }
 
   constructor(object?: VeranstaltungRaw) {
-    this.state = object
-      ? object
-      : {
-          startDate: new Date(),
-          endDate: new Date(),
-          url: "",
+    if (object) {
+      this.state = object;
+      this.kopf = new Kopf(object.kopf);
+      if (object.technik) {
+        this.technik = new Technik(object.technik);
+      }
+      if (object.presse) {
+        this.presse = new Presse(object.presse);
+      }
+    } else {
+      this.state = {
+        startDate: new Date(),
+        endDate: new Date(),
+        url: "",
 
-          kopf: {
-            beschreibung: "",
-            eventTyp: "",
-            flaeche: "",
-            kooperation: "_",
-            ort: "Jubez",
-            titel: "",
-            pressename: "",
-            presseIn: "",
-            genre: "",
-            confirmed: false,
-            rechnungAnKooperation: false
-          }
-        };
+        kopf: {
+          beschreibung: "",
+          eventTyp: "",
+          flaeche: "",
+          kooperation: "_",
+          ort: "Jubez",
+          titel: "",
+          pressename: "",
+          presseIn: "",
+          genre: "",
+          confirmed: false,
+          rechnungAnKooperation: false
+        }
+      };
+    }
   }
 
   fillFromUI(object: VeranstaltungUI): Veranstaltung {
@@ -182,7 +194,7 @@ export default class Veranstaltung {
         .toJSON();
     }
     if (object.kopf) {
-      this.kopf().fillFromUI(object.kopf);
+      this.kopf.fillFromUI(object.kopf);
     }
     if (object.kosten) {
       this.state.kosten = this.kosten()
@@ -190,9 +202,7 @@ export default class Veranstaltung {
         .toJSON();
     }
     if (object.presse) {
-      this.state.presse = this.presse()
-        .fillFromUI(object.presse)
-        .toJSON();
+      this.presse.fillFromUI(object.presse).toJSON();
     }
     if (object.staff) {
       this.state.staff = this.staff()
@@ -200,9 +210,7 @@ export default class Veranstaltung {
         .toJSON();
     }
     if (object.technik) {
-      this.state.technik = this.technik()
-        .fillFromUI(object.technik)
-        .toJSON();
+      this.technik.fillFromUI(object.technik).toJSON();
     }
     if (object.unterkunft) {
       this.state.unterkunft = this.unterkunft()
@@ -281,16 +289,8 @@ export default class Veranstaltung {
     return new Kasse(this.undefinedOrValue(this.state.kasse));
   }
 
-  kopf(): Kopf {
-    return new Kopf(this.state.kopf);
-  }
-
   kosten(): Kosten {
     return new Kosten(this.undefinedOrValue(this.state.kosten));
-  }
-
-  presse(): Presse {
-    return new Presse(this.undefinedOrValue(this.state.presse));
   }
 
   salesreport(): Salesreport | null {
@@ -306,10 +306,6 @@ export default class Veranstaltung {
       this.state.staff = new Staff(potentiallyUndefined).toJSON();
     }
     return new Staff(this.state.staff);
-  }
-
-  technik(): Technik {
-    return new Technik(this.undefinedOrValue(this.state.technik));
   }
 
   unterkunft(): Unterkunft {
@@ -408,44 +404,44 @@ export default class Veranstaltung {
 
   // utility
   presseTemplate(): string {
-    return `### ${this.kopf().titel()}
-#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf().presseIn()}
-**Eintritt:** ${this.eintrittspreise().alsPressetext(this.kopf().isKooperation() ? this.kopf().kooperation() : "")}
+    return `### ${this.kopf.titel}
+#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
+**Eintritt:** ${this.eintrittspreise().alsPressetext(this.kopf.isKooperation() ? this.kopf.kooperation : "")}
 
 `;
   }
 
   presseTemplateInternal(): string {
     // für interne Mails
-    return `### [${this.kopf().titel()}](${config.get("publicUrlPrefix")}${this.fullyQualifiedUrl()}/presse)
-#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf().presseIn()}
+    return `### [${this.kopf.titel}](${config.get("publicUrlPrefix")}${this.fullyQualifiedUrl()}/presse)
+#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
 
 `;
   }
 
   presseTextHTML(optionalText: string, optionalJazzclubURL: string): string {
     return Renderer.render(
-      this.presseTemplate() + (optionalText || this.presse().text()) + "\n\n" + this.presse().fullyQualifiedJazzclubURL(optionalJazzclubURL)
+      this.presseTemplate() + (optionalText || this.presse.text) + "\n\n" + this.presse.fullyQualifiedJazzclubURL(optionalJazzclubURL)
     );
   }
 
   renderedPresseText(): string {
-    return Renderer.render(this.presse().text());
+    return Renderer.render(this.presse.text);
   }
 
   presseTextForMail(): string {
     return (
       this.presseTemplate() +
-      this.presse().text() +
+      this.presse.text +
       "\n\n" +
-      (this.presse().firstImage() ? this.presse().imageURL() : "") +
+      (this.presse.firstImage() ? this.presse.imageURL() : "") +
       "\n\n" +
-      (this.presse().jazzclubURL() ? `**URL:** ${this.presse().fullyQualifiedJazzclubURL()}` : "")
+      (this.presse.jazzclubURL ? `**URL:** ${this.presse.fullyQualifiedJazzclubURL()}` : "")
     );
   }
 
   description(): string {
-    return `${this.datumForDisplayMitKW()} <b>${this.kopf().titel()}</b>`;
+    return `${this.datumForDisplayMitKW()} <b>${this.kopf.titel}</b>`;
   }
 
   // GEMA
@@ -457,7 +453,7 @@ export default class Veranstaltung {
   }
 
   kooperationGema(): boolean {
-    return this.kopf().rechnungAnKooperation();
+    return this.kopf.rechnungAnKooperationspartner();
   }
 
   einnahmenEintrittEUR(): number {
@@ -477,20 +473,20 @@ export default class Veranstaltung {
 
   // iCal
   tooltipInfos(): string {
-    return this.kopf().ort() + this.staff().tooltipInfos();
+    return this.kopf.ort + this.staff().tooltipInfos();
   }
 
   // Mailsend check
   isSendable(): boolean {
-    return this.presse().checked() && this.kopf().confirmed();
+    return this.presse.checked && this.kopf.confirmed;
   }
 
   kasseFehlt(): boolean {
-    return this.staff().kasseFehlt() && this.kopf().confirmed();
+    return this.staff().kasseFehlt() && this.kopf.confirmed;
   }
 
   // CSV Export
   toCSV(): string {
-    return `${this.kopf().titel()};${this.kopf().eventTyp()};${this.startDatumUhrzeit().fuerCsvExport}`;
+    return `${this.kopf.titel};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
   }
 }

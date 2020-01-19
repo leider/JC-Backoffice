@@ -22,7 +22,7 @@ app.get("/", (req, res, next) => {
       return next(err);
     }
     return sendCalendarStringNamedToResult(
-      icalService.icalForVeranstaltungen(veranstaltungen.filter(v => v.kopf().confirmed())),
+      icalService.icalForVeranstaltungen(veranstaltungen.filter(v => v.kopf.confirmed)),
       "events",
       res
     );

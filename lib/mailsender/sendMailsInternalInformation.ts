@@ -41,7 +41,7 @@ ${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal()).join("
       if (err1) {
         return;
       }
-      const zuSendende = veranstaltungen.filter(veranstaltung => !veranstaltung.presse().checked() && veranstaltung.kopf().confirmed());
+      const zuSendende = veranstaltungen.filter(veranstaltung => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
       if (zuSendende.length === 0) {
         callback();
       } else {
@@ -71,7 +71,7 @@ ${kaputteVeranstaltungen
   .map(
     veranst =>
       `<a href="${misc.toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url()))}">` +
-      `${veranst.kopf().titel()} am ${veranst.datumForDisplayShort()} ${veranst.kopf().presseIn()}</a>`
+      `${veranst.kopf.titel} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
   )
   .join("\n\n---\n")}
 
@@ -126,7 +126,7 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
 
 ---
 ${veranstaltungenMitFluegel
-  .map(veranst => veranst.kopf().titel() + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf().presseIn())
+  .map(veranst => veranst.kopf.titel + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
   .join("\n\n---\n")}`;
 
     const message = new Message({
@@ -149,7 +149,7 @@ ${veranstaltungenMitFluegel
     if (err1) {
       return;
     }
-    const zuSendende = veranstaltungen.filter(veranstaltung => veranstaltung.technik().fluegel());
+    const zuSendende = veranstaltungen.filter(veranstaltung => veranstaltung.technik.fluegel);
     if (zuSendende.length === 0) {
       callback();
     } else {

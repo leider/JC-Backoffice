@@ -9,15 +9,15 @@ mixin panelView(groupedVeranstaltungen)
       .col-12
         h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstOfMonth[0].startDatumUhrzeit().monatLangJahrKompakt}
       each veranstaltung in veranstOfMonth
-        - var kopf = veranstaltung.kopf();
+        - var kopf = veranstaltung.kopf;
         - var id = 'panel' + ++count;
         .col-xl-4.col-md-6
           .card.mb-2
             a(href=veranstaltung.fullyQualifiedUrl() + '/presse')
               .card-header.p-0
                 h6 #{veranstaltung.datumForDisplayShort()}
-                h6 #{kopf.presseIn()}
-                h5 #{kopf.titel()}
+                h6 #{kopf.presseInEcht()}
+                h5 #{kopf.titel}
             | !{veranstaltung.renderedPresseText()}
 
 block title
@@ -52,7 +52,7 @@ block content
     if (unconfirmedVeranstaltungen.length > 0)
       h2.text-danger Es gibt noch unbestätigte Veranstaltungen
       each veranstaltung in unconfirmedVeranstaltungen
-        p: a.text-danger(href=veranstaltung.fullyQualifiedUrl() + '/allgemeines') #{veranstaltung.kopf().titel()}
+        p: a.text-danger(href=veranstaltung.fullyQualifiedUrl() + '/allgemeines') #{veranstaltung.kopf.titel}
     +panelView(groupedVeranstaltungen)
 
 block head

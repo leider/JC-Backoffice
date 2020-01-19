@@ -15,16 +15,16 @@ mixin mitarbeiterRows(collection, verantwortlich)
           b #{' '}(Verantwortlich)
 
 block title
-  | #{veranstaltung.kopf().titel()}
+  | #{veranstaltung.kopf.titel}
 
 block content
   - var agentur = veranstaltung.agentur();
   - var eintrittspreise = veranstaltung.eintrittspreise();
-  - var kopf = veranstaltung.kopf();
+  - var kopf = veranstaltung.kopf;
   - var unterkunft = veranstaltung.unterkunft();
   - var hotel = veranstaltung.hotel();
-  - var presse = veranstaltung.presse();
-  - var technik = veranstaltung.technik();
+  - var presse = veranstaltung.presse;
+  - var technik = veranstaltung.technik;
   - var staff = veranstaltung.staff();
   - var salesreport = veranstaltung.salesreport();
 
@@ -35,15 +35,15 @@ block content
           .btn-group.float-right
             +submitButtonsFor(veranstaltung, '', true)
 
-          h2(class=`text-${cssColorCode(kopf.eventTyp())}`)
-            span(class=cssIconClass(kopf.eventTyp()), style="font-weight:normal") #{''}
-            | #{' '}#{kopf.titel()} #{kopf.presseIn()}
+          h2(class=`text-${cssColorCode(kopf.eventTyp)}`)
+            span(class=cssIconClass(kopf.eventTyp), style="font-weight:normal") #{''}
+            | #{' '}#{kopf.titel} #{kopf.presseInEcht()}
             br
             small
               | #{veranstaltung.startDatumUhrzeit().lesbareLangform} #{''}
-              span (#{kopf.eventTyp()})
-            if kopf.kooperation() && kopf.kooperation().length > 1
-              h3 Kooperation mit #{kopf.kooperation()}
+              span (#{kopf.eventTyp})
+            if kopf.kooperation() && kopf.kooperation.length > 1
+              h3 Kooperation mit #{kopf.kooperation}
     .row
       .col-md-6
         - var mitarbeiter = staff.state.mitarbeiterTransient;
@@ -90,19 +90,19 @@ block content
             .card-body !{kopf.beschreibungHTML()}
 
         +legendMitBody('technik', 'Technik', null, 'technik')
-          - var dateien = technik.dateirider();
+          - var dateien = technik.dateirider;
           table.table.table-sm.table-striped
-            if technik.fluegel()
+            if technik.fluegel
               tr: th(colspan=2) Flügel stimmen!
-            if technik.backlineJazzclub().length
+            if technik.backlineJazzclub.length
               tr: th(colspan=2) Backline Jazzclub
-              each item in technik.backlineJazzclub()
+              each item in technik.backlineJazzclub
                 tr
                   td(width="2%")
                   td(width="98%") #{item}
-            if technik.backlineRockshop().length
+            if technik.backlineRockshop.length
               tr: th(colspan=2) Backline Rockshop
-              each item in technik.backlineRockshop()
+              each item in technik.backlineRockshop
                 tr
                   td(width="2%")
                   td(width="98%") #{item}
