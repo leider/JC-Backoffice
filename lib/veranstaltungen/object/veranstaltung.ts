@@ -78,6 +78,7 @@ export default class Veranstaltung {
   artist = new Artist();
   eintrittspreise = new Eintrittspreise();
   hotel = new Kontakt();
+  kasse = new Kasse();
   kopf = new Kopf();
   presse = new Presse();
   technik = new Technik();
@@ -98,13 +99,11 @@ export default class Veranstaltung {
     result.artist = this.artist.toJSON();
     result.eintrittspreise = this.eintrittspreise.toJSON();
     result.hotel = this.hotel.toJSON();
+    result.kasse = this.kasse.toJSON();
     result.kopf = this.kopf.toJSON();
     result.presse = this.presse.toJSON();
     result.technik = this.technik.toJSON();
 
-    if (result.kasse) {
-      result.kasse = this.kasse().toJSON();
-    }
     if (result.kosten) {
       result.kosten = this.kosten().toJSON();
     }
@@ -138,6 +137,7 @@ export default class Veranstaltung {
       this.artist = new Artist(object.artist);
       this.eintrittspreise = new Eintrittspreise(object.eintrittspreise as EintrittspreiseRaw);
       this.hotel = new Kontakt(object.hotel);
+      this.kasse = new Kasse(object.kasse);
       this.technik = new Technik(object.technik);
       this.presse = new Presse(object.presse);
 
@@ -145,6 +145,7 @@ export default class Veranstaltung {
       delete object.artist;
       delete object.eintrittspreise;
       delete object.hotel;
+      delete object.kasse;
       delete object.kopf;
       delete object.presse;
       delete object.technik;
@@ -185,9 +186,7 @@ export default class Veranstaltung {
       this.hotel.fillFromUI(object.hotel).toJSON();
     }
     if (object.kasse) {
-      this.state.kasse = this.kasse()
-        .fillFromUI(object.kasse)
-        .toJSON();
+      this.kasse.fillFromUI(object.kasse).toJSON();
     }
     if (object.kosten) {
       this.state.kosten = this.kosten()
@@ -262,10 +261,6 @@ export default class Veranstaltung {
     return value && !R.isEmpty(value) ? value : undefined;
   }
 
-  kasse(): Kasse {
-    return new Kasse(this.undefinedOrValue(this.state.kasse));
-  }
-
   kosten(): Kosten {
     return new Kosten(this.undefinedOrValue(this.state.kosten));
   }
@@ -298,11 +293,11 @@ export default class Veranstaltung {
   // Money - GEMA - Reservix
 
   kostenGesamtEUR(): number {
-    return this.kosten().totalEUR() + this.unterkunft().kostenTotalEUR() + this.kasse().ausgabenOhneGage();
+    return this.kosten().totalEUR() + this.unterkunft().kostenTotalEUR() + this.kasse.ausgabenOhneGage();
   }
 
   einnahmenGesamtEUR(): number {
-    return this.salesreport()?.nettoUmsatz() || 0 + this.kasse().einnahmeTicketsEUR();
+    return this.salesreport()?.nettoUmsatz() || 0 + this.kasse.einnahmeTicketsEUR;
   }
 
   dealAbsolutEUR(): number {
@@ -414,7 +409,7 @@ export default class Veranstaltung {
   }
 
   einnahmenEintrittEUR(): number {
-    return this.kasse().einnahmeTicketsEUR() + (this.salesreport()?.bruttoUmsatz() || 0);
+    return this.kasse.einnahmeTicketsEUR + (this.salesreport()?.bruttoUmsatz() || 0);
   }
 
   eintrittGema(): string {
@@ -425,7 +420,7 @@ export default class Veranstaltung {
   }
 
   anzahlBesucher(): number {
-    return this.kasse().anzahlBesucherAK() + (this.salesreport()?.anzahlRegulaer() || 0);
+    return this.kasse.anzahlBesucherAK + (this.salesreport()?.anzahlRegulaer() || 0);
   }
 
   // iCal

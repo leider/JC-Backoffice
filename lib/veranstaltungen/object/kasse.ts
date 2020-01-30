@@ -22,7 +22,7 @@ export interface KasseRaw {
   ausgabeSonstiges3Text: string;
   einnahmeSonstiges1Text: string;
   einnahmeSonstiges2Text: string;
-  anzahlBesucherAK: string;
+  anzahlBesucherAK: number;
   kassenfreigabe?: string;
   kassenfreigabeAm?: Date;
 }
@@ -50,170 +50,119 @@ export interface KasseUI {
   kassenfreigabeAm?: Date;
 }
 
-export default class Kasse {
-  state: KasseRaw;
+export default class Kasse implements KasseRaw {
+  anfangsbestandEUR = 0;
+  ausgabeBankEUR = 0;
+  ausgabeCateringEUR = 0;
+  ausgabeGageEUR = 0;
+  ausgabeHelferEUR = 0;
+  ausgabeSonstiges1EUR = 0;
+  ausgabeSonstiges2EUR = 0;
+  ausgabeSonstiges3EUR = 0;
+  einnahmeBankEUR = 0;
+  einnahmeSonstiges1EUR = 0;
+  einnahmeTicketsEUR = 0;
+  einnahmeSonstiges2EUR = 0;
+  ausgabeSonstiges1Text = "";
+  ausgabeSonstiges2Text = "";
+  ausgabeSonstiges3Text = "";
+  einnahmeSonstiges1Text = "";
+  einnahmeSonstiges2Text = "";
+  anzahlBesucherAK = 0;
+  kassenfreigabe? = "";
+  kassenfreigabeAm? = new Date();
 
   toJSON(): KasseRaw {
-    return this.state;
-  }
-
-  constructor(object: KasseRaw | undefined) {
-    this.state = object || {
-      anfangsbestandEUR: 500,
-      ausgabeBankEUR: 0,
-      ausgabeCateringEUR: 0,
-      ausgabeGageEUR: 0,
-      ausgabeHelferEUR: 0,
-      ausgabeSonstiges1EUR: 0,
-      ausgabeSonstiges2EUR: 0,
-      ausgabeSonstiges3EUR: 0,
-      einnahmeBankEUR: 0,
-      einnahmeSonstiges1EUR: 0,
-      einnahmeTicketsEUR: 0,
-      einnahmeSonstiges2EUR: 0,
-      ausgabeSonstiges1Text: "",
-      ausgabeSonstiges2Text: "",
-      ausgabeSonstiges3Text: "",
-      einnahmeSonstiges1Text: "",
-      einnahmeSonstiges2Text: "",
-      anzahlBesucherAK: ""
-    };
-  }
-
-  fillFromUI(object: KasseUI): Kasse {
-    this.state.anfangsbestandEUR = floatAmount(object.anfangsbestandEUR);
-    this.state.ausgabeBankEUR = floatAmount(object.ausgabeBankEUR);
-    this.state.ausgabeCateringEUR = floatAmount(object.ausgabeCateringEUR);
-    this.state.ausgabeGageEUR = floatAmount(object.ausgabeGageEUR);
-    this.state.ausgabeHelferEUR = floatAmount(object.ausgabeHelferEUR);
-    this.state.ausgabeSonstiges1EUR = floatAmount(object.ausgabeSonstiges1EUR);
-    this.state.ausgabeSonstiges2EUR = floatAmount(object.ausgabeSonstiges2EUR);
-    this.state.ausgabeSonstiges3EUR = floatAmount(object.ausgabeSonstiges3EUR);
-    this.state.einnahmeBankEUR = floatAmount(object.einnahmeBankEUR);
-    this.state.einnahmeSonstiges1EUR = floatAmount(object.einnahmeSonstiges1EUR);
-    this.state.einnahmeSonstiges2EUR = floatAmount(object.einnahmeSonstiges2EUR);
-    this.state.einnahmeTicketsEUR = floatAmount(object.einnahmeTicketsEUR);
-    this.state.ausgabeSonstiges1Text = object.ausgabeSonstiges1Text;
-    this.state.ausgabeSonstiges2Text = object.ausgabeSonstiges2Text;
-    this.state.ausgabeSonstiges3Text = object.ausgabeSonstiges3Text;
-    this.state.einnahmeSonstiges1Text = object.einnahmeSonstiges1Text;
-    this.state.einnahmeSonstiges2Text = object.einnahmeSonstiges2Text;
-    this.state.anzahlBesucherAK = object.anzahlBesucherAK;
-    this.state.kassenfreigabe = object.kassenfreigabe || this.state.kassenfreigabe; // kann nicht mehr gelöscht werden
     return this;
   }
 
-  anfangsbestandEUR(): number {
-    return this.state.anfangsbestandEUR;
+  constructor(object?: KasseRaw) {
+    if (object) {
+      this.anfangsbestandEUR = object.anfangsbestandEUR;
+      this.ausgabeBankEUR = object.ausgabeBankEUR;
+      this.ausgabeCateringEUR = object.ausgabeCateringEUR;
+      this.ausgabeGageEUR = object.ausgabeGageEUR;
+      this.ausgabeHelferEUR = object.ausgabeHelferEUR;
+      this.ausgabeSonstiges1EUR = object.ausgabeSonstiges1EUR;
+      this.ausgabeSonstiges2EUR = object.ausgabeSonstiges2EUR;
+      this.ausgabeSonstiges3EUR = object.ausgabeSonstiges3EUR;
+      this.einnahmeBankEUR = object.einnahmeBankEUR;
+      this.einnahmeSonstiges1EUR = object.einnahmeSonstiges1EUR;
+      this.einnahmeTicketsEUR = object.einnahmeTicketsEUR;
+      this.einnahmeSonstiges2EUR = object.einnahmeSonstiges2EUR;
+      this.ausgabeSonstiges1Text = object.ausgabeSonstiges1Text;
+      this.ausgabeSonstiges2Text = object.ausgabeSonstiges2Text;
+      this.ausgabeSonstiges3Text = object.ausgabeSonstiges3Text;
+      this.einnahmeSonstiges1Text = object.ausgabeSonstiges1Text;
+      this.einnahmeSonstiges2Text = object.ausgabeSonstiges2Text;
+      this.anzahlBesucherAK = object.anzahlBesucherAK;
+      this.kassenfreigabe = object.kassenfreigabe;
+      this.kassenfreigabeAm = object.kassenfreigabeAm;
+    }
   }
 
-  anzahlBesucherAK(): number {
-    return parseInt(this.state.anzahlBesucherAK, 10) || 0;
-  }
-
-  ausgabeBankEUR(): number {
-    return this.state.ausgabeBankEUR;
-  }
-
-  ausgabeCateringEUR(): number {
-    return this.state.ausgabeCateringEUR;
-  }
-
-  ausgabeGageEUR(): number {
-    return this.state.ausgabeGageEUR;
-  }
-
-  ausgabeHelferEUR(): number {
-    return this.state.ausgabeHelferEUR;
-  }
-
-  ausgabeSonstiges1EUR(): number {
-    return this.state.ausgabeSonstiges1EUR;
-  }
-
-  ausgabeSonstiges1Text(): string {
-    return this.state.ausgabeSonstiges1Text;
-  }
-
-  ausgabeSonstiges2EUR(): number {
-    return this.state.ausgabeSonstiges2EUR;
-  }
-
-  ausgabeSonstiges2Text(): string {
-    return this.state.ausgabeSonstiges2Text;
-  }
-
-  ausgabeSonstiges3EUR(): number {
-    return this.state.ausgabeSonstiges3EUR;
-  }
-
-  ausgabeSonstiges3Text(): string {
-    return this.state.ausgabeSonstiges3Text;
+  fillFromUI(object: KasseUI): Kasse {
+    this.anfangsbestandEUR = floatAmount(object.anfangsbestandEUR);
+    this.ausgabeBankEUR = floatAmount(object.ausgabeBankEUR);
+    this.ausgabeCateringEUR = floatAmount(object.ausgabeCateringEUR);
+    this.ausgabeGageEUR = floatAmount(object.ausgabeGageEUR);
+    this.ausgabeHelferEUR = floatAmount(object.ausgabeHelferEUR);
+    this.ausgabeSonstiges1EUR = floatAmount(object.ausgabeSonstiges1EUR);
+    this.ausgabeSonstiges2EUR = floatAmount(object.ausgabeSonstiges2EUR);
+    this.ausgabeSonstiges3EUR = floatAmount(object.ausgabeSonstiges3EUR);
+    this.einnahmeBankEUR = floatAmount(object.einnahmeBankEUR);
+    this.einnahmeSonstiges1EUR = floatAmount(object.einnahmeSonstiges1EUR);
+    this.einnahmeSonstiges2EUR = floatAmount(object.einnahmeSonstiges2EUR);
+    this.einnahmeTicketsEUR = floatAmount(object.einnahmeTicketsEUR);
+    this.ausgabeSonstiges1Text = object.ausgabeSonstiges1Text;
+    this.ausgabeSonstiges2Text = object.ausgabeSonstiges2Text;
+    this.ausgabeSonstiges3Text = object.ausgabeSonstiges3Text;
+    this.einnahmeSonstiges1Text = object.einnahmeSonstiges1Text;
+    this.einnahmeSonstiges2Text = object.einnahmeSonstiges2Text;
+    this.anzahlBesucherAK = parseInt(object.anzahlBesucherAK);
+    this.kassenfreigabe = object.kassenfreigabe || this.kassenfreigabe; // kann nicht mehr gelöscht werden
+    return this;
   }
 
   ausgabenOhneGage(): number {
     return (
-      this.ausgabeCateringEUR() +
-      this.ausgabeHelferEUR() +
-      this.ausgabeSonstiges1EUR() +
-      this.ausgabeSonstiges2EUR() +
-      this.ausgabeSonstiges3EUR()
+      this.ausgabeCateringEUR +
+      this.ausgabeHelferEUR +
+      this.ausgabeSonstiges1EUR +
+      this.ausgabeSonstiges2EUR +
+      this.ausgabeSonstiges3EUR
     );
   }
 
   ausgabenTotalEUR(): number {
-    return this.ausgabeBankEUR() + this.ausgabeGageEUR() + this.ausgabenOhneGage();
-  }
-
-  einnahmeBankEUR(): number {
-    return this.state.einnahmeBankEUR;
-  }
-
-  einnahmeSonstiges1EUR(): number {
-    return this.state.einnahmeSonstiges1EUR;
-  }
-
-  einnahmeSonstiges1Text(): string {
-    return this.state.einnahmeSonstiges1Text;
-  }
-
-  einnahmeSonstiges2EUR(): number {
-    return this.state.einnahmeSonstiges2EUR;
-  }
-
-  einnahmeSonstiges2Text(): string {
-    return this.state.einnahmeSonstiges2Text;
-  }
-
-  einnahmeTicketsEUR(): number {
-    return this.state.einnahmeTicketsEUR;
+    return this.ausgabeBankEUR + this.ausgabeGageEUR + this.ausgabenOhneGage();
   }
 
   einnahmeTotalEUR(): number {
-    return this.einnahmeBankEUR() + this.einnahmeSonstiges1EUR() + this.einnahmeSonstiges2EUR() + this.einnahmeTicketsEUR();
+    return this.einnahmeBankEUR + this.einnahmeSonstiges1EUR + this.einnahmeSonstiges2EUR + this.einnahmeTicketsEUR;
   }
 
   endbestandEUR(): number {
-    return this.anfangsbestandEUR() + this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
+    return this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
   }
 
   // FREIGABE
 
   istFreigegeben(): boolean {
-    return !!this.state.kassenfreigabe;
+    return !!this.kassenfreigabe;
   }
 
   freigabeErfolgtDurch(name: string): void {
-    this.state.kassenfreigabe = name;
-    this.state.kassenfreigabeAm = new Date();
+    this.kassenfreigabe = name;
+    this.kassenfreigabeAm = new Date();
   }
 
   freigabeRueckgaengig(): void {
-    delete this.state.kassenfreigabe;
-    delete this.state.kassenfreigabeAm;
+    delete this.kassenfreigabe;
+    delete this.kassenfreigabeAm;
   }
 
   freigabeDisplayDatum(): string {
-    return this.state.kassenfreigabeAm ? DatumUhrzeit.forJSDate(this.state.kassenfreigabeAm).tagMonatJahrLang : "";
+    return this.kassenfreigabeAm ? DatumUhrzeit.forJSDate(this.kassenfreigabeAm).tagMonatJahrLang : "";
   }
 }

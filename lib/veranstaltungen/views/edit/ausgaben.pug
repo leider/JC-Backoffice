@@ -21,7 +21,7 @@ block content
   - var kosten = veranstaltung.kosten();
   - var salesreport = veranstaltung.salesreport();
   - var eintrittspreise = veranstaltung.eintrittspreise;
-  - var kasse = veranstaltung.kasse();
+  - var kasse = veranstaltung.kasse;
   .col-12
     form#ausgabenform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'ausgaben')
@@ -49,7 +49,7 @@ block content
                 .col-4
                   .form-group
                     label.float-right Abendkasse (Tickets):
-                    b: +currencySpan(kasse.einnahmeTicketsEUR(), 'kasseTickets', 'form-control-plaintext float-right')
+                    b: +currencySpan(kasse.einnahmeTicketsEUR, 'kasseTickets', 'form-control-plaintext float-right')
                 .col-4
                   .form-group
                     label.float-right Total:
@@ -189,7 +189,7 @@ block scripts
         setEuro(mitglied, preisMitglied);
 
         var erwarteteEinnahmen = floatAmount(zuschuss) + (#{showKasse}
-            ? #{kasse.einnahmeTicketsEUR()}
+            ? #{kasse.einnahmeTicketsEUR}
             : intAmount(anzahlBesucher) * (0.8 * preis + 0.1 * preisErmaessigt + 0.1 * preisMitglied)
         );
 
