@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
 
-import Kalender from "../../lib/programmheft/kalender";
+import Kalender, { EmailEvent } from "../../lib/programmheft/kalender";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 
 describe("Kalender", () => {
@@ -40,7 +40,9 @@ describe("Kalender", () => {
         id: "2020/12",
         text: "Was | Wer | Farbe | Wann\n" + "--- | --- | ---   | ---\n"
       });
-      expect(kalender.text).to.eql("Was | Wer | Farbe | Wann\n" + "--- | --- | ---   | ---\n");
+      expect(kalender.text).to.eql(`Was | Wer | Farbe | Wann
+--- | --- | ---   | ---
+`);
       expect(kalender.asEvents()).to.eql([]);
     });
   });
@@ -49,7 +51,9 @@ describe("Kalender", () => {
     it("parses old style filled text correctly", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text: "Was | Wer | Farbe | Wann\n" + "Irgendwas | Irgendwer | Green   | 13.12.2020\n"
+        text: `Was | Wer | Farbe | Wann
+Irgendwas | Irgendwer | Green   | 13.12.2020
+`
       });
       expect(kalender.asEvents()).to.eql([
         {
@@ -64,7 +68,9 @@ describe("Kalender", () => {
     it("ohne Jahr - parses old style filled text correctly", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text: "Was | Wer | Farbe | Wann\n" + "Irgendwas | Irgendwer | Green   | 13.12.\n"
+        text: `Was | Wer | Farbe | Wann
+Irgendwas | Irgendwer | Green   | 13.12.
+`
       });
       expect(kalender.asEvents()).to.eql([
         {
@@ -79,7 +85,9 @@ describe("Kalender", () => {
     it("parses broken date text correctly (e.g. empty)", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text: "Was | Wer | Farbe | Wann\n" + "Irgendwas | Irgendwer | Green   | 33.\n"
+        text: `Was | Wer | Farbe | Wann
+Irgendwas | Irgendwer | Green   | 33.
+`
       });
       expect(kalender.asEvents()).to.eql([]);
     });
@@ -89,7 +97,9 @@ describe("Kalender", () => {
     it("parses new style filled text correctly (email)", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text: "Was | Wer | Farbe | Wann | Email\n" + "Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as\n"
+        text: `Was | Wer | Farbe | Wann | Email
+Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
+`
       });
       expect(kalender.asEvents()).to.eql([
         {
@@ -108,10 +118,12 @@ describe("Kalender", () => {
     it("parses new style filled text correctly (email und offset)", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text:
-          "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14\n"
+        text: `Was | Wer | Farbe | Wann | Email | Tage vorher
+Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
+`
       });
-      expect(kalender.asEvents()).to.eql([
+      const events = kalender.asEvents();
+      expect(events).to.eql([
         {
           start: "2020-12-12T23:00:00.000Z",
           end: "2020-12-13T21:00:00.000Z",
@@ -123,6 +135,8 @@ describe("Kalender", () => {
           wer: "Irgendwer"
         }
       ]);
+      const nov29 = DatumUhrzeit.forGermanStringOrNow("29.11.20", "01:13");
+      expect(new EmailEvent(events[0]).shouldSendOn(nov29)).to.be.true;
     });
   });
 
@@ -151,7 +165,6 @@ describe("Kalender", () => {
         was: "Irgendwas",
         wer: "Irgendwer"
       });
-      expect(emailEvent.datumUhrzeitToSend().value).to.eql(sendeDatum.value);
       expect(emailEvent.email()).to.eql("andreas@andreas.as");
       expect(emailEvent.body()).to.eql(
         'Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub'

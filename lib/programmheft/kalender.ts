@@ -96,8 +96,12 @@ export class EmailEvent {
     this.event = event;
   }
 
-  datumUhrzeitToSend(): DatumUhrzeit {
+  private datumUhrzeitToSend(): DatumUhrzeit {
     return this.start().minus({ tage: this.event.emailOffset });
+  }
+
+  shouldSendOn(datumUhrzeit: DatumUhrzeit) {
+    return Math.abs(this.datumUhrzeitToSend().differenzInTagen(datumUhrzeit)) === 0
   }
 
   start(): DatumUhrzeit {
@@ -149,6 +153,6 @@ export default class Kalender {
     const events = this.asEvents()
       .filter(e => !!e.email)
       .map(e => new EmailEvent(e));
-    return events.filter(e => e.datumUhrzeitToSend().differenzInTagen(aDatumUhrzeit) === 0);
+    return events.filter(e => e.shouldSendOn(aDatumUhrzeit));
   }
 }

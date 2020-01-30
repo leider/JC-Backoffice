@@ -86,7 +86,7 @@ export default class DatumUhrzeit {
   }
 
   differenzInTagen(other: DatumUhrzeit): number {
-    return this.dateTime.diff(other.dateTime, "days").days;
+    return Math.trunc(this.dateTime.diff(other.dateTime, "days").days);
   }
 
   // Vergleiche

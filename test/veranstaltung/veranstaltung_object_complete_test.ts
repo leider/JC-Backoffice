@@ -63,7 +63,7 @@ const demo = {
     ausgabeSonstiges3Text: "",
     einnahmeSonstiges1Text: "",
     einnahmeSonstiges2Text: "",
-    anzahlBesucherAK: ""
+    anzahlBesucherAK: 0
   },
   kopf: {
     beschreibung: "",
