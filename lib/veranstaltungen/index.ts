@@ -249,7 +249,7 @@ app.post("/updateStaff", (req, res, next) => {
     if (err || !veranstaltung) {
       return next(err);
     }
-    veranstaltung.staff().updateStaff(body.staff || {});
+    veranstaltung.staff.updateStaff(body.staff || {});
     return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
       if (err1 || !veranstaltung) {
         return next(err1);

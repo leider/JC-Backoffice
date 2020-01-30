@@ -52,7 +52,7 @@ export function addRoutesTo(app: express.Express): void {
         if (err1) {
           return next(err1);
         }
-        veranstaltung.staff().enrichUsers(users);
+        veranstaltung.staff.enrichUsers(users);
         return res.render("preview", { veranstaltung });
       });
     });
@@ -246,7 +246,7 @@ export function addRoutesTo(app: express.Express): void {
       if (!veranstaltung) {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
-      return userstore.forId(veranstaltung.staff().kasseV()[0], (err1: Error | null, user: User) => {
+      return userstore.forId(veranstaltung.staff.kasseV()[0], (err1: Error | null, user: User) => {
         const kassierer = user && user.name;
         app.render(
           "pdf/kassenzettel",

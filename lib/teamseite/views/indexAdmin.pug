@@ -20,7 +20,7 @@ mixin multiselectSmall(id, name, value, tags)
 mixin peopleAndButton(veranstaltung, name, allUsers)
   - var checkID = `staff[${name}NotNeeded]`;
   .input-group
-    +multiselectSmall(`staff[${name}]${veranstaltung.id}`, `staff[${name}]`, veranstaltung.staff()[name](), allUsers.map(user => user.id))
+    +multiselectSmall(`staff[${name}]${veranstaltung.id}`, `staff[${name}]`, veranstaltung.staff[name], allUsers.map(user => user.id))
     .input-group-append
       .input-group-text.pl-1.pr-0
         .form-check.abc-checkbox.abc-checkbox-success
@@ -28,7 +28,7 @@ mixin peopleAndButton(veranstaltung, name, allUsers)
             type="checkbox",
             id=checkID + veranstaltung.id,
             name=checkID,
-            checked=!veranstaltung.staff()[`${name}NotNeeded`]() ? 'true' : undefined
+            checked=!veranstaltung.staff[`${name}NotNeeded`] ? 'true' : undefined
           )
           label.form-check-label(for=checkID + veranstaltung.id) #{''}
 

@@ -4,15 +4,15 @@ include mixins
 include ../../users/views/userMixins
 
 mixin button(veranstaltung, name, nameInMethod)
-  - var staff = veranstaltung.staff();
-  if !staff[name]().includes(user.id) && !staff[name]().includes(user.id.toLowerCase())
+  - var staff = veranstaltung.staff;
+  if !staff[name].includes(user.id) && !staff[name].includes(user.id.toLowerCase())
     a.btn.btn-success.btn-sm(href=`/teamseite/add${nameInMethod}/${encodeURIComponent(veranstaltung.id)}`, title="Ich kann"): i.fa-fw.fa-lg.fas.fa-plus-circle
   else
     a.btn.btn-danger.btn-sm(href=`/teamseite/remove${nameInMethod}/${encodeURIComponent(veranstaltung.id)}`, title="Ich kann nicht"): i.fa-fw.fa-lg.fas.fa-minus-circle
 
 mixin people(veranstaltung, name)
-  - var staff = veranstaltung.staff();
-  .mt-1: span.text-capitalize #{staff[name]().join(', ')}
+  - var staff = veranstaltung.staff;
+  .mt-1: span.text-capitalize #{staff[name].join(', ')}
 
 mixin monatHeadline(veranstaltung)
   h4.pt-1.pb-2.px-1.bg-primary.text-white #{veranstaltung.startDatumUhrzeit().monatLangJahrKompakt}
@@ -36,7 +36,7 @@ mixin panelView(groupedVeranstaltungen)
         - var collapsed = veranstaltung.startDatumUhrzeit().istNach(nearFuture);
         - var kopf = veranstaltung.kopf;
         - var id = `panel${++count}`;
-        - var staff = veranstaltung.staff();
+        - var staff = veranstaltung.staff;
         .col-xl-4.col-md-6
           .card.mb-2(class=`border-${cssColorCode(kopf.eventTyp)}`)
             .card-header.p-0(class=`color-${cssColorCode(kopf.eventTyp)}`)
@@ -45,45 +45,45 @@ mixin panelView(groupedVeranstaltungen)
                 h5.alert-danger.p-1.mb-0
                   i.fas.fa-exclamation-circle
                   | #{' '} Kasse gesucht!
-              if staff.noStaffNeeded() && staff.modNotNeeded()
+              if staff.noStaffNeeded() && staff.modNotNeeded
                 h5.alert-success.p-1.mb-0
                   i.fas.fa-check-circle
                   | #{' '} Kooperation
 
-            if !staff.noStaffNeeded() || !staff.modNotNeeded()
+            if !staff.noStaffNeeded() || !staff.modNotNeeded
               .collapse.cardcontent(id=id, class=collapsed ? '' : ' show')
                 table.table.table-striped.table-sm
-                  if (!staff['kasseVNotNeeded']() || !staff['kasseNotNeeded']())
+                  if (!staff['kasseVNotNeeded'] || !staff['kasseNotNeeded'])
                     tr: td(colspan=3): h5.mb-0 Kasse
-                    if !staff['kasseVNotNeeded']()
+                    if !staff['kasseVNotNeeded']
                       tr
                         th: .mt-1 Eins:
                         td: +people(veranstaltung, 'kasseV')
                         td.text-right: +button(veranstaltung, 'kasseV', 'KasseV')
-                    if !staff['kasseNotNeeded']()
+                    if !staff['kasseNotNeeded']
                       tr
                         th: .mt-1 Zwei:
                         td: +people(veranstaltung, 'kasse')
                         td.text-right: +button(veranstaltung, 'kasse', 'Kasse')
-                  if (!staff['technikerVNotNeeded']() || !staff['technikerNotNeeded']())
+                  if (!staff['technikerVNotNeeded'] || !staff['technikerNotNeeded'])
                     tr: td(colspan=3): h5.mb-0 Technik
-                    if !staff['technikerVNotNeeded']()
+                    if !staff['technikerVNotNeeded']
                       tr
                         th: .mt-1 Eins:
                         td: +people(veranstaltung, 'technikerV')
                         td.text-right: +button(veranstaltung, 'technikerV', 'TechnikerV')
-                    if !staff['technikerNotNeeded']()
+                    if !staff['technikerNotNeeded']
                       tr
                         th: .mt-1 Zwei:
                         td: +people(veranstaltung, 'techniker')
                         td.text-right: +button(veranstaltung, 'techniker', 'Techniker')
-                  if !staff['modNotNeeded']()
+                  if !staff['modNotNeeded']
                     tr: td(colspan=3): h5.mb-0 Master
                     tr
                       th &nbsp;
                       td: +people(veranstaltung, 'mod')
                       td.text-right: +button(veranstaltung, 'mod', 'MoD')
-                  if !staff['merchandiseNotNeeded']()
+                  if !staff['merchandiseNotNeeded']
                     tr: td(colspan=3): h5.mb-0 Merchandise
                     tr
                       th &nbsp;

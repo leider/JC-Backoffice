@@ -25,7 +25,7 @@ block content
   - var hotel = veranstaltung.hotel;
   - var presse = veranstaltung.presse;
   - var technik = veranstaltung.technik;
-  - var staff = veranstaltung.staff();
+  - var staff = veranstaltung.staff;
   - var salesreport = veranstaltung.salesreport();
 
   .col-12
@@ -42,14 +42,14 @@ block content
             small
               | #{veranstaltung.startDatumUhrzeit().lesbareLangform} #{''}
               span (#{kopf.eventTyp})
-            if kopf.kooperation() && kopf.kooperation.length > 1
+            if kopf.kooperation && kopf.kooperation.length > 1
               h3 Kooperation mit #{kopf.kooperation}
     .row
       .col-md-6
-        - var mitarbeiter = staff.state.mitarbeiterTransient;
+        - var mitarbeiter = staff.mitarbeiterTransient;
         +legendMitBody('staff', 'Staff', null, 'staff')
           table.table.table-striped.table-sm
-            if veranstaltung.staff().noStaffNeeded()
+            if veranstaltung.staff.noStaffNeeded()
               tr: th(colspan=2) Niemand benötigt
             else
               tr: th(colspan=2) MoD

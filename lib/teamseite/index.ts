@@ -19,7 +19,7 @@ function addStaff(sectionOfStaff: StaffType, req: express.Request, res: express.
     if (err) {
       return next(err);
     }
-    const section = veranstaltung.staff().getStaffCollection(sectionOfStaff);
+    const section = veranstaltung.staff.getStaffCollection(sectionOfStaff);
     section.push((req.user as User).id);
     return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
       if (err1) {
@@ -35,7 +35,7 @@ function removeStaff(sectionOfStaff: StaffType, req: express.Request, res: expre
     if (err) {
       return next(err);
     }
-    const section = veranstaltung.staff().getStaffCollection(sectionOfStaff);
+    const section = veranstaltung.staff.getStaffCollection(sectionOfStaff);
     const index = section.indexOf((req.user as User).id);
     section.splice(index, 1);
     return store.saveVeranstaltung(veranstaltung, (err1: Error) => {

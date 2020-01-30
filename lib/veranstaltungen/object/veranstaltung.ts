@@ -82,6 +82,7 @@ export default class Veranstaltung {
   kopf = new Kopf();
   kosten = new Kosten();
   presse = new Presse();
+  staff = new Staff();
   technik = new Technik();
 
   static fromJSON(object: VeranstaltungRaw): Veranstaltung {
@@ -104,11 +105,9 @@ export default class Veranstaltung {
     result.kopf = this.kopf.toJSON();
     result.kosten = this.kosten.toJSON();
     result.presse = this.presse.toJSON();
+    result.staff = this.staff.toJSON();
     result.technik = this.technik.toJSON();
 
-    if (result.staff) {
-      result.staff = this.staff().toJSON();
-    }
     if (result.unterkunft) {
       result.unterkunft = this.unterkunft().toJSON();
     }
@@ -138,8 +137,9 @@ export default class Veranstaltung {
       this.hotel = new Kontakt(object.hotel);
       this.kasse = new Kasse(object.kasse);
       this.kosten = new Kosten(object.kosten);
-      this.technik = new Technik(object.technik);
       this.presse = new Presse(object.presse);
+      this.staff = new Staff(object.staff);
+      this.technik = new Technik(object.technik);
 
       delete object.agentur;
       delete object.artist;
@@ -149,6 +149,7 @@ export default class Veranstaltung {
       delete object.kopf;
       delete object.kosten;
       delete object.presse;
+      delete object.staff;
       delete object.technik;
 
       this.state = object;
@@ -196,9 +197,7 @@ export default class Veranstaltung {
       this.presse.fillFromUI(object.presse).toJSON();
     }
     if (object.staff) {
-      this.state.staff = this.staff()
-        .fillFromUI(object.staff)
-        .toJSON();
+      this.staff = this.staff.fillFromUI(object.staff);
     }
     if (object.technik) {
       this.technik.fillFromUI(object.technik).toJSON();
@@ -265,14 +264,6 @@ export default class Veranstaltung {
       return new Salesreport(this.state.salesrep);
     }
     return null;
-  }
-
-  staff(): Staff {
-    const potentiallyUndefined = this.undefinedOrValue(this.state.staff);
-    if (!potentiallyUndefined) {
-      this.state.staff = new Staff(potentiallyUndefined).toJSON();
-    }
-    return new Staff(this.state.staff);
   }
 
   unterkunft(): Unterkunft {
@@ -420,7 +411,7 @@ export default class Veranstaltung {
 
   // iCal
   tooltipInfos(): string {
-    return this.kopf.ort + this.staff().tooltipInfos();
+    return this.kopf.ort + this.staff.tooltipInfos();
   }
 
   // Mailsend check
@@ -429,7 +420,7 @@ export default class Veranstaltung {
   }
 
   kasseFehlt(): boolean {
-    return this.staff().kasseFehlt() && this.kopf.confirmed;
+    return this.staff.kasseFehlt() && this.kopf.confirmed;
   }
 
   // CSV Export

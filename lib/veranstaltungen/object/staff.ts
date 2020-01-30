@@ -20,7 +20,6 @@ export interface StaffRaw extends StaffTypeCollections {
   kasseVNotNeeded: boolean;
   modNotNeeded: boolean;
   merchandiseNotNeeded: boolean;
-  mitarbeiterTransient?: { [p: string]: User[] };
 }
 
 export interface StaffUI extends StaffTypeCollections {
@@ -33,54 +32,60 @@ export interface StaffUI extends StaffTypeCollections {
 }
 
 export default class Staff {
-  state: StaffRaw;
+  techniker: string[] = [];
+  technikerV: string[] = [];
+  merchandise: string[] = [];
+  kasse: string[] = [];
+  kasseV: string[] = [];
+  mod: string[] = [];
+  technikerNotNeeded = false;
+  technikerVNotNeeded = false;
+  kasseNotNeeded = false;
+  kasseVNotNeeded = false;
+  modNotNeeded = false;
+  merchandiseNotNeeded = false;
+  mitarbeiterTransient?: { [p: string]: User[] };
 
   toJSON(): StaffRaw {
-    delete this.state.mitarbeiterTransient;
-    return this.state;
+    delete this.mitarbeiterTransient;
+    return this;
   }
 
-  constructor(object: StaffRaw | undefined) {
-    this.state = object || {
-      techniker: [],
-      technikerV: [],
-      merchandise: [],
-      kasse: [],
-      kasseV: [],
-      mod: [],
-      technikerNotNeeded: false,
-      technikerVNotNeeded: false,
-      kasseNotNeeded: false,
-      kasseVNotNeeded: false,
-      modNotNeeded: false,
-      merchandiseNotNeeded: false
-    };
-    this.state.techniker = this.state.techniker || [];
-    this.state.technikerV = this.state.technikerV || [];
-    this.state.kasse = this.state.kasse || [];
-    this.state.kasseV = this.state.kasseV || [];
-    this.state.merchandise = this.state.merchandise || [];
-    this.state.mod = this.state.mod || [];
+  constructor(object?: StaffRaw) {
+    if (object) {
+      this.techniker = object.techniker || [];
+      this.technikerV = object.technikerV || [];
+      this.kasse = object.kasse || [];
+      this.kasseV = object.kasseV || [];
+      this.merchandise = object.merchandise || [];
+      this.mod = object.mod || [];
+      this.technikerNotNeeded = object.technikerNotNeeded;
+      this.technikerVNotNeeded = object.technikerVNotNeeded;
+      this.kasseNotNeeded = object.kasseNotNeeded;
+      this.kasseVNotNeeded = object.kasseVNotNeeded;
+      this.modNotNeeded = object.modNotNeeded;
+      this.merchandiseNotNeeded = object.merchandiseNotNeeded;
+    }
   }
 
   fillFromUI(object: StaffUI): Staff {
-    this.state.techniker = misc.toArray(object.techniker);
-    this.state.technikerV = misc.toArray(object.technikerV);
-    this.state.kasse = misc.toArray(object.kasse);
-    this.state.kasseV = misc.toArray(object.kasseV);
-    this.state.merchandise = misc.toArray(object.merchandise);
-    this.state.mod = misc.toArray(object.mod);
-    this.state.technikerNotNeeded = !object.technikerNotNeeded;
-    this.state.technikerVNotNeeded = !object.technikerVNotNeeded;
-    this.state.kasseNotNeeded = !object.kasseNotNeeded;
-    this.state.kasseVNotNeeded = !object.kasseVNotNeeded;
-    this.state.modNotNeeded = !object.modNotNeeded;
-    this.state.merchandiseNotNeeded = !object.merchandiseNotNeeded;
+    this.techniker = misc.toArray(object.techniker);
+    this.technikerV = misc.toArray(object.technikerV);
+    this.kasse = misc.toArray(object.kasse);
+    this.kasseV = misc.toArray(object.kasseV);
+    this.merchandise = misc.toArray(object.merchandise);
+    this.mod = misc.toArray(object.mod);
+    this.technikerNotNeeded = !object.technikerNotNeeded;
+    this.technikerVNotNeeded = !object.technikerVNotNeeded;
+    this.kasseNotNeeded = !object.kasseNotNeeded;
+    this.kasseVNotNeeded = !object.kasseVNotNeeded;
+    this.modNotNeeded = !object.modNotNeeded;
+    this.merchandiseNotNeeded = !object.merchandiseNotNeeded;
     return this;
   }
 
   getStaffCollection(forType: StaffType): string[] {
-    return this.state[forType];
+    return this[forType];
   }
 
   updateStaff(object: StaffUI): void {
@@ -88,69 +93,15 @@ export default class Staff {
   }
 
   noStaffNeeded(): boolean {
-    return (
-      this.technikerNotNeeded() &&
-      this.technikerVNotNeeded() &&
-      this.kasseNotNeeded() &&
-      this.kasseVNotNeeded() &&
-      this.merchandiseNotNeeded()
-    );
-  }
-
-  mod(): string[] {
-    return this.state.mod;
-  }
-
-  modNotNeeded(): boolean {
-    return this.state.modNotNeeded;
-  }
-
-  techniker(): string[] {
-    return this.state.techniker;
-  }
-
-  technikerV(): string[] {
-    return this.state.technikerV;
-  }
-
-  technikerNotNeeded(): boolean {
-    return this.state.technikerNotNeeded;
-  }
-
-  technikerVNotNeeded(): boolean {
-    return this.state.technikerVNotNeeded;
-  }
-
-  merchandiseNotNeeded(): boolean {
-    return this.state.merchandiseNotNeeded;
+    return this.technikerNotNeeded && this.technikerVNotNeeded && this.kasseNotNeeded && this.kasseVNotNeeded && this.merchandiseNotNeeded;
   }
 
   technikerAlle(): string[] {
-    return R.union(this.technikerV(), this.techniker());
-  }
-
-  kasse(): string[] {
-    return this.state.kasse;
-  }
-
-  kasseV(): string[] {
-    return this.state.kasseV;
-  }
-
-  kasseNotNeeded(): boolean {
-    return this.state.kasseNotNeeded;
-  }
-
-  kasseVNotNeeded(): boolean {
-    return this.state.kasseVNotNeeded;
+    return R.union(this.technikerV, this.techniker);
   }
 
   kasseAlle(): string[] {
-    return R.union(this.kasseV(), this.kasse());
-  }
-
-  merchandise(): string[] {
-    return this.state.merchandise;
+    return R.union(this.kasseV, this.kasse);
   }
 
   technikerText(): string {
@@ -173,16 +124,16 @@ export default class Staff {
       return;
     }
     const filledUsers: { [index: string]: User[] } = {};
-    filledUsers.techniker = users.filter(u => R.includes(u.id, this.state.techniker));
-    filledUsers.technikerV = users.filter(u => R.includes(u.id, this.state.technikerV));
-    filledUsers.kasse = users.filter(u => R.includes(u.id, this.state.kasse));
-    filledUsers.kasseV = users.filter(u => R.includes(u.id, this.state.kasseV));
-    filledUsers.merchandise = users.filter(u => R.includes(u.id, this.state.merchandise));
-    filledUsers.mod = users.filter(u => R.includes(u.id, this.state.mod));
-    this.state.mitarbeiterTransient = filledUsers;
+    filledUsers.techniker = users.filter(u => R.includes(u.id, this.techniker));
+    filledUsers.technikerV = users.filter(u => R.includes(u.id, this.technikerV));
+    filledUsers.kasse = users.filter(u => R.includes(u.id, this.kasse));
+    filledUsers.kasseV = users.filter(u => R.includes(u.id, this.kasseV));
+    filledUsers.merchandise = users.filter(u => R.includes(u.id, this.merchandise));
+    filledUsers.mod = users.filter(u => R.includes(u.id, this.mod));
+    this.mitarbeiterTransient = filledUsers;
   }
 
   kasseFehlt(): boolean {
-    return (!this.kasseNotNeeded() && this.kasse().length === 0) || (!this.kasseVNotNeeded() && this.kasseV().length === 0);
+    return (!this.kasseNotNeeded && this.kasse.length === 0) || (!this.kasseVNotNeeded && this.kasseV.length === 0);
   }
 }
