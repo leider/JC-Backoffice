@@ -64,12 +64,12 @@ block content1
       p.
         §2.1 The salary is not subject to income tax and is taxable by the artist.
         The artist agrees to issue a proper invoice for the salary, either in a paper or electronic format.
-      if (veranstaltung.unterkunft().anzahlZimmer() === 0)
+      if (veranstaltung.unterkunft.anzahlZimmer() === 0)
         p.
           §2.2 The organizer will <b>not provide any accomodation</b>.
       else
         p.
-          §2.2 The organizer provides <b>#{veranstaltung.unterkunft().anzahlZimmer()} beds</b> at <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b> at his cost.
+          §2.2 The organizer provides <b>#{veranstaltung.unterkunft.anzahlZimmer()} beds</b> at <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b> at his cost.
       p.
         §2.3 The Artists are entitled to a catering flat rate of 20 &euro; per person in cash.
         German quality tab water shall be provided free of charge by the Organizer.

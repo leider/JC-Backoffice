@@ -50,7 +50,7 @@ export default class Misc {
     );
   }
 
-  static toArray(elem: string | string[]): Array<string> {
+  static toArray(elem?: string | string[]): Array<string> {
     if (!elem) {
       return [];
     }

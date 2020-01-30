@@ -84,6 +84,7 @@ export default class Veranstaltung {
   presse = new Presse();
   staff = new Staff();
   technik = new Technik();
+  unterkunft: Unterkunft;
 
   static fromJSON(object: VeranstaltungRaw): Veranstaltung {
     return new Veranstaltung(object);
@@ -107,10 +108,8 @@ export default class Veranstaltung {
     result.presse = this.presse.toJSON();
     result.staff = this.staff.toJSON();
     result.technik = this.technik.toJSON();
+    result.unterkunft = this.unterkunft.toJSON();
 
-    if (result.unterkunft) {
-      result.unterkunft = this.unterkunft().toJSON();
-    }
     if (result.vertrag) {
       result.vertrag = this.vertrag().toJSON();
     }
@@ -140,6 +139,7 @@ export default class Veranstaltung {
       this.presse = new Presse(object.presse);
       this.staff = new Staff(object.staff);
       this.technik = new Technik(object.technik);
+      this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit(), this.artist.name);
 
       delete object.agentur;
       delete object.artist;
@@ -151,8 +151,11 @@ export default class Veranstaltung {
       delete object.presse;
       delete object.staff;
       delete object.technik;
+      delete object.unterkunft;
 
       this.state = object;
+    } else {
+      this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit(), this.artist.name);
     }
   }
 
@@ -203,9 +206,7 @@ export default class Veranstaltung {
       this.technik.fillFromUI(object.technik).toJSON();
     }
     if (object.unterkunft) {
-      this.state.unterkunft = this.unterkunft()
-        .fillFromUI(object.unterkunft)
-        .toJSON();
+      this.unterkunft.fillFromUI(object.unterkunft);
     }
     if (object.vertrag) {
       this.state.vertrag = this.vertrag()
@@ -266,10 +267,6 @@ export default class Veranstaltung {
     return null;
   }
 
-  unterkunft(): Unterkunft {
-    return new Unterkunft(this.undefinedOrValue(this.state.unterkunft), this.startDatumUhrzeit(), this.artist.name);
-  }
-
   vertrag(): Vertrag {
     return new Vertrag(this.undefinedOrValue(this.state.vertrag));
   }
@@ -279,7 +276,7 @@ export default class Veranstaltung {
   // Money - GEMA - Reservix
 
   kostenGesamtEUR(): number {
-    return this.kosten.totalEUR() + this.unterkunft().kostenTotalEUR() + this.kasse.ausgabenOhneGage();
+    return this.kosten.totalEUR() + this.unterkunft.kostenTotalEUR() + this.kasse.ausgabenOhneGage();
   }
 
   einnahmenGesamtEUR(): number {

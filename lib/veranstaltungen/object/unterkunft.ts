@@ -21,8 +21,8 @@ export interface UnterkunftRaw {
   sonstiges: string[];
   angefragt: boolean;
   bestaetigt: boolean;
-  anreiseDate?: Date | null;
-  abreiseDate?: Date | null;
+  anreiseDate: Date;
+  abreiseDate: Date;
 }
 
 export interface UnterkunftUI {
@@ -42,87 +42,84 @@ export interface UnterkunftUI {
   bestaetigt: string;
 }
 
-export default class Unterkunft {
-  state: UnterkunftRaw;
-  private kuenstlerListe: string[];
+export default class Unterkunft implements UnterkunftRaw {
+  einzelNum = 0;
+  doppelNum = 0;
+  suiteNum = 0;
+  einzelEUR = 0;
+  doppelEUR = 0;
+  suiteEUR = 0;
+  transportEUR = 0;
+  kommentar = "";
+  transportText = "";
+  sonstiges: string[] = [];
+  angefragt = false;
+  bestaetigt = false;
+  anreiseDate: Date;
+  abreiseDate: Date;
+
   private veranstaltungstagAsDatumUhrzeit: DatumUhrzeit;
 
   toJSON(): UnterkunftRaw {
-    return this.state;
+    delete this.veranstaltungstagAsDatumUhrzeit;
+    return this;
   }
 
   constructor(object: UnterkunftRaw | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
-    this.state = object || {
-      einzelNum: 0,
-      doppelNum: 0,
-      suiteNum: 0,
-      einzelEUR: 0,
-      doppelEUR: 0,
-      suiteEUR: 0,
-      transportEUR: 0,
-      kommentar: "",
-      transportText: "",
-      sonstiges: [],
-      angefragt: false,
-      bestaetigt: false
-    };
-    this.kuenstlerListe = kuenstlerListe;
-    this.veranstaltungstagAsDatumUhrzeit = veranstaltungstagAsDatumUhrzeit;
-    if (!this.state.sonstiges) {
-      this.state.sonstiges = [];
-    }
-    if (!this.state.abreiseDate) {
-      this.state.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({
+    if (object) {
+      this.einzelNum = object.einzelNum;
+      this.doppelNum = object.doppelNum;
+      this.suiteNum = object.suiteNum;
+      this.einzelEUR = object.einzelEUR;
+      this.doppelEUR = object.doppelEUR;
+      this.suiteEUR = object.suiteEUR;
+      this.transportEUR = object.transportEUR;
+      this.transportText = object.transportText;
+      this.kommentar = object.kommentar || kuenstlerListe.join("\r\n");
+      this.sonstiges = misc.toArray(object.sonstiges);
+      this.angefragt = object.angefragt;
+      this.bestaetigt = object.bestaetigt;
+      this.anreiseDate = object.anreiseDate;
+      this.abreiseDate = object.abreiseDate;
+    } else {
+      this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
+      this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({
         tage: 1
       }).toJSDate;
     }
-    if (!this.state.anreiseDate) {
-      this.state.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
-    }
+    this.veranstaltungstagAsDatumUhrzeit = veranstaltungstagAsDatumUhrzeit;
   }
 
   fillFromUI(object: UnterkunftUI): Unterkunft {
-    this.state.einzelEUR = parseFloat(object.einzelEUR) || 0;
-    this.state.doppelEUR = parseFloat(object.doppelEUR) || 0;
-    this.state.suiteEUR = parseFloat(object.suiteEUR) || 0;
-    this.state.transportEUR = parseFloat(object.transportEUR) || 0;
-    this.state.einzelNum = parseInt(object.einzelNum) || 0;
-    this.state.doppelNum = parseInt(object.doppelNum) || 0;
-    this.state.suiteNum = parseInt(object.suiteNum) || 0;
-    this.state.kommentar = object.kommentar;
-    this.state.transportText = object.transportText;
-    this.state.sonstiges = misc.toArray(object.sonstiges);
-    this.state.angefragt = !!object.angefragt;
-    this.state.bestaetigt = !!object.bestaetigt;
+    this.einzelEUR = parseFloat(object.einzelEUR) || 0;
+    this.doppelEUR = parseFloat(object.doppelEUR) || 0;
+    this.suiteEUR = parseFloat(object.suiteEUR) || 0;
+    this.transportEUR = parseFloat(object.transportEUR) || 0;
+    this.einzelNum = parseInt(object.einzelNum) || 0;
+    this.doppelNum = parseInt(object.doppelNum) || 0;
+    this.suiteNum = parseInt(object.suiteNum) || 0;
+    this.kommentar = object.kommentar;
+    this.transportText = object.transportText;
+    this.sonstiges = misc.toArray(object.sonstiges);
+    this.angefragt = !!object.angefragt;
+    this.bestaetigt = !!object.bestaetigt;
 
-    this.state.anreiseDate = parseToDate(object.anreiseDate);
-    this.state.abreiseDate = parseToDate(object.abreiseDate);
+    this.anreiseDate = parseToDate(object.anreiseDate) || this.veranstaltungstagAsDatumUhrzeit.toJSDate;
+    this.abreiseDate =
+      parseToDate(object.abreiseDate) ||
+      this.veranstaltungstagAsDatumUhrzeit.plus({
+        tage: 1
+      }).toJSDate;
 
     return this;
   }
 
-  angefragt(): boolean {
-    return this.state.angefragt;
-  }
-
-  bestaetigt(): boolean {
-    return this.state.bestaetigt;
-  }
-
   checked(): boolean {
-    return this.bestaetigt();
-  }
-
-  anreiseDate(): Date | null | undefined {
-    return this.state.anreiseDate;
-  }
-
-  abreiseDate(): Date | null | undefined {
-    return this.state.abreiseDate;
+    return this.bestaetigt;
   }
 
   anreiseDisplayDate(): string {
-    const date = this.anreiseDate();
+    const date = this.anreiseDate;
     return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
@@ -131,67 +128,27 @@ export default class Unterkunft {
   }
 
   abreiseDisplayDate(): string {
-    const date = this.abreiseDate();
+    const date = this.abreiseDate;
     return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
-  kommentar(): string {
-    return this.state.kommentar || this.kuenstlerListe.join("\r\n");
-  }
-
-  einzelNum(): number {
-    return this.state.einzelNum;
-  }
-
-  doppelNum(): number {
-    return this.state.doppelNum;
-  }
-
-  suiteNum(): number {
-    return this.state.suiteNum;
-  }
-
-  einzelEUR(): number {
-    return this.state.einzelEUR;
-  }
-
-  doppelEUR(): number {
-    return this.state.doppelEUR;
-  }
-
-  suiteEUR(): number {
-    return this.state.suiteEUR;
-  }
-
-  transportEUR(): number {
-    return this.state.transportEUR;
-  }
-
-  transportText(): string {
-    return this.state.transportText;
-  }
-
-  sonstiges(): string[] {
-    return this.state.sonstiges;
-  }
-
   anzahlNaechte(): number {
-    const abreiseDate1 = this.abreiseDate();
-    const anreiseDate1 = this.anreiseDate();
+    const abreiseDate1 = this.abreiseDate;
+    const anreiseDate1 = this.anreiseDate;
     return abreiseDate1 && anreiseDate1 ? DatumUhrzeit.forJSDate(abreiseDate1).differenzInTagen(DatumUhrzeit.forJSDate(anreiseDate1)) : 0;
   }
 
   anzahlZimmer(): number {
-    return this.einzelNum() + this.doppelNum() + this.suiteNum();
+    return this.einzelNum + this.doppelNum + this.suiteNum;
   }
 
   kostenTotalEUR(): number {
     const naechte = this.anzahlNaechte();
     return (
-      this.einzelNum() * this.einzelEUR() * naechte +
-      this.doppelNum() * this.doppelEUR() * naechte +
-      this.suiteNum() * this.suiteEUR() * naechte +
-      this.transportEUR()
+      this.einzelNum * this.einzelEUR * naechte +
+      this.doppelNum * this.doppelEUR * naechte +
+      this.suiteNum * this.suiteEUR * naechte +
+      this.transportEUR
     );
   }
 }

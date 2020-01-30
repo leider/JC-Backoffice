@@ -7,15 +7,15 @@ mixin zimmerNumEUR(name, label)
   .col-sm-4
     .row
       .col-6
-        +number('unterkunft[' + name + 'Num]', label, unterkunft[name + 'Num'](), null, '0', '80')
+        +number('unterkunft[' + name + 'Num]', label, unterkunft[name + 'Num'], null, '0', '80')
       .col-6
-        +currency('unterkunft[' + name + 'EUR]', 'Preis', unterkunft[name + 'EUR']())
+        +currency('unterkunft[' + name + 'EUR]', 'Preis', unterkunft[name + 'EUR'])
 
 block title
   | Veranstaltung
 
 block content
-  - var unterkunft = veranstaltung.unterkunft();
+  - var unterkunft = veranstaltung.unterkunft;
   .col-12
     form#hotelform.needs-validation(action="/veranstaltungen/submit", method="post", novalidate)
       +editHeader(veranstaltung, 'hotel')
@@ -30,7 +30,7 @@ block content
                   span#naechte 0
                   span #{''} Nächte
               .col-8
-                +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar(), 'Name der Gäste')
+                +textareaPure('unterkunft[kommentar]', 'Kommentar', unterkunft.kommentar, 'Name der Gäste')
             .row
               +zimmerNumEUR('einzel', 'Einzel')
               +zimmerNumEUR('doppel', 'Doppel')
@@ -41,17 +41,17 @@ block content
 
         .col-md-6
           +legendMitBody('transport', 'Transport', 'transportTotal', 'hotel')
-            +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText(), 'Wer, wann, wo abholen, hinbringen?')
+            +textareaPure('unterkunft[transportText]', 'Anmerkungen', unterkunft.transportText, 'Wer, wann, wo abholen, hinbringen?')
             .row
               .col-md-6
-                +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges(), ['Parkgenehmigung', 'Stromanschluss'])
+                +multiselect('unterkunft[sonstiges]', 'Bus / Sonstiges', unterkunft.sonstiges, ['Parkgenehmigung', 'Stromanschluss'])
               .col-md-6
-                +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR())
+                +currency('unterkunft[transportEUR]', 'Summe', unterkunft.transportEUR)
           .row
             .col-6
-              +checkbox('unterkunft[angefragt]', 'Hotel Angefragt', unterkunft.angefragt())
+              +checkbox('unterkunft[angefragt]', 'Hotel Angefragt', unterkunft.angefragt)
             .col-6
-              +checkbox('unterkunft[bestaetigt]', 'Hotel Bestätigt', unterkunft.bestaetigt())
+              +checkbox('unterkunft[bestaetigt]', 'Hotel Bestätigt', unterkunft.bestaetigt)
           .row
             .col-12
               p #{''}

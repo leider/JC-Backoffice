@@ -96,7 +96,7 @@ mixin panelView(groupedVeranstaltungen)
                   td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.presse, 'presse')
                   td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.technik, 'technik')
                   if veranstaltung.artist.brauchtHotel
-                    td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.unterkunft(), 'hotel')
+                    td.p-0(width="33%"): +checkedButton(veranstaltung, veranstaltung.unterkunft, 'hotel')
 
             .collapse.cardcontent(id=id, class=collapsed ? '' : ' show')
               +submitButtonsFor(veranstaltung)
