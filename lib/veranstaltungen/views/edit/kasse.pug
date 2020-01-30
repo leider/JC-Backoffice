@@ -86,7 +86,7 @@ block content
           +legendMitBody('ausgaben', 'Ausgaben (Bar und mit Beleg)', 'ausgabenGesamt', 'kasse')
             .row
               .col-sm-4.col-6
-                if !veranstaltung.kosten().gageBAR()
+                if !veranstaltung.kosten.gageBAR
                   +currency('kasse[ausgabeGageEUR]', 'Gage', kasse.ausgabeGageEUR, null, null, freigegeben)
                 else
                   .form-group

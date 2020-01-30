@@ -23,7 +23,7 @@ block content
   - var artist = veranstaltung.artist;
   - var kopf = veranstaltung.kopf;
   - var vertrag = veranstaltung.vertrag();
-  - var kosten = veranstaltung.kosten();
+  - var kosten = veranstaltung.kosten;
   - var eintrittspreise = veranstaltung.eintrittspreise;
 
   .col-12
@@ -111,9 +111,9 @@ block content
               .col-sm-6
                 +editableMultiselect('artist[name]', 'Namen', artist.name, optionen.artists)
               .col-6.col-sm-3
-                +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR())
+                +currency('kosten[gagenEUR]', 'Gage (Netto)', kosten.gagenEUR)
               .col-6.col-sm-3
-                +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+                +singleselect('kosten[deal]', 'Deal', kosten.deal, kosten.deals())
             .row
               .col-6.col-sm-4
                 +checkbox('artist[isBawue]', 'BaWü-Förderung', artist.isBawue)

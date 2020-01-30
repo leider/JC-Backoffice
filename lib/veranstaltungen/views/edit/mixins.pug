@@ -59,7 +59,7 @@ mixin editHeader(veranstaltung, section, readonly)
     +hidden('kopf[confirmed]', veranstaltung.kopf.confirmed ? 'on' : undefined)
     +hidden('kopf[rechnungAnKooperation]', veranstaltung.kopf.rechnungAnKooperationspartner() ? 'on' : undefined)
   unless section === 'ausgaben'
-    +hidden('kosten[gageBAR]', veranstaltung.kosten().gageBAR() ? 'on' : undefined)
+    +hidden('kosten[gageBAR]', veranstaltung.kosten.gageBAR ? 'on' : undefined)
 
   .row
     .col-12

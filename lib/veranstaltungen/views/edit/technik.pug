@@ -6,7 +6,7 @@ block title
   | Veranstaltung
 
 block content
-  - var kosten = veranstaltung.kosten();
+  - var kosten = veranstaltung.kosten;
   - var technik = veranstaltung.technik;
   .col-12
     form#ausgabenform(action="/veranstaltungen/submit", method="post")
@@ -30,12 +30,12 @@ block content
                   .col-sm-9
                     +editableMultiselect('technik[backlineRockshop]', 'Backline Rockshop', technik.backlineRockshop, optionen.backlineRockshop)
                   .col-sm-3
-                    +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR())
+                    +currency('kosten[backlineEUR]', 'Betrag', kosten.backlineEUR)
                 .row
                   .col-sm-9
                     +text('technik[technikAngebot1]', 'Technik Zumietung', technik.technikAngebot1)
                   .col-sm-3
-                    +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR())
+                    +currency('kosten[technikAngebot1EUR]', 'Betrag', kosten.technikAngebot1EUR)
 
 block head
   link(rel="stylesheet", href="/stylesheets/fileinput.css")

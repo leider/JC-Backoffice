@@ -5,11 +5,11 @@ mixin band(kosten)
     +legendMitBody('band', 'Band', 'bandTotal')
       .row
         .col-3(style="padding-right: 5px;")
-          +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR())
+          +currency('kosten[gagenEUR]', 'Gagen', kosten.gagenEUR)
         .col-3(style="padding-left: 2px;padding-right: 2px;")
-          +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer(), ['ohne', '7% MWSt.', '19% MWSt.', '18,8% Ausland'])
+          +singleselect('kosten[gagenSteuer]', 'Steuer', kosten.gagenSteuer, kosten.steuerSatze())
         .col-3(style="padding-left: 2px;padding-right: 2px;")
-          +singleselect('kosten[deal]', 'Deal', kosten.deal(), ['ohne', '100%', '90%', '80%', '70%', '60%'])
+          +singleselect('kosten[deal]', 'Deal', kosten.deal, kosten.deals())
         .col-3(style="padding-left: 5px;")
           .form-group
             label.control-label Total:
@@ -17,7 +17,7 @@ mixin band(kosten)
               +currencySpan(null, 'gagenTotal', 'form-control-static float-right text-success')
       .row
         .col-6
-          +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR())
+          +checkbox('kosten[gageBAR]', 'Gage in BAR an der Abendkasse', kosten.gageBAR)
 
 mixin bandScript
   script.

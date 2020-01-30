@@ -22,7 +22,7 @@ export interface KasseRaw {
   ausgabeSonstiges3Text: string;
   einnahmeSonstiges1Text: string;
   einnahmeSonstiges2Text: string;
-  anzahlBesucherAK: number;
+  anzahlBesucherAK: number | string;
   kassenfreigabe?: string;
   kassenfreigabeAm?: Date;
 }
@@ -95,7 +95,8 @@ export default class Kasse implements KasseRaw {
       this.ausgabeSonstiges3Text = object.ausgabeSonstiges3Text;
       this.einnahmeSonstiges1Text = object.ausgabeSonstiges1Text;
       this.einnahmeSonstiges2Text = object.ausgabeSonstiges2Text;
-      this.anzahlBesucherAK = object.anzahlBesucherAK;
+      this.anzahlBesucherAK =
+        typeof object.anzahlBesucherAK === "string" ? Number.parseInt(object.anzahlBesucherAK) : object.anzahlBesucherAK;
       this.kassenfreigabe = object.kassenfreigabe;
       this.kassenfreigabeAm = object.kassenfreigabeAm;
     }
@@ -126,11 +127,7 @@ export default class Kasse implements KasseRaw {
 
   ausgabenOhneGage(): number {
     return (
-      this.ausgabeCateringEUR +
-      this.ausgabeHelferEUR +
-      this.ausgabeSonstiges1EUR +
-      this.ausgabeSonstiges2EUR +
-      this.ausgabeSonstiges3EUR
+      this.ausgabeCateringEUR + this.ausgabeHelferEUR + this.ausgabeSonstiges1EUR + this.ausgabeSonstiges2EUR + this.ausgabeSonstiges3EUR
     );
   }
 
