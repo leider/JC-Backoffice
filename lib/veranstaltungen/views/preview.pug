@@ -26,7 +26,7 @@ block content
   - var presse = veranstaltung.presse;
   - var technik = veranstaltung.technik;
   - var staff = veranstaltung.staff;
-  - var salesreport = veranstaltung.salesreport();
+  - var salesreport = veranstaltung.salesreport;
 
   .col-12
     .row
@@ -79,8 +79,8 @@ block content
                   th
                     | Reservix #{' '}
                     img(src="/img/rex_14x14.png")
-                  th.text-right #{salesreport.anzahlRegulaer()}
-                  th.text-right #{formatReadonlyAsEuro(salesreport.nettoUmsatz())}
+                  th.text-right #{salesreport.anzahl}
+                  th.text-right #{formatReadonlyAsEuro(salesreport.netto)}
 
             if accessrights.isAbendkasse()
               tr: td.text-right(colspan=3): a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title="Abendkasse") &nbsp;Abendkasse

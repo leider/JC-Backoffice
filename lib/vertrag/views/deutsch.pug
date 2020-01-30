@@ -63,12 +63,12 @@ block content1
         Der vereinbarte Betrag ist eine Bruttovergütung und schließt die MwSt. sowie sonstige Steuern ein. Nachforderungen sind ausgeschlossen.
       p.
         §2.1 Die Gage unterliegt nicht der Lohnsteuerpflicht, sondern wird vom Künstler selbst versteuert. Der Künstler verpflichtet sich zur Ausstellung einer ordnungsgemäßen Rechnung über die Gage in Papier- oder elektronischer Form.
-      if (veranstaltung.unterkunft.anzahlZimmer === 0)
+      if (veranstaltung.unterkunft.anzahlZimmer() === 0)
         p.
           §2.2 Der Veranstalter stellt <b>keine Unterkunft</b>.
       else
         p.
-          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft().anzahlZimmer()} Betten</b> im <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b>.
+          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft.anzahlZimmer()} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b>.
       if (buyoutInclusive)
         p.
           §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.

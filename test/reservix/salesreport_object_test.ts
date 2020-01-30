@@ -26,17 +26,17 @@ const minimumResult = { id: "dummy" };
 describe("Reservix Salesreport", () => {
   it("can parse a result", () => {
     const obj = new Salesreport(fullresult);
-    expect(obj.bruttoUmsatz()).to.eql(5296);
-    expect(obj.nettoUmsatz()).to.eql(4782.55);
+    expect(obj.brutto).to.eql(5296);
+    expect(obj.netto).to.eql(4782.55);
     expect(obj.gebuehren()).to.eql(5296 - 4782.55);
-    expect(obj.anzahlRegulaer()).to.eql(220);
-    expect(obj.id()).to.eql("1008242");
-    expect(obj.updated().toLocalDateTimeString).to.eql("28.10.2018, 13:58:23");
+    expect(obj.anzahl).to.eql(220);
+    expect(obj.id).to.eql("1008242");
+    expect(obj.zuletztAktualisiert().toLocalDateTimeString).to.eql("28.10.2018, 13:58:23");
   });
 
   it("handles non-existing bruttoUmsatz", () => {
     const obj = new Salesreport(minimumResult);
-    expect(obj.bruttoUmsatz()).to.equal(0);
+    expect(obj.brutto).to.equal(0);
   });
 
   it("handles non-existing gebuehren", () => {

@@ -19,30 +19,25 @@ export interface TechnikUI {
 }
 
 export default class Technik implements TechnikRaw {
-  dateirider: string[];
+  dateirider: string[] = [];
   technikAngebot1?: string;
-  backlineJazzclub: string[];
-  backlineRockshop: string[];
-  checked: boolean;
-  fluegel: boolean;
+  backlineJazzclub: string[] = [];
+  backlineRockshop: string[] = [];
+  checked = false;
+  fluegel = false;
 
   toJSON(): TechnikRaw {
     return this;
   }
 
   constructor(object?: TechnikRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.dateirider = object.dateirider || [];
       this.backlineJazzclub = object.backlineJazzclub;
       this.backlineRockshop = object.backlineRockshop;
       this.checked = object.checked;
       this.fluegel = object.fluegel;
-    } else {
-      this.dateirider = [];
-      this.backlineJazzclub = [];
-      this.backlineRockshop = [];
-      this.checked = false;
-      this.fluegel = false;
+      this.technikAngebot1 = object.technikAngebot1;
     }
   }
 

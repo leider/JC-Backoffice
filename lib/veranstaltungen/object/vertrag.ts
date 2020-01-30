@@ -9,56 +9,47 @@ export interface VertragRaw {
   datei: string[];
 }
 
-export default class Vertrag {
-  state: VertragRaw;
+export default class Vertrag implements VertragRaw {
+  art: Vertragsart = "Jazzclub";
+  sprache: Sprache = "Deutsch";
+  datei: string[] = [];
 
   static arten(): Vertragsart[] {
     return ["Jazzclub", "Agentur/Künstler", "JazzClassix"];
   }
 
-  toJSON(): VertragRaw {
-    return this.state;
+  static sprachen(): Sprache[] {
+    return ["Deutsch", "Englisch", "Regional"];
   }
 
-  constructor(object: VertragRaw | undefined) {
-    this.state = object || {
-      art: "Jazzclub",
-      sprache: "Deutsch",
-      datei: []
-    };
-    if (!this.state.datei) {
-      this.state.datei = [];
+  toJSON(): VertragRaw {
+    return this;
+  }
+
+  constructor(object?: VertragRaw) {
+    if (object && Object.keys(object).length !== 0) {
+      this.art = object.art;
+      this.sprache = object.sprache;
+      this.datei = misc.toArray(object.datei);
     }
   }
 
   fillFromUI(object: VertragRaw): Vertrag {
-    this.state.art = object.art;
-    this.state.sprache = object.sprache;
+    this.art = object.art;
+    this.sprache = object.sprache;
     return this;
   }
 
-  art(): Vertragsart {
-    return this.state.art;
-  }
-
   updateDatei(datei: string): boolean {
-    const imagePushed = misc.pushImage(this.state.datei, datei);
+    const imagePushed = misc.pushImage(this.datei, datei);
     if (imagePushed) {
-      this.state.datei = imagePushed;
+      this.datei = imagePushed;
       return true;
     }
     return false;
   }
 
   removeDatei(datei: string): void {
-    this.state.datei = misc.dropImage(this.state.datei, datei);
-  }
-
-  datei(): string[] {
-    return this.state.datei;
-  }
-
-  sprache(): string {
-    return this.state.sprache;
+    this.datei = misc.dropImage(this.datei, datei);
   }
 }

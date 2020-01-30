@@ -52,7 +52,7 @@ export default class Staff {
   }
 
   constructor(object?: StaffRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.techniker = object.techniker || [];
       this.technikerV = object.technikerV || [];
       this.kasse = object.kasse || [];

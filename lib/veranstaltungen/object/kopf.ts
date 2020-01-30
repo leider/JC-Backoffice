@@ -46,7 +46,7 @@ export default class Kopf implements KopfRaw {
   }
 
   constructor(object?: KopfRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.beschreibung = object.beschreibung;
       this.eventTyp = object.eventTyp;
       this.flaeche = object.flaeche;

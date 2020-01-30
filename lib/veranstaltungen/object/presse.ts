@@ -20,29 +20,23 @@ export interface PresseUI {
 }
 
 export default class Presse implements PresseRaw {
-  originalText: string;
-  text: string;
-  image: string[];
-  checked: boolean;
-  jazzclubURL: string;
+  originalText= "";
+  text = "";
+  image: string[] = [];
+  checked = false;
+  jazzclubURL = "";
 
   toJSON(): PresseRaw {
     return this;
   }
 
   constructor(object?: PresseRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.originalText = object.originalText;
       this.text = object.text;
       this.image = misc.toArray(object.image);
       this.checked = object.checked;
       this.jazzclubURL = object.jazzclubURL;
-    } else {
-      this.originalText = "";
-      this.text = "";
-      this.image = [];
-      this.checked = false;
-      this.jazzclubURL = "";
     }
   }
 

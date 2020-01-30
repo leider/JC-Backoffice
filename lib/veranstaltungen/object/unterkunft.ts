@@ -66,7 +66,7 @@ export default class Unterkunft implements UnterkunftRaw {
   }
 
   constructor(object: UnterkunftRaw | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.einzelNum = object.einzelNum;
       this.doppelNum = object.doppelNum;
       this.suiteNum = object.suiteNum;
@@ -91,13 +91,13 @@ export default class Unterkunft implements UnterkunftRaw {
   }
 
   fillFromUI(object: UnterkunftUI): Unterkunft {
-    this.einzelEUR = parseFloat(object.einzelEUR) || 0;
-    this.doppelEUR = parseFloat(object.doppelEUR) || 0;
-    this.suiteEUR = parseFloat(object.suiteEUR) || 0;
-    this.transportEUR = parseFloat(object.transportEUR) || 0;
-    this.einzelNum = parseInt(object.einzelNum) || 0;
-    this.doppelNum = parseInt(object.doppelNum) || 0;
-    this.suiteNum = parseInt(object.suiteNum) || 0;
+    this.einzelEUR = parseFloat(object.einzelEUR || "0") || 0;
+    this.doppelEUR = parseFloat(object.doppelEUR || "0") || 0;
+    this.suiteEUR = parseFloat(object.suiteEUR || "0") || 0;
+    this.transportEUR = parseFloat(object.transportEUR || "0") || 0;
+    this.einzelNum = parseInt(object.einzelNum || "0") || 0;
+    this.doppelNum = parseInt(object.doppelNum || "0") || 0;
+    this.suiteNum = parseInt(object.suiteNum || "0") || 0;
     this.kommentar = object.kommentar;
     this.transportText = object.transportText;
     this.sonstiges = misc.toArray(object.sonstiges);

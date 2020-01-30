@@ -31,7 +31,7 @@ export default class Eintrittspreise {
   }
 
   constructor(object?: EintrittspreiseRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       if (!object.preisprofil) {
         this.preisprofil = object.frei
           ? {

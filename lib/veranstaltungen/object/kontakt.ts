@@ -31,7 +31,7 @@ export default class Kontakt implements KontaktRaw {
   }
 
   constructor(object?: KontaktRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.adresse = object.adresse;
       this.ansprechpartner = object.ansprechpartner;
       this.email = object.email;

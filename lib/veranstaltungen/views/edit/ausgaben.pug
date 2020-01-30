@@ -19,7 +19,7 @@ block title
 
 block content
   - var kosten = veranstaltung.kosten;
-  - var salesreport = veranstaltung.salesreport();
+  - var salesreport = veranstaltung.salesreport;
   - var eintrittspreise = veranstaltung.eintrittspreise;
   - var kasse = veranstaltung.kasse;
   .col-12
@@ -70,15 +70,15 @@ block content
                 .col-4
                   .form-group
                     label.float-right Besucher (Reservix):
-                    b: span#anzahlBesucherReservix.text-right.float-right.form-control-plaintext #{salesreport.anzahlRegulaer()}
+                    b: span#anzahlBesucherReservix.text-right.float-right.form-control-plaintext #{salesreport.anzahl}
                 .col-4
                   .form-group
                     label.float-right Tickets Brutto (Reservix):
-                    b: +currencySpan(salesreport.bruttoUmsatz(), 'reservixBrutto', 'form-control-plaintext float-right')
+                    b: +currencySpan(salesreport.brutto, 'reservixBrutto', 'form-control-plaintext float-right')
                 .col-4
                   .form-group
                     label.float-right Tickets Netto (Reservix):
-                    b: +currencySpan(salesreport.nettoUmsatz(), 'reservixNetto', 'form-control-plaintext float-right text-success')
+                    b: +currencySpan(salesreport.netto, 'reservixNetto', 'form-control-plaintext float-right text-success')
 
           +legendMitBody('deal', 'Kostenübersicht / Break-Even', 'dealUeberschussTotal', 'concert', veranstaltung.dealUeberschussTotal())
             table.table.table-sm.table-striped
@@ -194,7 +194,7 @@ block scripts
         );
 
         setEuro($('#erwarteteEinnahmen'), erwarteteEinnahmen);
-        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport ? salesreport.nettoUmsatz(): 0});
+        setEuro(eintrittTotal, erwarteteEinnahmen + #{salesreport ? salesreport.netto: 0});
       }
 
       [anzahlBesucher, zuschuss].forEach(function (field) {

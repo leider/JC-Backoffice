@@ -131,7 +131,9 @@ const demo = {
     transportText: "",
     sonstiges: [],
     angefragt: false,
-    bestaetigt: false
+    bestaetigt: false,
+    anreiseDate: new Date(),
+    abreiseDate: new Date()
   },
   vertrag: {
     art: "Jazzclub" as Vertragsart,

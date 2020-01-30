@@ -53,7 +53,7 @@ export default class Kosten {
   }
 
   constructor(object?: KostenRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.backlineEUR = object.backlineEUR;
       this.saalmiete = object.saalmiete;
       this.technikAngebot1EUR = object.technikAngebot1EUR;

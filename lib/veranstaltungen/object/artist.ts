@@ -34,7 +34,7 @@ export default class Artist implements  ArtistRaw {
   }
 
   constructor(object?: ArtistRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.bandname = object.bandname;
       this.name = misc.toArray(object.name); // legacy, was text before
       this.numMusiker = object.numMusiker;

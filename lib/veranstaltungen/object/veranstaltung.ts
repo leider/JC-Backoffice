@@ -16,7 +16,6 @@ import Technik, { TechnikRaw, TechnikUI } from "./technik";
 import Unterkunft, { UnterkunftRaw, UnterkunftUI } from "./unterkunft";
 import Vertrag, { VertragRaw } from "./vertrag";
 import Salesreport, { ReservixState } from "../../reservix/salesreport";
-import R from "ramda";
 import { Hotelpreise } from "../../optionen/optionValues";
 
 interface VeranstaltungRaw {
@@ -65,8 +64,8 @@ export interface VeranstaltungUI {
   hotelpreise?: Hotelpreise;
 }
 
-export default class Veranstaltung {
-  state: VeranstaltungRaw = { startDate: new Date(), endDate: new Date(), url: "" };
+export default class Veranstaltung implements VeranstaltungRaw {
+  //state: VeranstaltungRaw = { startDate: new Date(), endDate: new Date(), url: "" };
 
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
@@ -82,8 +81,11 @@ export default class Veranstaltung {
   kopf = new Kopf();
   kosten = new Kosten();
   presse = new Presse();
+  salesreport = new Salesreport();
   staff = new Staff();
   technik = new Technik();
+  vertrag = new Vertrag();
+
   unterkunft: Unterkunft;
 
   static fromJSON(object: VeranstaltungRaw): Veranstaltung {
@@ -91,7 +93,7 @@ export default class Veranstaltung {
   }
 
   toJSON(): VeranstaltungRaw {
-    const result = this.state;
+    const result = {} as VeranstaltungRaw;
     result.id = this.id;
     result.startDate = this.startDate;
     result.endDate = this.endDate;
@@ -106,17 +108,11 @@ export default class Veranstaltung {
     result.kopf = this.kopf.toJSON();
     result.kosten = this.kosten.toJSON();
     result.presse = this.presse.toJSON();
+    result.salesrep = this.salesreport.toJSON();
     result.staff = this.staff.toJSON();
     result.technik = this.technik.toJSON();
     result.unterkunft = this.unterkunft.toJSON();
-
-    if (result.vertrag) {
-      result.vertrag = this.vertrag().toJSON();
-    }
-    const salesreport1 = this.salesreport();
-    if (salesreport1 !== null) {
-      result.salesrep = salesreport1.state;
-    }
+    result.vertrag = this.vertrag.toJSON();
     return result;
   }
 
@@ -137,23 +133,11 @@ export default class Veranstaltung {
       this.kasse = new Kasse(object.kasse);
       this.kosten = new Kosten(object.kosten);
       this.presse = new Presse(object.presse);
+      this.salesreport = new Salesreport(object.salesrep);
       this.staff = new Staff(object.staff);
       this.technik = new Technik(object.technik);
       this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit(), this.artist.name);
-
-      delete object.agentur;
-      delete object.artist;
-      delete object.eintrittspreise;
-      delete object.hotel;
-      delete object.kasse;
-      delete object.kopf;
-      delete object.kosten;
-      delete object.presse;
-      delete object.staff;
-      delete object.technik;
-      delete object.unterkunft;
-
-      this.state = object;
+      this.vertrag = new Vertrag(object.vertrag);
     } else {
       this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit(), this.artist.name);
     }
@@ -165,16 +149,16 @@ export default class Veranstaltung {
     }
 
     if (object.id) {
-      this.state.id = object.id;
+      this.id = object.id;
     }
 
     if (object.kopf) {
       if (object.startDate) {
-        this.state.reservixID = object.reservixID;
-        this.state.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate, object.startTime).toJSDate;
-        this.state.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, object.endTime).toJSDate;
-        this.state.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
-        this.state.url = object.url || this.state.startDate.toISOString() + object.kopf.titel;
+        this.reservixID = object.reservixID;
+        this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate, object.startTime).toJSDate;
+        this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, object.endTime).toJSDate;
+        this.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
+        this.url = object.url || this.startDate.toISOString() + object.kopf.titel;
       }
       this.kopf.fillFromUI(object.kopf);
     }
@@ -209,9 +193,7 @@ export default class Veranstaltung {
       this.unterkunft.fillFromUI(object.unterkunft);
     }
     if (object.vertrag) {
-      this.state.vertrag = this.vertrag()
-        .fillFromUI(object.vertrag)
-        .toJSON();
+      this.vertrag.fillFromUI(object.vertrag);
     }
     return this;
   }
@@ -219,30 +201,17 @@ export default class Veranstaltung {
   reset(): void {
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
-    delete this.state._id;
-    this.state.id = this.state.id + "copy";
-    this.state.url = this.state.url + "copy";
-    delete this.state.startDate;
-    delete this.state.endDate;
-    delete this.state.reservixID;
-    delete this.state.salesrep;
-    const staff1 = this.state.staff;
-    if (staff1) {
-      delete staff1.techniker;
-      delete staff1.technikerV;
-      delete staff1.kasse;
-      delete staff1.kasseV;
-      delete staff1.mod;
-      delete staff1.merchandise;
-    }
+    this.id = this.id + "copy";
+    this.url = this.url + "copy";
+    this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
+    this.endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
+    this.reservixID = undefined;
+    this.staff = new Staff();
   }
 
   associateSalesreport(salesreport?: Salesreport): void {
     if (salesreport) {
-      this.state.salesrep = salesreport.state;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      delete this.state.salesrep._id;
+      this.salesreport = salesreport;
     }
   }
 
@@ -254,25 +223,6 @@ export default class Veranstaltung {
     return "/vertrag/" + encodeURIComponent(this.url);
   }
 
-  // subobjects
-
-  undefinedOrValue<T>(value?: T): T | undefined {
-    return value && !R.isEmpty(value) ? value : undefined;
-  }
-
-  salesreport(): Salesreport | null {
-    if (this.state.salesrep) {
-      return new Salesreport(this.state.salesrep);
-    }
-    return null;
-  }
-
-  vertrag(): Vertrag {
-    return new Vertrag(this.undefinedOrValue(this.state.vertrag));
-  }
-
-  // end subobjects
-
   // Money - GEMA - Reservix
 
   kostenGesamtEUR(): number {
@@ -280,7 +230,7 @@ export default class Veranstaltung {
   }
 
   einnahmenGesamtEUR(): number {
-    return this.salesreport()?.nettoUmsatz() || 0 + this.kasse.einnahmeTicketsEUR;
+    return this.salesreport?.netto || 0 + this.kasse.einnahmeTicketsEUR;
   }
 
   dealAbsolutEUR(): number {
@@ -392,7 +342,7 @@ export default class Veranstaltung {
   }
 
   einnahmenEintrittEUR(): number {
-    return this.kasse.einnahmeTicketsEUR + (this.salesreport()?.bruttoUmsatz() || 0);
+    return this.kasse.einnahmeTicketsEUR + (this.salesreport?.brutto || 0);
   }
 
   eintrittGema(): string {
@@ -403,7 +353,7 @@ export default class Veranstaltung {
   }
 
   anzahlBesucher(): number {
-    return this.kasse.anzahlBesucherAK + (this.salesreport()?.anzahlRegulaer() || 0);
+    return this.kasse.anzahlBesucherAK + (this.salesreport?.anzahl || 0);
   }
 
   // iCal

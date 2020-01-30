@@ -246,7 +246,7 @@ export function addRoutesTo(app: express.Express): void {
       if (!veranstaltung) {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
-      return userstore.forId(veranstaltung.staff.kasseV()[0], (err1: Error | null, user: User) => {
+      return userstore.forId(veranstaltung.staff.kasseV[0], (err1: Error | null, user: User) => {
         const kassierer = user && user.name;
         app.render(
           "pdf/kassenzettel",
@@ -311,7 +311,7 @@ export function addRoutesTo(app: express.Express): void {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
 
-      veranstaltung.kasse().freigabeErfolgtDurch(res.locals.accessrights.member().name);
+      veranstaltung.kasse.freigabeErfolgtDurch(res.locals.accessrights.member().name);
       return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
         if (err1) {
           return next(err1);
@@ -334,7 +334,7 @@ export function addRoutesTo(app: express.Express): void {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
 
-      veranstaltung.kasse().freigabeRueckgaengig();
+      veranstaltung.kasse.freigabeRueckgaengig();
       return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
         if (err1) {
           return next(err1);
@@ -405,7 +405,7 @@ export function addRoutesTo(app: express.Express): void {
               }
             }
             if (fields.typ[0] === "vertrag") {
-              if (!veranstaltung.vertrag().updateDatei(dateiname)) {
+              if (!veranstaltung.vertrag.updateDatei(dateiname)) {
                 return res.send({
                   error: "Datei schon vorhanden. Bitte Seite neu laden."
                 });
@@ -452,7 +452,7 @@ export function addRoutesTo(app: express.Express): void {
         veranstaltung.presse.removeImage(filename);
       }
       if (body.typ === "vertrag") {
-        veranstaltung.vertrag().removeDatei(filename);
+        veranstaltung.vertrag.removeDatei(filename);
       }
       if (body.typ === "rider") {
         veranstaltung.technik.removeDateirider(filename);

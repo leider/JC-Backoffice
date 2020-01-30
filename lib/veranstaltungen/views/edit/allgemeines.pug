@@ -22,7 +22,7 @@ block title
 block content
   - var artist = veranstaltung.artist;
   - var kopf = veranstaltung.kopf;
-  - var vertrag = veranstaltung.vertrag();
+  - var vertrag = veranstaltung.vertrag;
   - var kosten = veranstaltung.kosten;
   - var eintrittspreise = veranstaltung.eintrittspreise;
 
@@ -130,20 +130,20 @@ block content
           +legendMitBody('vertrag', 'Vertrag')
             .row
               .col-md-6
-                +singleselect('vertrag[art]', 'Art', vertrag.art(), Vertrag.arten())
+                +singleselect('vertrag[art]', 'Art', vertrag.art, Vertrag.arten())
               .col-md-6
-                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache(), ['Deutsch', 'Englisch', 'Regional'])
+                +singleselect('vertrag[sprache]', 'Sprache', vertrag.sprache, Vertrag.sprachen())
             if user && (accessrights.isBookingTeam())
               .row
                 .col-12
                   a.btn.btn-primary.float-right(
-                    href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache(),
+                    href=veranstaltung.fullyQualifiedUrlForVertrag() + '/' + vertrag.sprache,
                     title="Vertrag generieren"
                   )
                     | Vertrag generieren
             .row
               .col-12
-                +uploader('vertragupload', 'Datei', null, vertrag.datei(), {id: veranstaltung.id, typ: 'vertrag'})
+                +uploader('vertragupload', 'Datei', null, vertrag.datei, {id: veranstaltung.id, typ: 'vertrag'})
 
 block head
   link(rel="stylesheet", href="/stylesheets/bootstrap-datepicker3.css")

@@ -9,39 +9,41 @@ export interface ReservixState {
   datum?: Date;
 }
 
-export default class Salesreport {
+export default class Salesreport implements ReservixState {
   private now = new DatumUhrzeit(); // lebt nur kurz!
-  state: ReservixState;
-  constructor(object: ReservixState) {
-    this.state = object;
-  }
 
-  id(): string {
-    return this.state.id;
-  }
+  id = "";
+  anzahl = 0;
+  brutto = 0;
+  netto = 0;
+  updated?: Date;
+  datum?: Date;
 
-  anzahlRegulaer(): number {
-    return this.state.anzahl || 0;
+  constructor(object?: ReservixState) {
+    if (object) {
+      this.id = object.id;
+      this.anzahl = object.anzahl || 0;
+      this.brutto = object.brutto || 0;
+      this.netto = object.netto || 0;
+      this.updated = object.updated;
+      this.datum = object.datum;
+    }
   }
-
-  bruttoUmsatz(): number {
-    return this.state.brutto || 0;
-  }
-
-  nettoUmsatz(): number {
-    return this.state.netto || 0;
+  toJSON(): ReservixState {
+    delete this.now;
+    return this;
   }
 
   gebuehren(): number {
-    return this.bruttoUmsatz() - this.nettoUmsatz();
+    return this.brutto - this.netto;
   }
 
-  updated(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.state.updated || new Date());
+  zuletztAktualisiert(): DatumUhrzeit {
+    return DatumUhrzeit.forJSDate(this.updated || new Date());
   }
 
   istVeraltet(): boolean {
-    const lastUpdated = this.updated();
+    const lastUpdated = this.zuletztAktualisiert();
     return (
       !this.istVergangen() &&
       (this.beginntInZwoelfStunden()
@@ -51,11 +53,11 @@ export default class Salesreport {
   }
 
   startDatumUhrzeit(): DatumUhrzeit {
-    return DatumUhrzeit.forJSDate(this.state.datum || new Date());
+    return DatumUhrzeit.forJSDate(this.datum || new Date());
   }
 
   istVergangen(): boolean {
-    if (!this.state.datum || this.state.datum.getTime() === 0) {
+    if (!this.datum || this.datum.getTime() === 0) {
       return false;
     }
     return this.startDatumUhrzeit()
@@ -64,7 +66,7 @@ export default class Salesreport {
   }
 
   beginntInZwoelfStunden(): boolean {
-    if (!this.state.datum) {
+    if (!this.datum) {
       return false;
     }
     return this.startDatumUhrzeit()

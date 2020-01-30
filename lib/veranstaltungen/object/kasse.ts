@@ -77,7 +77,7 @@ export default class Kasse implements KasseRaw {
   }
 
   constructor(object?: KasseRaw) {
-    if (object) {
+    if (object && Object.keys(object).length !== 0) {
       this.anfangsbestandEUR = object.anfangsbestandEUR;
       this.ausgabeBankEUR = object.ausgabeBankEUR;
       this.ausgabeCateringEUR = object.ausgabeCateringEUR;
