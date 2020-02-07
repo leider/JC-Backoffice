@@ -167,7 +167,15 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
       });
       expect(emailEvent.email()).to.eql("andreas@andreas.as");
       expect(emailEvent.body()).to.eql(
-        'Hallo Irgendwer\nHier eine automatische Erinnerungsmail, dass Deine Aufgabe "Irgendwas" bis zum 13. Dezember 2020 erledigt sein soll.\n\nVielen Dank für Deine Arbeit und Unterstützung,\nDer Backoffice-Mailautomat vom Jazzclub'
+        `Irgendwer,
+
+hier eine automatische Erinnerungsmail:
+Irgendwas
+
+Vielen Dank für Deine Arbeit und Unterstützung,
+Damit alles reibungslos klappt, sollte dies bis zum 13. Dezember 2020 erledigt sein.
+
+Danke & keep swingin'`
       );
     });
   });

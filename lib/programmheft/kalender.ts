@@ -113,11 +113,15 @@ export class EmailEvent {
   }
 
   body(): string {
-    return `Hallo ${this.event.wer}
-Hier eine automatische Erinnerungsmail, dass Deine Aufgabe "${this.event.was}" bis zum ${this.start().tagMonatJahrLang} erledigt sein soll.
+    return `${this.event.wer},
+
+hier eine automatische Erinnerungsmail:
+${this.event.was}
 
 Vielen Dank für Deine Arbeit und Unterstützung,
-Der Backoffice-Mailautomat vom Jazzclub`;
+Damit alles reibungslos klappt, sollte dies bis zum ${this.start().tagMonatJahrLang} erledigt sein.
+
+Danke & keep swingin'`;
   }
 }
 
