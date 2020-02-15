@@ -40,7 +40,7 @@ function secureAgainstClickjacking(req: express.Request, res: express.Response, 
 function serverpathRemover(req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.removeServerpaths = (msg: string): string => {
     // find the path that comes before node_modules or lib:
-    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC_Backoffice\/lib)\/)/.exec(msg);
+    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC-Backoffice\/lib)\/)/.exec(msg);
     if (pathToBeRemoved) {
       return msg.replace(new RegExp(pathToBeRemoved[0], "g"), "");
     }

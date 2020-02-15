@@ -69,7 +69,8 @@ mixin editHeader(veranstaltung, section, readonly)
           h2(class=`text-${section}`) #{veranstaltung.kopf.titel} <br>
             small(class=`text-${section}`) am #{veranstaltung.datumForDisplayShort()}
         else
-          h2(class=`text-${section}`) Neue Veranstaltung
+          h2.text-ausgaben Neue oder kopierte Veranstaltung <br>
+            small.text-ausgaben Denk daran, alle Felder zu überprüfen und auszufüllen
       +tabsFor(veranstaltung, section)
       .tab-content
         .tab-pane.show.active

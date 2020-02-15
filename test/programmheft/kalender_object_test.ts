@@ -144,9 +144,10 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
     const kalender = new Kalender({
       id: "2020/12",
       text:
-        "Was | Wer | Farbe | Wann | Email | Tage vorher\n" +
-        "Irgendwas | Irgendwer | Green   | 11.12.2020 | \n" +
-        "Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14\n"
+        `Was | Anrede | Farbe | Wann | Email | Tage vorher
+Irgendwas | Irgendwer | Green   | 11.12.2020 | 
+Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
+`
     });
     const sendeDatum = DatumUhrzeit.forISOString("2020-11-29");
 

@@ -22,7 +22,7 @@ interface VeranstaltungRaw {
   id?: string;
   startDate: Date;
   endDate: Date;
-  url: string;
+  url?: string;
   reservixID?: string;
 
   agentur?: KontaktRaw;
@@ -65,12 +65,10 @@ export interface VeranstaltungUI {
 }
 
 export default class Veranstaltung implements VeranstaltungRaw {
-  //state: VeranstaltungRaw = { startDate: new Date(), endDate: new Date(), url: "" };
-
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
-  url = "";
+  url? = "";
   reservixID?: string;
 
   agentur = new Kontakt();
@@ -199,14 +197,13 @@ export default class Veranstaltung implements VeranstaltungRaw {
   }
 
   reset(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    this.id = this.id + "copy";
-    this.url = this.url + "copy";
+    this.id = undefined;
+    this.url = undefined;
     this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
     this.endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
     this.reservixID = undefined;
     this.staff = new Staff();
+    this.kopf.confirmed = false;
   }
 
   associateSalesreport(salesreport?: Salesreport): void {
@@ -216,11 +213,11 @@ export default class Veranstaltung implements VeranstaltungRaw {
   }
 
   fullyQualifiedUrl(): string {
-    return "/veranstaltungen/" + encodeURIComponent(this.url);
+    return "/veranstaltungen/" + encodeURIComponent(this.url || "");
   }
 
   fullyQualifiedUrlForVertrag(): string {
-    return "/vertrag/" + encodeURIComponent(this.url);
+    return "/vertrag/" + encodeURIComponent(this.url || "");
   }
 
   // Money - GEMA - Reservix

@@ -67,6 +67,7 @@ export function addRoutesTo(app: express.Express): void {
       return res.redirect("/");
     }
 
+
     return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
       if (err) {
         return next(err);
@@ -75,11 +76,17 @@ export function addRoutesTo(app: express.Express): void {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
       veranstaltung.reset();
-      return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
-        if (err1) {
-          return next(err1);
+
+      return optionenService.optionenUndOrte((err: Error | null, optionen: OptionValues, orte: Orte) => {
+        if (err) {
+          return next(err);
         }
-        return res.redirect("/veranstaltungen/" + veranstaltung.url + "/allgemeines");
+        return res.render("edit/allgemeines", {
+          veranstaltung: veranstaltung,
+          optionen,
+          orte,
+          Vertrag
+        });
       });
     });
   });
