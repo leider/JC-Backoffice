@@ -2,7 +2,8 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
   Soulcafé: { color: "soulcafe", icon: "flaticon-play text-soulcafe" },
   JazzClassix: { color: "classix", icon: "flaticon-music-1 text-classix" },
   JamSession: { color: "session", icon: "flaticon-people text-session" },
-  JazzFestival: { color: "festival", icon: "flaticon-shapes text-festival" }
+  JazzFestival: { color: "festival", icon: "flaticon-shapes text-festival" },
+  Kooperation: { color: "kooperation", icon: "flaticon-shapes text-kooperation" }
 };
 
 export default {

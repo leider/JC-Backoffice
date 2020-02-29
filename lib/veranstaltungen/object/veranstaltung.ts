@@ -227,7 +227,7 @@ export default class Veranstaltung implements VeranstaltungRaw {
   }
 
   einnahmenGesamtEUR(): number {
-    return this.salesreport?.netto || 0 + this.kasse.einnahmeTicketsEUR;
+    return this.salesreport?.netto || this.kasse.einnahmeTicketsEUR;
   }
 
   dealAbsolutEUR(): number {
