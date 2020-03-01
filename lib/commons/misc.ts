@@ -10,26 +10,6 @@ export default class Misc {
     return !!number || number === 0;
   }
 
-  static toObject2(Constructor: any, callback: Function, err: Error | null, jsobject?: object): void {
-    if (err) {
-      return callback(err);
-    }
-    if (jsobject) {
-      return callback(null, Constructor.fromJSON(jsobject));
-    }
-    return callback(null, null);
-  }
-
-  static toObjectList2(Constructor: any, callback: Function, err: Error | null, jsobjects: object[]): void {
-    if (err) {
-      return callback(err);
-    }
-    return callback(
-      null,
-      jsobjects.map(each => Constructor.fromJSON(each))
-    );
-  }
-
   static toObject(Constructor: any, callback: Function, err: Error | null, jsobject?: object): void {
     if (err) {
       return callback(err);

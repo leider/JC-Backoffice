@@ -1,6 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
-type MailRuleRaw = {
+type MailRuleUI = {
   id: string;
   name: string;
   email: string;
@@ -159,11 +159,11 @@ export default class MailRule {
   email = "";
   rule: Rule = "";
 
-  static fromJSON(object: MailRuleRaw): MailRule {
+  static fromJSON(object: MailRuleUI): MailRule {
     return new MailRule(object);
   }
 
-  toJSON(): MailRuleRaw {
+  toJSON(): any {
     return Object.assign({}, this);
   }
 
@@ -171,14 +171,13 @@ export default class MailRule {
     return rules;
   }
 
-  constructor(object: MailRuleRaw = { id: "", name: "", email: "", rule: "" }) {
-    this.id = object.id;
-    this.name = object.name;
-    this.email = object.email;
-    this.rule = object.rule;
+  constructor(object?: any) {
+    if (object) {
+      Object.assign(this, object);
+    }
   }
 
-  fillFromUI(object: MailRuleRaw): MailRule {
+  fillFromUI(object: MailRuleUI): MailRule {
     Object.assign(this, object);
     if (!this.id) {
       this.id = encodeURIComponent(this.name + this.email + this.rule);

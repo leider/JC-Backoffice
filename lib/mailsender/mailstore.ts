@@ -6,11 +6,11 @@ import pers from "../persistence/persistence";
 const persistence = pers("mailstore");
 
 function toMailRule(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(MailRule, callback, err, jsobject);
+  return misc.toObject(MailRule, callback, err, jsobject);
 }
 
 function toMailRuleList(callback: Function, err: Error | null, jsobjects: object[]): void {
-  return misc.toObjectList2(MailRule, callback, err, jsobjects);
+  return misc.toObjectList(MailRule, callback, err, jsobjects);
 }
 
 export default {

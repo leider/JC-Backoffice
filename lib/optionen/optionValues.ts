@@ -20,58 +20,35 @@ export type Preisprofil = {
 
 export default class OptionValues {
   id = "instance";
-  hotelpreise: Hotelpreise[];
-  genres: string[];
-  typen: string[];
-  kooperationen: string[];
-  backlineJazzclub: string[];
-  backlineRockshop: string[];
-  artists: string[];
-  agenturen: KontaktUI[];
-  hotels: KontaktUI[];
+  hotelpreise: Hotelpreise[] = [];
+  genres: string[] = [];
+  typen: string[] = [];
+  kooperationen: string[] = [];
+  backlineJazzclub: string[] = [];
+  backlineRockshop: string[] = [];
+  artists: string[] = [];
+  agenturen: KontaktUI[] = [];
+  hotels: KontaktUI[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(object?: any): OptionValues {
-    return Object.assign(
-      new OptionValues(
-        object.hotelpreise,
-        object.genres,
-        object.typen,
-        object.kooperationen,
-        object.backlineJazzclub,
-        object.backlineRockshop,
-        object.artists,
-        object.agenturen,
-        object.hotels
-      ),
-      object
-    );
+    return new OptionValues(object);
   }
 
   toJSON(): object {
     return Object.assign({}, this);
   }
 
-  constructor(
-    hotelpreise: Hotelpreise[],
-    genres: string[],
-    typen: string[],
-    kooperationen: string[],
-    backlineJazzclub: string[],
-    backlineRockshop: string[],
-    artists: string[],
-    agenturen: KontaktUI[],
-    hotels: KontaktUI[]
-  ) {
-    this.hotelpreise = hotelpreise;
-    this.genres = genres;
-    this.typen = sortByNameCaseInsensitive(typen);
-    this.kooperationen = sortByNameCaseInsensitive(kooperationen);
-    this.backlineJazzclub = sortByNameCaseInsensitive(backlineJazzclub);
-    this.backlineRockshop = sortByNameCaseInsensitive(backlineRockshop);
-    this.artists = sortByNameCaseInsensitive(artists);
-    this.agenturen = agenturen;
-    this.hotels = hotels;
+  constructor(object?: any) {
+    if (object) {
+      Object.assign(this, object, {
+        typen: sortByNameCaseInsensitive(object.typen),
+        kooperationen: sortByNameCaseInsensitive(object.kooperationen),
+        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub),
+        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop),
+        artists: sortByNameCaseInsensitive(object.artists)
+      });
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

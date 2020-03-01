@@ -91,7 +91,7 @@ app.post("/submitEmailAddresses", (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      return res.redirect("/");
+      return res.redirect("/mailsender/emailAddresses");
     });
   });
 });

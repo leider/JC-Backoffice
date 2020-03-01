@@ -3,32 +3,38 @@ import { KopfUI } from "../veranstaltungen/object/kopf";
 
 const sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop("name")));
 
-interface Kopf {
-  flaeche: string;
-  ort: string;
-}
-
-interface Ort {
-  name: string;
-  flaeche: string;
+class Ort {
+  name = "";
+  flaeche = "";
   presseIn?: string;
   pressename?: string;
+
+  constructor(object?: any) {
+    if (object) {
+      delete object._csrf; // Altlast
+      Object.assign(this, object);
+    }
+  }
+  update(object: any): void {
+    this.name = object.name;
+    this.flaeche = object.flaeche;
+    this.presseIn = object.presseIn;
+    this.pressename = object.pressename;
+  }
 }
 
 export default class Orte {
   id = "orte";
-  orte: Ort[];
-
-  static fromJSON(object: { orte: Ort[] }): Orte {
-    return new Orte(object);
-  }
+  orte: Ort[] = [];
 
   toJSON(): object {
     return Object.assign({}, this);
   }
 
-  constructor(object: { orte: Ort[] }) {
-    this.orte = sortByNameCaseInsensitive(object.orte || []);
+  constructor(object?: any) {
+    if (object && object.orte) {
+      this.orte = sortByNameCaseInsensitive((object.orte || []).map((o: any) => new Ort(o)));
+    }
   }
 
   alleNamen(): string[] {
@@ -39,13 +45,13 @@ export default class Orte {
     return this.orte.find(ort => ort.name === name);
   }
 
-  addOrt(object: Ort & { oldname?: string }): void {
+  addOrt(object: any & { oldname?: string }): void {
     delete object.oldname;
     if (this.forName(object.name)) {
       this.updateOrt(object.name, object);
       return;
     }
-    this.orte.push(object);
+    this.orte.push(new Ort(object));
     this.orte = sortByNameCaseInsensitive(this.orte);
   }
 
@@ -55,15 +61,12 @@ export default class Orte {
     }
   }
 
-  updateOrt(name: string, object: Ort): void {
+  updateOrt(name: string, object: any): void {
     const ort = this.forName(name);
     if (!ort) {
       return;
     }
-    ort.name = object.name;
-    ort.flaeche = object.flaeche;
-    ort.presseIn = object.presseIn;
-    ort.pressename = object.pressename;
+    ort.update(object);
   }
 
   updateFlaeche(kopf: KopfUI): void {

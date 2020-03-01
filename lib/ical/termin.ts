@@ -2,14 +2,6 @@ import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 export type TerminType = "Sonstiges" | "Feiertag" | "Ferien" | "Vermietung";
 
-export type TerminRaw = {
-  id: string;
-  beschreibung?: string;
-  typ: TerminType;
-  startDate?: Date;
-  endDate?: Date;
-};
-
 export type TerminEvent = {
   color: string;
   start: string;
@@ -33,11 +25,13 @@ export default class Termin {
   startDate: Date = new DatumUhrzeit().toJSDate;
   endDate: Date = this.startDate;
 
-  static fromJSON(object?: TerminRaw): Termin {
-    return Object.assign(new Termin(), object);
+  constructor(object?: any) {
+    if (object) {
+      Object.assign(this, object);
+    }
   }
 
-  toJSON(): TerminRaw {
+  toJSON(): any {
     return Object.assign({}, this);
   }
 

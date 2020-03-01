@@ -2,28 +2,42 @@ import R from "ramda";
 
 import Termin, { TerminType } from "../ical/termin";
 
-interface Ical {
+class Ical {
   oldname?: string;
-  name: string;
-  url: string;
-  typ: TerminType;
+  name = "";
+  url = "";
+  typ: TerminType = "Sonstiges";
+
+  constructor(object?: any) {
+    if (object) {
+      Object.assign(this, object);
+    }
+  }
+
+  update(object: any) {
+    this.name = object.name;
+    this.url = object.url;
+    this.typ = object.typ;
+  }
 }
 
-interface FerienIcalsRaw {
-  id: string;
-  icals: Ical[];
-}
 type CalSource = string | { color: string; url: string };
 
 export default class FerienIcals {
   id = "ferienIcals";
   icals: Ical[] = [];
 
-  static fromJSON(object?: FerienIcalsRaw): FerienIcals {
-    return Object.assign(new FerienIcals(), object);
+  static fromJSON(object?: any): FerienIcals {
+    return new FerienIcals(object);
   }
 
-  toJSON(): FerienIcalsRaw {
+  constructor(object?: any) {
+    if (object && object.icals) {
+      this.icals = (object.icals || []).map((each: any) => new Ical(each));
+    }
+  }
+
+  toJSON(): any {
     return Object.assign({}, this);
   }
 
@@ -31,12 +45,12 @@ export default class FerienIcals {
     return this.icals.find(ical => ical.name === name);
   }
 
-  addIcal(object: Ical): void {
+  addIcal(object: any): void {
     delete object.oldname;
     if (this.forName(object.name)) {
       this.updateIcal(object.name, object);
     } else {
-      this.icals.push(object);
+      this.icals.push(new Ical(object));
     }
   }
 
@@ -46,14 +60,12 @@ export default class FerienIcals {
     }
   }
 
-  updateIcal(oldname: string, object: Ical): void {
+  updateIcal(oldname: string, object: any): void {
     const ical = this.forName(oldname);
     if (!ical) {
       return;
     }
-    ical.name = object.name;
-    ical.url = object.url;
-    ical.typ = object.typ;
+    ical.update(object);
   }
 
   forCalendar(): Array<CalSource> {

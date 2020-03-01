@@ -9,19 +9,19 @@ import Orte from "./orte";
 import FerienIcals from "./ferienIcals";
 
 function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(OptionValues, callback, err, jsobject);
+  return misc.toObject(OptionValues, callback, err, jsobject);
 }
 
 function toEmailAddresses(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(EmailAddresses, callback, err, jsobject);
+  return misc.toObject(EmailAddresses, callback, err, jsobject);
 }
 
 function toOrte(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(Orte, callback, err, jsobject);
+  return misc.toObject(Orte, callback, err, jsobject);
 }
 
 function toIcals(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(FerienIcals, callback, err, jsobject);
+  return misc.toObject(FerienIcals, callback, err, jsobject);
 }
 
 export default {
