@@ -1,6 +1,6 @@
 import misc from "../../commons/misc";
 
-export interface ArtistRaw {
+interface ArtistRaw {
   bandname: string;
   name: string[];
   numMusiker: number;
@@ -20,7 +20,7 @@ export interface ArtistUI {
   brauchtHotel?: string;
 }
 
-export default class Artist implements  ArtistRaw {
+export default class Artist {
   bandname = "";
   name: string[] = [];
   numMusiker = 1;
@@ -29,19 +29,16 @@ export default class Artist implements  ArtistRaw {
   isAusland = false;
   brauchtHotel = false;
 
-  toJSON(): ArtistRaw {
-    return this;
+  toJSON(): {} {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: ArtistRaw) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.bandname = object.bandname;
-      this.name = misc.toArray(object.name); // legacy, was text before
-      this.numMusiker = object.numMusiker;
-      this.numCrew = object.numCrew;
-      this.isBawue = object.isBawue;
-      this.isAusland = object.isAusland;
-      this.brauchtHotel = object.brauchtHotel;
+      Object.assign(this, object, {
+        name: misc.toArray(object.name) // legacy, was text before
+      });
     }
   }
 

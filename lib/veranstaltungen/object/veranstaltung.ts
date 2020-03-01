@@ -4,41 +4,19 @@ import fieldHelpers from "../../commons/fieldHelpers";
 import Renderer from "../../commons/renderer";
 import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
-import Artist, { ArtistRaw, ArtistUI } from "./artist";
-import Eintrittspreise, { EintrittspreiseRaw, EintrittspreiseUI } from "./eintrittspreise";
-import Kasse, { KasseRaw, KasseUI } from "./kasse";
-import Kontakt, { KontaktRaw, KontaktUI } from "./kontakt";
-import Kopf, { KopfRaw, KopfUI } from "./kopf";
-import Kosten, { KostenRaw, KostenUI } from "./kosten";
-import Presse, { PresseRaw, PresseUI } from "./presse";
-import Staff, { StaffRaw, StaffUI } from "./staff";
-import Technik, { TechnikRaw, TechnikUI } from "./technik";
-import Unterkunft, { UnterkunftRaw, UnterkunftUI } from "./unterkunft";
-import Vertrag, { VertragRaw } from "./vertrag";
-import Salesreport, { ReservixState } from "../../reservix/salesreport";
+import Artist, { ArtistUI } from "./artist";
+import Eintrittspreise, { EintrittspreiseUI } from "./eintrittspreise";
+import Kasse, { KasseUI } from "./kasse";
+import Kontakt, { KontaktUI } from "./kontakt";
+import Kopf, { KopfUI } from "./kopf";
+import Kosten, { KostenUI } from "./kosten";
+import Presse, { PresseUI } from "./presse";
+import Staff, { StaffUI } from "./staff";
+import Technik, { TechnikUI } from "./technik";
+import Unterkunft, { UnterkunftUI } from "./unterkunft";
+import Vertrag, { VertragUI } from "./vertrag";
+import Salesreport from "../../reservix/salesreport";
 import { Hotelpreise } from "../../optionen/optionValues";
-
-interface VeranstaltungRaw {
-  id?: string;
-  startDate: Date;
-  endDate: Date;
-  url?: string;
-  reservixID?: string;
-
-  agentur?: KontaktRaw;
-  artist?: ArtistRaw;
-  eintrittspreise?: EintrittspreiseRaw | Eintrittspreise;
-  hotel?: KontaktRaw;
-  kasse?: KasseRaw;
-  kopf?: KopfRaw;
-  kosten?: KostenRaw;
-  presse?: PresseRaw;
-  staff?: StaffRaw;
-  technik?: TechnikRaw;
-  unterkunft?: UnterkunftRaw;
-  vertrag?: VertragRaw;
-  salesrep?: ReservixState;
-}
 
 export interface VeranstaltungUI {
   id?: string;
@@ -60,11 +38,11 @@ export interface VeranstaltungUI {
   staff?: StaffUI;
   technik?: TechnikUI;
   unterkunft?: UnterkunftUI;
-  vertrag?: VertragRaw;
+  vertrag?: VertragUI;
   hotelpreise?: Hotelpreise;
 }
 
-export default class Veranstaltung implements VeranstaltungRaw {
+export default class Veranstaltung {
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
@@ -86,56 +64,45 @@ export default class Veranstaltung implements VeranstaltungRaw {
 
   unterkunft: Unterkunft;
 
-  static fromJSON(object: VeranstaltungRaw): Veranstaltung {
-    return new Veranstaltung(object);
-  }
-
-  toJSON(): VeranstaltungRaw {
-    const result = {} as VeranstaltungRaw;
-    result.id = this.id;
-    result.startDate = this.startDate;
-    result.endDate = this.endDate;
-    result.url = this.url;
-    result.reservixID = this.reservixID;
-
-    result.agentur = this.agentur.toJSON();
-    result.artist = this.artist.toJSON();
-    result.eintrittspreise = this.eintrittspreise.toJSON();
-    result.hotel = this.hotel.toJSON();
-    result.kasse = this.kasse.toJSON();
-    result.kopf = this.kopf.toJSON();
-    result.kosten = this.kosten.toJSON();
-    result.presse = this.presse.toJSON();
-    result.salesrep = this.salesreport.toJSON();
-    result.staff = this.staff.toJSON();
-    result.technik = this.technik.toJSON();
-    result.unterkunft = this.unterkunft.toJSON();
-    result.vertrag = this.vertrag.toJSON();
+  toJSON(): {} {
+    const result = {};
+    Object.assign(result, this, {
+      agentur: this.agentur.toJSON(),
+      artist: this.artist.toJSON(),
+      eintrittspreise: this.eintrittspreise.toJSON(),
+      hotel: this.hotel.toJSON(),
+      kasse: this.kasse.toJSON(),
+      kopf: this.kopf.toJSON(),
+      kosten: this.kosten.toJSON(),
+      presse: this.presse.toJSON(),
+      salesrep: this.salesreport.toJSON(),
+      staff: this.staff.toJSON(),
+      technik: this.technik.toJSON(),
+      unterkunft: this.unterkunft.toJSON(),
+      vertrag: this.vertrag.toJSON()
+    });
     return result;
   }
 
-  constructor(object?: VeranstaltungRaw) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(object?: any) {
     if (object) {
-      this.id = object.id;
-      this.startDate = object.startDate;
-      this.endDate = object.endDate;
-      this.url = object.url;
-      this.reservixID = object.reservixID;
-
-      this.kopf = new Kopf(object.kopf);
-
-      this.agentur = new Kontakt(object.agentur);
-      this.artist = new Artist(object.artist);
-      this.eintrittspreise = new Eintrittspreise(object.eintrittspreise as EintrittspreiseRaw);
-      this.hotel = new Kontakt(object.hotel);
-      this.kasse = new Kasse(object.kasse);
-      this.kosten = new Kosten(object.kosten);
-      this.presse = new Presse(object.presse);
-      this.salesreport = new Salesreport(object.salesrep);
-      this.staff = new Staff(object.staff);
-      this.technik = new Technik(object.technik);
+      delete object._id;
+      Object.assign(this, object, {
+        kopf: new Kopf(object.kopf),
+        agentur: new Kontakt(object.agentur),
+        artist: new Artist(object.artist),
+        eintrittspreise: new Eintrittspreise(object.eintrittspreise),
+        hotel: new Kontakt(object.hotel),
+        kasse: new Kasse(object.kasse),
+        kosten: new Kosten(object.kosten),
+        presse: new Presse(object.presse),
+        salesreport: new Salesreport(object.salesrep),
+        staff: new Staff(object.staff),
+        technik: new Technik(object.technik),
+        vertrag: new Vertrag(object.vertrag)
+      });
       this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit(), this.artist.name);
-      this.vertrag = new Vertrag(object.vertrag);
     } else {
       this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit(), this.artist.name);
     }

@@ -1,15 +1,5 @@
 import { Preisprofil } from "../../optionen/optionValues";
 
-export interface EintrittspreiseRaw {
-  preisprofil?: Preisprofil;
-  regulaer?: number;
-  rabattErmaessigt?: number;
-  rabattMitglied?: number;
-  erwarteteBesucher: number;
-  zuschuss: number;
-  frei?: boolean;
-}
-
 export interface EintrittspreiseUI {
   preisprofil: string;
   erwarteteBesucher?: string;
@@ -17,40 +7,36 @@ export interface EintrittspreiseUI {
 }
 
 export default class Eintrittspreise {
-  preisprofil = {
-    name: "Freier Eintritt",
-    regulaer: 0,
-    rabattErmaessigt: 0,
-    rabattMitglied: 0
-  };
+  preisprofil: Preisprofil = { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
   erwarteteBesucher = 0;
   zuschuss = 0;
 
-  toJSON(): Eintrittspreise {
-    return this;
+  static preisprofilAlt(object: any): any {
+    if (object.frei) {
+      return { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
+    }
+    return {
+      name: "Individuell (Alt)",
+      regulaer: object.regulaer || 0,
+      rabattErmaessigt: object.rabattErmaessigt || 0,
+      rabattMitglied: object.rabattMitglied || 0
+    };
   }
 
-  constructor(object?: EintrittspreiseRaw) {
+  toJSON(): any {
+    return Object.assign({}, this);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       if (!object.preisprofil) {
-        this.preisprofil = object.frei
-          ? {
-              name: "Freier Eintritt",
-              regulaer: 0,
-              rabattErmaessigt: 0,
-              rabattMitglied: 0
-            }
-          : {
-              name: "Individuell (Alt)",
-              regulaer: object.regulaer || 0,
-              rabattErmaessigt: object.rabattErmaessigt || 0,
-              rabattMitglied: object.rabattMitglied || 0
-            };
+        this.preisprofil = Eintrittspreise.preisprofilAlt(object);
       } else {
-        this.preisprofil = object.preisprofil;
-        this.erwarteteBesucher = object.erwarteteBesucher;
-        this.zuschuss = object.zuschuss;
+        this.preisprofil = Object.assign({}, object.preisprofil);
       }
+      this.erwarteteBesucher = object.erwarteteBesucher || 0;
+      this.zuschuss = object.zuschuss || 0;
     }
   }
 

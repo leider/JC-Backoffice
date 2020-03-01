@@ -3,14 +3,6 @@ import configure from "../../commons/simpleConfigure";
 
 const prefix = configure.get("publicUrlPrefix");
 
-export interface PresseRaw {
-  originalText: string;
-  text: string;
-  image: string[];
-  checked: boolean;
-  jazzclubURL: string;
-}
-
 export interface PresseUI {
   originalText?: string;
   text?: string;
@@ -19,24 +11,22 @@ export interface PresseUI {
   jazzclubURL?: string;
 }
 
-export default class Presse implements PresseRaw {
-  originalText= "";
+export default class Presse {
+  originalText = "";
   text = "";
   image: string[] = [];
   checked = false;
   jazzclubURL = "";
 
-  toJSON(): PresseRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: PresseRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.originalText = object.originalText;
-      this.text = object.text;
-      this.image = misc.toArray(object.image);
-      this.checked = object.checked;
-      this.jazzclubURL = object.jazzclubURL;
+      Object.assign(this, object, {
+        image: misc.toArray(object.image)
+      });
     }
   }
 

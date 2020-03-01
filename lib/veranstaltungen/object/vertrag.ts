@@ -3,13 +3,13 @@ import misc from "../../commons/misc";
 export type Sprache = "Deutsch" | "Englisch" | "Regional";
 export type Vertragsart = "Jazzclub" | "Agentur/Künstler" | "JazzClassix";
 
-export interface VertragRaw {
+export interface VertragUI {
   art: Vertragsart;
   sprache: Sprache;
   datei: string[];
 }
 
-export default class Vertrag implements VertragRaw {
+export default class Vertrag {
   art: Vertragsart = "Jazzclub";
   sprache: Sprache = "Deutsch";
   datei: string[] = [];
@@ -22,19 +22,19 @@ export default class Vertrag implements VertragRaw {
     return ["Deutsch", "Englisch", "Regional"];
   }
 
-  toJSON(): VertragRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: VertragRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.art = object.art;
-      this.sprache = object.sprache;
-      this.datei = misc.toArray(object.datei);
+      Object.assign(this, object, {
+        datei: misc.toArray(object.datei)
+      });
     }
   }
 
-  fillFromUI(object: VertragRaw): Vertrag {
+  fillFromUI(object: VertragUI): Vertrag {
     this.art = object.art;
     this.sprache = object.sprache;
     return this;

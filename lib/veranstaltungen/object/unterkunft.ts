@@ -8,23 +8,6 @@ function parseToDate(dateString: string, timeString?: string): Date | null {
   return null;
 }
 
-export interface UnterkunftRaw {
-  einzelNum: number;
-  doppelNum: number;
-  suiteNum: number;
-  einzelEUR: number;
-  doppelEUR: number;
-  suiteEUR: number;
-  transportEUR: number;
-  kommentar: string;
-  transportText: string;
-  sonstiges: string[];
-  angefragt: boolean;
-  bestaetigt: boolean;
-  anreiseDate: Date;
-  abreiseDate: Date;
-}
-
 export interface UnterkunftUI {
   anreiseDate: string;
   abreiseDate: string;
@@ -42,7 +25,7 @@ export interface UnterkunftUI {
   bestaetigt: string;
 }
 
-export default class Unterkunft implements UnterkunftRaw {
+export default class Unterkunft {
   einzelNum = 0;
   doppelNum = 0;
   suiteNum = 0;
@@ -60,32 +43,23 @@ export default class Unterkunft implements UnterkunftRaw {
 
   private veranstaltungstagAsDatumUhrzeit: DatumUhrzeit;
 
-  toJSON(): UnterkunftRaw {
-    delete this.veranstaltungstagAsDatumUhrzeit;
-    return this;
+  toJSON(): any {
+    const result = Object.assign({}, this);
+    delete result.veranstaltungstagAsDatumUhrzeit;
+    return result;
   }
 
-  constructor(object: UnterkunftRaw | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
+  constructor(object: any | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
     if (object && Object.keys(object).length !== 0) {
-      this.einzelNum = object.einzelNum;
-      this.doppelNum = object.doppelNum;
-      this.suiteNum = object.suiteNum;
-      this.einzelEUR = object.einzelEUR;
-      this.doppelEUR = object.doppelEUR;
-      this.suiteEUR = object.suiteEUR;
-      this.transportEUR = object.transportEUR;
-      this.transportText = object.transportText;
-      this.kommentar = object.kommentar || kuenstlerListe.join("\r\n");
-      this.sonstiges = misc.toArray(object.sonstiges);
-      this.angefragt = object.angefragt;
-      this.bestaetigt = object.bestaetigt;
-      this.anreiseDate = object.anreiseDate;
-      this.abreiseDate = object.abreiseDate;
+      Object.assign(this, object, {
+        kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
+        sonstiges: misc.toArray(object.sonstiges)
+      });
+      this.anreiseDate = object.anreiseDate || veranstaltungstagAsDatumUhrzeit.toJSDate;
+      this.abreiseDate = object.abreiseDate || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     } else {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
-      this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({
-        tage: 1
-      }).toJSDate;
+      this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     }
     this.veranstaltungstagAsDatumUhrzeit = veranstaltungstagAsDatumUhrzeit;
   }

@@ -4,29 +4,6 @@ function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
 }
 
-export interface KasseRaw {
-  anfangsbestandEUR: number;
-  ausgabeBankEUR: number;
-  ausgabeCateringEUR: number;
-  ausgabeGageEUR: number;
-  ausgabeHelferEUR: number;
-  ausgabeSonstiges1EUR: number;
-  ausgabeSonstiges2EUR: number;
-  ausgabeSonstiges3EUR: number;
-  einnahmeBankEUR: number;
-  einnahmeSonstiges1EUR: number;
-  einnahmeTicketsEUR: number;
-  einnahmeSonstiges2EUR: number;
-  ausgabeSonstiges1Text: string;
-  ausgabeSonstiges2Text: string;
-  ausgabeSonstiges3Text: string;
-  einnahmeSonstiges1Text: string;
-  einnahmeSonstiges2Text: string;
-  anzahlBesucherAK: number | string;
-  kassenfreigabe?: string;
-  kassenfreigabeAm?: Date;
-}
-
 export interface KasseUI {
   anfangsbestandEUR: string;
   ausgabeBankEUR: string;
@@ -50,7 +27,7 @@ export interface KasseUI {
   kassenfreigabeAm?: Date;
 }
 
-export default class Kasse implements KasseRaw {
+export default class Kasse {
   anfangsbestandEUR = 0;
   ausgabeBankEUR = 0;
   ausgabeCateringEUR = 0;
@@ -72,33 +49,15 @@ export default class Kasse implements KasseRaw {
   kassenfreigabe? = "";
   kassenfreigabeAm? = new Date();
 
-  toJSON(): KasseRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: KasseRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.anfangsbestandEUR = object.anfangsbestandEUR;
-      this.ausgabeBankEUR = object.ausgabeBankEUR;
-      this.ausgabeCateringEUR = object.ausgabeCateringEUR;
-      this.ausgabeGageEUR = object.ausgabeGageEUR;
-      this.ausgabeHelferEUR = object.ausgabeHelferEUR;
-      this.ausgabeSonstiges1EUR = object.ausgabeSonstiges1EUR;
-      this.ausgabeSonstiges2EUR = object.ausgabeSonstiges2EUR;
-      this.ausgabeSonstiges3EUR = object.ausgabeSonstiges3EUR;
-      this.einnahmeBankEUR = object.einnahmeBankEUR;
-      this.einnahmeSonstiges1EUR = object.einnahmeSonstiges1EUR;
-      this.einnahmeTicketsEUR = object.einnahmeTicketsEUR;
-      this.einnahmeSonstiges2EUR = object.einnahmeSonstiges2EUR;
-      this.ausgabeSonstiges1Text = object.ausgabeSonstiges1Text;
-      this.ausgabeSonstiges2Text = object.ausgabeSonstiges2Text;
-      this.ausgabeSonstiges3Text = object.ausgabeSonstiges3Text;
-      this.einnahmeSonstiges1Text = object.ausgabeSonstiges1Text;
-      this.einnahmeSonstiges2Text = object.ausgabeSonstiges2Text;
-      this.anzahlBesucherAK =
-        typeof object.anzahlBesucherAK === "string" ? Number.parseInt(object.anzahlBesucherAK) : object.anzahlBesucherAK;
-      this.kassenfreigabe = object.kassenfreigabe;
-      this.kassenfreigabeAm = object.kassenfreigabeAm;
+      Object.assign(this, object, {
+        anzahlBesucherAK: typeof object.anzahlBesucherAK === "string" ? Number.parseInt(object.anzahlBesucherAK) : object.anzahlBesucherAK
+      });
     }
   }
 

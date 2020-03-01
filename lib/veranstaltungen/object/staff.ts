@@ -4,25 +4,13 @@ import User from "../../users/user";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
 
-interface StaffTypeCollections {
+export interface StaffUI {
   techniker: string[];
   technikerV: string[];
   merchandise: string[];
   kasse: string[];
   kasseV: string[];
   mod: string[];
-}
-
-export interface StaffRaw extends StaffTypeCollections {
-  technikerNotNeeded: boolean;
-  technikerVNotNeeded: boolean;
-  kasseNotNeeded: boolean;
-  kasseVNotNeeded: boolean;
-  modNotNeeded: boolean;
-  merchandiseNotNeeded: boolean;
-}
-
-export interface StaffUI extends StaffTypeCollections {
   technikerNotNeeded?: string;
   technikerVNotNeeded?: string;
   kasseNotNeeded?: string;
@@ -46,25 +34,22 @@ export default class Staff {
   merchandiseNotNeeded = false;
   mitarbeiterTransient?: { [p: string]: User[] };
 
-  toJSON(): StaffRaw {
-    delete this.mitarbeiterTransient;
-    return this;
+  toJSON(): any {
+    const result = Object.assign({}, this);
+    delete result.mitarbeiterTransient;
+    return result;
   }
 
-  constructor(object?: StaffRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.techniker = object.techniker || [];
-      this.technikerV = object.technikerV || [];
-      this.kasse = object.kasse || [];
-      this.kasseV = object.kasseV || [];
-      this.merchandise = object.merchandise || [];
-      this.mod = object.mod || [];
-      this.technikerNotNeeded = object.technikerNotNeeded;
-      this.technikerVNotNeeded = object.technikerVNotNeeded;
-      this.kasseNotNeeded = object.kasseNotNeeded;
-      this.kasseVNotNeeded = object.kasseVNotNeeded;
-      this.modNotNeeded = object.modNotNeeded;
-      this.merchandiseNotNeeded = object.merchandiseNotNeeded;
+      Object.assign(this, object, {
+        techniker: object.techniker || [],
+        technikerV: object.technikerV || [],
+        kasse: object.kasse || [],
+        kasseV: object.kasseV || [],
+        merchandise: object.merchandise || [],
+        mod: object.mod || []
+      });
     }
   }
 

@@ -2,18 +2,19 @@ import R from "ramda";
 
 import misc from "../commons/misc";
 import winston from "winston";
-const logger = winston.loggers.get("transactions");
 import pers from "../persistence/persistence";
-const persistence = pers("veranstaltungenstore");
 import Veranstaltung from "./object/veranstaltung";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
+const logger = winston.loggers.get("transactions");
+const persistence = pers("veranstaltungenstore");
+
 function toVeranstaltung(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject2(Veranstaltung, callback, err, jsobject);
+  return misc.toObject(Veranstaltung, callback, err, jsobject);
 }
 
 function toVeranstaltungenList(callback: Function, err: Error | null, jsobjects: object[]): void {
-  return misc.toObjectList2(Veranstaltung, callback, err, jsobjects);
+  return misc.toObjectList(Veranstaltung, callback, err, jsobjects);
 }
 
 function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: object, callback: Function): void {

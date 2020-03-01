@@ -47,7 +47,6 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
-      coverage: ["coverage", "coverageWithDB"],
       public: ["public/clientscripts", "public/fonts", "public/img/bootstrap-colorpicker", "public/images", "public/stylesheets"],
       compiledTypescript: ["lib/**/*.js*", "test/**/*.js*", "start.js*", "app.js*", "configure.js*", "initWinston.js*"],
       options: { force: true }
@@ -126,33 +125,14 @@ module.exports = function(grunt) {
       }
     },
 
-    mocha_istanbul: {
+    mochacli: {
+      options: {
+        exit: true,
+        reporter: "dot",
+        timeout: 6000
+      },
       test: {
-        src: "test",
-        options: {
-          coverageFolder: "coverage",
-          timeout: 6000,
-          slow: 100,
-          mask: "**/*.js",
-          root: "lib",
-          reporter: "dot",
-          check: {
-            lines: 35,
-            statements: 35
-          },
-          mochaOptions: ["--exit"]
-        }
-      }
-    },
-    istanbul_check_coverage: {
-      server: {
-        options: {
-          coverageFolder: "coverage*",
-          check: {
-            lines: 81,
-            statements: 77
-          }
-        }
+        src: "test/**/*.js"
       }
     },
     pug: {
@@ -166,6 +146,22 @@ module.exports = function(grunt) {
         files: {
           "frontendtests/fixtures/forms.html": "frontendtests/fixtures/forms.pug"
         }
+      }
+    },
+    puglint: {
+      standard: {
+        options: {
+          disallowAttributeInterpolation: true,
+          disallowDuplicateAttributes: true,
+          disallowLegacyMixinCall: true,
+          disallowTemplateString: true,
+          requireClassLiteralsBeforeAttributes: true,
+          requireIdLiteralsBeforeAttributes: true,
+          requireLowerCaseTags: true,
+          requireStrictEqualityOperators: true,
+          validateAttributeQuoteMarks: '"'
+        },
+        src: ["lib/**/*.pug"]
       }
     },
     ts: {
@@ -185,11 +181,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-sassjs");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-eslint");
-  grunt.loadNpmTasks("grunt-mocha-istanbul");
   grunt.loadNpmTasks("grunt-ts");
+  grunt.loadNpmTasks("grunt-mocha-cli");
+  grunt.loadNpmTasks("grunt-puglint");
 
-  grunt.registerTask("prepare", ["eslint", "clean", "copy"]);
-  grunt.registerTask("tests", ["eslint", "ts", "mocha_istanbul"]);
+  grunt.registerTask("prepare", ["eslint", "puglint", "clean", "copy"]);
+  grunt.registerTask("tests", ["prepare", "ts", "mochacli", "clean:compiledTypescript"]);
   grunt.registerTask("deploy_development", ["prepare", "sass", "cssmin", "uglify:development_de"]);
   grunt.registerTask("css_only", ["prepare", "sass", "cssmin"]);
 

@@ -164,28 +164,28 @@ export interface Lineobject {
 }
 
 export function loadSalesreports(optionalDateString: string | null, callback: Function): void {
-  requester(loginURL, (err, resp, body): void => {
+  requester(loginURL, (err, resp, body): request.Request => {
     if (err) {
       return callback(err);
     }
     const $ = cheerio.load(body.toString());
     $("#id_mitarbeiterpw").val(username as string);
     const inputs = prepareInputsForPost($("#login input"), $);
-    return request.post(
-      // @ts-ignore
-      { url: $("#login").attr("action"), formData: inputs },
-      (err1: Error | null, resp1: Response): void => {
-        if (err1) {
-          callback(err1);
-        } else {
-          openWelcomePage(
-            // @ts-ignore
-            baseURL + resp1.headers.location,
-            optionalDateString,
-            callback
-          );
-        }
+    const url = $("#login").attr("action");
+    if (url === undefined) {
+      return callback("Problem beim LAden von REservix");
+    }
+    return request.post(url, { formData: inputs }, (err1, resp1) => {
+      if (err1) {
+        callback(err1);
+      } else {
+        openWelcomePage(
+          // @ts-ignore
+          baseURL + resp1.headers.location,
+          optionalDateString,
+          callback
+        );
       }
-    );
+    });
   });
 }

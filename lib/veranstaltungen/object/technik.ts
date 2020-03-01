@@ -18,7 +18,7 @@ export interface TechnikUI {
   fluegel?: string;
 }
 
-export default class Technik implements TechnikRaw {
+export default class Technik {
   dateirider: string[] = [];
   technikAngebot1?: string;
   backlineJazzclub: string[] = [];
@@ -26,18 +26,15 @@ export default class Technik implements TechnikRaw {
   checked = false;
   fluegel = false;
 
-  toJSON(): TechnikRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: TechnikRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.dateirider = object.dateirider || [];
-      this.backlineJazzclub = object.backlineJazzclub;
-      this.backlineRockshop = object.backlineRockshop;
-      this.checked = object.checked;
-      this.fluegel = object.fluegel;
-      this.technikAngebot1 = object.technikAngebot1;
+      Object.assign(this, object, {
+        dateirider: object.dateirider || []
+      });
     }
   }
 

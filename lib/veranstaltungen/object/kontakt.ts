@@ -1,11 +1,3 @@
-export interface KontaktRaw {
-  name: string;
-  ansprechpartner: string;
-  telefon: string;
-  email: string;
-  adresse: string;
-}
-
 export interface KontaktUI {
   auswahl: string;
   name: string;
@@ -15,7 +7,7 @@ export interface KontaktUI {
   adresse: string;
 }
 
-export default class Kontakt implements KontaktRaw {
+export default class Kontakt {
   adresse = "";
   ansprechpartner = "";
   email = "";
@@ -23,20 +15,15 @@ export default class Kontakt implements KontaktRaw {
   telefon = "";
   auswahl = "";
 
-  toJSON(): KontaktRaw {
-    const result = new Kontakt() ;
-    Object.assign(result, this);
+  toJSON(): any {
+    const result = Object.assign({}, this);
     delete result.auswahl;
     return result;
   }
 
-  constructor(object?: KontaktRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.adresse = object.adresse;
-      this.ansprechpartner = object.ansprechpartner;
-      this.email = object.email;
-      this.name = object.name;
-      this.telefon = object.telefon;
+      Object.assign(this, object);
     }
   }
 

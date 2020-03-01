@@ -7,20 +7,6 @@ function floatAmount(textWithNumberOrNull?: string | null): number {
 const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 const deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
 
-export interface KostenRaw {
-  backlineEUR: number;
-  saalmiete: number;
-  technikAngebot1EUR: number;
-  gagenEUR: number;
-  werbung1: number;
-  werbung2: number;
-  werbung3: number;
-  personal: number;
-  gagenSteuer: string | null;
-  deal: string | null;
-  gageBAR: boolean;
-}
-
 export interface KostenUI {
   backlineEUR?: string;
   saalmiete?: string;
@@ -48,23 +34,13 @@ export default class Kosten {
   deal: string | null = null;
   gageBAR = false;
 
-  toJSON(): KostenRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: KostenRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.backlineEUR = object.backlineEUR;
-      this.saalmiete = object.saalmiete;
-      this.technikAngebot1EUR = object.technikAngebot1EUR;
-      this.gagenEUR = object.gagenEUR;
-      this.werbung1 = object.werbung1;
-      this.werbung2 = object.werbung2;
-      this.werbung3 = object.werbung3;
-      this.personal = object.personal;
-      this.gagenSteuer = object.gagenSteuer;
-      this.deal = object.deal;
-      this.gageBAR = object.gageBAR;
+      Object.assign(this, object);
     }
   }
 

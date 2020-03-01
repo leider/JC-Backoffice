@@ -1,19 +1,5 @@
 import Renderer from "../../commons/renderer";
 
-export interface KopfRaw {
-  beschreibung: string;
-  eventTyp: string;
-  flaeche: string;
-  kooperation: string;
-  ort: string;
-  titel: string;
-  pressename: string;
-  presseIn: string;
-  genre: string;
-  confirmed: boolean;
-  rechnungAnKooperation: boolean;
-}
-
 export interface KopfUI {
   beschreibung?: string;
   eventTyp?: string;
@@ -28,7 +14,7 @@ export interface KopfUI {
   rechnungAnKooperation?: string;
 }
 
-export default class Kopf implements KopfRaw {
+export default class Kopf {
   beschreibung = "";
   eventTyp = "";
   flaeche = "";
@@ -41,23 +27,13 @@ export default class Kopf implements KopfRaw {
   confirmed = false;
   rechnungAnKooperation = false;
 
-  toJSON(): KopfRaw {
-    return this;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 
-  constructor(object?: KopfRaw) {
+  constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      this.beschreibung = object.beschreibung;
-      this.eventTyp = object.eventTyp;
-      this.flaeche = object.flaeche;
-      this.kooperation = object.kooperation;
-      this.ort = object.ort;
-      this.titel = object.titel;
-      this.pressename = object.pressename;
-      this.presseIn = object.presseIn;
-      this.genre = object.genre;
-      this.confirmed = object.confirmed;
-      this.rechnungAnKooperation = object.rechnungAnKooperation;
+      Object.assign(this, object);
     }
   }
 
