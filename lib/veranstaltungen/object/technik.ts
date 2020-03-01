@@ -1,14 +1,5 @@
 import misc from "../../commons/misc";
 
-export interface TechnikRaw {
-  dateirider: string[];
-  technikAngebot1?: string;
-  backlineJazzclub: string[];
-  backlineRockshop: string[];
-  checked: boolean;
-  fluegel: boolean;
-}
-
 export interface TechnikUI {
   dateirider?: string[];
   technikAngebot1?: string;

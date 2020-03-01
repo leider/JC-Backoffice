@@ -1,15 +1,5 @@
 import misc from "../../commons/misc";
 
-interface ArtistRaw {
-  bandname: string;
-  name: string[];
-  numMusiker: number;
-  numCrew: number;
-  isBawue: boolean;
-  isAusland: boolean;
-  brauchtHotel: boolean;
-}
-
 export interface ArtistUI {
   bandname?: string;
   name?: string[];
