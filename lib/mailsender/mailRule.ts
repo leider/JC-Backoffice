@@ -4,27 +4,9 @@ type MailRuleUI = {
   id: string;
   name: string;
   email: string;
-  rule: Rule;
+  rule: string;
 };
 
-type Rule =
-  | ""
-  | "Mittwochs für die nächste Woche"
-  | "Am 5. den Folgemonat"
-  | "Am 5. zwei Folgemonate"
-  | "Am 16. den Folgemonat ab 15."
-  | "Montags die Folgewoche ab Freitag"
-  | "Montags die übernächste Folgewoche";
-
-const rules: Rule[] = [
-  "",
-  "Mittwochs für die nächste Woche",
-  "Am 5. den Folgemonat",
-  "Am 5. zwei Folgemonate",
-  "Am 16. den Folgemonat ab 15.",
-  "Montags die Folgewoche ab Freitag",
-  "Montags die übernächste Folgewoche"
-];
 
 interface RuleLogic {
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean;
@@ -145,6 +127,7 @@ class RuleLogic6 implements RuleLogic {
 }
 
 const logicArray: { [index: string]: RuleLogic } = {
+  "": new RuleLogicEmpty(),
   "Mittwochs für die nächste Woche": new RuleLogic1(),
   "Am 5. den Folgemonat": new RuleLogic2(),
   "Am 5. zwei Folgemonate": new RuleLogic3(),
@@ -153,11 +136,14 @@ const logicArray: { [index: string]: RuleLogic } = {
   "Montags die übernächste Folgewoche": new RuleLogic6()
 };
 
+export const allMailrules: string[] = Object.keys(logicArray);
+
+
 export default class MailRule {
   id = "";
   name = "";
   email = "";
-  rule: Rule = "";
+  rule = "";
 
   static fromJSON(object: MailRuleUI): MailRule {
     return new MailRule(object);
@@ -165,10 +151,6 @@ export default class MailRule {
 
   toJSON(): any {
     return Object.assign({}, this);
-  }
-
-  static rules(): Rule[] {
-    return rules;
   }
 
   constructor(object?: any) {
@@ -185,8 +167,8 @@ export default class MailRule {
     return this;
   }
 
-  rules(): Rule[] {
-    return MailRule.rules();
+  rules(): string[] {
+    return allMailrules;
   }
 
   fullyQualifiedUrl(): string {
