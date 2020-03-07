@@ -18,7 +18,7 @@ mixin panelView(groupedVeranstaltungen)
                 h6 #{veranstaltung.datumForDisplayShort()}
                 h6 #{kopf.presseInEcht()}
                 h5 #{kopf.titel}
-            | !{veranstaltung.renderedPresseText()}
+            | !{Renderer.render(veranstaltung.presse.text)}
 
 block title
   | Programmheft #{date}

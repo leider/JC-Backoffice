@@ -25,10 +25,11 @@ import Salesreport from "../reservix/salesreport";
 
 import { addRoutesTo } from "./indexDetails";
 import FerienIcals from "../optionen/ferienIcals";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
-const uploadDir = path.join(__dirname, "../../public/upload");
+const uploadDir = path.join(__dirname, "../../static/upload");
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 

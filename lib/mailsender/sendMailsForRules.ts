@@ -10,6 +10,7 @@ import Message from "./message";
 import mailtransport from "./mailtransport";
 import MailRule from "./mailRule";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import conf from "../commons/simpleConfigure";
 
 export function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function): void {
   const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
@@ -23,7 +24,7 @@ Liebe Grüße vom Jazzclub Team.`;
     const startAndEndDay = rule.startAndEndDay(now);
 
     function sendMail(selected: Veranstaltung[], callbackInner: Function): void {
-      const markdownToSend = markdownForRules + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail()).join("\n\n---\n");
+      const markdownToSend = markdownForRules + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
       const message = new Message({
         subject: rule.subject(now),
         markdown: markdownToSend

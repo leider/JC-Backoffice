@@ -1,0 +1,347 @@
+<template lang="pug">
+div
+  b-navbar(fixed="top", toggleable="lg", type="dark", variant="dark")
+    b-navbar-brand(href="/")
+      img(src="/img/logo_weiss.png", alt="Jazzclub")
+    b-nav-toggle(target="nav-collapse")
+    b-collapse#nav-collapse.align-self-end(is-nav)
+      b-navbar-nav
+        b-nav-item(v-if="showItem", href="/veranstaltungen/zukuenftige")
+          i.far.fa-calendar-alt.fa-fw.fa-lg
+          span &nbsp;Veranstaltungen&nbsp;
+        b-nav-item(v-if="showItem", data-jcnav="programmheft", href="/programmheft")
+          i.far.fa-newspaper.fa-fw.fa-lg
+          span &nbsp;Programmheft&nbsp;
+        b-nav-item-dropdown(v-if="showItem", data-jcnav="optionen")
+          template(v-slot:button-content)
+            i.fas.fa-cogs.fa-fw.fa-lg
+            span &nbsp;Optionen
+          b-dropdown-item(href="/optionen") Optionen
+          b-dropdown-item(href="/optionen/orte") Orte
+          b-dropdown-item(href="/optionen/icals") Ferienkalender
+          b-dropdown-item(href="/ical/termine") Termine
+          b-dropdown-item(href="/optionen/kassenbericht") Kassenberichte
+        b-nav-item(v-if="showItem", data-jcnav="gema", href="/gema")
+          i.fas.fa-chart-pie.fa-fw.fa-lg
+          span &nbsp;GEMA
+        b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="mailsender")
+          template(v-slot:button-content)
+            i.fas.fa-envelope.fa-fw.fa-lg
+            span &nbsp;Mails
+          b-dropdown-item(href="/mailsender") Regeln
+          b-dropdown-item(href="/mailsender/compose") Manuell
+          b-dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
+        b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="users")
+          template(v-slot:button-content)
+            i.fas.fa-users.fa-fw.fa-lg
+            span &nbsp;User
+          b-dropdown-item(href="/users") Bearbeiten / Anlegen
+          b-dropdown-item(href="/users/rundmail") Rundmail
+          b-dropdown-item(href="/users/mailinglisten") Mailinglisten
+        b-nav-item(data-jcnav="teamseite", href="/teamseite")
+          i.far.fa-hand-paper.fa-fw.fa-lg
+          | &nbsp;Team&nbsp;
+        b-nav-item-dropdown(data-jcnav="wiki")
+          template(v-slot:button-content)
+            i.fas.fa-book.fa-fw.fa-lg
+            span &nbsp;Wiki&nbsp;
+          b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :href="`/wiki/${subdir}/`") {{subdir}}
+      b-navbar-nav.ml-auto
+        b-nav-item-dropdown(v-if="user", right)
+          template(v-slot:button-content)
+            i.fas.fa-user.fa-fw.fa-lg
+            span &nbsp;Profil
+          b-dropdown-item(:href="`/users/changePassword/${user.id}`")
+            i.fas.fa-key.fa-fw.fa-lg
+            | &nbsp;Passwort ändern
+          b-dropdown-item(href="/logout")
+            i.fas.fa-sign-out-alt.fa-fw.fa-lg
+            | &nbsp;Abmelden
+
+  .container-fluid.p-0.p-md-auto
+    .row.main
+      router-view
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import { currentUser, wikisubdirs } from "@/commons/loader";
+import Accessrights from "../lib/commons/accessrights";
+import User from "../lib/users/user";
+
+@Component({})
+export default class App extends Vue {
+  private user: User = new User({});
+  private wikisubdirs = ["a", "b"];
+
+  created() {
+    currentUser((user: any) => {
+      user.accessrights = new Accessrights(user);
+      this.user = user;
+    });
+
+    wikisubdirs((subdirs: string[]) => {
+      this.wikisubdirs = subdirs;
+    });
+  }
+
+  get showItem() {
+    return this.user?.accessrights?.isOrgaTeam;
+  }
+
+  get showItemSuperuser() {
+    return this.user?.accessrights?.isSuperuser;
+  }
+}
+</script>
+
+<style lang="scss">
+@import "~rfs/scss";
+@import "../frontend/sass/jc-variables";
+@import "~bootstrap";
+@import "~bootstrap-vue/src/index.scss";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+
+@import "~@fortawesome/fontawesome-free/css/all.css";
+// colors
+$color-ausgaben1: #d50f36;
+
+$color-kasse1: #9185be;
+
+$color-allgemein1: #05498c;
+
+$color-hotel1: #66267b;
+
+$color-sonst1: #009285;
+
+$color-ausgaben2: #f07f31;
+
+$color-kasse2: #dea71f;
+
+$color-allgemein2: #4faee3;
+
+$color-hotel2: #e50069;
+
+$color-sonst2: #95c22e;
+
+$color-festival: #9fc442;
+
+$jc_colors: (
+  "classix": $color-allgemein2,
+  "concert": $gray-600,
+  "ausgaben": $color-ausgaben1,
+  "festival": $color-festival,
+  "allgemeines": $color-allgemein1,
+  "hotel": $color-hotel1,
+  "kasse": $color-kasse1,
+  "technik": $color-sonst1,
+  "presse": $color-sonst2,
+  "session": $color-kasse2,
+  "soulcafe": $color-ausgaben2,
+  "staff": $color-kasse2,
+  "copy": theme-color("secondary")
+);
+
+.btn-presse {
+  color: $yiq-text-light !important;
+}
+
+@mixin color-variant($color) {
+  background-color: $color !important;
+  border-color: $color !important;
+  color: #ffffff !important;
+}
+
+@mixin border-variant($color) {
+  background-color: #ffffff !important;
+  border-color: $color !important;
+  color: inherit !important;
+}
+
+@each $color, $value in $jc_colors {
+  .border-#{$color} {
+    @include border-variant($value);
+  }
+  .color-#{$color} {
+    @include color-variant($value);
+  }
+  .text-#{$color} {
+    color: $value;
+  }
+  .tab-#{$color} {
+    color: $value;
+    border-color: $value !important;
+    border: 1px solid;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+  }
+  .btn-#{$color} {
+    @include button-variant($value, darken($value, 5%));
+  }
+}
+
+.logo-festival {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-image: url("/img/Festival_Icon.png");
+  height: 20px;
+  width: 24px;
+  margin: 3px;
+}
+
+.color-reservix {
+  @include color-variant(#f8500d);
+}
+
+.logo-reservix {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-image: url("/img/rex_14x14.png");
+  height: 14px;
+  width: 14px;
+}
+
+.color-geplant {
+  color: red !important;
+}
+
+.main {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media print {
+  .btn {
+    display: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: none !important;
+  }
+
+  a[href]:after {
+    content: "" !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .popover {
+    max-width: 450px;
+  }
+  .page-header {
+    margin-top: 30px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .fixed-top {
+    position: relative !important;
+  }
+}
+
+a.inherit-color {
+  color: inherit !important;
+}
+
+label {
+  font-weight: $font-weight-bold;
+}
+
+.fc-day-grid-event .fc-content {
+  /* force events to be one-line tall */
+  white-space: inherit !important;
+}
+
+// wiki page compare *BEGIN*
+.compare {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+}
+
+.compare td {
+  padding: 0 3px;
+  border-top-width: 0;
+}
+
+.compare .gd {
+  background-color: #ffdddd;
+}
+
+.compare .gc {
+  color: #999999;
+  background-color: #eaf2f5;
+}
+
+.compare .gi {
+  background-color: #ddffdd;
+}
+
+.compare .ln {
+  color: #999999;
+  background-color: #eaf2f5;
+  text-align: right;
+  border-bottom-color: transparent;
+}
+
+// wiki page compare *END*
+
+.blau {
+  color: #118be8;
+}
+
+h1 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h2 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h3 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h4 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h5 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+h6 > small {
+  display: inline-block;
+  color: $text-muted;
+}
+
+// transform fullcalendar's primary to light button
+.fc-right .btn-primary {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.abc-checkbox label {
+  padding-top: 2px;
+}
+
+// patch bootstrap btn
+.btn {
+  white-space: nowrap;
+}
+</style>

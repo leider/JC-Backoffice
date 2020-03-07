@@ -3,15 +3,15 @@ import mailstore from "./mailstore";
 import optionenService from "../optionen/optionenService";
 import store from "../veranstaltungen/veranstaltungenstore";
 import optionenstore from "../optionen/optionenstore";
-
-import misc from "../commons/misc";
+import conf from "../commons/simpleConfigure";
 import MailRule from "./mailRule";
 import Message from "./message";
 import mailtransport from "./mailtransport";
 import EmailAddresses from "../optionen/emailAddresses";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 app.get("/", (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
@@ -139,7 +139,7 @@ app.post("/send", (req, res, next) => {
       }
       const event = Object.keys(req.body.event);
       const selected = veranstaltungen.filter(veranst => event.includes(veranst.id || ""));
-      const markdownToSend = req.body.markdown + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail()).join("\n\n---\n");
+      const markdownToSend = req.body.markdown + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
       const message = new Message({
         subject: req.body.subject,
         markdown: markdownToSend

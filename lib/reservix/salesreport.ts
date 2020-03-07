@@ -1,12 +1,13 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
+import Misc from "../commons/misc";
 
 export interface ReservixState {
   id: string;
   anzahl?: number;
   brutto?: number;
   netto?: number;
-  updated?: Date;
-  datum?: Date;
+  updated?: Date | string;
+  datum?: Date | string;
 }
 
 export default class Salesreport implements ReservixState {
@@ -25,8 +26,8 @@ export default class Salesreport implements ReservixState {
       this.anzahl = object.anzahl || 0;
       this.brutto = object.brutto || 0;
       this.netto = object.netto || 0;
-      this.updated = object.updated;
-      this.datum = object.datum;
+      this.updated = Misc.stringOrDateToDate(object.updated);
+      this.datum = Misc.stringOrDateToDate(object.datum);
     }
   }
   toJSON(): ReservixState {

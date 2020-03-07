@@ -1,14 +1,13 @@
 import express from "express";
 import store from "../veranstaltungen/veranstaltungenstore";
-import misc from "../commons/misc";
 import puppeteerPrinter from "../commons/puppeteerPrinter";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { PDFOptions } from "puppeteer";
-
-const app = misc.expressAppIn(__dirname);
-
 import conf from "../commons/simpleConfigure";
+import { expressAppIn } from "../middleware/expressViewHelper";
+
+const app = expressAppIn(__dirname);
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const printoptions: PDFOptions = {

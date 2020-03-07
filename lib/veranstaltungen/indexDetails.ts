@@ -17,8 +17,9 @@ import Orte from "../optionen/orte";
 import { PDFOptions } from "puppeteer";
 
 import conf from "../commons/simpleConfigure";
-const uploadDir = path.join(__dirname, "../../public/upload");
-const filesDir = path.join(__dirname, "../../public/files");
+import Renderer from "../commons/renderer";
+const uploadDir = path.join(__dirname, "../../static/upload");
+const filesDir = path.join(__dirname, "../../static/files");
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const printoptions: PDFOptions = {
@@ -66,7 +67,6 @@ export function addRoutesTo(app: express.Express): void {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect("/");
     }
-
 
     return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
       if (err) {
@@ -301,7 +301,13 @@ export function addRoutesTo(app: express.Express): void {
       if (!veranstaltung) {
         return res.redirect("/veranstaltungen/zukuenftige");
       }
-      return res.send(veranstaltung.presseTextHTML(req.query.text, req.query.jazzclubURL));
+      const result = Renderer.render(
+        veranstaltung.presseTemplate() +
+          (req.query.text || veranstaltung.presse.text) +
+          "\n\n" +
+          veranstaltung.presse.fullyQualifiedJazzclubURL(req.query.jazzclubURL)
+      );
+      return res.send(result);
     });
   });
 

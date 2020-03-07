@@ -1,6 +1,5 @@
 import express from "express";
-
-import misc from "../commons/misc";
+import misc from "../commons/misc"
 import service from "./usersService";
 import store from "./userstore";
 import Message from "../mailsender/message";
@@ -8,8 +7,9 @@ import mailtransport from "../mailsender/mailtransport";
 import statusmessage from "../commons/statusmessage";
 import Users, { Mailingliste } from "./users";
 import User from "./user";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 function showListe(res: express.Response, next: express.NextFunction, optionalLastSavedUser?: User): void {
   store.allUsers((err: Error | null, users: User[]) => {

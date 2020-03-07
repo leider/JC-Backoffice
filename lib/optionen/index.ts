@@ -1,4 +1,3 @@
-import misc from "../commons/misc";
 import service from "./optionenService";
 import store from "./optionenstore";
 import puppeteerPrinter from "../commons/puppeteerPrinter";
@@ -10,9 +9,10 @@ import FerienIcals from "./ferienIcals";
 import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import Kontakt from "../veranstaltungen/object/kontakt";
+import { expressAppIn } from "../middleware/expressViewHelper";
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 const printoptions: PDFOptions = {
   format: "A4",

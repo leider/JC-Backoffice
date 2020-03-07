@@ -1,13 +1,13 @@
 import R from "ramda";
-import misc from "../commons/misc";
 import store from "./kalenderstore";
 
 import veranstaltungenstore from "../veranstaltungen/veranstaltungenstore";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import Kalender from "./kalender";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 app.get("/", (req, res) => {
   res.redirect(new DatumUhrzeit().naechsterUngeraderMonat.fuerKalenderViews);

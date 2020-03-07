@@ -1,4 +1,5 @@
 import DatumUhrzeit from "../../commons/DatumUhrzeit";
+import Misc from "../../commons/misc";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
@@ -56,6 +57,7 @@ export default class Kasse {
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {
+        kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
         anzahlBesucherAK: typeof object.anzahlBesucherAK === "string" ? Number.parseInt(object.anzahlBesucherAK) : object.anzahlBesucherAK
       });
     }

@@ -1,5 +1,6 @@
 import DatumUhrzeit from "../../commons/DatumUhrzeit";
 import misc from "../../commons/misc";
+import Misc from "../../commons/misc";
 
 function parseToDate(dateString: string, timeString?: string): Date | null {
   if (dateString) {
@@ -55,8 +56,8 @@ export default class Unterkunft {
         kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
         sonstiges: misc.toArray(object.sonstiges)
       });
-      this.anreiseDate = object.anreiseDate || veranstaltungstagAsDatumUhrzeit.toJSDate;
-      this.abreiseDate = object.abreiseDate || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
+      this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) || veranstaltungstagAsDatumUhrzeit.toJSDate;
+      this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     } else {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;

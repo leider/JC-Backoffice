@@ -2,10 +2,10 @@ import express from "express";
 import renderer from "../commons/renderer";
 import wikiService from "./wikiService";
 import statusmessage from "../commons/statusmessage";
-import misc from "../commons/misc";
 import { Metadata } from "./wikiObjects";
 import Diff from "./gitDiff";
 import User from "../users/user";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
 function showPage(
   subdir: string,
@@ -35,7 +35,7 @@ function showPage(
   });
 }
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 // wiki pages
 

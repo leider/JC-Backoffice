@@ -37,7 +37,8 @@ export default {
       if (err || !existingUser) {
         return callback(err);
       }
-      existingUser.updatePassword(password);
+      existingUser.salt = genSalt();
+      existingUser.hashedPassword = hashPassword(password, existingUser.salt);
       return store.save(existingUser, (err1: Error | null) => {
         existingUser.password = password; // to give UI feedback, called after save!
         callback(err1, existingUser);

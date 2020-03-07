@@ -2,7 +2,7 @@
 module.exports = function(grunt) {
   // filesets for uglify
   const files_de = {
-    "public/clientscripts/global.js": [
+    "static/clientscripts/global.js": [
       "node_modules/jquery/dist/jquery.js",
       "node_modules/select2/dist/js/select2.full.js",
       "node_modules/select2/dist/js/i18n/de.js",
@@ -12,25 +12,25 @@ module.exports = function(grunt) {
       "node_modules/bootstrap-select/dist/js/i18n/defaults-de_DE.js",
       "frontend/javascript/jc-backoffice.js"
     ],
-    "public/clientscripts/fullcalendar.min.js": [
+    "static/clientscripts/fullcalendar.min.js": [
       "node_modules/@fullcalendar/core/main.js",
       "node_modules/@fullcalendar/core/locales/de.js",
       "node_modules/@fullcalendar/daygrid/main.js",
       "node_modules/@fullcalendar/bootstrap/main.js"
     ],
-    "public/clientscripts/fileinput.min.js": [
+    "static/clientscripts/fileinput.min.js": [
       "node_modules/bootstrap-fileinput/js/fileinput.js",
       "node_modules/bootstrap-fileinput/js/locales/de.js",
       "node_modules/bootstrap-fileinput/themes/fas/theme.js"
     ],
-    "public/clientscripts/bootstrap-markdown.min.js": [
+    "static/clientscripts/bootstrap-markdown.min.js": [
       "node_modules/bootstrap-markdown/js/bootstrap-markdown.js",
       "node_modules/bootstrap-markdown/locale/bootstrap-markdown.de.js"
     ]
   };
 
   const filesForCss = {
-    "public/stylesheets/screen.css": [
+    "static/stylesheets/screen.css": [
       "frontend/3rd_party_css/flaticon-patched.css",
       "node_modules/select2/dist/css/select2.css",
       "frontend/sass/out/jc-backoffice.css"
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
   };
 
   const filesForFullcalendarCss = {
-    "public/stylesheets/fullcalendar.css": [
+    "static/stylesheets/fullcalendar.css": [
       "node_modules/@fullcalendar/core/main.css",
       "node_modules/@fullcalendar/daygrid/main.css",
       "node_modules/@fullcalendar/bootstrap/main.css"
@@ -47,14 +47,14 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
-      public: ["public/clientscripts", "public/fonts", "public/img/bootstrap-colorpicker", "public/images", "public/stylesheets"],
+      static: ["static/clientscripts", "static/fonts", "static/img/bootstrap-colorpicker", "static/images", "static/stylesheets"],
       compiledTypescript: ["lib/**/*.js*", "test/**/*.js*", "start.js*", "app.js*", "configure.js*", "initWinston.js*"],
       options: { force: true }
     },
     copy: {
       bootstrapFileinputImages: {
         src: "node_modules/bootstrap-fileinput/img/*",
-        dest: "public/img/",
+        dest: "static/img/",
         expand: true,
         flatten: true
       },
@@ -64,25 +64,25 @@ module.exports = function(grunt) {
           "node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min.js",
           "node_modules/simple-timepicker/dist/simple-timepicker.min.js"
         ],
-        dest: "public/clientscripts",
+        dest: "static/clientscripts",
         expand: true,
         flatten: true
       },
       utilCSS: {
         src: ["node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css", "node_modules/bootstrap-fileinput/css/fileinput.css"],
-        dest: "public/stylesheets",
+        dest: "static/stylesheets",
         expand: true,
         flatten: true
       },
       flaticonFONTS: {
         src: ["frontend/additionalIcons/font/*", "!frontend/additionalIcons/font/*css", "!frontend/additionalIcons/font/*html"],
-        dest: "public/fonts",
+        dest: "static/fonts",
         expand: true,
         flatten: true
       },
       fontawesomeFONTS: {
         src: "node_modules/@fortawesome/fontawesome-free/webfonts/*",
-        dest: "public/webfonts",
+        dest: "static/webfonts",
         expand: true,
         flatten: true
       }

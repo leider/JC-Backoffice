@@ -1,7 +1,6 @@
 import express from "express";
 import R from "ramda";
 import async from "async";
-import misc from "../commons/misc";
 import store from "../veranstaltungen/veranstaltungenstore";
 import User from "../users/user";
 import userstore from "../users/userstore";
@@ -11,8 +10,9 @@ import optionenservice from "../optionen/optionenService";
 import conf from "../commons/simpleConfigure";
 import { StaffType } from "../veranstaltungen/object/staff";
 import FerienIcals from "../optionen/ferienIcals";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app: express.Express = misc.expressAppIn(__dirname);
+const app: express.Express = expressAppIn(__dirname);
 
 function addStaff(sectionOfStaff: StaffType, req: express.Request, res: express.Response, next: express.NextFunction): void {
   store.getVeranstaltungForId(req.params.id, (err: Error, veranstaltung: Veranstaltung) => {

@@ -1,48 +1,49 @@
 import express from "express";
 import User from "../users/user";
+import Accessrights from "../commons/accessrights";
 
 export default function accessrights(req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.accessrights = {
-    req,
+    acc: new Accessrights(req.user as User),
 
     member: function member(): User {
-      return this.req.user;
+      return this.acc.member;
     },
 
     memberId: function memberId(): string {
-      return this.member().id;
+      return this.acc.memberId;
     },
 
     gruppen: function gruppen(): string[] {
-      return this.member().gruppen || [];
+      return this.acc.gruppen;
     },
 
     rechte: function rechte(): string[] {
-      return this.member().rechte || [];
+      return this.acc.rechte;
     },
 
     isSuperuser: function isSuperuser(): boolean {
-      return this.gruppen().includes("superusers");
+      return this.acc.isSuperuser;
     },
 
     isBookingTeam: function isBookingTeam(): boolean {
-      return this.isSuperuser() || this.gruppen().includes("bookingTeam");
+      return this.acc.isBookingTeam;
     },
 
     isOrgaTeam: function isOrgaTeam(): boolean {
-      return this.isBookingTeam() || this.gruppen().includes("orgaTeam");
+      return this.acc.isOrgaTeam;
     },
 
     isAbendkasse: function isAbendkasse(): boolean {
-      return this.isSuperuser() || this.isOrgaTeam() || this.gruppen().includes("abendkasse");
+      return this.acc.isAbendkasse;
     },
 
     darfKasseFreigeben: function darfKasseFreigeben(): boolean {
-      return this.isSuperuser() || this.rechte().includes("kassenfreigabe");
+      return this.acc.darfKasseFreigeben;
     },
 
     canEditUser: function canEditUser(userid: string): boolean {
-      return this.isSuperuser() || this.memberId() === userid;
+      return this.acc.canEditUser(userid);
     }
   };
   next();

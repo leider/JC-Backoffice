@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:@typescript-eslint/recommended", "eslint:recommended"],
+  "extends": ["plugin:@typescript-eslint/recommended", "eslint:recommended", "plugin:vue/essential", "@vue/prettier", "@vue/typescript"],
   "parserOptions": {
     "parser": "@typescript-eslint/parser",
     "sourceType": "module",
@@ -10,7 +10,7 @@
     "es6": true
   },
   "rules": {
-    "quotes": [ 2, "double", { "avoidEscape": true }],
+    "quotes": [2, "double", { "avoidEscape": true }],
     "no-sync": 2,
     "no-alert": 2,
     "no-eval": 2,

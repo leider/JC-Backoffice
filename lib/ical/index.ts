@@ -1,4 +1,3 @@
-import misc from "../commons/misc";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import terminstore from "./terminstore";
 import icalService from "./icalService";
@@ -7,8 +6,9 @@ import Termin, { TerminEvent } from "./termin";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 
 function sendCalendarStringNamedToResult(ical: object, filename: string, res: express.Response): void {
   res.type("text/calendar; charset=utf-8");

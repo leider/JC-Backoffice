@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import R from "ramda";
-import express from "express";
-import path from "path";
-import conf from "./simpleConfigure";
+import DatumUhrzeit from "./DatumUhrzeit";
 
 export default class Misc {
   static isNumber(aString: string): boolean {
     const number = Number.parseInt(aString);
     return !!number || number === 0;
+  }
+
+  static stringOrDateToDate(object?: string | Date): Date | undefined {
+    if (!object) {
+      return undefined;
+    }
+    return typeof object === "string" ? DatumUhrzeit.forISOString(object).toJSDate : object;
   }
 
   static toObject(Constructor: any, callback: Function, err: Error | null, jsobject?: object): void {
@@ -41,21 +46,6 @@ export default class Misc {
       return elem.split(",");
     }
     return [elem];
-  }
-
-  static toFullQualifiedUrl(prefix: string, localUrl: string): string {
-    function trimLeadingAndTrailingSlash(string: string): string {
-      return string.replace(/(^\/)|(\/$)/g, "");
-    }
-
-    return conf.get("publicUrlPrefix") + "/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
-  }
-
-  static expressAppIn(directory: string): express.Express {
-    const app = express();
-    app.set("views", path.join(directory, "views"));
-    app.set("view engine", "pug");
-    return app;
   }
 
   static compact<T>(array: T[]): T[] {

@@ -1,7 +1,7 @@
 build/
 *coverage*/
 log/
-public/
+static/
 **/3rd_party_js/
 node_modules
 

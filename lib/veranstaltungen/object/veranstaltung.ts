@@ -1,7 +1,5 @@
 /*eslint no-underscore-dangle: 0 */
-import config from "../../commons/simpleConfigure";
 import fieldHelpers from "../../commons/fieldHelpers";
-import Renderer from "../../commons/renderer";
 import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
 import Artist, { ArtistUI } from "./artist";
@@ -17,6 +15,7 @@ import Unterkunft, { UnterkunftUI } from "./unterkunft";
 import Vertrag, { VertragUI } from "./vertrag";
 import Salesreport from "../../reservix/salesreport";
 import { Hotelpreise } from "../../optionen/optionValues";
+import Misc from "../../commons/misc";
 
 export interface VeranstaltungUI {
   id?: string;
@@ -89,6 +88,8 @@ export default class Veranstaltung {
     if (object) {
       delete object._id;
       Object.assign(this, object, {
+        startDate: Misc.stringOrDateToDate(object.startDate),
+        endDate: Misc.stringOrDateToDate(object.endDate),
         kopf: new Kopf(object.kopf),
         agentur: new Kontakt(object.agentur),
         artist: new Artist(object.artist),
@@ -260,30 +261,20 @@ export default class Veranstaltung {
 `;
   }
 
-  presseTemplateInternal(): string {
+  presseTemplateInternal(prefix: string): string {
     // für interne Mails
-    return `### [${this.kopf.titel}](${config.get("publicUrlPrefix")}${this.fullyQualifiedUrl()}/presse)
+    return `### [${this.kopf.titel}](${prefix}${this.fullyQualifiedUrl()}/presse)
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
 
 `;
   }
 
-  presseTextHTML(optionalText: string, optionalJazzclubURL: string): string {
-    return Renderer.render(
-      this.presseTemplate() + (optionalText || this.presse.text) + "\n\n" + this.presse.fullyQualifiedJazzclubURL(optionalJazzclubURL)
-    );
-  }
-
-  renderedPresseText(): string {
-    return Renderer.render(this.presse.text);
-  }
-
-  presseTextForMail(): string {
+  presseTextForMail(prefix: string): string {
     return (
       this.presseTemplate() +
       this.presse.text +
       "\n\n" +
-      (this.presse.firstImage() ? this.presse.imageURL() : "") +
+      (this.presse.firstImage() ? this.presse.imageURL(prefix) : "") +
       "\n\n" +
       (this.presse.jazzclubURL ? `**URL:** ${this.presse.fullyQualifiedJazzclubURL()}` : "")
     );

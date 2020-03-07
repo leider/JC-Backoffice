@@ -4,18 +4,24 @@ import express from "express";
 import { Server, createServer } from "http";
 import path from "path";
 const appLogger = loggers.get("application");
+const httpLogger = loggers.get("http");
 import configureApp from "./configureApp";
 
 import conf from "./lib/commons/simpleConfigure";
+import handle404 from "./lib/middleware/handle404";
+import handle500 from "./lib/middleware/handle500";
 
 export default class TheApp {
   server!: Server;
 
   create(): express.Express {
     const app = express();
-    app.use(express.static(path.join(__dirname, "public"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
-    //app.use(express.static(path.join(__dirname, 'public'), {maxAge: 60 * 1000})); // one minute
+    app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
+    //app.use(express.static(path.join(__dirname, 'static'), {maxAge: 60 * 1000})); // one minute
     configureApp(app);
+
+    app.use(handle404(httpLogger));
+    app.use(handle500(appLogger));
     return app;
   }
 

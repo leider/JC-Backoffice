@@ -1,7 +1,6 @@
 import express from "express";
 import compress from "compression";
 import bodyparser from "body-parser";
-import history from "connect-history-api-fallback";
 
 import loggers from "./initWinston";
 
@@ -21,20 +20,19 @@ import usersApp from "./lib/users";
 import veranstaltungenApp from "./lib/veranstaltungen";
 import vertragApp from "./lib/vertrag";
 import wikiApp from "./lib/wiki";
+import vueApp from "./lib/vue";
+import history from "connect-history-api-fallback";
 
 import expressViewHelper from "./lib/middleware/expressViewHelper";
 import expressSessionConfigurator from "./lib/middleware/expressSessionConfigurator";
 import passportInitializer from "./lib/middleware/passportInitializer";
 import accessrights from "./lib/middleware/accessrights";
 import addCsrfTokenToLocals from "./lib/middleware/addCsrfTokenToLocals";
-import handle404 from "./lib/middleware/handle404";
-import handle500 from "./lib/middleware/handle500";
 import secureByLogin from "./lib/middleware/secureByLogin";
 import wikiSubdirs from "./lib/middleware/wikiSubdirs";
 import path from "path";
 import { Logger } from "winston";
 
-const appLogger = loggers.get("application");
 const httpLogger = loggers.get("http");
 
 // stream the log messages of express to winston, remove line breaks on message
@@ -80,11 +78,13 @@ export default function(app: express.Express) {
   app.use(serverpathRemover);
   app.set("view engine", "pug");
   app.set("views", path.join(__dirname, "views"));
-  app.use(favicon(path.join(__dirname, "public/", "img/favicon.ico")));
+  app.use(favicon(path.join(__dirname, "static/", "img/favicon.ico")));
   app.use(morgan("combined", { stream: winstonStream }));
   app.use(cookieParser());
   app.use(bodyparser.urlencoded({ extended: true }));
+  app.use(bodyparser.json());
   app.use(compress());
+  app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(expressSessionConfigurator);
   app.use(passportInitializer);
@@ -92,7 +92,7 @@ export default function(app: express.Express) {
   app.use(expressViewHelper);
   app.use(accessrights);
   app.use(secureAgainstClickjacking);
-  app.use(csurf());
+  app.use(csurf({ cookie: true }));
   app.use(addCsrfTokenToLocals);
   app.use(wikiSubdirs);
   app.use("/", siteApp);
@@ -106,9 +106,7 @@ export default function(app: express.Express) {
   useApp(app, "ical", icalApp);
   useApp(app, "vertrag", vertragApp);
   useApp(app, "programmheft", programmheftApp);
+  useApp(app, "vue-spa", vueApp);
 
-  app.use(history({ index: "/vue/index.html" }));
-
-  app.use(handle404(httpLogger));
-  app.use(handle500(appLogger));
+  app.use("/vue", history({ index: "/vue/index.html" }));
 }

@@ -9,10 +9,19 @@ import mailstore from "./mailstore";
 import Message from "./message";
 import mailtransport from "./mailtransport";
 import misc from "../commons/misc";
+import conf from "../commons/simpleConfigure";
 import MailRule from "./mailRule";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import User from "../users/user";
 import usersService from "../users/usersService";
+
+function toFullQualifiedUrl(prefix: string, localUrl: string): string {
+  function trimLeadingAndTrailingSlash(string: string): string {
+    return string.replace(/(^\/)|(\/$)/g, "");
+  }
+
+  return conf.get("publicUrlPrefix") + "/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+}
 
 export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): void {
   const start = now;
@@ -25,7 +34,7 @@ export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): vo
       const markdownToSend = `## Folgende Veranstaltungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
-${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal()).join("\n\n---\n")}`;
+${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal(conf.get("publicUrlPrefix") as string)).join("\n\n---\n")}`;
       const message = new Message({
         subject: "Veranstaltungen ohne Pressetext",
         markdown: markdownToSend
@@ -70,13 +79,13 @@ export function checkKasse(now: DatumUhrzeit, callback: Function): void {
 ${kaputteVeranstaltungen
   .map(
     veranst =>
-      `<a href="${misc.toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
+      `<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
       `${veranst.kopf.titel} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
   )
   .join("\n\n---\n")}
 
 --- 
-<a href="${misc.toFullQualifiedUrl("teamseite", "")}">Zur Teamseite</a>`;
+<a href="${toFullQualifiedUrl("teamseite", "")}">Zur Teamseite</a>`;
 
     const message = new Message({
       subject: "Kassenpersonal für Veranstaltungen gesucht",

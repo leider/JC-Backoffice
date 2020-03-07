@@ -1,4 +1,4 @@
-import { genSalt, hashPassword } from "../commons/hashPassword";
+import Accessrights from "../commons/accessrights";
 
 export default class User {
   id: string;
@@ -13,6 +13,7 @@ export default class User {
   rechte: string[];
   mailinglisten: string[];
   password!: string; // transient
+  accessrights!: Accessrights; // transient
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object: any) {
@@ -28,15 +29,6 @@ export default class User {
     this.rechte = object.rechte || [];
 
     this.mailinglisten = object.mailinglisten || [];
-
-    if (object.password) {
-      this.updatePassword(object.password);
-    }
-  }
-
-  updatePassword(newPass: string): void {
-    this.salt = genSalt();
-    this.hashedPassword = hashPassword(newPass, this.salt);
   }
 
   get asGitAuthor(): string {

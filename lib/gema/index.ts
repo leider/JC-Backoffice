@@ -1,13 +1,13 @@
 import express from "express";
 
-import misc from "../commons/misc";
 import puppeteerPrinter from "../commons/puppeteerPrinter";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { PDFOptions } from "puppeteer";
+import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = misc.expressAppIn(__dirname);
+const app = expressAppIn(__dirname);
 import conf from "../commons/simpleConfigure";
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 

@@ -1,7 +1,4 @@
 import misc from "../../commons/misc";
-import configure from "../../commons/simpleConfigure";
-
-const prefix = configure.get("publicUrlPrefix");
 
 export interface PresseUI {
   originalText?: string;
@@ -58,14 +55,14 @@ export default class Presse {
     return this.image[0];
   }
 
-  imageURL(): string {
+  imageURL(prefix: string): string {
     if (this.image.length > 0) {
-      return "**Pressephoto:**\n" + this.imageURLpure();
+      return "**Pressephoto:**\n" + this.imageURLpure(prefix);
     }
     return "";
   }
 
-  imageURLpure(): string {
+  imageURLpure(prefix: string): string {
     if (this.image.length > 0) {
       return prefix + "/upload/" + encodeURIComponent(this.firstImage());
     }

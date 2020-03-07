@@ -1,5 +1,3 @@
-import Renderer from "../../commons/renderer";
-
 export interface KopfUI {
   beschreibung?: string;
   eventTyp?: string;
@@ -50,10 +48,6 @@ export default class Kopf {
     this.confirmed = !!object.confirmed;
     this.rechnungAnKooperation = !!object.rechnungAnKooperation;
     return this;
-  }
-
-  beschreibungHTML(): string {
-    return Renderer.render(this.beschreibung);
   }
 
   isKooperation(): boolean {
