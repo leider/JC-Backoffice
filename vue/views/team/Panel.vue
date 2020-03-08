@@ -31,32 +31,34 @@
         tbody
           tr(v-if="!staff.kasseVNotNeeded || !staff.kasseNotNeeded")
             td(colspan=3): h5.mb-0 Kasse
-          StaffRow(v-if="!staff.kasseVNotNeeded", label="Eins:", :section="staff.kasseV", v-on:saveVeranstaltung="saveVeranstaltung")
-          StaffRow(v-if="!staff.kasseNotNeeded", label="Zwei:", :section="staff.kasse", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.kasseVNotNeeded", label="Eins:", :section="staff.kasseV", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.kasseNotNeeded", label="Zwei:", :section="staff.kasse", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
           tr(v-if="!staff.technikerVNotNeeded || !staff.technikerNotNeeded")
             td(colspan=3): h5.mb-0 Techniker
-          StaffRow(v-if="!staff.technikerVNotNeeded", label="Eins:", :section="staff.technikerV", v-on:saveVeranstaltung="saveVeranstaltung")
-          StaffRow(v-if="!staff.technikerNotNeeded", label="Zwei:", :section="staff.techniker", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.technikerVNotNeeded", label="Eins:", :section="staff.technikerV", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.technikerNotNeeded", label="Zwei:", :section="staff.techniker", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
           tr(v-if="!staff.modNotNeeded")
             td(colspan=3): h5.mb-0 Master
-          StaffRow(v-if="!staff.modNotNeeded", label="", :section="staff.mod", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.modNotNeeded", label="", :section="staff.mod", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
           tr(v-if="!staff.merchandiseNotNeeded")
             td(colspan=3): h5.mb-0 Merchandise
-          StaffRow(v-if="!staff.merchandiseNotNeeded", label="", :section="staff.merchandise", v-on:saveVeranstaltung="saveVeranstaltung")
+          StaffRow(v-if="!staff.merchandiseNotNeeded", label="", :section="staff.merchandise", :user="user", v-on:saveVeranstaltung="saveVeranstaltung")
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import fieldHelpers from "../../../lib/commons/fieldHelpers";
-import { postAndReceiveJSON } from "@/commons/loader";
+import { saveVeranstaltung } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import StaffRow from "@/views/team/StaffRow.vue";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
+import User from "../../../lib/users/user";
 
 @Component({ components: { StaffRow } })
 export default class Panel extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() nearFuture!: DatumUhrzeit;
+  @Prop() user!: User;
 
   private expanded = this.veranstaltung.startDatumUhrzeit().istVor(this.nearFuture);
 
@@ -102,7 +104,7 @@ export default class Panel extends Vue {
   }
 
   saveVeranstaltung() {
-    postAndReceiveJSON("/vue-spa/saveVeranstaltung", this.veranstaltung.toJSON(), (res: any) => {
+    saveVeranstaltung(this.veranstaltung, (res: any) => {
       this.$emit("veranstaltungSaved", new Veranstaltung(res));
     });
   }

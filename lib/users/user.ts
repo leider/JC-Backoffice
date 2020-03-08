@@ -31,6 +31,13 @@ export default class User {
     this.mailinglisten = object.mailinglisten || [];
   }
 
+  toJSON() {
+    const result = Object.assign({}, this);
+    delete result.password;
+    delete result.accessrights;
+    return result;
+  }
+
   get asGitAuthor(): string {
     return `${this.name} <${this.email}>`;
   }
@@ -39,7 +46,6 @@ export default class User {
     if (oldlistname) {
       this.mailinglisten = this.mailinglisten.filter(name => name !== oldlistname);
     }
-
   }
 
   subscribeList(listname: string) {

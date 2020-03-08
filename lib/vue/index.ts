@@ -142,11 +142,33 @@ app.post("/saveVeranstaltung", (req, res) => {
 });
 
 app.get("/user.json", (req, res) => {
-  res.set("Content-Type", "application/json").send(req.user);
+  res.set("Content-Type", "application/json").send((req.user as User)?.toJSON());
+});
+
+app.get("/allusers.json", (req, res) => {
+  userstore.allUsers((err: Error | null, users: User[]) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(users.map(u => u.toJSON()));
+  });
+});
+
+app.post("/saveUser", (req, res) => {
+  const user = new User(req.body);
+  if (!res.locals.accessrights.canEditUser(user.id)) {
+    return;
+  }
+  userstore.save(user, (err: Error) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(user.toJSON());
+  });
 });
 
 app.get("/csrf-token.json", (req, res) => {
-  res.set("Content-Type", "application/json").send({token: req.csrfToken()});
+  res.set("Content-Type", "application/json").send({ token: req.csrfToken() });
 });
 
 app.get("/wikisubdirs.json", (req, res, next) => {

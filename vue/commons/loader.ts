@@ -13,7 +13,7 @@ function getJson(url: string, callback: any): void {
     .then(callback);
 }
 
-function postAndReceive(responseCallback: any, url: string, data: any, callback: any) {
+function postAndReceive(url: string, data: any, callback: any) {
   getJson("/vue-spa/csrf-token.json", (res: any) => {
     fetch(url, {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -33,15 +33,11 @@ function postAndReceive(responseCallback: any, url: string, data: any, callback:
         if (!response.ok) {
           throw Error(response.statusText);
         }
-        return responseCallback(response);
+        return response.json();
       })
       .then(callback)
       .catch(err => callback({ severity: "error", message: err.toString() }));
   });
-}
-
-export function postAndReceiveJSON(url: string, data: any, callback: any) {
-  postAndReceive((res: Response) => res.json(), url, data, callback);
 }
 
 export function veranstaltungenForTeam(callback: Function): void {
@@ -50,10 +46,24 @@ export function veranstaltungenForTeam(callback: Function): void {
   });
 }
 
+export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function) {
+  postAndReceive("/vue-spa/saveVeranstaltung", veranstaltung.toJSON(), callback);
+}
+
 export function currentUser(callback: Function): void {
   getJson("/vue-spa/user.json", (result: object) => {
     callback(new User(result));
   });
+}
+
+export function allUsers(callback: Function): void {
+  getJson("/vue-spa/allusers.json", (result: object[]) => {
+    callback(result.map(r => new User(r)));
+  });
+}
+
+export function saveUser(user: User, callback: Function) {
+  postAndReceive("/vue-spa/saveUser", user.toJSON(), callback);
 }
 
 export function wikisubdirs(callback: Function): void {
