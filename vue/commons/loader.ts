@@ -66,6 +66,10 @@ export function saveUser(user: User, callback: Function) {
   postAndReceive("/vue-spa/saveUser", user.toJSON(), callback);
 }
 
+export function icals(callback: Function): void {
+  getJson("/vue-spa/icals.json", callback);
+}
+
 export function wikisubdirs(callback: Function): void {
   getJson("/vue-spa/wikisubdirs.json", callback);
 }

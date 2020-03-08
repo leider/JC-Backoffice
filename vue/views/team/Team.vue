@@ -16,7 +16,7 @@
         .col-12
           PanelsForUsers(ref="panels", :veranstaltungen="veranstaltungen", :user="user")
     .col-lg-4
-      h3 calendar!
+      JazzCalendar(:eventSources="icals").mt-4
   .row
     .col-12
       hr
@@ -31,18 +31,21 @@
 import { Component, Vue } from "vue-property-decorator";
 import PanelsForUsers from "./PanelsForUsers.vue";
 import User from "../../../lib/users/user";
-import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
+import { allUsers, currentUser, icals, veranstaltungenForTeam } from "@/commons/loader";
 import Accessrights from "../../../lib/commons/accessrights";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
+import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
+import { CalSource } from "../../../lib/optionen/ferienIcals";
 
 @Component({
-  components: { UserPanel, PanelsForUsers }
+  components: { JazzCalendar, UserPanel, PanelsForUsers }
 })
 export default class Team extends Vue {
   private user: User = new User({});
   private users!: User[];
   private veranstaltungen: Veranstaltung[] = [];
+  private icals: CalSource[] = [];
 
   created() {
     allUsers((users: User[]) => {
@@ -54,6 +57,9 @@ export default class Team extends Vue {
     });
     veranstaltungenForTeam((veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen;
+    });
+    icals((icals: CalSource[]) => {
+      this.icals = icals;
     });
   }
 

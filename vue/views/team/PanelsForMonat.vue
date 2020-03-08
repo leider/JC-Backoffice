@@ -2,12 +2,9 @@
 .row
   .col-12
     h4.pt-1.pb-2.px-1.bg-primary.text-white {{monat}} &nbsp;
-      a.btn.btn-secondary(v-if="expanded", @click="aufZu")
-        i.far.fa-minus-square.fa-fw-fw-sm
-        | #{' '} Alle Zu
-      a.btn.btn-secondary(v-if="!expanded", @click="aufZu")
-        i.far.fa-plus-square.fa-fw-fw-sm
-        | #{' '} Alle Auf
+      a.btn.btn-secondary.btn-sm(@click="aufZu")
+        i.far.fa-fw-fw-sm(:class="{'fa-minus-square': expanded, 'fa-plus-square': !expanded}")
+        | #{' '} Alle {{expanded? "Zu": "Auf"}}
       .btn-group.btn-group-sm.float-right
         a.btn.btn-secondary.btn-sm(href="/veranstaltungen/texte/")
           i.far.fa-file-alt.fa-fw

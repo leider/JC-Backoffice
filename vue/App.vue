@@ -106,6 +106,11 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
 @import "~@fortawesome/fontawesome-free/css/all.css";
+
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css";
+@import "~@fullcalendar/bootstrap/main.css";
+
 // colors
 $color-ausgaben1: #d50f36;
 

@@ -19,6 +19,7 @@ import Salesreport from "../reservix/salesreport";
 import FerienIcals from "../optionen/ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import Git from "../wiki/gitmech";
+import optionenservice from "../optionen/optionenService";
 
 const app = expressAppIn(__dirname);
 
@@ -171,23 +172,24 @@ app.get("/csrf-token.json", (req, res) => {
   res.set("Content-Type", "application/json").send({ token: req.csrfToken() });
 });
 
-app.get("/wikisubdirs.json", (req, res, next) => {
+app.get("/wikisubdirs.json", (req, res) => {
   Git.lsdirs((err: Error | null, gitdirs: string[]) => {
     if (err) {
-      return next(err);
+      return res.status(500).send(err);
     }
     res.set("Content-Type", "application/json").send(gitdirs);
   });
 });
 
-app.get("/eventsForCalendar", (req, res, next) => {
-  const start = DatumUhrzeit.forISOString(req.query.start);
-  const end = DatumUhrzeit.forISOString(req.query.end);
-  eventsBetween(start, end, res, (err1: Error | null, events: CalendarEvent[]) => {
-    if (err1) {
-      return next(err1);
+app.get("/icals.json", (req, res) => {
+  optionenservice.icals((err: Error, icals: FerienIcals) => {
+    if (err) {
+      return res.status(500).send(err);
     }
-    return res.end(JSON.stringify(events));
+    const result = icals.forCalendar();
+    result.unshift("/veranstaltungen/eventsForCalendar");
+    result.unshift("/ical/eventsForCalendar");
+    res.set("Content-Type", "application/json").send(result);
   });
 });
 

@@ -21,7 +21,7 @@ class Ical {
   }
 }
 
-type CalSource = string | { color: string; url: string };
+export type CalSource = string | { color: string; url: string };
 
 export default class FerienIcals {
   id = "ferienIcals";
@@ -68,7 +68,7 @@ export default class FerienIcals {
     ical.update(object);
   }
 
-  forCalendar(): Array<CalSource> {
+  forCalendar(): CalSource[] {
     return this.icals.map(ical => {
       return {
         color: Termin.colorForType(ical.typ),
