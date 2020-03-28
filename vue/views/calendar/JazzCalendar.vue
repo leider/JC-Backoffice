@@ -6,7 +6,7 @@ FullCalendar(
   :locales="locales",
   locale="de",
   :header="{ left: 'title', center: '', right: 'prev,today,next' }",
-  timezone="Europe/Berlin",
+  timeZone="Europe/Berlin",
   timeFormat="HH:mm",
   :displayEventTime="false",
   :views="{month: {titleFormat: {month: 'short', year: '2-digit'},fixedWeekCount: false,showNonCurrentDates: false}}",

@@ -5,7 +5,8 @@
       table(width='100%')
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+            i.far.fa-fw.fa-lg(v-if="!nobodyNeeded", :class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+            i.far.fa-fw.fa-lg.fa-square(v-else)
           td: a(@click="toggleExpanded")
             h6 {{veranstaltung.datumForDisplayShort()}}
 
@@ -51,16 +52,15 @@ import fieldHelpers from "../../../lib/commons/fieldHelpers";
 import { saveVeranstaltung } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import StaffRow from "@/views/team/StaffRow.vue";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import User from "../../../lib/users/user";
 
 @Component({ components: { StaffRow } })
 export default class Panel extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
-  @Prop() nearFuture!: DatumUhrzeit;
   @Prop() user!: User;
+  @Prop() initiallyExpanded?: boolean;
 
-  private expanded = this.veranstaltung.startDatumUhrzeit().istVor(this.nearFuture);
+  private expanded = this.initiallyExpanded;
 
   private id = "ID";
 

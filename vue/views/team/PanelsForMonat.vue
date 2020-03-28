@@ -1,10 +1,10 @@
 <template lang="pug">
 .row
   .col-12
-    h4.pt-1.pb-2.px-1.bg-primary.text-white {{monat}} &nbsp;
-      a.btn.btn-secondary.btn-sm(@click="aufZu")
-        i.far.fa-fw-fw-sm(:class="{'fa-minus-square': expanded, 'fa-plus-square': !expanded}")
-        | #{' '} Alle {{expanded? "Zu": "Auf"}}
+    h4.pt-1.pb-2.px-1.bg-primary.text-white
+      a(@click="aufZu")
+        i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+        | {{monat}} &nbsp;
       .btn-group.btn-group-sm.float-right
         a.btn.btn-secondary.btn-sm(href="/veranstaltungen/texte/")
           i.far.fa-file-alt.fa-fw
@@ -12,7 +12,7 @@
         a.btn.btn-secondary.btn-sm(href="/veranstaltungen/monat/")
           i.fas.fa-align-justify.fa-fw
           | #{' '} Übersicht
-  Panel(v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id", :veranstaltung="veranstaltung", :nearFuture="nearFuture", :user="user")
+  Panel(v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id", :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :user="user")
 </template>
 
 <script lang="ts">
@@ -31,7 +31,7 @@ export default class PanelsForMonat extends Vue {
   private expanded = this.veranstaltungen[0].startDatumUhrzeit().istVor(this.nearFuture);
 
   doWithAllPanels(action: string): void {
-    this.veranstaltungen.forEach(v => {
+    this.veranstaltungen.forEach((v) => {
       (this.$refs[v.id || ""] as any)[0][action]();
     });
   }

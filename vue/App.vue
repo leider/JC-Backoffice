@@ -38,7 +38,7 @@ div
           b-dropdown-item(href="/users") Bearbeiten / Anlegen
           b-dropdown-item(href="/users/rundmail") Rundmail
           b-dropdown-item(href="/users/mailinglisten") Mailinglisten
-        b-nav-item(data-jcnav="teamseite", href="/teamseite")
+        b-nav-item(to="/team", active-class="active")
           i.far.fa-hand-paper.fa-fw.fa-lg
           | &nbsp;Team&nbsp;
         b-nav-item-dropdown(data-jcnav="wiki")
@@ -137,6 +137,7 @@ $color-festival: #9fc442;
 $jc_colors: (
   "classix": $color-allgemein2,
   "concert": $gray-600,
+  "kooperation": $color-kasse1,
   "ausgaben": $color-ausgaben1,
   "festival": $color-festival,
   "allgemeines": $color-allgemein1,
@@ -147,7 +148,7 @@ $jc_colors: (
   "session": $color-kasse2,
   "soulcafe": $color-ausgaben2,
   "staff": $color-kasse2,
-  "copy": theme-color("secondary")
+  "copy": theme-color("secondary"),
 );
 
 .btn-presse {
