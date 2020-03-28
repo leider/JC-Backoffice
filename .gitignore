@@ -29,3 +29,5 @@ start.js
 *.map
 .tscache/
 reservixLoad.js
+/static/vue/
+

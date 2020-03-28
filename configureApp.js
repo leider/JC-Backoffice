@@ -76,6 +76,7 @@ function default_1(app) {
     app.use(body_parser_1.default.urlencoded({ extended: true }));
     app.use(body_parser_1.default.json());
     app.use(compression_1.default());
+    app.use("/vue", connect_history_api_fallback_1.default({ index: "/index.html" }));
     app.use(express_1.default.static(path_1.default.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 }));
     app.use(expressSessionConfigurator_1.default);
     app.use(passportInitializer_1.default);
@@ -98,7 +99,6 @@ function default_1(app) {
     useApp(app, "vertrag", vertrag_1.default);
     useApp(app, "programmheft", programmheft_1.default);
     useApp(app, "vue-spa", vue_1.default);
-    app.use("/vue", connect_history_api_fallback_1.default({ index: "/vue/index.html" }));
 }
 exports.default = default_1;
 //# sourceMappingURL=configureApp.js.map

@@ -84,6 +84,7 @@ export default function(app: express.Express) {
   app.use(bodyparser.urlencoded({ extended: true }));
   app.use(bodyparser.json());
   app.use(compress());
+  app.use("/vue", history({ index: "/index.html" }));
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(expressSessionConfigurator);
@@ -108,5 +109,4 @@ export default function(app: express.Express) {
   useApp(app, "programmheft", programmheftApp);
   useApp(app, "vue-spa", vueApp);
 
-  app.use("/vue", history({ index: "/vue/index.html" }));
 }
