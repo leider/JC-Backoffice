@@ -5,4 +5,6 @@ npm update
 npm prune
 git checkout -- package-lock.json
 grunt deploy_production
+grunt ts
+npm run build
 sudo svc -du /etc/service/JC-backoffice/
