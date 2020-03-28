@@ -1,11 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require("path");
-require("./configure");
-const configureAPI = require("./configureApp").default;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
+const config = {
   publicPath: "/vue/",
   outputDir: "static/vue",
   configureWebpack: {
@@ -13,8 +11,8 @@ module.exports = {
     entry: "./main.ts",
     resolve: {
       alias: {
-        "@": path.resolve("vue")
-      }
+        "@": path.resolve("vue"),
+      },
     },
     plugins: [
       new CopyPlugin([
@@ -22,19 +20,24 @@ module.exports = {
           from: path.join(__dirname, "vue/public"),
           to: path.join(__dirname, "static"),
           toType: "dir",
-          ignore: ["index.html", ".DS_Store"]
-        }
-      ])
-    ]
-  },
-  devServer: {
-    before: configureAPI
+          ignore: ["index.html", ".DS_Store"],
+        },
+      ]),
+    ],
   },
   /* to configure vue/public as the location of the template */
-  chainWebpack: config => {
-    config.plugin("html").tap(args => {
+  chainWebpack: (config) => {
+    config.plugin("html").tap((args) => {
       args[0].template = path.join(__dirname, "vue/public/index.html");
       return args;
     });
-  }
+  },
 };
+
+if (process.env.NODE_ENV !== "production") {
+  require("./configure");
+  const configureAPI = require("./configureApp").default;
+  config.devServer = {before: configureAPI};
+}
+
+module.exports = config;
