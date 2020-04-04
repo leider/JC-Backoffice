@@ -19,8 +19,7 @@ function addStaff(sectionOfStaff: StaffType, req: express.Request, res: express.
     if (err) {
       return next(err);
     }
-    const section = veranstaltung.staff.getStaffCollection(sectionOfStaff);
-    section.push((req.user as User).id);
+    veranstaltung.staff.addUserToSection(req.user as User, sectionOfStaff);
     return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
       if (err1) {
         return next(err1);
@@ -35,9 +34,7 @@ function removeStaff(sectionOfStaff: StaffType, req: express.Request, res: expre
     if (err) {
       return next(err);
     }
-    const section = veranstaltung.staff.getStaffCollection(sectionOfStaff);
-    const index = section.indexOf((req.user as User).id);
-    section.splice(index, 1);
+    veranstaltung.staff.removeUserFromSection(req.user as User, sectionOfStaff);
     return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
       if (err1) {
         return next(err1);
@@ -52,7 +49,7 @@ app.get("/", (req, res, next) => {
     {
       veranstaltungen: (callback: Function) => store.zukuenftigeMitGestern(callback),
       users: (callback: Function) => userstore.allUsers(callback),
-      icals: (callback: Function) => optionenservice.icals(callback)
+      icals: (callback: Function) => optionenservice.icals(callback),
     },
     (err: Error | undefined, results) => {
       if (err) {
@@ -63,13 +60,13 @@ app.get("/", (req, res, next) => {
       icals.unshift("/ical/eventsForCalendar");
 
       const filteredVeranstaltungen = (results.veranstaltungen as Veranstaltung[]).filter((v: Veranstaltung) => v.kopf.confirmed);
-      const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
-      const users = (results.users as User[]);
+      const groupedVeranstaltungen = R.groupBy((veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+      const users = results.users as User[];
       return res.render("index", {
         groupedVeranstaltungen,
         users,
         icals,
-        webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/"
+        webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/",
       });
     }
   );

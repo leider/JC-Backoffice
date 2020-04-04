@@ -48,7 +48,7 @@ export default class Staff {
         kasse: object.kasse || [],
         kasseV: object.kasseV || [],
         merchandise: object.merchandise || [],
-        mod: object.mod || []
+        mod: object.mod || [],
       });
     }
   }
@@ -109,16 +109,26 @@ export default class Staff {
       return;
     }
     const filledUsers: { [index: string]: User[] } = {};
-    filledUsers.techniker = users.filter(u => R.includes(u.id, this.techniker));
-    filledUsers.technikerV = users.filter(u => R.includes(u.id, this.technikerV));
-    filledUsers.kasse = users.filter(u => R.includes(u.id, this.kasse));
-    filledUsers.kasseV = users.filter(u => R.includes(u.id, this.kasseV));
-    filledUsers.merchandise = users.filter(u => R.includes(u.id, this.merchandise));
-    filledUsers.mod = users.filter(u => R.includes(u.id, this.mod));
+    filledUsers.techniker = users.filter((u) => R.includes(u.id, this.techniker));
+    filledUsers.technikerV = users.filter((u) => R.includes(u.id, this.technikerV));
+    filledUsers.kasse = users.filter((u) => R.includes(u.id, this.kasse));
+    filledUsers.kasseV = users.filter((u) => R.includes(u.id, this.kasseV));
+    filledUsers.merchandise = users.filter((u) => R.includes(u.id, this.merchandise));
+    filledUsers.mod = users.filter((u) => R.includes(u.id, this.mod));
     this.mitarbeiterTransient = filledUsers;
   }
 
   kasseFehlt(): boolean {
     return (!this.kasseNotNeeded && this.kasse.length === 0) || (!this.kasseVNotNeeded && this.kasseV.length === 0);
+  }
+
+  addUserToSection(user: User, section: StaffType) {
+    this.getStaffCollection(section).push(user.id);
+  }
+
+  removeUserFromSection(user: User, section: StaffType) {
+    const sec = this.getStaffCollection(section);
+    const index = sec.indexOf(user.id);
+    sec.splice(index, 1);
   }
 }

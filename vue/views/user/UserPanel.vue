@@ -32,6 +32,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "../../../lib/users/user";
 import { saveUser } from "@/commons/loader";
+import Accessrights from "../../../lib/commons/accessrights";
 
 @Component
 export default class UserPanel extends Vue {
@@ -39,11 +40,11 @@ export default class UserPanel extends Vue {
   @Prop() user!: User;
   private expanded = this.user.id === this.currentUser.id;
 
-  get accessrights() {
+  get accessrights(): Accessrights {
     return this.currentUser.accessrights;
   }
 
-  get shirtsizes() {
+  get shirtsizes(): string[] {
     return [
       "",
       "S",
@@ -58,12 +59,12 @@ export default class UserPanel extends Vue {
       "Ladies' M",
       "Ladies' L",
       "Ladies' XL",
-      "Ladies' XXL"
+      "Ladies' XXL",
     ];
   }
 
-  get canEdit() {
-    return this.accessrights?.canEditUser(this.user.id);
+  get canEdit(): boolean {
+    return this.accessrights.canEditUser(this.user.id);
   }
 
   gruppenUndRechteText(): string {
@@ -74,11 +75,12 @@ export default class UserPanel extends Vue {
     return "-";
   }
 
-  editlink() {
+  editlink(): string {
     return this.accessrights.canEditUser(this.user.id) ? `/users/${encodeURIComponent(this.user.id)}` : "";
   }
 
-  saveUser() {
+  saveUser(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     saveUser(this.user, (res: any) => {
       this.$emit("userSaved", new User(res));
     });

@@ -1,7 +1,7 @@
 import { salesreportFor } from "../reservix/reservixService";
 
 import conf from "../commons/simpleConfigure";
-import express from "express";
+import express, { Request, Response } from "express";
 
 import async from "async";
 import R from "ramda";
@@ -20,6 +20,7 @@ import FerienIcals from "../optionen/ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import Git from "../wiki/gitmech";
 import optionenservice from "../optionen/optionenService";
+import { StaffType } from "../veranstaltungen/object/staff";
 
 const app = expressAppIn(__dirname);
 
@@ -36,7 +37,7 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res:
   if (res.locals.accessrights.isBookingTeam()) {
     return veranstaltungen;
   }
-  return veranstaltungen.filter(v => v.kopf.confirmed);
+  return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
 function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction, res: express.Response, titel: string): void {
@@ -64,14 +65,14 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
     }
     return async.parallel(
       {
-        users: callback => userstore.allUsers(callback),
-        icals: callback => optionenService.icals(callback)
+        users: (callback) => userstore.allUsers(callback),
+        icals: (callback) => optionenService.icals(callback),
       },
       (err1, results) => {
         if (err1) {
           return next(err1);
         }
-        return async.each(veranstaltungen, associateReservix, err2 => {
+        return async.each(veranstaltungen, associateReservix, (err2) => {
           if (err2) {
             return next(err2);
           }
@@ -80,13 +81,13 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
           icals.unshift("/ical/eventsForCalendar");
 
           const filteredVeranstaltungen = filterUnbestaetigteFuerJedermann(veranstaltungen, res);
-          const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+          const groupedVeranstaltungen = R.groupBy((veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
           return res.render("../../teamseite/views/indexAdmin", {
             titel,
             users: R.sortBy(R.prop("name"), results.users as User[]),
             icals,
             groupedVeranstaltungen,
-            webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/"
+            webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/",
           });
         });
       }
@@ -107,7 +108,7 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
       className:
         (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
         "verySmall color-" +
-        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)
+        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
     };
   }
 
@@ -128,7 +129,7 @@ app.get("/veranstaltungen.json", (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.set("Content-Type", "application/json").send(veranstaltungen.map(v => v.toJSON()));
+    res.set("Content-Type", "application/json").send(veranstaltungen.map((v) => v.toJSON()));
   });
 });
 
@@ -142,6 +143,29 @@ app.post("/saveVeranstaltung", (req, res) => {
   });
 });
 
+function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response): void {
+  store.getVeranstaltungForId(req.body.id, (err: Error, veranstaltung: Veranstaltung) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    veranstaltung.staff[func](req.user as User, req.body.section);
+    return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
+      if (err1) {
+        return res.status(500).send(err1);
+      }
+      return res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
+    });
+  });
+}
+
+app.post("/addUserToSection", (req, res) => {
+  addOrRemoveUserFromSection("addUserToSection", req, res);
+});
+
+app.post("/removeUserFromSection", (req, res) => {
+  addOrRemoveUserFromSection("removeUserFromSection", req, res);
+});
+
 app.get("/user.json", (req, res) => {
   res.set("Content-Type", "application/json").send((req.user as User)?.toJSON());
 });
@@ -151,7 +175,7 @@ app.get("/allusers.json", (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.set("Content-Type", "application/json").send(users.map(u => u.toJSON()));
+    res.set("Content-Type", "application/json").send(users.map((u) => u.toJSON()));
   });
 });
 

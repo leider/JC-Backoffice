@@ -32,15 +32,14 @@ export default class PanelsForMonat extends Vue {
 
   doWithAllPanels(action: string): void {
     this.veranstaltungen.forEach((v) => {
-      (this.$refs[v.id || ""] as any)[0][action]();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this.$refs[v.id || ""] as any[])[0][action]();
     });
   }
 
-  aufZu() {
+  aufZu(): void {
     this.doWithAllPanels(this.expanded ? "close" : "expand");
     this.expanded = !this.expanded;
   }
 }
 </script>
-
-<style></style>

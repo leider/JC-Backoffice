@@ -27,14 +27,14 @@ import { CalSource } from "../../../lib/optionen/ferienIcals";
 @Component({ components: { FullCalendar } })
 export default class JazzCalendar extends Vue {
   @Prop() eventSources!: CalSource[];
-  get calendarPlugins() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get calendarPlugins(): any[] {
     return [dayGridPlugin, bootstrapPlugin];
   }
 
-  get locales() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get locales(): any {
     return [deLocale];
   }
 }
 </script>
-
-<style></style>

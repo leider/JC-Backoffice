@@ -16,15 +16,13 @@ export default class PanelsForUsers extends Vue {
   @Prop() veranstaltungen!: Veranstaltung[];
   @Prop() user!: User;
 
-  get veranstaltungenNachMonat() {
-    const filteredVeranstaltungen = this.veranstaltungen.filter(v => v.kopf.confirmed);
-    return groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+  get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
+    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => v.kopf.confirmed);
+    return groupBy((veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
   }
 
-  get monate() {
+  get monate(): string[] {
     return Object.keys(this.veranstaltungenNachMonat);
   }
 }
 </script>
-
-<style></style>

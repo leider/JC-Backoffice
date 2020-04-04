@@ -39,15 +39,17 @@ import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
 
 @Component({
-  components: { JazzCalendar, UserPanel, PanelsForUsers }
+  components: { JazzCalendar, UserPanel, PanelsForUsers },
 })
 export default class Team extends Vue {
   private user: User = new User({});
   private users!: User[];
+  // noinspection JSMismatchedCollectionQueryUpdate
   private veranstaltungen: Veranstaltung[] = [];
+  // noinspection JSMismatchedCollectionQueryUpdate
   private icals: CalSource[] = [];
 
-  created() {
+  created(): void {
     allUsers((users: User[]) => {
       this.users = users;
     });
@@ -63,12 +65,12 @@ export default class Team extends Vue {
     });
   }
 
-  get webcalUrl() {
+  get webcalUrl(): string {
     return `${window.location.origin.replace(/https|http/, "webcal")}/ical/`;
   }
 
-  otherUsers() {
-    return this.users?.filter(u => u.id !== this.user.id) || [];
+  otherUsers(): User[] {
+    return this.users?.filter((u) => u.id !== this.user.id) || [];
   }
 }
 </script>

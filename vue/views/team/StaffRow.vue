@@ -1,41 +1,58 @@
 <template lang="pug">
-tr
-  th: .mt-1 {{label}}
-  td: .mt-1: span.text-capitalize {{(section || []).join(', ')}}
-  td.text-right
-    b-button.btn.btn-success.btn-sm(v-if="!hasRegistered()", @click="add", title='Ich kann'): i.fa-fw.fa-lg.fas.fa-plus-circle
-    b-button.btn.btn-danger.btn-sm(v-else, @click="remove", title='Ich kann nicht'): i.fa-fw.fa-lg.fas.fa-minus-circle
+  tr
+    th: .mt-1 {{label}}
+    td: .mt-1: span.text-capitalize {{(section || []).join(", ")}}
+    td.text-right
+      b-button.btn.btn-success.btn-sm(v-if="!hasRegistered()", @click="add", title='Ich kann'): i.fa-fw.fa-lg.fas.fa-plus-circle
+      b-button.btn.btn-danger.btn-sm(v-else, @click="remove", title='Ich kann nicht'): i.fa-fw.fa-lg.fas.fa-minus-circle
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "../../../lib/users/user";
+import Staff, { StaffType } from "../../../lib/veranstaltungen/object/staff";
+import { addUserToSection, removeUserFromSection } from "@/commons/loader";
+import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 
 @Component
 export default class StaffRow extends Vue {
-  @Prop() section!: string[];
+  @Prop() sectionName!: StaffType;
   @Prop() label!: string;
+  @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
 
-  hasRegistered() {
-    return this.section.map(name => name.toLowerCase()).includes(this.user.id.toLowerCase());
+  get section(): string[] {
+    return this.staff.getStaffCollection(this.sectionName);
   }
 
-  add() {
-    this.section.push(this.user.id);
-    this.saveVeranstaltung();
+  get staff(): Staff {
+    return this.veranstaltung.staff;
   }
 
-  remove() {
-    const index = this.section.indexOf(this.user.id);
-    this.section.splice(index, 1);
-    this.saveVeranstaltung();
+  hasRegistered(): boolean {
+    return this.section.map((name) => name.toLowerCase()).includes(this.user.id.toLowerCase());
   }
 
-  private saveVeranstaltung() {
-    this.$emit("saveVeranstaltung");
+  add(): void {
+    if (!this.veranstaltung.id) {
+      return;
+    }
+    addUserToSection(this.veranstaltung.id, this.sectionName, (err: Error) => {
+      if (!err) {
+        this.staff.addUserToSection(this.user, this.sectionName);
+      }
+    });
+  }
+
+  remove(): void {
+    if (!this.veranstaltung.id) {
+      return;
+    }
+    removeUserFromSection(this.veranstaltung.id, this.sectionName, (err: Error) => {
+      if (!err) {
+        this.staff.removeUserFromSection(this.user, this.sectionName);
+      }
+    });
   }
 }
 </script>
-
-<style scoped></style>
