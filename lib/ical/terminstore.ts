@@ -1,6 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
-import ramda from "ramda";
+import { partial } from "lodash";
 import Termin from "./termin";
 import misc from "../commons/misc";
 
@@ -19,20 +19,20 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
   // ranges are DatumUhrzeit
   persistence.listByField(
     {
-      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }]
+      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
     sortOrder,
-    ramda.partial(toTerminList, [callback])
+    partial(toTerminList, callback)
   );
 }
 
 export default {
   forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, ramda.partial(toTermin, [callback]));
+    persistence.getById(id, partial(toTermin, callback));
   },
 
   alle: function alle(callback: Function): void {
-    persistence.list({ startDate: -1 }, ramda.partial(toTerminList, [callback]));
+    persistence.list({ startDate: -1 }, partial(toTerminList, callback));
   },
 
   save: function save(termin: Termin, callback: Function): void {
@@ -45,5 +45,5 @@ export default {
 
   remove: function remove(id: string, callback: Function): void {
     persistence.removeById(id, callback);
-  }
+  },
 };

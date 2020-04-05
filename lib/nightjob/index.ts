@@ -1,7 +1,7 @@
 import "../../configure";
 import "../../initWinston";
 import async from "async";
-import R from "ramda";
+import { partial } from "lodash";
 
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
@@ -37,7 +37,7 @@ function informAdmin(err: Error | undefined, counter?: number): void {
       subject: "[B-O Jazzclub] Mails sent",
       markdown: `Nightly Mails have been sent
 Anzahl: ${counter}
-Error: ${err ? err.message : "keiner"}`
+Error: ${err ? err.message : "keiner"}`,
     });
     message.setTo(user.email);
     return mailtransport.sendMail(message, (err2: Error | undefined) => {
@@ -52,11 +52,11 @@ const now = new DatumUhrzeit();
 
 async.parallel(
   {
-    checkFluegel: R.partial(sendMailsNightly.checkFluegel, [now]),
-    checkPresse: R.partial(sendMailsNightly.checkPressetexte, [now]),
-    checkKasse: R.partial(sendMailsNightly.checkKasse, [now]),
-    send: R.partial(sendMailsNightly.loadRulesAndProcess, [now]),
-    remindForProgrammheft: R.partial(sendMailsNightly.remindForProgrammheft, [now])
+    checkFluegel: partial(sendMailsNightly.checkFluegel, now),
+    checkPresse: partial(sendMailsNightly.checkPressetexte, now),
+    checkKasse: partial(sendMailsNightly.checkKasse, now),
+    send: partial(sendMailsNightly.loadRulesAndProcess, now),
+    remindForProgrammheft: partial(sendMailsNightly.remindForProgrammheft, now),
   },
   (err: Error | undefined, results) => {
     informAdmin(err, results.send as number);

@@ -1,4 +1,4 @@
-import R from "ramda";
+import { partial } from "lodash";
 
 import misc from "../commons/misc";
 import winston from "winston";
@@ -20,10 +20,10 @@ function toVeranstaltungenList(callback: Function, err: Error | null, jsobjects:
 function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: object, callback: Function): void {
   persistence.listByField(
     {
-      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }]
+      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
     sortOrder,
-    R.partial(toVeranstaltungenList, [callback])
+    partial(toVeranstaltungenList, callback)
   );
 }
 
@@ -59,11 +59,11 @@ export default {
   byDateRangeInAscendingOrder,
 
   getVeranstaltung: function getVeranstaltung(url: string, callback: Function): void {
-    persistence.getByField({ url }, R.partial(toVeranstaltung, [callback]));
+    persistence.getByField({ url }, partial(toVeranstaltung, callback));
   },
 
   getVeranstaltungForId: function getVeranstaltungForId(id: string, callback: Function): void {
-    persistence.getById(id, R.partial(toVeranstaltung, [callback]));
+    persistence.getById(id, partial(toVeranstaltung, callback));
   },
 
   saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
@@ -75,5 +75,5 @@ export default {
       logger.info("Veranstaltung removed:" + JSON.stringify(url));
       callback(err);
     });
-  }
+  },
 };

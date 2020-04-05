@@ -1,7 +1,8 @@
-import R from "ramda";
+import { reject } from "lodash";
+import { sortBy, compose, toLower, prop } from "lodash/fp";
 import { KopfUI } from "../veranstaltungen/object/kopf";
 
-const sortByNameCaseInsensitive = R.sortBy(R.compose(R.toLower, R.prop("name")));
+const sortByNameCaseInsensitive = sortBy(compose(toLower, prop("name")));
 
 class Ort {
   name = "";
@@ -15,6 +16,11 @@ class Ort {
       Object.assign(this, object);
     }
   }
+
+  toJSON(): object {
+    return Object.assign({}, this);
+  }
+
   update(object: any): void {
     this.name = object.name;
     this.flaeche = object.flaeche;
@@ -28,7 +34,9 @@ export default class Orte {
   orte: Ort[] = [];
 
   toJSON(): object {
-    return Object.assign({}, this);
+    return Object.assign({}, this, {
+      orte: this.orte.map((o) => o.toJSON()),
+    });
   }
 
   constructor(object?: any) {
@@ -38,11 +46,11 @@ export default class Orte {
   }
 
   alleNamen(): string[] {
-    return this.orte.map(ort => ort.name);
+    return this.orte.map((ort) => ort.name);
   }
 
   forName(name: string): Ort | undefined {
-    return this.orte.find(ort => ort.name === name);
+    return this.orte.find((ort) => ort.name === name);
   }
 
   addOrt(object: any & { oldname?: string }): void {
@@ -57,7 +65,7 @@ export default class Orte {
 
   deleteOrt(name?: string): void {
     if (name) {
-      this.orte = R.reject(R.propEq("name", name))(this.orte);
+      this.orte = reject(this.orte, { name });
     }
   }
 

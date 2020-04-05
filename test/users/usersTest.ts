@@ -7,44 +7,44 @@ const user1 = new User({
   id: "user1",
   name: "Name of User1",
   email: "user1@jazzclub.de",
-  gruppen: ["orgaTeam"]
+  gruppen: ["orgaTeam"],
 });
 const user2 = new User({
   id: "user2",
   name: "Name of User2",
   email: "user2@jazzclub.de",
-  gruppen: ["orgaTeam"]
+  gruppen: ["orgaTeam"],
 });
 const user3 = new User({
   id: "user3",
   name: "Name of User3",
   email: "user3@jazzclub.de",
-  gruppen: ["bookingTeam"]
+  gruppen: ["bookingTeam"],
 });
 const user4 = new User({
   id: "user4",
   name: "Name of User4",
   email: "user4@jazzclub.de",
-  gruppen: ["bookingTeam", "orgaTeam"]
+  gruppen: ["bookingTeam", "orgaTeam"],
 });
 const user5 = new User({
   id: "user5",
   name: "Name of User5",
   email: "user5@jazzclub.de",
   gruppen: ["bookingTeam", "orgaTeam", "superusers"],
-  mailinglisten: ["liste1"]
+  mailinglisten: ["liste1"],
 });
 const superuser = new User({
   id: "superuser",
   name: "Name of User6",
   email: "superuser@jazzclub.de",
-  gruppen: ["superusers"]
+  gruppen: ["superusers"],
 });
 const user7 = new User({
   id: "user7",
   name: "Name of User7",
   email: "user7@jazzclub.de",
-  gruppen: []
+  gruppen: [],
 });
 
 const userCollection = [user1, user2, user3, user4, user5, superuser, user7];

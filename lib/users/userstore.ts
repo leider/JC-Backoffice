@@ -1,4 +1,4 @@
-import R from "ramda";
+import { partial } from "lodash";
 import misc from "../commons/misc";
 import User from "./user";
 import pers from "../persistence/persistence";
@@ -14,7 +14,7 @@ function toUserList(callback: Function, err: Error | null, jsobjects?: object[])
 
 export default {
   allUsers: function allUsers(callback: Function): void {
-    persistence.list({ name: 1 }, R.partial(toUserList, [callback]));
+    persistence.list({ name: 1 }, partial(toUserList, callback));
   },
 
   save: function save(user: User, callback: Function): void {
@@ -23,19 +23,19 @@ export default {
   },
 
   saveAll: function saveAll(users: User[], callback: Function): void {
-    users.forEach(u => {
+    users.forEach((u) => {
       delete u.password;
     });
     persistence.saveAll(users, callback);
   },
 
   forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, R.partial(toUserObject, [callback]));
+    persistence.getById(id, partial(toUserObject, callback));
   },
 
   deleteUser: function deleteUser(id: string, callback: Function): void {
     persistence.removeById(id, (err: Error | null) => {
       callback(err);
     });
-  }
+  },
 };

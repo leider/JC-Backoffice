@@ -1,4 +1,4 @@
-import R from "ramda";
+import { groupBy } from "lodash";
 import store from "./kalenderstore";
 
 import veranstaltungenstore from "../veranstaltungen/veranstaltungenstore";
@@ -47,14 +47,14 @@ app.get("/:year/:month", (req, res, next) => {
       if (err1) {
         return next(err1);
       }
-      const filteredVeranstaltungen = veranstaltungen.filter(v => v.kopf.confirmed);
-      const unconfirmedVeranstaltungen = veranstaltungen.filter(v => !v.kopf.confirmed);
-      const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+      const filteredVeranstaltungen = veranstaltungen.filter((v) => v.kopf.confirmed);
+      const unconfirmedVeranstaltungen = veranstaltungen.filter((v) => !v.kopf.confirmed);
+      const groupedVeranstaltungen = groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
       return res.render("heft", {
         unconfirmedVeranstaltungen,
         groupedVeranstaltungen,
         start,
-        kalender
+        kalender,
       });
     });
   });

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import R from "ramda";
+import { compact } from "lodash";
 import DatumUhrzeit from "./DatumUhrzeit";
 
 export default class Misc {
@@ -48,8 +48,8 @@ export default class Misc {
     return [elem];
   }
 
-  static compact<T>(array: T[]): T[] {
-    return R.filter(a => !!a, array || []);
+  static compact<T>(array?: T[]): T[] {
+    return compact(array);
   }
 
   static pushImage(images: string | Array<string>, image: string): string[] {
@@ -70,7 +70,7 @@ export default class Misc {
     if (typeof images === "string") {
       return [];
     } else {
-      return R.reject(each => each === image, images);
+      return images.filter((each) => each !== image);
     }
   }
 }

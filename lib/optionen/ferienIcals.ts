@@ -1,4 +1,4 @@
-import R from "ramda";
+import { reject } from "lodash";
 
 import Termin, { TerminType } from "../ical/termin";
 
@@ -42,7 +42,7 @@ export default class FerienIcals {
   }
 
   forName(name: string): Ical | undefined {
-    return this.icals.find(ical => ical.name === name);
+    return this.icals.find((ical) => ical.name === name);
   }
 
   addIcal(object: any): void {
@@ -56,7 +56,7 @@ export default class FerienIcals {
 
   deleteIcal(name: string): void {
     if (name) {
-      this.icals = R.reject(R.propEq("name", name))(this.icals);
+      this.icals = reject(this.icals, { name });
     }
   }
 
@@ -69,10 +69,10 @@ export default class FerienIcals {
   }
 
   forCalendar(): CalSource[] {
-    return this.icals.map(ical => {
+    return this.icals.map((ical) => {
       return {
         color: Termin.colorForType(ical.typ),
-        url: "/ical/eventsFromIcalURL/" + encodeURIComponent(ical.url)
+        url: "/ical/eventsFromIcalURL/" + encodeURIComponent(ical.url),
       };
     });
   }

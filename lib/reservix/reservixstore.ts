@@ -1,4 +1,4 @@
-import R from "ramda";
+import { partial } from "lodash";
 
 import misc from "../commons/misc";
 import pers from "../persistence/persistence";
@@ -12,10 +12,10 @@ function toOptionValues(callback: Function, err: Error | null, jsobject: object)
 
 export default {
   getSalesreport: function getSalesreport(id: string, callback: Function): void {
-    persistence.getById(id, R.partial(toOptionValues, [callback]));
+    persistence.getById(id, partial(toOptionValues, callback));
   },
 
-  saveAll: function(objects: Array<Lineobject>, callback: Function): void {
+  saveAll: function (objects: Array<Lineobject>, callback: Function): void {
     persistence.saveAll(objects, callback);
-  }
+  },
 };

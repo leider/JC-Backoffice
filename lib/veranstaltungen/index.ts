@@ -6,11 +6,10 @@ import fs from "fs";
 const zipstream = require("zip-stream");
 import express from "express";
 import async from "async";
-import R from "ramda";
+import { groupBy, sortBy, flatten } from "lodash";
 
 import path from "path";
 import fieldHelpers from "../commons/fieldHelpers";
-import misc from "../commons/misc";
 
 import optionenService from "../optionen/optionenService";
 import store from "./veranstaltungenstore";
@@ -46,7 +45,7 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res:
   if (res.locals.accessrights.isBookingTeam()) {
     return veranstaltungen;
   }
-  return veranstaltungen.filter(v => v.kopf.confirmed);
+  return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
 function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction, res: express.Response, titel: string): void {
@@ -74,14 +73,14 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
     }
     return async.parallel(
       {
-        users: callback => userstore.allUsers(callback),
-        icals: callback => optionenService.icals(callback)
+        users: (callback) => userstore.allUsers(callback),
+        icals: (callback) => optionenService.icals(callback),
       },
       (err1, results) => {
         if (err1) {
           return next(err1);
         }
-        return async.each(veranstaltungen, associateReservix, err2 => {
+        return async.each(veranstaltungen, associateReservix, (err2) => {
           if (err2) {
             return next(err2);
           }
@@ -90,13 +89,13 @@ function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction
           icals.unshift("/ical/eventsForCalendar");
 
           const filteredVeranstaltungen = filterUnbestaetigteFuerJedermann(veranstaltungen, res);
-          const groupedVeranstaltungen = R.groupBy(veranst => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+          const groupedVeranstaltungen = groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
           return res.render("../../teamseite/views/indexAdmin", {
             titel,
-            users: R.sortBy(R.prop("name"), results.users as User[]),
+            users: sortBy(results.users as User[], "name"),
             icals,
             groupedVeranstaltungen,
-            webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/"
+            webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/",
           });
         });
       }
@@ -113,7 +112,7 @@ function veranstaltungenForExport(fetcher: Function, next: express.NextFunction,
     if (err) {
       return next(err);
     }
-    const lines = veranstaltungen.map(veranstaltung => veranstaltung.toCSV());
+    const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
     return res.set("Content-Type", "text/csv").send(lines);
   });
 }
@@ -131,7 +130,7 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
       className:
         (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
         "verySmall color-" +
-        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)
+        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
     };
   }
 
@@ -166,7 +165,7 @@ app.get("/new", (req, res, next) => {
       veranstaltung: new Veranstaltung(),
       optionen,
       orte,
-      Vertrag
+      Vertrag,
     });
   });
 });
@@ -191,7 +190,7 @@ app.get("/imgzip/:monat", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const images = R.flatten(result.map(veranst => veranst.presse.image)).map(filename => {
+    const images = flatten(result.map((veranst) => veranst.presse.image)).map((filename) => {
       return { path: uploadDir + "/" + filename, name: filename };
     });
     const filename = "Jazzclub Bilder " + start.monatJahrKompakt + ".zip";
@@ -207,7 +206,7 @@ app.get("/imgzip/:monat", (req, res, next) => {
       (file, cb) => {
         zip.entry(fs.createReadStream(file.path), { name: file.name }, cb);
       },
-      err1 => {
+      (err1) => {
         if (err1) {
           return next(err1);
         }

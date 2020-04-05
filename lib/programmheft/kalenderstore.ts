@@ -1,6 +1,5 @@
 import Kalender from "./kalender";
-
-import R from "ramda";
+import { partial } from "lodash";
 
 import misc from "../commons/misc";
 
@@ -14,7 +13,7 @@ function toKalenderValues(callback: Function, id: string, err: Error | null, jso
 
 export default {
   getKalender: function getKalender(id: string, callback: Function): void {
-    persistence.getById(id, R.partial(toKalenderValues, [callback, id]));
+    persistence.getById(id, partial(toKalenderValues, callback, id));
   },
 
   saveKalender: function saveKalender(kalender: Kalender, callback: Function): void {

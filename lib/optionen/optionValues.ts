@@ -1,5 +1,6 @@
-import R from "ramda";
-const sortByNameCaseInsensitive = R.sortBy(R.toLower);
+import { range } from "lodash";
+import { sortBy, toLower } from "lodash/fp";
+const sortByNameCaseInsensitive = sortBy(toLower);
 import fieldHelpers from "../commons/fieldHelpers";
 import misc from "../commons/misc";
 import { KontaktUI } from "../veranstaltungen/object/kontakt";
@@ -42,11 +43,11 @@ export default class OptionValues {
   constructor(object?: any) {
     if (object) {
       Object.assign(this, object, {
-        typen: sortByNameCaseInsensitive(object.typen),
-        kooperationen: sortByNameCaseInsensitive(object.kooperationen),
-        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub),
-        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop),
-        artists: sortByNameCaseInsensitive(object.artists)
+        typen: sortByNameCaseInsensitive(object.typen || []),
+        kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
+        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
+        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
+        artists: sortByNameCaseInsensitive(object.artists || []),
       });
     }
   }
@@ -68,13 +69,13 @@ export default class OptionValues {
         name: "Kooperation",
         regulaer: 0,
         rabattErmaessigt: 0,
-        rabattMitglied: 0
+        rabattMitglied: 0,
       },
       {
         name: "Freier Eintritt",
         regulaer: 0,
         rabattErmaessigt: 0,
-        rabattMitglied: 0
+        rabattMitglied: 0,
       },
       { name: "Classix", regulaer: 5, rabattErmaessigt: 1, rabattMitglied: 5 },
       { name: "6,00", regulaer: 6, rabattErmaessigt: 1, rabattMitglied: 2 },
@@ -88,12 +89,12 @@ export default class OptionValues {
       { name: "30,00", regulaer: 30, rabattErmaessigt: 3, rabattMitglied: 7 },
       { name: "34,00", regulaer: 34, rabattErmaessigt: 3, rabattMitglied: 7 },
       { name: "38,00", regulaer: 38, rabattErmaessigt: 3, rabattMitglied: 7 },
-      { name: "42,00", regulaer: 42, rabattErmaessigt: 3, rabattMitglied: 7 }
+      { name: "42,00", regulaer: 42, rabattErmaessigt: 3, rabattMitglied: 7 },
     ];
   }
 
   noOfEmails(): number[] {
-    return R.range(1, 16);
+    return range(1, 16);
   }
 
   agenturenForSelection(): { name: string }[] {
@@ -116,7 +117,7 @@ export default class OptionValues {
       return;
     }
     delete kontakt.auswahl;
-    const existingKontakt = ourCollection.find(k => k.name === kontakt.name);
+    const existingKontakt = ourCollection.find((k) => k.name === kontakt.name);
     if (existingKontakt) {
       existingKontakt.ansprechpartner = kontakt.ansprechpartner;
       existingKontakt.telefon = kontakt.telefon;
@@ -133,7 +134,7 @@ export default class OptionValues {
       suiteEUR: string;
     }
   ): void {
-    if (!this.hotels.find(h => h.name === hotel.name)) {
+    if (!this.hotels.find((h) => h.name === hotel.name)) {
       // kein Hotel gefunden
       return;
     }
@@ -147,7 +148,7 @@ export default class OptionValues {
         name: hotel.name,
         einzelEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.einzelEUR),
         doppelEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.doppelEUR),
-        suiteEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.suiteEUR)
+        suiteEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.suiteEUR),
       });
     }
   }
@@ -179,7 +180,7 @@ export default class OptionValues {
         ourCollection = this.backlineRockshop;
         break;
     }
-    misc.toArray(updatedCollection).forEach(item => {
+    misc.toArray(updatedCollection).forEach((item) => {
       if (ourCollection.indexOf(item) < 0) {
         ourCollection.push(item);
       }

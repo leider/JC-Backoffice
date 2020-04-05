@@ -1,4 +1,4 @@
-import R from "ramda";
+import {uniq, flatten} from "lodash";
 
 import misc from "../commons/misc";
 import User from "./user";
@@ -27,44 +27,32 @@ class Users {
         return this.users;
       }
       result = result.concat(
-        R.uniq(
-          R.flatten(
+        uniq(
+          flatten(
             misc
               .toArray(groupsFromBody)
               .concat("superusers")
-              .map(group => {
-                return this.users.filter(user => user.gruppen.includes(group));
-              })
+              .map((group) => this.users.filter((user) => user.gruppen.includes(group)))
           )
         )
       );
     }
     if (listenFromBody && listenFromBody.length > 0) {
-      result = result.concat(
-        R.uniq(
-          R.flatten(
-            misc
-              .toArray(listenFromBody)
-              .map(liste => {
-                return this.users.filter(user => user.mailinglisten.includes(liste));
-              })
-          )
-        )
-      );
+      result = result.concat(uniq(flatten(misc.toArray(listenFromBody).map((liste) => this.getUsersInListe(liste)))));
     }
-    return R.uniq(result.concat(this.users.filter(user => (userFromBody || []).includes(user.id))));
+    return uniq(result.concat(this.users.filter((user) => (userFromBody || []).includes(user.id))));
   }
 
   extractListen() {
-    return R.uniq(R.flatten(this.users.map(u => u.mailinglisten)));
+    return uniq(flatten(this.users.map((u) => u.mailinglisten)));
   }
 
   getUsersInListe(listenname: string) {
-    return this.users.filter(u => u.mailinglisten.includes(listenname));
+    return this.users.filter((u) => u.mailinglisten.includes(listenname));
   }
 
   get mailinglisten() {
-    return this.extractListen().map(name => new Mailingliste(name, this.getUsersInListe(name)));
+    return this.extractListen().map((name) => new Mailingliste(name, this.getUsersInListe(name)));
   }
 }
 export default Users;

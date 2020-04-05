@@ -1,5 +1,4 @@
 import misc from "../../commons/misc";
-import R from "ramda";
 import User from "../../users/user";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
@@ -126,11 +125,11 @@ export default class Staff {
   }
 
   technikerAlle(): string[] {
-    return R.union(this.technikerV, this.techniker);
+    return this.technikerV.concat(this.techniker);
   }
 
   kasseAlle(): string[] {
-    return R.union(this.kasseV, this.kasse);
+    return this.kasseV.concat(this.kasse);
   }
 
   technikerText(): string {
@@ -153,12 +152,12 @@ export default class Staff {
       return;
     }
     const filledUsers: { [index: string]: User[] } = {};
-    filledUsers.techniker = users.filter((u) => R.includes(u.id, this.techniker));
-    filledUsers.technikerV = users.filter((u) => R.includes(u.id, this.technikerV));
-    filledUsers.kasse = users.filter((u) => R.includes(u.id, this.kasse));
-    filledUsers.kasseV = users.filter((u) => R.includes(u.id, this.kasseV));
-    filledUsers.merchandise = users.filter((u) => R.includes(u.id, this.merchandise));
-    filledUsers.mod = users.filter((u) => R.includes(u.id, this.mod));
+    filledUsers.techniker = users.filter((u) => this.techniker.includes(u.id));
+    filledUsers.technikerV = users.filter((u) => this.technikerV.includes(u.id));
+    filledUsers.kasse = users.filter((u) => this.kasse.includes(u.id));
+    filledUsers.kasseV = users.filter((u) => this.kasseV.includes(u.id));
+    filledUsers.merchandise = users.filter((u) => this.merchandise.includes(u.id));
+    filledUsers.mod = users.filter((u) => this.mod.includes(u.id));
     this.mitarbeiterTransient = filledUsers;
   }
 
@@ -166,11 +165,11 @@ export default class Staff {
     return (!this.kasseNotNeeded && this.kasse.length === 0) || (!this.kasseVNotNeeded && this.kasseV.length === 0);
   }
 
-  addUserToSection(user: User, section: StaffType) {
+  addUserToSection(user: User, section: StaffType): void {
     this.getStaffCollection(section).push(user.id);
   }
 
-  removeUserFromSection(user: User, section: StaffType) {
+  removeUserFromSection(user: User, section: StaffType): void {
     const sec = this.getStaffCollection(section);
     const index = sec.indexOf(user.id);
     sec.splice(index, 1);

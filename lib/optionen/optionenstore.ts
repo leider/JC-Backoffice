@@ -1,4 +1,4 @@
-import R from "ramda";
+import { partial } from "lodash";
 
 import misc from "../commons/misc";
 import pers from "../persistence/persistence";
@@ -26,22 +26,22 @@ function toIcals(callback: Function, err: Error | null, jsobject: object): void 
 
 export default {
   get: function get(callback: Function): void {
-    persistence.getById("instance", R.partial(toOptionValues, [callback]));
+    persistence.getById("instance", partial(toOptionValues, callback));
   },
 
   emailAddresses: function emailAddresses(callback: Function): void {
-    persistence.getById("emailaddresses", R.partial(toEmailAddresses, [callback]));
+    persistence.getById("emailaddresses", partial(toEmailAddresses, callback));
   },
 
   orte: function orte(callback: Function): void {
-    persistence.getById("orte", R.partial(toOrte, [callback]));
+    persistence.getById("orte", partial(toOrte, callback));
   },
 
   icals: function icals(callback: Function): void {
-    persistence.getById("ferienIcals", R.partial(toIcals, [callback]));
+    persistence.getById("ferienIcals", partial(toIcals, callback));
   },
 
   save: function save(object: OptionValues | Orte | EmailAddresses | FerienIcals, callback: Function): void {
     persistence.save(object.toJSON() as { id: string }, callback);
-  }
+  },
 };

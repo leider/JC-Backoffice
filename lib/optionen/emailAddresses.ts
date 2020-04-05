@@ -1,4 +1,4 @@
-import R from "ramda";
+import { range } from "lodash";
 
 export default class EmailAddresses {
   id = "emailaddresses";
@@ -49,7 +49,7 @@ export default class EmailAddresses {
   }
 
   noOfEmails(): number[] {
-    return R.range(1, 16);
+    return range(1, 16);
   }
 
   partnerForIndex(index: number): string {

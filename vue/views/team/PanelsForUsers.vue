@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import { groupBy } from "ramda";
+import { groupBy } from "lodash";
 import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
 import User from "../../../lib/users/user";
 
@@ -21,7 +21,7 @@ export default class PanelsForUsers extends Vue {
 
   get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
     const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.admin || v.kopf.confirmed);
-    return groupBy((veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
+    return groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
   }
 
   get monate(): string[] {
