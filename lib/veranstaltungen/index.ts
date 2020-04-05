@@ -143,11 +143,11 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
   });
 }
 
-app.get("/", (req, res) => res.redirect("/veranstaltungen/zukuenftige"));
+app.get("/", (req, res) => res.redirect("/vue/veranstaltungen/zukuenftige"));
 
-app.get("/zukuenftige", (req, res, next) => veranstaltungenForDisplay(store.zukuenftigeMitGestern, next, res, "Zukünftige"));
+app.get("/zukuenftige", (req, res) => res.redirect("/vue/veranstaltungen/zukuenftige"));
 
-app.get("/vergangene", (req, res, next) => veranstaltungenForDisplay(store.vergangene, next, res, "Vergangene"));
+app.get("/vergangene", (req, res) => res.redirect("/vue/veranstaltungen/vergangene"));
 
 app.get("/zukuenftige/csv", (req, res, next) => veranstaltungenForExport(store.zukuenftigeMitGestern, next, res));
 

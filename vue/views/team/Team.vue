@@ -20,7 +20,7 @@
             .btn-group.float-right
               a.btn.btn-light(href="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
               a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
-              b-dropdown(variant="light", :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
+              b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
                 b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
                 b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
             h2 Veranstaltungen

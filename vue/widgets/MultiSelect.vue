@@ -1,7 +1,7 @@
 <template lang="pug">
-  multiselect(:options="options", v-model="selected", :state="valid",
-    placeholder="Tippen zum Suchen", selectLabel="", deselectLabel="", selectedLabel="Gewählt",
-    allowEmpty=false, showLabels=false, :openDirection="openDirection", multiple=true, taggable=true,
+  multiselect(:options="options", v-model="selected", :state="valid", :closeOnSelect="false",
+    :searchable="false", placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
+    showLabels=false, :openDirection="openDirection", multiple=true, taggable=true,
     tag-placeholder="Als neues Schlagwort hinzufügen", @tag="addTag")
 </template>
 

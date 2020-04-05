@@ -11,8 +11,7 @@
       table(width='100%')
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(v-if="!nobodyNeeded", :class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-            i.far.fa-fw.fa-lg.fa-square(v-else)
+            i.far.fa-fw.fa-lg(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
           td: a(@click="toggleExpanded")
             h6 {{veranstaltung.datumForDisplayShort()}}
 
@@ -51,7 +50,7 @@
           staff-row-admin(label="Zwei:", sectionName="kasse", :users="users", :veranstaltung="veranstaltung")
           tr: td(colspan=3): h5.mb-0 Techniker
           staff-row-admin(label="Eins:", sectionName="technikerV", :users="users", :veranstaltung="veranstaltung")
-          staff-row-admin(v-if="!staff.technikerNotNeeded", label="Zwei:", sectionName="techniker", :users="users", :veranstaltung="veranstaltung")
+          staff-row-admin(label="Zwei:", sectionName="techniker", :users="users", :veranstaltung="veranstaltung")
           tr: td(colspan=3): h5.mb-0 Master
           staff-row-admin(label="", sectionName="mod", :users="users", :veranstaltung="veranstaltung")
           tr: td(colspan=3): h5.mb-0 Merchandise

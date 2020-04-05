@@ -3,7 +3,7 @@
     th: .form-control-plaintext {{label}}
     td
       .input-group
-        multi-select(v-model="section", :options="userids", style="width:90%!important")
+        multi-select(v-model="section", :options="userids")
         .input-group-append
           .input-group-text.pl-1.pr-0
             b-form-checkbox(v-model="checked")
@@ -33,7 +33,7 @@ export default class StaffRowAdmin extends Vue {
   }
 
   get userids() {
-    return this.users.map(u => u.id);
+    return this.users.map((u) => u.id);
   }
 
   get staff(): Staff {
@@ -48,3 +48,12 @@ export default class StaffRowAdmin extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.multiselect {
+  width: calc(100% - 29px) !important;
+}
+.multiselect__tags {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+</style>
