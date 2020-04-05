@@ -34,10 +34,7 @@ export default class StaffRow extends Vue {
   }
 
   add(): void {
-    if (!this.veranstaltung.id) {
-      return;
-    }
-    addUserToSection(this.veranstaltung.id, this.sectionName, (err: Error) => {
+    addUserToSection(this.veranstaltung, this.sectionName, (err: Error) => {
       if (!err) {
         this.staff.addUserToSection(this.user, this.sectionName);
       }
@@ -45,10 +42,7 @@ export default class StaffRow extends Vue {
   }
 
   remove(): void {
-    if (!this.veranstaltung.id) {
-      return;
-    }
-    removeUserFromSection(this.veranstaltung.id, this.sectionName, (err: Error) => {
+    removeUserFromSection(this.veranstaltung, this.sectionName, (err: Error) => {
       if (!err) {
         this.staff.removeUserFromSection(this.user, this.sectionName);
       }

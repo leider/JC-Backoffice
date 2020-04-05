@@ -15,7 +15,6 @@ import mailsenderApp from "./lib/mailsender";
 import optionenApp from "./lib/optionen";
 import programmheftApp from "./lib/programmheft";
 import siteApp from "./lib/site";
-import teamseiteApp from "./lib/teamseite";
 import usersApp from "./lib/users";
 import veranstaltungenApp from "./lib/veranstaltungen";
 import vertragApp from "./lib/vertrag";
@@ -37,7 +36,7 @@ const httpLogger = loggers.get("http");
 
 // stream the log messages of express to winston, remove line breaks on message
 const winstonStream = {
-  write: (message: string): Logger => httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, ""))
+  write: (message: string): Logger => httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, "")),
 };
 
 function secureAgainstClickjacking(req: express.Request, res: express.Response, next: express.NextFunction): void {
@@ -74,7 +73,7 @@ function useApp(parent: express.Express, url: string, child: express.Express): e
   return child;
 }
 
-export default function(app: express.Express) {
+export default function (app: express.Express) {
   app.use(serverpathRemover);
   app.set("view engine", "pug");
   app.set("views", path.join(__dirname, "views"));
@@ -102,11 +101,9 @@ export default function(app: express.Express) {
   useApp(app, "veranstaltungen", veranstaltungenApp);
   useApp(app, "users", usersApp);
   useApp(app, "gema", gemaApp);
-  useApp(app, "teamseite", teamseiteApp);
   useApp(app, "wiki", wikiApp);
   useApp(app, "ical", icalApp);
   useApp(app, "vertrag", vertragApp);
   useApp(app, "programmheft", programmheftApp);
   useApp(app, "vue-spa", vueApp);
-
 }

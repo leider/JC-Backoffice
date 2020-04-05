@@ -32,18 +32,18 @@
         tbody
           tr(v-if="!staff.kasseVNotNeeded || !staff.kasseNotNeeded")
             td(colspan=3): h5.mb-0 Kasse
-          StaffRow(v-if="!staff.kasseVNotNeeded", label="Eins:", sectionName="kasseV", :user="user", :veranstaltung="veranstaltung")
-          StaffRow(v-if="!staff.kasseNotNeeded", label="Zwei:", sectionName="kasse", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.kasseVNotNeeded", label="Eins:", sectionName="kasseV", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.kasseNotNeeded", label="Zwei:", sectionName="kasse", :user="user", :veranstaltung="veranstaltung")
           tr(v-if="!staff.technikerVNotNeeded || !staff.technikerNotNeeded")
             td(colspan=3): h5.mb-0 Techniker
-          StaffRow(v-if="!staff.technikerVNotNeeded", label="Eins:", sectionName="technikerV", :user="user", :veranstaltung="veranstaltung")
-          StaffRow(v-if="!staff.technikerNotNeeded", label="Zwei:", sectionName="techniker", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.technikerVNotNeeded", label="Eins:", sectionName="technikerV", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.technikerNotNeeded", label="Zwei:", sectionName="techniker", :user="user", :veranstaltung="veranstaltung")
           tr(v-if="!staff.modNotNeeded")
             td(colspan=3): h5.mb-0 Master
-          StaffRow(v-if="!staff.modNotNeeded", label="", sectionName="mod", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.modNotNeeded", label="", sectionName="mod", :user="user", :veranstaltung="veranstaltung")
           tr(v-if="!staff.merchandiseNotNeeded")
             td(colspan=3): h5.mb-0 Merchandise
-          StaffRow(v-if="!staff.merchandiseNotNeeded", label="", sectionName="merchandise", :user="user", :veranstaltung="veranstaltung")
+          staff-row(v-if="!staff.merchandiseNotNeeded", label="", sectionName="merchandise", :user="user", :veranstaltung="veranstaltung")
 </template>
 
 <script lang="ts">
@@ -56,18 +56,12 @@ import Kopf from "../../../lib/veranstaltungen/object/kopf";
 import Staff from "../../../lib/veranstaltungen/object/staff";
 
 @Component({ components: { StaffRow } })
-export default class Panel extends Vue {
+export default class TeamPanelUser extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
   @Prop() initiallyExpanded?: boolean;
 
   private expanded = this.initiallyExpanded;
-
-  private id = "ID";
-
-  get collapseId(): string {
-    return `collapse${this.veranstaltung.id}`;
-  }
 
   close(): void {
     this.expanded = false;

@@ -1,34 +1,45 @@
 <template lang="pug">
-.row
-  .col-12
-    h4.pt-1.pb-2.px-1.bg-primary.text-white
-      a(@click="aufZu")
-        i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-        | {{monat}} &nbsp;
-      .btn-group.btn-group-sm.float-right
-        a.btn.btn-secondary.btn-sm(href="/veranstaltungen/texte/")
-          i.far.fa-file-alt.fa-fw
-          | #{' '} Presseexte
-        a.btn.btn-secondary.btn-sm(href="/veranstaltungen/monat/")
-          i.fas.fa-align-justify.fa-fw
-          | #{' '} Übersicht
-  Panel(v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id", :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :user="user")
+div
+  h4.pt-1.pb-2.px-1.bg-primary.text-white
+    a(@click="aufZu")
+      i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+      | {{monat}} &nbsp;
+    .btn-group.btn-group-sm.float-right
+      a.btn.btn-secondary.btn-sm(href="/veranstaltungen/texte/")
+        i.far.fa-file-alt.fa-fw
+        | #{' '} Presseexte
+      a.btn.btn-secondary.btn-sm(href="/veranstaltungen/monat/")
+        i.fas.fa-align-justify.fa-fw
+        | #{' '} Übersicht
+  .row
+    team-panel-user(v-if="!admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
+      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :user="user")
+    team-panel-admin(v-if="admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
+      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :users="users")
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Panel from "@/views/team/Panel.vue";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import User from "../../../lib/users/user";
+import TeamPanelUser from "@/views/team/TeamPanelUser.vue";
+import TeamPanelAdmin from "@/views/team/TeamPanelAdmin.vue";
 
-@Component({ components: { Panel } })
+@Component({ components: { TeamPanelAdmin, TeamPanelUser } })
 export default class PanelsForMonat extends Vue {
   @Prop() monat!: string;
   @Prop() veranstaltungen!: Veranstaltung[];
   @Prop() user!: User;
+  @Prop() users!: User[];
+  @Prop() admin!: boolean;
   private nearFuture = new DatumUhrzeit().plus({ monate: 1 });
-  private expanded = this.veranstaltungen[0].startDatumUhrzeit().istVor(this.nearFuture);
+  private expanded =
+    this.datumErsteVeranstaltung.istVor(this.nearFuture) && this.datumErsteVeranstaltung.istNach(new DatumUhrzeit().minus({ monate: 1 }));
+
+  get datumErsteVeranstaltung(): DatumUhrzeit {
+    return this.veranstaltungen[0].startDatumUhrzeit();
+  }
 
   doWithAllPanels(action: string): void {
     this.veranstaltungen.forEach((v) => {

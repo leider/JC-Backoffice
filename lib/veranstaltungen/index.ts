@@ -260,6 +260,26 @@ app.post("/updateStaff", (req, res, next) => {
   });
 });
 
+app.get("/zukuenftige.json", (req, res) => {
+  store.zukuenftigeMitGestern((err: Error, veranstaltungen: Veranstaltung[]) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
+    res.set("Content-Type", "application/json").send(result);
+  });
+});
+
+app.get("/vergangene.json", (req, res) => {
+  store.vergangene((err: Error, veranstaltungen: Veranstaltung[]) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
+    res.set("Content-Type", "application/json").send(result);
+  });
+});
+
 addRoutesTo(app);
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {

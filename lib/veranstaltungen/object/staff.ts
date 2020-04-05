@@ -73,6 +73,50 @@ export default class Staff {
     return this[forType];
   }
 
+  setStaffCollection(forType: StaffType, value: string[]): void {
+    this[forType] = value;
+  }
+
+  getStaffNotNeeded(forType: StaffType): boolean {
+    switch (forType) {
+      case "kasse":
+        return this.kasseNotNeeded;
+      case "kasseV":
+        return this.kasseVNotNeeded;
+      case "merchandise":
+        return this.merchandiseNotNeeded;
+      case "mod":
+        return this.modNotNeeded;
+      case "techniker":
+        return this.technikerNotNeeded;
+      case "technikerV":
+        return this.technikerVNotNeeded;
+    }
+  }
+
+  setStaffNotNeeded(forType: StaffType, check: boolean): void {
+    switch (forType) {
+      case "kasse":
+        this.kasseNotNeeded = check;
+        break;
+      case "kasseV":
+        this.kasseVNotNeeded = check;
+        break;
+      case "merchandise":
+        this.merchandiseNotNeeded = check;
+        break;
+      case "mod":
+        this.modNotNeeded = check;
+        break;
+      case "techniker":
+        this.technikerNotNeeded = check;
+        break;
+      case "technikerV":
+        this.technikerVNotNeeded = check;
+        break;
+    }
+  }
+
   updateStaff(object: StaffUI): void {
     this.fillFromUI(object);
   }

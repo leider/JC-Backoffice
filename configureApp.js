@@ -17,7 +17,6 @@ var mailsender_1 = __importDefault(require("./lib/mailsender"));
 var optionen_1 = __importDefault(require("./lib/optionen"));
 var programmheft_1 = __importDefault(require("./lib/programmheft"));
 var site_1 = __importDefault(require("./lib/site"));
-var teamseite_1 = __importDefault(require("./lib/teamseite"));
 var users_1 = __importDefault(require("./lib/users"));
 var veranstaltungen_1 = __importDefault(require("./lib/veranstaltungen"));
 var vertrag_1 = __importDefault(require("./lib/vertrag"));
@@ -34,7 +33,7 @@ var wikiSubdirs_1 = __importDefault(require("./lib/middleware/wikiSubdirs"));
 var path_1 = __importDefault(require("path"));
 var httpLogger = initWinston_1.default.get("http");
 var winstonStream = {
-    write: function (message) { return httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, "")); }
+    write: function (message) { return httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, "")); },
 };
 function secureAgainstClickjacking(req, res, next) {
     res.setHeader("X-Frame-Options", "DENY");
@@ -93,7 +92,6 @@ function default_1(app) {
     useApp(app, "veranstaltungen", veranstaltungen_1.default);
     useApp(app, "users", users_1.default);
     useApp(app, "gema", index_1.default);
-    useApp(app, "teamseite", teamseite_1.default);
     useApp(app, "wiki", wiki_1.default);
     useApp(app, "ical", ical_1.default);
     useApp(app, "vertrag", vertrag_1.default);

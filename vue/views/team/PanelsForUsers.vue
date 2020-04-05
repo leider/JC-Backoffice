@@ -1,7 +1,8 @@
 <template lang="pug">
 .row
   .col-12
-    PanelsForMonat(v-for="monat in monate", :key="monat", :monat="monat", :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user")
+    panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
+      :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin")
 </template>
 
 <script lang="ts">
@@ -15,9 +16,11 @@ import User from "../../../lib/users/user";
 export default class PanelsForUsers extends Vue {
   @Prop() veranstaltungen!: Veranstaltung[];
   @Prop() user!: User;
+  @Prop() users!: User[];
+  @Prop() admin!: boolean;
 
   get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
-    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => v.kopf.confirmed);
+    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.admin || v.kopf.confirmed);
     return groupBy((veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt, filteredVeranstaltungen);
   }
 

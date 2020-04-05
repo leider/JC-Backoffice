@@ -7,6 +7,8 @@ import Termin, { TerminEvent } from "./termin";
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
+import optionenservice from "../optionen/optionenService";
+import FerienIcals from "../optionen/ferienIcals";
 
 const app = expressAppIn(__dirname);
 
@@ -26,6 +28,18 @@ app.get("/", (req, res, next) => {
       "events",
       res
     );
+  });
+});
+
+app.get("/calURLs.json", (req, res) => {
+  optionenservice.icals((err: Error, icals: FerienIcals) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    const result = icals.forCalendar();
+    result.unshift("/veranstaltungen/eventsForCalendar");
+    result.unshift("/ical/eventsForCalendar");
+    res.set("Content-Type", "application/json").send(result);
   });
 });
 

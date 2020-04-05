@@ -40,7 +40,7 @@ export default class UserPanel extends Vue {
   @Prop() user!: User;
   private expanded = this.user.id === this.currentUser.id;
 
-  get accessrights(): Accessrights {
+  get accessrights(): Accessrights | undefined {
     return this.currentUser.accessrights;
   }
 
@@ -64,7 +64,7 @@ export default class UserPanel extends Vue {
   }
 
   get canEdit(): boolean {
-    return this.accessrights.canEditUser(this.user.id);
+    return !!this.accessrights && this.accessrights.canEditUser(this.user.id);
   }
 
   gruppenUndRechteText(): string {
@@ -76,7 +76,7 @@ export default class UserPanel extends Vue {
   }
 
   editlink(): string {
-    return this.accessrights.canEditUser(this.user.id) ? `/users/${encodeURIComponent(this.user.id)}` : "";
+    return this.canEdit ? `/users/${encodeURIComponent(this.user.id)}` : "";
   }
 
   saveUser(): void {

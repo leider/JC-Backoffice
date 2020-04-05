@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import express from "express";
+import express, { Request, Response } from "express";
 
 import { Form } from "multiparty";
 import optionenService from "../optionen/optionenService";
@@ -18,6 +18,7 @@ import { PDFOptions } from "puppeteer";
 
 import conf from "../commons/simpleConfigure";
 import Renderer from "../commons/renderer";
+import app from "../vue";
 const uploadDir = path.join(__dirname, "../../static/upload");
 const filesDir = path.join(__dirname, "../../static/files");
 const publicUrlPrefix = conf.get("publicUrlPrefix");
@@ -26,7 +27,7 @@ const printoptions: PDFOptions = {
   format: "A4",
   landscape: false, // portrait or landscape
   scale: 1.1,
-  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" }
+  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
 };
 
 export function addRoutesTo(app: express.Express): void {
@@ -85,7 +86,7 @@ export function addRoutesTo(app: express.Express): void {
           veranstaltung: veranstaltung,
           optionen,
           orte,
-          Vertrag
+          Vertrag,
         });
       });
     });
@@ -136,7 +137,7 @@ export function addRoutesTo(app: express.Express): void {
           veranstaltung: veranstaltung,
           optionen,
           orte,
-          Vertrag
+          Vertrag,
         });
       });
     });
@@ -162,7 +163,7 @@ export function addRoutesTo(app: express.Express): void {
           res.render("edit/ausgaben", {
             veranstaltung,
             optionen,
-            allUsers: users.map(user => user.id)
+            allUsers: users.map((user) => user.id),
           });
         });
       });
@@ -187,7 +188,7 @@ export function addRoutesTo(app: express.Express): void {
         }
         return res.render("edit/hotel", {
           veranstaltung: veranstaltung,
-          optionen: optionen
+          optionen: optionen,
         });
       });
     });
@@ -211,7 +212,7 @@ export function addRoutesTo(app: express.Express): void {
         }
         return res.render("edit/kasse", {
           veranstaltung: veranstaltung,
-          optionen: optionen
+          optionen: optionen,
         });
       });
     });
@@ -235,7 +236,7 @@ export function addRoutesTo(app: express.Express): void {
         }
         return res.render("edit/technik", {
           veranstaltung: veranstaltung,
-          optionen: optionen
+          optionen: optionen,
         });
       });
     });
@@ -260,7 +261,7 @@ export function addRoutesTo(app: express.Express): void {
           {
             veranstaltung: veranstaltung,
             kassierer: kassierer,
-            publicUrlPrefix: publicUrlPrefix
+            publicUrlPrefix: publicUrlPrefix,
           },
           puppeteerPrinter.generatePdf(printoptions, res, next)
         );
@@ -283,7 +284,7 @@ export function addRoutesTo(app: express.Express): void {
         bildernamen.unshift(null);
         return res.render("edit/presse", {
           veranstaltung: veranstaltung,
-          bildernamen
+          bildernamen,
         });
       });
     });
@@ -357,6 +358,19 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
+  app.post("/saveVeranstaltung", (req, res) => {
+    if (!res.locals.accessrights.isOrgaTeam()) {
+      return res.redirect("/");
+    }
+    const veranstaltung = new Veranstaltung(req.body);
+    store.saveVeranstaltung(veranstaltung, (err: Error) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
+    });
+  });
+
   app.post("/submit", (req, res, next) => {
     const body = req.body;
 
@@ -399,7 +413,7 @@ export function addRoutesTo(app: express.Express): void {
         const dateiname = datei.originalFilename.replace(/[()]/g, "_");
         const istPressefoto = fields.typ[0] === "pressefoto";
         const pfad = datei.path;
-        return copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname), errC => {
+        return copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname), (errC) => {
           if (errC) {
             return res.send({ error: errC });
           }
@@ -413,21 +427,21 @@ export function addRoutesTo(app: express.Express): void {
             if (istPressefoto) {
               if (!veranstaltung.presse.updateImage(dateiname)) {
                 return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden."
+                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
                 });
               }
             }
             if (fields.typ[0] === "vertrag") {
               if (!veranstaltung.vertrag.updateDatei(dateiname)) {
                 return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden."
+                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
                 });
               }
             }
             if (fields.typ[0] === "rider") {
               if (!veranstaltung.technik.updateDateirider(dateiname)) {
                 return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden."
+                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
                 });
               }
             }
@@ -477,5 +491,28 @@ export function addRoutesTo(app: express.Express): void {
         return res.send({});
       });
     });
+  });
+
+  function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response): void {
+    store.getVeranstaltung(req.params.url, (err: Error, veranstaltung: Veranstaltung) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      veranstaltung.staff[func](req.user as User, req.body.section);
+      return store.saveVeranstaltung(veranstaltung, (err1: Error) => {
+        if (err1) {
+          return res.status(500).send(err1);
+        }
+        return res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
+      });
+    });
+  }
+
+  app.post("/:url/addUserToSection", (req, res) => {
+    addOrRemoveUserFromSection("addUserToSection", req, res);
+  });
+
+  app.post("/:url/removeUserFromSection", (req, res) => {
+    addOrRemoveUserFromSection("removeUserFromSection", req, res);
   });
 }

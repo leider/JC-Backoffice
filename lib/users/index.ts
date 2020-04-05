@@ -23,19 +23,6 @@ function showListe(res: express.Response, next: express.NextFunction, optionalLa
   });
 }
 
-function updateUserWith(setter: Function, req: express.Request, res: express.Response): void {
-  const userid = req.query.user;
-  const value = req.query.value;
-  store.forId(userid, (err: Error | null, user: User) => {
-    if (err) {
-      return res.send(false);
-    }
-    setter(user, value);
-    return store.save(user, (err1: Error | null) => {
-      res.send(!err1);
-    });
-  });
-}
 app.get("/", (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect("/");
@@ -152,24 +139,30 @@ app.get("/deleteliste/:name", (req, res, next) => {
   });
 });
 
-app.get("/tshirt-size-for", (req, res) => {
-  updateUserWith(
-    (user: User, value: string): void => {
-      user.tshirt = value;
-    },
-    req,
-    res
-  );
+app.get("/user.json", (req, res) => {
+  res.set("Content-Type", "application/json").send((req.user as User)?.toJSON());
 });
 
-app.get("/tel-for", (req, res) => {
-  updateUserWith(
-    (user: User, value: string): void => {
-      user.tel = value;
-    },
-    req,
-    res
-  );
+app.get("/allusers.json", (req, res) => {
+  store.allUsers((err: Error | null, users: User[]) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(users.map((u) => u.toJSON()));
+  });
+});
+
+app.post("/saveUser", (req, res) => {
+  const user = new User(req.body);
+  if (!res.locals.accessrights.canEditUser(user.id)) {
+    return;
+  }
+  store.save(user, (err: Error) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(user.toJSON());
+  });
 });
 
 app.get("/changePassword/:id", (req, res, next) => {

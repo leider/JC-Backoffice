@@ -6,7 +6,7 @@ div
     b-nav-toggle(target="nav-collapse")
     b-collapse#nav-collapse.align-self-end(is-nav)
       b-navbar-nav
-        b-nav-item(v-if="showItem", href="/veranstaltungen/zukuenftige")
+        b-nav-item(v-if="showItem", to="/veranstaltungen", active-class="active")
           i.far.fa-calendar-alt.fa-fw.fa-lg
           span &nbsp;Veranstaltungen&nbsp;
         b-nav-item(v-if="showItem", data-jcnav="programmheft", href="/programmheft")
@@ -110,7 +110,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
-
+@import "widgets/vue-multiselect";
 // colors
 $color-ausgaben1: #d50f36;
 
