@@ -22,7 +22,7 @@ export default class StaffRow extends Vue {
         return this.veranstaltung.unterkunft;
       case "technik":
         return this.veranstaltung.technik;
-      default :
+      default:
         return this.veranstaltung.presse;
     }
   }

@@ -48,61 +48,6 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res:
   return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
-function veranstaltungenForDisplay(fetcher: Function, next: express.NextFunction, res: express.Response, titel: string): void {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/teamseite/");
-  }
-
-  function associateReservix(veranstaltung: Veranstaltung, callback: Function): void {
-    const reservixID = veranstaltung.reservixID;
-    if (reservixID && (!veranstaltung.salesreport || !veranstaltung.salesreport?.istVergangen())) {
-      salesreportFor(reservixID, (salesreport?: Salesreport) => {
-        veranstaltung.associateSalesreport(salesreport);
-        store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
-          callback(err, veranstaltung);
-        });
-      });
-    } else {
-      callback(null, veranstaltung);
-    }
-  }
-
-  return fetcher((err: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return next(err);
-    }
-    return async.parallel(
-      {
-        users: (callback) => userstore.allUsers(callback),
-        icals: (callback) => optionenService.icals(callback),
-      },
-      (err1, results) => {
-        if (err1) {
-          return next(err1);
-        }
-        return async.each(veranstaltungen, associateReservix, (err2) => {
-          if (err2) {
-            return next(err2);
-          }
-          const icals = (results.icals as FerienIcals).forCalendar();
-          icals.unshift("/veranstaltungen/eventsForCalendar");
-          icals.unshift("/ical/eventsForCalendar");
-
-          const filteredVeranstaltungen = filterUnbestaetigteFuerJedermann(veranstaltungen, res);
-          const groupedVeranstaltungen = groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
-          return res.render("../../teamseite/views/indexAdmin", {
-            titel,
-            users: sortBy(results.users as User[], "name"),
-            icals,
-            groupedVeranstaltungen,
-            webcalURL: (conf.get("publicUrlPrefix") as string).replace(/https|http/, "webcal") + "/ical/",
-          });
-        });
-      }
-    );
-  });
-}
-
 function veranstaltungenForExport(fetcher: Function, next: express.NextFunction, res: express.Response): void {
   if (!res.locals.accessrights.isBookingTeam()) {
     return res.redirect("/");

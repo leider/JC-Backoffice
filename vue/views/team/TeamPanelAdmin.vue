@@ -62,14 +62,13 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import fieldHelpers from "../../../lib/commons/fieldHelpers";
 import { saveVeranstaltung } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import StaffRow from "@/views/team/StaffRow.vue";
 import User from "../../../lib/users/user";
 import Kopf from "../../../lib/veranstaltungen/object/kopf";
 import Staff from "../../../lib/veranstaltungen/object/staff";
 import CheckedButton from "@/views/team/CheckedButton.vue";
 import StaffRowAdmin from "@/views/team/StaffRowAdmin.vue";
 
-@Component({ components: { StaffRowAdmin, CheckedButton, StaffRow } })
+@Component({ components: { StaffRowAdmin, CheckedButton } })
 export default class TeamPanelAdmin extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() users!: User[];

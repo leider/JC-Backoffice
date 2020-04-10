@@ -5,10 +5,10 @@ div
       i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
       | {{monat}} &nbsp;
     .btn-group.btn-group-sm.float-right
-      a.btn.btn-secondary.btn-sm(href="/veranstaltungen/texte/")
+      a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/texte/${datumErsteVeranstaltung.fuerUnterseiten}`")
         i.far.fa-file-alt.fa-fw
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(href="/veranstaltungen/monat/")
+      a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/monat/${datumErsteVeranstaltung.fuerUnterseiten}`")
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
   .row

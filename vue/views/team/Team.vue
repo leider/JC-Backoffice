@@ -27,7 +27,8 @@
 
       .row
         .col-12
-          panels-for-users(ref="panels", :veranstaltungen="veranstaltungen", :user="user", :admin="admin", :users="users")
+          panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
+            :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin")
     .col-lg-4
       jazz-calendar.mt-4
   .row
@@ -36,13 +37,12 @@
       .page-header
         h2 Übersicht der Benutzer
   .row
-    UserPanel(:currentUser="user", :user="user")
-    UserPanel(v-for="u in otherUsers()", :key="u.id", :currentUser="user", :user="u")
+    user-panel(:currentUser="user", :user="user")
+    user-panel(v-for="u in otherUsers()", :key="u.id", :currentUser="user", :user="u")
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import PanelsForUsers from "./PanelsForUsers.vue";
 import User from "../../../lib/users/user";
 import { allUsers, currentUser, icals, veranstaltungenForTeam } from "@/commons/loader";
 import Accessrights from "../../../lib/commons/accessrights";
@@ -50,9 +50,11 @@ import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
 import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
+import { groupBy } from "lodash";
+import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
 
 @Component({
-  components: { JazzCalendar, UserPanel, PanelsForUsers },
+  components: { JazzCalendar, UserPanel, PanelsForMonat },
 })
 export default class Team extends Vue {
   @Prop() admin!: boolean;
@@ -89,6 +91,15 @@ export default class Team extends Vue {
 
   get webcalUrl(): string {
     return `${window.location.origin.replace(/https|http/, "webcal")}/ical/`;
+  }
+
+  get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
+    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.admin || v.kopf.confirmed);
+    return groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
+  }
+
+  get monate(): string[] {
+    return Object.keys(this.veranstaltungenNachMonat);
   }
 
   otherUsers(): User[] {
