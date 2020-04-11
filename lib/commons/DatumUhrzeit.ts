@@ -240,6 +240,7 @@ export default class DatumUhrzeit {
   }
 
   get value(): DateTime {
-    return this.dateTime.isValid ? this.dateTime : DateTime.local();
+    return this.dateTime;
+    //return this.dateTime.isValid ? this.dateTime : DateTime.local();
   }
 }

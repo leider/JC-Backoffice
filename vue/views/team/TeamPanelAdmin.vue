@@ -30,7 +30,7 @@
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="technik")
-          td(v-if="veranstaltung.artist.brauchtHotel").p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
+          td.p-0(v-if="veranstaltung.artist.brauchtHotel", width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
     b-collapse(v-model="expanded")
       .btn-group.btn-group-sm.float-right.m-1
         a.btn.btn-allgemeines(:href="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): i.fas.fa-fw.fa-keyboard

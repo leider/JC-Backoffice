@@ -4,7 +4,6 @@ FullCalendar(
   defaultView="dayGridMonth",
   themeSystem="bootstrap",
   :locales="locales",
-  locale="de",
   :header="{ left: 'title', center: '', right: '' }",
   timeZone="Europe/Berlin",
   timeFormat="HH:mm",
@@ -21,6 +20,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
+import luxonPlugin from "@fullcalendar/luxon";
 import deLocale from "@fullcalendar/core/locales/de";
 
 @Component({ components: { FullCalendar } })
@@ -31,7 +31,7 @@ export default class HeftCalendar extends Vue {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get calendarPlugins(): any[] {
-    return [dayGridPlugin, bootstrapPlugin];
+    return [dayGridPlugin, bootstrapPlugin, luxonPlugin];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

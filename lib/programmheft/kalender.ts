@@ -44,7 +44,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
     function dates(element: string): string[] | null {
       if (element.trim()) {
         const fromAndUntil = misc.compact(element.split("-").map((each) => each.trim()));
-        const from = toDate(fromAndUntil[0], "02:00");
+        const from = toDate(fromAndUntil[0]);
         const until = toDate(fromAndUntil[1] || fromAndUntil[0], "22:00"); // 22 hours
         if (from && until) {
           return [from.toISOString(), until.toISOString()];

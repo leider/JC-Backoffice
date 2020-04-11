@@ -12,12 +12,6 @@ module.exports = function (grunt) {
       "node_modules/bootstrap-select/dist/js/i18n/defaults-de_DE.js",
       "frontend/javascript/jc-backoffice.js",
     ],
-    "static/clientscripts/fullcalendar.min.js": [
-      "node_modules/@fullcalendar/core/main.js",
-      "node_modules/@fullcalendar/core/locales/de.js",
-      "node_modules/@fullcalendar/daygrid/main.js",
-      "node_modules/@fullcalendar/bootstrap/main.js",
-    ],
     "static/clientscripts/fileinput.min.js": [
       "node_modules/bootstrap-fileinput/js/fileinput.js",
       "node_modules/bootstrap-fileinput/js/locales/de.js",
@@ -34,14 +28,6 @@ module.exports = function (grunt) {
       "frontend/3rd_party_css/flaticon-patched.css",
       "node_modules/select2/dist/css/select2.css",
       "frontend/sass/out/jc-backoffice.css",
-    ],
-  };
-
-  const filesForFullcalendarCss = {
-    "static/stylesheets/fullcalendar.css": [
-      "node_modules/@fullcalendar/core/main.css",
-      "node_modules/@fullcalendar/daygrid/main.css",
-      "node_modules/@fullcalendar/bootstrap/main.css",
     ],
   };
 
@@ -104,12 +90,6 @@ module.exports = function (grunt) {
           level: 2,
         },
         files: filesForCss,
-      },
-      fullcalendar: {
-        options: {
-          level: 2,
-        },
-        files: filesForFullcalendarCss,
       },
     },
     uglify: {

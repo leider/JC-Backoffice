@@ -16,11 +16,11 @@ describe("Programmheft Mailsender", () => {
 
   const currentKalender = new Kalender({
     id: "2019/05",
-    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.04.19 | x@y.z | 3"
+    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.04.19 | x@y.z | 3",
   });
   const nextKalender = new Kalender({
     id: "2019/07",
-    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.06.19 | x@y.z | 3"
+    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.06.19 | x@y.z | 3",
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,7 +42,7 @@ describe("Programmheft Mailsender", () => {
     sinon.restore();
   });
 
-  it("runs correctly on a day where notificatons lie", done => {
+  it("runs correctly on a day where notificatons lie", (done) => {
     remindForProgrammheft(april12 as DatumUhrzeit, (err: Error | null | undefined) => {
       sinon.assert.calledOnce(mailcheck);
       const message = mailcheck.args[0][0];
@@ -52,7 +52,7 @@ describe("Programmheft Mailsender", () => {
     });
   });
 
-  it("runs correctly on a day where no notificatons lie", done => {
+  it("runs correctly on a day where no notificatons lie", (done) => {
     remindForProgrammheft(april13 as DatumUhrzeit, (err: Error | null | undefined) => {
       sinon.assert.notCalled(mailcheck);
       done(err);

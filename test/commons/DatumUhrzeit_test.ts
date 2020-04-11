@@ -43,9 +43,9 @@ describe("DatumUhrzeit", () => {
       expect(DatumUhrzeit.forReservixString("So, 12.05.2019", "20:00 Uhr")?.toLocalDateTimeString).to.eql("12.05.2019, 20:00:00");
     });
 
-    it.only("handles bullshit strings gracefully", () => {
-      expect(DatumUhrzeit.forGermanStringOrNow("00.05.2019", "20:00 Uhr")?.toJSDate).to.eql("12.05.2019, 20:00:00");
-    })
+    it("handles bullshit strings gracefully", () => {
+      expect(DatumUhrzeit.forGermanStringOrNow("00.05.2019", "20:00 Uhr").value.isValid).to.eq(true);
+    });
   });
 
   describe("plus und minus (Datum) mit immutability", () => {

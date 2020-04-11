@@ -228,13 +228,6 @@ h6 > small {
   color: $text-muted;
 }
 
-// transform fullcalendar's primary to light button
-.fc-right .btn-primary {
-  color: #212529;
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
-}
-
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
