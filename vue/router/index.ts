@@ -11,7 +11,8 @@ const routes = [
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
   { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, zukuenftige: true } },
   { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, zukuenftige: false } },
-  { path: "/programmheft", component: Programmheft, props: { initialStart: new DatumUhrzeit().naechsterUngeraderMonat } },
+  { path: "/programmheft", redirect: `/programmheft/${new DatumUhrzeit().naechsterUngeraderMonat.fuerKalenderViews}` },
+  { path: "/programmheft/:year/:month", component: Programmheft, props: true },
 ];
 
 const router = new VueRouter({

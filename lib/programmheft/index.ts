@@ -27,6 +27,35 @@ app.get("/kalenderFor", (req, res, next) => {
   });
 });
 
+app.get("/:year/:month.json", (req, res) => {
+  let yearMonthString = `${req.params.year}/${req.params.month}`;
+  if (parseInt(req.params.month) % 2 === 0) {
+    const correctedDatum = DatumUhrzeit.forYYYYslashMM(yearMonthString).naechsterUngeraderMonat;
+    yearMonthString = correctedDatum.fuerKalenderViews;
+  }
+
+  return store.getKalender(yearMonthString, (err: Error | null, kalender: Kalender) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(kalender);
+  });
+});
+
+app.post("/saveProgrammheft", (req, res) => {
+  if (!res.locals.accessrights.isOrgaTeam()) {
+    return res.redirect("/");
+  }
+
+  const kalender = new Kalender(req.body);
+  return store.saveKalender(kalender, (err: Error | null) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(kalender);
+  });
+});
+
 app.get("/:year/:month", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");

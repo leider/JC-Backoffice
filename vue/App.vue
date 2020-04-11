@@ -9,7 +9,7 @@ div
         b-nav-item(v-if="showItem", to="/veranstaltungen", active-class="active")
           i.far.fa-calendar-alt.fa-fw.fa-lg
           span &nbsp;Veranstaltungen&nbsp;
-        b-nav-item(v-if="showItem", data-jcnav="programmheft", href="/programmheft")
+        b-nav-item(v-if="showItem", to="/programmheft", active-class="active")
           i.far.fa-newspaper.fa-fw.fa-lg
           span &nbsp;Programmheft&nbsp;
         b-nav-item-dropdown(v-if="showItem", data-jcnav="optionen")

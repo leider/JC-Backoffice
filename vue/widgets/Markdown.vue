@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import CodeMirror, { EditorFromTextArea } from "codemirror";
+import CodeMirror, { Editor, EditorFromTextArea } from "codemirror";
 import "codemirror/addon/display/fullscreen.js";
 import "codemirror/mode/markdown/markdown.js";
 import "codemirror/addon/display/placeholder.js";
@@ -235,7 +235,7 @@ export default class Markdown extends Vue {
       .split(" ")
       .map(tag)
       .filter((each: string | undefined) => !!each)
-      .forEach((tag: string) => (ret[tag!] = true));
+      .forEach((tag: string | undefined) => (ret[tag!] = true));
     return ret;
   }
 
@@ -285,7 +285,7 @@ export default class Markdown extends Vue {
   }
 
   toggleFullscreen() {
-    const ed = this.editor!;
+    const ed = this.editor! as any;
     this.fullScreen = !this.fullScreen;
     ed.setOption("fullScreen", !ed.getOption("fullScreen"));
   }
@@ -319,7 +319,7 @@ export default class Markdown extends Vue {
     const ed = (this.editor = CodeMirror.fromTextArea(document.getElementById(this.id!) as HTMLTextAreaElement, o));
     ed.setValue(this.value!);
     ed.setSize(this.width, this.height);
-    ed.on("change", (ed: CodeMirror.EditorFromTextArea) => this.$emit("input", ed.getValue()));
+    ed.on("change", (ed: Editor) => this.$emit("input", ed.getValue()));
 
     this.__rendered = true;
   }

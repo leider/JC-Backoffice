@@ -2,7 +2,7 @@
 .col-12
   .page-header
     .btn-group.float-right
-      button.btn.btn-success(type="submit", title="Speichern"): i.far.fa-save.fa-fw
+      button.btn.btn-success(@click="save", title="Speichern"): i.far.fa-save.fa-fw
     h2 Programmheft<br>
       small {{start.monatKompakt}} - {{start.plus({monate: 1}).monatJahrKompakt}}
     .row
@@ -12,30 +12,94 @@
             heft-calendar(:dateString="start.minus({monate: 2}).fuerCalendarWidget", :events="events")
           .col-6
             heft-calendar(:dateString="start.minus({monate: 1}).fuerCalendarWidget", :events="events", height="600")
+        .row.mt-4
+          .col-12
+            h4 Farben Hilfe
+            p
+              | Du kannst entweder eine #{' '}
+              a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{' '}
+              | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
+
       .col-lg-4.col-sm-12
         markdown(id="kalender", v-model="kalender.text", theme="light", height="600",
         toolbar="bold italic heading | image link | numlist bullist | preview fullscreen")
+  h2.text-danger(v-if="unbestaetigte.length > 0") Es gibt noch unbestätigte Veranstaltungen
+  p(v-for="veranst in unbestaetigte", :key="veranst.id")
+    a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{veranst.kopf.titel}}
+  .row(v-for="monat in monate", :key="monat")
+    .col-12
+      h4.pt-1.pb-2.px-1.bg-primary.text-white {{monat}}
+    .col-xl-4.col-md-6(v-for="veranst in veranstaltungenNachMonat[monat]")
+      .card-mb-2
+        a(:href="`${veranst.fullyQualifiedUrl()}/presse`")
+          .card-header.p-0
+            h6 {{veranst.datumForDisplayShort()}}
+            h6 {{veranst.kopf.presseInEcht()}}
+            h5 {{veranst.kopf.titel}}
+        div(v-html="renderedPressetext(veranst)")
+
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
 import Markdown from "@/widgets/Markdown.vue";
 import Kalender, { Event } from "../../../lib/programmheft/kalender";
+import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "@/commons/loader";
+import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import { groupBy } from "lodash";
+import Marked from "marked";
 
 @Component({ components: { HeftCalendar, Markdown } })
 export default class Programmheft extends Vue {
-  @Prop() initialStart!: DatumUhrzeit;
-  kalender = new Kalender({ id: "2020/03", text: "" });
+  @Prop() year!: string;
+  @Prop() month!: string;
+  kalender = new Kalender({ id: this.start.fuerKalenderViews, text: "" });
+  veranstaltungen: Veranstaltung[] = [];
 
   get start(): DatumUhrzeit {
-    return this.initialStart || new DatumUhrzeit().naechsterUngeraderMonat;
+    return (DatumUhrzeit.forYYYYMM(`${this.year}${this.month}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
   }
 
   get events(): Event[] {
-    console.log("Bingo");
     return this.kalender.asEvents();
+  }
+
+  get unbestaetigte(): Veranstaltung[] {
+    return this.veranstaltungen.filter((v) => !v.kopf.confirmed);
+  }
+
+  get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
+    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => v.kopf.confirmed);
+    return groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
+  }
+
+  get monate(): string[] {
+    return Object.keys(this.veranstaltungenNachMonat);
+  }
+
+  renderedPressetext(veranstaltung: Veranstaltung): string {
+    return Marked(veranstaltung.presse.text || "", { gfm: true, breaks: true, smartLists: true, pedantic: false });
+  }
+
+  save(): void {
+    saveProgrammheft(this.kalender, (err: Error) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }
+
+  @Watch("$route")
+  mounted(): void {
+    document.title = "Programmheft";
+    kalenderFor(this.start.fuerKalenderViews, (kalender: Kalender) => {
+      this.kalender = kalender;
+    });
+    veranstaltungenBetween(this.start, this.start.plus({ monate: 2 }), (veranstaltungen: Veranstaltung[]) => {
+      this.veranstaltungen = veranstaltungen;
+    });
   }
 }
 </script>

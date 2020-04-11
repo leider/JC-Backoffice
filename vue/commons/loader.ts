@@ -3,6 +3,8 @@ import fetch from "cross-fetch";
 import Veranstaltung from "../../lib/veranstaltungen/object/veranstaltung";
 import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
+import Kalender from "../../lib/programmheft/kalender";
+import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -83,4 +85,20 @@ export function icals(callback: Function): void {
 
 export function wikisubdirs(callback: Function): void {
   getJson("/vue-spa/wikisubdirs.json", (err: Error, json: object) => callback(json));
+}
+
+export function kalenderFor(jahrMonat: string, callback: Function): void {
+  getJson(`/programmheft/${jahrMonat}.json`, (err: Error, result: { id: string; text: string }) => {
+    callback(new Kalender(result));
+  });
+}
+
+export function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
+  getJson(`/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}/list.json`, (err: Error, result: object[]) => {
+    callback(result.map((r) => new Veranstaltung(r)));
+  });
+}
+
+export function saveProgrammheft(kalender: Kalender, callback: Function): void {
+  postAndReceive("/programmheft/saveProgrammheft", kalender, (err: Error, json: object) => callback(json));
 }

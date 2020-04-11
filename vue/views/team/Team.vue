@@ -2,28 +2,29 @@
 .col-12
   .row
     .col-lg-8
-      .row(v-if="!admin")
+      .row
         .col-12
-          .page-header
-            .btn-group.float-right
-              b-link.btn.btn-light(v-if="user.accessrights && user.accessrights.isOrgaTeam", to="/veranstaltungen/zukuenftige", title="administration")
-                i.fas.fa-edit.fa-fw
-                | &nbsp;Admin
-            h2 Team
-            p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
-            p
-              a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
-              | #{' '} Hiermit kannst Du den Kalender abonnieren.
-      .row(v-else)
-        .col-12
-          .page-header
-            .btn-group.float-right
-              a.btn.btn-light(href="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
-              a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
-              b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
-                b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
-                b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
-            h2 Veranstaltungen
+          b-overlay(:show="loading")
+            .page-header(v-if="!admin")
+              .btn-group.float-right
+                b-link.btn.btn-light(v-if="user.accessrights && user.accessrights.isOrgaTeam", to="/veranstaltungen/zukuenftige", title="administration")
+                  i.fas.fa-edit.fa-fw
+                  | &nbsp;Admin
+              h2 Team <br>
+              p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
+              p
+                a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                | #{' '} Hiermit kannst Du den Kalender abonnieren.
+            .page-header(v-else)
+              .btn-group.float-right
+                a.btn.btn-light(href="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
+                a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
+                  b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
+                  b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
+              h2 Veranstaltungen
+            template(v-slot:overlay)
+              p.text-center Lade Daten...
 
       .row
         .col-12
@@ -66,6 +67,8 @@ export default class Team extends Vue {
   // noinspection JSMismatchedCollectionQueryUpdate
   private icals: CalSource[] = [];
 
+  private loading = false;
+
   created(): void {
     allUsers((users: User[]) => {
       this.users = users;
@@ -84,8 +87,10 @@ export default class Team extends Vue {
   @Watch("zukuenftige")
   reloadVeranstaltungen(): void {
     document.title = this.admin ? "Veranstaltungen" : "Team";
+    this.loading = true;
     veranstaltungenForTeam(this.zukuenftige ? "zukuenftige" : "vergangene", (veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen;
+      this.loading = false;
     });
   }
 

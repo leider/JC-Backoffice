@@ -224,6 +224,18 @@ app.get("/vergangene.json", (req, res) => {
   });
 });
 
+app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
+  const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
+  const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
+  store.byDateRangeInAscendingOrder(start, end, (err: Error, veranstaltungen: Veranstaltung[]) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
+    res.set("Content-Type", "application/json").send(result);
+  });
+});
+
 addRoutesTo(app);
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {

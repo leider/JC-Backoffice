@@ -28,6 +28,10 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromFormat(YYYYMM, "yyyyMM"));
   }
 
+  static forYYYYslashMM(YYYYMM: string): DatumUhrzeit {
+    return new DatumUhrzeit(DateTime.fromFormat(YYYYMM, "yyyy/MM"));
+  }
+
   static forISOString(ISO: string): DatumUhrzeit {
     return new DatumUhrzeit(DateTime.fromISO(ISO));
   }
@@ -130,6 +134,10 @@ export default class DatumUhrzeit {
   }
 
   // Formatierungen
+  get yyyyMM(): string {
+    return this.format("yyyyMM");
+  }
+
   get monatLang(): string {
     return this.format("MMMM");
   }

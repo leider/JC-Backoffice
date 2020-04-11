@@ -9,8 +9,7 @@ FullCalendar(
   timeZone="Europe/Berlin",
   timeFormat="HH:mm",
   :displayEventTime="false",
-  :views="{month: {titleFormat: {month: 'short', year: '2-digit'},fixedWeekCount: false,showNonCurrentDates: false}}",
-  :weekNumbers="true",
+  :views="{month: {titleFormat: {month: 'long'},fixedWeekCount: false,showNonCurrentDates: false}}",
   :contentHeight="600",
   :defaultDate="dateString",
   :events="events",
@@ -27,6 +26,7 @@ import deLocale from "@fullcalendar/core/locales/de";
 @Component({ components: { FullCalendar } })
 export default class HeftCalendar extends Vue {
   @Prop() dateString!: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @Prop() events!: any[];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
