@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Team from "../views/team/Team.vue";
+import Programmheft from "@/views/programmheft/Programmheft.vue";
+import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 Vue.use(VueRouter);
 
 const routes = [
@@ -9,6 +11,7 @@ const routes = [
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
   { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, zukuenftige: true } },
   { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, zukuenftige: false } },
+  { path: "/programmheft", component: Programmheft, props: { initialStart: new DatumUhrzeit().naechsterUngeraderMonat } },
 ];
 
 const router = new VueRouter({

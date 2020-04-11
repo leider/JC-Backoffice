@@ -1,7 +1,7 @@
 import misc from "../commons/misc";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
-type Event = {
+export type Event = {
   start: string;
   end: string;
   title: string;
@@ -20,7 +20,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
 
   function lineToObject(line: string): Event | undefined {
     const datum = DatumUhrzeit.forYYYYMM(jmArray[0] + jmArray[1]).minus({
-      monate: 2
+      monate: 2,
     });
 
     function padLeftWithZero(aNumberString: string): string {
@@ -43,8 +43,8 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
 
     function dates(element: string): string[] | null {
       if (element.trim()) {
-        const fromAndUntil = misc.compact(element.split("-").map(each => each.trim()));
-        const from = toDate(fromAndUntil[0]);
+        const fromAndUntil = misc.compact(element.split("-").map((each) => each.trim()));
+        const from = toDate(fromAndUntil[0], "02:00");
         const until = toDate(fromAndUntil[1] || fromAndUntil[0], "22:00"); // 22 hours
         if (from && until) {
           return [from.toISOString(), until.toISOString()];
@@ -69,7 +69,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
           start: fromUntil[0],
           end: fromUntil[1],
           title: was.trim() + " (" + wer.trim() + ")",
-          color: farbe.trim()
+          color: farbe.trim(),
         };
       }
       return {
@@ -80,7 +80,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
         email: email.trim(),
         emailOffset: emailOffset,
         was: was.trim(),
-        wer: wer.trim()
+        wer: wer.trim(),
       };
     }
   }
@@ -101,7 +101,7 @@ export class EmailEvent {
   }
 
   shouldSendOn(datumUhrzeit: DatumUhrzeit) {
-    return Math.abs(this.datumUhrzeitToSend().differenzInTagen(datumUhrzeit)) === 0
+    return Math.abs(this.datumUhrzeitToSend().differenzInTagen(datumUhrzeit)) === 0;
   }
 
   start(): DatumUhrzeit {
@@ -155,8 +155,8 @@ export default class Kalender {
 
   eventsToSend(aDatumUhrzeit: DatumUhrzeit): EmailEvent[] {
     const events = this.asEvents()
-      .filter(e => !!e.email)
-      .map(e => new EmailEvent(e));
-    return events.filter(e => e.shouldSendOn(aDatumUhrzeit));
+      .filter((e) => !!e.email)
+      .map((e) => new EmailEvent(e));
+    return events.filter((e) => e.shouldSendOn(aDatumUhrzeit));
   }
 }

@@ -111,6 +111,8 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
 @import "widgets/vue-multiselect";
+@import "markdown";
+
 // colors
 $color-ausgaben1: #d50f36;
 

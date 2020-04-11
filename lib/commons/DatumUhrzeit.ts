@@ -16,7 +16,7 @@ export default class DatumUhrzeit {
 
   constructor(dateTime?: DateTime) {
     this.locale = "de-DE";
-    this.dateTime = dateTime || DateTime.local();
+    this.dateTime = dateTime && dateTime.isValid ? dateTime : DateTime.local();
   }
 
   // Konstruktoren
@@ -62,71 +62,71 @@ export default class DatumUhrzeit {
 
   // Rechnen
   plus(options: AdditionOptions): DatumUhrzeit {
-    const d = this.dateTime.plus({
+    const d = this.value.plus({
       years: options.jahre,
       months: options.monate,
       weeks: options.wochen,
       days: options.tage,
       hours: options.stunden,
-      minutes: options.minuten
+      minutes: options.minuten,
     });
     return new DatumUhrzeit(d);
   }
 
   minus(options: AdditionOptions): DatumUhrzeit {
-    const d = this.dateTime.minus({
+    const d = this.value.minus({
       years: options.jahre,
       months: options.monate,
       weeks: options.wochen,
       days: options.tage,
       hours: options.stunden,
-      minutes: options.minuten
+      minutes: options.minuten,
     });
     return new DatumUhrzeit(d);
   }
 
   differenzInTagen(other: DatumUhrzeit): number {
-    return Math.trunc(this.dateTime.diff(other.dateTime, "days").days);
+    return Math.trunc(this.value.diff(other.value, "days").days);
   }
 
   // Vergleiche
   istVor(other: DatumUhrzeit): boolean {
-    return this.dateTime < other.dateTime;
+    return this.value < other.value;
   }
 
   istNach(other: DatumUhrzeit): boolean {
-    return this.dateTime > other.dateTime;
+    return this.value > other.value;
   }
 
   // getter
   get monat(): number {
-    return this.dateTime.month;
+    return this.value.month;
   }
 
   get jahr(): number {
-    return this.dateTime.year;
+    return this.value.year;
   }
 
   get tag(): number {
-    return this.dateTime.day;
+    return this.value.day;
   }
 
   get kw(): number {
-    return this.dateTime.weekNumber;
+    return this.value.weekNumber;
   }
 
   get wochentag(): number {
-    return this.dateTime.weekday;
+    return this.value.weekday;
   }
 
   // pseudosetter
 
   setTag(tag: number): DatumUhrzeit {
-    return new DatumUhrzeit(this.dateTime.set({ day: tag }));
+    return new DatumUhrzeit(this.value.set({ day: tag }));
   }
 
   setUhrzeit(stunde: number, minuten: number): DatumUhrzeit {
-    return new DatumUhrzeit(this.dateTime.set({ hour: stunde, minute: minuten }));
+    return new DatumUhrzeit(this.value.set({ hour: stunde, minute: minuten }));
   }
 
   // Formatierungen
@@ -199,7 +199,7 @@ export default class DatumUhrzeit {
   }
 
   format(options: string): string {
-    return this.dateTime.toFormat(options);
+    return this.value.toFormat(options);
   }
 
   get toLocalDateTimeString(): string {
@@ -209,13 +209,13 @@ export default class DatumUhrzeit {
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit"
+      second: "2-digit",
     };
     return new Intl.DateTimeFormat(this.locale, options).format(this.toJSDate);
   }
 
   get toJSDate(): Date {
-    return this.dateTime.toJSDate();
+    return this.value.toJSDate();
   }
 
   // special
@@ -232,6 +232,6 @@ export default class DatumUhrzeit {
   }
 
   get value(): DateTime {
-    return this.dateTime;
+    return this.dateTime.isValid ? this.dateTime : DateTime.local();
   }
 }
