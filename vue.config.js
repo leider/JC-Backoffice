@@ -39,5 +39,4 @@ if (process.env.NODE_ENV !== "production") {
   const configureAPI = require("./configureApp").default;
   config.devServer = {before: configureAPI};
 }
-
 module.exports = config;

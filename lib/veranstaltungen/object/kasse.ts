@@ -56,9 +56,10 @@ export default class Kasse {
 
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
+      const ak = object.anzahlBesucherAK;
       Object.assign(this, object, {
         kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
-        anzahlBesucherAK: typeof object.anzahlBesucherAK === "string" ? Number.parseInt(object.anzahlBesucherAK) : object.anzahlBesucherAK
+        anzahlBesucherAK: typeof ak === "string" ? parseInt(ak) : isNaN(ak) ? 0 : ak,
       });
     }
   }

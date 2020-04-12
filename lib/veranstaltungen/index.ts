@@ -204,36 +204,32 @@ app.post("/updateStaff", (req, res, next) => {
   });
 });
 
-app.get("/zukuenftige.json", (req, res) => {
-  store.zukuenftigeMitGestern((err: Error, veranstaltungen: Veranstaltung[]) => {
+function standardCallback(res: express.Response): Function {
+  return (err: Error, veranstaltungen: Veranstaltung[]): void => {
     if (err) {
-      return res.status(500).send(err);
+      res.status(500).send(err);
+      return;
     }
     const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
     res.set("Content-Type", "application/json").send(result);
-  });
+  };
+}
+app.get("/vergangene.json", (req, res) => {
+  store.vergangene(standardCallback(res));
 });
 
-app.get("/vergangene.json", (req, res) => {
-  store.vergangene((err: Error, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
-    res.set("Content-Type", "application/json").send(result);
-  });
+app.get("/zukuenftige.json", (req, res) => {
+  store.zukuenftigeMitGestern(standardCallback(res));
+});
+
+app.get("/alle.json", (req, res) => {
+  store.alle(standardCallback(res));
 });
 
 app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
-  store.byDateRangeInAscendingOrder(start, end, (err: Error, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
-    res.set("Content-Type", "application/json").send(result);
-  });
+  store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
 });
 
 addRoutesTo(app);

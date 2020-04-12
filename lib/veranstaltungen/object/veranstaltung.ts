@@ -281,7 +281,7 @@ export default class Veranstaltung {
   }
 
   description(): string {
-    return `${this.datumForDisplayMitKW()} <b>${this.kopf.titel}</b>`;
+    return `${this.datumForDisplayMitKW()} ${this.kopf.titel}`;
   }
 
   // GEMA

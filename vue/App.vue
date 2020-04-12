@@ -21,7 +21,7 @@ div
           b-dropdown-item(href="/optionen/icals") Ferienkalender
           b-dropdown-item(href="/ical/termine") Termine
           b-dropdown-item(href="/optionen/kassenbericht") Kassenberichte
-        b-nav-item(v-if="showItem", data-jcnav="gema", href="/gema")
+        b-nav-item(v-if="showItem", to="/gema", active-class="active")
           i.fas.fa-chart-pie.fa-fw.fa-lg
           span &nbsp;GEMA
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="mailsender")

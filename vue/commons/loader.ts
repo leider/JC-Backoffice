@@ -5,6 +5,7 @@ import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
 import Kalender from "../../lib/programmheft/kalender";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
+import { TransferObject } from "@/views/gema/SharedGemaTypes";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -45,7 +46,7 @@ function postAndReceive(url: string, data: any, callback: any): void {
   });
 }
 
-export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene", callback: Function): void {
+export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle", callback: Function): void {
   getJson(`/veranstaltungen/${selector}.json`, (err: Error, result: object[]) => {
     callback(result.map((r) => new Veranstaltung(r)));
   });
@@ -87,6 +88,7 @@ export function wikisubdirs(callback: Function): void {
   getJson("/vue-spa/wikisubdirs.json", (err: Error, json: object) => callback(json));
 }
 
+// Programmheft
 export function kalenderFor(jahrMonat: string, callback: Function): void {
   getJson(`/programmheft/${jahrMonat}.json`, (err: Error, result: { id: string; text: string }) => {
     callback(new Kalender(result));
