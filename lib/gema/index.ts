@@ -68,41 +68,8 @@ function createResult(
   });
 }
 
-app.get("/", (req, res, next) => {
-  store.zukuenftige((err: Error | null, zukuenftige: Array<Veranstaltung>) => {
-    if (err) {
-      return next(err);
-    }
-    return store.vergangene((err1: Error | null, vergangene: Array<Veranstaltung>) => {
-      if (err1) {
-        return next(err1);
-      }
-      return res.render("choose", {
-        upcomingEvents: zukuenftige,
-        pastEvents: vergangene,
-      });
-    });
-  });
-});
-
-app.post("/vorab", (req, res, next) => {
-  if (!req.body.event) {
-    return res.redirect("/gema");
-  }
-  const event = Object.keys(req.body.event);
-  const dateiart = req.body.dateiart;
-  const origin = req.headers.origin;
-  return createResult({ event, dateiart, origin }, res, next, "zukuenftige");
-});
-
-app.post("/nach", (req, res, next) => {
-  if (!req.body.event) {
-    return res.redirect("/gema");
-  }
-  const event = Object.keys(req.body.event);
-  const dateiart = req.body.dateiart;
-  const origin = req.headers.origin;
-  return createResult({ event, dateiart, origin }, res, next, "vergangene");
+app.get("/", (req, res) => {
+  res.redirect("/vue/gema");
 });
 
 app.get("/meldung", (req, res, next) => {
