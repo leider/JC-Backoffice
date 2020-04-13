@@ -220,6 +220,10 @@ export default class Veranstaltung {
     return this.startDatumUhrzeit().jahr;
   }
 
+  tagNumerisch(): string {
+    return this.startDatumUhrzeit().tagNumerisch;
+  }
+
   datumForDisplayShort(): string {
     return this.startDatumUhrzeit().lesbareKurzform;
   }

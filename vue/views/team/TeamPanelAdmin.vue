@@ -8,7 +8,7 @@
             i.fas.fa-exclamation-circle.fa-fw
             | #{' '} UNBESTÄTIGT #{' '}
             i.fas.fa-exclamation-circle.fa-fw
-      table(width='100%')
+      table(width='100%', v-if="expanded")
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
             i.far.fa-fw.fa-lg(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
@@ -26,6 +26,18 @@
         tr
           td
           td(colspan=2): a(@click="toggleExpanded"): h5 {{kopf.titel}}
+      table(width='100%', v-else)
+        tr.align-top
+          td.text-left: a(@click="toggleExpanded")
+            h5 {{veranstaltung.tagNumerisch()}} &nbsp;
+          td: a(@click="toggleExpanded")
+            h5 {{kopf.titel}} {{kopf.presseIn}}
+
+          td.text-right: .btn-group
+            .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
+              i.logo-reservix
+              | &nbsp; {{veranstaltung.salesreport.anzahl}}
+            a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
       table(width="100%")
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")

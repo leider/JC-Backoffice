@@ -1,7 +1,7 @@
 <template lang="pug">
 table.table.table-sm.table-striped
   tbody
-    tr: th.bg-secondary.text-white
+    tr: th.bg-secondary.text-white(style="border-top-width: 0")
       b-checkbox(@change="monatClicked") {{monat}}
     tr(v-for="veranst in veranstaltungen", :key="veranst.id"): td
       b-checkbox(v-model="veranst.selected") {{veranst.description}}

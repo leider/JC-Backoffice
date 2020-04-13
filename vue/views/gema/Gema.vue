@@ -3,9 +3,9 @@
   .row
     .col-12
       .page-header
-        .float-right
-          label 'PDF / CSV'
-          b-form-select(v-model="format", :options="['PDF', 'CSV']", size="sm")
+        .form-group.row.float-right
+          label.col.col-form-label Format:
+          single-select.col(v-model="format", :options="['PDF', 'CSV']", size="sm")
         h2 Gema
   .row
     gema-section(vorNach="zukuenftige", :veranstaltungen="zukuenftige", :format="format")
@@ -21,8 +21,9 @@ import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import { renderart, VeranstaltungZeileMitCheck } from "@/views/gema/SharedGemaTypes";
 import GemaMonat from "@/views/gema/GemaMonat.vue";
 import GemaSection from "@/views/gema/GemaSection.vue";
+import SingleSelect from "@/widgets/SingleSelect.vue";
 
-@Component({ components: { GemaSection, GemaMonat } })
+@Component({ components: { GemaSection, GemaMonat, SingleSelect } })
 export default class Gema extends Vue {
   private veranstaltungen: VeranstaltungZeileMitCheck[] = [];
   private format: renderart = "PDF";

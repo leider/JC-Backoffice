@@ -88,6 +88,7 @@ export default class Team extends Vue {
   reloadVeranstaltungen(): void {
     document.title = this.admin ? "Veranstaltungen" : "Team";
     this.loading = true;
+    this.veranstaltungen = [];
     veranstaltungenForTeam(this.zukuenftige ? "zukuenftige" : "vergangene", (veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen;
       this.loading = false;

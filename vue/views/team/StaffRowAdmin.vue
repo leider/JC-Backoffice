@@ -32,7 +32,7 @@ export default class StaffRowAdmin extends Vue {
     this.staff.setStaffCollection(this.sectionName, value);
   }
 
-  get userids() {
+  get userids(): string[] {
     return this.users.map((u) => u.id);
   }
 
@@ -48,7 +48,7 @@ export default class StaffRowAdmin extends Vue {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .multiselect {
   width: calc(100% - 29px) !important;
 }

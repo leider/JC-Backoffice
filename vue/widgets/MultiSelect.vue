@@ -1,23 +1,20 @@
 <template lang="pug">
-  multiselect(:options="options", v-model="selected", :state="valid", :closeOnSelect="false",
-    :searchable="false", placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
-    showLabels=false, :openDirection="openDirection", multiple=true, taggable=true,
+  multiselect(:options="options", v-model="selected", :closeOnSelect="false",
+    searchable=true, placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
+    showLabels=false, :openDirection="openDirection", multiple=true, :taggable="allowNewTags",
     tag-placeholder="Als neues Schlagwort hinzufügen", @tag="addTag")
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import Multiselect from "vue-multiselect";
 
 @Component({ components: { Multiselect } })
 export default class MultiSelect extends Vue {
   @Prop() value!: string[];
-  @Prop() readonly label?: string;
-  @Prop() options?: string[];
-  @Prop() readonly required?: boolean;
-  @Prop() openDirection?: string;
-  @Prop() noNewTags?: boolean;
-  valid: boolean | null = null;
+  @Prop() options!: string[];
+  @Prop() openDirection!: string;
+  @Prop() allowNewTags!: boolean;
 
   get selected(): string[] | undefined {
     return this.value.filter((v) => (this.options || []).includes(v));
@@ -29,35 +26,16 @@ export default class MultiSelect extends Vue {
     );
   }
 
-  mounted(): void {
-    this.validate();
-  }
-
-  updated(): void {
-    this.validate();
-  }
-
   addTag(tag: string): void {
-    if (this.noNewTags || !this.options) {
+    if (!this.allowNewTags || !this.options) {
       return;
     }
     this.options.push(tag);
     this.value.push(tag);
     this.$emit(
       "input",
-      (this.value || []).filter((v) => (this.options || []).includes(v))
+      (this.value || []).filter((v) => this.options.includes(v))
     );
-  }
-
-  @Watch("selected")
-  validate(): void {
-    if (this.required !== undefined) {
-      if ((this.selected || []).length === 0) {
-        this.valid = false;
-      } else {
-        this.valid = null;
-      }
-    }
   }
 }
 </script>

@@ -194,6 +194,10 @@ export default class DatumUhrzeit {
     return this.format("yyyy-MM-dd'T'HH:mm");
   }
 
+  get tagNumerisch(): string {
+    return this.format("dd.");
+  }
+
   get mitUhrzeitNumerisch(): string {
     return this.format("dd.MM.yy HH:mm");
   }

@@ -1,9 +1,9 @@
 <template lang="pug">
 .col-lg-6
-  .card.mb-2.border-allgemeines
+  .card.border-allgemeines
     h3.card-header.p-2.color-allgemeines {{title}}
       button.btn.btn-secondary.float-right(@click="meldungClicked") Erzeugen
-    .p-1
+    div
       gema-monat(v-for="monat in monate", :key="monat", :veranstaltungen="veranstaltungenGrouped[monat]", :monat="monat")
 </template>
 

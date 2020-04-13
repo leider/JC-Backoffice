@@ -22,7 +22,7 @@
 
       .col-lg-4.col-sm-12
         markdown(id="kalender", v-model="kalender.text", theme="light", height="600",
-        toolbar="bold italic heading | image link | numlist bullist | preview fullscreen")
+        toolbar="bold italic heading | image link | numlist bullist | preview fullscreen help")
   h2.text-danger(v-if="unbestaetigte.length > 0") Es gibt noch unbestätigte Veranstaltungen
   p(v-for="veranst in unbestaetigte", :key="veranst.id")
     a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{veranst.kopf.titel}}
