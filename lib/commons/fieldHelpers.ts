@@ -3,7 +3,8 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
   JazzClassix: { color: "classix", icon: "flaticon-music-1 text-classix" },
   JamSession: { color: "session", icon: "flaticon-people text-session" },
   JazzFestival: { color: "festival", icon: "flaticon-shapes text-festival" },
-  Kooperation: { color: "kooperation", icon: "flaticon-shapes text-kooperation" }
+  Kooperation: { color: "kooperation", icon: "flaticon-shapes text-kooperation" },
+  Livestream: { color: "livestream", icon: "flaticon-shapes text-livestream" }
 };
 
 export default {

@@ -120,7 +120,8 @@ export default class TeamPanelAdmin extends Vue {
   }
 
   get colorCode(): string {
-    return fieldHelpers.cssColorCode(this.kopf.eventTyp);
+    const colorCode = fieldHelpers.cssColorCode(this.kopf.eventTyp);
+    return colorCode;
   }
 
   toggleExpanded(): void {

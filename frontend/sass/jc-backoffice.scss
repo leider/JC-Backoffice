@@ -33,6 +33,8 @@ $color-sonst2: #95c22e;
 
 $color-festival: #9FC442;
 
+$color-livestream: #ff29ac;
+
 $jc_colors: (
         "classix": $color-allgemein2,
         "concert": $gray-600,
@@ -47,7 +49,8 @@ $jc_colors: (
         "session": $color-kasse2,
         "soulcafe": $color-ausgaben2,
         "staff": $color-kasse2,
-        "copy": theme-color("secondary")
+        "copy": theme-color("secondary"),
+        "livestream": $color-livestream
 );
 
 .btn-presse {
