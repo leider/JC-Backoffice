@@ -38,7 +38,7 @@
     "icalendar": "0.7.1",
     "iconv-lite": "0.5.1",
     "intl": "^1.2.5",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "lodash": "4.17.15",
     "luxon": "1.23.0",
     "marked": "1.0.0",

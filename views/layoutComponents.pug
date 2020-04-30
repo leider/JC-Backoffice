@@ -23,7 +23,7 @@ mixin topNavbar
               i.far.fa-calendar-alt.fa-fw.fa-lg
               span &nbsp;Veranstaltungen&nbsp;
           li.nav-item(data-jcnav="programmheft")
-            a.nav-link(href="/programmheft")
+            a.nav-link(href="/vue/programmheft")
               i.far.fa-newspaper.fa-fw.fa-lg
               span &nbsp;Programmheft&nbsp;
           li.nav-item.dropdown(data-jcnav="[optionen|ical|image]")
@@ -38,7 +38,7 @@ mixin topNavbar
               a.dropdown-item(href="/optionen/kassenbericht") Kassenberichte
               if(accessrights.isSuperuser())
                 a.dropdown-item(href="/image/allWithImageNames") Bilder bearbeiten
-          li.nav-item(data-jcnav="gema"): a.nav-link(href="/gema")
+          li.nav-item(data-jcnav="gema"): a.nav-link(href="/vue/gema")
             i.fas.fa-chart-pie.fa-fw.fa-lg
             span &nbsp;GEMA
         if user && (accessrights.isSuperuser())
