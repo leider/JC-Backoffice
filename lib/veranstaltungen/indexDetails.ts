@@ -18,7 +18,7 @@ import { PDFOptions } from "puppeteer";
 
 import conf from "../commons/simpleConfigure";
 import Renderer from "../commons/renderer";
-import app from "../vue";
+import imageService from "../image/imageService";
 const uploadDir = path.join(__dirname, "../../static/upload");
 const filesDir = path.join(__dirname, "../../static/files");
 const publicUrlPrefix = conf.get("publicUrlPrefix");
@@ -273,7 +273,7 @@ export function addRoutesTo(app: express.Express): void {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect("/");
     }
-    return veranstaltungenService.alleBildNamen((err: Error | null, bildernamen: Array<string | null>) => {
+    return imageService.alleBildNamen((err: Error | null, bildernamen: Array<string | null>) => {
       store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
         if (err1) {
           return next(err1);
@@ -410,7 +410,7 @@ export function addRoutesTo(app: express.Express): void {
       }
       if (files.datei) {
         const datei = files.datei[0];
-        const dateiname = datei.originalFilename.replace(/[()]/g, "_");
+        const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
         const istPressefoto = fields.typ[0] === "pressefoto";
         const pfad = datei.path;
         return copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname), (errC) => {

@@ -125,6 +125,25 @@ export default function(collectionName: string) {
       });
     }
 
+    getByFieldWithProjection(fieldAsObject: FilterQuery<any>, projection: object, callback: Function): void {
+      performInDB((err: Error | null, db: mongodb.Db) => {
+        if (err) {
+          return callback(err);
+        }
+        return db
+          .collection(collectionName)
+          .find(fieldAsObject)
+          .project(projection)
+          .toArray((err1, result) => {
+            if (err1) {
+              callback(err1);
+            } else {
+              callback(err1, result);
+            }
+          });
+      });
+    }
+
     save(object: object & { id?: string }, callback: Function): void {
       this.update(object, object.id, callback);
     }

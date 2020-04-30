@@ -12,7 +12,7 @@ div
         b-nav-item(v-if="showItem", to="/programmheft", active-class="active")
           i.far.fa-newspaper.fa-fw.fa-lg
           span &nbsp;Programmheft&nbsp;
-        b-nav-item-dropdown(v-if="showItem", data-jcnav="optionen")
+        b-nav-item-dropdown(v-if="showItem", data-jcnav="[optionen|ical|image]")
           template(v-slot:button-content)
             i.fas.fa-cogs.fa-fw.fa-lg
             span &nbsp;Optionen
@@ -21,6 +21,7 @@ div
           b-dropdown-item(href="/optionen/icals") Ferienkalender
           b-dropdown-item(href="/ical/termine") Termine
           b-dropdown-item(href="/optionen/kassenbericht") Kassenberichte
+          b-dropdown-item(v-if="showItemSuperuser", href="/image/allWithImageNames") Bilder bearbeiten
         b-nav-item(v-if="showItem", to="/gema", active-class="active")
           i.fas.fa-chart-pie.fa-fw.fa-lg
           span &nbsp;GEMA

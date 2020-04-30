@@ -78,7 +78,7 @@ export default class Veranstaltung {
       staff: this.staff.toJSON(),
       technik: this.technik.toJSON(),
       unterkunft: this.unterkunft.toJSON(),
-      vertrag: this.vertrag.toJSON()
+      vertrag: this.vertrag.toJSON(),
     });
     return result;
   }
@@ -101,7 +101,7 @@ export default class Veranstaltung {
         salesreport: new Salesreport(object.salesrep),
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
-        vertrag: new Vertrag(object.vertrag)
+        vertrag: new Vertrag(object.vertrag),
       });
       this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit(), this.artist.name);
     } else {
@@ -332,5 +332,10 @@ export default class Veranstaltung {
   // CSV Export
   toCSV(): string {
     return `${this.kopf.titel};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
+  }
+
+  updateImageName(oldname: string, newname: string) {
+    this.presse.image = this.presse.image.filter((each) => each !== oldname);
+    this.presse.image.push(newname);
   }
 }

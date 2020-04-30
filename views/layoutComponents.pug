@@ -26,7 +26,7 @@ mixin topNavbar
             a.nav-link(href="/programmheft")
               i.far.fa-newspaper.fa-fw.fa-lg
               span &nbsp;Programmheft&nbsp;
-          li.nav-item.dropdown(data-jcnav="optionen")
+          li.nav-item.dropdown(data-jcnav="[optionen|ical|image]")
             a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-cogs.fa-fw.fa-lg
               span &nbsp;Optionen
@@ -36,6 +36,8 @@ mixin topNavbar
               a.dropdown-item(href="/optionen/icals") Ferienkalender
               a.dropdown-item(href="/ical/termine") Termine
               a.dropdown-item(href="/optionen/kassenbericht") Kassenberichte
+              if(accessrights.isSuperuser())
+                a.dropdown-item(href="/image/allWithImageNames") Bilder bearbeiten
           li.nav-item(data-jcnav="gema"): a.nav-link(href="/gema")
             i.fas.fa-chart-pie.fa-fw.fa-lg
             span &nbsp;GEMA

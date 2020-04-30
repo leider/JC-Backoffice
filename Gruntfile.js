@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     clean: {
-      static: ["static/clientscripts", "static/fonts", "static/img/bootstrap-colorpicker", "static/images", "static/stylesheets"],
+      static: ["static/*", "!static/files", "!static/img", "!static/reporting", "!static/upload"],
       compiledTypescript: ["lib/**/*.js*", "test/**/*.js*", "start.js*", "app.js*", "configure.js*", "initWinston.js*"],
       options: { force: true },
     },
@@ -69,6 +69,18 @@ module.exports = function (grunt) {
       fontawesomeFONTS: {
         src: "node_modules/@fortawesome/fontawesome-free/webfonts/*",
         dest: "static/webfonts",
+        expand: true,
+        flatten: true,
+      },
+      offlineFONTS: {
+        src: "frontend/offlinefonts/fonts/*",
+        dest: "static/fonts",
+        expand: true,
+        flatten: true,
+      },
+      offlineFONTS_CSS: {
+        src: "frontend/offlinefonts/stylesheets/*",
+        dest: "static/stylesheets",
         expand: true,
         flatten: true,
       },

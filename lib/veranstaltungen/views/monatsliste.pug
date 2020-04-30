@@ -1,29 +1,33 @@
-doctype html
-html
-  head
-    meta(charset="utf-8")
-    link(href="/stylesheets/screen.css", rel="stylesheet")
-    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat:p,500")
-    title Veranstaltungen eines Monats
-  body
-    .container-fluid
-      .row
-        .col-12
-          p: a.btn.btn-primary(href='/veranstaltungen/imgzip/' + monat)
-            i.fas.fa-download.fa-fw
-            | &nbsp;Alle Bilder als ZIP
-      .row
-        .col-12
-          each veranstaltung in liste
-            p
-              b #{veranstaltung.kopf.titel}<br>
-              b: i #{veranstaltung.startDatumUhrzeit().wochentagTagMonat}
-              b #{' '} // #{veranstaltung.startDatumUhrzeit().uhrzeitKompakt} Uhr<br>
-              | #{veranstaltung.kopf.presseInEcht()}
-      .row
-        .col-md-6
-          h3 Bilder
-          each veranstaltung in liste
+extends ../../../views/layout
+
+block title
+  | Veranstaltungen eines Monats
+
+block content
+  .col-12
+    .row
+      .col-12
+        .page-header
+          .btn-group.float-right
+            a.btn.btn-primary(href='/veranstaltungen/imgzip/' + monat)
+              i.fas.fa-download.fa-fw
+              | &nbsp;Alle Bilder als ZIP
+          h2 Monatsliste
+    .row
+      .col-12
+        each veranstaltung in liste
+          p
+            b #{veranstaltung.kopf.titel}<br>
+            b: i #{veranstaltung.startDatumUhrzeit().wochentagTagMonat}
+            b #{' '} // #{veranstaltung.startDatumUhrzeit().uhrzeitKompakt} Uhr<br>
+            | #{veranstaltung.kopf.presseInEcht()}
+    .row
+      .col-12
+        h3 Bilder
+    .row
+      each veranstaltung in liste
+        if veranstaltung.presse.image.length > 0
+          .col-lg-6
             p &nbsp;
             p: b #{veranstaltung.kopf.titel}
             each bild in veranstaltung.presse.image

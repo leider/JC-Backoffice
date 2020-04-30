@@ -11,6 +11,7 @@ import csurf from "csurf";
 
 import gemaApp from "./lib/gema/index";
 import icalApp from "./lib/ical";
+import imageApp from "./lib/image";
 import mailsenderApp from "./lib/mailsender";
 import optionenApp from "./lib/optionen";
 import programmheftApp from "./lib/programmheft";
@@ -103,6 +104,7 @@ export default function (app: express.Express) {
   useApp(app, "gema", gemaApp);
   useApp(app, "wiki", wikiApp);
   useApp(app, "ical", icalApp);
+  useApp(app, "image", imageApp);
   useApp(app, "vertrag", vertragApp);
   useApp(app, "programmheft", programmheftApp);
   useApp(app, "vue-spa", vueApp);

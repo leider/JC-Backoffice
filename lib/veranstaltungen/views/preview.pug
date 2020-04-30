@@ -114,8 +114,8 @@ block content
       .col-md-6
         +legendMitBody('presse', 'Pressetext', null, 'presse')
           | !{Renderer.render(veranstaltung.presseTemplate() + veranstaltung.presse.text + "\n\n" + veranstaltung.presse.fullyQualifiedJazzclubURL())}
-          if presse.firstImage()
-            img(src=presse.imageURLpure({publicUrlPrefix}), width="100%")
+          each img in presse.image
+            img(src="/image/imagepreview/" + encodeURIComponent(img), width="100%")
 
         if agentur.name
           +legendMitBody('agentur', 'Agentur: ' + agentur.name, null, 'allgemeines')

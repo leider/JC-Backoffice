@@ -13,6 +13,7 @@ var morgan_1 = __importDefault(require("morgan"));
 var csurf_1 = __importDefault(require("csurf"));
 var index_1 = __importDefault(require("./lib/gema/index"));
 var ical_1 = __importDefault(require("./lib/ical"));
+var image_1 = __importDefault(require("./lib/image"));
 var mailsender_1 = __importDefault(require("./lib/mailsender"));
 var optionen_1 = __importDefault(require("./lib/optionen"));
 var programmheft_1 = __importDefault(require("./lib/programmheft"));
@@ -94,6 +95,7 @@ function default_1(app) {
     useApp(app, "gema", index_1.default);
     useApp(app, "wiki", wiki_1.default);
     useApp(app, "ical", ical_1.default);
+    useApp(app, "image", image_1.default);
     useApp(app, "vertrag", vertrag_1.default);
     useApp(app, "programmheft", programmheft_1.default);
     useApp(app, "vue-spa", vue_1.default);

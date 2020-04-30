@@ -1,29 +1,23 @@
-import { salesreportFor } from "../reservix/reservixService";
-
-import conf from "../commons/simpleConfigure";
 import fs from "fs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const zipstream = require("zip-stream");
 import express from "express";
 import async from "async";
-import { groupBy, sortBy, flatten } from "lodash";
+import { flatten, uniq } from "lodash";
 
 import path from "path";
 import fieldHelpers from "../commons/fieldHelpers";
 
 import optionenService from "../optionen/optionenService";
 import store from "./veranstaltungenstore";
+import service from "./veranstaltungenService";
 import Veranstaltung from "./object/veranstaltung";
 import Vertrag from "./object/vertrag";
-import userstore from "../users/userstore";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import OptionValues from "../optionen/optionValues";
 import Orte from "../optionen/orte";
-import User from "../users/user";
-import Salesreport from "../reservix/salesreport";
 
 import { addRoutesTo } from "./indexDetails";
-import FerienIcals from "../optionen/ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);

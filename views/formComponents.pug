@@ -211,7 +211,7 @@ mixin legendMitBody(id, title, optionalCurrencySpan, optionalColorClassSuffix, o
 
 mixin uploader(name, label, accept, value, extradata)
   - var istPressefoto = extradata.typ === 'pressefoto';
-  - var prefix = istPressefoto ? '/upload/' : '/files/';
+  - var prefix = istPressefoto ? '/image/imagepreview/' : '/files/';
   - var files = value instanceof Array ? value : [value];
   - var previewFiles = value ? files.map(each => prefix + encodeURIComponent(each)) : [];
   - var previewConfig = files.map(each => { return { caption: each, key: encodeURIComponent(each) } });

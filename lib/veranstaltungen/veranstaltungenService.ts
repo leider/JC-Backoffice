@@ -1,12 +1,7 @@
-import path from "path";
-import fs from "fs";
-
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";
 import Veranstaltung from "./object/veranstaltung";
 import Salesreport from "../reservix/salesreport";
-
-const uploadDir = path.join(__dirname, "../../static/upload");
 
 function getVeranstaltungMitReservix(url: string, callback: Function): void {
   store.getVeranstaltung(url, (err: Error | null, veranstaltung?: Veranstaltung) => {
@@ -25,10 +20,4 @@ function getVeranstaltungMitReservix(url: string, callback: Function): void {
 
 export default {
   getVeranstaltungMitReservix,
-
-  alleBildNamen: function alleBildNamen(callback: Function): void {
-    fs.readdir(uploadDir, (err, files) => {
-      callback(err, files.sort());
-    });
-  }
 };
