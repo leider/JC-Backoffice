@@ -5,12 +5,15 @@ import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
 import Kalender from "../../lib/programmheft/kalender";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
-import { TransferObject } from "@/views/gema/SharedGemaTypes";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
     .then((response) => {
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/login";
+          return;
+        }
         throw Error(response as any);
       }
       return response.json();

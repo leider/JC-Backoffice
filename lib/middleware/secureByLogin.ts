@@ -8,6 +8,14 @@ export default function secureByLogin(req: express.Request, res: express.Respons
   if (/\/upload|ical/.test(req.originalUrl)) {
     return next();
   }
+
+  const pathname = req.originalUrl;
+  if (pathname.lastIndexOf(".") > pathname.lastIndexOf("/")) { // seems to be a file request
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      res.status(401).send();
+      return;
+    }
+  }
   return store.allUsers((err: Error | null, users: User[]) => {
     if (err) {
       return next(err);
