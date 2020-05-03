@@ -226,6 +226,17 @@ app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
   store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
 });
 
+app.get("/:url.json", (req, res, next) => {
+  store.alle((err: Error, veranstaltungen: Veranstaltung[]): void => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    const veranstaltung = veranstaltungen.find((v) => v.url === req.params.url);
+    res.set("Content-Type", "application/json").send(veranstaltung);
+  });
+});
+
 addRoutesTo(app);
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {

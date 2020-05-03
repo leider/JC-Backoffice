@@ -371,6 +371,18 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
+  app.post("/deleteVeranstaltung", (req, res, next) => {
+    if (!res.locals.accessrights.isOrgaTeam()) {
+      return res.redirect("/");
+    }
+    store.deleteVeranstaltungById(req.body.id, (err: Error | null) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      res.set("Content-Type", "application/json").send({ status: "ok" });
+    });
+  });
+
   app.post("/submit", (req, res, next) => {
     const body = req.body;
 

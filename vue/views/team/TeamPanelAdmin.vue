@@ -29,9 +29,10 @@
       table(width='100%', v-else)
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            h5 {{veranstaltung.tagNumerisch()}} &nbsp;
+            h5 {{veranstaltung.tagNumerisch()}}
           td: a(@click="toggleExpanded")
-            h5 {{kopf.titel}} {{kopf.presseIn}}
+            h5 {{kopf.titel}} &nbsp;
+              small(style="color: inherit") {{kopf.presseIn}}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
@@ -51,10 +52,22 @@
         a.btn.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :href="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): i.fas.fa-fw.fa-bed
         a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): i.fas.fa-fw.fa-money-bill-alt
         a.btn.btn-presse(:href="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): i.fas.fa-fw.fa-newspaper
-        span.btn.btn-light(v-if="!veranstaltung.kopf.confirmed")
+        b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
           i.fas.fa-fw.fa-trash-alt.text-danger
+          b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop=true, @ok="deleteVeranstaltung")
+            p Bist Du sicher, dass Du {{veranstaltung.kopf.titel}} löschen willst?
+            template(v-slot:modal-header)
+              h3.modal-title Veranstaltung löschen
+            template(v-slot:modal-footer="{ ok, cancel }")
+              .row
+                .col-12
+                  .btn-group.float-right
+                    b-button.btn.btn-light(@click="cancel()") Abbrechen
+                    b-button.btn.btn-danger.text(@click="deleteVeranstaltung")
+                      i.fas.fa-trash.fa-fw.fa-lg
+                      | &nbsp;Löschen
         a.btn.btn-copy(:href="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): i.fas.fa-fw.fa-copy
-        b-button.btn.btn-sm.btn-success(title="Speichern", @click="saveVeranstaltung"): i.fas.fa-fw.fa-save
+        b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): i.fas.fa-fw.fa-save
       table.table.table-striped.table-sm
         tbody
           tr: td(colspan=3): h5.mb-0 Kasse
@@ -70,9 +83,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import fieldHelpers from "../../../lib/commons/fieldHelpers";
-import { saveVeranstaltung } from "@/commons/loader";
+import { deleteVeranstaltungWithId, saveVeranstaltung } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import User from "../../../lib/users/user";
 import Kopf from "../../../lib/veranstaltungen/object/kopf";
@@ -120,12 +133,22 @@ export default class TeamPanelAdmin extends Vue {
   }
 
   get colorCode(): string {
-    const colorCode = fieldHelpers.cssColorCode(this.kopf.eventTyp);
-    return colorCode;
+    return fieldHelpers.cssColorCode(this.kopf.eventTyp);
   }
 
   toggleExpanded(): void {
     this.expanded = !this.expanded;
+  }
+
+  deleteVeranstaltung(): void {
+    if (this.veranstaltung.id) {
+      deleteVeranstaltungWithId(this.veranstaltung.id, (err: Error) => {
+        if (err) {
+          return console.log(err);
+        }
+        this.$emit("deleted");
+      });
+    }
   }
 
   saveVeranstaltung(): void {

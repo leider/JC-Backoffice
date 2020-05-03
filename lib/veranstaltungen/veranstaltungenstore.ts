@@ -70,9 +70,16 @@ export default {
     persistence.save(veranstaltung.toJSON(), callback);
   },
 
-  deleteVeranstaltung: function removeVeranstaltung(url: string, callback: Function): void {
+  deleteVeranstaltung: function deleteVeranstaltung(url: string, callback: Function): void {
     persistence.removeByUrl(url, (err: Error | null) => {
-      logger.info("Veranstaltung removed:" + JSON.stringify(url));
+      logger.info(`Veranstaltung removed: ${JSON.stringify(url)}`);
+      callback(err);
+    });
+  },
+
+  deleteVeranstaltungById: function deleteVeranstaltungById(id: string, callback: Function): void {
+    persistence.removeById(id, (err: Error | null) => {
+      logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
       callback(err);
     });
   },

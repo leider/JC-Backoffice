@@ -15,7 +15,7 @@ div
     team-panel-user(v-if="!admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
       :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :user="user")
     team-panel-admin(v-if="admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
-      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :users="users")
+      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :users="users", v-on:deleted="deleted(veranstaltung)")
 </template>
 
 <script lang="ts">
@@ -51,6 +51,10 @@ export default class PanelsForMonat extends Vue {
   aufZu(): void {
     this.doWithAllPanels(this.expanded ? "close" : "expand");
     this.expanded = !this.expanded;
+  }
+
+  deleted(veranstaltung: Veranstaltung): void {
+    this.$emit("deleted", veranstaltung);
   }
 }
 </script>

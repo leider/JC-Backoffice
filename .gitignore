@@ -23,10 +23,11 @@ lib/**/*.js
 test/**/*.js
 app.js
 configure.js
+configureApp.js
 initWinston.js
+reservixLoad.js
 start.js
 *.map
 .tscache/
-reservixLoad.js
 /static/vue/
 

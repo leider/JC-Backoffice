@@ -13,7 +13,7 @@ const demo = {
     ansprechpartner: "",
     telefon: "",
     email: "",
-    adresse: ""
+    adresse: "",
   },
   artist: {
     bandname: "",
@@ -22,20 +22,20 @@ const demo = {
     numCrew: 0,
     isBawue: false,
     isAusland: false,
-    brauchtHotel: false
+    brauchtHotel: false,
   },
   eintrittspreise: {
     preisprofil: {
       name: "Freier Eintritt",
       regulaer: 0,
       rabattErmaessigt: 0,
-      rabattMitglied: 0
+      rabattMitglied: 0,
     },
     regulaer: 0,
     rabattErmaessigt: 0,
     rabattMitglied: 0,
     erwarteteBesucher: 0,
-    zuschuss: 0
+    zuschuss: 0,
   },
   hotel: {
     auswahl: "",
@@ -43,7 +43,7 @@ const demo = {
     ansprechpartner: "",
     telefon: "",
     email: "",
-    adresse: ""
+    adresse: "",
   },
   kasse: {
     anfangsbestandEUR: 500,
@@ -63,7 +63,7 @@ const demo = {
     ausgabeSonstiges3Text: "",
     einnahmeSonstiges1Text: "",
     einnahmeSonstiges2Text: "",
-    anzahlBesucherAK: 0
+    anzahlBesucherAK: 0,
   },
   kopf: {
     beschreibung: "",
@@ -76,7 +76,7 @@ const demo = {
     presseIn: "",
     genre: "",
     confirmed: false,
-    rechnungAnKooperation: false
+    rechnungAnKooperation: false,
   },
   kosten: {
     backlineEUR: 0,
@@ -89,14 +89,14 @@ const demo = {
     personal: 0,
     gagenSteuer: null,
     deal: null,
-    gageBAR: false
+    gageBAR: false,
   },
   presse: {
     originalText: "",
     text: "",
     image: [],
     checked: false,
-    jazzclubURL: ""
+    jazzclubURL: "",
   },
   staff: {
     techniker: [],
@@ -110,14 +110,14 @@ const demo = {
     kasseNotNeeded: false,
     kasseVNotNeeded: false,
     modNotNeeded: false,
-    merchandiseNotNeeded: false
+    merchandiseNotNeeded: false,
   },
   technik: {
     dateirider: [],
     backlineJazzclub: [],
     backlineRockshop: [],
     checked: false,
-    fluegel: false
+    fluegel: false,
   },
   unterkunft: {
     einzelNum: 0,
@@ -133,14 +133,14 @@ const demo = {
     angefragt: false,
     bestaetigt: false,
     anreiseDate: new Date(),
-    abreiseDate: new Date()
+    abreiseDate: new Date(),
   },
   vertrag: {
     art: "Jazzclub" as Vertragsart,
     sprache: "Deutsch" as Sprache,
-    datei: []
+    datei: [],
   },
-  salesrep: { id: "" }
+  salesrep: { id: "" },
 };
 const reference = JSON.parse(JSON.stringify(demo));
 const emptyKontakt = {
@@ -149,7 +149,7 @@ const emptyKontakt = {
   ansprechpartner: "",
   telefon: "",
   email: "",
-  adresse: ""
+  adresse: "",
 };
 describe("Veranstaltung Gesamt", () => {
   let veranstaltung: Veranstaltung;
@@ -168,7 +168,7 @@ describe("Veranstaltung Gesamt", () => {
   describe("fillFromUI", () => {
     it("ohne kopf oder ohne id bleiben die vorherigen Felder", () => {
       veranstaltung.fillFromUI({
-        agentur: emptyKontakt
+        agentur: emptyKontakt,
       });
 
       expect(veranstaltung.agentur.name).to.eql(reference.agentur.name);
@@ -185,5 +185,15 @@ describe("Veranstaltung Gesamt", () => {
 
       expect(veranstaltung.agentur.name).to.eql(emptyKontakt.name);
     });
+  });
+});
+
+describe("URL Generierung", () => {
+  const date = new Date(2020, 4, 1);
+  const titel = "Der Titel, der-auch kömische Ümläßte // enthält";
+
+  it("formats the date usefully", () => {
+    const url = Veranstaltung.createUrlFrom(date, titel);
+    expect(url).to.eql("2020-05-01-der_titel_der-auch_komische_umlaste____enthalt");
   });
 });

@@ -73,4 +73,20 @@ export default class Misc {
       return images.filter((each) => each !== image);
     }
   }
+
+  static normalizeString(input: string): string {
+    // iconv-lite cannot do this yet, so we do it manually:
+    return input
+      .replace(/[äÄàáÀÁâÂ]/gi, "a")
+      .replace(/[èéÈÉêÊ]/gi, "e")
+      .replace(/[ìíÌÍîÎ]/gi, "i")
+      .replace(/[öÖòóÒÓôÔ]/gi, "o")
+      .replace(/[üÜùúÙÚûÛ]/gi, "u")
+      .replace(/ß/g, "s")
+      .trim()
+      .replace(/\s/g, "_")
+      .replace(/\//g, "_")
+      .replace(/[^a-zA-Z0-9\- _]/g, "")
+      .toLowerCase();
+  }
 }

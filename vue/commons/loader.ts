@@ -59,6 +59,10 @@ export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Functi
   postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), (err: Error, json: object) => callback(json));
 }
 
+export function deleteVeranstaltungWithId(id: string, callback: Function): void {
+  postAndReceive("/veranstaltungen/deleteVeranstaltung", { id }, callback);
+}
+
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
   postAndReceive(`${veranstaltung.fullyQualifiedUrl()}/addUserToSection`, { section }, callback);
 }
@@ -106,4 +110,9 @@ export function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, c
 
 export function saveProgrammheft(kalender: Kalender, callback: Function): void {
   postAndReceive("/programmheft/saveProgrammheft", kalender, (err: Error, json: object) => callback(json));
+}
+
+// Veranstaltung bearbeiten
+export function veranstaltungForUrl(url: string, callback: Function): void {
+  getJson("/veranstaltungen/" + encodeURIComponent(url) + ".json", (err: Error, result: any) => callback(new Veranstaltung(result)));
 }

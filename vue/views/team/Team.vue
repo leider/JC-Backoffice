@@ -29,7 +29,8 @@
       .row
         .col-12
           panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
-            :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin")
+            :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin",
+            @deleted="deleted")
     .col-lg-4
       jazz-calendar.mt-4
   .row
@@ -110,6 +111,13 @@ export default class Team extends Vue {
 
   otherUsers(): User[] {
     return this.users?.filter((u) => u.id !== this.user.id) || [];
+  }
+
+  deleted(veranstaltung: Veranstaltung): void {
+    const idx = this.veranstaltungen.indexOf(veranstaltung);
+    if (idx > -1) {
+      this.veranstaltungen.splice(idx, 1);
+    }
   }
 }
 </script>

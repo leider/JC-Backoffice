@@ -16,6 +16,7 @@ import Vertrag, { VertragUI } from "./vertrag";
 import Salesreport from "../../reservix/salesreport";
 import { Hotelpreise } from "../../optionen/optionValues";
 import Misc from "../../commons/misc";
+import misc from "../../commons/misc";
 
 export interface VeranstaltungUI {
   id?: string;
@@ -109,6 +110,14 @@ export default class Veranstaltung {
     }
   }
 
+  static createUrlFrom(date: Date, titel: string): string {
+    return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + misc.normalizeString(titel);
+  }
+
+  get initializedUrl(): string {
+    return Veranstaltung.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
+  }
+
   fillFromUI(object: VeranstaltungUI): Veranstaltung {
     if (!object.kopf && !object.id) {
       return this;
@@ -124,7 +133,7 @@ export default class Veranstaltung {
         this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate, object.startTime).toJSDate;
         this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, object.endTime).toJSDate;
         this.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
-        this.url = object.url || this.startDate.toISOString() + object.kopf.titel;
+        this.url = object.url || Veranstaltung.createUrlFrom(this.startDate, object.kopf.titel || this.id);
       }
       this.kopf.fillFromUI(object.kopf);
     }
@@ -334,7 +343,7 @@ export default class Veranstaltung {
     return `${this.kopf.titel};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
   }
 
-  updateImageName(oldname: string, newname: string) {
+  updateImageName(oldname: string, newname: string): void {
     this.presse.image = this.presse.image.filter((each) => each !== oldname);
     this.presse.image.push(newname);
   }
