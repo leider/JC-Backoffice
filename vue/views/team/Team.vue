@@ -52,7 +52,7 @@ import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
 import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
-import { groupBy } from "lodash";
+import groupBy = require("lodash/groupBy");
 import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
 
 @Component({

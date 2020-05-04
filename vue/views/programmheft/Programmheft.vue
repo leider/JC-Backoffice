@@ -48,7 +48,7 @@ import Markdown from "@/widgets/Markdown.vue";
 import Kalender, { Event } from "../../../lib/programmheft/kalender";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import { groupBy } from "lodash";
+import groupBy = require("lodash/groupBy");
 import Marked from "marked";
 
 @Component({ components: { HeftCalendar, Markdown } })

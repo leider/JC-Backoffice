@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { groupBy } from "lodash";
+import groupBy = require("lodash/groupBy");
 import { renderart, TransferObject, VeranstaltungZeileMitCheck, vorNach } from "@/views/gema/SharedGemaTypes";
 import GemaMonat from "@/views/gema/GemaMonat.vue";
 

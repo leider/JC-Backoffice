@@ -2,6 +2,22 @@
 const path = require("path");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require("copy-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+
+const plugins = [
+  new CopyPlugin([
+    {
+      from: path.join(__dirname, "vue/public"),
+      to: path.join(__dirname, "static"),
+      toType: "dir",
+      ignore: ["index.html", ".DS_Store"],
+    },
+  ]),
+];
+
+if (process.env.NODE_ENV !== "production") {
+  plugins.push(new BundleAnalyzerPlugin());
+}
 
 const config = {
   publicPath: "/vue/",
@@ -14,16 +30,7 @@ const config = {
         "@": path.resolve("vue"),
       },
     },
-    plugins: [
-      new CopyPlugin([
-        {
-          from: path.join(__dirname, "vue/public"),
-          to: path.join(__dirname, "static"),
-          toType: "dir",
-          ignore: ["index.html", ".DS_Store"],
-        },
-      ]),
-    ],
+    plugins: plugins,
   },
   /* to configure vue/public as the location of the template */
   chainWebpack: (config) => {
@@ -37,6 +44,6 @@ const config = {
 if (process.env.NODE_ENV !== "production") {
   require("./configure");
   const configureAPI = require("./configureApp").default;
-  config.devServer = {before: configureAPI};
+  config.devServer = { before: configureAPI };
 }
 module.exports = config;
