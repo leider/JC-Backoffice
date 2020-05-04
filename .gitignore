@@ -24,6 +24,7 @@ test/**/*.js
 app.js
 configure.js
 configureApp.js
+initUrls.js
 initWinston.js
 reservixLoad.js
 start.js
