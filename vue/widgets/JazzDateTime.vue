@@ -1,0 +1,65 @@
+<template lang="pug">
+.row
+  .col-6.pl-2.pr-1
+    .form-group
+      jazz-label(:label="label", :tooltip="tooltip")
+      b-form-datepicker(v-if="!$isMobile()", v-model="datestring", :min="min", :state="valid", locale="de",
+        start-weekday="1", :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }")
+      b-form-input(v-else, type="date", v-model="datestring", :min="minstring", :state="valid")
+      b-form-invalid-feedback Muss in der Zukunft liegen
+  .col-6.pl-1.pr-2
+    .form-group
+      label &nbsp;
+      b-form-input(type="time", v-model="timestring", :state="valid")
+
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from "vue-property-decorator";
+import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
+import JazzLabel from "@/widgets/JazzLabel.vue";
+
+@Component({
+  components: { JazzLabel },
+})
+export default class JazzDateTime extends Vue {
+  @Prop() value!: Date;
+  @Prop() min!: Date;
+  @Prop() readonly label!: string;
+  @Prop() readonly tooltip!: string | undefined;
+
+  get datestring(): string {
+    return DatumUhrzeit.forJSDate(this.value).fuerCalendarWidget;
+  }
+  set datestring(str: string) {
+    this.emitChange(str, this.timestring);
+  }
+
+  get timestring(): string {
+    return DatumUhrzeit.forJSDate(this.value).format("HH:mm");
+  }
+  set timestring(str: string) {
+    this.emitChange(this.datestring, str);
+  }
+
+  get minstring(): string {
+    return DatumUhrzeit.forJSDate(this.min).fuerCalendarWidget;
+  }
+
+  emitChange(date: string, time: string): void {
+    const newDate = DatumUhrzeit.forISOString(`${date}T${time}`).toJSDate;
+    this.$emit("oldAndNew", {old: this.value, changed: newDate})
+    this.$emit("input", newDate);
+  }
+
+  get valid(): boolean | null {
+    if (this.min) {
+      const a = DatumUhrzeit.forJSDate(this.value);
+      const b = DatumUhrzeit.forJSDate(this.min);
+      const check = a.istNach(b) || a.mitUhrzeitNumerisch === b.mitUhrzeitNumerisch;
+      return check ? null : false;
+    }
+    return null;
+  }
+}
+</script>

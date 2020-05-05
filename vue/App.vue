@@ -111,6 +111,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
+@import "../frontend/3rd_party_css/flaticon-patched.css";
 @import "widgets/vue-multiselect";
 @import "markdown";
 
@@ -355,5 +356,9 @@ input[type="number"]::-webkit-outer-spin-button {
 // patch bootstrap btn
 .btn {
   white-space: nowrap;
+}
+
+.b-form-datepicker > button {
+  display: none;
 }
 </style>

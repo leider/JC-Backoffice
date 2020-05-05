@@ -1,45 +1,22 @@
 <template lang="pug">
-  multiselect(:options="options", v-model="selected", :state="valid", :allowEmpty="false",
-    :searchable="false", placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
-    showLabels=false, :openDirection="openDirection")
+.form-group
+  jazz-label(v-if="label", :label="label", :tooltip="tooltip")
+  single-select-pure(:value="value", :options="options", :required="required", :openDirection="openDirection",
+    @input="$emit('input', $event)")
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Multiselect from "vue-multiselect";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import JazzLabel from "@/widgets/JazzLabel.vue";
+import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 
-@Component({ components: { Multiselect } })
+@Component({ components: { SingleSelectPure, JazzLabel } })
 export default class SingleSelect extends Vue {
   @Prop() value!: string;
+  @Prop() label!: string;
+  @Prop() tooltip!: string;
   @Prop() options!: string[];
   @Prop() readonly required!: boolean;
   @Prop() openDirection!: string;
-  valid: boolean | null = null;
-
-  get selected(): string {
-    return this.value;
-  }
-  set selected(val: string) {
-    this.$emit("input", val);
-  }
-
-  mounted(): void {
-    this.validate();
-  }
-
-  updated(): void {
-    this.validate();
-  }
-
-  @Watch("selected")
-  validate(): void {
-    if (this.required !== undefined) {
-      if (this.selected === "") {
-        this.valid = false;
-      } else {
-        this.valid = null;
-      }
-    }
-  }
 }
 </script>

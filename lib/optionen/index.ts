@@ -34,6 +34,34 @@ app.get("/", (req, res, next) => {
   });
 });
 
+app.get("/optionen.json", (req, res, next) => {
+  if (!res.locals.accessrights.isOrgaTeam()) {
+    return res.redirect("/");
+  }
+
+  return service.optionen((err: Error | null, optionen: OptionValues) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    res.set("Content-Type", "application/json").send(optionen);
+  });
+});
+
+app.get("/orte.json", (req, res, next) => {
+  if (!res.locals.accessrights.isOrgaTeam()) {
+    return res.redirect("/");
+  }
+
+  return service.orte((err: Error | null, orte: Orte) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    res.set("Content-Type", "application/json").send(orte);
+  });
+});
+
 app.get("/kassenbericht", (req, res) => {
   const now = new DatumUhrzeit();
   res.render("kassenberichtentry", { now });

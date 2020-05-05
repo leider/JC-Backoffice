@@ -130,7 +130,7 @@ export default class DatumUhrzeit {
   }
 
   setUhrzeit(stunde: number, minuten: number): DatumUhrzeit {
-    return new DatumUhrzeit(this.value.set({ hour: stunde, minute: minuten }));
+    return new DatumUhrzeit(this.value.set({ hour: stunde, minute: minuten, second: 0 }));
   }
 
   // Formatierungen

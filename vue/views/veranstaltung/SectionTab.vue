@@ -2,7 +2,7 @@
 b-tab(:title-link-class="titlelinkclass", @click="clicked" )
   template(v-slot:title)
     i.fas.fa-fw(:class="icon")
-    b.d-none.d-md-inline #{' '} {{title}}
+    b.d-none.d-sm-inline #{' '} {{title}}
   slot
 </template>
 

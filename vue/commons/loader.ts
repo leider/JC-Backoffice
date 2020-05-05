@@ -5,6 +5,8 @@ import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
 import Kalender from "../../lib/programmheft/kalender";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
+import OptionValues from "../../lib/optionen/optionValues";
+import Orte from "../../lib/optionen/orte";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -114,5 +116,14 @@ export function saveProgrammheft(kalender: Kalender, callback: Function): void {
 
 // Veranstaltung bearbeiten
 export function veranstaltungForUrl(url: string, callback: Function): void {
-  getJson("/veranstaltungen/" + encodeURIComponent(url) + ".json", (err: Error, result: any) => callback(new Veranstaltung(result)));
+  getJson(`/veranstaltungen/${encodeURIComponent(url)}.json`, (err: Error, result: any) => callback(new Veranstaltung(result)));
+}
+
+// Optionen
+export function optionen(callback: Function): void {
+  getJson("/optionen/optionen.json", (err: Error, result: any) => callback(new OptionValues(result)));
+}
+
+export function orte(callback: Function): void {
+  getJson("/optionen/orte.json", (err: Error, result: any) => callback(new Orte(result)));
 }

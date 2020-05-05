@@ -115,6 +115,9 @@ fieldset[disabled] .multiselect {
   box-sizing     : border-box;
   margin-bottom  : $vue-multiselect-padding-y;
   vertical-align : top;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .multiselect__input::placeholder {
