@@ -1,4 +1,4 @@
-import { range } from "lodash";
+import range from "lodash/range";
 import { sortBy, toLower } from "lodash/fp";
 const sortByNameCaseInsensitive = sortBy(toLower);
 import fieldHelpers from "../commons/fieldHelpers";

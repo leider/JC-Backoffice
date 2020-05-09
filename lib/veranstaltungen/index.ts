@@ -3,14 +3,13 @@ import fs from "fs";
 const zipstream = require("zip-stream");
 import express from "express";
 import async from "async";
-import { flatten, uniq } from "lodash";
+import flatten from "lodash/flatten";
 
 import path from "path";
 import fieldHelpers from "../commons/fieldHelpers";
 
 import optionenService from "../optionen/optionenService";
 import store from "./veranstaltungenstore";
-import service from "./veranstaltungenService";
 import Veranstaltung from "./object/veranstaltung";
 import Vertrag from "./object/vertrag";
 import DatumUhrzeit from "../commons/DatumUhrzeit";

@@ -1,5 +1,5 @@
 import Kalender from "./kalender";
-import { partial } from "lodash";
+import partial from "lodash/partial";
 
 import misc from "../commons/misc";
 

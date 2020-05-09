@@ -1,4 +1,7 @@
-import { difference, intersection, flatten, uniq } from "lodash";
+import difference from "lodash/difference";
+import intersection from "lodash/intersection";
+import flatten from "lodash/flatten";
+import uniq from "lodash/uniq";
 
 import path from "path";
 import store from "../veranstaltungen/veranstaltungenstore";

@@ -1,5 +1,5 @@
 import misc from "../commons/misc";
-import { partial } from "lodash";
+import partial from "lodash/partial";
 import MailRule from "./mailRule";
 
 import pers from "../persistence/persistence";

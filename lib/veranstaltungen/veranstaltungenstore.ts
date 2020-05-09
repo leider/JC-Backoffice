@@ -1,4 +1,4 @@
-import { partial } from "lodash";
+import partial from "lodash/partial";
 
 import misc from "../commons/misc";
 import winston from "winston";

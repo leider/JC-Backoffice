@@ -1,7 +1,7 @@
 import "../../configure";
 import "../../initWinston";
 import async from "async";
-import { partial } from "lodash";
+import partial from "lodash/partial";
 
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 

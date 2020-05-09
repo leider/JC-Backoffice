@@ -1,4 +1,5 @@
-import {uniq, flatten} from "lodash";
+import uniq from "lodash/uniq";
+import flatten from "lodash/flatten";
 
 import misc from "../commons/misc";
 import User from "./user";

@@ -1,4 +1,4 @@
-import { reject } from "lodash";
+import reject from "lodash/reject";
 
 import Termin, { TerminType } from "../ical/termin";
 

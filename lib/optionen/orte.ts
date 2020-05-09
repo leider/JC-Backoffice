@@ -1,4 +1,4 @@
-import { reject } from "lodash";
+import reject from "lodash/reject";
 import { sortBy, compose, toLower, prop } from "lodash/fp";
 import { KopfUI } from "../veranstaltungen/object/kopf";
 

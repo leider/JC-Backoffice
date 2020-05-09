@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { compact } from "lodash";
+import compact from "lodash/compact";
 import DatumUhrzeit from "./DatumUhrzeit";
 
 export default class Misc {

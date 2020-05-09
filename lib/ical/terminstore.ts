@@ -1,6 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
-import { partial } from "lodash";
+import partial from "lodash/partial";
 import Termin from "./termin";
 import misc from "../commons/misc";
 
