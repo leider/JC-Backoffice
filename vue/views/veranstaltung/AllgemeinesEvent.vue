@@ -21,7 +21,7 @@
         .col-4
           jazz-number(label="Fläche", v-model="kopf.flaeche", min="0", max="1000")
         .col-4
-          jazz-currency(label="Saalmiete", v-model="veranstaltung.kosten.saalmiete")
+          jazz-currency(label="Saalmiete", v-model="kosten.saalmiete")
       .row
         .col-4
           koop-select(:kopf="kopf", :options="optionen.kooperationen")
@@ -29,6 +29,49 @@
           preis-select(v-model="veranstaltung.eintrittspreise.preisprofil", :options="optionen.preisprofile()")
         .col-4
           single-select(label="Genre", v-model="kopf.genre", :options="optionen.genres")
+    legend-card(section="allgemeines", title="Künstler")
+      .row
+        .col-6
+          jazz-text(label="Bandname", tooltip="Wird für den Vertrag benötigt", v-model="artist.bandname")
+        .col-3
+          jazz-number(label="Musiker", min="1", max="30", v-model="artist.numMusiker")
+        .col-3
+          jazz-number(label="Crew", min="0", max="30", v-model="artist.numCrew")
+      .row
+        .col-sm-6
+          .form-group
+            jazz-label(label="Namen")
+            multi-select(v-model="artist.name", :allowNewTags="true", :options="optionen.artists")
+        .col-6.col-sm-3
+          jazz-currency(label="Gage (Netto)", v-model="kosten.gagenEUR")
+        .col-6.col-sm-3
+          single-select(label="Deal", v-model="kosten.deal", :options="kosten.deals()")
+      .row
+        .col-6.col-sm-4
+          jazz-check(v-model="artist.isBawue", label="BaWü-Förderung", :inline="true")
+        .col-6.col-sm-4
+          jazz-check(v-model="artist.isAusland", label="aus dem Ausland", :inline="true")
+    legend-card(section="allgemeines", title="Kommentar")
+      .row
+        .col-sm-12
+          .form-group
+            jazz-label(label="Zusätzliche Infos", tooltip="Notizen / Gäste / Reservierung, etc.")
+            markdown(v-model="kopf.beschreibung")
+  .col-md-6
+    kontakt-card(section="allgemeines", title="Agentur / Verantwortlicher", :kontakt="veranstaltung.agentur",
+      :options="optionen.agenturen")
+    legend-card(section="allgemeines", title="Vertrag")
+      .row
+        .col-md-6
+          single-select(label="Art", v-model="vertrag.art", :options="vertragArten")
+        .col-md-6
+          single-select(label="Sprache", v-model="vertrag.sprache", :options="vertragSprachen")
+      .row(v-if="isBookingTeam")
+        .col-12
+          a.btn.btn-primary.float-right(:href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`") Vertrag generieren
+      .row
+        .col-12
+          b-form-file
 </template>
 
 <script lang="ts">
@@ -51,8 +94,17 @@ import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import KoopSelect from "@/views/veranstaltung/KoopSelect.vue";
 import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
+import Artist from "../../../lib/veranstaltungen/object/artist";
+import MultiSelect from "@/widgets/MultiSelect.vue";
+import Kosten from "../../../lib/veranstaltungen/object/kosten";
+import Markdown from "@/widgets/Markdown.vue";
+import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
+import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/object/vertrag";
 @Component({
   components: {
+    KontaktCard,
+    Markdown,
+    MultiSelect,
     PreisSelect,
     KoopSelect,
     SingleSelectPure,
@@ -74,8 +126,28 @@ export default class AllgemeinesEvent extends Vue {
   @Prop() orte!: Orte;
   @Prop() minimumStart!: DatumUhrzeit;
 
+  get artist(): Artist {
+    return this.veranstaltung.artist;
+  }
+
   get kopf(): Kopf {
     return this.veranstaltung.kopf;
+  }
+
+  get kosten(): Kosten {
+    return this.veranstaltung.kosten;
+  }
+
+  get vertrag(): Vertrag {
+    return this.veranstaltung.vertrag;
+  }
+
+  get vertragArten(): Vertragsart[] {
+    return Vertrag.arten();
+  }
+
+  get vertragSprachen(): Sprache[] {
+    return Vertrag.sprachen();
   }
 
   get isBookingTeam(): boolean {

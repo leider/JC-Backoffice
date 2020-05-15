@@ -146,7 +146,8 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__tags-wrap {
-  display : inline
+  display : inline;
+  line-height: 1;
 }
 
 .multiselect__tags {

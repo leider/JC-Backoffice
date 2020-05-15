@@ -8,7 +8,7 @@
           span(v-if="button.text") &nbsp;{{button.text}}
     .v-md-wrapper(v-on:click="editor.focus()")
       textarea.v-md-editor(:style="styles", :id="id", rows="10")
-      .v-md-preview(v-if="preview", v-html="html")
+      .v-md-preview(v-if="preview", v-html="html()")
       b-modal(v-model="showHelp", size="lg", title="Markdown Cheatsheet", title-tag="h3", ok-only, ok-title="Schließen")
         .modal-body
           .row
@@ -178,7 +178,7 @@ export default class Markdown extends Vue {
     };
   }
 
-  get html(): string {
+  html(): string {
     function enhanceTableTag(rendered: string): string {
       return rendered
         .replace(/<table>/g, '<table class="table table-condensed table-hover table-striped">')

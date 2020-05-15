@@ -3,7 +3,7 @@
   h5.card-header.p-2(:class="`color-${this.section}`")
     a.inherit-color(@click="toggleExpanded"): b
       i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-      | {{title}}
+      | &nbsp;{{title}}
     if optionalCurrencySpan
       b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
   b-collapse.p-1(v-model="expanded")

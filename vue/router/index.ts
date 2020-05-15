@@ -13,7 +13,7 @@ const routes = [
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
   { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, zukuenftige: true } },
   { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, zukuenftige: false } },
-  { path: "/veranstaltung/:url", component: VeranstaltungView, props: true },
+  { path: "/veranstaltungen/:url", component: VeranstaltungView, props: true },
   { path: "/programmheft", redirect: `/programmheft/${new DatumUhrzeit().naechsterUngeraderMonat.fuerKalenderViews}` },
   { path: "/programmheft/:year/:month", component: Programmheft, props: true },
   { path: "/gema", component: Gema },
