@@ -20,12 +20,6 @@
               i.logo-reservix
               | &nbsp; {{veranstaltung.salesreport.anzahl}}
             a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
-        tr
-          td
-          td(colspan=2): a(@click="toggleExpanded"): h6 {{kopf.presseIn}}
-        tr
-          td
-          td(colspan=2): a(@click="toggleExpanded"): h5 {{kopf.titel}}
       table(width='100%', v-else)
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
@@ -39,6 +33,13 @@
               i.logo-reservix
               | &nbsp; {{veranstaltung.salesreport.anzahl}}
             a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
+      table.position-relative(width='100%', v-if="expanded")
+        tr
+          td
+          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h6 {{kopf.presseIn}}
+        tr
+          td
+          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h5 {{kopf.titel}}
       table(width="100%")
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")

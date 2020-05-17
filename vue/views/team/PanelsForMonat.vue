@@ -1,7 +1,7 @@
 <template lang="pug">
 div
-  h4.pt-1.pb-2.px-1.bg-primary.text-white
-    a(@click="aufZu")
+  h4.pt-1.pb-2.px-1.bg-primary.text-white.position-relative
+    a.stretched-link(@click="aufZu")
       i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
       | {{monat}} &nbsp;
     .btn-group.btn-group-sm.float-right

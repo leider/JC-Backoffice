@@ -15,12 +15,13 @@
               i.logo-reservix
               | &nbsp; {{veranstaltung.salesreport.anzahl}}
             a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
+      table.position-relative(width='100%')
         tr
           td
-          td(colspan=2): a(@click="toggleExpanded"): h6 {{kopf.presseIn}}
+          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h6 {{kopf.presseIn}}
         tr
           td
-          td(colspan=2): a(@click="toggleExpanded"): h5 {{kopf.titel}}
+          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h5 {{kopf.titel}}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
         i.fas.fa-exclamation-circle
         | #{' '} Kasse gesucht!

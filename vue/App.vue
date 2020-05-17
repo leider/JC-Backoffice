@@ -361,4 +361,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .b-form-datepicker > button {
   display: none;
 }
+
+.stretched-link::after {
+  z-index: 0;
+}
 </style>
