@@ -31,7 +31,7 @@ export default class ImageOverviewSection extends Vue {
   @Prop() title!: string;
 
   hoverOptions(image: string): object {
-    const url = `http://localhost:1969/image/imagepreview/${image}`;
+    const url = `/image/imagepreview/${image}`;
     return {
       title: image,
       content: `<img src='${url}' alt='bild' width="100%">`,
