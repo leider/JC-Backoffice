@@ -22,7 +22,6 @@ export default class JazzInterval extends Vue {
 
   startChanged({ old, changed }: { old: Date; changed: Date }): void {
     const diff = changed.getTime() - old.getTime();
-    console.log(old + " - " + changed + " diff: " + diff);
     this.veranstaltung.endDate = new Date(this.veranstaltung.endDate.getTime() + diff);
   }
 }

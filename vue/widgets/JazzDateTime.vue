@@ -6,7 +6,7 @@
       b-form-datepicker(v-if="!$isMobile()", v-model="datestring", :min="min", :state="valid", locale="de",
         start-weekday="1", :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }")
       b-form-input(v-else, type="date", v-model="datestring", :min="minstring", :state="valid")
-      b-form-invalid-feedback Muss in der Zukunft liegen
+      b-form-invalid-feedback {{invalidFeedback}}
   .col-6.pl-1.pr-2
     .form-group
       label &nbsp;
@@ -27,6 +27,8 @@ export default class JazzDateTime extends Vue {
   @Prop() min!: Date;
   @Prop() readonly label!: string;
   @Prop() readonly tooltip!: string | undefined;
+  private validTimestring = true;
+  private intTimestring = "";
 
   get datestring(): string {
     return DatumUhrzeit.forJSDate(this.value).fuerCalendarWidget;
@@ -36,9 +38,17 @@ export default class JazzDateTime extends Vue {
   }
 
   get timestring(): string {
-    return DatumUhrzeit.forJSDate(this.value).format("HH:mm");
+    if (this.validTimestring) {
+      return DatumUhrzeit.forJSDate(this.value).format("HH:mm");
+    }
+    return this.intTimestring;
   }
   set timestring(str: string) {
+    this.validTimestring = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(str);
+    if (!this.validTimestring) {
+      this.intTimestring = str;
+      return;
+    }
     this.emitChange(this.datestring, str);
   }
 
@@ -48,11 +58,14 @@ export default class JazzDateTime extends Vue {
 
   emitChange(date: string, time: string): void {
     const newDate = DatumUhrzeit.forISOString(`${date}T${time}`).toJSDate;
-    this.$emit("oldAndNew", {old: this.value, changed: newDate})
+    this.$emit("oldAndNew", { old: this.value, changed: newDate });
     this.$emit("input", newDate);
   }
 
   get valid(): boolean | null {
+    if (!this.validTimestring) {
+      return false;
+    }
     if (this.min) {
       const a = DatumUhrzeit.forJSDate(this.value);
       const b = DatumUhrzeit.forJSDate(this.min);
@@ -60,6 +73,13 @@ export default class JazzDateTime extends Vue {
       return check ? null : false;
     }
     return null;
+  }
+
+  get invalidFeedback(): string {
+    if (this.validTimestring) {
+      return "Muss in der Zukunft liegen";
+    }
+    return "ungültige Uhrzeit";
   }
 }
 </script>
