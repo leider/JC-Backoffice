@@ -5,6 +5,7 @@ import Programmheft from "@/views/programmheft/Programmheft.vue";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 import Gema from "@/views/gema/Gema.vue";
 import VeranstaltungView from "@/views/veranstaltung/VeranstaltungView.vue";
+import ImageOverview from "@/views/imageOverview/ImageOverview.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -17,6 +18,7 @@ const routes = [
   { path: "/programmheft", redirect: `/programmheft/${new DatumUhrzeit().naechsterUngeraderMonat.fuerKalenderViews}` },
   { path: "/programmheft/:year/:month", component: Programmheft, props: true },
   { path: "/gema", component: Gema },
+  { path: "/imageoverview", component: ImageOverview },
 ];
 
 const router = new VueRouter({

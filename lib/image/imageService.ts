@@ -3,7 +3,7 @@ import fs from "fs";
 import async, { ErrorCallback } from "async";
 
 import store from "../veranstaltungen/veranstaltungenstore";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import Veranstaltung, { ImageOverviewRow } from "../veranstaltungen/object/veranstaltung";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
@@ -26,8 +26,22 @@ function renameImage(oldname: string, newname: string, veranstIds: string[], cal
   });
 }
 
+function renameImages(rows: ImageOverviewRow[], callback: ErrorCallback): void {
+  function renameRow(row: ImageOverviewRow, cb: ErrorCallback): void {
+    renameImage(
+      row.image,
+      row.newname,
+      row.veranstaltungen.map((v) => v.id),
+      cb
+    );
+  }
+  async.each(rows, renameRow, callback);
+}
+
 export default {
   renameImage,
+
+  renameImages,
 
   alleBildNamen: function alleBildNamen(callback: Function): void {
     fs.readdir(uploadDir, (err, files) => {

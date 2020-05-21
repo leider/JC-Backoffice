@@ -225,7 +225,7 @@ app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
   store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
 });
 
-app.get("/:url.json", (req, res, next) => {
+app.get("/:url.json", (req, res) => {
   store.alle((err: Error, veranstaltungen: Veranstaltung[]): void => {
     if (err) {
       res.status(500).send(err);

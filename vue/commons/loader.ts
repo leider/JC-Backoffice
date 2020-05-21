@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fetch from "cross-fetch";
-import Veranstaltung from "../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung, { ImageOverviewRow } from "../../lib/veranstaltungen/object/veranstaltung";
 import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
 import Kalender from "../../lib/programmheft/kalender";
@@ -126,4 +126,13 @@ export function optionen(callback: Function): void {
 
 export function orte(callback: Function): void {
   getJson("/optionen/orte.json", (err: Error, result: any) => callback(new Orte(result)));
+}
+
+// Image
+export function imagenames(callback: Function): void {
+  getJson("/image/allImagenames.json", (err: Error, result: any) => callback(result));
+}
+
+export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
+  postAndReceive("/image/imagenamesChanged", rows, (err: Error, json: object) => callback(json));
 }

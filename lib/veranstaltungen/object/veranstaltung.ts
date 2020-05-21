@@ -42,6 +42,20 @@ export interface VeranstaltungUI {
   hotelpreise?: Hotelpreise;
 }
 
+export interface ImageOverviewVeranstaltung {
+  id: string;
+  startDate: DatumUhrzeit;
+  titel: string;
+  fullyQualifiedUrl: string;
+  images: string[];
+}
+
+export interface ImageOverviewRow {
+  image: string;
+  newname: string;
+  veranstaltungen: ImageOverviewVeranstaltung[];
+}
+
 export default class Veranstaltung {
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
@@ -195,6 +209,17 @@ export default class Veranstaltung {
 
   fullyQualifiedUrlForVertrag(): string {
     return "/vertrag/" + encodeURIComponent(this.url || "");
+  }
+
+  // Image Overview
+  get suitableForImageOverview(): ImageOverviewVeranstaltung {
+    return {
+      id: this.id || "",
+      startDate: this.startDatumUhrzeit(),
+      titel: this.kopf.titel,
+      fullyQualifiedUrl: this.fullyQualifiedUrl(),
+      images: this.presse.image,
+    };
   }
 
   // Money - GEMA - Reservix
