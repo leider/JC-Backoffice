@@ -11,7 +11,7 @@ export type TerminEvent = {
 };
 
 interface TerminUI {
-  id: string;
+  id?: string;
   beschreibung: string;
   typ: TerminType;
   startDate: string;
@@ -19,7 +19,7 @@ interface TerminUI {
 }
 
 export default class Termin {
-  id: string = new DatumUhrzeit().toLocalDateTimeString;
+  id?: string;
   beschreibung?: string;
   typ: TerminType = "Sonstiges";
   startDate: Date = new DatumUhrzeit().toJSDate;
@@ -28,6 +28,9 @@ export default class Termin {
   constructor(object?: any) {
     if (object) {
       Object.assign(this, object);
+      if (!this.id) {
+        this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
+      }
     }
   }
 
@@ -44,7 +47,7 @@ export default class Termin {
       Sonstiges: "#d6bdff",
       Feiertag: "#c1c3ff",
       Ferien: "#c1c3ff",
-      Vermietung: "#cc6678"
+      Vermietung: "#cc6678",
     }[typ];
   }
 
@@ -71,7 +74,7 @@ export default class Termin {
       start: this.startDate.toISOString(),
       end: this.endDate.toISOString(),
       title: this.beschreibung || "",
-      tooltip: this.beschreibung || ""
+      tooltip: this.beschreibung || "",
     };
   }
 }
