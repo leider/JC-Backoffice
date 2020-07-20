@@ -13,7 +13,7 @@ app.locals.pretty = true;
 
 app.get("/", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/teamseite");
+    return res.redirect("/vue/team");
   }
   return res.redirect("/veranstaltungen");
 });

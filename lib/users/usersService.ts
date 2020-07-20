@@ -10,7 +10,7 @@ export default {
       excludeSimilarCharacters: true,
       length: 10,
       numbers: true,
-      symbols: true
+      symbols: true,
     });
     store.forId(username, (err: Error | null, existingUser?: User) => {
       if (err) {
@@ -21,10 +21,11 @@ export default {
         existingUser ||
         new User({
           id: username,
-          salt: newSalt,
-          hashedPassword: hashPassword(password, newSalt),
-          gruppen: []
+          gruppen: [],
         });
+      user.salt = newSalt;
+      user.hashedPassword = hashPassword(password, newSalt);
+
       return store.save(user, (err1: Error | null) => {
         user.password = password; // to give UI feedback, called after save!
         callback(err1, user);
@@ -49,10 +50,10 @@ export default {
   emailsAllerBookingUser: function emailsAllerBookingUser(callback: Function): void {
     store.allUsers((err: Error | null, users: User[]) => {
       const emails = users
-        .filter(user => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
-        .filter(user => !!user.email)
-        .map(u => u.email);
+        .filter((user) => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
+        .filter((user) => !!user.email)
+        .map((u) => u.email);
       callback(err, emails);
     });
-  }
+  },
 };

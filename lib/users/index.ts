@@ -1,5 +1,5 @@
 import express from "express";
-import misc from "../commons/misc"
+import misc from "../commons/misc";
 import service from "./usersService";
 import store from "./userstore";
 import Message from "../mailsender/message";
@@ -18,7 +18,7 @@ function showListe(res: express.Response, next: express.NextFunction, optionalLa
     }
     return res.render("liste", {
       users,
-      lastSaved: optionalLastSavedUser
+      lastSaved: optionalLastSavedUser,
     });
   });
 }
@@ -37,7 +37,7 @@ app.get("/rundmail", (req, res) => {
 
   store.allUsers((err: Error | null, users: User[]) => {
     const listen = new Users(users).mailinglisten;
-    res.render("rundmail", { listen, users: users.filter(user => !!user.email) });
+    res.render("rundmail", { listen, users: users.filter((user) => !!user.email) });
   });
 });
 
@@ -50,17 +50,17 @@ app.post("/rundmail", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const validUsers = new Users(users).filterReceivers(req.body.group, req.body.user, req.body.liste).filter(user => !!user.email);
-    const emails = validUsers.map(user => Message.formatEMailAddress(user.name, user.email));
+    const validUsers = new Users(users).filterReceivers(req.body.group, req.body.user, req.body.liste).filter((user) => !!user.email);
+    const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
     const markdownToSend = req.body.markdown;
-    const currentUser = users.find(user => user.id === (req.user as User).id);
+    const currentUser = users.find((user) => user.id === (req.user as User).id);
     if (!validUsers || !currentUser) {
       return next(new Error("Fehler beim Senden"));
     }
     const message = new Message(
       {
         subject: req.body.subject,
-        markdown: markdownToSend
+        markdown: markdownToSend,
       },
       currentUser.name,
       currentUser.email
@@ -83,7 +83,7 @@ app.get("/mailinglisten", (req, res, next) => {
     }
     const listen = new Users(users).mailinglisten;
     listen.push(new Mailingliste("new", []));
-    res.render("mailingliste", { listen, users: users.filter(user => !!user.email) });
+    res.render("mailingliste", { listen, users: users.filter((user) => !!user.email) });
   });
 });
 
@@ -103,9 +103,9 @@ app.post("/mailinglisten", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    users.forEach(u => u.unsubscribeFromList(oldlistname));
-    const selectedUsers = users.filter(u => usernames.includes(u.id));
-    selectedUsers.forEach(u => u.subscribeList(listname));
+    users.forEach((u) => u.unsubscribeFromList(oldlistname));
+    const selectedUsers = users.filter((u) => usernames.includes(u.id));
+    selectedUsers.forEach((u) => u.subscribeList(listname));
     store.saveAll(users, (err1: Error | null) => {
       if (err1) {
         return next(err1);
@@ -129,7 +129,7 @@ app.get("/deleteliste/:name", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    users.forEach(u => u.unsubscribeFromList(listname));
+    users.forEach((u) => u.unsubscribeFromList(listname));
     store.saveAll(users, (err1: Error | null) => {
       if (err1) {
         return next(err1);
