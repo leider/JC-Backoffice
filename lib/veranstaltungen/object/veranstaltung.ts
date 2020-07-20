@@ -124,12 +124,21 @@ export default class Veranstaltung {
     }
   }
 
+  get isValid(): boolean {
+    return this.kopf.isValid && this.startDatumUhrzeit().istVorOderAn(this.endDatumUhrzeit());
+  }
+
   static createUrlFrom(date: Date, titel: string): string {
     return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + misc.normalizeString(titel);
   }
 
   get initializedUrl(): string {
     return Veranstaltung.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
+  }
+
+  initializeIdAndUrl() {
+    this.url = this.initializedUrl;
+    this.id = this.kopf.titel + " am " + this.datumForDisplay();
   }
 
   fillFromUI(object: VeranstaltungUI): Veranstaltung {
@@ -229,7 +238,7 @@ export default class Veranstaltung {
   }
 
   einnahmenGesamtEUR(): number {
-    return this.salesreport?.netto || this.kasse.einnahmeTicketsEUR;
+    return this.salesreport?.netto + this.kasse.einnahmeTicketsEUR;
   }
 
   dealAbsolutEUR(): number {

@@ -54,7 +54,7 @@ export default class Unterkunft {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {
         kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
-        sonstiges: misc.toArray(object.sonstiges)
+        sonstiges: misc.toArray(object.sonstiges),
       });
       this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) || veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
@@ -83,7 +83,7 @@ export default class Unterkunft {
     this.abreiseDate =
       parseToDate(object.abreiseDate) ||
       this.veranstaltungstagAsDatumUhrzeit.plus({
-        tage: 1
+        tage: 1,
       }).toJSDate;
 
     return this;
@@ -108,22 +108,31 @@ export default class Unterkunft {
   }
 
   anzahlNaechte(): number {
-    const abreiseDate1 = this.abreiseDate;
-    const anreiseDate1 = this.anreiseDate;
-    return abreiseDate1 && anreiseDate1 ? DatumUhrzeit.forJSDate(abreiseDate1).differenzInTagen(DatumUhrzeit.forJSDate(anreiseDate1)) : 0;
+    const ab = this.abreiseDate;
+    const an = this.anreiseDate;
+    return ab && an ? DatumUhrzeit.forJSDate(ab).differenzInTagen(DatumUhrzeit.forJSDate(an)) : 0;
   }
 
   anzahlZimmer(): number {
-    return this.einzelNum + this.doppelNum + this.suiteNum;
+    function reallyNumber(val: string | number) {
+      return parseInt(val.toString());
+    }
+    return reallyNumber(this.einzelNum) + reallyNumber(this.doppelNum) + reallyNumber(this.suiteNum);
   }
 
   kostenTotalEUR(): number {
+    return this.roomsTotalEUR + this.transportEUR;
+  }
+
+  get anzNacht(): string {
+    const anz = this.anzahlNaechte();
+    if (anz < 1) {
+      return "";
+    }
+    return anz === 1 ? "eine Nacht" : `${anz} Nächte`;
+  }
+  get roomsTotalEUR(): number {
     const naechte = this.anzahlNaechte();
-    return (
-      this.einzelNum * this.einzelEUR * naechte +
-      this.doppelNum * this.doppelEUR * naechte +
-      this.suiteNum * this.suiteEUR * naechte +
-      this.transportEUR
-    );
+    return this.einzelNum * this.einzelEUR * naechte + this.doppelNum * this.doppelEUR * naechte + this.suiteNum * this.suiteEUR * naechte;
   }
 }

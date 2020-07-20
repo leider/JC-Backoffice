@@ -83,7 +83,7 @@ block content
                   th.text-right #{formatReadonlyAsEuro(salesreport.netto)}
 
             if accessrights.isAbendkasse()
-              tr: td.text-right(colspan=3): a.btn.btn-kasse(href=veranstaltung.fullyQualifiedUrl() + '/kasse', title="Abendkasse") &nbsp;Abendkasse
+              tr: td.text-right(colspan=3): a.btn.btn-kasse(href=`${veranstaltung.fullyQualifiedUrl()}/kasse`, title="Abendkasse") &nbsp;Abendkasse
 
         if kopf.beschreibung
           +legendMitBody('info', 'Informationen', null, 'allgemeines')

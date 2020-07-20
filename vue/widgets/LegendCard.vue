@@ -4,8 +4,8 @@
     a.inherit-color.stretched-link(@click="toggleExpanded"): b
       i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
       | &nbsp;{{title}}
-    if optionalCurrencySpan
-      b: +currencySpan(optionalMoney, optionalCurrencySpan, 'float-right')
+      b(v-if="hasMoney")
+        .float-right {{moneyFormatted}} €
   b-collapse.p-1(v-model="expanded")
     slot
 
@@ -13,12 +13,20 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 
 @Component
 export default class LegendCard extends Vue {
   @Prop() section!: string;
   @Prop() title!: string;
+  @Prop() money!: number;
+  @Prop() hasMoney!: boolean;
+
   private expanded = true;
+
+  get moneyFormatted(): string {
+    return formatToGermanNumberString(this.money || 0);
+  }
 
   toggleExpanded(): void {
     this.expanded = !this.expanded;

@@ -51,6 +51,35 @@ function postAndReceive(url: string, data: any, callback: any): void {
   });
 }
 
+function postAndReceiveForFiles(url: string, data: FormData, callback: any): void {
+  getJson("/vue-spa/csrf-token.json", (err: Error, res: any) => {
+    fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "same-origin", // no-cors, cors, *same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "X-CSRF-TOKEN": res.token,
+      },
+      redirect: "follow", // manual, *follow, error
+      referrer: "no-referrer", // no-referrer, *client
+      body: data, // body data type must match "Content-Type" header
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((json) => callback(null, json))
+      .catch((err) => callback(err));
+  });
+}
+
+export function uploadFile(data: FormData, callback: Function): void {
+  postAndReceiveForFiles("/veranstaltungen/upload", data, (err: Error, json: object) => callback(json));
+}
+
 export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle", callback: Function): void {
   getJson(`/veranstaltungen/${selector}.json`, (err: Error, result: object[]) => {
     callback(result.map((r) => new Veranstaltung(r)));
@@ -58,7 +87,7 @@ export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | 
 }
 
 export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), (err: Error, json: object) => callback(json));
+  postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), callback);
 }
 
 export function deleteVeranstaltungWithId(id: string, callback: Function): void {

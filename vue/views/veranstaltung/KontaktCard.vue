@@ -29,9 +29,12 @@ export default class KontaktCard extends Vue {
   @Prop() title!: string;
   @Prop() kontakt!: Kontakt;
   @Prop() options!: Kontakt[];
-  private auswahl = "[temporär]]";
+  private auswahl = "[temporär]";
 
   get auswahlName(): string {
+    if (this.kontakt) {
+      return this.kontakt.name;
+    }
     return this.auswahl;
   }
 

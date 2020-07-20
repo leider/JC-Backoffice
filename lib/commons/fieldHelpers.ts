@@ -4,7 +4,7 @@ const cssMap: { [index: string]: { color: string; icon: string } } = {
   JamSession: { color: "session", icon: "flaticon-people text-session" },
   JazzFestival: { color: "festival", icon: "flaticon-shapes text-festival" },
   Kooperation: { color: "kooperation", icon: "flaticon-shapes text-kooperation" },
-  Livestream: { color: "livestream", icon: "flaticon-shapes text-livestream" }
+  Livestream: { color: "livestream", icon: "flaticon-shapes text-livestream" },
 };
 
 export default {
@@ -18,7 +18,7 @@ export default {
     return new Intl.NumberFormat("de-DE", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-      useGrouping: false
+      useGrouping: false,
     }).format(number || 0);
   },
 
@@ -32,7 +32,7 @@ export default {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-      useGrouping: false
+      useGrouping: false,
     }).format(number || 0);
   },
 
@@ -46,5 +46,5 @@ export default {
 
   cssIconClass: function cssIconClass(typ: string): string {
     return (cssMap[typ] || { icon: "flaticon-null text-concert" }).icon;
-  }
+  },
 };

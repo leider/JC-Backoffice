@@ -4,13 +4,13 @@
     .form-group
       jazz-label(:label="label", :tooltip="tooltip")
       b-form-datepicker(v-if="!$isMobile()", v-model="datestring", :min="min", :state="valid", locale="de",
-        start-weekday="1", :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }")
+        start-weekday="1", :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit', weekday: 'short' }")
       b-form-input(v-else, type="date", v-model="datestring", :min="minstring", :state="valid")
       b-form-invalid-feedback {{invalidFeedback}}
   .col-6.pl-1.pr-2
     .form-group
       label &nbsp;
-      b-form-input(type="time", v-model="timestring", :state="valid")
+      b-form-input.text-right(type="time", v-model="timestring", :state="valid")
 
 </template>
 
@@ -69,8 +69,8 @@ export default class JazzDateTime extends Vue {
     if (this.min) {
       const a = DatumUhrzeit.forJSDate(this.value);
       const b = DatumUhrzeit.forJSDate(this.min);
-      const check = a.istNach(b) || a.mitUhrzeitNumerisch === b.mitUhrzeitNumerisch;
-      return check ? null : false;
+      b.istVorOderAn(a)
+      return b.istVorOderAn(a) ? null : false;
     }
     return null;
   }

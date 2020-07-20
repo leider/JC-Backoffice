@@ -102,7 +102,7 @@ export default class Kasse {
   }
 
   endbestandEUR(): number {
-    return this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
+    return this.anfangsbestandEUR + this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
   }
 
   // FREIGABE

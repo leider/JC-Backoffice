@@ -1,4 +1,5 @@
 import { Preisprofil } from "../../optionen/optionValues";
+import Kasse from "./kasse";
 
 export interface EintrittspreiseUI {
   preisprofil: string;
@@ -19,7 +20,7 @@ export default class Eintrittspreise {
       name: "Individuell (Alt)",
       regulaer: object.regulaer || 0,
       rabattErmaessigt: object.rabattErmaessigt || 0,
-      rabattMitglied: object.rabattMitglied || 0
+      rabattMitglied: object.rabattMitglied || 0,
     };
   }
 
@@ -83,6 +84,15 @@ export default class Eintrittspreise {
 
   mitglied(): number {
     return this.regulaer() - Math.abs(this.rabattMitglied());
+  }
+
+  erwarteteEinnahmen(kasse: Kasse): number {
+    return (
+      this.zuschuss +
+      (kasse.istFreigegeben()
+        ? kasse.einnahmeTicketsEUR
+        : this.erwarteteBesucher * (0.8 * this.regulaer() + 0.1 * this.ermaessigt() + 0.1 * this.mitglied()))
+    );
   }
 
   alsPressetext(kooperationspartner: string): string {

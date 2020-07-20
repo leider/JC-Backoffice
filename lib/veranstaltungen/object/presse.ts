@@ -22,8 +22,11 @@ export default class Presse {
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {
-        image: misc.toArray(object.image)
+        image: misc.toArray(object.image),
       });
+      if (!this.originalText) {
+        this.originalText = "";
+      }
     }
   }
 

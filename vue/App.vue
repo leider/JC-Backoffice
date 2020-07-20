@@ -145,6 +145,7 @@ $jc_colors: (
   "concert": $gray-600,
   "kooperation": $color-kasse1,
   "ausgaben": $color-ausgaben1,
+  "kalkulation": $color-ausgaben1,
   "festival": $color-festival,
   "allgemeines": $color-allgemein1,
   "hotel": $color-hotel1,
@@ -359,7 +360,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .b-form-datepicker > button {
-  display: none;
+  padding: 0.375rem;
 }
 
 .stretched-link::after {

@@ -1,37 +1,28 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-input-group(append="€")
-    b-form-input.text-right(v-model="wert", type="number", step="0.01", :state="state")
-  b-form-invalid-feedback Bitte eine deutsche Zahl eingeben
+  jazz-currency-pure(v-model="val")
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import JazzLabel from "@/widgets/JazzLabel.vue";
+import JazzCurrencyPure from "@/widgets/JazzCurrencyPure.vue";
+
 @Component({
-  components: { JazzLabel },
+  components: { JazzCurrencyPure, JazzLabel },
 })
 export default class JazzCurrency extends Vue {
   @Prop() label!: string;
   @Prop() value!: number;
   @Prop() tooltip!: string | undefined;
-  @Prop() required!: boolean;
 
-  get wert(): string {
-    return this.value.toString();
+  get val(): number {
+    return this.value;
   }
 
-  set wert(wert: string) {
-    console.log("Hallo" + wert);
-    this.$emit("input", Number.parseFloat(wert));
-  }
-
-  get state(): boolean | null {
-    if (!this.required) {
-      return null;
-    }
-    return this.value ? null : false;
+  set val(val: number) {
+    this.$emit("input", val);
   }
 }
 </script>

@@ -1,9 +1,9 @@
 <template lang="pug">
 .row
-  .col-sm-6
+  .col-6
     jazz-date-time(label="Start", tooltip="Startzeitpunkt", v-model="veranstaltung.startDate", :min="minimumStart.toJSDate"
       @oldAndNew="startChanged")
-  .col-sm-6
+  .col-6
     jazz-date-time(label="Ende", tooltip="Erwartetes Ende", v-model="veranstaltung.endDate", :min="veranstaltung.startDate")
 </template>
 

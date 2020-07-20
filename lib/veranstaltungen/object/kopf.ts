@@ -50,6 +50,10 @@ export default class Kopf {
     return this;
   }
 
+  get isValid(): boolean {
+    return this.titel.length > 0;
+  }
+
   isKooperation(): boolean {
     return !!this.kooperation && this.kooperation !== "_";
   }
