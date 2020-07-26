@@ -5,7 +5,7 @@ export type Event = {
   start: string;
   end: string;
   title: string;
-  color: string;
+  farbe: string;
   email?: string;
   emailOffset?: number;
   was?: string;
@@ -69,14 +69,14 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
           start: fromUntil[0],
           end: fromUntil[1],
           title: was.trim() + " (" + wer.trim() + ")",
-          color: farbe.trim(),
+          farbe: farbe.trim(),
         };
       }
       return {
         start: fromUntil[0],
         end: fromUntil[1],
         title: was.trim() + " (" + wer.trim() + ")",
-        color: farbe.trim(),
+        farbe: farbe.trim(),
         email: email.trim(),
         emailOffset: emailOffset,
         was: was.trim(),

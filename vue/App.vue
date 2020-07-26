@@ -75,8 +75,8 @@ export default class App extends Vue {
   private user: User = new User({});
   private wikisubdirs = ["a", "b"];
 
-  created() {
-    currentUser((user: any) => {
+  created(): void {
+    currentUser((user: User) => {
       user.accessrights = new Accessrights(user);
       this.user = user;
     });
@@ -86,11 +86,11 @@ export default class App extends Vue {
     });
   }
 
-  get showItem() {
+  get showItem(): boolean {
     return this.user?.accessrights?.isOrgaTeam;
   }
 
-  get showItemSuperuser() {
+  get showItemSuperuser(): boolean {
     return this.user?.accessrights?.isSuperuser;
   }
 }
@@ -108,7 +108,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
 
 @import "~@fortawesome/fontawesome-free/css/all.css";
 
-@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/common/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
 @import "../frontend/3rd_party_css/flaticon-patched.css";
@@ -265,9 +265,9 @@ label {
   font-weight: $font-weight-bold;
 }
 
-.fc-day-grid-event .fc-content {
+.fc-content {
   /* force events to be one-line tall */
-  white-space: inherit !important;
+  white-space: normal !important;
 }
 
 // wiki page compare *BEGIN*
@@ -338,7 +338,7 @@ h6 > small {
 }
 
 // transform fullcalendar's primary to light button
-.fc-right .btn-primary {
+.fc-toolbar .btn-primary {
   color: #212529;
   background-color: #f8f9fa;
   border-color: #f8f9fa;

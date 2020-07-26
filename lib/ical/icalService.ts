@@ -13,13 +13,7 @@ function asICal(veranstaltung: Veranstaltung): object {
   const event = new icalendar.VEvent(veranstaltung.url);
   event.setSummary(veranstaltung.kopf.titel);
   event.setDescription(veranstaltung.tooltipInfos());
-  event.addProperty(
-    "LOCATION",
-    veranstaltung
-      .kopf
-      .ort
-      .replace(/\r\n/g, "\n")
-  );
+  event.addProperty("LOCATION", veranstaltung.kopf.ort.replace(/\r\n/g, "\n"));
   event.setDate(veranstaltung.startDatumUhrzeit().toJSDate, veranstaltung.endDatumUhrzeit().toJSDate);
   return event;
 }
@@ -46,7 +40,7 @@ function termineFromIcalURL(url: string, callback: Function): void {
           start: calprops.DTSTART[0].value.toISOString(),
           end: calprops.DTEND ? calprops.DTEND[0].value.toISOString() : calprops.DTSTART[0].value.toISOString(),
           title: calprops.SUMMARY[0].value,
-          tooltip: calprops.SUMMARY[0].value
+          tooltip: calprops.SUMMARY[0].value,
         };
       });
     return callback(null, events);
@@ -60,7 +54,7 @@ function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback
     }
     return callback(
       null,
-      termine.map(termin => termin.asEvent())
+      termine.map((termin) => termin.asEvent())
     );
   });
 }
@@ -68,13 +62,13 @@ function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback
 export default {
   asICal,
 
-  icalForVeranstaltungen: function(veranstaltungen: Veranstaltung[]): object {
+  icalForVeranstaltungen: function (veranstaltungen: Veranstaltung[]): object {
     // eslint-disable-next-line new-cap
     const ical = new icalendar.iCalendar();
-    veranstaltungen.forEach(veranstaltung => ical.addComponent(asICal(veranstaltung)));
+    veranstaltungen.forEach((veranstaltung) => ical.addComponent(asICal(veranstaltung)));
     return ical;
   },
 
   termineFromIcalURL,
-  termineAsEventsBetween
+  termineAsEventsBetween,
 };

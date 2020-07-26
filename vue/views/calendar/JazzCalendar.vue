@@ -1,23 +1,15 @@
 <template lang="pug">
-FullCalendar(
-  :plugins="calendarPlugins",
-  defaultView="dayGridMonth",
-  themeSystem="bootstrap",
-  :locales="locales",
-  :header="{ left: 'title', center: '', right: 'prev,today,next' }",
-  timeZone="Europe/Berlin",
-  timeFormat="HH:mm",
-  :displayEventTime="false",
-  :views="{month: {titleFormat: {month: 'short', year: '2-digit'},fixedWeekCount: false,showNonCurrentDates: false}}",
-  :weekNumbers="true",
-  height="auto",
-  :eventSources="eventSources"
-)
+FullCalendar( :options="options" )
+  template( v-slot:eventContent='arg')
+    .fc-content
+      b(v-if="arg.timeText && arg.timeText !== '00 Uhr'" ) {{ arg.timeText }}
+        br
+      i {{ arg.event.title }}
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import FullCalendar from "@fullcalendar/vue";
+import FullCalendar, { CalendarOptions } from "@fullcalendar/vue/";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import luxonPlugin from "@fullcalendar/luxon";
@@ -27,21 +19,30 @@ import { icals } from "@/commons/loader";
 
 @Component({ components: { FullCalendar } })
 export default class JazzCalendar extends Vue {
-  eventSources: CalSource[] = [];
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get calendarPlugins(): any[] {
-    return [dayGridPlugin, bootstrapPlugin, luxonPlugin];
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get locales(): any {
-    return [deLocale];
-  }
+  options: CalendarOptions = {
+    plugins: [dayGridPlugin, bootstrapPlugin, luxonPlugin],
+    initialView: "dayGridMonth",
+    themeSystem: "bootstrap",
+    locales: [deLocale],
+    headerToolbar: { left: "title", center: "", right: "prev,today,next" },
+    timeZone: "Europe/Berlin",
+    views: {
+      month: {
+        titleFormat: { month: "short", year: "2-digit" },
+        weekNumberFormat: { week: "short" },
+        fixedWeekCount: false,
+        showNonCurrentDates: false,
+        weekNumbers: true,
+        weekText: "KW",
+      },
+    },
+    height: "auto",
+    eventSources: [],
+  };
 
   created(): void {
     icals((icals: CalSource[]) => {
-      this.eventSources = icals;
+      this.options.eventSources = icals;
     });
   }
 }
