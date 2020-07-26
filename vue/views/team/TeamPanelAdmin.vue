@@ -19,7 +19,7 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{veranstaltung.salesreport.anzahl}}
-            a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
       table(width='100%', v-else)
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
@@ -32,7 +32,7 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{veranstaltung.salesreport.anzahl}}
-            a.btn.btn-secondary.py-0.px-1(:href="`${veranstaltung.fullyQualifiedUrl()}/preview`"): i.fas.fa-eye.fa-lg
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
       table.position-relative(width='100%', v-if="expanded")
         tr
           td
