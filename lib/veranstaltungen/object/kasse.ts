@@ -117,8 +117,8 @@ export default class Kasse {
   }
 
   freigabeRueckgaengig(): void {
-    delete this.kassenfreigabe;
-    delete this.kassenfreigabeAm;
+    this.kassenfreigabe = undefined;
+    this.kassenfreigabeAm = undefined;
   }
 
   freigabeDisplayDatum(): string {

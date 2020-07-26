@@ -5,6 +5,7 @@
     "sourceType": "module",
     "ecmaVersion": 8
   },
+  "plugins": ["@typescript-eslint"],
   "env": {
     "node": true,
     "es6": true
@@ -16,6 +17,26 @@
     "no-eval": 2,
     "no-process-exit": 2,
     "curly": [2, "all"],
-    "eqeqeq": 2
+    "eqeqeq": 2,
+    "@typescript-eslint/ban-types": [
+      "error",
+      {"extendDefaults": false,
+        "types": {
+          // add a custom message to help explain why not to use it
+          "Foo": "Don't use Far because it is unsafe",
+
+          // add a custom message, AND tell the plugin how to fix it
+          "String": {
+            "message": "Use string instead",
+            "fixWith": "string"
+          },
+
+          "{}": {
+            "message": "Use object instead",
+            "fixWith": "object"
+          }
+        }
+      }
+    ]
   }
 }

@@ -79,20 +79,21 @@ export default class Eintrittspreise {
   }
 
   ermaessigt(): number {
-    return this.regulaer() - Math.abs(this.rabattErmaessigt());
+    return Math.max(this.regulaer() - Math.abs(this.rabattErmaessigt()), 0);
   }
 
   mitglied(): number {
-    return this.regulaer() - Math.abs(this.rabattMitglied());
+    return Math.max(this.regulaer() - Math.abs(this.rabattMitglied()), 0);
   }
 
   erwarteteEinnahmen(kasse: Kasse): number {
-    return (
-      this.zuschuss +
-      (kasse.istFreigegeben()
-        ? kasse.einnahmeTicketsEUR
-        : this.erwarteteBesucher * (0.8 * this.regulaer() + 0.1 * this.ermaessigt() + 0.1 * this.mitglied()))
-    );
+    return this.zuschuss + this.erwarteterOderEchterEintritt(kasse);
+  }
+
+  erwarteterOderEchterEintritt(kasse: Kasse) {
+    return kasse.istFreigegeben()
+      ? kasse.einnahmeTicketsEUR
+      : this.erwarteteBesucher * (0.8 * this.regulaer() + 0.1 * this.ermaessigt() + 0.1 * this.mitglied());
   }
 
   alsPressetext(kooperationspartner: string): string {

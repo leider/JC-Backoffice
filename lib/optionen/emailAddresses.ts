@@ -53,12 +53,12 @@ export default class EmailAddresses {
   }
 
   partnerForIndex(index: number): string {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return this["partner" + index];
   }
   emailForIndex(index: number): string {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return this["email" + index];
   }

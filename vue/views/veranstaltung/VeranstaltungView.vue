@@ -17,7 +17,7 @@
                     i.fas.fa-trash.fa-fw.fa-lg
                     | &nbsp;Löschen
       b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy" title="Kopieren"): i.fas.fa-fw.fa-copy
-      b-button.btn.btn-success(:disabled="!dirty || !veranstaltung.isValid", @click="save", title="Speichern"): i.far.fa-save.fa-fw
+      b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern"): i.far.fa-save.fa-fw
     h2(v-if="!isNew", :class="colorClass") {{veranstaltung.kopf.titel}}<br>
       small(:class="colorClass") am {{veranstaltung.datumForDisplayShort()}}
     h2.text-danger(v-else) Neue oder kopierte Veranstaltung <br>
@@ -193,6 +193,10 @@ export default class VeranstaltungView extends Vue {
 
   get colorClass(): string {
     return `text-${fieldHelpers.cssColorCode(this.veranstaltung.kopf.eventTyp)}`;
+  }
+
+  get dirtyAndValid(): boolean {
+    return this.dirty && this.veranstaltung.isValid;
   }
 }
 </script>

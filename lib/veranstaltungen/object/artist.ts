@@ -19,7 +19,7 @@ export default class Artist {
   isAusland = false;
   brauchtHotel = false;
 
-  toJSON(): {} {
+  toJSON(): object {
     return Object.assign({}, this);
   }
 
