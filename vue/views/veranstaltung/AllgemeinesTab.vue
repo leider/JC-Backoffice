@@ -62,22 +62,35 @@
       :options="optionen.agenturen")
     legend-card(section="allgemeines", title="Vertrag")
       .row
-        .col-md-6
+        .col-md-5
           single-select(label="Art", v-model="vertrag.art", :options="vertragArten")
-        .col-md-6
-          single-select(label="Sprache", v-model="vertrag.sprache", :options="vertragSprachen")
-      .row(v-if="isBookingTeam")
-        .col-12
-          a.btn.btn-primary.float-right(:href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`") Vertrag generieren
+        .col-md-7
+          .form-group
+            label Variante:
+            .input-group
+              single-select-pure(label="Sprache", v-model="vertrag.sprache", :options="vertragSprachen")
+              .input-group-append
+                b-button(:href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`",
+                  :disabled="!veranstaltung.id || !isBookingTeam", variant="primary") Generieren
       .row
         .col-12
-          b-form-file
+          .form-group
+            label Dateien:
+            .input-group
+              b-form-file(v-model="filesForUpload", multiple, placeholder="Dateien auswählen", browse-text="Auswählen")
+              .input-group-append
+                b-button(@click="saveFiles", variant="primary", :disabled="filesForUpload.length === 0") Hochladen
+            .row.mt-3
+              .col-6(v-for="datei in vertrag.datei", :key="datei")
+                .form-inline
+                  a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{datei}}
+                  a.ml-1(@click="vertrag.removeDatei(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
+                    i.fas.fa-fw.fa-times.fa-sm
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import User from "../../../lib/users/user";
 import Kopf from "../../../lib/veranstaltungen/object/kopf";
 import LegendCard from "@/widgets/LegendCard.vue";
 import JazzText from "@/widgets/JazzText.vue";
@@ -100,6 +113,8 @@ import Kosten from "../../../lib/veranstaltungen/object/kosten";
 import Markdown from "@/widgets/Markdown.vue";
 import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
 import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/object/vertrag";
+import { uploadFile } from "@/commons/loader";
+
 @Component({
   components: {
     KontaktCard,
@@ -119,12 +134,14 @@ import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/obje
     LegendCard,
   },
 })
-export default class AllgemeinesEvent extends Vue {
+export default class AllgemeinesTab extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
-  @Prop() user!: User;
   @Prop() optionen!: OptionValues;
   @Prop() orte!: Orte;
   @Prop() minimumStart!: DatumUhrzeit;
+  @Prop() isBookingTeam!: boolean;
+
+  private filesForUpload: File[] = [];
 
   get artist(): Artist {
     return this.veranstaltung.artist;
@@ -150,10 +167,6 @@ export default class AllgemeinesEvent extends Vue {
     return Vertrag.sprachen();
   }
 
-  get isBookingTeam(): boolean {
-    return this.user?.accessrights?.isBookingTeam;
-  }
-
   get eventTypen(): string[] {
     return this.optionen.typen;
   }
@@ -167,5 +180,32 @@ export default class AllgemeinesEvent extends Vue {
       this.kopf.flaeche = derOrt.flaeche;
     }
   }
+
+  saveFiles(): void {
+    const formData = new FormData();
+    formData.append("id", this.veranstaltung.id || "");
+    formData.append("typ", "vertrag");
+    this.filesForUpload.forEach((file) => {
+      formData.append("datei", file, file.name);
+    });
+    uploadFile(formData, (json: { error?: string; veranstaltung?: any }) => {
+      if (!json.error) {
+        this.filesForUpload = [];
+        const strings = this.vertrag.datei;
+        strings.splice(0, strings.length);
+        const newStrings = new Veranstaltung(json.veranstaltung).vertrag.datei;
+        newStrings.forEach((s) => strings.push(s));
+      }
+    });
+  }
 }
 </script>
+<style lang="scss" scoped>
+.multiselect {
+  width: calc(100% - 99px) !important;
+}
+.multiselect__tags {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+</style>

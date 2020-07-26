@@ -75,7 +75,6 @@ export default class Misc {
   }
 
   static normalizeString(input: string): string {
-    // iconv-lite cannot do this yet, so we do it manually:
     return input
       .replace(/[äÄàáÀÁâÂ]/gi, "a")
       .replace(/[èéÈÉêÊ]/gi, "e")

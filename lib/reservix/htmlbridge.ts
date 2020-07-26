@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore, @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
 import request from "request";
 const requester = request.defaults({ jar: true });
 import cheerio from "cheerio";
@@ -23,12 +23,12 @@ const tablepositions = {
   belegungProzent: 8,
   bezahlt: 16,
   netto: 17,
-  brutto: 18
+  brutto: 18,
 };
 
 function prepareInputsForPost(forminputs: any, $: CheerioStatic): any {
   return forminputs
-    .filter(function() {
+    .filter(function () {
       // @ts-ignore
       return !!$(this).val();
     })
@@ -47,15 +47,15 @@ function parseTable(headersAndLines: { headers: Array<any>; lines: Array<any> },
 
   // check headers TODO
   const lineobjects = headersAndLines.lines
-    .filter(each => each.row.length === 20)
-    .map(each => {
+    .filter((each) => each.row.length === 20)
+    .map((each) => {
       const row = each.row;
       return {
         datum: DatumUhrzeit.forReservixString(row[tablepositions.datum], row[tablepositions.uhrzeit]),
         id: row[tablepositions.event].match(/\((\w+)\)$/)[1], // search event id between (...)
         anzahl: parseInt(row[tablepositions.gesamt], 10) + parseInt(row[tablepositions.freikarten], 10),
         netto: moneyStringToFloat(row[tablepositions.netto]),
-        brutto: moneyStringToFloat(row[tablepositions.brutto])
+        brutto: moneyStringToFloat(row[tablepositions.brutto]),
       };
     });
   callback(null, lineobjects);
@@ -68,20 +68,15 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
       // @ts-ignore
       row: $(this)
         .find("td")
-        .map(function() {
+        .map(function () {
           // @ts-ignore
           return $(this).text();
         })
-        .toArray()
+        .toArray(),
     };
   }
-  const headers = $(".tablelines tr")
-    .not(".rxrow")
-    .map(asFields)
-    .toArray();
-  const lines = $(".tablelines .rxrow")
-    .map(asFields)
-    .toArray();
+  const headers = $(".tablelines tr").not(".rxrow").map(asFields).toArray();
+  const lines = $(".tablelines .rxrow").map(asFields).toArray();
   parseTable({ headers, lines }, callback);
 }
 
@@ -99,7 +94,7 @@ function openAuswertungPage(location: string, optionalDateString: string | null,
     return request.post(
       {
         url: baseURL + "/sales/" + $("#searchForm").attr("action"),
-        formData: prepareInputsForPost($("#searchForm :input"), $)
+        formData: prepareInputsForPost($("#searchForm :input"), $),
       },
       (err1, resp1, body1) => {
         if (err1) {
@@ -122,7 +117,7 @@ function openVerwaltungPage(location: string, optionalDateString: string | null,
     const $ = cheerio.load(body.toString());
     const auswertungUrl = $("#content ul li a")
       // @ts-ignore
-      .filter(function() {
+      .filter(function () {
         // @ts-ignore
         return $(this)
           .html()
@@ -142,7 +137,7 @@ function openWelcomePage(location: string, optionalDateString: string | null, ca
     const $ = cheerio.load(body.toString());
     const verwaltungUrl = $("#page_header_middle ul li a")
       // @ts-ignore
-      .filter(function() {
+      .filter(function () {
         // @ts-ignore
         return $(this)
           .html()
@@ -164,28 +159,31 @@ export interface Lineobject {
 }
 
 export function loadSalesreports(optionalDateString: string | null, callback: Function): void {
-  requester(loginURL, (err, resp, body): request.Request => {
-    if (err) {
-      return callback(err);
-    }
-    const $ = cheerio.load(body.toString());
-    $("#id_mitarbeiterpw").val(username as string);
-    const inputs = prepareInputsForPost($("#login input"), $);
-    const url = $("#login").attr("action");
-    if (url === undefined) {
-      return callback("Problem beim LAden von REservix");
-    }
-    return request.post(url, { formData: inputs }, (err1, resp1) => {
-      if (err1) {
-        callback(err1);
-      } else {
-        openWelcomePage(
-          // @ts-ignore
-          baseURL + resp1.headers.location,
-          optionalDateString,
-          callback
-        );
+  requester(
+    loginURL,
+    (err, resp, body): request.Request => {
+      if (err) {
+        return callback(err);
       }
-    });
-  });
+      const $ = cheerio.load(body.toString());
+      $("#id_mitarbeiterpw").val(username as string);
+      const inputs = prepareInputsForPost($("#login input"), $);
+      const url = $("#login").attr("action");
+      if (url === undefined) {
+        return callback("Problem beim LAden von REservix");
+      }
+      return request.post(url, { formData: inputs }, (err1, resp1) => {
+        if (err1) {
+          callback(err1);
+        } else {
+          openWelcomePage(
+            // @ts-ignore
+            baseURL + resp1.headers.location,
+            optionalDateString,
+            callback
+          );
+        }
+      });
+    }
+  );
 }

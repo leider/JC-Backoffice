@@ -19,6 +19,8 @@ import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import Renderer from "../commons/renderer";
 import imageService from "../image/imageService";
+import async from "async";
+import Kasse from "./object/kasse";
 const uploadDir = path.join(__dirname, "../../static/upload");
 const filesDir = path.join(__dirname, "../../static/files");
 const publicUrlPrefix = conf.get("publicUrlPrefix");
@@ -359,20 +361,40 @@ export function addRoutesTo(app: express.Express): void {
   });
 
   app.post("/saveVeranstaltung", (req, res) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
+    if (!res.locals.accessrights.isAbendkasse) {
       return res.redirect("/");
     }
-    const veranstaltung = new Veranstaltung(req.body);
-    store.saveVeranstaltung(veranstaltung, (err: Error) => {
-      if (err) {
-        return res.status(500).send(err);
+    if (res.locals.accessrights.isOrgaTeam) {
+      const veranstaltung = new Veranstaltung(req.body);
+      store.saveVeranstaltung(veranstaltung, (err: Error) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
+      });
+    } else {
+      // Nur Kasse erlaubt
+      const url = req.body.url;
+      if (!url) {
+        return res.status(500).send("Kasse darf nur bestehende speichern");
       }
-      res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
-    });
+      store.getVeranstaltung(url, (err: Error | null, veranstaltung?: Veranstaltung) => {
+        if (err || !veranstaltung) {
+          return res.status(500).send(err);
+        }
+        veranstaltung.kasse = new Kasse(req.body.kasse);
+        store.saveVeranstaltung(veranstaltung, (err1: Error) => {
+          if (err1) {
+            return res.status(500).send(err1);
+          }
+          res.set("Content-Type", "application/json").send(veranstaltung.toJSON());
+        });
+      });
+    }
   });
 
   app.post("/deleteVeranstaltung", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
+    if (!res.locals.accessrights.isOrgaTeam) {
       return res.redirect("/");
     }
     store.deleteVeranstaltungById(req.body.id, (err: Error | null) => {
@@ -386,7 +408,7 @@ export function addRoutesTo(app: express.Express): void {
   app.post("/submit", (req, res, next) => {
     const body = req.body;
 
-    if (!(res.locals.accessrights.isOrgaTeam() || (body.kasse && res.locals.accessrights.isAbendkasse()))) {
+    if (!(res.locals.accessrights.isOrgaTeam || (body.kasse && res.locals.accessrights.isAbendkasse))) {
       return res.redirect("/");
     }
 
@@ -420,48 +442,52 @@ export function addRoutesTo(app: express.Express): void {
       if (err) {
         return res.send({ error: err });
       }
+      const typElement = fields.typ[0];
+      const idElement = fields.id[0];
+      const istPressefoto = typElement === "pressefoto";
+
       if (files.datei) {
-        const datei = files.datei[0];
-        const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
-        const istPressefoto = fields.typ[0] === "pressefoto";
-        const pfad = datei.path;
-        return copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname), (errC) => {
-          if (errC) {
-            return res.send({ error: errC });
+        return store.getVeranstaltungForId(idElement, (err1: Error | null, veranstaltung?: Veranstaltung) => {
+          if (err1) {
+            return res.send({ error: err1 });
           }
-          return store.getVeranstaltungForId(fields.id[0], (err1: Error | null, veranstaltung?: Veranstaltung) => {
-            if (err1) {
-              return res.send({ error: err1 });
-            }
-            if (!veranstaltung) {
-              return res.send({ error: "technisches Problem" });
-            }
-            if (istPressefoto) {
-              if (!veranstaltung.presse.updateImage(dateiname)) {
-                return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
-                });
+          if (!veranstaltung) {
+            return res.send({ error: "technisches Problem" });
+          }
+
+          function copyToDestination(datei: { originalFilename: string; path: string }, callback: Function): void {
+            const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
+            const pfad = datei.path;
+            copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname), (errC) => {
+              if (errC || !veranstaltung) {
+                return callback(errC);
               }
-            }
-            if (fields.typ[0] === "vertrag") {
-              if (!veranstaltung.vertrag.updateDatei(dateiname)) {
-                return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
-                });
+              let result = true;
+              if (istPressefoto) {
+                result = veranstaltung.presse.updateImage(dateiname);
               }
-            }
-            if (fields.typ[0] === "rider") {
-              if (!veranstaltung.technik.updateDateirider(dateiname)) {
-                return res.send({
-                  error: "Datei schon vorhanden. Bitte Seite neu laden.",
-                });
+              if (typElement === "vertrag") {
+                result = veranstaltung.vertrag.updateDatei(dateiname);
               }
+              if (typElement === "rider") {
+                result = veranstaltung.technik.updateDateirider(dateiname);
+              }
+              if (!result) {
+                return callback({ error: "Datei schon vorhanden. Bitte Seite neu laden." });
+              }
+              return callback();
+            });
+          }
+
+          async.forEach(files.datei, copyToDestination, (err) => {
+            if (err) {
+              return res.send({ error: err });
             }
             return store.saveVeranstaltung(veranstaltung, (err2: Error | null) => {
               if (err2) {
                 return res.send({ error: err2 });
               }
-              return res.send({});
+              return res.set("Content-Type", "application/json").send({ veranstaltung: veranstaltung.toJSON() });
             });
           });
         });

@@ -1,7 +1,9 @@
 <template lang="pug">
-.form-group
-  jazz-label(:label="label", :tooltip="tooltip")
-  jazz-currency-pure(v-model="val")
+.form-group.row
+  .col-sm-3
+  label.col-6.col-form-label {{label}}
+  .col-6.col-sm-3
+    jazz-currency-pure(v-model="val")
 </template>
 
 <script lang="ts">
@@ -9,13 +11,10 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import JazzCurrencyPure from "@/widgets/JazzCurrencyPure.vue";
 
-@Component({
-  components: { JazzCurrencyPure, JazzLabel },
-})
-export default class JazzCurrency extends Vue {
-  @Prop() label!: string;
+@Component({ components: { JazzCurrencyPure, JazzLabel } })
+export default class LabelCurrencyRow extends Vue {
   @Prop() value!: number;
-  @Prop() tooltip!: string | undefined;
+  @Prop() label!: string;
 
   get val(): number {
     return this.value;

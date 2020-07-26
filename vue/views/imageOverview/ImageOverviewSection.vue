@@ -41,4 +41,3 @@ export default class ImageOverviewSection extends Vue {
   }
 }
 </script>
-http://localhost:1969/image/imagepreview/

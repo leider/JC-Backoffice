@@ -47,12 +47,12 @@
           td.p-0(v-if="veranstaltung.artist.brauchtHotel", width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
     b-collapse(v-model="expanded")
       .btn-group.btn-group-sm.float-right.m-1
-        a.btn.btn-allgemeines(:href="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): i.fas.fa-fw.fa-keyboard
-        a.btn.btn-technik(:href="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): i.fas.fa-fw.fa-microphone-alt
-        a.btn.btn-ausgaben(:href="veranstaltung.fullyQualifiedUrl() + '/ausgaben'", title="Ausgaben"): i.fas.fa-fw.fa-euro-sign
-        a.btn.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :href="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): i.fas.fa-fw.fa-bed
-        a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): i.fas.fa-fw.fa-money-bill-alt
-        a.btn.btn-presse(:href="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): i.fas.fa-fw.fa-newspaper
+        b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): i.fas.fa-fw.fa-keyboard
+        b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): i.fas.fa-fw.fa-microphone-alt
+        b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl() + '/kalkulation'", title="Ausgaben"): i.fas.fa-fw.fa-euro-sign
+        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): i.fas.fa-fw.fa-bed
+        b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): i.fas.fa-fw.fa-money-bill-alt
+        b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): i.fas.fa-fw.fa-newspaper
         b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
           i.fas.fa-fw.fa-trash-alt.text-danger
           b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop=true, @ok="deleteVeranstaltung")
@@ -67,7 +67,7 @@
                     b-button.btn.btn-danger.text(@click="deleteVeranstaltung")
                       i.fas.fa-trash.fa-fw.fa-lg
                       | &nbsp;Löschen
-        a.btn.btn-copy(:href="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): i.fas.fa-fw.fa-copy
+        b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): i.fas.fa-fw.fa-copy
         b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): i.fas.fa-fw.fa-save
       table.table.table-striped.table-sm
         tbody

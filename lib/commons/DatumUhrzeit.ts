@@ -98,6 +98,10 @@ export default class DatumUhrzeit {
     return this.value < other.value;
   }
 
+  istVorOderAn(other: DatumUhrzeit): boolean {
+    return this.value.toSeconds() < other.value.toSeconds() || this.mitUhrzeitNumerisch === other.mitUhrzeitNumerisch;
+  }
+
   istNach(other: DatumUhrzeit): boolean {
     return this.value > other.value;
   }

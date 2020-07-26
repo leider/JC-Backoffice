@@ -1,7 +1,7 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-form-input(:value="value", @input="$emit('input', $event)", type="number", :min="min", :max="max", :state="state")
+  b-form-input.text-right(v-model="valueString", type="number", :min="min", :max="max", :state="state")
   b-form-invalid-feedback Muss ausgefüllt werden
 </template>
 
@@ -13,17 +13,25 @@ import JazzLabel from "@/widgets/JazzLabel.vue";
 })
 export default class JazzNumber extends Vue {
   @Prop() label!: string;
-  @Prop() value!: string;
+  @Prop() value!: number;
   @Prop() min!: string;
   @Prop() max!: string;
   @Prop() tooltip!: string | undefined;
   @Prop() required!: boolean;
 
+  get valueString(): string {
+    return this.value.toString(10);
+  }
+
+  set valueString(s: string) {
+    this.$emit("input", parseInt(s, 10));
+  }
+
   get state(): boolean | null {
     if (!this.required) {
       return null;
     }
-    return !!this.value && this.value.length > 0 ? null : false;
+    return !!this.value && this.valueString.length > 0 ? null : false;
   }
 }
 </script>

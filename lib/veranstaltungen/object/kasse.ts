@@ -102,7 +102,7 @@ export default class Kasse {
   }
 
   endbestandEUR(): number {
-    return this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
+    return this.anfangsbestandEUR + this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
   }
 
   // FREIGABE
@@ -117,8 +117,8 @@ export default class Kasse {
   }
 
   freigabeRueckgaengig(): void {
-    delete this.kassenfreigabe;
-    delete this.kassenfreigabeAm;
+    this.kassenfreigabe = undefined;
+    this.kassenfreigabeAm = undefined;
   }
 
   freigabeDisplayDatum(): string {

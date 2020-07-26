@@ -41,6 +41,9 @@ export default class Kosten {
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object);
+      if (!this.gagenSteuer) {
+        this.gagenSteuer = "ohne";
+      }
     }
   }
 

@@ -36,7 +36,7 @@ export default class Accessrights {
   }
 
   get isAbendkasse(): boolean {
-    return this.isSuperuser || this.isOrgaTeam || this.gruppen.includes("abendkasse");
+    return this.isOrgaTeam || this.gruppen.includes("abendkasse");
   }
 
   get darfKasseFreigeben(): boolean {
