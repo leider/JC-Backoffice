@@ -1,46 +1,49 @@
 <template lang="pug">
 .col-12
-  .row
-    .col-lg-8
-      .row
-        .col-12
-          b-overlay(:show="loading")
-            .page-header(v-if="!admin")
-              .btn-group.float-right
-                b-link.btn.btn-light(v-if="user.accessrights && user.accessrights.isOrgaTeam", to="/veranstaltungen/zukuenftige", title="administration")
-                  i.fas.fa-edit.fa-fw
-                  | &nbsp;Admin
-              h2 Team <br>
-              p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
-              p
-                a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
-                | #{' '} Hiermit kannst Du den Kalender abonnieren.
-            .page-header(v-else)
-              .btn-group.float-right
-                a.btn.btn-light(href="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
-                a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
-                b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
-                  b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
-                  b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
-              h2 Veranstaltungen
-            template(v-slot:overlay)
-              p.text-center Lade Daten...
+  .row.page-header
+    .col-lg-12
+      b-tabs
+        b-tab
+          template(v-slot:title)
+            h2(v-if="!admin") Team
+            h2(v-else) Veranstaltungen
+          .row
+            .col-lg-8
+              .row
+                .col-12
+                  b-overlay(:show="loading")
+                    div(v-if="!admin")
+                      .btn-group.float-right
+                        b-link.btn.btn-light(v-if="user.accessrights && user.accessrights.isOrgaTeam", to="/veranstaltungen/zukuenftige", title="administration")
+                          i.fas.fa-edit.fa-fw
+                          | &nbsp;Admin
+                      p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
+                      p
+                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                        | #{' '} Hiermit kannst Du den Kalender abonnieren.
+                    div(v-else)
+                      .btn-group.float-right
+                        b-button.btn-light(to="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
+                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                        b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
+                          b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
+                          b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
+                    template(v-slot:overlay)
+                      p.text-center Lade Daten...
 
-      .row
-        .col-12
-          panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
-            :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin",
-            @deleted="deleted")
-    .col-lg-4
-      jazz-calendar.mt-4
-  .row
-    .col-12
-      hr
-      .page-header
-        h2 Übersicht der Benutzer
-  .row
-    user-panel(:currentUser="user", :user="user")
-    user-panel(v-for="u in otherUsers()", :key="u.id", :currentUser="user", :user="u")
+              .row
+                .col-12
+                  panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
+                    :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin",
+                    @deleted="deleted")
+            .col-lg-4
+              jazz-calendar.mt-4
+        b-tab
+          template(v-slot:title)
+            h2 Übersicht der Benutzer
+          .row
+            user-panel(:currentUser="user", :user="user")
+            user-panel(v-for="u in otherUsers()", :key="u.id", :currentUser="user", :user="u")
 </template>
 
 <script lang="ts">

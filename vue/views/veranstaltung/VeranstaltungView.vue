@@ -2,8 +2,9 @@
 .col-12
   .page-header
     .btn-group.float-right
-      b-button.btn.btn-light(v-if="showAllTabs", :disabled="isNew || veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
-        i.fas.fa-fw.fa-trash-alt.text-danger
+      b-button.btn.btn-danger(v-if="showAllTabs", :disabled="isNew || veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
+        i.fas.fa-fw.fa-trash-alt
+        .d-none.d-md-inline  #{" "}Löschen
         b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop=true, @ok="loeschen")
           p Bist Du sicher, dass Du {{veranstaltung.kopf.titel}} löschen willst?
           template(v-slot:modal-header)
@@ -16,8 +17,12 @@
                   b-button.btn.btn-danger.text(@click="ok()")
                     i.fas.fa-trash.fa-fw.fa-lg
                     | &nbsp;Löschen
-      b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy" title="Kopieren"): i.fas.fa-fw.fa-copy
-      b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern"): i.far.fa-save.fa-fw
+      b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
+        i.fas.fa-fw.fa-copy
+        .d-none.d-md-inline #{" "}Kopieren
+      b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
+        i.far.fa-save.fa-fw
+        .d-none.d-md-inline #{" "}Speichern
     h2(v-if="!isNew", :class="colorClass") {{veranstaltung.kopf.titel}}<br>
       small(:class="colorClass") am {{veranstaltung.datumForDisplayShort()}}
     h2.text-danger(v-else) Neue oder kopierte Veranstaltung <br>
