@@ -34,15 +34,15 @@
             tr: th(colspan=2) Niemand benötigt
           tbody(v-else)
             tr: th(colspan=2) MoD
-            preview-user-row(v-for="user in mitarbeiter.mod", :key="user", :user="user", verantwortlich="true")
+            preview-user-row(v-for="name in staff.mod", :key="name", :name="name", :users="users", :verantwortlich="true")
             tr: th(colspan=2) Kasse
-            preview-user-row(v-for="user in mitarbeiter.kasseV", :key="user", verantwortlich="true")
-            preview-user-row(v-for="user in mitarbeiter.kasse", :key="user", verantwortlich="false")
+            preview-user-row(v-for="name in staff.kasseV", :key="name", :name="name", :users="users", :verantwortlich="true")
+            preview-user-row(v-for="name in staff.kasse", :key="name", :name="name", :users="users", :verantwortlich="false")
             tr: th(colspan=2) Technik
-            preview-user-row(v-for="user in mitarbeiter.technikV", :key="user", verantwortlich="true")
-            preview-user-row(v-for="user in mitarbeiter.technik", :key="user", verantwortlich="false")
-            tr(v-if="mitarbeiter.merchandise.length > 0"): th(colspan=2) Merchandising
-            preview-user-row(v-for="user in mitarbeiter.merchandise", :key="user", verantwortlich="false")
+            preview-user-row(v-for="name in staff.technikerV", :key="name", :name="name", :users="users", :verantwortlich="true")
+            preview-user-row(v-for="name in staff.techniker", :key="name", :name="name", :users="users", :verantwortlich="false")
+            tr(v-if="staff && staff.merchandise.length > 0"): th(colspan=2) Merchandising
+            preview-user-row(v-for="name in staff.merchandise", :key="name", :name="name", :users="users", :verantwortlich="false")
 
       legend-card(section="kasse", title="Eintritt und Abendkasse")
         table.table.table-striped.table-sm
@@ -61,7 +61,7 @@
               th.text-right: jazz-currency-display(:value="veranstaltung.salesreport.netto")
             tr(v-if="isAbendkasse"): td.text-right(colspan=3): b-button.btn-kasse(:to="`${veranstaltung.fullyQualifiedUrl()}/kasse`", title="Abendkasse") Abendkasse
 
-      legend-card(v-if="kopf.beschreibung.trim()", section="allgemeines", title="Informationen")
+      legend-card(v-if="kopf.beschreibung && kopf.beschreibung.trim()", section="allgemeines", title="Informationen")
         div(v-html="previewBeschreibung")
 
       legend-card(section="technik", title="Technik")
@@ -126,7 +126,6 @@ export default class Preview extends Vue {
   @Prop() url!: string;
   @Prop() tab!: string;
 
-  private originalVeranstaltung = new Veranstaltung();
   private veranstaltung = new Veranstaltung();
   private user = new User({});
   private users: User[] = [];
@@ -186,6 +185,14 @@ export default class Preview extends Vue {
     return this.staff.mitarbeiterTransient || {};
   }
 
+  get kasse(): User[] {
+    return this.mitarbeiter.kasse;
+  }
+
+  get kasseV(): User[] {
+    return this.mitarbeiter.kasseV;
+  }
+
   get previewBeschreibung(): string {
     return renderer.render(this.kopf.beschreibung);
   }
@@ -202,9 +209,7 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
   }
 
   get hoteltitel(): string {
-    return `${
-      this.hotel.name
-    }: ${this.veranstaltung.unterkunft.anzahlZimmer()} Zimmer / ${this.veranstaltung.unterkunft.anzNacht}`;
+    return `${this.hotel.name}: ${this.veranstaltung.unterkunft.anzahlZimmer()} Zimmer / ${this.veranstaltung.unterkunft.anzNacht}`;
   }
 
   @Watch("$url")

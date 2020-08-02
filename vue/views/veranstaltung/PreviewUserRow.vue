@@ -1,8 +1,8 @@
 <template lang="pug">
+
 tr
   td(width="2%")
-  td(width="98%")
-    | {{user.name}} &nbsp;
+  td(width="98%") {{user.name}} &nbsp;
     a(:href="`mailto:${user.email}`") {{user.email}}
     | {{ }} Tel.: &nbsp;
     a(:href="`tel:${user.tel}`") {{user.tel}}
@@ -16,7 +16,12 @@ import User from "../../../lib/users/user";
 
 @Component
 export default class PreviewUserRow extends Vue {
-  @Prop() user!: User;
+  @Prop() name!: string;
+  @Prop() users!: User[];
   @Prop() verantwortlich!: boolean;
+
+  get user(): User {
+    return this.users.find((u: User) => this.name === u.id) || new User({});
+  }
 }
 </script>

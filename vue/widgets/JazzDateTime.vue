@@ -69,7 +69,6 @@ export default class JazzDateTime extends Vue {
     if (this.min) {
       const a = DatumUhrzeit.forJSDate(this.value);
       const b = DatumUhrzeit.forJSDate(this.min);
-      b.istVorOderAn(a)
       return b.istVorOderAn(a) ? null : false;
     }
     return null;
