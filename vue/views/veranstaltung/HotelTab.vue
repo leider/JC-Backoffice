@@ -1,7 +1,7 @@
 <template lang="pug">
 .row
   .col-md-6
-    kontakt-card(section="hotel", title="Hotel", :kontakt="veranstaltung.hotel", :options="optionen.hotels")
+    kontakt-card(section="hotel", title="Hotel", singular="hotel", :options="optionen.hotels", :veranstaltung="veranstaltung")
 
     legend-card(section="hotel", title="Zimmer", hasMoney="true", :money="unterkunft.roomsTotalEUR")
       .row

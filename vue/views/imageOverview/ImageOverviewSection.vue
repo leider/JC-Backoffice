@@ -14,7 +14,7 @@ legend-card(section="allgemeines", :title="title")
                 i.fas.fa-glasses.fa-fw
         td
           span.form-control-plaintext(v-for="v in row.veranstaltungen", :key="v.id")
-            a.font-weight-bold(:href="`${v.fullyQualifiedUrl}/presse`") {{v.titel}}
+            a.font-weight-bold(:href="`/vue${v.fullyQualifiedUrl}/presse`") {{v.titel}}
             | &nbsp; {{v.startDate.tagMonatJahrKompakt}}
 </template>
 

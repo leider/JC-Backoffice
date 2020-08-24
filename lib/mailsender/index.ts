@@ -120,7 +120,7 @@ app.post("/send", (req, res, next) => {
     return res.redirect("/");
   }
   if (!req.body.event || !req.body.partner) {
-    return res.redirect("/veranstaltungen/zukuenftige");
+    return res.redirect("/vue/veranstaltungen/zukuenftige");
   }
 
   return optionenService.emailAddresses((err: Error | null, emailAddresses: EmailAddresses) => {
@@ -149,7 +149,7 @@ app.post("/send", (req, res, next) => {
         if (err2) {
           return next(err2);
         }
-        return res.redirect("/veranstaltungen/zukuenftige");
+        return res.redirect("/vue/veranstaltungen/zukuenftige");
       });
     });
   });

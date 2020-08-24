@@ -3,22 +3,15 @@ import fs from "fs";
 import express, { Request, Response } from "express";
 
 import { Form } from "multiparty";
-import optionenService from "../optionen/optionenService";
 import userstore from "../users/userstore";
 import store from "./veranstaltungenstore";
 import veranstaltungenService from "./veranstaltungenService";
 import Veranstaltung from "./object/veranstaltung";
-import Vertrag from "./object/vertrag";
-import statusmessage from "../commons/statusmessage";
 import puppeteerPrinter from "../commons/puppeteerPrinter";
 import User from "../users/user";
-import OptionValues from "../optionen/optionValues";
-import Orte from "../optionen/orte";
 import { PDFOptions } from "puppeteer";
 
 import conf from "../commons/simpleConfigure";
-import Renderer from "../commons/renderer";
-import imageService from "../image/imageService";
 import async from "async";
 import Kasse from "./object/kasse";
 const uploadDir = path.join(__dirname, "../../static/upload");
@@ -40,209 +33,6 @@ export function addRoutesTo(app: express.Express): void {
     readStream.once("end", callback);
     readStream.pipe(fs.createWriteStream(dest));
   }
-
-  app.get("/:url", (req, res, next) => {
-    veranstaltungenService.getVeranstaltungMitReservix(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      if (!veranstaltung) {
-        if (!res.locals.accessrights.isOrgaTeam()) {
-          return res.redirect("/teamseite");
-        }
-        return res.redirect("/veranstaltungen/zukuenftige");
-      }
-      return userstore.allUsers((err1: Error | null, users?: User[]) => {
-        if (err1) {
-          return next(err1);
-        }
-        veranstaltung.staff.enrichUsers(users);
-        return res.render("preview", { veranstaltung });
-      });
-    });
-  });
-
-  app.get("/:url/preview", (req, res) => {
-    return res.redirect("/veranstaltungen/" + encodeURIComponent(req.params.url));
-  });
-
-  app.get("/:url/copy", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      if (!veranstaltung) {
-        return res.redirect("/veranstaltungen/zukuenftige");
-      }
-      veranstaltung.reset();
-
-      return optionenService.optionenUndOrte((err: Error | null, optionen: OptionValues, orte: Orte) => {
-        if (err) {
-          return next(err);
-        }
-        return res.render("edit/allgemeines", {
-          veranstaltung: veranstaltung,
-          optionen,
-          orte,
-          Vertrag,
-        });
-      });
-    });
-  });
-
-  app.get("/deleteVeranstaltungDialog/:url", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-    return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      return res.render("edit/deleteVeranstaltungDialog", { veranstaltung });
-    });
-  });
-
-  app.get("/:url/delete", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return store.deleteVeranstaltung(req.params.url, (err: Error | null) => {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect("/veranstaltungen/zukuenftige");
-    });
-  });
-
-  app.get("/:url/allgemeines", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return optionenService.optionenUndOrte((err: Error | null, optionen: OptionValues, orte: Orte) => {
-      if (err) {
-        return next(err);
-      }
-      return store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        return res.render("edit/allgemeines", {
-          veranstaltung: veranstaltung,
-          optionen,
-          orte,
-          Vertrag,
-        });
-      });
-    });
-  });
-
-  app.get("/:url/ausgaben", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
-      if (err) {
-        return next(err);
-      }
-      return store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        return userstore.allUsers((err2: Error | null, users: User[]) => {
-          res.render("edit/ausgaben", {
-            veranstaltung,
-            optionen,
-            allUsers: users.map((user) => user.id),
-          });
-        });
-      });
-    });
-  });
-
-  app.get("/:url/hotel", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
-      if (err) {
-        return next(err);
-      }
-      return store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        return res.render("edit/hotel", {
-          veranstaltung: veranstaltung,
-          optionen: optionen,
-        });
-      });
-    });
-  });
-
-  app.get("/:url/kasse", (req, res, next) => {
-    if (!res.locals.accessrights.isAbendkasse()) {
-      return res.redirect("/");
-    }
-
-    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
-      if (err) {
-        return next(err);
-      }
-      return veranstaltungenService.getVeranstaltungMitReservix(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        return res.render("edit/kasse", {
-          veranstaltung: veranstaltung,
-          optionen: optionen,
-        });
-      });
-    });
-  });
-
-  app.get("/:url/technik", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return optionenService.optionen((err: Error | null, optionen: OptionValues) => {
-      if (err) {
-        return next(err);
-      }
-      return veranstaltungenService.getVeranstaltungMitReservix(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        return res.render("edit/technik", {
-          veranstaltung: veranstaltung,
-          optionen: optionen,
-        });
-      });
-    });
-  });
 
   app.get("/:url/kassenzettel", (req, res, next) => {
     if (!res.locals.accessrights.isAbendkasse()) {
@@ -271,98 +61,9 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
-  app.get("/:url/presse", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-    return imageService.alleBildNamen((err: Error | null, bildernamen: Array<string | null>) => {
-      store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-        if (err1) {
-          return next(err1);
-        }
-        if (!veranstaltung) {
-          return res.redirect("/veranstaltungen/zukuenftige");
-        }
-        bildernamen.unshift(null);
-        return res.render("edit/presse", {
-          veranstaltung: veranstaltung,
-          bildernamen,
-        });
-      });
-    });
-  });
-
-  app.get("/:url/pressePreview", (req, res, next) => {
-    if (!res.locals.accessrights.isOrgaTeam()) {
-      return res.redirect("/");
-    }
-
-    return store.getVeranstaltung(req.params.url, (err1: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err1) {
-        return next(err1);
-      }
-      if (!veranstaltung) {
-        return res.redirect("/veranstaltungen/zukuenftige");
-      }
-      const result = Renderer.render(
-        veranstaltung.presseTemplate() +
-          (req.query.text || veranstaltung.presse.text) +
-          "\n\n" +
-          veranstaltung.presse.fullyQualifiedJazzclubURL(req.query.jazzclubURL)
-      );
-      return res.send(result);
-    });
-  });
-
-  app.get("/:url/kassenfreigabe", (req, res, next) => {
-    if (!res.locals.accessrights.darfKasseFreigeben()) {
-      return res.redirect("/");
-    }
-
-    return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      if (!veranstaltung) {
-        return res.redirect("/veranstaltungen/zukuenftige");
-      }
-
-      veranstaltung.kasse.freigabeErfolgtDurch(res.locals.accessrights.member().name);
-      return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
-        if (err1) {
-          return next(err1);
-        }
-        return res.redirect(veranstaltung.fullyQualifiedUrl() + "/kasse");
-      });
-    });
-  });
-
-  app.get("/:url/kassenfreigaberuckgaengig", (req, res, next) => {
-    if (!res.locals.accessrights.darfKasseFreigeben()) {
-      return res.redirect("/");
-    }
-
-    return store.getVeranstaltung(req.params.url, (err: Error | null, veranstaltung?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      if (!veranstaltung) {
-        return res.redirect("/veranstaltungen/zukuenftige");
-      }
-
-      veranstaltung.kasse.freigabeRueckgaengig();
-      return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
-        if (err1) {
-          return next(err1);
-        }
-        return res.redirect(veranstaltung.fullyQualifiedUrl() + "/kasse");
-      });
-    });
-  });
-
   app.post("/saveVeranstaltung", (req, res) => {
     if (!res.locals.accessrights.isAbendkasse) {
-      return res.redirect("/");
+      return res.redirect("/"); // ErrorHandling
     }
     if (res.locals.accessrights.isOrgaTeam) {
       const veranstaltung = new Veranstaltung(req.body);
@@ -393,7 +94,7 @@ export function addRoutesTo(app: express.Express): void {
     }
   });
 
-  app.post("/deleteVeranstaltung", (req, res, next) => {
+  app.post("/deleteVeranstaltung", (req, res) => {
     if (!res.locals.accessrights.isOrgaTeam) {
       return res.redirect("/");
     }
@@ -402,34 +103,6 @@ export function addRoutesTo(app: express.Express): void {
         return res.status(500).send(err);
       }
       res.set("Content-Type", "application/json").send({ status: "ok" });
-    });
-  });
-
-  app.post("/submit", (req, res, next) => {
-    const body = req.body;
-
-    if (!(res.locals.accessrights.isOrgaTeam || (body.kasse && res.locals.accessrights.isAbendkasse))) {
-      return res.redirect("/");
-    }
-
-    return store.getVeranstaltungForId(body.id, (err: Error | null, result?: Veranstaltung) => {
-      if (err) {
-        return next(err);
-      }
-      const veranstaltung = result || new Veranstaltung();
-      veranstaltung.fillFromUI(body);
-      return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
-        if (err1) {
-          return next(err1);
-        }
-        return optionenService.saveStuffFromVeranstaltung(body, (err2: Error | null) => {
-          if (err2) {
-            return next(err2);
-          }
-          statusmessage.successMessage("Gespeichert", "Deine Änderungen wurden gespeichert").putIntoSession(req);
-          return res.redirect(veranstaltung.fullyQualifiedUrl() + "/" + (body.returnTo || ""));
-        });
-      });
     });
   });
 

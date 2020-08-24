@@ -58,8 +58,8 @@
             jazz-label(label="Zusätzliche Infos", tooltip="Notizen / Gäste / Reservierung, etc.")
             markdown(v-model="kopf.beschreibung")
   .col-md-6
-    kontakt-card(section="allgemeines", title="Agentur / Verantwortlicher", :kontakt="veranstaltung.agentur",
-      :options="optionen.agenturen")
+    kontakt-card(section="allgemeines", title="Agentur / Verantwortlicher", singular="agentur",
+      :options="optionen.agenturen", :veranstaltung="veranstaltung")
     legend-card(section="allgemeines", title="Vertrag")
       .row
         .col-md-5

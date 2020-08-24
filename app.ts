@@ -16,8 +16,6 @@ export default class TheApp {
 
   create(): express.Express {
     const app = express();
-    app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
-    //app.use(express.static(path.join(__dirname, 'static'), {maxAge: 60 * 1000})); // one minute
     configureApp(app);
 
     app.use(handle404(httpLogger));

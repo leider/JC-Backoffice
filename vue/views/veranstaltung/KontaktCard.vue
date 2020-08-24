@@ -14,27 +14,31 @@ legend-card(:section="section", :title="title")
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Kontakt from "../../../lib/veranstaltungen/object/kontakt";
 import LegendCard from "@/widgets/LegendCard.vue";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import JazzText from "@/widgets/JazzText.vue";
 import JazzTextarea from "@/widgets/JazzTextarea.vue";
 import JazzMail from "@/widgets/JazzMail.vue";
+import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 @Component({
   components: { JazzMail, JazzTextarea, JazzText, SingleSelect, LegendCard },
 })
 export default class KontaktCard extends Vue {
+  @Prop() veranstaltung!: Veranstaltung;
   @Prop() section!: string;
   @Prop() title!: string;
-  @Prop() kontakt!: Kontakt;
   @Prop() options!: Kontakt[];
+  @Prop() singular!: string;
   private auswahl = "[temporär]";
 
+  @Watch("veranstaltung")
+  veranstaltungChanged(): void {
+    this.auswahl = this.kontakt?.name ? this.kontakt.name : this.auswahl;
+  }
+
   get auswahlName(): string {
-    if (this.kontakt) {
-      return this.kontakt.name;
-    }
     return this.auswahl;
   }
 
@@ -44,10 +48,36 @@ export default class KontaktCard extends Vue {
     if (kontakt) {
       this.kontakt = kontakt;
     }
+    if (!this.kontakt) {
+      this.kontakt = new Kontakt();
+    }
+    this.kontakt.auswahl = name;
   }
 
   get auswahlOptions(): string[] {
     return ["[temporär]", "[neu]"].concat(this.options.map((o) => o.name));
+  }
+
+  get kontakt(): Kontakt | null {
+    if (this.singular === "hotel") {
+      return this.veranstaltung.hotel;
+    }
+    if (this.singular === "agentur") {
+      return this.veranstaltung.agentur;
+    }
+    return null;
+  }
+
+  set kontakt(kontakt: Kontakt | null) {
+    if (kontakt === null) {
+      return;
+    }
+    if (this.singular === "hotel") {
+      this.veranstaltung.hotel = kontakt;
+    }
+    if (this.singular === "agentur") {
+      this.veranstaltung.agentur = kontakt;
+    }
   }
 }
 </script>

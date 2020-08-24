@@ -62,7 +62,7 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Resp
     return {
       start: veranstaltung.startDate.toISOString(),
       end: veranstaltung.endDate.toISOString(),
-      url: veranstaltung.fullyQualifiedUrl() + urlSuffix,
+      url: "/vue" + veranstaltung.fullyQualifiedUrl() + urlSuffix,
       title: veranstaltung.kopf.titel,
       tooltip: veranstaltung.tooltipInfos(),
       className:
@@ -89,24 +89,6 @@ app.get("/vergangene", (req, res) => res.redirect("/vue/veranstaltungen/vergange
 app.get("/zukuenftige/csv", (req, res, next) => veranstaltungenForExport(store.zukuenftigeMitGestern, next, res));
 
 app.get("/vergangene/csv", (req, res, next) => veranstaltungenForExport(store.vergangene, next, res));
-
-app.get("/new", (req, res, next) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-
-  return optionenService.optionenUndOrte((err: Error | null, optionen: OptionValues, orte: Orte) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("edit/allgemeines", {
-      veranstaltung: new Veranstaltung(),
-      optionen,
-      orte,
-      Vertrag,
-    });
-  });
-});
 
 app.get("/monat/:monat", (req, res, next) => {
   const yymm = req.params.monat; // kommt als YYMM
@@ -174,26 +156,6 @@ app.get("/eventsForCalendar", (req, res, next) => {
       return next(err1);
     }
     return res.end(JSON.stringify(events));
-  });
-});
-
-app.post("/updateStaff", (req, res, next) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-
-  const body = req.body;
-  return store.getVeranstaltungForId(body.id, (err: Error | null, veranstaltung: Veranstaltung) => {
-    if (err || !veranstaltung) {
-      return next(err);
-    }
-    veranstaltung.staff.updateStaff(body.staff || {});
-    return store.saveVeranstaltung(veranstaltung, (err1: Error | null) => {
-      if (err1 || !veranstaltung) {
-        return next(err1);
-      }
-      return res.redirect("/");
-    });
   });
 });
 

@@ -133,7 +133,6 @@ export default class Preview extends Vue {
   created(): void {
     allUsers((users: User[]) => {
       this.users = users;
-      this.staff.enrichUsers(users);
     });
     currentUser((user: User) => {
       user.accessrights = new Accessrights(user);
@@ -181,18 +180,6 @@ export default class Preview extends Vue {
     return this.veranstaltung.hotel;
   }
 
-  get mitarbeiter(): { [p: string]: User[] } {
-    return this.staff.mitarbeiterTransient || {};
-  }
-
-  get kasse(): User[] {
-    return this.mitarbeiter.kasse;
-  }
-
-  get kasseV(): User[] {
-    return this.mitarbeiter.kasseV;
-  }
-
   get previewBeschreibung(): string {
     return renderer.render(this.kopf.beschreibung);
   }
@@ -216,7 +203,6 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
   mounted(): void {
     veranstaltungForUrl(this.url, (v: Veranstaltung) => {
       this.veranstaltung = v;
-      this.staff.enrichUsers(this.users);
       document.title = this.veranstaltung.kopf.titel;
     });
   }

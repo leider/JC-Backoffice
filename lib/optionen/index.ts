@@ -10,6 +10,8 @@ import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import Kontakt from "../veranstaltungen/object/kontakt";
 import { expressAppIn } from "../middleware/expressViewHelper";
+import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import Kasse from "../veranstaltungen/object/kasse";
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const app = expressAppIn(__dirname);
@@ -18,7 +20,7 @@ const printoptions: PDFOptions = {
   format: "A4",
   landscape: false, // portrait or landscape
   scale: 1.1,
-  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" }
+  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
 };
 
 app.get("/", (req, res, next) => {
@@ -34,7 +36,7 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.get("/optionen.json", (req, res, next) => {
+app.get("/optionen.json", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -44,11 +46,24 @@ app.get("/optionen.json", (req, res, next) => {
       res.status(500).send(err);
       return;
     }
-    res.set("Content-Type", "application/json").send(optionen);
+    res.set("Content-Type", "application/json").send(optionen.toJSON());
   });
 });
 
-app.get("/orte.json", (req, res, next) => {
+app.post("/saveOptionen", (req, res) => {
+  if (!res.locals.accessrights.isOrgaTeam) {
+    return res.redirect("/"); //ErrorHandling!!
+  }
+  const optionen = new OptionValues(req.body);
+  store.save(optionen, (err: Error | null) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(optionen.toJSON());
+  });
+});
+
+app.get("/orte.json", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }

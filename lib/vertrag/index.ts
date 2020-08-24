@@ -14,7 +14,7 @@ const printoptions: PDFOptions = {
   format: "A4",
   landscape: false, // portrait or landscape
   scale: 1.31,
-  margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" }
+  margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" },
 };
 
 function renderVertrag(
@@ -40,7 +40,7 @@ function renderVertrag(
         veranstaltung,
         datum: new DatumUhrzeit(),
         buyoutInclusive,
-        publicUrlPrefix: publicUrlPrefix
+        publicUrlPrefix: publicUrlPrefix,
       },
       puppeteerPrinter.generatePdf(printoptions, res, next)
     );

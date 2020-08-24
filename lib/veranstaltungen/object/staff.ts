@@ -31,12 +31,9 @@ export default class Staff {
   kasseVNotNeeded = false;
   modNotNeeded = false;
   merchandiseNotNeeded = false;
-  mitarbeiterTransient?: { [p: string]: User[] };
 
-  toJSON(): any {
-    const result = Object.assign({}, this);
-    delete result.mitarbeiterTransient;
-    return result;
+  toJSON(): object {
+    return Object.assign({}, this);
   }
 
   constructor(object?: any) {
@@ -145,20 +142,6 @@ export default class Staff {
       return "";
     }
     return " Kasse: " + this.kassiererText() + " | Techniker: " + this.technikerText();
-  }
-
-  enrichUsers(users?: User[]): void {
-    if (!users) {
-      return;
-    }
-    const filledUsers: { [index: string]: User[] } = {};
-    filledUsers.techniker = users.filter((u) => this.techniker.includes(u.id));
-    filledUsers.technikerV = users.filter((u) => this.technikerV.includes(u.id));
-    filledUsers.kasse = users.filter((u) => this.kasse.includes(u.id));
-    filledUsers.kasseV = users.filter((u) => this.kasseV.includes(u.id));
-    filledUsers.merchandise = users.filter((u) => this.merchandise.includes(u.id));
-    filledUsers.mod = users.filter((u) => this.mod.includes(u.id));
-    this.mitarbeiterTransient = filledUsers;
   }
 
   kasseFehlt(): boolean {

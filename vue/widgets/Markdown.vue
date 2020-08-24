@@ -192,7 +192,7 @@ export default class Markdown extends Vue {
   @Watch("value")
   valueChanged(val: string): void {
     if (val !== this.editor.getValue()) {
-      this.editor.setValue(val);
+      this.editor.setValue(val || "");
     }
   }
 
@@ -344,7 +344,7 @@ export default class Markdown extends Vue {
     const o = Object.assign({ mode: { name: "gfm" } }, this.options);
 
     const ed = (this.editor = CodeMirror.fromTextArea(document.getElementById(this.id) as HTMLTextAreaElement, o));
-    ed.setValue(this.value);
+    ed.setValue(this.value || "");
     ed.setSize(this.width, this.height);
     ed.on("change", (ed: Editor) => this.$emit("input", ed.getValue()));
 

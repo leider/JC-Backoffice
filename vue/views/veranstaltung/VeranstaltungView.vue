@@ -54,6 +54,7 @@ import {
   imagenames,
   saveVeranstaltung,
   deleteVeranstaltungWithId,
+  saveOptionen,
 } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import SectionTab from "@/views/veranstaltung/SectionTab.vue";
@@ -159,16 +160,26 @@ export default class VeranstaltungView extends Vue {
     if (this.isNew) {
       this.veranstaltung.initializeIdAndUrl();
     }
-    saveVeranstaltung(this.veranstaltung, (err: Error, json: any) => {
+    this.optionen.addOrUpdateKontakt("agenturen", this.veranstaltung.agentur);
+    if (this.veranstaltung.artist.brauchtHotel) {
+      this.optionen.addOrUpdateKontakt("hotels", this.veranstaltung.hotel);
+    }
+    saveOptionen(this.optionen, (err: Error, json: any) => {
       if (err) {
         console.log(err);
       }
-      this.originalVeranstaltung = new Veranstaltung(json);
-      if (this.isNew) {
-        const url = encodeURIComponent(this.originalVeranstaltung.url || "");
-        this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
-        document.title = this.originalVeranstaltung.kopf.titel;
-      }
+      this.optionen = new OptionValues(json);
+      saveVeranstaltung(this.veranstaltung, (err: Error, json: any) => {
+        if (err) {
+          console.log(err);
+        }
+        this.originalVeranstaltung = new Veranstaltung(json);
+        if (this.isNew) {
+          const url = encodeURIComponent(this.originalVeranstaltung.url || "");
+          this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
+          document.title = this.originalVeranstaltung.kopf.titel;
+        }
+      });
     });
   }
 

@@ -67,7 +67,8 @@ export default {
   },
 
   saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-    persistence.save(veranstaltung.toJSON(), callback);
+    const object = veranstaltung.toJSON();
+    persistence.save(object, callback);
   },
 
   deleteVeranstaltung: function deleteVeranstaltung(url: string, callback: Function): void {

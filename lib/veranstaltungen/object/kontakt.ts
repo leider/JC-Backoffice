@@ -14,11 +14,10 @@ export default class Kontakt {
   name = "";
   telefon = "";
   auswahl = "";
+  isToSave = false;
 
   toJSON(): any {
-    const result = Object.assign({}, this);
-    delete result.auswahl;
-    return result;
+    return Object.assign({}, this);
   }
 
   constructor(object?: any) {

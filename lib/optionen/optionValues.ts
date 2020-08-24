@@ -42,6 +42,7 @@ export default class OptionValues {
 
   constructor(object?: any) {
     if (object) {
+      delete object._id;
       Object.assign(this, object, {
         typen: sortByNameCaseInsensitive(object.typen || []),
         kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
@@ -107,16 +108,15 @@ export default class OptionValues {
 
   addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: KontaktUI): void {
     const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
-    if (kontakt.auswahl.match(/\[temporär]/)) {
-      delete kontakt.auswahl;
+    const auswahl = kontakt.auswahl;
+    delete kontakt.auswahl;
+    if (auswahl.match(/\[temporär]/)) {
       return;
     }
-    if (kontakt.auswahl.match(/\[neu]/)) {
-      delete kontakt.auswahl;
+    if (auswahl.match(/\[neu]/)) {
       ourCollection.push(kontakt);
       return;
     }
-    delete kontakt.auswahl;
     const existingKontakt = ourCollection.find((k) => k.name === kontakt.name);
     if (existingKontakt) {
       existingKontakt.ansprechpartner = kontakt.ansprechpartner;

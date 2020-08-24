@@ -157,6 +157,10 @@ export function orte(callback: Function): void {
   getJson("/optionen/orte.json", (err: Error, result: any) => callback(new Orte(result)));
 }
 
+export function saveOptionen(optionen: OptionValues, callback: Function): void {
+  postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback);
+}
+
 // Image
 export function imagenames(callback: Function): void {
   getJson("/image/allImagenames.json", (err: Error, result: any) => callback(result));

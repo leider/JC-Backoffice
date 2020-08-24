@@ -310,7 +310,7 @@ export default class Veranstaltung {
 
   presseTemplateInternal(prefix: string): string {
     // für interne Mails
-    return `### [${this.kopf.titel}](${prefix}${this.fullyQualifiedUrl()}/presse)
+    return `### [${this.kopf.titel}](${prefix}/vue${this.fullyQualifiedUrl()}/presse)
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
 
 `;
