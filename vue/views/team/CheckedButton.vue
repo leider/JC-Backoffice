@@ -1,5 +1,5 @@
 <template lang="pug">
-  .text-capitalize(:class="section.checked ? 'alert-success' : 'alert-danger'"): a.inherit-color(:href="`${veranstaltung.fullyQualifiedUrl()}/${name}`")
+  .text-capitalize(:class="section.checked ? 'alert-success' : 'alert-danger'"): b-link.inherit-color(:to="`${veranstaltung.fullyQualifiedUrl()}/${name}`")
     i.fas.fa-fw(:class="section.checked ? 'fa-check' : 'fa-exclamation-circle'")
     | {{name}}
 </template>
