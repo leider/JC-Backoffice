@@ -23,10 +23,10 @@
       b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
         i.far.fa-save.fa-fw
         .d-none.d-md-inline #{" "}Speichern
-    h2(v-if="!isNew", :class="colorClass") {{veranstaltung.kopf.titel}}<br>
-      small(:class="colorClass") am {{veranstaltung.datumForDisplayShort()}}
-    h2.text-danger(v-else) Neue oder kopierte Veranstaltung <br>
+    h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
       small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
+    h2(v-else, :class="colorClass") {{veranstaltung.kopf.titel}}<br>
+      small(:class="colorClass") am {{veranstaltung.datumForDisplayShort()}}
   b-tabs(v-if="showAllTabs")
     section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="fa-keyboard", @clicked="tabActivated")
       allgemeines-tab(:veranstaltung="veranstaltung", :optionen="optionen", :orte="orte", :minimumStart="minimumStart", :isBookingTeam="isBookingTeam")
@@ -137,13 +137,14 @@ export default class VeranstaltungView extends Vue {
       this.originalVeranstaltung = new Veranstaltung();
       document.title = "Neue Veranstaltung";
     } else {
+      this.originalVeranstaltung = new Veranstaltung({ id: "dummy" });
+      this.activeSection = this.tab;
       veranstaltungForUrl(this.url, (v: Veranstaltung) => {
         this.originalVeranstaltung = v;
         if (this.tab === "copy") {
           return this.copy();
         }
         document.title = this.originalVeranstaltung.kopf.titel;
-        this.activeSection = this.tab;
       });
     }
   }
