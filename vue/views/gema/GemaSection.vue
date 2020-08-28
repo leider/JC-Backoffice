@@ -1,8 +1,8 @@
 <template lang="pug">
 .col-lg-6
   .card.border-allgemeines
-    h3.card-header.p-2.color-allgemeines {{title}}
-      button.btn.btn-secondary.float-right(@click="meldungClicked") Erzeugen
+    h3.card-header.p-2.color-allgemeines {{ title }}
+      button.btn.btn-secondary.float-right(:disabled="!isSomeSelected" @click="meldungClicked") Erzeugen
     div
       gema-monat(v-for="monat in monate", :key="monat", :veranstaltungen="veranstaltungenGrouped[monat]", :monat="monat")
 </template>
@@ -29,6 +29,10 @@ export default class GemaSection extends Vue {
 
   get veranstaltungenGrouped(): { [index: string]: VeranstaltungZeileMitCheck[] } {
     return groupBy(this.veranstaltungen, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+  }
+
+  get isSomeSelected(): boolean {
+    return !!this.veranstaltungen.find((v) => v.selected);
   }
 
   meldungClicked(): void {
