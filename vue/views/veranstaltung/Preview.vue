@@ -141,11 +141,13 @@ export default class Preview extends Vue {
   }
 
   get isOrgaTeam(): boolean {
-    return this.user.accessrights?.isOrgaTeam;
+    const accessrights = this.user.accessrights;
+    return !!accessrights && accessrights.isOrgaTeam;
   }
 
   get isAbendkasse(): boolean {
-    return this.user.accessrights?.isAbendkasse;
+    const accessrights = this.user.accessrights;
+    return !!accessrights && accessrights.isAbendkasse;
   }
 
   get kooperation(): string {

@@ -187,7 +187,9 @@ export default class KasseTab extends Vue {
   }
 
   get darfKasseFreigeben(): boolean {
-    return this.user?.accessrights?.darfKasseFreigeben;
+    const user1 = this.user;
+    const accessrights = !!user1 && user1.accessrights;
+    return !!accessrights && accessrights.darfKasseFreigeben;
   }
 
   get kosten(): Kosten {

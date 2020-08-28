@@ -1,13 +1,5 @@
 import misc from "../../commons/misc";
 
-export interface PresseUI {
-  originalText?: string;
-  text?: string;
-  existingbild?: string;
-  checked?: boolean;
-  jazzclubURL?: string;
-}
-
 export default class Presse {
   originalText = "";
   text = "";
@@ -28,17 +20,6 @@ export default class Presse {
         this.originalText = "";
       }
     }
-  }
-
-  fillFromUI(object: PresseUI): Presse {
-    this.originalText = object.originalText || this.originalText;
-    this.text = object.text || this.text;
-    this.jazzclubURL = object.jazzclubURL || this.jazzclubURL;
-    this.checked = !!object.checked;
-    if (object.existingbild) {
-      this.updateImage(object.existingbild);
-    }
-    return this;
   }
 
   updateImage(image: string): boolean {

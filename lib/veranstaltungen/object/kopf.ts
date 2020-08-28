@@ -1,17 +1,3 @@
-export interface KopfUI {
-  beschreibung?: string;
-  eventTyp?: string;
-  flaeche?: string;
-  kooperation?: string;
-  ort?: string;
-  titel?: string;
-  pressename?: string;
-  presseIn?: string;
-  genre?: string;
-  confirmed?: string;
-  rechnungAnKooperation?: string;
-}
-
 export default class Kopf {
   beschreibung = "";
   eventTyp = "";
@@ -33,21 +19,6 @@ export default class Kopf {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object);
     }
-  }
-
-  fillFromUI(object: KopfUI): Kopf {
-    this.beschreibung = object.beschreibung || this.beschreibung;
-    this.eventTyp = object.eventTyp || this.eventTyp;
-    this.flaeche = object.flaeche || this.flaeche;
-    this.kooperation = object.kooperation || this.kooperation;
-    this.ort = object.ort || this.ort;
-    this.titel = object.titel || this.titel;
-    this.pressename = object.pressename || this.pressename;
-    this.presseIn = object.presseIn || this.presseIn;
-    this.genre = object.genre || this.genre;
-    this.confirmed = !!object.confirmed;
-    this.rechnungAnKooperation = !!object.rechnungAnKooperation;
-    return this;
   }
 
   get isValid(): boolean {

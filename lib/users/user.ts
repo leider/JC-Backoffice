@@ -12,8 +12,8 @@ export default class User {
   gruppen: string[];
   rechte: string[];
   mailinglisten: string[];
-  password!: string; // transient
-  accessrights!: Accessrights; // transient
+  password?: string; // transient
+  accessrights?: Accessrights; // transient
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object: any) {
@@ -44,7 +44,7 @@ export default class User {
 
   unsubscribeFromList(oldlistname: string | undefined) {
     if (oldlistname) {
-      this.mailinglisten = this.mailinglisten.filter(name => name !== oldlistname);
+      this.mailinglisten = this.mailinglisten.filter((name) => name !== oldlistname);
     }
   }
 

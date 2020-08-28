@@ -143,14 +143,6 @@ const demo = {
   salesrep: { id: "" },
 };
 const reference = JSON.parse(JSON.stringify(demo));
-const emptyKontakt = {
-  auswahl: "",
-  name: "name",
-  ansprechpartner: "",
-  telefon: "",
-  email: "",
-  adresse: "",
-};
 describe("Veranstaltung Gesamt", () => {
   let veranstaltung: Veranstaltung;
 
@@ -163,28 +155,6 @@ describe("Veranstaltung Gesamt", () => {
     expect(veranstaltung.url).to.eql(reference.url);
     expect(veranstaltung.startDate.toISOString()).to.eql(reference.startDate);
     expect(veranstaltung.endDate.toISOString()).to.eql(reference.endDate);
-  });
-
-  describe("fillFromUI", () => {
-    it("ohne kopf oder ohne id bleiben die vorherigen Felder", () => {
-      veranstaltung.fillFromUI({
-        agentur: emptyKontakt,
-      });
-
-      expect(veranstaltung.agentur.name).to.eql(reference.agentur.name);
-    });
-
-    it("mit kopf werden die vorherigen Felder überschrieben", () => {
-      veranstaltung.fillFromUI({ kopf: {}, agentur: emptyKontakt });
-
-      expect(veranstaltung.agentur.name).to.eql(emptyKontakt.name);
-    });
-
-    it("mit id werden die vorherigen Felder überschrieben", () => {
-      veranstaltung.fillFromUI({ id: "id", agentur: emptyKontakt });
-
-      expect(veranstaltung.agentur.name).to.eql(emptyKontakt.name);
-    });
   });
 });
 

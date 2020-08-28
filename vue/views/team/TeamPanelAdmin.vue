@@ -8,38 +8,38 @@
             i.fas.fa-exclamation-circle.fa-fw
             | #{' '} UNBESTÄTIGT #{' '}
             i.fas.fa-exclamation-circle.fa-fw
-      table(width='100%', v-if="expanded")
+      table(width="100%", v-if="expanded")
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+            i.far.fa-fw.fa-lg(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
           td: a(@click="toggleExpanded")
-            h6 {{veranstaltung.datumForDisplayShort()}}
+            h6 {{ veranstaltung.datumForDisplayShort() }}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
-              | &nbsp; {{veranstaltung.salesreport.anzahl}}
+              | &nbsp; {{ veranstaltung.salesreport.anzahl }}
             b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
-      table(width='100%', v-else)
+      table(width="100%", v-else)
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            h5 {{veranstaltung.tagNumerisch()}}
+            h5 {{ veranstaltung.tagNumerisch() }}
           td: a(@click="toggleExpanded")
-            h5 {{kopf.titel}} &nbsp;
-              small(style="color: inherit") {{kopf.presseIn}}
+            h5 {{ kopf.titel }} &nbsp;
+              small(style="color: inherit") {{ kopf.presseIn }}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
-              | &nbsp; {{veranstaltung.salesreport.anzahl}}
+              | &nbsp; {{ veranstaltung.salesreport.anzahl }}
             b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
-      table.position-relative(width='100%', v-if="expanded")
+      table.position-relative(width="100%", v-if="expanded")
         tr
           td
-          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h6 {{kopf.presseIn}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{ kopf.presseIn }}
         tr
           td
-          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h5 {{kopf.titel}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titel }}
       table(width="100%")
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")
@@ -55,8 +55,8 @@
         b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): i.fas.fa-fw.fa-newspaper
         b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
           i.fas.fa-fw.fa-trash-alt.text-danger
-          b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop=true, @ok="deleteVeranstaltung")
-            p Bist Du sicher, dass Du {{veranstaltung.kopf.titel}} löschen willst?
+          b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="deleteVeranstaltung")
+            p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
             template(v-slot:modal-header)
               h3.modal-title Veranstaltung löschen
             template(v-slot:modal-footer="{ ok, cancel }")
@@ -98,7 +98,7 @@ import StaffRowAdmin from "@/views/team/StaffRowAdmin.vue";
 export default class TeamPanelAdmin extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() users!: User[];
-  @Prop() initiallyExpanded?: boolean;
+  @Prop() initiallyExpanded!: boolean;
 
   private expanded = this.initiallyExpanded;
 

@@ -2,30 +2,6 @@ import DatumUhrzeit from "../../commons/DatumUhrzeit";
 import misc from "../../commons/misc";
 import Misc from "../../commons/misc";
 
-function parseToDate(dateString: string, timeString?: string): Date | null {
-  if (dateString) {
-    return DatumUhrzeit.forGermanString(dateString, timeString)?.toJSDate || null;
-  }
-  return null;
-}
-
-export interface UnterkunftUI {
-  anreiseDate: string;
-  abreiseDate: string;
-  kommentar: string;
-  einzelNum: string;
-  einzelEUR: string;
-  doppelNum: string;
-  doppelEUR: string;
-  suiteNum: string;
-  suiteEUR: string;
-  transportText: string;
-  transportEUR: string;
-  sonstiges?: string[];
-  angefragt: string;
-  bestaetigt: string;
-}
-
 export default class Unterkunft {
   einzelNum = 0;
   doppelNum = 0;
@@ -42,12 +18,8 @@ export default class Unterkunft {
   anreiseDate: Date;
   abreiseDate: Date;
 
-  private veranstaltungstagAsDatumUhrzeit: DatumUhrzeit;
-
   toJSON(): any {
-    const result = Object.assign({}, this);
-    delete result.veranstaltungstagAsDatumUhrzeit;
-    return result;
+    return Object.assign({}, this);
   }
 
   constructor(object: any | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
@@ -62,31 +34,6 @@ export default class Unterkunft {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     }
-    this.veranstaltungstagAsDatumUhrzeit = veranstaltungstagAsDatumUhrzeit;
-  }
-
-  fillFromUI(object: UnterkunftUI): Unterkunft {
-    this.einzelEUR = parseFloat(object.einzelEUR || "0") || 0;
-    this.doppelEUR = parseFloat(object.doppelEUR || "0") || 0;
-    this.suiteEUR = parseFloat(object.suiteEUR || "0") || 0;
-    this.transportEUR = parseFloat(object.transportEUR || "0") || 0;
-    this.einzelNum = parseInt(object.einzelNum || "0") || 0;
-    this.doppelNum = parseInt(object.doppelNum || "0") || 0;
-    this.suiteNum = parseInt(object.suiteNum || "0") || 0;
-    this.kommentar = object.kommentar;
-    this.transportText = object.transportText;
-    this.sonstiges = misc.toArray(object.sonstiges);
-    this.angefragt = !!object.angefragt;
-    this.bestaetigt = !!object.bestaetigt;
-
-    this.anreiseDate = parseToDate(object.anreiseDate) || this.veranstaltungstagAsDatumUhrzeit.toJSDate;
-    this.abreiseDate =
-      parseToDate(object.abreiseDate) ||
-      this.veranstaltungstagAsDatumUhrzeit.plus({
-        tage: 1,
-      }).toJSDate;
-
-    return this;
   }
 
   checked(): boolean {
@@ -96,10 +43,6 @@ export default class Unterkunft {
   anreiseDisplayDate(): string {
     const date = this.anreiseDate;
     return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
-  }
-
-  minimalStartForHotel(): string {
-    return this.veranstaltungstagAsDatumUhrzeit.minus({ tage: 7 }).tagMonatJahrKompakt;
   }
 
   abreiseDisplayDate(): string {

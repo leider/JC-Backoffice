@@ -87,11 +87,15 @@ export default class App extends Vue {
   }
 
   get showItem(): boolean {
-    return this.user?.accessrights?.isOrgaTeam;
+    const user1 = this.user;
+    const accessrights = !!user1 && user1.accessrights;
+    return !!accessrights && accessrights.isOrgaTeam;
   }
 
   get showItemSuperuser(): boolean {
-    return this.user?.accessrights?.isSuperuser;
+    const user1 = this.user;
+    const accessrights = !!user1 && user1.accessrights;
+    return !!accessrights && accessrights.isSuperuser;
   }
 }
 </script>

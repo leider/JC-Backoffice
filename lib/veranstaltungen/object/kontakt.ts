@@ -1,19 +1,10 @@
-export interface KontaktUI {
-  auswahl: string;
-  name: string;
-  ansprechpartner: string;
-  telefon: string;
-  email: string;
-  adresse: string;
-}
-
 export default class Kontakt {
   adresse = "";
   ansprechpartner = "";
   email = "";
   name = "";
   telefon = "";
-  auswahl = "";
+  auswahl?: string;
   isToSave = false;
 
   toJSON(): any {
@@ -24,16 +15,6 @@ export default class Kontakt {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object);
     }
-  }
-
-  fillFromUI(object: KontaktUI): Kontakt {
-    this.auswahl = object.auswahl;
-    this.name = object.name;
-    this.ansprechpartner = object.ansprechpartner;
-    this.telefon = object.telefon;
-    this.email = object.email;
-    this.adresse = object.adresse;
-    return this;
   }
 
   strasse(): string {

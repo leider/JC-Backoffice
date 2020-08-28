@@ -119,18 +119,6 @@ app.get("/icals", (req, res, next) => {
   });
 });
 
-app.get("/agenturForAuswahl", (req, res) => {
-  service.agenturForAuswahl(req.query.auswahl, (err: Error | null, kontakt: Kontakt) => res.send(kontakt));
-});
-
-app.get("/hotelForAuswahl", (req, res) => {
-  service.hotelForAuswahl(req.query.auswahl, (err: Error | null, kontakt: Kontakt) => res.send(kontakt));
-});
-
-app.get("/preiseForAuswahl", (req, res) => {
-  service.preiseForAuswahl(req.query.auswahl, (err: Error | null, preise: Hotelpreise) => res.send(preise));
-});
-
 app.post("/ortChanged", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");

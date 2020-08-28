@@ -1,12 +1,6 @@
 import { Preisprofil } from "../../optionen/optionValues";
 import Kasse from "./kasse";
 
-export interface EintrittspreiseUI {
-  preisprofil: string;
-  erwarteteBesucher?: string;
-  zuschuss?: string;
-}
-
 export default class Eintrittspreise {
   preisprofil: Preisprofil = { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
   erwarteteBesucher = 0;
@@ -39,15 +33,6 @@ export default class Eintrittspreise {
       this.erwarteteBesucher = object.erwarteteBesucher || 0;
       this.zuschuss = object.zuschuss || 0;
     }
-  }
-
-  fillFromUI(object: EintrittspreiseUI): Eintrittspreise {
-    if (object.preisprofil) {
-      this.preisprofil = JSON.parse(object.preisprofil);
-    }
-    this.erwarteteBesucher = parseInt(object.erwarteteBesucher || "") || 0;
-    this.zuschuss = parseFloat(object.zuschuss || "") || 0;
-    return this;
   }
 
   standardRabattErmaessigt(): number {

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mongodb, { FilterQuery, FindOneOptions, MongoCallback, UpdateWriteOpResult } from "mongodb";
-import { ErrorCallback } from "async";
+import mongodb, { FilterQuery, MongoCallback, UpdateWriteOpResult } from "mongodb";
+import async, { ErrorCallback } from "async";
 import conf from "../commons/simpleConfigure";
-import async from "async";
 import { loggers } from "winston";
+
 const logger = loggers.get("transactions");
 const scriptLogger = loggers.get("scripts");
 
@@ -12,7 +12,7 @@ let ourDB: mongodb.Db | null;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function(collectionName: string) {
+export default function (collectionName: string) {
   let logOpenOnceOnly = 0;
   function logInfo(logMessage: string): void {
     if (collectionName === "optionenstore") {
@@ -55,7 +55,7 @@ export default function(collectionName: string) {
     } else {
       logInfo("connection is " + ourDBConnectionState + ", opening it and retrying");
       openDB();
-      setTimeout(function() {
+      setTimeout(function () {
         performInDB(callback);
       }, 100);
     }
@@ -77,18 +77,11 @@ export default function(collectionName: string) {
     }
 
     listByField(searchObject: FilterQuery<any>, sortOrder: object, callback: Function): void {
-      this.listByFieldWithOptions(searchObject, {}, sortOrder, callback);
-    }
-
-    listByFieldWithOptions(searchObject: FilterQuery<any>, options: FindOneOptions, sortOrder: object, callback: Function): void {
       performInDB((err: Error | null, db: mongodb.Db) => {
         if (err) {
           return callback(err);
         }
-        const cursor = db
-          .collection(this.collectionName)
-          .find(searchObject, options)
-          .sort(sortOrder);
+        const cursor = db.collection(this.collectionName).find(searchObject, {}).sort(sortOrder);
         return cursor.count((err1, result) => {
           if (err1) {
             return callback(err1);
@@ -102,7 +95,6 @@ export default function(collectionName: string) {
         });
       });
     }
-
     getById(id: string, callback: Function): void {
       this.getByField({ id }, callback);
     }
@@ -170,7 +162,7 @@ export default function(collectionName: string) {
           return callback(err);
         }
         const collection = db.collection(collectionName);
-        return collection.deleteOne({ url: url }, { w: 1 }, err1 => {
+        return collection.deleteOne({ url: url }, { w: 1 }, (err1) => {
           callback(err1);
         });
       });
@@ -185,7 +177,7 @@ export default function(collectionName: string) {
           return callback(err);
         }
         const collection = db.collection(collectionName);
-        return collection.deleteOne({ id: id }, { w: 1 }, err1 => {
+        return collection.deleteOne({ id: id }, { w: 1 }, (err1) => {
           callback(err1);
         });
       });

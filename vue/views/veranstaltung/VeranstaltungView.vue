@@ -105,15 +105,18 @@ export default class VeranstaltungView extends Vue {
   }
 
   get showAllTabs(): boolean {
-    return this.user.accessrights?.isOrgaTeam;
+    const accessrights = this.user.accessrights;
+    return !!accessrights && accessrights.isOrgaTeam;
   }
 
   get showKasse(): boolean {
-    return this.user.accessrights?.isAbendkasse;
+    const accessrights = this.user.accessrights;
+    return !!accessrights && accessrights.isAbendkasse;
   }
 
   get isBookingTeam(): boolean {
-    return this.user.accessrights?.isBookingTeam;
+    const accessrights = this.user.accessrights;
+    return !!accessrights && accessrights.isBookingTeam;
   }
 
   @Watch("originalVeranstaltung")

@@ -18,10 +18,10 @@
       table.position-relative(width='100%')
         tr
           td
-          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h6 {{kopf.presseIn}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{kopf.presseIn}}
         tr
           td
-          td(colspan=2): a.stretched-link(@click="toggleExpanded"): h5 {{kopf.titel}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{kopf.titel}}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
         i.fas.fa-exclamation-circle
         | #{' '} Kasse gesucht!
@@ -60,7 +60,7 @@ import Staff from "../../../lib/veranstaltungen/object/staff";
 export default class TeamPanelUser extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
-  @Prop() initiallyExpanded?: boolean;
+  @Prop() initiallyExpanded!: boolean;
 
   private expanded = this.initiallyExpanded;
 

@@ -1,6 +1,6 @@
 import reject from "lodash/reject";
 import { sortBy, compose, toLower, prop } from "lodash/fp";
-import { KopfUI } from "../veranstaltungen/object/kopf";
+import Kopf from "../veranstaltungen/object/kopf";
 
 const sortByNameCaseInsensitive = sortBy(compose(toLower, prop("name")));
 
@@ -77,7 +77,7 @@ export default class Orte {
     ort.update(object);
   }
 
-  updateFlaeche(kopf: KopfUI): void {
+  updateFlaeche(kopf: Kopf): void {
     if (kopf.ort && kopf.flaeche) {
       const existingOrt = this.forName(kopf.ort);
       if (existingOrt) {

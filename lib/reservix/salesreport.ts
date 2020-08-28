@@ -11,7 +11,7 @@ export interface ReservixState {
 }
 
 export default class Salesreport implements ReservixState {
-  private now = new DatumUhrzeit(); // lebt nur kurz!
+  private _now? = new DatumUhrzeit(); // lebt nur kurz!
 
   id = "";
   anzahl = 0;
@@ -31,8 +31,15 @@ export default class Salesreport implements ReservixState {
     }
   }
   toJSON(): ReservixState {
-    delete this.now;
+    delete this._now;
     return this;
+  }
+
+  get now(): DatumUhrzeit {
+    if (!this._now) {
+      this._now = new DatumUhrzeit();
+    }
+    return this._now;
   }
 
   gebuehren(): number {
@@ -61,17 +68,13 @@ export default class Salesreport implements ReservixState {
     if (!this.datum || this.datum.getTime() === 0) {
       return false;
     }
-    return this.startDatumUhrzeit()
-      .plus({ tage: 1 })
-      .istVor(this.now);
+    return this.startDatumUhrzeit().plus({ tage: 1 }).istVor(this.now);
   }
 
   beginntInZwoelfStunden(): boolean {
     if (!this.datum) {
       return false;
     }
-    return this.startDatumUhrzeit()
-      .minus({ stunden: 12 })
-      .istVor(this.now);
+    return this.startDatumUhrzeit().minus({ stunden: 12 }).istVor(this.now);
   }
 }

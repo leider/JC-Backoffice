@@ -1,22 +1,6 @@
-import misc from "../../commons/misc";
 import User from "../../users/user";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
-
-export interface StaffUI {
-  techniker: string[];
-  technikerV: string[];
-  merchandise: string[];
-  kasse: string[];
-  kasseV: string[];
-  mod: string[];
-  technikerNotNeeded?: string;
-  technikerVNotNeeded?: string;
-  kasseNotNeeded?: string;
-  kasseVNotNeeded?: string;
-  modNotNeeded?: string;
-  merchandiseNotNeeded?: string;
-}
 
 export default class Staff {
   techniker: string[] = [];
@@ -47,22 +31,6 @@ export default class Staff {
         mod: object.mod || [],
       });
     }
-  }
-
-  fillFromUI(object: StaffUI): Staff {
-    this.techniker = misc.toArray(object.techniker);
-    this.technikerV = misc.toArray(object.technikerV);
-    this.kasse = misc.toArray(object.kasse);
-    this.kasseV = misc.toArray(object.kasseV);
-    this.merchandise = misc.toArray(object.merchandise);
-    this.mod = misc.toArray(object.mod);
-    this.technikerNotNeeded = !object.technikerNotNeeded;
-    this.technikerVNotNeeded = !object.technikerVNotNeeded;
-    this.kasseNotNeeded = !object.kasseNotNeeded;
-    this.kasseVNotNeeded = !object.kasseVNotNeeded;
-    this.modNotNeeded = !object.modNotNeeded;
-    this.merchandiseNotNeeded = !object.merchandiseNotNeeded;
-    return this;
   }
 
   getStaffCollection(forType: StaffType): string[] {
@@ -111,10 +79,6 @@ export default class Staff {
         this.technikerVNotNeeded = check;
         break;
     }
-  }
-
-  updateStaff(object: StaffUI): void {
-    this.fillFromUI(object);
   }
 
   noStaffNeeded(): boolean {

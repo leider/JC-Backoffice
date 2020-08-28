@@ -3,7 +3,7 @@ import { sortBy, toLower } from "lodash/fp";
 const sortByNameCaseInsensitive = sortBy(toLower);
 import fieldHelpers from "../commons/fieldHelpers";
 import misc from "../commons/misc";
-import { KontaktUI } from "../veranstaltungen/object/kontakt";
+import Kontakt from "../veranstaltungen/object/kontakt";
 
 export type Hotelpreise = {
   name: string;
@@ -28,8 +28,8 @@ export default class OptionValues {
   backlineJazzclub: string[] = [];
   backlineRockshop: string[] = [];
   artists: string[] = [];
-  agenturen: KontaktUI[] = [];
-  hotels: KontaktUI[] = [];
+  agenturen: Kontakt[] = [];
+  hotels: Kontakt[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(object?: any): OptionValues {
@@ -106,9 +106,9 @@ export default class OptionValues {
     return [{ name: "[temporär]" }, { name: "[neu]" }].concat(this.hotels);
   }
 
-  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: KontaktUI): void {
+  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt): void {
     const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
-    const auswahl = kontakt.auswahl;
+    const auswahl = kontakt.auswahl || "[temporär]";
     delete kontakt.auswahl;
     if (auswahl.match(/\[temporär]/)) {
       return;
@@ -127,7 +127,7 @@ export default class OptionValues {
   }
 
   updateHotelpreise(
-    hotel: KontaktUI,
+    hotel: Kontakt,
     unterkunft: {
       einzelEUR: string;
       doppelEUR: string;

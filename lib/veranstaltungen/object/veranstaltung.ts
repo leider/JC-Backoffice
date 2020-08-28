@@ -2,45 +2,19 @@
 import fieldHelpers from "../../commons/fieldHelpers";
 import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
-import Artist, { ArtistUI } from "./artist";
-import Eintrittspreise, { EintrittspreiseUI } from "./eintrittspreise";
-import Kasse, { KasseUI } from "./kasse";
-import Kontakt, { KontaktUI } from "./kontakt";
-import Kopf, { KopfUI } from "./kopf";
-import Kosten, { KostenUI } from "./kosten";
-import Presse, { PresseUI } from "./presse";
-import Staff, { StaffUI } from "./staff";
-import Technik, { TechnikUI } from "./technik";
-import Unterkunft, { UnterkunftUI } from "./unterkunft";
-import Vertrag, { VertragUI } from "./vertrag";
+import Artist from "./artist";
+import Eintrittspreise from "./eintrittspreise";
+import Kasse from "./kasse";
+import Kontakt from "./kontakt";
+import Kopf from "./kopf";
+import Kosten from "./kosten";
+import Presse from "./presse";
+import Staff from "./staff";
+import Technik from "./technik";
+import Unterkunft from "./unterkunft";
+import Vertrag from "./vertrag";
 import Salesreport from "../../reservix/salesreport";
-import { Hotelpreise } from "../../optionen/optionValues";
 import Misc from "../../commons/misc";
-import misc from "../../commons/misc";
-
-export interface VeranstaltungUI {
-  id?: string;
-  startDate?: string;
-  endDate?: string;
-  startTime?: string;
-  endTime?: string;
-  url?: string;
-  reservixID?: string;
-
-  agentur?: KontaktUI;
-  artist?: ArtistUI;
-  eintrittspreise?: EintrittspreiseUI;
-  hotel?: KontaktUI;
-  kasse?: KasseUI;
-  kopf?: KopfUI;
-  kosten?: KostenUI;
-  presse?: PresseUI;
-  staff?: StaffUI;
-  technik?: TechnikUI;
-  unterkunft?: UnterkunftUI;
-  vertrag?: VertragUI;
-  hotelpreise?: Hotelpreise;
-}
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -129,71 +103,16 @@ export default class Veranstaltung {
   }
 
   static createUrlFrom(date: Date, titel: string): string {
-    return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + misc.normalizeString(titel);
+    return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + Misc.normalizeString(titel);
   }
 
   get initializedUrl(): string {
     return Veranstaltung.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
   }
 
-  initializeIdAndUrl() {
+  initializeIdAndUrl(): void {
     this.url = this.initializedUrl;
     this.id = this.kopf.titel + " am " + this.datumForDisplay();
-  }
-
-  fillFromUI(object: VeranstaltungUI): Veranstaltung {
-    if (!object.kopf && !object.id) {
-      return this;
-    }
-
-    if (object.id) {
-      this.id = object.id;
-    }
-
-    if (object.kopf) {
-      if (object.startDate) {
-        this.reservixID = object.reservixID;
-        this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate, object.startTime).toJSDate;
-        this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, object.endTime).toJSDate;
-        this.id = object.id || object.kopf.titel + " am " + this.datumForDisplay();
-        this.url = object.url || Veranstaltung.createUrlFrom(this.startDate, object.kopf.titel || this.id);
-      }
-      this.kopf.fillFromUI(object.kopf);
-    }
-    if (object.agentur) {
-      this.agentur.fillFromUI(object.agentur);
-    }
-    if (object.artist) {
-      this.artist.fillFromUI(object.artist);
-    }
-    if (object.eintrittspreise) {
-      this.eintrittspreise.fillFromUI(object.eintrittspreise);
-    }
-    if (object.hotel) {
-      this.hotel.fillFromUI(object.hotel);
-    }
-    if (object.kasse) {
-      this.kasse.fillFromUI(object.kasse);
-    }
-    if (object.kosten) {
-      this.kosten.fillFromUI(object.kosten);
-    }
-    if (object.presse) {
-      this.presse.fillFromUI(object.presse).toJSON();
-    }
-    if (object.staff) {
-      this.staff = this.staff.fillFromUI(object.staff);
-    }
-    if (object.technik) {
-      this.technik.fillFromUI(object.technik).toJSON();
-    }
-    if (object.unterkunft) {
-      this.unterkunft.fillFromUI(object.unterkunft);
-    }
-    if (object.vertrag) {
-      this.vertrag.fillFromUI(object.vertrag);
-    }
-    return this;
   }
 
   reset(): void {

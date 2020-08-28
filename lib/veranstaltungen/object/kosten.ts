@@ -7,20 +7,6 @@ function floatAmount(textWithNumberOrNull?: string | null): number {
 const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 const deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
 
-export interface KostenUI {
-  backlineEUR?: string;
-  saalmiete?: string;
-  technikAngebot1EUR?: string;
-  gagenEUR?: string;
-  werbung1?: string;
-  werbung2?: string;
-  werbung3?: string;
-  personal?: string;
-  gagenSteuer?: string | null;
-  deal?: string | null;
-  gageBAR?: string;
-}
-
 export default class Kosten {
   backlineEUR = 0;
   saalmiete = 0;
@@ -45,21 +31,6 @@ export default class Kosten {
         this.gagenSteuer = "ohne";
       }
     }
-  }
-
-  fillFromUI(object: KostenUI): Kosten {
-    this.backlineEUR = floatAmount(object.backlineEUR);
-    this.saalmiete = floatAmount(object.saalmiete);
-    this.technikAngebot1EUR = floatAmount(object.technikAngebot1EUR);
-    this.gagenEUR = floatAmount(object.gagenEUR);
-    this.werbung1 = floatAmount(object.werbung1);
-    this.werbung2 = floatAmount(object.werbung2);
-    this.werbung3 = floatAmount(object.werbung3);
-    this.personal = floatAmount(object.personal);
-    this.gagenSteuer = object.gagenSteuer || this.gagenSteuer;
-    this.deal = object.deal || this.deal;
-    this.gageBAR = !!object.gageBAR;
-    return this;
   }
 
   gagenTotalEUR(): number {
