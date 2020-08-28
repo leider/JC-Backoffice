@@ -69,7 +69,8 @@ export default class KontaktCard extends Vue {
   }
 
   get auswahlOptions(): string[] {
-    return ["[temporär]", "[neu]"].concat(this.options.map((o) => o.name));
+    const names = this.options.map((o) => o.name).sort();
+    return ["[temporär]", "[neu]"].concat(names);
   }
 
   get kontakt(): Kontakt | null {

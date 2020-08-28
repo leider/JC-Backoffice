@@ -1,6 +1,6 @@
 <template lang="pug">
   multiselect(:options="options", v-model="selected", :state="valid", :allowEmpty="false",
-    :searchable="false", placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
+    placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
     showLabels=false, :openDirection="openDirection")
 </template>
 
