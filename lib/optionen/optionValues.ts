@@ -1,9 +1,10 @@
 import range from "lodash/range";
+import remove from "lodash/remove";
 import { sortBy, toLower } from "lodash/fp";
-const sortByNameCaseInsensitive = sortBy(toLower);
-import fieldHelpers from "../commons/fieldHelpers";
 import misc from "../commons/misc";
 import Kontakt from "../veranstaltungen/object/kontakt";
+
+const sortByNameCaseInsensitive = sortBy(toLower);
 
 export type Hotelpreise = {
   name: string;
@@ -98,58 +99,18 @@ export default class OptionValues {
     return range(1, 16);
   }
 
-  agenturenForSelection(): { name: string }[] {
-    return [{ name: "[temporär]" }, { name: "[neu]" }].concat(this.agenturen);
-  }
-
-  hotelsForSelection(): { name: string }[] {
-    return [{ name: "[temporär]" }, { name: "[neu]" }].concat(this.hotels);
-  }
-
-  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt): void {
-    const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
-    const auswahl = kontakt.auswahl || "[temporär]";
-    delete kontakt.auswahl;
-    if (auswahl.match(/\[temporär]/)) {
-      return;
-    }
-    if (auswahl.match(/\[neu]/)) {
+  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection: string): void {
+    if (!(selection || "[temporär]").match(/\[temporär]/)) {
+      const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
+      remove(ourCollection, (k) => k.name === kontakt.name);
       ourCollection.push(kontakt);
-      return;
-    }
-    const existingKontakt = ourCollection.find((k) => k.name === kontakt.name);
-    if (existingKontakt) {
-      existingKontakt.ansprechpartner = kontakt.ansprechpartner;
-      existingKontakt.telefon = kontakt.telefon;
-      existingKontakt.email = kontakt.email;
-      existingKontakt.adresse = kontakt.adresse;
     }
   }
 
-  updateHotelpreise(
-    hotel: Kontakt,
-    unterkunft: {
-      einzelEUR: string;
-      doppelEUR: string;
-      suiteEUR: string;
-    }
-  ): void {
-    if (!this.hotels.find((h) => h.name === hotel.name)) {
-      // kein Hotel gefunden
-      return;
-    }
-    const existingPreise = this.hotelpreise.find((p: Hotelpreise) => p.name === hotel.name);
-    if (existingPreise) {
-      existingPreise.einzelEUR = fieldHelpers.parseNumberWithCurrentLocale(unterkunft.einzelEUR);
-      existingPreise.doppelEUR = fieldHelpers.parseNumberWithCurrentLocale(unterkunft.doppelEUR);
-      existingPreise.suiteEUR = fieldHelpers.parseNumberWithCurrentLocale(unterkunft.suiteEUR);
-    } else {
-      this.hotelpreise.push({
-        name: hotel.name,
-        einzelEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.einzelEUR),
-        doppelEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.doppelEUR),
-        suiteEUR: fieldHelpers.parseNumberWithCurrentLocale(unterkunft.suiteEUR),
-      });
+  updateHotelpreise(hotel: Kontakt, zimmerPreise: { einzelEUR: number; doppelEUR: number; suiteEUR: number }): void {
+    if (this.hotels.find((h) => h.name === hotel.name)) {
+      remove(this.hotelpreise, (p: Hotelpreise) => p.name === hotel.name);
+      this.hotelpreise.push({ name: hotel.name, ...zimmerPreise });
     }
   }
 

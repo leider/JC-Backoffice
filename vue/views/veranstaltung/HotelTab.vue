@@ -1,14 +1,26 @@
 <template lang="pug">
 .row
   .col-md-6
-    kontakt-card(section="hotel", title="Hotel", singular="hotel", :options="optionen.hotels", :veranstaltung="veranstaltung")
+    kontakt-card(
+      section="hotel",
+      title="Hotel",
+      singular="hotel",
+      :options="optionen.hotels",
+      :veranstaltung="veranstaltung",
+      :editVariables="editVariables"
+    )
 
     legend-card(section="hotel", title="Zimmer", hasMoney="true", :money="unterkunft.roomsTotalEUR")
       .row
         .col-4
-          jazz-date(label="Anreise", v-model="unterkunft.anreiseDate", :min="minDate", tooltip="Diese Werte haben Einfluß auf den berechneten Preis")
+          jazz-date(
+            label="Anreise",
+            v-model="unterkunft.anreiseDate",
+            :min="minDate",
+            tooltip="Diese Werte haben Einfluß auf den berechneten Preis"
+          )
           jazz-date(label="Abreise", v-model="unterkunft.abreiseDate", :min="minDateAbreise")
-          label.float-right {{unterkunft.anzNacht}}
+          label.float-right {{ unterkunft.anzNacht }}
         .col-8
           jazz-textarea(label="Kommentar", v-model="unterkunft.kommentar", tooltip="Namen der Gäste")
       .row
@@ -32,7 +44,7 @@
               jazz-currency(label="Preis", v-model="unterkunft.suiteEUR")
       .row
         .col-12
-          jazz-check(label="Preise als Default übernehmen", v-model="hotelpreiseAlsDefault", inline="true")
+          jazz-check(label="Preise als Default übernehmen", v-model="editVariables.hotelpreiseAlsDefault", inline="true")
   .col-md-6
     legend-card(section="hotel", title="Transport", has-money="true", :money="unterkunft.transportEUR")
       .row
@@ -57,10 +69,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import LegendCard from "@/widgets/LegendCard.vue";
-import OptionValues from "../../../lib/optionen/optionValues";
+import OptionValues, { Hotelpreise } from "../../../lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import MultiSelect from "@/widgets/MultiSelect.vue";
@@ -76,6 +88,7 @@ import JazzDate from "@/widgets/JazzDate.vue";
 import Unterkunft from "../../../lib/veranstaltungen/object/unterkunft";
 import JazzTextarea from "@/widgets/JazzTextarea.vue";
 import User from "../../../lib/users/user";
+import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
 
 @Component({
   components: {
@@ -98,8 +111,7 @@ export default class HotelTab extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() optionen!: OptionValues;
   @Prop() user!: User;
-
-  hotelpreiseAlsDefault = false;
+  @Prop() editVariables!: EditVariables;
 
   get minDate(): Date | null {
     return this.veranstaltung.startDatumUhrzeit().minus({ tage: 7 }).toJSDate;
@@ -115,6 +127,18 @@ export default class HotelTab extends Vue {
 
   get kosten(): Kosten {
     return this.veranstaltung.kosten;
+  }
+
+  @Watch("editVariables.selectedHotel")
+  selectedHotelChanged(): void {
+    const selectedPreise = this.optionen.hotelpreise.find((p: Hotelpreise) => p.name === this.editVariables.selectedHotel) || {
+      einzelEUR: 0,
+      doppelEUR: 0,
+      suiteEUR: 0,
+    };
+    this.unterkunft.einzelEUR = selectedPreise.einzelEUR;
+    this.unterkunft.doppelEUR = selectedPreise.doppelEUR;
+    this.unterkunft.suiteEUR = selectedPreise.suiteEUR;
   }
 
   sendMail(): void {
@@ -138,8 +162,8 @@ ${this.unterkunft.kommentar}
 
 Mit freundlichen Grüßen,
 ${this.user.name}`);
-    const href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
-    window.location.href = href;
+
+    window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
   }
 }
 </script>

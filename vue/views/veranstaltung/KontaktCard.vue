@@ -22,6 +22,7 @@ import JazzText from "@/widgets/JazzText.vue";
 import JazzTextarea from "@/widgets/JazzTextarea.vue";
 import JazzMail from "@/widgets/JazzMail.vue";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
 @Component({
   components: { JazzMail, JazzTextarea, JazzText, SingleSelect, LegendCard },
 })
@@ -31,27 +32,40 @@ export default class KontaktCard extends Vue {
   @Prop() title!: string;
   @Prop() options!: Kontakt[];
   @Prop() singular!: string;
+  @Prop() editVariables!: EditVariables;
   private auswahl = "[temporär]";
 
   @Watch("veranstaltung")
+  @Watch("singular")
+  @Watch("section")
   veranstaltungChanged(): void {
-    this.auswahl = this.kontakt?.name ? this.kontakt.name : this.auswahl;
+    const name = this.kontakt?.name;
+    if (name && this.isHotel) {
+      this.editVariables.selectedHotel = name;
+    }
+    if (name && this.isAgentur) {
+      this.editVariables.selectedAgentur = name;
+    }
   }
 
   get auswahlName(): string {
-    return this.auswahl;
+    return this.isAgentur ? this.editVariables.selectedAgentur : this.editVariables.selectedHotel;
   }
 
   set auswahlName(name: string) {
-    this.auswahl = name;
     const kontakt = this.options.find((o) => o.name === name);
     if (kontakt) {
-      this.kontakt = kontakt;
+      this.kontakt = new Kontakt(kontakt);
     }
-    if (!this.kontakt) {
+    if (!this.kontakt || name === "[neu]") {
       this.kontakt = new Kontakt();
     }
-    this.kontakt.auswahl = name;
+    if (this.isHotel) {
+      this.editVariables.selectedHotel = name;
+    }
+    if (this.isAgentur) {
+      this.editVariables.selectedAgentur = name;
+    }
   }
 
   get auswahlOptions(): string[] {
@@ -59,10 +73,10 @@ export default class KontaktCard extends Vue {
   }
 
   get kontakt(): Kontakt | null {
-    if (this.singular === "hotel") {
+    if (this.isHotel) {
       return this.veranstaltung.hotel;
     }
-    if (this.singular === "agentur") {
+    if (this.isAgentur) {
       return this.veranstaltung.agentur;
     }
     return null;
@@ -72,12 +86,20 @@ export default class KontaktCard extends Vue {
     if (kontakt === null) {
       return;
     }
-    if (this.singular === "hotel") {
+    if (this.isHotel) {
       this.veranstaltung.hotel = kontakt;
     }
-    if (this.singular === "agentur") {
+    if (this.isAgentur) {
       this.veranstaltung.agentur = kontakt;
     }
+  }
+
+  get isAgentur(): boolean {
+    return this.singular === "agentur";
+  }
+
+  get isHotel(): boolean {
+    return this.singular === "hotel";
   }
 }
 </script>

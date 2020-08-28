@@ -58,8 +58,14 @@
             jazz-label(label="Zusätzliche Infos", tooltip="Notizen / Gäste / Reservierung, etc.")
             markdown(v-model="kopf.beschreibung")
   .col-md-6
-    kontakt-card(section="allgemeines", title="Agentur / Verantwortlicher", singular="agentur",
-      :options="optionen.agenturen", :veranstaltung="veranstaltung")
+    kontakt-card(
+      section="allgemeines",
+      title="Agentur / Verantwortlicher",
+      singular="agentur",
+      :options="optionen.agenturen",
+      :veranstaltung="veranstaltung",
+      :editVariables="editVariables"
+    )
     legend-card(section="allgemeines", title="Vertrag")
       .row
         .col-md-5
@@ -70,8 +76,11 @@
             .input-group
               single-select-pure(label="Sprache", v-model="vertrag.sprache", :options="vertragSprachen")
               .input-group-append
-                b-button(:href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`",
-                  :disabled="!veranstaltung.id || !isBookingTeam", variant="primary") Generieren
+                b-button(
+                  :href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`",
+                  :disabled="!veranstaltung.id || !isBookingTeam",
+                  variant="primary"
+                ) Generieren
       .row
         .col-12
           .form-group
@@ -83,7 +92,7 @@
             .row.mt-3
               .col-6(v-for="datei in vertrag.datei", :key="datei")
                 .form-inline
-                  a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{datei}}
+                  a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{ datei }}
                   a.ml-1(@click="vertrag.removeDatei(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
                     i.fas.fa-fw.fa-times.fa-sm
 </template>
@@ -114,6 +123,7 @@ import Markdown from "@/widgets/Markdown.vue";
 import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
 import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/object/vertrag";
 import { uploadFile } from "@/commons/loader";
+import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
 
 @Component({
   components: {
@@ -140,6 +150,7 @@ export default class AllgemeinesTab extends Vue {
   @Prop() orte!: Orte;
   @Prop() minimumStart!: DatumUhrzeit;
   @Prop() isBookingTeam!: boolean;
+  @Prop() editVariables!: EditVariables;
 
   private filesForUpload: File[] = [];
 

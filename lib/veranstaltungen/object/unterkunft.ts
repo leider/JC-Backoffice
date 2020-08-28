@@ -74,8 +74,13 @@ export default class Unterkunft {
     }
     return anz === 1 ? "eine Nacht" : `${anz} Nächte`;
   }
+
   get roomsTotalEUR(): number {
     const naechte = this.anzahlNaechte();
     return this.einzelNum * this.einzelEUR * naechte + this.doppelNum * this.doppelEUR * naechte + this.suiteNum * this.suiteEUR * naechte;
+  }
+
+  get zimmerPreise(): { einzelEUR: number; doppelEUR: number; suiteEUR: number } {
+    return { einzelEUR: this.einzelEUR, doppelEUR: this.doppelEUR, suiteEUR: this.suiteEUR };
   }
 }

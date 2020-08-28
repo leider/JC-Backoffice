@@ -4,8 +4,6 @@ export default class Kontakt {
   email = "";
   name = "";
   telefon = "";
-  auswahl?: string;
-  isToSave = false;
 
   toJSON(): any {
     return Object.assign({}, this);
@@ -38,9 +36,5 @@ export default class Kontakt {
       return this.adresse.replace("\r\n", ", ");
     }
     return "-";
-  }
-
-  adresseHTML(): string {
-    return this.adresse.replace("\r\n", "<br>");
   }
 }
