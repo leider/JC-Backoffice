@@ -1,4 +1,3 @@
-import express from "express";
 import misc from "../commons/misc";
 import service from "./usersService";
 import store from "./userstore";
@@ -10,25 +9,6 @@ import User from "./user";
 import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);
-
-function showListe(res: express.Response, next: express.NextFunction, optionalLastSavedUser?: User): void {
-  store.allUsers((err: Error | null, users: User[]) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("liste", {
-      users,
-      lastSaved: optionalLastSavedUser,
-    });
-  });
-}
-
-app.get("/", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return showListe(res, next);
-});
 
 app.get("/rundmail", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
@@ -188,91 +168,6 @@ app.post("/deleteUser", (req, res) => {
       return res.status(500).send(err);
     }
     res.set("Content-Type", "application/json").send({ message });
-  });
-});
-
-app.get("/changePassword/:id", (req, res, next) => {
-  if (!res.locals.accessrights.canEditUser(req.params.id) && !res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return store.forId(req.params.id, (err: Error | null, user: User) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("changePassword", { user: user });
-  });
-});
-
-app.get("/:id", (req, res, next) => {
-  if (!res.locals.accessrights.canEditUser(req.params.id) && !res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return store.forId(req.params.id, (err: Error | null, user: User) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("edit", { user: user });
-  });
-});
-
-app.get("/:id/delete", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-
-  return store.deleteUser(req.params.id, (err: Error | null) => {
-    if (err) {
-      return next(err);
-    }
-    return res.redirect("/users");
-  });
-});
-
-app.post("/submit", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser() && !res.locals.accessrights.memberId() === req.body.id) {
-    return res.redirect("/");
-  }
-  const userid = req.body.id;
-  return store.forId(userid, (err: Error | null, user: User) => {
-    if (err) {
-      return next(err);
-    }
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.tel = req.body.tel;
-    user.tshirt = req.body.tshirt;
-    user.gruppen = misc.toArray(req.body.gruppen);
-    user.rechte = misc.toArray(req.body.rechte);
-    return store.save(user, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      return showListe(res, next);
-    });
-  });
-});
-
-app.post("/newPassword", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser() && !res.locals.accessrights.memberId() === req.body.id) {
-    return res.redirect("/");
-  }
-  return service.updatePassword(req.body.id, req.body.passwort, (err: Error | null, user: User) => {
-    if (err) {
-      return next(err);
-    }
-    return showListe(res, next, user);
-  });
-});
-
-app.post("/submitNew", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return service.saveNewUser(req.body.username, (err: Error | null, user: User) => {
-    if (err) {
-      return next(err);
-    }
-    return showListe(res, next, user);
   });
 });
 
