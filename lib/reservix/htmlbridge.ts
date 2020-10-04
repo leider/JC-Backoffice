@@ -26,7 +26,7 @@ const tablepositions = {
   brutto: 18,
 };
 
-function prepareInputsForPost(forminputs: any, $: CheerioStatic): any {
+function prepareInputsForPost(forminputs: any, $: cheerio.Selector): any {
   return forminputs
     .filter(function () {
       // @ts-ignore

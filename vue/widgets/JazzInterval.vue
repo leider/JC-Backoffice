@@ -6,7 +6,7 @@
       tooltip="Startzeitpunkt",
       v-model="veranstaltung.startDate",
       :min="minimumStart.toJSDate",
-      @oldAndNew="startChanged"
+      @old-and-new="startChanged"
     )
   .col-6
     jazz-date-time(label="Ende", tooltip="Erwartetes Ende", v-model="veranstaltung.endDate", :min="veranstaltung.startDate")

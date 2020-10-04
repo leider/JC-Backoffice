@@ -41,7 +41,7 @@ export default class JazzDate extends Vue {
 
   emitChange(date: string): void {
     const newDate = DatumUhrzeit.forISOString(`${date}T00:00`).toJSDate;
-    this.$emit("oldAndNew", { old: this.value, changed: newDate });
+    this.$emit("old-and-new", { old: this.value, changed: newDate });
     this.$emit("input", newDate);
   }
 
