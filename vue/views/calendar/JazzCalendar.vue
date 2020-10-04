@@ -12,7 +12,6 @@ import { Component, Vue } from "vue-property-decorator";
 import FullCalendar, { CalendarOptions } from "@fullcalendar/vue/";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
-import luxonPlugin from "@fullcalendar/luxon";
 import deLocale from "@fullcalendar/core/locales/de";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
 import { icals } from "@/commons/loader";
@@ -20,7 +19,7 @@ import { icals } from "@/commons/loader";
 @Component({ components: { FullCalendar } })
 export default class JazzCalendar extends Vue {
   options: CalendarOptions = {
-    plugins: [dayGridPlugin, bootstrapPlugin, luxonPlugin],
+    plugins: [dayGridPlugin, bootstrapPlugin],
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
     locales: [deLocale],
