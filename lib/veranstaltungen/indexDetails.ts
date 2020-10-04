@@ -14,6 +14,7 @@ import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import async from "async";
 import Kasse from "./object/kasse";
+import app from "./index";
 const uploadDir = path.join(__dirname, "../../static/upload");
 const filesDir = path.join(__dirname, "../../static/files");
 const publicUrlPrefix = conf.get("publicUrlPrefix");
@@ -58,6 +59,16 @@ export function addRoutesTo(app: express.Express): void {
           puppeteerPrinter.generatePdf(printoptions, res, next)
         );
       });
+    });
+  });
+
+  app.get("/:url.json", (req, res) => {
+    store.getVeranstaltung(req.params.url, (err: Error, veranstaltung: Veranstaltung) => {
+      if (err) {
+        res.status(500).send(err);
+        return;
+      }
+      res.set("Content-Type", "application/json").send(veranstaltung);
     });
   });
 

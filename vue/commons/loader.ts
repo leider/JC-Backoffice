@@ -102,6 +102,7 @@ export function removeUserFromSection(veranstaltung: Veranstaltung, section: Sta
   postAndReceive(`${veranstaltung.fullyQualifiedUrl()}/removeUserFromSection`, { section }, callback);
 }
 
+// User
 export function currentUser(callback: Function): void {
   getJson("/users/user.json", (err: Error, result: object) => {
     callback(new User(result));
@@ -116,6 +117,14 @@ export function allUsers(callback: Function): void {
 
 export function saveUser(user: User, callback: Function): void {
   postAndReceive("/users/saveUser", user.toJSON(), (err: Error, json: object) => callback(json));
+}
+
+export function deleteUser(user: User, callback: Function): void {
+  postAndReceive("/users/deleteUser", user.toJSON(), (err: Error, json: object) => callback(json));
+}
+
+export function saveNewUser(user: User, callback: Function): void {
+  postAndReceive("/users/saveNewUser", user.toJSON(), callback);
 }
 
 export function icals(callback: Function): void {

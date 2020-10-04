@@ -1,8 +1,8 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-form-input(:value="value", @input="$emit('input', $event)", type="email", :state="state")
-  b-form-invalid-feedback E-Mail Adresse ungültig
+  b-form-input(:value="value", type="password", @input="$emit('input', $event)", :state="state")
+  b-form-invalid-feedback Muss ausgefüllt werden
 </template>
 
 <script lang="ts">
@@ -11,20 +11,17 @@ import JazzLabel from "@/widgets/JazzLabel.vue";
 @Component({
   components: { JazzLabel },
 })
-export default class JazzMail extends Vue {
+export default class JazzPass extends Vue {
   @Prop() label!: string;
   @Prop() value!: string;
   @Prop() tooltip!: string | undefined;
   @Prop() required!: boolean;
 
   get state(): boolean | null {
-    const validEmail =
-      !(this.value && !this.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/));
-
     if (!this.required) {
-      return validEmail ? null : false;
+      return null;
     }
-    return !!this.value && this.value.length > 0 && validEmail ? null : false;
+    return !!this.value && this.value.length > 0 ? null : false;
   }
 }
 </script>

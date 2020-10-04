@@ -2,13 +2,12 @@
 .card.mb-2(:class="`border-${this.section}`")
   h5.card-header.p-2.position-relative(:class="`color-${this.section}`")
     a.stretched-link.inherit-color(@click="toggleExpanded"): b
-      i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-      | &nbsp;{{title}}
+      i.far.fa-fw(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
+      | &nbsp;{{ title }}
       b(v-if="hasMoney")
-        .float-right {{moneyFormatted}} €
+        .float-right {{ moneyFormatted }} €
   b-collapse.p-1(v-model="expanded")
     slot
-
 </template>
 
 <script lang="ts">

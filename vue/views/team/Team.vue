@@ -2,11 +2,8 @@
 .col-12
   .row.page-header
     .col-lg-12
-      b-tabs
-        b-tab
-          template(v-slot:title)
-            h2(v-if="!admin") Team
-            h2(v-else) Veranstaltungen
+      b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
+        b-tab(:title="admin ? 'Veranstaltungen' : 'Team'")
           .row
             .col-lg-8
               .row
@@ -14,7 +11,11 @@
                   b-overlay(:show="loading")
                     div(v-if="!admin")
                       .btn-group.float-right
-                        b-link.btn.btn-light(v-if="user.accessrights && user.accessrights.isOrgaTeam", to="/veranstaltungen/zukuenftige", title="administration")
+                        b-link.btn.btn-light(
+                          v-if="user.accessrights && user.accessrights.isOrgaTeam",
+                          to="/veranstaltungen/zukuenftige",
+                          title="administration"
+                        )
                           i.fas.fa-edit.fa-fw
                           | &nbsp;Admin
                       p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
@@ -33,17 +34,20 @@
 
               .row
                 .col-12
-                  panels-for-monat(v-for="monat in monate", :key="monat", :monat="monat",
-                    :veranstaltungen="veranstaltungenNachMonat[monat]", :user="user", :users="users", :admin="admin",
-                    @deleted="deleted")
+                  panels-for-monat(
+                    v-for="monat in monate",
+                    :key="monat",
+                    :monat="monat",
+                    :veranstaltungen="veranstaltungenNachMonat[monat]",
+                    :user="user",
+                    :users="users",
+                    :admin="admin",
+                    @deleted="deleted"
+                  )
             .col-lg-4
               jazz-calendar.mt-4
-        b-tab
-          template(v-slot:title)
-            h2 Übersicht der Benutzer
-          .row
-            user-panel(:currentUser="user", :user="user")
-            user-panel(v-for="u in otherUsers()", :key="u.id", :currentUser="user", :user="u")
+        b-tab(title="Benutzer")
+          user-panels
 </template>
 
 <script lang="ts">
@@ -57,9 +61,10 @@ import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
 import groupBy = require("lodash/groupBy");
 import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
+import UserPanels from "@/views/user/UserPanels.vue";
 
 @Component({
-  components: { JazzCalendar, UserPanel, PanelsForMonat },
+  components: { UserPanels, JazzCalendar, UserPanel, PanelsForMonat },
 })
 export default class Team extends Vue {
   @Prop() admin!: boolean;

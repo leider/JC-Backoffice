@@ -8,13 +8,9 @@ import flatten from "lodash/flatten";
 import path from "path";
 import fieldHelpers from "../commons/fieldHelpers";
 
-import optionenService from "../optionen/optionenService";
 import store from "./veranstaltungenstore";
 import Veranstaltung from "./object/veranstaltung";
-import Vertrag from "./object/vertrag";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import OptionValues from "../optionen/optionValues";
-import Orte from "../optionen/orte";
 
 import { addRoutesTo } from "./indexDetails";
 import { expressAppIn } from "../middleware/expressViewHelper";
@@ -185,17 +181,6 @@ app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
   store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
-});
-
-app.get("/:url.json", (req, res) => {
-  store.alle((err: Error, veranstaltungen: Veranstaltung[]): void => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    const veranstaltung = veranstaltungen.find((v) => v.url === req.params.url);
-    res.set("Content-Type", "application/json").send(veranstaltung);
-  });
 });
 
 addRoutesTo(app);

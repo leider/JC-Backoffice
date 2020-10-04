@@ -2,7 +2,7 @@
 const path = require("path");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require("copy-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 const plugins = [
   new CopyPlugin([
@@ -16,7 +16,7 @@ const plugins = [
 ];
 
 if (process.env.NODE_ENV !== "production") {
-  plugins.push(new BundleAnalyzerPlugin());
+  // plugins.push(new BundleAnalyzerPlugin());
 }
 
 const config = {

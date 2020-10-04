@@ -33,6 +33,28 @@ export default {
     });
   },
 
+  saveNewUserWithPassword: function saveNewUser(user: User, callback: Function): void {
+    const password = user.password;
+    if (!password) {
+      return callback(null, "Kein Passwort übermittelt");
+    }
+    delete user.password;
+    store.forId(user.id, (err: Error | null, existingUser?: User) => {
+      if (err) {
+        return callback(err);
+      }
+      if (existingUser) {
+        return callback(null, "Benutzer mit Id '" + user.id + "' existiert schon");
+      }
+      const newSalt = genSalt();
+      user.salt = newSalt;
+      user.hashedPassword = hashPassword(password, newSalt);
+      return store.save(user, (err1: Error | null) => {
+        callback(err1);
+      });
+    });
+  },
+
   updatePassword: function updatePassword(username: string, password: string, callback: Function): void {
     store.forId(username, (err: Error | null, existingUser?: User) => {
       if (err || !existingUser) {

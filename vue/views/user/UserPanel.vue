@@ -3,78 +3,195 @@
   .card.mb-2.border-allgemeines
     h5.card-header.p-2.color-allgemeines
       a(@click="expanded = !expanded"): b
-        i.far.fa-fw.fa-lg(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-        | {{user.name}} ({{user.id}})
-        small #{""} Gruppen: {{gruppenUndRechteText()}}
+        i.far.fa-fw.fa-lg(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }") #{" "}
+        i.fa-fw.fas(:class="gruppenUndRechteIcon")
+        | #{" "} {{ user.name }}
+      .btn-group.float-right(v-if="canEdit")
+        b-button.btn.btn-sm.btn.btn-light(v-b-modal="`dialog-${user.id}`", title="Bearbeiten")
+          i.fas.fa-fw.fa-edit
+        b-button.btn.btn-sm.btn.btn-light(v-b-modal="`pass-${user.id}`", title="Passwort ändern")
+          i.fas.fa-fw.fa-key.text-success
+        b-button.btn.btn-sm.btn-light(v-if="isSuperuser", v-b-modal="`delete-${user.id}`", title="Löschen")
+          i.fas.fa-fw.fa-trash-alt.text-danger
+      b-modal(:id="`dialog-${user.id}`", no-close-on-backdrop, @ok="saveUser", @cancel="resetUsers")
+        .row
+          .col-12
+            jazz-text(label="Vollständiger Name", v-model="user.name")
+            jazz-mail(label="E-Mail", v-model="user.email", required)
+            jazz-text(label="Telefon", v-model="user.tel")
+            single-select(label="T-Shirt", v-model="user.tshirt", :options="shirtsizes")
+        .row(v-if="isSuperuser")
+          .col-12
+            single-select(label="Rechte", v-model="rechte", :options="alleRechte")
+            jazz-check(v-if="!accessrights.isSuperuser", label="Kassenfreigabe", v-model="kassenfreigabe")
+        template(v-slot:modal-header)
+          h3.modal-title User "{{ user.id }}" bearbeiten
+        template(v-slot:modal-footer="{ ok, cancel }")
+          .row
+            .col-12
+              .btn-group.float-right
+                b-button.btn.btn-light(@click="cancel()") Abbrechen
+                b-button.btn.btn-success.text(@click="ok()")
+                  i.fas.fa-fw.fa-lg.fa-save
+                  | &nbsp;Speichern
+      b-modal(:id="`pass-${user.id}`", no-close-on-backdrop, @ok="changePassword", @cancel="resetPassfields")
+        .row
+          .col-12
+            p Beide Felder mit mindestens 6 Buchstaben identisch ausfüllen!
+            jazz-pass-twice(v-model="newPass")
+        template(v-slot:modal-header)
+          h3.modal-title Passwort ändern
+        template(v-slot:modal-footer="{ ok, cancel }")
+          .row
+            .col-12
+              .btn-group.float-right
+                b-button.btn.btn-light(@click="cancel()") Abbrechen
+                b-button.btn.btn-success.text(@click="ok()", :disabled="newPass.length < 6")
+                  i.fas.fa-save.fa-fw.fa-lg
+                  | &nbsp;Ändern
+      b-modal(:id="`delete-${user.id}`", no-close-on-backdrop, @ok="deleteUser")
+        p Bist Du sicher, dass Du den User "{{ user.name }}" löschen willst?
+        template(v-slot:modal-header)
+          h3.modal-title User löschen
+        template(v-slot:modal-footer="{ ok, cancel }")
+          .row
+            .col-12
+              .btn-group.float-right
+                b-button.btn.btn-light(@click="cancel()") Abbrechen
+                b-button.btn.btn-danger.text(@click="ok()")
+                  i.fas.fa-trash.fa-fw.fa-lg
+                  | &nbsp;Löschen
+
     b-collapse(v-model="expanded")
       table.table.table-striped.table-sm
         tbody
-          tr(v-if="canEdit"): td(colspan=2): a.btn.btn-sm.btn-primary.float-right(:href="editlink()", title="Bearbeiten"): i.fas.fa-fw.fa-edit
+          tr
+            th: .form-control-plaintext Username:
+            td: .form-control-plaintext {{ user.id }}
           tr
             th: .form-control-plaintext E-Mail:
-            td: .form-control-plaintext: a(:href="`mailto:${user.email}`") {{user.email}}
-          tr(v-if="canEdit")
+            td: .form-control-plaintext: a(:href="`mailto:${user.email}`") {{ user.email }}
+          tr
             th: .form-control-plaintext T-Shirt:
-            td: single-select-pure(v-model="user.tshirt", :options="shirtsizes", size="sm", style="width:100%", @change="saveUser")
-          tr(v-if="canEdit")
+            td: .form-control-plaintext {{ user.tshirt }}
+          tr
             th: .form-control-plaintext Telefon:
-            td: b-form-input(type="text", v-model="user.tel", size="sm", style="width:100%", @blur="saveUser")
-
-          tr(v-if="!canEdit")
-            th: .form-control-plaintext T-Shirt:
-            td: .form-control-plaintext {{user.tshirt}}
-          tr(v-if="!canEdit")
-            th: .form-control-plaintext Telefon:
-            td: .form-control-plaintext: a(:href="`tel:${user.tel}`") {{user.tel}}
+            td: .form-control-plaintext: a(:href="`tel:${user.tel}`") {{ user.tel }}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "../../../lib/users/user";
-import { saveUser } from "@/commons/loader";
+import { deleteUser, saveUser } from "@/commons/loader";
 import Accessrights from "../../../lib/commons/accessrights";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
+import JazzText from "@/widgets/JazzText.vue";
+import JazzMail from "@/widgets/JazzMail.vue";
+import SingleSelect from "@/widgets/SingleSelect.vue";
+import JazzCheck from "@/widgets/JazzCheck.vue";
+import JazzPassTwice from "@/widgets/JazzPassTwice.vue";
+
 @Component({
-  components: { SingleSelectPure }
+  components: { JazzPassTwice, JazzCheck, SingleSelect, JazzMail, JazzText, SingleSelectPure },
 })
 export default class UserPanel extends Vue {
   @Prop() currentUser!: User;
   @Prop() user!: User;
-  private expanded = this.user.id === this.currentUser.id;
+  private expanded = false;
+  private shirtsizes = [
+    "",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "XXXL",
+    "No Shirt",
+    "Ladies' XS",
+    "Ladies' S",
+    "Ladies' M",
+    "Ladies' L",
+    "Ladies' XL",
+    "Ladies' XXL",
+  ];
 
-  get accessrights(): Accessrights | undefined {
-    return this.currentUser.accessrights;
-  }
+  private alleRechte = ["superusers", "bookingTeam", "orgaTeam", "abendkasse", ""];
 
-  get shirtsizes(): string[] {
-    return [
-      "",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "XXL",
-      "XXXL",
-      "No Shirt",
-      "Ladies' XS",
-      "Ladies' S",
-      "Ladies' M",
-      "Ladies' L",
-      "Ladies' XL",
-      "Ladies' XXL",
-    ];
+  private newPass = "";
+
+  get accessrights(): Accessrights {
+    return new Accessrights(this.user);
   }
 
   get canEdit(): boolean {
-    return !!this.accessrights && this.accessrights.canEditUser(this.user.id);
+    return !!this.currentUser.accessrights && this.currentUser.accessrights.canEditUser(this.user.id);
   }
 
-  gruppenUndRechteText(): string {
-    const tokens = this.user.rechte ? this.user.gruppen.concat(this.user.rechte) : this.user.gruppen;
-    if (tokens.length > 0) {
-      return tokens.map((gruppe: string) => gruppe.substring(0, 1).toLocaleUpperCase()).join(", ");
+  get isSuperuser(): boolean {
+    return !!(this.currentUser && this.currentUser.accessrights && this.currentUser.accessrights.isSuperuser);
+  }
+
+  get emailstate(): boolean | null {
+    const email = this.user.email;
+    if (!email || email.length === 0) {
+      return null;
     }
-    return "-";
+    const validEmail = !(email && !email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/));
+    return !!email && validEmail ? null : false;
+  }
+
+  get gruppenUndRechteIcon(): string {
+    function highestGroup(rights: Accessrights): string {
+      if (rights.isSuperuser) {
+        return "fa-smile";
+      }
+      if (rights.isBookingTeam) {
+        return "fa-id-card";
+      }
+      if (rights.isOrgaTeam) {
+        return "fa-chalkboard-teacher";
+      }
+      if (rights.isAbendkasse) {
+        return "fa-user-tag";
+      }
+      return "";
+    }
+    return highestGroup(this.accessrights);
+  }
+
+  get rechte(): string {
+    function highestGroup(rights: Accessrights): string {
+      if (rights.isSuperuser) {
+        return "superusers";
+      }
+      if (rights.isBookingTeam) {
+        return "bookingTeam";
+      }
+      if (rights.isOrgaTeam) {
+        return "orgaTeam";
+      }
+      if (rights.isAbendkasse) {
+        return "abendkasse";
+      }
+      return "";
+    }
+
+    return highestGroup(this.accessrights);
+  }
+
+  set rechte(rechte: string) {
+    this.user.gruppen = rechte ? [rechte] : [];
+  }
+
+  get kassenfreigabe(): boolean {
+    return this.accessrights.darfKasseFreigeben;
+  }
+
+  set kassenfreigabe(freigabe: boolean) {
+    if (this.accessrights.isSuperuser) {
+      return;
+    }
+    freigabe ? (this.user.rechte = ["kassenfreigabe"]) : (this.user.rechte = []);
   }
 
   editlink(): string {
@@ -82,10 +199,27 @@ export default class UserPanel extends Vue {
   }
 
   saveUser(): void {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    saveUser(this.user, (res: any) => {
-      this.$emit("userSaved", new User(res));
+    saveUser(this.user, () => {
+      this.$emit("user-saved");
     });
+  }
+
+  deleteUser(): void {
+    deleteUser(this.user, () => {
+      this.$emit("user-saved");
+    });
+  }
+
+  resetUsers(): void {
+    this.$emit("reload-users");
+  }
+
+  changePassword(): void {
+    console.log(this.newPass);
+  }
+
+  resetPassfields(): void {
+    this.newPass = "";
   }
 }
 </script>

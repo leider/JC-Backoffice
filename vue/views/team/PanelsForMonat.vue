@@ -2,8 +2,8 @@
 div
   h4.pt-1.pb-2.px-1.bg-primary.text-white.position-relative
     a.stretched-link.inherit-color(@click="aufZu")
-      i.far.fa-fw(:class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
-      | {{monat}} &nbsp;
+      i.far.fa-fw(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
+      | {{ monat }} &nbsp;
     .btn-group.btn-group-sm.float-right
       a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/texte/${datumErsteVeranstaltung.fuerUnterseiten}`")
         i.far.fa-file-alt.fa-fw
@@ -12,10 +12,25 @@ div
         i.fas.fa-align-justify.fa-fw
         | #{' '} Übersicht
   .row
-    team-panel-user(v-if="!admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
-      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :user="user")
-    team-panel-admin(v-if="admin", v-for="veranstaltung in veranstaltungen", :key="veranstaltung.id", :ref="veranstaltung.id",
-      :veranstaltung="veranstaltung", :initiallyExpanded="expanded", :users="users", v-on:deleted="deleted(veranstaltung)")
+    team-panel-user(
+      v-if="!admin",
+      v-for="veranstaltung in veranstaltungen",
+      :key="veranstaltung.id",
+      :ref="veranstaltung.id",
+      :veranstaltung="veranstaltung",
+      :initiallyExpanded="expanded",
+      :user="user"
+    )
+    team-panel-admin(
+      v-if="admin",
+      v-for="veranstaltung in veranstaltungen",
+      :key="veranstaltung.id",
+      :ref="veranstaltung.id",
+      :veranstaltung="veranstaltung",
+      :initiallyExpanded="expanded",
+      :users="users",
+      v-on:deleted="deleted(veranstaltung)"
+    )
 </template>
 
 <script lang="ts">
