@@ -18,7 +18,7 @@
             .row.mt-3
               .col-6(v-for="datei in technik.dateirider", :key="datei")
                 .form-inline
-                  a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{datei}}
+                  a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{ datei }}
                   a.ml-1(@click="technik.removeDateirider(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
                     i.fas.fa-fw.fa-times.fa-sm
         .col-xl-6

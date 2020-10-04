@@ -1,8 +1,8 @@
 <template lang="pug">
-FullCalendar( :options="options" )
-  template( v-slot:eventContent='arg')
+FullCalendar(:options="options")
+  template(v-slot:eventContent="arg")
     .fc-content(:style="colorFor(arg)")
-      b(v-if="arg.timeText && arg.timeText !== '00 Uhr'" ) {{ arg.timeText }}
+      b(v-if="arg.timeText && arg.timeText !== '00 Uhr'") {{ arg.timeText }}
         br
       i {{ arg.event.title }}
 </template>

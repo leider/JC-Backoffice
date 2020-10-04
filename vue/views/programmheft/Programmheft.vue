@@ -4,14 +4,14 @@
     .btn-group.float-right
       button.btn.btn-success(@click="save", title="Speichern"): i.far.fa-save.fa-fw
     h2 Programmheft<br>
-      small {{start.monatKompakt}} - {{start.plus({monate: 1}).monatJahrKompakt}}
+      small {{ start.monatKompakt }} - {{ start.plus({ monate: 1 }).monatJahrKompakt }}
     .row
       .col-lg-8.col-sm-12
         .row
           .col-6
-            heft-calendar(:dateString="start.minus({monate: 2}).fuerCalendarWidget", :events="events")
+            heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
           .col-6
-            heft-calendar(:dateString="start.minus({monate: 1}).fuerCalendarWidget", :events="events", height="600")
+            heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
         .row.mt-4
           .col-12
             h4 Farben Hilfe
@@ -21,23 +21,27 @@
               | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
 
       .col-lg-4.col-sm-12
-        markdown(id="kalender", v-model="kalender.text", theme="light", height="600",
-        toolbar="bold italic heading | image link | numlist bullist | preview fullscreen help")
+        markdown#kalender(
+          ,
+          v-model="kalender.text",
+          theme="light",
+          height="600",
+          toolbar="bold italic heading | image link | numlist bullist | preview fullscreen help"
+        )
   h2.text-danger(v-if="unbestaetigte.length > 0") Es gibt noch unbestätigte Veranstaltungen
   p(v-for="veranst in unbestaetigte", :key="veranst.id")
-    a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{veranst.kopf.titel}}
+    a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{ veranst.kopf.titel }}
   .row(v-for="monat in monate", :key="monat")
     .col-12
-      h4.pt-1.pb-2.px-1.bg-primary.text-white {{monat}}
+      h4.pt-1.pb-2.px-1.bg-primary.text-white {{ monat }}
     .col-xl-4.col-md-6(v-for="veranst in veranstaltungenNachMonat[monat]")
       .card-mb-2
         a(:href="`${veranst.fullyQualifiedUrl()}/presse`")
           .card-header.p-0
-            h6 {{veranst.datumForDisplayShort()}}
-            h6 {{veranst.kopf.presseInEcht()}}
-            h5 {{veranst.kopf.titel}}
+            h6 {{ veranst.datumForDisplayShort() }}
+            h6 {{ veranst.kopf.presseInEcht() }}
+            h5 {{ veranst.kopf.titel }}
         div(v-html="renderedPressetext(veranst)")
-
 </template>
 
 <script lang="ts">

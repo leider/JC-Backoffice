@@ -1,12 +1,12 @@
 <template lang="pug">
-  tr
-    th: .form-control-plaintext {{label}}
-    td
-      .input-group
-        multi-select(v-model="section", :options="userids")
-        .input-group-append
-          .input-group-text.pl-1.pr-0
-            b-form-checkbox(v-model="checked")
+tr
+  th: .form-control-plaintext {{ label }}
+  td
+    .input-group
+      multi-select(v-model="section", :options="userids")
+      .input-group-append
+        .input-group-text.pl-1.pr-0
+          b-form-checkbox(v-model="checked")
 </template>
 
 <script lang="ts">

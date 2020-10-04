@@ -2,26 +2,26 @@
 .col-xl-4.col-md-6
   .card.mb-2(:class="'border-' + colorCode")
     .card-header.p-0(:class="'color-' + colorCode")
-      table(width='100%')
+      table(width="100%")
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(v-if="!nobodyNeeded", :class="{'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded}")
+            i.far.fa-fw.fa-lg(v-if="!nobodyNeeded", :class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
             i.far.fa-fw.fa-lg.fa-square(v-else)
           td: a(@click="toggleExpanded")
-            h6 {{veranstaltung.datumForDisplayShort()}}
+            h6 {{ veranstaltung.datumForDisplayShort() }}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
-              | &nbsp; {{veranstaltung.salesreport.anzahl}}
+              | &nbsp; {{ veranstaltung.salesreport.anzahl }}
             b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
-      table.position-relative(width='100%')
+      table.position-relative(width="100%")
         tr
           td
-          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{kopf.presseIn}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{ kopf.presseIn }}
         tr
           td
-          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{kopf.titel}}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titel }}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
         i.fas.fa-exclamation-circle
         | #{' '} Kasse gesucht!
@@ -37,7 +37,13 @@
           staff-row(v-if="!staff.kasseNotNeeded", label="Zwei:", sectionName="kasse", :user="user", :veranstaltung="veranstaltung")
           tr(v-if="!staff.technikerVNotNeeded || !staff.technikerNotNeeded")
             td(colspan=3): h5.mb-0 Techniker
-          staff-row(v-if="!staff.technikerVNotNeeded", label="Eins:", sectionName="technikerV", :user="user", :veranstaltung="veranstaltung")
+          staff-row(
+            v-if="!staff.technikerVNotNeeded",
+            label="Eins:",
+            sectionName="technikerV",
+            :user="user",
+            :veranstaltung="veranstaltung"
+          )
           staff-row(v-if="!staff.technikerNotNeeded", label="Zwei:", sectionName="techniker", :user="user", :veranstaltung="veranstaltung")
           tr(v-if="!staff.modNotNeeded")
             td(colspan=3): h5.mb-0 Master

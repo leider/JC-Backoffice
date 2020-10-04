@@ -18,8 +18,7 @@ export default class JazzMail extends Vue {
   @Prop() required!: boolean;
 
   get state(): boolean | null {
-    const validEmail =
-      !(this.value && !this.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/));
+    const validEmail = !(this.value && !this.value.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/));
 
     if (!this.required) {
       return validEmail ? null : false;

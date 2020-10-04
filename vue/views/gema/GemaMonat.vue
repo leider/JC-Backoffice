@@ -2,9 +2,9 @@
 table.table.table-sm.table-striped
   tbody
     tr: th.bg-secondary.text-white(style="border-top-width: 0")
-      b-checkbox(@change="monatClicked"): .w-100 {{monat}}
+      b-checkbox(@change="monatClicked"): .w-100 {{ monat }}
     tr(v-for="veranst in veranstaltungen", :key="veranst.id"): td
-      b-checkbox(v-model="veranst.selected") {{veranst.description}}
+      b-checkbox(v-model="veranst.selected") {{ veranst.description }}
 </template>
 
 <script lang="ts">

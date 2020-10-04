@@ -2,7 +2,7 @@
 .col-lg-6
   .card.border-allgemeines
     h3.card-header.p-2.color-allgemeines {{ title }}
-      button.btn.btn-secondary.float-right(:disabled="!isSomeSelected" @click="meldungClicked") Erzeugen
+      button.btn.btn-secondary.float-right(:disabled="!isSomeSelected", @click="meldungClicked") Erzeugen
     div
       gema-monat(v-for="monat in monate", :key="monat", :veranstaltungen="veranstaltungenGrouped[monat]", :monat="monat")
 </template>

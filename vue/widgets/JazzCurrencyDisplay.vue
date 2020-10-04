@@ -1,7 +1,7 @@
 <template lang="pug">
 div
-  label(v-if="label").float-right {{label}}:
-  b: span.text-right.form-control-plaintext.float-right {{formattedValue}}
+  label.float-right(v-if="label") {{ label }}:
+  b: span.text-right.form-control-plaintext.float-right {{ formattedValue }}
 </template>
 
 <script lang="ts">

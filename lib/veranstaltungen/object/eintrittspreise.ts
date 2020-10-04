@@ -75,7 +75,7 @@ export default class Eintrittspreise {
     return this.zuschuss + this.erwarteterOderEchterEintritt(kasse);
   }
 
-  erwarteterOderEchterEintritt(kasse: Kasse) {
+  erwarteterOderEchterEintritt(kasse: Kasse): number {
     return kasse.istFreigegeben()
       ? kasse.einnahmeTicketsEUR
       : this.erwarteteBesucher * (0.8 * this.regulaer() + 0.1 * this.ermaessigt() + 0.1 * this.mitglied());

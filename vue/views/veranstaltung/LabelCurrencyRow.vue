@@ -1,7 +1,7 @@
 <template lang="pug">
 .form-group.row
   .col-sm-3
-  label.col-6.col-form-label {{label}}
+  label.col-6.col-form-label {{ label }}
   .col-6.col-sm-3
     jazz-currency-pure(v-model="val")
 </template>

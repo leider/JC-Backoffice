@@ -1,7 +1,7 @@
 <template lang="pug">
-label(v-if="tooltip"): span(v-b-tooltip="tooltip") {{label}}:&nbsp;
+label(v-if="tooltip"): span(v-b-tooltip="tooltip") {{ label }}:&nbsp;
   i.fas.fa-question-circle
-label(v-else) {{label}}:
+label(v-else) {{ label }}:
 </template>
 
 <script lang="ts">

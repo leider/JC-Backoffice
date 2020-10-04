@@ -100,7 +100,7 @@ export class EmailEvent {
     return this.start().minus({ tage: this.event.emailOffset });
   }
 
-  shouldSendOn(datumUhrzeit: DatumUhrzeit) {
+  shouldSendOn(datumUhrzeit: DatumUhrzeit): boolean {
     return Math.abs(this.datumUhrzeitToSend().differenzInTagen(datumUhrzeit)) === 0;
   }
 

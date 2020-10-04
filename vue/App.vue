@@ -36,7 +36,6 @@ div
           template(v-slot:button-content)
             i.fas.fa-users.fa-fw.fa-lg
             span &nbsp;User
-          b-dropdown-item(href="/users") Bearbeiten / Anlegen
           b-dropdown-item(href="/users/rundmail") Rundmail
           b-dropdown-item(href="/users/mailinglisten") Mailinglisten
         b-nav-item(to="/team", active-class="active")
@@ -46,15 +45,12 @@ div
           template(v-slot:button-content)
             i.fas.fa-book.fa-fw.fa-lg
             span &nbsp;Wiki&nbsp;
-          b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :href="`/wiki/${subdir}/`") {{subdir}}
+          b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :href="`/wiki/${subdir}/`") {{ subdir }}
       b-navbar-nav.ml-auto
         b-nav-item-dropdown(v-if="user", right)
           template(v-slot:button-content)
             i.fas.fa-user.fa-fw.fa-lg
-            span &nbsp;Profil
-          b-dropdown-item(:href="`/users/changePassword/${user.id}`")
-            i.fas.fa-key.fa-fw.fa-lg
-            | &nbsp;Passwort ändern
+            span &nbsp;{{user.id}}
           b-dropdown-item(href="/logout")
             i.fas.fa-sign-out-alt.fa-fw.fa-lg
             | &nbsp;Abmelden

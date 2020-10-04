@@ -1,15 +1,27 @@
 <template lang="pug">
 .form-group
   jazz-label(label="Typ")
-  multiselect(:options="optionObjects", v-model="selected", :state="valid", :allowEmpty="false",
-    :searchable="false", placeholder="Bitte wählen", selectLabel="", deselectLabel="", selectedLabel="",
-    showLabels=false, :openDirection="openDirection", label="text", track-by="text")
+  multiselect(
+    :options="optionObjects",
+    v-model="selected",
+    :state="valid",
+    :allowEmpty="false",
+    :searchable="false",
+    placeholder="Bitte wählen",
+    selectLabel="",
+    deselectLabel="",
+    selectedLabel="",
+    showLabels=false,
+    :openDirection="openDirection",
+    label="text",
+    track-by="text"
+  )
     template(slot="singleLabel", slot-scope="props")
       span(:class="props.option.icon")
-      span(:class="props.option.color") &nbsp;{{props.option.text}}
+      span(:class="props.option.color") &nbsp;{{ props.option.text }}
     template(slot="option", slot-scope="props")
       span(:class="props.option.icon")
-      span(:class="props.option.color") &nbsp;{{props.option.text}}
+      span(:class="props.option.color") &nbsp;{{ props.option.text }}
 </template>
 
 <script lang="ts">

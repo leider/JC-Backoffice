@@ -1,6 +1,6 @@
 <template lang="pug">
 #modals
-  b-modal#aufhebenDialog(v-model="showAufheben", no-close-on-backdrop=true, @ok="freigabeAufheben")
+  b-modal#aufhebenDialog(v-model="showAufheben", no-close-on-backdrop, @ok="freigabeAufheben")
     p Bist Du sicher?
     template(v-slot:modal-header)
       h3 Kassenfreigabe rückgängig
@@ -12,7 +12,7 @@
             b-button.btn.btn-danger.text(@click="ok()")
               i.fas.fa-unlock.fa-fw.fa-lg
               | &nbsp;Kassenfreigabe rückgängig
-  b-modal#freigebenDialog(v-model="showFreigeben", no-close-on-backdrop=true, @ok="freigeben")
+  b-modal#freigebenDialog(v-model="showFreigeben", no-close-on-backdrop, @ok="freigeben")
     p Nach dem Freigeben ist keine Änderung mehr möglich!
     template(v-slot:modal-header)
       h3 Kasse freigeben
@@ -27,10 +27,20 @@
               | &nbsp;Kasse freigeben
   .row
     .col-md-6
-      legend-card(v-if="!kasse.istFreigegeben()", section="kasse", title="Einnahmen Abendkasse", hasMoney="true", :money="kasse.einnahmeTotalEUR()")
+      legend-card(
+        v-if="!kasse.istFreigegeben()",
+        section="kasse",
+        title="Einnahmen Abendkasse",
+        hasMoney="true",
+        :money="kasse.einnahmeTotalEUR()"
+      )
         .row
           .col-4
-            jazz-currency(label="Tickets (AK)", v-model="kasse.einnahmeTicketsEUR", tooltip="Alles hier eingegebene gilt als Einnahme für \"Deal\"")
+            jazz-currency(
+              label="Tickets (AK)",
+              v-model="kasse.einnahmeTicketsEUR",
+              tooltip="Alles hier eingegebene gilt als Einnahme für \"Deal\""
+            )
           .col-4
             jazz-number(label="Anzahl (AK)", v-model="kasse.anzahlBesucherAK", tooltip="Anzahl der bar bezahlten Tickets")
           .col-4
@@ -51,19 +61,19 @@
             jazz-currency-display(label="Tickets (AK)", :value="kasse.einnahmeTicketsEUR")
           .col-4
             label.float-right Anzahl (AK):
-            b: span.text-right.form-control-plaintext.float-right {{kasse.anzahlBesucherAK}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.anzahlBesucherAK }}
           .col-4
             jazz-currency-display(label="Bareinlage", :value="kasse.einnahmeBankEUR")
         .row
           .col-8
             label Sonstiges:
-            b: span.text-right.form-control-plaintext.float-right {{kasse.einnahmeSonstiges1Text}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.einnahmeSonstiges1Text }}
           .col-4
             jazz-currency-display(label="Betrag", :value="kasse.einnahmeSonstiges1EUR")
         .row
           .col-8
             label Sonstiges:
-            b: span.text-right.form-control-plaintext.float-right {{kasse.einnahmeSonstiges2Text}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.einnahmeSonstiges2Text }}
           .col-4
             jazz-currency-display(label="Betrag", :value="kasse.einnahmeSonstiges2EUR")
       .row
@@ -71,7 +81,11 @@
           a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrl() + '/kassenzettel'", title="Abendkasse")
             i.fas.fa-fw.fa-print
             | #{' '} Kassenzettel
-          b-button.btn.btn-danger.float-right(v-if="kasse.istFreigegeben()", :class="darfKasseFreigeben ? '' : 'disabled'", @click="showAufheben = true")
+          b-button.btn.btn-danger.float-right(
+            v-if="kasse.istFreigegeben()",
+            :class="darfKasseFreigeben ? '' : 'disabled'",
+            @click="showAufheben = true"
+          )
             i.fas.fa-lock.fa-fw.fa-lg
             | &nbsp;Kasse ist freigegeben
 
@@ -79,7 +93,13 @@
             i.fas.fa-unlock.fa-fw.fa-lg
             | &nbsp;Kasse freigeben
     .col-md-6
-      legend-card(v-if="!kasse.istFreigegeben()", section="kasse", title="Ausgaben (Bar und mit Beleg)", hasMoney="true", :money="kasse.ausgabenTotalEUR()")
+      legend-card(
+        v-if="!kasse.istFreigegeben()",
+        section="kasse",
+        title="Ausgaben (Bar und mit Beleg)",
+        hasMoney="true",
+        :money="kasse.ausgabenTotalEUR()"
+      )
         .row
           .col-sm-4.col-6
             jazz-currency(v-if="!kosten.gageBAR", label="Gage", v-model="kasse.ausgabeGageEUR")
@@ -123,19 +143,19 @@
         .row
           .col-8
             label Sonstiges:
-            b: span.text-right.form-control-plaintext.float-right {{kasse.ausgabeSonstiges1Text}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.ausgabeSonstiges1Text }}
           .col-4
             jazz-currency-display(label="Betrag", :value="kasse.ausgabeSonstiges1EUR")
         .row
           .col-8
             label Sonstiges:
-            b: span.text-right.form-control-plaintext.float-right {{kasse.ausgabeSonstiges2Text}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.ausgabeSonstiges2Text }}
           .col-4
             jazz-currency-display(label="Betrag", :value="kasse.ausgabeSonstiges2EUR")
         .row
           .col-8
             label Sonstiges:
-            b: span.text-right.form-control-plaintext.float-right {{kasse.ausgabeSonstiges3Text}}
+            b: span.text-right.form-control-plaintext.float-right {{ kasse.ausgabeSonstiges3Text }}
           .col-4
             jazz-currency-display(label="Betrag", :value="kasse.ausgabeSonstiges3EUR")
         .row
@@ -149,7 +169,6 @@
     .col-sm-3.col-6
       jazz-currency(v-if="!kasse.istFreigegeben()", label="Endbestand", v-model="kasse.endbestandEUR()")
       jazz-currency-display(v-else, label="Anfangsbestand", :value="kasse.endbestandEUR()")
-
 </template>
 
 <script lang="ts">

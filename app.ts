@@ -2,7 +2,6 @@ import loggers from "./initWinston";
 
 import express from "express";
 import { Server, createServer } from "http";
-import path from "path";
 const appLogger = loggers.get("application");
 const httpLogger = loggers.get("http");
 import configureApp from "./configureApp";

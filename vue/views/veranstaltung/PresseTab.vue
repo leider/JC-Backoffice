@@ -8,7 +8,7 @@
       .row
         .col-md-6
           jazz-text(label="URL-Suffix bei jazzclub.de", v-model="presse.jazzclubURL")
-          b-tabs(v-model="tabIndex" )
+          b-tabs(v-model="tabIndex")
             b-tab(title="Finaler Text", :title-link-class="titlelinkclass(0)")
               .form-group
                 jazz-label(label="Formatierter Text für die Pressemitteilung")
@@ -26,7 +26,7 @@
             .row.mt-3
               .col-12(v-for="datei in presse.image", :key="datei")
                 .form-inline
-                  span(v-b-popover.hover="hoverOptions(datei)") {{datei}}
+                  span(v-b-popover.hover="hoverOptions(datei)") {{ datei }}
                   a.ml-1(@click="presse.removeImage(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
                     i.fas.fa-fw.fa-times.fa-sm
           single-select(label="Vorhandene Bilder", v-model="existingImage", :options="allImageNames")
@@ -87,7 +87,10 @@ export default class PresseTab extends Vue {
     return (
       Renderer.render(`${this.veranstaltung.presseTemplate() + this.presse.text}
 ${this.presse.fullyQualifiedJazzclubURL()}`) +
-      `<h4>Bilder:</h4>${this.presse.image.map((i) => `<p><img src="/image/imagepreview/${i}" width="100%"></p>`).reverse().join("")}`
+      `<h4>Bilder:</h4>${this.presse.image
+        .map((i) => `<p><img src="/image/imagepreview/${i}" width="100%"></p>`)
+        .reverse()
+        .join("")}`
     );
   }
 

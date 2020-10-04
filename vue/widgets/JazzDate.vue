@@ -1,11 +1,17 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-form-datepicker(v-if="!$isMobile()", v-model="datestring", :min="min", :state="valid", locale="de",
-    start-weekday="1", :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }")
+  b-form-datepicker(
+    v-if="!$isMobile()",
+    v-model="datestring",
+    :min="min",
+    :state="valid",
+    locale="de",
+    start-weekday="1",
+    :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' }"
+  )
   b-form-input(v-else, type="date", v-model="datestring", :min="minstring", :state="valid")
-  b-form-invalid-feedback {{invalidFeedback}}
-
+  b-form-invalid-feedback {{ invalidFeedback }}
 </template>
 
 <script lang="ts">

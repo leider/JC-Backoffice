@@ -1,16 +1,25 @@
 <template lang="pug">
 .form-group
   jazz-label(label="Preisprofil")
-  multiselect(:options="options", v-model="selected", :allowEmpty="false",
-    :searchable="false", placeholder="Bitte wählen", selectLabel="", deselectLabel="", selectedLabel="",
-    showLabels=false, label="text", track-by="name")
+  multiselect(
+    :options="options",
+    v-model="selected",
+    :allowEmpty="false",
+    :searchable="false",
+    placeholder="Bitte wählen",
+    selectLabel="",
+    deselectLabel="",
+    selectedLabel="",
+    showLabels=false,
+    label="text",
+    track-by="name"
+  )
     template(slot="singleLabel", slot-scope="props")
-      span {{props.option.name}}
-        small &nbsp; {{subtext(props.option)}}
+      span {{ props.option.name }}
+        small &nbsp; {{ subtext(props.option) }}
     template(slot="option", slot-scope="props")
-      span {{props.option.name}}
-        small &nbsp; {{subtext(props.option)}}
-
+      span {{ props.option.name }}
+        small &nbsp; {{ subtext(props.option) }}
 </template>
 
 <script lang="ts">

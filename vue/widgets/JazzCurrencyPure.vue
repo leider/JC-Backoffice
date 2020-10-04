@@ -1,6 +1,6 @@
 <template lang="pug">
-  b-input-group(append="€")
-    b-form-input.text-right(v-model="wert", type="number", :formatter="formatter", lazy-formatter, lazy)
+b-input-group(append="€")
+  b-form-input.text-right(v-model="wert", type="number", :formatter="formatter", lazy-formatter, lazy)
 </template>
 
 <script lang="ts">

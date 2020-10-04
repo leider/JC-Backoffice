@@ -1,7 +1,16 @@
 <template lang="pug">
-  multiselect(:options="options", v-model="selected", :state="valid", :allowEmpty="false",
-    placeholder="Auswählen", selectLabel="", deselectLabel="", selectedLabel="",
-    showLabels=false, :openDirection="openDirection")
+multiselect(
+  :options="options",
+  v-model="selected",
+  :state="valid",
+  :allowEmpty="false",
+  placeholder="Auswählen",
+  selectLabel="",
+  deselectLabel="",
+  selectedLabel="",
+  showLabels=false,
+  :openDirection="openDirection"
+)
 </template>
 
 <script lang="ts">

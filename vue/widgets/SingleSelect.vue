@@ -1,8 +1,13 @@
 <template lang="pug">
 .form-group
   jazz-label(v-if="label", :label="label", :tooltip="tooltip")
-  single-select-pure(:value="value", :options="options", :required="required", :openDirection="openDirection",
-    @input="$emit('input', $event)")
+  single-select-pure(
+    :value="value",
+    :options="options",
+    :required="required",
+    :openDirection="openDirection",
+    @input="$emit('input', $event)"
+  )
 </template>
 
 <script lang="ts">

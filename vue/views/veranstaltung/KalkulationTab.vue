@@ -19,7 +19,7 @@
           jazz-currency(label="Zuschüsse", v-model="eintrittspreise.zuschuss")
         .col-4
           .form-group
-            jazz-currency-display(v-if="kasse.istFreigegeben()" label="Abendkasse (Tickets)", :value="kasse.einnahmeTicketsEUR")
+            jazz-currency-display(v-if="kasse.istFreigegeben()", label="Abendkasse (Tickets)", :value="kasse.einnahmeTicketsEUR")
             jazz-number(v-else, label="Gäste (erw.)", v-model="eintrittspreise.erwarteteBesucher")
         .col-4
           .form-group
@@ -28,7 +28,7 @@
         .col-4
           .form-group
             label.float-right Besucher (Reservix):
-            b: span.text-right.form-control-plaintext.float-right {{salesreport.anzahl}}
+            b: span.text-right.form-control-plaintext.float-right {{ salesreport.anzahl }}
         .col-4
           .form-group
             jazz-currency-display(label="Tickets Brutto (Reservix)", :value="salesreport.brutto")
@@ -43,13 +43,13 @@
             th(style="text-align: right;") Kosten
             th(style="text-align: right;") Überschuss
           tr
-            td(style="text-align: right;"): span.text-right {{format(veranstaltung.einnahmenGesamtEUR())}}
-            td(style="text-align: right;"): span.text-right {{format(veranstaltung.kostenGesamtEUR())}}
-            td(style="text-align: right;"): b: span.text-right {{format(veranstaltung.bruttoUeberschussEUR())}}
+            td(style="text-align: right;"): span.text-right {{ format(veranstaltung.einnahmenGesamtEUR()) }}
+            td(style="text-align: right;"): span.text-right {{ format(veranstaltung.kostenGesamtEUR()) }}
+            td(style="text-align: right;"): b: span.text-right {{ format(veranstaltung.bruttoUeberschussEUR()) }}
           tr
             th Anteilig an Band:
             td
-            td(style="text-align: right;"): b: span.text-right {{format(veranstaltung.dealAbsolutEUR())}}
+            td(style="text-align: right;"): b: span.text-right {{ format(veranstaltung.dealAbsolutEUR()) }}
   .col-md-6
     legend-card(section="kalkulation", title="Kosten / Ausgaben", hasMoney="true", :money="ausgabenTotal")
       .row
@@ -62,7 +62,7 @@
         .col-3(style="padding-left: 5px;")
           .form-group
             label.control-label Total:
-            b: span.text-right.form-control-plaintext.float-right.text-success {{format(kosten.gagenTotalEUR())}}
+            b: span.text-right.form-control-plaintext.float-right.text-success {{ format(kosten.gagenTotalEUR()) }}
       label-currency-row(label="Backline Rockshop", v-model="kosten.backlineEUR")
       label-currency-row(label="Technik Zumietung", v-model="kosten.technikAngebot1EUR")
       label-currency-row(label="Saalmiete", v-model="kosten.saalmiete")
@@ -74,7 +74,7 @@
         .col-sm-3
         label.col-6.col-form-label Abendkasse (ohne Gage)
         .col-6.col-sm-3
-          b: span.text-right.form-control-plaintext.float-right {{format(kasse.ausgabenOhneGage())}}
+          b: span.text-right.form-control-plaintext.float-right {{ format(kasse.ausgabenOhneGage()) }}
       .row
         .col-12
           jazz-check(label="Gage in BAR an der Abendkasse", v-model="kosten.gageBAR", inline="true")

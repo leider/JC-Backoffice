@@ -55,7 +55,6 @@ mixin topNavbar
               i.fas.fa-users.fa-fw.fa-lg
               span &nbsp;User
             .dropdown-menu
-              a.dropdown-item(href="/users") Bearbeiten / Anlegen
               a.dropdown-item(href="/users/rundmail") Rundmail
               a.dropdown-item(href="/users/mailinglisten") Mailinglisten
         li.nav-item(data-jcnav="teamseite")
@@ -74,11 +73,8 @@ mixin topNavbar
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(href="#", data-toggle="dropdown")
               i.fas.fa-user.fa-fw.fa-lg
-              span &nbsp;Profil
+              span &nbsp;#{user.id}
             .dropdown-menu.dropdown-menu-right
-              a.dropdown-item(href='/users/changePassword/' + user.id)
-                i.fas.fa-key.fa-fw.fa-lg
-                | &nbsp;Passwort ändern
               a.dropdown-item(href="/logout")
                 i.fas.fa-sign-out-alt.fa-fw.fa-lg
                 | &nbsp;Abmelden

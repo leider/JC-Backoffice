@@ -5,8 +5,8 @@
       b-button.btn.btn-danger(v-if="isOrgaTeam", :disabled="kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
         i.fas.fa-fw.fa-trash-alt
         .d-none.d-md-inline  #{" "}Löschen
-        b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop=true, @ok="loeschen")
-          p Bist Du sicher, dass Du {{veranstaltung.kopf.titel}} löschen willst?
+        b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
+          p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
           template(v-slot:modal-header)
             h3.modal-title Veranstaltung löschen
           template(v-slot:modal-footer="{ ok, cancel }")
@@ -17,15 +17,15 @@
                   b-button.btn.btn-danger.text(@click="ok()")
                     i.fas.fa-trash.fa-fw.fa-lg
                     | &nbsp;Löschen
-      b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`" title="Kopieren")
+      b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
         i.fas.fa-fw.fa-copy
         .d-none.d-md-inline #{" "}Kopieren
     h2
       span(:class="iconClass", style="font-weight:normal")
-      span(:class="colorClass") &nbsp; {{kopf.titel}} {{kopf.presseInEcht()}}
+      span(:class="colorClass") &nbsp; {{ kopf.titel }} {{ kopf.presseInEcht() }}
       br
-      small am {{veranstaltung.datumForDisplayShort()}}
-    h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{kooperation}}
+      small am {{ veranstaltung.datumForDisplayShort() }}
+    h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{ kooperation }}
   .row
     .col-md-6
       legend-card(section="staff", title="Staff")
@@ -57,9 +57,12 @@
               th: .form-control-plaintext
                 | Reservix &nbsp;
                 img(src="/img/rex_14x14.png")
-              th.text-right: .form-control-plaintext {{veranstaltung.salesreport.anzahl}}
+              th.text-right: .form-control-plaintext {{ veranstaltung.salesreport.anzahl }}
               th.text-right: jazz-currency-display(:value="veranstaltung.salesreport.netto")
-            tr(v-if="isAbendkasse"): td.text-right(colspan=3): b-button.btn-kasse(:to="`${veranstaltung.fullyQualifiedUrl()}/kasse`", title="Abendkasse") Abendkasse
+            tr(v-if="isAbendkasse"): td.text-right(colspan=3): b-button.btn-kasse(
+              :to="`${veranstaltung.fullyQualifiedUrl()}/kasse`",
+              title="Abendkasse"
+            ) Abendkasse
 
       legend-card(v-if="kopf.beschreibung && kopf.beschreibung.trim()", section="allgemeines", title="Informationen")
         div(v-html="previewBeschreibung")
@@ -71,14 +74,14 @@
             tr(v-if="technik.backlineJazzclub.length > 0"): th(colspan=2) Backline Jazzclub
             tr(v-for="item in technik.backlineJazzclub", :key="item")
               td(width="2%")
-              td(width="98%") {{item}}
+              td(width="98%") {{ item }}
             tr(v-if="technik.backlineRockshop.length > 0"): th(colspan=2) Backline Rockshop
             tr(v-for="item in technik.backlineRockshop", :key="item")
               td(width="2%")
-              td(width="98%") {{item}}
+              td(width="98%") {{ item }}
             tr(v-if="technik.dateirider.length > 0"): th(colspan=2) Dateien
             tr(v-for="item in technik.dateirider", :key="item")
-              td.text-right(colspan=2): a.btn.btn-ausgaben(:href="`/files/${item}`") {{item}}
+              td.text-right(colspan=2): a.btn.btn-ausgaben(:href="`/files/${item}`") {{ item }}
 
     .col-md-6
       legend-card(section="presse", title="Pressetext")
@@ -86,20 +89,19 @@
 
       legend-card(v-if="agentur.name", section="allgemeines", title="Agentur")
         address
-          strong {{agentur.ansprechpartner}} <br>
-          | {{agentur.adresse}} <br>
-          | Tel.: {{agentur.telefon}} <br>
+          strong {{ agentur.ansprechpartner }} <br>
+          | {{ agentur.adresse }} <br>
+          | Tel.: {{ agentur.telefon }} <br>
           | E-Mail: &nbsp;
-          a(:href="`mailto:${agentur.email}`") {{agentur.email}}
+          a(:href="`mailto:${agentur.email}`") {{ agentur.email }}
 
       legend-card(v-if="veranstaltung.unterkunft.anzahlZimmer() > 0", section="hotel", :title="hoteltitel")
         address
-          strong {{hotel.ansprechpartner}} <br>
-          | {{hotel.adresse}} <br>
-          | Tel.: {{hotel.telefon}} <br>
+          strong {{ hotel.ansprechpartner }} <br>
+          | {{ hotel.adresse }} <br>
+          | Tel.: {{ hotel.telefon }} <br>
           | E-Mail: &nbsp;
-          a(:href="`mailto:${hotel.email}`") {{hotel.email}}
-
+          a(:href="`mailto:${hotel.email}`") {{ hotel.email }}
 </template>
 
 <script lang="ts">

@@ -1,67 +1,73 @@
 <template lang="pug">
-  .v-md-container(:class="[css, { 'v-md-auto-resize': height === 'auto', 'v-md-fullscreen': fullScreen }]")
-    .v-md-toolbar(v-if="toolbars.length > 0")
-      .btn-group.mr-1(role="group" v-for="group in toolbars")
-        button.btn.btn-sm(v-for="button in group", type="button", :title="button.title", :class="'btn-' + theme", @click="button.function(md)",
-          :disabled="preview && !button.ready")
-          i(:class="[button.ico]")
-          span(v-if="button.text") &nbsp;{{button.text}}
-    .v-md-wrapper(v-on:click="editor.focus()")
-      textarea.v-md-editor(:style="styles", :id="id", rows="10")
-      .v-md-preview(v-if="preview", v-html="html()")
-      b-modal(v-model="showHelp", size="lg", title="Markdown Cheatsheet", title-tag="h3", ok-only, ok-title="Schließen")
-        .modal-body
-          .row
-            .col-md-4.pr-1
-              .card
-                h4.card-header.p-1 Format Text
-                .card-body.p-1
-                  h5.card-title Headers
-                  pre.
-                    # This is an &lt;h1&gt; tag
-                    ## This is an &lt;h2&gt; tag
-                    ###### This is an &lt;h6&gt; tag
-                  h5.card-title Text styles
-                  pre.
-                    *This text will be italic*
-                    _This will also be italic_
-                    **This text will be bold**
-                    __This will also be bold__
-                    *You **can** combine them*
-            .col-md-3.px-1
-              .card
-                h4.card-header.p-1 Lists
-                .card-body.p-1
-                  h5.card-title Unordered
-                  pre.
-                    * Item 1
-                    * Item 2
-                    * Item 2a
-                    * Item 2b
-                  h5.card-title Ordered
-                  pre.
-                    1. Item 1
-                    2. Item 2
-                    3. Item 3
-                       * Item 3a
-                       * Item 3b
-            .col-md-5.pl-1
-              .card
-                h4.card-header.p-1 Miscellaneous
-                .card-body.p-1
-                  h5.card-title Images
-                  pre.
-                    ![GitHub Logo](/images/logo.png)
-                    Format: ![Alt Text](url)
-                  h5.card-title Links
-                  pre.
-                    http://github.com - automatic!
-                    [GitHub](http://github.com)
-                  h5.card-title Blockquotes
-                  pre.
-                    As Kanye West said:
-                    &gt; We're living the future so
-                    &gt; the present is our past.
+.v-md-container(:class="[css, { 'v-md-auto-resize': height === 'auto', 'v-md-fullscreen': fullScreen }]")
+  .v-md-toolbar(v-if="toolbars.length > 0")
+    .btn-group.mr-1(role="group", v-for="group in toolbars")
+      button.btn.btn-sm(
+        v-for="button in group",
+        type="button",
+        :title="button.title",
+        :class="'btn-' + theme",
+        @click="button.function(md)",
+        :disabled="preview && !button.ready"
+      )
+        i(:class="[button.ico]")
+        span(v-if="button.text") &nbsp;{{ button.text }}
+  .v-md-wrapper(v-on:click="editor.focus()")
+    textarea.v-md-editor(:style="styles", :id="id", rows="10")
+    .v-md-preview(v-if="preview", v-html="html()")
+    b-modal(v-model="showHelp", size="lg", title="Markdown Cheatsheet", title-tag="h3", ok-only, ok-title="Schließen")
+      .modal-body
+        .row
+          .col-md-4.pr-1
+            .card
+              h4.card-header.p-1 Format Text
+              .card-body.p-1
+                h5.card-title Headers
+                pre.
+                  # This is an &lt;h1&gt; tag
+                  ## This is an &lt;h2&gt; tag
+                  ###### This is an &lt;h6&gt; tag
+                h5.card-title Text styles
+                pre.
+                  *This text will be italic*
+                  _This will also be italic_
+                  **This text will be bold**
+                  __This will also be bold__
+                  *You **can** combine them*
+          .col-md-3.px-1
+            .card
+              h4.card-header.p-1 Lists
+              .card-body.p-1
+                h5.card-title Unordered
+                pre.
+                  * Item 1
+                  * Item 2
+                  * Item 2a
+                  * Item 2b
+                h5.card-title Ordered
+                pre.
+                  1. Item 1
+                  2. Item 2
+                  3. Item 3
+                     * Item 3a
+                     * Item 3b
+          .col-md-5.pl-1
+            .card
+              h4.card-header.p-1 Miscellaneous
+              .card-body.p-1
+                h5.card-title Images
+                pre.
+                  ![GitHub Logo](/images/logo.png)
+                  Format: ![Alt Text](url)
+                h5.card-title Links
+                pre.
+                  http://github.com - automatic!
+                  [GitHub](http://github.com)
+                h5.card-title Blockquotes
+                pre.
+                  As Kanye West said:
+                  &gt; We're living the future so
+                  &gt; the present is our past.
 </template>
 
 <script lang="ts">
