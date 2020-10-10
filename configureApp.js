@@ -16,11 +16,11 @@ var ical_1 = __importDefault(require("./lib/ical"));
 var image_1 = __importDefault(require("./lib/image"));
 var mailsender_1 = __importDefault(require("./lib/mailsender"));
 var optionen_1 = __importDefault(require("./lib/optionen"));
+var pdf_1 = __importDefault(require("./lib/pdf"));
 var programmheft_1 = __importDefault(require("./lib/programmheft"));
 var site_1 = __importDefault(require("./lib/site"));
 var users_1 = __importDefault(require("./lib/users"));
 var veranstaltungen_1 = __importDefault(require("./lib/veranstaltungen"));
-var vertrag_1 = __importDefault(require("./lib/vertrag"));
 var wiki_1 = __importDefault(require("./lib/wiki"));
 var vue_1 = __importDefault(require("./lib/vue"));
 var connect_history_api_fallback_1 = __importDefault(require("connect-history-api-fallback"));
@@ -96,7 +96,7 @@ function default_1(app) {
     useApp(app, "wiki", wiki_1.default);
     useApp(app, "ical", ical_1.default);
     useApp(app, "image", image_1.default);
-    useApp(app, "vertrag", vertrag_1.default);
+    useApp(app, "pdf", pdf_1.default);
     useApp(app, "programmheft", programmheft_1.default);
     useApp(app, "vue-spa", vue_1.default);
 }

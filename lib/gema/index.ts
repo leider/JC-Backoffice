@@ -1,45 +1,40 @@
-import express from "express";
-
-import puppeteerPrinter from "../commons/puppeteerPrinter";
+import { Request, Response, NextFunction } from "express";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
-import { PDFOptions } from "puppeteer";
+import { gemaMeldungPdf } from "../pdf";
 import { expressAppIn } from "../middleware/expressViewHelper";
-import conf from "../commons/simpleConfigure";
 
 const app = expressAppIn(__dirname);
-const publicUrlPrefix = conf.get("publicUrlPrefix");
 
-const printoptions: PDFOptions = {
-  format: "A4",
-  landscape: true, // portrait or landscape
-  scale: 1.1,
-  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
+const printAsCsv = function (res: Response, selected: Veranstaltung[], nachmeldung: boolean) {
+  function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
+    const header = `Datum;Ort;Kooperation Mit;Veranstaltungsart;Musikwiedergabeart;Eintrittspreis;${
+      nachmeldung ? "Einnahmen;" : ""
+    }Anzahl Besucher;Rechnung An;Raumgröße\n`;
+    const zeilen = events.map((e) => {
+      const wiedergabeart = e.artist.bandname || e.artist.name.join(", ");
+      const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
+      return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
+        nachmeldung ? e.eintrittGema() + ";" : ""
+      }${e.anzahlBesucher()};${rechnungAn};${e.kopf.flaeche}\n`;
+    });
+    let result = header;
+    zeilen.forEach((z) => {
+      result += z;
+    });
+    return result;
+  }
+
+  res.setHeader("Content-disposition", "attachment; filename=" + (nachmeldung ? "nachmeldung" : "vorabmeldung") + ".csv");
+  res.set("Content-Type", "text/csv");
+  return res.send(createCSV(false, selected));
 };
-
-function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
-  const header = `Datum;Ort;Kooperation Mit;Veranstaltungsart;Musikwiedergabeart;Eintrittspreis;${
-    nachmeldung ? "Einnahmen;" : ""
-  }Anzahl Besucher;Rechnung An;Raumgröße\n`;
-  const zeilen = events.map((e) => {
-    const wiedergabeart = e.artist.bandname || e.artist.name.join(", ");
-    const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
-    return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
-      nachmeldung ? e.eintrittGema() + ";" : ""
-    }${e.anzahlBesucher()};${rechnungAn};${e.kopf.flaeche}\n`;
-  });
-  let result = header;
-  zeilen.forEach((z) => {
-    result += z;
-  });
-  return result;
-}
 
 function createResult(
   eventAndDateiart: { event: string[]; dateiart: string; origin: string | string[] | undefined },
-  res: express.Response,
-  next: express.NextFunction,
+  res: Response,
+  next: NextFunction,
   selector: "vergangene" | "zukuenftige"
 ): void {
   const { event, dateiart } = eventAndDateiart;
@@ -52,19 +47,9 @@ function createResult(
     }
     const selected = veranstaltungen.filter((veranst) => event.includes(veranst.id || ""));
     if (dateiart === "PDF") {
-      return app.render(
-        "meldung",
-        {
-          events: selected,
-          nachmeldung,
-          publicUrlPrefix: process.env.NODE_ENV === "production" ? publicUrlPrefix : eventAndDateiart.origin,
-        },
-        puppeteerPrinter.generatePdf(printoptions, res, next)
-      );
+      return gemaMeldungPdf(selected, nachmeldung, eventAndDateiart.origin, res, next);
     }
-    res.setHeader("Content-disposition", "attachment; filename=" + (nachmeldung ? "nachmeldung" : "vorabmeldung") + ".csv");
-    res.set("Content-Type", "text/csv");
-    return res.send(createCSV(false, selected));
+    return printAsCsv(res, selected, nachmeldung);
   });
 }
 
@@ -72,7 +57,7 @@ app.get("/", (req, res) => {
   res.redirect("/vue/gema");
 });
 
-app.get("/meldung", (req, res, next) => {
+app.get("/meldung", (req: Request, res: Response, next: NextFunction) => {
   const transferObject = JSON.parse(<string>req.query.transferObject);
   const event = transferObject.selectedIds;
   const dateiart = transferObject.renderart;

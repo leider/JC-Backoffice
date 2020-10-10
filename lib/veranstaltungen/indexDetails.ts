@@ -1,32 +1,21 @@
 import path from "path";
 import fs from "fs";
-import express, { Request, Response } from "express";
+import { Express, Request, Response, NextFunction } from "express";
 
 import { Form } from "multiparty";
 import userstore from "../users/userstore";
 import store from "./veranstaltungenstore";
 import veranstaltungenService from "./veranstaltungenService";
 import Veranstaltung from "./object/veranstaltung";
-import puppeteerPrinter from "../commons/puppeteerPrinter";
 import User from "../users/user";
-import { PDFOptions } from "puppeteer";
 
-import conf from "../commons/simpleConfigure";
 import async from "async";
 import Kasse from "./object/kasse";
-import app from "./index";
+import { kassenzettelPdf } from "../pdf";
 const uploadDir = path.join(__dirname, "../../static/upload");
 const filesDir = path.join(__dirname, "../../static/files");
-const publicUrlPrefix = conf.get("publicUrlPrefix");
 
-const printoptions: PDFOptions = {
-  format: "A4",
-  landscape: false, // portrait or landscape
-  scale: 1.1,
-  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
-};
-
-export function addRoutesTo(app: express.Express): void {
+export function addRoutesTo(app: Express): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function copyFile(src: string, dest: string, callback: (...args: any[]) => void): void {
     const readStream = fs.createReadStream(src);
@@ -35,7 +24,7 @@ export function addRoutesTo(app: express.Express): void {
     readStream.pipe(fs.createWriteStream(dest));
   }
 
-  app.get("/:url/kassenzettel", (req, res, next) => {
+  app.get("/:url/kassenzettel", (req: Request, res: Response, next: NextFunction) => {
     if (!res.locals.accessrights.isAbendkasse()) {
       return res.redirect("/");
     }
@@ -49,20 +38,12 @@ export function addRoutesTo(app: express.Express): void {
       }
       return userstore.forId(veranstaltung.staff.kasseV[0], (err1: Error | null, user: User) => {
         const kassierer = user && user.name;
-        app.render(
-          "pdf/kassenzettel",
-          {
-            veranstaltung: veranstaltung,
-            kassierer: kassierer,
-            publicUrlPrefix: publicUrlPrefix,
-          },
-          puppeteerPrinter.generatePdf(printoptions, res, next)
-        );
+        kassenzettelPdf(veranstaltung, kassierer, res, next);
       });
     });
   });
 
-  app.get("/:url.json", (req, res) => {
+  app.get("/:url.json", (req: Request, res: Response) => {
     store.getVeranstaltung(req.params.url, (err: Error, veranstaltung: Veranstaltung) => {
       if (err) {
         res.status(500).send(err);
@@ -72,7 +53,7 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
-  app.post("/saveVeranstaltung", (req, res) => {
+  app.post("/saveVeranstaltung", (req: Request, res: Response) => {
     if (!res.locals.accessrights.isAbendkasse) {
       return res.redirect("/"); // ErrorHandling
     }
@@ -105,7 +86,7 @@ export function addRoutesTo(app: express.Express): void {
     }
   });
 
-  app.post("/deleteVeranstaltung", (req, res) => {
+  app.post("/deleteVeranstaltung", (req: Request, res: Response) => {
     if (!res.locals.accessrights.isOrgaTeam) {
       return res.redirect("/");
     }
@@ -117,7 +98,7 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
-  app.post("/upload", (req, res) => {
+  app.post("/upload", (req: Request, res: Response) => {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect("/");
     }
@@ -181,7 +162,7 @@ export function addRoutesTo(app: express.Express): void {
     });
   });
 
-  app.post("/deletefile", (req, res) => {
+  app.post("/deletefile", (req: Request, res: Response) => {
     if (!res.locals.accessrights.isOrgaTeam()) {
       return res.redirect("/");
     }
@@ -230,11 +211,11 @@ export function addRoutesTo(app: express.Express): void {
     });
   }
 
-  app.post("/:url/addUserToSection", (req, res) => {
+  app.post("/:url/addUserToSection", (req: Request, res: Response) => {
     addOrRemoveUserFromSection("addUserToSection", req, res);
   });
 
-  app.post("/:url/removeUserFromSection", (req, res) => {
+  app.post("/:url/removeUserFromSection", (req: Request, res: Response) => {
     addOrRemoveUserFromSection("removeUserFromSection", req, res);
   });
 }

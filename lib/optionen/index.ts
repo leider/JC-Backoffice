@@ -1,29 +1,15 @@
 import service from "./optionenService";
 import store from "./optionenstore";
-import puppeteerPrinter from "../commons/puppeteerPrinter";
-
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import OptionValues, { Hotelpreise } from "./optionValues";
+import OptionValues from "./optionValues";
 import Orte from "./orte";
 import FerienIcals from "./ferienIcals";
-import { PDFOptions } from "puppeteer";
-import conf from "../commons/simpleConfigure";
-import Kontakt from "../veranstaltungen/object/kontakt";
 import { expressAppIn } from "../middleware/expressViewHelper";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
-import Kasse from "../veranstaltungen/object/kasse";
-const publicUrlPrefix = conf.get("publicUrlPrefix");
+import { NextFunction, Request, Response } from "express";
 
 const app = expressAppIn(__dirname);
 
-const printoptions: PDFOptions = {
-  format: "A4",
-  landscape: false, // portrait or landscape
-  scale: 1.1,
-  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
-};
-
-app.get("/", (req, res, next) => {
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -36,7 +22,7 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.get("/optionen.json", (req, res) => {
+app.get("/optionen.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -50,7 +36,7 @@ app.get("/optionen.json", (req, res) => {
   });
 });
 
-app.post("/saveOptionen", (req, res) => {
+app.post("/saveOptionen", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam) {
     return res.redirect("/"); //ErrorHandling!!
   }
@@ -63,7 +49,7 @@ app.post("/saveOptionen", (req, res) => {
   });
 });
 
-app.get("/orte.json", (req, res) => {
+app.get("/orte.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -77,23 +63,12 @@ app.get("/orte.json", (req, res) => {
   });
 });
 
-app.get("/kassenbericht", (req, res) => {
+app.get("/kassenbericht", (req: Request, res: Response) => {
   const now = new DatumUhrzeit();
   res.render("kassenberichtentry", { now });
 });
 
-app.get("/kassenbericht/:year/:month", (req, res, next) => {
-  const month = req.params.month;
-  const year = req.params.year;
-  const datum = DatumUhrzeit.forYYYYMM(year + "" + month);
-  const now = new DatumUhrzeit();
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-  return app.render("kassenbericht", { datum, now, publicUrlPrefix }, puppeteerPrinter.generatePdf(printoptions, res, next));
-});
-
-app.get("/orte", (req, res, next) => {
+app.get("/orte", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -106,7 +81,7 @@ app.get("/orte", (req, res, next) => {
   });
 });
 
-app.get("/icals", (req, res, next) => {
+app.get("/icals", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -119,7 +94,7 @@ app.get("/icals", (req, res, next) => {
   });
 });
 
-app.post("/ortChanged", (req, res, next) => {
+app.post("/ortChanged", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -151,7 +126,7 @@ app.post("/ortChanged", (req, res, next) => {
   });
 });
 
-app.post("/icalChanged", (req, res, next) => {
+app.post("/icalChanged", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
@@ -183,7 +158,7 @@ app.post("/icalChanged", (req, res, next) => {
   });
 });
 
-app.post("/submit", (req, res, next) => {
+app.post("/submit", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }

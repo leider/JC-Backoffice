@@ -136,7 +136,7 @@ export default class Veranstaltung {
   }
 
   fullyQualifiedUrlForVertrag(): string {
-    return "/vertrag/" + encodeURIComponent(this.url || "");
+    return "/pdf/vertrag/" + encodeURIComponent(this.url || "");
   }
 
   // Image Overview

@@ -14,11 +14,11 @@ import icalApp from "./lib/ical";
 import imageApp from "./lib/image";
 import mailsenderApp from "./lib/mailsender";
 import optionenApp from "./lib/optionen";
+import pdfApp from "./lib/pdf";
 import programmheftApp from "./lib/programmheft";
 import siteApp from "./lib/site";
 import usersApp from "./lib/users";
 import veranstaltungenApp from "./lib/veranstaltungen";
-import vertragApp from "./lib/vertrag";
 import wikiApp from "./lib/wiki";
 import vueApp from "./lib/vue";
 import history from "connect-history-api-fallback";
@@ -105,7 +105,7 @@ export default function (app: express.Express) {
   useApp(app, "wiki", wikiApp);
   useApp(app, "ical", icalApp);
   useApp(app, "image", imageApp);
-  useApp(app, "vertrag", vertragApp);
+  useApp(app, "pdf", pdfApp);
   useApp(app, "programmheft", programmheftApp);
   useApp(app, "vue-spa", vueApp);
 }
