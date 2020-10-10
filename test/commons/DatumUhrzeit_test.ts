@@ -8,7 +8,7 @@ describe("DatumUhrzeit", () => {
 
     it("kann ohne Parameter erzeugt werden", () => {
       const aktMonat = new Intl.DateTimeFormat("de-DE", {
-        month: "long"
+        month: "long",
       }).format(new Date());
 
       expect(new DatumUhrzeit().monatLang).to.eql(aktMonat);
@@ -44,7 +44,7 @@ describe("DatumUhrzeit", () => {
     });
 
     it("handles bullshit strings gracefully", () => {
-      expect(DatumUhrzeit.forGermanStringOrNow("00.05.2019", "20:00 Uhr").value.isValid).to.eq(true);
+      expect(DatumUhrzeit.forGermanStringOrNow("00.05.2019", "20:00 Uhr").value.isValid()).to.eq(true);
     });
   });
 
@@ -178,7 +178,7 @@ describe("DatumUhrzeit", () => {
     });
 
     it("formatiert alles kompakt", () => {
-      expect(januar01.lesbareKurzform).to.eql("Di., 1. Jan. 2019, 00:00");
+      expect(januar01.lesbareKurzform).to.eql("Di., 1. Jan 2019 00:00");
     });
 
     it("formatiert Wochentag Tag und Monat", () => {
@@ -229,7 +229,7 @@ describe("DatumUhrzeit", () => {
       );
     });
 
-    it("findet mächsten ungeraden Monat", () => {
+    it("findet nächsten ungeraden Monat", () => {
       expect(DatumUhrzeit.forISOString("2020-04-30").naechsterUngeraderMonat.value).to.eql(DatumUhrzeit.forISOString("2020-05-30").value);
       expect(DatumUhrzeit.forISOString("2020-03-31").naechsterUngeraderMonat.value).to.eql(DatumUhrzeit.forISOString("2020-05-31").value);
       expect(DatumUhrzeit.forISOString("2020-02-29").naechsterUngeraderMonat.value).to.eql(DatumUhrzeit.forISOString("2020-03-29").value);
