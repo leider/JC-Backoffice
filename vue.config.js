@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-const IgnorePlugin = require("webpack").IgnorePlugin;
 
 const plugins = [
   new CopyPlugin([
@@ -12,7 +11,6 @@ const plugins = [
       ignore: ["index.html", ".DS_Store"],
     },
   ]),
-  new IgnorePlugin(/icons/),
 ];
 
 const config = {
