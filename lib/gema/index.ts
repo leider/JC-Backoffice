@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/meldung", (req, res, next) => {
-  const transferObject = JSON.parse(req.query.transferObject);
+  const transferObject = JSON.parse(<string>req.query.transferObject);
   const event = transferObject.selectedIds;
   const dateiart = transferObject.renderart;
   const vorNach = transferObject.vorNach;

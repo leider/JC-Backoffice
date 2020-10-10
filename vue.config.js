@@ -1,8 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const CopyPlugin = require("copy-webpack-plugin");
-//const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const IgnorePlugin = require("webpack").IgnorePlugin;
 
 const plugins = [
   new CopyPlugin([
@@ -13,11 +12,8 @@ const plugins = [
       ignore: ["index.html", ".DS_Store"],
     },
   ]),
+  new IgnorePlugin(/icons/),
 ];
-
-if (process.env.NODE_ENV !== "production") {
-  // plugins.push(new BundleAnalyzerPlugin());
-}
 
 const config = {
   publicPath: "/vue/",
@@ -42,6 +38,7 @@ const config = {
 };
 
 if (process.env.NODE_ENV !== "production") {
+  plugins.push(new (require("webpack-bundle-analyzer").BundleAnalyzerPlugin)());
   require("./configure");
   const configureAPI = require("./configureApp").default;
   config.devServer = { before: configureAPI };

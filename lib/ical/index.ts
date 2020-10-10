@@ -24,7 +24,7 @@ app.get("/", (req, res, next) => {
       return next(err);
     }
     return sendCalendarStringNamedToResult(
-      icalService.icalForVeranstaltungen(veranstaltungen.filter(v => v.kopf.confirmed)),
+      icalService.icalForVeranstaltungen(veranstaltungen.filter((v) => v.kopf.confirmed)),
       "events",
       res
     );
@@ -54,8 +54,8 @@ app.get("/termine", (req, res, next) => {
 });
 
 app.get("/eventsForCalendar", (req, res, next) => {
-  const start = DatumUhrzeit.forISOString(req.query.start);
-  const end = DatumUhrzeit.forISOString(req.query.end);
+  const start = DatumUhrzeit.forISOString(<string>req.query.start);
+  const end = DatumUhrzeit.forISOString(<string>req.query.end);
   icalService.termineAsEventsBetween(start, end, (err: Error | null, events: TerminEvent[]) => {
     if (err) {
       return next(err);

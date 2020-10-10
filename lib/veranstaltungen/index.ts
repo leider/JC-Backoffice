@@ -1,7 +1,7 @@
 import fs from "fs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const zipstream = require("zip-stream");
-import express from "express";
+import express = require("express");
 import async from "async";
 import flatten from "lodash/flatten";
 
@@ -145,8 +145,8 @@ app.get("/texte/:monat", (req, res, next) => {
 });
 
 app.get("/eventsForCalendar", (req, res, next) => {
-  const start = DatumUhrzeit.forISOString(req.query.start);
-  const end = DatumUhrzeit.forISOString(req.query.end);
+  const start = DatumUhrzeit.forISOString(<string>req.query.start);
+  const end = DatumUhrzeit.forISOString(<string>req.query.end);
   eventsBetween(start, end, res, (err1: Error | null, events: CalendarEvent[]) => {
     if (err1) {
       return next(err1);

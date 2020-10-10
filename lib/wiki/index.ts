@@ -30,7 +30,7 @@ function showPage(
       title: headerAndBody.title,
       pageName: normalizedPageName,
       subdir,
-      canEdit: pageVersion === "HEAD" && req.user
+      canEdit: pageVersion === "HEAD" && req.user,
     });
   });
 }
@@ -50,7 +50,7 @@ app.get("/versions/:subdir/:page", (req, res, next) => {
     return res.render("history", {
       pageName,
       subdir,
-      items: metadata
+      items: metadata,
     });
   });
 });
@@ -67,7 +67,7 @@ app.get("/compare/:subdir/:page/:revisions", (req, res, next) => {
     return res.render("compare", {
       pageName,
       subdir,
-      lines: diff.asLines()
+      lines: diff.asLines(),
     });
   });
 });
@@ -85,7 +85,7 @@ app.get("/edit/:subdir/:page", (req, res, next) => {
     return res.render("edit", {
       page: { content, comment: "", metadata: metadata[0].fullhash },
       subdir,
-      pageName
+      pageName,
     });
   });
 });
@@ -144,13 +144,13 @@ app.get("/modal/:subdir/:page", (req, res, next) => {
     }
     return res.render("modal", {
       content: content && renderer.render(content, subdir),
-      subdir
+      subdir,
     });
   });
 });
 
 app.get("/:subdir/:page", (req, res, next) => {
-  const version = req.query.version || "HEAD";
+  const version = <string>req.query.version || "HEAD";
   showPage(req.params.subdir, req.params.page, version, req, res, next);
 });
 

@@ -7,9 +7,9 @@ export class SimpleConfigure {
     if (!files) {
       return;
     }
-    files.forEach(file => {
+    files.forEach((file) => {
       if (fs.existsSync(file)) {
-        const theFile = fs.readFileSync(file, { encoding: "UTF-8" });
+        const theFile = fs.readFileSync(file, { encoding: "utf-8" });
         this.addProperties(JSON.parse(theFile));
       }
     });
@@ -19,7 +19,7 @@ export class SimpleConfigure {
     if (!properties) {
       return;
     }
-    Object.keys(properties).forEach(property => {
+    Object.keys(properties).forEach((property) => {
       this.storage[property] = properties[property];
     });
   }
