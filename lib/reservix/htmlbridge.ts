@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
-import request from "request";
-const requester = request.defaults({ jar: true });
+import superagent, { Response } from "superagent";
 import cheerio from "cheerio";
 
 import conf from "../commons/simpleConfigure";
@@ -81,40 +80,34 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
 }
 
 function openAuswertungPage(location: string, optionalDateString: string | null, callback: Function): void {
-  request(location, (err, resp, body) => {
+  superagent.get(location, (err: any, resp: Response) => {
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(body.toString());
+    const $ = cheerio.load(resp.text);
     const logoutURL = $("#page_header_logout a").attr("href");
     if (optionalDateString) {
       $("#id_eventdatumvon").val(optionalDateString);
     }
-
-    return request.post(
-      {
-        url: baseURL + "/sales/" + $("#searchForm").attr("action"),
-        formData: prepareInputsForPost($("#searchForm :input"), $),
-      },
-      (err1, resp1, body1) => {
-        if (err1) {
-          return callback(err1);
-        }
-        return request(baseURL + logoutURL, () => {
+    superagent
+      .post(baseURL + "/sales/" + $("#searchForm").attr("action"))
+      .type("form")
+      .send(prepareInputsForPost($("#searchForm :input"), $))
+      .then((resp1: Response) => {
+        superagent.get(baseURL + logoutURL, () => {
           // logout then parse
-          extractResultTableLines(body1.toString(), callback);
+          extractResultTableLines(resp1.text, callback);
         });
-      }
-    );
+      });
   });
 }
 
 function openVerwaltungPage(location: string, optionalDateString: string | null, callback: Function): void {
-  request(location, (err, resp, body) => {
+  superagent.get(location, (err: any, resp: Response) => {
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(body.toString());
+    const $ = cheerio.load(resp.text);
     const auswertungUrl = $("#content ul li a")
       // @ts-ignore
       .filter(function () {
@@ -130,12 +123,12 @@ function openVerwaltungPage(location: string, optionalDateString: string | null,
 }
 
 function openWelcomePage(location: string, optionalDateString: string | null, callback: Function): void {
-  request(location, (err, resp, body) => {
+  superagent.get(location, (err: any, resp: Response) => {
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(body.toString());
-    const verwaltungUrl = $("#page_header_middle ul li a")
+    const $ = cheerio.load(resp.text);
+    const verwaltungUrl = $("#page_header ul li a")
       // @ts-ignore
       .filter(function () {
         // @ts-ignore
@@ -159,31 +152,28 @@ export interface Lineobject {
 }
 
 export function loadSalesreports(optionalDateString: string | null, callback: Function): void {
-  requester(
-    loginURL,
-    (err, resp, body): request.Request => {
-      if (err) {
-        return callback(err);
-      }
-      const $ = cheerio.load(body.toString());
-      $("#id_mitarbeiterpw").val(username as string);
-      const inputs = prepareInputsForPost($("#login input"), $);
-      const url = $("#login").attr("action");
-      if (url === undefined) {
-        return callback("Problem beim LAden von REservix");
-      }
-      return request.post(url, { formData: inputs }, (err1, resp1) => {
-        if (err1) {
-          callback(err1);
-        } else {
-          openWelcomePage(
-            // @ts-ignore
-            baseURL + resp1.headers.location,
-            optionalDateString,
-            callback
-          );
-        }
-      });
+  superagent.get(loginURL, (err: any, res: Response) => {
+    if (err) {
+      return callback(err);
     }
-  );
+    const $ = cheerio.load(res.text);
+    $("#id_mitarbeiterpw").val(username as string);
+    const inputs = prepareInputsForPost($("#login input"), $);
+    const url = $("#login").attr("action");
+    if (url === undefined) {
+      return callback("Problem beim LAden von REservix");
+    }
+    return superagent
+      .post(url)
+      .type("form")
+      .send(inputs)
+      .then((res1: Response) => {
+        openWelcomePage(
+          // @ts-ignore
+          res1.redirects[0],
+          optionalDateString,
+          callback
+        );
+      });
+  });
 }

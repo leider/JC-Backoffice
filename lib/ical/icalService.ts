@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import req, { Response } from "request";
+import superagent, { Response } from "superagent";
 import Termin, { TerminEvent } from "./termin";
 import terminstore from "./terminstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const icalendar = require("icalendar");
-
-const request = req.defaults({ jar: true });
 
 function asICal(veranstaltung: Veranstaltung): object {
   const event = new icalendar.VEvent(veranstaltung.url);
@@ -19,11 +18,12 @@ function asICal(veranstaltung: Veranstaltung): object {
 }
 
 function termineFromIcalURL(url: string, callback: Function): void {
-  request(url, (err: Error | null, resp: Response, body: string) => {
+  superagent.get(url, (err: any, resp: Response) => {
     if (err) {
       return callback(err);
     }
     // HACK for feeds not ending with \r\n
+    let body = resp.text;
     const lines = body.split(/\r?\n/);
     if (lines[lines.length - 1] !== "") {
       body = body + "\r\n";

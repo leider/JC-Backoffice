@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase, camelcase */
 module.exports = function (grunt) {
   // filesets for uglify
   const files_de = {
@@ -34,7 +33,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     clean: {
       static: ["static/*", "!static/files", "!static/img", "!static/reporting", "!static/upload"],
-      compiledTypescript: ["lib/**/*.js*", "test/**/*.js*", "start.js*", "app.js*", "configure.js*", "initWinston.js*"],
+      compiledTypescript: ["lib/**/*.js*", "test/**/*.js*", "start.js*", "app.js*", "configure.js*", "initWinston.js*", "reservixLoad.js*"],
       options: { force: true },
     },
     copy: {
@@ -127,40 +126,6 @@ module.exports = function (grunt) {
         src: "test/**/*.js",
       },
     },
-    pug: {
-      compile: {
-        options: {
-          pretty: true,
-          data: function () {
-            return require("./frontendtests/fixtures/locals");
-          },
-        },
-        files: {
-          "frontendtests/fixtures/forms.html": "frontendtests/fixtures/forms.pug",
-        },
-      },
-    },
-    puglint: {
-      standard: {
-        options: {
-          disallowAttributeInterpolation: true,
-          disallowDuplicateAttributes: true,
-          disallowLegacyMixinCall: true,
-          disallowTemplateString: true,
-          requireClassLiteralsBeforeAttributes: true,
-          requireIdLiteralsBeforeAttributes: true,
-          requireLowerCaseTags: true,
-          requireStrictEqualityOperators: true,
-          validateAttributeQuoteMarks: '"',
-        },
-        src: ["lib/**/*.pug"],
-      },
-    },
-    ts: {
-      default: {
-        tsconfig: "./tsconfig.json",
-      },
-    },
   });
 
   process.env.NODE_ICU_DATA = "node_modules/full-icu"; // necessary for timezone stuff
@@ -169,21 +134,18 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-cssmin");
-  grunt.loadNpmTasks("grunt-contrib-pug");
   grunt.loadNpmTasks("grunt-contrib-sassjs");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-eslint");
-  grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-mocha-cli");
-  grunt.loadNpmTasks("grunt-puglint");
 
-  grunt.registerTask("prepare", ["eslint", "puglint", "clean", "copy"]);
-  grunt.registerTask("tests", ["prepare", "ts", "mochacli", "clean:compiledTypescript"]);
+  grunt.registerTask("prepare", ["eslint", "clean", "copy"]);
+  grunt.registerTask("tests", ["prepare", "mochacli", "clean:compiledTypescript"]);
   grunt.registerTask("deploy_development", ["prepare", "sass", "cssmin", "uglify:development_de"]);
   grunt.registerTask("css_only", ["prepare", "sass", "cssmin"]);
 
   // Default task.
   grunt.registerTask("default", ["tests"]);
 
-  grunt.registerTask("deploy_production", ["prepare", "sass", "cssmin", "uglify:production_de", "ts"]);
+  grunt.registerTask("deploy_production", ["prepare", "sass", "cssmin", "uglify:production_de"]);
 };
