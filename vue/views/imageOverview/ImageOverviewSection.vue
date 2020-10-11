@@ -11,7 +11,7 @@ legend-card(section="allgemeines", :title="title")
             b-form-input(v-model="row.newname")
             .input-group-append
               .input-group-text(v-b-popover.hover="hoverOptions(row.image)")
-                i.fas.fa-glasses.fa-fw
+                b-icon-eyeglasses(scale="1.5")
         td
           span.form-control-plaintext(v-for="v in row.veranstaltungen", :key="v.id")
             a.font-weight-bold(:href="`/vue${v.fullyQualifiedUrl}/presse`") {{ v.titel }}

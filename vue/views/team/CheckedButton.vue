@@ -2,8 +2,9 @@
 .text-capitalize(:class="section.checked ? 'alert-success' : 'alert-danger'"): b-link.inherit-color(
   :to="`${veranstaltung.fullyQualifiedUrl()}/${name}`"
 )
-  i.fas.fa-fw(:class="section.checked ? 'fa-check' : 'fa-exclamation-circle'")
-  | {{ name }}
+  b-icon-check2-circle(v-if="section.checked", scale=1.1)
+  b-icon-exclamation-circle-fill(v-else)
+  | #{" "} {{ name }}
 </template>
 
 <script lang="ts">

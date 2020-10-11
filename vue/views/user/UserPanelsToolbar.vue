@@ -6,20 +6,20 @@
       title="Neuer Benutzer",
       v-b-modal.dialog
     )
-      i.far.fa-file.fa-fw
-      .d-none.d-md-inline #{" "}Neuer Benutzer
+      b-icon-person-plus
+      | #{" "}Neuer Benutzer
     ul.list-inline.mt-2
       li.list-inline-item
-        i.fa.fas.fa-smile.fa-fw.fa-lg
+        b-icon-emoji-sunglasses
         | #{""} Admin
       li.list-inline-item
-        i.fa.fas.fa-id-card.fa-fw.fa-lg
+        b-icon-person-check
         | #{""} Booking
       li.list-inline-item
-        i.fa.fas.fa-chalkboard-teacher.fa-fw.fa-lg
+        b-icon-building
         | #{""} Orga
       li.list-inline-item
-        i.fa.fas.fa-user-tag.fa-fw.fa-lg
+        b-icon-wallet2
         | #{""} Abendkasse
     b-modal#dialog(no-close-on-backdrop, @ok="createUser", @cancel="resetNewUser")
       .row
@@ -42,7 +42,7 @@
             .btn-group.float-right
               b-button.btn.btn-light(@click="cancel()") Abbrechen
               b-button.btn.btn-success.text(@click="ok()")
-                i.fas.fa-fw.fa-lg.fa-save
+                b-icon-check-square
                 | &nbsp;Speichern
 </template>
 

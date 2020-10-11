@@ -1,7 +1,7 @@
 <template lang="pug">
 b-tab(:title-link-class="titlelinkclass", @click="clicked", :active="value === section")
   template(v-slot:title)
-    i.fas.fa-fw(:class="icon")
+    b-icon(:icon="icon")
     b.d-none.d-sm-inline #{' '} {{ title }}
   slot
 </template>

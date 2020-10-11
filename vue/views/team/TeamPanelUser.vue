@@ -4,9 +4,9 @@
     .card-header.p-0(:class="'color-' + colorCode")
       table(width="100%")
         tr.align-top
-          td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(v-if="!nobodyNeeded", :class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
-            i.far.fa-fw.fa-lg.fa-square(v-else)
+          td.text-left: a(v-if="!nobodyNeeded", @click="toggleExpanded")
+            b-icon-caret-down(v-if="expanded")
+            b-icon-caret-right(v-else)
           td: a(@click="toggleExpanded")
             h6 {{ veranstaltung.datumForDisplayShort() }}
 
@@ -14,7 +14,7 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
       table.position-relative(width="100%")
         tr
           td
@@ -23,10 +23,10 @@
           td
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titel }}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
-        i.fas.fa-exclamation-circle
+        b-icon-exclamation-circle-fill
         | #{' '} Kasse gesucht!
       h5.alert-success.p-1.mb-0(v-if="nobodyNeeded")
-        i.fas.fa-check-circle
+        b-icon-check2-circle(scale=1.1)
         | #{' '} Kooperation
     b-collapse(v-if="!nobodyNeeded", v-model="expanded")
       table.table.table-striped.table-sm

@@ -22,6 +22,8 @@ export default class JazzCalendar extends Vue {
     plugins: [dayGridPlugin, bootstrapPlugin],
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
+    bootstrapFontAwesome: false,
+    buttonText: { next: ">", prev: "<"},
     locales: [deLocale],
     headerToolbar: { left: "title", center: "", right: "prev,today,next" },
     timeZone: "Europe/Berlin",

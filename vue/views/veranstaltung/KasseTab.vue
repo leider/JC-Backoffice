@@ -10,7 +10,7 @@
           .btn-group.float-right
             b-button.btn.btn-light(@click="cancel()") Abbrechen
             b-button.btn.btn-danger.text(@click="ok()")
-              i.fas.fa-unlock.fa-fw.fa-lg
+              b-icon-lock
               | &nbsp;Kassenfreigabe rückgängig
   b-modal#freigebenDialog(v-model="showFreigeben", no-close-on-backdrop, @ok="freigeben")
     p Nach dem Freigeben ist keine Änderung mehr möglich!
@@ -22,8 +22,7 @@
           .btn-group.float-right
             b-button.btn.btn-light(@click="cancel()") Abbrechen
             b-button.btn.btn-success.text(@click="ok()")
-              i.fas.fa-lock.fa-fw.fa-lg
-
+              b-icon-unlock
               | &nbsp;Kasse freigeben
   .row
     .col-md-6
@@ -79,18 +78,18 @@
       .row
         .col-12.mb-2
           a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrl() + '/kassenzettel'", title="Abendkasse")
-            i.fas.fa-fw.fa-print
+            b-icon-printer-fill
             | #{' '} Kassenzettel
           b-button.btn.btn-danger.float-right(
             v-if="kasse.istFreigegeben()",
             :class="darfKasseFreigeben ? '' : 'disabled'",
             @click="showAufheben = true"
           )
-            i.fas.fa-lock.fa-fw.fa-lg
+            b-icon-lock
             | &nbsp;Kasse ist freigegeben
 
           b-button.btn.btn-success.float-right(v-else-if="darfKasseFreigeben", @click="showFreigeben = true")
-            i.fas.fa-unlock.fa-fw.fa-lg
+            b-icon-unlock
             | &nbsp;Kasse freigeben
     .col-md-6
       legend-card(
@@ -105,9 +104,10 @@
             jazz-currency(v-if="!kosten.gageBAR", label="Gage", v-model="kasse.ausgabeGageEUR")
             .form-group(v-else)
               label.control-label.text-danger
-                i.fas.fa-exclamation-triangle
+                b-icon-exclamation-triangle-fill(scale=1.1)
                 | &nbsp; Gage BAR &nbsp;
-                i.fas.fa-exclamation-triangle :
+                b-icon-exclamation-triangle-fill(scale=1.1)
+                | :
               jazz-currency-pure(v-model="kasse.ausgabeGageEUR")
           .col-sm-4.col-6
             jazz-currency(label="Catering", v-model="kasse.ausgabeCateringEUR")

@@ -3,8 +3,8 @@
   .page-header
     .btn-group.float-right
       b-button.btn.btn-danger(v-if="isOrgaTeam", :disabled="kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
-        i.fas.fa-fw.fa-trash-alt
-        .d-none.d-md-inline  #{" "}Löschen
+        b-icon-trash
+        | #{" "}Löschen
         b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
           p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
           template(v-slot:modal-header)
@@ -15,11 +15,11 @@
                 .btn-group.float-right
                   b-button.btn.btn-light(@click="cancel()") Abbrechen
                   b-button.btn.btn-danger.text(@click="ok()")
-                    i.fas.fa-trash.fa-fw.fa-lg
+                    b-icon-trash
                     | &nbsp;Löschen
       b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
-        i.fas.fa-fw.fa-copy
-        .d-none.d-md-inline #{" "}Kopieren
+        b-icon-files
+        | #{" "}Kopieren
     h2
       span(:class="iconClass", style="font-weight:normal")
       span(:class="colorClass") &nbsp; {{ kopf.titel }} {{ kopf.presseInEcht() }}

@@ -5,13 +5,13 @@
       table(v-if="!veranstaltung.kopf.confirmed", width="100%")
         tr: td.p-0(colspan=2)
           h5.m-0.alert-danger.text-center
-            i.fas.fa-exclamation-circle.fa-fw
+            b-icon-exclamation-circle-fill
             | #{' '} UNBESTÄTIGT #{' '}
-            i.fas.fa-exclamation-circle.fa-fw
+            b-icon-exclamation-circle-fill
       table(width="100%", v-if="expanded")
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
-            i.far.fa-fw.fa-lg(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
+            b-icon-caret-down
           td: a(@click="toggleExpanded")
             h6 {{ veranstaltung.datumForDisplayShort() }}
 
@@ -19,9 +19,11 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
       table(width="100%", v-else)
         tr.align-top
+          td.text-left: a(@click="toggleExpanded")
+            b-icon-caret-right
           td.text-left: a(@click="toggleExpanded")
             h5 {{ veranstaltung.tagNumerisch() }}
           td: a(@click="toggleExpanded")
@@ -32,7 +34,7 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): i.fas.fa-eye.fa-lg
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
       table.position-relative(width="100%", v-if="expanded")
         tr
           td
@@ -47,14 +49,14 @@
           td.p-0(v-if="veranstaltung.artist.brauchtHotel", width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
     b-collapse(v-model="expanded")
       .btn-group.btn-group-sm.float-right.m-1
-        b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): i.fas.fa-fw.fa-keyboard
-        b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): i.fas.fa-fw.fa-microphone-alt
-        b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl() + '/kalkulation'", title="Ausgaben"): i.fas.fa-fw.fa-euro-sign
-        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): i.fas.fa-fw.fa-bed
-        b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): i.fas.fa-fw.fa-money-bill-alt
-        b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): i.fas.fa-fw.fa-newspaper
+        b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): b-icon-keyboard(scale=1.2)
+        b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): b-icon-headphones(scale=1.2)
+        b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl() + '/kalkulation'", title="Ausgaben"): b-icon-graph-up
+        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): b-icon-house-door(scale=1.2)
+        b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): b-icon-cash-stack(scale=1.2)
+        b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): b-icon-newspaper(scale=1.2)
         b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
-          i.fas.fa-fw.fa-trash-alt.text-danger
+          b-icon-trash.text-danger
           b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="deleteVeranstaltung")
             p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
             template(v-slot:modal-header)
@@ -65,10 +67,10 @@
                   .btn-group.float-right
                     b-button.btn.btn-light(@click="cancel()") Abbrechen
                     b-button.btn.btn-danger.text(@click="deleteVeranstaltung")
-                      i.fas.fa-trash.fa-fw.fa-lg
+                      b-icon-trash
                       | &nbsp;Löschen
-        b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): i.fas.fa-fw.fa-copy
-        b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): i.fas.fa-fw.fa-save
+        b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): b-icon-files
+        b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): b-icon-check-square
       table.table.table-striped.table-sm
         tbody
           tr: td(colspan=3): h5.mb-0 Kasse

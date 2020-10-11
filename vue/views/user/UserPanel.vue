@@ -3,16 +3,18 @@
   .card.mb-2.border-allgemeines
     h5.card-header.p-2.color-allgemeines
       a(@click="expanded = !expanded"): b
-        i.far.fa-fw.fa-lg(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }") #{" "}
-        i.fa-fw.fas(:class="gruppenUndRechteIcon")
+        b-icon-caret-down(v-if="expanded")
+        b-icon-caret-right(v-else)
+        | #{" "}
+        b-icon(:icon="gruppenUndRechteIcon")
         | #{" "} {{ user.name }}
       .btn-group.float-right(v-if="canEdit")
         b-button.btn.btn-sm.btn.btn-light(v-b-modal="`dialog-${user.id}`", title="Bearbeiten")
-          i.fas.fa-fw.fa-edit
+          b-icon-pencil-square
         b-button.btn.btn-sm.btn.btn-light(v-b-modal="`pass-${user.id}`", title="Passwort ändern")
-          i.fas.fa-fw.fa-key.text-success
+          b-icon-key-fill.text-success
         b-button.btn.btn-sm.btn-light(v-if="isSuperuser", v-b-modal="`delete-${user.id}`", title="Löschen")
-          i.fas.fa-fw.fa-trash-alt.text-danger
+          b-icon-trash.text-danger
       b-modal(:id="`dialog-${user.id}`", no-close-on-backdrop, @ok="saveUser", @cancel="resetUsers")
         .row
           .col-12
@@ -32,7 +34,7 @@
               .btn-group.float-right
                 b-button.btn.btn-light(@click="cancel()") Abbrechen
                 b-button.btn.btn-success.text(@click="ok()")
-                  i.fas.fa-fw.fa-lg.fa-save
+                  b-icon-check-square
                   | &nbsp;Speichern
       b-modal(:id="`pass-${user.id}`", no-close-on-backdrop, @ok="changePassword", @cancel="resetPassfields")
         .row
@@ -47,7 +49,7 @@
               .btn-group.float-right
                 b-button.btn.btn-light(@click="cancel()") Abbrechen
                 b-button.btn.btn-success.text(@click="ok()", :disabled="newPass.length < 6")
-                  i.fas.fa-save.fa-fw.fa-lg
+                  b-icon-check-square
                   | &nbsp;Ändern
       b-modal(:id="`delete-${user.id}`", no-close-on-backdrop, @ok="deleteUser")
         p Bist Du sicher, dass Du den User "{{ user.name }}" löschen willst?
@@ -59,7 +61,7 @@
               .btn-group.float-right
                 b-button.btn.btn-light(@click="cancel()") Abbrechen
                 b-button.btn.btn-danger.text(@click="ok()")
-                  i.fas.fa-trash.fa-fw.fa-lg
+                  b-icon-trash.text-danger
                   | &nbsp;Löschen
 
     b-collapse(v-model="expanded")
@@ -143,16 +145,16 @@ export default class UserPanel extends Vue {
   get gruppenUndRechteIcon(): string {
     function highestGroup(rights: Accessrights): string {
       if (rights.isSuperuser) {
-        return "fa-smile";
+        return "emoji-sunglasses";
       }
       if (rights.isBookingTeam) {
-        return "fa-id-card";
+        return "person-check";
       }
       if (rights.isOrgaTeam) {
-        return "fa-chalkboard-teacher";
+        return "building";
       }
       if (rights.isAbendkasse) {
-        return "fa-user-tag";
+        return "wallet2";
       }
       return "";
     }

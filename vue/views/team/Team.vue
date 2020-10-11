@@ -16,16 +16,16 @@
                           to="/veranstaltungen/zukuenftige",
                           title="administration"
                         )
-                          i.fas.fa-edit.fa-fw
+                          b-icon-pencil-square
                           | &nbsp;Admin
                       p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
                       p
-                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): b-icon-calendar3
                         | #{' '} Hiermit kannst Du den Kalender abonnieren.
                     div(v-else)
                       .btn-group.float-right
-                        b-button.btn-light(to="/veranstaltungen/new", title="Neu"): i.far.fa-file.fa-fw
-                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): i.far.fa-calendar-alt
+                        b-button.btn-light(to="/veranstaltungen/new", title="Neu"): b-icon-file-earmark
+                        a.btn.btn-light(:href="webcalUrl", title="als iCal"): b-icon-calendar3
                         b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
                           b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
                           b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene

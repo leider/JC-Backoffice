@@ -7,14 +7,14 @@ div
     b-collapse#nav-collapse.align-self-end(is-nav)
       b-navbar-nav
         b-nav-item(v-if="showItem", to="/veranstaltungen", active-class="active")
-          i.far.fa-calendar-alt.fa-fw.fa-lg
+          b-icon-speaker
           span &nbsp;Veranstaltungen&nbsp;
         b-nav-item(v-if="showItem", to="/programmheft", active-class="active")
-          i.far.fa-newspaper.fa-fw.fa-lg
+          b-icon-calendar2-check
           span &nbsp;Programmheft&nbsp;
         b-nav-item-dropdown(v-if="showItem", data-jcnav="[optionen|ical|image]")
           template(v-slot:button-content)
-            i.fas.fa-cogs.fa-fw.fa-lg
+            b-icon-toggles
             span &nbsp;Optionen
           b-dropdown-item(href="/optionen") Optionen
           b-dropdown-item(href="/optionen/orte") Orte
@@ -23,36 +23,36 @@ div
           b-dropdown-item(href="/optionen/kassenbericht") Kassenberichte
           b-dropdown-item(v-if="showItemSuperuser", to="/imageoverview") Bilder bearbeiten
         b-nav-item(v-if="showItem", to="/gema", active-class="active")
-          i.fas.fa-chart-pie.fa-fw.fa-lg
+          b-icon-clipboard-data
           span &nbsp;GEMA
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="mailsender")
           template(v-slot:button-content)
-            i.fas.fa-envelope.fa-fw.fa-lg
+            b-icon-envelope-fill
             span &nbsp;Mails
           b-dropdown-item(href="/mailsender") Regeln
           b-dropdown-item(href="/mailsender/compose") Manuell
           b-dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="users")
           template(v-slot:button-content)
-            i.fas.fa-users.fa-fw.fa-lg
+            b-icon-person-lines-fill
             span &nbsp;User
           b-dropdown-item(href="/users/rundmail") Rundmail
           b-dropdown-item(href="/users/mailinglisten") Mailinglisten
         b-nav-item(to="/team", active-class="active")
-          i.far.fa-hand-paper.fa-fw.fa-lg
+          b-icon-people
           | &nbsp;Team&nbsp;
         b-nav-item-dropdown(data-jcnav="wiki")
           template(v-slot:button-content)
-            i.fas.fa-book.fa-fw.fa-lg
+            b-icon-journals
             span &nbsp;Wiki&nbsp;
           b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :href="`/wiki/${subdir}/`") {{ subdir }}
       b-navbar-nav.ml-auto
         b-nav-item-dropdown(v-if="user", right)
           template(v-slot:button-content)
-            i.fas.fa-user.fa-fw.fa-lg
+            b-icon-person-circle
             span &nbsp;{{user.id}}
           b-dropdown-item(href="/logout")
-            i.fas.fa-sign-out-alt.fa-fw.fa-lg
+            b-icon-box-arrow-right
             | &nbsp;Abmelden
 
   .container-fluid.p-0.p-md-auto
@@ -101,10 +101,6 @@ export default class App extends Vue {
 @import "../frontend/sass/jc-variables";
 @import "~bootstrap";
 @import "~bootstrap-vue/src/index.scss";
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
-@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "~@fortawesome/fontawesome-free/scss/regular.scss";
-@import "~@fortawesome/fontawesome-free/scss/solid.scss";
 
 @import "~@fullcalendar/common/main.css";
 @import "~@fullcalendar/daygrid/main.css";

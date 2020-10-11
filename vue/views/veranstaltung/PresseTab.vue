@@ -28,7 +28,7 @@
                 .form-inline
                   span(v-b-popover.hover="hoverOptions(datei)") {{ datei }}
                   a.ml-1(@click="presse.removeImage(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
-                    i.fas.fa-fw.fa-times.fa-sm
+                    b-icon-file-earmark-x(font-scale="1.2")
           single-select(label="Vorhandene Bilder", v-model="existingImage", :options="allImageNames")
         .col-md-6
           div(v-html="preview")

@@ -20,7 +20,7 @@
                 .form-inline
                   a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{ datei }}
                   a.ml-1(@click="technik.removeDateirider(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
-                    i.fas.fa-fw.fa-times.fa-sm
+                    b-icon-file-earmark-x(font-scale="1.2")
         .col-xl-6
           .row
             .col-sm-9

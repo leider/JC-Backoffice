@@ -64,8 +64,8 @@
     .row.mt-3
       .col-12
         b-button.btn.btn-success(@click="sendMail")
-          i.far.fa-envelope-open.fa-fw
-          | &nbsp;Reservierungsmail
+          b-icon-envelope-open(scale="0.8")
+          | #{" "} Reservierungsmail
 </template>
 
 <script lang="ts">

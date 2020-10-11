@@ -5,7 +5,7 @@
       .page-header
         .btn-group.float-right
           b-button.btn.btn-success(:disabled="!dirty", @click="save", title="Speichern")
-            i.far.fa-save.fa-fw
+            b-icon-check-square
             | &nbsp; Speichern
         h2 Bilder bearbeiten
   .row

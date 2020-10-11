@@ -22,6 +22,8 @@ export default class HeftCalendar extends Vue {
     plugins: [dayGridPlugin, bootstrapPlugin],
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
+    bootstrapFontAwesome: false,
+    buttonText: { next: ">", prev: "<" },
     locales: [deLocale],
     headerToolbar: { left: "title", center: "", right: "" },
     timeZone: "Europe/Berlin",

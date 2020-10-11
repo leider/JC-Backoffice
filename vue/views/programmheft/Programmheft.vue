@@ -2,7 +2,7 @@
 .col-12
   .page-header
     .btn-group.float-right
-      button.btn.btn-success(@click="save", title="Speichern"): i.far.fa-save.fa-fw
+      button.btn.btn-success(@click="save", title="Speichern"): b-icon-check-square
     h2 Programmheft<br>
       small {{ start.monatKompakt }} - {{ start.plus({ monate: 1 }).monatJahrKompakt }}
     .row

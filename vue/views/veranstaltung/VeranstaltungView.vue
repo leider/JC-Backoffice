@@ -7,8 +7,8 @@
         :disabled="isNew || veranstaltung.kopf.confirmed",
         v-b-modal="`dialog-${veranstaltung.id}`"
       )
-        i.fas.fa-fw.fa-trash-alt
-        .d-none.d-md-inline  #{" "}Löschen
+        b-icon-trash
+        | #{" "}Löschen
         b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
           p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
           template(v-slot:modal-header)
@@ -19,20 +19,20 @@
                 .btn-group.float-right
                   b-button.btn.btn-light(@click="cancel()") Abbrechen
                   b-button.btn.btn-danger.text(@click="ok()")
-                    i.fas.fa-trash.fa-fw.fa-lg
+                    b-icon-trash.text-danger
                     | &nbsp;Löschen
       b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
-        i.fas.fa-fw.fa-copy
-        .d-none.d-md-inline #{" "}Kopieren
+        b-icon-files
+        | #{" "}Kopieren
       b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
-        i.far.fa-save.fa-fw
-        .d-none.d-md-inline #{" "}Speichern
+        b-icon-check-square
+        | #{" "}Speichern
     h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
       small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
     h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titel }}<br>
       small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort() }}
   b-tabs(v-if="showAllTabs")
-    section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="fa-keyboard", @clicked="tabActivated")
+    section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="keyboard", @clicked="tabActivated")
       allgemeines-tab(
         :veranstaltung="veranstaltung",
         :optionen="optionen",
@@ -41,22 +41,22 @@
         :isBookingTeam="isBookingTeam",
         :editVariables="editVariables"
       )
-    section-tab(v-model="activeSection", section="technik", title="Technik", icon="fa-microphone-alt", @clicked="tabActivated")
+    section-tab(v-model="activeSection", section="technik", title="Technik", icon="headphones", @clicked="tabActivated")
       technik-tab(:veranstaltung="veranstaltung", :optionen="optionen")
-    section-tab(v-model="activeSection", section="kalkulation", title="Kalkulation", icon="fa-euro-sign", @clicked="tabActivated")
+    section-tab(v-model="activeSection", section="kalkulation", title="Kalkulation", icon="graph-up", @clicked="tabActivated")
       kalkulation-tab(:veranstaltung="veranstaltung", :optionen="optionen")
     section-tab(
       v-if="veranstaltung.artist.brauchtHotel",
       v-model="activeSection",
       section="hotel",
       title="Hotel",
-      icon="fa-bed",
+      icon="house-door",
       @clicked="tabActivated"
     )
       hotel-tab(:veranstaltung="veranstaltung", :optionen="optionen", :user="user", :editVariables="editVariables")
-    section-tab(v-model="activeSection", section="kasse", title="Abendkasse", icon="fa-money-bill-alt", @clicked="tabActivated")
+    section-tab(v-model="activeSection", section="kasse", title="Abendkasse", icon="cash-stack", @clicked="tabActivated")
       kasse-tab(:veranstaltung="veranstaltung", :user="user")
-    section-tab(v-model="activeSection", section="presse", title="Presse", icon="fa-newspaper", @clicked="tabActivated")
+    section-tab(v-model="activeSection", section="presse", title="Presse", icon="newspaper", @clicked="tabActivated")
       presse-tab(:veranstaltung="veranstaltung", :allImageNames="allImageNames")
   kasse-tab(v-else-if="showKasse", :veranstaltung="veranstaltung", :user="user")
 </template>

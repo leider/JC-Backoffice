@@ -2,14 +2,15 @@
 div
   h4.pt-1.pb-2.px-1.bg-primary.text-white.position-relative
     a.stretched-link.inherit-color(@click="aufZu")
-      i.far.fa-fw(:class="{ 'fa-caret-square-right': !expanded, 'fa-caret-square-down': expanded }")
-      | {{ monat }} &nbsp;
+      b-icon-caret-down(v-if="expanded")
+      b-icon-caret-right(v-else)
+      | #{" "} {{ monat }} &nbsp;
     .btn-group.btn-group-sm.float-right
       a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/texte/${datumErsteVeranstaltung.fuerUnterseiten}`")
-        i.far.fa-file-alt.fa-fw
+        b-icon-file-text
         | #{' '} Presseexte
       a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/monat/${datumErsteVeranstaltung.fuerUnterseiten}`")
-        i.fas.fa-align-justify.fa-fw
+        b-icon-file-spreadsheet
         | #{' '} Übersicht
   .row
     team-panel-user(

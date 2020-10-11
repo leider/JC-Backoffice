@@ -10,7 +10,7 @@
         @click="button.function(md)",
         :disabled="preview && !button.ready"
       )
-        i(:class="[button.ico]")
+        b-icon(:icon="button.ico")
         span(v-if="button.text") &nbsp;{{ button.text }}
   .v-md-wrapper(v-on:click="editor.focus()")
     textarea.v-md-editor(:style="styles", :id="id", rows="10")
@@ -94,30 +94,30 @@ interface Button {
 
 function defaultButtons(): { [key: string]: Button } {
   return {
-    undo: { ico: "fas far fa-undo", title: "Undo", function: (md): void => md.editor.undo() },
-    redo: { ico: "fas far fa-redo", title: "Redo", function: (md): void => md.editor.redo() },
-    bullist: { ico: "fas fa-list-ul", title: "Liste", function: (md): void => md._toggleLine("bullist") },
-    numlist: { ico: "fas fa-list-ol", title: "Aufzählung", function: (md): void => md._toggleLine("numlist") },
-    bold: { ico: "fas fa-bold", title: "Fett", function: (md): void => md._toggleBlock("bold", "**") },
-    italic: { ico: "fas fa-italic", title: "Kursiv", function: (md): void => md._toggleBlock("italic", "*") },
+    undo: { ico: "arrow-counterclockwise", title: "Undo", function: (md): void => md.editor.undo() },
+    redo: { ico: "arrow-clockwise", title: "Redo", function: (md): void => md.editor.redo() },
+    bullist: { ico: "list-ul", title: "Liste", function: (md): void => md._toggleLine("bullist") },
+    numlist: { ico: "list-ol", title: "Aufzählung", function: (md): void => md._toggleLine("numlist") },
+    bold: { ico: "type-bold", title: "Fett", function: (md): void => md._toggleBlock("bold", "**") },
+    italic: { ico: "type-italic", title: "Kursiv", function: (md): void => md._toggleBlock("italic", "*") },
     strikethrough: {
-      ico: "fas fa-strikethrough",
+      ico: "type-strikethrough",
       title: "durchgestrichen",
       function: (md): void => md._toggleBlock("strikethrough", "~~"),
     },
     heading: {
-      ico: "fas fa-heading",
+      ico: "type-h1",
       title: "Überschrift",
       function: (md): void => md.editor.replaceSelection("\n### " + md.editor.getSelection()),
     },
-    code: { ico: "fas fa-code", title: "Code", function: (md): void => md._toggleBlock("code", "```") },
-    quote: { ico: "fas fa-quote-left", title: "Zitat", function: (md): void => md._toggleLine("quote") },
-    link: { ico: "fas fa-link", title: "Link", function: (md): void => md.drawLink() },
-    image: { ico: "far fa-image", title: "Bild", function: (md): void => md.drawImage() },
-    fullscreen: { ico: "fas far fa-expand", title: "Vollbild", function: (md): void => md.toggleFullscreen(), ready: true },
-    preview: { ico: "fas far fa-eye", title: "Vorschau", function: (md): void => md.togglePreview(), ready: true, text: "Vorschau" },
+    code: { ico: "code", title: "Code", function: (md): void => md._toggleBlock("code", "```") },
+    quote: { ico: "chat-quote", title: "Zitat", function: (md): void => md._toggleLine("quote") },
+    link: { ico: "link", title: "Link", function: (md): void => md.drawLink() },
+    image: { ico: "image", title: "Bild", function: (md): void => md.drawImage() },
+    fullscreen: { ico: "fullscreen", title: "Vollbild", function: (md): void => md.toggleFullscreen(), ready: true },
+    preview: { ico: "eyeglasses", title: "Vorschau", function: (md): void => md.togglePreview(), ready: true, text: "Vorschau" },
     help: {
-      ico: "fas fa-question-circle",
+      ico: "question-circle",
       title: "Hilfe",
       function: (md): void => {
         md.showHelp = !md.showHelp;
@@ -140,7 +140,7 @@ export default class Markdown extends Vue {
   @Prop({ type: [String], default: "300px" }) readonly height!: string;
   @Prop({
     type: String,
-    default: "undo redo bold italic strikethrough heading | image link | numlist bullist code quote | preview fullscreen",
+    default: "undo redo bold italic strikethrough heading | image link | numlist bullist code quote | preview fullscreen | help",
   })
   toolbar!: string;
   @Prop({

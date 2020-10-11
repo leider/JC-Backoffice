@@ -94,7 +94,7 @@
                 .form-inline
                   a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{ datei }}
                   a.ml-1(@click="vertrag.removeDatei(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
-                    i.fas.fa-fw.fa-times.fa-sm
+                    b-icon-file-earmark-x(font-scale="1.2")
 </template>
 
 <script lang="ts">
