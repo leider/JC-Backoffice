@@ -158,6 +158,19 @@ app.post("/saveNewUser", (req, res) => {
   });
 });
 
+app.post("/changePassword", (req, res) => {
+  const user = new User(req.body);
+  if (!res.locals.accessrights.canEditUser(user.id)) {
+    return;
+  }
+  service.changePassword(user, (err: Error, message: string) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send({ message });
+  });
+});
+
 app.post("/deleteUser", (req, res) => {
   const user = new User(req.body);
   if (!res.locals.accessrights.isSuperuser()) {

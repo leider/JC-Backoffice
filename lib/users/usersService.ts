@@ -5,7 +5,7 @@ import { hashPassword, genSalt } from "../commons/hashPassword";
 import User from "./user";
 
 export default {
-  saveNewUserWithPassword: function saveNewUser(user: User, callback: Function): void {
+  saveNewUserWithPassword: function saveNewUserWithPassword(user: User, callback: Function): void {
     const password = user.password;
     if (!password) {
       return callback(null, "Kein Passwort übermittelt");
@@ -22,6 +22,25 @@ export default {
       user.salt = newSalt;
       user.hashedPassword = hashPassword(password, newSalt);
       return store.save(user, (err1: Error | null) => {
+        callback(err1);
+      });
+    });
+  },
+
+  changePassword: function changePassword(user: User, callback: Function): void {
+    const password = user.password;
+    if (!password) {
+      return callback(null, "Kein Passwort übermittelt");
+    }
+    delete user.password;
+    store.forId(user.id, (err: Error | null, existingUser?: User) => {
+      if (err || !existingUser) {
+        return callback(err);
+      }
+      const newSalt = genSalt();
+      existingUser.salt = newSalt;
+      existingUser.hashedPassword = hashPassword(password, newSalt);
+      return store.save(existingUser, (err1: Error | null) => {
         callback(err1);
       });
     });

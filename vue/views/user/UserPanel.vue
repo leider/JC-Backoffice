@@ -84,7 +84,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "../../../lib/users/user";
-import { deleteUser, saveUser } from "@/commons/loader";
+import { deleteUser, saveUser, changePassword } from "@/commons/loader";
 import Accessrights from "../../../lib/commons/accessrights";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import JazzText from "@/widgets/JazzText.vue";
@@ -218,6 +218,11 @@ export default class UserPanel extends Vue {
 
   changePassword(): void {
     console.log(this.newPass);
+    this.user.password = this.newPass;
+    console.log("User: " + this.user.password);
+    changePassword(this.user, () => {
+      this.$emit("user-saved");
+    });
   }
 
   resetPassfields(): void {

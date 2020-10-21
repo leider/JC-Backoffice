@@ -127,6 +127,10 @@ export function saveNewUser(user: User, callback: Function): void {
   postAndReceive("/users/saveNewUser", user.toJSON(), callback);
 }
 
+export function changePassword(user: User, callback: Function): void {
+  postAndReceive("/users/changePassword", user.toJSON(), callback);
+}
+
 export function icals(callback: Function): void {
   getJson("/ical/calURLs.json", (err: Error, json: object) => callback(json));
 }
