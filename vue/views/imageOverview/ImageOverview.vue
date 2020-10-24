@@ -2,12 +2,11 @@
 .col-12
   .row
     .col-12
-      .page-header
-        .btn-group.float-right
-          b-button.btn.btn-success(:disabled="!dirty", @click="save", title="Speichern")
-            b-icon-check-square
-            | &nbsp; Speichern
-        h2 Bilder bearbeiten
+      .btn-group.float-right
+        b-button.btn.btn-success(:disabled="!dirty", @click="save", title="Speichern")
+          b-icon-check-square
+          | &nbsp; Speichern
+      h2 Bilder bearbeiten
   .row
     .col-12
       image-overview-section(title="Bilder ohne Probleme", :rows="imagesWithVeranstaltungen")

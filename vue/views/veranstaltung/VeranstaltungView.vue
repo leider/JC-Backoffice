@@ -1,36 +1,35 @@
 <template lang="pug">
 .col-12
-  .page-header
-    .btn-group.float-right
-      b-button.btn.btn-danger(
-        v-if="showAllTabs",
-        :disabled="isNew || veranstaltung.kopf.confirmed",
-        v-b-modal="`dialog-${veranstaltung.id}`"
-      )
-        b-icon-trash
-        | #{" "}Löschen
-        b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
-          p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
-          template(v-slot:modal-header)
-            h3.modal-title Veranstaltung löschen
-          template(v-slot:modal-footer="{ ok, cancel }")
-            .row
-              .col-12
-                .btn-group.float-right
-                  b-button.btn.btn-light(@click="cancel()") Abbrechen
-                  b-button.btn.btn-danger.text(@click="ok()")
-                    b-icon-trash.text-danger
-                    | &nbsp;Löschen
-      b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
-        b-icon-files
-        | #{" "}Kopieren
-      b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
-        b-icon-check-square
-        | #{" "}Speichern
-    h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
-      small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
-    h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titel }}<br>
-      small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort() }}
+  .btn-group.float-right
+    b-button.btn.btn-danger(
+      v-if="showAllTabs",
+      :disabled="isNew || veranstaltung.kopf.confirmed",
+      v-b-modal="`dialog-${veranstaltung.id}`"
+    )
+      b-icon-trash
+      | #{" "}Löschen
+      b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
+        p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
+        template(v-slot:modal-header)
+          h3.modal-title Veranstaltung löschen
+        template(v-slot:modal-footer="{ ok, cancel }")
+          .row
+            .col-12
+              .btn-group.float-right
+                b-button.btn.btn-light(@click="cancel()") Abbrechen
+                b-button.btn.btn-danger.text(@click="ok()")
+                  b-icon-trash.text-danger
+                  | &nbsp;Löschen
+    b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
+      b-icon-files
+      | #{" "}Kopieren
+    b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
+      b-icon-check-square
+      | #{" "}Speichern
+  h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
+    small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
+  h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titel }}<br>
+    small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort() }}
   b-tabs(v-if="showAllTabs")
     section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="keyboard", @clicked="tabActivated")
       allgemeines-tab(

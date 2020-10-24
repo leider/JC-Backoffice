@@ -1,31 +1,30 @@
 <template lang="pug">
 .col-12
-  .page-header
-    .btn-group.float-right
-      b-button.btn.btn-danger(v-if="isOrgaTeam", :disabled="kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
-        b-icon-trash
-        | #{" "}Löschen
-        b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
-          p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
-          template(v-slot:modal-header)
-            h3.modal-title Veranstaltung löschen
-          template(v-slot:modal-footer="{ ok, cancel }")
-            .row
-              .col-12
-                .btn-group.float-right
-                  b-button.btn.btn-light(@click="cancel()") Abbrechen
-                  b-button.btn.btn-danger.text(@click="ok()")
-                    b-icon-trash
-                    | &nbsp;Löschen
-      b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
-        b-icon-files
-        | #{" "}Kopieren
-    h2
-      span(:class="iconClass", style="font-weight:normal")
-      span(:class="colorClass") &nbsp; {{ kopf.titel }} {{ kopf.presseInEcht() }}
-      br
-      small am {{ veranstaltung.datumForDisplayShort() }}
-    h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{ kooperation }}
+  .btn-group.float-right
+    b-button.btn.btn-danger(v-if="isOrgaTeam", :disabled="kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
+      b-icon-trash
+      | #{" "}Löschen
+      b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
+        p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
+        template(v-slot:modal-header)
+          h3.modal-title Veranstaltung löschen
+        template(v-slot:modal-footer="{ ok, cancel }")
+          .row
+            .col-12
+              .btn-group.float-right
+                b-button.btn.btn-light(@click="cancel()") Abbrechen
+                b-button.btn.btn-danger.text(@click="ok()")
+                  b-icon-trash
+                  | &nbsp;Löschen
+    b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
+      b-icon-files
+      | #{" "}Kopieren
+  h2
+    span(:class="iconClass", style="font-weight:normal")
+    span(:class="colorClass") &nbsp; {{ kopf.titel }} {{ kopf.presseInEcht() }}
+    br
+    small am {{ veranstaltung.datumForDisplayShort() }}
+  h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{ kooperation }}
   .row
     .col-md-6
       legend-card(section="staff", title="Staff")

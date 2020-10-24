@@ -55,7 +55,7 @@ div
             b-icon-box-arrow-right
             | &nbsp;Abmelden
 
-  .container-fluid.p-0.p-md-auto
+  .container-fluid.p-0.p-md-auto.mt-md-4
     .row.main
       router-view
 </template>
@@ -239,9 +239,6 @@ $jc_colors: (
 @media (min-width: 768px) {
   .popover {
     max-width: 450px;
-  }
-  .page-header {
-    margin-top: 30px !important;
   }
 }
 

@@ -1,6 +1,6 @@
 <template lang="pug">
 .col-12
-  .row.page-header
+  .row
     .col-lg-12
       b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
         b-tab(:title="admin ? 'Veranstaltungen' : 'Team'")

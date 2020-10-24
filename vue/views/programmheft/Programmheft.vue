@@ -1,32 +1,31 @@
 <template lang="pug">
 .col-12
-  .page-header
-    .btn-group.float-right
-      button.btn.btn-success(@click="save", title="Speichern"): b-icon-check-square
-    h2 Programmheft<br>
-      small {{ start.monatKompakt }} - {{ start.plus({ monate: 1 }).monatJahrKompakt }}
-    .row
-      .col-lg-8.col-sm-12
-        .row
-          .col-6
-            heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
-          .col-6
-            heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
-        .row.mt-4
-          .col-12
-            h4 Farben Hilfe
-            p
-              | Du kannst entweder eine #{' '}
-              a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{' '}
-              | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
+  .btn-group.float-right
+    button.btn.btn-success(@click="save", title="Speichern"): b-icon-check-square
+  h2 Programmheft<br>
+    small {{ start.monatKompakt }} - {{ start.plus({ monate: 1 }).monatJahrKompakt }}
+  .row
+    .col-lg-8.col-sm-12
+      .row
+        .col-6
+          heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
+        .col-6
+          heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
+      .row.mt-4
+        .col-12
+          h4 Farben Hilfe
+          p
+            | Du kannst entweder eine #{' '}
+            a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{' '}
+            | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
 
-      .col-lg-4.col-sm-12
-        markdown#kalender(
-          v-model="kalender.text",
-          theme="light",
-          height="600",
-          toolbar="bold italic heading | image link | numlist bullist | preview fullscreen help"
-        )
+    .col-lg-4.col-sm-12
+      markdown#kalender(
+        v-model="kalender.text",
+        theme="light",
+        height="600",
+        toolbar="bold italic heading | image link | numlist bullist | preview fullscreen help"
+      )
   h2.text-danger(v-if="unbestaetigte.length > 0") Es gibt noch unbestätigte Veranstaltungen
   p(v-for="veranst in unbestaetigte", :key="veranst.id")
     a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{ veranst.kopf.titel }}

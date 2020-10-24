@@ -1,6 +1,6 @@
 <template lang="pug">
 .col-12
-  .row.page-header
+  .row
     .col-12
       .btn-group.float-right
         button.btn.btn-success(@click="sendMail", title="Speichern", :disabled="!valid")

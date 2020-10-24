@@ -2,11 +2,10 @@
 .col-12
   .row
     .col-12
-      .page-header
-        .float-right.row
-          label.col-form-label.mr-1 Format:
-          single-select-pure(v-model="format", :options="['PDF', 'CSV']", size="sm", style="width: 150px")
-        h2 Gema
+      .float-right.row
+        label.col-form-label.mr-1 Format:
+        single-select-pure(v-model="format", :options="['PDF', 'CSV']", size="sm", style="width: 150px")
+      h2 Gema
   .row
     gema-section(vorNach="zukuenftige", :veranstaltungen="zukuenftige", :format="format")
     gema-section(vorNach="vergangene", :veranstaltungen="vergangene", :format="format")
