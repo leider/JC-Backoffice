@@ -22,7 +22,6 @@
 
       .col-lg-4.col-sm-12
         markdown#kalender(
-          ,
           v-model="kalender.text",
           theme="light",
           height="600",

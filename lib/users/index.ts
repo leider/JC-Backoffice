@@ -10,52 +10,6 @@ import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);
 
-app.get("/rundmail", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-
-  store.allUsers((err: Error | null, users: User[]) => {
-    const listen = new Users(users).mailinglisten;
-    res.render("rundmail", { listen, users: users.filter((user) => !!user.email) });
-  });
-});
-
-app.post("/rundmail", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-
-  store.allUsers((err: Error | null, users: User[]) => {
-    if (err) {
-      return next(err);
-    }
-    const validUsers = new Users(users).filterReceivers(req.body.group, req.body.user, req.body.liste).filter((user) => !!user.email);
-    const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
-    const markdownToSend = req.body.markdown;
-    const currentUser = users.find((user) => user.id === (req.user as User).id);
-    if (!validUsers || !currentUser) {
-      return next(new Error("Fehler beim Senden"));
-    }
-    const message = new Message(
-      {
-        subject: req.body.subject,
-        markdown: markdownToSend,
-      },
-      currentUser.name,
-      currentUser.email
-    );
-    message.setBcc(emails);
-    return mailtransport.sendMail(message, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      statusmessage.successMessage("Gesendet", "Deine Mail wurde an geschickt").putIntoSession(req);
-      return res.redirect("/users/rundmail");
-    });
-  });
-});
-
 app.get("/mailinglisten", (req, res, next) => {
   store.allUsers((err: Error | null, users: User[]) => {
     if (err) {

@@ -1,7 +1,7 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-form-input(:value="value", @input="$emit('input', $event)", :state="state")
+  b-form-input(:value="value", @input="$emit('input', $event)", :state="state", :placeholder="placeholder")
   b-form-invalid-feedback Muss ausgefüllt werden
 </template>
 
@@ -16,6 +16,7 @@ export default class JazzText extends Vue {
   @Prop() value!: string;
   @Prop() tooltip!: string | undefined;
   @Prop() required!: boolean;
+  @Prop() placeholder!: string;
 
   get state(): boolean | null {
     if (!this.required) {

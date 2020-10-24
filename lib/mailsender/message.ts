@@ -6,12 +6,20 @@ import conf from "../commons/simpleConfigure";
 import Mail from "nodemailer/lib/mailer";
 
 export default class Message {
-  private readonly subject!: string;
-  private readonly markdown!: string;
-  private readonly senderName!: string;
-  private readonly senderAddress!: string;
+  subject!: string;
+  markdown!: string;
+  private senderName!: string;
+  private senderAddress!: string;
   private to!: string;
   private bcc!: string;
+
+  static fromJSON(json: any) {
+    const message = new Message({ subject: json.subject, markdown: json.markdown });
+    message.bcc = json.bcc;
+    message.senderName = json.senderName;
+    message.senderAddress = json.senderAddress;
+    return message;
+  }
 
   constructor(subjectWithText: { subject: string; markdown: string }, optionalSenderName?: string, optionalSenderAddress?: string) {
     if (subjectWithText) {
@@ -50,7 +58,7 @@ export default class Message {
     const renderingOptions = {
       pretty: true,
       content: Renderer.render(this.markdown),
-      plain: this.markdown
+      plain: this.markdown,
     };
     const filename = path.join(__dirname, "views/mailtemplate.pug");
     const filenameTextonly = path.join(__dirname, "views/mailtemplate-textonly.pug");
@@ -61,7 +69,7 @@ export default class Message {
       bcc: this.bcc || this.senderAddress,
       subject: this.subject,
       text: pug.renderFile(filenameTextonly, renderingOptions),
-      html: pug.renderFile(filename, renderingOptions)
+      html: pug.renderFile(filename, renderingOptions),
     };
   }
 }

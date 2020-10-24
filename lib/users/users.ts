@@ -52,7 +52,7 @@ class Users {
     return this.users.filter((u) => u.mailinglisten.includes(listenname));
   }
 
-  get mailinglisten() {
+  get mailinglisten(): Mailingliste[] {
     return this.extractListen().map((name) => new Mailingliste(name, this.getUsersInListe(name)));
   }
 }

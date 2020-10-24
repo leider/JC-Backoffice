@@ -7,6 +7,7 @@ import Gema from "@/views/gema/Gema.vue";
 import VeranstaltungView from "@/views/veranstaltung/VeranstaltungView.vue";
 import ImageOverview from "@/views/imageOverview/ImageOverview.vue";
 import Preview from "@/views/veranstaltung/Preview.vue";
+import Rundmail from "@/views/mails/Rundmail.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -22,6 +23,7 @@ const routes = [
   { path: "/programmheft/:year/:month", component: Programmheft, props: true },
   { path: "/gema", component: Gema },
   { path: "/imageoverview", component: ImageOverview },
+  { path: "/rundmail", component: Rundmail },
 ];
 
 const router = new VueRouter({

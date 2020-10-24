@@ -7,6 +7,7 @@ import Kalender from "../../lib/programmheft/kalender";
 import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 import OptionValues from "../../lib/optionen/optionValues";
 import Orte from "../../lib/optionen/orte";
+import Message from "../../lib/mailsender/message";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -181,4 +182,9 @@ export function imagenames(callback: Function): void {
 
 export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
   postAndReceive("/image/imagenamesChanged", rows, (err: Error, json: object) => callback(json));
+}
+
+//Mails
+export function sendMail(message: Message, callback: Function): void {
+  postAndReceive("/mailsender/rundmail", message, (err: Error, json: object) => callback(json));
 }

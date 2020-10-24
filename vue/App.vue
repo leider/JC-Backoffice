@@ -32,11 +32,11 @@ div
           b-dropdown-item(href="/mailsender") Regeln
           b-dropdown-item(href="/mailsender/compose") Manuell
           b-dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
+          b-dropdown-item(to="/rundmail") Rundmail
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="users")
           template(v-slot:button-content)
             b-icon-person-lines-fill
             span &nbsp;User
-          b-dropdown-item(href="/users/rundmail") Rundmail
           b-dropdown-item(href="/users/mailinglisten") Mailinglisten
         b-nav-item(to="/team", active-class="active")
           b-icon-people
@@ -50,7 +50,7 @@ div
         b-nav-item-dropdown(v-if="user", right)
           template(v-slot:button-content)
             b-icon-person-circle
-            span &nbsp;{{user.id}}
+            span &nbsp;{{ user.id }}
           b-dropdown-item(href="/logout")
             b-icon-box-arrow-right
             | &nbsp;Abmelden

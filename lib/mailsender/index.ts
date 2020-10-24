@@ -47,7 +47,7 @@ app.get("/compose", (req, res, next) => {
       }
       return res.render("compose", {
         upcomingEvents: veranstaltungen,
-        optionen: emailAddresses
+        optionen: emailAddresses,
       });
     });
   });
@@ -75,6 +75,19 @@ app.get("/:id", (req, res, next) => {
       return next(err);
     }
     return res.render("edit", { rule: rule });
+  });
+});
+
+app.post("/rundmail", (req, res) => {
+  if (!res.locals.accessrights.isSuperuser()) {
+    return;
+  }
+  const message = Message.fromJSON(req.body);
+  return mailtransport.sendMail(message, (err: Error | null) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send({ message: "Deine Mail wurde geschickt." });
   });
 });
 
@@ -128,7 +141,7 @@ app.post("/send", (req, res, next) => {
       return next(err);
     }
 
-    const emails = Object.keys(req.body.partner).map(address => {
+    const emails = Object.keys(req.body.partner).map((address) => {
       const index = address.substring(5, address.length);
       return Message.formatEMailAddress(emailAddresses.partnerForIndex(Number(index)), emailAddresses.emailForIndex(Number(index)));
     });
@@ -138,11 +151,14 @@ app.post("/send", (req, res, next) => {
         return next(err1);
       }
       const event = Object.keys(req.body.event);
-      const selected = veranstaltungen.filter(veranst => event.includes(veranst.id || ""));
-      const markdownToSend = req.body.markdown + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
+      const selected = veranstaltungen.filter((veranst) => event.includes(veranst.id || ""));
+      const markdownToSend =
+        req.body.markdown +
+        "\n\n---\n" +
+        selected.map((veranst) => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
       const message = new Message({
         subject: req.body.subject,
-        markdown: markdownToSend
+        markdown: markdownToSend,
       });
       message.setTo(emails);
       return mailtransport.sendMail(message, (err2: Error | null) => {
