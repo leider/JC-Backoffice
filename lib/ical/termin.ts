@@ -8,6 +8,7 @@ export type TerminEvent = {
   end: string;
   title: string;
   tooltip: string;
+  display: string;
 };
 
 interface TerminUI {
@@ -52,8 +53,8 @@ export default class Termin {
   }
 
   fillFromUI(object: TerminUI): Termin {
-    this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate).toJSDateUTC;
-    this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, "12:00").toJSDateUTC;
+    this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate).toJSDate;
+    this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, "12:00").toJSDate;
     this.id = object.id || new DatumUhrzeit().toLocalDateTimeString;
     this.beschreibung = object.beschreibung;
     this.typ = object.typ || Termin.typen()[0];
@@ -70,6 +71,7 @@ export default class Termin {
 
   asEvent(): TerminEvent {
     return {
+      display: "block",
       color: Termin.colorForType(this.typ),
       start: this.startDate.toISOString(),
       end: this.endDate.toISOString(),

@@ -37,6 +37,7 @@ function termineFromIcalURL(url: string, callback: Function): void {
       .map((each: any) => {
         const calprops = each.properties;
         return {
+          display: "block",
           start: calprops.DTSTART[0].value.toISOString(),
           end: calprops.DTEND ? calprops.DTEND[0].value.toISOString() : calprops.DTSTART[0].value.toISOString(),
           title: calprops.SUMMARY[0].value,

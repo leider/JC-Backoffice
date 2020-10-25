@@ -21,9 +21,6 @@ dayjs.extend(advancedFormat);
 import weekOfYear from "dayjs/plugin/weekOfYear";
 dayjs.extend(weekOfYear);
 
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
-
 import "dayjs/locale/de";
 dayjs.locale("de");
 
@@ -245,10 +242,6 @@ export default class DatumUhrzeit {
 
   get toJSDate(): Date {
     return this.value.toDate();
-  }
-
-  get toJSDateUTC(): Date {
-    return this.value.utc(true).toDate();
   }
 
   // special
