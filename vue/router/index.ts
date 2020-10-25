@@ -8,6 +8,7 @@ import VeranstaltungView from "@/views/veranstaltung/VeranstaltungView.vue";
 import ImageOverview from "@/views/imageOverview/ImageOverview.vue";
 import Preview from "@/views/veranstaltung/Preview.vue";
 import Rundmail from "@/views/mails/Rundmail.vue";
+import Mailinglisten from "@/views/mails/Mailinglisten.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -24,6 +25,7 @@ const routes = [
   { path: "/gema", component: Gema },
   { path: "/imageoverview", component: ImageOverview },
   { path: "/rundmail", component: Rundmail },
+  { path: "/mailinglisten", component: Mailinglisten },
 ];
 
 const router = new VueRouter({

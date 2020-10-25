@@ -8,6 +8,7 @@ import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
 import OptionValues from "../../lib/optionen/optionValues";
 import Orte from "../../lib/optionen/orte";
 import Message from "../../lib/mailsender/message";
+import { Mailingliste } from "../../lib/users/users";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -186,5 +187,13 @@ export function saveImagenames(rows: ImageOverviewRow[], callback: Function): vo
 
 //Mails
 export function sendMail(message: Message, callback: Function): void {
-  postAndReceive("/mailsender/rundmail", message, (err: Error, json: object) => callback(json));
+  postAndReceive("/users/rundmail", message, (err: Error, json: object) => callback(json));
+}
+
+export function deleteMailinglist(listname: string, callback: Function): void {
+  postAndReceive("/users/deleteliste", { name: listname }, (err: Error, json: object) => callback(json));
+}
+
+export function saveMailinglist(list: Mailingliste, callback: Function): void {
+  postAndReceive("/users/saveliste", list, (err: Error, json: object) => callback(json));
 }

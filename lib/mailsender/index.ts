@@ -2,6 +2,7 @@ import mailstore from "./mailstore";
 
 import optionenService from "../optionen/optionenService";
 import store from "../veranstaltungen/veranstaltungenstore";
+import userstore from "../users/userstore";
 import optionenstore from "../optionen/optionenstore";
 import conf from "../commons/simpleConfigure";
 import MailRule from "./mailRule";
@@ -10,6 +11,8 @@ import mailtransport from "./mailtransport";
 import EmailAddresses from "../optionen/emailAddresses";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
+import User from "../users/user";
+import { Mailingliste } from "../users/users";
 
 const app = expressAppIn(__dirname);
 
@@ -75,19 +78,6 @@ app.get("/:id", (req, res, next) => {
       return next(err);
     }
     return res.render("edit", { rule: rule });
-  });
-});
-
-app.post("/rundmail", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return;
-  }
-  const message = Message.fromJSON(req.body);
-  return mailtransport.sendMail(message, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send({ message: "Deine Mail wurde geschickt." });
   });
 });
 

@@ -32,12 +32,9 @@ div
           b-dropdown-item(href="/mailsender") Regeln
           b-dropdown-item(href="/mailsender/compose") Manuell
           b-dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
+          b-dropdown-divider
           b-dropdown-item(to="/rundmail") Rundmail
-        b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="users")
-          template(v-slot:button-content)
-            b-icon-person-lines-fill
-            span &nbsp;User
-          b-dropdown-item(href="/users/mailinglisten") Mailinglisten
+          b-dropdown-item(to="/mailinglisten") Mailinglisten
         b-nav-item(to="/team", active-class="active")
           b-icon-people
           | &nbsp;Team&nbsp;

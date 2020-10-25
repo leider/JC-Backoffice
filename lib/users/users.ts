@@ -6,11 +6,13 @@ import User from "./user";
 
 export class Mailingliste {
   name: string;
+  originalName?: string;
   users: User[];
 
-  constructor(name: string, usersInListe: User[]) {
+  constructor(name: string, usersInListe: User[], originalName?: string) {
     this.name = name;
     this.users = usersInListe;
+    this.originalName = originalName || name;
   }
 }
 
@@ -21,7 +23,7 @@ class Users {
     this.users = users;
   }
 
-  filterReceivers(groupsFromBody: string[] | undefined, userFromBody: string[] | undefined, listenFromBody: string[] | undefined): User[] {
+  filterReceivers(groupsFromBody?: string[], userFromBody?: string[], listenFromBody?: string[]): User[] {
     let result: User[] = [];
     if (groupsFromBody && groupsFromBody.length > 0) {
       if (misc.toArray(groupsFromBody).includes("alle")) {
