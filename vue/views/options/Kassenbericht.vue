@@ -1,0 +1,24 @@
+<template lang="pug">
+.col-12
+  h1 Kassenberichte
+  p(v-for="monat in monate", :key="monat")
+    a(:href="`/pdf/kassenbericht/${monat.fuerKalenderViews}`") Kassenbericht {{ monat.monatJahrKompakt }}
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
+
+@Component
+export default class Kassenbericht extends Vue {
+  get monate(): DatumUhrzeit[] {
+    const result: DatumUhrzeit[] = [];
+    let current = new DatumUhrzeit().minus({ monae: 6 });
+    for (let i = 0; i < 12; i++) {
+      result.push(current);
+      current = current.plus({ monate: 1 });
+    }
+    return result;
+  }
+}
+</script>

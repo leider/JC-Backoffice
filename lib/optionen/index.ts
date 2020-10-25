@@ -63,11 +63,6 @@ app.get("/orte.json", (req: Request, res: Response) => {
   });
 });
 
-app.get("/kassenbericht", (req: Request, res: Response) => {
-  const now = new DatumUhrzeit();
-  res.render("kassenberichtentry", { now });
-});
-
 app.get("/orte", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");

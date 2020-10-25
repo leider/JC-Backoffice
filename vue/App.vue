@@ -20,7 +20,7 @@ div
           b-dropdown-item(href="/optionen/orte") Orte
           b-dropdown-item(href="/optionen/icals") Ferienkalender
           b-dropdown-item(href="/ical/termine") Termine
-          b-dropdown-item(href="/optionen/kassenbericht") Kassenberichte
+          b-dropdown-item(to="/kassenbericht") Kassenberichte
           b-dropdown-item(v-if="showItemSuperuser", to="/imageoverview") Bilder bearbeiten
         b-nav-item(v-if="showItem", to="/gema", active-class="active")
           b-icon-clipboard-data
