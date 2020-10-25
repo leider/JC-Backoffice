@@ -10,6 +10,7 @@ import Preview from "@/views/veranstaltung/Preview.vue";
 import Rundmail from "@/views/mails/Rundmail.vue";
 import Mailinglisten from "@/views/mails/Mailinglisten.vue";
 import MailRules from "@/views/mails/MailRules.vue";
+import ManualMail from "@/views/mails/ManualMail.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -28,6 +29,7 @@ const routes = [
   { path: "/rundmail", component: Rundmail },
   { path: "/mailinglisten", component: Mailinglisten },
   { path: "/mailrules", component: MailRules },
+  { path: "/manualmail", component: ManualMail },
 ];
 
 const router = new VueRouter({

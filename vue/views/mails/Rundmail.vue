@@ -10,7 +10,7 @@
   .row
     .col-6
       jazz-label(label="Gruppen / Mailinglisten")
-      multi-select(label="Gruppen / Mailinglisten", v-model="selectedListen", :options="listen")
+      multi-select(v-model="selectedListen", :options="listen")
     .col-6
       jazz-label(label="Users")
       multi-select(v-model="selectedUsers", :options="userids")

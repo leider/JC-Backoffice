@@ -30,10 +30,10 @@ div
             b-icon-envelope-fill
             span &nbsp;Mails
           b-dropdown-item(to="/mailrules") Regeln
-          b-dropdown-item(href="/mailsender/compose") Manuell
+          b-dropdown-item(to  ="/manualmail") Manuell
           b-dropdown-divider
-          b-dropdown-item(to="/rundmail") Rundmail
           b-dropdown-item(to="/mailinglisten") Mailinglisten
+          b-dropdown-item(to="/rundmail") Rundmail
         b-nav-item(to="/team", active-class="active")
           b-icon-people
           | &nbsp;Team&nbsp;

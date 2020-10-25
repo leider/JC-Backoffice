@@ -5,10 +5,6 @@ export default {
     store.get(callback);
   },
 
-  emailAddresses: function emailAddresses(callback: Function): void {
-    store.emailAddresses(callback);
-  },
-
   orte: function orte(callback: Function): void {
     store.orte(callback);
   },
