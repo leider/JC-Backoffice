@@ -26,7 +26,6 @@ export default class JazzCalendar extends Vue {
     buttonText: { next: ">", prev: "<"},
     locales: [deLocale],
     headerToolbar: { left: "title", center: "", right: "prev,today,next" },
-    timeZone: "Europe/Berlin",
     views: {
       month: {
         titleFormat: { month: "short", year: "2-digit" },

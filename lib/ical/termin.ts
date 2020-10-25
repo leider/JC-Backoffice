@@ -52,8 +52,8 @@ export default class Termin {
   }
 
   fillFromUI(object: TerminUI): Termin {
-    this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate).toJSDate;
-    this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, "12:00").toJSDate;
+    this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate).toJSDateUTC;
+    this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, "12:00").toJSDateUTC;
     this.id = object.id || new DatumUhrzeit().toLocalDateTimeString;
     this.beschreibung = object.beschreibung;
     this.typ = object.typ || Termin.typen()[0];

@@ -36,6 +36,12 @@ describe("DatumUhrzeit", () => {
 
       expect(DatumUhrzeit.forGermanString("01.03.2019")?.toLocalDateTimeString).to.eql("01.03.2019, 00:00:00");
 
+      const jsDate = DatumUhrzeit.forGermanString("01.03.2019")?.toJSDateUTC as Date;
+      expect(DatumUhrzeit.forJSDate(jsDate).toLocalDateTimeString).to.eql("01.03.2019, 01:00:00");
+
+      const jsDate1 = DatumUhrzeit.forGermanString("01.06.2019")?.toJSDateUTC as Date;
+      expect(DatumUhrzeit.forJSDate(jsDate1).toLocalDateTimeString).to.eql("01.06.2019, 02:00:00");
+
       expect(DatumUhrzeit.forGermanString()).to.be.null;
     });
 

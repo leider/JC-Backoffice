@@ -26,7 +26,6 @@ export default class HeftCalendar extends Vue {
     buttonText: { next: ">", prev: "<" },
     locales: [deLocale],
     headerToolbar: { left: "title", center: "", right: "" },
-    timeZone: "Europe/Berlin",
     views: {
       month: {
         titleFormat: { month: "long" },
