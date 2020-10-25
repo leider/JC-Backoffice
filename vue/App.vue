@@ -29,9 +29,8 @@ div
           template(v-slot:button-content)
             b-icon-envelope-fill
             span &nbsp;Mails
-          b-dropdown-item(href="/mailsender") Regeln
+          b-dropdown-item(to="/mailrules") Regeln
           b-dropdown-item(href="/mailsender/compose") Manuell
-          b-dropdown-item(href="/mailsender/emailAddresses") Emailadressen bearbeiten
           b-dropdown-divider
           b-dropdown-item(to="/rundmail") Rundmail
           b-dropdown-item(to="/mailinglisten") Mailinglisten

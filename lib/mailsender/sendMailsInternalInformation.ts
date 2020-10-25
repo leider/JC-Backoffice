@@ -8,7 +8,6 @@ import userstore from "../users/userstore";
 import mailstore from "./mailstore";
 import Message from "./message";
 import mailtransport from "./mailtransport";
-import misc from "../commons/misc";
 import conf from "../commons/simpleConfigure";
 import MailRule from "./mailRule";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
@@ -28,16 +27,16 @@ export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): vo
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
   function processRules(rules: MailRule[], callback: Function): void {
-    const maxDay = rules.map(rule => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
+    const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
     function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function): void {
       const markdownToSend = `## Folgende Veranstaltungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
-${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal(conf.get("publicUrlPrefix") as string)).join("\n\n---\n")}`;
+${kaputteVeranstaltungen.map((veranst) => veranst.presseTemplateInternal(conf.get("publicUrlPrefix") as string)).join("\n\n---\n")}`;
       const message = new Message({
         subject: "Veranstaltungen ohne Pressetext",
-        markdown: markdownToSend
+        markdown: markdownToSend,
       });
       usersService.emailsAllerBookingUser((err: Error | null, bookingAddresses: string) => {
         logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
@@ -50,7 +49,7 @@ ${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal(conf.get(
       if (err1) {
         return;
       }
-      const zuSendende = veranstaltungen.filter(veranstaltung => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
+      const zuSendende = veranstaltungen.filter((veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
       if (zuSendende.length === 0) {
         callback();
       } else {
@@ -63,7 +62,7 @@ ${kaputteVeranstaltungen.map(veranst => veranst.presseTemplateInternal(conf.get(
     if (err) {
       return;
     }
-    const relevantRules = rules.filter(rule => rule.shouldSendUntil(start, end));
+    const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
     processRules(relevantRules, callbackOuter);
   });
 }
@@ -78,7 +77,7 @@ export function checkKasse(now: DatumUhrzeit, callback: Function): void {
 ---
 ${kaputteVeranstaltungen
   .map(
-    veranst =>
+    (veranst) =>
       `<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
       `${veranst.kopf.titel} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
   )
@@ -89,15 +88,15 @@ ${kaputteVeranstaltungen
 
     const message = new Message({
       subject: "Kassenpersonal für Veranstaltungen gesucht",
-      markdown: markdownToSend
+      markdown: markdownToSend,
     });
 
     userstore.allUsers((err: Error | null, users: User[]) => {
       if (err) {
         return callback(err);
       }
-      const validUsers = users.filter(user => !!user.email);
-      const emails = validUsers.map(user => Message.formatEMailAddress(user.name, user.email));
+      const validUsers = users.filter((user) => !!user.email);
+      const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
       logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
       message.setBcc(emails);
       return mailtransport.sendMail(message, callbackInner);
@@ -108,7 +107,7 @@ ${kaputteVeranstaltungen
     if (err1) {
       return;
     }
-    const zuSendende = veranstaltungen.filter(veranstaltung => veranstaltung.kasseFehlt());
+    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.kasseFehlt());
     if (zuSendende.length === 0) {
       callback();
     } else {
@@ -135,12 +134,12 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
 
 ---
 ${veranstaltungenMitFluegel
-  .map(veranst => veranst.kopf.titel + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
+  .map((veranst) => veranst.kopf.titel + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
   .join("\n\n---\n")}`;
 
     const message = new Message({
       subject: "Flügelstimmen im Jazzclub",
-      markdown: markdownToSend
+      markdown: markdownToSend,
     });
 
     return usersService.emailsAllerBookingUser((err: Error | null, bookingAddresses: string[]) => {
@@ -158,7 +157,7 @@ ${veranstaltungenMitFluegel
     if (err1) {
       return;
     }
-    const zuSendende = veranstaltungen.filter(veranstaltung => veranstaltung.technik.fluegel);
+    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.technik.fluegel);
     if (zuSendende.length === 0) {
       callback();
     } else {

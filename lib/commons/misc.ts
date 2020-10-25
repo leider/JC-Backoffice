@@ -20,6 +20,8 @@ export default class Misc {
       return callback(err);
     }
     if (jsobject) {
+      delete (jsobject as any)._csrf;
+      delete (jsobject as any)._id;
       return callback(null, new Constructor(jsobject));
     }
     return callback(null, null);
@@ -31,7 +33,11 @@ export default class Misc {
     }
     return callback(
       null,
-      (jsobjects || []).map((each: object) => new Constructor(each))
+      (jsobjects || []).map((each: object) => {
+        delete (each as any)._csrf;
+        delete (each as any)._id;
+        return new Constructor(each);
+      })
     );
   }
 

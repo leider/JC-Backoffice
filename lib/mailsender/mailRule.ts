@@ -7,7 +7,6 @@ type MailRuleUI = {
   rule: string;
 };
 
-
 interface RuleLogic {
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean;
   startAndEndDay(datumUhrzeit: DatumUhrzeit): { start: DatumUhrzeit; end: DatumUhrzeit };
@@ -35,7 +34,7 @@ class RuleLogic1 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ tage: 5 }), // nächster Montag
-      end: datumUhrzeit.plus({ tage: 11 }) // übernächster Sonntag
+      end: datumUhrzeit.plus({ tage: 11 }), // übernächster Sonntag
     };
   }
 }
@@ -51,10 +50,7 @@ class RuleLogic2 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
-      end: datumUhrzeit
-        .plus({ monate: 2 })
-        .setTag(1)
-        .minus({ tage: 1 })
+      end: datumUhrzeit.plus({ monate: 2 }).setTag(1).minus({ tage: 1 }),
     };
   }
 }
@@ -70,10 +66,7 @@ class RuleLogic3 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ monate: 1 }).setTag(1),
-      end: datumUhrzeit
-        .plus({ monate: 3 })
-        .setTag(1)
-        .minus({ tage: 1 })
+      end: datumUhrzeit.plus({ monate: 3 }).setTag(1).minus({ tage: 1 }),
     };
   }
 }
@@ -89,7 +82,7 @@ class RuleLogic4 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ monate: 1 }).setTag(15),
-      end: datumUhrzeit.plus({ monate: 2 }).setTag(15)
+      end: datumUhrzeit.plus({ monate: 2 }).setTag(15),
     };
   }
 }
@@ -105,7 +98,7 @@ class RuleLogic5 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ tage: 4 }),
-      end: datumUhrzeit.plus({ tage: 11 })
+      end: datumUhrzeit.plus({ tage: 11 }),
     };
   }
 }
@@ -121,7 +114,7 @@ class RuleLogic6 implements RuleLogic {
     }
     return {
       start: datumUhrzeit.plus({ tage: 14 }),
-      end: datumUhrzeit.plus({ tage: 21 })
+      end: datumUhrzeit.plus({ tage: 21 }),
     };
   }
 }
@@ -133,11 +126,10 @@ const logicArray: { [index: string]: RuleLogic } = {
   "Am 5. zwei Folgemonate": new RuleLogic3(),
   "Am 16. den Folgemonat ab 15.": new RuleLogic4(),
   "Montags die Folgewoche ab Freitag": new RuleLogic5(),
-  "Montags die übernächste Folgewoche": new RuleLogic6()
+  "Montags die übernächste Folgewoche": new RuleLogic6(),
 };
 
 export const allMailrules: string[] = Object.keys(logicArray);
-
 
 export default class MailRule {
   id = "";
@@ -157,22 +149,23 @@ export default class MailRule {
     if (object) {
       Object.assign(this, object);
     }
+    this.updateId();
+  }
+
+  updateId() {
+    if (!this.id) {
+      this.id = encodeURIComponent(this.name + this.email + this.rule);
+    }
   }
 
   fillFromUI(object: MailRuleUI): MailRule {
     Object.assign(this, object);
-    if (!this.id) {
-      this.id = encodeURIComponent(this.name + this.email + this.rule);
-    }
+    this.updateId();
     return this;
   }
 
   rules(): string[] {
     return allMailrules;
-  }
-
-  fullyQualifiedUrl(): string {
-    return "/mailsender/" + encodeURIComponent(this.id);
   }
 
   subject(datumUhrzeit: DatumUhrzeit): string {

@@ -9,6 +9,7 @@ import OptionValues from "../../lib/optionen/optionValues";
 import Orte from "../../lib/optionen/orte";
 import Message from "../../lib/mailsender/message";
 import { Mailingliste } from "../../lib/users/users";
+import MailRule from "../../lib/mailsender/mailRule";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -185,7 +186,7 @@ export function saveImagenames(rows: ImageOverviewRow[], callback: Function): vo
   postAndReceive("/image/imagenamesChanged", rows, (err: Error, json: object) => callback(json));
 }
 
-//Mails
+//Mails intern
 export function sendMail(message: Message, callback: Function): void {
   postAndReceive("/users/rundmail", message, (err: Error, json: object) => callback(json));
 }
@@ -196,4 +197,17 @@ export function deleteMailinglist(listname: string, callback: Function): void {
 
 export function saveMailinglist(list: Mailingliste, callback: Function): void {
   postAndReceive("/users/saveliste", list, (err: Error, json: object) => callback(json));
+}
+
+// Mails für Veranstaltungen
+export function mailRules(callback: Function): void {
+  getJson("/mailsender/rules.json", (err: Error, result: any[]) => callback(result.map((each) => new MailRule(each))));
+}
+
+export function deleteMailRule(ruleID: string, callback: Function): void {
+  postAndReceive("/mailsender/deleteRule", { id: ruleID }, (err: Error, json: object) => callback(json));
+}
+
+export function saveMailRule(rule: MailRule, callback: Function): void {
+  postAndReceive("/mailsender/saveRule", rule, (err: Error, json: object) => callback(json));
 }

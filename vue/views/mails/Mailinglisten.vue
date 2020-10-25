@@ -9,20 +9,21 @@
       h1 Mailinglisten
   .row
     .col-12
-      .table-responsive(style="height:500px")
+      .table-responsive(style="min-height:500px")
         table.table.table-sm.table-striped
-          tr
-            th(style="width:15%") Name
-            th(style="width:85%") Users
-            th
-            th
-          MailinglistRow(
-            v-for="(list, index) in mailinglisten",
-            :key="index",
-            :mailinglist="list",
-            :users="users",
-            @loeschen="deleteList(list)"
-          )
+          tbody
+            tr
+              th(style="width:15%") Name
+              th(style="width:85%") Users
+              th
+              th
+            MailinglistRow(
+              v-for="(list, index) in mailinglisten",
+              :key="index",
+              :mailinglist="list",
+              :users="users",
+              @loeschen="deleteList(list)"
+            )
 </template>
 
 <script lang="ts">

@@ -8,16 +8,6 @@ import mailtransport from "../mailsender/mailtransport";
 
 const app = expressAppIn(__dirname);
 
-app.get("/mailinglists.json", (req, res, next) => {
-  store.allUsers((err: Error | null, users: User[]) => {
-    if (err) {
-      return next(err);
-    }
-    const listen = new Users(users).mailinglisten;
-    res.render("mailingliste", { listen, users: users.filter((user) => !!user.email) });
-  });
-});
-
 app.get("/user.json", (req, res) => {
   res.set("Content-Type", "application/json").send((req.user as User)?.toJSON());
 });
@@ -71,15 +61,27 @@ app.post("/changePassword", (req, res) => {
 });
 
 app.post("/deleteUser", (req, res) => {
-  const user = new User(req.body);
   if (!res.locals.accessrights.isSuperuser()) {
     return;
   }
+  const user = new User(req.body);
   store.deleteUser(user.id, (err: Error, message: string) => {
     if (err) {
       return res.status(500).send(err);
     }
     res.set("Content-Type", "application/json").send({ message });
+  });
+});
+
+// Mailinglisten und Senden
+
+app.get("/mailinglists.json", (req, res, next) => {
+  store.allUsers((err: Error | null, users: User[]) => {
+    if (err) {
+      return next(err);
+    }
+    const listen = new Users(users).mailinglisten;
+    res.render("mailingliste", { listen, users: users.filter((user) => !!user.email) });
   });
 });
 

@@ -18,6 +18,10 @@ export default {
     persistence.list({}, partial(toMailRuleList, callback));
   },
 
+  removeById: function removeById(id: string, callback: Function): void {
+    persistence.removeById(id, partial(toMailRule, callback));
+  },
+
   forId: function forId(id: string, callback: Function): void {
     persistence.getById(id, partial(toMailRule, callback));
   },

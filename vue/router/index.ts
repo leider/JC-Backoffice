@@ -9,6 +9,7 @@ import ImageOverview from "@/views/imageOverview/ImageOverview.vue";
 import Preview from "@/views/veranstaltung/Preview.vue";
 import Rundmail from "@/views/mails/Rundmail.vue";
 import Mailinglisten from "@/views/mails/Mailinglisten.vue";
+import MailRules from "@/views/mails/MailRules.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
   { path: "/imageoverview", component: ImageOverview },
   { path: "/rundmail", component: Rundmail },
   { path: "/mailinglisten", component: Mailinglisten },
+  { path: "/mailrules", component: MailRules },
 ];
 
 const router = new VueRouter({

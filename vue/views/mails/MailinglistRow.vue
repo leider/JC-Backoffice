@@ -38,7 +38,7 @@ export default class MailinglistRow extends Vue {
   }
 
   created(): void {
-    this.originallist = new Mailingliste(this.mailinglist.name, [...this.mailinglist.users]);
+    this.listChanged();
   }
 
   loeschen(): void {

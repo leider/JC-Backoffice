@@ -2,7 +2,6 @@ import mailstore from "./mailstore";
 
 import optionenService from "../optionen/optionenService";
 import store from "../veranstaltungen/veranstaltungenstore";
-import userstore from "../users/userstore";
 import optionenstore from "../optionen/optionenstore";
 import conf from "../commons/simpleConfigure";
 import MailRule from "./mailRule";
@@ -11,28 +10,44 @@ import mailtransport from "./mailtransport";
 import EmailAddresses from "../optionen/emailAddresses";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
-import User from "../users/user";
-import { Mailingliste } from "../users/users";
 
 const app = expressAppIn(__dirname);
 
-app.get("/", (req, res, next) => {
+app.get("/rules.json", (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect("/");
   }
   return mailstore.all((err: Error | null, rules: MailRule[]) => {
     if (err) {
-      return next(err);
+      return res.status(500).send(err);
     }
-    return res.render("index", { rules: rules });
+    res.set("Content-Type", "application/json").send(rules.map((r) => r.toJSON()));
   });
 });
 
-app.get("/new", (req, res) => {
+app.post("/saveRule", (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.redirect("/");
   }
-  return res.render("edit", { rule: new MailRule() });
+  const ruleToSave = new MailRule(req.body);
+  mailstore.save(ruleToSave, (err1: Error | null) => {
+    if (err1) {
+      return res.status(500).send(err1);
+    }
+    res.set("Content-Type", "application/json").send({ message: "Regel gespeichert." });
+  });
+});
+
+app.post("/deleteRule", (req, res, next) => {
+  if (!res.locals.accessrights.isSuperuser()) {
+    return res.redirect("/");
+  }
+  mailstore.removeById(req.body.id, (err1: Error | null) => {
+    if (err1) {
+      return res.status(500).send(err1);
+    }
+    res.set("Content-Type", "application/json").send({ message: "Regel gelöscht." });
+  });
 });
 
 app.get("/compose", (req, res, next) => {
@@ -69,18 +84,6 @@ app.get("/emailAddresses", (req, res, next) => {
   });
 });
 
-app.get("/:id", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return mailstore.forId(req.params.id, (err: Error | null, rule: MailRule) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("edit", { rule: rule });
-  });
-});
-
 app.post("/submitEmailAddresses", (req, res, next) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
@@ -96,25 +99,6 @@ app.post("/submitEmailAddresses", (req, res, next) => {
       }
       return res.redirect("/mailsender/emailAddresses");
     });
-  });
-});
-
-app.post("/save", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-  return mailstore.forId(req.body.id, (err: Error | null, rule: MailRule) => {
-    if (err) {
-      return next(err);
-    }
-    const ruleToSave = rule || new MailRule();
-    ruleToSave.fillFromUI(req.body);
-    mailstore.save(ruleToSave, (err1: Error | null) => {
-      if (err1) {
-        next(err1);
-      }
-    });
-    return res.redirect("/mailsender");
   });
 });
 
