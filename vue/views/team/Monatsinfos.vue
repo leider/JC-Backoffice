@@ -11,7 +11,7 @@
         .col-lg-6(v-for="veran in veranstaltungen", :key="veran.id")
           div(v-html="preview(veran)")
           hr
-    b-tab(title="Übersicht", :active="'uebersicht' === tab", @click="tabActivated('uebersicht')")
+    b-tab(title="Übersicht", :active="'uebersicht' === tab", @click="tabActivated('uebersicht')", lazy)
       .row: .col-12
         p(v-for="veran in veranstaltungen", :key="veran.id")
           b {{ veran.kopf.titel }}<br>
