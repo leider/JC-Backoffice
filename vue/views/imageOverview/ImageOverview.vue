@@ -18,10 +18,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import { veranstaltungenForTeam, imagenames, saveImagenames } from "@/commons/loader";
 import Veranstaltung, { ImageOverviewVeranstaltung, ImageOverviewRow } from "../../../lib/veranstaltungen/object/veranstaltung";
-import differenceBy = require("lodash/differenceBy");
-import intersection = require("lodash/intersection");
-import flatten = require("lodash/flatten");
-import uniq = require("lodash/uniq");
+import differenceBy from "lodash/differenceBy";
+import intersection from "lodash/intersection";
+import flatten from "lodash/flatten";
+import uniq from "lodash/uniq";
 import ImageOverviewSection from "@/views/imageOverview/ImageOverviewSection.vue";
 
 @Component({

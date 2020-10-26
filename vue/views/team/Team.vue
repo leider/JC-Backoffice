@@ -59,7 +59,7 @@ import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
 import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import { CalSource } from "../../../lib/optionen/ferienIcals";
-import groupBy = require("lodash/groupBy");
+import groupBy from "lodash/groupBy";
 import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
 import UserPanels from "@/views/user/UserPanels.vue";
 
@@ -110,7 +110,7 @@ export default class Team extends Vue {
 
   get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
     const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.admin || v.kopf.confirmed);
-    return groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
+    return groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
   }
 
   get monate(): string[] {

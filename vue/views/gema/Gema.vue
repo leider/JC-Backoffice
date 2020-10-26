@@ -15,7 +15,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { veranstaltungenForTeam } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import sortBy = require("lodash/sortBy");
+import sortBy from "lodash/sortBy";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import { renderart, VeranstaltungZeileMitCheck } from "@/views/gema/SharedGemaTypes";
 import GemaMonat from "@/views/gema/GemaMonat.vue";
