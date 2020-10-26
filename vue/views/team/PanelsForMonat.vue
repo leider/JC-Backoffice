@@ -6,10 +6,10 @@ div
       b-icon-caret-right(v-else)
       | #{" "} {{ monat }} &nbsp;
     .btn-group.btn-group-sm.float-right
-      a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/texte/${datumErsteVeranstaltung.fuerUnterseiten}`")
+      b-link.btn.btn-secondary.btn-sm(:to="`/infos/${datumErsteVeranstaltung.fuerUnterseiten}/pressetexte`")
         b-icon-file-text
         | #{' '} Presseexte
-      a.btn.btn-secondary.btn-sm(:href="`/veranstaltungen/monat/${datumErsteVeranstaltung.fuerUnterseiten}`")
+      b-link.btn.btn-secondary.btn-sm(:to="`/infos/${datumErsteVeranstaltung.fuerUnterseiten}/uebersicht`")
         b-icon-file-spreadsheet
         | #{' '} Übersicht
   .row

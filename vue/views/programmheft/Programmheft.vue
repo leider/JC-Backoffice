@@ -28,13 +28,13 @@
       )
   h2.text-danger(v-if="unbestaetigte.length > 0") Es gibt noch unbestätigte Veranstaltungen
   p(v-for="veranst in unbestaetigte", :key="veranst.id")
-    a.text-danger(:href="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{ veranst.kopf.titel }}
+    b-link.text-danger(:to="`${veranst.fullyQualifiedUrl()}/allgemeines`") {{ veranst.kopf.titel }}
   .row(v-for="monat in monate", :key="monat")
     .col-12
       h4.pt-1.pb-2.px-1.bg-primary.text-white {{ monat }}
     .col-xl-4.col-md-6(v-for="veranst in veranstaltungenNachMonat[monat]")
       .card-mb-2
-        a(:href="`${veranst.fullyQualifiedUrl()}/presse`")
+        b-link(:to="`${veranst.fullyQualifiedUrl()}/presse`")
           .card-header.p-0
             h6 {{ veranst.datumForDisplayShort() }}
             h6 {{ veranst.kopf.presseInEcht() }}

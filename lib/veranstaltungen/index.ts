@@ -86,18 +86,6 @@ app.get("/zukuenftige/csv", (req, res, next) => veranstaltungenForExport(store.z
 
 app.get("/vergangene/csv", (req, res, next) => veranstaltungenForExport(store.vergangene, next, res));
 
-app.get("/monat/:monat", (req, res, next) => {
-  const yymm = req.params.monat; // kommt als YYMM
-  const start = DatumUhrzeit.forYYMM(yymm);
-  const end = start.plus({ monate: 1 });
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, result: Veranstaltung[]) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("monatsliste", { liste: result, monat: yymm });
-  });
-});
-
 app.get("/imgzip/:monat", (req, res, next) => {
   const yymm = req.params.monat; // kommt als YYMM
   const start = DatumUhrzeit.forYYMM(yymm);
@@ -129,18 +117,6 @@ app.get("/imgzip/:monat", (req, res, next) => {
         return zip.finalize();
       }
     );
-  });
-});
-
-app.get("/texte/:monat", (req, res, next) => {
-  const yymm = req.params.monat; // kommt als YYMM
-  const start = DatumUhrzeit.forYYMM(yymm);
-  const end = start.plus({ monate: 1 });
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, result: Veranstaltung[]) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("pressetexte", { liste: result, monat: yymm });
   });
 });
 

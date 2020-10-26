@@ -12,6 +12,7 @@ import Mailinglisten from "@/views/mails/Mailinglisten.vue";
 import MailRules from "@/views/mails/MailRules.vue";
 import ManualMail from "@/views/mails/ManualMail.vue";
 import Kassenbericht from "@/views/options/Kassenbericht.vue";
+import Monatsinfos from "@/views/team/Monatsinfos.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -32,6 +33,7 @@ const routes = [
   { path: "/mailrules", component: MailRules },
   { path: "/manualmail", component: ManualMail },
   { path: "/kassenbericht", component: Kassenbericht },
+  { path: "/infos/:monat/:tab", component: Monatsinfos, props: true },
 ];
 
 const router = new VueRouter({
