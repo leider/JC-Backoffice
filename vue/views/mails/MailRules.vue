@@ -23,17 +23,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
-import Markdown from "@/widgets/Markdown.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import MultiSelect from "@/widgets/MultiSelect.vue";
 import { deleteMailRule, mailRules } from "@/commons/loader";
-import MailinglistRow from "@/views/mails/MailinglistRow.vue";
 import MailRule from "../../../lib/mailsender/mailRule";
 import MailRuleRow from "@/views/mails/MailRuleRow.vue";
 
-@Component({ components: { MailRuleRow, MailinglistRow, MultiSelect, JazzText, JazzLabel, HeftCalendar, Markdown } })
+@Component({ components: { MailRuleRow } })
 export default class MailRules extends Vue {
   private rules: MailRule[] = [];
 

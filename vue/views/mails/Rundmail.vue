@@ -30,7 +30,6 @@
 import difference from "lodash/difference";
 import lowerFirst from "lodash/lowerFirst";
 import { Component, Vue } from "vue-property-decorator";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
 import Markdown from "@/widgets/Markdown.vue";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import JazzText from "@/widgets/JazzText.vue";
@@ -41,7 +40,7 @@ import Accessrights from "../../../lib/commons/accessrights";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 import Users from "../../../lib/users/users";
 
-@Component({ components: { MultiSelect, JazzText, JazzLabel, HeftCalendar, Markdown } })
+@Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class Rundmail extends Vue {
   private subject = "";
   private markdown = "";

@@ -28,17 +28,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
-import Markdown from "@/widgets/Markdown.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
 import User from "../../../lib/users/user";
-import MultiSelect from "@/widgets/MultiSelect.vue";
 import Users, { Mailingliste } from "../../../lib/users/users";
 import { allUsers, deleteMailinglist } from "@/commons/loader";
 import MailinglistRow from "@/views/mails/MailinglistRow.vue";
 
-@Component({ components: { MailinglistRow, MultiSelect, JazzText, JazzLabel, HeftCalendar, Markdown } })
+@Component({ components: { MailinglistRow } })
 export default class Mailinglisten extends Vue {
   private mailinglisten: Mailingliste[] = [];
   private users: User[] = [];

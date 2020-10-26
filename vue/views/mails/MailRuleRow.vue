@@ -9,17 +9,11 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
-import Markdown from "@/widgets/Markdown.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import MultiSelect from "@/widgets/MultiSelect.vue";
 import MailRule, { allMailrules } from "../../../lib/mailsender/mailRule";
-import SingleSelect from "@/widgets/SingleSelect.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import { saveMailRule } from "@/commons/loader";
 
-@Component({ components: { SingleSelectPure, SingleSelect, MultiSelect, JazzText, JazzLabel, HeftCalendar, Markdown } })
+@Component({ components: { SingleSelectPure } })
 export default class MailRuleRow extends Vue {
   private originalRule!: MailRule;
   @Prop() rule!: MailRule;

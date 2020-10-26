@@ -8,16 +8,12 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
-import Markdown from "@/widgets/Markdown.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
 import User from "../../../lib/users/user";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 import { Mailingliste } from "../../../lib/users/users";
 import { saveMailinglist } from "@/commons/loader";
 
-@Component({ components: { MultiSelect, JazzText, JazzLabel, HeftCalendar, Markdown } })
+@Component({ components: { MultiSelect } })
 export default class MailinglistRow extends Vue {
   private originallist!: Mailingliste;
   @Prop() mailinglist!: Mailingliste;
