@@ -16,53 +16,44 @@
         b-button.btn.btn-sm.btn-light(v-if="isSuperuser", v-b-modal="`delete-${user.id}`", title="Löschen")
           b-icon-trash.text-danger
       b-modal(:id="`dialog-${user.id}`", no-close-on-backdrop, @ok="saveUser", @cancel="resetUsers")
-        .row
-          .col-12
-            jazz-text(label="Vollständiger Name", v-model="user.name")
-            jazz-mail(label="E-Mail", v-model="user.email", required)
-            jazz-text(label="Telefon", v-model="user.tel")
-            single-select(label="T-Shirt", v-model="user.tshirt", :options="shirtsizes")
-        .row(v-if="isSuperuser")
-          .col-12
-            single-select(label="Rechte", v-model="rechte", :options="alleRechte")
-            jazz-check(v-if="!accessrights.isSuperuser", label="Kassenfreigabe", v-model="kassenfreigabe")
+        .row: .col-12
+          jazz-text(label="Vollständiger Name", v-model="user.name")
+          jazz-mail(label="E-Mail", v-model="user.email", required)
+          jazz-text(label="Telefon", v-model="user.tel")
+          single-select(label="T-Shirt", v-model="user.tshirt", :options="shirtsizes")
+        .row(v-if="isSuperuser"): .col-12
+          single-select(label="Rechte", v-model="rechte", :options="alleRechte")
+          jazz-check(v-if="!accessrights.isSuperuser", label="Kassenfreigabe", v-model="kassenfreigabe")
         template(v-slot:modal-header)
           h3.modal-title User "{{ user.id }}" bearbeiten
         template(v-slot:modal-footer="{ ok, cancel }")
-          .row
-            .col-12
-              .btn-group.float-right
-                b-button.btn.btn-light(@click="cancel()") Abbrechen
-                b-button.btn.btn-success.text(@click="ok()")
-                  b-icon-check-square
-                  | &nbsp;Speichern
+          .row: .col-12: .btn-group.float-right
+            b-button.btn.btn-light(@click="cancel()") Abbrechen
+            b-button.btn.btn-success.text(@click="ok()")
+              b-icon-check-square
+              | &nbsp;Speichern
       b-modal(:id="`pass-${user.id}`", no-close-on-backdrop, @ok="changePassword", @cancel="resetPassfields")
-        .row
-          .col-12
-            p Beide Felder mit mindestens 6 Buchstaben identisch ausfüllen!
-            jazz-pass-twice(v-model="newPass")
+        .row: .col-12
+          p Beide Felder mit mindestens 6 Buchstaben identisch ausfüllen!
+          jazz-pass-twice(v-model="newPass")
         template(v-slot:modal-header)
           h3.modal-title Passwort ändern
         template(v-slot:modal-footer="{ ok, cancel }")
-          .row
-            .col-12
-              .btn-group.float-right
-                b-button.btn.btn-light(@click="cancel()") Abbrechen
-                b-button.btn.btn-success.text(@click="ok()", :disabled="newPass.length < 6")
-                  b-icon-check-square
-                  | &nbsp;Ändern
+          .row: .col-12: .btn-group.float-right
+            b-button.btn.btn-light(@click="cancel()") Abbrechen
+            b-button.btn.btn-success.text(@click="ok()", :disabled="newPass.length < 6")
+              b-icon-check-square
+              | &nbsp;Ändern
       b-modal(:id="`delete-${user.id}`", no-close-on-backdrop, @ok="deleteUser")
         p Bist Du sicher, dass Du den User "{{ user.name }}" löschen willst?
         template(v-slot:modal-header)
           h3.modal-title User löschen
         template(v-slot:modal-footer="{ ok, cancel }")
-          .row
-            .col-12
-              .btn-group.float-right
-                b-button.btn.btn-light(@click="cancel()") Abbrechen
-                b-button.btn.btn-danger.text(@click="ok()")
-                  b-icon-trash.text-danger
-                  | &nbsp;Löschen
+          .row: .col-12: .btn-group.float-right
+            b-button.btn.btn-light(@click="cancel()") Abbrechen
+            b-button.btn.btn-danger.text(@click="ok()")
+              b-icon-trash
+              | &nbsp;Löschen
 
     b-collapse(v-model="expanded")
       table.table.table-striped.table-sm

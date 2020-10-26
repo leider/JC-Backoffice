@@ -9,13 +9,11 @@
         template(v-slot:modal-header)
           h3.modal-title Veranstaltung löschen
         template(v-slot:modal-footer="{ ok, cancel }")
-          .row
-            .col-12
-              .btn-group.float-right
-                b-button.btn.btn-light(@click="cancel()") Abbrechen
-                b-button.btn.btn-danger.text(@click="ok()")
-                  b-icon-trash
-                  | &nbsp;Löschen
+          .row: .col-12: .btn-group.float-right
+            b-button.btn.btn-light(@click="cancel()") Abbrechen
+            b-button.btn.btn-danger.text(@click="ok()")
+              b-icon-trash
+              | &nbsp;Löschen
     b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
       b-icon-files
       | #{" "}Kopieren

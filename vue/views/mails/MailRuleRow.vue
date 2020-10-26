@@ -3,7 +3,19 @@ tr
   td: b-form-input(v-model="rule.name")
   td: b-form-input(v-model="rule.email")
   td: single-select-pure(v-model="rule.rule", :options="allRulenames")
-  td: b-button.btn.btn-danger.float-right(@click="loeschen", :disabled="dirty"): b-icon-trash
+  td: b-button.btn.btn-danger.float-right(:disabled="dirty", v-b-modal="`dialog-${rule.name}`")
+    b-icon-trash
+    b-modal(:id="`dialog-${rule.name}`", no-close-on-backdrop, @ok="loeschen")
+      p Bist Du sicher, dass Du {{ rule.name }} löschen willst?
+      template(v-slot:modal-header)
+        h3.modal-title Liste löschen
+      template(v-slot:modal-footer="{ ok, cancel }")
+        .row: .col-12: .btn-group.float-right
+          b-button.btn.btn-light(@click="cancel()") Abbrechen
+          b-button.btn.btn-danger.text(@click="ok()")
+            b-icon-trash
+            | &nbsp;Löschen
+
   td: b-button.btn.btn-success.float-right(@click="save", :disabled="!dirty"): b-icon-check-square
 </template>
 
@@ -48,11 +60,7 @@ export default class MailRuleRow extends Vue {
       return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
     }
 
-    const s = normCrLf(this.originalRule);
-    const s1 = normCrLf(this.rule);
-    console.log("S: " + s);
-    console.log("S1: " + s1);
-    this.dirty = s !== s1;
+    this.dirty = normCrLf(this.originalRule) !== normCrLf(this.rule);
   }
 }
 </script>

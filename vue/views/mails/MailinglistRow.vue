@@ -2,7 +2,18 @@
 tr
   td: b-form-input(v-model="mailinglist.name")
   td: multi-select(v-model="selectedUsers", :options="allUsernames")
-  td: b-button.btn.btn-danger.float-right(@click="loeschen", :disabled="dirty"): b-icon-trash
+  td: b-button.btn.btn-danger.float-right(:disabled="dirty", v-b-modal="`dialog-${mailinglist.originalName}`")
+    b-icon-trash
+    b-modal(:id="`dialog-${mailinglist.originalName}`", no-close-on-backdrop, @ok="loeschen")
+      p Bist Du sicher, dass Du {{ mailinglist.name }} löschen willst?
+      template(v-slot:modal-header)
+        h3.modal-title Liste löschen
+      template(v-slot:modal-footer="{ ok, cancel }")
+        .row: .col-12: .btn-group.float-right
+          b-button.btn.btn-light(@click="cancel()") Abbrechen
+          b-button.btn.btn-danger.text(@click="ok()")
+            b-icon-trash
+            | &nbsp;Löschen
   td: b-button.btn.btn-success.float-right(@click="save", :disabled="!dirty"): b-icon-check-square
 </template>
 

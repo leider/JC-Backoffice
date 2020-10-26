@@ -5,25 +5,21 @@
     template(v-slot:modal-header)
       h3 Kassenfreigabe rückgängig
     template(v-slot:modal-footer="{ ok, cancel }")
-      .row
-        .col-12
-          .btn-group.float-right
-            b-button.btn.btn-light(@click="cancel()") Abbrechen
-            b-button.btn.btn-danger.text(@click="ok()")
-              b-icon-lock
-              | &nbsp;Kassenfreigabe rückgängig
+      .row: .col-12: .btn-group.float-right
+        b-button.btn.btn-light(@click="cancel()") Abbrechen
+        b-button.btn.btn-danger.text(@click="ok()")
+          b-icon-lock
+          | &nbsp;Kassenfreigabe rückgängig
   b-modal#freigebenDialog(v-model="showFreigeben", no-close-on-backdrop, @ok="freigeben")
     p Nach dem Freigeben ist keine Änderung mehr möglich!
     template(v-slot:modal-header)
       h3 Kasse freigeben
     template(v-slot:modal-footer="{ ok, cancel }")
-      .row
-        .col-12
-          .btn-group.float-right
-            b-button.btn.btn-light(@click="cancel()") Abbrechen
-            b-button.btn.btn-success.text(@click="ok()")
-              b-icon-unlock
-              | &nbsp;Kasse freigeben
+      .row: .col-12: .btn-group.float-right
+        b-button.btn.btn-light(@click="cancel()") Abbrechen
+        b-button.btn.btn-success.text(@click="ok()")
+          b-icon-unlock
+          | &nbsp;Kasse freigeben
   .row
     .col-md-6
       legend-card(
