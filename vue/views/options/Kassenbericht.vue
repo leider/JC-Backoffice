@@ -13,7 +13,7 @@ import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 export default class Kassenbericht extends Vue {
   get monate(): DatumUhrzeit[] {
     const result: DatumUhrzeit[] = [];
-    let current = new DatumUhrzeit().minus({ monae: 6 });
+    let current = new DatumUhrzeit().minus({ monate: 6 });
     for (let i = 0; i < 12; i++) {
       result.push(current);
       current = current.plus({ monate: 1 });
