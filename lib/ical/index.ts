@@ -12,13 +12,13 @@ import FerienIcals from "../optionen/ferienIcals";
 
 const app = expressAppIn(__dirname);
 
-function sendCalendarStringNamedToResult(ical: object, filename: string, res: express.Response): void {
-  res.type("text/calendar; charset=utf-8");
-  res.header("Content-Disposition", "inline; filename=" + filename + ".ics");
-  res.send(ical.toString());
-}
-
 app.get("/", (req, res, next) => {
+  function sendCalendarStringNamedToResult(ical: object, filename: string, res: express.Response): void {
+    res.type("text/calendar; charset=utf-8");
+    res.header("Content-Disposition", "inline; filename=" + filename + ".ics");
+    res.send(ical.toString());
+  }
+
   store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err || !veranstaltungen) {
       return next(err);
