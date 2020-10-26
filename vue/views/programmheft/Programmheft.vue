@@ -1,7 +1,7 @@
 <template lang="pug">
 .col-12
   .btn-group.float-right
-    button.btn.btn-success(@click="save", title="Speichern"): b-icon-check-square
+    b-button.btn.btn-success(@click="save", title="Speichern"): b-icon-check-square
   h2 Programmheft<br>
     small {{ start.monatKompakt }} - {{ start.plus({ monate: 1 }).monatJahrKompakt }}
   .row

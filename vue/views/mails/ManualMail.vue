@@ -3,7 +3,7 @@
   .row
     .col-12
       .btn-group.float-right
-        button.btn.btn-success(@click="sendMail", title="Speichern", :disabled="!valid")
+        b-button.btn.btn-success(@click="sendMail", title="Speichern", :disabled="!valid")
           b-icon-envelope-open
           | #{" "} Senden...
       h1 Rundmail

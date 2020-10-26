@@ -3,7 +3,7 @@
   .row
     .col-12
       .btn-group.float-right
-        button.btn.btn-light(@click="neueListe", title="Neu")
+        b-button.btn.btn-light(@click="neueListe", title="Neu")
           b-icon-file-earmark
           | #{" "} Neu...
       h1 Mailinglisten
