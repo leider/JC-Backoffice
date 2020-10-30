@@ -1,8 +1,8 @@
 import reject from "lodash/reject";
-import { sortBy, compose, toLower, prop } from "lodash/fp";
+import { sortBy, flowRight, toLower, prop } from "lodash/fp";
 import Kopf from "../veranstaltungen/object/kopf";
 
-const sortByNameCaseInsensitive = sortBy(compose(toLower, prop("name")));
+const sortByNameCaseInsensitive = sortBy(flowRight(toLower, prop("name")));
 
 class Ort {
   name = "";
