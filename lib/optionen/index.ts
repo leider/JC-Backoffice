@@ -6,6 +6,8 @@ import Orte from "./orte";
 import FerienIcals from "./ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { NextFunction, Request, Response } from "express";
+import Termin from "../ical/termin";
+import terminstore from "../ical/terminstore";
 
 const app = expressAppIn(__dirname);
 
@@ -150,6 +152,33 @@ app.post("/icalChanged", (req: Request, res: Response, next: NextFunction) => {
       }
       return res.redirect("icals");
     });
+  });
+});
+
+app.post("/savetermin", (req: Request, res: Response) => {
+  if (!res.locals.accessrights.isBookingTeam()) {
+    return res.redirect("/"); //ErrorHandling!!
+  }
+  const termin = new Termin(req.body);
+  delete termin.originalBeschreibung;
+  terminstore.save(termin, (err: Error | null) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send(termin.toJSON());
+  });
+});
+
+app.post("/deletetermin", (req: Request, res: Response) => {
+  if (!res.locals.accessrights.isBookingTeam()) {
+    return res.redirect("/"); //ErrorHandling!!
+  }
+  const id = req.body.id;
+  terminstore.remove(id, (err: Error | null) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.set("Content-Type", "application/json").send({ message: "Termin gelöscht" });
   });
 });
 

@@ -10,6 +10,7 @@ import Orte from "../../lib/optionen/orte";
 import Message from "../../lib/mailsender/message";
 import { Mailingliste } from "../../lib/users/users";
 import MailRule from "../../lib/mailsender/mailRule";
+import Termin from "../../lib/ical/termin";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -164,7 +165,7 @@ export function veranstaltungForUrl(url: string, callback: Function): void {
   getJson(`/veranstaltungen/${encodeURIComponent(url)}.json`, (err: Error, result: any) => callback(new Veranstaltung(result)));
 }
 
-// Optionen
+// Optionen & Termine
 export function optionen(callback: Function): void {
   getJson("/optionen/optionen.json", (err: Error, result: any) => callback(new OptionValues(result)));
 }
@@ -175,6 +176,18 @@ export function orte(callback: Function): void {
 
 export function saveOptionen(optionen: OptionValues, callback: Function): void {
   postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback);
+}
+
+export function termine(callback: Function): void {
+  getJson("/ical/termine.json", (err: Error, result: any) => callback(result.map((r: any) => new Termin(r))));
+}
+
+export function deleteTermin(terminID: string, callback: Function): void {
+  postAndReceive("/optionen/deletetermin", { id: terminID }, (err: Error, json: object) => callback(json));
+}
+
+export function saveTermin(termin: Termin, callback: Function): void {
+  postAndReceive("/optionen/savetermin", termin, (err: Error, json: object) => callback(json));
 }
 
 // Image

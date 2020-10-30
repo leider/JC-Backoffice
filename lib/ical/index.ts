@@ -53,12 +53,23 @@ app.get("/termine", (req, res, next) => {
   });
 });
 
+app.get("/termine.json", (req, res, next) => {
+  terminstore.alle((err: Error | null, termine: Termin[]) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+    res.set("Content-Type", "application/json").send(termine);
+  });
+});
+
 app.get("/eventsForCalendar", (req, res, next) => {
   const start = DatumUhrzeit.forISOString(<string>req.query.start);
   const end = DatumUhrzeit.forISOString(<string>req.query.end);
   icalService.termineAsEventsBetween(start, end, (err: Error | null, events: TerminEvent[]) => {
     if (err) {
-      return next(err);
+      res.status(500).send(err);
+      return;
     }
     return res.end(JSON.stringify(events));
   });
@@ -68,7 +79,8 @@ app.get("/eventsFromIcalURL/:url", (req, res, next) => {
   const url = req.params.url;
   icalService.termineFromIcalURL(url, (err: Error | null, events: TerminEvent) => {
     if (err) {
-      return next(err);
+      res.status(500).send(err);
+      return;
     }
     return res.end(JSON.stringify(events));
   });

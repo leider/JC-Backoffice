@@ -1,4 +1,5 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
+import Misc from "../commons/misc";
 
 export type TerminType = "Sonstiges" | "Feiertag" | "Ferien" | "Vermietung";
 
@@ -22,13 +23,19 @@ interface TerminUI {
 export default class Termin {
   id?: string;
   beschreibung?: string;
+  originalBeschreibung?: string;
   typ: TerminType = "Sonstiges";
   startDate: Date = new DatumUhrzeit().toJSDate;
   endDate: Date = this.startDate;
 
   constructor(object?: any) {
     if (object) {
-      Object.assign(this, object);
+      this.id = object.id;
+      this.beschreibung = object.beschreibung;
+      this.originalBeschreibung = object.beschreibung;
+      this.typ = object.typ;
+      this.startDate = Misc.stringOrDateToDate(object.startDate) || new DatumUhrzeit().toJSDate;
+      this.endDate = Misc.stringOrDateToDate(object.endDate) || this.startDate;
       if (!this.id) {
         this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
       }

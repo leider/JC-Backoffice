@@ -17,7 +17,7 @@
               th(style="width:85%") Users
               th
               th
-            MailinglistRow(
+            mailinglist-row(
               v-for="(list, index) in mailinglisten",
               :key="index",
               :mailinglist="list",

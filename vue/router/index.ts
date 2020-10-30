@@ -13,6 +13,7 @@ import MailRules from "@/views/mails/MailRules.vue";
 import ManualMail from "@/views/mails/ManualMail.vue";
 import Kassenbericht from "@/views/options/Kassenbericht.vue";
 import Monatsinfos from "@/views/team/Monatsinfos.vue";
+import TermineUndKalender from "@/views/options/TermineUndKalender.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -34,6 +35,7 @@ const routes = [
   { path: "/manualmail", component: ManualMail },
   { path: "/kassenbericht", component: Kassenbericht },
   { path: "/infos/:monat/:tab", component: Monatsinfos, props: true },
+  { path: "/terminekalender/:tab", component: TermineUndKalender, props: true },
 ];
 
 const router = new VueRouter({

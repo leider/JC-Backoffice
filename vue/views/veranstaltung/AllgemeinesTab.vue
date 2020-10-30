@@ -108,7 +108,6 @@ import OptionValues from "../../../lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
-import JazzInterval from "@/widgets/JazzInterval.vue";
 import Orte from "../../../lib/optionen/orte";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import JazzNumber from "@/widgets/JazzNumber.vue";
@@ -124,6 +123,7 @@ import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
 import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/object/vertrag";
 import { uploadFile } from "@/commons/loader";
 import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
+import JazzInterval from "@/views/veranstaltung/JazzInterval.vue";
 
 @Component({
   components: {
