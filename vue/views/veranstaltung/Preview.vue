@@ -1,19 +1,15 @@
 <template lang="pug">
 .col-12
   .btn-group.float-right
-    b-button.btn.btn-danger(v-if="isOrgaTeam", :disabled="kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
-      b-icon-trash
-      | #{" "}Löschen
-      b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
-        p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
-        template(v-slot:modal-header)
-          h3.modal-title Veranstaltung löschen
-        template(v-slot:modal-footer="{ ok, cancel }")
-          .row: .col-12: .btn-group.float-right
-            b-button.btn.btn-light(@click="cancel()") Abbrechen
-            b-button.btn.btn-danger.text(@click="ok()")
-              b-icon-trash
-              | &nbsp;Löschen
+    delete-button-with-dialog(
+      v-if="isOrgaTeam",
+      :id="veranstaltung.id",
+      :name="veranstaltung.kopf.titel",
+      objecttype="Veranstaltung",
+      :callback="loeschen",
+      :dirty="kopf.confirmed",
+      show-text="true"
+    )
     b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
       b-icon-files
       | #{" "}Kopieren
@@ -118,8 +114,9 @@ import renderer from "../../../lib/commons/renderer";
 import Technik from "../../../lib/veranstaltungen/object/technik";
 import Presse from "../../../lib/veranstaltungen/object/presse";
 import Kontakt from "../../../lib/veranstaltungen/object/kontakt";
+import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
 @Component({
-  components: { JazzCurrencyDisplay, PreviewUserRow, LegendCard },
+  components: { DeleteButtonWithDialog, JazzCurrencyDisplay, PreviewUserRow, LegendCard },
 })
 export default class Preview extends Vue {
   @Prop() url!: string;

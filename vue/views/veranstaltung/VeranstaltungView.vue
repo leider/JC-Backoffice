@@ -1,23 +1,15 @@
 <template lang="pug">
 .col-12
   .btn-group.float-right
-    b-button.btn.btn-danger(
+    delete-button-with-dialog(
       v-if="showAllTabs",
-      :disabled="isNew || veranstaltung.kopf.confirmed",
-      v-b-modal="`dialog-${veranstaltung.id}`"
+      :id="veranstaltung.id",
+      :name="veranstaltung.kopf.titel",
+      objecttype="Veranstaltung",
+      :callback="loeschen",
+      :dirty="isNew || veranstaltung.kopf.confirmed",
+      show-text="true"
     )
-      b-icon-trash
-      | #{" "}Löschen
-      b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="loeschen")
-        p Bist Du sicher, dass Du {{ veranstaltung.kopf.titel }} löschen willst?
-        template(v-slot:modal-header)
-          h3.modal-title Veranstaltung löschen
-        template(v-slot:modal-footer="{ ok, cancel }")
-          .row: .col-12: .btn-group.float-right
-            b-button.btn.btn-light(@click="cancel()") Abbrechen
-            b-button.btn.btn-danger.text(@click="ok()")
-              b-icon-trash
-              | &nbsp;Löschen
     b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
       b-icon-files
       | #{" "}Kopieren
@@ -84,6 +76,7 @@ import KalkulationTab from "@/views/veranstaltung/KalkulationTab.vue";
 import KasseTab from "@/views/veranstaltung/KasseTab.vue";
 import HotelTab from "@/views/veranstaltung/HotelTab.vue";
 import PresseTab from "@/views/veranstaltung/PresseTab.vue";
+import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
 
 export interface EditVariables {
   hotelpreiseAlsDefault: boolean;
@@ -92,7 +85,7 @@ export interface EditVariables {
 }
 
 @Component({
-  components: { PresseTab, HotelTab, KasseTab, KalkulationTab, TechnikTab, AllgemeinesTab, SectionTab },
+  components: { DeleteButtonWithDialog, PresseTab, HotelTab, KasseTab, KalkulationTab, TechnikTab, AllgemeinesTab, SectionTab },
 })
 export default class VeranstaltungView extends Vue {
   @Prop() url!: string;

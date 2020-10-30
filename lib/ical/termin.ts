@@ -39,6 +39,10 @@ export default class Termin {
       if (!this.id) {
         this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
       }
+    } else {
+      this.startDate = new DatumUhrzeit().toJSDate;
+      this.endDate = this.startDate;
+      this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
     }
   }
 

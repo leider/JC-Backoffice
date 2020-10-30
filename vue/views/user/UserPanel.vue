@@ -44,16 +44,7 @@
             b-button.btn.btn-success.text(@click="ok()", :disabled="newPass.length < 6")
               b-icon-check-square
               | &nbsp;Ändern
-      b-modal(:id="`delete-${user.id}`", no-close-on-backdrop, @ok="deleteUser")
-        p Bist Du sicher, dass Du den User "{{ user.name }}" löschen willst?
-        template(v-slot:modal-header)
-          h3.modal-title User löschen
-        template(v-slot:modal-footer="{ ok, cancel }")
-          .row: .col-12: .btn-group.float-right
-            b-button.btn.btn-light(@click="cancel()") Abbrechen
-            b-button.btn.btn-danger.text(@click="ok()")
-              b-icon-trash
-              | &nbsp;Löschen
+      delete-dialog(:id="user.id", :name="user.name", objecttype="User", :callback="deleteUser")
 
     b-collapse(v-model="expanded")
       table.table.table-striped.table-sm
@@ -83,9 +74,10 @@ import JazzMail from "@/widgets/JazzMail.vue";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzPassTwice from "@/widgets/JazzPassTwice.vue";
+import DeleteDialog from "@/widgets/DeleteDialog.vue";
 
 @Component({
-  components: { JazzPassTwice, JazzCheck, SingleSelect, JazzMail, JazzText, SingleSelectPure },
+  components: { DeleteDialog, JazzPassTwice, JazzCheck, SingleSelect, JazzMail, JazzText, SingleSelectPure },
 })
 export default class UserPanel extends Vue {
   @Prop() currentUser!: User;
