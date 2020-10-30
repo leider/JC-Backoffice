@@ -104,7 +104,6 @@ export default class UserPanelsToolbar extends Vue {
     this.newUser = new User({ gruppen: [""] });
   }
   createUser(): void {
-    console.log(JSON.stringify(this.newUser));
     saveNewUser(this.newUser, (err: Error, res: { message: string }) => {
       if (err) {
         console.log(err);

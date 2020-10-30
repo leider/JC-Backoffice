@@ -11,6 +11,7 @@ import Message from "../../lib/mailsender/message";
 import { Mailingliste } from "../../lib/users/users";
 import MailRule from "../../lib/mailsender/mailRule";
 import Termin from "../../lib/ical/termin";
+import FerienIcals from "../../lib/optionen/ferienIcals";
 
 function getJson(url: string, callback: any): void {
   fetch(url)
@@ -179,7 +180,7 @@ export function saveOptionen(optionen: OptionValues, callback: Function): void {
 }
 
 export function termine(callback: Function): void {
-  getJson("/ical/termine.json", (err: Error, result: any) => callback(result.map((r: any) => new Termin(r))));
+  getJson("/optionen/termine.json", (err: Error, result: any) => callback(result.map((r: any) => new Termin(r))));
 }
 
 export function deleteTermin(terminID: string, callback: Function): void {
@@ -188,6 +189,14 @@ export function deleteTermin(terminID: string, callback: Function): void {
 
 export function saveTermin(termin: Termin, callback: Function): void {
   postAndReceive("/optionen/savetermin", termin, (err: Error, json: object) => callback(json));
+}
+
+export function kalender(callback: Function): void {
+  getJson("/optionen/kalender.json", (err: Error, result: any) => callback(new FerienIcals(result)));
+}
+
+export function saveKalender(kalender: FerienIcals, callback: Function): void {
+  postAndReceive("/optionen/savekalender", kalender, (err: Error, json: object) => callback(json));
 }
 
 // Image

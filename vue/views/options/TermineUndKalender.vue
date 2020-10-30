@@ -23,18 +23,39 @@
                       th
                     termin-row(v-for="(termin, index) in termine", :key="index", :termin="termin", @loeschen="deleteTermin(termin)")
         b-tab(title="Kalender", :active="'kalender' === tab", @click="tabActivated('kalender')")
+          .row
+            .col-12
+              .table-responsive(style="min-height:500px")
+                table.table.table-sm.table-striped
+                  tbody
+                    tr
+                      th(style="width:15%") Name
+                      th(style="width:70%") URL
+                      th(style="width:15%") Typ
+                      th
+                      th
+                    kalender-row(
+                      v-for="(kalender, index) in kalender.icals",
+                      :key="index",
+                      :kalender="kalender",
+                      @loeschen="deleteKalender(kalender)",
+                      @speichern="saveKalender()"
+                    )
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import TerminRow from "@/views/options/TerminRow.vue";
 import Termin from "../../../lib/ical/termin";
-import { deleteTermin, termine } from "@/commons/loader";
+import { deleteTermin, kalender, saveKalender, termine } from "@/commons/loader";
+import KalenderRow from "@/views/options/KalenderRow.vue";
+import FerienIcals, { Ical } from "../../../lib/optionen/ferienIcals";
 @Component({
-  components: { TerminRow },
+  components: { KalenderRow, TerminRow },
 })
 export default class TermineUndKalender extends Vue {
   private termine: Termin[] = [];
+  private kalender: FerienIcals = new FerienIcals();
   @Prop() tab!: string;
 
   @Watch("$url")
@@ -42,6 +63,9 @@ export default class TermineUndKalender extends Vue {
     document.title = "Termine und Kalender";
     termine((termine: Termin[]) => {
       this.termine = termine;
+    });
+    kalender((kalender: FerienIcals) => {
+      this.kalender = kalender;
     });
   }
 
@@ -66,6 +90,21 @@ export default class TermineUndKalender extends Vue {
     if (this.tab === "termine") {
       this.termine.unshift(new Termin());
     }
+    if (this.tab === "kalender") {
+      this.kalender.icals.unshift(new Ical());
+    }
+  }
+
+  saveKalender() {
+    saveKalender(this.kalender, (result: any) => {
+      console.log(result);
+    });
+  }
+
+  deleteKalender(kalender: Ical) {
+    const index = this.kalender.icals.indexOf(kalender);
+    this.kalender.icals.splice(index, 1);
+    this.saveKalender();
   }
 }
 </script>

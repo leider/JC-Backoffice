@@ -18,8 +18,8 @@ div
             span &nbsp;Optionen
           b-dropdown-item(href="/optionen") Optionen
           b-dropdown-item(href="/optionen/orte") Orte
-          b-dropdown-item(href="/optionen/icals") Ferienkalender
-          b-dropdown-item(href="/ical/termine") Termine
+          b-dropdown-item(to="/terminekalender/kalender") Ferienkalender
+          b-dropdown-item(to="/terminekalender/termine") Termine
           b-dropdown-item(to="/kassenbericht") Kassenberichte
           b-dropdown-item(v-if="showItemSuperuser", to="/imageoverview") Bilder bearbeiten
         b-nav-item(v-if="showItem", to="/gema", active-class="active")

@@ -43,26 +43,6 @@ app.get("/calURLs.json", (req, res) => {
   });
 });
 
-app.get("/termine", (req, res, next) => {
-  terminstore.alle((err: Error | null, termine: Termin[]) => {
-    if (err) {
-      return next(err);
-    }
-    termine.unshift(new Termin());
-    return res.render("termine", { termine });
-  });
-});
-
-app.get("/termine.json", (req, res, next) => {
-  terminstore.alle((err: Error | null, termine: Termin[]) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(termine);
-  });
-});
-
 app.get("/eventsForCalendar", (req, res, next) => {
   const start = DatumUhrzeit.forISOString(<string>req.query.start);
   const end = DatumUhrzeit.forISOString(<string>req.query.end);
@@ -71,7 +51,7 @@ app.get("/eventsForCalendar", (req, res, next) => {
       res.status(500).send(err);
       return;
     }
-    return res.end(JSON.stringify(events));
+    return res.set("Content-Type", "application/json").send(events);
   });
 });
 
@@ -82,48 +62,8 @@ app.get("/eventsFromIcalURL/:url", (req, res, next) => {
       res.status(500).send(err);
       return;
     }
-    return res.end(JSON.stringify(events));
+    return res.set("Content-Type", "application/json").send(events);
   });
-});
-
-app.get("/delete/:id", (req, res, next) => {
-  terminstore.remove(req.params.id, (err: Error | null) => {
-    if (err) {
-      return next(err);
-    }
-    return res.redirect("/ical/termine");
-  });
-});
-
-app.post("/submit", (req, res, next) => {
-  if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
-  }
-
-  const body = req.body;
-  if (body.id) {
-    return terminstore.forId(body.id, (err: Error | null, termin: Termin) => {
-      if (err || !termin) {
-        return next(err);
-      }
-      termin.fillFromUI(body);
-      return terminstore.save(termin, (err1: Error | null) => {
-        if (err1) {
-          return next(err1);
-        }
-        return res.redirect("/ical/termine");
-      });
-    });
-  } else {
-    const termin = new Termin();
-    termin.fillFromUI(body);
-    return terminstore.save(termin, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      return res.redirect("/ical/termine");
-    });
-  }
 });
 
 export default app;

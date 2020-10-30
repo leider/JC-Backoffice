@@ -78,16 +78,17 @@ app.get("/orte", (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.get("/icals", (req: Request, res: Response, next: NextFunction) => {
+app.get("/kalender.json", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
 
-  return service.icals((err: Error | null, icals: FerienIcals) => {
+  return store.icals((err: Error | null, icals: FerienIcals) => {
     if (err) {
-      return next(err);
+      res.status(500).send(err);
+      return;
     }
-    return res.render("icals", { icals: icals || {} });
+    res.set("Content-Type", "application/json").send(icals.toJSON());
   });
 });
 
@@ -123,40 +124,31 @@ app.post("/ortChanged", (req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-app.post("/icalChanged", (req: Request, res: Response, next: NextFunction) => {
+app.post("/savekalender", (req: Request, res: Response, next: NextFunction) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
-  const ical = req.body;
-  // eslint-disable-next-line no-underscore-dangle
-  delete ical._csrf;
-  return service.icals((err: Error | null, icals: FerienIcals) => {
+  const ical = new FerienIcals(req.body);
+  store.save(ical, (err: Error | null) => {
     if (err) {
-      return next(err);
+      return res.status(500).send(err);
     }
-    if (ical.name) {
-      if (ical.oldname) {
-        //ändern
-        icals.updateIcal(ical.oldname, ical);
-      } else {
-        //neu
-        icals.addIcal(ical);
-      }
-    } else {
-      //löschen
-      icals.deleteIcal(ical.oldname);
+    res.set("Content-Type", "application/json").send(ical.toJSON());
+  });
+});
+
+app.get("/termine.json", (req, res, next) => {
+  terminstore.alle((err: Error | null, termine: Termin[]) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
     }
-    return store.save(icals, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      return res.redirect("icals");
-    });
+    res.set("Content-Type", "application/json").send(termine);
   });
 });
 
 app.post("/savetermin", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isBookingTeam()) {
+  if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/"); //ErrorHandling!!
   }
   const termin = new Termin(req.body);
@@ -170,7 +162,7 @@ app.post("/savetermin", (req: Request, res: Response) => {
 });
 
 app.post("/deletetermin", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isBookingTeam()) {
+  if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/"); //ErrorHandling!!
   }
   const id = req.body.id;

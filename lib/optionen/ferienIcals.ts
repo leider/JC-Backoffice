@@ -1,9 +1,6 @@
-import reject from "lodash/reject";
-
 import Termin, { TerminType } from "../ical/termin";
 
-class Ical {
-  oldname?: string;
+export class Ical {
   name = "";
   url = "";
   typ: TerminType = "Sonstiges";
@@ -14,10 +11,8 @@ class Ical {
     }
   }
 
-  update(object: any) {
-    this.name = object.name;
-    this.url = object.url;
-    this.typ = object.typ;
+  toJSON(): any {
+    return Object.assign({}, this);
   }
 }
 
@@ -38,34 +33,10 @@ export default class FerienIcals {
   }
 
   toJSON(): any {
-    return Object.assign({}, this);
-  }
-
-  forName(name: string): Ical | undefined {
-    return this.icals.find((ical) => ical.name === name);
-  }
-
-  addIcal(object: any): void {
-    delete object.oldname;
-    if (this.forName(object.name)) {
-      this.updateIcal(object.name, object);
-    } else {
-      this.icals.push(new Ical(object));
-    }
-  }
-
-  deleteIcal(name: string): void {
-    if (name) {
-      this.icals = reject(this.icals, { name });
-    }
-  }
-
-  updateIcal(oldname: string, object: any): void {
-    const ical = this.forName(oldname);
-    if (!ical) {
-      return;
-    }
-    ical.update(object);
+    const res: any = {};
+    Object.assign(res, this);
+    res.icals = this.icals.map((i) => i.toJSON());
+    return res;
   }
 
   forCalendar(): CalSource[] {
