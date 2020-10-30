@@ -70,7 +70,9 @@ export default class TermineUndKalender extends Vue {
   }
 
   tabActivated(section: string): void {
-    this.$router.replace(`/terminekalender/${section}`);
+    if (this.tab !== section) {
+      this.$router.replace(`/terminekalender/${section}`);
+    }
   }
 
   deleteTermin(termin: Termin) {

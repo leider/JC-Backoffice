@@ -16,8 +16,8 @@ div
           template(v-slot:button-content)
             b-icon-toggles
             span &nbsp;Optionen
-          b-dropdown-item(href="/optionen") Optionen
-          b-dropdown-item(href="/optionen/orte") Orte
+          b-dropdown-item(to="/optionen/optionen") Optionen
+          b-dropdown-item(to="/optionen/orte") Orte
           b-dropdown-item(to="/terminekalender/kalender") Ferienkalender
           b-dropdown-item(to="/terminekalender/termine") Termine
           b-dropdown-item(to="/kassenbericht") Kassenberichte

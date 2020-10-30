@@ -11,19 +11,6 @@ import terminstore from "../ical/terminstore";
 
 const app = expressAppIn(__dirname);
 
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-
-  return service.optionen((err: Error | null, optionen: OptionValues) => {
-    if (err) {
-      return next(err);
-    }
-    return res.render("optionen", { optionen: optionen });
-  });
-});
-
 app.get("/optionen.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
@@ -65,16 +52,16 @@ app.get("/orte.json", (req: Request, res: Response) => {
   });
 });
 
-app.get("/orte", (req: Request, res: Response, next: NextFunction) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+app.post("/saveOrte", (req: Request, res: Response) => {
+  if (!res.locals.accessrights.isOrgaTeam) {
+    return res.redirect("/"); //ErrorHandling!!
   }
-
-  return service.orte((err: Error | null, orte: Orte) => {
+  const orte = new Orte(req.body);
+  store.save(orte, (err: Error | null) => {
     if (err) {
-      return next(err);
+      return res.status(500).send(err);
     }
-    return res.render("orte", { orte });
+    res.set("Content-Type", "application/json").send(orte.toJSON());
   });
 });
 
@@ -89,38 +76,6 @@ app.get("/kalender.json", (req: Request, res: Response, next: NextFunction) => {
       return;
     }
     res.set("Content-Type", "application/json").send(icals.toJSON());
-  });
-});
-
-app.post("/ortChanged", (req: Request, res: Response, next: NextFunction) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-  const ort = req.body;
-  // eslint-disable-next-line no-underscore-dangle
-  delete ort._csrf;
-  return service.orte((err: Error | null, orte: Orte) => {
-    if (err) {
-      return next(err);
-    }
-    if (ort.name) {
-      if (ort.oldname) {
-        //ändern
-        orte.updateOrt(ort.oldname, ort);
-      } else {
-        //neu
-        orte.addOrt(ort);
-      }
-    } else {
-      //löschen
-      orte.deleteOrt(ort.oldname);
-    }
-    return store.save(orte, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      return res.redirect("orte");
-    });
   });
 });
 
@@ -171,24 +126,6 @@ app.post("/deletetermin", (req: Request, res: Response) => {
       return res.status(500).send(err);
     }
     res.set("Content-Type", "application/json").send({ message: "Termin gelöscht" });
-  });
-});
-
-app.post("/submit", (req: Request, res: Response, next: NextFunction) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
-  }
-  return service.optionen((err: Error | null, optionen: OptionValues) => {
-    if (err) {
-      return next(err);
-    }
-    optionen.fillFromUI(req.body);
-    return store.save(optionen, (err1: Error | null) => {
-      if (err1) {
-        return next(err1);
-      }
-      return res.redirect("/");
-    });
   });
 });
 

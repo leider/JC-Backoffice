@@ -11,15 +11,15 @@ $vue-multiselect-color : $custom-select-color !default;
 $vue-multiselect-disabled-bg : $custom-select-disabled-bg !default;
 $vue-multiselect-disabled-color : $custom-select-disabled-color !default;
 
-$vue-multiselect-option-selected-bg : theme-color("success") !default;
+$vue-multiselect-option-selected-bg : theme-color("info") !default;
 $vue-multiselect-option-selected-color : #fff !default;
 $vue-multiselect-option-highlight-color : #fff !default;
-$vue-multiselect-option-highlight-bg : theme-color("secondary") !default;
+$vue-multiselect-option-highlight-bg : theme-color("primary") !default;
 $vue-multiselect-option-selected-highlight-color : #fff !default;
-$vue-multiselect-option-selected-highlight-bg : theme-color("secondary") !default;
+$vue-multiselect-option-selected-highlight-bg : theme-color("secodary") !default;
 
-$vue-multiselect-tag-color : $light !default;
-$vue-multiselect-tag-bg : $success !default;
+$vue-multiselect-tag-color : $dark !default;
+$vue-multiselect-tag-bg : theme-color("light") !default;
 $vue-multiselect-tag-font-size : $badge-font-size !default;
 $vue-multiselect-tag-font-weight : normal !default;
 $vue-multiselect-tag-icon-size : 1.7rem !default;
@@ -175,6 +175,7 @@ fieldset[disabled] .multiselect {
   text-overflow : ellipsis;
   font-size     : $vue-multiselect-tag-font-size;
   font-weight   : $vue-multiselect-tag-font-weight;
+  border        : $vue-multiselect-tag-color solid $vue-multiselect-border-width;
 }
 
 .multiselect__tag-icon {

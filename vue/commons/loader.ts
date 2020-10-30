@@ -171,12 +171,16 @@ export function optionen(callback: Function): void {
   getJson("/optionen/optionen.json", (err: Error, result: any) => callback(new OptionValues(result)));
 }
 
+export function saveOptionen(optionen: OptionValues, callback: Function): void {
+  postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback);
+}
+
 export function orte(callback: Function): void {
   getJson("/optionen/orte.json", (err: Error, result: any) => callback(new Orte(result)));
 }
 
-export function saveOptionen(optionen: OptionValues, callback: Function): void {
-  postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback);
+export function saveOrte(orte: Orte, callback: Function): void {
+  postAndReceive("/optionen/saveOrte", orte.toJSON(), callback);
 }
 
 export function termine(callback: Function): void {

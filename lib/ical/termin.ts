@@ -63,15 +63,6 @@ export default class Termin {
     }[typ];
   }
 
-  fillFromUI(object: TerminUI): Termin {
-    this.startDate = DatumUhrzeit.forGermanStringOrNow(object.startDate).toJSDate;
-    this.endDate = DatumUhrzeit.forGermanStringOrNow(object.endDate, "12:00").toJSDate;
-    this.id = object.id || new DatumUhrzeit().toLocalDateTimeString;
-    this.beschreibung = object.beschreibung;
-    this.typ = object.typ || Termin.typen()[0];
-    return this;
-  }
-
   startDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.startDate);
   }

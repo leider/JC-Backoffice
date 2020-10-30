@@ -169,6 +169,9 @@ export default class VeranstaltungView extends Vue {
   }
 
   tabActivated(section: string): void {
+    if (this.activeSection === section) {
+      return;
+    }
     this.activeSection = section;
     if (this.veranstaltung.url) {
       const url = encodeURIComponent(this.veranstaltung.url);

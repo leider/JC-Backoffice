@@ -4,7 +4,7 @@ import Kopf from "../veranstaltungen/object/kopf";
 
 const sortByNameCaseInsensitive = sortBy(flowRight(toLower, prop("name")));
 
-class Ort {
+export class Ort {
   name = "";
   flaeche = "";
   presseIn?: string;

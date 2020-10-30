@@ -54,17 +54,6 @@ export default class OptionValues {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fillFromUI(object: any): OptionValues {
-    this.genres = misc.toArray(object.genres);
-    this.typen = misc.toArray(object.typen);
-    this.kooperationen = misc.toArray(object.kooperationen);
-    this.backlineJazzclub = misc.toArray(object.backlineJazzclub);
-    this.backlineRockshop = misc.toArray(object.backlineRockshop);
-    this.artists = misc.toArray(object.artists);
-    return this;
-  }
-
   preisprofile(): Preisprofil[] {
     return [
       {

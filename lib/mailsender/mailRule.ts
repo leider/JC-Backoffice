@@ -158,12 +158,6 @@ export default class MailRule {
     }
   }
 
-  fillFromUI(object: MailRuleUI): MailRule {
-    Object.assign(this, object);
-    this.updateId();
-    return this;
-  }
-
   rules(): string[] {
     return allMailrules;
   }

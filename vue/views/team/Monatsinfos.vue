@@ -65,7 +65,9 @@ ${veranstaltung.presse.fullyQualifiedJazzclubURL()}`);
   }
 
   tabActivated(section: string): void {
-    this.$router.replace(`/infos/${this.monat}/${section}`);
+    if (this.tab !== section) {
+      this.$router.replace(`/infos/${this.monat}/${section}`);
+    }
   }
 }
 </script>
