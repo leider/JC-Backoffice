@@ -188,6 +188,10 @@ describe("DatumUhrzeit", () => {
     it("formatiert für Presse", () => {
       expect(januar01.fuerPresse).to.eql("Dienstag, 1. Januar 2019 um 00:00");
     });
+
+    it("formatiert für iCal", () => {
+      expect(januar01.fuerIcal).to.eql("20181231T230000Z");
+    });
   });
 
   describe("Vergleiche", () => {

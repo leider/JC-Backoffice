@@ -4,6 +4,7 @@ import superagent from "superagent";
 import flatMap from "lodash/flatMap";
 // @ts-ignore
 import icalparser, { CalendarComponent } from "ical";
+import { ComplexDate, Parser } from "ikalendar";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 import store from "../veranstaltungen/veranstaltungenstore";
@@ -44,27 +45,30 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: Response, ca
 }
 
 function termineForIcal(ical: Ical, callback: Function): void {
+  function toIsoString(event?: string | ComplexDate): string {
+    if (!event) {
+      return "";
+    }
+    if (typeof event === "string") {
+      return event;
+    }
+    return toIsoString((event as ComplexDate).value);
+  }
+
   superagent.get(ical.url, (err: any, resp: superagent.Response) => {
     if (err) {
       return callback(err);
     }
-    const data = icalparser.parseICS(resp.text);
-    const eventArray: TerminEvent[] = [];
-    for (let k in data) {
-      if (data.hasOwnProperty(k)) {
-        const event: CalendarComponent = data[k];
-        if (event.type == "VEVENT") {
-          eventArray.push({
-            color: ical.color,
-            display: "block",
-            start: event.start?.toISOString() || "",
-            end: (event.end || event.start)?.toISOString() || "",
-            title: event.summary || "",
-            tooltip: event.summary || "",
-          });
-        }
-      }
-    }
+    const parsed = new Parser().parse(resp.text);
+    const eventArray: TerminEvent[] =
+      parsed.events?.map((event) => ({
+        color: ical.color,
+        display: "block",
+        start: toIsoString(event.start),
+        end: toIsoString(event.end || event.start),
+        title: event.summary || "",
+        tooltip: event.summary || "",
+      })) || [];
     return callback(null, eventArray);
   });
 }

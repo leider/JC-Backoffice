@@ -24,6 +24,9 @@ dayjs.extend(weekOfYear);
 import "dayjs/locale/de";
 dayjs.locale("de");
 
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
 type AdditionOptions = {
   jahre?: number;
   monate?: number;
@@ -230,6 +233,10 @@ export default class DatumUhrzeit {
 
   get fuerPresse(): string {
     return this.format("dddd, LL [um] HH:mm");
+  }
+
+  get fuerIcal(): string {
+    return this.value.utc().format("YYYYMMDD[T]HHmmss[Z]");
   }
 
   format(options: string): string {
