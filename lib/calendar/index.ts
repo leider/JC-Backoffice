@@ -2,8 +2,6 @@ import async from "async";
 import { Response } from "express";
 import superagent from "superagent";
 import flatMap from "lodash/flatMap";
-// @ts-ignore
-import icalparser, { CalendarComponent } from "ical";
 import { ComplexDate, Parser } from "ikalendar";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
