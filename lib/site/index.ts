@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/vue/team");
   }
-  return res.redirect("/veranstaltungen");
+  return res.redirect("/vue/veranstaltungen");
 });
 
 app.get("/robots.txt", (req, res, next) => {

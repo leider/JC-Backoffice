@@ -27,10 +27,6 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
 }
 
 export default {
-  forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, partial(toTermin, callback));
-  },
-
   alle: function alle(callback: Function): void {
     persistence.list({ startDate: -1 }, partial(toTerminList, callback));
   },

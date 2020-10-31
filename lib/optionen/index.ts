@@ -1,13 +1,12 @@
 import service from "./optionenService";
 import store from "./optionenstore";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
 import OptionValues from "./optionValues";
 import Orte from "./orte";
 import FerienIcals from "./ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { NextFunction, Request, Response } from "express";
-import Termin from "../ical/termin";
-import terminstore from "../ical/terminstore";
+import Termin from "./termin";
+import terminstore from "./terminstore";
 
 const app = expressAppIn(__dirname);
 

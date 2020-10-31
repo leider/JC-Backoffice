@@ -1,7 +1,8 @@
 import fs from "fs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const zipstream = require("zip-stream");
-import express = require("express");
+
+import express from "express";
 import async from "async";
 import flatten from "lodash/flatten";
 

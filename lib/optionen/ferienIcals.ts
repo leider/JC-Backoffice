@@ -1,4 +1,4 @@
-import Termin, { TerminType } from "../ical/termin";
+import Termin, { TerminType } from "./termin";
 
 export class Ical {
   name = "";

@@ -36,7 +36,8 @@ function allImageNames(res: Response): void {
 
 app.get("/allImagenames.json", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
+    res.sendStatus(403);
+    return;
   }
   allImageNames(res);
 });
@@ -49,7 +50,8 @@ app.post("/imagenamesChanged", (req, res, next) => {
   const rows = req.body as ImageOverviewRow[];
   service.renameImages(rows, (err) => {
     if (err) {
-      return next(err);
+      res.status(500).send(err);
+      return;
     }
     allImageNames(res);
   });

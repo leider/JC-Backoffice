@@ -39,8 +39,6 @@ function renameImages(rows: ImageOverviewRow[], callback: ErrorCallback): void {
 }
 
 export default {
-  renameImage,
-
   renameImages,
 
   alleBildNamen: function alleBildNamen(callback: Function): void {

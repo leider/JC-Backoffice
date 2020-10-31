@@ -25,10 +25,6 @@ app.get("/:year/:month.json", (req, res) => {
   });
 });
 
-app.get("/:year/:month", (req, res) => {
-  res.redirect(`/vue/programmheft/${req.params.year}/${req.params.month}`);
-});
-
 app.post("/saveProgrammheft", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");

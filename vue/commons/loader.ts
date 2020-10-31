@@ -10,7 +10,7 @@ import Orte from "../../lib/optionen/orte";
 import Message from "../../lib/mailsender/message";
 import { Mailingliste } from "../../lib/users/users";
 import MailRule from "../../lib/mailsender/mailRule";
-import Termin from "../../lib/ical/termin";
+import Termin from "../../lib/optionen/termin";
 import FerienIcals from "../../lib/optionen/ferienIcals";
 
 function getJson(url: string, callback: any): void {

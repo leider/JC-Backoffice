@@ -1,5 +1,3 @@
-import { generate } from "generate-password";
-
 import store from "./userstore";
 import { hashPassword, genSalt } from "../commons/hashPassword";
 import User from "./user";

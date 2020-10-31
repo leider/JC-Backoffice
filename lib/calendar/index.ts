@@ -12,10 +12,10 @@ import optionenstore from "../optionen/optionenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import FerienIcals, { Ical } from "../optionen/ferienIcals";
-import Termin, { TerminEvent } from "../ical/termin";
+import Termin, { TerminEvent } from "../optionen/termin";
 import fieldHelpers from "../commons/fieldHelpers";
 import { filterUnbestaetigteFuerJedermann } from "../veranstaltungen";
-import terminstore from "../ical/terminstore";
+import terminstore from "../optionen/terminstore";
 
 const app = expressAppIn(__dirname);
 

@@ -75,16 +75,6 @@ app.post("/deleteUser", (req, res) => {
 
 // Mailinglisten und Senden
 
-app.get("/mailinglists.json", (req, res, next) => {
-  store.allUsers((err: Error | null, users: User[]) => {
-    if (err) {
-      return next(err);
-    }
-    const listen = new Users(users).mailinglisten;
-    res.render("mailingliste", { listen, users: users.filter((user) => !!user.email) });
-  });
-});
-
 app.post("/rundmail", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return;
