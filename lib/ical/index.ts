@@ -1,4 +1,5 @@
 import express from "express";
+import IcalGenerator, { ICalCalendar } from "ical-generator";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../veranstaltungen/object/veranstaltung";
@@ -6,26 +7,24 @@ import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const icalendar = require("icalendar");
+function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): ICalCalendar {
+  const calendar = IcalGenerator();
 
-function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): object {
-  function asICal(veranstaltung: Veranstaltung): object {
-    const event = new icalendar.VEvent(veranstaltung.url);
-    event.setSummary(veranstaltung.kopf.titel);
-    event.setDescription(veranstaltung.tooltipInfos());
-    event.addProperty("LOCATION", veranstaltung.kopf.ort.replace(/\r\n/g, "\n"));
-    event.setDate(veranstaltung.startDatumUhrzeit().toJSDate, veranstaltung.endDatumUhrzeit().toJSDate);
-    return event;
+  function asICal(veranstaltung: Veranstaltung): void {
+    calendar.createEvent({
+      uid: veranstaltung.url,
+      start: veranstaltung.startDatumUhrzeit().toJSDate,
+      end: veranstaltung.endDatumUhrzeit().toJSDate,
+      summary: veranstaltung.kopf.titel,
+      description: veranstaltung.tooltipInfos(),
+      location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
+    });
   }
-
-  // eslint-disable-next-line new-cap
-  const ical = new icalendar.iCalendar();
-  veranstaltungen.forEach((veranstaltung) => ical.addComponent(asICal(veranstaltung)));
-  return ical;
+  veranstaltungen.forEach((veranstaltung) => asICal(veranstaltung));
+  return calendar;
 }
 
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   function sendCalendarStringNamedToResult(ical: object, filename: string, res: express.Response): void {
     res.type("text/calendar; charset=utf-8");
     res.header("Content-Disposition", "inline; filename=" + filename + ".ics");
@@ -34,7 +33,7 @@ app.get("/", (req, res, next) => {
 
   store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err || !veranstaltungen) {
-      return next(err);
+      return res.status(500).send(err);
     }
     return sendCalendarStringNamedToResult(icalForVeranstaltungen(veranstaltungen.filter((v) => v.kopf.confirmed)), "events", res);
   });

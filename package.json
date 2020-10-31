@@ -37,6 +37,7 @@
     "generate-password": "1.5.1",
     "glob": "7.1.6",
     "icalendar": "0.7.1",
+    "ical-generator": "1.15.1",
     "intl": "^1.2.5",
     "jquery": "3.5.1",
     "lodash": "4.17.20",
