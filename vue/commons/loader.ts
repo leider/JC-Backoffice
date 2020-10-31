@@ -136,10 +136,6 @@ export function changePassword(user: User, callback: Function): void {
   postAndReceive("/users/changePassword", user.toJSON(), callback);
 }
 
-export function icals(callback: Function): void {
-  getJson("/ical/calURLs.json", (err: Error, json: object) => callback(json));
-}
-
 export function wikisubdirs(callback: Function): void {
   getJson("/vue-spa/wikisubdirs.json", (err: Error, json: object) => callback(json));
 }

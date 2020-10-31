@@ -13,8 +13,6 @@ import FullCalendar, { CalendarOptions } from "@fullcalendar/vue/";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import deLocale from "@fullcalendar/core/locales/de";
-import { CalSource } from "../../../lib/optionen/ferienIcals";
-import { icals } from "@/commons/loader";
 
 @Component({ components: { FullCalendar } })
 export default class JazzCalendar extends Vue {
@@ -23,7 +21,7 @@ export default class JazzCalendar extends Vue {
     initialView: "dayGridMonth",
     themeSystem: "bootstrap",
     bootstrapFontAwesome: false,
-    buttonText: { next: ">", prev: "<"},
+    buttonText: { next: ">", prev: "<" },
     locales: [deLocale],
     headerToolbar: { left: "title", center: "", right: "prev,today,next" },
     views: {
@@ -37,13 +35,7 @@ export default class JazzCalendar extends Vue {
       },
     },
     height: "auto",
-    eventSources: [],
+    eventSources: ["/calendar/events.json"],
   };
-
-  created(): void {
-    icals((icals: CalSource[]) => {
-      this.options.eventSources = icals;
-    });
-  }
 }
 </script>

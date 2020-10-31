@@ -9,6 +9,7 @@ import favicon from "serve-favicon";
 import morgan from "morgan";
 import csurf from "csurf";
 
+import calendarApp from "./lib/calendar/index";
 import gemaApp from "./lib/gema/index";
 import icalApp from "./lib/ical";
 import imageApp from "./lib/image";
@@ -97,6 +98,7 @@ export default function (app: express.Express) {
   app.use(addCsrfTokenToLocals);
   app.use(wikiSubdirs);
   app.use("/", siteApp);
+  useApp(app, "calendar", calendarApp);
   useApp(app, "mailsender", mailsenderApp);
   useApp(app, "optionen", optionenApp);
   useApp(app, "veranstaltungen", veranstaltungenApp);

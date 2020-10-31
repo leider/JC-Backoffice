@@ -30,7 +30,7 @@ type CalendarEvent = {
   className: string;
 };
 
-function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res: express.Response): Veranstaltung[] {
+export function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res: express.Response): Veranstaltung[] {
   if (res.locals.accessrights.isBookingTeam()) {
     return veranstaltungen;
   }
@@ -117,17 +117,6 @@ app.get("/imgzip/:monat", (req, res, next) => {
         return zip.finalize();
       }
     );
-  });
-});
-
-app.get("/eventsForCalendar", (req, res, next) => {
-  const start = DatumUhrzeit.forISOString(<string>req.query.start);
-  const end = DatumUhrzeit.forISOString(<string>req.query.end);
-  eventsBetween(start, end, res, (err1: Error | null, events: CalendarEvent[]) => {
-    if (err1) {
-      return next(err1);
-    }
-    return res.end(JSON.stringify(events));
   });
 });
 

@@ -3,21 +3,15 @@ import Misc from "../commons/misc";
 
 export type TerminType = "Sonstiges" | "Feiertag" | "Ferien" | "Vermietung";
 
-export type TerminEvent = {
-  color: string;
+export interface TerminEvent {
   start: string;
   end: string;
   title: string;
   tooltip: string;
-  display: string;
-};
-
-interface TerminUI {
-  id?: string;
-  beschreibung: string;
-  typ: TerminType;
-  startDate: string;
-  endDate: string;
+  color?: string;
+  display?: string;
+  className?: string;
+  url?: string;
 }
 
 export default class Termin {
@@ -71,7 +65,7 @@ export default class Termin {
     return DatumUhrzeit.forJSDate(this.endDate);
   }
 
-  asEvent(): TerminEvent {
+  get asEvent(): TerminEvent {
     return {
       display: "block",
       color: Termin.colorForType(this.typ),

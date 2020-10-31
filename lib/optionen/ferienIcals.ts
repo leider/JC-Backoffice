@@ -14,9 +14,11 @@ export class Ical {
   toJSON(): any {
     return Object.assign({}, this);
   }
-}
 
-export type CalSource = string | { color: string; url: string };
+  get color(): string {
+    return Termin.colorForType(this.typ);
+  }
+}
 
 export default class FerienIcals {
   id = "ferienIcals";
@@ -37,14 +39,5 @@ export default class FerienIcals {
     Object.assign(res, this);
     res.icals = this.icals.map((i) => i.toJSON());
     return res;
-  }
-
-  forCalendar(): CalSource[] {
-    return this.icals.map((ical) => {
-      return {
-        color: Termin.colorForType(ical.typ),
-        url: "/ical/eventsFromIcalURL/" + encodeURIComponent(ical.url),
-      };
-    });
   }
 }

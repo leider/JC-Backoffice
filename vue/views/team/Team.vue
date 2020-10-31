@@ -53,12 +53,11 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import User from "../../../lib/users/user";
-import { allUsers, currentUser, icals, veranstaltungenForTeam } from "@/commons/loader";
+import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
 import Accessrights from "../../../lib/commons/accessrights";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
 import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
-import { CalSource } from "../../../lib/optionen/ferienIcals";
 import groupBy from "lodash/groupBy";
 import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
 import UserPanels from "@/views/user/UserPanels.vue";
@@ -73,8 +72,6 @@ export default class Team extends Vue {
   private users: User[] = [];
   // noinspection JSMismatchedCollectionQueryUpdate
   private veranstaltungen: Veranstaltung[] = [];
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private icals: CalSource[] = [];
 
   private loading = false;
 
@@ -85,9 +82,6 @@ export default class Team extends Vue {
     currentUser((user: User) => {
       user.accessrights = new Accessrights(user);
       this.user = user;
-    });
-    icals((icals: CalSource[]) => {
-      this.icals = icals;
     });
     this.reloadVeranstaltungen();
   }
