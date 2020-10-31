@@ -2,7 +2,8 @@ import async from "async";
 import { Response } from "express";
 import superagent from "superagent";
 import flatMap from "lodash/flatMap";
-
+// @ts-ignore
+import icalparser, { CalendarComponent } from "ical";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 import store from "../veranstaltungen/veranstaltungenstore";
@@ -14,8 +15,6 @@ import Termin, { TerminEvent } from "../ical/termin";
 import fieldHelpers from "../commons/fieldHelpers";
 import { filterUnbestaetigteFuerJedermann } from "../veranstaltungen";
 import terminstore from "../ical/terminstore";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const icalendar = require("icalendar");
 
 const app = expressAppIn(__dirname);
 
@@ -49,30 +48,24 @@ function termineForIcal(ical: Ical, callback: Function): void {
     if (err) {
       return callback(err);
     }
-    // HACK for feeds not ending with \r\n
-    let body = resp.text;
-    const lines = body.split(/\r?\n/);
-    if (lines[lines.length - 1] !== "") {
-      body = body + "\r\n";
+    const data = icalparser.parseICS(resp.text);
+    const eventArray: TerminEvent[] = [];
+    for (let k in data) {
+      if (data.hasOwnProperty(k)) {
+        const event: CalendarComponent = data[k];
+        if (event.type == "VEVENT") {
+          eventArray.push({
+            color: ical.color,
+            display: "block",
+            start: event.start?.toISOString() || "",
+            end: (event.end || event.start)?.toISOString() || "",
+            title: event.summary || "",
+            tooltip: event.summary || "",
+          });
+        }
+      }
     }
-    // END HACK
-
-    const events: TerminEvent = icalendar
-      .parse_calendar(body)
-      .events()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((each: any) => {
-        const calprops = each.properties;
-        return {
-          color: ical.color,
-          display: "block",
-          start: calprops.DTSTART[0].value.toISOString(),
-          end: calprops.DTEND ? calprops.DTEND[0].value.toISOString() : calprops.DTSTART[0].value.toISOString(),
-          title: calprops.SUMMARY[0].value,
-          tooltip: calprops.SUMMARY[0].value,
-        };
-      });
-    return callback(null, events);
+    return callback(null, eventArray);
   });
 }
 
@@ -104,12 +97,12 @@ app.get("/events.json", (req, res) => {
         return;
       }
       const icals = (results.icals as FerienIcals).icals;
-      async.map(icals, termineForIcal, (err1, result2?: any[]) => {
+      async.map(icals, termineForIcal, (err1, termineForIcals?: any[]) => {
         if (err1) {
           res.status(500).send(err);
           return;
         }
-        const events = flatMap(result2, (x) => x)
+        const events = flatMap(termineForIcals, (x) => x)
           .concat(results.termine)
           .concat(results.veranstaltungen);
         return res.set("Content-Type", "application/json").send(events);
