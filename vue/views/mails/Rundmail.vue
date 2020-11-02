@@ -50,6 +50,10 @@ export default class Rundmail extends Vue {
 
   private groupdNames = ["Alle", "Orga Team", "Booking Team"];
 
+  mounted() {
+    document.title = "Rundmail";
+  }
+
   get listen(): string[] {
     const listNames = new Users(this.users).mailinglisten.map((l) => l.name);
     return this.groupdNames.concat(listNames);

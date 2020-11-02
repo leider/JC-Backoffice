@@ -6,7 +6,7 @@
         b-button.btn.btn-success(@click="sendMail", title="Speichern", :disabled="!valid")
           b-icon-envelope-open
           | #{" "} Senden...
-      h1 Rundmail
+      h1 Manuelle Nachricht
   .row
     .col-6
       jazz-label(label="Veranstaltungen")
@@ -47,6 +47,10 @@ export default class ManualMail extends Vue {
   private selectedRules: string[] = [];
   private selectedVeranstaltungen: string[] = [];
   private veranstaltungen: Veranstaltung[] = [];
+
+  mounted() {
+    document.title = "Manuelle Nachricht";
+  }
 
   get rules(): string[] {
     return this.allRules.map((rule) => rule.name);

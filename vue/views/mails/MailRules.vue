@@ -13,9 +13,9 @@
         table.table.table-sm.table-striped
           tbody
             tr
-              th Name
-              th E-Mail
-              th Regel
+              th(style="width:30%") Name
+              th(style="width:30%") E-Mail
+              th(style="width:40%") Regel
               th
               th
             mail-rule-row(v-for="(rule, index) in rules", :key="index", :rule="rule", @loeschen="deleteRule(rule)")
@@ -31,7 +31,8 @@ import MailRuleRow from "@/views/mails/MailRuleRow.vue";
 export default class MailRules extends Vue {
   private rules: MailRule[] = [];
 
-  created(): void {
+  mounted(): void {
+    document.title = "Mailingregeln";
     mailRules((rules: MailRule[]) => {
       this.rules = rules;
     });

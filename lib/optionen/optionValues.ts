@@ -47,6 +47,7 @@ export default class OptionValues {
       Object.assign(this, object, {
         typen: sortByNameCaseInsensitive(object.typen || []),
         kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
+        genres: sortByNameCaseInsensitive(object.genres || []),
         backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
         backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
         artists: sortByNameCaseInsensitive(object.artists || []),

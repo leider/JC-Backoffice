@@ -34,7 +34,7 @@ export default class ImageOverview extends Vue {
   private imagesWithVeranstaltungenUnused: ImageOverviewRow[] = [];
   private imagesWithVeranstaltungenNotFound: ImageOverviewRow[] = [];
 
-  created(): void {
+  mounted(): void {
     document.title = "Bilder bearbeiten";
     imagenames((imagenames: string[]) => {
       this.imagenames = imagenames;
