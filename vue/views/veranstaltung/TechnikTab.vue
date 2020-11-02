@@ -84,12 +84,12 @@ export default class TechnikTab extends Vue {
     this.filesForUpload.forEach((file) => {
       formData.append("datei", file, file.name);
     });
-    uploadFile(formData, (json: { error?: string; veranstaltung?: any }) => {
-      if (!json.error) {
+    uploadFile(formData, (err?: Error, veranstaltung?: any) => {
+      if (!err) {
         this.filesForUpload = [];
         const strings = this.technik.dateirider;
         strings.splice(0, strings.length);
-        const newStrings = new Veranstaltung(json.veranstaltung).technik.dateirider;
+        const newStrings = new Veranstaltung(veranstaltung).technik.dateirider;
         newStrings.forEach((s) => strings.push(s));
       }
     });

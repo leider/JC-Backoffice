@@ -36,7 +36,6 @@ import JazzText from "@/widgets/JazzText.vue";
 import Message from "../../../lib/mailsender/message";
 import { allUsers, currentUser, sendMail } from "@/commons/loader";
 import User from "../../../lib/users/user";
-import Accessrights from "../../../lib/commons/accessrights";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 import Users from "../../../lib/users/users";
 
@@ -72,12 +71,13 @@ export default class Rundmail extends Vue {
 
     const result = new Message({ subject: this.subject, markdown: this.markdown }, this.user.name, this.user.email);
     result.setBcc(emails);
-    sendMail(result, (message: any) => {
-      this.subject = "";
-      this.markdown = "";
-      this.selectedListen = [];
-      this.selectedUsers = [];
-      console.log(message);
+    sendMail(result, (err?: Error) => {
+      if (!err) {
+        this.subject = "";
+        this.markdown = "";
+        this.selectedListen = [];
+        this.selectedUsers = [];
+      }
     });
   }
 
@@ -86,7 +86,6 @@ export default class Rundmail extends Vue {
       this.users = users;
     });
     currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
       this.user = user;
     });
   }

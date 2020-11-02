@@ -7,7 +7,7 @@ import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);
 
-const printAsCsv = function (res: Response, selected: Veranstaltung[], nachmeldung: boolean) {
+function printAsCsv(res: Response, selected: Veranstaltung[], nachmeldung: boolean) {
   function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
     const header = `Datum;Ort;Kooperation Mit;Veranstaltungsart;Musikwiedergabeart;Eintrittspreis;${
       nachmeldung ? "Einnahmen;" : ""
@@ -27,9 +27,8 @@ const printAsCsv = function (res: Response, selected: Veranstaltung[], nachmeldu
   }
 
   res.setHeader("Content-disposition", "attachment; filename=" + (nachmeldung ? "nachmeldung" : "vorabmeldung") + ".csv");
-  res.set("Content-Type", "text/csv");
-  return res.send(createCSV(false, selected));
-};
+  res.type("text/csv").send(createCSV(false, selected));
+}
 
 function createResult(
   eventAndDateiart: { event: string[]; dateiart: string; origin: string | string[] | undefined },
@@ -52,10 +51,6 @@ function createResult(
     return printAsCsv(res, selected, nachmeldung);
   });
 }
-
-app.get("/", (req, res) => {
-  res.redirect("/vue/gema");
-});
 
 app.get("/meldung", (req: Request, res: Response, next: NextFunction) => {
   const transferObject = JSON.parse(<string>req.query.transferObject);

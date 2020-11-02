@@ -60,12 +60,11 @@ import {
   imagenames,
   saveVeranstaltung,
   deleteVeranstaltungWithId,
-  saveOptionen,
+  saveOptionenQuiet,
 } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import SectionTab from "@/views/veranstaltung/SectionTab.vue";
 import User from "../../../lib/users/user";
-import Accessrights from "../../../lib/commons/accessrights";
 import OptionValues from "../../../lib/optionen/optionValues";
 import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
 import fieldHelpers from "../../../lib/commons/fieldHelpers";
@@ -104,7 +103,6 @@ export default class VeranstaltungView extends Vue {
 
   created(): void {
     currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
       this.user = user;
     });
     optionen((opts: OptionValues) => {
@@ -193,22 +191,20 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Jazzclub", this.veranstaltung.technik.backlineJazzclub);
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
-    saveOptionen(this.optionen, (err: Error, json: any) => {
-      if (err) {
-        console.log(err);
+    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
+      if (!err) {
+        this.optionen = new OptionValues(optionen);
+        saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: any) => {
+          if (!err) {
+            this.originalVeranstaltung = new Veranstaltung(veranstaltung);
+            if (this.isNew) {
+              const url = encodeURIComponent(this.originalVeranstaltung.url || "");
+              this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
+              document.title = this.originalVeranstaltung.kopf.titel;
+            }
+          }
+        });
       }
-      this.optionen = new OptionValues(json);
-      saveVeranstaltung(this.veranstaltung, (err: Error, json: any) => {
-        if (err) {
-          console.log(err);
-        }
-        this.originalVeranstaltung = new Veranstaltung(json);
-        if (this.isNew) {
-          const url = encodeURIComponent(this.originalVeranstaltung.url || "");
-          this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
-          document.title = this.originalVeranstaltung.kopf.titel;
-        }
-      });
     });
   }
 
@@ -227,11 +223,10 @@ export default class VeranstaltungView extends Vue {
 
   loeschen(): void {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err: Error) => {
-        if (err) {
-          return console.log(err);
+      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
+        if (!err) {
+          this.$router.push("/veranstaltungen/");
         }
-        this.$router.push("/veranstaltungen/");
       });
     }
   }

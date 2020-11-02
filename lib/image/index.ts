@@ -5,6 +5,7 @@ import { ImageOverviewRow } from "../veranstaltungen/object/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import sharp from "sharp";
 import { Response } from "express";
+import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
@@ -25,12 +26,8 @@ app.get("/imagepreview/:filename", (req, res, next) => {
 });
 
 function allImageNames(res: Response): void {
-  service.alleBildNamen((err: Error | null, imagenamesOfFiles: string[]) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(imagenamesOfFiles);
+  service.alleBildNamen((err?: Error, imagenamesOfFiles?: string[]) => {
+    reply(res, err, { names: imagenamesOfFiles });
   });
 }
 
@@ -44,7 +41,7 @@ app.get("/allImagenames.json", (req, res) => {
 
 app.post("/imagenamesChanged", (req, res, next) => {
   if (!res.locals.accessrights.isSuperuser()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
 
   const rows = req.body as ImageOverviewRow[];

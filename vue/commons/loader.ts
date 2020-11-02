@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import fetch from "cross-fetch";
+import fetch, { Response } from "cross-fetch";
 import Veranstaltung, { ImageOverviewRow } from "../../lib/veranstaltungen/object/veranstaltung";
 import User from "../../lib/users/user";
 import { StaffType } from "../../lib/veranstaltungen/object/staff";
@@ -12,91 +12,92 @@ import { Mailingliste } from "../../lib/users/users";
 import MailRule from "../../lib/mailsender/mailRule";
 import Termin from "../../lib/optionen/termin";
 import FerienIcals from "../../lib/optionen/ferienIcals";
+import { feedbackMessages } from "@/views/general/FeedbackMessages";
+import Accessrights from "../../lib/commons/accessrights";
 
-function getJson(url: string, callback: any): void {
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        if (response.status === 401) {
-          window.location.href = "/login";
-          return;
-        }
-        throw Error(response as any);
+function standardFetch(url: string, callback: any, title?: string, text?: string, postHeader?: RequestInit): void {
+  function handleErrorIfAny(response: Response): any {
+    if (!response.ok) {
+      if (response.status === 401) {
+        window.location.href = "/login";
+        return;
       }
-      return response.json();
+      if (response.status === 404) {
+        return;
+      }
+      response.text().then((fehlertext) => {
+        feedbackMessages.addError(`HTTP Fehler: ${response.status} ${response.statusText}`, fehlertext);
+      });
+      throw Error(response.statusText);
+    }
+    return response.json();
+  }
+
+  fetch(url, postHeader)
+    .then(handleErrorIfAny)
+    .then((json: any) => {
+      if (title || text) {
+        feedbackMessages.addSuccess(title || "Erfolgreich", text || "---");
+      }
+      callback(null, json);
     })
-    .then((json) => callback(null, json))
     .catch((err) => callback(err));
 }
 
-function postAndReceive(url: string, data: any, callback: any): void {
+function getJson(url: string, callback: any): void {
+  standardFetch(url, callback);
+}
+
+const defaultPostHeader: RequestInit = {
+  method: "POST",
+  mode: "same-origin",
+  cache: "no-cache",
+  credentials: "same-origin",
+  redirect: "follow",
+  referrer: "no-referrer",
+};
+
+function postAndReceive(url: string, data: any, callback: any, title?: string, text?: string): void {
   getJson("/vue-spa/csrf-token.json", (err: Error, res: any) => {
-    fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "same-origin", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": res.token,
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: "follow", // manual, *follow, error
-      referrer: "no-referrer", // no-referrer, *client
-      body: JSON.stringify(data), // body data type must match "Content-Type" header
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((json) => callback(null, json))
-      .catch((err) => callback(err));
+    const postHeader: RequestInit = {
+      ...defaultPostHeader,
+      headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": res.token },
+      body: JSON.stringify(data),
+    };
+    standardFetch(url, callback, title, text, postHeader);
   });
 }
 
-function postAndReceiveForFiles(url: string, data: FormData, callback: any): void {
+function postAndReceiveForFiles(url: string, data: FormData, callback: any, title: string, text: string): void {
   getJson("/vue-spa/csrf-token.json", (err: Error, res: any) => {
-    fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "same-origin", // no-cors, cors, *same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
-      headers: {
-        "X-CSRF-TOKEN": res.token,
-      },
-      redirect: "follow", // manual, *follow, error
-      referrer: "no-referrer", // no-referrer, *client
-      body: data, // body data type must match "Content-Type" header
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then((json) => callback(null, json))
-      .catch((err) => callback(err));
+    const postHeader: RequestInit = {
+      ...defaultPostHeader,
+      headers: { "X-CSRF-TOKEN": res.token },
+      body: data,
+    };
+    standardFetch(url, callback, title, text, postHeader);
   });
 }
 
 export function uploadFile(data: FormData, callback: Function): void {
-  postAndReceiveForFiles("/veranstaltungen/upload", data, (err: Error, json: object) => callback(json));
+  postAndReceiveForFiles("/veranstaltungen/upload", data, callback, "Gespeichert", "Datei gespeichert");
+}
+function veranstaltungenCallback(callback: Function) {
+  return (err?: Error, result?: object[]) => {
+    callback(result?.map((r) => new Veranstaltung(r)) || []);
+  };
 }
 
 export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle", callback: Function): void {
-  getJson(`/veranstaltungen/${selector}.json`, (err: Error, result: object[]) => {
-    callback(result.map((r) => new Veranstaltung(r)));
-  });
+  getJson(`/veranstaltungen/${selector}.json`, veranstaltungenCallback(callback));
 }
 
 export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), callback);
+  postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), callback, "Gespeichert", "Veranstaltung gespeichert");
 }
 
 export function deleteVeranstaltungWithId(id: string, callback: Function): void {
-  postAndReceive("/veranstaltungen/deleteVeranstaltung", { id }, callback);
+  postAndReceive("/veranstaltungen/deleteVeranstaltung", { id }, callback, "Gelöscht", "Veranstaltung gelöscht");
 }
 
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
@@ -109,127 +110,131 @@ export function removeUserFromSection(veranstaltung: Veranstaltung, section: Sta
 
 // User
 export function currentUser(callback: Function): void {
-  getJson("/users/user.json", (err: Error, result: object) => {
-    callback(new User(result));
+  getJson("/users/user.json", (err?: Error, result?: object) => {
+    const user = new User(result);
+    user.accessrights = new Accessrights(user);
+    callback(user);
   });
 }
 
 export function allUsers(callback: Function): void {
-  getJson("/users/allusers.json", (err: Error, result: object[]) => {
-    callback(result.map((r) => new User(r)));
+  getJson("/users/allusers.json", (err?: Error, result?: { users: object[] }) => {
+    callback(result?.users.map((r) => new User(r)) || []);
   });
 }
 
 export function saveUser(user: User, callback: Function): void {
-  postAndReceive("/users/saveUser", user.toJSON(), (err: Error, json: object) => callback(json));
+  postAndReceive("/users/saveUser", user.toJSON(), callback, "Gespeichert", "Änderungen gespeichert");
 }
 
 export function deleteUser(user: User, callback: Function): void {
-  postAndReceive("/users/deleteUser", user.toJSON(), (err: Error, json: object) => callback(json));
+  postAndReceive("/users/deleteUser", user.toJSON(), callback, "Gelöscht", "User gelöscht");
 }
 
 export function saveNewUser(user: User, callback: Function): void {
-  postAndReceive("/users/saveNewUser", user.toJSON(), callback);
+  postAndReceive("/users/saveNewUser", user.toJSON(), callback, "Gespeichert", "Neuer User angelegt");
 }
 
 export function changePassword(user: User, callback: Function): void {
-  postAndReceive("/users/changePassword", user.toJSON(), callback);
+  postAndReceive("/users/changePassword", user.toJSON(), callback, "Gespeichert", "Passwort geändert");
 }
 
 export function wikisubdirs(callback: Function): void {
-  getJson("/vue-spa/wikisubdirs.json", (err: Error, json: object) => callback(json));
+  getJson("/vue-spa/wikisubdirs.json", (err?: Error, json?: object) => callback(json || []));
 }
 
 // Programmheft
 export function kalenderFor(jahrMonat: string, callback: Function): void {
-  getJson(`/programmheft/${jahrMonat}.json`, (err: Error, result: { id: string; text: string }) => {
+  getJson(`/programmheft/${jahrMonat}.json`, (err?: Error, result?: { id: string; text: string }) => {
     callback(new Kalender(result));
   });
 }
 
 export function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
-  getJson(`/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}/list.json`, (err: Error, result: object[]) => {
-    callback(result.map((r) => new Veranstaltung(r)));
-  });
+  getJson(`/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}/list.json`, veranstaltungenCallback(callback));
 }
 
 export function saveProgrammheft(kalender: Kalender, callback: Function): void {
-  postAndReceive("/programmheft/saveProgrammheft", kalender, (err: Error, json: object) => callback(json));
+  postAndReceive("/programmheft/saveProgrammheft", kalender, callback, "Gespeichert", "Änderungen gespeichert");
 }
 
 // Veranstaltung bearbeiten
 export function veranstaltungForUrl(url: string, callback: Function): void {
-  getJson(`/veranstaltungen/${encodeURIComponent(url)}.json`, (err: Error, result: any) => callback(new Veranstaltung(result)));
+  getJson(`/veranstaltungen/${encodeURIComponent(url)}.json`, (err?: Error, result?: any) => callback(new Veranstaltung(result)));
 }
 
 // Optionen & Termine
 export function optionen(callback: Function): void {
-  getJson("/optionen/optionen.json", (err: Error, result: any) => callback(new OptionValues(result)));
+  getJson("/optionen/optionen.json", (err?: Error, result?: any) => callback(new OptionValues(result)));
 }
 
 export function saveOptionen(optionen: OptionValues, callback: Function): void {
+  postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback, "Gespeichert", "Optionen gespeichert");
+}
+
+export function saveOptionenQuiet(optionen: OptionValues, callback: Function): void {
   postAndReceive("/optionen/saveOptionen", optionen.toJSON(), callback);
 }
 
 export function orte(callback: Function): void {
-  getJson("/optionen/orte.json", (err: Error, result: any) => callback(new Orte(result)));
+  getJson("/optionen/orte.json", (err?: Error, result?: any) => callback(new Orte(result)));
 }
 
 export function saveOrte(orte: Orte, callback: Function): void {
-  postAndReceive("/optionen/saveOrte", orte.toJSON(), callback);
+  postAndReceive("/optionen/saveOrte", orte.toJSON(), callback, "Gespeichert", "Orte aktualisiert");
 }
 
 export function termine(callback: Function): void {
-  getJson("/optionen/termine.json", (err: Error, result: any) => callback(result.map((r: any) => new Termin(r))));
+  getJson("/optionen/termine.json", (err?: Error, result?: any) => callback(result?.map((r: any) => new Termin(r))) || []);
 }
 
 export function deleteTermin(terminID: string, callback: Function): void {
-  postAndReceive("/optionen/deletetermin", { id: terminID }, (err: Error, json: object) => callback(json));
+  postAndReceive("/optionen/deletetermin", { id: terminID }, callback, "Gelöscht", "Termin gelöscht");
 }
 
 export function saveTermin(termin: Termin, callback: Function): void {
-  postAndReceive("/optionen/savetermin", termin, (err: Error, json: object) => callback(json));
+  postAndReceive("/optionen/savetermin", termin, callback, "Gespeichert", "Termin gespeichert");
 }
 
 export function kalender(callback: Function): void {
-  getJson("/optionen/kalender.json", (err: Error, result: any) => callback(new FerienIcals(result)));
+  getJson("/optionen/kalender.json", (err?: Error, result?: any) => callback(new FerienIcals(result)));
 }
 
 export function saveKalender(kalender: FerienIcals, callback: Function): void {
-  postAndReceive("/optionen/savekalender", kalender, (err: Error, json: object) => callback(json));
+  postAndReceive("/optionen/savekalender", kalender, callback, "Gespeichert", "Änderungen gespeichert");
 }
 
 // Image
 export function imagenames(callback: Function): void {
-  getJson("/image/allImagenames.json", (err: Error, result: any) => callback(result));
+  getJson("/image/allImagenames.json", (err?: Error, result?: { names: string[] }) => callback(result?.names));
 }
 
 export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
-  postAndReceive("/image/imagenamesChanged", rows, (err: Error, json: object) => callback(json));
+  postAndReceive("/image/imagenamesChanged", rows, callback, "Gespeichert", "Änderungen gespeichert");
 }
 
 //Mails intern
 export function sendMail(message: Message, callback: Function): void {
-  postAndReceive("/users/rundmail", message, (err: Error, json: object) => callback(json));
+  postAndReceive("/users/rundmail", message, callback, "Gesendet", "Meil geschickt");
 }
 
 export function deleteMailinglist(listname: string, callback: Function): void {
-  postAndReceive("/users/deleteliste", { name: listname }, (err: Error, json: object) => callback(json));
+  postAndReceive("/users/deleteliste", { name: listname }, callback, "Gelöscht", "Liste gelöscht");
 }
 
 export function saveMailinglist(list: Mailingliste, callback: Function): void {
-  postAndReceive("/users/saveliste", list, (err: Error, json: object) => callback(json));
+  postAndReceive("/users/saveliste", list, callback, "Gespeichert", "Liste gespeichert");
 }
 
 // Mails für Veranstaltungen
 export function mailRules(callback: Function): void {
-  getJson("/mailsender/rules.json", (err: Error, result: any[]) => callback(result.map((each) => new MailRule(each))));
+  getJson("/mailsender/rules.json", (err?: Error, result?: any[]) => callback(result?.map((each) => new MailRule(each))) || []);
 }
 
 export function deleteMailRule(ruleID: string, callback: Function): void {
-  postAndReceive("/mailsender/deleteRule", { id: ruleID }, (err: Error, json: object) => callback(json));
+  postAndReceive("/mailsender/deleteRule", { id: ruleID }, callback, "Gelöscht", "Regel gelöscht");
 }
 
 export function saveMailRule(rule: MailRule, callback: Function): void {
-  postAndReceive("/mailsender/saveRule", rule, (err: Error, json: object) => callback(json));
+  postAndReceive("/mailsender/saveRule", rule, callback, "Gespeichert", "Regel gespeichert");
 }

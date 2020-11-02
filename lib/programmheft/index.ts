@@ -3,6 +3,7 @@ import store from "./kalenderstore";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import Kalender from "./kalender";
 import { expressAppIn } from "../middleware/expressViewHelper";
+import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
@@ -17,25 +18,19 @@ app.get("/:year/:month.json", (req, res) => {
     yearMonthString = correctedDatum.fuerKalenderViews;
   }
 
-  return store.getKalender(yearMonthString, (err: Error | null, kalender: Kalender) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(kalender);
+  return store.getKalender(yearMonthString, (err?: Error, kalender?: Kalender) => {
+    reply(res, err, kalender);
   });
 });
 
 app.post("/saveProgrammheft", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
 
   const kalender = new Kalender(req.body);
-  return store.saveKalender(kalender, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(kalender);
+  return store.saveKalender(kalender, (err?: Error) => {
+    reply(res, err, kalender);
   });
 });
 

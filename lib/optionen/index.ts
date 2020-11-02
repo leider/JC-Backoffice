@@ -7,124 +7,94 @@ import { expressAppIn } from "../middleware/expressViewHelper";
 import { NextFunction, Request, Response } from "express";
 import Termin from "./termin";
 import terminstore from "./terminstore";
+import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
 app.get("/optionen.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
 
-  return service.optionen((err: Error | null, optionen: OptionValues) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(optionen.toJSON());
+  return service.optionen((err?: Error, optionen?: OptionValues) => {
+    reply(res, err, optionen);
   });
 });
 
 app.post("/saveOptionen", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam) {
-    return res.redirect("/"); //ErrorHandling!!
+    return res.sendStatus(403);
   }
   const optionen = new OptionValues(req.body);
-  store.save(optionen, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(optionen.toJSON());
+  store.save(optionen, (err?: Error) => {
+    reply(res, err, optionen);
   });
 });
 
 app.get("/orte.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
 
-  return service.orte((err: Error | null, orte: Orte) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(orte);
+  return service.orte((err?: Error, orte?: Orte) => {
+    reply(res, err, orte);
   });
 });
 
 app.post("/saveOrte", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam) {
-    return res.redirect("/"); //ErrorHandling!!
+    return res.sendStatus(403);
   }
   const orte = new Orte(req.body);
-  store.save(orte, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(orte.toJSON());
+  store.save(orte, (err?: Error) => {
+    reply(res, err, orte);
   });
 });
 
-app.get("/kalender.json", (req: Request, res: Response, next: NextFunction) => {
+app.get("/kalender.json", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
 
-  return store.icals((err: Error | null, icals: FerienIcals) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(icals.toJSON());
+  return store.icals((err?: Error, icals?: FerienIcals) => {
+    reply(res, err, icals);
   });
 });
 
-app.post("/savekalender", (req: Request, res: Response, next: NextFunction) => {
+app.post("/savekalender", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/");
+    return res.sendStatus(403);
   }
   const ical = new FerienIcals(req.body);
-  store.save(ical, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(ical.toJSON());
+  store.save(ical, (err?: Error) => {
+    reply(res, err, ical);
   });
 });
 
-app.get("/termine.json", (req, res, next) => {
-  terminstore.alle((err: Error | null, termine: Termin[]) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    res.set("Content-Type", "application/json").send(termine);
+app.get("/termine.json", (req, res) => {
+  terminstore.alle((err?: Error, termine?: Termin[]) => {
+    reply(res, err, termine);
   });
 });
 
 app.post("/savetermin", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/"); //ErrorHandling!!
+    return res.sendStatus(403);
   }
   const termin = new Termin(req.body);
   delete termin.originalBeschreibung;
   terminstore.save(termin, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send(termin.toJSON());
+    reply(res, err, termin);
   });
 });
 
 app.post("/deletetermin", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/"); //ErrorHandling!!
+    return res.sendStatus(403);
   }
   const id = req.body.id;
   terminstore.remove(id, (err: Error | null) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    res.set("Content-Type", "application/json").send({ message: "Termin gelöscht" });
+    reply(res, err);
   });
 });
 

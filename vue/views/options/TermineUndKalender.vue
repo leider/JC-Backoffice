@@ -81,10 +81,11 @@ export default class TermineUndKalender extends Vue {
       this.termine.splice(index, 1);
       return;
     }
-    deleteTermin(termin.id, (message: string) => {
-      console.log(message);
-      const index = this.termine.indexOf(termin);
-      this.termine.splice(index, 1);
+    deleteTermin(termin.id, (err?: Error) => {
+      if (!err) {
+        const index = this.termine.indexOf(termin);
+        this.termine.splice(index, 1);
+      }
     });
   }
 
@@ -98,8 +99,8 @@ export default class TermineUndKalender extends Vue {
   }
 
   saveKalender() {
-    saveKalender(this.kalender, (result: any) => {
-      console.log(result);
+    saveKalender(this.kalender, () => {
+      // empty by design
     });
   }
 

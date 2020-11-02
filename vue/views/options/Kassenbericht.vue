@@ -1,7 +1,7 @@
 <template lang="pug">
 .col-12
   h1 Kassenberichte
-  p(v-for="monat in monate", :key="monat")
+  p(v-for="monat in monate", :key="monat.monatJahrKompakt")
     a(:href="`/pdf/kassenbericht/${monat.fuerKalenderViews}`") Kassenbericht {{ monat.monatJahrKompakt }}
 </template>
 

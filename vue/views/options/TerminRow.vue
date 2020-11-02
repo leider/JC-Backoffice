@@ -38,10 +38,12 @@ export default class TerminRow extends Vue {
   }
 
   save(): void {
-    saveTermin(this.termin, () => {
-      this.termin.originalBeschreibung = this.termin.beschreibung;
-      this.terminChanged();
-      this.somethingChanged();
+    saveTermin(this.termin, (err?: Error) => {
+      if (!err) {
+        this.termin.originalBeschreibung = this.termin.beschreibung;
+        this.terminChanged();
+        this.somethingChanged();
+      }
     });
   }
 

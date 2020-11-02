@@ -184,14 +184,18 @@ export default class UserPanel extends Vue {
   }
 
   saveUser(): void {
-    saveUser(this.user, () => {
-      this.$emit("user-saved");
+    saveUser(this.user, (err?: Error) => {
+      if (!err) {
+        this.$emit("user-saved");
+      }
     });
   }
 
   deleteUser(): void {
-    deleteUser(this.user, () => {
-      this.$emit("user-saved");
+    deleteUser(this.user, (err?: Error) => {
+      if (!err) {
+        this.$emit("user-saved");
+      }
     });
   }
 
@@ -203,8 +207,10 @@ export default class UserPanel extends Vue {
     console.log(this.newPass);
     this.user.password = this.newPass;
     console.log("User: " + this.user.password);
-    changePassword(this.user, () => {
-      this.$emit("user-saved");
+    changePassword(this.user, (err?: Error) => {
+      if (!err) {
+        this.$emit("user-saved");
+      }
     });
   }
 

@@ -12,7 +12,7 @@ app.get("/wikisubdirs.json", (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.set("Content-Type", "application/json").send(gitdirs);
+    res.set("Content-Type", "application/json").send({ dirs: gitdirs });
   });
 });
 

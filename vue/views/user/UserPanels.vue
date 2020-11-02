@@ -7,32 +7,20 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "../../../lib/users/user";
-import { allUsers, currentUser } from "@/commons/loader";
 import UserPanel from "@/views/user/UserPanel.vue";
-import Accessrights from "../../../lib/commons/accessrights";
 import UserPanelsToolbar from "@/views/user/UserPanelsToolbar.vue";
 
 @Component({
   components: { UserPanelsToolbar, UserPanel },
 })
 export default class UserPanels extends Vue {
-  private user = new User({});
-  private users: User[] = [];
-
-  created(): void {
-    this.reload();
-  }
+  @Prop() user!: User;
+  @Prop() users!: User[];
 
   reload(): void {
-    allUsers((users: User[]) => {
-      this.users = users;
-    });
-    currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
-      this.user = user;
-    });
+    this.$emit("reload-users");
   }
 
   actualUser(): User {

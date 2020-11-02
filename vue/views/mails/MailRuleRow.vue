@@ -31,10 +31,12 @@ export default class MailRuleRow extends Vue {
   }
 
   save(): void {
-    saveMailRule(this.rule, () => {
-      this.rule.updateId();
-      this.ruleChanged();
-      this.somethingChanged();
+    saveMailRule(this.rule, (err?: Error) => {
+      if (!err) {
+        this.rule.updateId();
+        this.ruleChanged();
+        this.somethingChanged();
+      }
     });
   }
 

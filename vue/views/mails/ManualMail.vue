@@ -34,7 +34,6 @@ import JazzText from "@/widgets/JazzText.vue";
 import Message from "../../../lib/mailsender/message";
 import { currentUser, mailRules, sendMail, veranstaltungenForTeam } from "@/commons/loader";
 import User from "../../../lib/users/user";
-import Accessrights from "../../../lib/commons/accessrights";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 import MailRule from "../../../lib/mailsender/mailRule";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
@@ -68,17 +67,16 @@ export default class ManualMail extends Vue {
     const emails = rules.map((user) => Message.formatEMailAddress(user.name, user.email));
 
     const markdownToSend =
-      this.markdown +
-      "\n\n---\n" +
-      upcomings.map((veranst) => veranst.presseTextForMail(window.location.origin)).join("\n\n---\n");
+      this.markdown + "\n\n---\n" + upcomings.map((veranst) => veranst.presseTextForMail(window.location.origin)).join("\n\n---\n");
     const result = new Message({ subject: this.subject, markdown: markdownToSend }, this.user.name, this.user.email);
     result.setBcc(emails);
-    sendMail(result, (message: any) => {
-      this.subject = "[Jazzclub manuell] Veranstaltungen für ...";
-      this.markdown = "";
-      this.selectedRules = [];
-      this.selectedVeranstaltungen = [];
-      console.log(message);
+    sendMail(result, (err?: Error) => {
+      if (!err) {
+        this.subject = "[Jazzclub manuell] Veranstaltungen für ...";
+        this.markdown = "";
+        this.selectedRules = [];
+        this.selectedVeranstaltungen = [];
+      }
     });
   }
 
@@ -87,7 +85,6 @@ export default class ManualMail extends Vue {
       this.allRules = rules;
     });
     currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
       this.user = user;
     });
     veranstaltungenForTeam("zukuenftige", (veranstaltungen: Veranstaltung[]) => {

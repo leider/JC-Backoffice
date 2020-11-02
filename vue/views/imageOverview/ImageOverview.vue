@@ -78,9 +78,11 @@ export default class ImageOverview extends Vue {
   }
 
   save(): void {
-    saveImagenames(this.changedRows, (newNames: string[]) => {
-      this.imagenames = newNames;
-      this.initObjects();
+    saveImagenames(this.changedRows, (err?: Error, newNames?: { names: string[] }) => {
+      if (!err) {
+        this.imagenames = newNames?.names || [];
+        this.initObjects();
+      }
     });
   }
 }

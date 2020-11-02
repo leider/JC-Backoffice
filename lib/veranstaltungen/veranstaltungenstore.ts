@@ -72,14 +72,14 @@ export default {
   },
 
   deleteVeranstaltung: function deleteVeranstaltung(url: string, callback: Function): void {
-    persistence.removeByUrl(url, (err: Error | null) => {
+    persistence.removeByUrl(url, (err?: Error) => {
       logger.info(`Veranstaltung removed: ${JSON.stringify(url)}`);
       callback(err);
     });
   },
 
   deleteVeranstaltungById: function deleteVeranstaltungById(id: string, callback: Function): void {
-    persistence.removeById(id, (err: Error | null) => {
+    persistence.removeById(id, (err?: Error) => {
       logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
       callback(err);
     });

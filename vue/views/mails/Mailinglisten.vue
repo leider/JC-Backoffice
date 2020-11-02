@@ -53,10 +53,11 @@ export default class Mailinglisten extends Vue {
   }
 
   deleteList(list: Mailingliste) {
-    deleteMailinglist(list.name, (message: string) => {
-      console.log(message);
-      const index = this.mailinglisten.indexOf(list);
-      this.mailinglisten.splice(index, 1);
+    deleteMailinglist(list.name, (err?: Error) => {
+      if (!err) {
+        const index = this.mailinglisten.indexOf(list);
+        this.mailinglisten.splice(index, 1);
+      }
     });
   }
 }

@@ -33,7 +33,7 @@ function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): string {
 
 app.get("/", (req, res) => {
   function sendCalendarStringNamedToResult(icalString: string, filename: string, res: express.Response): void {
-    res.type("text/calendar; charset=utf-8");
+    res.type("ics");
     res.header("Content-Disposition", "inline; filename=" + filename + ".ics");
     res.send(icalString);
   }

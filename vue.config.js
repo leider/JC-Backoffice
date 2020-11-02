@@ -36,7 +36,7 @@ const config = {
 };
 
 if (process.env.NODE_ENV !== "production") {
-  plugins.push(new (require("webpack-bundle-analyzer").BundleAnalyzerPlugin)());
+  //plugins.push(new (require("webpack-bundle-analyzer").BundleAnalyzerPlugin)());
   require("./configure");
   const configureAPI = require("./configureApp").default;
   config.devServer = { before: configureAPI };

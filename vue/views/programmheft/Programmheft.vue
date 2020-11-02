@@ -86,10 +86,8 @@ export default class Programmheft extends Vue {
   }
 
   save(): void {
-    saveProgrammheft(this.kalender, (err: Error) => {
-      if (err) {
-        console.log(err);
-      }
+    saveProgrammheft(this.kalender, () => {
+      // empty by design
     });
   }
 

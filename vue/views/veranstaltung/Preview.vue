@@ -102,7 +102,6 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { currentUser, veranstaltungForUrl, deleteVeranstaltungWithId, allUsers } from "@/commons/loader";
 import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
 import User from "../../../lib/users/user";
-import Accessrights from "../../../lib/commons/accessrights";
 import fieldHelpers from "../../../lib/commons/fieldHelpers";
 import LegendCard from "@/widgets/LegendCard.vue";
 import PreviewUserRow from "@/views/veranstaltung/PreviewUserRow.vue";
@@ -115,6 +114,7 @@ import Technik from "../../../lib/veranstaltungen/object/technik";
 import Presse from "../../../lib/veranstaltungen/object/presse";
 import Kontakt from "../../../lib/veranstaltungen/object/kontakt";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
+
 @Component({
   components: { DeleteButtonWithDialog, JazzCurrencyDisplay, PreviewUserRow, LegendCard },
 })
@@ -131,7 +131,6 @@ export default class Preview extends Vue {
       this.users = users;
     });
     currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
       this.user = user;
     });
   }
@@ -207,11 +206,10 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
 
   loeschen(): void {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err: Error) => {
-        if (err) {
-          return console.log(err);
+      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
+        if (!err) {
+          this.$router.push("/veranstaltungen/");
         }
-        this.$router.push("/veranstaltungen/");
       });
     }
   }

@@ -109,12 +109,12 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
     this.filesForUpload.forEach((file) => {
       formData.append("datei", file, file.name);
     });
-    uploadFile(formData, (json: { error?: string; veranstaltung?: any }) => {
-      if (!json.error) {
+    uploadFile(formData, (err?: Error, veranstaltung?: any) => {
+      if (!err) {
         this.filesForUpload = [];
         const strings = this.presse.image;
         strings.splice(0, strings.length);
-        const newStrings = new Veranstaltung(json.veranstaltung).presse.image;
+        const newStrings = new Veranstaltung(veranstaltung).presse.image;
         newStrings.forEach((s) => strings.push(s));
       }
     });

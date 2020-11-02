@@ -2,7 +2,13 @@
 tr
   td: b-form-input(v-model="mailinglist.name")
   td: multi-select(v-model="selectedUsers", :options="allUsernames")
-  td: delete-button-with-dialog(:id="mailinglist.originalName", :name="mailinglist.name", objecttype="Liste", :callback="loeschen", :dirty="dirty")
+  td: delete-button-with-dialog(
+    :id="mailinglist.originalName",
+    :name="mailinglist.name",
+    objecttype="Liste",
+    :callback="loeschen",
+    :dirty="dirty"
+  )
   td: b-button.btn.btn-success.float-right(@click="save", :disabled="!dirty"): b-icon-check-square
 </template>
 
@@ -43,10 +49,12 @@ export default class MailinglistRow extends Vue {
   }
 
   save(): void {
-    saveMailinglist(this.mailinglist, () => {
-      this.mailinglist.originalName = this.mailinglist.name;
-      this.listChanged();
-      this.somethingChanged();
+    saveMailinglist(this.mailinglist, (err?: Error) => {
+      if (!err) {
+        this.mailinglist.originalName = this.mailinglist.name;
+        this.listChanged();
+        this.somethingChanged();
+      }
     });
   }
 

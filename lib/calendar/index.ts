@@ -14,6 +14,7 @@ import Termin, { TerminEvent } from "../optionen/termin";
 import fieldHelpers from "../commons/fieldHelpers";
 import { filterUnbestaetigteFuerJedermann } from "../veranstaltungen";
 import terminstore from "../optionen/terminstore";
+import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
@@ -34,11 +35,11 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: Response, ca
     };
   }
 
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, veranstaltungen: Veranstaltung[]) => {
+  store.byDateRangeInAscendingOrder(start, end, (err?: Error, veranstaltungen?: Veranstaltung[]) => {
     if (err) {
       return callback(err);
     }
-    return callback(null, filterUnbestaetigteFuerJedermann(veranstaltungen, res).map(asCalendarEvent));
+    return callback(undefined, filterUnbestaetigteFuerJedermann(veranstaltungen || [], res).map(asCalendarEvent));
   });
 }
 
@@ -72,13 +73,13 @@ function termineForIcal(ical: Ical, callback: Function): void {
 }
 
 function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
-  terminstore.termineBetween(start, end, (err: Error | null, termine: Termin[]): void => {
+  terminstore.termineBetween(start, end, (err?: Error, termine?: Termin[]): void => {
     if (err) {
       return callback(err);
     }
     return callback(
-      null,
-      termine.map((termin) => termin.asEvent)
+      undefined,
+      termine?.map((termin) => termin.asEvent)
     );
   });
 }
@@ -100,14 +101,10 @@ app.get("/events.json", (req, res) => {
       }
       const icals = (results.icals as FerienIcals).icals;
       async.map(icals, termineForIcal, (err1, termineForIcals?: any[]) => {
-        if (err1) {
-          res.status(500).send(err);
-          return;
-        }
         const events = flatMap(termineForIcals, (x) => x)
           .concat(results.termine)
           .concat(results.veranstaltungen);
-        return res.set("Content-Type", "application/json").send(events);
+        reply(res, err1, events);
       });
     }
   );

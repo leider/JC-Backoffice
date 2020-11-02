@@ -52,7 +52,9 @@
         b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): b-icon-keyboard(scale=1.2)
         b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): b-icon-headphones(scale=1.2)
         b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl() + '/kalkulation'", title="Ausgaben"): b-icon-graph-up
-        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): b-icon-house-door(scale=1.2)
+        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): b-icon-house-door(
+          scale=1.2
+        )
         b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): b-icon-cash-stack(scale=1.2)
         b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): b-icon-newspaper(scale=1.2)
         b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
@@ -143,20 +145,17 @@ export default class TeamPanelAdmin extends Vue {
 
   deleteVeranstaltung(): void {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err: Error) => {
-        if (err) {
-          return console.log(err);
+      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
+        if (!err) {
+          this.$emit("deleted");
         }
-        this.$emit("deleted");
       });
     }
   }
 
   saveVeranstaltung(): void {
-    saveVeranstaltung(this.veranstaltung, (err: Error) => {
-      if (err) {
-        console.log(err);
-      }
+    saveVeranstaltung(this.veranstaltung, () => {
+      // empty by design
     });
   }
 }

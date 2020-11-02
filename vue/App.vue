@@ -30,7 +30,7 @@ div
             b-icon-envelope-fill
             span &nbsp;Mails
           b-dropdown-item(to="/mailrules") Regeln
-          b-dropdown-item(to  ="/manualmail") Manuell
+          b-dropdown-item(to="/manualmail") Manuell
           b-dropdown-divider
           b-dropdown-item(to="/mailinglisten") Mailinglisten
           b-dropdown-item(to="/rundmail") Rundmail
@@ -53,28 +53,30 @@ div
 
   .container-fluid.p-0.p-md-auto.mt-md-4
     .row.main
-      router-view
+    feedback-alerts
+    router-view
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { currentUser, wikisubdirs } from "@/commons/loader";
-import Accessrights from "../lib/commons/accessrights";
 import User from "../lib/users/user";
+import FeedbackAlerts from "@/views/general/FeedbackAlerts.vue";
 
-@Component({})
+@Component({
+  components: { FeedbackAlerts },
+})
 export default class App extends Vue {
   private user: User = new User({});
   private wikisubdirs = ["a", "b"];
 
   created(): void {
     currentUser((user: User) => {
-      user.accessrights = new Accessrights(user);
       this.user = user;
     });
 
-    wikisubdirs((subdirs: string[]) => {
-      this.wikisubdirs = subdirs;
+    wikisubdirs((json: { dirs: string[] }) => {
+      this.wikisubdirs = json.dirs;
     });
   }
 

@@ -45,10 +45,11 @@ export default class MailRules extends Vue {
   }
 
   deleteRule(rule: MailRule) {
-    deleteMailRule(rule.id, (message: string) => {
-      console.log(message);
-      const index = this.rules.indexOf(rule);
-      this.rules.splice(index, 1);
+    deleteMailRule(rule.id, (err?: Error) => {
+      if (!err) {
+        const index = this.rules.indexOf(rule);
+        this.rules.splice(index, 1);
+      }
     });
   }
 }

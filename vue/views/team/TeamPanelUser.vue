@@ -27,7 +27,7 @@
         | #{' '} Kasse gesucht!
       h5.alert-success.p-1.mb-0(v-if="nobodyNeeded")
         b-icon-check2-circle(scale=1.1)
-        | #{' '} Kooperation
+        | #{' '} Niemand benötigt
     b-collapse(v-if="!nobodyNeeded", v-model="expanded")
       table.table.table-striped.table-sm
         tbody

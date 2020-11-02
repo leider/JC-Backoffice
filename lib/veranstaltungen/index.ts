@@ -7,7 +7,6 @@ import async from "async";
 import flatten from "lodash/flatten";
 
 import path from "path";
-import fieldHelpers from "../commons/fieldHelpers";
 
 import store from "./veranstaltungenstore";
 import Veranstaltung from "./object/veranstaltung";
@@ -15,21 +14,13 @@ import DatumUhrzeit from "../commons/DatumUhrzeit";
 
 import { addRoutesTo } from "./indexDetails";
 import { expressAppIn } from "../middleware/expressViewHelper";
+import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
-
-type CalendarEvent = {
-  start: string;
-  end: string;
-  url: string;
-  title: string;
-  tooltip: string;
-  className: string;
-};
 
 export function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res: express.Response): Veranstaltung[] {
   if (res.locals.accessrights.isBookingTeam()) {
@@ -48,40 +39,9 @@ function veranstaltungenForExport(fetcher: Function, next: express.NextFunction,
       return next(err);
     }
     const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
-    return res.set("Content-Type", "text/csv").send(lines);
+    return res.type("csv").send(lines);
   });
 }
-
-function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: express.Response, callback: Function): void {
-  function asCalendarEvent(veranstaltung: Veranstaltung): CalendarEvent {
-    const urlSuffix = res.locals.accessrights.isOrgaTeam() ? "/allgemeines" : "/preview";
-
-    return {
-      start: veranstaltung.startDate.toISOString(),
-      end: veranstaltung.endDate.toISOString(),
-      url: "/vue" + veranstaltung.fullyQualifiedUrl() + urlSuffix,
-      title: veranstaltung.kopf.titel,
-      tooltip: veranstaltung.tooltipInfos(),
-      className:
-        (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
-        "verySmall color-" +
-        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
-    };
-  }
-
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return callback(err);
-    }
-    return callback(null, filterUnbestaetigteFuerJedermann(veranstaltungen, res).map(asCalendarEvent));
-  });
-}
-
-app.get("/", (req, res) => res.redirect("/vue/veranstaltungen/zukuenftige"));
-
-app.get("/zukuenftige", (req, res) => res.redirect("/vue/veranstaltungen/zukuenftige"));
-
-app.get("/vergangene", (req, res) => res.redirect("/vue/veranstaltungen/vergangene"));
 
 app.get("/zukuenftige/csv", (req, res, next) => veranstaltungenForExport(store.zukuenftigeMitGestern, next, res));
 
@@ -100,7 +60,7 @@ app.get("/imgzip/:monat", (req, res, next) => {
     });
     const filename = "Jazzclub Bilder " + start.monatJahrKompakt + ".zip";
 
-    res.header("Content-Type", "application/zip");
+    res.type("zip");
     res.header("Content-Disposition", 'attachment; filename="' + filename + '"');
 
     const zip = zipstream({ level: 1 });
@@ -122,13 +82,9 @@ app.get("/imgzip/:monat", (req, res, next) => {
 });
 
 function standardCallback(res: express.Response): Function {
-  return (err: Error, veranstaltungen: Veranstaltung[]): void => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
+  return (err: Error, veranstaltungen: Veranstaltung[]) => {
     const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
-    res.set("Content-Type", "application/json").send(result);
+    reply(res, err, result);
   };
 }
 app.get("/vergangene.json", (req, res) => {
