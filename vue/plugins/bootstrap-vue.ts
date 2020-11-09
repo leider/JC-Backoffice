@@ -5,6 +5,7 @@ import { NavbarPlugin } from "bootstrap-vue/src/components/navbar";
 
 import { ButtonPlugin } from "bootstrap-vue/src/components/button";
 
+import { FormPlugin } from "bootstrap-vue/src/components/form";
 import { FormCheckboxPlugin } from "bootstrap-vue/src/components/form-checkbox";
 import { FormDatepickerPlugin } from "bootstrap-vue/src/components/form-datepicker";
 import { FormFilePlugin } from "bootstrap-vue/src/components/form-file";
@@ -29,6 +30,7 @@ import { IconsPlugin } from "bootstrap-vue/src/icons/";
 Vue.use(NavPlugin);
 Vue.use(NavbarPlugin);
 Vue.use(ButtonPlugin);
+Vue.use(FormPlugin);
 Vue.use(FormCheckboxPlugin);
 Vue.use(FormDatepickerPlugin);
 Vue.use(FormFilePlugin);

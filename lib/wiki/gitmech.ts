@@ -3,12 +3,10 @@ import childProcess from "child_process";
 import conf from "../commons/simpleConfigure";
 const workTree = conf.get("wikipath");
 
-import misc from "../commons/misc";
 import gitExec from "./gitExec";
-import { Metadata } from "./wikiObjects";
 
 function dataToLines(data?: string): string[] {
-  return data ? data.split("\n").filter(v => v !== "") : [];
+  return data ? data.split("\n").filter((v) => v !== "") : [];
 }
 
 function esc(arg: string): string {
@@ -38,26 +36,6 @@ export default {
     gitExec.command(["show", version + ":" + esc(path)], callback);
   },
 
-  log: function log(path: string, version: string, howMany: number, callback: Function): void {
-    gitExec.command(
-      ["log", "-" + howMany, "--no-notes", "--follow", "--pretty=format:%h%n%H%n%an%n%ai%n%s", version, "--name-only", "--", esc(path)],
-      (err: Error | null, data: string) => {
-        if (err) {
-          return callback(err);
-        }
-        const logdata = data ? data.split("\n\n") : [];
-        const metadata = misc.compact(logdata).map(chunk => {
-          const group = chunk.split("\n");
-          return new Metadata(group);
-        });
-        if (metadata[0]) {
-          metadata[0].hashRef = "HEAD"; // This can be used linking this version, but needs to be empty for HEAD
-        }
-        return callback(null, metadata);
-      }
-    );
-  },
-
   add: function add(
     path: string,
     message: string,
@@ -69,21 +47,6 @@ export default {
         return callback(err, "", "");
       }
       return commit(path, message, author, callback);
-    });
-  },
-
-  mv: function mv(
-    oldpath: string,
-    newpath: string,
-    message: string,
-    author: string,
-    callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
-  ): void {
-    gitExec.command(["mv", esc(oldpath), esc(newpath)], (err: Error | null) => {
-      if (err) {
-        return callback(err, "", "");
-      }
-      return commit(".", message, author, callback);
     });
   },
 
@@ -113,20 +76,12 @@ export default {
       // Search in the file names
       return gitExec.command(["ls-files", "*" + esc(pattern) + "*.md"], (err1: Error | null, data1: string) => {
         if (data1) {
-          data1.split("\n").forEach(name => result.push(name));
+          data1.split("\n").forEach((name) => result.push(name));
         }
 
         return callback(err1, result);
       });
     });
-  },
-
-  diff: function diff(
-    path: string,
-    revisions: string,
-    callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
-  ): void {
-    gitExec.command(["diff", "--no-color", "-b", esc(revisions), "--", esc(path)], callback);
   },
 
   ls: function ls(subdir: string, callback: Function): void {
@@ -148,5 +103,5 @@ export default {
       }
       return callback(null, dataToLines(data));
     });
-  }
+  },
 };

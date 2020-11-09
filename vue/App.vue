@@ -41,7 +41,7 @@ div
           template(v-slot:button-content)
             b-icon-journals
             span &nbsp;Wiki&nbsp;
-          b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :href="`/wiki/${subdir}/`") {{ subdir }}
+          b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :to="`/wiki/${subdir}/`") {{ subdir }}
       b-navbar-nav.ml-auto
         b-nav-item-dropdown(v-if="user", right)
           template(v-slot:button-content)

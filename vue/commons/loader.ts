@@ -26,7 +26,7 @@ function standardFetch(url: string, callback: any, title?: string, text?: string
         return;
       }
       response.text().then((fehlertext) => {
-        feedbackMessages.addError(`HTTP Fehler: ${response.status} ${response.statusText}`, fehlertext);
+        feedbackMessages.addError(`Fehler: ${response.status} ${response.statusText}`, fehlertext);
       });
       throw Error(response.statusText);
     }
@@ -237,4 +237,25 @@ export function deleteMailRule(ruleID: string, callback: Function): void {
 
 export function saveMailRule(rule: MailRule, callback: Function): void {
   postAndReceive("/mailsender/saveRule", rule, callback, "Gespeichert", "Regel gespeichert");
+}
+
+// Wiki
+export function wikiSubdir(subdir: string, callback: Function): void {
+  getJson(`/wiki/list/${subdir}/alle.json`, (err?: Error, result?: any[]) => callback(result || []));
+}
+
+export function wikiPage(subdir: string, page: string, callback: Function): void {
+  getJson(`/wiki/${subdir}/${page}.json`, (err?: Error, result?: any) => callback(result.content || ""));
+}
+
+export function saveWikiPage(subdir: string, page: string, content: string, callback: Function): void {
+  postAndReceive(`/wiki/${subdir}/${page}`, { content }, callback, "Gespeichert", "Die Seite wurde gespeichert.");
+}
+
+export function searchWiki(suchtext: string, callback: Function): void {
+  postAndReceive("/wiki/search", { suchtext }, callback);
+}
+
+export function deleteWikiPage(subdir: string, page: string, callback: Function): void {
+  postAndReceive(`/wiki/delete/${subdir}/${page}`, { data: "" }, callback);
 }

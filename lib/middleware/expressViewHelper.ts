@@ -1,5 +1,4 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import statusmessage from "../commons/statusmessage";
 import fieldHelpers from "../commons/fieldHelpers";
 import express from "express";
 import User from "../users/user";
@@ -16,11 +15,6 @@ function gruppenUndRechteText(user: User): string {
 }
 
 export default function expressViewHelper(req: express.Request, res: express.Response, next: express.NextFunction): void {
-  if (req.session) {
-    if (req.session.statusmessage) {
-      statusmessage.fromObject(req.session.statusmessage).putIntoSession(req, res);
-    }
-  }
   res.locals.user = req.user;
   res.locals.currentUrl = req.url;
   res.locals.formatReadonlyAsEuro = (number: string | number): string => {

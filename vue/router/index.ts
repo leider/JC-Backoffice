@@ -15,6 +15,9 @@ import Kassenbericht from "@/views/options/Kassenbericht.vue";
 import Monatsinfos from "@/views/team/Monatsinfos.vue";
 import TermineUndKalender from "@/views/options/TermineUndKalender.vue";
 import Optionen from "@/views/options/Optionen.vue";
+import WikiList from "@/views/wiki/WikiList.vue";
+import WikiPage from "@/views/wiki/WikiPage.vue";
+import WikiSearchresults from "@/views/wiki/WikiSearchresults.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -38,6 +41,10 @@ const routes = [
   { path: "/infos/:monat/:tab", component: Monatsinfos, props: true },
   { path: "/terminekalender/:tab", component: TermineUndKalender, props: true },
   { path: "/optionen/:tab", component: Optionen, props: true },
+  { path: "/wiki/list/:subdir", component: WikiList, props: true },
+  { path: "/wiki/searchresults/:suchtext", component: WikiSearchresults, props: true },
+  { path: "/wiki/:subdir", redirect: "/wiki/list/:subdir" },
+  { path: "/wiki/:subdir/:page", component: WikiPage, props: true },
 ];
 
 const router = new VueRouter({
