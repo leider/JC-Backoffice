@@ -23,7 +23,7 @@ html
   head
     meta(charset="utf-8")
     link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
-    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Montserrat:p,500")
+    link(href=publicUrlPrefix + '/stylesheets/fonts.css', rel="stylesheet")
 
   body
     .container-fluid
@@ -86,20 +86,16 @@ html
           table.table.table-bordered.table-sm
             tr
               th Anfangsbestand:
-              td(align="right")
-                +currencyOrEmpty(kasse.anfangsbestandEUR)
+              td.text-right: +currencyOrEmpty(kasse.anfangsbestandEUR)
             tr
               th Einnahmen:
-              td(align="right")
-                +currencyOrEmpty(kasse.einnahmeTotalEUR())
+              td.text-right: +currencyOrEmpty(kasse.einnahmeTotalEUR())
             tr
               th Ausgaben:
-              td(align="right")
-                +currencyOrEmpty(kasse.ausgabenTotalEUR() * -1)
+              td.text-right: +currencyOrEmpty(kasse.ausgabenTotalEUR() * -1)
             tr
               th Endbestand:
-              td(align="right")
-                +currencyOrEmpty(kasse.endbestandEUR())
+              td.text-right: +currencyOrEmpty(kasse.endbestandEUR())
       .row
         .col-6
           table.table.table-bordered.table-sm
@@ -111,19 +107,19 @@ html
             tr
               td Ticketverkauf
               td
-              td(align="right"): +currencyOrEmpty(kasse.einnahmeTicketsEUR)
+              td.text-right: +currencyOrEmpty(kasse.einnahmeTicketsEUR)
             tr
               td Bareinlage
               td
-              td(align="right"): +currencyOrEmpty(kasse.einnahmeBankEUR)
+              td.text-right: +currencyOrEmpty(kasse.einnahmeBankEUR)
             tr
               td #{kasse.einnahmeSonstiges1Text}
               td
-              td(align="right"): +currencyOrEmpty(kasse.einnahmeSonstiges1EUR)
+              td.text-right: +currencyOrEmpty(kasse.einnahmeSonstiges1EUR)
             tr
               td #{kasse.einnahmeSonstiges2Text}
               td
-              td(align="right"): +currencyOrEmpty(kasse.einnahmeSonstiges2EUR)
+              td.text-right: +currencyOrEmpty(kasse.einnahmeSonstiges2EUR)
             tr
               td &nbsp;
               td
@@ -139,7 +135,7 @@ html
             tr
               th Summe
               td
-              td(align="right"): b: +currencyOrEmpty(kasse.einnahmeTotalEUR())
+              td.text-right: b: +currencyOrEmpty(kasse.einnahmeTotalEUR())
 
         .col-6
           table.table.table-bordered.table-striped.table-sm
@@ -179,6 +175,6 @@ html
             tr
               th Summe
               td
-              td(align="right"): b: +currencyOrEmpty(kasse.ausgabenTotalEUR())
+              td.text-right: b: +currencyOrEmpty(kasse.ausgabenTotalEUR())
       +signbox(veranstaltung.datumForDisplay(), 'Kassierer/-in', kassierer)
       +signbox(kasse.freigabeDisplayDatum(), 'Freigegeben', kasse.kassenfreigabe)
