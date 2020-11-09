@@ -259,42 +259,7 @@ label {
   white-space: normal !important;
 }
 
-// wiki page compare *BEGIN*
-.compare {
-  font-family: Consolas, monospace;
-  font-size: 12px;
-}
-
-.compare td {
-  padding: 0 3px;
-  border-top-width: 0;
-}
-
-.compare .gd {
-  background-color: #ffdddd;
-}
-
-.compare .gc {
-  color: #999999;
-  background-color: #eaf2f5;
-}
-
-.compare .gi {
-  background-color: #ddffdd;
-}
-
-.compare .ln {
-  color: #999999;
-  background-color: #eaf2f5;
-  text-align: right;
-  border-bottom-color: transparent;
-}
-
 // wiki page compare *END*
-
-.blau {
-  color: #118be8;
-}
 
 h1 > small {
   display: inline-block;

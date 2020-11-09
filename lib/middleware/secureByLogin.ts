@@ -5,12 +5,13 @@ import store from "../users/userstore";
 import User from "../users/user";
 
 export default function secureByLogin(req: express.Request, res: express.Response, next: express.NextFunction): void {
-  if (/\/upload|ical/.test(req.originalUrl)) {
+  if (/\/upload|ical|index.html/.test(req.originalUrl)) {
     return next();
   }
 
   const pathname = req.originalUrl;
-  if (pathname.lastIndexOf(".") > pathname.lastIndexOf("/")) { // seems to be a file request
+  if (pathname.lastIndexOf(".") > pathname.lastIndexOf("/")) {
+    // seems to be a file request
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       res.status(401).send();
       return;

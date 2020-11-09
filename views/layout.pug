@@ -1,5 +1,3 @@
-include layoutComponents
-
 doctype html
 html
   head
@@ -18,30 +16,9 @@ html
       | &nbsp;- JC
 
   body.pt-md-5
-    #cheatsheet.modal.fade(tabindex="-1")
-      .modal-dialog.modal-lg
-        .modal-content
-    #loeschdialog.modal.fade(tabindex="-1")
-      .modal-dialog
-        .modal-content
-
-    if (statusmessage)
-      +notificationsBlock(statusmessage)
-    +topNavbar
-    .container-fluid.p-0.p-md-auto
+    header.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      a.navbar-brand(href="/")
+        img(src="/img/logo_weiss.png", alt="Jazzclub")
+    .container-fluid.p-md-auto
       .row.main
         block content
-
-script(src="/clientscripts/global.js")
-script.
-  $(document).ready(function () {
-    $('.modaldialog').click(function (e) {
-      var data = e.currentTarget.dataset;
-      var target = data.target;
-      var url = data.link;
-      $(target + ' .modal-content').load(url);
-    });
-    $('.toast').toast('show')
-  })
-
-block scripts

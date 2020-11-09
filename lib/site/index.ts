@@ -3,7 +3,6 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import passport from "passport";
-import Renderer from "../commons/renderer";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -27,13 +26,7 @@ app.get("/robots.txt", (req, res, next) => {
   });
 });
 
-app.post("/preview", (req, res) => res.send(Renderer.render(req.body.data, req.body.subdir)));
-
 app.get("/login", (req, res) => res.render("authenticationRequired"));
-
-app.get("/cheatsheet.html", (req, res) => {
-  res.render("lazyMarkdownCheatsheet");
-});
 
 app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => res.redirect("/"));
 

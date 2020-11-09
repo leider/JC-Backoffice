@@ -7,10 +7,6 @@ import { reply } from "../commons/replies";
 
 const app = expressAppIn(__dirname);
 
-app.get("/", (req, res) => {
-  res.redirect("/vue/programmheft");
-});
-
 app.get("/:year/:month.json", (req, res) => {
   let yearMonthString = `${req.params.year}/${req.params.month}`;
   if (parseInt(req.params.month) % 2 === 0) {

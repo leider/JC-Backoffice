@@ -41,7 +41,7 @@ app.get("/:subdir/:page", (req, res) => {
     if ((error?.message || "").indexOf("does not exist") > -1) {
       error = null;
     }
-    let content = cont || "";
+    const content = cont || "";
     reply(res, error, { content });
   });
 });
