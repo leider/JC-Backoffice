@@ -15,7 +15,7 @@
     delete-button-with-dialog#delete-wikipage(:name="page", objecttype="Seite", :callback="loeschen", :dirty="dirty", show-text="true")
   h1 Wiki<br>
     small
-      b-link(:to="`/wiki/list/${subdir}`") "{{ subdir }}
+      b-link(:to="`/wiki/${subdir}`") "{{ subdir }}
       | #{" "}/ {{ page }}"
   markdown(v-if="isEdit", v-model="content", height="600px")
   div(v-else, v-html="body")

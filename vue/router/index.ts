@@ -43,8 +43,9 @@ const routes = [
   { path: "/optionen/:tab", component: Optionen, props: true },
   { path: "/wiki/list/:subdir", component: WikiList, props: true },
   { path: "/wiki/searchresults/:suchtext", component: WikiSearchresults, props: true },
-  { path: "/wiki/:subdir", redirect: "/wiki/list/:subdir" },
+  { path: "/wiki/:subdir", redirect: "/wiki/:subdir/index" },
   { path: "/wiki/:subdir/:page", component: WikiPage, props: true },
+  { path: "*", redirect: "/" },
 ];
 
 const router = new VueRouter({
