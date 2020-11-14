@@ -18,7 +18,7 @@ const fullresult = {
   anzahl: 220,
   netto: 4782.55,
   brutto: 5296,
-  updated: new Date("2018-10-28T12:58:23.072Z")
+  updated: new Date("2018-10-28T12:58:23.072Z"),
 };
 
 const minimumResult = { id: "dummy" };
@@ -49,7 +49,7 @@ describe("Reservix Salesreport", () => {
       const obj = new Salesreport({
         id: "dodo",
         datum: tomorrow,
-        updated: oneHourAgo
+        updated: oneHourAgo,
       });
       expect(obj.istVeraltet()).to.equal(true);
     });
@@ -68,7 +68,7 @@ describe("Reservix Salesreport", () => {
       const obj = new Salesreport({
         id: "dodo",
         datum: heute,
-        updated: thirtyMinutesAgo
+        updated: thirtyMinutesAgo,
       });
       expect(obj.istVeraltet()).to.equal(true);
     });
@@ -88,7 +88,7 @@ describe("Reservix Salesreport", () => {
     it("2017 is past", () => {
       const obj = new Salesreport({
         id: "dodo",
-        datum: new Date("2017-10-27T12:58:23.072Z")
+        datum: new Date("2017-10-27T12:58:23.072Z"),
       });
       expect(obj.istVergangen()).to.equal(true);
     });

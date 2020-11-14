@@ -6,7 +6,7 @@ describe("Eintrittspreise", () => {
   const freierEintritt = {
     erwarteteBesucher: 0,
     preisprofil: { name: "Freier Eintritt", rabattErmaessigt: 0, rabattMitglied: 0, regulaer: 0 },
-    zuschuss: 0
+    zuschuss: 0,
   };
   describe("Initialisiert", () => {
     it("mit freiem Eintritt für leeres Objekt", () => {

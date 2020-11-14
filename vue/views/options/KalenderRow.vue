@@ -11,7 +11,7 @@ tr
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import JazzDatePure from "@/widgets/JazzDatePure.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
-import { Ical } from "../../../lib/optionen/ferienIcals";
+import { Ical } from "../../../backend/lib/optionen/ferienIcals";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
 
 @Component({ components: { DeleteButtonWithDialog, SingleSelectPure, JazzDatePure } })

@@ -15,8 +15,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import JazzDateTime from "@/widgets/JazzDateTime.vue";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
 
 @Component({
   components: { JazzDateTime },

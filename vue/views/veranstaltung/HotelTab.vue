@@ -70,13 +70,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import LegendCard from "@/widgets/LegendCard.vue";
-import OptionValues, { Hotelpreise } from "../../../lib/optionen/optionValues";
+import OptionValues, { Hotelpreise } from "../../../backend/lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import MultiSelect from "@/widgets/MultiSelect.vue";
-import Kosten from "../../../lib/veranstaltungen/object/kosten";
+import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
 import JazzText from "@/widgets/JazzText.vue";
 import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
 import JazzNumber from "@/widgets/JazzNumber.vue";
@@ -85,9 +85,9 @@ import LabelCurrencyRow from "@/views/veranstaltung/LabelCurrencyRow.vue";
 import JazzCurrencyDisplay from "@/widgets/JazzCurrencyDisplay.vue";
 import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
 import JazzDate from "@/widgets/JazzDate.vue";
-import Unterkunft from "../../../lib/veranstaltungen/object/unterkunft";
+import Unterkunft from "../../../backend/lib/veranstaltungen/object/unterkunft";
 import JazzTextarea from "@/widgets/JazzTextarea.vue";
-import User from "../../../lib/users/user";
+import User from "../../../backend/lib/users/user";
 import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
 
 @Component({

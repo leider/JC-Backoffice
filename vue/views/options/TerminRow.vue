@@ -18,7 +18,7 @@ tr
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { saveTermin } from "@/commons/loader";
 import JazzDatePure from "@/widgets/JazzDatePure.vue";
-import Termin from "../../../lib/optionen/termin";
+import Termin from "../../../backend/lib/optionen/termin";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
 

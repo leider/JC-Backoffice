@@ -12,7 +12,7 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
-import Kopf from "../../../lib/veranstaltungen/object/kopf";
+import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
 
 @Component({ components: { SingleSelectPure, JazzLabel } })
 export default class KoopSelect extends Vue {

@@ -8,12 +8,12 @@ function createConfiguration(): SimpleConfigure {
   // first, set the default values
   conf.addProperties({
     port: "1969",
-    emaildomainname: "localhost"
+    emaildomainname: "localhost",
   });
 
   // then, add properties from config files:
   const files = ["mailsender-config.json", "mongo-config.json", "passwordSalt.json", "server-config.json"];
-  conf.addFiles(files.map(file => configdir + file));
+  conf.addFiles(files.map((file) => configdir + file));
 
   return conf;
 }

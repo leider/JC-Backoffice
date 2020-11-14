@@ -31,12 +31,12 @@ import { Component, Vue } from "vue-property-decorator";
 import Markdown from "@/widgets/Markdown.vue";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import JazzText from "@/widgets/JazzText.vue";
-import Message from "../../../lib/mailsender/message";
+import Message from "../../../backend/lib/mailsender/message";
 import { currentUser, mailRules, sendMail, veranstaltungenForTeam } from "@/commons/loader";
-import User from "../../../lib/users/user";
+import User from "../../../backend/lib/users/user";
 import MultiSelect from "@/widgets/MultiSelect.vue";
-import MailRule from "../../../lib/mailsender/mailRule";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import MailRule from "../../../backend/lib/mailsender/mailRule";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 
 @Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class ManualMail extends Vue {

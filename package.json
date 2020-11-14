@@ -144,6 +144,6 @@
     "test": "grunt tests",
     "serve": "vue-cli-service serve --port 1969",
     "build": "vue-cli-service build --no-clean",
-    "tsc": "./node_modules/typescript/bin/tsc"
+    "tsc": "./node_modules/typescript/bin/tsc --project backend/tsconfig.json"
   }
 }

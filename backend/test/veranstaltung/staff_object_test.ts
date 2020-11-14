@@ -19,7 +19,7 @@ describe("Staff", () => {
         kasseNotNeeded: false,
         kasseVNotNeeded: false,
         modNotNeeded: false,
-        merchandiseNotNeeded: false
+        merchandiseNotNeeded: false,
       });
     });
     it("initial", () => {

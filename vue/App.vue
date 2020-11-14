@@ -60,7 +60,7 @@ div
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { currentUser, wikisubdirs } from "@/commons/loader";
-import User from "../lib/users/user";
+import User from "../backend/lib/users/user";
 import FeedbackAlerts from "@/views/general/FeedbackAlerts.vue";
 
 @Component({

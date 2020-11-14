@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 
 @Component({

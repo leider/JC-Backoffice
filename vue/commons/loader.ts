@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fetch, { Response } from "cross-fetch";
-import Veranstaltung, { ImageOverviewRow } from "../../lib/veranstaltungen/object/veranstaltung";
-import User from "../../lib/users/user";
-import { StaffType } from "../../lib/veranstaltungen/object/staff";
-import Kalender from "../../lib/programmheft/kalender";
-import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
-import OptionValues from "../../lib/optionen/optionValues";
-import Orte from "../../lib/optionen/orte";
-import Message from "../../lib/mailsender/message";
-import { Mailingliste } from "../../lib/users/users";
-import MailRule from "../../lib/mailsender/mailRule";
-import Termin from "../../lib/optionen/termin";
-import FerienIcals from "../../lib/optionen/ferienIcals";
+import Veranstaltung, { ImageOverviewRow } from "../../backend/lib/veranstaltungen/object/veranstaltung";
+import User from "../../backend/lib/users/user";
+import { StaffType } from "../../backend/lib/veranstaltungen/object/staff";
+import Kalender from "../../backend/lib/programmheft/kalender";
+import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
+import OptionValues from "../../backend/lib/optionen/optionValues";
+import Orte from "../../backend/lib/optionen/orte";
+import Message from "../../backend/lib/mailsender/message";
+import { Mailingliste } from "../../backend/lib/users/users";
+import MailRule from "../../backend/lib/mailsender/mailRule";
+import Termin from "../../backend/lib/optionen/termin";
+import FerienIcals from "../../backend/lib/optionen/ferienIcals";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
-import Accessrights from "../../lib/commons/accessrights";
+import Accessrights from "../../backend/lib/commons/accessrights";
 
 function standardFetch(url: string, callback: any, title?: string, text?: string, postHeader?: RequestInit): void {
   function handleErrorIfAny(response: Response): any {

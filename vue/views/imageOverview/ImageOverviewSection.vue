@@ -21,7 +21,7 @@ legend-card(section="allgemeines", :title="title")
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import LegendCard from "@/widgets/LegendCard.vue";
-import { ImageOverviewRow } from "../../../lib/veranstaltungen/object/veranstaltung";
+import { ImageOverviewRow } from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 
 @Component({
   components: { LegendCard },

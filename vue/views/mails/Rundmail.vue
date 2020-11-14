@@ -33,11 +33,11 @@ import { Component, Vue } from "vue-property-decorator";
 import Markdown from "@/widgets/Markdown.vue";
 import JazzLabel from "@/widgets/JazzLabel.vue";
 import JazzText from "@/widgets/JazzText.vue";
-import Message from "../../../lib/mailsender/message";
+import Message from "../../../backend/lib/mailsender/message";
 import { allUsers, currentUser, sendMail } from "@/commons/loader";
-import User from "../../../lib/users/user";
+import User from "../../../backend/lib/users/user";
 import MultiSelect from "@/widgets/MultiSelect.vue";
-import Users from "../../../lib/users/users";
+import Users from "../../../backend/lib/users/users";
 
 @Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class Rundmail extends Vue {

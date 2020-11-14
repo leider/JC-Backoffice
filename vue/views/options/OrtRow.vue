@@ -11,7 +11,7 @@ tr
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
-import { Ort } from "../../../lib/optionen/orte";
+import { Ort } from "../../../backend/lib/optionen/orte";
 
 @Component({ components: { DeleteButtonWithDialog } })
 export default class KalenderRow extends Vue {

@@ -62,13 +62,13 @@ import {
   deleteVeranstaltungWithId,
   saveOptionenQuiet,
 } from "@/commons/loader";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import SectionTab from "@/views/veranstaltung/SectionTab.vue";
-import User from "../../../lib/users/user";
-import OptionValues from "../../../lib/optionen/optionValues";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
-import fieldHelpers from "../../../lib/commons/fieldHelpers";
-import Orte from "../../../lib/optionen/orte";
+import User from "../../../backend/lib/users/user";
+import OptionValues from "../../../backend/lib/optionen/optionValues";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
+import fieldHelpers from "../../../backend/lib/commons/fieldHelpers";
+import Orte from "../../../backend/lib/optionen/orte";
 import AllgemeinesTab from "@/views/veranstaltung/AllgemeinesTab.vue";
 import TechnikTab from "@/views/veranstaltung/TechnikTab.vue";
 import KalkulationTab from "@/views/veranstaltung/KalkulationTab.vue";

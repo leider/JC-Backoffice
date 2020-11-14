@@ -9,10 +9,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import Unterkunft from "../../../lib/veranstaltungen/object/unterkunft";
-import Technik from "../../../lib/veranstaltungen/object/technik";
-import Presse from "../../../lib/veranstaltungen/object/presse";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import Unterkunft from "../../../backend/lib/veranstaltungen/object/unterkunft";
+import Technik from "../../../backend/lib/veranstaltungen/object/technik";
+import Presse from "../../../backend/lib/veranstaltungen/object/presse";
 
 @Component
 export default class StaffRow extends Vue {

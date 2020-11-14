@@ -11,9 +11,9 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../lib/users/user";
-import Staff, { StaffType } from "../../../lib/veranstaltungen/object/staff";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import User from "../../../backend/lib/users/user";
+import Staff, { StaffType } from "../../../backend/lib/veranstaltungen/object/staff";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 @Component({
   components: { MultiSelect },

@@ -1,5 +1,5 @@
-import "../../configure";
-import "../../initWinston";
+import "../../../configure";
+import "../../../initWinston";
 import async from "async";
 import partial from "lodash/partial";
 

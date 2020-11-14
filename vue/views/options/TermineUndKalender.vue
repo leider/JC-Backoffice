@@ -46,10 +46,10 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import TerminRow from "@/views/options/TerminRow.vue";
-import Termin from "../../../lib/optionen/termin";
+import Termin from "../../../backend/lib/optionen/termin";
 import { deleteTermin, kalender, saveKalender, termine } from "@/commons/loader";
 import KalenderRow from "@/views/options/KalenderRow.vue";
-import FerienIcals, { Ical } from "../../../lib/optionen/ferienIcals";
+import FerienIcals, { Ical } from "../../../backend/lib/optionen/ferienIcals";
 @Component({
   components: { KalenderRow, TerminRow },
 })

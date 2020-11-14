@@ -9,7 +9,7 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import MailRule, { allMailrules } from "../../../lib/mailsender/mailRule";
+import MailRule, { allMailrules } from "../../../backend/lib/mailsender/mailRule";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import { saveMailRule } from "@/commons/loader";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";

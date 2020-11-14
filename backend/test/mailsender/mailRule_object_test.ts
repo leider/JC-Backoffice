@@ -17,7 +17,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[1]
+      rule: allMailrules[1],
     });
 
     it("sendet nur Mittowchs", () => {
@@ -43,7 +43,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[2]
+      rule: allMailrules[2],
     });
 
     it("sendet nur am 5.", () => {
@@ -75,7 +75,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[3]
+      rule: allMailrules[3],
     });
 
     it("sendet nur am 5.", () => {
@@ -107,7 +107,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[4]
+      rule: allMailrules[4],
     });
 
     it("sendet nur am 16.", () => {
@@ -139,7 +139,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[5]
+      rule: allMailrules[5],
     });
 
     it("sendet nur Montags", () => {
@@ -171,7 +171,7 @@ describe("MailRule", () => {
       id: "someID",
       name: "test",
       email: "aa@bb.cc",
-      rule: allMailrules[6]
+      rule: allMailrules[6],
     });
 
     it("sendet nur Montags", () => {

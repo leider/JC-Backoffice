@@ -15,7 +15,7 @@ describe("Kosten", () => {
       personal: 0,
       gagenSteuer: null,
       deal: null,
-      gageBAR: false
+      gageBAR: false,
     });
     expect(kosten.gagenTotalEUR()).to.equal(0);
     expect(kosten.backlineUndTechnikEUR()).to.equal(0);

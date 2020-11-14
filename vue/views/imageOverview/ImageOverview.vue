@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { veranstaltungenForTeam, imagenames, saveImagenames } from "@/commons/loader";
-import Veranstaltung, { ImageOverviewVeranstaltung, ImageOverviewRow } from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung, { ImageOverviewVeranstaltung, ImageOverviewRow } from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import differenceBy from "lodash/differenceBy";
 import intersection from "lodash/intersection";
 import flatten from "lodash/flatten";

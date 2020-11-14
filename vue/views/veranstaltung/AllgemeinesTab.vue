@@ -99,28 +99,28 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import Kopf from "../../../lib/veranstaltungen/object/kopf";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
 import LegendCard from "@/widgets/LegendCard.vue";
 import JazzText from "@/widgets/JazzText.vue";
 import EventTypSelect from "@/widgets/EventTypSelect.vue";
-import OptionValues from "../../../lib/optionen/optionValues";
+import OptionValues from "../../../backend/lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzLabel from "@/widgets/JazzLabel.vue";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
-import Orte from "../../../lib/optionen/orte";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
+import Orte from "../../../backend/lib/optionen/orte";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import JazzNumber from "@/widgets/JazzNumber.vue";
 import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import KoopSelect from "@/views/veranstaltung/KoopSelect.vue";
 import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
-import Artist from "../../../lib/veranstaltungen/object/artist";
+import Artist from "../../../backend/lib/veranstaltungen/object/artist";
 import MultiSelect from "@/widgets/MultiSelect.vue";
-import Kosten from "../../../lib/veranstaltungen/object/kosten";
+import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
 import Markdown from "@/widgets/Markdown.vue";
 import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
-import Vertrag, { Sprache, Vertragsart } from "../../../lib/veranstaltungen/object/vertrag";
+import Vertrag, { Sprache, Vertragsart } from "../../../backend/lib/veranstaltungen/object/vertrag";
 import { uploadFile } from "@/commons/loader";
 import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
 import JazzInterval from "@/views/veranstaltung/JazzInterval.vue";

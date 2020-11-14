@@ -50,9 +50,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../lib/users/user";
+import User from "../../../backend/lib/users/user";
 import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import UserPanel from "@/views/user/UserPanel.vue";
 import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import groupBy from "lodash/groupBy";

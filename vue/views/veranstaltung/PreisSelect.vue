@@ -25,7 +25,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import JazzLabel from "@/widgets/JazzLabel.vue";
-import { Preisprofil } from "../../../lib/optionen/optionValues";
+import { Preisprofil } from "../../../backend/lib/optionen/optionValues";
 import Multiselect from "vue-multiselect";
 
 @Component({ components: { Multiselect, JazzLabel } })

@@ -100,19 +100,19 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { currentUser, veranstaltungForUrl, deleteVeranstaltungWithId, allUsers } from "@/commons/loader";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import User from "../../../lib/users/user";
-import fieldHelpers from "../../../lib/commons/fieldHelpers";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import User from "../../../backend/lib/users/user";
+import fieldHelpers from "../../../backend/lib/commons/fieldHelpers";
 import LegendCard from "@/widgets/LegendCard.vue";
 import PreviewUserRow from "@/views/veranstaltung/PreviewUserRow.vue";
 import JazzCurrencyDisplay from "@/widgets/JazzCurrencyDisplay.vue";
-import Eintrittspreise from "../../../lib/veranstaltungen/object/eintrittspreise";
-import Staff from "../../../lib/veranstaltungen/object/staff";
-import Kopf from "../../../lib/veranstaltungen/object/kopf";
-import renderer from "../../../lib/commons/renderer";
-import Technik from "../../../lib/veranstaltungen/object/technik";
-import Presse from "../../../lib/veranstaltungen/object/presse";
-import Kontakt from "../../../lib/veranstaltungen/object/kontakt";
+import Eintrittspreise from "../../../backend/lib/veranstaltungen/object/eintrittspreise";
+import Staff from "../../../backend/lib/veranstaltungen/object/staff";
+import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
+import renderer from "../../../backend/lib/commons/renderer";
+import Technik from "../../../backend/lib/veranstaltungen/object/technik";
+import Presse from "../../../backend/lib/veranstaltungen/object/presse";
+import Kontakt from "../../../backend/lib/veranstaltungen/object/kontakt";
 import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
 
 @Component({

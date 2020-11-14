@@ -1,4 +1,4 @@
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
 
 export interface VeranstaltungZeileMitCheck {
   id: string;

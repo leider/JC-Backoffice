@@ -24,7 +24,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { deleteMailRule, mailRules } from "@/commons/loader";
-import MailRule from "../../../lib/mailsender/mailRule";
+import MailRule from "../../../backend/lib/mailsender/mailRule";
 import MailRuleRow from "@/views/mails/MailRuleRow.vue";
 
 @Component({ components: { MailRuleRow } })

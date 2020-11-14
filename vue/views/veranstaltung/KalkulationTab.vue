@@ -82,20 +82,20 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import LegendCard from "@/widgets/LegendCard.vue";
-import OptionValues from "../../../lib/optionen/optionValues";
+import OptionValues from "../../../backend/lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import MultiSelect from "@/widgets/MultiSelect.vue";
-import Kosten from "../../../lib/veranstaltungen/object/kosten";
+import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
 import JazzText from "@/widgets/JazzText.vue";
 import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
-import Eintrittspreise from "../../../lib/veranstaltungen/object/eintrittspreise";
+import Eintrittspreise from "../../../backend/lib/veranstaltungen/object/eintrittspreise";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
-import Kasse from "../../../lib/veranstaltungen/object/kasse";
+import Kasse from "../../../backend/lib/veranstaltungen/object/kasse";
 import JazzNumber from "@/widgets/JazzNumber.vue";
-import Salesreport from "../../../lib/reservix/salesreport";
+import Salesreport from "../../../backend/lib/reservix/salesreport";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import LabelCurrencyRow from "@/views/veranstaltung/LabelCurrencyRow.vue";
 import JazzCurrencyDisplay from "@/widgets/JazzCurrencyDisplay.vue";

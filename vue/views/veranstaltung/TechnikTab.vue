@@ -41,16 +41,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import LegendCard from "@/widgets/LegendCard.vue";
-import OptionValues from "../../../lib/optionen/optionValues";
+import OptionValues from "../../../backend/lib/optionen/optionValues";
 import JazzCheck from "@/widgets/JazzCheck.vue";
 import JazzCurrency from "@/widgets/JazzCurrency.vue";
 import MultiSelect from "@/widgets/MultiSelect.vue";
 import { uploadFile } from "@/commons/loader";
-import Technik from "../../../lib/veranstaltungen/object/technik";
+import Technik from "../../../backend/lib/veranstaltungen/object/technik";
 import JazzLabel from "@/widgets/JazzLabel.vue";
-import Kosten from "../../../lib/veranstaltungen/object/kosten";
+import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
 import JazzText from "@/widgets/JazzText.vue";
 
 @Component({

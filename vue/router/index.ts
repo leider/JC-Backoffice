@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Team from "../views/team/Team.vue";
 import Programmheft from "@/views/programmheft/Programmheft.vue";
-import DatumUhrzeit from "../../lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
 import Gema from "@/views/gema/Gema.vue";
 import VeranstaltungView from "@/views/veranstaltung/VeranstaltungView.vue";
 import ImageOverview from "@/views/imageOverview/ImageOverview.vue";

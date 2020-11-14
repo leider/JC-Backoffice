@@ -65,9 +65,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../lib/users/user";
+import User from "../../../backend/lib/users/user";
 import { deleteUser, saveUser, changePassword } from "@/commons/loader";
-import Accessrights from "../../../lib/commons/accessrights";
+import Accessrights from "../../../backend/lib/commons/accessrights";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 import JazzText from "@/widgets/JazzText.vue";
 import JazzMail from "@/widgets/JazzMail.vue";

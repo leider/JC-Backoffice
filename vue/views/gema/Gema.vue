@@ -14,9 +14,9 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { veranstaltungenForTeam } from "@/commons/loader";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
 import sortBy from "lodash/sortBy";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
 import { renderart, VeranstaltungZeileMitCheck } from "@/views/gema/SharedGemaTypes";
 import GemaMonat from "@/views/gema/GemaMonat.vue";
 import GemaSection from "@/views/gema/GemaSection.vue";

@@ -36,9 +36,9 @@ div
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../lib/veranstaltungen/object/veranstaltung";
-import DatumUhrzeit from "../../../lib/commons/DatumUhrzeit";
-import User from "../../../lib/users/user";
+import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
+import User from "../../../backend/lib/users/user";
 import TeamPanelUser from "@/views/team/TeamPanelUser.vue";
 import TeamPanelAdmin from "@/views/team/TeamPanelAdmin.vue";
 
