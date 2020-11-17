@@ -21,7 +21,7 @@ function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): string {
       uid: veranstaltung.url || "",
       start: veranstaltung.startDatumUhrzeit().fuerIcal,
       end: veranstaltung.endDatumUhrzeit().fuerIcal,
-      summary: veranstaltung.kopf.titel,
+      summary: veranstaltung.kopf.titelMitPrefix,
       description: veranstaltung.tooltipInfos(),
       location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
     });

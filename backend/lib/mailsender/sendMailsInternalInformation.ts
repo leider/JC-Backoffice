@@ -79,7 +79,7 @@ ${kaputteVeranstaltungen
   .map(
     (veranst) =>
       `<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
-      `${veranst.kopf.titel} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
+      `${veranst.kopf.titelMitPrefix} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
   )
   .join("\n\n---\n")}
 
@@ -134,7 +134,7 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
 
 ---
 ${veranstaltungenMitFluegel
-  .map((veranst) => veranst.kopf.titel + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
+  .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
   .join("\n\n---\n")}`;
 
     const message = new Message({

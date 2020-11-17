@@ -18,7 +18,7 @@
       | #{" "}Speichern
   h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
     small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
-  h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titel }}<br>
+  h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titelMitPrefix }}<br>
     small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort() }}
   b-tabs(v-if="showAllTabs")
     section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="keyboard", @clicked="tabActivated")
@@ -63,8 +63,10 @@ import {
   deleteVeranstaltungWithId,
   imagenames,
   optionen,
-  orte, saveOptionenQuiet,
-  saveVeranstaltung, veranstaltungForUrl
+  orte,
+  saveOptionenQuiet,
+  saveVeranstaltung,
+  veranstaltungForUrl,
 } from "../../commons/loader";
 import SectionTab from "./SectionTab.vue";
 import AllgemeinesTab from "./AllgemeinesTab.vue";
@@ -189,10 +191,10 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Jazzclub", this.veranstaltung.technik.backlineJazzclub);
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
-    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
+    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: OptionValues) => {
       if (!err) {
         this.optionen = new OptionValues(optionen);
-        saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: any) => {
+        saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {
           if (!err) {
             this.originalVeranstaltung = new Veranstaltung(veranstaltung);
             if (this.isNew) {

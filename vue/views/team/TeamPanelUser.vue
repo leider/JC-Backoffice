@@ -21,7 +21,7 @@
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{ kopf.presseIn }}
         tr
           td
-          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titel }}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titelMitPrefix }}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
         b-icon-exclamation-circle-fill
         | #{' '} Kasse gesucht!

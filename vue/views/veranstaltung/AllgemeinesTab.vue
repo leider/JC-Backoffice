@@ -9,6 +9,11 @@
           jazz-check(v-model="veranstaltung.artist.brauchtHotel", label="Braucht Hotel")
         .col-4.col-xl-3
           jazz-text(label="Reservix-ID", tooltip="Falls bei Reservix", v-model="veranstaltung.reservixID")
+        .col-4.col-xl-3
+          .form-group
+            label &nbsp;
+            b-button.form-control.d-block(v-if="!kopf.abgesagt", variant="warning", @click="absagen()") Absagen
+            b-button.form-control.d-block(v-else, variant="warning", @click="absagenAufheben") Absage Rückgängig
       .row
         .col-sm-6
           jazz-text(label="Titel", tooltip="Titel für die Veranstaltung", required="true", v-model="kopf.titel")
@@ -190,6 +195,14 @@ export default class AllgemeinesTab extends Vue {
       this.kopf.presseIn = derOrt.presseIn || this.kopf.pressename;
       this.kopf.flaeche = derOrt.flaeche;
     }
+  }
+
+  absagen(): void {
+    this.kopf.abgesagt = true;
+  }
+
+  absagenAufheben(): void {
+    this.kopf.abgesagt = false;
   }
 
   saveFiles(): void {

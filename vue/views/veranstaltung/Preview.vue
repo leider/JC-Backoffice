@@ -15,7 +15,7 @@
       | #{" "}Kopieren
   h2
     span(:class="iconClass", style="font-weight:normal")
-    span(:class="colorClass") &nbsp; {{ kopf.titel }} {{ kopf.presseInEcht() }}
+    span(:class="colorClass") &nbsp; {{ kopf.titelMitPrefix }} {{ kopf.presseInEcht() }}
     br
     small am {{ veranstaltung.datumForDisplayShort() }}
   h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{ kooperation }}
@@ -200,7 +200,7 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
   mounted(): void {
     veranstaltungForUrl(this.url, (v: Veranstaltung) => {
       this.veranstaltung = v;
-      document.title = this.veranstaltung.kopf.titel;
+      document.title = this.veranstaltung.kopf.titelMitPrefix;
     });
   }
 

@@ -123,6 +123,7 @@ export default class Veranstaltung {
     this.reservixID = undefined;
     this.staff = new Staff();
     this.kopf.confirmed = false;
+    this.kopf.abgesagt = false;
   }
 
   associateSalesreport(salesreport?: Salesreport): void {
@@ -220,7 +221,7 @@ export default class Veranstaltung {
 
   // utility
   presseTemplate(): string {
-    return `### ${this.kopf.titel}
+    return `### ${this.kopf.titelMitPrefix}
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
 **Eintritt:** ${this.eintrittspreise.alsPressetext(this.kopf.isKooperation() ? this.kopf.kooperation : "")}
 
@@ -229,7 +230,7 @@ export default class Veranstaltung {
 
   presseTemplateInternal(prefix: string): string {
     // für interne Mails
-    return `### [${this.kopf.titel}](${prefix}/vue${this.fullyQualifiedUrl()}/presse)
+    return `### [${this.kopf.titelMitPrefix}](${prefix}/vue${this.fullyQualifiedUrl()}/presse)
 #### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
 
 `;
@@ -247,7 +248,7 @@ export default class Veranstaltung {
   }
 
   description(): string {
-    return `${this.datumForDisplayMitKW()} ${this.kopf.titel}`;
+    return `${this.datumForDisplayMitKW()} ${this.kopf.titelMitPrefix}`;
   }
 
   // GEMA
@@ -293,7 +294,7 @@ export default class Veranstaltung {
 
   // CSV Export
   toCSV(): string {
-    return `${this.kopf.titel};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
+    return `${this.kopf.titelMitPrefix};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
   }
 
   updateImageName(oldname: string, newname: string): void {

@@ -27,7 +27,7 @@
           td.text-left: a(@click="toggleExpanded")
             h5 {{ veranstaltung.tagNumerisch() }}
           td: a(@click="toggleExpanded")
-            h5 {{ kopf.titel }} &nbsp;
+            h5 {{ kopf.titelMitPrefix }} &nbsp;
               small(style="color: inherit") {{ kopf.presseIn }}
 
           td.text-right: .btn-group
@@ -41,7 +41,7 @@
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{ kopf.presseIn }}
         tr
           td
-          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titel }}
+          td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titelMitPrefix }}
       table(width="100%")
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")

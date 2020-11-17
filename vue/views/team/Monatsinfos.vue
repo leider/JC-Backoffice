@@ -14,7 +14,7 @@
     b-tab(title="Übersicht", :active="'uebersicht' === tab", @click="tabActivated('uebersicht')", lazy)
       .row: .col-12
         p(v-for="veran in veranstaltungen", :key="veran.id")
-          b {{ veran.kopf.titel }}<br>
+          b {{ veran.kopf.titelMitPrefix }}<br>
           b: i {{ veran.startDatumUhrzeit().wochentagTagMonat }}
           b #{' '} // {{ veran.startDatumUhrzeit().uhrzeitKompakt }} Uhr<br>
           | {{ veran.kopf.presseInEcht() }}
@@ -23,7 +23,7 @@
       .row
         .col-lg-6(v-for="veran in veranstaltungenMitBildern", :key="veran.id")
           p &nbsp;
-          p: b {{ veran.kopf.titel }}
+          p: b {{ veran.kopf.titelMitPrefix }}
           span(v-for="bild in veran.presse.image", :key="bild")
             img(:src="`/upload/${encodeURIComponent(bild)}`", width="100%")
             br

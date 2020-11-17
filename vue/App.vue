@@ -211,7 +211,7 @@ $jc_colors: (
 }
 
 .color-geplant {
-  color: red !important;
+  color: #f3c1c1 !important;
 }
 
 .main {

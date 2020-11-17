@@ -10,6 +10,7 @@ export default class Kopf {
   genre = "";
   confirmed = false;
   rechnungAnKooperation = false;
+  abgesagt = false;
 
   toJSON(): any {
     return Object.assign({}, this);
@@ -39,5 +40,9 @@ export default class Kopf {
 
   presseInEcht(): string {
     return this.presseIn || this.pressenameEcht();
+  }
+
+  get titelMitPrefix(): string {
+    return `${this.abgesagt ? "Abgesagt: " : ""}${this.titel}`;
   }
 }
