@@ -114,7 +114,6 @@
     "grunt-contrib-cssmin": "3.0.0",
     "grunt-contrib-sassjs": "0.1.8",
     "grunt-eslint": "23.0.0",
-    "grunt-mocha-cli": "6.0.0",
     "mocha": "8.2.1",
     "node-sass": "5.0.0",
     "prettier": "2.1.2",
@@ -140,10 +139,11 @@
     "last 2 versions"
   ],
   "scripts": {
+    "deploy": "grunt deploy && npm run build && npm run tsc",
     "start": "node --icu-data-dir=node_modules/full-icu start",
-    "test": "grunt tests",
+    "test": "ts-mocha --icu-data-dir=node_modules/full-icu test/**/*.ts",
     "serve": "vue-cli-service serve --port 1969",
     "build": "vue-cli-service build --no-clean",
-    "tsc": "./node_modules/typescript/bin/tsc --project backend/tsconfig.json"
+    "tsc": "./node_modules/typescript/bin/tsc --project backend/tsconfig.json && ./node_modules/typescript/bin/tsc --project shared/tsconfig.json"
   }
 }

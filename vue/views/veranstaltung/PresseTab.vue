@@ -36,16 +36,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import LegendCard from "@/widgets/LegendCard.vue";
-import JazzCheck from "@/widgets/JazzCheck.vue";
-import { uploadFile } from "@/commons/loader";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import Presse from "../../../backend/lib/veranstaltungen/object/presse";
-import Markdown from "@/widgets/Markdown.vue";
-import Renderer from "../../../backend/lib/commons/renderer";
-import SingleSelect from "@/widgets/SingleSelect.vue";
+import Renderer from "../../../shared/commons/renderer";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import { uploadFile } from "../../commons/loader";
+import JazzLabel from "../../widgets/JazzLabel.vue";
+import JazzCheck from "../../widgets/JazzCheck.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import Presse from "../../../shared/veranstaltung/presse";
+import LegendCard from "../../widgets/LegendCard.vue";
+import Markdown from "../../widgets/Markdown.vue";
 
 @Component({
   components: {

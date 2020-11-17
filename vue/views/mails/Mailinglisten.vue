@@ -28,10 +28,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import Users, { Mailingliste } from "../../../backend/lib/users/users";
-import { allUsers, deleteMailinglist } from "@/commons/loader";
-import MailinglistRow from "@/views/mails/MailinglistRow.vue";
+import User from "../../../shared/user/user";
+import Users, { Mailingliste } from "../../../shared/user/users";
+import { allUsers, deleteMailinglist } from "../../commons/loader";
+import MailinglistRow from "./MailinglistRow.vue";
 
 @Component({ components: { MailinglistRow } })
 export default class Mailinglisten extends Vue {

@@ -15,14 +15,15 @@ legend-card(:section="section", :title="title")
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Kontakt from "../../../backend/lib/veranstaltungen/object/kontakt";
-import LegendCard from "@/widgets/LegendCard.vue";
-import SingleSelect from "@/widgets/SingleSelect.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import JazzTextarea from "@/widgets/JazzTextarea.vue";
-import JazzMail from "@/widgets/JazzMail.vue";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
+import JazzMail from "../../widgets/JazzMail.vue";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import Kontakt from "../../../shared/veranstaltung/kontakt";
+import JazzText from "../../widgets/JazzText.vue";
+import { EditVariables } from "./VeranstaltungView.vue";
+import JazzTextarea from "../../widgets/JazzTextarea.vue";
+import LegendCard from "../../widgets/LegendCard.vue";
+
 @Component({
   components: { JazzMail, JazzTextarea, JazzText, SingleSelect, LegendCard },
 })

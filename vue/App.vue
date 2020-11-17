@@ -59,9 +59,9 @@ div
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { currentUser, wikisubdirs } from "@/commons/loader";
-import User from "../backend/lib/users/user";
-import FeedbackAlerts from "@/views/general/FeedbackAlerts.vue";
+import User from "../shared/user/user";
+import { currentUser, wikisubdirs } from "./commons/loader";
+import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
 @Component({
   components: { FeedbackAlerts },
@@ -96,14 +96,14 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import "~rfs/scss";
-@import "../frontend/sass/jc-variables";
+@import "../backend/frontend/sass/jc-variables";
 @import "~bootstrap";
 @import "~bootstrap-vue/src/index.scss";
 
 @import "~@fullcalendar/common/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
-@import "../frontend/3rd_party_css/flaticon-patched.css";
+@import "../backend/frontend/3rd_party_css/flaticon-patched.css";
 @import "widgets/vue-multiselect";
 @import "markdown";
 

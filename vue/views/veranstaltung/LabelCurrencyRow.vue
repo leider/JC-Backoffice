@@ -8,8 +8,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzCurrencyPure from "@/widgets/JazzCurrencyPure.vue";
+import JazzLabel from "../../widgets/JazzLabel.vue";
+import JazzCurrencyPure from "../../widgets/JazzCurrencyPure.vue";
 
 @Component({ components: { JazzCurrencyPure, JazzLabel } })
 export default class LabelCurrencyRow extends Vue {

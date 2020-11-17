@@ -48,14 +48,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import JazzCheck from "@/widgets/JazzCheck.vue";
-import SingleSelect from "@/widgets/SingleSelect.vue";
-import JazzMail from "@/widgets/JazzMail.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
-import { saveNewUser } from "@/commons/loader";
-import JazzPass from "@/widgets/JazzPass.vue";
+import User from "../../../shared/user/user";
+import JazzMail from "../../widgets/JazzMail.vue";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import JazzCheck from "../../widgets/JazzCheck.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import JazzPass from "../../widgets/JazzPass.vue";
+import { saveNewUser } from "../../commons/loader";
+import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 
 @Component({
   components: { JazzPass, JazzCheck, SingleSelect, JazzMail, JazzText, SingleSelectPure },

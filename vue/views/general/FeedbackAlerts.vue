@@ -4,7 +4,7 @@ div
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { FeedbackMessage, feedbackMessages } from "@/views/general/FeedbackMessages";
+import { FeedbackMessage, feedbackMessages } from "./FeedbackMessages";
 
 @Component
 export default class FeedbackAlerts extends Vue {

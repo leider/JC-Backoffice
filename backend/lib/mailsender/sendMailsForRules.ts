@@ -1,4 +1,4 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 import async from "async";
 import { loggers } from "winston";
@@ -6,10 +6,10 @@ const logger = loggers.get("application");
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import mailstore from "./mailstore";
-import Message from "./message";
+import Message from "../../../shared/mail/message";
 import mailtransport from "./mailtransport";
-import MailRule from "./mailRule";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import MailRule from "../../../shared/mail/mailRule";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import conf from "../commons/simpleConfigure";
 
 export function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function): void {
@@ -24,10 +24,13 @@ Liebe Grüße vom Jazzclub Team.`;
     const startAndEndDay = rule.startAndEndDay(now);
 
     function sendMail(selected: Veranstaltung[], callbackInner: Function): void {
-      const markdownToSend = markdownForRules + "\n\n---\n" + selected.map(veranst => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
+      const markdownToSend =
+        markdownForRules +
+        "\n\n---\n" +
+        selected.map((veranst) => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
       const message = new Message({
         subject: rule.subject(now),
-        markdown: markdownToSend
+        markdown: markdownToSend,
       });
       const mailAddress = Message.formatEMailAddress(rule.name, rule.email);
       logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
@@ -40,7 +43,7 @@ Liebe Grüße vom Jazzclub Team.`;
       if (err1) {
         return;
       }
-      const zuSendende = veranstaltungen.filter(veranstaltung => veranstaltung.isSendable());
+      const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.isSendable());
       if (zuSendende.length === 0) {
         callback();
       } else {
@@ -53,8 +56,8 @@ Liebe Grüße vom Jazzclub Team.`;
     if (err) {
       return;
     }
-    const relevantRules = rules.filter(rule => rule.shouldSend(now));
-    async.each(relevantRules, processRule, errFinal => {
+    const relevantRules = rules.filter((rule) => rule.shouldSend(now));
+    async.each(relevantRules, processRule, (errFinal) => {
       callbackOuter(errFinal, counter);
     });
   });

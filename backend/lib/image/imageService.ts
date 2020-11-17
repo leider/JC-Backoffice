@@ -3,7 +3,7 @@ import fs from "fs";
 import async, { ErrorCallback } from "async";
 
 import store from "../veranstaltungen/veranstaltungenstore";
-import Veranstaltung, { ImageOverviewRow } from "../veranstaltungen/object/veranstaltung";
+import Veranstaltung, { ImageOverviewRow } from "../../../shared/veranstaltung/veranstaltung";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 

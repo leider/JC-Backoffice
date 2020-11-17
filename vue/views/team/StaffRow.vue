@@ -9,10 +9,10 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import Staff, { StaffType } from "../../../backend/lib/veranstaltungen/object/staff";
-import { addUserToSection, removeUserFromSection } from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Staff, { StaffType } from "../../../shared/veranstaltung/staff";
+import { addUserToSection, removeUserFromSection } from "../../commons/loader";
 
 @Component
 export default class StaffRow extends Vue {

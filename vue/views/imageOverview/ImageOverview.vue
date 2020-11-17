@@ -16,13 +16,13 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { veranstaltungenForTeam, imagenames, saveImagenames } from "@/commons/loader";
-import Veranstaltung, { ImageOverviewVeranstaltung, ImageOverviewRow } from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import { veranstaltungenForTeam, imagenames, saveImagenames } from "../../commons/loader";
 import differenceBy from "lodash/differenceBy";
 import intersection from "lodash/intersection";
 import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
-import ImageOverviewSection from "@/views/imageOverview/ImageOverviewSection.vue";
+import Veranstaltung, { ImageOverviewRow, ImageOverviewVeranstaltung } from "../../../shared/veranstaltung/veranstaltung";
+import ImageOverviewSection from "./ImageOverviewSection.vue";
 
 @Component({
   components: { ImageOverviewSection },

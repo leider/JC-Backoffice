@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fetch, { Response } from "cross-fetch";
-import Veranstaltung, { ImageOverviewRow } from "../../backend/lib/veranstaltungen/object/veranstaltung";
-import User from "../../backend/lib/users/user";
-import { StaffType } from "../../backend/lib/veranstaltungen/object/staff";
-import Kalender from "../../backend/lib/programmheft/kalender";
-import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
-import OptionValues from "../../backend/lib/optionen/optionValues";
-import Orte from "../../backend/lib/optionen/orte";
-import Message from "../../backend/lib/mailsender/message";
-import { Mailingliste } from "../../backend/lib/users/users";
-import MailRule from "../../backend/lib/mailsender/mailRule";
-import Termin from "../../backend/lib/optionen/termin";
-import FerienIcals from "../../backend/lib/optionen/ferienIcals";
-import { feedbackMessages } from "@/views/general/FeedbackMessages";
-import Accessrights from "../../backend/lib/commons/accessrights";
+import User from "../../shared/user/user";
+import Kalender from "../../shared/programmheft/kalender";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import OptionValues from "../../shared/optionen/optionValues";
+import Orte from "../../shared/optionen/orte";
+import Message from "../../shared/mail/message";
+import { Mailingliste } from "../../shared/user/users";
+import MailRule from "../../shared/mail/mailRule";
+import Termin from "../../shared/optionen/termin";
+import FerienIcals from "../../shared/optionen/ferienIcals";
+import Accessrights from "../../shared/user/accessrights";
+import { StaffType } from "../../shared/veranstaltung/staff";
+import Veranstaltung, { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
+import { feedbackMessages } from "../views/general/FeedbackMessages";
 
 function standardFetch(url: string, callback: any, title?: string, text?: string, postHeader?: RequestInit): void {
   function handleErrorIfAny(response: Response): any {

@@ -13,14 +13,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { veranstaltungenForTeam } from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import { veranstaltungenForTeam } from "../../commons/loader";
 import sortBy from "lodash/sortBy";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
-import { renderart, VeranstaltungZeileMitCheck } from "@/views/gema/SharedGemaTypes";
-import GemaMonat from "@/views/gema/GemaMonat.vue";
-import GemaSection from "@/views/gema/GemaSection.vue";
-import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import { renderart, VeranstaltungZeileMitCheck } from "./SharedGemaTypes";
+import GemaMonat from "./GemaMonat.vue";
+import GemaSection from "./GemaSection.vue";
+import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 
 @Component({ components: { GemaSection, GemaMonat, SingleSelectPure } })
 export default class Gema extends Vue {

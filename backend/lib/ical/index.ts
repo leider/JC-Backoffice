@@ -2,7 +2,7 @@ import express from "express";
 import { Builder, Calendar, Event } from "ikalendar";
 
 import store from "../veranstaltungen/veranstaltungenstore";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import { expressAppIn } from "../middleware/expressViewHelper";
 
 const app = expressAppIn(__dirname);

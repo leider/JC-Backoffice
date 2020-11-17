@@ -44,14 +44,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
-import HeftCalendar from "@/views/calendar/HeftCalendar.vue";
-import Markdown from "@/widgets/Markdown.vue";
-import Kalender, { Event } from "../../../backend/lib/programmheft/kalender";
-import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Kalender, { Event } from "../../../shared/programmheft/kalender";
 import groupBy from "lodash/groupBy";
 import Marked from "marked";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "../../commons/loader";
+import HeftCalendar from "../calendar/HeftCalendar.vue";
+import Markdown from "../../widgets/Markdown.vue";
 
 @Component({ components: { HeftCalendar, Markdown } })
 export default class Programmheft extends Vue {

@@ -9,7 +9,7 @@ table.table.table-sm.table-striped
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { VeranstaltungZeileMitCheck } from "@/views/gema/SharedGemaTypes";
+import { VeranstaltungZeileMitCheck } from "./SharedGemaTypes";
 
 @Component
 export default class GemaMonat extends Vue {

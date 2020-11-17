@@ -1,9 +1,9 @@
 import service from "./usersService";
 import store from "./userstore";
-import { Mailingliste } from "./users";
-import User from "./user";
+import { Mailingliste } from "../../../shared/user/users";
+import User from "../../../shared/user/user";
 import { expressAppIn } from "../middleware/expressViewHelper";
-import Message from "../mailsender/message";
+import Message from "../../../shared/mail/message";
 import mailtransport from "../mailsender/mailtransport";
 import { reply } from "../commons/replies";
 

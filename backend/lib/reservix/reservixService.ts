@@ -1,8 +1,8 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 import reservixstore from "./reservixstore";
 import { loadSalesreports, Lineobject } from "./htmlbridge";
-import Salesreport from "./salesreport";
+import Salesreport from "../../../shared/veranstaltung/salesreport";
 
 function updateSalesreports(callback: Function): void {
   loadSalesreports(null, (err: Error | null, results: Lineobject[]) => {
@@ -10,7 +10,7 @@ function updateSalesreports(callback: Function): void {
       return callback(err);
     }
     const now = new Date();
-    const resultsToSave = results.map(each => {
+    const resultsToSave = results.map((each) => {
       each.datum = (each.datum as DatumUhrzeit).toJSDate;
       each.updated = now;
       return each;
@@ -27,7 +27,7 @@ export function salesreportFor(eventID: string | undefined, callback: Function):
     brutto: 0,
     netto: 0,
     updated: new Date(),
-    datum: new Date()
+    datum: new Date(),
   });
   if (!eventID) {
     return callback(emptySalesreport);

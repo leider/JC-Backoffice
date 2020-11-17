@@ -23,10 +23,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Renderer from "../../../backend/lib/commons/renderer";
-import { deleteWikiPage, saveWikiPage, wikiPage } from "@/commons/loader";
-import Markdown from "@/widgets/Markdown.vue";
-import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
+import Renderer from "../../../shared/commons/renderer";
+import { deleteWikiPage, saveWikiPage, wikiPage } from "../../commons/loader";
+import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
+import Markdown from "../../widgets/Markdown.vue";
+
 @Component({
   components: { DeleteButtonWithDialog, Markdown },
 })

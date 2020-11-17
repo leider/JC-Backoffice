@@ -48,13 +48,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { optionen, orte, saveOptionen, saveOrte } from "@/commons/loader";
-import Orte, { Ort } from "../../../backend/lib/optionen/orte";
-import OrtRow from "@/views/options/OrtRow.vue";
-import OptionValues from "../../../backend/lib/optionen/optionValues";
-import MultiSelect from "@/widgets/MultiSelect.vue";
-import LegendCard from "@/widgets/LegendCard.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
+import { optionen, orte, saveOptionen, saveOrte } from "../../commons/loader";
+import Orte, { Ort } from "../../../shared/optionen/orte";
+import OptionValues from "../../../shared/optionen/optionValues";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import JazzLabel from "../../widgets/JazzLabel.vue";
+import LegendCard from "../../widgets/LegendCard.vue";
+import OrtRow from "./OrtRow.vue";
 
 @Component({
   components: { JazzLabel, LegendCard, MultiSelect, OrtRow },

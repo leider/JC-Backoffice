@@ -11,7 +11,7 @@ b-form-input(v-else, type="date", v-model="datestring")
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 
 @Component
 export default class JazzDatePure extends Vue {

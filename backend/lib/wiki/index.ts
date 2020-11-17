@@ -1,8 +1,8 @@
 import wikiService from "./wikiService";
-import User from "../users/user";
+import User from "../../../shared/user/user";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { reply } from "../commons/replies";
-import misc from "../commons/misc";
+import misc from "../../../shared/commons/misc";
 const app = expressAppIn(__dirname);
 
 app.post("/search", (req, res, next) => {

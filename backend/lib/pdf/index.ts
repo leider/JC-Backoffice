@@ -1,10 +1,10 @@
 import puppeteerPrinter from "../commons/puppeteerPrinter";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 import { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { NextFunction, Request, Response } from "express";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");

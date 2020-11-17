@@ -65,16 +65,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import { deleteUser, saveUser, changePassword } from "@/commons/loader";
-import Accessrights from "../../../backend/lib/commons/accessrights";
-import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import JazzMail from "@/widgets/JazzMail.vue";
-import SingleSelect from "@/widgets/SingleSelect.vue";
-import JazzCheck from "@/widgets/JazzCheck.vue";
-import JazzPassTwice from "@/widgets/JazzPassTwice.vue";
-import DeleteDialog from "@/widgets/DeleteDialog.vue";
+import User from "../../../shared/user/user";
+import Accessrights from "../../../shared/user/accessrights";
+import JazzMail from "../../widgets/JazzMail.vue";
+import DeleteDialog from "../../widgets/DeleteDialog.vue";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import JazzPassTwice from "../../widgets/JazzPassTwice.vue";
+import JazzCheck from "../../widgets/JazzCheck.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import { changePassword, deleteUser, saveUser } from "../../commons/loader";
+import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 
 @Component({
   components: { DeleteDialog, JazzPassTwice, JazzCheck, SingleSelect, JazzMail, JazzText, SingleSelectPure },

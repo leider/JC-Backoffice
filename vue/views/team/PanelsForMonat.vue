@@ -36,11 +36,11 @@ div
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
-import User from "../../../backend/lib/users/user";
-import TeamPanelUser from "@/views/team/TeamPanelUser.vue";
-import TeamPanelAdmin from "@/views/team/TeamPanelAdmin.vue";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import TeamPanelUser from "./TeamPanelUser.vue";
+import TeamPanelAdmin from "./TeamPanelAdmin.vue";
 
 @Component({ components: { TeamPanelAdmin, TeamPanelUser } })
 export default class PanelsForMonat extends Vue {

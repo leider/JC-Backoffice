@@ -1,6 +1,6 @@
 import store from "./userstore";
 import { hashPassword, genSalt } from "../commons/hashPassword";
-import User from "./user";
+import User from "../../../shared/user/user";
 
 export default {
   saveNewUserWithPassword: function saveNewUserWithPassword(user: User, callback: Function): void {

@@ -6,7 +6,7 @@ const plugins = [
   new CopyPlugin([
     {
       from: path.join(__dirname, "vue/public"),
-      to: path.join(__dirname, "static"),
+      to: path.join(__dirname, "backend/static"),
       toType: "dir",
       ignore: ["index.html", ".DS_Store"],
     },
@@ -15,15 +15,10 @@ const plugins = [
 
 const config = {
   publicPath: "/vue/",
-  outputDir: "static/vue",
+  outputDir: "backend/static/vue",
   configureWebpack: {
     context: __dirname + "/vue", // to automatically find tsconfig.json
     entry: "./main.ts",
-    resolve: {
-      alias: {
-        "@": path.resolve("vue"),
-      },
-    },
     plugins: plugins,
   },
   /* to configure vue/public as the location of the template */
@@ -37,8 +32,8 @@ const config = {
 
 if (process.env.NODE_ENV !== "production") {
   //plugins.push(new (require("webpack-bundle-analyzer").BundleAnalyzerPlugin)());
-  require("./configure");
-  const configureAPI = require("./configureApp").default;
+  require("./backend/configure");
+  const configureAPI = require("./backend/configureApp").default;
   config.devServer = { before: configureAPI };
 }
 module.exports = config;

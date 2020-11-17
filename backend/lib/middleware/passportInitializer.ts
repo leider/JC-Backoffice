@@ -5,7 +5,7 @@ import { loggers } from "winston";
 const appLogger = loggers.get("application");
 
 import store from "../users/userstore";
-import User from "../users/user";
+import User from "../../../shared/user/user";
 import { hashPassword } from "../commons/hashPassword";
 
 passport.use(

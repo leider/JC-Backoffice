@@ -1,6 +1,6 @@
 import express from "express";
-import User from "../users/user";
-import Accessrights from "../commons/accessrights";
+import User from "../../../shared/user/user";
+import Accessrights from "../../../shared/user/accessrights";
 
 export default function accessrights(req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.accessrights = {
@@ -44,7 +44,7 @@ export default function accessrights(req: express.Request, res: express.Response
 
     canEditUser: function canEditUser(userid: string): boolean {
       return this.acc.canEditUser(userid);
-    }
+    },
   };
   next();
 }

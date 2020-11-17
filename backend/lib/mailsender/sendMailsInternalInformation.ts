@@ -1,4 +1,4 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 import config from "../commons/simpleConfigure";
 import { loggers } from "winston";
 const logger = loggers.get("application");
@@ -6,12 +6,12 @@ const logger = loggers.get("application");
 import store from "../veranstaltungen/veranstaltungenstore";
 import userstore from "../users/userstore";
 import mailstore from "./mailstore";
-import Message from "./message";
+import Message from "../../../shared/mail/message";
 import mailtransport from "./mailtransport";
 import conf from "../commons/simpleConfigure";
-import MailRule from "./mailRule";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
-import User from "../users/user";
+import MailRule from "../../../shared/mail/mailRule";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import User from "../../../shared/user/user";
 import usersService from "../users/usersService";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {

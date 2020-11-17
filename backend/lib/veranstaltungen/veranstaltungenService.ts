@@ -1,7 +1,7 @@
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";
-import Veranstaltung from "./object/veranstaltung";
-import Salesreport from "../reservix/salesreport";
+import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
+import Salesreport from "../../../shared/veranstaltung/salesreport";
 
 function getVeranstaltungMitReservix(url: string, callback: Function): void {
   store.getVeranstaltung(url, (err: Error | null, veranstaltung?: Veranstaltung) => {

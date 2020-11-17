@@ -6,11 +6,11 @@ import { Form } from "multiparty";
 import userstore from "../users/userstore";
 import store from "./veranstaltungenstore";
 import veranstaltungenService from "./veranstaltungenService";
-import Veranstaltung from "./object/veranstaltung";
-import User from "../users/user";
+import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
+import User from "../../../shared/user/user";
 
 import async from "async";
-import Kasse from "./object/kasse";
+import Kasse from "../../../shared/veranstaltung//kasse";
 import { kassenzettelPdf } from "../pdf";
 import { reply } from "../commons/replies";
 

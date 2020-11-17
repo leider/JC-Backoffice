@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
+import JazzLabel from "./JazzLabel.vue";
+import SingleSelectPure from "./SingleSelectPure.vue";
 
 @Component({ components: { SingleSelectPure, JazzLabel } })
 export default class SingleSelect extends Vue {

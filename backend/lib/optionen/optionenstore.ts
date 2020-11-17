@@ -1,11 +1,11 @@
 import partial from "lodash/partial";
 
-import misc from "../commons/misc";
+import misc from "../../../shared/commons/misc";
 import pers from "../persistence/persistence";
 const persistence = pers("optionenstore");
-import OptionValues from "./optionValues";
-import Orte from "./orte";
-import FerienIcals from "./ferienIcals";
+import OptionValues from "../../../shared/optionen/optionValues";
+import Orte from "../../../shared/optionen/orte";
+import FerienIcals from "../../../shared/optionen/ferienIcals";
 
 function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
   return misc.toObject(OptionValues, callback, err, jsobject);

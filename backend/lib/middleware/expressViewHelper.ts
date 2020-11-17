@@ -1,9 +1,9 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
-import fieldHelpers from "../commons/fieldHelpers";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
 import express from "express";
-import User from "../users/user";
+import User from "../../../shared/user/user";
 import path from "path";
-import Renderer from "../commons/renderer";
+import Renderer from "../../../shared/commons/renderer";
 import conf from "../commons/simpleConfigure";
 
 function gruppenUndRechteText(user: User): string {

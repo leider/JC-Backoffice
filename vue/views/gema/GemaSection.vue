@@ -10,8 +10,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import groupBy from "lodash/groupBy";
-import { renderart, TransferObject, VeranstaltungZeileMitCheck, vorNach } from "@/views/gema/SharedGemaTypes";
-import GemaMonat from "@/views/gema/GemaMonat.vue";
+import { renderart, TransferObject, VeranstaltungZeileMitCheck, vorNach } from "./SharedGemaTypes";
+import GemaMonat from "./GemaMonat.vue";
 
 @Component({ components: { GemaMonat } })
 export default class GemaSection extends Vue {

@@ -87,14 +87,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import fieldHelpers from "../../../backend/lib/commons/fieldHelpers";
-import { deleteVeranstaltungWithId, saveVeranstaltung } from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import User from "../../../backend/lib/users/user";
-import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
-import Staff from "../../../backend/lib/veranstaltungen/object/staff";
-import CheckedButton from "@/views/team/CheckedButton.vue";
-import StaffRowAdmin from "@/views/team/StaffRowAdmin.vue";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import { deleteVeranstaltungWithId, saveVeranstaltung } from "../../commons/loader";
+import StaffRowAdmin from "./StaffRowAdmin.vue";
+import Staff from "../../../shared/veranstaltung/staff";
+import Kopf from "../../../shared/veranstaltung/kopf";
+import CheckedButton from "./CheckedButton.vue";
 
 @Component({ components: { StaffRowAdmin, CheckedButton } })
 export default class TeamPanelAdmin extends Vue {

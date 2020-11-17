@@ -10,7 +10,7 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
+import User from "../../../shared/user/user";
 
 @Component
 export default class PreviewUserRow extends Vue {

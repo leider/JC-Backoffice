@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import store from "../veranstaltungen/veranstaltungenstore";
-import Veranstaltung from "../veranstaltungen/object/veranstaltung";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import { gemaMeldungPdf } from "../pdf";
 import { expressAppIn } from "../middleware/expressViewHelper";
 

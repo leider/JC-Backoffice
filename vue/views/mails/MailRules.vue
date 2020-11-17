@@ -23,9 +23,9 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { deleteMailRule, mailRules } from "@/commons/loader";
-import MailRule from "../../../backend/lib/mailsender/mailRule";
-import MailRuleRow from "@/views/mails/MailRuleRow.vue";
+import MailRule from "../../../shared/mail/mailRule";
+import MailRuleRow from "./MailRuleRow.vue";
+import { deleteMailRule, mailRules } from "../../commons/loader";
 
 @Component({ components: { MailRuleRow } })
 export default class MailRules extends Vue {

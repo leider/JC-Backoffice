@@ -1,7 +1,7 @@
 import store from "./kalenderstore";
 
-import DatumUhrzeit from "../commons/DatumUhrzeit";
-import Kalender from "./kalender";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Kalender from "../../../shared/programmheft/kalender";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { reply } from "../commons/replies";
 

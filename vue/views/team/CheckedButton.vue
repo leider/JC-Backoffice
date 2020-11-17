@@ -9,13 +9,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import Unterkunft from "../../../backend/lib/veranstaltungen/object/unterkunft";
-import Technik from "../../../backend/lib/veranstaltungen/object/technik";
-import Presse from "../../../backend/lib/veranstaltungen/object/presse";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Unterkunft from "../../../shared/veranstaltung/unterkunft";
+import Technik from "../../../shared/veranstaltung/technik";
+import Presse from "../../../shared/veranstaltung/presse";
 
 @Component
-export default class StaffRow extends Vue {
+export default class CheckedButton extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() name!: string;
 

@@ -11,10 +11,10 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import Staff, { StaffType } from "../../../backend/lib/veranstaltungen/object/staff";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import MultiSelect from "@/widgets/MultiSelect.vue";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import Staff, { StaffType } from "../../../shared/veranstaltung/staff";
 @Component({
   components: { MultiSelect },
 })

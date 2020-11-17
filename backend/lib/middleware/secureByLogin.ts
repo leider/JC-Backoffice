@@ -2,7 +2,7 @@ import express from "express";
 import { ensureLoggedIn } from "connect-ensure-login";
 const eLI = ensureLoggedIn("/login");
 import store from "../users/userstore";
-import User from "../users/user";
+import User from "../../../shared/user/user";
 
 export default function secureByLogin(req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (/\/upload|ical|index.html/.test(req.originalUrl)) {

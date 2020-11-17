@@ -1,17 +1,17 @@
 import async, { ErrorCallback } from "async";
 
 import store from "../programmheft/kalenderstore";
-import Message from "./message";
+import Message from "../../../shared/mail/message";
 import mailtransport from "./mailtransport";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
-import Kalender, { EmailEvent } from "../programmheft/kalender";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Kalender, { EmailEvent } from "../../../shared/programmheft/kalender";
 
 export function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), callback: ErrorCallback): void {
   function sendMail(eventsForToday: EmailEvent[], callbackInner: ErrorCallback): void {
-    const messages = eventsForToday.map(e => {
+    const messages = eventsForToday.map((e) => {
       const message = new Message({
         subject: "Programmheft Action Reminder",
-        markdown: e.body()
+        markdown: e.body(),
       });
       message.setTo(e.email());
       return message;
@@ -21,8 +21,8 @@ export function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), ca
 
   async.parallel(
     {
-      current: cb1 => store.getCurrentKalender(now, cb1),
-      next: cb2 => store.getNextKalender(now, cb2)
+      current: (cb1) => store.getCurrentKalender(now, cb1),
+      next: (cb2) => store.getNextKalender(now, cb2),
     },
     (err, result) => {
       if (err) {

@@ -49,15 +49,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import UserPanel from "@/views/user/UserPanel.vue";
-import JazzCalendar from "@/views/calendar/JazzCalendar.vue";
 import groupBy from "lodash/groupBy";
-import PanelsForMonat from "@/views/team/PanelsForMonat.vue";
-import UserPanels from "@/views/user/UserPanels.vue";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import UserPanels from "../user/UserPanels.vue";
+import { allUsers, currentUser, veranstaltungenForTeam } from "../../commons/loader";
+import JazzCalendar from "../calendar/JazzCalendar.vue";
+import PanelsForMonat from "./PanelsForMonat.vue";
+import UserPanel from "../user/UserPanel.vue";
 
 @Component({
   components: { UserPanels, JazzCalendar, UserPanel, PanelsForMonat },

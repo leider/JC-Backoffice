@@ -7,10 +7,9 @@ b-button.btn.btn-danger(:disabled="dirty", v-b-modal="`delete-${id}`")
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DeleteDialog from "@/widgets/DeleteDialog.vue";
-@Component({
-  components: { DeleteDialog },
-})
+import DeleteDialog from "./DeleteDialog.vue";
+
+@Component({ components: { DeleteDialog } })
 export default class DeleteButtonWithDialog extends Vue {
   @Prop() id!: string;
   @Prop() name!: string;

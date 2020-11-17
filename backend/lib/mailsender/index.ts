@@ -1,6 +1,6 @@
 import mailstore from "./mailstore";
 
-import MailRule from "./mailRule";
+import MailRule from "../../../shared/mail/mailRule";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { reply } from "../commons/replies";
 

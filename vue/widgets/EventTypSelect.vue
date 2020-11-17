@@ -27,8 +27,8 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Multiselect from "vue-multiselect";
-import fieldHelpers from "../../backend/lib/commons/fieldHelpers";
-import JazzLabel from "@/widgets/JazzLabel.vue";
+import fieldHelpers from "../../shared/commons/fieldHelpers";
+import JazzLabel from "./JazzLabel.vue";
 
 @Component({ components: { JazzLabel, Multiselect } })
 export default class EventTypSelect extends Vue {

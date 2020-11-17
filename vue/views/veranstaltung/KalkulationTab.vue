@@ -82,23 +82,23 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import LegendCard from "@/widgets/LegendCard.vue";
-import OptionValues from "../../../backend/lib/optionen/optionValues";
-import JazzCheck from "@/widgets/JazzCheck.vue";
-import JazzCurrency from "@/widgets/JazzCurrency.vue";
-import MultiSelect from "@/widgets/MultiSelect.vue";
-import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
-import JazzText from "@/widgets/JazzText.vue";
-import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
-import Eintrittspreise from "../../../backend/lib/veranstaltungen/object/eintrittspreise";
-import { formatToGermanNumberString } from "@/commons/utilityFunctions";
-import Kasse from "../../../backend/lib/veranstaltungen/object/kasse";
-import JazzNumber from "@/widgets/JazzNumber.vue";
-import Salesreport from "../../../backend/lib/reservix/salesreport";
-import SingleSelect from "@/widgets/SingleSelect.vue";
-import LabelCurrencyRow from "@/views/veranstaltung/LabelCurrencyRow.vue";
-import JazzCurrencyDisplay from "@/widgets/JazzCurrencyDisplay.vue";
+import OptionValues from "../../../shared/optionen/optionValues";
+import Salesreport from "../../../shared/veranstaltung/salesreport";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Eintrittspreise from "../../../shared/veranstaltung/eintrittspreise";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import Kasse from "../../../shared/veranstaltung/kasse";
+import Kosten from "../../../shared/veranstaltung/kosten";
+import JazzText from "../../widgets/JazzText.vue";
+import { formatToGermanNumberString } from "../../commons/utilityFunctions";
+import LabelCurrencyRow from "./LabelCurrencyRow.vue";
+import JazzCurrency from "../../widgets/JazzCurrency.vue";
+import JazzNumber from "../../widgets/JazzNumber.vue";
+import LegendCard from "../../widgets/LegendCard.vue";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import PreisSelect from "./PreisSelect.vue";
+import JazzCurrencyDisplay from "../../widgets/JazzCurrencyDisplay.vue";
+import JazzCheck from "../../widgets/JazzCheck.vue";
 
 @Component({
   components: {

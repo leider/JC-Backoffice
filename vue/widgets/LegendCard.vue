@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { formatToGermanNumberString } from "@/commons/utilityFunctions";
+import { formatToGermanNumberString } from "../commons/utilityFunctions";
 
 @Component
 export default class LegendCard extends Vue {

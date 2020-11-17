@@ -11,11 +11,9 @@ div
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import JazzLabel from "@/widgets/JazzLabel.vue";
+import JazzLabel from "./JazzLabel.vue";
 
-@Component({
-  components: { JazzLabel },
-})
+@Component({ components: { JazzLabel } })
 export default class JazzPassTwice extends Vue {
   @Prop() value!: string;
   private pass1 = this.value;

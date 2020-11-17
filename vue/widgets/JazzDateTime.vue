@@ -22,12 +22,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "../../backend/lib/commons/DatumUhrzeit";
-import JazzLabel from "@/widgets/JazzLabel.vue";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import JazzLabel from "./JazzLabel.vue";
 
-@Component({
-  components: { JazzLabel },
-})
+@Component({ components: { JazzLabel } })
 export default class JazzDateTime extends Vue {
   @Prop() value!: Date;
   @Prop() min!: Date;

@@ -3,7 +3,7 @@ import conf, { SimpleConfigure } from "./lib/commons/simpleConfigure";
 import path from "path";
 
 function createConfiguration(): SimpleConfigure {
-  const configdir = path.join(__dirname, "config/");
+  const configdir = path.join(__dirname, "../config/");
 
   // first, set the default values
   conf.addProperties({

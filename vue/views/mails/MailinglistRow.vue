@@ -14,11 +14,11 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../backend/lib/users/user";
-import MultiSelect from "@/widgets/MultiSelect.vue";
-import { Mailingliste } from "../../../backend/lib/users/users";
-import { saveMailinglist } from "@/commons/loader";
-import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
+import User from "../../../shared/user/user";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import { Mailingliste } from "../../../shared/user/users";
+import { saveMailinglist } from "../../commons/loader";
+import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 
 @Component({ components: { DeleteButtonWithDialog, MultiSelect } })
 export default class MailinglistRow extends Vue {

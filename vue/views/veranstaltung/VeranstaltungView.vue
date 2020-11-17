@@ -52,30 +52,28 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import User from "../../../shared/user/user";
+import OptionValues from "../../../shared/optionen/optionValues";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
+import Orte from "../../../shared/optionen/orte";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import {
   currentUser,
-  optionen,
-  orte,
-  veranstaltungForUrl,
-  imagenames,
-  saveVeranstaltung,
   deleteVeranstaltungWithId,
-  saveOptionenQuiet,
-} from "@/commons/loader";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import SectionTab from "@/views/veranstaltung/SectionTab.vue";
-import User from "../../../backend/lib/users/user";
-import OptionValues from "../../../backend/lib/optionen/optionValues";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
-import fieldHelpers from "../../../backend/lib/commons/fieldHelpers";
-import Orte from "../../../backend/lib/optionen/orte";
-import AllgemeinesTab from "@/views/veranstaltung/AllgemeinesTab.vue";
-import TechnikTab from "@/views/veranstaltung/TechnikTab.vue";
-import KalkulationTab from "@/views/veranstaltung/KalkulationTab.vue";
-import KasseTab from "@/views/veranstaltung/KasseTab.vue";
-import HotelTab from "@/views/veranstaltung/HotelTab.vue";
-import PresseTab from "@/views/veranstaltung/PresseTab.vue";
-import DeleteButtonWithDialog from "@/widgets/DeleteButtonWithDialog.vue";
+  imagenames,
+  optionen,
+  orte, saveOptionenQuiet,
+  saveVeranstaltung, veranstaltungForUrl
+} from "../../commons/loader";
+import SectionTab from "./SectionTab.vue";
+import AllgemeinesTab from "./AllgemeinesTab.vue";
+import PresseTab from "./PresseTab.vue";
+import KasseTab from "./KasseTab.vue";
+import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
+import KalkulationTab from "./KalkulationTab.vue";
+import TechnikTab from "./TechnikTab.vue";
+import HotelTab from "./HotelTab.vue";
 
 export interface EditVariables {
   hotelpreiseAlsDefault: boolean;

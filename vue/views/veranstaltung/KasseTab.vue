@@ -169,16 +169,16 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import LegendCard from "@/widgets/LegendCard.vue";
-import JazzCurrency from "@/widgets/JazzCurrency.vue";
-import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
-import JazzText from "@/widgets/JazzText.vue";
-import Kasse from "../../../backend/lib/veranstaltungen/object/kasse";
-import JazzNumber from "@/widgets/JazzNumber.vue";
-import User from "../../../backend/lib/users/user";
-import JazzCurrencyDisplay from "@/widgets/JazzCurrencyDisplay.vue";
-import JazzCurrencyPure from "@/widgets/JazzCurrencyPure.vue";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Kasse from "../../../shared/veranstaltung/kasse";
+import JazzCurrencyDisplay from "../../widgets/JazzCurrencyDisplay.vue";
+import Kosten from "../../../shared/veranstaltung/kosten";
+import JazzCurrencyPure from "../../widgets/JazzCurrencyPure.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import JazzCurrency from "../../widgets/JazzCurrency.vue";
+import JazzNumber from "../../widgets/JazzNumber.vue";
+import LegendCard from "../../widgets/LegendCard.vue";
 
 @Component({
   components: {

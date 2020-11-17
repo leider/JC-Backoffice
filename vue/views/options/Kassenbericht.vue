@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 @Component
 export default class Kassenbericht extends Vue {

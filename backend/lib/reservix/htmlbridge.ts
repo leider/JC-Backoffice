@@ -7,8 +7,8 @@ const baseURL = "https://system.reservix.de";
 
 const loginURL = baseURL + "/off/login_check.php?deeplink=0&id=" + conf.get("reservix-deeplink");
 const username = conf.get("reservix-username");
-import fieldHelpers from "../commons/fieldHelpers";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 const tablepositions = {
   datum: 0,

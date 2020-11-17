@@ -1,6 +1,6 @@
 import path from "path";
 import service from "./imageService";
-import { ImageOverviewRow } from "../veranstaltungen/object/veranstaltung";
+import { ImageOverviewRow } from "../../../shared/veranstaltung/veranstaltung";
 
 import { expressAppIn } from "../middleware/expressViewHelper";
 import sharp from "sharp";

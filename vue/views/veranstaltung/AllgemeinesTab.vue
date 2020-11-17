@@ -99,31 +99,31 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
-import LegendCard from "@/widgets/LegendCard.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import EventTypSelect from "@/widgets/EventTypSelect.vue";
-import OptionValues from "../../../backend/lib/optionen/optionValues";
-import JazzCheck from "@/widgets/JazzCheck.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
-import Orte from "../../../backend/lib/optionen/orte";
-import SingleSelect from "@/widgets/SingleSelect.vue";
-import JazzNumber from "@/widgets/JazzNumber.vue";
-import JazzCurrency from "@/widgets/JazzCurrency.vue";
-import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
-import KoopSelect from "@/views/veranstaltung/KoopSelect.vue";
-import PreisSelect from "@/views/veranstaltung/PreisSelect.vue";
-import Artist from "../../../backend/lib/veranstaltungen/object/artist";
-import MultiSelect from "@/widgets/MultiSelect.vue";
-import Kosten from "../../../backend/lib/veranstaltungen/object/kosten";
-import Markdown from "@/widgets/Markdown.vue";
-import KontaktCard from "@/views/veranstaltung/KontaktCard.vue";
-import Vertrag, { Sprache, Vertragsart } from "../../../backend/lib/veranstaltungen/object/vertrag";
-import { uploadFile } from "@/commons/loader";
-import { EditVariables } from "@/views/veranstaltung/VeranstaltungView.vue";
-import JazzInterval from "@/views/veranstaltung/JazzInterval.vue";
+import OptionValues from "../../../shared/optionen/optionValues";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Orte from "../../../shared/optionen/orte";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Artist from "../../../shared/veranstaltung/artist";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import { uploadFile } from "../../commons/loader";
+import EventTypSelect from "../../widgets/EventTypSelect.vue";
+import JazzLabel from "../../widgets/JazzLabel.vue";
+import Kosten from "../../../shared/veranstaltung/kosten";
+import JazzInterval from "./JazzInterval.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import Vertrag, { Sprache, Vertragsart } from "../../../shared/veranstaltung/vertrag";
+import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
+import JazzCurrency from "../../widgets/JazzCurrency.vue";
+import KontaktCard from "./KontaktCard.vue";
+import JazzNumber from "../../widgets/JazzNumber.vue";
+import LegendCard from "../../widgets/LegendCard.vue";
+import PreisSelect from "./PreisSelect.vue";
+import KoopSelect from "./KoopSelect.vue";
+import SingleSelect from "../../widgets/SingleSelect.vue";
+import JazzCheck from "../../widgets/JazzCheck.vue";
+import Kopf from "../../../shared/veranstaltung/kopf";
+import { EditVariables } from "./VeranstaltungView.vue";
+import Markdown from "../../widgets/Markdown.vue";
 
 @Component({
   components: {

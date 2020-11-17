@@ -30,14 +30,14 @@
 import difference from "lodash/difference";
 import lowerFirst from "lodash/lowerFirst";
 import { Component, Vue } from "vue-property-decorator";
-import Markdown from "@/widgets/Markdown.vue";
-import JazzLabel from "@/widgets/JazzLabel.vue";
-import JazzText from "@/widgets/JazzText.vue";
-import Message from "../../../backend/lib/mailsender/message";
-import { allUsers, currentUser, sendMail } from "@/commons/loader";
-import User from "../../../backend/lib/users/user";
-import MultiSelect from "@/widgets/MultiSelect.vue";
-import Users from "../../../backend/lib/users/users";
+import Message from "../../../shared/mail/message";
+import User from "../../../shared/user/user";
+import Users from "../../../shared/user/users";
+import MultiSelect from "../../widgets/MultiSelect.vue";
+import { allUsers, currentUser, sendMail } from "../../commons/loader";
+import JazzLabel from "../../widgets/JazzLabel.vue";
+import JazzText from "../../widgets/JazzText.vue";
+import Markdown from "../../widgets/Markdown.vue";
 
 @Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class Rundmail extends Vue {

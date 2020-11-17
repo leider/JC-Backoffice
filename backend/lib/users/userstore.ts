@@ -1,6 +1,6 @@
 import partial from "lodash/partial";
-import misc from "../commons/misc";
-import User from "./user";
+import misc from "../../../shared/commons/misc";
+import User from "../../../shared/user/user";
 import pers from "../persistence/persistence";
 const persistence = pers("userstore");
 

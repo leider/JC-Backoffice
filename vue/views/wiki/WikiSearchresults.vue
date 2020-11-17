@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { searchWiki } from "@/commons/loader";
+import { searchWiki } from "../../commons/loader";
 
 @Component
 export default class WikiSearchresults extends Vue {

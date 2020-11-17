@@ -3,13 +3,13 @@ import "../../../initWinston";
 import async from "async";
 import partial from "lodash/partial";
 
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 import userstore from "../users/userstore";
 
-import Message from "../mailsender/message";
+import Message from "../../../shared/mail/message";
 import mailtransport from "../mailsender/mailtransport";
-import User from "../users/user";
+import User from "../../../shared/user/user";
 
 const receiver = "leider";
 import sendMailsNightly from "../mailsender/sendMailsNightly";

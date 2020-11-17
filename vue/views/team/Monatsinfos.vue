@@ -31,10 +31,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import Renderer from "../../../backend/lib/commons/renderer";
-import { veranstaltungenBetween } from "@/commons/loader";
-import DatumUhrzeit from "../../../backend/lib/commons/DatumUhrzeit";
+import Renderer from "../../../shared/commons/renderer";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import { veranstaltungenBetween } from "../../commons/loader";
 
 @Component
 export default class Monatsinfos extends Vue {

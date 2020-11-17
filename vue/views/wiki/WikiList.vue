@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { wikiSubdir } from "@/commons/loader";
+import { wikiSubdir } from "../../commons/loader";
 
 @Component
 export default class WikiList extends Vue {

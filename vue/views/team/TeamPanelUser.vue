@@ -55,12 +55,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import fieldHelpers from "../../../backend/lib/commons/fieldHelpers";
-import Veranstaltung from "../../../backend/lib/veranstaltungen/object/veranstaltung";
-import StaffRow from "@/views/team/StaffRow.vue";
-import User from "../../../backend/lib/users/user";
-import Kopf from "../../../backend/lib/veranstaltungen/object/kopf";
-import Staff from "../../../backend/lib/veranstaltungen/object/staff";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
+import User from "../../../shared/user/user";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Staff from "../../../shared/veranstaltung/staff";
+import Kopf from "../../../shared/veranstaltung/kopf";
+import StaffRow from "./StaffRow.vue";
 
 @Component({ components: { StaffRow } })
 export default class TeamPanelUser extends Vue {

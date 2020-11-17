@@ -1,11 +1,11 @@
 import service from "./optionenService";
 import store from "./optionenstore";
-import OptionValues from "./optionValues";
-import Orte from "./orte";
-import FerienIcals from "./ferienIcals";
+import OptionValues from "../../../shared/optionen/optionValues";
+import Orte from "../../../shared/optionen/orte";
+import FerienIcals from "../../../shared/optionen/ferienIcals";
 import { expressAppIn } from "../middleware/expressViewHelper";
 import { NextFunction, Request, Response } from "express";
-import Termin from "./termin";
+import Termin from "../../../shared/optionen/termin";
 import terminstore from "./terminstore";
 import { reply } from "../commons/replies";
 

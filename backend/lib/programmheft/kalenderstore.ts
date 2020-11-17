@@ -1,10 +1,10 @@
-import Kalender from "./kalender";
+import Kalender from "../../../shared/programmheft/kalender";
 import partial from "lodash/partial";
 
-import misc from "../commons/misc";
+import misc from "../../../shared/commons/misc";
 
 import pers from "../persistence/persistence";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 const persistence = pers("kalenderstore");
 
 function toKalenderValues(callback: Function, id: string, err: Error | null, jsobject?: object): void {
@@ -26,5 +26,5 @@ export default {
 
   getNextKalender: function getNextKalender(aDatumUhrzeit: DatumUhrzeit, callback: Function): void {
     this.getKalender(aDatumUhrzeit.naechsterUngeraderMonat.fuerKalenderViews, callback);
-  }
+  },
 };

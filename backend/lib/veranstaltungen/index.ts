@@ -9,8 +9,8 @@ import flatten from "lodash/flatten";
 import path from "path";
 
 import store from "./veranstaltungenstore";
-import Veranstaltung from "./object/veranstaltung";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
 import { addRoutesTo } from "./indexDetails";
 import { expressAppIn } from "../middleware/expressViewHelper";
