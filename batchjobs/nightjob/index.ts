@@ -3,16 +3,16 @@ import "../../../initWinston";
 import async from "async";
 import partial from "lodash/partial";
 
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 
-import userstore from "../users/userstore";
+import userstore from "../../backend/lib/users/userstore";
 
-import Message from "../../../shared/mail/message";
-import mailtransport from "../mailsender/mailtransport";
-import User from "../../../shared/user/user";
+import Message from "../../shared/mail/message";
+import mailtransport from "../../backend/lib/mailsender/mailtransport";
+import User from "../../shared/user/user";
 
 const receiver = "leider";
-import sendMailsNightly from "../mailsender/sendMailsNightly";
+import sendMailsNightly from "./sendMailsNightly";
 
 function closeAndExit(err: Error | undefined): void {
   if (err) {

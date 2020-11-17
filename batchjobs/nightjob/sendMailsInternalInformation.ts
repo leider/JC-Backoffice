@@ -1,18 +1,18 @@
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import config from "../commons/simpleConfigure";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import config from "../../backend/lib/commons/simpleConfigure";
 import { loggers } from "winston";
 const logger = loggers.get("application");
 
-import store from "../veranstaltungen/veranstaltungenstore";
-import userstore from "../users/userstore";
-import mailstore from "./mailstore";
-import Message from "../../../shared/mail/message";
-import mailtransport from "./mailtransport";
-import conf from "../commons/simpleConfigure";
-import MailRule from "../../../shared/mail/mailRule";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import User from "../../../shared/user/user";
-import usersService from "../users/usersService";
+import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
+import userstore from "../../backend/lib/users/userstore";
+import mailstore from "../../backend/lib/mailsender/mailstore";
+import Message from "../../shared/mail/message";
+import mailtransport from "../../backend/lib/mailsender/mailtransport";
+import conf from "../../backend/lib/commons/simpleConfigure";
+import MailRule from "../../shared/mail/mailRule";
+import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
+import User from "../../shared/user/user";
+import usersService from "../../backend/lib/users/usersService";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {

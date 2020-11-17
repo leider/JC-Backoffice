@@ -20,5 +20,6 @@ jazzclubmongo*
 /backend/frontend/sass/out/jc-backoffice.css
 /backend/**/*.js
 /shared/**/*.js
+/batchjobs/**/*.js
 *.map
 .tscache/

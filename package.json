@@ -145,6 +145,6 @@
     "test": "ts-mocha --icu-data-dir=node_modules/full-icu test/**/*.ts",
     "serve": "vue-cli-service serve --port 1969",
     "build": "vue-cli-service build --no-clean",
-    "tsc": "./node_modules/typescript/bin/tsc --project backend/tsconfig.json && ./node_modules/typescript/bin/tsc --project shared/tsconfig.json"
+    "tsc": "./node_modules/typescript/bin/tsc --project backend/tsconfig.json && ./node_modules/typescript/bin/tsc --project shared/tsconfig.json && ./node_modules/typescript/bin/tsc --project batchjobs/tsconfig.json"
   }
 }

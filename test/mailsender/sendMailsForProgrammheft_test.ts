@@ -8,7 +8,7 @@ import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 import kalenderstore from "../../backend/lib/programmheft/kalenderstore";
 import Kalender from "../../shared/programmheft/kalender";
 import mailtransport from "../../backend/lib/mailsender/mailtransport";
-import { remindForProgrammheft } from "../../backend/lib/mailsender/sendMailsForProgrammheft";
+import { remindForProgrammheft } from "../../batchjobs/nightjob/sendMailsForProgrammheft";
 
 describe("Programmheft Mailsender", () => {
   const april12 = DatumUhrzeit.forGermanString("12.04.2019");
