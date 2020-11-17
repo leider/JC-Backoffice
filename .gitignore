@@ -20,6 +20,7 @@ jazzclubmongo*
 *.gz
 /backend/frontend/sass/out/jc-backoffice.css
 /backend/**/*.js
+/shared/**/*.js
 *.map
 .tscache/
 /backend/static/vue/

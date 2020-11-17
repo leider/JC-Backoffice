@@ -140,6 +140,7 @@
   ],
   "scripts": {
     "deploy": "grunt deploy && npm run build && npm run tsc",
+    "develop": "grunt clean:compiledTypescript && npm run tsc && npm run serve",
     "start": "node --icu-data-dir=node_modules/full-icu start",
     "test": "ts-mocha --icu-data-dir=node_modules/full-icu test/**/*.ts",
     "serve": "vue-cli-service serve --port 1969",
