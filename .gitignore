@@ -7,11 +7,10 @@ node_modules/
 /backend/static/fonts
 /backend/static/stylesheets
 /backend/static/upload
+/backend/static/vue/
 /backend/static/webfonts
 *.log
 workspace.xml
-coverage
-/backend/static/img/loadin*.gif
 jazzclubmongo.dump/jazzclub
 mongodump_jc.sh
 dump.zip
@@ -23,4 +22,3 @@ jazzclubmongo*
 /shared/**/*.js
 *.map
 .tscache/
-/backend/static/vue/
