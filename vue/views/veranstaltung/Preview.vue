@@ -186,7 +186,7 @@ export default class Preview extends Vue {
       renderer.render(`${this.veranstaltung.presseTemplate() + this.presse.text}
 ${this.presse.fullyQualifiedJazzclubURL()}`) +
       `<h4>Bilder:</h4>${this.presse.image
-        .map((i) => `<p><img src="/image/imagepreview/${i}" width="100%"></p>`)
+        .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
         .reverse()
         .join("")}`
     );

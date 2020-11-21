@@ -191,7 +191,7 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Jazzclub", this.veranstaltung.technik.backlineJazzclub);
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
-    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: OptionValues) => {
+    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
       if (!err) {
         this.optionen = new OptionValues(optionen);
         saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {

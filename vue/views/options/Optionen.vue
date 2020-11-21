@@ -125,9 +125,9 @@ export default class Optionen extends Vue {
   }
 
   saveOptionen(): void {
-    saveOptionen(this.optionen, (err?: Error, optionen?: OptionValues) => {
+    saveOptionen(this.optionen, (err?: Error, optionen?: any) => {
       if (!err && optionen) {
-        this.initOptionen(optionen);
+        this.initOptionen(new OptionValues(optionen));
         this.optionenChanged();
         this.somethingChanged();
       }

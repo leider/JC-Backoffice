@@ -35,7 +35,7 @@ export default class JazzCalendar extends Vue {
       },
     },
     height: "auto",
-    eventSources: ["/calendar/events.json"],
+    eventSources: ["/rest/fullcalendarevents.json"],
   };
 }
 </script>

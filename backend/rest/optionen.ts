@@ -1,27 +1,25 @@
-import service from "./optionenService";
-import store from "./optionenstore";
-import OptionValues from "../../../shared/optionen/optionValues";
-import Orte from "../../../shared/optionen/orte";
-import FerienIcals from "../../../shared/optionen/ferienIcals";
-import { expressAppIn } from "../middleware/expressViewHelper";
-import { NextFunction, Request, Response } from "express";
-import Termin from "../../../shared/optionen/termin";
-import terminstore from "./terminstore";
-import { reply } from "../commons/replies";
+import store from "../lib/optionen/optionenstore";
+import OptionValues from "../../shared/optionen/optionValues";
+import Orte from "../../shared/optionen/orte";
+import FerienIcals from "../../shared/optionen/ferienIcals";
+import express, { Request, Response } from "express";
+import Termin from "../../shared/optionen/termin";
+import terminstore from "../lib/optionen/terminstore";
+import { reply } from "../lib/commons/replies";
 
-const app = expressAppIn(__dirname);
+const app = express();
 
-app.get("/optionen.json", (req: Request, res: Response) => {
+app.get("/optionen", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
 
-  return service.optionen((err?: Error, optionen?: OptionValues) => {
+  return store.get((err?: Error, optionen?: OptionValues) => {
     reply(res, err, optionen);
   });
 });
 
-app.post("/saveOptionen", (req: Request, res: Response) => {
+app.post("/optionen", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam) {
     return res.sendStatus(403);
   }
@@ -31,17 +29,17 @@ app.post("/saveOptionen", (req: Request, res: Response) => {
   });
 });
 
-app.get("/orte.json", (req: Request, res: Response) => {
+app.get("/orte", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
 
-  return service.orte((err?: Error, orte?: Orte) => {
+  return store.orte((err?: Error, orte?: Orte) => {
     reply(res, err, orte);
   });
 });
 
-app.post("/saveOrte", (req: Request, res: Response) => {
+app.post("/orte", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam) {
     return res.sendStatus(403);
   }
@@ -51,7 +49,7 @@ app.post("/saveOrte", (req: Request, res: Response) => {
   });
 });
 
-app.get("/kalender.json", (req: Request, res: Response) => {
+app.get("/kalender", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
@@ -61,7 +59,7 @@ app.get("/kalender.json", (req: Request, res: Response) => {
   });
 });
 
-app.post("/savekalender", (req: Request, res: Response) => {
+app.post("/kalender", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
@@ -71,13 +69,13 @@ app.post("/savekalender", (req: Request, res: Response) => {
   });
 });
 
-app.get("/termine.json", (req, res) => {
+app.get("/termine", (req, res) => {
   terminstore.alle((err?: Error, termine?: Termin[]) => {
     reply(res, err, termine);
   });
 });
 
-app.post("/savetermin", (req: Request, res: Response) => {
+app.post("/termin", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
@@ -88,7 +86,7 @@ app.post("/savetermin", (req: Request, res: Response) => {
   });
 });
 
-app.post("/deletetermin", (req: Request, res: Response) => {
+app.delete("/termin", (req: Request, res: Response) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }

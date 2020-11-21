@@ -1,13 +1,14 @@
-import store from "./kalenderstore";
+import express from "express";
 
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import Kalender from "../../../shared/programmheft/kalender";
-import { expressAppIn } from "../middleware/expressViewHelper";
-import { reply } from "../commons/replies";
+import store from "../lib/programmheft/kalenderstore";
 
-const app = expressAppIn(__dirname);
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import Kalender from "../../shared/programmheft/kalender";
+import { reply } from "../lib/commons/replies";
 
-app.get("/:year/:month.json", (req, res) => {
+const app = express();
+
+app.get("/programmheft/:year/:month", (req, res) => {
   let yearMonthString = `${req.params.year}/${req.params.month}`;
   if (parseInt(req.params.month) % 2 === 0) {
     const correctedDatum = DatumUhrzeit.forYYYYslashMM(yearMonthString).naechsterUngeraderMonat;
@@ -19,7 +20,7 @@ app.get("/:year/:month.json", (req, res) => {
   });
 });
 
-app.post("/saveProgrammheft", (req, res) => {
+app.post("/programmheft", (req, res) => {
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }

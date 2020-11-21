@@ -2,7 +2,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     clean: {
       static: ["backend/static/*", "!backend/static/files", "!backend/static/img", "!backend/static/reporting", "!backend/static/upload"],
-      compiledTypescript: ["backend/**/*.js", "shared/**/*.js", "backend/static/vue"],
+      compiledTypescript: ["backend/**/*.js", "shared/**/*.js", "batchjobs/**/*.js", "backend/static/vue"],
       options: { force: true },
     },
     copy: {

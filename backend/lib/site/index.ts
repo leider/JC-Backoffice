@@ -3,6 +3,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import passport from "passport";
+import sharp from "sharp";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -33,6 +34,22 @@ app.post("/login", passport.authenticate("local", { failureRedirect: "/login" })
 app.get("/logout", (req, res) => {
   req.logout();
   res.redirect("/login");
+});
+
+const uploadDir = path.join(__dirname, "../../static/upload");
+
+app.get("/imagepreview/:filename", (req, res, next) => {
+  sharp(uploadDir + "/" + req.params.filename)
+    .resize({ width: 800 })
+    .toBuffer((err, buffer) => {
+      if (err) {
+        if (err.message === "Input file is missing") {
+          return next();
+        }
+        return next(err);
+      }
+      res.send(buffer);
+    });
 });
 
 export default app;

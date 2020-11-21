@@ -33,6 +33,6 @@ export default {
   },
 
   save: function save(object: OptionValues | Orte | FerienIcals, callback: Function): void {
-    persistence.save(object.toJSON() as { id: string }, callback);
+    persistence.save(object.toJSON(), callback);
   },
 };

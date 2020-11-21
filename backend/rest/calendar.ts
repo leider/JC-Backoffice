@@ -1,22 +1,21 @@
 import async from "async";
-import { Response } from "express";
+import express, { Response } from "express";
 import superagent from "superagent";
 import flatMap from "lodash/flatMap";
 import { ComplexDate, Parser } from "ikalendar";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 
-import store from "../veranstaltungen/veranstaltungenstore";
-import optionenstore from "../optionen/optionenstore";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import { expressAppIn } from "../middleware/expressViewHelper";
-import FerienIcals, { Ical } from "../../../shared/optionen/ferienIcals";
-import Termin, { TerminEvent } from "../../../shared/optionen/termin";
-import fieldHelpers from "../../../shared/commons/fieldHelpers";
-import { filterUnbestaetigteFuerJedermann } from "../veranstaltungen";
-import terminstore from "../optionen/terminstore";
-import { reply } from "../commons/replies";
+import store from "../lib/veranstaltungen/veranstaltungenstore";
+import optionenstore from "../lib/optionen/optionenstore";
+import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
+import FerienIcals, { Ical } from "../../shared/optionen/ferienIcals";
+import Termin, { TerminEvent } from "../../shared/optionen/termin";
+import fieldHelpers from "../../shared/commons/fieldHelpers";
+import { filterUnbestaetigteFuerJedermann } from "../lib/veranstaltungen";
+import terminstore from "../lib/optionen/terminstore";
+import { reply } from "../lib/commons/replies";
 
-const app = expressAppIn(__dirname);
+const app = express();
 
 function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: Response, callback: Function): void {
   function asCalendarEvent(veranstaltung: Veranstaltung): TerminEvent {
@@ -84,7 +83,7 @@ function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback
   });
 }
 
-app.get("/events.json", (req, res) => {
+app.get("/fullcalendarevents.json", (req, res) => {
   const start = DatumUhrzeit.forISOString(req.query.start as string);
   const end = DatumUhrzeit.forISOString(req.query.end as string);
 

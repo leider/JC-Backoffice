@@ -9,19 +9,19 @@ import favicon from "serve-favicon";
 import morgan from "morgan";
 import csurf from "csurf";
 
-import calendarApp from "./lib/calendar/index";
-import gemaApp from "./lib/gema/index";
+import restApp from "./rest";
+import calendarApp from "./rest/calendar";
+import mailsenderApp from "./rest/mail";
+import optionenApp from "./rest/optionen";
+import programmheftApp from "./rest/programmheft";
+import usersApp from "./rest/users";
+import wikiApp from "./rest/wiki";
+
+import gemaApp from "./lib/gema";
 import icalApp from "./lib/ical";
-import imageApp from "./lib/image";
-import mailsenderApp from "./lib/mailsender";
-import optionenApp from "./lib/optionen";
 import pdfApp from "./lib/pdf";
-import programmheftApp from "./lib/programmheft";
 import siteApp from "./lib/site";
-import usersApp from "./lib/users";
 import veranstaltungenApp from "./lib/veranstaltungen";
-import wikiApp from "./lib/wiki";
-import vueApp from "./lib/vue";
 import history from "connect-history-api-fallback";
 
 import expressViewHelper from "./lib/middleware/expressViewHelper";
@@ -98,16 +98,16 @@ export default function (app: express.Express) {
   app.use(addCsrfTokenToLocals);
   app.use(wikiSubdirs);
   app.use("/", siteApp);
-  useApp(app, "calendar", calendarApp);
-  useApp(app, "mailsender", mailsenderApp);
-  useApp(app, "optionen", optionenApp);
+
+  app.use("/rest/", restApp);
+  app.use("/rest/", calendarApp);
+  app.use("/rest/", mailsenderApp);
+  app.use("/rest/", optionenApp);
+  app.use("/rest/", programmheftApp);
+  app.use("/rest/", usersApp);
+  app.use("/rest/", wikiApp);
   useApp(app, "veranstaltungen", veranstaltungenApp);
-  useApp(app, "users", usersApp);
   useApp(app, "gema", gemaApp);
-  useApp(app, "wiki", wikiApp);
   useApp(app, "ical", icalApp);
-  useApp(app, "image", imageApp);
   useApp(app, "pdf", pdfApp);
-  useApp(app, "programmheft", programmheftApp);
-  useApp(app, "vue-spa", vueApp);
 }

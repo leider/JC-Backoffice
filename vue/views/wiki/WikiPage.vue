@@ -83,6 +83,7 @@ export default class WikiPage extends Vue {
   }
 
   @Watch("page")
+  @Watch("subdir")
   pageChanged() {
     document.title = `${this.page} : (${this.subdir})`;
     wikiPage(this.subdir, this.page, (content: string) => {

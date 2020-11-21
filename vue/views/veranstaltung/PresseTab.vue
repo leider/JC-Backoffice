@@ -70,7 +70,7 @@ export default class PresseTab extends Vue {
   }
 
   hoverOptions(image: string): object {
-    const url = `/image/imagepreview/${image}`;
+    const url = `/imagepreview/${image}`;
     return {
       title: image,
       content: `<img src='${url}' alt='bild' width="100%">`,
@@ -88,7 +88,7 @@ export default class PresseTab extends Vue {
       Renderer.render(`${this.veranstaltung.presseTemplate() + this.presse.text}
 ${this.presse.fullyQualifiedJazzclubURL()}`) +
       `<h4>Bilder:</h4>${this.presse.image
-        .map((i) => `<p><img src="/image/imagepreview/${i}" width="100%"></p>`)
+        .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
         .reverse()
         .join("")}`
     );

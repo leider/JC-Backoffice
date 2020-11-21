@@ -1,9 +1,8 @@
-import puppeteerPrinter from "../commons/puppeteerPrinter";
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import { PDFOptions } from "puppeteer";
+import puppeteer, { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
 import { expressAppIn } from "../middleware/expressViewHelper";
-import { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
 
@@ -11,6 +10,27 @@ const publicUrlPrefix = conf.get("publicUrlPrefix");
 
 const app = expressAppIn(__dirname);
 export default app;
+
+function generatePdf(options: PDFOptions, res: express.Response, next: express.NextFunction) {
+  return (err: Error | null, html?: string): void => {
+    if (err) {
+      next(err);
+    } else {
+      (async (): Promise<void> => {
+        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        const page = await browser.newPage();
+        await page.emulateMediaType("screen");
+        await page.goto(`data:text/html,${html}`, {
+          waitUntil: "networkidle0",
+        });
+        const pdf1 = await page.pdf(options);
+        await browser.close();
+        res.set("Content-Type", "application/pdf");
+        res.send(pdf1);
+      })();
+    }
+  };
+}
 
 const printoptions: PDFOptions = {
   format: "A4",
@@ -27,7 +47,7 @@ app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextF
   if (!res.locals.accessrights.isOrgaTeam()) {
     return res.redirect("/");
   }
-  return app.render("kassenbericht", { datum, now, publicUrlPrefix }, puppeteerPrinter.generatePdf(printoptions, res, next));
+  return app.render("kassenbericht", { datum, now, publicUrlPrefix }, generatePdf(printoptions, res, next));
 });
 
 app.get("/vertrag/:url/:language", (req, res, next) => {
@@ -45,11 +65,7 @@ app.get("/vertrag/:url/:language", (req, res, next) => {
       return app.render(
         `vertrag-${language}`,
         { veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix },
-        puppeteerPrinter.generatePdf(
-          { ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } },
-          res,
-          next
-        )
+        generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next)
       );
       // res.render(language, {veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix: publicUrlPrefix});
     });
@@ -68,13 +84,9 @@ export const gemaMeldungPdf = (
   next: NextFunction
 ): void => {
   const prefix = process.env.NODE_ENV === "production" ? publicUrlPrefix : origin;
-  app.render(
-    "meldung",
-    { events, nachmeldung, publicUrlPrefix: prefix },
-    puppeteerPrinter.generatePdf({ ...printoptions, landscape: true }, res, next)
-  );
+  app.render("meldung", { events, nachmeldung, publicUrlPrefix: prefix }, generatePdf({ ...printoptions, landscape: true }, res, next));
 };
 
 export const kassenzettelPdf = (veranstaltung: Veranstaltung, kassierer: string, res: Response, next: NextFunction): void => {
-  app.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, puppeteerPrinter.generatePdf(printoptions, res, next));
+  app.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
 };
