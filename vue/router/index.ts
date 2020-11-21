@@ -21,11 +21,11 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: "/", redirect: "/team" },
-  { path: "/team", component: Team, props: { admin: false, zukuenftige: true } },
+  { path: "/team", component: Team, props: { admin: false, periode: "zukuenftige" } },
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
-  { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, zukuenftige: "zukuenftige" } },
-  { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, zukuenftige: "vergangene" } },
-  { path: "/veranstaltungen/alle", component: Team, props: { admin: true, zukuenftige: "alle" } },
+  { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, periode: "zukuenftige" } },
+  { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, periode: "vergangene" } },
+  { path: "/veranstaltungen/alle", component: Team, props: { admin: true, periode: "alle" } },
   { path: "/veranstaltungen/:url", redirect: "/veranstaltungen/:url/allgemeines" },
   { path: "/veranstaltungen/:url/preview", component: Preview, props: true },
   { path: "/veranstaltungen/:url/:tab", component: VeranstaltungView, props: true },

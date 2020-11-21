@@ -66,7 +66,7 @@ import UserPanel from "../user/UserPanel.vue";
 })
 export default class Team extends Vue {
   @Prop() admin!: boolean;
-  @Prop() zukuenftige: "zukuenftige" | "vergangene" | "alle" = "zukuenftige";
+  @Prop() periode: "zukuenftige" | "vergangene" | "alle" = "zukuenftige";
   private user: User = new User({});
   private users: User[] = [];
   // noinspection JSMismatchedCollectionQueryUpdate
@@ -89,7 +89,7 @@ export default class Team extends Vue {
   }
 
   get dropdownText(): string {
-    return upperFirst(this.zukuenftige).replace("ue", "ü");
+    return upperFirst(this.periode).replace("ue", "ü");
   }
 
   get realadmin(): boolean {
@@ -97,12 +97,12 @@ export default class Team extends Vue {
   }
 
   @Watch("admin")
-  @Watch("zukuenftige")
+  @Watch("periode")
   reloadVeranstaltungen(): void {
     document.title = this.realadmin ? "Veranstaltungen" : "Team";
     this.loading = true;
     this.veranstaltungen = [];
-    veranstaltungenForTeam(this.zukuenftige, (veranstaltungen: Veranstaltung[]) => {
+    veranstaltungenForTeam(this.periode, (veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen;
       this.loading = false;
     });
