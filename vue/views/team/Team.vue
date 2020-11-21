@@ -1,13 +1,13 @@
 <template lang="pug">
 .col-lg-12
   b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
-    b-tab(:title="admin ? 'Veranstaltungen' : 'Team'")
+    b-tab(:title="realadmin ? 'Veranstaltungen' : 'Team'")
       .row
         .col-lg-8
           .row
             .col-12
               b-overlay(:show="loading")
-                div(v-if="!admin")
+                div(v-if="!realadmin")
                   .btn-group.float-right
                     b-link.btn.btn-light(
                       v-if="user.accessrights && user.accessrights.isOrgaTeam",
@@ -24,9 +24,10 @@
                   .btn-group.float-right
                     b-button.btn-light(to="/veranstaltungen/new", title="Neu"): b-icon-file-earmark
                     a.btn.btn-light(:href="webcalUrl", title="als iCal"): b-icon-calendar3
-                    b-dropdown(variant="light", right, :text="zukuenftige ? 'Zukünftige' : 'Vergangene'")
+                    b-dropdown(variant="light", right, :text="dropdownText")
                       b-dropdown-item(to="/veranstaltungen/zukuenftige") Zukünftige
                       b-dropdown-item(to="/veranstaltungen/vergangene") Vergangene
+                      b-dropdown-item(to="/veranstaltungen/alle") Alle
                 template(v-slot:overlay)
                   p.text-center Lade Daten...
 
@@ -39,7 +40,7 @@
                 :veranstaltungen="veranstaltungenNachMonat[monat]",
                 :user="user",
                 :users="users",
-                :admin="admin",
+                :admin="realadmin",
                 @deleted="deleted"
               )
         .col-lg-4
@@ -50,6 +51,7 @@
 
 <script lang="ts">
 import groupBy from "lodash/groupBy";
+import upperFirst from "lodash/upperFirst"
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import User from "../../../shared/user/user";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
@@ -64,7 +66,7 @@ import UserPanel from "../user/UserPanel.vue";
 })
 export default class Team extends Vue {
   @Prop() admin!: boolean;
-  @Prop() zukuenftige = true;
+  @Prop() zukuenftige: "zukuenftige" | "vergangene" | "alle" = "zukuenftige";
   private user: User = new User({});
   private users: User[] = [];
   // noinspection JSMismatchedCollectionQueryUpdate
@@ -86,13 +88,21 @@ export default class Team extends Vue {
     });
   }
 
+  get dropdownText(): string {
+    return upperFirst(this.zukuenftige).replace("ue", "ü");
+  }
+
+  get realadmin(): boolean {
+    return this.admin && (this.user.accessrights?.isOrgaTeam || false);
+  }
+
   @Watch("admin")
   @Watch("zukuenftige")
   reloadVeranstaltungen(): void {
-    document.title = this.admin ? "Veranstaltungen" : "Team";
+    document.title = this.realadmin ? "Veranstaltungen" : "Team";
     this.loading = true;
     this.veranstaltungen = [];
-    veranstaltungenForTeam(this.zukuenftige ? "zukuenftige" : "vergangene", (veranstaltungen: Veranstaltung[]) => {
+    veranstaltungenForTeam(this.zukuenftige, (veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen;
       this.loading = false;
     });
@@ -103,7 +113,7 @@ export default class Team extends Vue {
   }
 
   get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
-    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.admin || v.kopf.confirmed);
+    const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.realadmin || v.kopf.confirmed);
     return groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
   }
 

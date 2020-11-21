@@ -48,12 +48,12 @@ export default {
 
   vergangene: function vergangene(callback: Function): void {
     const now = new DatumUhrzeit();
-    byDateRangeInDescendingOrder(now.minus({ jahre: 100 }), now, callback);
+    byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now, callback);
   },
 
   alle: function alle(callback: Function): void {
     const now = new DatumUhrzeit();
-    byDateRangeInAscendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }), callback);
+    byDateRangeInDescendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }), callback);
   },
 
   byDateRangeInAscendingOrder,

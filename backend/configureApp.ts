@@ -18,9 +18,7 @@ import usersApp from "./rest/users";
 import veranstaltungenRestApp from "./rest/veranstaltungen";
 import wikiApp from "./rest/wiki";
 
-import gemaApp from "./lib/gema";
-import icalApp from "./lib/ical";
-import pdfApp from "./lib/pdf";
+import pdfApp from "./lib/pdf-csv";
 import siteApp from "./lib/site";
 import veranstaltungenApp from "./lib/veranstaltungen";
 import history from "connect-history-api-fallback";
@@ -107,7 +105,5 @@ export default function (app: express.Express) {
   app.use("/rest/", veranstaltungenRestApp);
   app.use("/rest/", wikiApp);
   useApp(app, "veranstaltungen", veranstaltungenApp);
-  useApp(app, "gema", gemaApp);
-  useApp(app, "ical", icalApp);
   useApp(app, "pdf", pdfApp);
 }

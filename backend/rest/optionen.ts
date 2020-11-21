@@ -20,7 +20,7 @@ app.get("/optionen", (req: Request, res: Response) => {
 });
 
 app.post("/optionen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam) {
+  if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
   const optionen = new OptionValues(req.body);
@@ -40,7 +40,7 @@ app.get("/orte", (req: Request, res: Response) => {
 });
 
 app.post("/orte", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam) {
+  if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
   const orte = new Orte(req.body);

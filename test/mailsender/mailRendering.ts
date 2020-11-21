@@ -33,12 +33,12 @@ Error: "keiner"`);
   it("uses the predefined sender", () => {
     const message = new Message({ subject: "", markdown: "" });
     const res = toTransportObject(message);
-    expect(res.from).to.equal(`"Der Sender" <sender@jazz.club>`);
+    expect(res.from).to.equal('"Der Sender" <sender@jazz.club>');
   });
 
   it("uses the given sender", () => {
     const message = new Message({ subject: "", markdown: "" }, "Andreas von Jazzclub", "andreas@jazz.club");
     const res = toTransportObject(message);
-    expect(res.from).to.equal(`"Andreas von Jazzclub via backoffice.jazzclub.de" <andreas@jazz.club>`);
+    expect(res.from).to.equal('"Andreas von Jazzclub via backoffice.jazzclub.de" <andreas@jazz.club>');
   });
 });

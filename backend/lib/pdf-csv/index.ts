@@ -101,13 +101,67 @@ app.get("/kassenzettel/:url", (req: Request, res: Response, next: NextFunction) 
   });
 });
 
-export const gemaMeldungPdf = (
-  events: Veranstaltung[],
-  nachmeldung: boolean,
-  origin: string | string[] | undefined,
+function gemaResult(
+  eventAndDateiart: { event: string[]; dateiart: string; origin: string | string[] | undefined },
   res: Response,
-  next: NextFunction
-): void => {
-  const prefix = process.env.NODE_ENV === "production" ? publicUrlPrefix : origin;
-  app.render("meldung", { events, nachmeldung, publicUrlPrefix: prefix }, generatePdf({ ...printoptions, landscape: true }, res, next));
-};
+  next: NextFunction,
+  selector: "vergangene" | "zukuenftige"
+): void {
+  const { event, dateiart } = eventAndDateiart;
+  const functionToCall = selector === "vergangene" ? store.vergangene : store.zukuenftige;
+  const nachmeldung = selector === "vergangene";
+
+  function gemaMeldungPdf(
+    events: Veranstaltung[],
+    nachmeldung: boolean,
+    origin: string | string[] | undefined,
+    res: Response,
+    next: NextFunction
+  ): void {
+    const prefix = process.env.NODE_ENV === "production" ? publicUrlPrefix : origin;
+    app.render("meldung", { events, nachmeldung, publicUrlPrefix: prefix }, generatePdf({ ...printoptions, landscape: true }, res, next));
+  }
+
+  function gemaMeldungCsv(res: Response, selected: Veranstaltung[], nachmeldung: boolean) {
+    function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
+      const header = `Datum;Ort;Kooperation Mit;Veranstaltungsart;Musikwiedergabeart;Eintrittspreis;${
+        nachmeldung ? "Einnahmen;" : ""
+      }Anzahl Besucher;Rechnung An;Raumgröße\n`;
+      const zeilen = events.map((e) => {
+        const wiedergabeart = e.artist.bandname || e.artist.name.join(", ");
+        const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
+        return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
+          nachmeldung ? e.eintrittGema() + ";" : ""
+        }${e.anzahlBesucher()};${rechnungAn};${e.kopf.flaeche}\n`;
+      });
+      let result = header;
+      zeilen.forEach((z) => {
+        result += z;
+      });
+      return result;
+    }
+
+    res.setHeader("Content-disposition", "attachment; filename=" + (nachmeldung ? "nachmeldung" : "vorabmeldung") + ".csv");
+    res.type("text/csv").send(createCSV(false, selected));
+  }
+
+  functionToCall((err: Error | null, veranstaltungen: Array<Veranstaltung>) => {
+    if (err) {
+      return next(err);
+    }
+    const selected = veranstaltungen.filter((veranst) => event.includes(veranst.id || ""));
+    if (dateiart === "PDF") {
+      return gemaMeldungPdf(selected, nachmeldung, eventAndDateiart.origin, res, next);
+    }
+    return gemaMeldungCsv(res, selected, nachmeldung);
+  });
+}
+
+app.get("/gemameldung", (req: Request, res: Response, next: NextFunction) => {
+  const transferObject = JSON.parse(<string>req.query.transferObject);
+  const event = transferObject.selectedIds;
+  const dateiart = transferObject.renderart;
+  const vorNach = transferObject.vorNach;
+  const origin = new URL(req.headers.referer || "").origin;
+  return gemaResult({ event, dateiart, origin }, res, next, vorNach);
+});

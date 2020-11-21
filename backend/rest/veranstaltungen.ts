@@ -56,10 +56,10 @@ app.get("/veranstaltungen/:url", (req: Request, res: Response) => {
 });
 
 app.post("/veranstaltungen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isAbendkasse) {
+  if (!res.locals.accessrights.isAbendkasse()) {
     return res.sendStatus(403);
   }
-  if (res.locals.accessrights.isOrgaTeam) {
+  if (res.locals.accessrights.isOrgaTeam()) {
     saveAndReply(res, new Veranstaltung(req.body));
   } else {
     // Nur Kasse erlaubt
@@ -78,7 +78,7 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
 });
 
 app.delete("/veranstaltungen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam) {
+  if (!res.locals.accessrights.isOrgaTeam()) {
     return res.sendStatus(403);
   }
   store.deleteVeranstaltungById(req.body.id, (err?: Error) => {

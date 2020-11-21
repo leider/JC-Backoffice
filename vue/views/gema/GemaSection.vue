@@ -39,7 +39,7 @@ export default class GemaSection extends Vue {
     const selectedIds: string[] = this.veranstaltungen.filter((v) => v.selected).map((v) => v.id);
 
     const transferObject: TransferObject = { selectedIds, renderart: this.format, vorNach: this.vorNach };
-    window.open(`/gema/meldung?transferObject=${encodeURIComponent(JSON.stringify(transferObject))}`);
+    window.open(`/pdf/gemameldung?transferObject=${encodeURIComponent(JSON.stringify(transferObject))}`);
   }
 }
 </script>
