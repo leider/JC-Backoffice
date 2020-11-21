@@ -9,9 +9,9 @@
     .row(v-for="match in matches", :key="JSON.stringify(match)")
       dt.col-4
         b-link(:to="`/wiki/${match.pageName}`") {{ match.pageName }}
-        span(v-if="match.line") #{" "}(in Zeile {{match.line}})
-      dd(v-if="match.text").col-8: em {{match.text}}
-      dd(v-else).col-8 (im Dateinamen)
+        span(v-if="match.line") #{" "}(in Zeile {{ match.line }})
+      dd.col-8(v-if="match.text"): em {{ match.text }}
+      dd.col-8(v-else) (im Dateinamen)
 </template>
 
 <script lang="ts">

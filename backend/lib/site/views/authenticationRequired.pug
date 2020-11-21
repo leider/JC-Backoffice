@@ -19,15 +19,20 @@ html
           h2 Jazzclub - Backoffice
           p Um auf diese Seite zuzugreifen, musst Du Dich anmelden.
           form(action="/login", method="post")
-            input(type="hidden", name='_csrf', value=csrf_token)
+            input(type="hidden", name="_csrf", value=csrf_token)
             .row
               .col-lg-6
-                label(for='username') Benutzername:
-                input.form-control.trim-text#username(type="text", name='username', value='', placeholder='Groß-/Kleinschreibung Beachten!')
+                label(for="username") Benutzername:
+                input#username.form-control.trim-text(
+                  type="text",
+                  name="username",
+                  value="",
+                  placeholder="Groß-/Kleinschreibung Beachten!"
+                )
             .row
               .col-lg-6
                 .form-group
-                  label(for='password') Passwort:
+                  label(for="password") Passwort:
                   input#password.form-control.trim-text(type="password", name="password", value="")
             .row
               .col-lg-6

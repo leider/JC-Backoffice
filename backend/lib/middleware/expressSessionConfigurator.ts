@@ -11,7 +11,7 @@ if (!conf.get("dontUsePersistentSessions")) {
   sessionStore = new MongoStore({
     url: conf.get("mongoURL") as string,
     touchAfter: oneHour,
-    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true }
+    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
   });
 }
 
@@ -20,5 +20,5 @@ export default expressSession({
   cookie: { maxAge: sevenDays },
   store: sessionStore,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 });

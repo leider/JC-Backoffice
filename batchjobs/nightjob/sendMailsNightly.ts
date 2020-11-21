@@ -7,5 +7,5 @@ export default {
   checkPressetexte,
   checkKasse,
   checkFluegel,
-  remindForProgrammheft
+  remindForProgrammheft,
 };

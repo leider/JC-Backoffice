@@ -20,7 +20,8 @@
     "eqeqeq": 2,
     "@typescript-eslint/ban-types": [
       "error",
-      {"extendDefaults": false,
+      {
+        "extendDefaults": false,
         "types": {
           // add a custom message to help explain why not to use it
           "Foo": "Don't use Far because it is unsafe",

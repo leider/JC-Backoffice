@@ -9,7 +9,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import JazzLabel from "./JazzLabel.vue";
 
-@Component({ components: { JazzLabel }, })
+@Component({ components: { JazzLabel } })
 export default class JazzNumber extends Vue {
   @Prop() label!: string;
   @Prop() value!: number;

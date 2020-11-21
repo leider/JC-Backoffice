@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import groupBy from "lodash/groupBy";
-import upperFirst from "lodash/upperFirst"
+import upperFirst from "lodash/upperFirst";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import User from "../../../shared/user/user";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";

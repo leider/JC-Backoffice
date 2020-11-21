@@ -16,7 +16,7 @@ export default function handle500(logger: Logger) {
     if (/InternalOpenIDError|BadRequestError|InternalOAuthError/.test(error.name)) {
       return res.render("errorPages/authenticationError.pug", {
         error,
-        status: req.statusCode
+        status: req.statusCode,
       });
     }
     return res.render("errorPages/500.pug", { error, status: req.statusCode });
