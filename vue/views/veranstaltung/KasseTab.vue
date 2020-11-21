@@ -73,7 +73,7 @@
             jazz-currency-display(label="Betrag", :value="kasse.einnahmeSonstiges2EUR")
       .row
         .col-12.mb-2
-          a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrl() + '/kassenzettel.pdf'", title="Abendkasse")
+          a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrlForKassenzettel()", title="Abendkasse")
             b-icon-printer-fill
             | #{' '} Kassenzettel
           b-button.btn.btn-danger.float-right(

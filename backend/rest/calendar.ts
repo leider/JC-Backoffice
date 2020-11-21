@@ -11,9 +11,9 @@ import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
 import FerienIcals, { Ical } from "../../shared/optionen/ferienIcals";
 import Termin, { TerminEvent } from "../../shared/optionen/termin";
 import fieldHelpers from "../../shared/commons/fieldHelpers";
-import { filterUnbestaetigteFuerJedermann } from "../lib/veranstaltungen";
 import terminstore from "../lib/optionen/terminstore";
 import { reply } from "../lib/commons/replies";
+import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 
 const app = express();
 
@@ -38,7 +38,7 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, res: Response, ca
     if (err) {
       return callback(err);
     }
-    return callback(undefined, filterUnbestaetigteFuerJedermann(veranstaltungen || [], res).map(asCalendarEvent));
+    return callback(undefined, veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen || [], res).map(asCalendarEvent));
   });
 }
 

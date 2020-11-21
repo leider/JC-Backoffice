@@ -15,6 +15,7 @@ import mailsenderApp from "./rest/mail";
 import optionenApp from "./rest/optionen";
 import programmheftApp from "./rest/programmheft";
 import usersApp from "./rest/users";
+import veranstaltungenRestApp from "./rest/veranstaltungen";
 import wikiApp from "./rest/wiki";
 
 import gemaApp from "./lib/gema";
@@ -30,7 +31,6 @@ import passportInitializer from "./lib/middleware/passportInitializer";
 import accessrights from "./lib/middleware/accessrights";
 import addCsrfTokenToLocals from "./lib/middleware/addCsrfTokenToLocals";
 import secureByLogin from "./lib/middleware/secureByLogin";
-import wikiSubdirs from "./lib/middleware/wikiSubdirs";
 import path from "path";
 import { Logger } from "winston";
 
@@ -96,7 +96,6 @@ export default function (app: express.Express) {
   app.use(secureAgainstClickjacking);
   app.use(csurf({ cookie: true }));
   app.use(addCsrfTokenToLocals);
-  app.use(wikiSubdirs);
   app.use("/", siteApp);
 
   app.use("/rest/", restApp);
@@ -105,6 +104,7 @@ export default function (app: express.Express) {
   app.use("/rest/", optionenApp);
   app.use("/rest/", programmheftApp);
   app.use("/rest/", usersApp);
+  app.use("/rest/", veranstaltungenRestApp);
   app.use("/rest/", wikiApp);
   useApp(app, "veranstaltungen", veranstaltungenApp);
   useApp(app, "gema", gemaApp);

@@ -102,24 +102,32 @@ function veranstaltungenCallback(callback: Function) {
   };
 }
 
+export function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
+  getJson(`/rest/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}`, veranstaltungenCallback(callback));
+}
+
 export function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle", callback: Function): void {
-  getJson(`/veranstaltungen/${selector}.json`, veranstaltungenCallback(callback));
+  getJson(`/rest/veranstaltungen/${selector}`, veranstaltungenCallback(callback));
+}
+
+export function veranstaltungForUrl(url: string, callback: Function): void {
+  getJson(`/rest/veranstaltungen/${encodeURIComponent(url)}`, (err?: Error, result?: any) => callback(new Veranstaltung(result)));
 }
 
 export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  postAndReceive("/veranstaltungen/saveVeranstaltung", veranstaltung.toJSON(), callback, "Gespeichert", "Veranstaltung gespeichert");
+  postAndReceive("/rest/veranstaltungen", veranstaltung.toJSON(), callback, "Gespeichert", "Veranstaltung gespeichert");
 }
 
 export function deleteVeranstaltungWithId(id: string, callback: Function): void {
-  postAndReceive("/veranstaltungen/deleteVeranstaltung", { id }, callback, "Gelöscht", "Veranstaltung gelöscht");
+  deleteAndReceive("/rest/veranstaltungen", { id }, callback, "Gelöscht", "Veranstaltung gelöscht");
 }
 
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  postAndReceive(`${veranstaltung.fullyQualifiedUrl()}/addUserToSection`, { section }, callback);
+  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl()}/addUserToSection`, { section }, callback);
 }
 
 export function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  postAndReceive(`${veranstaltung.fullyQualifiedUrl()}/removeUserFromSection`, { section }, callback);
+  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl()}/removeUserFromSection`, { section }, callback);
 }
 
 // User
@@ -160,17 +168,8 @@ export function kalenderFor(jahrMonat: string, callback: Function): void {
   });
 }
 
-export function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
-  getJson(`/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}/list.json`, veranstaltungenCallback(callback));
-}
-
 export function saveProgrammheft(kalender: Kalender, callback: Function): void {
   postAndReceive("/rest/programmheft", kalender, callback, "Gespeichert", "Änderungen gespeichert");
-}
-
-// Veranstaltung bearbeiten
-export function veranstaltungForUrl(url: string, callback: Function): void {
-  getJson(`/veranstaltungen/${encodeURIComponent(url)}.json`, (err?: Error, result?: any) => callback(new Veranstaltung(result)));
 }
 
 // Optionen & Termine

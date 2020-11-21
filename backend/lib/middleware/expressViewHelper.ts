@@ -29,10 +29,3 @@ export default function expressViewHelper(req: express.Request, res: express.Res
   res.locals.publicUrlPrefix = conf.get("publicUrlPrefix");
   next();
 }
-
-export function expressAppIn(directory: string): express.Express {
-  const app = express();
-  app.set("views", path.join(directory, "views"));
-  app.set("view engine", "pug");
-  return app;
-}

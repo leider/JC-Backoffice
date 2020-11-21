@@ -140,6 +140,10 @@ export default class Veranstaltung {
     return "/pdf/vertrag/" + encodeURIComponent(this.url || "");
   }
 
+  fullyQualifiedUrlForKassenzettel(): string {
+    return "/pdf/kassenzettel/" + encodeURIComponent(this.url || "");
+  }
+
   // Image Overview
   get suitableForImageOverview(): ImageOverviewVeranstaltung {
     return {

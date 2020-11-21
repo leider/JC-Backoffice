@@ -1,14 +1,20 @@
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 import puppeteer, { PDFOptions } from "puppeteer";
 import conf from "../commons/simpleConfigure";
-import { expressAppIn } from "../middleware/expressViewHelper";
 import express, { NextFunction, Request, Response } from "express";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
+import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
+import userstore from "../users/userstore";
+import User from "../../../shared/user/user";
+import path from "path";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
-const app = expressAppIn(__dirname);
+const app = express();
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+
 export default app;
 
 function generatePdf(options: PDFOptions, res: express.Response, next: express.NextFunction) {
@@ -76,6 +82,25 @@ app.get("/vertrag/:url/:language", (req, res, next) => {
   renderVertrag(sprache, language !== "regional", req, res, next);
 });
 
+app.get("/kassenzettel/:url", (req: Request, res: Response, next: NextFunction) => {
+  if (!res.locals.accessrights.isAbendkasse()) {
+    return res.redirect("/");
+  }
+
+  return veranstaltungenService.getVeranstaltungMitReservix(req.params.url, (err?: Error, veranstaltung?: Veranstaltung) => {
+    if (err) {
+      return next(err);
+    }
+    if (!veranstaltung) {
+      return res.redirect("/veranstaltungen/zukuenftige");
+    }
+    return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
+      const kassierer = user?.name || "";
+      app.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
+    });
+  });
+});
+
 export const gemaMeldungPdf = (
   events: Veranstaltung[],
   nachmeldung: boolean,
@@ -85,8 +110,4 @@ export const gemaMeldungPdf = (
 ): void => {
   const prefix = process.env.NODE_ENV === "production" ? publicUrlPrefix : origin;
   app.render("meldung", { events, nachmeldung, publicUrlPrefix: prefix }, generatePdf({ ...printoptions, landscape: true }, res, next));
-};
-
-export const kassenzettelPdf = (veranstaltung: Veranstaltung, kassierer: string, res: Response, next: NextFunction): void => {
-  app.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
 };

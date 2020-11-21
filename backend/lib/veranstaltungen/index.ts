@@ -1,7 +1,4 @@
 import fs from "fs";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const zipstream = require("zip-stream");
-
 import express from "express";
 import async from "async";
 import flatten from "lodash/flatten";
@@ -12,22 +9,14 @@ import store from "./veranstaltungenstore";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 
-import { addRoutesTo } from "./indexDetails";
-import { expressAppIn } from "../middleware/expressViewHelper";
-import { reply } from "../commons/replies";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const zipstream = require("zip-stream");
 
-const app = expressAppIn(__dirname);
+const app = express();
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
-
-export function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res: express.Response): Veranstaltung[] {
-  if (res.locals.accessrights.isBookingTeam()) {
-    return veranstaltungen;
-  }
-  return veranstaltungen.filter((v) => v.kopf.confirmed);
-}
 
 function veranstaltungenForExport(fetcher: Function, next: express.NextFunction, res: express.Response): void {
   if (!res.locals.accessrights.isBookingTeam()) {
@@ -80,32 +69,6 @@ app.get("/imgzip/:monat", (req, res, next) => {
     );
   });
 });
-
-function standardCallback(res: express.Response): Function {
-  return (err: Error, veranstaltungen: Veranstaltung[]) => {
-    const result = filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
-    reply(res, err, result);
-  };
-}
-app.get("/vergangene.json", (req, res) => {
-  store.vergangene(standardCallback(res));
-});
-
-app.get("/zukuenftige.json", (req, res) => {
-  store.zukuenftigeMitGestern(standardCallback(res));
-});
-
-app.get("/alle.json", (req, res) => {
-  store.alle(standardCallback(res));
-});
-
-app.get("/:startYYYYMM/:endYYYYMM/list.json", (req, res) => {
-  const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
-  const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
-  store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
-});
-
-addRoutesTo(app);
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {
 //   fileexportStadtKarlsruhe.send(req.params.url, (err, result) => {

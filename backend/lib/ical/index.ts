@@ -3,9 +3,8 @@ import { Builder, Calendar, Event } from "ikalendar";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = expressAppIn(__dirname);
+const app = express();
 
 function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): string {
   const events: Event[] = [];
@@ -33,9 +32,10 @@ function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): string {
 
 app.get("/", (req, res) => {
   function sendCalendarStringNamedToResult(icalString: string, filename: string, res: express.Response): void {
-    res.type("ics");
-    res.header("Content-Disposition", "inline; filename=" + filename + ".ics");
-    res.send(icalString);
+    res
+      .type("ics")
+      .header("Content-Disposition", "inline; filename=" + filename + ".ics")
+      .send(icalString);
   }
 
   store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {

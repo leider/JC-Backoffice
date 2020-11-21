@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 
 import store from "../veranstaltungen/veranstaltungenstore";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import { gemaMeldungPdf } from "../pdf";
-import { expressAppIn } from "../middleware/expressViewHelper";
 
-const app = expressAppIn(__dirname);
+const app = express();
 
 function printAsCsv(res: Response, selected: Veranstaltung[], nachmeldung: boolean) {
   function createCSV(nachmeldung: boolean, events: Array<Veranstaltung>): string {
