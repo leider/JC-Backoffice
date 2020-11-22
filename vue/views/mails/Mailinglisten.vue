@@ -5,7 +5,7 @@
       .btn-group.float-right
         b-button.btn.btn-light(@click="neueListe", title="Neu")
           b-icon-file-earmark
-          | #{" "} Neu...
+          .d-none.d.d-sm-inline #{" "} Neu...
       h1 Mailinglisten
   .row
     .col-12
@@ -13,10 +13,10 @@
         table.table.table-sm.table-striped
           tbody
             tr
-              th(style="width:15%") Name
-              th(style="width:85%") Users
-              th
-              th
+              th(style="min-width:150px") Name
+              th Users
+              th(style="width:50px")
+              th(style="width:50px")
             mailinglist-row(
               v-for="(list, index) in mailinglisten",
               :key="index",

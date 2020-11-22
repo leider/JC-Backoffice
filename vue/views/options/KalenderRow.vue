@@ -3,7 +3,7 @@ tr
   td: b-form-input(v-model="kalender.name")
   td: b-form-input(v-model="kalender.url")
   td: single-select-pure(v-model="kalender.typ", :options="['Sonstiges', 'Feiertag', 'Ferien', 'Vermietung']")
-  td: delete-button-with-dialog(:id="kalender.name", :name="kalender.name", objecttype="Kalender", :callback="loeschen", :dirty="dirty")
+  td: delete-button-with-dialog.float-right(:id="kalender.name", :name="kalender.name", objecttype="Kalender", :callback="loeschen", :dirty="dirty")
   td: b-button.btn.btn-success.float-right(@click="save", :disabled="!dirty"): b-icon-check-square
 </template>
 

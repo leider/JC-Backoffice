@@ -304,13 +304,14 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.abc-checkbox label {
-  padding-top: 2px;
-}
-
 // patch bootstrap btn
 .btn {
   white-space: nowrap;
+}
+
+// patch tabs
+.tabs .nav {
+  flex-flow: nowrap;
 }
 
 .b-form-datepicker > button {

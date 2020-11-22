@@ -1,7 +1,7 @@
 <template lang="pug">
 b-button.btn.btn-danger(:disabled="dirty", v-b-modal="`delete-${id}`")
   b-icon-trash
-  span(v-if="showText") #{" "}Löschen
+  .d-none.d.d-sm-inline(v-if="showText") #{" "}Löschen
   delete-dialog(:id="id", :callback="callback", :objecttype="objecttype", :name="name")
 </template>
 

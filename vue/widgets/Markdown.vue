@@ -112,7 +112,7 @@ function defaultButtons(): { [key: string]: Button } {
     link: { ico: "link", title: "Link", function: (md): void => md.drawLink() },
     image: { ico: "image", title: "Bild", function: (md): void => md.drawImage() },
     fullscreen: { ico: "fullscreen", title: "Vollbild", function: (md): void => md.toggleFullscreen(), ready: true },
-    preview: { ico: "eyeglasses", title: "Vorschau", function: (md): void => md.togglePreview(), ready: true, text: "Vorschau" },
+    preview: { ico: "eyeglasses", title: "Vorschau", function: (md): void => md.togglePreview(), ready: true },
     help: {
       ico: "question-circle",
       title: "Hilfe",

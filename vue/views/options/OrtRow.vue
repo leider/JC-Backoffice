@@ -4,7 +4,7 @@ tr
   td: b-form-input(v-model="ort.flaeche")
   td: b-form-input(v-model="ort.pressename")
   td: b-form-input(v-model="ort.presseIn")
-  td: delete-button-with-dialog(:id="ort.name", :name="ort.name", objecttype="Ort", :callback="loeschen", :dirty="dirty")
+  td: delete-button-with-dialog.float-right(:id="ort.name", :name="ort.name", objecttype="Ort", :callback="loeschen", :dirty="dirty")
   td: b-button.btn.btn-success.float-right(@click="save", :disabled="!dirty"): b-icon-check-square
 </template>
 

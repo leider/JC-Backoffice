@@ -7,7 +7,7 @@
           b-icon-file-earmark
           | #{" "} Neu...
       h1 Termine und Kalender
-      b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
+      b-tabs(active-nav-item-class="color-allgemeines")
         b-tab(title="Termine", :active="'termine' === tab", @click="tabActivated('termine')")
           .row
             .col-12
@@ -15,12 +15,12 @@
                 table.table.table-sm.table-striped
                   tbody
                     tr
-                      th(style="width:15%") Startet am
-                      th(style="width:15%") Endet am
-                      th(style="width:85%") Beschreibung
-                      th(style="width:85%") Typ
-                      th
-                      th
+                      th Startet am
+                      th Endet am
+                      th(style="min-width:200px") Beschreibung
+                      th Typ
+                      th(style="width:50px")
+                      th(style="width:50px")
                     termin-row(v-for="(termin, index) in termine", :key="index", :termin="termin", @loeschen="deleteTermin(termin)")
         b-tab(title="Kalender", :active="'kalender' === tab", @click="tabActivated('kalender')")
           .row
@@ -29,11 +29,11 @@
                 table.table.table-sm.table-striped
                   tbody
                     tr
-                      th(style="width:15%") Name
-                      th(style="width:70%") URL
-                      th(style="width:15%") Typ
-                      th
-                      th
+                      th(style="width:150px; min-width:150px") Name
+                      th(style="min-width:250px") URL
+                      th(style="width:150px") Typ
+                      th(style="width:50px")
+                      th(style="width:50px")
                     kalender-row(
                       v-for="(kalender, index) in kalender.icals",
                       :key="index",

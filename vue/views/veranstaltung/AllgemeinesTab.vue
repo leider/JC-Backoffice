@@ -9,7 +9,7 @@
           jazz-check(v-model="veranstaltung.artist.brauchtHotel", label="Braucht Hotel")
         .col-4.col-xl-3
           jazz-text(label="Reservix-ID", tooltip="Falls bei Reservix", v-model="veranstaltung.reservixID")
-        .col-4.col-xl-3
+        .col-6.col-xl-3
           .form-group
             label &nbsp;
             b-button.form-control.d-block(v-if="!kopf.abgesagt", variant="warning", @click="absagen()") Absagen

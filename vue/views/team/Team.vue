@@ -1,6 +1,6 @@
 <template lang="pug">
 .col-lg-12
-  b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
+  b-tabs(active-nav-item-class="color-allgemeines")
     b-tab(:title="realadmin ? 'Veranstaltungen' : 'Team'")
       .row
         .col-lg-8
@@ -131,5 +131,6 @@ export default class Team extends Vue {
       this.veranstaltungen.splice(idx, 1);
     }
   }
+
 }
 </script>

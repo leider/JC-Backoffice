@@ -5,7 +5,7 @@
       b-icon-download
       | &nbsp;Alle Bilder als ZIP
   h1 Infos für {{ start.monatJahrKompakt }}
-  b-tabs(active-nav-item-class="font-weight-bold text-uppercase")
+  b-tabs(active-nav-item-class="color-allgemeines")
     b-tab(title="Pressetexte", :active="'pressetexte' === tab", @click="tabActivated('pressetexte')")
       .row
         .col-lg-6(v-for="veran in veranstaltungen", :key="veran.id")

@@ -5,20 +5,19 @@
       .btn-group.float-right
         b-button.btn.btn-light(@click="neueRule", title="Neu")
           b-icon-file-earmark
-          | #{" "} Neu...
+          .d-none.d.d-sm-inline #{" "} Neu...
       h1 Mailing Regeln
   .row
     .col-12
-      .table-responsive(style="min-height:500px")
-        table.table.table-sm.table-striped
-          tbody
-            tr
-              th(style="width:30%") Name
-              th(style="width:30%") E-Mail
-              th(style="width:40%") Regel
-              th
-              th
-            mail-rule-row(v-for="(rule, index) in rules", :key="index", :rule="rule", @loeschen="deleteRule(rule)")
+      table.table.table-sm.table-striped.table-responsive(style="min-height:500px")
+        tbody
+          tr
+            th(style="min-width:150px") Name
+            th(style="min-width:250px") E-Mail
+            th(style="width:300px") Regel
+            th(style="width:50px")
+            th(style="width:50px")
+          mail-rule-row(v-for="(rule, index) in rules", :key="index", :rule="rule", @loeschen="deleteRule(rule)")
 </template>
 
 <script lang="ts">
