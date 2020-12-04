@@ -14,7 +14,7 @@ export default {
         return callback(err);
       }
       if (existingUser) {
-        return callback(null, "Benutzer mit Id '" + user.id + "' existiert schon");
+        return callback(new Error(`Benutzer mit Id '${user.id}' existiert schon`));
       }
       const newSalt = genSalt();
       user.salt = newSalt;
@@ -28,7 +28,7 @@ export default {
   changePassword: function changePassword(user: User, callback: Function): void {
     const password = user.password;
     if (!password) {
-      return callback(null, "Kein Passwort übermittelt");
+      return callback(new Error("Kein Passwort übermittelt"));
     }
     delete user.password;
     store.forId(user.id, (err: Error | null, existingUser?: User) => {

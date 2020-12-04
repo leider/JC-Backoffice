@@ -5,8 +5,8 @@ export default class User {
   name!: string;
   email!: string;
   tel!: string;
-  hashedPassword!: string;
-  salt!: string;
+  hashedPassword?: string;
+  salt?: string;
   tshirt!: string;
 
   gruppen: string[];
@@ -34,6 +34,13 @@ export default class User {
   toJSON(): any {
     const result = Object.assign({}, this);
     delete result.accessrights;
+    return result;
+  }
+
+  toJSONWithoutPass(): any {
+    const result = this.toJSON();
+    delete result.hashedPassword;
+    delete result.salt;
     return result;
   }
 
