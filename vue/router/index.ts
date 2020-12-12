@@ -17,10 +17,14 @@ import Optionen from "../views/options/Optionen.vue";
 import WikiPage from "../views/wiki/WikiPage.vue";
 import WikiSearchresults from "../views/wiki/WikiSearchresults.vue";
 import Programmheft from "../views/programmheft/Programmheft.vue";
+import Login from "../views/general/Login.vue";
+import { globals } from "../commons/loader";
+
 Vue.use(VueRouter);
 
 const routes = [
   { path: "/", redirect: "/team" },
+  { path: "/login", component: Login },
   { path: "/team", component: Team, props: { admin: false, periode: "zukuenftige" } },
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
   { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, periode: "zukuenftige" } },
@@ -51,6 +55,14 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (!to.path.startsWith("/login") && !globals.isAuthenticated()) {
+    next({ path: "/login", query: { originalURL: to.path } });
+  } else {
+    next();
+  }
 });
 
 export default router;

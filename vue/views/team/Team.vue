@@ -67,7 +67,7 @@ import UserPanel from "../user/UserPanel.vue";
 export default class Team extends Vue {
   @Prop() admin!: boolean;
   @Prop() periode: "zukuenftige" | "vergangene" | "alle" = "zukuenftige";
-  private user: User = new User({});
+  private user: User = new User({id: "dummy+=%%"});
   private users: User[] = [];
   // noinspection JSMismatchedCollectionQueryUpdate
   private veranstaltungen: Veranstaltung[] = [];

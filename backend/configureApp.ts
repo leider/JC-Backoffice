@@ -1,7 +1,6 @@
 import express from "express";
 import compress from "compression";
 import bodyparser from "body-parser";
-
 import loggers from "./initWinston";
 
 import cookieParser from "cookie-parser";
@@ -10,13 +9,6 @@ import morgan from "morgan";
 import csurf from "csurf";
 
 import restApp from "./rest";
-import calendarApp from "./rest/calendar";
-import mailsenderApp from "./rest/mail";
-import optionenApp from "./rest/optionen";
-import programmheftApp from "./rest/programmheft";
-import usersApp from "./rest/users";
-import veranstaltungenRestApp from "./rest/veranstaltungen";
-import wikiApp from "./rest/wiki";
 
 import pdfApp from "./lib/pdf-csv";
 import siteApp from "./lib/site";
@@ -31,6 +23,7 @@ import addCsrfTokenToLocals from "./lib/middleware/addCsrfTokenToLocals";
 import secureByLogin from "./lib/middleware/secureByLogin";
 import path from "path";
 import { Logger } from "winston";
+import passport from "passport";
 
 const httpLogger = loggers.get("http");
 
@@ -86,24 +79,17 @@ export default function (app: express.Express) {
   app.use("/vue", history({ index: "/index.html" }));
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
-  app.use(expressSessionConfigurator);
+  //app.use(expressSessionConfigurator);
   app.use(passportInitializer);
-  app.use(secureByLogin);
+  //app.use(secureByLogin);
   app.use(expressViewHelper);
   app.use(accessrights);
   app.use(secureAgainstClickjacking);
-  app.use(csurf({ cookie: true }));
-  app.use(addCsrfTokenToLocals);
+  //  app.use(csurf({ cookie: true }));
+  //  app.use(addCsrfTokenToLocals);
   app.use("/", siteApp);
 
-  app.use("/rest/", restApp);
-  app.use("/rest/", calendarApp);
-  app.use("/rest/", mailsenderApp);
-  app.use("/rest/", optionenApp);
-  app.use("/rest/", programmheftApp);
-  app.use("/rest/", usersApp);
-  app.use("/rest/", veranstaltungenRestApp);
-  app.use("/rest/", wikiApp);
+  app.use("/rest/", passport.authenticate("jwt", { session: false }), accessrights, restApp);
   useApp(app, "veranstaltungen", veranstaltungenApp);
   useApp(app, "pdf", pdfApp);
 }

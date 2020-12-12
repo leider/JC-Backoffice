@@ -19,7 +19,7 @@ export default class PreviewUserRow extends Vue {
   @Prop() verantwortlich!: boolean;
 
   get user(): User {
-    return this.users.find((u: User) => this.name === u.id) || new User({});
+    return this.users.find((u: User) => this.name === u.id) || new User({id: "dummy+=%%"});
   }
 }
 </script>

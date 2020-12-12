@@ -2,8 +2,23 @@ import express, { Response } from "express";
 import service from "../lib/veranstaltungen/imageService";
 import { reply } from "../lib/commons/replies";
 import { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
+import calendarApp from "./calendar";
+import mailsenderApp from "./mail";
+import optionenApp from "./optionen";
+import programmheftApp from "./programmheft";
+import usersApp from "./users";
+import veranstaltungenRestApp from "./veranstaltungen";
+import wikiApp from "./wiki";
 
 const app = express();
+
+app.use("/", calendarApp);
+app.use("/", mailsenderApp);
+app.use("/", optionenApp);
+app.use("/", programmheftApp);
+app.use("/", usersApp);
+app.use("/", veranstaltungenRestApp);
+app.use("/", wikiApp);
 
 app.get("/csrf-token.json", (req, res) => {
   res.set("Content-Type", "application/json").send({ token: req.csrfToken() });

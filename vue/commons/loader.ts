@@ -14,12 +14,29 @@ import Accessrights from "../../shared/user/accessrights";
 import { StaffType } from "../../shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
 import { feedbackMessages } from "../views/general/FeedbackMessages";
+import router from "../router";
+import jwt from "jsonwebtoken";
+
+export const globals = {
+  jwtToken: "",
+
+  isAuthenticated: function isAuthenticated(): boolean {
+    if (globals.jwtToken) {
+      const decoded = jwt.decode(globals.jwtToken) as { [key: string]: any };
+      const exp: number = decoded["exp"];
+      return Date.now() < exp * 1000;
+    }
+    return false;
+  },
+};
 
 function standardFetch(url: string, callback: any, title?: string, text?: string, postHeader?: RequestInit): void {
   function handleErrorIfAny(response: Response): any {
     if (!response.ok) {
       if (response.status === 401) {
-        window.location.href = "/login";
+        if (router.currentRoute.path !== "/login") {
+          router.push("/login");
+        }
         return;
       }
       if (response.status === 404) {
@@ -45,23 +62,23 @@ function standardFetch(url: string, callback: any, title?: string, text?: string
 }
 
 function getJson(url: string, callback: any): void {
-  standardFetch(url, callback);
+  standardFetch(url, callback, undefined, undefined, {
+    headers: { "Content-Type": "application/json", Authorization: "Bearer " + globals.jwtToken },
+  });
 }
 
 function methodAndReceive(method: string, url: string, data: any, callback: any, title?: string, text?: string): void {
-  getJson("/rest/csrf-token.json", (err: Error, res: any) => {
-    const postHeader: RequestInit = {
-      method: method,
-      mode: "same-origin",
-      cache: "no-cache",
-      credentials: "same-origin",
-      redirect: "follow",
-      referrer: "no-referrer",
-      headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": res.token },
-      body: JSON.stringify(data),
-    };
-    standardFetch(url, callback, title, text, postHeader);
-  });
+  const postHeader: RequestInit = {
+    method: method,
+    mode: "same-origin",
+    cache: "no-cache",
+    credentials: "same-origin",
+    redirect: "follow",
+    referrer: "no-referrer",
+    headers: { "Content-Type": "application/json", Authorization: "Bearer " + globals.jwtToken },
+    body: JSON.stringify(data),
+  };
+  standardFetch(url, callback, title, text, postHeader);
 }
 
 function deleteAndReceive(url: string, data: any, callback: any, title?: string, text?: string): void {
@@ -94,6 +111,15 @@ function postAndReceiveForFiles(url: string, data: FormData, callback: any, titl
 
 export function uploadFile(data: FormData, callback: Function): void {
   postAndReceiveForFiles("/veranstaltungen/upload", data, callback, "Gespeichert", "Datei gespeichert");
+}
+
+export function login(name: string, pass: string, callback: Function): void {
+  postAndReceive("/login", { name, pass }, (err: any, json: any) => {
+    if (json) {
+      globals.jwtToken = json.token;
+    }
+    callback(err, json);
+  });
 }
 
 function veranstaltungenCallback(callback: Function) {
@@ -266,4 +292,9 @@ export function searchWiki(suchtext: string, callback: Function): void {
 
 export function deleteWikiPage(subdir: string, page: string, callback: Function): void {
   deleteAndReceive(`/rest/wikipage/${subdir}/${page}`, { data: "" }, callback);
+}
+
+// Calendar
+export function calendarEventSources(start: Date, end: Date, callback: Function): void {
+  getJson(`/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`, callback);
 }

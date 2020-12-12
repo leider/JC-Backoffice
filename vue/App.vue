@@ -53,22 +53,35 @@ div
 
   .container-fluid.p-0.p-md-auto.mt-md-4
     .row.main
-    feedback-alerts
-    router-view
+      feedback-alerts
+      router-view
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "../shared/user/user";
-import { currentUser, wikisubdirs } from "./commons/loader";
+import { currentUser, wikisubdirs, globals } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
 @Component({
   components: { FeedbackAlerts },
 })
 export default class App extends Vue {
-  private user: User = new User({});
+  private user: User = new User({id: "dummy+=%%"});
   private wikisubdirs = ["a", "b"];
+  private globals = globals;
+
+  @Watch("globals", { deep: true })
+  globalsChanged() {
+    currentUser((user: User) => {
+      this.user = user;
+    });
+
+    wikisubdirs((json: { dirs: string[] }) => {
+      this.wikisubdirs = json.dirs;
+    });
+
+  }
 
   created(): void {
     currentUser((user: User) => {
@@ -81,14 +94,12 @@ export default class App extends Vue {
   }
 
   get showItem(): boolean {
-    const user1 = this.user;
-    const accessrights = !!user1 && user1.accessrights;
+    const accessrights = this.user.accessrights;
     return !!accessrights && accessrights.isOrgaTeam;
   }
 
   get showItemSuperuser(): boolean {
-    const user1 = this.user;
-    const accessrights = !!user1 && user1.accessrights;
+    const accessrights = this.user.accessrights;
     return !!accessrights && accessrights.isSuperuser;
   }
 }

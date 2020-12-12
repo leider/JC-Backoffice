@@ -7,6 +7,16 @@ import sharp from "sharp";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import { Builder, Calendar, Event } from "ikalendar";
 import store from "../veranstaltungen/veranstaltungenstore";
+import User from "../../../shared/user/user";
+import { reply } from "../commons/replies";
+import userstore from "../users/userstore";
+import jwt from "jsonwebtoken";
+import { hashPassword } from "../commons/hashPassword";
+import { loggers } from "winston";
+const appLogger = loggers.get("application");
+
+import conf from "../commons/simpleConfigure";
+const jwtSecret = conf.get("salt") as string;
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -32,7 +42,27 @@ app.get("/robots.txt", (req, res, next) => {
 
 app.get("/login", (req, res) => res.render("authenticationRequired"));
 
-app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => res.redirect("/"));
+//app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => res.redirect("/"));
+
+app.post("/login", (req, res) => {
+  const name = req.body.name;
+  const pass = req.body.pass;
+  userstore.forId(name, (err: Error | null, user: User) => {
+    appLogger.info("Login for: " + name);
+    if (err || !user) {
+      appLogger.error("Login error for: " + name);
+      appLogger.error(err?.message || "");
+      return res.status(401).send();
+    }
+    if (hashPassword(pass, user.salt) === user.hashedPassword) {
+      const token = jwt.sign({ id: user.id }, jwtSecret, {
+        expiresIn: 15 * 60, // 15 minutes
+      });
+      reply(res, err, { token });
+    }
+    return res.status(401).send();
+  });
+});
 
 app.get("/logout", (req, res) => {
   req.logout();
