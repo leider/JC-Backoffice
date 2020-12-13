@@ -1,8 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
-import express from "express";
+import express, { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
-import passport from "passport";
 import sharp from "sharp";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import { Builder, Calendar, Event } from "ikalendar";
@@ -13,9 +12,13 @@ import userstore from "../users/userstore";
 import jwt from "jsonwebtoken";
 import { hashPassword } from "../commons/hashPassword";
 import { loggers } from "winston";
+import conf from "../commons/simpleConfigure";
+import { v4 as uuidv4 } from "uuid";
+import refreshstore, { RefreshToken } from "./refreshstore";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+
 const appLogger = loggers.get("application");
 
-import conf from "../commons/simpleConfigure";
 const jwtSecret = conf.get("salt") as string;
 
 const app = express();
@@ -25,9 +28,6 @@ app.set("view engine", "pug");
 app.locals.pretty = true;
 
 app.get("/", (req, res) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
-    return res.redirect("/vue/team");
-  }
   return res.redirect("/vue/veranstaltungen");
 });
 
@@ -40,33 +40,67 @@ app.get("/robots.txt", (req, res, next) => {
   });
 });
 
-app.get("/login", (req, res) => res.render("authenticationRequired"));
+function createToken(req: Request, res: Response, name: string) {
+  const ttl = 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
 
-//app.post("/login", passport.authenticate("local", { failureRedirect: "/login" }), (req, res) => res.redirect("/"));
+  function addRefreshToken(res: Response, refreshTokenId: string) {
+    res.cookie("refresh-token", refreshTokenId, {
+      maxAge: ttl,
+      httpOnly: true,
+      secure: false,
+    });
+  }
+
+  function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number, callback: Function): void {
+    refreshstore.remove(oldId, () => {
+      const expiry = new Date(Date.now() + ttl);
+      refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry }, callback);
+    });
+  }
+
+  const token = jwt.sign({ id: name }, jwtSecret, {
+    expiresIn: 120, // 15 minutes
+  });
+  const refreshTokenId = uuidv4();
+  const oldId = (req.cookies["refresh-token"] as string) || "";
+  return persistRefreshToken(refreshTokenId, oldId, name, ttl, (err1?: Error) => {
+    if (err1) {
+      return res.sendStatus(401);
+    }
+    addRefreshToken(res, refreshTokenId);
+    reply(res, undefined, { token });
+  });
+}
+
+app.post("/refreshtoken", (req, res) => {
+  const oldId = req.cookies["refresh-token"] as string;
+  if (!oldId) {
+    return res.sendStatus(401);
+  }
+  refreshstore.forId(oldId, (err?: Error, refreshToken?: RefreshToken) => {
+    if (err || !refreshToken || DatumUhrzeit.forJSDate(refreshToken.expiresAt).istVor(new DatumUhrzeit())) {
+      return res.sendStatus(401);
+    }
+    return createToken(req, res, refreshToken.userId);
+  });
+});
 
 app.post("/login", (req, res) => {
   const name = req.body.name;
   const pass = req.body.pass;
+
   userstore.forId(name, (err: Error | null, user: User) => {
     appLogger.info("Login for: " + name);
     if (err || !user) {
       appLogger.error("Login error for: " + name);
       appLogger.error(err?.message || "");
-      return res.status(401).send();
+      return res.sendStatus(401);
     }
     if (hashPassword(pass, user.salt) === user.hashedPassword) {
-      const token = jwt.sign({ id: user.id }, jwtSecret, {
-        expiresIn: 15 * 60, // 15 minutes
-      });
-      reply(res, err, { token });
+      return createToken(req, res, name);
     }
-    return res.status(401).send();
+    return res.sendStatus(401);
   });
-});
-
-app.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/login");
 });
 
 const uploadDir = path.join(__dirname, "../../static/upload");
@@ -85,43 +119,27 @@ app.get("/imagepreview/:filename", (req, res, next) => {
     });
 });
 
-function icalForVeranstaltungen(veranstaltungen: Veranstaltung[]): string {
-  const events: Event[] = [];
-
-  const calendar: Calendar = {
-    version: "2.0",
-    prodId: "ical by jazzclub",
-    events: events,
-  };
-
-  function asICal(veranstaltung: Veranstaltung): void {
-    events.push({
-      uid: veranstaltung.url || "",
-      start: veranstaltung.startDatumUhrzeit().fuerIcal,
-      end: veranstaltung.endDatumUhrzeit().fuerIcal,
-      summary: veranstaltung.kopf.titelMitPrefix,
-      description: veranstaltung.tooltipInfos(),
-      location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
-    });
-  }
-  veranstaltungen.forEach((veranstaltung) => asICal(veranstaltung));
-  const builder = new Builder(calendar);
-  return builder.build();
-}
-
 app.get("/ical/", (req, res) => {
-  function sendCalendarStringNamedToResult(icalString: string, filename: string, res: express.Response): void {
-    res
-      .type("ics")
-      .header("Content-Disposition", "inline; filename=" + filename + ".ics")
-      .send(icalString);
-  }
-
   store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err || !veranstaltungen) {
       return res.status(500).send(err);
     }
-    return sendCalendarStringNamedToResult(icalForVeranstaltungen(veranstaltungen.filter((v) => v.kopf.confirmed)), "events", res);
+    const calendar: Calendar = {
+      version: "2.0",
+      prodId: "ical by jazzclub",
+      events: veranstaltungen
+        .filter((v) => v.kopf.confirmed)
+        .map((veranstaltung) => ({
+          uid: veranstaltung.url || "",
+          start: veranstaltung.startDatumUhrzeit().fuerIcal,
+          end: veranstaltung.endDatumUhrzeit().fuerIcal,
+          summary: veranstaltung.kopf.titelMitPrefix,
+          description: veranstaltung.tooltipInfos(),
+          location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
+        })),
+    };
+    const calString = new Builder(calendar).build();
+    return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
   });
 });
 

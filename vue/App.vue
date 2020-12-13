@@ -4,15 +4,15 @@ div
     b-navbar-brand(href="/")
       img(src="/img/logo_weiss.png", alt="Jazzclub")
     b-nav-toggle(target="nav-collapse")
-    b-collapse#nav-collapse.align-self-end(is-nav)
+    b-collapse#nav-collapse.align-self-end(v-if="showItem", is-nav)
       b-navbar-nav
-        b-nav-item(v-if="showItem", to="/veranstaltungen", active-class="active")
+        b-nav-item(v-if="showItemOrga", to="/veranstaltungen", active-class="active")
           b-icon-speaker
           span &nbsp;Veranstaltungen&nbsp;
-        b-nav-item(v-if="showItem", to="/programmheft", active-class="active")
+        b-nav-item(v-if="showItemOrga", to="/programmheft", active-class="active")
           b-icon-calendar2-check
           span &nbsp;Programmheft&nbsp;
-        b-nav-item-dropdown(v-if="showItem", data-jcnav="[optionen|ical|image]")
+        b-nav-item-dropdown(v-if="showItemOrga", data-jcnav="[optionen|ical|image]")
           template(v-slot:button-content)
             b-icon-toggles
             span &nbsp;Optionen
@@ -22,7 +22,7 @@ div
           b-dropdown-item(to="/terminekalender/termine") Termine
           b-dropdown-item(to="/kassenbericht") Kassenberichte
           b-dropdown-item(v-if="showItemSuperuser", to="/imageoverview") Bilder bearbeiten
-        b-nav-item(v-if="showItem", to="/gema", active-class="active")
+        b-nav-item(v-if="showItemOrga", to="/gema", active-class="active")
           b-icon-clipboard-data
           span &nbsp;GEMA
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="mailsender")
@@ -43,11 +43,11 @@ div
             span &nbsp;Wiki&nbsp;
           b-dropdown-item(v-for="subdir in wikisubdirs", :key="subdir", :to="`/wiki/${subdir}/`") {{ subdir }}
       b-navbar-nav.ml-auto
-        b-nav-item-dropdown(v-if="user", right)
+        b-nav-item-dropdown(right)
           template(v-slot:button-content)
             b-icon-person-circle
             span &nbsp;{{ user.id }}
-          b-dropdown-item(href="/logout")
+          b-dropdown-item(@click="logout")
             b-icon-box-arrow-right
             | &nbsp;Abmelden
 
@@ -60,27 +60,30 @@ div
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "../shared/user/user";
-import { currentUser, wikisubdirs, globals } from "./commons/loader";
+import { currentUser, wikisubdirs, globals, logout } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
 @Component({
   components: { FeedbackAlerts },
 })
 export default class App extends Vue {
-  private user: User = new User({id: "dummy+=%%"});
+  private user: User = new User({ id: "invalidUser" });
   private wikisubdirs = ["a", "b"];
   private globals = globals;
 
   @Watch("globals", { deep: true })
-  globalsChanged() {
-    currentUser((user: User) => {
-      this.user = user;
-    });
+  globalsChanged(): void {
+    if (globals.jwtToken) {
+      currentUser((user: User) => {
+        this.user = user;
+      });
 
-    wikisubdirs((json: { dirs: string[] }) => {
-      this.wikisubdirs = json.dirs;
-    });
-
+      wikisubdirs((json: { dirs: string[] }) => {
+        this.wikisubdirs = json.dirs;
+      });
+    } else {
+      this.user = new User({ id: "invalidUser" });
+    }
   }
 
   created(): void {
@@ -94,13 +97,23 @@ export default class App extends Vue {
   }
 
   get showItem(): boolean {
+    return !this.user.id || this.user.id !== "invalidUser";
+  }
+
+  get showItemOrga(): boolean {
     const accessrights = this.user.accessrights;
-    return !!accessrights && accessrights.isOrgaTeam;
+    return accessrights?.isOrgaTeam || false;
   }
 
   get showItemSuperuser(): boolean {
     const accessrights = this.user.accessrights;
-    return !!accessrights && accessrights.isSuperuser;
+    return accessrights?.isSuperuser || false;
+  }
+
+  logout(): void {
+    logout(() => {
+      this.$router.push("/login");
+    });
   }
 }
 </script>

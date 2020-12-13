@@ -67,16 +67,19 @@ import UserPanel from "../user/UserPanel.vue";
 export default class Team extends Vue {
   @Prop() admin!: boolean;
   @Prop() periode: "zukuenftige" | "vergangene" | "alle" = "zukuenftige";
-  private user: User = new User({id: "dummy+=%%"});
+  private user: User = new User({ id: "invalidUser" });
   private users: User[] = [];
   // noinspection JSMismatchedCollectionQueryUpdate
   private veranstaltungen: Veranstaltung[] = [];
 
   private loading = false;
 
-  created(): void {
+  mounted(): void {
     this.reloadUsers();
     this.reloadVeranstaltungen();
+    if (this.$route.path.startsWith("/veranstaltungen") && !this.realadmin) {
+      this.$router.replace({ path: "/team" });
+    }
   }
 
   reloadUsers() {
@@ -131,6 +134,5 @@ export default class Team extends Vue {
       this.veranstaltungen.splice(idx, 1);
     }
   }
-
 }
 </script>

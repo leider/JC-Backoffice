@@ -9,6 +9,8 @@ import programmheftApp from "./programmheft";
 import usersApp from "./users";
 import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
+import refreshstore, { RefreshToken } from "../lib/site/refreshstore";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 
 const app = express();
 
@@ -20,15 +22,21 @@ app.use("/", usersApp);
 app.use("/", veranstaltungenRestApp);
 app.use("/", wikiApp);
 
-app.get("/csrf-token.json", (req, res) => {
-  res.set("Content-Type", "application/json").send({ token: req.csrfToken() });
-});
-
 function allImageNames(res: Response): void {
   service.alleBildNamen((err?: Error, imagenamesOfFiles?: string[]) => {
     reply(res, err, { names: imagenamesOfFiles });
   });
 }
+
+app.post("/logout", (req, res) => {
+  const oldId = req.cookies["refresh-token"] as string;
+  if (!oldId) {
+    return res.sendStatus(401);
+  }
+  refreshstore.remove(oldId, () => {
+    return res.clearCookie("refresh-token").send({});
+  });
+});
 
 app.get("/imagenames", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {

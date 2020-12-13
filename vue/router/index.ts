@@ -23,7 +23,7 @@ import { globals } from "../commons/loader";
 Vue.use(VueRouter);
 
 const routes = [
-  { path: "/", redirect: "/team" },
+  { path: "/", redirect: "/veranstaltungen" },
   { path: "/login", component: Login },
   { path: "/team", component: Team, props: { admin: false, periode: "zukuenftige" } },
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
@@ -58,8 +58,15 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.path.startsWith("/login") && !globals.isAuthenticated()) {
-    next({ path: "/login", query: { originalURL: to.path } });
+  console.log("to: " + to.path);
+  if (!to.path.startsWith("/login")) {
+    globals.isAuthenticated((isAuth: boolean) => {
+      if (!isAuth) {
+        next({ path: "/login", query: { originalURL: to.path } });
+      } else {
+        next();
+      }
+    });
   } else {
     next();
   }

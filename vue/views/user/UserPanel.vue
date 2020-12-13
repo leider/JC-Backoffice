@@ -204,9 +204,7 @@ export default class UserPanel extends Vue {
   }
 
   changePassword(): void {
-    console.log(this.newPass);
     this.user.password = this.newPass;
-    console.log("User: " + this.user.password);
     changePassword(this.user, (err?: Error) => {
       if (!err) {
         this.$emit("user-saved");

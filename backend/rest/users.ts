@@ -8,7 +8,10 @@ import { reply } from "../lib/commons/replies";
 const app = express();
 
 app.get("/users/current", (req, res) => {
-  reply(res, undefined, new User(req.user).toJSONWithoutPass());
+  if (req.user) {
+    return reply(res, undefined, new User(req.user).toJSONWithoutPass());
+  }
+  res.sendStatus(401);
 });
 
 app.get("/users", (req, res) => {

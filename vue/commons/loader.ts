@@ -20,13 +20,21 @@ import jwt from "jsonwebtoken";
 export const globals = {
   jwtToken: "",
 
-  isAuthenticated: function isAuthenticated(): boolean {
+  isAuthenticated: function isAuthenticated(callback: (isAuth: boolean) => void): void {
     if (globals.jwtToken) {
       const decoded = jwt.decode(globals.jwtToken) as { [key: string]: any };
-      const exp: number = decoded["exp"];
-      return Date.now() < exp * 1000;
+      const exp: number = decoded.exp;
+      const stillValid = Date.now() + 60000 < exp * 1000; // should be valid one more minute
+      if (stillValid) {
+        return callback(true);
+      }
     }
-    return false;
+    postAndReceive("/refreshToken", undefined, (err: any, json: any) => {
+      if (json) {
+        globals.jwtToken = json.token;
+      }
+      callback(!err && json.token);
+    });
   },
 };
 
@@ -35,7 +43,11 @@ function standardFetch(url: string, callback: any, title?: string, text?: string
     if (!response.ok) {
       if (response.status === 401) {
         if (router.currentRoute.path !== "/login") {
-          router.push("/login");
+          globals.isAuthenticated((isAuth: boolean) => {
+            if (!isAuth) {
+              router.push("/login");
+            }
+          });
         }
         return;
       }
@@ -94,23 +106,27 @@ function postAndReceive(url: string, data: any, callback: any, title?: string, t
 }
 
 function postAndReceiveForFiles(url: string, data: FormData, callback: any, title: string, text: string): void {
-  getJson("/rest/csrf-token.json", (err: Error, res: any) => {
-    const postHeader: RequestInit = {
-      method: "POST",
-      mode: "same-origin",
-      cache: "no-cache",
-      credentials: "same-origin",
-      redirect: "follow",
-      referrer: "no-referrer",
-      headers: { "X-CSRF-TOKEN": res.token },
-      body: data,
-    };
-    standardFetch(url, callback, title, text, postHeader);
-  });
+  const postHeader: RequestInit = {
+    method: "POST",
+    mode: "same-origin",
+    cache: "no-cache",
+    credentials: "same-origin",
+    redirect: "follow",
+    referrer: "no-referrer",
+    body: data,
+  };
+  standardFetch(url, callback, title, text, postHeader);
 }
 
 export function uploadFile(data: FormData, callback: Function): void {
   postAndReceiveForFiles("/veranstaltungen/upload", data, callback, "Gespeichert", "Datei gespeichert");
+}
+
+export function logout(callback: Function): void {
+  postAndReceive("/rest/logout", undefined, (err?: Error) => {
+    globals.jwtToken = "";
+    callback(err);
+  });
 }
 
 export function login(name: string, pass: string, callback: Function): void {
@@ -159,6 +175,9 @@ export function removeUserFromSection(veranstaltung: Veranstaltung, section: Sta
 // User
 export function currentUser(callback: Function): void {
   getJson("/rest/users/current", (err?: Error, result?: object) => {
+    if (err) {
+      return callback(new User("invalidUser"));
+    }
     const user = new User(result);
     user.accessrights = new Accessrights(user);
     callback(user);
