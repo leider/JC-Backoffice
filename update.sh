@@ -2,7 +2,5 @@
 sudo svc -d /etc/service/JC-backoffice/
 git pull
 npm ci
-grunt deploy
-npm run build
-npm run tsc
+npm run deploy
 sudo svc -u /etc/service/JC-backoffice/

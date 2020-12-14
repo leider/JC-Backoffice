@@ -1,14 +1,9 @@
-build/
 config/
-!/backend/static/reporting
 node_modules/
-/backend/static/clientscripts
 /backend/static/files
-/backend/static/fonts
 /backend/static/stylesheets
 /backend/static/upload
 /backend/static/vue/
-/backend/static/webfonts
 *.log
 workspace.xml
 jazzclubmongo.dump/jazzclub
@@ -17,7 +12,7 @@ dump.zip
 mongorestore_jc.sh
 jazzclubmongo*
 *.gz
-/backend/frontend/sass/out/jc-backoffice.css
+/backend/sass/out/jc-backoffice.css
 /backend/**/*.js
 /shared/**/*.js
 /batchjobs/**/*.js

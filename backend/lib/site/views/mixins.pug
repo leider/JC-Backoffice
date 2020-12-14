@@ -1,0 +1,17 @@
+mixin localCurrency(value)
+  span #{new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'EUR'}).format(value)}
+
+mixin currencyOrEmpty(value)
+  if veranstaltung.istVergangen() && !!value
+    +localCurrency(value)
+  else
+    | &nbsp;
+
+mixin signbox(datum, rolle, name)
+  .row
+    .col-2
+      p(style="line-height:3;"): b #{rolle}:
+    .col-10
+      p(style="line-height:3;border-bottom:1px dotted;") #{datum}
+      p.text-center(style="margin-top:-10px; font-size:10px;") #{name}
+

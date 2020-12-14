@@ -1,21 +1,13 @@
-mixin localCurrency(value)
-  span #{new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'EUR'}).format(value)}
+- var heute = now.tagMonatJahrLang;
 
-mixin signbox(datum, rolle, name)
-  .row
-    .col-2
-      p(style="line-height:3;"): b #{rolle}:
-    .col-10
-      p(style="line-height:3;border-bottom:1px dotted;") #{datum}
-      p.text-center(style="margin-top:-10px; font-size:10px;") #{name}
+include mixins
 
 doctype html
 html
-  - var heute = now.tagMonatJahrLang;
   head
     meta(charset="utf-8")
     link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
-    link(href=publicUrlPrefix + '/stylesheets/fonts.css', rel="stylesheet")
+    link(href=publicUrlPrefix + '/fonts/fonts.css', rel="stylesheet")
 
   body
     .container-fluid

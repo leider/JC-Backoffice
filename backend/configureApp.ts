@@ -52,5 +52,5 @@ export default function (app: express.Express) {
 
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, accessrights, restApp);
-  app.use(handle404);
+  //app.use(handle404);
 }

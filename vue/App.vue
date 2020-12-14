@@ -120,14 +120,14 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import "~rfs/scss";
-@import "../backend/frontend/sass/jc-variables";
-@import "~bootstrap";
+@import "../backend/sass/jc-variables";
+@import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/src/index.scss";
 
 @import "~@fullcalendar/common/main.css";
 @import "~@fullcalendar/daygrid/main.css";
 @import "~@fullcalendar/bootstrap/main.css";
-@import "../backend/frontend/3rd_party_css/flaticon-patched.css";
+@import "flaticon-patched.css";
 @import "widgets/vue-multiselect";
 @import "markdown";
 

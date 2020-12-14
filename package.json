@@ -106,8 +106,6 @@
     "grunt": "1.3.0",
     "grunt-cli": "1.3.2",
     "grunt-contrib-clean": "2.0.0",
-    "grunt-contrib-copy": "1.0.0",
-    "grunt-contrib-cssmin": "3.0.0",
     "grunt-contrib-sassjs": "0.1.8",
     "grunt-eslint": "23.0.0",
     "mocha": "8.2.1",
@@ -135,7 +133,7 @@
     "last 2 versions"
   ],
   "scripts": {
-    "deploy": "grunt deploy && npm run build && npm run tsc",
+    "deploy": "grunt && npm run build && npm run tsc",
     "develop": "grunt clean:compiledTypescript && npm run tsc && npm run serve",
     "start": "node --icu-data-dir=node_modules/full-icu start",
     "test": "ts-mocha --icu-data-dir=node_modules/full-icu test/**/*.ts",
