@@ -2,7 +2,7 @@
 .col-12
   h1 Kassenberichte
   p(v-for="monat in monate", :key="monat.monatJahrKompakt")
-    a(:href="`/pdf/kassenbericht/${monat.fuerKalenderViews}`") Kassenbericht {{ monat.monatJahrKompakt }}
+    a(:href="`/kassenbericht/${monat.fuerKalenderViews}`") Kassenbericht {{ monat.monatJahrKompakt }}
 </template>
 
 <script lang="ts">

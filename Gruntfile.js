@@ -26,7 +26,7 @@ module.exports = function (grunt) {
     },
     eslint: {
       options: { quiet: true },
-      target: ["backend/**/*.ts", "shared/**/*.ts", "test/**/*.ts"],
+      target: ["backend/**/*.ts", "shared/**/*.ts", "test/**/*.ts", "vue/**/*.ts|vue"],
     },
     sass: {
       dist: {

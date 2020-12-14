@@ -1,17 +1,14 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import compress from "compression";
 import bodyparser from "body-parser";
 import loggers from "./initWinston";
 
 import cookieParser from "cookie-parser";
 import favicon from "serve-favicon";
-import morgan from "morgan";
 
 import restApp from "./rest";
 
-import pdfApp from "./lib/pdf-csv";
 import siteApp from "./lib/site";
-import veranstaltungenApp from "./lib/veranstaltungen";
 import history from "connect-history-api-fallback";
 
 import expressViewHelper from "./lib/middleware/expressViewHelper";
@@ -28,46 +25,18 @@ const winstonStream = {
   write: (message: string): Logger => httpLogger.info(message.replace(/(\r\n|\n|\r)/gm, "")),
 };
 
-function secureAgainstClickjacking(req: express.Request, res: express.Response, next: express.NextFunction): void {
+function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
   res.setHeader("X-Frame-Options", "DENY");
   next();
 }
 
-function serverpathRemover(req: express.Request, res: express.Response, next: express.NextFunction): void {
-  res.locals.removeServerpaths = (msg: string): string => {
-    // find the path that comes before node_modules or lib:
-    const pathToBeRemoved = /\/[^ ]*?\/(?=(node_modules|JC-Backoffice\/lib)\/)/.exec(msg);
-    if (pathToBeRemoved) {
-      return msg.replace(new RegExp(pathToBeRemoved[0], "g"), "");
-    }
-    return msg;
-  };
-  next();
-}
-
-function useApp(parent: express.Express, url: string, child: express.Express): express.Express {
-  function ensureRequestedUrlEndsWithSlash(req: express.Request, res: express.Response, next: express.NextFunction): void {
-    if (!/\/$/.test(req.url)) {
-      res.redirect(req.url + "/");
-    } else {
-      next();
-    }
-  }
-
-  if (process.env.NODE_ENV !== "production") {
-    child.locals.pretty = true;
-  }
-  parent.get("/" + url, ensureRequestedUrlEndsWithSlash);
-  parent.use("/" + url + "/", child);
-  return child;
+function handle404(req: Request, res: Response): void {
+  httpLogger.warn("404 by requesting URL: " + req.originalUrl);
+  res.redirect("/");
 }
 
 export default function (app: express.Express) {
-  app.use(serverpathRemover);
-  app.set("view engine", "pug");
-  app.set("views", path.join(__dirname, "views"));
   app.use(favicon(path.join(__dirname, "static/", "img/favicon.ico")));
-  app.use(morgan("combined", { stream: winstonStream }));
   app.use(cookieParser());
   app.use(bodyparser.urlencoded({ extended: true }));
   app.use(bodyparser.json());
@@ -83,6 +52,5 @@ export default function (app: express.Express) {
 
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, accessrights, restApp);
-  app.use("/veranstaltungen/", veranstaltungenApp);
-  app.use("/pdf/", pdfApp);
+  app.use(handle404);
 }

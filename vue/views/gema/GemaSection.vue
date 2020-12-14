@@ -12,6 +12,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import groupBy from "lodash/groupBy";
 import { renderart, TransferObject, VeranstaltungZeileMitCheck, vorNach } from "./SharedGemaTypes";
 import GemaMonat from "./GemaMonat.vue";
+import { openPayload } from "../../commons/loader";
 
 @Component({ components: { GemaMonat } })
 export default class GemaSection extends Vue {
@@ -37,9 +38,8 @@ export default class GemaSection extends Vue {
 
   meldungClicked(): void {
     const selectedIds: string[] = this.veranstaltungen.filter((v) => v.selected).map((v) => v.id);
-
     const transferObject: TransferObject = { selectedIds, renderart: this.format, vorNach: this.vorNach };
-    window.open(`/pdf/gemameldung?transferObject=${encodeURIComponent(JSON.stringify(transferObject))}`);
+    openPayload({ url: "gemameldung", params: transferObject });
   }
 }
 </script>

@@ -73,7 +73,7 @@
             jazz-currency-display(label="Betrag", :value="kasse.einnahmeSonstiges2EUR")
       .row
         .col-12.mb-2
-          a.btn.btn-kasse(:href="veranstaltung.fullyQualifiedUrlForKassenzettel()", title="Abendkasse")
+          b-button.btn.btn-kasse(@click="kassenzettel")
             b-icon-printer-fill
             | #{' '} Kassenzettel
           b-button.btn.btn-danger.float-right(
@@ -179,6 +179,7 @@ import JazzText from "../../widgets/JazzText.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import JazzNumber from "../../widgets/JazzNumber.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
+import { openPayload } from "../../commons/loader";
 
 @Component({
   components: {
@@ -217,6 +218,10 @@ export default class KasseTab extends Vue {
 
   freigabeAufheben(): void {
     this.kasse.freigabeRueckgaengig();
+  }
+
+  kassenzettel(): void {
+    openPayload({ url: "kassenzettel", params: { url: this.veranstaltung.url } });
   }
 }
 </script>

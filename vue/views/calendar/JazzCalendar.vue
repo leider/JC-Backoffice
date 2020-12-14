@@ -24,9 +24,11 @@ function getEvents(
     endStr: string;
     timeZone: string;
   },
+  // eslint-disable-next-line no-unused-vars
   successCallback: (events: EventInput[]) => void,
+  // eslint-disable-next-line no-unused-vars
   failureCallback: (error: { message: string; response?: any; [otherProp: string]: any }) => void
-) {
+): void {
   calendarEventSources(info.start, info.end, (err: Error, res: any) => {
     if (err) {
       return failureCallback(err);

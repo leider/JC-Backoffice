@@ -16,6 +16,9 @@ import Veranstaltung, { ImageOverviewRow } from "../../shared/veranstaltung/vera
 import { feedbackMessages } from "../views/general/FeedbackMessages";
 import router from "../router";
 import jwt from "jsonwebtoken";
+import { Payload } from "../../backend/lib/site/onetimeTokens";
+
+let refreshTokenState: string;
 
 export const globals = {
   jwtToken: "",
@@ -29,12 +32,16 @@ export const globals = {
         return callback(true);
       }
     }
-    postAndReceive("/refreshToken", undefined, (err: any, json: any) => {
-      if (json) {
-        globals.jwtToken = json.token;
-      }
-      callback(!err && json.token);
-    });
+    if (refreshTokenState !== "START") {
+      refreshTokenState = "START";
+      postAndReceive("/refreshToken", undefined, (err: any, json: any) => {
+        if (json) {
+          globals.jwtToken = json.token;
+        }
+        refreshTokenState = "FINISHED";
+        callback(!err && json.token);
+      });
+    }
   },
 };
 
@@ -113,13 +120,14 @@ function postAndReceiveForFiles(url: string, data: FormData, callback: any, titl
     credentials: "same-origin",
     redirect: "follow",
     referrer: "no-referrer",
+    headers: { Authorization: "Bearer " + globals.jwtToken },
     body: data,
   };
   standardFetch(url, callback, title, text, postHeader);
 }
 
 export function uploadFile(data: FormData, callback: Function): void {
-  postAndReceiveForFiles("/veranstaltungen/upload", data, callback, "Gespeichert", "Datei gespeichert");
+  postAndReceiveForFiles("/rest/upload", data, callback, "Gespeichert", "Datei gespeichert");
 }
 
 export function logout(callback: Function): void {
@@ -316,4 +324,14 @@ export function deleteWikiPage(subdir: string, page: string, callback: Function)
 // Calendar
 export function calendarEventSources(start: Date, end: Date, callback: Function): void {
   getJson(`/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`, callback);
+}
+
+// Special
+export function openPayload(payload: Payload): void {
+  postAndReceive("/rest/onetimeToken", payload, (err?: Error, result?: { token: string }) => {
+    if (err || !result) {
+      return;
+    }
+    window.open(`/onetimeToken/${result.token}`);
+  });
 }

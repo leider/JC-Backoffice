@@ -58,7 +58,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("to: " + to.path);
   if (!to.path.startsWith("/login")) {
     globals.isAuthenticated((isAuth: boolean) => {
       if (!isAuth) {

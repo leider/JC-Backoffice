@@ -77,9 +77,6 @@ export default class Team extends Vue {
   mounted(): void {
     this.reloadUsers();
     this.reloadVeranstaltungen();
-    if (this.$route.path.startsWith("/veranstaltungen") && !this.realadmin) {
-      this.$router.replace({ path: "/team" });
-    }
   }
 
   reloadUsers() {
@@ -88,6 +85,11 @@ export default class Team extends Vue {
     });
     currentUser((user: User) => {
       this.user = user;
+      if (this.$route.path.startsWith("/veranstaltungen") && !this.realadmin) {
+        if (this.user.id !== "invalidUser") {
+          this.$router.replace({ path: "/team" });
+        }
+      }
     });
   }
 

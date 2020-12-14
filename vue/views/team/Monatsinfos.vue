@@ -1,7 +1,7 @@
 <template lang="pug">
 .col-12
   .btn-group.float-right
-    a.btn.btn-primary(:href="`/veranstaltungen/imgzip/${monat}`")
+    b-button.btn.btn-primary(@click="imgzip")
       b-icon-download
       | &nbsp;Alle Bilder als ZIP
   h1 Infos für {{ start.monatJahrKompakt }}
@@ -34,7 +34,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Renderer from "../../../shared/commons/renderer";
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import { veranstaltungenBetween } from "../../commons/loader";
+import { openPayload, veranstaltungenBetween } from "../../commons/loader";
 
 @Component
 export default class Monatsinfos extends Vue {
@@ -68,6 +68,10 @@ ${veranstaltung.presse.fullyQualifiedJazzclubURL()}`);
     if (this.tab !== section) {
       this.$router.replace(`/infos/${this.monat}/${section}`);
     }
+  }
+
+  imgzip(): void {
+    openPayload({ url: "imgzip", params: { yymm: this.monat } });
   }
 }
 </script>

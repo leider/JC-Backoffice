@@ -1,9 +1,9 @@
 /* eslint no-underscore-dangle: 0 */
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import path from "path";
-import fs from "fs";
 import sharp from "sharp";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import { Builder, Calendar, Event } from "ikalendar";
 import store from "../veranstaltungen/veranstaltungenstore";
 import User from "../../../shared/user/user";
@@ -16,12 +16,16 @@ import conf from "../commons/simpleConfigure";
 import { v4 as uuidv4 } from "uuid";
 import refreshstore, { RefreshToken } from "./refreshstore";
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import { getPayload } from "./onetimeTokens";
+import { gemameldung } from "./gemaMeldungGeneration";
+import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration";
 
 const appLogger = loggers.get("application");
 
 const jwtSecret = conf.get("salt") as string;
 
 const app = express();
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
@@ -29,15 +33,6 @@ app.locals.pretty = true;
 
 app.get("/", (req, res) => {
   return res.redirect("/vue/veranstaltungen");
-});
-
-app.get("/robots.txt", (req, res, next) => {
-  fs.readFile(path.join(__dirname, "views", "robots.txt"), "utf8", (err, data) => {
-    if (err) {
-      return next(err);
-    }
-    return res.send(data);
-  });
 });
 
 function createToken(req: Request, res: Response, name: string) {
@@ -59,7 +54,7 @@ function createToken(req: Request, res: Response, name: string) {
   }
 
   const token = jwt.sign({ id: name }, jwtSecret, {
-    expiresIn: 120, // 15 minutes
+    expiresIn: 15 * 60, // 15 minutes
   });
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
@@ -75,6 +70,7 @@ function createToken(req: Request, res: Response, name: string) {
 app.post("/refreshtoken", (req, res) => {
   const oldId = req.cookies["refresh-token"] as string;
   if (!oldId) {
+    appLogger.warn("refreshToken without cookie called");
     return res.sendStatus(401);
   }
   refreshstore.forId(oldId, (err?: Error, refreshToken?: RefreshToken) => {
@@ -141,6 +137,35 @@ app.get("/ical/", (req, res) => {
     const calString = new Builder(calendar).build();
     return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
   });
+});
+
+app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextFunction) => {
+  const datum = DatumUhrzeit.forYYYYMM(req.params.year + "" + req.params.month);
+  kassenbericht(res, next, datum);
+});
+
+app.get("/onetimeToken/:token", (req, res, next) => {
+  const payload = getPayload(req.params.token);
+  if (!payload) {
+    return res.sendStatus(401);
+  }
+  if (payload.url === "imgzip") {
+    const { yymm } = payload.params;
+    return veranstaltungenService.imgzip(res, next, yymm);
+  }
+  if (payload.url === "gemameldung") {
+    const transferObject = payload.params;
+    return gemameldung(res, next, transferObject);
+  }
+  if (payload.url === "vertrag") {
+    const { url, language } = payload.params;
+    return vertrag(res, next, url, language);
+  }
+  if (payload.url === "kassenzettel") {
+    const { url } = payload.params;
+    return kassenzettel(res, next, url);
+  }
+  res.redirect("/");
 });
 
 export default app;

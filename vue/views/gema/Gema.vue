@@ -42,10 +42,12 @@ export default class Gema extends Vue {
   }
 
   get zukuenftige(): VeranstaltungZeileMitCheck[] {
-    return sortBy(
+    const result = sortBy(
       this.veranstaltungen.filter((v) => v.startDatumUhrzeit.istNach(this.heute)),
       (v) => v.startDatumUhrzeit
     );
+    result.reverse();
+    return result;
   }
 
   get vergangene(): VeranstaltungZeileMitCheck[] {
@@ -53,7 +55,6 @@ export default class Gema extends Vue {
       this.veranstaltungen.filter((v) => v.startDatumUhrzeit.istVor(this.heute)),
       (v) => v.startDatumUhrzeit
     );
-    result.reverse();
     return result;
   }
 }

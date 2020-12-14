@@ -17,7 +17,7 @@ app.set("view engine", "pug");
 
 export default app;
 
-function generatePdf(options: PDFOptions, res: express.Response, next: express.NextFunction) {
+function generatePdf(options: PDFOptions, res: Response, next: NextFunction) {
   return (err: Error | null, html?: string): void => {
     if (err) {
       next(err);

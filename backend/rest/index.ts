@@ -10,8 +10,7 @@ import usersApp from "./users";
 import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
 import refreshstore, { RefreshToken } from "../lib/site/refreshstore";
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-
+import { addPayload } from "../lib/site/onetimeTokens";
 const app = express();
 
 app.use("/", calendarApp);
@@ -59,6 +58,14 @@ app.post("/imagenames", (req, res, next) => {
     }
     allImageNames(res);
   });
+});
+
+app.post("/onetimeToken", (req, res) => {
+  if (!res.locals.accessrights.isAbendkasse()) {
+    return res.sendStatus(401);
+  }
+  const token = addPayload(req.body);
+  reply(res, undefined, { token });
 });
 
 export default app;

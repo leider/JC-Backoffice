@@ -81,11 +81,7 @@
             .input-group
               single-select-pure(label="Sprache", v-model="vertrag.sprache", :options="vertragSprachen")
               .input-group-append
-                b-button(
-                  :href="`${veranstaltung.fullyQualifiedUrlForVertrag()}/${vertrag.sprache}`",
-                  :disabled="!veranstaltung.id || !isBookingTeam",
-                  variant="primary"
-                ) Generieren
+                b-button(@click="generateVertrag", :disabled="!veranstaltung.id || !isBookingTeam", variant="primary") Generieren
       .row
         .col-12
           .form-group
@@ -110,7 +106,7 @@ import Orte from "../../../shared/optionen/orte";
 import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import Artist from "../../../shared/veranstaltung/artist";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import { uploadFile } from "../../commons/loader";
+import { openPayload, uploadFile } from "../../commons/loader";
 import EventTypSelect from "../../widgets/EventTypSelect.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import Kosten from "../../../shared/veranstaltung/kosten";
@@ -221,6 +217,10 @@ export default class AllgemeinesTab extends Vue {
         newStrings.forEach((s) => strings.push(s));
       }
     });
+  }
+
+  generateVertrag(): void {
+    openPayload({ url: "vertrag", params: { url: this.veranstaltung.url, language: this.vertrag.sprache.toLowerCase() } });
   }
 }
 </script>
