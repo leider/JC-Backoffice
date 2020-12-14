@@ -84,6 +84,7 @@ interface EditorConfiguration {
 interface Button {
   ico: string;
   title: string;
+  // eslint-disable-next-line no-unused-vars
   function: (markdown: Markdown) => void;
   ready?: boolean;
   text?: string;
