@@ -1,9 +1,9 @@
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";
-import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
-import Salesreport from "../../../shared/veranstaltung/salesreport";
+import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
 import express, { NextFunction, Response } from "express";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import flatten from "lodash/flatten";
 import fs from "fs";
 import async from "async";

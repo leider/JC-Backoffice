@@ -4,9 +4,9 @@ const sinon = sin.createSandbox();
 
 import "../../backend/configure";
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import kalenderstore from "../../backend/lib/programmheft/kalenderstore";
-import Kalender from "../../shared/programmheft/kalender";
+import Kalender from "jc-shared/programmheft/kalender";
 import mailtransport from "../../backend/lib/mailsender/mailtransport";
 import { remindForProgrammheft } from "../../batchjobs/nightjob/sendMailsForProgrammheft";
 

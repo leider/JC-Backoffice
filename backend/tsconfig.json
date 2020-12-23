@@ -9,8 +9,8 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "lib": ["esnext"],
-    "types": ["node", "mocha", "express"]
+    "lib": ["esnext", "dom"],
+    "types": ["node", "express"]
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

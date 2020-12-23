@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
-import Staff from "../../shared/veranstaltung/staff";
+import Staff from "jc-shared/veranstaltung/staff";
 
 describe("Staff", () => {
   describe("kann sagen, ob jemand für die Kasse fehlt", () => {

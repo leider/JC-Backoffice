@@ -1,7 +1,5 @@
 import { expect } from "chai";
-import OptionValues from "../../shared/optionen/optionValues";
-
-const emptyOrte = { orte: [] };
+import OptionValues from "jc-shared/optionen/optionValues";
 
 describe("OptionValues constructor sorts lists case insensitive", () => {
   it("typen", () => {

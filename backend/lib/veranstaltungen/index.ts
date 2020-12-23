@@ -1,7 +1,7 @@
 import express from "express";
 
 import store from "./veranstaltungenstore";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
 const app = express();
 

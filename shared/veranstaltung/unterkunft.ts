@@ -1,5 +1,4 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit";
-import misc from "../commons/misc";
 import Misc from "../commons/misc";
 
 export default class Unterkunft {
@@ -26,7 +25,7 @@ export default class Unterkunft {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {
         kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
-        sonstiges: misc.toArray(object.sonstiges),
+        sonstiges: Misc.toArray(object.sonstiges),
       });
       this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) || veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;

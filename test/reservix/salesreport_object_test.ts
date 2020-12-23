@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Salesreport from "../../shared/veranstaltung/salesreport";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 const now = new DatumUhrzeit();
 const heute = now.plus({ stunden: 8 }).toJSDate;

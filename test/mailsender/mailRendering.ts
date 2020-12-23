@@ -8,7 +8,7 @@ conf.addProperties({
 });
 
 import { toTransportObject } from "../../backend/lib/mailsender/mailtransport";
-import Message from "../../shared/mail/message";
+import Message from "jc-shared/mail/message";
 
 describe("Mailrendering works", () => {
   const message = new Message({

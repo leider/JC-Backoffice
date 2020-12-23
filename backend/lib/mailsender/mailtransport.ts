@@ -9,7 +9,7 @@ const transport = nodemailer.createTransport(conf.get("transport-options") as ob
 import Mail from "nodemailer/lib/mailer";
 
 import MailBodyRenderer from "./mailbodyRenderer";
-import Message from "../../../shared/mail/message";
+import Message from "jc-shared/mail/message";
 
 export function toTransportObject(message: Message): Mail.Options {
   const mbRenderer = new MailBodyRenderer(message.markdown);

@@ -2,6 +2,11 @@
 import compact from "lodash/compact";
 import DatumUhrzeit from "./DatumUhrzeit";
 
+export interface Payload {
+  url: string;
+  params?: any;
+}
+
 export default class Misc {
   static isNumber(aString: string): boolean {
     const number = Number.parseInt(aString);

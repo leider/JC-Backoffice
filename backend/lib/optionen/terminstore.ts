@@ -1,8 +1,8 @@
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import partial from "lodash/partial";
-import Termin from "../../../shared/optionen/termin";
-import misc from "../../../shared/commons/misc";
+import Termin from "jc-shared/optionen/termin";
+import misc from "jc-shared/commons/misc";
 
 import pers from "../persistence/persistence";
 const persistence = pers("terminstore");

@@ -1,6 +1,6 @@
-import misc from "../../../shared/commons/misc";
+import misc from "jc-shared/commons/misc";
 import partial from "lodash/partial";
-import MailRule from "../../../shared/mail/mailRule";
+import MailRule from "jc-shared/mail/mailRule";
 
 import pers from "../persistence/persistence";
 const persistence = pers("mailstore");

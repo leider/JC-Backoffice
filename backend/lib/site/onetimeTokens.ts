@@ -1,9 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-
-export interface Payload {
-  url: string;
-  params?: any;
-}
+import { Payload } from "jc-shared/commons/misc";
 
 const onetimeTokens: { [key: string]: Payload } = {};
 

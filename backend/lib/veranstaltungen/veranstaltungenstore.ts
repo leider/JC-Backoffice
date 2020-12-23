@@ -1,10 +1,10 @@
 import partial from "lodash/partial";
 
-import misc from "../../../shared/commons/misc";
+import misc from "jc-shared/commons/misc";
 import winston from "winston";
 import pers from "../persistence/persistence";
-import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 const logger = winston.loggers.get("transactions");
 const persistence = pers("veranstaltungenstore");

@@ -8,7 +8,9 @@ type MailRuleUI = {
 };
 
 interface RuleLogic {
+  // eslint-disable-next-line no-unused-vars
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean;
+  // eslint-disable-next-line no-unused-vars
   startAndEndDay(datumUhrzeit: DatumUhrzeit): { start: DatumUhrzeit; end: DatumUhrzeit };
 }
 

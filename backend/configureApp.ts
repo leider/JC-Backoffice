@@ -4,7 +4,6 @@ import bodyparser from "body-parser";
 import loggers from "./initWinston";
 
 import cookieParser from "cookie-parser";
-import favicon from "serve-favicon";
 
 import restApp from "./rest";
 
@@ -36,7 +35,6 @@ function handle404(req: Request, res: Response): void {
 }
 
 export default function (app: express.Express) {
-  app.use(favicon(path.join(__dirname, "static/", "img/favicon.ico")));
   app.use(cookieParser());
   app.use(bodyparser.urlencoded({ extended: true }));
   app.use(bodyparser.json());

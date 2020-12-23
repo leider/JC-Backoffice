@@ -1,10 +1,10 @@
-import Kalender from "../../../shared/programmheft/kalender";
+import Kalender from "jc-shared/programmheft/kalender";
 import partial from "lodash/partial";
 
-import misc from "../../../shared/commons/misc";
+import misc from "jc-shared/commons/misc";
 
 import pers from "../persistence/persistence";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 const persistence = pers("kalenderstore");
 
 function toKalenderValues(callback: Function, id: string, err: Error | null, jsobject?: object): void {

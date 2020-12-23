@@ -1,11 +1,11 @@
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import conf from "../commons/simpleConfigure";
 import { NextFunction, Response } from "express";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import userstore from "../users/userstore";
-import User from "../../../shared/user/user";
+import User from "jc-shared/user/user";
 import { generatePdf, printoptions } from "./pdfCommons";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
