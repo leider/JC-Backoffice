@@ -2,6 +2,7 @@ import express from "express";
 
 import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 import Kalender from "../../shared/programmheft/kalender";
+import User from "../../shared/user/user";
 
 import store from "../lib/programmheft/kalenderstore";
 import { reply } from "../lib/commons/replies";
@@ -21,7 +22,7 @@ app.get("/programmheft/:year/:month", (req, res) => {
 });
 
 app.post("/programmheft", (req, res) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 

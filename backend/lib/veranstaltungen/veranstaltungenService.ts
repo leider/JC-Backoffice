@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const zipstream = require("zip-stream");
-import express, { NextFunction, Response } from "express";
+import { NextFunction, Response } from "express";
 import flatten from "lodash/flatten";
 import fs from "fs";
 import async from "async";
@@ -9,6 +9,7 @@ import path from "path";
 import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
 import Salesreport from "../../../shared/veranstaltung/salesreport";
 import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import User from "../../../shared/user/user";
 
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";
@@ -29,8 +30,8 @@ function getVeranstaltungMitReservix(url: string, callback: Function): void {
   });
 }
 
-function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res: express.Response): Veranstaltung[] {
-  if (res.locals.accessrights.isBookingTeam()) {
+function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user?: User): Veranstaltung[] {
+  if (user?.accessrights?.isBookingTeam) {
     return veranstaltungen;
   }
   return veranstaltungen.filter((v) => v.kopf.confirmed);

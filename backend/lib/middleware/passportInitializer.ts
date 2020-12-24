@@ -13,6 +13,7 @@ const appLogger = loggers.get("application");
 
 import store from "../users/userstore";
 import User from "../../../shared/user/user";
+import Accessrights from "../../../shared/user/accessrights";
 
 passport.use(
   new Strategy(jwtOptions, (jwtPayload: any, done: VerifiedCallback) => {
@@ -22,6 +23,7 @@ passport.use(
         appLogger.error(err?.message || "");
         return done(err);
       }
+      user.accessrights = new Accessrights(user);
       return done(null, user);
     });
   })

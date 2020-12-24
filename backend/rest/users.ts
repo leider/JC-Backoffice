@@ -23,7 +23,7 @@ app.get("/users", (req, res) => {
 
 app.post("/user/changePassword", (req, res) => {
   const user = new User(req.body);
-  if (!res.locals.accessrights.canEditUser(user.id)) {
+  if (!(req.user as User)?.accessrights?.canEditUser(user.id)) {
     return res.sendStatus(403);
   }
   service.changePassword(user, (err?: Error) => {
@@ -33,7 +33,7 @@ app.post("/user/changePassword", (req, res) => {
 
 app.post("/user", (req, res) => {
   const user = new User(req.body);
-  if (!res.locals.accessrights.canEditUser(user.id)) {
+  if (!(req.user as User)?.accessrights?.canEditUser(user.id)) {
     return res.sendStatus(403);
   }
   store.forId(user.id, (err?: Error, existingUser?: User) => {
@@ -50,7 +50,7 @@ app.post("/user", (req, res) => {
 
 app.put("/user", (req, res) => {
   const user = new User(req.body);
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   service.saveNewUserWithPassword(user, (err?: Error) => {
@@ -59,7 +59,7 @@ app.put("/user", (req, res) => {
 });
 
 app.delete("/user", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const user = new User(req.body);

@@ -12,6 +12,7 @@ import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
 import refreshstore from "../lib/site/refreshstore";
 import { addPayload } from "../lib/site/onetimeTokens";
+import User from "../../shared/user/user";
 const app = express();
 
 app.use("/", calendarApp);
@@ -39,7 +40,7 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/imagenames", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     res.sendStatus(403);
     return;
   }
@@ -47,7 +48,7 @@ app.get("/imagenames", (req, res) => {
 });
 
 app.post("/imagenames", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
 
@@ -62,7 +63,7 @@ app.post("/imagenames", (req, res) => {
 });
 
 app.post("/onetimeToken", (req, res) => {
-  if (!res.locals.accessrights.isAbendkasse()) {
+  if (!(req.user as User)?.accessrights?.isAbendkasse) {
     return res.sendStatus(401);
   }
   const token = addPayload(req.body);

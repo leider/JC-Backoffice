@@ -12,7 +12,6 @@ import restApp from "./rest";
 import siteApp from "./lib/site";
 
 import passportInitializer from "./lib/middleware/passportInitializer";
-import accessrights from "./lib/middleware/accessrights";
 
 const httpLogger = loggers.get("http");
 
@@ -36,11 +35,10 @@ export default function (app: express.Express): void {
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(passportInitializer);
-  app.use(accessrights);
   app.use(secureAgainstClickjacking);
   app.use("/", siteApp);
 
   const authenticator = passport.authenticate("jwt", { session: false });
-  app.use("/rest/", authenticator, accessrights, restApp);
+  app.use("/rest/", authenticator, restApp);
   //app.use(handle404);
 }

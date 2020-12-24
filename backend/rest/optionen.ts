@@ -4,6 +4,7 @@ import OptionValues from "../../shared/optionen/optionValues";
 import Orte from "../../shared/optionen/orte";
 import FerienIcals from "../../shared/optionen/ferienIcals";
 import Termin from "../../shared/optionen/termin";
+import User from "../../shared/user/user";
 
 import store from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
@@ -12,7 +13,7 @@ import { reply } from "../lib/commons/replies";
 const app = express();
 
 app.get("/optionen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 
@@ -22,7 +23,7 @@ app.get("/optionen", (req: Request, res: Response) => {
 });
 
 app.post("/optionen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const optionen = new OptionValues(req.body);
@@ -32,7 +33,7 @@ app.post("/optionen", (req: Request, res: Response) => {
 });
 
 app.get("/orte", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 
@@ -42,7 +43,7 @@ app.get("/orte", (req: Request, res: Response) => {
 });
 
 app.post("/orte", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const orte = new Orte(req.body);
@@ -52,7 +53,7 @@ app.post("/orte", (req: Request, res: Response) => {
 });
 
 app.get("/kalender", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 
@@ -62,7 +63,7 @@ app.get("/kalender", (req: Request, res: Response) => {
 });
 
 app.post("/kalender", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const ical = new FerienIcals(req.body);
@@ -78,7 +79,7 @@ app.get("/termine", (req, res) => {
 });
 
 app.post("/termin", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const termin = new Termin(req.body);
@@ -89,7 +90,7 @@ app.post("/termin", (req: Request, res: Response) => {
 });
 
 app.delete("/termin", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const id = req.body.id;

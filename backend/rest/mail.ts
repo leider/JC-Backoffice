@@ -13,7 +13,7 @@ import store from "../lib/users/userstore";
 const app = express();
 
 app.get("/mailrule", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   return mailstore.all((err?: Error, rules?: MailRule[]) => {
@@ -23,7 +23,7 @@ app.get("/mailrule", (req, res) => {
 });
 
 app.post("/mailrule", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const ruleToSave = new MailRule(req.body);
@@ -33,7 +33,7 @@ app.post("/mailrule", (req, res) => {
 });
 
 app.delete("/mailrule", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   mailstore.removeById(req.body.id, (err1?: Error) => {
@@ -44,7 +44,7 @@ app.delete("/mailrule", (req, res) => {
 // Mailinglisten und Senden
 
 app.post("/rundmail", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const message = Message.fromJSON(req.body);
@@ -54,7 +54,7 @@ app.post("/rundmail", (req, res) => {
 });
 
 app.delete("/mailingliste", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const listname = req.body.name;
@@ -70,7 +70,7 @@ app.delete("/mailingliste", (req, res) => {
 });
 
 app.post("/mailingliste", (req, res) => {
-  if (!res.locals.accessrights.isSuperuser()) {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const list = new Mailingliste(req.body.name, req.body.users, req.body.originalName);

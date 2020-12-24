@@ -15,9 +15,9 @@ import store from "../lib/veranstaltungen/veranstaltungenstore";
 
 const app = express();
 
-function standardCallback(res: express.Response): Function {
+function standardCallback(res: Response, user?: User): Function {
   return (err: Error, veranstaltungen: Veranstaltung[]) => {
-    const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, res).map((v) => v.toJSON());
+    const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user).map((v) => v.toJSON());
     reply(res, err, result);
   };
 }
@@ -29,21 +29,21 @@ function saveAndReply(res: Response, veranstaltung: Veranstaltung) {
 }
 
 app.get("/veranstaltungen/vergangene", (req, res) => {
-  store.vergangene(standardCallback(res));
+  store.vergangene(standardCallback(res, req.user as User));
 });
 
 app.get("/veranstaltungen/zukuenftige", (req, res) => {
-  store.zukuenftigeMitGestern(standardCallback(res));
+  store.zukuenftigeMitGestern(standardCallback(res, req.user as User));
 });
 
 app.get("/veranstaltungen/alle", (req, res) => {
-  store.alle(standardCallback(res));
+  store.alle(standardCallback(res, req.user as User));
 });
 
 app.get("/veranstaltungen/:startYYYYMM/:endYYYYMM", (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
-  store.byDateRangeInAscendingOrder(start, end, standardCallback(res));
+  store.byDateRangeInAscendingOrder(start, end, standardCallback(res, req.user as User));
 });
 
 app.get("/veranstaltungen/:url", (req: Request, res: Response) => {
@@ -57,10 +57,10 @@ app.get("/veranstaltungen/:url", (req: Request, res: Response) => {
 });
 
 app.post("/veranstaltungen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isAbendkasse()) {
+  if (!(req.user as User)?.accessrights?.isAbendkasse) {
     return res.sendStatus(403);
   }
-  if (res.locals.accessrights.isOrgaTeam()) {
+  if ((req.user as User)?.accessrights?.isOrgaTeam) {
     saveAndReply(res, new Veranstaltung(req.body));
   } else {
     // Nur Kasse erlaubt
@@ -79,7 +79,7 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
 });
 
 app.delete("/veranstaltungen", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   store.deleteVeranstaltungById(req.body.id, (err?: Error) => {
@@ -106,7 +106,7 @@ app.post("/veranstaltungen/:url/removeUserFromSection", (req: Request, res: Resp
 });
 
 app.post("/upload", (req: Request, res: Response) => {
-  if (!res.locals.accessrights.isOrgaTeam()) {
+  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const uploadDir = path.join(__dirname, "../static/upload");
