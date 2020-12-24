@@ -1,7 +1,8 @@
 import express, { Response } from "express";
+import { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
+
 import service from "../lib/veranstaltungen/imageService";
 import { reply } from "../lib/commons/replies";
-import { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
 import calendarApp from "./calendar";
 import mailsenderApp from "./mail";
 import optionenApp from "./optionen";
@@ -9,7 +10,7 @@ import programmheftApp from "./programmheft";
 import usersApp from "./users";
 import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
-import refreshstore, { RefreshToken } from "../lib/site/refreshstore";
+import refreshstore from "../lib/site/refreshstore";
 import { addPayload } from "../lib/site/onetimeTokens";
 const app = express();
 
@@ -45,7 +46,7 @@ app.get("/imagenames", (req, res) => {
   allImageNames(res);
 });
 
-app.post("/imagenames", (req, res, next) => {
+app.post("/imagenames", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.sendStatus(403);
   }

@@ -1,17 +1,18 @@
 import express from "express";
 
+import User from "../../shared/user/user";
+import { Mailingliste } from "../../shared/user/users";
+import Message from "../../shared/mail/message";
+
 import mailstore from "../lib/mailsender/mailstore";
 import MailRule from "../../shared/mail/mailRule";
 import { reply } from "../lib/commons/replies";
-import Message from "../../shared/mail/message";
 import mailtransport from "../lib/mailsender/mailtransport";
 import store from "../lib/users/userstore";
-import User from "../../shared/user/user";
-import { Mailingliste } from "../../shared/user/users";
 
 const app = express();
 
-app.get("/mailrule", (req, res, next) => {
+app.get("/mailrule", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.sendStatus(403);
   }
@@ -21,7 +22,7 @@ app.get("/mailrule", (req, res, next) => {
   });
 });
 
-app.post("/mailrule", (req, res, next) => {
+app.post("/mailrule", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.sendStatus(403);
   }
@@ -31,7 +32,7 @@ app.post("/mailrule", (req, res, next) => {
   });
 });
 
-app.delete("/mailrule", (req, res, next) => {
+app.delete("/mailrule", (req, res) => {
   if (!res.locals.accessrights.isSuperuser()) {
     return res.sendStatus(403);
   }

@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["esnext"],
-    "types": ["node"]
+    "types": ["node", "mocha"]
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

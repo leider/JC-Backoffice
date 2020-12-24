@@ -1,6 +1,6 @@
 import conf from "../commons/simpleConfigure";
-import { NextFunction, Request, Response } from "express";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { NextFunction, Response } from "express";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
 import { generatePdf, printoptions } from "./pdfCommons";
 
@@ -55,7 +55,7 @@ function gemaResult(
   });
 }
 
-export function gemameldung(res: Response, next: NextFunction, transferObject: any) {
+export function gemameldung(res: Response, next: NextFunction, transferObject: any): void {
   const event = transferObject.selectedIds;
   const dateiart = transferObject.renderart;
   const vorNach = transferObject.vorNach;

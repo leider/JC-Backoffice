@@ -44,11 +44,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kalender, { Event } from "jc-shared/programmheft/kalender";
+import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
+import Kalender, { Event } from "../../../../shared/programmheft/kalender";
 import groupBy from "lodash/groupBy";
 import Marked from "marked";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "../../commons/loader";
 import HeftCalendar from "../calendar/HeftCalendar.vue";
 import Markdown from "../../widgets/Markdown.vue";

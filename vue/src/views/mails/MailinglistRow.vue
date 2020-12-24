@@ -14,9 +14,9 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "jc-shared/user/user";
+import User from "../../../../shared/user/user";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import { Mailingliste } from "jc-shared/user/users";
+import { Mailingliste } from "../../../../shared/user/users";
 import { saveMailinglist } from "../../commons/loader";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 

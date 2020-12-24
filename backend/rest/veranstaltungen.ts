@@ -1,16 +1,17 @@
 import express, { Request, Response } from "express";
-
-import { reply } from "../lib/commons/replies";
-import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
-import store from "../lib/veranstaltungen/veranstaltungenstore";
-import Kasse from "../../shared/veranstaltung/kasse";
-import User from "../../shared/user/user";
 import { Form } from "multiparty";
 import fs from "fs";
 import path from "path";
 import async from "async";
+
+import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import Kasse from "../../shared/veranstaltung/kasse";
+import User from "../../shared/user/user";
+
+import { reply } from "../lib/commons/replies";
+import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
+import store from "../lib/veranstaltungen/veranstaltungenstore";
 
 const app = express();
 
@@ -111,6 +112,7 @@ app.post("/upload", (req: Request, res: Response) => {
   const uploadDir = path.join(__dirname, "../static/upload");
   const filesDir = path.join(__dirname, "../static/files");
 
+  // eslint-disable-next-line no-unused-vars
   function copyFile(src: string, dest: string, callback: (err: Error) => void): void {
     const readStream = fs.createReadStream(src);
     readStream.once("error", callback);

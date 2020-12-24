@@ -1,9 +1,8 @@
-import childProcess from "child_process";
-
-import conf from "../commons/simpleConfigure";
-const workTree = conf.get("wikipath");
+import { ExecException } from "child_process";
 
 import gitExec from "./gitExec";
+import conf from "../commons/simpleConfigure";
+const workTree = conf.get("wikipath");
 
 function dataToLines(data?: string): string[] {
   return data ? data.split("\n").filter((v) => v !== "") : [];
@@ -18,7 +17,8 @@ function commit(
   path: string,
   message: string,
   author: string,
-  callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
+  // eslint-disable-next-line no-unused-vars
+  callback: (error: ExecException | null, stdout: string, stderr: string) => void
 ): void {
   gitExec.command(["commit", "--author=" + esc(author), "-m", esc(message), esc(path)], callback);
 }
@@ -31,7 +31,8 @@ export default {
   readFile: function readFile(
     path: string,
     version: string,
-    callback: ((error: import("child_process").ExecException | null, stdout: string, stderr: string) => void) | undefined
+    // eslint-disable-next-line no-unused-vars
+    callback: ((error: ExecException | null, stdout: string, stderr: string) => void) | undefined
   ): void {
     gitExec.command(["show", version + ":" + esc(path)], callback);
   },
@@ -40,7 +41,8 @@ export default {
     path: string,
     message: string,
     author: string,
-    callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
+    // eslint-disable-next-line no-unused-vars
+    callback: (error: ExecException | null, stdout: string, stderr: string) => void
   ): void {
     gitExec.command(["add", esc(path)], (err: Error | null) => {
       if (err) {
@@ -54,7 +56,8 @@ export default {
     path: string,
     message: string,
     author: string,
-    callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
+    // eslint-disable-next-line no-unused-vars
+    callback: (error: ExecException | null, stdout: string, stderr: string) => void
   ): void {
     gitExec.command(["rm", esc(path)], (err: Error | null) => {
       if (err) {

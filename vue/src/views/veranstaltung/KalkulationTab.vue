@@ -82,13 +82,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import OptionValues from "jc-shared/optionen/optionValues";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
+import OptionValues from "../../../../shared/optionen/optionValues";
+import Salesreport from "../../../../shared/veranstaltung/salesreport";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import Eintrittspreise from "../../../../shared/veranstaltung/eintrittspreise";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import Kasse from "jc-shared/veranstaltung/kasse";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kasse from "../../../../shared/veranstaltung/kasse";
+import Kosten from "../../../../shared/veranstaltung/kosten";
 import JazzText from "../../widgets/JazzText.vue";
 import { formatToGermanNumberString } from "../../commons/utilityFunctions";
 import LabelCurrencyRow from "./LabelCurrencyRow.vue";

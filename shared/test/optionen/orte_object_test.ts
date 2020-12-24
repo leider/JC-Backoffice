@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import Orte from "jc-shared/optionen/orte";
+import Orte from "../../optionen/orte";
 
 const emptyOrte = { orte: [] };
 

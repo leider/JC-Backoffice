@@ -12,7 +12,7 @@ import { loggers } from "winston";
 const appLogger = loggers.get("application");
 
 import store from "../users/userstore";
-import User from "jc-shared/user/user";
+import User from "../../../shared/user/user";
 
 passport.use(
   new Strategy(jwtOptions, (jwtPayload: any, done: VerifiedCallback) => {

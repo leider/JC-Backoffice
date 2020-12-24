@@ -31,9 +31,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Renderer from "jc-shared/commons/renderer";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Renderer from "../../../../shared/commons/renderer";
+import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import { openPayload, veranstaltungenBetween } from "../../commons/loader";
 
 @Component

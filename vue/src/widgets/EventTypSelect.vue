@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Multiselect from "vue-multiselect";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import fieldHelpers from "../../../shared/commons/fieldHelpers";
 import JazzLabel from "./JazzLabel.vue";
 
 @Component({ components: { JazzLabel, Multiselect } })

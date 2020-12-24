@@ -1,21 +1,23 @@
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import conf from "../commons/simpleConfigure";
 import { NextFunction, Response } from "express";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import User from "../../../shared/user/user";
+
+import conf from "../commons/simpleConfigure";
 import store from "../veranstaltungen/veranstaltungenstore";
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import userstore from "../users/userstore";
-import User from "jc-shared/user/user";
 import { generatePdf, printoptions } from "./pdfCommons";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
-export function kassenbericht(res: Response, next: NextFunction, datum: DatumUhrzeit) {
+export function kassenbericht(res: Response, next: NextFunction, datum: DatumUhrzeit): void {
   const now = new DatumUhrzeit();
   return res.render("kassenbericht", { datum, now, publicUrlPrefix }, generatePdf(printoptions, res, next));
 }
 
-export function vertrag(res: Response, next: NextFunction, veranstaltungUrl: string, language: string) {
+export function vertrag(res: Response, next: NextFunction, veranstaltungUrl: string, language: string): void {
   return store.getVeranstaltung(veranstaltungUrl, (err: Error | null, veranstaltung?: Veranstaltung) => {
     if (err) {
       return next(err);
@@ -33,7 +35,7 @@ export function vertrag(res: Response, next: NextFunction, veranstaltungUrl: str
   });
 }
 
-export function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl: string) {
+export function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl: string): void {
   veranstaltungenService.getVeranstaltungMitReservix(veranstaltungUrl, (err?: Error, veranstaltung?: Veranstaltung) => {
     if (err) {
       return next(err);

@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import MailRule from "jc-shared/mail/mailRule";
+import MailRule from "../../../../shared/mail/mailRule";
 import MailRuleRow from "./MailRuleRow.vue";
 import { deleteMailRule, mailRules } from "../../commons/loader";
 

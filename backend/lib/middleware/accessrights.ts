@@ -1,6 +1,8 @@
+// TODO replace with direct user.accessrights
+
 import express from "express";
-import User from "jc-shared/user/user";
-import Accessrights from "jc-shared/user/accessrights";
+import User from "../../../shared/user/user";
+import Accessrights from "../../../shared/user/accessrights";
 
 export default function accessrights(req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.accessrights = {

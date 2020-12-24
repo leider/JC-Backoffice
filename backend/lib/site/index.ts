@@ -1,21 +1,22 @@
-/* eslint no-underscore-dangle: 0 */
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import sharp from "sharp";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
+import jwt from "jsonwebtoken";
+import { loggers } from "winston";
+import { v4 as uuidv4 } from "uuid";
 import { Builder, Calendar } from "ikalendar";
+
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import User from "../../../shared/user/user";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+
+import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import store from "../veranstaltungen/veranstaltungenstore";
-import User from "jc-shared/user/user";
 import { reply } from "../commons/replies";
 import userstore from "../users/userstore";
-import jwt from "jsonwebtoken";
 import { hashPassword } from "../commons/hashPassword";
-import { loggers } from "winston";
 import conf from "../commons/simpleConfigure";
-import { v4 as uuidv4 } from "uuid";
 import refreshstore, { RefreshToken } from "./refreshstore";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { getPayload } from "./onetimeTokens";
 import { gemameldung } from "./gemaMeldungGeneration";
 import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration";

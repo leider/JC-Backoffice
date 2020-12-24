@@ -70,12 +70,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import OptionValues, { Hotelpreise } from "jc-shared/optionen/optionValues";
-import User from "jc-shared/user/user";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import OptionValues, { Hotelpreise } from "../../../../shared/optionen/optionValues";
+import User from "../../../../shared/user/user";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import Unterkunft from "jc-shared/veranstaltung/unterkunft";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Unterkunft from "../../../../shared/veranstaltung/unterkunft";
+import Kosten from "../../../../shared/veranstaltung/kosten";
 import JazzText from "../../widgets/JazzText.vue";
 import LabelCurrencyRow from "./LabelCurrencyRow.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";

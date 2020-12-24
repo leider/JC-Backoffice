@@ -87,13 +87,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
-import User from "jc-shared/user/user";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import fieldHelpers from "../../../../shared/commons/fieldHelpers";
+import User from "../../../../shared/user/user";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import { deleteVeranstaltungWithId, saveVeranstaltung } from "@/commons/loader";
 import StaffRowAdmin from "./StaffRowAdmin.vue";
-import Staff from "jc-shared/veranstaltung/staff";
-import Kopf from "jc-shared/veranstaltung/kopf";
+import Staff from "../../../../shared/veranstaltung/staff";
+import Kopf from "../../../../shared/veranstaltung/kopf";
 import CheckedButton from "./CheckedButton.vue";
 
 @Component({ components: { StaffRowAdmin, CheckedButton } })

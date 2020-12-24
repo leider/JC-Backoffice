@@ -100,19 +100,19 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import OptionValues from "jc-shared/optionen/optionValues";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Orte from "jc-shared/optionen/orte";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import Artist from "jc-shared/veranstaltung/artist";
+import OptionValues from "../../../../shared/optionen/optionValues";
+import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
+import Orte from "../../../../shared/optionen/orte";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import Artist from "../../../../shared/veranstaltung/artist";
 import MultiSelect from "../../widgets/MultiSelect.vue";
 import { openPayload, uploadFile } from "../../commons/loader";
 import EventTypSelect from "../../widgets/EventTypSelect.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kosten from "../../../../shared/veranstaltung/kosten";
 import JazzInterval from "./JazzInterval.vue";
 import JazzText from "../../widgets/JazzText.vue";
-import Vertrag, { Sprache, Vertragsart } from "jc-shared/veranstaltung/vertrag";
+import Vertrag, { Sprache, Vertragsart } from "../../../../shared/veranstaltung/vertrag";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import KontaktCard from "./KontaktCard.vue";
@@ -122,7 +122,7 @@ import PreisSelect from "./PreisSelect.vue";
 import KoopSelect from "./KoopSelect.vue";
 import SingleSelect from "../../widgets/SingleSelect.vue";
 import JazzCheck from "../../widgets/JazzCheck.vue";
-import Kopf from "jc-shared/veranstaltung/kopf";
+import Kopf from "../../../../shared/veranstaltung/kopf";
 import { EditVariables } from "./VeranstaltungView.vue";
 import Markdown from "../../widgets/Markdown.vue";
 

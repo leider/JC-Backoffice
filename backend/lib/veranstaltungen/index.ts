@@ -1,9 +1,12 @@
 import express from "express";
 
+import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+
 import store from "./veranstaltungenstore";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
 const app = express();
+
+// this file is currently unused
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 

@@ -1,8 +1,8 @@
 import fs from "fs";
+import path from "path";
+import { ExecException } from "child_process";
 
 import Git from "./gitmech";
-import path from "path";
-import childProcess from "child_process";
 
 export default {
   BLOG_ENTRY_FILE_PATTERN: "blog_*",
@@ -10,7 +10,8 @@ export default {
   showPage: function showPage(
     completePageName: string,
     pageVersion: string,
-    callback: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
+    // eslint-disable-next-line no-unused-vars
+    callback: (error: ExecException | null, stdout: string, stderr: string) => void
   ): void {
     Git.readFile(completePageName + ".md", pageVersion, callback);
   },

@@ -17,7 +17,7 @@ tr
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { saveTermin } from "../../commons/loader";
-import Termin from "jc-shared/optionen/termin";
+import Termin from "../../../../shared/optionen/termin";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import JazzDatePure from "../../widgets/JazzDatePure.vue";

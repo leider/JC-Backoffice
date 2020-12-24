@@ -55,11 +55,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
-import User from "jc-shared/user/user";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import Staff from "jc-shared/veranstaltung/staff";
-import Kopf from "jc-shared/veranstaltung/kopf";
+import fieldHelpers from "../../../../shared/commons/fieldHelpers";
+import User from "../../../../shared/user/user";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import Staff from "../../../../shared/veranstaltung/staff";
+import Kopf from "../../../../shared/veranstaltung/kopf";
 import StaffRow from "./StaffRow.vue";
 
 @Component({ components: { StaffRow } })

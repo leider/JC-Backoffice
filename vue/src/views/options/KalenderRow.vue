@@ -9,7 +9,7 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Ical } from "jc-shared/optionen/ferienIcals";
+import { Ical } from "../../../../shared/optionen/ferienIcals";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import JazzDatePure from "../../widgets/JazzDatePure.vue";

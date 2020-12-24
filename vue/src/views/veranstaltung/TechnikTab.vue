@@ -41,14 +41,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import OptionValues from "jc-shared/optionen/optionValues";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import MultiSelect from "../../widgets/MultiSelect.vue";
-import { uploadFile } from "../../commons/loader";
-import Technik from "jc-shared/veranstaltung/technik";
+import OptionValues from "../../../../shared/optionen/optionValues";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import MultiSelect from "@/widgets/MultiSelect.vue";
+import { uploadFile } from "@/commons/loader";
+import Technik from "../../../../shared/veranstaltung/technik";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import JazzCheck from "../../widgets/JazzCheck.vue";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kosten from "../../../../shared/veranstaltung/kosten";
 import JazzText from "../../widgets/JazzText.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import LegendCard from "../../widgets/LegendCard.vue";

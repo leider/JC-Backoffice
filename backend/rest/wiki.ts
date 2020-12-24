@@ -1,9 +1,10 @@
 import express from "express";
 
-import wikiService from "../lib/wiki/wikiService";
 import User from "../../shared/user/user";
-import { reply } from "../lib/commons/replies";
 import misc from "../../shared/commons/misc";
+
+import wikiService from "../lib/wiki/wikiService";
+import { reply } from "../lib/commons/replies";
 import Git from "../lib/wiki/gitmech";
 const app = express();
 
@@ -25,14 +26,14 @@ app.get("/wikipage/:subdir/:page", (req, res) => {
   });
 });
 
-app.post("/wikipage/search", (req, res, next) => {
+app.post("/wikipage/search", (req, res) => {
   const searchtext = req.body.suchtext;
   return wikiService.search(searchtext, (err: Error | null, matches: { pageName: string; line: string; text: string }[]) => {
     reply(res, err, { searchtext, matches });
   });
 });
 
-app.delete("/wikipage/:subdir/:page", (req, res, next) => {
+app.delete("/wikipage/:subdir/:page", (req, res) => {
   const pageName = misc.normalizeString(req.params.page);
   return wikiService.pageDelete(req.params.subdir, pageName, (req.user as User).asGitAuthor, (err: Error | null) => {
     reply(res, err);

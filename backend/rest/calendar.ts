@@ -3,14 +3,15 @@ import express, { Response } from "express";
 import superagent from "superagent";
 import flatMap from "lodash/flatMap";
 import { ComplexDate, Parser } from "ikalendar";
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 
-import store from "../lib/veranstaltungen/veranstaltungenstore";
-import optionenstore from "../lib/optionen/optionenstore";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
 import FerienIcals, { Ical } from "../../shared/optionen/ferienIcals";
 import Termin, { TerminEvent } from "../../shared/optionen/termin";
 import fieldHelpers from "../../shared/commons/fieldHelpers";
+
+import store from "../lib/veranstaltungen/veranstaltungenstore";
+import optionenstore from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
 import { reply } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
@@ -53,11 +54,11 @@ function termineForIcal(ical: Ical, callback: Function): void {
     return toIsoString((event as ComplexDate).value);
   }
 
-  superagent.get(ical.url, (err: any, resp: superagent.Response) => {
+  superagent.get(ical.url, (err?: Error, resp?: superagent.Response) => {
     if (err) {
       return callback(err);
     }
-    const parsed = new Parser().parse(resp.text);
+    const parsed = new Parser().parse(resp?.text || "");
     const eventArray: TerminEvent[] =
       parsed.events?.map((event) => ({
         color: ical.color,

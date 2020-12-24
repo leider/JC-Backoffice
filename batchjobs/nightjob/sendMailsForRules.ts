@@ -1,15 +1,15 @@
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-
 import async from "async";
 import { loggers } from "winston";
 const logger = loggers.get("application");
 
-import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
-import mailstore from "../../backend/lib/mailsender/mailstore";
+import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 import Message from "../../shared/mail/message";
-import mailtransport from "../../backend/lib/mailsender/mailtransport";
 import MailRule from "../../shared/mail/mailRule";
 import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
+
+import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
+import mailstore from "../../backend/lib/mailsender/mailstore";
+import mailtransport from "../../backend/lib/mailsender/mailtransport";
 import conf from "../../backend/lib/commons/simpleConfigure";
 
 export function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function): void {

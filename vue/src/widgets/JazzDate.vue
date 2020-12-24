@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
 import JazzLabel from "./JazzLabel.vue";
 
 @Component({ components: { JazzLabel } })

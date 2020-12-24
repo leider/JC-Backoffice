@@ -16,9 +16,9 @@ legend-card(:section="section", :title="title")
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import JazzMail from "../../widgets/JazzMail.vue";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import SingleSelect from "../../widgets/SingleSelect.vue";
-import Kontakt from "jc-shared/veranstaltung/kontakt";
+import Kontakt from "../../../../shared/veranstaltung/kontakt";
 import JazzText from "../../widgets/JazzText.vue";
 import { EditVariables } from "./VeranstaltungView.vue";
 import JazzTextarea from "../../widgets/JazzTextarea.vue";

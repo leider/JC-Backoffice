@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
-import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import MailRule, { allMailrules } from "../../mail/mailRule";
+import DatumUhrzeit from "../../commons/DatumUhrzeit";
 
 describe("MailRule", () => {
   const jan5 = DatumUhrzeit.forISOString("2018-01-05");

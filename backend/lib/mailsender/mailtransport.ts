@@ -1,16 +1,17 @@
+import nodemailer from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
 import winston from "winston";
-
 const logger = winston.loggers.get("application");
+
+import Message from "../../../shared/mail/message";
+
 import conf from "../commons/simpleConfigure";
 const doNotSendMails = conf.get("doNotSendMails") || false;
-
-import nodemailer from "nodemailer";
-const transport = nodemailer.createTransport(conf.get("transport-options") as object);
-import Mail from "nodemailer/lib/mailer";
-
 import MailBodyRenderer from "./mailbodyRenderer";
-import Message from "jc-shared/mail/message";
 
+const transport = nodemailer.createTransport(conf.get("transport-options") as object);
+
+// exported for testing
 export function toTransportObject(message: Message): Mail.Options {
   const mbRenderer = new MailBodyRenderer(message.markdown);
 

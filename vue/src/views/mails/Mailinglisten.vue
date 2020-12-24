@@ -28,8 +28,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import User from "jc-shared/user/user";
-import Users, { Mailingliste } from "jc-shared/user/users";
+import User from "../../../../shared/user/user";
+import Users, { Mailingliste } from "../../../../shared/user/users";
 import { allUsers, deleteMailinglist } from "../../commons/loader";
 import MailinglistRow from "./MailinglistRow.vue";
 

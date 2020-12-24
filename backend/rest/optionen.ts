@@ -1,9 +1,11 @@
-import store from "../lib/optionen/optionenstore";
+import express, { Request, Response } from "express";
+
 import OptionValues from "../../shared/optionen/optionValues";
 import Orte from "../../shared/optionen/orte";
 import FerienIcals from "../../shared/optionen/ferienIcals";
-import express, { Request, Response } from "express";
 import Termin from "../../shared/optionen/termin";
+
+import store from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
 import { reply } from "../lib/commons/replies";
 

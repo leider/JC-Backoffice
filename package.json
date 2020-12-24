@@ -1,0 +1,26 @@
+{
+  "name": "jazzclub-backoffice",
+  "description": "The back office for Jazzclub Karlsruhe",
+  "version": "1.0.0",
+  "author": "Andreas Leidig",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leider/JC-Backoffice"
+  },
+  "license": "(MIT OR Apache-2.0)",
+  "main": "",
+  "engines": {
+    "node": ">=8.0"
+  },
+  "scripts": {
+    "compile": "cd backend && npm run deploy && cd ../batchjobs && npm run tsc && cd ../shared && npm run tsc",
+    "deploy": "npm run compile && cd vue && npm run build",
+    "clean-ts": "cd backend && npm run clean-ts && cd ../batchjobs && npm run clean-ts && cd ../shared && npm run clean-ts",
+    "develop": "npm run clean-ts && npm run compile && cd vue && npm run serve",
+    "start": "cd backend && node --icu-data-dir=node_modules/full-icu start",
+    "test": "cd batchjobs && npm t && cd ../shared && npm t",
+    "clean-all-modules": "rm -rf backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules",
+    "install-all-modules": "cd backend && npm i && cd ../batchjobs && npm i && cd ../shared && npm i && cd ../vue && npm i",
+    "ci-all-modules": "cd backend && npm ci && cd ../batchjobs && npm ci && cd ../shared && npm ci && cd ../vue && npm ci"
+  }
+}

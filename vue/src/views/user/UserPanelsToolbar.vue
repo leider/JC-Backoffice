@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "jc-shared/user/user";
+import User from "../../../../shared/user/user";
 import JazzMail from "../../widgets/JazzMail.vue";
 import SingleSelect from "../../widgets/SingleSelect.vue";
 import JazzCheck from "../../widgets/JazzCheck.vue";

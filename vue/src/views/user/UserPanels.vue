@@ -8,7 +8,7 @@ div
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "jc-shared/user/user";
+import User from "../../../../shared/user/user";
 import UserPanel from "./UserPanel.vue";
 import UserPanelsToolbar from "./UserPanelsToolbar.vue";
 

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kosten from "../../veranstaltung/kosten";
 
 describe("Kosten", () => {
   it('funktioniert auf allen Methoden auch mit "null" values', () => {

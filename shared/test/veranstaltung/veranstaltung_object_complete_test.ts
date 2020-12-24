@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Sprache, Vertragsart } from "jc-shared/veranstaltung/vertrag";
+import Veranstaltung from "../../veranstaltung/veranstaltung";
+import { Sprache, Vertragsart } from "../../veranstaltung/vertrag";
 
 const demo = {
   id: "Peterchen",

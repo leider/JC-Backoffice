@@ -1,16 +1,17 @@
-import store from "./veranstaltungenstore";
-import { salesreportFor } from "../reservix/reservixService";
-import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const zipstream = require("zip-stream");
 import express, { NextFunction, Response } from "express";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import flatten from "lodash/flatten";
 import fs from "fs";
 import async from "async";
 import path from "path";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const zipstream = require("zip-stream");
+import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
+import Salesreport from "../../../shared/veranstaltung/salesreport";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+
+import store from "./veranstaltungenstore";
+import { salesreportFor } from "../reservix/reservixService";
 const uploadDir = path.join(__dirname, "../../static/upload");
 
 function getVeranstaltungMitReservix(url: string, callback: Function): void {
@@ -35,7 +36,7 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], res:
   return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
-function imgzip<ResBody>(res: Response, next: NextFunction, yymm: string) {
+function imgzip(res: Response, next: NextFunction, yymm: string): void {
   const start = DatumUhrzeit.forYYMM(yymm);
   const end = start.plus({ monate: 1 });
   store.byDateRangeInAscendingOrder(start, end, (err: Error | null, result: Veranstaltung[]) => {

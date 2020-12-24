@@ -15,10 +15,8 @@
     "connect-history-api-fallback": "1.6.0",
     "cookie-parser": "1.4.5",
     "express": "4.17.1",
-    "full-icu": "1.3.1",
     "glob": "7.1.6",
     "ikalendar": "1.1.0",
-    "jc-shared": "file:../shared",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.20",
     "mongodb": "3.6.3",
@@ -70,8 +68,9 @@
     "typescript": "4.1.3"
   },
   "scripts": {
+    "deploy": "grunt && npm run tsc",
     "tsc": "./node_modules/typescript/bin/tsc",
     "eslint": "eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm lib/**/*.js configure.js configureApp.js initWinston.js reservixLoad.js start.js"
+    "clean-ts": "rm -f lib/**/*.js configure.js configureApp.js initWinston.js reservixLoad.js start.js"
   }
 }

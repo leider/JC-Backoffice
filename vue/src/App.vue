@@ -59,7 +59,7 @@ div
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import User from "jc-shared/user/user";
+import User from "../../shared/user/user";
 import { currentUser, wikisubdirs, globals, logout } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 

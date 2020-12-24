@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import JazzLabel from "../../widgets/JazzLabel.vue";
-import Kopf from "jc-shared/veranstaltung/kopf";
+import Kopf from "../../../../shared/veranstaltung/kopf";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 
 @Component({ components: { SingleSelectPure, JazzLabel } })

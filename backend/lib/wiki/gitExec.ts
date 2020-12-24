@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
-
 import childProcess from "child_process";
+
 import conf from "../commons/simpleConfigure";
 let workTree = conf.get("wikipath") as string;
 
@@ -34,7 +34,8 @@ if (workTree) {
 
 function gitExec(
   commands: string[],
-  callback: ((error: childProcess.ExecException | null, stdout: string, stderr: string) => void) | undefined
+  // eslint-disable-next-line no-unused-vars
+  callback?: (error: childProcess.ExecException | null, stdout: string, stderr: string) => void
 ): void {
   childProcess.exec("git " + gitCommands.concat(commands).join(" "), { cwd: workTree }, callback);
 }

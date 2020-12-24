@@ -1,15 +1,15 @@
 import "../../backend/configure";
 import "../../backend/initWinston";
+
 import async from "async";
 import partial from "lodash/partial";
 
 import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
+import Message from "../../shared/mail/message";
+import User from "../../shared/user/user";
 
 import userstore from "../../backend/lib/users/userstore";
-
-import Message from "../../shared/mail/message";
 import mailtransport from "../../backend/lib/mailsender/mailtransport";
-import User from "../../shared/user/user";
 
 const receiver = "leider";
 import sendMailsNightly from "./sendMailsNightly";

@@ -1,8 +1,9 @@
 import express from "express";
 
+import User from "../../shared/user/user";
+
 import service from "../lib/users/usersService";
 import store from "../lib/users/userstore";
-import User from "../../shared/user/user";
 import { reply } from "../lib/commons/replies";
 
 const app = express();

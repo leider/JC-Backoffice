@@ -1,8 +1,8 @@
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import Salesreport from "../../../shared/veranstaltung/salesreport";
 
 import reservixstore from "./reservixstore";
 import { loadSalesreports, Lineobject } from "./htmlbridge";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 function updateSalesreports(callback: Function): void {
   loadSalesreports(null, (err: Error | null, results: Lineobject[]) => {

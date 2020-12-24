@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Preisprofil } from "jc-shared/optionen/optionValues";
+import { Preisprofil } from "../../../../shared/optionen/optionValues";
 import Multiselect from "vue-multiselect";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 

@@ -1,9 +1,9 @@
 import express from "express";
 
-import store from "../lib/programmheft/kalenderstore";
-
 import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
 import Kalender from "../../shared/programmheft/kalender";
+
+import store from "../lib/programmheft/kalenderstore";
 import { reply } from "../lib/commons/replies";
 
 const app = express();
