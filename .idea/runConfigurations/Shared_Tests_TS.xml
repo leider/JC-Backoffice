@@ -1,14 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All Tests TS" type="mocha-javascript-test-runner">
+  <configuration default="false" name="Shared Tests TS" type="mocha-javascript-test-runner">
     <node-interpreter>$usr-local-bin$/node</node-interpreter>
-    <node-options>--icu-data-dir=node_modules/full-icu</node-options>
+    <node-options>--icu-data-dir=../node_modules/full-icu</node-options>
     <mocha-package>$PROJECT_DIR$/node_modules/ts-mocha</mocha-package>
-    <working-directory>$PROJECT_DIR$</working-directory>
+    <working-directory>$PROJECT_DIR$/shared</working-directory>
     <pass-parent-env>true</pass-parent-env>
     <ui>bdd</ui>
     <extra-mocha-options />
     <test-kind>PATTERN</test-kind>
-    <test-pattern>$PROJECT_DIR$/test/**/*.ts</test-pattern>
+    <test-pattern>$PROJECT_DIR$/shared/test/**/*.ts</test-pattern>
     <method v="2" />
   </configuration>
 </component>

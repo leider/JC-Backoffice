@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="serve" type="js.build_tools.npm" nameIsGenerated="true">
+    <package-json value="$PROJECT_DIR$/vue/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="serve" />
+    </scripts>
+    <node-interpreter value="project" />
+    <node-options value="--icu-data-dir=node_modules/full-icu" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

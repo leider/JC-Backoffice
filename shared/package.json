@@ -12,8 +12,7 @@
     "marked": "1.2.7"
   },
   "devDependencies": {
-    "@types/marked": "1.2.1",
-    "@types/node": "14.14.14"
+    "@types/marked": "1.2.1"
   },
   "scripts": {
     "test": "ts-mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.ts",

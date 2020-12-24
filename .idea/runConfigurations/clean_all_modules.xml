@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="tsc" type="js.build_tools.npm" nameIsGenerated="true">
+  <configuration default="false" name="clean-all-modules" type="js.build_tools.npm" nameIsGenerated="true">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="tsc" />
+      <script value="clean-all-modules" />
     </scripts>
     <node-interpreter value="project" />
     <envs />
