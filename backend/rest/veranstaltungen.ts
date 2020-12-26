@@ -12,13 +12,38 @@ import User from "../../shared/user/user";
 import { reply } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 import store from "../lib/veranstaltungen/veranstaltungenstore";
+import { salesreportFor } from "../lib/reservix/reservixService";
+import Salesreport from "../../shared/veranstaltung/salesreport";
 
 const app = express();
 
 function standardCallback(res: Response, user?: User): Function {
   return (err: Error, veranstaltungen: Veranstaltung[]) => {
-    const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user).map((v) => v.toJSON());
-    reply(res, err, result);
+    function associateReservix(veranstaltung: Veranstaltung, callback: Function): void {
+      const reservixID = veranstaltung.reservixID;
+      if (reservixID && (!veranstaltung.salesreport || !veranstaltung.salesreport.istVergangen())) {
+        salesreportFor(reservixID, (salesreport?: Salesreport) => {
+          veranstaltung.associateSalesreport(salesreport);
+          store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
+            callback(err, veranstaltung);
+          });
+        });
+      } else {
+        callback(null, veranstaltung);
+      }
+    }
+    if (err) {
+      return reply(res, err);
+    }
+
+    const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
+    async.each(result, associateReservix, (err1) => {
+      reply(
+        res,
+        err1,
+        result.map((v) => v.toJSON())
+      );
+    });
   };
 }
 
