@@ -155,9 +155,9 @@ export default class VeranstaltungView extends Vue {
       document.title = "Neue Veranstaltung";
     } else {
       this.originalVeranstaltung = new Veranstaltung({ id: "dummy" });
-      this.activeSection = this.tab;
       veranstaltungForUrl(this.url, (v: Veranstaltung) => {
         this.originalVeranstaltung = v;
+        this.activeSection = this.tab;
         if (this.tab === "copy") {
           return this.copy();
         }

@@ -6,7 +6,7 @@
       <script value="serve" />
     </scripts>
     <node-interpreter value="project" />
-    <node-options value="--icu-data-dir=node_modules/full-icu" />
+    <node-options value="--icu-data-dir=../node_modules/full-icu" />
     <envs />
     <method v="2" />
   </configuration>
