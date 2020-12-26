@@ -9,14 +9,14 @@
       h1 Mailinglisten
   .row
     .col-12
-      .table-responsive(style="min-height:500px")
+      .table-responsive(style="min-height: 500px")
         table.table.table-sm.table-striped
           tbody
             tr
-              th(style="min-width:150px") Name
+              th(style="min-width: 150px") Name
               th Users
-              th(style="width:50px")
-              th(style="width:50px")
+              th(style="width: 50px")
+              th(style="width: 50px")
             mailinglist-row(
               v-for="(list, index) in mailinglisten",
               :key="index",

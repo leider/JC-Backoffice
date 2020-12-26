@@ -11,29 +11,29 @@
         b-tab(title="Termine", :active="'termine' === tab", @click="tabActivated('termine')")
           .row
             .col-12
-              .table-responsive(style="min-height:500px")
+              .table-responsive(style="min-height: 500px")
                 table.table.table-sm.table-striped
                   tbody
                     tr
                       th Startet am
                       th Endet am
-                      th(style="min-width:200px") Beschreibung
+                      th(style="min-width: 200px") Beschreibung
                       th Typ
-                      th(style="width:50px")
-                      th(style="width:50px")
+                      th(style="width: 50px")
+                      th(style="width: 50px")
                     termin-row(v-for="(termin, index) in termine", :key="index", :termin="termin", @loeschen="deleteTermin(termin)")
         b-tab(title="Kalender", :active="'kalender' === tab", @click="tabActivated('kalender')")
           .row
             .col-12
-              .table-responsive(style="min-height:500px")
+              .table-responsive(style="min-height: 500px")
                 table.table.table-sm.table-striped
                   tbody
                     tr
-                      th(style="width:150px; min-width:150px") Name
-                      th(style="min-width:250px") URL
-                      th(style="width:150px") Typ
-                      th(style="width:50px")
-                      th(style="width:50px")
+                      th(style="width: 150px; min-width: 150px") Name
+                      th(style="min-width: 250px") URL
+                      th(style="width: 150px") Typ
+                      th(style="width: 50px")
+                      th(style="width: 50px")
                     kalender-row(
                       v-for="(kalender, index) in kalender.icals",
                       :key="index",

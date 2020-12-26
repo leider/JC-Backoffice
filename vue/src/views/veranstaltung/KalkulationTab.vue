@@ -39,27 +39,27 @@
       table.table.table-sm.table-striped
         tbody
           tr
-            th(style="text-align: right;") Einnahmen
-            th(style="text-align: right;") Kosten
-            th(style="text-align: right;") Überschuss
+            th(style="text-align: right") Einnahmen
+            th(style="text-align: right") Kosten
+            th(style="text-align: right") Überschuss
           tr
-            td(style="text-align: right;"): span.text-right {{ format(veranstaltung.einnahmenGesamtEUR()) }}
-            td(style="text-align: right;"): span.text-right {{ format(veranstaltung.kostenGesamtEUR()) }}
-            td(style="text-align: right;"): b: span.text-right {{ format(veranstaltung.bruttoUeberschussEUR()) }}
+            td(style="text-align: right"): span.text-right {{ format(veranstaltung.einnahmenGesamtEUR()) }}
+            td(style="text-align: right"): span.text-right {{ format(veranstaltung.kostenGesamtEUR()) }}
+            td(style="text-align: right"): b: span.text-right {{ format(veranstaltung.bruttoUeberschussEUR()) }}
           tr
             th Anteilig an Band:
             td
-            td(style="text-align: right;"): b: span.text-right {{ format(veranstaltung.dealAbsolutEUR()) }}
+            td(style="text-align: right"): b: span.text-right {{ format(veranstaltung.dealAbsolutEUR()) }}
   .col-md-6
     legend-card(section="kalkulation", title="Kosten / Ausgaben", hasMoney="true", :money="ausgabenTotal")
       .row
-        .col-3(style="padding-right: 5px;")
+        .col-3(style="padding-right: 5px")
           jazz-currency(label="Gagen", v-model="kosten.gagenEUR")
-        .col-3(style="padding-left: 2px;padding-right: 2px;")
+        .col-3(style="padding-left: 2px; padding-right: 2px")
           single-select(label="Steuer", v-model="kosten.gagenSteuer", :options="kosten.steuerSatze()")
-        .col-3(style="padding-left: 2px;padding-right: 2px;")
+        .col-3(style="padding-left: 2px; padding-right: 2px")
           single-select(label="Deal", v-model="kosten.deal", :options="kosten.deals()")
-        .col-3(style="padding-left: 5px;")
+        .col-3(style="padding-left: 5px")
           .form-group
             label.control-label Total:
             b: span.text-right.form-control-plaintext.float-right.text-success {{ format(kosten.gagenTotalEUR()) }}

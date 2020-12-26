@@ -33,15 +33,15 @@
     b-tab(title="Orte", :active="'orte' === tab", @click="tabActivated('orte')")
       .row
         .col-12
-          table.table.table-sm.table-striped.table-responsive(style="min-height:500px")
+          table.table.table-sm.table-striped.table-responsive(style="min-height: 500px")
             tbody
               tr
-                th(style="min-width:100px") Name
-                th(style="min-width:80px") Fläche
-                th(style="min-width:150px") Für Presse
-                th(style="min-width:150px") Für Presse mit "in"
-                th(style="width:50px")
-                th(style="width:50px")
+                th(style="min-width: 100px") Name
+                th(style="min-width: 80px") Fläche
+                th(style="min-width: 150px") Für Presse
+                th(style="min-width: 150px") Für Presse mit "in"
+                th(style="width: 50px")
+                th(style="width: 50px")
               ort-row(v-for="(ort, index) in orte.orte", :key="index", :ort="ort", @loeschen="deleteOrt(ort)", @speichern="saveOrt()")
 </template>
 

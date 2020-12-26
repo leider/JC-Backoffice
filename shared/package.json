@@ -15,9 +15,9 @@
     "@types/marked": "1.2.1"
   },
   "scripts": {
-    "test": "ts-mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.ts",
+    "test": "../node_modules/.bin/ts-mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.ts",
     "tsc": "../node_modules/typescript/bin/tsc",
-    "eslint": "eslint --config .eslintrc **/*.ts",
+    "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js"
   }
 }

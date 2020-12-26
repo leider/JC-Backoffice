@@ -15,9 +15,9 @@
     "@types/async": "3.2.5"
   },
   "scripts": {
-    "test": "ts-mocha --exit test/**/*.ts",
+    "test": "../node_modules/.bin/ts-mocha --exit test/**/*.ts",
     "tsc": "../node_modules/typescript/bin/tsc",
-    "eslint": "eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f nightjob/*.js test/**/*.js"
+    "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
+    "clean-ts": "rm -f src/*.js test/**/*.js"
   }
 }

@@ -14,7 +14,7 @@
       b-icon-files
       | #{" "}Kopieren
   h2
-    span(:class="iconClass", style="font-weight:normal")
+    span(:class="iconClass", style="font-weight: normal")
     span(:class="colorClass") &nbsp; {{ kopf.titelMitPrefix }} {{ kopf.presseInEcht() }}
     br
     small am {{ veranstaltung.datumForDisplayShort() }}

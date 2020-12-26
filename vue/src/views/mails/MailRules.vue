@@ -9,14 +9,14 @@
       h1 Mailing Regeln
   .row
     .col-12
-      table.table.table-sm.table-striped.table-responsive(style="min-height:500px")
+      table.table.table-sm.table-striped.table-responsive(style="min-height: 500px")
         tbody
           tr
-            th(style="min-width:150px") Name
-            th(style="min-width:250px") E-Mail
-            th(style="width:300px") Regel
-            th(style="width:50px")
-            th(style="width:50px")
+            th(style="min-width: 150px") Name
+            th(style="min-width: 250px") E-Mail
+            th(style="width: 300px") Regel
+            th(style="width: 50px")
+            th(style="width: 50px")
           mail-rule-row(v-for="(rule, index) in rules", :key="index", :rule="rule", @loeschen="deleteRule(rule)")
 </template>
 
