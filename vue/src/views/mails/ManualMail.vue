@@ -37,6 +37,7 @@ import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import JazzText from "../../widgets/JazzText.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import Markdown from "../../widgets/Markdown.vue";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
 
 @Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class ManualMail extends Vue {
@@ -57,7 +58,7 @@ export default class ManualMail extends Vue {
   }
 
   get descriptions(): string[] {
-    return this.veranstaltungen.map((v) => v.description());
+    return this.veranstaltungen.map((v) => new VeranstaltungFormatter(v).description);
   }
 
   get valid(): boolean {
@@ -65,13 +66,15 @@ export default class ManualMail extends Vue {
   }
 
   sendMail(): void {
-    const upcomings = this.veranstaltungen.filter((v) => this.selectedVeranstaltungen.includes(v.description()));
+    const upcomings = this.veranstaltungen.filter((v) => this.selectedVeranstaltungen.includes(new VeranstaltungFormatter(v).description));
     const rules = this.allRules.filter((r) => this.selectedRules.includes(r.name));
 
     const emails = rules.map((user) => Message.formatEMailAddress(user.name, user.email));
 
     const markdownToSend =
-      this.markdown + "\n\n---\n" + upcomings.map((veranst) => veranst.presseTextForMail(window.location.origin)).join("\n\n---\n");
+      this.markdown +
+      "\n\n---\n" +
+      upcomings.map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin)).join("\n\n---\n");
     const result = new Message({ subject: this.subject, markdown: markdownToSend }, this.user.name, this.user.email);
     result.setBcc(emails);
     sendMail(result, (err?: Error) => {

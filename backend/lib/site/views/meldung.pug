@@ -39,14 +39,14 @@ html
             each veranstaltung in events
               - var kopf = veranstaltung.kopf;
               tr
-                td #{veranstaltung.datumForDisplay()}
+                td #{veranstaltung.datumForDisplay}
                 td #{kopf.ort}
                 td #{kopf.kooperation}
                 td Jazzkonzert
                 td #{veranstaltung.artist.bandname || veranstaltung.artist.name.join(', ')}
-                td.text-right #{veranstaltung.preisAusweisGema()}
+                td.text-right #{veranstaltung.gema.preisAusweis}
                 if nachmeldung
-                  td.text-right #{veranstaltung.eintrittGema()}
-                  td.text-right #{veranstaltung.anzahlBesucher()}
-                td #{kopf.rechnungAnKooperationspartner() ? kopf.kooperation : 'Jazzclub'}
+                  td.text-right #{veranstaltung.gema.eintritt}
+                  td.text-right #{veranstaltung.gema.anzahlBesucher}
+                td #{kopf.rechnungAnKooperationspartner ? kopf.kooperation : 'Jazzclub'}
                 td.text-right #{kopf.flaeche} m<sup>2</sup>

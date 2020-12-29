@@ -37,27 +37,27 @@ export default class Kasse {
     }
   }
 
-  ausgabenOhneGage(): number {
+  get ausgabenOhneGage(): number {
     return (
       this.ausgabeCateringEUR + this.ausgabeHelferEUR + this.ausgabeSonstiges1EUR + this.ausgabeSonstiges2EUR + this.ausgabeSonstiges3EUR
     );
   }
 
-  ausgabenTotalEUR(): number {
-    return this.ausgabeBankEUR + this.ausgabeGageEUR + this.ausgabenOhneGage();
+  get ausgabenTotalEUR(): number {
+    return this.ausgabeBankEUR + this.ausgabeGageEUR + this.ausgabenOhneGage;
   }
 
-  einnahmeTotalEUR(): number {
+  get einnahmeTotalEUR(): number {
     return this.einnahmeBankEUR + this.einnahmeSonstiges1EUR + this.einnahmeSonstiges2EUR + this.einnahmeTicketsEUR;
   }
 
-  endbestandEUR(): number {
-    return this.anfangsbestandEUR + this.einnahmeTotalEUR() - this.ausgabenTotalEUR();
+  get endbestandEUR(): number {
+    return this.anfangsbestandEUR + this.einnahmeTotalEUR - this.ausgabenTotalEUR;
   }
 
   // FREIGABE
 
-  istFreigegeben(): boolean {
+  get istFreigegeben(): boolean {
     return !!this.kassenfreigabe;
   }
 
@@ -71,7 +71,7 @@ export default class Kasse {
     this.kassenfreigabeAm = undefined;
   }
 
-  freigabeDisplayDatum(): string {
+  get freigabeDisplayDatum(): string {
     return this.kassenfreigabeAm ? DatumUhrzeit.forJSDate(this.kassenfreigabeAm).tagMonatJahrLang : "";
   }
 }

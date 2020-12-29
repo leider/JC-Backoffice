@@ -13,19 +13,19 @@
           td.text-left: a(@click="toggleExpanded")
             b-icon-caret-down
           td: a(@click="toggleExpanded")
-            h6 {{ veranstaltung.datumForDisplayShort() }}
+            h6 {{ veranstaltung.datumForDisplayShort }}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
       table(width="100%", v-else)
         tr.align-top
           td.text-left: a(@click="toggleExpanded")
             b-icon-caret-right
           td.text-left: a(@click="toggleExpanded")
-            h5 {{ veranstaltung.tagNumerisch() }}
+            h5 {{ veranstaltung.startDatumUhrzeit.tagNumerisch }}
           td: a(@click="toggleExpanded")
             h5 {{ kopf.titelMitPrefix }} &nbsp;
               small(style="color: inherit") {{ kopf.presseIn }}
@@ -34,7 +34,7 @@
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
       table.position-relative(width="100%", v-if="expanded")
         tr
           td
@@ -49,14 +49,14 @@
           td.p-0(v-if="veranstaltung.artist.brauchtHotel", width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
     b-collapse(v-model="expanded")
       .btn-group.btn-group-sm.float-right.m-1
-        b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl() + '/allgemeines'", title="Allgemeines"): b-icon-keyboard(scale=1.2)
-        b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl() + '/technik'", title="Technik"): b-icon-headphones(scale=1.2)
-        b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl() + '/kalkulation'", title="Ausgaben"): b-icon-graph-up
-        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl() + '/hotel'", title="Hotel"): b-icon-house-door(
+        b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl + '/allgemeines'", title="Allgemeines"): b-icon-keyboard(scale=1.2)
+        b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl + '/technik'", title="Technik"): b-icon-headphones(scale=1.2)
+        b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl + '/kalkulation'", title="Ausgaben"): b-icon-graph-up
+        b-button.btn-hotel(v-if="veranstaltung.artist.brauchtHotel", :to="veranstaltung.fullyQualifiedUrl + '/hotel'", title="Hotel"): b-icon-house-door(
           scale=1.2
         )
-        b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl() + '/kasse'", title="Kasse"): b-icon-cash-stack(scale=1.2)
-        b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl() + '/presse'", title="Presse"): b-icon-newspaper(scale=1.2)
+        b-button.btn-kasse(:to="veranstaltung.fullyQualifiedUrl + '/kasse'", title="Kasse"): b-icon-cash-stack(scale=1.2)
+        b-button.btn-presse(:to="veranstaltung.fullyQualifiedUrl + '/presse'", title="Presse"): b-icon-newspaper(scale=1.2)
         b-button.btn.btn-light(v-if="!veranstaltung.kopf.confirmed", v-b-modal="`dialog-${veranstaltung.id}`")
           b-icon-trash.text-danger
           b-modal(:id="`dialog-${veranstaltung.id}`", no-close-on-backdrop, @ok="deleteVeranstaltung")
@@ -69,7 +69,7 @@
                 b-button.btn.btn-danger.text(@click="deleteVeranstaltung")
                   b-icon-trash
                   | &nbsp;Löschen
-        b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl() + '/copy'", title="Kopieren"): b-icon-files
+        b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl + '/copy'", title="Kopieren"): b-icon-files
         b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): b-icon-check-square
       table.table.table-striped.table-sm
         tbody

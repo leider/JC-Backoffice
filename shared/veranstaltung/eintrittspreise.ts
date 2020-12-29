@@ -1,5 +1,7 @@
 import { Preisprofil } from "../optionen/optionValues";
-import Kasse from "./kasse";
+
+const standardRabattErmaessigt = 2;
+const standardRabattMitglied = 5;
 
 export default class Eintrittspreise {
   preisprofil: Preisprofil = { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
@@ -22,7 +24,6 @@ export default class Eintrittspreise {
     return Object.assign({}, this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       if (!object.preisprofil) {
@@ -35,57 +36,35 @@ export default class Eintrittspreise {
     }
   }
 
-  standardRabattErmaessigt(): number {
-    return 2;
-  }
-
-  standardRabattMitglied(): number {
-    return 5;
-  }
-
-  frei(): boolean {
+  get frei(): boolean {
     return this.preisprofil.regulaer === 0;
   }
 
-  istKooperation(): boolean {
+  get istKooperation(): boolean {
     return this.preisprofil.name === "Kooperation";
   }
 
-  regulaer(): number {
+  get regulaer(): number {
     return this.preisprofil.regulaer;
   }
 
-  rabattErmaessigt(): number {
-    return this.preisprofil.rabattErmaessigt || this.standardRabattErmaessigt();
+  private get rabattErmaessigt(): number {
+    return this.preisprofil.rabattErmaessigt || standardRabattErmaessigt;
   }
 
-  rabattMitglied(): number {
-    return this.preisprofil.rabattMitglied || this.standardRabattMitglied();
+  private get rabattMitglied(): number {
+    return this.preisprofil.rabattMitglied || standardRabattMitglied;
   }
 
-  ermaessigt(): number {
-    return Math.max(this.regulaer() - Math.abs(this.rabattErmaessigt()), 0);
+  get ermaessigt(): number {
+    return Math.max(this.regulaer - Math.abs(this.rabattErmaessigt), 0);
   }
 
-  mitglied(): number {
-    return Math.max(this.regulaer() - Math.abs(this.rabattMitglied()), 0);
+  get mitglied(): number {
+    return Math.max(this.regulaer - Math.abs(this.rabattMitglied), 0);
   }
 
-  erwarteteEinnahmen(kasse: Kasse): number {
-    return this.zuschuss + this.erwarteterOderEchterEintritt(kasse);
-  }
-
-  erwarteterOderEchterEintritt(kasse: Kasse): number {
-    return kasse.istFreigegeben()
-      ? kasse.einnahmeTicketsEUR
-      : this.erwarteteBesucher * (0.8 * this.regulaer() + 0.1 * this.ermaessigt() + 0.1 * this.mitglied());
-  }
-
-  alsPressetext(kooperationspartner: string): string {
-    return this.istKooperation()
-      ? `Gemäß Kooperationspartner (${kooperationspartner})`
-      : this.frei()
-      ? "freier Eintritt"
-      : `${this.regulaer()},- (Ermässigt: ${this.ermaessigt()},-, Mitglieder: ${this.mitglied()},-) €`;
+  get erwarteterEintritt(): number {
+    return this.erwarteteBesucher * (0.8 * this.regulaer + 0.1 * this.ermaessigt + 0.1 * this.mitglied);
   }
 }

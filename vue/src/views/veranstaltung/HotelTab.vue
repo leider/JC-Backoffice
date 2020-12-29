@@ -114,7 +114,7 @@ export default class HotelTab extends Vue {
   @Prop() editVariables!: EditVariables;
 
   get minDate(): Date | null {
-    return this.veranstaltung.startDatumUhrzeit().minus({ tage: 7 }).toJSDate;
+    return this.veranstaltung.startDatumUhrzeit.minus({ tage: 7 }).toJSDate;
   }
 
   get minDateAbreise(): Date {
@@ -143,7 +143,7 @@ export default class HotelTab extends Vue {
 
   sendMail(): void {
     const email = encodeURIComponent(`${this.veranstaltung.hotel.name}<${this.veranstaltung.hotel.email}>`);
-    const subject = encodeURIComponent(`Jazzclub Reservierungsanfrage für ${this.unterkunft.anreiseDisplayDate()}`);
+    const subject = encodeURIComponent(`Jazzclub Reservierungsanfrage für ${this.unterkunft.anreiseDisplayDate}`);
     const einzel = this.unterkunft.einzelNum;
     const einzelText = einzel > 0 ? `${einzel} Einzelzimmer, ` : "";
     const doppel = this.unterkunft.doppelNum;
@@ -155,7 +155,7 @@ export default class HotelTab extends Vue {
 
 bitte reservieren Sie für den Jazzclub Karlsruhe e.V.:
 ${einzelText}${doppelText}${suiteText} für ${this.unterkunft.anzNacht}.
-Anreise: ${this.unterkunft.anreiseDisplayDate()}, Abreise: ${this.unterkunft.abreiseDisplayDate()}
+Anreise: ${this.unterkunft.anreiseDisplayDate}, Abreise: ${this.unterkunft.abreiseDisplayDate}
 
 Die Namen der Gäste lauten:
 ${this.unterkunft.kommentar}

@@ -23,11 +23,11 @@
   .row
     .col-md-6
       legend-card(
-        v-if="!kasse.istFreigegeben()",
+        v-if="!kasse.istFreigegeben",
         section="kasse",
         title="Einnahmen Abendkasse",
         hasMoney="true",
-        :money="kasse.einnahmeTotalEUR()"
+        :money="kasse.einnahmeTotalEUR"
       )
         .row
           .col-4
@@ -50,7 +50,7 @@
             jazz-text(label="Sonstiges", v-model="kasse.einnahmeSonstiges2Text", tooltip="Spende, Mitgliedsbeitrag, etc.")
           .col-4
             jazz-currency(label="Betrag", v-model="kasse.einnahmeSonstiges2EUR")
-      legend-card(v-else, section="kasse", title="Einnahmen Abendkasse", hasMoney="true", :money="kasse.einnahmeTotalEUR()")
+      legend-card(v-else, section="kasse", title="Einnahmen Abendkasse", hasMoney="true", :money="kasse.einnahmeTotalEUR")
         .row
           .col-4
             jazz-currency-display(label="Tickets (AK)", :value="kasse.einnahmeTicketsEUR")
@@ -77,7 +77,7 @@
             b-icon-printer-fill
             | #{' '} Kassenzettel
           b-button.btn.btn-danger.float-right(
-            v-if="kasse.istFreigegeben()",
+            v-if="kasse.istFreigegeben",
             :class="darfKasseFreigeben ? '' : 'disabled'",
             @click="showAufheben = true"
           )
@@ -89,11 +89,11 @@
             | &nbsp;Kasse freigeben
     .col-md-6
       legend-card(
-        v-if="!kasse.istFreigegeben()",
+        v-if="!kasse.istFreigegeben",
         section="kasse",
         title="Ausgaben (Bar und mit Beleg)",
         hasMoney="true",
-        :money="kasse.ausgabenTotalEUR()"
+        :money="kasse.ausgabenTotalEUR"
       )
         .row
           .col-sm-4.col-6
@@ -128,7 +128,7 @@
           .col-sm-8.col-6
           .col-sm-4.col-6
             jazz-currency(label="An Bank", v-model="kasse.ausgabeBankEUR")
-      legend-card(v-else, section="kasse", title="Ausgaben (Bar und mit Beleg)", hasMoney="true", :money="kasse.ausgabenTotalEUR()")
+      legend-card(v-else, section="kasse", title="Ausgaben (Bar und mit Beleg)", hasMoney="true", :money="kasse.ausgabenTotalEUR")
         .row
           .col-sm-4.col-6
             jazz-currency-display(label="Gage", :value="kasse.ausgabeGageEUR")
@@ -160,11 +160,11 @@
             jazz-currency-display(label="An Bank", :value="kasse.ausgabeBankEUR")
   .row
     .col-sm-3.col-6
-      jazz-currency(v-if="!kasse.istFreigegeben()", label="Anfangsbestand", v-model="kasse.anfangsbestandEUR")
+      jazz-currency(v-if="!kasse.istFreigegeben", label="Anfangsbestand", v-model="kasse.anfangsbestandEUR")
       jazz-currency-display(v-else, label="Anfangsbestand", :value="kasse.anfangsbestandEUR")
     .col-sm-3.col-6
-      jazz-currency(v-if="!kasse.istFreigegeben()", label="Endbestand", v-model="kasse.endbestandEUR()")
-      jazz-currency-display(v-else, label="Anfangsbestand", :value="kasse.endbestandEUR()")
+      jazz-currency(v-if="!kasse.istFreigegeben", label="Endbestand", v-model="kasse.endbestandEUR")
+      jazz-currency-display(v-else, label="Endbestand", :value="kasse.endbestandEUR")
 </template>
 
 <script lang="ts">

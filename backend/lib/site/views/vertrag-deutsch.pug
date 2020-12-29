@@ -5,12 +5,12 @@ block adresse
   p.
     #{bandname} <br>
     c/o #{veranstaltung.agentur.name}<br>
-    #{veranstaltung.agentur.strasse()}<br>
-    #{veranstaltung.agentur.ort()}
+    #{veranstaltung.agentur.strasse}<br>
+    #{veranstaltung.agentur.ort}
 
 block content1
-  - var start = veranstaltung.startDatumUhrzeit();
-  - var getin = veranstaltung.getinDatumUhrzeit();
+  - var start = veranstaltung.startDatumUhrzeit;
+  - var getin = veranstaltung.getinDatumUhrzeit;
   - var hotel = veranstaltung.hotel;
   - var bandname = veranstaltung.artist.bandname || 'Band ohne Namen';
 
@@ -30,7 +30,7 @@ block content1
       p
         b #{bandname}<br>
         b #{veranstaltung.agentur.name}<br>
-          | #{veranstaltung.agentur.strasse()}, #{veranstaltung.agentur.ort()}<br>
+          | #{veranstaltung.agentur.strasse}, #{veranstaltung.agentur.ort}<br>
   .row
     .col-12
       p: i (nachfolgend Künstler genannt)
@@ -59,16 +59,16 @@ block content1
       p.
         §1.2 Gebietsschutz: Die Künstler verpflichten sich hiermit 14 Tage vor und nach dem Konzerttermin keine Konzerte im Umkreis von 50km zu geben.
       p.
-        §2 Die vereinbarte Gage beträgt <b>#{veranstaltung.kosten.gagenTotalEURformatted()} &euro;</b>.<br>
+        §2 Die vereinbarte Gage beträgt <b>#{veranstaltung.kosten.gagenTotalEURformatted} &euro;</b>.<br>
         Der vereinbarte Betrag ist eine Bruttovergütung und schließt die MwSt. sowie sonstige Steuern ein. Nachforderungen sind ausgeschlossen.
       p.
         §2.1 Die Gage unterliegt nicht der Lohnsteuerpflicht, sondern wird vom Künstler selbst versteuert. Der Künstler verpflichtet sich zur Ausstellung einer ordnungsgemäßen Rechnung über die Gage in Papier- oder elektronischer Form.
-      if (veranstaltung.unterkunft.anzahlZimmer() === 0)
+      if (veranstaltung.unterkunft.anzahlZimmer === 0)
         p.
           §2.2 Der Veranstalter stellt <b>keine Unterkunft</b>.
       else
         p.
-          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft.anzahlZimmer()} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b>.
+          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft.anzahlZimmer} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse}</b>.
       if (buyoutInclusive)
         p.
           §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.

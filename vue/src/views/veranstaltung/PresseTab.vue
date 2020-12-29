@@ -46,6 +46,7 @@ import JazzText from "../../widgets/JazzText.vue";
 import Presse from "../../../../shared/veranstaltung/presse";
 import LegendCard from "../../widgets/LegendCard.vue";
 import Markdown from "../../widgets/Markdown.vue";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
 
 @Component({
   components: {
@@ -85,8 +86,8 @@ export default class PresseTab extends Vue {
 
   get preview(): string {
     return (
-      Renderer.render(`${this.veranstaltung.presseTemplate() + this.presse.text}
-${this.presse.fullyQualifiedJazzclubURL()}`) +
+      Renderer.render(`${new VeranstaltungFormatter(this.veranstaltung).presseTemplate + this.presse.text}
+${this.presse.fullyQualifiedJazzclubURL}`) +
       `<h4>Bilder:</h4>${this.presse.image
         .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
         .reverse()

@@ -15,7 +15,7 @@ export default class Kontakt {
     }
   }
 
-  strasse(): string {
+  get strasse(): string {
     if (this.adresse) {
       const lines = this.adresse.split("\r\n");
       return lines[0] || "-";
@@ -23,7 +23,7 @@ export default class Kontakt {
     return "-";
   }
 
-  ort(): string {
+  get ort(): string {
     if (this.adresse) {
       const lines = this.adresse.split("\r\n");
       return lines[1] || "-";
@@ -31,7 +31,7 @@ export default class Kontakt {
     return "-";
   }
 
-  einzeiligeAdresse(): string {
+  get einzeiligeAdresse(): string {
     if (this.adresse) {
       return this.adresse.replace("\r\n", ", ");
     }

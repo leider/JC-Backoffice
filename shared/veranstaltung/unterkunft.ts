@@ -35,39 +35,39 @@ export default class Unterkunft {
     }
   }
 
-  checked(): boolean {
+  get checked(): boolean {
     return this.bestaetigt;
   }
 
-  anreiseDisplayDate(): string {
+  get anreiseDisplayDate(): string {
     const date = this.anreiseDate;
     return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
-  abreiseDisplayDate(): string {
+  get abreiseDisplayDate(): string {
     const date = this.abreiseDate;
     return date ? DatumUhrzeit.forJSDate(date).tagMonatJahrKompakt : "";
   }
 
-  anzahlNaechte(): number {
+  private get anzahlNaechte(): number {
     const ab = this.abreiseDate;
     const an = this.anreiseDate;
     return ab && an ? DatumUhrzeit.forJSDate(ab).differenzInTagen(DatumUhrzeit.forJSDate(an)) : 0;
   }
 
-  anzahlZimmer(): number {
+  get anzahlZimmer(): number {
     function reallyNumber(val: string | number) {
       return parseInt(val.toString());
     }
     return reallyNumber(this.einzelNum) + reallyNumber(this.doppelNum) + reallyNumber(this.suiteNum);
   }
 
-  kostenTotalEUR(): number {
+  get kostenTotalEUR(): number {
     return this.roomsTotalEUR + this.transportEUR;
   }
 
   get anzNacht(): string {
-    const anz = this.anzahlNaechte();
+    const anz = this.anzahlNaechte;
     if (anz < 1) {
       return "";
     }
@@ -75,7 +75,7 @@ export default class Unterkunft {
   }
 
   get roomsTotalEUR(): number {
-    const naechte = this.anzahlNaechte();
+    const naechte = this.anzahlNaechte;
     return this.einzelNum * this.einzelEUR * naechte + this.doppelNum * this.doppelEUR * naechte + this.suiteNum * this.suiteEUR * naechte;
   }
 

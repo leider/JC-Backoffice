@@ -128,10 +128,10 @@ app.get("/ical/", (req, res) => {
         .filter((v) => v.kopf.confirmed)
         .map((veranstaltung) => ({
           uid: veranstaltung.url || "",
-          start: veranstaltung.startDatumUhrzeit().fuerIcal,
-          end: veranstaltung.endDatumUhrzeit().fuerIcal,
+          start: veranstaltung.startDatumUhrzeit.fuerIcal,
+          end: veranstaltung.endDatumUhrzeit.fuerIcal,
           summary: veranstaltung.kopf.titelMitPrefix,
-          description: veranstaltung.tooltipInfos(),
+          description: veranstaltung.tooltipInfos,
           location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
         })),
     };

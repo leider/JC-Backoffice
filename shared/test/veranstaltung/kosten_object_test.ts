@@ -16,10 +16,10 @@ describe("Kosten", () => {
       deal: null,
       gageBAR: false,
     });
-    expect(kosten.gagenTotalEUR()).to.equal(0);
-    expect(kosten.backlineUndTechnikEUR()).to.equal(0);
-    expect(kosten.totalEUR()).to.equal(0);
+    expect(kosten.gagenTotalEUR).to.equal(0);
+    expect(kosten.backlineUndTechnikEUR).to.equal(0);
+    expect(kosten.totalEUR).to.equal(0);
 
-    expect(kosten.dealAlsFaktor()).to.equal(0);
+    expect(kosten.dealAlsFaktor).to.equal(0);
   });
 });

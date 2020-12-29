@@ -22,39 +22,39 @@ describe("Staff", () => {
       });
     });
     it("initial", () => {
-      expect(staff.kasseFehlt()).to.be.true;
+      expect(staff.kasseFehlt).to.be.true;
     });
 
     it("wenn nur einer gebraucht wird", () => {
       staff.kasseVNotNeeded = true;
-      expect(staff.kasseFehlt()).to.be.true;
+      expect(staff.kasseFehlt).to.be.true;
 
       staff.kasseNotNeeded = true;
       staff.kasseVNotNeeded = false;
-      expect(staff.kasseFehlt()).to.be.true;
+      expect(staff.kasseFehlt).to.be.true;
     });
 
     it("wenn nur einer fehlt", () => {
       staff.kasse.push("Peter");
-      expect(staff.kasseFehlt()).to.be.true;
+      expect(staff.kasseFehlt).to.be.true;
     });
 
     it("wenn beide da sind", () => {
       staff.kasse.push("Peter");
       staff.kasseV.push("Peter");
-      expect(staff.kasseFehlt()).to.be.false;
+      expect(staff.kasseFehlt).to.be.false;
     });
 
     it("normal gebraucht, einer da", () => {
       staff.kasse.push("Peter");
       staff.kasseVNotNeeded = true;
-      expect(staff.kasseFehlt()).to.be.false;
+      expect(staff.kasseFehlt).to.be.false;
     });
 
     it("verantwortlich gebraucht, einer da", () => {
       staff.kasseV.push("Peter");
       staff.kasseNotNeeded = true;
-      expect(staff.kasseFehlt()).to.be.false;
+      expect(staff.kasseFehlt).to.be.false;
     });
   });
 });

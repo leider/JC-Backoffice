@@ -174,11 +174,11 @@ export function deleteVeranstaltungWithId(id: string, callback: Function): void 
 }
 
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl()}/addUserToSection`, { section }, callback);
+  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`, { section }, callback);
 }
 
 export function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl()}/removeUserFromSection`, { section }, callback);
+  postAndReceive(`/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`, { section }, callback);
 }
 
 // User

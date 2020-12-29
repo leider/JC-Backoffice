@@ -26,23 +26,23 @@ export default class Kopf {
     return this.titel.length > 0;
   }
 
-  isKooperation(): boolean {
+  private get isKooperation(): boolean {
     return !!this.kooperation && this.kooperation !== "_";
   }
 
-  rechnungAnKooperationspartner(): boolean {
-    return !this.rechnungAnKooperation ? this.isKooperation() : this.rechnungAnKooperation;
+  get rechnungAnKooperationspartner(): boolean {
+    return !this.rechnungAnKooperation ? this.isKooperation : this.rechnungAnKooperation;
   }
 
-  pressenameEcht(): string {
-    return this.pressename || this.ort;
-  }
-
-  presseInEcht(): string {
-    return this.presseIn || this.pressenameEcht();
+  get presseInEcht(): string {
+    return this.presseIn || this.pressename || this.ort;
   }
 
   get titelMitPrefix(): string {
     return `${this.abgesagt ? "Abgesagt: " : ""}${this.titel}`;
+  }
+
+  get kooperationspartnerText(): string {
+    return this.isKooperation ? this.kooperation : "";
   }
 }

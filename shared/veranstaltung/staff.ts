@@ -81,34 +81,23 @@ export default class Staff {
     }
   }
 
-  noStaffNeeded(): boolean {
+  get noStaffNeeded(): boolean {
     return this.technikerNotNeeded && this.technikerVNotNeeded && this.kasseNotNeeded && this.kasseVNotNeeded && this.merchandiseNotNeeded;
   }
 
-  technikerAlle(): string[] {
-    return this.technikerV.concat(this.techniker);
-  }
-
-  kasseAlle(): string[] {
-    return this.kasseV.concat(this.kasse);
-  }
-
-  technikerText(): string {
-    return this.technikerAlle().length > 0 ? this.technikerAlle().join(", ") : "-";
-  }
-
-  kassiererText(): string {
-    return this.kasseAlle().length > 0 ? this.kasseAlle().join(", ") : "-";
-  }
-
-  tooltipInfos(): string {
-    if (this.noStaffNeeded()) {
+  get tooltipInfos(): string {
+    if (this.noStaffNeeded) {
       return "";
     }
-    return " Kasse: " + this.kassiererText() + " | Techniker: " + this.technikerText();
+    const kasseAlle = this.kasseV.concat(this.kasse);
+    const kassiererText = kasseAlle.length > 0 ? kasseAlle.join(", ") : "-";
+    const technikerAlle = this.technikerV.concat(this.techniker);
+    const technikerText = technikerAlle.length > 0 ? technikerAlle.join(", ") : "-";
+
+    return " Kasse: " + kassiererText + " | Techniker: " + technikerText;
   }
 
-  kasseFehlt(): boolean {
+  get kasseFehlt(): boolean {
     return (!this.kasseNotNeeded && this.kasse.length === 0) || (!this.kasseVNotNeeded && this.kasseV.length === 0);
   }
 

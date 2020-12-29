@@ -19,7 +19,7 @@
   h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
     small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
   h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titelMitPrefix }}<br>
-    small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort() }}
+    small(:class="colorClass") am {{ veranstaltung.datumForDisplayShort }}
   b-tabs(v-if="showAllTabs")
     section-tab(v-model="activeSection", section="allgemeines", title="Allgemeines", icon="keyboard", @clicked="tabActivated")
       allgemeines-tab(
@@ -134,7 +134,7 @@ export default class VeranstaltungView extends Vue {
   @Watch("originalVeranstaltung")
   copyForBearbeiten(): void {
     this.veranstaltung = new Veranstaltung(this.originalVeranstaltung.toJSON());
-    this.minimumStart = this.veranstaltung.minimalStartForEdit();
+    this.minimumStart = this.veranstaltung.minimalStartForEdit;
     this.editVariables.selectedHotel = this.veranstaltung.hotel.name;
     this.editVariables.selectedAgentur = this.veranstaltung.agentur.name;
   }

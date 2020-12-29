@@ -26,9 +26,9 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User | unde
     return {
       start: veranstaltung.startDate.toISOString(),
       end: veranstaltung.endDate.toISOString(),
-      url: "/vue" + veranstaltung.fullyQualifiedUrl() + urlSuffix,
+      url: "/vue" + veranstaltung.fullyQualifiedUrl + urlSuffix,
       title: veranstaltung.kopf.titelMitPrefix,
-      tooltip: veranstaltung.tooltipInfos(),
+      tooltip: veranstaltung.tooltipInfos,
       className:
         (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
         "verySmall color-" +

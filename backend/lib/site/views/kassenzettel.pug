@@ -26,8 +26,8 @@ html
           h1(style="white-space: nowrap") Abendkasse
             br
             small(style="white-space: nowrap")
-              | #{veranstaltung.datumForDisplay()}
-      if !eintrittspreise.frei()
+              | #{veranstaltung.datumForDisplay}
+      if !eintrittspreise.frei
         .row
           .col-12
             h4 Eintrittspreise
@@ -37,15 +37,15 @@ html
           .col-4
             p
               b Regulär:#{' '}
-              +localCurrency(veranstaltung.eintrittspreise.regulaer())
+              +localCurrency(veranstaltung.eintrittspreise.regulaer)
           .col-4
             p
               b Ermäßigt:#{' '}
-              +localCurrency(veranstaltung.eintrittspreise.ermaessigt())
+              +localCurrency(veranstaltung.eintrittspreise.ermaessigt)
           .col-4
             p
               b Mitglied:#{' '}
-              +localCurrency(veranstaltung.eintrittspreise.mitglied())
+              +localCurrency(veranstaltung.eintrittspreise.mitglied)
       .row
         .col-6
           table.table.table-bordered.table-sm
@@ -57,11 +57,11 @@ html
               td #{veranstaltung.kopf.ort}
             tr
               th Datum:
-              td #{veranstaltung.datumForDisplay()}
+              td #{veranstaltung.datumForDisplay}
             tr
               th Besucher Abendkasse:
               td
-                if veranstaltung.istVergangen()
+                if veranstaltung.istVergangen
                   | #{kasse.anzahlBesucherAK}
                 else
                   | &nbsp;
@@ -73,13 +73,13 @@ html
               td.text-right: +currencyOrEmpty(kasse.anfangsbestandEUR)
             tr
               th Einnahmen:
-              td.text-right: +currencyOrEmpty(kasse.einnahmeTotalEUR())
+              td.text-right: +currencyOrEmpty(kasse.einnahmeTotalEUR)
             tr
               th Ausgaben:
-              td.text-right: +currencyOrEmpty(kasse.ausgabenTotalEUR() * -1)
+              td.text-right: +currencyOrEmpty(kasse.ausgabenTotalEUR * -1)
             tr
               th Endbestand:
-              td.text-right: +currencyOrEmpty(kasse.endbestandEUR())
+              td.text-right: +currencyOrEmpty(kasse.endbestandEUR)
       .row
         .col-6
           table.table.table-bordered.table-striped.table-sm
@@ -119,7 +119,7 @@ html
             tr
               th Summe
               td
-              td.text-right: b: +currencyOrEmpty(kasse.einnahmeTotalEUR())
+              td.text-right: b: +currencyOrEmpty(kasse.einnahmeTotalEUR)
 
         .col-6
           table.table.table-bordered.table-striped.table-sm
@@ -159,6 +159,6 @@ html
             tr
               th Summe
               td
-              td.text-right: b: +currencyOrEmpty(kasse.ausgabenTotalEUR())
-      +signbox(veranstaltung.datumForDisplay(), 'Kassierer/-in', kassierer)
-      +signbox(kasse.freigabeDisplayDatum(), 'Freigegeben', kasse.kassenfreigabe)
+              td.text-right: b: +currencyOrEmpty(kasse.ausgabenTotalEUR)
+      +signbox(veranstaltung.datumForDisplay, 'Kassierer/-in', kassierer)
+      +signbox(kasse.freigabeDisplayDatum, 'Freigegeben', kasse.kassenfreigabe)

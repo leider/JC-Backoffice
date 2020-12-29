@@ -15,9 +15,9 @@
       .row: .col-12
         p(v-for="veran in veranstaltungen", :key="veran.id")
           b {{ veran.kopf.titelMitPrefix }}<br>
-          b: i {{ veran.startDatumUhrzeit().wochentagTagMonat }}
-          b #{' '} // {{ veran.startDatumUhrzeit().uhrzeitKompakt }} Uhr<br>
-          | {{ veran.kopf.presseInEcht() }}
+          b: i {{ veran.startDatumUhrzeit.wochentagTagMonat }}
+          b #{' '} // {{ veran.startDatumUhrzeit.uhrzeitKompakt }} Uhr<br>
+          | {{ veran.kopf.presseInEcht }}
       .row: .col-12
         h3 Bilder
       .row
@@ -35,6 +35,7 @@ import Renderer from "../../../../shared/commons/renderer";
 import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
 import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
 import { openPayload, veranstaltungenBetween } from "../../commons/loader";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
 
 @Component
 export default class Monatsinfos extends Vue {
@@ -43,9 +44,9 @@ export default class Monatsinfos extends Vue {
   private veranstaltungen: Veranstaltung[] = [];
 
   preview(veranstaltung: Veranstaltung): string {
-    return Renderer.render(`${veranstaltung.presseTemplate() + veranstaltung.presse.text}
+    return Renderer.render(`${new VeranstaltungFormatter(veranstaltung).presseTemplate + veranstaltung.presse.text}
 
-${veranstaltung.presse.fullyQualifiedJazzclubURL()}`);
+${veranstaltung.presse.fullyQualifiedJazzclubURL}`);
   }
 
   get start(): DatumUhrzeit {

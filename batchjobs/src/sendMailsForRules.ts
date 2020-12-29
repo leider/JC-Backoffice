@@ -11,6 +11,11 @@ import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
 import mailstore from "../../backend/lib/mailsender/mailstore";
 import mailtransport from "../../backend/lib/mailsender/mailtransport";
 import conf from "../../backend/lib/commons/simpleConfigure";
+import VeranstaltungFormatter from "../../shared/veranstaltung/veranstaltungFormatter";
+
+function isSendable(veranstaltung: Veranstaltung): boolean {
+  return veranstaltung.presse.checked && veranstaltung.kopf.confirmed;
+}
 
 export function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function): void {
   const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
@@ -27,7 +32,9 @@ Liebe Grüße vom Jazzclub Team.`;
       const markdownToSend =
         markdownForRules +
         "\n\n---\n" +
-        selected.map((veranst) => veranst.presseTextForMail(conf.get("publicUrlPrefix") as string)).join("\n\n---\n");
+        selected
+          .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(conf.get("publicUrlPrefix") as string))
+          .join("\n\n---\n");
       const message = new Message({
         subject: rule.subject(now),
         markdown: markdownToSend,
@@ -43,7 +50,7 @@ Liebe Grüße vom Jazzclub Team.`;
       if (err1) {
         return;
       }
-      const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.isSendable());
+      const zuSendende = veranstaltungen.filter((veranstaltung) => isSendable(veranstaltung));
       if (zuSendende.length === 0) {
         callback();
       } else {

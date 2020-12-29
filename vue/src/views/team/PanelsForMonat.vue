@@ -54,7 +54,7 @@ export default class PanelsForMonat extends Vue {
     this.datumErsteVeranstaltung.istVor(this.nearFuture) && this.datumErsteVeranstaltung.istNach(new DatumUhrzeit().minus({ monate: 1 }));
 
   get datumErsteVeranstaltung(): DatumUhrzeit {
-    return this.veranstaltungen[0].startDatumUhrzeit();
+    return this.veranstaltungen[0].startDatumUhrzeit;
   }
 
   doWithAllPanels(action: string): void {

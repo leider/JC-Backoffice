@@ -42,6 +42,7 @@
     "develop": "npm run clean-ts && npm run compile && cd vue && npm run serve",
     "start": "node --icu-data-dir=node_modules/full-icu backend/start",
     "test": "cd batchjobs && npm t && cd ../shared && npm t",
+    "lint-all": "cd backend && npm run eslint && cd ../batchjobs && npm run eslint && cd ../shared && npm run eslint && cd ../vue && npm run lint",
     "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules",
     "install-all-modules": "npm i && cd backend && npm i && cd ../batchjobs && npm i && cd ../shared && npm i && cd ../vue && npm i",
     "ci-all-modules": "npm ci && cd backend && npm ci && cd ../batchjobs && npm ci && cd ../shared && npm ci && cd ../vue && npm ci"

@@ -50,7 +50,7 @@
         .col-6.col-sm-3
           jazz-currency(label="Gage (Netto)", v-model="kosten.gagenEUR")
         .col-6.col-sm-3
-          single-select(label="Deal", v-model="kosten.deal", :options="kosten.deals()")
+          single-select(label="Deal", v-model="kosten.deal", :options="deals")
       .row
         .col-6.col-sm-4
           jazz-check(v-model="artist.isBawue", label="BaWü-Förderung", :inline="true")
@@ -181,6 +181,10 @@ export default class AllgemeinesTab extends Vue {
 
   get eventTypen(): string[] {
     return this.optionen.typen;
+  }
+
+  get deals(): string[] {
+    return Kosten.deals;
   }
 
   @Watch("kopf.ort")

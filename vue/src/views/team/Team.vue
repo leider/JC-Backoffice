@@ -119,7 +119,7 @@ export default class Team extends Vue {
 
   get veranstaltungenNachMonat(): { [index: string]: Veranstaltung[] } {
     const filteredVeranstaltungen = this.veranstaltungen.filter((v) => this.realadmin || v.kopf.confirmed);
-    return groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit().monatLangJahrKompakt);
+    return groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
   }
 
   get monate(): string[] {

@@ -10,20 +10,20 @@
       :dirty="kopf.confirmed",
       show-text="true"
     )
-    b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl()}/copy`", title="Kopieren")
+    b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl}/copy`", title="Kopieren")
       b-icon-files
       | #{" "}Kopieren
   h2
     span(:class="iconClass", style="font-weight: normal")
-    span(:class="colorClass") &nbsp; {{ kopf.titelMitPrefix }} {{ kopf.presseInEcht() }}
+    span(:class="colorClass") &nbsp; {{ kopf.titelMitPrefix }} {{ kopf.presseInEcht }}
     br
-    small am {{ veranstaltung.datumForDisplayShort() }}
+    small am {{ veranstaltung.datumForDisplayShort }}
   h3(v-if="kooperation && kooperation.length > 1") Kooperation mit {{ kooperation }}
   .row
     .col-md-6
       legend-card(section="staff", title="Staff")
         table.table.table-striped.table-sm
-          tbody(v-if="staff.noStaffNeeded()")
+          tbody(v-if="staff.noStaffNeeded")
             tr: th(colspan=2) Niemand benötigt
           tbody(v-else)
             tr: th(colspan=2) MoD
@@ -39,13 +39,13 @@
 
       legend-card(section="kasse", title="Eintritt und Abendkasse")
         table.table.table-striped.table-sm
-          tbody(v-if="eintrittspreise.frei()")
+          tbody(v-if="eintrittspreise.frei")
             tr: th(align="right") Freier Eintritt (Sammelbox)
           tbody(v-else)
             tr
-              th.text-right: jazz-currency-display(:value="eintrittspreise.regulaer()")
-              th.text-right: jazz-currency-display(:value="eintrittspreise.ermaessigt()")
-              th.text-right: jazz-currency-display(:value="eintrittspreise.mitglied()")
+              th.text-right: jazz-currency-display(:value="eintrittspreise.regulaer")
+              th.text-right: jazz-currency-display(:value="eintrittspreise.ermaessigt")
+              th.text-right: jazz-currency-display(:value="eintrittspreise.mitglied")
             tr(v-if="veranstaltung.reservixID")
               th: .form-control-plaintext
                 | Reservix &nbsp;
@@ -53,7 +53,7 @@
               th.text-right: .form-control-plaintext {{ veranstaltung.salesreport.anzahl }}
               th.text-right: jazz-currency-display(:value="veranstaltung.salesreport.netto")
             tr(v-if="isAbendkasse"): td.text-right(colspan=3): b-button.btn-kasse(
-              :to="`${veranstaltung.fullyQualifiedUrl()}/kasse`",
+              :to="`${veranstaltung.fullyQualifiedUrl}/kasse`",
               title="Abendkasse"
             ) Abendkasse
 
@@ -88,7 +88,7 @@
           | E-Mail: &nbsp;
           a(:href="`mailto:${agentur.email}`") {{ agentur.email }}
 
-      legend-card(v-if="veranstaltung.unterkunft.anzahlZimmer() > 0", section="hotel", :title="hoteltitel")
+      legend-card(v-if="veranstaltung.unterkunft.anzahlZimmer > 0", section="hotel", :title="hoteltitel")
         address
           strong {{ hotel.ansprechpartner }} <br>
           | {{ hotel.adresse }} <br>
@@ -114,6 +114,7 @@ import Technik from "../../../../shared/veranstaltung/technik";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import Kopf from "../../../../shared/veranstaltung/kopf";
 import Presse from "../../../../shared/veranstaltung/presse";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
 
 @Component({
   components: { DeleteButtonWithDialog, JazzCurrencyDisplay, PreviewUserRow, LegendCard },
@@ -183,8 +184,8 @@ export default class Preview extends Vue {
 
   get preview(): string {
     return (
-      renderer.render(`${this.veranstaltung.presseTemplate() + this.presse.text}
-${this.presse.fullyQualifiedJazzclubURL()}`) +
+      renderer.render(`${new VeranstaltungFormatter(this.veranstaltung).presseTemplate + this.presse.text}
+${this.presse.fullyQualifiedJazzclubURL}`) +
       `<h4>Bilder:</h4>${this.presse.image
         .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
         .reverse()
@@ -193,7 +194,7 @@ ${this.presse.fullyQualifiedJazzclubURL()}`) +
   }
 
   get hoteltitel(): string {
-    return `${this.hotel.name}: ${this.veranstaltung.unterkunft.anzahlZimmer()} Zimmer / ${this.veranstaltung.unterkunft.anzNacht}`;
+    return `${this.hotel.name}: ${this.veranstaltung.unterkunft.anzahlZimmer} Zimmer / ${this.veranstaltung.unterkunft.anzNacht}`;
   }
 
   @Watch("$url")

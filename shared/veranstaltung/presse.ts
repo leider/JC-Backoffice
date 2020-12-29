@@ -35,7 +35,7 @@ export default class Presse {
     this.image = misc.dropImage(this.image, image);
   }
 
-  firstImage(): string {
+  get firstImage(): string {
     return this.image[0];
   }
 
@@ -48,12 +48,12 @@ export default class Presse {
 
   imageURLpure(prefix: string): string {
     if (this.image.length > 0) {
-      return prefix + "/upload/" + encodeURIComponent(this.firstImage());
+      return prefix + "/upload/" + encodeURIComponent(this.firstImage);
     }
     return "";
   }
 
-  fullyQualifiedJazzclubURL(optionalURL?: string): string {
-    return "http://www.jazzclub.de/event/" + (optionalURL || this.jazzclubURL);
+  get fullyQualifiedJazzclubURL(): string {
+    return "https://www.jazzclub.de/event/" + this.jazzclubURL;
   }
 }

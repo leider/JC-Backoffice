@@ -53,8 +53,8 @@ export default class Salesreport implements ReservixState {
   istVeraltet(): boolean {
     const lastUpdated = this.zuletztAktualisiert();
     return (
-      !this.istVergangen() &&
-      (this.beginntInZwoelfStunden()
+      !this.istVergangen &&
+      (this.beginntInZwoelfStunden
         ? this.now.minus({ minuten: 10 }).istNach(lastUpdated)
         : this.now.minus({ minuten: 60 }).istNach(lastUpdated))
     );
@@ -64,14 +64,14 @@ export default class Salesreport implements ReservixState {
     return DatumUhrzeit.forJSDate(this.datum || new Date());
   }
 
-  istVergangen(): boolean {
+  get istVergangen(): boolean {
     if (!this.datum || this.datum.getTime() === 0) {
       return false;
     }
     return this.startDatumUhrzeit().plus({ tage: 1 }).istVor(this.now);
   }
 
-  beginntInZwoelfStunden(): boolean {
+  private get beginntInZwoelfStunden(): boolean {
     if (!this.datum) {
       return false;
     }

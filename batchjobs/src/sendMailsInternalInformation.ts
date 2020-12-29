@@ -32,10 +32,19 @@ export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): vo
     const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
     function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function): void {
+      const prefix = conf.get("publicUrlPrefix") as string;
+      function presseTemplateInternal(veranst: Veranstaltung): string {
+        // für interne Mails
+        return `### [${veranst.kopf.titelMitPrefix}](${prefix}/vue${veranst.fullyQualifiedUrl}/presse)
+#### ${veranst.startDatumUhrzeit.fuerPresse} ${veranst.kopf.presseInEcht}
+
+`;
+      }
+
       const markdownToSend = `## Folgende Veranstaltungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
-${kaputteVeranstaltungen.map((veranst) => veranst.presseTemplateInternal(conf.get("publicUrlPrefix") as string)).join("\n\n---\n")}`;
+${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
       const message = new Message({
         subject: "Veranstaltungen ohne Pressetext",
         markdown: markdownToSend,
@@ -69,6 +78,10 @@ ${kaputteVeranstaltungen.map((veranst) => veranst.presseTemplateInternal(conf.ge
   });
 }
 
+function kasseFehlt(veranstaltung: Veranstaltung): boolean {
+  return veranstaltung.staff.kasseFehlt && veranstaltung.kopf.confirmed;
+}
+
 export function checkKasse(now: DatumUhrzeit, callback: Function): void {
   const start = now;
   const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
@@ -81,7 +94,7 @@ ${kaputteVeranstaltungen
   .map(
     (veranst) =>
       `<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
-      `${veranst.kopf.titelMitPrefix} am ${veranst.datumForDisplayShort()} ${veranst.kopf.presseInEcht()}</a>`
+      `${veranst.kopf.titelMitPrefix} am ${veranst.datumForDisplayShort} ${veranst.kopf.presseInEcht}</a>`
   )
   .join("\n\n---\n")}
 
@@ -109,7 +122,7 @@ ${kaputteVeranstaltungen
     if (err1) {
       return;
     }
-    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.kasseFehlt());
+    const zuSendende = veranstaltungen.filter((veranstaltung) => kasseFehlt(veranstaltung));
     if (zuSendende.length === 0) {
       callback();
     } else {
@@ -136,7 +149,7 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
 
 ---
 ${veranstaltungenMitFluegel
-  .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort() + " " + veranst.kopf.presseInEcht())
+  .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht)
   .join("\n\n---\n")}`;
 
     const message = new Message({

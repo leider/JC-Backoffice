@@ -61,6 +61,7 @@
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -rf lib/**/*.js configure.js configureApp.js initWinston.js reservixLoad.js start.js",
-    "sass": "../node_modules/.bin/sass sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
+    "sass": "../node_modules/.bin/sass sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map",
+    "outdated": "npm outdated"
   }
 }

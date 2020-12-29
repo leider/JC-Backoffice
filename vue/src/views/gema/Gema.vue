@@ -21,6 +21,7 @@ import GemaMonat from "./GemaMonat.vue";
 import GemaSection from "./GemaSection.vue";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
 
 @Component({ components: { GemaSection, GemaMonat, SingleSelectPure } })
 export default class Gema extends Vue {
@@ -36,7 +37,8 @@ export default class Gema extends Vue {
     document.title = "Gema";
     veranstaltungenForTeam("alle", (veranstaltungen: Veranstaltung[]) => {
       this.veranstaltungen = veranstaltungen.map((v) => {
-        return { id: v.id || "", description: v.description(), startDatumUhrzeit: v.startDatumUhrzeit(), selected: false };
+        const formatter = new VeranstaltungFormatter(v);
+        return { id: v.id || "", description: formatter.description, startDatumUhrzeit: v.startDatumUhrzeit, selected: false };
       });
     });
   }

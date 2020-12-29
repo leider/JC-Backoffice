@@ -77,12 +77,12 @@ describe("Reservix Salesreport", () => {
   describe("istVergangen", () => {
     it("23 hours are in grace period", () => {
       const obj = new Salesreport({ id: "dodo", datum: almostOneDayOld });
-      expect(obj.istVergangen()).to.equal(false);
+      expect(obj.istVergangen).to.equal(false);
     });
 
     it("25 hours are definitely over", () => {
       const obj = new Salesreport({ id: "dodo", datum: moreThanOneDayOld });
-      expect(obj.istVergangen()).to.equal(true);
+      expect(obj.istVergangen).to.equal(true);
     });
 
     it("2017 is past", () => {
@@ -90,7 +90,7 @@ describe("Reservix Salesreport", () => {
         id: "dodo",
         datum: new Date("2017-10-27T12:58:23.072Z"),
       });
-      expect(obj.istVergangen()).to.equal(true);
+      expect(obj.istVergangen).to.equal(true);
     });
   });
 });

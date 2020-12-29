@@ -1,5 +1,3 @@
-/*eslint no-underscore-dangle: 0 */
-import fieldHelpers from "../commons/fieldHelpers";
 import DatumUhrzeit from "../commons/DatumUhrzeit";
 import Misc from "../commons/misc";
 
@@ -15,6 +13,7 @@ import Technik from "./technik";
 import Unterkunft from "./unterkunft";
 import Vertrag from "./vertrag";
 import Salesreport from "./salesreport";
+import VeranstaltungGema from "./veranstaltungGema";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -92,27 +91,27 @@ export default class Veranstaltung {
         technik: new Technik(object.technik),
         vertrag: new Vertrag(object.vertrag),
       });
-      this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit(), this.artist.name);
+      this.unterkunft = new Unterkunft(object.unterkunft, this.startDatumUhrzeit, this.artist.name);
     } else {
-      this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit(), this.artist.name);
+      this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit, this.artist.name);
     }
   }
 
   get isValid(): boolean {
-    return this.kopf.isValid && this.startDatumUhrzeit().istVorOderAn(this.endDatumUhrzeit());
+    return this.kopf.isValid && this.startDatumUhrzeit.istVorOderAn(this.endDatumUhrzeit);
   }
 
   static createUrlFrom(date: Date, titel: string): string {
     return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + Misc.normalizeString(titel);
   }
 
-  get initializedUrl(): string {
+  private get initializedUrl(): string {
     return Veranstaltung.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
   }
 
   initializeIdAndUrl(): void {
     this.url = this.initializedUrl;
-    this.id = this.kopf.titel + " am " + this.datumForDisplay();
+    this.id = this.kopf.titel + " am " + this.datumForDisplay;
   }
 
   reset(): void {
@@ -132,173 +131,64 @@ export default class Veranstaltung {
     }
   }
 
-  fullyQualifiedUrl(): string {
+  get fullyQualifiedUrl(): string {
     return "/veranstaltungen/" + encodeURIComponent(this.url || "");
-  }
-
-  fullyQualifiedUrlForVertrag(): string {
-    return "/pdf/vertrag/" + encodeURIComponent(this.url || "");
-  }
-
-  fullyQualifiedUrlForKassenzettel(): string {
-    return "/pdf/kassenzettel/" + encodeURIComponent(this.url || "");
   }
 
   // Image Overview
   get suitableForImageOverview(): ImageOverviewVeranstaltung {
     return {
       id: this.id || "",
-      startDate: this.startDatumUhrzeit(),
+      startDate: this.startDatumUhrzeit,
       titel: this.kopf.titel,
-      fullyQualifiedUrl: this.fullyQualifiedUrl(),
+      fullyQualifiedUrl: this.fullyQualifiedUrl,
       images: this.presse.image,
     };
   }
 
-  // Money - GEMA - Reservix
+  // Dates and Times
 
-  kostenGesamtEUR(): number {
-    return this.kosten.totalEUR() + this.unterkunft.kostenTotalEUR() + this.kasse.ausgabenOhneGage();
-  }
-
-  einnahmenGesamtEUR(): number {
-    return this.salesreport?.netto + this.eintrittspreise.erwarteterOderEchterEintritt(this.kasse);
-  }
-
-  dealAbsolutEUR(): number {
-    return Math.max(this.bruttoUeberschussEUR() * this.kosten.dealAlsFaktor(), 0);
-  }
-
-  bruttoUeberschussEUR(): number {
-    return this.einnahmenGesamtEUR() - this.kostenGesamtEUR();
-  }
-
-  dealUeberschussTotal(): number {
-    return this.bruttoUeberschussEUR() - this.dealAbsolutEUR();
-  }
-
-  // Display Dates and Times
-
-  month(): number {
-    return this.startDatumUhrzeit().monat;
-  }
-
-  year(): number {
-    return this.startDatumUhrzeit().jahr;
-  }
-
-  tagNumerisch(): string {
-    return this.startDatumUhrzeit().tagNumerisch;
-  }
-
-  datumForDisplayShort(): string {
-    return this.startDatumUhrzeit().lesbareKurzform;
-  }
-
-  datumForDisplay(): string {
-    return this.startDatumUhrzeit().tagMonatJahrLang;
-  }
-
-  datumForDisplayMitKW(): string {
-    return this.startDatumUhrzeit().tagMonatJahrLangMitKW;
-  }
-
-  startDatumUhrzeit(): DatumUhrzeit {
+  get startDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.startDate);
   }
 
-  getinDatumUhrzeit(): DatumUhrzeit {
-    return this.startDatumUhrzeit().minus({ stunden: 2 });
-  }
-
-  minimalStartForEdit(): DatumUhrzeit {
-    return this.startDatumUhrzeit().istVor(new DatumUhrzeit()) ? this.startDatumUhrzeit() : new DatumUhrzeit();
-  }
-
-  endDatumUhrzeit(): DatumUhrzeit {
+  get endDatumUhrzeit(): DatumUhrzeit {
     return DatumUhrzeit.forJSDate(this.endDate);
   }
 
-  istVergangen(): boolean {
-    return this.startDatumUhrzeit().istVor(new DatumUhrzeit());
+  get getinDatumUhrzeit(): DatumUhrzeit {
+    return this.startDatumUhrzeit.minus({ stunden: 2 });
   }
 
-  // utility
-  presseTemplate(): string {
-    return `### ${this.kopf.titelMitPrefix}
-#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
-**Eintritt:** ${this.eintrittspreise.alsPressetext(this.kopf.isKooperation() ? this.kopf.kooperation : "")}
-
-`;
+  get minimalStartForEdit(): DatumUhrzeit {
+    return this.startDatumUhrzeit.istVor(new DatumUhrzeit()) ? this.startDatumUhrzeit : new DatumUhrzeit();
   }
 
-  presseTemplateInternal(prefix: string): string {
-    // für interne Mails
-    return `### [${this.kopf.titelMitPrefix}](${prefix}/vue${this.fullyQualifiedUrl()}/presse)
-#### ${this.startDatumUhrzeit().fuerPresse} ${this.kopf.presseInEcht()}
-
-`;
+  get datumForDisplay(): string {
+    return this.startDatumUhrzeit.tagMonatJahrLang;
   }
 
-  presseTextForMail(prefix: string): string {
-    return (
-      this.presseTemplate() +
-      this.presse.text +
-      "\n\n" +
-      (this.presse.firstImage() ? this.presse.imageURL(prefix) : "") +
-      "\n\n" +
-      (this.presse.jazzclubURL ? `**URL:** ${this.presse.fullyQualifiedJazzclubURL()}` : "")
-    );
+  get datumForDisplayShort(): string {
+    return this.startDatumUhrzeit.lesbareKurzform;
   }
 
-  description(): string {
-    return `${this.datumForDisplayMitKW()} ${this.kopf.titelMitPrefix}`;
+  get istVergangen(): boolean {
+    return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
   }
 
   // GEMA
-  preisAusweisGema(): string {
-    if (this.eintrittspreise.frei() || this.kooperationGema()) {
-      return "-";
-    }
-    return `${fieldHelpers.formatNumberTwoDigits(this.eintrittspreise.regulaer())} €`;
-  }
-
-  kooperationGema(): boolean {
-    return this.kopf.rechnungAnKooperationspartner();
-  }
-
-  einnahmenEintrittEUR(): number {
-    return this.kasse.einnahmeTicketsEUR + (this.salesreport?.brutto || 0);
-  }
-
-  eintrittGema(): string {
-    if (this.eintrittspreise.frei() || this.kooperationGema()) {
-      return "-";
-    }
-    return `${fieldHelpers.formatNumberTwoDigits(this.einnahmenEintrittEUR())} €`;
-  }
-
-  anzahlBesucher(): number {
-    return this.kasse.anzahlBesucherAK + (this.salesreport?.anzahl || 0);
+  get gema(): VeranstaltungGema {
+    return new VeranstaltungGema(this);
   }
 
   // iCal
-  tooltipInfos(): string {
-    return this.kopf.ort + this.staff.tooltipInfos();
-  }
-
-  // Mailsend check
-  isSendable(): boolean {
-    return this.presse.checked && this.kopf.confirmed;
-  }
-
-  kasseFehlt(): boolean {
-    return this.staff.kasseFehlt() && this.kopf.confirmed;
+  get tooltipInfos(): string {
+    return this.kopf.ort + this.staff.tooltipInfos;
   }
 
   // CSV Export
   toCSV(): string {
-    return `${this.kopf.titelMitPrefix};${this.kopf.eventTyp};${this.startDatumUhrzeit().fuerCsvExport}`;
+    return `${this.kopf.titelMitPrefix};${this.kopf.eventTyp};${this.startDatumUhrzeit.fuerCsvExport}`;
   }
 
   updateImageName(oldname: string, newname: string): void {

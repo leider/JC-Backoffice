@@ -1,7 +1,7 @@
 <template lang="pug">
 .row
   .col-12
-    legend-card(section="technik", title="Rider und Backline", hasMoney="true", :money="kosten.backlineUndTechnikEUR()")
+    legend-card(section="technik", title="Rider und Backline", hasMoney="true", :money="kosten.backlineUndTechnikEUR")
       .row.mb-3
         .col-12.col-md-3
           jazz-check(v-model="technik.checked", label="Technik ist geklärt")

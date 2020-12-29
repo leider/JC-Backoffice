@@ -5,12 +5,12 @@ block adresse
   p.
     #{bandname} <br>
     c/o #{veranstaltung.agentur.name}<br>
-    #{veranstaltung.agentur.strasse()}<br>
-    #{veranstaltung.agentur.ort()}
+    #{veranstaltung.agentur.strasse}<br>
+    #{veranstaltung.agentur.ort}
 
 block content1
-  - var start = veranstaltung.startDatumUhrzeit();
-  - var getin = veranstaltung.getinDatumUhrzeit();
+  - var start = veranstaltung.startDatumUhrzeit;
+  - var getin = veranstaltung.getinDatumUhrzeit;
   - var hotel = veranstaltung.hotel;
   - var bandname = veranstaltung.artist.bandname || 'Band ohne Namen';
 
@@ -30,7 +30,7 @@ block content1
       p
         b #{bandname}<br>
         b #{veranstaltung.agentur.name}<br>
-          | #{veranstaltung.agentur.strasse()}, #{veranstaltung.agentur.ort()}<br>
+          | #{veranstaltung.agentur.strasse}, #{veranstaltung.agentur.ort}<br>
   .row
     .col-12
       p: i (hereafter referred to as Artist)
@@ -59,17 +59,17 @@ block content1
       p.
         §1.2 Territorial Protection: the artists herby commit to not play any concert within the radius of 50 km 14 days prior or after the concert.
       p.
-        §2 The agreed salary is <b>#{veranstaltung.kosten.gagenTotalEURformatted()} &euro;</b>.<br>
+        §2 The agreed salary is <b>#{veranstaltung.kosten.gagenTotalEURformatted} &euro;</b>.<br>
         The agreed amount is a gross payment and includes VAT as well as other taxes. Additional payments are precluded.
       p.
         §2.1 The salary is not subject to income tax and is taxable by the artist.
         The artist agrees to issue a proper invoice for the salary, either in a paper or electronic format.
-      if (veranstaltung.unterkunft.anzahlZimmer() === 0)
+      if (veranstaltung.unterkunft.anzahlZimmer === 0)
         p.
           §2.2 The organizer will <b>not provide any accomodation</b>.
       else
         p.
-          §2.2 The organizer provides <b>#{veranstaltung.unterkunft.anzahlZimmer()} beds</b> at <b>#{hotel.name}, #{hotel.einzeiligeAdresse()}</b> at his cost.
+          §2.2 The organizer provides <b>#{veranstaltung.unterkunft.anzahlZimmer} beds</b> at <b>#{hotel.name}, #{hotel.einzeiligeAdresse}</b> at his cost.
       p.
         §2.3 The Artists are entitled to a catering flat rate of 20 &euro; per person in cash.
         German quality tab water shall be provided free of charge by the Organizer.

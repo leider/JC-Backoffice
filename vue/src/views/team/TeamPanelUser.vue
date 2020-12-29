@@ -8,13 +8,13 @@
             b-icon-caret-down(v-if="expanded")
             b-icon-caret-right(v-else)
           td: a(@click="toggleExpanded")
-            h6 {{ veranstaltung.datumForDisplayShort() }}
+            h6 {{ veranstaltung.datumForDisplayShort }}
 
           td.text-right: .btn-group
             .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
               i.logo-reservix
               | &nbsp; {{ veranstaltung.salesreport.anzahl }}
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl() + '/preview'"): b-icon-eye-fill
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
       table.position-relative(width="100%")
         tr
           td

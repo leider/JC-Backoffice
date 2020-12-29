@@ -18,6 +18,7 @@
     "test": "../node_modules/.bin/ts-mocha --exit test/**/*.ts",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f src/*.js test/**/*.js"
+    "clean-ts": "rm -f src/*.js test/**/*.js",
+    "outdated": "npm outdated"
   }
 }

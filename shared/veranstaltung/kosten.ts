@@ -4,10 +4,9 @@ function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
 }
 
-const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
-const deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
-
 export default class Kosten {
+  static deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
+
   backlineEUR = 0;
   saalmiete = 0;
   technikAngebot1EUR = 0;
@@ -33,35 +32,25 @@ export default class Kosten {
     }
   }
 
-  gagenTotalEUR(): number {
+  get gagenTotalEUR(): number {
     const eur = this.gagenEUR;
     const mwst = (eur * floatAmount(this.gagenSteuer)) / 100;
     return eur + mwst;
   }
 
-  gagenTotalEURformatted(): string {
-    return fieldHelpers.formatNumberTwoDigits(this.gagenTotalEUR());
+  get gagenTotalEURformatted(): string {
+    return fieldHelpers.formatNumberTwoDigits(this.gagenTotalEUR);
   }
 
-  dealAlsFaktor(): number {
+  get dealAlsFaktor(): number {
     return floatAmount(this.deal) / 100;
   }
 
-  backlineUndTechnikEUR(): number {
+  get backlineUndTechnikEUR(): number {
     return this.backlineEUR + this.technikAngebot1EUR;
   }
 
-  totalEUR(): number {
-    return (
-      this.gagenTotalEUR() + this.backlineUndTechnikEUR() + this.saalmiete + this.werbung1 + this.werbung2 + this.werbung3 + this.personal
-    );
-  }
-
-  steuerSatze(): string[] {
-    return steuerSaetze;
-  }
-
-  deals(): string[] {
-    return deals;
+  get totalEUR(): number {
+    return this.gagenTotalEUR + this.backlineUndTechnikEUR + this.saalmiete + this.werbung1 + this.werbung2 + this.werbung3 + this.personal;
   }
 }

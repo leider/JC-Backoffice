@@ -17,10 +17,10 @@ function gemaMeldungCsv(res: Response, selected: Veranstaltung[], nachmeldung: b
     }Anzahl Besucher;Rechnung An;Raumgröße\n`;
     const zeilen = events.map((e) => {
       const wiedergabeart = e.artist.bandname || e.artist.name.join(", ");
-      const rechnungAn = e.kopf.rechnungAnKooperationspartner() ? e.kopf.kooperation : "Jazzclub";
-      return `${e.datumForDisplay()};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.preisAusweisGema()};${
-        nachmeldung ? `${e.eintrittGema()};` : ""
-      }${e.anzahlBesucher()};${rechnungAn};${e.kopf.flaeche}\n`;
+      const rechnungAn = e.kopf.rechnungAnKooperationspartner ? e.kopf.kooperation : "Jazzclub";
+      return `${e.datumForDisplay};${e.kopf.ort};${e.kopf.kooperation};Jazzkonzert;${wiedergabeart};${e.gema.preisAusweis};${
+        nachmeldung ? `${e.gema.eintritt};` : ""
+      }${e.gema.anzahlBesucher};${rechnungAn};${e.kopf.flaeche}\n`;
     });
     let result = header;
     zeilen.forEach((z) => {
