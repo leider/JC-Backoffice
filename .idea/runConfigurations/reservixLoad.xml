@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="reservixLoad" type="NodeJSConfigurationType" path-to-node="$PROJECT_DIR$/node_modules/.bin/ts-node" node-parameters="--respawn --icu-data-dir=node_modules/full-icu" path-to-js-file="backend/reservixLoad.ts" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="reservixLoad" type="NodeJSConfigurationType" path-to-node="$PROJECT_DIR$/node_modules/.bin/ts-node" node-parameters="--respawn --icu-data-dir=node_modules/full-icu" path-to-js-file="reservixLoad.ts" working-dir="$PROJECT_DIR$/backend">
     <method v="2" />
   </configuration>
 </component>

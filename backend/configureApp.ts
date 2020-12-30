@@ -6,24 +6,14 @@ import history from "connect-history-api-fallback";
 import path from "path";
 import passport from "passport";
 
-import loggers from "./initWinston";
+import "./initWinston";
 import restApp from "./rest";
-
 import siteApp from "./lib/site";
-
 import passportInitializer from "./lib/middleware/passportInitializer";
-
-const httpLogger = loggers.get("http");
 
 function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
   res.setHeader("X-Frame-Options", "DENY");
   next();
-}
-
-// eslint-disable-next-line no-unused-vars
-function handle404(req: Request, res: Response): void {
-  httpLogger.warn("404 by requesting URL: " + req.originalUrl);
-  res.redirect("/");
 }
 
 export default function (app: express.Express): void {
@@ -40,5 +30,4 @@ export default function (app: express.Express): void {
 
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, restApp);
-  //app.use(handle404);
 }

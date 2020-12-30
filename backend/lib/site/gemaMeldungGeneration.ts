@@ -55,7 +55,11 @@ function gemaResult(
   });
 }
 
-export function gemameldung(res: Response, next: NextFunction, transferObject: any): void {
+export function gemameldung(
+  res: Response,
+  next: NextFunction,
+  transferObject: { selectedIds: string[]; renderart: string; vorNach: "vergangene" | "zukuenftige" }
+): void {
   const event = transferObject.selectedIds;
   const dateiart = transferObject.renderart;
   const vorNach = transferObject.vorNach;

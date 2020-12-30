@@ -51,7 +51,7 @@ export default {
   pageDelete: function pageDelete(subdir: string, pageName: string, user: string, callback: Function): void {
     const completePageName = subdir + "/" + pageName + ".md";
 
-    Git.readFile(completePageName, "HEAD", (err: Error | null, contentOld: string) => {
+    Git.readFile(completePageName, "HEAD", (err: Error | null) => {
       if (err) {
         return callback(err);
       }

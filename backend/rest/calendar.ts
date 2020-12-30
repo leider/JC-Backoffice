@@ -89,7 +89,7 @@ app.get("/fullcalendarevents.json", (req, res) => {
   const start = DatumUhrzeit.forISOString(req.query.start as string);
   const end = DatumUhrzeit.forISOString(req.query.end as string);
 
-  async.parallel(
+  async.parallel<TerminEvent[] | FerienIcals>(
     {
       icals: optionenstore.icals,
       termine: (cb) => termineAsEventsBetween(start, end, (err: Error | null, events: TerminEvent[]) => cb(err, events)),
@@ -101,10 +101,10 @@ app.get("/fullcalendarevents.json", (req, res) => {
         return;
       }
       const icals = (results.icals as FerienIcals).icals;
-      async.map(icals, termineForIcal, (err1, termineForIcals?: any[]) => {
+      async.map<Ical, TerminEvent>(icals, termineForIcal, (err1, termineForIcals?) => {
         const events = flatMap(termineForIcals, (x) => x)
-          .concat(results.termine)
-          .concat(results.veranstaltungen);
+          .concat(results.termine as TerminEvent[])
+          .concat(results.veranstaltungen as TerminEvent[]);
         reply(res, err1, events);
       });
     }

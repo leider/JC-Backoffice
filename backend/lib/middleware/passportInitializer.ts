@@ -16,7 +16,7 @@ import User from "../../../shared/user/user";
 import Accessrights from "../../../shared/user/accessrights";
 
 passport.use(
-  new Strategy(jwtOptions, (jwtPayload: any, done: VerifiedCallback) => {
+  new Strategy(jwtOptions, (jwtPayload: { id: string }, done: VerifiedCallback) => {
     const username = jwtPayload.id;
     store.forId(username, (err: Error | null, user: User) => {
       if (err || !user) {
