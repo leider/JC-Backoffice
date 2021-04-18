@@ -1,5 +1,5 @@
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import Salesreport from "../../../shared/veranstaltung/salesreport";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 import reservixstore from "./reservixstore";
 import { loadSalesreports, Lineobject } from "./htmlbridge";

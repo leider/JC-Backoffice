@@ -23,7 +23,7 @@ export function generatePdf(options: PDFOptions, res: Response, next: NextFuncti
 }
 
 export const printoptions: PDFOptions = {
-  format: "A4",
+  format: "a4",
   landscape: false,
   scale: 1.1,
   margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },

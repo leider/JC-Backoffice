@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import async, { ErrorCallback } from "async";
 
-import Veranstaltung, { ImageOverviewRow } from "../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 
 import store from "./veranstaltungenstore";
 const uploadDir = path.join(__dirname, "../../static/upload");

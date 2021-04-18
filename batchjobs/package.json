@@ -8,17 +8,13 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "3.2.0",
-    "winston": "3.3.3"
-  },
-  "devDependencies": {
-    "@types/async": "3.2.5"
+    "jc-backend": "1.0.0",
+    "jc-shared": "1.0.0"
   },
   "scripts": {
     "test": "../node_modules/.bin/ts-mocha --exit test/**/*.ts",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f src/*.js test/**/*.js",
-    "outdated": "npm outdated"
+    "clean-ts": "rm -f src/*.js test/**/*.js"
   }
 }

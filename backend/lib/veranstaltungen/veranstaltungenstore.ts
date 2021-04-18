@@ -1,9 +1,9 @@
 import partial from "lodash/partial";
 import winston from "winston";
 
-import misc from "../../../shared/commons/misc";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import misc from "jc-shared/commons/misc";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import pers from "../persistence/persistence";
 const persistence = pers("veranstaltungenstore");

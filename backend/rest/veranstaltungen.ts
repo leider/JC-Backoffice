@@ -4,16 +4,16 @@ import fs from "fs";
 import path from "path";
 import async from "async";
 
-import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Kasse from "../../shared/veranstaltung/kasse";
-import User from "../../shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Kasse from "jc-shared/veranstaltung/kasse";
+import User from "jc-shared/user/user";
 
 import { reply } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import { salesreportFor } from "../lib/reservix/reservixService";
-import Salesreport from "../../shared/veranstaltung/salesreport";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 const app = express();
 

@@ -10,7 +10,7 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Ort } from "../../../../shared/optionen/orte";
+import { Ort } from "jc-shared/optionen/orte";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 
 @Component({ components: { DeleteButtonWithDialog } })

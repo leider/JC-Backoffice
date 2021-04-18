@@ -3,6 +3,13 @@
   "description": "The back office for Jazzclub Karlsruhe",
   "version": "1.0.0",
   "author": "Andreas Leidig",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "batchjobs",
+    "vue",
+    "shared"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/leider/JC-Backoffice"
@@ -13,38 +20,37 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "lodash": "4.17.20"
+    "lodash": "4.17.21"
   },
   "devDependencies": {
-    "@prettier/plugin-pug": "1.13.1",
-    "@types/chai": "4.2.14",
-    "@types/lodash": "4.14.165",
-    "@types/mocha": "8.2.0",
-    "@types/node": "14.14.14",
-    "@types/sinon": "9.0.9",
-    "@typescript-eslint/eslint-plugin": "4.9.1",
-    "@typescript-eslint/parser": "4.9.1",
-    "chai": "4.2.0",
-    "eslint": "7.16.0",
-    "eslint-plugin-prettier": "3.3.0",
-    "full-icu": "1.3.1",
-    "mocha": "8.2.1",
+    "@prettier/plugin-pug": "1.13.5",
+    "@types/chai": "4.2.16",
+    "@types/lodash": "4.14.168",
+    "@types/mocha": "8.2.2",
+    "@types/node": "14.14.41",
+    "@types/sinon": "10.0.0",
+    "@typescript-eslint/eslint-plugin": "4.22.0",
+    "@typescript-eslint/parser": "4.22.0",
+    "chai": "4.3.4",
+    "eslint": "7.24.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "full-icu": "1.3.4",
+    "mocha": "8.3.2",
     "prettier": "2.2.1",
-    "sass": "1.30.0",
-    "sinon": "9.2.2",
+    "sass": "1.32.10",
+    "sinon": "10.0.0",
+    "tslib": "2.2.0",
     "ts-mocha": "8.0.0",
-    "typescript": "4.1.3"
+    "typescript": "4.2.4"
   },
   "scripts": {
-    "compile": "cd backend && npm run deploy && cd ../batchjobs && npm run tsc && cd ../shared && npm run tsc",
-    "deploy": "npm run compile && cd vue && npm run build",
-    "clean-ts": "cd backend && npm run clean-ts && cd ../batchjobs && npm run clean-ts && cd ../shared && npm run clean-ts",
-    "develop": "npm run clean-ts && npm run compile && cd vue && npm run serve",
+    "compile": "cd backend && yarn deploy && cd ../batchjobs && yarn tsc && cd ../shared && yarn tsc",
+    "deploy": "yarn compile && cd vue && yarn build",
+    "clean-ts": "cd backend && yarn clean-ts && cd ../batchjobs && yarn clean-ts && cd ../shared && yarn clean-ts",
+    "develop": "yarn clean-ts && yarn compile && cd vue && yarn serve",
     "start": "node --icu-data-dir=node_modules/full-icu backend/start",
-    "test": "cd batchjobs && npm t && cd ../shared && npm t",
-    "lint-all": "cd backend && npm run eslint && cd ../batchjobs && npm run eslint && cd ../shared && npm run eslint && cd ../vue && npm run lint",
-    "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules",
-    "install-all-modules": "npm i && cd backend && npm i && cd ../batchjobs && npm i && cd ../shared && npm i && cd ../vue && npm i",
-    "ci-all-modules": "npm ci && cd backend && npm ci && cd ../batchjobs && npm ci && cd ../shared && npm ci && cd ../vue && npm ci"
+    "test": "cd batchjobs && yarn test && cd ../shared && yarn test",
+    "lint-all": "cd backend && yarn eslint && cd ../batchjobs && yarn eslint && cd ../shared && yarn eslint && cd ../vue && yarn lint",
+    "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules"
   }
 }

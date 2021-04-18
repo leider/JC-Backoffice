@@ -1,7 +1,7 @@
 import express from "express";
 
-import User from "../../shared/user/user";
-import misc from "../../shared/commons/misc";
+import User from "jc-shared/user/user";
+import misc from "jc-shared/commons/misc";
 
 import wikiService from "../lib/wiki/wikiService";
 import { reply } from "../lib/commons/replies";

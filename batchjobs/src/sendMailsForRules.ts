@@ -2,16 +2,16 @@ import async from "async";
 import { loggers } from "winston";
 const logger = loggers.get("application");
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Message from "../../shared/mail/message";
-import MailRule from "../../shared/mail/mailRule";
-import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Message from "jc-shared/mail/message";
+import MailRule from "jc-shared/mail/mailRule";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
-import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
-import mailstore from "../../backend/lib/mailsender/mailstore";
-import mailtransport from "../../backend/lib/mailsender/mailtransport";
-import conf from "../../backend/lib/commons/simpleConfigure";
-import VeranstaltungFormatter from "../../shared/veranstaltung/veranstaltungFormatter";
+import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
+import mailstore from "jc-backend/lib/mailsender/mailstore";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport";
+import conf from "jc-backend/lib/commons/simpleConfigure";
+import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 
 function isSendable(veranstaltung: Veranstaltung): boolean {
   return veranstaltung.presse.checked && veranstaltung.kopf.confirmed;

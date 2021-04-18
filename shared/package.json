@@ -8,17 +8,18 @@
   },
   "license": "MIT",
   "dependencies": {
-    "dayjs": "1.9.7",
-    "marked": "1.2.7"
+    "dayjs": "1.10.4",
+    "marked": "2.0.3"
   },
   "devDependencies": {
-    "@types/marked": "1.2.1"
+    "@types/jsonwebtoken": "8.5.1",
+    "@types/marked": "2.0.2",
+    "pug": "3.0.2"
   },
   "scripts": {
     "test": "../node_modules/.bin/ts-mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.ts",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js",
-    "outdated": "npm outdated"
+    "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js"
   }
 }

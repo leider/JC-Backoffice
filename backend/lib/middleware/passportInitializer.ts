@@ -12,8 +12,8 @@ import { loggers } from "winston";
 const appLogger = loggers.get("application");
 
 import store from "../users/userstore";
-import User from "../../../shared/user/user";
-import Accessrights from "../../../shared/user/accessrights";
+import User from "jc-shared/user/user";
+import Accessrights from "jc-shared/user/accessrights";
 
 passport.use(
   new Strategy(jwtOptions, (jwtPayload: { id: string }, done: VerifiedCallback) => {

@@ -151,7 +151,7 @@ function openDB(): void {
     }
     ourDB = db;
     ourDBConnectionState = DBSTATE.OPEN;
-    return logInfo("DB state is now OPEN, db = " + JSON.stringify(db));
+    return logInfo("DB state is now OPEN, db = " + JSON.stringify(db.databaseName));
   });
 }
 

@@ -1,5 +1,5 @@
 import express, { Response } from "express";
-import { ImageOverviewRow } from "../../shared/veranstaltung/veranstaltung";
+import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 
 import service from "../lib/veranstaltungen/imageService";
 import { reply } from "../lib/commons/replies";
@@ -12,7 +12,7 @@ import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
 import refreshstore from "../lib/site/refreshstore";
 import { addPayload } from "../lib/site/onetimeTokens";
-import User from "../../shared/user/user";
+import User from "jc-shared/user/user";
 const app = express();
 
 app.use("/", calendarApp);

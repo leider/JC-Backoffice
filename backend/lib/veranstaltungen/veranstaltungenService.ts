@@ -6,10 +6,10 @@ import fs from "fs";
 import async from "async";
 import path from "path";
 
-import Veranstaltung from "../../../shared/veranstaltung//veranstaltung";
-import Salesreport from "../../../shared/veranstaltung/salesreport";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import User from "../../../shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import User from "jc-shared/user/user";
 
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";

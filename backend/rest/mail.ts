@@ -1,11 +1,11 @@
 import express from "express";
 
-import User from "../../shared/user/user";
-import { Mailingliste } from "../../shared/user/users";
-import Message from "../../shared/mail/message";
+import User from "jc-shared/user/user";
+import { Mailingliste } from "jc-shared/user/users";
+import Message from "jc-shared/mail/message";
 
 import mailstore from "../lib/mailsender/mailstore";
-import MailRule from "../../shared/mail/mailRule";
+import MailRule from "jc-shared/mail/mailRule";
 import { reply } from "../lib/commons/replies";
 import mailtransport from "../lib/mailsender/mailtransport";
 import store from "../lib/users/userstore";

@@ -3,7 +3,7 @@
 import "./configure";
 import { Lineobject, loadSalesreports } from "./lib/reservix/htmlbridge";
 import reservixstore from "./lib/reservix/reservixstore";
-import DatumUhrzeit from "../shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 function load(datumString: string | null, results: Lineobject[], callback: Function): void {
   loadSalesreports(datumString, (err: Error | null, rawresults: Lineobject[]) => {

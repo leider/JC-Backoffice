@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import fetch, { Response } from "cross-fetch";
-import User from "../../../shared/user/user";
-import Kalender from "../../../shared/programmheft/kalender";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import OptionValues from "../../../shared/optionen/optionValues";
-import Orte from "../../../shared/optionen/orte";
-import Message from "../../../shared/mail/message";
-import { Mailingliste } from "../../../shared/user/users";
-import MailRule from "../../../shared/mail/mailRule";
-import Termin from "../../../shared/optionen/termin";
-import FerienIcals from "../../../shared/optionen/ferienIcals";
-import Accessrights from "../../../shared/user/accessrights";
-import { StaffType } from "../../../shared/veranstaltung/staff";
-import Veranstaltung, { ImageOverviewRow } from "../../../shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
+import Kalender from "jc-shared/programmheft/kalender";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import OptionValues from "jc-shared/optionen/optionValues";
+import Orte from "jc-shared/optionen/orte";
+import Message from "jc-shared/mail/message";
+import { Mailingliste } from "jc-shared/user/users";
+import MailRule from "jc-shared/mail/mailRule";
+import Termin from "jc-shared/optionen/termin";
+import FerienIcals from "jc-shared/optionen/ferienIcals";
+import Accessrights from "jc-shared/user/accessrights";
+import { StaffType } from "jc-shared/veranstaltung/staff";
+import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import router from "../router";
 import jwt from "jsonwebtoken";
-import { Payload } from "../../../shared/commons/misc";
+import { Payload } from "jc-shared/commons/misc";
 
 let refreshTokenState: string;
 

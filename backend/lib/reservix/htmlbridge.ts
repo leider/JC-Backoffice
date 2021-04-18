@@ -1,8 +1,8 @@
 import superagent, { Response } from "superagent";
 import cheerio from "cheerio";
 
-import fieldHelpers from "../../../shared/commons/fieldHelpers";
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
+import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import conf from "../commons/simpleConfigure";
 import Cheerio = cheerio.Cheerio;
@@ -62,7 +62,7 @@ function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { ro
 function extractResultTableLines(htmlString: string, callback: Function): void {
   const $ = cheerio.load(htmlString);
 
-  const asfields = (index: number, element: cheerio.Element): { row: string[] } => ({
+  const asfields = (index: number, element: any): { row: string[] } => ({
     row: ($(element)
       .find("td")
       .map((index1, element1) => $(element1).text())

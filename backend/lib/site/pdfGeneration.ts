@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
 
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import User from "../../../shared/user/user";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
 
 import conf from "../commons/simpleConfigure";
 import store from "../veranstaltungen/veranstaltungenstore";

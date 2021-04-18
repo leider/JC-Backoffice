@@ -4,12 +4,12 @@ import superagent from "superagent";
 import flatMap from "lodash/flatMap";
 import { ComplexDate, Parser } from "ikalendar";
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
-import FerienIcals, { Ical } from "../../shared/optionen/ferienIcals";
-import Termin, { TerminEvent } from "../../shared/optionen/termin";
-import User from "../../shared/user/user";
-import fieldHelpers from "../../shared/commons/fieldHelpers";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
+import Termin, { TerminEvent } from "jc-shared/optionen/termin";
+import User from "jc-shared/user/user";
+import fieldHelpers from "jc-shared/commons/fieldHelpers";
 
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import optionenstore from "../lib/optionen/optionenstore";

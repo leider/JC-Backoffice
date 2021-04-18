@@ -1,8 +1,8 @@
 import partial from "lodash/partial";
 
-import DatumUhrzeit from "../../../shared/commons/DatumUhrzeit";
-import Kalender from "../../../shared/programmheft/kalender";
-import misc from "../../../shared/commons/misc";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Kalender from "jc-shared/programmheft/kalender";
+import misc from "jc-shared/commons/misc";
 
 import pers from "../persistence/persistence";
 const persistence = pers("kalenderstore");

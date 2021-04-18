@@ -1,15 +1,15 @@
-import "../../backend/configure";
-import "../../backend/initWinston";
+import "jc-backend/configure";
+import "jc-backend/initWinston";
 
 import async from "async";
 import partial from "lodash/partial";
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Message from "../../shared/mail/message";
-import User from "../../shared/user/user";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Message from "jc-shared/mail/message";
+import User from "jc-shared/user/user";
 
-import userstore from "../../backend/lib/users/userstore";
-import mailtransport from "../../backend/lib/mailsender/mailtransport";
+import userstore from "jc-backend/lib/users/userstore";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport";
 
 const receiver = "leider";
 import sendMailsNightly from "./sendMailsNightly";

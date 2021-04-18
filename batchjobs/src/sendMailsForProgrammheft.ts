@@ -1,11 +1,11 @@
 import async, { ErrorCallback } from "async";
 
-import Message from "../../shared/mail/message";
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Kalender, { EmailEvent } from "../../shared/programmheft/kalender";
+import Message from "jc-shared/mail/message";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Kalender, { EmailEvent } from "jc-shared/programmheft/kalender";
 
-import store from "../../backend/lib/programmheft/kalenderstore";
-import mailtransport from "../../backend/lib/mailsender/mailtransport";
+import store from "jc-backend/lib/programmheft/kalenderstore";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport";
 
 export function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), callback: ErrorCallback): void {
   function sendMail(eventsForToday: EmailEvent[], callbackInner: ErrorCallback): void {

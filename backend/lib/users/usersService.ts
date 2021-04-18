@@ -1,4 +1,4 @@
-import User from "../../../shared/user/user";
+import User from "jc-shared/user/user";
 
 import store from "./userstore";
 import { hashPassword, genSalt } from "../commons/hashPassword";

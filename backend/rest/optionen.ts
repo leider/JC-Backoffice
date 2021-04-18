@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 
-import OptionValues from "../../shared/optionen/optionValues";
-import Orte from "../../shared/optionen/orte";
-import FerienIcals from "../../shared/optionen/ferienIcals";
-import Termin from "../../shared/optionen/termin";
-import User from "../../shared/user/user";
+import OptionValues from "jc-shared/optionen/optionValues";
+import Orte from "jc-shared/optionen/orte";
+import FerienIcals from "jc-shared/optionen/ferienIcals";
+import Termin from "jc-shared/optionen/termin";
+import User from "jc-shared/user/user";
 
 import store from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";

@@ -59,7 +59,7 @@ div
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import User from "../../shared/user/user";
+import User from "jc-shared/user/user";
 import { currentUser, wikisubdirs, globals, logout } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
@@ -119,14 +119,14 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@import "../node_modules/rfs/scss";
-@import "../../backend/sass/jc-variables";
-@import "../node_modules/bootstrap/scss/bootstrap";
-@import "../node_modules/bootstrap-vue/src/index";
+@import "../../node_modules/rfs/scss";
+@import "../../node_modules/jc-backend/sass/jc-variables";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap-vue/src/index";
 
-@import "../node_modules/@fullcalendar/common/main.css";
-@import "../node_modules/@fullcalendar/daygrid/main.css";
-@import "../node_modules/@fullcalendar/bootstrap/main.css";
+@import "../../node_modules/@fullcalendar/common/main.css";
+@import "../../node_modules/@fullcalendar/daygrid/main.css";
+@import "../../node_modules/@fullcalendar/bootstrap/main.css";
 @import "flaticon-patched.css";
 @import "widgets/vue-multiselect";
 @import "markdown";

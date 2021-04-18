@@ -9,10 +9,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
-import Unterkunft from "../../../../shared/veranstaltung/unterkunft";
-import Technik from "../../../../shared/veranstaltung/technik";
-import Presse from "../../../../shared/veranstaltung/presse";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Unterkunft from "jc-shared/veranstaltung/unterkunft";
+import Technik from "jc-shared/veranstaltung/technik";
+import Presse from "jc-shared/veranstaltung/presse";
 
 @Component
 export default class CheckedButton extends Vue {

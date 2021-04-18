@@ -169,11 +169,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
-import Kasse from "../../../../shared/veranstaltung/kasse";
+import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Kasse from "jc-shared/veranstaltung/kasse";
 import JazzCurrencyDisplay from "../../widgets/JazzCurrencyDisplay.vue";
-import Kosten from "../../../../shared/veranstaltung/kosten";
+import Kosten from "jc-shared/veranstaltung/kosten";
 import JazzCurrencyPure from "../../widgets/JazzCurrencyPure.vue";
 import JazzText from "../../widgets/JazzText.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";

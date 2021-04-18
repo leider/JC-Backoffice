@@ -45,9 +45,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Termin from "../../../../shared/optionen/termin";
+import Termin from "jc-shared/optionen/termin";
 import { deleteTermin, kalender, saveKalender, termine } from "../../commons/loader";
-import FerienIcals, { Ical } from "../../../../shared/optionen/ferienIcals";
+import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
 import KalenderRow from "./KalenderRow.vue";
 import TerminRow from "./TerminRow.vue";
 @Component({

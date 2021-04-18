@@ -30,9 +30,9 @@
 import difference from "lodash/difference";
 import lowerFirst from "lodash/lowerFirst";
 import { Component, Vue } from "vue-property-decorator";
-import Message from "../../../../shared/mail/message";
-import User from "../../../../shared/user/user";
-import Users from "../../../../shared/user/users";
+import Message from "jc-shared/mail/message";
+import User from "jc-shared/user/user";
+import Users from "jc-shared/user/users";
 import MultiSelect from "../../widgets/MultiSelect.vue";
 import { allUsers, currentUser, sendMail } from "../../commons/loader";
 import JazzLabel from "../../widgets/JazzLabel.vue";

@@ -1,6 +1,6 @@
 import conf from "../commons/simpleConfigure";
 import { NextFunction, Response } from "express";
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import store from "../veranstaltungen/veranstaltungenstore";
 import { generatePdf, printoptions } from "./pdfCommons";
 

@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 
-import Veranstaltung from "../../../shared/veranstaltung/veranstaltung";
-import User from "../../../shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
 
 import store from "./veranstaltungenstore";
 

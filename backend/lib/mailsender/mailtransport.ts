@@ -3,7 +3,7 @@ import Mail from "nodemailer/lib/mailer";
 import winston from "winston";
 const logger = winston.loggers.get("application");
 
-import Message from "../../../shared/mail/message";
+import Message from "jc-shared/mail/message";
 
 import conf from "../commons/simpleConfigure";
 const doNotSendMails = conf.get("doNotSendMails") || false;

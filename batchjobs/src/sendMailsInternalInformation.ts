@@ -1,20 +1,20 @@
 import { loggers } from "winston";
 const logger = loggers.get("application");
 
-import DatumUhrzeit from "../../shared/commons/DatumUhrzeit";
-import Message from "../../shared/mail/message";
-import MailRule from "../../shared/mail/mailRule";
-import Veranstaltung from "../../shared/veranstaltung/veranstaltung";
-import User from "../../shared/user/user";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Message from "jc-shared/mail/message";
+import MailRule from "jc-shared/mail/mailRule";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
 
-import config from "../../backend/lib/commons/simpleConfigure";
+import config from "jc-backend/lib/commons/simpleConfigure";
 
-import store from "../../backend/lib/veranstaltungen/veranstaltungenstore";
-import userstore from "../../backend/lib/users/userstore";
-import mailstore from "../../backend/lib/mailsender/mailstore";
-import mailtransport from "../../backend/lib/mailsender/mailtransport";
-import conf from "../../backend/lib/commons/simpleConfigure";
-import usersService from "../../backend/lib/users/usersService";
+import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
+import userstore from "jc-backend/lib/users/userstore";
+import mailstore from "jc-backend/lib/mailsender/mailstore";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport";
+import conf from "jc-backend/lib/commons/simpleConfigure";
+import usersService from "jc-backend/lib/users/usersService";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {

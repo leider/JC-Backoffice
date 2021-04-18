@@ -9,9 +9,9 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
-import Staff, { StaffType } from "../../../../shared/veranstaltung/staff";
+import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 import { addUserToSection, removeUserFromSection } from "../../commons/loader";
 
 @Component

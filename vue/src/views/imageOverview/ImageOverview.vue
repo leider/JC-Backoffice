@@ -21,7 +21,7 @@ import differenceBy from "lodash/differenceBy";
 import intersection from "lodash/intersection";
 import flatten from "lodash/flatten";
 import uniq from "lodash/uniq";
-import Veranstaltung, { ImageOverviewRow, ImageOverviewVeranstaltung } from "../../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung, { ImageOverviewRow, ImageOverviewVeranstaltung } from "jc-shared/veranstaltung/veranstaltung";
 import ImageOverviewSection from "./ImageOverviewSection.vue";
 
 @Component({

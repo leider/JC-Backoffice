@@ -53,8 +53,8 @@
 import groupBy from "lodash/groupBy";
 import upperFirst from "lodash/upperFirst";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import UserPanels from "../user/UserPanels.vue";
 import { allUsers, currentUser, veranstaltungenForTeam } from "../../commons/loader";
 import JazzCalendar from "../calendar/JazzCalendar.vue";

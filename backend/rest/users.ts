@@ -1,6 +1,6 @@
 import express from "express";
 
-import User from "../../shared/user/user";
+import User from "jc-shared/user/user";
 
 import service from "../lib/users/usersService";
 import store from "../lib/users/userstore";

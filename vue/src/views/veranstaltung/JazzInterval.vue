@@ -14,8 +14,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import JazzDateTime from "../../widgets/JazzDateTime.vue";
 
 @Component({

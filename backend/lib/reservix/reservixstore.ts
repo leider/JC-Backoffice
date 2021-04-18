@@ -1,7 +1,7 @@
 import partial from "lodash/partial";
 
-import misc from "../../../shared/commons/misc";
-import Salesreport from "../../../shared/veranstaltung/salesreport";
+import misc from "jc-shared/commons/misc";
+import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 import pers from "../persistence/persistence";
 const persistence = pers("reservixstore");

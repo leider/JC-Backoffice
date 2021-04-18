@@ -65,8 +65,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import Accessrights from "../../../../shared/user/accessrights";
+import User from "jc-shared/user/user";
+import Accessrights from "jc-shared/user/accessrights";
 import JazzMail from "../../widgets/JazzMail.vue";
 import DeleteDialog from "../../widgets/DeleteDialog.vue";
 import SingleSelect from "../../widgets/SingleSelect.vue";

@@ -52,12 +52,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import OptionValues from "../../../../shared/optionen/optionValues";
-import DatumUhrzeit from "../../../../shared/commons/DatumUhrzeit";
-import fieldHelpers from "../../../../shared/commons/fieldHelpers";
-import Orte from "../../../../shared/optionen/orte";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import User from "jc-shared/user/user";
+import OptionValues from "jc-shared/optionen/optionValues";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import Orte from "jc-shared/optionen/orte";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import {
   currentUser,
   deleteVeranstaltungWithId,

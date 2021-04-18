@@ -11,7 +11,7 @@ import FullCalendar, { CalendarOptions } from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import deLocale from "@fullcalendar/core/locales/de";
-import { Event } from "../../../../shared/programmheft/kalender";
+import { Event } from "jc-shared/programmheft/kalender";
 
 @Component({ components: { FullCalendar } })
 export default class HeftCalendar extends Vue {

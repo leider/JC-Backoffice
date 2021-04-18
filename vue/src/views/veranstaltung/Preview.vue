@@ -99,22 +99,22 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import User from "../../../../shared/user/user";
-import fieldHelpers from "../../../../shared/commons/fieldHelpers";
-import renderer from "../../../../shared/commons/renderer";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
-import Eintrittspreise from "../../../../shared/veranstaltung/eintrittspreise";
+import User from "jc-shared/user/user";
+import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import renderer from "jc-shared/commons/renderer";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
 import PreviewUserRow from "./PreviewUserRow.vue";
-import Kontakt from "../../../../shared/veranstaltung/kontakt";
+import Kontakt from "jc-shared/veranstaltung/kontakt";
 import { allUsers, currentUser, deleteVeranstaltungWithId, veranstaltungForUrl } from "../../commons/loader";
-import Staff from "../../../../shared/veranstaltung/staff";
+import Staff from "jc-shared/veranstaltung/staff";
 import LegendCard from "../../widgets/LegendCard.vue";
 import JazzCurrencyDisplay from "../../widgets/JazzCurrencyDisplay.vue";
-import Technik from "../../../../shared/veranstaltung/technik";
+import Technik from "jc-shared/veranstaltung/technik";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
-import Kopf from "../../../../shared/veranstaltung/kopf";
-import Presse from "../../../../shared/veranstaltung/presse";
-import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
+import Kopf from "jc-shared/veranstaltung/kopf";
+import Presse from "jc-shared/veranstaltung/presse";
+import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 
 @Component({
   components: { DeleteButtonWithDialog, JazzCurrencyDisplay, PreviewUserRow, LegendCard },

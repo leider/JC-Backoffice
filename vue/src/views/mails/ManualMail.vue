@@ -28,16 +28,16 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Message from "../../../../shared/mail/message";
+import Message from "jc-shared/mail/message";
 import { currentUser, mailRules, sendMail, veranstaltungenForTeam } from "../../commons/loader";
-import User from "../../../../shared/user/user";
-import MailRule from "../../../../shared/mail/mailRule";
+import User from "jc-shared/user/user";
+import MailRule from "jc-shared/mail/mailRule";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import Veranstaltung from "../../../../shared/veranstaltung/veranstaltung";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import JazzText from "../../widgets/JazzText.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import Markdown from "../../widgets/Markdown.vue";
-import VeranstaltungFormatter from "../../../../shared/veranstaltung/veranstaltungFormatter";
+import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 
 @Component({ components: { MultiSelect, JazzText, JazzLabel, Markdown } })
 export default class ManualMail extends Vue {
