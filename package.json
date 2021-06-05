@@ -20,28 +20,30 @@
     "node": ">=8.0"
   },
   "dependencies": {
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "sharp": "^0.28.3"
   },
   "devDependencies": {
-    "@prettier/plugin-pug": "1.13.5",
-    "@types/chai": "4.2.16",
-    "@types/lodash": "4.14.168",
+    "@prettier/plugin-pug": "1.15.2",
+    "@types/chai": "4.2.18",
+    "@types/lodash": "4.14.170",
     "@types/mocha": "8.2.2",
-    "@types/node": "14.14.41",
-    "@types/sinon": "10.0.0",
-    "@typescript-eslint/eslint-plugin": "4.22.0",
-    "@typescript-eslint/parser": "4.22.0",
+    "@types/node": "14.17.2",
+    "@types/sharp": "0.28.3",
+    "@types/sinon": "10.0.2",
+    "@typescript-eslint/eslint-plugin": "4.26.0",
+    "@typescript-eslint/parser": "4.26.0",
     "chai": "4.3.4",
-    "eslint": "7.24.0",
+    "eslint": "7.28.0",
     "eslint-plugin-prettier": "3.4.0",
     "full-icu": "1.3.4",
-    "mocha": "8.3.2",
-    "prettier": "2.2.1",
+    "mocha": "8.4.0",
+    "prettier": "2.3.1",
     "sass": "1.32.10",
-    "sinon": "10.0.0",
-    "tslib": "2.2.0",
+    "sinon": "11.1.1",
     "ts-mocha": "8.0.0",
-    "typescript": "4.2.4"
+    "tslib": "2.2.0",
+    "typescript": "4.3.2"
   },
   "scripts": {
     "compile": "cd backend && yarn deploy && cd ../batchjobs && yarn tsc && cd ../shared && yarn tsc",

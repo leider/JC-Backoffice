@@ -1,11 +1,10 @@
 import superagent, { Response } from "superagent";
-import cheerio from "cheerio";
+import { Cheerio, CheerioAPI, load } from "cheerio";
 
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import conf from "../commons/simpleConfigure";
-import Cheerio = cheerio.Cheerio;
 
 const baseURL = "https://system.reservix.de";
 
@@ -26,9 +25,9 @@ const tablepositions = {
   brutto: 18,
 };
 
-function prepareInputsForPost(forminputs: Cheerio): { [x: string]: string } {
+function prepareInputsForPost(forminputs: Cheerio<any>, $: CheerioAPI): { [p: string]: string } {
   return forminputs
-    .filter((i, e) => !!cheerio(e).val())
+    .filter((i: any, e: any) => !!$(e).val())
     .serializeArray()
     .reduce((acc: { [x: string]: string }, curr: { name: string; value: string }) => {
       acc[curr.name] = curr.value;
@@ -60,7 +59,7 @@ function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { ro
 }
 
 function extractResultTableLines(htmlString: string, callback: Function): void {
-  const $ = cheerio.load(htmlString);
+  const $ = load(htmlString);
 
   const asfields = (index: number, element: any): { row: string[] } => ({
     row: ($(element)
@@ -78,7 +77,7 @@ function openAuswertungPage(location: string, optionalDateString: string | null,
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(resp.text);
+    const $ = load(resp.text);
     const logoutURL = $("#page_header_logout a").attr("href");
     if (optionalDateString) {
       $("#id_eventdatumvon").val(optionalDateString);
@@ -86,7 +85,7 @@ function openAuswertungPage(location: string, optionalDateString: string | null,
     superagent
       .post(baseURL + "/sales/" + $("#searchForm").attr("action"))
       .type("form")
-      .send(prepareInputsForPost($("#searchForm :input")))
+      .send(prepareInputsForPost($("#searchForm :input"), $))
       .then((resp1: Response) => {
         superagent.get(baseURL + logoutURL, () => {
           // logout then parse
@@ -101,7 +100,7 @@ function openVerwaltungPage(location: string, optionalDateString: string | null,
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(resp.text);
+    const $ = load(resp.text);
     const auswertungUrl = $("#content ul li a")
       .filter(
         (index, element) =>
@@ -120,7 +119,7 @@ function openWelcomePage(location: string, optionalDateString: string | null, ca
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(resp.text);
+    const $ = load(resp.text);
     const verwaltungUrl = $("#page_header ul li a")
       .filter(
         (index, element) =>
@@ -148,9 +147,9 @@ export function loadSalesreports(optionalDateString: string | null, callback: Fu
     if (err) {
       return callback(err);
     }
-    const $ = cheerio.load(res.text);
+    const $ = load(res.text);
     $("#id_mitarbeiterpw").val(username as string);
-    const inputs = prepareInputsForPost($("#login input"));
+    const inputs = prepareInputsForPost($("#login input"), $);
     const url = $("#login").attr("action");
     if (url === undefined) {
       return callback("Problem beim Laden von Reservix");
