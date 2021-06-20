@@ -75,7 +75,7 @@
         .col-12.mb-2
           b-button.btn.btn-kasse(@click="kassenzettel")
             b-icon-printer-fill
-            | #{' '} Kassenzettel
+            | #{ ' ' } Kassenzettel
           b-button.btn.btn-danger.float-right(
             v-if="kasse.istFreigegeben",
             :class="darfKasseFreigeben ? '' : 'disabled'",

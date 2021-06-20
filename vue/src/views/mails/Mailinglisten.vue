@@ -5,7 +5,7 @@
       .btn-group.float-right
         b-button.btn.btn-light(@click="neueListe", title="Neu")
           b-icon-file-earmark
-          .d-none.d.d-sm-inline #{" "} Neu...
+          .d-none.d.d-sm-inline #{ " " } Neu...
       h1 Mailinglisten
   .row
     .col-12

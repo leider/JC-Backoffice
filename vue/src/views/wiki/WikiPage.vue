@@ -5,18 +5,18 @@
       b-input(placeholder="Wiki durchsuchen...", v-model="suchtext")
     b-button(variant="primary", @click="edit", :disabled="isEdit")
       b-icon-file-earmark-text
-      | #{" "} Bearbeiten
+      | #{ " " } Bearbeiten
     b-button(@click="undo", :disabled="!isEdit")
       b-icon-file-earmark-text
-      | #{" "} Undo
+      | #{ " " } Undo
     b-button(variant="success", @click="save", :disabled="!dirty")
       b-icon-check-square
-      | #{" "} Speichern
+      | #{ " " } Speichern
     delete-button-with-dialog#delete-wikipage(:name="page", objecttype="Seite", :callback="loeschen", :dirty="dirty", show-text="true")
   h1 Wiki<br>
     small
       b-link(:to="`/wiki/${subdir}`") "{{ subdir }}
-      | #{" "}/ {{ page }}"
+      | #{ " " }/ {{ page }}"
   markdown(v-if="isEdit", v-model="content", height="600px")
   div(v-else, v-html="body")
 </template>

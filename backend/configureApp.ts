@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
 import compress from "compression";
-import bodyparser from "body-parser";
 import cookieParser from "cookie-parser";
 import history from "connect-history-api-fallback";
 import path from "path";
@@ -18,8 +17,8 @@ function secureAgainstClickjacking(req: Request, res: Response, next: NextFuncti
 
 export default function (app: express.Express): void {
   app.use(cookieParser());
-  app.use(bodyparser.urlencoded({ extended: true }));
-  app.use(bodyparser.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
   app.use(compress());
   app.use("/vue", history({ index: "/index.html" }));
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours

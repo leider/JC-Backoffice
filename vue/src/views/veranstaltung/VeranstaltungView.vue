@@ -12,10 +12,10 @@
     )
     b-button.btn-copy(v-if="showAllTabs", :disabled="isNew", @click="copy", title="Kopieren")
       b-icon-files
-      .d-none.d.d-sm-inline #{" "}Kopieren
+      .d-none.d.d-sm-inline #{ " " }Kopieren
     b-button.btn.btn-success(:disabled="!dirtyAndValid", @click="save", title="Speichern")
       b-icon-check-square
-      .d-none.d.d-sm-inline #{" "}Speichern
+      .d-none.d.d-sm-inline #{ " " }Speichern
   h2.text-danger(v-if="isNew") Neue oder kopierte Veranstaltung <br>
     small.text-danger Denk daran, alle Felder zu überprüfen und auszufüllen
   h2(v-else, :class="colorClass") {{ veranstaltung.kopf.titelMitPrefix }}<br>

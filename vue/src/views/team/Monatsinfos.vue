@@ -16,7 +16,7 @@
         p(v-for="veran in veranstaltungen", :key="veran.id")
           b {{ veran.kopf.titelMitPrefix }}<br>
           b: i {{ veran.startDatumUhrzeit.wochentagTagMonat }}
-          b #{' '} // {{ veran.startDatumUhrzeit.uhrzeitKompakt }} Uhr<br>
+          b #{ ' ' } // {{ veran.startDatumUhrzeit.uhrzeitKompakt }} Uhr<br>
           | {{ veran.kopf.presseInEcht }}
       .row: .col-12
         h3 Bilder

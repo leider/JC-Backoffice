@@ -24,10 +24,10 @@
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titelMitPrefix }}
       h5.alert-danger.p-1.mb-0(v-if="kasseFehlt")
         b-icon-exclamation-circle-fill
-        | #{' '} Kasse gesucht!
+        | #{ ' ' } Kasse gesucht!
       h5.alert-success.p-1.mb-0(v-if="nobodyNeeded")
         b-icon-check2-circle(scale=1.1)
-        | #{' '} Niemand benötigt
+        | #{ ' ' } Niemand benötigt
     b-collapse(v-if="!nobodyNeeded", v-model="expanded")
       table.table.table-striped.table-sm
         tbody

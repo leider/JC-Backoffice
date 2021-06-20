@@ -3,10 +3,10 @@
   .btn-group.float-right
     b-button.btn.btn-light(@click="neu", title="Neuer Ort", :disabled="tab !== 'orte'")
       b-icon-file-earmark
-      .d-none.d.d-sm-inline #{" "} Neuer Ort
+      .d-none.d.d-sm-inline #{ " " } Neuer Ort
     b-button.btn.btn-success(:disabled="!dirty", @click="saveOptionen", title="Speichern")
       b-icon-check-square
-      .d-none.d.d-sm-inline #{" "}Speichern
+      .d-none.d.d-sm-inline #{ " " }Speichern
   h1 Optionen
   b-tabs.optionen(active-nav-item-class="color-allgemeines")
     b-tab(title="Optionen", :active="'optionen' === tab", @click="tabActivated('optionen')")

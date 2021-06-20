@@ -15,8 +15,8 @@
         .col-12
           h4 Farben Hilfe
           p
-            | Du kannst entweder eine #{' '}
-            a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{' '}
+            | Du kannst entweder eine #{ ' ' }
+            a(href="https://www.w3schools.com/colors/colors_names.asp", target="_blank") Farbe mit Namen eintragen #{ ' ' }
             | oder einen HEX-Code als "#RGB" oder "#RRGGBB".
 
     .col-lg-4.col-sm-12

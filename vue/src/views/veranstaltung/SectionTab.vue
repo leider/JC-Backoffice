@@ -2,7 +2,7 @@
 b-tab(:title-link-class="titlelinkclass", @click="clicked", :active="value === section")
   template(v-slot:title)
     b-icon(:icon="icon")
-    b.d-none.d-sm-inline #{' '} {{ title }}
+    b.d-none.d-sm-inline #{ ' ' } {{ title }}
   slot
 </template>
 

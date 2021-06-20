@@ -7,20 +7,20 @@
       v-b-modal.dialog
     )
       b-icon-person-plus
-      | #{" "}Neuer Benutzer
+      | #{ " " }Neuer Benutzer
     ul.list-inline.mt-2
       li.list-inline-item
         b-icon-emoji-sunglasses
-        | #{""} Admin
+        | #{ "" } Admin
       li.list-inline-item
         b-icon-person-check
-        | #{""} Booking
+        | #{ "" } Booking
       li.list-inline-item
         b-icon-building
-        | #{""} Orga
+        | #{ "" } Orga
       li.list-inline-item
         b-icon-wallet2
-        | #{""} Abendkasse
+        | #{ "" } Abendkasse
     b-modal#dialog(no-close-on-backdrop, @ok="createUser", @cancel="resetNewUser")
       .row
         .col-12

@@ -5,7 +5,7 @@
       .btn-group.float-right
         b-button.btn.btn-light(@click="neuerTerminOderKalender", title="Neu")
           b-icon-file-earmark
-          | #{" "} Neu...
+          | #{ " " } Neu...
       h1 Termine und Kalender
       b-tabs(active-nav-item-class="color-allgemeines")
         b-tab(title="Termine", :active="'termine' === tab", @click="tabActivated('termine')")

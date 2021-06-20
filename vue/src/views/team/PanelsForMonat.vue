@@ -4,14 +4,14 @@ div
     a.stretched-link.inherit-color(@click="aufZu")
       b-icon-caret-down(v-if="expanded")
       b-icon-caret-right(v-else)
-      | #{" "} {{ monat }} &nbsp;
+      | #{ " " } {{ monat }} &nbsp;
     .btn-group.btn-group-sm.float-right
       b-link.btn.btn-secondary.btn-sm(:to="`/infos/${datumErsteVeranstaltung.fuerUnterseiten}/pressetexte`")
         b-icon-file-text
-        | #{' '} Presseexte
+        | #{ ' ' } Presseexte
       b-link.btn.btn-secondary.btn-sm(:to="`/infos/${datumErsteVeranstaltung.fuerUnterseiten}/uebersicht`")
         b-icon-file-spreadsheet
-        | #{' '} Übersicht
+        | #{ ' ' } Übersicht
   .row
     team-panel-user(
       v-if="!admin",

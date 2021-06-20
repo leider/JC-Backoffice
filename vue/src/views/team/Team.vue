@@ -19,7 +19,7 @@
                   p <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor der Veranstaltung da zu sein!
                   p
                     a.btn.btn-light(:href="webcalUrl", title="als iCal"): b-icon-calendar3
-                    | #{' '} Hiermit kannst Du den Kalender abonnieren.
+                    | #{ ' ' } Hiermit kannst Du den Kalender abonnieren.
                 div(v-else)
                   .btn-group.float-right
                     b-button.btn-light(to="/veranstaltungen/new", title="Neu"): b-icon-file-earmark

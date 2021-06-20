@@ -12,7 +12,7 @@
     )
     b-button.btn-copy(v-if="isOrgaTeam", :to="`${veranstaltung.fullyQualifiedUrl}/copy`", title="Kopieren")
       b-icon-files
-      | #{" "}Kopieren
+      | #{ " " }Kopieren
   h2
     span(:class="iconClass", style="font-weight: normal")
     span(:class="colorClass") &nbsp; {{ kopf.titelMitPrefix }} {{ kopf.presseInEcht }}

@@ -4,7 +4,7 @@
 )
   b-icon-check2-circle(v-if="section.checked", scale=1.1)
   b-icon-exclamation-circle-fill(v-else)
-  | #{" "} {{ name }}
+  | #{ " " } {{ name }}
 </template>
 
 <script lang="ts">

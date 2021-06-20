@@ -6,7 +6,7 @@
         tr: td.p-0(colspan=2)
           h5.m-0.alert-danger.text-center
             b-icon-exclamation-circle-fill
-            | #{' '} UNBESTÄTIGT #{' '}
+            | #{ ' ' } UNBESTÄTIGT #{ ' ' }
             b-icon-exclamation-circle-fill
       table(width="100%", v-if="expanded")
         tr.align-top

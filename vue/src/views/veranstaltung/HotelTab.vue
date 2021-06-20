@@ -65,7 +65,7 @@
       .col-12
         b-button.btn.btn-success(@click="sendMail")
           b-icon-envelope-open(scale="0.8")
-          | #{" "} Reservierungsmail
+          | #{ " " } Reservierungsmail
 </template>
 
 <script lang="ts">

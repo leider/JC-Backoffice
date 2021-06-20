@@ -5,9 +5,9 @@
       a(@click="expanded = !expanded"): b
         b-icon-caret-down(v-if="expanded")
         b-icon-caret-right(v-else)
-        | #{" "}
+        | #{ " " }
         b-icon(:icon="gruppenUndRechteIcon")
-        | #{" "} {{ user.name }}
+        | #{ " " } {{ user.name }}
       .btn-group.float-right(v-if="canEdit")
         b-button.btn.btn-sm.btn.btn-light(v-b-modal="`dialog-${user.id}`", title="Bearbeiten")
           b-icon-pencil-square
