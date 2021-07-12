@@ -121,6 +121,8 @@ export default class Veranstaltung {
     this.endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
     this.reservixID = undefined;
     this.staff = new Staff();
+    this.unterkunft = new Unterkunft(undefined, new DatumUhrzeit().setUhrzeit(20, 0), []);
+    this.kasse = new Kasse();
     this.kopf.confirmed = false;
     this.kopf.abgesagt = false;
   }

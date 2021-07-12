@@ -21,7 +21,7 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return conf.get("publicUrlPrefix") + "/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return conf.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): void {
