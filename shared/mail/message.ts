@@ -9,8 +9,8 @@ export default class Message {
   static fromJSON(json: any) {
     const message = new Message({ subject: json.subject, markdown: json.markdown });
     message.bcc = json.bcc;
-    message.senderNameField = json.senderName;
-    message.senderAddressField = json.senderAddress;
+    message.senderNameField = json.senderNameField;
+    message.senderAddressField = json.senderAddressField;
     return message;
   }
 
