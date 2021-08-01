@@ -1,9 +1,16 @@
 process.chdir(__dirname);
 import conf, { SimpleConfigure } from "./lib/commons/simpleConfigure";
 import path from "path";
+import fs from "fs";
 
 function createConfiguration(): SimpleConfigure {
-  const configdir = path.join(__dirname, "../config/");
+  let configdir = path.join(__dirname, "../config/");
+  try {
+    // eslint-disable-next-line no-sync
+    fs.statSync(configdir);
+  } catch (e) {
+    configdir = path.join(__dirname, "../dummy-config/");
+  }
 
   // first, set the default values
   conf.addProperties({

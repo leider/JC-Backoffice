@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - 14
+services:
+  - mongodb
+before_script:
+  - mongod --version
+
