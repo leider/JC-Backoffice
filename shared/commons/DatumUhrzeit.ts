@@ -27,6 +27,8 @@ dayjs.locale("de");
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
+process.env.TZ = "Europe/Berlin";
+
 type AdditionOptions = {
   jahre?: number;
   monate?: number;
