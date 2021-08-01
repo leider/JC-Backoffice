@@ -232,8 +232,4 @@ export default class AllgemeinesTab extends Vue {
 .multiselect {
   width: calc(100% - 99px) !important;
 }
-.multiselect__tags {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
 </style>

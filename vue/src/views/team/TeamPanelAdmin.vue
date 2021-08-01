@@ -48,7 +48,7 @@
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="technik")
           td.p-0(v-if="veranstaltung.artist.brauchtHotel", width="33%"): checked-button(:veranstaltung="veranstaltung", name="hotel")
     b-collapse(v-model="expanded")
-      .btn-group.btn-group-sm.float-right.m-1
+      .btn-group.btn-group-sm.float-right.m-1(v-if="!dirty")
         b-button.btn-allgemeines(:to="veranstaltung.fullyQualifiedUrl + '/allgemeines'", title="Allgemeines"): b-icon-keyboard(scale=1.2)
         b-button.btn-technik(:to="veranstaltung.fullyQualifiedUrl + '/technik'", title="Technik"): b-icon-headphones(scale=1.2)
         b-button.btn-ausgaben(:to="veranstaltung.fullyQualifiedUrl + '/kalkulation'", title="Ausgaben"): b-icon-graph-up
@@ -70,23 +70,26 @@
                   b-icon-trash
                   | &nbsp;Löschen
         b-button.btn-copy(:to="veranstaltung.fullyQualifiedUrl + '/copy'", title="Kopieren"): b-icon-files
-        b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung"): b-icon-check-square
+      .btn-group.btn-group-sm.float-right.m-1(v-else)
+        b-button.btn.btn-success(title="Speichern", @click="saveVeranstaltung")
+          b-icon-check-square
+          | &nbsp;Speichern
       table.table.table-striped.table-sm
         tbody
           tr: td(colspan=3): h5.mb-0 Kasse
-          staff-row-admin(label="Eins:", sectionName="kasseV", :users="users", :veranstaltung="veranstaltung")
-          staff-row-admin(label="Zwei:", sectionName="kasse", :users="users", :veranstaltung="veranstaltung")
+          staff-row-admin(label="Eins:", sectionName="kasseV", :users="users", :staff="staff")
+          staff-row-admin(label="Zwei:", sectionName="kasse", :users="users", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Techniker
-          staff-row-admin(label="Eins:", sectionName="technikerV", :users="users", :veranstaltung="veranstaltung")
-          staff-row-admin(label="Zwei:", sectionName="techniker", :users="users", :veranstaltung="veranstaltung")
+          staff-row-admin(label="Eins:", sectionName="technikerV", :users="users", :staff="staff")
+          staff-row-admin(label="Zwei:", sectionName="techniker", :users="users", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Master
-          staff-row-admin(label="", sectionName="mod", :users="users", :veranstaltung="veranstaltung")
+          staff-row-admin(label="", sectionName="mod", :users="users", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Merchandise
-          staff-row-admin(label="", sectionName="merchandise", :users="users", :veranstaltung="veranstaltung")
+          staff-row-admin(label="", sectionName="merchandise", :users="users", :staff="staff")
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -95,6 +98,7 @@ import StaffRowAdmin from "./StaffRowAdmin.vue";
 import Staff from "jc-shared/veranstaltung/staff";
 import Kopf from "jc-shared/veranstaltung/kopf";
 import CheckedButton from "./CheckedButton.vue";
+import { feedbackMessages } from "@/views/general/FeedbackMessages";
 
 @Component({ components: { StaffRowAdmin, CheckedButton } })
 export default class TeamPanelAdmin extends Vue {
@@ -103,6 +107,8 @@ export default class TeamPanelAdmin extends Vue {
   @Prop() initiallyExpanded!: boolean;
 
   private expanded = this.initiallyExpanded;
+  private dirty = false;
+  private originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
 
   close(): void {
     this.expanded = false;
@@ -110,6 +116,18 @@ export default class TeamPanelAdmin extends Vue {
 
   expand(): void {
     this.expanded = true;
+  }
+
+  @Watch("veranstaltung", { deep: true })
+  somethingChanged(): void {
+    function normCrLf(json: any): string {
+      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
+    }
+    const dirtybefore = this.dirty;
+    this.dirty = normCrLf(this.originalVeranstaltung.toJSON()) !== normCrLf(this.veranstaltung.toJSON());
+    if (this.dirty && !dirtybefore) {
+      feedbackMessages.addWarning("Achtung", "Du musst die Veranstaltung speichern!");
+    }
   }
 
   get kopf(): Kopf {

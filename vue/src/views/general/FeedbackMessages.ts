@@ -1,4 +1,4 @@
-type Variant = "danger" | "success";
+type Variant = "danger" | "success" | "warning";
 
 export interface FeedbackMessage {
   variant: Variant;
@@ -12,6 +12,12 @@ class FeedbackMessages {
   addError(title: string, text: string): void {
     if (this.notificationFunction) {
       this.notificationFunction({ variant: "danger", title, text });
+    }
+  }
+
+  addWarning(title: string, text: string): void {
+    if (this.notificationFunction) {
+      this.notificationFunction({ variant: "warning", title, text });
     }
   }
 

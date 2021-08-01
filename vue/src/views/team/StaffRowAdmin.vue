@@ -12,7 +12,6 @@ tr
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import User from "jc-shared/user/user";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import MultiSelect from "../../widgets/MultiSelect.vue";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 
@@ -22,7 +21,7 @@ import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 export default class StaffRowAdmin extends Vue {
   @Prop() sectionName!: StaffType;
   @Prop() label!: string;
-  @Prop() veranstaltung!: Veranstaltung;
+  @Prop() staff!: Staff;
   @Prop() users!: User[];
 
   get section(): string[] {
@@ -37,10 +36,6 @@ export default class StaffRowAdmin extends Vue {
     return this.users.map((u) => u.id);
   }
 
-  get staff(): Staff {
-    return this.veranstaltung.staff;
-  }
-
   get checked(): boolean {
     return !this.staff.getStaffNotNeeded(this.sectionName);
   }
@@ -52,9 +47,5 @@ export default class StaffRowAdmin extends Vue {
 <style lang="scss" scoped>
 .multiselect {
   width: calc(100% - 29px) !important;
-}
-.multiselect__tags {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
 }
 </style>
