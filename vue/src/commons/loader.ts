@@ -232,10 +232,16 @@ export function optionen(callback: Function): void {
 }
 
 export function saveOptionen(optionen: OptionValues, callback: Function): void {
+  if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
+    return callback(new Error("oops, Optionen kaputt??"));
+  }
   postAndReceive("/rest/optionen", optionen.toJSON(), callback, "Gespeichert", "Optionen gespeichert");
 }
 
 export function saveOptionenQuiet(optionen: OptionValues, callback: Function): void {
+  if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
+    return callback(new Error("oops, Optionen kaputt??"));
+  }
   postAndReceive("/rest/optionen", optionen.toJSON(), callback);
 }
 

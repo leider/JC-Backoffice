@@ -11,6 +11,7 @@ export default class Kopf {
   confirmed = false;
   rechnungAnKooperation = false;
   abgesagt = false;
+  fotografBestellen = false;
 
   toJSON(): any {
     return Object.assign({}, this);

@@ -54,6 +54,7 @@ import MultiSelect from "../../widgets/MultiSelect.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
 import OrtRow from "./OrtRow.vue";
+import { feedbackMessages } from "@/views/general/FeedbackMessages";
 
 @Component({
   components: { JazzLabel, LegendCard, MultiSelect, OrtRow },
@@ -125,6 +126,10 @@ export default class Optionen extends Vue {
 
   saveOptionen(): void {
     saveOptionen(this.optionen, (err?: Error, optionen?: any) => {
+      if (err) {
+        feedbackMessages.addError("Oooops. Optionen kaputt", err.message);
+      }
+
       if (!err && optionen) {
         this.initOptionen(new OptionValues(optionen));
         this.optionenChanged();

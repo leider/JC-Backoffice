@@ -76,6 +76,7 @@ import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import KalkulationTab from "./KalkulationTab.vue";
 import TechnikTab from "./TechnikTab.vue";
 import HotelTab from "./HotelTab.vue";
+import { feedbackMessages } from "@/views/general/FeedbackMessages";
 
 export interface EditVariables {
   hotelpreiseAlsDefault: boolean;
@@ -107,6 +108,7 @@ export default class VeranstaltungView extends Vue {
     });
     optionen((opts: OptionValues) => {
       this.optionen = opts;
+      console.log("opts", opts);
     });
     orte((orte: Orte) => {
       this.orte = orte;
@@ -192,6 +194,9 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
     saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
+      if (err) {
+        feedbackMessages.addError("Oooops. Optionen kaputt", err.message);
+      }
       if (!err) {
         this.optionen = new OptionValues(optionen);
         saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {

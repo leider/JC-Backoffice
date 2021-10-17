@@ -6,6 +6,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import pers from "../persistence/persistence";
+import { Sort } from "mongodb";
 const persistence = pers("veranstaltungenstore");
 const logger = winston.loggers.get("transactions");
 
@@ -17,7 +18,7 @@ function toVeranstaltungenList(callback: Function, err: Error | null, jsobjects:
   return misc.toObjectList(Veranstaltung, callback, err, jsobjects);
 }
 
-function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: object, callback: Function): void {
+function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort, callback: Function): void {
   persistence.listByField(
     {
       $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],

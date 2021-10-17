@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mongodb, { FilterQuery, MongoCallback, UpdateWriteOpResult } from "mongodb";
+import { Callback, Db, Filter, MongoClient, Sort, UpdateResult } from "mongodb";
 import async, { ErrorCallback } from "async";
 import conf from "../commons/simpleConfigure";
 import { loggers } from "winston";
@@ -8,7 +8,7 @@ const logger = loggers.get("transactions");
 const scriptLogger = loggers.get("scripts");
 
 const DBSTATE = { OPEN: "OPEN", CLOSED: "CLOSED", OPENING: "OPENING" };
-let ourDB: mongodb.Db | null;
+let ourDB: Db | null;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
 class Persistence {
@@ -18,16 +18,16 @@ class Persistence {
     this.collectionName = collName;
   }
 
-  list(sortOrder: object, callback: Function): void {
+  list(sortOrder: Sort, callback: Function): void {
     this.listByField({}, sortOrder, callback);
   }
 
-  listByIds(list: string[], sortOrder: object, callback: Function): void {
+  listByIds(list: string[], sortOrder: Sort, callback: Function): void {
     this.listByField({ id: { $in: list } }, sortOrder, callback);
   }
 
-  listByField(searchObject: FilterQuery<any>, sortOrder: object, callback: Function): void {
-    performInDB((err: Error | null, db: mongodb.Db) => {
+  listByField(searchObject: Filter<any>, sortOrder: Sort, callback: Function): void {
+    performInDB((err: Error | null, db: Db) => {
       if (err) {
         return callback(err);
       }
@@ -41,7 +41,7 @@ class Persistence {
           return callback(null, []);
         }
         cursor.batchSize(result);
-        return cursor.toArray(callback as MongoCallback<any>);
+        return cursor.toArray(callback as Callback<any>);
       });
     });
   }
@@ -49,8 +49,8 @@ class Persistence {
     this.getByField({ id }, callback);
   }
 
-  getByField(fieldAsObject: FilterQuery<any>, callback: Function): void {
-    performInDB((err: Error | null, db: mongodb.Db) => {
+  getByField(fieldAsObject: Filter<any>, callback: Function): void {
+    performInDB((err: Error | null, db: Db) => {
       if (err) {
         return callback(err);
       }
@@ -58,11 +58,7 @@ class Persistence {
         .collection(this.collectionName)
         .find(fieldAsObject)
         .toArray((err1, result) => {
-          if (err1) {
-            callback(err1);
-          } else {
-            callback(err1, result[0]);
-          }
+          callback(err1, result && result[0]);
         });
     });
   }
@@ -75,12 +71,12 @@ class Persistence {
     if (object.id === null || object.id === undefined) {
       return callback(new Error("Given object has no valid id"));
     }
-    return performInDB((err: Error | null, db: mongodb.Db) => {
+    return performInDB((err: Error | null, db: Db) => {
       if (err) {
         return callback(err);
       }
       const collection = db.collection(this.collectionName);
-      return collection.updateOne({ id: storedId }, { $set: object }, { upsert: true }, callback as MongoCallback<UpdateWriteOpResult>);
+      return collection.updateOne({ id: storedId }, { $set: object }, { upsert: true }, callback as Callback<UpdateResult>);
     });
   }
 
@@ -88,12 +84,12 @@ class Persistence {
     if (url === null || url === undefined) {
       return callback(new Error("Given object has no valid url"));
     }
-    return performInDB((err: Error | null, db: mongodb.Db) => {
+    return performInDB((err: Error | null, db: Db) => {
       if (err) {
         return callback(err);
       }
       const collection = db.collection(this.collectionName);
-      return collection.deleteOne({ url: url }, { w: 1 }, (err1) => {
+      return collection.deleteOne({ url: url }, (err1) => {
         callback(err1);
       });
     });
@@ -103,12 +99,12 @@ class Persistence {
     if (id === null || id === undefined) {
       return callback(new Error("Given object has no valid id"));
     }
-    return performInDB((err: Error | null, db: mongodb.Db) => {
+    return performInDB((err: Error | null, db: Db) => {
       if (err) {
         return callback(err);
       }
       const collection = db.collection(this.collectionName);
-      return collection.deleteOne({ id: id }, { w: 1 }, (err1) => {
+      return collection.deleteOne({ id: id }, (err1) => {
         callback(err1);
       });
     });
@@ -139,16 +135,16 @@ function openDB(): void {
   logInfo("Setting connection state to OPENING");
   ourDBConnectionState = DBSTATE.OPENING;
 
-  const MongoClient = mongodb.MongoClient;
+  const client = new MongoClient(conf.get("mongoURL") as string);
   logInfo("Connecting to Mongo");
-  MongoClient.connect(conf.get("mongoURL") as string, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-    const db = client.db("jazzclub");
+  client.connect((err, client) => {
     logInfo("In connect callback");
-    if (err) {
+    if (err || !client) {
       logInfo("An error occurred: " + err);
       ourDBConnectionState = DBSTATE.CLOSED;
       return logger.error(err);
     }
+    const db = client.db("jazzclub");
     ourDB = db;
     ourDBConnectionState = DBSTATE.OPEN;
     return logInfo("DB state is now OPEN, db = " + JSON.stringify(db.databaseName));

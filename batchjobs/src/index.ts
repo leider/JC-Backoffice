@@ -53,6 +53,7 @@ const now = new DatumUhrzeit();
 async.parallel(
   {
     checkFluegel: partial(sendMailsNightly.checkFluegel, now),
+    checkFotograf: partial(sendMailsNightly.checkFotograf, now),
     checkPresse: partial(sendMailsNightly.checkPressetexte, now),
     checkKasse: partial(sendMailsNightly.checkKasse, now),
     send: partial(sendMailsNightly.loadRulesAndProcess, now),

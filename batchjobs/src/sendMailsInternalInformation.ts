@@ -180,3 +180,53 @@ ${veranstaltungenMitFluegel
     }
   });
 }
+
+export function checkFotograf(now: DatumUhrzeit, callback: Function): void {
+  if (now.wochentag !== 7) {
+    // Sonntag
+    return callback();
+  }
+  const stimmerName = config.get("fotograf-name");
+  const stimmerEmail = config.get("fotograf-email");
+  if (!stimmerName || !stimmerEmail) {
+    return callback();
+  }
+  const start = now;
+  const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
+
+  function sendMail(veranstaltungenMitFotograf: Veranstaltung[], callbackInner: Function): void {
+    const markdownToSend = `## The following concerts may profit from a professional photographer:
+
+---
+${veranstaltungenMitFotograf
+  .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht)
+  .join("\n\n---\n")}`;
+
+    const message = new Message({
+      subject: "Photographing for Jazzclub",
+      markdown: markdownToSend,
+    });
+
+    return usersService.emailsAllerBookingUser((err: Error | null, bookingAddresses: string[]) => {
+      if (err) {
+        return callback(err);
+      }
+      logger.info(`Email Adressen für Flügelstimmen: ${bookingAddresses}`);
+      message.setTo([Message.formatEMailAddress(stimmerName as string, stimmerEmail as string)]);
+      message.setBcc(bookingAddresses);
+      return mailtransport.sendMail(message, callbackInner);
+    });
+  }
+
+  return store.byDateRangeInAscendingOrder(start, end, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
+    if (err1) {
+      return;
+    }
+    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.technik.fluegel);
+    if (zuSendende.length === 0) {
+      callback();
+    } else {
+      sendMail(zuSendende, callback);
+    }
+  });
+}

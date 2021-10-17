@@ -5,13 +5,14 @@ import Termin from "jc-shared/optionen/termin";
 import misc from "jc-shared/commons/misc";
 
 import pers from "../persistence/persistence";
+import { Sort } from "mongodb";
 const persistence = pers("terminstore");
 
 function toTerminList(callback: Function, err: Error | null, jsobjects: object[]): void {
   return misc.toObjectList(Termin, callback, err, jsobjects);
 }
 
-function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: object, callback: Function): void {
+function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort, callback: Function): void {
   // ranges are DatumUhrzeit
   persistence.listByField(
     {
