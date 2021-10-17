@@ -9,11 +9,11 @@
   "license": "MIT",
   "dependencies": {
     "dayjs": "1.10.7",
-    "marked": "3.0.3"
+    "marked": "3.0.7"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "8.5.5",
-    "@types/marked": "3.0.0",
+    "@types/marked": "3.0.1",
     "pug": "3.0.2"
   },
   "scripts": {
