@@ -71,12 +71,20 @@ class Persistence {
     if (object.id === null || object.id === undefined) {
       return callback(new Error("Given object has no valid id"));
     }
-    return performInDB((err: Error | null, db: Db) => {
+    this.getById(object.id, (err: Error | null, oldObject: any) => {
       if (err) {
         return callback(err);
       }
-      const collection = db.collection(this.collectionName);
-      return collection.updateOne({ id: storedId }, { $set: object }, { upsert: true }, callback as Callback<UpdateResult>);
+      logger.info(`about to update ${this.collectionName} object`);
+      logger.info(JSON.stringify(oldObject));
+      logger.info(`new object: ${JSON.stringify(object)}`);
+      return performInDB((err: Error | null, db: Db) => {
+        if (err) {
+          return callback(err);
+        }
+        const collection = db.collection(this.collectionName);
+        return collection.updateOne({ id: storedId }, { $set: object }, { upsert: true }, callback as Callback<UpdateResult>);
+      });
     });
   }
 
@@ -84,13 +92,21 @@ class Persistence {
     if (url === null || url === undefined) {
       return callback(new Error("Given object has no valid url"));
     }
-    return performInDB((err: Error | null, db: Db) => {
+    this.getByField({ url }, (err: Error | null, oldObject: any) => {
       if (err) {
         return callback(err);
       }
-      const collection = db.collection(this.collectionName);
-      return collection.deleteOne({ url: url }, (err1) => {
-        callback(err1);
+      logger.info(`about to delete ${this.collectionName} object`);
+      logger.info(JSON.stringify(oldObject));
+
+      return performInDB((err: Error | null, db: Db) => {
+        if (err) {
+          return callback(err);
+        }
+        const collection = db.collection(this.collectionName);
+        return collection.deleteOne({ url: url }, (err1) => {
+          callback(err1);
+        });
       });
     });
   }
@@ -99,13 +115,21 @@ class Persistence {
     if (id === null || id === undefined) {
       return callback(new Error("Given object has no valid id"));
     }
-    return performInDB((err: Error | null, db: Db) => {
+    this.getById(id, (err: Error | null, oldObject: any) => {
       if (err) {
         return callback(err);
       }
-      const collection = db.collection(this.collectionName);
-      return collection.deleteOne({ id: id }, (err1) => {
-        callback(err1);
+      logger.info(`about to delete ${this.collectionName} object`);
+      logger.info(JSON.stringify(oldObject));
+
+      return performInDB((err: Error | null, db: Db) => {
+        if (err) {
+          return callback(err);
+        }
+        const collection = db.collection(this.collectionName);
+        return collection.deleteOne({ id: id }, (err1) => {
+          callback(err1);
+        });
       });
     });
   }
