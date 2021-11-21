@@ -132,7 +132,7 @@ ${kaputteVeranstaltungen
 }
 
 export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
-  if (now.wochentag !== 7) {
+  if (now.wochentag !== 0) {
     // Sonntag
     return callback();
   }
@@ -182,7 +182,7 @@ ${veranstaltungenMitFluegel
 }
 
 export function checkFotograf(now: DatumUhrzeit, callback: Function): void {
-  if (now.wochentag !== 7) {
+  if (now.wochentag !== 0) {
     // Sonntag
     return callback();
   }
