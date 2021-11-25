@@ -1,4 +1,4 @@
-import marked from "marked";
+import { marked } from "marked";
 import misc from "./misc";
 
 function normalize(str: string): string {

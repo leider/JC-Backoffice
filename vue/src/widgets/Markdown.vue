@@ -75,7 +75,7 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/addon/display/placeholder";
 
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import Marked from "marked";
+import { marked } from "marked";
 
 interface EditorConfiguration {
   fullScreen?: boolean;
@@ -189,7 +189,7 @@ export default class Markdown extends Vue {
         .replace(/<img src=/g, '<img class="img-responsive" src=');
     }
 
-    const rendered = Marked(this.editor.getValue(), { gfm: true, breaks: true, smartLists: true, pedantic: false });
+    const rendered = marked.parse(this.editor.getValue(), { gfm: true, breaks: true, smartLists: true, pedantic: false });
     return enhanceTableTag(rendered);
   }
 

@@ -47,7 +47,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender, { Event } from "jc-shared/programmheft/kalender";
 import groupBy from "lodash/groupBy";
-import Marked from "marked";
+import { marked } from "marked";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "../../commons/loader";
 import HeftCalendar from "../calendar/HeftCalendar.vue";
@@ -82,7 +82,7 @@ export default class Programmheft extends Vue {
   }
 
   renderedPressetext(veranstaltung: Veranstaltung): string {
-    return Marked(veranstaltung.presse.text || "", { gfm: true, breaks: true, smartLists: true, pedantic: false });
+    return marked.parse(veranstaltung.presse.text || "", { gfm: true, breaks: true, smartLists: true, pedantic: false });
   }
 
   save(): void {
