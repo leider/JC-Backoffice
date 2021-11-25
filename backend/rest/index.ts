@@ -40,10 +40,6 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/imagenames", (req, res) => {
-  if (!(req.user as User)?.accessrights?.isSuperuser) {
-    res.sendStatus(403);
-    return;
-  }
   allImageNames(res);
 });
 
