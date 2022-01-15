@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "dayjs": "1.10.7",
-    "marked": "4.0.5"
+    "marked": "4.0.10"
   },
   "devDependencies": {
     "@types/marked": "4.0.1",
