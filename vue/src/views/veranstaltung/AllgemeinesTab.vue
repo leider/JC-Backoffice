@@ -102,6 +102,12 @@
                   a(:href="`/files/${datei}`", v-b-tooltip.hover, title="Klick zum Anzeigen") {{ datei }}
                   a.ml-1(@click="vertrag.removeDatei(datei)", v-b-tooltip.hover, title="Aus Dateien enfernen")
                     b-icon-file-earmark-x(font-scale="1.2")
+    legend-card(section="allgemeines", title="Bearbeiter")
+      .row(v-for="item in veranstaltung.changelist")
+        .col
+          details.mx-2
+            summary {{ item.zeitpunkt }} {{ item.bearbeiter }}
+            pre {{ item.diff }}
 </template>
 
 <script lang="ts">
@@ -191,6 +197,36 @@ export default class AllgemeinesTab extends Vue {
 
   get deals(): string[] {
     return Kosten.deals;
+  }
+
+  get bearbeiter(): string {
+    return (
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n" +
+      "01.01.2020 12:23 Andreas\n"
+    );
+  }
+
+  get changelist(): { title: string; details: string }[] {
+    return [
+      {
+        title: "01.01.2020 12:23 Andreas",
+        details: JSON.stringify(
+          {
+            hinzu: {},
+            gelöscht: { id: undefined },
+            geändert: { unterkunft: { angefragt: true } },
+          },
+          null,
+          2
+        ),
+      },
+    ];
   }
 
   @Watch("kopf.ort")

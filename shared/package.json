@@ -9,6 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "dayjs": "1.10.7",
+    "deep-object-diff": "1.1.7",
     "marked": "4.0.12"
   },
   "devDependencies": {

@@ -345,4 +345,13 @@ input[type="number"]::-webkit-outer-spin-button {
 .stretched-link::after {
   z-index: 0;
 }
+
+summary {
+  font-weight: bold;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
 </style>

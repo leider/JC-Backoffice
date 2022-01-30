@@ -57,7 +57,7 @@ import OptionValues from "jc-shared/optionen/optionValues";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import Orte from "jc-shared/optionen/orte";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 import {
   currentUser,
   deleteVeranstaltungWithId,
@@ -77,6 +77,7 @@ import KalkulationTab from "./KalkulationTab.vue";
 import TechnikTab from "./TechnikTab.vue";
 import HotelTab from "./HotelTab.vue";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
+import { differenceFor } from "jc-shared/commons/compareObjects";
 
 export interface EditVariables {
   hotelpreiseAlsDefault: boolean;
@@ -180,8 +181,16 @@ export default class VeranstaltungView extends Vue {
   }
 
   save(): void {
+    const createLogWithDiff = (diff: string): ChangelistItem => {
+      return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: this.user.id, diff };
+    };
+
     if (this.isNew) {
       this.veranstaltung.initializeIdAndUrl();
+      this.veranstaltung.changelist = [createLogWithDiff("Angelegt")];
+    } else {
+      const diff = differenceFor(this.originalVeranstaltung, this.veranstaltung);
+      this.veranstaltung.changelist.unshift(createLogWithDiff(diff));
     }
     this.optionen.addOrUpdateKontakt("agenturen", this.veranstaltung.agentur, this.editVariables.selectedAgentur);
     if (this.veranstaltung.artist.brauchtHotel) {

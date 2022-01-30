@@ -29,12 +29,19 @@ export interface ImageOverviewRow {
   veranstaltungen: ImageOverviewVeranstaltung[];
 }
 
+export interface ChangelistItem {
+  bearbeiter: string;
+  zeitpunkt: string;
+  diff: string;
+}
+
 export default class Veranstaltung {
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
   reservixID?: string;
+  changelist: ChangelistItem[] = [];
 
   agentur = new Kontakt();
   artist = new Artist();
