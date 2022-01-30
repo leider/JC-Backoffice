@@ -19,18 +19,18 @@
     "ikalendar": "1.4.0",
     "jc-shared": "1.0.0",
     "jsonwebtoken": "8.5.1",
-    "mongodb": "4.3.0",
+    "mongodb": "4.3.1",
     "morgan": "1.10.0",
-    "multiparty": "4.2.2",
+    "multiparty": "4.2.3",
     "nodemailer": "6.7.2",
     "passport": "0.5.2",
     "passport-jwt": "4.0.0",
     "popper.js": "1.16.1",
-    "puppeteer": "13.0.1",
+    "puppeteer": "13.1.2",
     "simple-configure": "0.1.6",
-    "superagent": "7.0.2",
+    "superagent": "7.1.1",
     "uuid": "8.3.2",
-    "winston": "3.4.0",
+    "winston": "3.5.0",
     "zip-stream": "4.1.0"
   },
   "devDependencies": {
@@ -48,7 +48,7 @@
     "@types/pug": "2.0.6",
     "@types/puppeteer": "5.4.4",
     "@types/serve-favicon": "2.5.3",
-    "@types/superagent": "4.1.14",
+    "@types/superagent": "4.1.15",
     "@types/uuid": "8.3.4"
   },
   "scripts": {
