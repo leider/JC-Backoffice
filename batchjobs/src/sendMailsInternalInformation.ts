@@ -222,7 +222,7 @@ ${veranstaltungenMitFotograf
     if (err1) {
       return;
     }
-    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.technik.fluegel);
+    const zuSendende = veranstaltungen.filter((veranstaltung) => veranstaltung.kopf.fotografBestellen);
     if (zuSendende.length === 0) {
       callback();
     } else {
