@@ -23,7 +23,7 @@ export function toTransportObject(message: Message): Mail.Options {
     subject: message.subject,
     text: mbRenderer.text,
     html: mbRenderer.html,
-    attachments: message.pdfBufferAndName && [{ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf }],
+    attachments: message.pdfBufferAndName && [{ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf as Buffer }],
   };
 }
 
