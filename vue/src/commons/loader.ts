@@ -14,7 +14,7 @@ import FerienIcals from "jc-shared/optionen/ferienIcals";
 import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
-import { feedbackMessages } from "@/views/general/FeedbackMessages";
+import { feedbackMessages } from "../views/general/FeedbackMessages";
 import router from "../router";
 import jwt from "jsonwebtoken";
 import { Payload } from "jc-shared/commons/misc";

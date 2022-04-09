@@ -13,10 +13,6 @@ import { reply } from "../lib/commons/replies";
 const app = express();
 
 app.get("/optionen", (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
-
   return store.get((err?: Error, optionen?: OptionValues) => {
     reply(res, err, optionen);
   });
@@ -33,10 +29,6 @@ app.post("/optionen", (req: Request, res: Response) => {
 });
 
 app.get("/orte", (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
-
   return store.orte((err?: Error, orte?: Orte) => {
     reply(res, err, orte);
   });

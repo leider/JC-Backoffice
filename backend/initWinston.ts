@@ -29,7 +29,7 @@ function fileNamed(name: string): FileTransportInstance {
 
 loggers.add("application", { level: "info", transports: [console(), fileNamed("server")] });
 loggers.add("scripts", { level: "info", transports: [console(), fileNamed("scripts")] });
-loggers.add("transactions", { level: "info", transports: [console(), fileNamed("transactions")] });
+loggers.add("transactions", { level: "warn", transports: [console(), fileNamed("transactions")] });
 loggers.add("http", { level: "warn", transports: [console(), fileNamed("http")] });
 
 export default loggers;

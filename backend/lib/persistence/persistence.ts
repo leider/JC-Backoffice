@@ -75,9 +75,8 @@ class Persistence {
       if (err) {
         return callback(err);
       }
-      logger.info(`about to update ${this.collectionName} object`);
-      logger.info(JSON.stringify(oldObject));
-      logger.info(`new object: ${JSON.stringify(object)}`);
+      logger.info(`about to update ${this.collectionName} old: ${JSON.stringify(oldObject)}`);
+      logger.info(`new: ${JSON.stringify(object)}`);
       return performInDB((err: Error | null, db: Db) => {
         if (err) {
           return callback(err);

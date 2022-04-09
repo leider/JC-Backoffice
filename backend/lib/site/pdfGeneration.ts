@@ -8,7 +8,12 @@ import conf from "../commons/simpleConfigure";
 import store from "../veranstaltungen/veranstaltungenstore";
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import userstore from "../users/userstore";
-import { generatePdf, printoptions } from "./pdfCommons";
+import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons";
+import pug from "pug";
+import path from "path";
+import { sendMail } from "jc-vue/src/commons/loader";
+import mailtransport from "../mailsender/mailtransport";
+import Message from "jc-shared/mail/message";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
@@ -46,6 +51,22 @@ export function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl
     return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
       const kassierer = user?.name || "";
       res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
+    });
+  });
+}
+
+export function kassenzettelLocal(veranstaltung: Veranstaltung): void {
+  const file = path.join(__dirname, "views/kassenzettel.pug");
+  return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
+    const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
+    const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
+    generatePdfLocally(renderedHtml, (pdf) => {
+      const message = new Message({ subject: "Kassenzettel für Datev", markdown: "Neuer Kassenzettel" });
+      message.pdfBufferAndName = { pdf, name: "Kassenzettel.pdf" };
+      message.to = "leider@me.com";
+      mailtransport.sendMail(message, () => {
+        console.log("Mail sent");
+      });
     });
   });
 }

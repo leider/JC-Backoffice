@@ -67,7 +67,7 @@ export default class Kasse {
   }
 
   freigabeRueckgaengig(): void {
-    this.kassenfreigabe = undefined;
+    this.kassenfreigabe = "";
     this.kassenfreigabeAm = undefined;
   }
 

@@ -11,7 +11,11 @@
           b-icon-lock
           | &nbsp;Kassenfreigabe rückgängig
   b-modal#freigebenDialog(v-model="showFreigeben", no-close-on-backdrop, @ok="freigeben")
-    p Nach dem Freigeben ist keine Änderung mehr möglich!
+    p
+      b-icon-exclamation-circle-fill(variant="danger")
+      span #{ " " } Nach dem Freigeben ist keine Änderung mehr möglich!
+    p: b Die Freigabe sendet den Kassenzettel an die Buchhaltung.
+    p: b Du musst natürlich noch "Speichern".
     template(v-slot:modal-header)
       h3 Kasse freigeben
     template(v-slot:modal-footer="{ ok, cancel }")
@@ -76,11 +80,7 @@
           b-button.btn.btn-kasse(@click="kassenzettel")
             b-icon-printer-fill
             | #{ ' ' } Kassenzettel
-          b-button.btn.btn-danger.float-right(
-            v-if="kasse.istFreigegeben",
-            :class="darfKasseFreigeben ? '' : 'disabled'",
-            @click="showAufheben = true"
-          )
+          b-button.btn.btn-danger.float-right(disabled="!darfFreigabeAufheben", v-if="kasse.istFreigegeben", @click="showAufheben = true")
             b-icon-lock
             | &nbsp;Kasse ist freigegeben
 
@@ -203,9 +203,11 @@ export default class KasseTab extends Vue {
   }
 
   get darfKasseFreigeben(): boolean {
-    const user1 = this.user;
-    const accessrights = !!user1 && user1.accessrights;
-    return !!accessrights && accessrights.darfKasseFreigeben;
+    return !!this.user?.accessrights?.darfKasseFreigeben;
+  }
+
+  get darfFreigabeAufheben(): boolean {
+    return !!this.user?.accessrights?.isSuperuser;
   }
 
   get kosten(): Kosten {

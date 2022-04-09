@@ -14,6 +14,7 @@ import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenServic
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import { salesreportFor } from "../lib/reservix/reservixService";
 import Salesreport from "jc-shared/veranstaltung/salesreport";
+import { kassenzettelLocal } from "../lib/site/pdfGeneration";
 
 const app = express();
 
@@ -82,25 +83,31 @@ app.get("/veranstaltungen/:url", (req: Request, res: Response) => {
 });
 
 app.post("/veranstaltungen", (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isAbendkasse) {
+  const user = req.user as User;
+  if (!user?.accessrights?.isAbendkasse) {
     return res.sendStatus(403);
   }
-  if ((req.user as User)?.accessrights?.isOrgaTeam) {
-    saveAndReply(res, new Veranstaltung(req.body));
-  } else {
-    // Nur Kasse erlaubt
-    const url = req.body.url;
-    if (!url) {
-      return res.status(403).send("Kasse darf nur bestehende speichern");
+  // checkFreigabeChanged
+  const url = req.body.url;
+  store.getVeranstaltung(url, (err?: Error, veranstaltung?: Veranstaltung) => {
+    if (veranstaltung) {
+      const frischFreigegeben = veranstaltung.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
+      if (frischFreigegeben) {
+        console.log("Kasse frisch freigegeben!");
+        kassenzettelLocal(new Veranstaltung(req.body));
+      }
     }
-    store.getVeranstaltung(url, (err?: Error, veranstaltung?: Veranstaltung) => {
-      if (!err || !veranstaltung) {
-        return res.status(500).send(err?.message || "Keine Veranstaltung gefunden");
+    if (user?.accessrights?.isOrgaTeam) {
+      saveAndReply(res, new Veranstaltung(req.body));
+    } else {
+      // Nur Kasse erlaubt
+      if ((url && err) || !veranstaltung) {
+        return res.status(403).send("Kasse darf nur bestehende speichern");
       }
       veranstaltung.kasse = new Kasse(req.body.kasse);
       saveAndReply(res, veranstaltung);
-    });
-  }
+    }
+  });
 });
 
 app.delete("/veranstaltungen", (req: Request, res: Response) => {

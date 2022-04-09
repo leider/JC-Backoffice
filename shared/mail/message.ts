@@ -1,3 +1,5 @@
+import * as Buffer from "buffer";
+
 export default class Message {
   subject!: string;
   markdown!: string;
@@ -5,6 +7,7 @@ export default class Message {
   senderAddressField?: string;
   to!: string;
   bcc!: string;
+  pdfBufferAndName?: { pdf: Buffer; name: string };
 
   static fromJSON(json: any) {
     const message = new Message({ subject: json.subject, markdown: json.markdown });

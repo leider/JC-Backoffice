@@ -109,7 +109,6 @@ export default class VeranstaltungView extends Vue {
     });
     optionen((opts: OptionValues) => {
       this.optionen = opts;
-      console.log("opts", opts);
     });
     orte((orte: Orte) => {
       this.orte = orte;
@@ -191,6 +190,14 @@ export default class VeranstaltungView extends Vue {
     } else {
       const diff = differenceFor(this.originalVeranstaltung, this.veranstaltung);
       this.veranstaltung.changelist.unshift(createLogWithDiff(diff));
+    }
+    if (!this.user.accessrights?.isOrgaTeam && !this.isNew) {
+      // prevent saving of optionen
+      return saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {
+        if (!err) {
+          this.originalVeranstaltung = new Veranstaltung(veranstaltung);
+        }
+      });
     }
     this.optionen.addOrUpdateKontakt("agenturen", this.veranstaltung.agentur, this.editVariables.selectedAgentur);
     if (this.veranstaltung.artist.brauchtHotel) {
