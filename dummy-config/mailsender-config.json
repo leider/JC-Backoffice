@@ -6,5 +6,6 @@
   "sender-address": "changethis@jazzclub.de",
   "stimmer-name": "Andreas Leidig",
   "stimmer-email": "changethis@me.com",
-  "kassenzettel-email": "changethis@me.com"
+  "kassenzettel-email": "changethis@me.com",
+  "sender-address-datev": "changethis@me.com"
 }

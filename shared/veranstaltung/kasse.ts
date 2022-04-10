@@ -5,7 +5,6 @@ export default class Kasse {
   anfangsbestandEUR = 0;
   ausgabeBankEUR = 0;
   ausgabeCateringEUR = 0;
-  ausgabeGageEUR = 0;
   ausgabeHelferEUR = 0;
   ausgabeSonstiges1EUR = 0;
   ausgabeSonstiges2EUR = 0;
@@ -44,7 +43,7 @@ export default class Kasse {
   }
 
   get ausgabenTotalEUR(): number {
-    return this.ausgabeBankEUR + this.ausgabeGageEUR + this.ausgabenOhneGage;
+    return this.ausgabeBankEUR + this.ausgabenOhneGage;
   }
 
   get einnahmeTotalEUR(): number {

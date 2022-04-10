@@ -66,7 +66,7 @@ export function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback
       if (!message.to) {
         return callback();
       }
-      mailtransport.sendMail(message, (err2: Error) => {
+      mailtransport.sendDatevMail(message, (err2: Error) => {
         callback(err2);
       });
     });
