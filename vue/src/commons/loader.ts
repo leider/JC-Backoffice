@@ -35,18 +35,20 @@ export const globals = {
     }
     if (refreshTokenState !== "START") {
       refreshTokenState = "START";
-      standardFetch({
-        method: "POST",
-        url: "/refreshToken",
-        callback: (err: any, json: any) => {
+      standardFetch(
+        {
+          method: "POST",
+          url: "/refreshToken",
+          contentType: "json",
+        },
+        (err: any, json: any) => {
           if (json) {
             globals.jwtToken = json.token;
             refreshTokenState = "FINISHED";
             callback(!err && json.token);
           }
-        },
-        contentType: "json",
-      });
+        }
+      );
     } else {
       callback(false);
     }
@@ -62,10 +64,9 @@ type FetchParams = {
   data?: any;
   title?: string;
   text?: string;
-  callback: any;
 };
 
-function standardFetch(params: FetchParams): void {
+function standardFetch(params: FetchParams, callback: Function): void {
   const options: AxiosRequestConfig = {
     url: params.url,
     method: params.method,
@@ -79,7 +80,7 @@ function standardFetch(params: FetchParams): void {
       if (params.title || params.text) {
         feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
       }
-      params.callback(null, res.data);
+      callback(null, res.data);
     })
     .catch((err) => {
       if (err.response.status === 401) {
@@ -87,7 +88,7 @@ function standardFetch(params: FetchParams): void {
           globals.isAuthenticated((isAuth: boolean) => {
             if (!isAuth) {
               router.push("/login");
-              params.callback();
+              callback();
             }
           });
         }
@@ -95,53 +96,59 @@ function standardFetch(params: FetchParams): void {
 
       if (err.response.text) {
         feedbackMessages.addError(`Fehler: ${err.response.status} ${err.response.statusText}`, err.response.text);
-        return params.callback(err.response.statusText);
+        return callback(err.response.statusText);
       }
-      params.callback(err);
+      callback(err);
     });
 }
 
 function getForType(contentType: ContentType, url: string, callback: Function) {
-  standardFetch({ contentType, url, callback, method: "GET" });
+  standardFetch({ contentType, url, method: "GET" }, callback);
 }
 
 export function uploadFile(data: FormData, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/upload",
-    data,
-    title: "Gespeichert",
-    text: "Datei gespeichert",
-    callback,
-    contentType: "other",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/upload",
+      data,
+      title: "Gespeichert",
+      text: "Datei gespeichert",
+      contentType: "other",
+    },
+    callback
+  );
 }
 
 export function logout(callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/logout",
-    callback: (err?: Error) => {
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/logout",
+      contentType: "json",
+    },
+    (err?: Error) => {
       globals.jwtToken = "";
       callback(err);
-    },
-    contentType: "json",
-  });
+    }
+  );
 }
 
 export function login(name: string, pass: string, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/login",
-    data: { name, pass },
-    callback: (err: any, json: any) => {
+  standardFetch(
+    {
+      method: "POST",
+      url: "/login",
+      data: { name, pass },
+      contentType: "json",
+    },
+    (err: any, json: any) => {
       if (json) {
         globals.jwtToken = json.token;
       }
       callback(err, json);
-    },
-    contentType: "json",
-  });
+    }
+  );
 }
 
 function veranstaltungenCallback(callback: Function) {
@@ -165,47 +172,55 @@ export function veranstaltungForUrl(url: string, callback: Function): void {
 }
 
 export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/veranstaltungen",
-    data: veranstaltung.toJSON(),
-    title: "Gespeichert",
-    text: "Veranstaltung gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/veranstaltungen",
+      data: veranstaltung.toJSON(),
+      title: "Gespeichert",
+      text: "Veranstaltung gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function deleteVeranstaltungWithId(id: string, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: "/rest/veranstaltungen",
-    data: { id },
-    title: "Gelöscht",
-    text: "Veranstaltung gelöscht",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: "/rest/veranstaltungen",
+      data: { id },
+      title: "Gelöscht",
+      text: "Veranstaltung gelöscht",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
-    data: { section },
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
+      data: { section },
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
-    data: { section },
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
+      data: { section },
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // User
@@ -227,51 +242,59 @@ export function allUsers(callback: Function): void {
 }
 
 export function saveUser(user: User, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/user",
-    data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/user",
+      data: user.toJSON(),
+      title: "Gespeichert",
+      text: "Änderungen gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function deleteUser(user: User, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: "/rest/user",
-    data: user.toJSON(),
-    title: "Gelöscht",
-    text: "User gelöscht",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: "/rest/user",
+      data: user.toJSON(),
+      title: "Gelöscht",
+      text: "User gelöscht",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function saveNewUser(user: User, callback: Function): void {
-  standardFetch({
-    method: "PUT",
-    url: "/rest/user",
-    data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Neuer User angelegt",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "PUT",
+      url: "/rest/user",
+      data: user.toJSON(),
+      title: "Gespeichert",
+      text: "Neuer User angelegt",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function changePassword(user: User, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/user/changePassword",
-    data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Passwort geändert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/user/changePassword",
+      data: user.toJSON(),
+      title: "Gespeichert",
+      text: "Passwort geändert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Programmheft
@@ -282,15 +305,17 @@ export function kalenderFor(jahrMonat: string, callback: Function): void {
 }
 
 export function saveProgrammheft(kalender: Kalender, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/programmheft",
-    data: kalender,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/programmheft",
+      data: kalender,
+      title: "Gespeichert",
+      text: "Änderungen gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Optionen & Termine
@@ -302,28 +327,32 @@ export function saveOptionen(optionen: OptionValues, callback: Function): void {
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
     return callback(new Error("oops, Optionen kaputt??"));
   }
-  standardFetch({
-    method: "POST",
-    url: "/rest/optionen",
-    data: optionen.toJSON(),
-    title: "Gespeichert",
-    text: "Optionen gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/optionen",
+      data: optionen.toJSON(),
+      title: "Gespeichert",
+      text: "Optionen gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function saveOptionenQuiet(optionen: OptionValues, callback: Function): void {
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
     return callback(new Error("oops, Optionen kaputt??"));
   }
-  standardFetch({
-    method: "POST",
-    url: "/rest/optionen",
-    data: optionen.toJSON(),
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/optionen",
+      data: optionen.toJSON(),
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function orte(callback: Function): void {
@@ -331,15 +360,17 @@ export function orte(callback: Function): void {
 }
 
 export function saveOrte(orte: Orte, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/orte",
-    data: orte.toJSON(),
-    title: "Gespeichert",
-    text: "Orte aktualisiert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/orte",
+      data: orte.toJSON(),
+      title: "Gespeichert",
+      text: "Orte aktualisiert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function termine(callback: Function): void {
@@ -347,27 +378,31 @@ export function termine(callback: Function): void {
 }
 
 export function saveTermin(termin: Termin, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/termin",
-    data: termin,
-    title: "Gespeichert",
-    text: "Termin gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/termin",
+      data: termin,
+      title: "Gespeichert",
+      text: "Termin gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function deleteTermin(terminID: string, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: "/rest/termin",
-    data: { id: terminID },
-    title: "Gelöscht",
-    text: "Termin gelöscht",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: "/rest/termin",
+      data: { id: terminID },
+      title: "Gelöscht",
+      text: "Termin gelöscht",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function kalender(callback: Function): void {
@@ -375,15 +410,17 @@ export function kalender(callback: Function): void {
 }
 
 export function saveKalender(kalender: FerienIcals, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/kalender",
-    data: kalender,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/kalender",
+      data: kalender,
+      title: "Gespeichert",
+      text: "Änderungen gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Image
@@ -392,52 +429,60 @@ export function imagenames(callback: Function): void {
 }
 
 export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/imagenames",
-    data: rows,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/imagenames",
+      data: rows,
+      title: "Gespeichert",
+      text: "Änderungen gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 //Mails intern
 export function sendMail(message: Message, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/rundmail",
-    data: message,
-    title: "Gesendet",
-    text: "Meil geschickt",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/rundmail",
+      data: message,
+      title: "Gesendet",
+      text: "Meil geschickt",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function deleteMailinglist(listname: string, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: "/rest/mailingliste",
-    data: { name: listname },
-    title: "Gelöscht",
-    text: "Liste gelöscht",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: "/rest/mailingliste",
+      data: { name: listname },
+      title: "Gelöscht",
+      text: "Liste gelöscht",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function saveMailinglist(list: Mailingliste, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/mailingliste",
-    data: list,
-    title: "Gespeichert",
-    text: "Liste gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/mailingliste",
+      data: list,
+      title: "Gespeichert",
+      text: "Liste gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Mails für Veranstaltungen
@@ -446,27 +491,31 @@ export function mailRules(callback: Function): void {
 }
 
 export function deleteMailRule(ruleID: string, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: "/rest/mailrule",
-    data: { id: ruleID },
-    title: "Gelöscht",
-    text: "Regel gelöscht",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: "/rest/mailrule",
+      data: { id: ruleID },
+      title: "Gelöscht",
+      text: "Regel gelöscht",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function saveMailRule(rule: MailRule, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/mailrule",
-    data: rule,
-    title: "Gespeichert",
-    text: "Regel gespeichert",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/mailrule",
+      data: rule,
+      title: "Gespeichert",
+      text: "Regel gespeichert",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Wiki
@@ -478,35 +527,41 @@ export function wikiPage(subdir: string, page: string, callback: Function): void
 }
 
 export function saveWikiPage(subdir: string, page: string, content: string, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: `/rest/wikipage/${subdir}/${page}`,
-    data: { content },
-    title: "Gespeichert",
-    text: "Die Seite wurde gespeichert.",
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: `/rest/wikipage/${subdir}/${page}`,
+      data: { content },
+      title: "Gespeichert",
+      text: "Die Seite wurde gespeichert.",
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function searchWiki(suchtext: string, callback: Function): void {
-  standardFetch({
-    method: "POST",
-    url: "/rest/wikipage/search",
-    data: { suchtext },
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/wikipage/search",
+      data: { suchtext },
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 export function deleteWikiPage(subdir: string, page: string, callback: Function): void {
-  standardFetch({
-    method: "DELETE",
-    url: `/rest/wikipage/${subdir}/${page}`,
-    data: { data: "" },
-    callback,
-    contentType: "json",
-  });
+  standardFetch(
+    {
+      method: "DELETE",
+      url: `/rest/wikipage/${subdir}/${page}`,
+      data: { data: "" },
+      contentType: "json",
+    },
+    callback
+  );
 }
 
 // Calendar
