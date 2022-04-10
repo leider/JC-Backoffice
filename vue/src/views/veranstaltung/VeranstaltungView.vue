@@ -44,10 +44,10 @@
     )
       hotel-tab(:veranstaltung="veranstaltung", :optionen="optionen", :user="user", :editVariables="editVariables")
     section-tab(v-model="activeSection", section="kasse", title="Abendkasse", icon="cash-stack", @clicked="tabActivated")
-      kasse-tab(:veranstaltung="veranstaltung", :user="user")
+      kasse-tab(:veranstaltung="veranstaltung", :user="user", :users="users")
     section-tab(v-model="activeSection", section="presse", title="Presse", icon="newspaper", @clicked="tabActivated")
       presse-tab(:veranstaltung="veranstaltung", :allImageNames="allImageNames")
-  kasse-tab(v-else-if="showKasse", :veranstaltung="veranstaltung", :user="user")
+  kasse-tab(v-else-if="showKasse", :veranstaltung="veranstaltung", :user="user", :users="users")
 </template>
 
 <script lang="ts">
@@ -59,6 +59,7 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import Orte from "jc-shared/optionen/orte";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 import {
+  allUsers,
   currentUser,
   deleteVeranstaltungWithId,
   imagenames,
@@ -67,7 +68,7 @@ import {
   saveOptionenQuiet,
   saveVeranstaltung,
   veranstaltungForUrl,
-} from "../../commons/loader";
+} from "@/commons/loader";
 import SectionTab from "./SectionTab.vue";
 import AllgemeinesTab from "./AllgemeinesTab.vue";
 import PresseTab from "./PresseTab.vue";
@@ -96,6 +97,7 @@ export default class VeranstaltungView extends Vue {
   private veranstaltung = new Veranstaltung();
   private activeSection = "allgemeines";
   private user = new User({});
+  private users: User[] = [];
   private optionen = new OptionValues();
   private orte = new Orte();
   private dirty = false;
@@ -115,6 +117,9 @@ export default class VeranstaltungView extends Vue {
     });
     imagenames((names: string[]) => {
       this.allImageNames = names;
+    });
+    allUsers((users: User[]) => {
+      this.users = users;
     });
   }
 

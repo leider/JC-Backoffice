@@ -56,7 +56,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import UserPanels from "../user/UserPanels.vue";
-import { allUsers, currentUser, veranstaltungenForTeam } from "../../commons/loader";
+import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
 import JazzCalendar from "../calendar/JazzCalendar.vue";
 import PanelsForMonat from "./PanelsForMonat.vue";
 import UserPanel from "../user/UserPanel.vue";

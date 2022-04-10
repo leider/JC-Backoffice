@@ -140,7 +140,7 @@ const demo = {
     sprache: "Deutsch" as Sprache,
     datei: [],
   },
-  salesrep: { id: "" },
+  salesreport: { id: "" },
 };
 const reference = JSON.parse(JSON.stringify(demo));
 describe("Veranstaltung Gesamt", () => {

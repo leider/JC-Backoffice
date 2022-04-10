@@ -14,6 +14,7 @@
     p
       b-icon-exclamation-circle-fill(variant="danger")
       span #{ " " } Nach dem Freigeben ist keine Änderung mehr möglich!
+      single-select-pure(v-model="freigabeUser", :options="allUserNames")
     p: b Die Freigabe sendet den Kassenzettel an die Buchhaltung.
     p: b Du musst natürlich noch "Speichern".
     template(v-slot:modal-header)
@@ -169,9 +170,13 @@ import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import JazzNumber from "../../widgets/JazzNumber.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
 import { openPayload } from "@/commons/loader";
+import SingleSelect from "@/widgets/SingleSelect.vue";
+import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 
 @Component({
   components: {
+    SingleSelectPure,
+    SingleSelect,
     JazzCurrencyPure,
     JazzCurrencyDisplay,
     JazzNumber,
@@ -183,9 +188,11 @@ import { openPayload } from "@/commons/loader";
 export default class KasseTab extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
+  @Prop() users!: User[];
 
   showAufheben = false;
   showFreigeben = false;
+  freigabeUser = this.kasse.kassenfreigabe || this.user.name;
 
   get kasse(): Kasse {
     return this.veranstaltung.kasse;
@@ -204,7 +211,7 @@ export default class KasseTab extends Vue {
   }
 
   freigeben(): void {
-    this.kasse.freigabeErfolgtDurch(this.user.name);
+    this.kasse.freigabeErfolgtDurch(this.freigabeUser);
   }
 
   freigabeAufheben(): void {
@@ -213,6 +220,10 @@ export default class KasseTab extends Vue {
 
   kassenzettel(): void {
     openPayload({ url: "kassenzettel", params: { url: this.veranstaltung.url } });
+  }
+
+  get allUserNames(): string[] {
+    return this.users.map((user) => user.name).sort();
   }
 }
 </script>
