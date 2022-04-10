@@ -169,7 +169,7 @@ import JazzText from "../../widgets/JazzText.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import JazzNumber from "../../widgets/JazzNumber.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
-import { openPayload } from "@/commons/loader";
+import { openKassenzettel } from "@/commons/loader";
 import SingleSelect from "@/widgets/SingleSelect.vue";
 import SingleSelectPure from "@/widgets/SingleSelectPure.vue";
 
@@ -219,7 +219,7 @@ export default class KasseTab extends Vue {
   }
 
   kassenzettel(): void {
-    openPayload({ url: "kassenzettel", params: { url: this.veranstaltung.url } });
+    openKassenzettel(this.veranstaltung);
   }
 
   get allUserNames(): string[] {

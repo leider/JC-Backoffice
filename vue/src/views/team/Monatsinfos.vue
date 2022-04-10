@@ -34,7 +34,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Renderer from "jc-shared/commons/renderer";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { openPayload, veranstaltungenBetween } from "../../commons/loader";
+import { imgZip, veranstaltungenBetween } from "@/commons/loader";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 
 @Component
@@ -72,7 +72,7 @@ ${veranstaltung.presse.fullyQualifiedJazzclubURL}`);
   }
 
   imgzip(): void {
-    openPayload({ url: "imgzip", params: { yymm: this.monat } });
+    imgZip(this.monat);
   }
 }
 </script>

@@ -17,8 +17,6 @@ import userstore from "../users/userstore";
 import { hashPassword } from "../commons/hashPassword";
 import conf from "../commons/simpleConfigure";
 import refreshstore, { RefreshToken } from "./refreshstore";
-import { getPayload } from "./onetimeTokens";
-import { gemameldung } from "./gemaMeldungGeneration";
 import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration";
 
 const appLogger = loggers.get("application");
@@ -145,28 +143,16 @@ app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextF
   kassenbericht(res, next, datum);
 });
 
-app.get("/onetimeToken/:token", (req, res, next) => {
-  const payload = getPayload(req.params.token);
-  if (!payload) {
-    return res.sendStatus(401);
-  }
-  if (payload.url === "imgzip") {
-    const { yymm } = payload.params;
-    return veranstaltungenService.imgzip(res, next, yymm);
-  }
-  if (payload.url === "gemameldung") {
-    const transferObject = payload.params;
-    return gemameldung(res, next, transferObject);
-  }
-  if (payload.url === "vertrag") {
-    const { url, language } = payload.params;
-    return vertrag(res, next, url, language);
-  }
-  if (payload.url === "kassenzettel") {
-    const { url } = payload.params;
-    return kassenzettel(res, next, url);
-  }
-  res.redirect("/");
+app.get("/pdf/kassenzettel/:url", (req, res, next) => {
+  kassenzettel(res, next, req.params.url);
+});
+
+app.get("/pdf/vertrag/:url/:language", (req, res, next) => {
+  vertrag(res, next, req.params.url, req.params.language);
+});
+
+app.get("/imgzip/:yymm", (req, res, next) => {
+  veranstaltungenService.imgzip(res, next, req.params.yymm);
 });
 
 export default app;

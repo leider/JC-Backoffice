@@ -22,9 +22,6 @@ div
           b-dropdown-item(to="/terminekalender/termine") Termine
           b-dropdown-item(to="/kassenbericht") Kassenberichte
           b-dropdown-item(v-if="showItemSuperuser", to="/imageoverview") Bilder bearbeiten
-        b-nav-item(v-if="showItemOrga", to="/gema", active-class="active")
-          b-icon-clipboard-data
-          span &nbsp;GEMA
         b-nav-item-dropdown(v-if="showItemSuperuser", data-jcnav="mailsender")
           template(v-slot:button-content)
             b-icon-envelope-fill

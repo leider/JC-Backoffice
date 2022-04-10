@@ -11,7 +11,6 @@ import usersApp from "./users";
 import veranstaltungenRestApp from "./veranstaltungen";
 import wikiApp from "./wiki";
 import refreshstore from "../lib/site/refreshstore";
-import { addPayload } from "../lib/site/onetimeTokens";
 import User from "jc-shared/user/user";
 const app = express();
 
@@ -56,14 +55,6 @@ app.post("/imagenames", (req, res) => {
     }
     allImageNames(res);
   });
-});
-
-app.post("/onetimeToken", (req, res) => {
-  if (!(req.user as User)?.accessrights?.isAbendkasse) {
-    return res.sendStatus(401);
-  }
-  const token = addPayload(req.body);
-  reply(res, undefined, { token });
 });
 
 export default app;

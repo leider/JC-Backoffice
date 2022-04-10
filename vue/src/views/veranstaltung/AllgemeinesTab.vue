@@ -118,7 +118,7 @@ import Orte from "jc-shared/optionen/orte";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Artist from "jc-shared/veranstaltung/artist";
 import MultiSelect from "../../widgets/MultiSelect.vue";
-import { openPayload, uploadFile } from "../../commons/loader";
+import { openVertrag, uploadFile } from "@/commons/loader";
 import EventTypSelect from "../../widgets/EventTypSelect.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import Kosten from "jc-shared/veranstaltung/kosten";
@@ -266,7 +266,7 @@ export default class AllgemeinesTab extends Vue {
   }
 
   generateVertrag(): void {
-    openPayload({ url: "vertrag", params: { url: this.veranstaltung.url, language: this.vertrag.sprache.toLowerCase() } });
+    openVertrag(this.veranstaltung);
   }
 }
 </script>

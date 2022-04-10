@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Team from "../views/team/Team.vue";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Gema from "../views/gema/Gema.vue";
 import VeranstaltungView from "../views/veranstaltung/VeranstaltungView.vue";
 import ImageOverview from "../views/imageOverview/ImageOverview.vue";
 import Preview from "../views/veranstaltung/Preview.vue";
@@ -18,7 +17,7 @@ import WikiPage from "../views/wiki/WikiPage.vue";
 import WikiSearchresults from "../views/wiki/WikiSearchresults.vue";
 import Programmheft from "../views/programmheft/Programmheft.vue";
 import Login from "../views/general/Login.vue";
-import { globals } from "../commons/loader";
+import { globals } from "@/commons/loader";
 
 Vue.use(VueRouter);
 
@@ -35,7 +34,6 @@ const routes = [
   { path: "/veranstaltungen/:url/:tab", component: VeranstaltungView, props: true },
   { path: "/programmheft", redirect: `/programmheft/${new DatumUhrzeit().naechsterUngeraderMonat.fuerKalenderViews}` },
   { path: "/programmheft/:year/:month", component: Programmheft, props: true },
-  { path: "/gema", component: Gema },
   { path: "/imageoverview", component: ImageOverview },
   { path: "/rundmail", component: Rundmail },
   { path: "/mailinglisten", component: Mailinglisten },
