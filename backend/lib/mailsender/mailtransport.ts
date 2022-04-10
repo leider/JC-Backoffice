@@ -16,7 +16,7 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
   const mbRenderer = new MailBodyRenderer(message.markdown);
 
   const senderAddress = isForDatev ? (conf.get("sender-address-datev") as string) : (conf.get("sender-address") as string);
-  const senderName = (conf.get("sender-name") as string) + isForDatev ? " für Datev" : "";
+  const senderName = (conf.get("sender-name") as string) + (isForDatev ? " für Datev" : "");
   return {
     from: Message.formatEMailAddress(message.senderName(senderName), message.senderAddress(senderAddress)),
     to: message.to || message.senderAddress(senderAddress),
