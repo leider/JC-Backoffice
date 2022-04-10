@@ -199,7 +199,7 @@ export default class KasseTab extends Vue {
   }
 
   get darfKasseFreigeben(): boolean {
-    return !!this.user?.accessrights?.darfKasseFreigeben;
+    return this.veranstaltung.istVergangen && !!this.user?.accessrights?.darfKasseFreigeben;
   }
 
   get darfFreigabeAufheben(): boolean {
