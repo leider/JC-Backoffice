@@ -157,8 +157,11 @@ export default class TeamPanelAdmin extends Vue {
   }
 
   saveVeranstaltung(): void {
-    saveVeranstaltung(this.veranstaltung, () => {
-      // empty by design
+    saveVeranstaltung(this.veranstaltung, (err: Error | undefined, result: Veranstaltung) => {
+      if (!err && result) {
+        this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+        this.dirty = false;
+      }
     });
   }
 }
