@@ -19,7 +19,7 @@ Error: "keiner"`,
   });
 
   it("renders html and text", () => {
-    const res = toTransportObject(message);
+    const res = toTransportObject(message, false);
     expect(res.html).to.equal(`<!DOCTYPE html>
 <html>
   <body><p>Nightly Mails have been sent<br>Anzahl: 5<br>Error: &quot;keiner&quot;</p>
@@ -32,13 +32,13 @@ Error: "keiner"`);
 
   it("uses the predefined sender", () => {
     const message = new Message({ subject: "", markdown: "" });
-    const res = toTransportObject(message);
+    const res = toTransportObject(message, false);
     expect(res.from).to.equal('"Der Sender" <sender@jazz.club>');
   });
 
   it("uses the given sender", () => {
     const message = new Message({ subject: "", markdown: "" }, "Andreas von Jazzclub", "andreas@jazz.club");
-    const res = toTransportObject(message);
+    const res = toTransportObject(message, false);
     expect(res.from).to.equal('"Andreas von Jazzclub via backoffice.jazzclub.de" <andreas@jazz.club>');
   });
 });
