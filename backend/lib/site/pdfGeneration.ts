@@ -54,7 +54,7 @@ export function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl
   });
 }
 
-export function kassenzettelLocal(veranstaltung: Veranstaltung): void {
+export function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback: Function): void {
   const file = path.join(__dirname, "views/kassenzettel.pug");
   return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
     const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
@@ -62,9 +62,12 @@ export function kassenzettelLocal(veranstaltung: Veranstaltung): void {
     generatePdfLocally(renderedHtml, (pdf) => {
       const message = new Message({ subject: "Kassenzettel für Datev", markdown: "Neuer Kassenzettel" });
       message.pdfBufferAndName = { pdf, name: "Kassenzettel.pdf" };
-      message.to = "leider@me.com";
-      mailtransport.sendMail(message, () => {
-        console.log("Mail sent");
+      message.to = conf.get("kassenzettel-email") as string;
+      if (!message.to) {
+        return callback();
+      }
+      mailtransport.sendMail(message, (err2: Error) => {
+        callback(err2);
       });
     });
   });

@@ -14,7 +14,7 @@ import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenServic
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import { salesreportFor } from "../lib/reservix/reservixService";
 import Salesreport from "jc-shared/veranstaltung/salesreport";
-import { kassenzettelLocal } from "../lib/site/pdfGeneration";
+import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration";
 
 const app = express();
 
@@ -93,19 +93,22 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
     if (veranstaltung) {
       const frischFreigegeben = veranstaltung.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
       if (frischFreigegeben) {
-        console.log("Kasse frisch freigegeben!");
-        kassenzettelLocal(new Veranstaltung(req.body));
+        kassenzettelToBuchhaltung(new Veranstaltung(req.body), (err1: Error) => {
+          if (err1) {
+            console.log("Kassenzettel Versand an Buchhaltung gescheitert");
+          }
+          if (user?.accessrights?.isOrgaTeam) {
+            saveAndReply(res, new Veranstaltung(req.body));
+          } else {
+            // Nur Kasse erlaubt
+            if ((url && err) || !veranstaltung) {
+              return res.status(403).send("Kasse darf nur bestehende speichern");
+            }
+            veranstaltung.kasse = new Kasse(req.body.kasse);
+            saveAndReply(res, veranstaltung);
+          }
+        });
       }
-    }
-    if (user?.accessrights?.isOrgaTeam) {
-      saveAndReply(res, new Veranstaltung(req.body));
-    } else {
-      // Nur Kasse erlaubt
-      if ((url && err) || !veranstaltung) {
-        return res.status(403).send("Kasse darf nur bestehende speichern");
-      }
-      veranstaltung.kasse = new Kasse(req.body.kasse);
-      saveAndReply(res, veranstaltung);
     }
   });
 });

@@ -80,7 +80,7 @@
           b-button.btn.btn-kasse(@click="kassenzettel")
             b-icon-printer-fill
             | #{ ' ' } Kassenzettel
-          b-button.btn.btn-danger.float-right(disabled="!darfFreigabeAufheben", v-if="kasse.istFreigegeben", @click="showAufheben = true")
+          b-button.btn.btn-danger.float-right(:disabled="!darfFreigabeAufheben", v-if="kasse.istFreigegeben", @click="showAufheben = true")
             b-icon-lock
             | &nbsp;Kasse ist freigegeben
 

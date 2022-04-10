@@ -3,7 +3,8 @@
     "streamTransport": true
   },
   "sender-name": "Jazzclub Backoffice",
-  "sender-address": "bo@jazzclub.de",
+  "sender-address": "changethis@jazzclub.de",
   "stimmer-name": "Andreas Leidig",
-  "stimmer-email": "leider@me.com"
+  "stimmer-email": "changethis@me.com",
+  "kassenzettel-email": "changethis@me.com"
 }

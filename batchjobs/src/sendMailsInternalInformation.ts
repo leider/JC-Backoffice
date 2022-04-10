@@ -13,7 +13,6 @@ import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";
 import mailstore from "jc-backend/lib/mailsender/mailstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import conf from "jc-backend/lib/commons/simpleConfigure";
 import usersService from "jc-backend/lib/users/usersService";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
@@ -21,7 +20,7 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return conf.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return config.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): void {
@@ -32,7 +31,7 @@ export function checkPressetexte(now: DatumUhrzeit, callbackOuter: Function): vo
     const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
     function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function): void {
-      const prefix = conf.get("publicUrlPrefix") as string;
+      const prefix = config.get("publicUrlPrefix") as string;
       function presseTemplateInternal(veranst: Veranstaltung): string {
         // für interne Mails
         return `### [${veranst.kopf.titelMitPrefix}](${prefix}/vue${veranst.fullyQualifiedUrl}/presse)
