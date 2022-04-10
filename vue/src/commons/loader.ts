@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
-import fetch, { Response } from "cross-fetch";
+import axios, { AxiosRequestConfig, Method } from "axios";
+
 import User from "jc-shared/user/user";
 import Kalender from "jc-shared/programmheft/kalender";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -34,15 +35,15 @@ export const globals = {
     }
     if (refreshTokenState !== "START") {
       refreshTokenState = "START";
-      callAndReceive({
+      standardFetch({
         method: "POST",
         url: "/refreshToken",
         callback: (err: any, json: any) => {
           if (json) {
             globals.jwtToken = json.token;
+            refreshTokenState = "FINISHED";
+            callback(!err && json.token);
           }
-          refreshTokenState = "FINISHED";
-          callback(!err && json.token);
         },
         contentType: "json",
       });
@@ -57,80 +58,55 @@ type ContentType = "json" | "pdf" | "zip" | "other";
 type FetchParams = {
   url: string;
   contentType: ContentType;
-  method?: string;
+  method: Method;
   data?: any;
   title?: string;
   text?: string;
   callback: any;
 };
 
-function standardFetch(params: FetchParams, postHeader?: RequestInit): void {
-  function handleErrorIfAny(response: Response): any {
-    if (!response.ok) {
-      if (response.status === 401) {
+function standardFetch(params: FetchParams): void {
+  const options: AxiosRequestConfig = {
+    url: params.url,
+    method: params.method,
+    data: params.data,
+    responseType: params.contentType !== "json" ? "blob" : "json",
+    headers: { Authorization: `Bearer ${globals.jwtToken}` },
+  };
+
+  axios(options)
+    .then((res) => {
+      if (params.title || params.text) {
+        feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
+      }
+      params.callback(null, res.data);
+    })
+    .catch((err) => {
+      if (err.response.status === 401) {
         if (router.currentRoute.path !== "/login") {
           globals.isAuthenticated((isAuth: boolean) => {
             if (!isAuth) {
               router.push("/login");
+              params.callback();
             }
           });
         }
-        return;
       }
-      if (response.status === 404) {
-        return;
-      }
-      response.text().then((fehlertext) => {
-        feedbackMessages.addError(`Fehler: ${response.status} ${response.statusText}`, fehlertext);
-      });
-      throw Error(response.statusText);
-    }
-    if (params.contentType !== "json") {
-      console.log("RESPONSE", response);
-      return response.blob();
-    }
-    return response.json();
-  }
 
-  fetch(params.url, postHeader)
-    .then(handleErrorIfAny)
-    .then((json: any) => {
-      if (params.title || params.text) {
-        feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
+      if (err.response.text) {
+        feedbackMessages.addError(`Fehler: ${err.response.status} ${err.response.statusText}`, err.response.text);
+        return params.callback(err.response.statusText);
       }
-      params.callback(null, json);
-    })
-    .catch((err) => params.callback(err));
+      params.callback(err);
+    });
 }
 
 function getForType(contentType: ContentType, url: string, callback: Function) {
-  standardFetch(
-    { contentType, url, callback },
-    { headers: { "Content-Type": `application/${contentType}`, Authorization: "Bearer " + globals.jwtToken } }
-  );
-}
-
-function callAndReceive(params: FetchParams): void {
-  const isJson = params.contentType === "json";
-  const theHeaders: HeadersInit = { Authorization: `Bearer ${globals.jwtToken}` };
-  if (isJson) {
-    theHeaders["Content-Type"] = "application/json";
-  }
-  const postHeader: RequestInit = {
-    method: params.method,
-    mode: "same-origin",
-    cache: "no-cache",
-    credentials: "same-origin",
-    redirect: "follow",
-    referrer: "no-referrer",
-    headers: theHeaders,
-    body: isJson ? JSON.stringify(params.data) : params.data,
-  };
-  standardFetch(params, postHeader);
+  standardFetch({ contentType, url, callback, method: "GET" });
 }
 
 export function uploadFile(data: FormData, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/upload",
     data,
@@ -142,7 +118,7 @@ export function uploadFile(data: FormData, callback: Function): void {
 }
 
 export function logout(callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/logout",
     callback: (err?: Error) => {
@@ -154,7 +130,7 @@ export function logout(callback: Function): void {
 }
 
 export function login(name: string, pass: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/login",
     data: { name, pass },
@@ -189,7 +165,7 @@ export function veranstaltungForUrl(url: string, callback: Function): void {
 }
 
 export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/veranstaltungen",
     data: veranstaltung.toJSON(),
@@ -201,7 +177,7 @@ export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Functi
 }
 
 export function deleteVeranstaltungWithId(id: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: "/rest/veranstaltungen",
     data: { id },
@@ -213,7 +189,7 @@ export function deleteVeranstaltungWithId(id: string, callback: Function): void 
 }
 
 export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
     data: { section },
@@ -223,7 +199,7 @@ export function addUserToSection(veranstaltung: Veranstaltung, section: StaffTyp
 }
 
 export function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
     data: { section },
@@ -251,7 +227,7 @@ export function allUsers(callback: Function): void {
 }
 
 export function saveUser(user: User, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/user",
     data: user.toJSON(),
@@ -263,7 +239,7 @@ export function saveUser(user: User, callback: Function): void {
 }
 
 export function deleteUser(user: User, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: "/rest/user",
     data: user.toJSON(),
@@ -275,7 +251,7 @@ export function deleteUser(user: User, callback: Function): void {
 }
 
 export function saveNewUser(user: User, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "PUT",
     url: "/rest/user",
     data: user.toJSON(),
@@ -287,7 +263,7 @@ export function saveNewUser(user: User, callback: Function): void {
 }
 
 export function changePassword(user: User, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/user/changePassword",
     data: user.toJSON(),
@@ -306,7 +282,7 @@ export function kalenderFor(jahrMonat: string, callback: Function): void {
 }
 
 export function saveProgrammheft(kalender: Kalender, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/programmheft",
     data: kalender,
@@ -326,7 +302,7 @@ export function saveOptionen(optionen: OptionValues, callback: Function): void {
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
     return callback(new Error("oops, Optionen kaputt??"));
   }
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/optionen",
     data: optionen.toJSON(),
@@ -341,7 +317,7 @@ export function saveOptionenQuiet(optionen: OptionValues, callback: Function): v
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
     return callback(new Error("oops, Optionen kaputt??"));
   }
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/optionen",
     data: optionen.toJSON(),
@@ -355,7 +331,7 @@ export function orte(callback: Function): void {
 }
 
 export function saveOrte(orte: Orte, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/orte",
     data: orte.toJSON(),
@@ -371,7 +347,7 @@ export function termine(callback: Function): void {
 }
 
 export function saveTermin(termin: Termin, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/termin",
     data: termin,
@@ -383,7 +359,7 @@ export function saveTermin(termin: Termin, callback: Function): void {
 }
 
 export function deleteTermin(terminID: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: "/rest/termin",
     data: { id: terminID },
@@ -399,7 +375,7 @@ export function kalender(callback: Function): void {
 }
 
 export function saveKalender(kalender: FerienIcals, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/kalender",
     data: kalender,
@@ -416,7 +392,7 @@ export function imagenames(callback: Function): void {
 }
 
 export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/imagenames",
     data: rows,
@@ -429,7 +405,7 @@ export function saveImagenames(rows: ImageOverviewRow[], callback: Function): vo
 
 //Mails intern
 export function sendMail(message: Message, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/rundmail",
     data: message,
@@ -441,7 +417,7 @@ export function sendMail(message: Message, callback: Function): void {
 }
 
 export function deleteMailinglist(listname: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: "/rest/mailingliste",
     data: { name: listname },
@@ -453,7 +429,7 @@ export function deleteMailinglist(listname: string, callback: Function): void {
 }
 
 export function saveMailinglist(list: Mailingliste, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/mailingliste",
     data: list,
@@ -470,7 +446,7 @@ export function mailRules(callback: Function): void {
 }
 
 export function deleteMailRule(ruleID: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: "/rest/mailrule",
     data: { id: ruleID },
@@ -482,7 +458,7 @@ export function deleteMailRule(ruleID: string, callback: Function): void {
 }
 
 export function saveMailRule(rule: MailRule, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/mailrule",
     data: rule,
@@ -502,7 +478,7 @@ export function wikiPage(subdir: string, page: string, callback: Function): void
 }
 
 export function saveWikiPage(subdir: string, page: string, content: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: `/rest/wikipage/${subdir}/${page}`,
     data: { content },
@@ -514,7 +490,7 @@ export function saveWikiPage(subdir: string, page: string, content: string, call
 }
 
 export function searchWiki(suchtext: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "POST",
     url: "/rest/wikipage/search",
     data: { suchtext },
@@ -524,7 +500,7 @@ export function searchWiki(suchtext: string, callback: Function): void {
 }
 
 export function deleteWikiPage(subdir: string, page: string, callback: Function): void {
-  callAndReceive({
+  standardFetch({
     method: "DELETE",
     url: `/rest/wikipage/${subdir}/${page}`,
     data: { data: "" },
