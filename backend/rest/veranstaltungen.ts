@@ -89,6 +89,19 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
   }
   // checkFreigabeChanged
   const url = req.body.url;
+  function saveVeranstaltung(err: Error | undefined, veranstaltung: Veranstaltung) {
+    if (user?.accessrights?.isOrgaTeam) {
+      saveAndReply(res, new Veranstaltung(req.body));
+    } else {
+      // Nur Kasse erlaubt
+      if ((url && err) || !veranstaltung) {
+        return res.status(403).send("Kasse darf nur bestehende speichern");
+      }
+      veranstaltung.kasse = new Kasse(req.body.kasse);
+      saveAndReply(res, veranstaltung);
+    }
+  }
+
   store.getVeranstaltung(url, (err?: Error, veranstaltung?: Veranstaltung) => {
     if (veranstaltung) {
       const frischFreigegeben = veranstaltung.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
@@ -97,17 +110,10 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
           if (err1) {
             console.log("Kassenzettel Versand an Buchhaltung gescheitert");
           }
-          if (user?.accessrights?.isOrgaTeam) {
-            saveAndReply(res, new Veranstaltung(req.body));
-          } else {
-            // Nur Kasse erlaubt
-            if ((url && err) || !veranstaltung) {
-              return res.status(403).send("Kasse darf nur bestehende speichern");
-            }
-            veranstaltung.kasse = new Kasse(req.body.kasse);
-            saveAndReply(res, veranstaltung);
-          }
+          saveVeranstaltung(err, veranstaltung);
         });
+      } else {
+        saveVeranstaltung(err, veranstaltung);
       }
     }
   });

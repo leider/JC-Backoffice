@@ -30,7 +30,9 @@ export function toTransportObject(message: Message): Mail.Options {
 function sendMail(message: Message, callback: Function): void {
   const transportObject = toTransportObject(message);
   if (doNotSendMails) {
-    logger.info(JSON.stringify(transportObject, null, 2));
+    const withoutAttachments = JSON.parse(JSON.stringify(transportObject));
+    delete withoutAttachments.attachments;
+    logger.info(JSON.stringify(withoutAttachments, null, 2));
     message.setTo();
     message.setBcc("derleider@web.de");
   }
