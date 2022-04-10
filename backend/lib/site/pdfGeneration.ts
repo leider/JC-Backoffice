@@ -59,8 +59,9 @@ export function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback
   return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
     const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
     const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
+    const subject = `[Kassenzettel] ${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.fuerPresse}`;
     generatePdfLocally(renderedHtml, (pdf) => {
-      const message = new Message({ subject: "Kassenzettel für Datev", markdown: "Neuer Kassenzettel" });
+      const message = new Message({ subject, markdown: "" });
       message.pdfBufferAndName = { pdf, name: "Kassenzettel.pdf" };
       message.to = conf.get("kassenzettel-email") as string;
       if (!message.to) {
