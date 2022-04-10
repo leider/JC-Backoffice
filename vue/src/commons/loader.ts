@@ -42,6 +42,8 @@ export const globals = {
         refreshTokenState = "FINISHED";
         callback(!err && json.token);
       });
+    } else {
+      callback(false);
     }
   },
 };

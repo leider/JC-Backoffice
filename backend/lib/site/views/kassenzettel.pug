@@ -50,7 +50,7 @@ html
         .col-6
           table.table.table-bordered.table-sm
             tr
-              th Name:
+              th Veranstaltung:
               td #{veranstaltung.kopf.titelMitPrefix}
             tr
               th Ort:
@@ -59,7 +59,7 @@ html
               th Datum:
               td #{veranstaltung.datumForDisplay}
             tr
-              th Besucher Abendkasse:
+              th Besucher gesamt:
               td
                 if veranstaltung.istVergangen
                   | #{kasse.anzahlBesucherAK}
@@ -69,7 +69,7 @@ html
         .col-6
           table.table.table-bordered.table-sm
             tr
-              th Anfangsbestand:
+              th Anfangsbestand Kasse:
               td.text-right: +currencyOrEmpty(kasse.anfangsbestandEUR)
             tr
               th Einnahmen:
@@ -78,7 +78,7 @@ html
               th Ausgaben:
               td.text-right: +currencyOrEmpty(kasse.ausgabenTotalEUR * -1)
             tr
-              th Endbestand:
+              th Endbestand Kasse:
               td.text-right: +currencyOrEmpty(kasse.endbestandEUR)
       .row
         .col-6
@@ -113,10 +113,6 @@ html
               td
               td
             tr
-              td &nbsp;
-              td
-              td
-            tr
               th Summe
               td
               td.text-right: b: +currencyOrEmpty(kasse.einnahmeTotalEUR)
@@ -128,10 +124,6 @@ html
               th Verwendungszweck
               th Beleg-Nr.
               th.text-right Betrag
-            tr
-              td Gage (bar)
-              td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeGageEUR)
             tr
               td Catering
               td

@@ -87,12 +87,16 @@ export default class App extends Vue {
   }
 
   created(): void {
-    currentUser((user: User) => {
-      this.user = user;
-    });
+    globals.isAuthenticated((isAuth) => {
+      if (isAuth) {
+        currentUser((user: User) => {
+          this.user = user;
+        });
 
-    wikisubdirs((json: { dirs: string[] }) => {
-      this.wikisubdirs = json.dirs;
+        wikisubdirs((json: { dirs: string[] }) => {
+          this.wikisubdirs = json.dirs;
+        });
+      }
     });
   }
 

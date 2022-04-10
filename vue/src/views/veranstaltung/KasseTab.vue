@@ -41,7 +41,7 @@
               tooltip="Alles hier eingegebene gilt als Einnahme für \"Deal\""
             )
           .col-4
-            jazz-number(label="Anzahl (AK)", v-model="kasse.anzahlBesucherAK", tooltip="Anzahl der bar bezahlten Tickets")
+            jazz-number(label="Besucher gesamt", v-model="kasse.anzahlBesucherAK", tooltip="Anzahl der bar bezahlten Tickets")
           .col-4
             jazz-currency(label="Bareinlage", v-model="kasse.einnahmeBankEUR", tooltip="z.B. Gage")
         .row
@@ -97,15 +97,6 @@
       )
         .row
           .col-sm-4.col-6
-            jazz-currency(v-if="!kosten.gageBAR", label="Gage", v-model="kasse.ausgabeGageEUR")
-            .form-group(v-else)
-              label.control-label.text-danger
-                b-icon-exclamation-triangle-fill(scale=1.1)
-                | &nbsp; Gage BAR &nbsp;
-                b-icon-exclamation-triangle-fill(scale=1.1)
-                | :
-              jazz-currency-pure(v-model="kasse.ausgabeGageEUR")
-          .col-sm-4.col-6
             jazz-currency(label="Catering", v-model="kasse.ausgabeCateringEUR")
           .col-sm-4.col-6
             jazz-currency(label="Personal", v-model="kasse.ausgabeHelferEUR")
@@ -130,8 +121,6 @@
             jazz-currency(label="An Bank", v-model="kasse.ausgabeBankEUR")
       legend-card(v-else, section="kasse", title="Ausgaben (Bar und mit Beleg)", hasMoney="true", :money="kasse.ausgabenTotalEUR")
         .row
-          .col-sm-4.col-6
-            jazz-currency-display(label="Gage", :value="kasse.ausgabeGageEUR")
           .col-sm-4.col-6
             jazz-currency-display(label="Catering", :value="kasse.ausgabeCateringEUR")
           .col-sm-4.col-6
@@ -159,12 +148,12 @@
           .col-sm-4.col-6
             jazz-currency-display(label="An Bank", :value="kasse.ausgabeBankEUR")
   .row
-    .col-sm-3.col-6
-      jazz-currency(v-if="!kasse.istFreigegeben", label="Anfangsbestand", v-model="kasse.anfangsbestandEUR")
-      jazz-currency-display(v-else, label="Anfangsbestand", :value="kasse.anfangsbestandEUR")
-    .col-sm-3.col-6
-      jazz-currency(v-if="!kasse.istFreigegeben", label="Endbestand", v-model="kasse.endbestandEUR")
-      jazz-currency-display(v-else, label="Endbestand", :value="kasse.endbestandEUR")
+    .col-md-3.col-6
+      jazz-currency(v-if="!kasse.istFreigegeben", label="Anfangsbestand Kasse", v-model="kasse.anfangsbestandEUR")
+      jazz-currency-display(v-else, label="Anfangsbestand Kasse", :value="kasse.anfangsbestandEUR")
+    .col-md-3.col-6
+      jazz-currency(v-if="!kasse.istFreigegeben", label="Endbestand Kasse", v-model="kasse.endbestandEUR")
+      jazz-currency-display(v-else, label="Endbestand Kasse", :value="kasse.endbestandEUR")
 </template>
 
 <script lang="ts">
@@ -179,7 +168,7 @@ import JazzText from "../../widgets/JazzText.vue";
 import JazzCurrency from "../../widgets/JazzCurrency.vue";
 import JazzNumber from "../../widgets/JazzNumber.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
-import { openPayload } from "../../commons/loader";
+import { openPayload } from "@/commons/loader";
 
 @Component({
   components: {

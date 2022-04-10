@@ -11,7 +11,6 @@ import userstore from "../users/userstore";
 import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons";
 import pug from "pug";
 import path from "path";
-import { sendMail } from "jc-vue/src/commons/loader";
 import mailtransport from "../mailsender/mailtransport";
 import Message from "jc-shared/mail/message";
 
