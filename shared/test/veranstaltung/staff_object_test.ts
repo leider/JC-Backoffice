@@ -3,24 +3,51 @@ import { expect } from "chai";
 import Staff from "../../veranstaltung/staff";
 
 describe("Staff", () => {
-  describe("kann sagen, ob jemand für die Kasse fehlt", () => {
-    let staff: Staff;
-    beforeEach(() => {
-      staff = new Staff({
-        techniker: [],
-        technikerV: [],
-        merchandise: [],
-        kasse: [],
-        kasseV: [],
-        mod: [],
-        technikerNotNeeded: false,
-        technikerVNotNeeded: false,
-        kasseNotNeeded: false,
-        kasseVNotNeeded: false,
-        modNotNeeded: false,
-        merchandiseNotNeeded: false,
-      });
+  let staff: Staff;
+  beforeEach(() => {
+    staff = new Staff({
+      techniker: [],
+      technikerV: [],
+      merchandise: [],
+      kasse: [],
+      kasseV: [],
+      mod: [],
+      technikerNotNeeded: false,
+      technikerVNotNeeded: false,
+      kasseNotNeeded: false,
+      kasseVNotNeeded: false,
+      modNotNeeded: false,
+      merchandiseNotNeeded: false,
     });
+  });
+
+  describe("gibt alle asl Array zurück", () => {
+    it("wenn nur Kasse", () => {
+      staff.kasse = ["Peter"];
+      staff.kasseV = ["Paul"];
+      expect(staff.allNames).to.include("Peter");
+      expect(staff.allNames).to.include("Paul");
+    });
+
+    it("wenn mehrere an Kasse", () => {
+      staff.kasse = ["Peter", "Paul"];
+      expect(staff.allNames).to.include("Peter");
+      expect(staff.allNames).to.include("Paul");
+    });
+
+    it("Kasse und Technik und MoD", () => {
+      staff.kasse = ["Peter", "Paul"];
+      staff.techniker = ["Anne", "Gret"];
+      staff.mod = ["Nikki"];
+      expect(staff.allNames).to.include("Peter");
+      expect(staff.allNames).to.include("Paul");
+      expect(staff.allNames).to.include("Anne");
+      expect(staff.allNames).to.include("Gret");
+      expect(staff.allNames).to.include("Nikki");
+    });
+  });
+
+  describe("kann sagen, ob jemand für die Kasse fehlt", () => {
     it("initial", () => {
       expect(staff.kasseFehlt).to.be.true;
     });

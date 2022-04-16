@@ -19,6 +19,7 @@
         .row: .col-12
           jazz-text(label="Vollständiger Name", v-model="user.name")
           jazz-mail(label="E-Mail", v-model="user.email", required)
+          jazz-check.mb-3(label="Benachrichtigen, wenn Staff", v-model="user.wantsEmailReminders", inline="true")
           jazz-text(label="Telefon", v-model="user.tel")
           single-select(label="T-Shirt", v-model="user.tshirt", :options="shirtsizes")
         .row(v-if="isSuperuser"): .col-12
@@ -49,6 +50,8 @@
     b-collapse(v-model="expanded")
       table.table.table-striped.table-sm
         tbody
+          tr(v-if="user.wantsEmailReminders")
+            th(colspan=2): .form-control-plaintext Du wirst benachrichtigt, wenn Du Staff bist
           tr
             th: .form-control-plaintext Username:
             td: .form-control-plaintext {{ user.id }}

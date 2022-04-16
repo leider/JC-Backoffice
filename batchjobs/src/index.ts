@@ -58,6 +58,7 @@ async.parallel(
     checkKasse: partial(sendMailsNightly.checkKasse, now),
     send: partial(sendMailsNightly.loadRulesAndProcess, now),
     remindForProgrammheft: partial(sendMailsNightly.remindForProgrammheft, now),
+    checkStaff: partial(sendMailsNightly.checkStaff, now),
   },
   (err: Error | undefined, results) => {
     informAdmin(err, results.send as number);

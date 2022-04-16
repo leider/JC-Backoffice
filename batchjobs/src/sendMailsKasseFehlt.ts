@@ -62,7 +62,7 @@ export function checkKasse(now: DatumUhrzeit, callback: Function): void {
 
   store.byDateRangeInAscendingOrder(start, end, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err1) {
-      return;
+      return callback();
     }
     const zuSendende = veranstaltungen.filter((veranstaltung) => kasseFehlt(veranstaltung));
     if (zuSendende.length === 0) {

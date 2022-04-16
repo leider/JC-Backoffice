@@ -111,4 +111,13 @@ export default class Staff {
     const index = sec.indexOf(user.id);
     sec.splice(index, 1);
   }
+
+  get allNames() {
+    return this.kasseV
+      .concat(this.kasse)
+      .concat(this.technikerV)
+      .concat(this.techniker)
+      .concat(this.mod)
+      .filter((s) => !!s);
+  }
 }

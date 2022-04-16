@@ -12,6 +12,7 @@ export default class User {
   gruppen: string[];
   rechte: string[];
   mailinglisten: string[];
+  wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
   accessrights?: Accessrights; // transient
 
@@ -24,6 +25,7 @@ export default class User {
     this.salt = object.salt;
     this.tshirt = object.tshirt;
     this.password = object.password;
+    this.wantsEmailReminders = object.wantsEmailReminders;
 
     this.gruppen = object.gruppen || [];
     this.rechte = object.rechte || [];
