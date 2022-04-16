@@ -29,7 +29,7 @@ export const printoptions: PDFOptions = {
   margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
 };
 
-export function generatePdfLocally(html: string, callback: (pdf: Buffer) => void): void {
+export function generatePdfLocally(html: string, callback: Function): void {
   (async (): Promise<void> => {
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
     const page = await browser.newPage();

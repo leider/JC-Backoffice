@@ -7,6 +7,7 @@ export default class Message {
   bcc!: string;
   pdfBufferAndName?: { pdf: Buffer; name: string };
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   static fromJSON(json: any) {
     const message = new Message({ subject: json.subject, markdown: json.markdown });
     message.bcc = json.bcc;

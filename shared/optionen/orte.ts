@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any*/
+
 import { sortBy, flowRight, toLower, prop } from "lodash/fp";
 
 const sortByNameCaseInsensitive = sortBy(flowRight(toLower, prop("name")));

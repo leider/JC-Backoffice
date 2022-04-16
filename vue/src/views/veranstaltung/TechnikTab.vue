@@ -84,6 +84,7 @@ export default class TechnikTab extends Vue {
     this.filesForUpload.forEach((file) => {
       formData.append("datei", file, file.name);
     });
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     uploadFile(formData, (err?: Error, veranstaltung?: any) => {
       if (!err) {
         this.filesForUpload = [];

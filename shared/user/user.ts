@@ -31,12 +31,14 @@ export default class User {
     this.mailinglisten = object.mailinglisten || [];
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     const result = Object.assign({}, this);
     delete result.accessrights;
     return result;
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSONWithoutPass(): any {
     const result = this.toJSON();
     delete result.hashedPassword;

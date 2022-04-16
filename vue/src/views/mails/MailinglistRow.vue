@@ -17,8 +17,9 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
 import MultiSelect from "../../widgets/MultiSelect.vue";
 import { Mailingliste } from "jc-shared/user/users";
-import { saveMailinglist } from "../../commons/loader";
+import { saveMailinglist } from "@/commons/loader";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { DeleteButtonWithDialog, MultiSelect } })
 export default class MailinglistRow extends Vue {
@@ -66,10 +67,6 @@ export default class MailinglistRow extends Vue {
   @Watch("selectedUsers")
   @Watch("mailinglist.name")
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originallist) !== normCrLf(this.mailinglist);
   }
 }

@@ -99,6 +99,7 @@ import Staff from "jc-shared/veranstaltung/staff";
 import Kopf from "jc-shared/veranstaltung/kopf";
 import CheckedButton from "./CheckedButton.vue";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { StaffRowAdmin, CheckedButton } })
 export default class TeamPanelAdmin extends Vue {
@@ -120,9 +121,6 @@ export default class TeamPanelAdmin extends Vue {
 
   @Watch("veranstaltung", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
     const dirtybefore = this.dirty;
     this.dirty = normCrLf(this.originalVeranstaltung.toJSON()) !== normCrLf(this.veranstaltung.toJSON());
     if (this.dirty && !dirtybefore) {

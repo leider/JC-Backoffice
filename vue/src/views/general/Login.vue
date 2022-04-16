@@ -15,7 +15,7 @@
 <script lang="ts">
 import JazzPass from "../../widgets/JazzPass.vue";
 import JazzText from "../../widgets/JazzText.vue";
-import { login } from "../../commons/loader";
+import { login } from "@/commons/loader";
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({ components: { JazzText, JazzPass } })
@@ -25,7 +25,7 @@ export default class Login extends Vue {
   private password = "";
 
   login(): void {
-    login(this.username, this.password, (err: any) => {
+    login(this.username, this.password, (err?: Error) => {
       if (err) {
         this.$router.push("/");
       }

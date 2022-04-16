@@ -178,7 +178,7 @@ describe("DatumUhrzeit", () => {
     });
 
     it("formatiert alles kompakt", () => {
-      expect(januar01.lesbareKurzform).to.eql("Di., 1. Jan 2019 00:00");
+      expect(januar01.lesbareKurzform).to.eql("Di., 1. Jan. 2019 00:00");
     });
 
     it("formatiert Wochentag Tag und Monat", () => {

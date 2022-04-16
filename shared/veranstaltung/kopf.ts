@@ -13,10 +13,12 @@ export default class Kopf {
   abgesagt = false;
   fotografBestellen = false;
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object);

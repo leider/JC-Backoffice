@@ -6,6 +6,8 @@ FullCalendar(:options="options")
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import FullCalendar, { CalendarOptions } from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";

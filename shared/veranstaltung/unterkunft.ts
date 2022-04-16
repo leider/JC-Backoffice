@@ -17,10 +17,12 @@ export default class Unterkunft {
   anreiseDate: Date;
   abreiseDate: Date;
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object: any | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {

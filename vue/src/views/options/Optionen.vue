@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { optionen, orte, saveOptionen, saveOrte } from "../../commons/loader";
+import { optionen, orte, saveOptionen, saveOrte } from "@/commons/loader";
 import Orte, { Ort } from "jc-shared/optionen/orte";
 import OptionValues from "jc-shared/optionen/optionValues";
 import MultiSelect from "../../widgets/MultiSelect.vue";
@@ -55,6 +55,7 @@ import JazzLabel from "../../widgets/JazzLabel.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
 import OrtRow from "./OrtRow.vue";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({
   components: { JazzLabel, LegendCard, MultiSelect, OrtRow },
@@ -105,10 +106,6 @@ export default class Optionen extends Vue {
 
   @Watch("optionen", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originalOptionen) !== normCrLf(this.optionen);
   }
 
@@ -125,6 +122,7 @@ export default class Optionen extends Vue {
   }
 
   saveOptionen(): void {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     saveOptionen(this.optionen, (err?: Error, optionen?: any) => {
       if (err) {
         feedbackMessages.addError("Oooops. Optionen kaputt", err.message);

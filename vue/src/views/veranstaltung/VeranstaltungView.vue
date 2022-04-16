@@ -79,6 +79,7 @@ import TechnikTab from "./TechnikTab.vue";
 import HotelTab from "./HotelTab.vue";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import { differenceFor } from "jc-shared/commons/compareObjects";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 export interface EditVariables {
   hotelpreiseAlsDefault: boolean;
@@ -148,9 +149,6 @@ export default class VeranstaltungView extends Vue {
 
   @Watch("veranstaltung", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
     this.dirty = normCrLf(this.originalVeranstaltung.toJSON()) !== normCrLf(this.veranstaltung.toJSON());
   }
 
@@ -214,6 +212,7 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Jazzclub", this.veranstaltung.technik.backlineJazzclub);
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
       if (err) {
         feedbackMessages.addError("Oooops. Optionen kaputt", err.message);

@@ -11,8 +11,9 @@ tr
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
-import { saveMailRule } from "../../commons/loader";
+import { saveMailRule } from "@/commons/loader";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { DeleteButtonWithDialog, SingleSelectPure } })
 export default class MailRuleRow extends Vue {
@@ -47,10 +48,6 @@ export default class MailRuleRow extends Vue {
 
   @Watch("rule", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originalRule) !== normCrLf(this.rule);
   }
 }

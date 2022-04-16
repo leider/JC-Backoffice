@@ -22,6 +22,7 @@ export default class Termin {
   startDate: Date = new DatumUhrzeit().toJSDate;
   endDate: Date = this.startDate;
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object) {
       this.id = object.id;
@@ -40,6 +41,7 @@ export default class Termin {
     }
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
   }

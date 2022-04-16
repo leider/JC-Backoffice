@@ -15,7 +15,7 @@ interface RuleLogic {
 }
 
 class RuleLogicEmpty implements RuleLogic {
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
     return false;
   }
@@ -143,10 +143,12 @@ export default class MailRule {
     return new MailRule(object);
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object) {
       Object.assign(this, object);

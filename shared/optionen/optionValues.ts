@@ -41,6 +41,7 @@ export default class OptionValues {
     return Object.assign({}, this);
   }
 
+  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object) {
       delete object._id;

@@ -16,11 +16,12 @@ tr
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { saveTermin } from "../../commons/loader";
+import { saveTermin } from "@/commons/loader";
 import Termin from "jc-shared/optionen/termin";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import JazzDatePure from "../../widgets/JazzDatePure.vue";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { DeleteButtonWithDialog, SingleSelectPure, JazzDatePure } })
 export default class TerminRow extends Vue {
@@ -54,10 +55,6 @@ export default class TerminRow extends Vue {
 
   @Watch("termin", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originaltermin.toJSON()) !== normCrLf(this.termin.toJSON());
   }
 }

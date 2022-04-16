@@ -17,3 +17,8 @@ export function formatToGermanNumberString(amount: number): string {
 export function formatToEnglishNumberString(amount: number): string {
   return formatEng.format(amount);
 }
+
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+export function normCrLf(json: any): string {
+  return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
+}

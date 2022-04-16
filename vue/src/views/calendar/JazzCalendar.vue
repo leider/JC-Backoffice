@@ -8,12 +8,14 @@ FullCalendar(:options="options")
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Component, Vue } from "vue-property-decorator";
 import FullCalendar, { CalendarOptions } from "@fullcalendar/vue/";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import deLocale from "@fullcalendar/core/locales/de";
-import { calendarEventSources } from "../../commons/loader";
+import { calendarEventSources } from "@/commons/loader";
 import { EventInput } from "@fullcalendar/common";
 
 function getEvents(

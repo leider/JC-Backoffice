@@ -170,7 +170,7 @@ export default class DatumUhrzeit {
   }
 
   get monatKompakt(): string {
-    return this.format("MMM[.]");
+    return this.format("MMM");
   }
 
   get wochentagTagMonat(): string {
@@ -202,7 +202,7 @@ export default class DatumUhrzeit {
   }
 
   get monatJahrKompakt(): string {
-    return this.format("MMM[. ']YY");
+    return this.format("MMM[ ']YY");
   }
 
   get monatLangJahrKompakt(): string {

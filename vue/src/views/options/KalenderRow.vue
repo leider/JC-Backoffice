@@ -19,6 +19,7 @@ import { Ical } from "jc-shared/optionen/ferienIcals";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import SingleSelectPure from "../../widgets/SingleSelectPure.vue";
 import JazzDatePure from "../../widgets/JazzDatePure.vue";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { DeleteButtonWithDialog, SingleSelectPure, JazzDatePure } })
 export default class KalenderRow extends Vue {
@@ -48,10 +49,6 @@ export default class KalenderRow extends Vue {
 
   @Watch("kalender", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originalkalender) !== normCrLf(this.kalender);
   }
 }

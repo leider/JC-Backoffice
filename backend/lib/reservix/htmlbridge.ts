@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import superagent, { Response } from "superagent";
 import { Cheerio, CheerioAPI, load } from "cheerio";
 
@@ -62,13 +64,13 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
   const $ = load(htmlString);
 
   const asfields = (index: number, element: any): { row: string[] } => ({
-    row: ($(element)
+    row: $(element)
       .find("td")
       .map((index1, element1) => $(element1).text())
-      .toArray() as unknown) as string[],
+      .toArray() as unknown as string[],
   });
-  const headers = ($(".tablelines tr").not(".rxrow").map(asfields).toArray() as unknown) as { row: string[] }[];
-  const lines = ($(".tablelines .rxrow").map(asfields).toArray() as unknown) as { row: string[] }[];
+  const headers = $(".tablelines tr").not(".rxrow").map(asfields).toArray() as unknown as { row: string[] }[];
+  const lines = $(".tablelines .rxrow").map(asfields).toArray() as unknown as { row: string[] }[];
   parseTable({ headers, lines }, callback);
 }
 

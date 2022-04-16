@@ -1,7 +1,7 @@
 <template lang="pug">
 tr
   th: .mt-1 {{ label }}
-  td: .mt-1: span.text-capitalize {{ (section || []).join(', ') }}
+  td: .mt-1: span.text-capitalize {{ (section || []).join(", ") }}
   td.text-right
     b-button.btn.btn-success.btn-sm(v-if="!hasRegistered()", @click="add", title="Ich kann"): b-icon-plus-circle-fill
     b-button.btn.btn-danger.btn-sm(v-else, @click="remove", title="Ich kann nicht"): b-icon-dash-circle-fill

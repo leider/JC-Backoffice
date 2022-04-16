@@ -12,6 +12,7 @@ tr
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Ort } from "jc-shared/optionen/orte";
 import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
+import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({ components: { DeleteButtonWithDialog } })
 export default class OrtRow extends Vue {
@@ -41,10 +42,6 @@ export default class OrtRow extends Vue {
 
   @Watch("ort", { deep: true })
   somethingChanged(): void {
-    function normCrLf(json: any): string {
-      return JSON.stringify(json).replace(/\\r\\n/g, "\\n");
-    }
-
     this.dirty = normCrLf(this.originalort) !== normCrLf(this.ort);
   }
 }
