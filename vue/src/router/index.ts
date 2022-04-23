@@ -18,6 +18,7 @@ import WikiSearchresults from "../views/wiki/WikiSearchresults.vue";
 import Programmheft from "../views/programmheft/Programmheft.vue";
 import Login from "../views/general/Login.vue";
 import { globals } from "@/commons/loader";
+import Belege from "@/views/belege/Belege.vue";
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,7 @@ const routes = [
   { path: "/wiki/searchresults/:suchtext", component: WikiSearchresults, props: true },
   { path: "/wiki/:subdir", redirect: "/wiki/:subdir/index" },
   { path: "/wiki/:subdir/:page", component: WikiPage, props: true },
+  { path: "/belege", component: Belege },
   { path: "*", redirect: "/" },
 ];
 

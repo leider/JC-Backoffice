@@ -120,6 +120,20 @@ export function uploadFile(data: FormData, callback: Function): void {
   );
 }
 
+export function uploadBeleg(data: FormData, callback: Function): void {
+  standardFetch(
+    {
+      method: "POST",
+      url: "/rest/beleg",
+      data,
+      title: "Erfolgreich",
+      text: "Beleg übertragen",
+      contentType: "other",
+    },
+    callback
+  );
+}
+
 export function logout(callback: Function): void {
   standardFetch(
     {

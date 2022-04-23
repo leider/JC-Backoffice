@@ -34,6 +34,9 @@ div
         b-nav-item(to="/team", active-class="active")
           b-icon-people
           | &nbsp;Team&nbsp;
+        b-nav-item(to="/belege", active-class="active")
+          b-icon-camera
+          | &nbsp;Belege
         b-nav-item-dropdown(data-jcnav="wiki")
           template(v-slot:button-content)
             b-icon-journals
