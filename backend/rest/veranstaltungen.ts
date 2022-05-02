@@ -33,6 +33,7 @@ function standardCallback(res: Response, user?: User): Function {
         callback(null, veranstaltung);
       }
     }
+
     if (err) {
       return reply(res, err);
     }
@@ -89,7 +90,8 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
   }
   // checkFreigabeChanged
   const url = req.body.url;
-  function saveVeranstaltung(err: Error | undefined, veranstaltung: Veranstaltung) {
+
+  function saveVeranstaltung(err: Error | undefined, veranstaltung?: Veranstaltung) {
     if (user?.accessrights?.isOrgaTeam) {
       saveAndReply(res, new Veranstaltung(req.body));
     } else {
@@ -110,12 +112,10 @@ app.post("/veranstaltungen", (req: Request, res: Response) => {
           if (err1) {
             console.log("Kassenzettel Versand an Buchhaltung gescheitert");
           }
-          saveVeranstaltung(err, veranstaltung);
         });
-      } else {
-        saveVeranstaltung(err, veranstaltung);
       }
     }
+    saveVeranstaltung(err, veranstaltung);
   });
 });
 
