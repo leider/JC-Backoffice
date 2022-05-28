@@ -1,4 +1,3 @@
-import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Message from "jc-shared/mail/message";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";

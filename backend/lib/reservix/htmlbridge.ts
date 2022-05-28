@@ -22,9 +22,9 @@ const tablepositions = {
   gesamt: 6,
   freikarten: 7,
   belegungProzent: 8,
-  bezahlt: 16,
-  netto: 17,
-  brutto: 18,
+  bezahlt: 14,
+  netto: 15,
+  brutto: 16,
 };
 
 function prepareInputsForPost(forminputs: Cheerio<any>, $: CheerioAPI): { [p: string]: string } {
@@ -45,7 +45,7 @@ function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { ro
 
   // check headers TODO
   const lineobjects = headersAndLines.lines
-    .filter((each) => each.row.length === 20)
+    .filter((each) => each.row.length === 18)
     .map((each) => {
       const row = each.row;
       const match = row[tablepositions.event].match(/\((\w+)\)$/);

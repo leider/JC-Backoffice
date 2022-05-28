@@ -38,20 +38,24 @@ export default class Belege extends Vue {
 
   saveFiles(): void {
     if (!this.kommentar || this.kommentar.trim().length < 1) {
-      return feedbackMessages.addError("Angabe fehlt", "Du muss einen Kommentar eingeben");
+      return feedbackMessages.addError("Angabe fehlt", "Du musst einen Kommentar eingeben!");
     }
-    const formData = new FormData();
-    formData.append("datei", this.fileForUpload!, this.fileForUpload!.name);
-    formData.append("datum", DatumUhrzeit.forJSDate(this.datum).tagMonatJahrLang);
-    formData.append("kommentar", this.kommentar);
-    uploadBeleg(formData, (err?: Error) => {
-      if (!err) {
-        this.fileForUpload = null;
-        this.datum = new Date();
-        this.kommentar = "";
-        return;
-      }
-    });
+    if (!this.fileForUpload) {
+      return feedbackMessages.addError("Angabe fehlt", "Belegdatei nicht vorhanden!");
+    } else {
+      const formData = new FormData();
+      formData.append("datei", this.fileForUpload, this.fileForUpload.name);
+      formData.append("datum", DatumUhrzeit.forJSDate(this.datum).tagMonatJahrLang);
+      formData.append("kommentar", this.kommentar);
+      uploadBeleg(formData, (err?: Error) => {
+        if (!err) {
+          this.fileForUpload = null;
+          this.datum = new Date();
+          this.kommentar = "";
+          return;
+        }
+      });
+    }
   }
 }
 </script>

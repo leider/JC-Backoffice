@@ -12,9 +12,9 @@
     "@fullcalendar/core": "5.11.0",
     "@fullcalendar/daygrid": "5.11.0",
     "@fullcalendar/vue": "5.11.0",
-    "axios": "0.26.1",
-    "bootstrap-vue": "2.21.2",
-    "codemirror": "5.65.2",
+    "axios": "0.27.2",
+    "bootstrap-vue": "2.22.0",
+    "codemirror": "5.65.4",
     "jc-backend": "1.0.0",
     "jc-shared": "1.0.0",
     "jsonwebtoken": "8.5.1",
@@ -23,7 +23,7 @@
     "vue-class-component": "7.2.6",
     "vue-multiselect": "2.1.6",
     "vue-property-decorator": "9.1.2",
-    "vue-router": "3.5.3"
+    "vue-router": "3.5.4"
   },
   "devDependencies": {
     "@types/codemirror": "5.60.5",

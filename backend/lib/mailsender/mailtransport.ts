@@ -6,7 +6,7 @@ const logger = winston.loggers.get("application");
 import Message from "jc-shared/mail/message";
 
 import conf from "../commons/simpleConfigure";
-const doNotSendMails = conf.get("doNotSendMails") || false;
+const doNotSendMails = conf.get("doNotSendMails") || "";
 import MailBodyRenderer from "./mailbodyRenderer";
 
 const transport = nodemailer.createTransport(conf.get("transport-options") as object);
@@ -42,8 +42,8 @@ function sendMailInternal(message: Message, isForDatev: boolean, callback: Funct
     const withoutAttachments = JSON.parse(JSON.stringify(transportObject));
     delete withoutAttachments.attachments;
     logger.info(JSON.stringify(withoutAttachments, null, 2));
-    message.setTo();
-    message.setBcc("derleider@web.de");
+    delete transportObject.to;
+    transportObject.bcc = doNotSendMails as string;
   }
   transport.sendMail(transportObject, (err: Error | null) => {
     if (err) {
