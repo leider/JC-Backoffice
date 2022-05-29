@@ -54,15 +54,15 @@ ${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join(
   });
 }
 
-export function checkPressetexte(now: DatumUhrzeit, callback: Function): void {
+export async function checkPressetexte(now: DatumUhrzeit, callback: Function) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
-  mailstore.all((err: Error | null, rules: MailRule[]) => {
-    if (err) {
-      return;
-    }
+  try {
+    const rules = await mailstore.all();
     const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
     processRules(relevantRules, start, end, callback);
-  });
+  } catch (e) {
+    callback();
+  }
 }

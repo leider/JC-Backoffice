@@ -17,7 +17,7 @@ function isSendable(veranstaltung: Veranstaltung): boolean {
   return veranstaltung.presse.checked && veranstaltung.kopf.confirmed;
 }
 
-export function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function): void {
+export async function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function) {
   const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
 Diese Mail ist automatisch generiert. Bitte informieren Sie uns über Verbesserungen oder Änderungswünsche, speziell bzgl. des Sendedatums, der Sendeperiode und des Anfangs- und Endezeitraums.
 
@@ -59,13 +59,13 @@ Liebe Grüße vom Jazzclub Team.`;
     });
   }
 
-  mailstore.all((err: Error | null, rules: MailRule[]) => {
-    if (err) {
-      return;
-    }
+  try {
+    const rules = await mailstore.all();
     const relevantRules = rules.filter((rule) => rule.shouldSend(now));
     async.each(relevantRules, processRule, (errFinal) => {
       callbackOuter(errFinal, counter);
     });
-  });
+  } catch (e) {
+    callbackOuter();
+  }
 }

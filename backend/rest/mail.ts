@@ -6,39 +6,36 @@ import Message from "jc-shared/mail/message";
 
 import mailstore from "../lib/mailsender/mailstore";
 import MailRule from "jc-shared/mail/mailRule";
-import { reply } from "../lib/commons/replies";
+import { reply, resToJson } from "../lib/commons/replies";
 import mailtransport from "../lib/mailsender/mailtransport";
 import store from "../lib/users/userstore";
 
 const app = express();
 
-app.get("/mailrule", (req, res) => {
+app.get("/mailrule", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
-  return mailstore.all((err?: Error, rules?: MailRule[]) => {
-    const result = rules?.map((r) => r.toJSON());
-    reply(res, err, result);
-  });
+  const rules = await mailstore.all();
+  const result = rules?.map((r) => r.toJSON());
+  resToJson(res, result);
 });
 
-app.post("/mailrule", (req, res) => {
+app.post("/mailrule", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const ruleToSave = new MailRule(req.body);
-  mailstore.save(ruleToSave, (err1?: Error) => {
-    reply(res, err1, ruleToSave);
-  });
+  await mailstore.save(ruleToSave);
+  resToJson(res, ruleToSave);
 });
 
-app.delete("/mailrule", (req, res) => {
+app.delete("/mailrule", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
-  mailstore.removeById(req.body.id, (err1?: Error) => {
-    reply(res, err1);
-  });
+  await mailstore.removeById(req.body.id);
+  resToJson(res);
 });
 
 // Mailinglisten und Senden

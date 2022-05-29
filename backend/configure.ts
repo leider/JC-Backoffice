@@ -25,4 +25,4 @@ function createConfiguration(): SimpleConfigure {
   return conf;
 }
 
-module.exports = createConfiguration();
+createConfiguration();

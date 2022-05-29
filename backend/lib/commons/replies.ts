@@ -9,3 +9,8 @@ export function reply(res: Response, err?: Error | null, value?: any): void {
   const valToSend = value?.toJSON ? value.toJSON() : value;
   res.type("application/json").send(valToSend || { status: "ok" });
 }
+
+export function resToJson(res: Response, value?: any) {
+  const valToSend = value?.toJSON ? value.toJSON() : value;
+  res.type("application/json").send(valToSend || { status: "ok" });
+}

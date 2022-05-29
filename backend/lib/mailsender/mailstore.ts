@@ -1,33 +1,20 @@
-import partial from "lodash/partial";
-
-import misc from "jc-shared/commons/misc";
 import MailRule from "jc-shared/mail/mailRule";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
 const persistence = pers("mailstore");
 
-function toMailRule(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(MailRule, callback, err, jsobject);
-}
-
-function toMailRuleList(callback: Function, err: Error | null, jsobjects: object[]): void {
-  return misc.toObjectList(MailRule, callback, err, jsobjects);
-}
-
 export default {
-  all: function all(callback: Function): void {
-    persistence.list({}, partial(toMailRuleList, callback));
+  all: async function all() {
+    const result = await persistence.list({});
+    return result.map((each) => new MailRule(each));
   },
 
-  removeById: function removeById(id: string, callback: Function): void {
-    persistence.removeById(id, partial(toMailRule, callback));
+  removeById: async function removeById(id: string) {
+    const result = await persistence.removeById(id);
+    return new MailRule(result);
   },
 
-  forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, partial(toMailRule, callback));
-  },
-
-  save: function save(mailRule: MailRule, callback: Function): void {
-    persistence.save(mailRule.toJSON(), callback);
+  save: async function save(mailRule: MailRule) {
+    return persistence.save(mailRule.toJSON());
   },
 };
