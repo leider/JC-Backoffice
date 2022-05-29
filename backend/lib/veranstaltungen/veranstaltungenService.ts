@@ -7,26 +7,25 @@ import async from "async";
 import path from "path";
 
 import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import User from "jc-shared/user/user";
 
 import store from "./veranstaltungenstore";
 import { salesreportFor } from "../reservix/reservixService";
+
 const uploadDir = path.join(__dirname, "../../static/upload");
 
 function getVeranstaltungMitReservix(url: string, callback: Function): void {
-  store.getVeranstaltung(url, (err: Error | null, veranstaltung?: Veranstaltung) => {
+  store.getVeranstaltung(url, async (err: Error | null, veranstaltung?: Veranstaltung) => {
     if (err) {
       return callback(err);
     }
     if (!veranstaltung) {
       return callback(null, null);
     }
-    return salesreportFor(veranstaltung.reservixID, (salesreport?: Salesreport) => {
-      veranstaltung.associateSalesreport(salesreport);
-      callback(null, veranstaltung);
-    });
+    const salesreport = await salesreportFor(veranstaltung.reservixID);
+    veranstaltung.associateSalesreport(salesreport);
+    callback(null, veranstaltung);
   });
 }
 

@@ -1,23 +1,17 @@
-import partial from "lodash/partial";
-
-import misc from "jc-shared/commons/misc";
 import Salesreport from "jc-shared/veranstaltung/salesreport";
 
-import pers from "../persistence/persistence";
-const persistence = pers("reservixstore");
-
+import pers from "../persistence/persistenceNew";
 import { Lineobject } from "./htmlbridge";
 
-function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(Salesreport, callback, err, jsobject);
-}
+const persistence = pers("reservixstore");
 
 export default {
-  getSalesreport: function getSalesreport(id: string, callback: Function): void {
-    persistence.getById(id, partial(toOptionValues, callback));
+  getSalesreport: async function getSalesreport(id: string) {
+    const result = await persistence.getById(id);
+    return new Salesreport(result as any);
   },
 
-  saveAll: function (objects: Array<Lineobject>, callback: Function): void {
-    persistence.saveAll(objects, callback);
+  saveAll: async function (objects: Array<Lineobject>) {
+    return persistence.saveAll(objects);
   },
 };

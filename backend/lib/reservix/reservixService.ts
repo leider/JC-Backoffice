@@ -4,23 +4,26 @@ import Salesreport from "jc-shared/veranstaltung/salesreport";
 import reservixstore from "./reservixstore";
 import { loadSalesreports, Lineobject } from "./htmlbridge";
 
-function updateSalesreports(callback: Function): void {
-  loadSalesreports(null, (err: Error | null, results: Lineobject[]) => {
-    if (err || !results) {
-      return callback(err);
-    }
-    const now = new Date();
-    const resultsToSave = results.map((each) => {
-      each.datum = (each.datum as DatumUhrzeit).toJSDate;
-      each.updated = now;
-      return each;
+async function updateSalesreports() {
+  const results: Lineobject[] = await new Promise((resolve, reject) => {
+    loadSalesreports(null, (err: Error | null, results: Lineobject[]) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(results);
     });
-
-    return reservixstore.saveAll(resultsToSave, callback);
   });
+  const now = new Date();
+  const resultsToSave = results.map((each) => {
+    each.datum = (each.datum as DatumUhrzeit).toJSDate;
+    each.updated = now;
+    return each;
+  });
+
+  return reservixstore.saveAll(resultsToSave);
 }
 
-export function salesreportFor(eventID: string | undefined, callback: Function): void {
+export async function salesreportFor(eventID?: string) {
   const emptySalesreport = new Salesreport({
     id: "dummy",
     anzahl: 0,
@@ -30,21 +33,18 @@ export function salesreportFor(eventID: string | undefined, callback: Function):
     datum: new Date(),
   });
   if (!eventID) {
-    return callback(emptySalesreport);
+    return emptySalesreport;
   }
-  return reservixstore.getSalesreport(eventID, (err: Error | null, report: Salesreport) => {
-    if (err || !report || report.istVeraltet()) {
-      // neuer Request, speichern und dann nochmal laden!
-      updateSalesreports((err1: Error | null) => {
-        if (err1) {
-          return callback(report || emptySalesreport);
-        }
-        return reservixstore.getSalesreport(eventID, (err2: Error | null, reportAktualisiert: Salesreport) => {
-          return callback(reportAktualisiert || emptySalesreport);
-        });
-      });
-    } else {
-      callback(report || emptySalesreport);
+  const report = await reservixstore.getSalesreport(eventID);
+  if (!report || report.istVeraltet()) {
+    // neuer Request, speichern und dann nochmal laden!
+    const reportUpd = await updateSalesreports();
+    if (!reportUpd) {
+      return emptySalesreport;
     }
-  });
+    const reportAktualisiert = await reservixstore.getSalesreport(eventID);
+    return reportAktualisiert || emptySalesreport;
+  } else {
+    return report || emptySalesreport;
+  }
 }

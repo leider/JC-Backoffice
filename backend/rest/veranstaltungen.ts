@@ -13,21 +13,19 @@ import { reply } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import { salesreportFor } from "../lib/reservix/reservixService";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
 import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration";
 
 const app = express();
 
 function standardCallback(res: Response, user?: User): Function {
   return (err: Error, veranstaltungen: Veranstaltung[]) => {
-    function associateReservix(veranstaltung: Veranstaltung, callback: Function): void {
+    async function associateReservix(veranstaltung: Veranstaltung, callback: Function) {
       const reservixID = veranstaltung.reservixID;
       if (reservixID && (!veranstaltung.salesreport || !veranstaltung.salesreport.istVergangen)) {
-        salesreportFor(reservixID, (salesreport?: Salesreport) => {
-          veranstaltung.associateSalesreport(salesreport);
-          store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
-            callback(err, veranstaltung);
-          });
+        const salesreport = await salesreportFor(reservixID);
+        veranstaltung.associateSalesreport(salesreport);
+        store.saveVeranstaltung(veranstaltung, (err: Error | null) => {
+          callback(err, veranstaltung);
         });
       } else {
         callback(null, veranstaltung);

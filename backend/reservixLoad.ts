@@ -22,7 +22,7 @@ function load(datumString: string | null, results: Lineobject[], callback: Funct
   });
 }
 
-load("01.07.2019", [], (results: Lineobject[]) => {
+load("01.07.2019", [], async (results: Lineobject[]) => {
   const now = new Date();
   const resultsToSave = results.map((each) => {
     each.datum = (each.datum as DatumUhrzeit).toJSDate;
@@ -30,11 +30,11 @@ load("01.07.2019", [], (results: Lineobject[]) => {
     return each;
   });
   console.log(JSON.stringify(resultsToSave));
-  reservixstore.saveAll(resultsToSave, (err: Error | null) => {
-    if (err) {
-      console.log(err);
-    }
-    /*eslint no-process-exit: 0 */
-    process.exit();
-  });
+  try {
+    await reservixstore.saveAll(resultsToSave);
+  } catch (e) {
+    console.log(e);
+  }
+  // eslint-disable-next-line no-process-exit
+  process.exit();
 });
