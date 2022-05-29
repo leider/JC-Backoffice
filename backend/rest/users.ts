@@ -4,7 +4,7 @@ import User from "jc-shared/user/user";
 
 import service from "../lib/users/usersService";
 import store from "../lib/users/userstore";
-import { reply } from "../lib/commons/replies";
+import { reply, resToJson } from "../lib/commons/replies";
 
 const app = express();
 
@@ -15,57 +15,51 @@ app.get("/users/current", (req, res) => {
   res.sendStatus(401);
 });
 
-app.get("/users", (req, res) => {
-  store.allUsers((err?: Error, users?: User[]) => {
-    reply(res, err, { users: users?.map((u) => u.toJSONWithoutPass()) });
-  });
+app.get("/users", async (req, res) => {
+  const users = await store.allUsers();
+  resToJson(res, { users: users?.map((u) => u.toJSONWithoutPass()) });
 });
 
-app.post("/user/changePassword", (req, res) => {
+app.post("/user/changePassword", async (req, res) => {
   const user = new User(req.body);
   if (!(req.user as User)?.accessrights?.canEditUser(user.id)) {
     return res.sendStatus(403);
   }
-  service.changePassword(user, (err?: Error) => {
-    reply(res, err);
-  });
+  await service.changePassword(user);
+  resToJson(res, user);
 });
 
-app.post("/user", (req, res) => {
+app.post("/user", async (req, res) => {
   const user = new User(req.body);
   if (!(req.user as User)?.accessrights?.canEditUser(user.id)) {
     return res.sendStatus(403);
   }
-  store.forId(user.id, (err?: Error, existingUser?: User) => {
-    if (err || !existingUser) {
-      return reply(res, err || new Error("user not found"));
-    }
-    user.hashedPassword = existingUser.hashedPassword;
-    user.salt = existingUser.salt;
-    store.save(user, (err?: Error) => {
-      reply(res, err, user);
-    });
-  });
+  const existingUser = await store.forId(user.id);
+  if (!existingUser) {
+    throw new Error("user not found");
+  }
+  user.hashedPassword = existingUser.hashedPassword;
+  user.salt = existingUser.salt;
+  await store.save(user);
+  resToJson(res, user);
 });
 
-app.put("/user", (req, res) => {
+app.put("/user", async (req, res) => {
   const user = new User(req.body);
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
-  service.saveNewUserWithPassword(user, (err?: Error) => {
-    reply(res, err);
-  });
+  await service.saveNewUserWithPassword(user);
+  resToJson(res, user);
 });
 
-app.delete("/user", (req, res) => {
+app.delete("/user", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const user = new User(req.body);
-  store.deleteUser(user.id, (err?: Error) => {
-    reply(res, err);
-  });
+  await store.deleteUser(user.id);
+  resToJson(res, user);
 });
 
 export default app;

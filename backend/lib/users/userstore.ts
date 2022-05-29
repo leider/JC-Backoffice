@@ -1,43 +1,32 @@
-import partial from "lodash/partial";
-
-import misc from "jc-shared/commons/misc";
 import User from "jc-shared/user/user";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
 const persistence = pers("userstore");
 
-function toUserObject(callback: Function, err: Error | null, jsobject?: object): void {
-  return misc.toObject(User, callback, err, jsobject);
-}
-
-function toUserList(callback: Function, err: Error | null, jsobjects?: object[]): void {
-  return misc.toObjectList(User, callback, err, jsobjects);
-}
-
 export default {
-  allUsers: function allUsers(callback: Function): void {
-    persistence.list({ name: 1 }, partial(toUserList, callback));
+  allUsers: async function allUsers() {
+    const result = await persistence.list({ name: 1 });
+    return result.map((each) => new User(each));
   },
 
-  save: function save(user: User, callback: Function): void {
+  save: async function save(user: User) {
     delete user.password;
-    persistence.save(user, callback);
+    return persistence.save(user);
   },
 
-  saveAll: function saveAll(users: User[], callback: Function): void {
+  saveAll: async function saveAll(users: User[]) {
     users.forEach((u) => {
       delete u.password;
     });
-    persistence.saveAll(users, callback);
+    return persistence.saveAll(users);
   },
 
-  forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, partial(toUserObject, callback));
+  forId: async function forId(id: string) {
+    const result = await persistence.getById(id);
+    return new User(result);
   },
 
-  deleteUser: function deleteUser(id: string, callback: Function): void {
-    persistence.removeById(id, (err: Error | null) => {
-      callback(err);
-    });
+  deleteUser: async function deleteUser(id: string) {
+    return persistence.removeById(id);
   },
 };

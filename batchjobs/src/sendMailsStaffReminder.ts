@@ -8,7 +8,7 @@ import config from "jc-backend/lib/commons/simpleConfigure";
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import async from "async";
+import async, { ErrorCallback } from "async";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
@@ -40,31 +40,26 @@ function sendMail(verMitUser: VerMitUser, callback: Function): void {
   return mailtransport.sendMail(message, callback);
 }
 
-export function checkStaff(now: DatumUhrzeit, callback: Function): void {
+export function checkStaff(now: DatumUhrzeit, callback: ErrorCallback): void {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, veranstaltungen: Veranstaltung[]) => {
+  store.byDateRangeInAscendingOrder(start, end, async (err: Error | null, veranstaltungen: Veranstaltung[]) => {
     if (err) {
       return callback();
     }
-    userstore.allUsers((err: Error | null, users: User[]) => {
-      if (err) {
-        return callback(err);
-      }
+    try {
+      const users = await userstore.allUsers();
       const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
       const zuSendende = veranstaltungen;
       if (zuSendende.length === 0) {
         callback();
       } else {
         const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
-        async.each(verMitUsers, sendMail, (err) => {
-          if (err) {
-            callback(err);
-          }
-          callback();
-        });
+        async.each(verMitUsers, sendMail, callback);
       }
-    });
+    } catch (e) {
+      return callback(e as Error);
+    }
   });
 }

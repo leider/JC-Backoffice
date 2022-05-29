@@ -82,22 +82,27 @@ app.post("/refreshtoken", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const name = req.body.name;
   const pass = req.body.pass;
 
-  userstore.forId(name, (err: Error | null, user: User) => {
+  try {
+    const user = await userstore.forId(name);
     appLogger.info("Login for: " + name);
-    if (err || !user) {
+    if (!user) {
       appLogger.error("Login error for: " + name);
-      appLogger.error(err?.message || "");
+      appLogger.error("user not found");
       return res.sendStatus(401);
     }
     if (hashPassword(pass, user.salt) === user.hashedPassword) {
       return createToken(req, res, name);
     }
     return res.sendStatus(401);
-  });
+  } catch (e) {
+    appLogger.error("Login error for: " + name);
+    appLogger.error((e as any)?.message || "");
+    return res.sendStatus(401);
+  }
 });
 
 const uploadDir = path.join(__dirname, "../../static/upload");

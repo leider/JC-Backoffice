@@ -25,14 +25,12 @@ function closeAndExit(err: Error | undefined): void {
   process.exit();
 }
 
-function informAdmin(err: Error | undefined, counter?: number): void {
+async function informAdmin(err: Error | undefined, counter?: number) {
   if (!err && !counter) {
     return closeAndExit(err);
   }
-  return userstore.forId(receiver, (err1: Error | null, user: User) => {
-    if (err1) {
-      return closeAndExit(err1);
-    }
+  try {
+    const user = await userstore.forId(receiver);
     const message = new Message({
       subject: "[B-O Jazzclub] Mails sent",
       markdown: `Nightly Mails have been sent
@@ -43,7 +41,9 @@ Error: ${err ? err.message : "keiner"}`,
     return mailtransport.sendMail(message, (err2: Error | undefined) => {
       closeAndExit(err2);
     });
-  });
+  } catch (e) {
+    return closeAndExit(e as any);
+  }
 }
 
 console.log("Starting nightjob...");

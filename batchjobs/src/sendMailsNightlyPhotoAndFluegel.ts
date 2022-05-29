@@ -13,7 +13,7 @@ const logger = loggers.get("application");
 
 type SendMailVariables = { name: string; email: string; subject: string; firstLine: string };
 
-function sendMail(veranstaltungen: Veranstaltung[], variables: SendMailVariables, callback: Function): void {
+async function sendMail(veranstaltungen: Veranstaltung[], variables: SendMailVariables, callback: Function) {
   const markdownToSend = `${variables.firstLine}
 
 ---
@@ -26,15 +26,15 @@ ${veranstaltungen
     markdown: markdownToSend,
   });
 
-  return usersService.emailsAllerBookingUser((err: Error | null, bookingAddresses: string[]) => {
-    if (err) {
-      return callback(err);
-    }
+  try {
+    const bookingAddresses = await usersService.emailsAllerBookingUser();
     logger.info(`Email Adressen für ${variables.subject}: ${bookingAddresses}`);
     message.setTo([Message.formatEMailAddress(variables.name, variables.email)]);
     message.setBcc(bookingAddresses);
     return mailtransport.sendMail(message, callback);
-  });
+  } catch (e) {
+    return callback(e);
+  }
 }
 
 function checkForFilter(

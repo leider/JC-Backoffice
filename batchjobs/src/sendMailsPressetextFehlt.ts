@@ -16,7 +16,7 @@ const logger = loggers.get("application");
 function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
-  function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function): void {
+  async function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function) {
     const prefix = config.get("publicUrlPrefix") as string;
     function presseTemplateInternal(veranst: Veranstaltung): string {
       // für interne Mails
@@ -34,11 +34,10 @@ ${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join(
       subject: "Veranstaltungen ohne Pressetext",
       markdown: markdownToSend,
     });
-    usersService.emailsAllerBookingUser((err: Error | null, bookingAddresses: string) => {
-      logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
-      message.setBcc(bookingAddresses);
-      mailtransport.sendMail(message, callbackInner);
-    });
+    const bookingAddresses = await usersService.emailsAllerBookingUser();
+    logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
+    message.setBcc(bookingAddresses);
+    mailtransport.sendMail(message, callbackInner);
   }
 
   store.byDateRangeInAscendingOrder(start, maxDay, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {

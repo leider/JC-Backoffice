@@ -40,37 +40,35 @@ export function vertrag(res: Response, next: NextFunction, veranstaltungUrl: str
 }
 
 export function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl: string): void {
-  veranstaltungenService.getVeranstaltungMitReservix(veranstaltungUrl, (err?: Error, veranstaltung?: Veranstaltung) => {
+  veranstaltungenService.getVeranstaltungMitReservix(veranstaltungUrl, async (err?: Error, veranstaltung?: Veranstaltung) => {
     if (err) {
       return next(err);
     }
     if (!veranstaltung) {
       return res.redirect("/");
     }
-    return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
-      const kassierer = user?.name || "";
-      res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
-    });
+    const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
+    const kassierer = user?.name || "";
+    res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
   });
 }
 
-export function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback: Function): void {
+export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback: Function) {
   const file = path.join(__dirname, "views/kassenzettel.pug");
-  return userstore.forId(veranstaltung.staff.kasseV[0], (err1?: Error, user?: User) => {
-    const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
-    const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
-    const subject = `[Kassenzettel] ${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.fuerPresse}`;
-    const filenamepdf = `${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
-    generatePdfLocally(renderedHtml, (pdf: Buffer) => {
-      const message = new Message({ subject, markdown: "" });
-      message.pdfBufferAndName = { pdf, name: filenamepdf };
-      message.to = conf.get("kassenzettel-email") as string;
-      if (!message.to) {
-        return callback();
-      }
-      mailtransport.sendDatevMail(message, (err2: Error) => {
-        callback(err2);
-      });
+  const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
+  const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
+  const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
+  const subject = `[Kassenzettel] ${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.fuerPresse}`;
+  const filenamepdf = `${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
+  generatePdfLocally(renderedHtml, (pdf: Buffer) => {
+    const message = new Message({ subject, markdown: "" });
+    message.pdfBufferAndName = { pdf, name: filenamepdf };
+    message.to = conf.get("kassenzettel-email") as string;
+    if (!message.to) {
+      return callback();
+    }
+    mailtransport.sendDatevMail(message, (err2: Error) => {
+      callback(err2);
     });
   });
 }

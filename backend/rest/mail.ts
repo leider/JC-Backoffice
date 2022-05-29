@@ -50,38 +50,28 @@ app.post("/rundmail", (req, res) => {
   });
 });
 
-app.delete("/mailingliste", (req, res) => {
+app.delete("/mailingliste", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const listname = req.body.name;
-  store.allUsers((err?: Error, users?: User[]) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    users?.forEach((u) => u.unsubscribeFromList(listname));
-    store.saveAll(users || [], (err1?: Error) => {
-      reply(res, err1);
-    });
-  });
+  const users = await store.allUsers();
+  users?.forEach((u) => u.unsubscribeFromList(listname));
+  await store.saveAll(users || []);
+  resToJson(res);
 });
 
-app.post("/mailingliste", (req, res) => {
+app.post("/mailingliste", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const list = new Mailingliste(req.body.name, req.body.users, req.body.originalName);
-  store.allUsers((err?: Error, users?: User[]) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    users?.forEach((u) => u.unsubscribeFromList(list.originalName));
-    const selectedUsers = users?.filter((u) => list.users.map((lu) => lu.id).includes(u.id));
-    selectedUsers?.forEach((u) => u.subscribeList(list.name));
-    store.saveAll(users || [], (err1?: Error) => {
-      reply(res, err1);
-    });
-  });
+  const users = await store.allUsers();
+  users?.forEach((u) => u.unsubscribeFromList(list.originalName));
+  const selectedUsers = users?.filter((u) => list.users.map((lu) => lu.id).includes(u.id));
+  selectedUsers?.forEach((u) => u.subscribeList(list.name));
+  await store.saveAll(users || []);
+  resToJson(res);
 });
 
 export default app;

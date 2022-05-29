@@ -24,7 +24,7 @@ function kasseFehlt(veranstaltung: Veranstaltung): boolean {
   return veranstaltung.staff.kasseFehlt && veranstaltung.kopf.confirmed;
 }
 
-function sendMail(veranstaltungen: Veranstaltung[], callback: Function): void {
+async function sendMail(veranstaltungen: Veranstaltung[], callback: Function) {
   const markdownToSend = `## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:
 
 ---
@@ -44,16 +44,16 @@ ${veranstaltungen
     markdown: markdownToSend,
   });
 
-  userstore.allUsers((err: Error | null, users: User[]) => {
-    if (err) {
-      return callback(err);
-    }
+  try {
+    const users = await userstore.allUsers();
     const validUsers = users.filter((user) => !!user.email);
     const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
     logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
     message.setBcc(emails);
     return mailtransport.sendMail(message, callback);
-  });
+  } catch (e) {
+    return callback(e);
+  }
 }
 
 export function checkKasse(now: DatumUhrzeit, callback: Function): void {
