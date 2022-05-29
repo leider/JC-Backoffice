@@ -1,30 +1,25 @@
-import partial from "lodash/partial";
-
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
-import misc from "jc-shared/commons/misc";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
+
 const persistence = pers("kalenderstore");
 
-function toKalenderValues(callback: Function, id: string, err: Error | null, jsobject?: object): void {
-  misc.toObject(Kalender, callback, err, jsobject || { id });
-}
-
 export default {
-  getKalender: function getKalender(id: string, callback: Function): void {
-    persistence.getById(id, partial(toKalenderValues, callback, id));
+  getKalender: async function getKalender(id: string) {
+    const result = await persistence.getById(id);
+    return new Kalender(result as any);
   },
 
-  saveKalender: function saveKalender(kalender: Kalender, callback: Function): void {
-    persistence.save(kalender, callback);
+  saveKalender: async function saveKalender(kalender: Kalender) {
+    return persistence.save(kalender);
   },
 
-  getCurrentKalender: function getCurrentKalender(aDatumUhrzeit: DatumUhrzeit, callback: Function): void {
-    this.getKalender(aDatumUhrzeit.vorigerOderAktuellerUngeraderMonat.fuerKalenderViews, callback);
+  getCurrentKalender: async function getCurrentKalender(aDatumUhrzeit: DatumUhrzeit) {
+    return this.getKalender(aDatumUhrzeit.vorigerOderAktuellerUngeraderMonat.fuerKalenderViews);
   },
 
-  getNextKalender: function getNextKalender(aDatumUhrzeit: DatumUhrzeit, callback: Function): void {
-    this.getKalender(aDatumUhrzeit.naechsterUngeraderMonat.fuerKalenderViews, callback);
+  getNextKalender: async function getNextKalender(aDatumUhrzeit: DatumUhrzeit) {
+    return this.getKalender(aDatumUhrzeit.naechsterUngeraderMonat.fuerKalenderViews);
   },
 };

@@ -27,12 +27,8 @@ describe("Programmheft Mailsender", () => {
   let mailcheck: any;
 
   beforeEach(() => {
-    sinon.stub(kalenderstore, "getCurrentKalender").callsFake((datum, callback) => {
-      callback(null, currentKalender);
-    });
-    sinon.stub(kalenderstore, "getNextKalender").callsFake((datum, callback) => {
-      callback(null, nextKalender);
-    });
+    sinon.stub(kalenderstore, "getCurrentKalender").resolves(currentKalender);
+    sinon.stub(kalenderstore, "getNextKalender").resolves(nextKalender);
     mailcheck = sinon.stub(mailtransport, "sendMail").callsFake((message, callback) => {
       callback();
     });

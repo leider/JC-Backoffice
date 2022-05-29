@@ -5,31 +5,29 @@ import Kalender from "jc-shared/programmheft/kalender";
 import User from "jc-shared/user/user";
 
 import store from "../lib/programmheft/kalenderstore";
-import { reply } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 
 const app = express();
 
-app.get("/programmheft/:year/:month", (req, res) => {
+app.get("/programmheft/:year/:month", async (req, res) => {
   let yearMonthString = `${req.params.year}/${req.params.month}`;
   if (parseInt(req.params.month) % 2 === 0) {
     const correctedDatum = DatumUhrzeit.forYYYYslashMM(yearMonthString).naechsterUngeraderMonat;
     yearMonthString = correctedDatum.fuerKalenderViews;
   }
 
-  return store.getKalender(yearMonthString, (err?: Error, kalender?: Kalender) => {
-    reply(res, err, kalender);
-  });
+  const kalender = await store.getKalender(yearMonthString);
+  resToJson(res, kalender);
 });
 
-app.post("/programmheft", (req, res) => {
+app.post("/programmheft", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 
   const kalender = new Kalender(req.body);
-  return store.saveKalender(kalender, (err?: Error) => {
-    reply(res, err, kalender);
-  });
+  await store.saveKalender(kalender);
+  resToJson(res, kalender);
 });
 
 export default app;

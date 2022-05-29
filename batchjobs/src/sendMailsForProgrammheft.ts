@@ -7,7 +7,7 @@ import Kalender, { EmailEvent } from "jc-shared/programmheft/kalender";
 import store from "jc-backend/lib/programmheft/kalenderstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
 
-export function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), callback: ErrorCallback): void {
+export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), callback: ErrorCallback) {
   function sendMail(eventsForToday: EmailEvent[], callbackInner: ErrorCallback): void {
     const messages = eventsForToday.map((e) => {
       const message = new Message({
@@ -20,20 +20,11 @@ export function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit(), ca
     async.each(messages, mailtransport.sendMail, callbackInner);
   }
 
-  async.parallel(
-    {
-      current: (cb1) => store.getCurrentKalender(now, cb1),
-      next: (cb2) => store.getNextKalender(now, cb2),
-    },
-    (err, result) => {
-      if (err) {
-        return callback(err);
-      }
-      const events = [result.current as Kalender, result.next as Kalender].reduce(
-        (arr: EmailEvent[], each) => arr.concat(each.eventsToSend(now)),
-        []
-      );
-      return sendMail(events, callback);
-    }
-  );
+  try {
+    const [current, next] = await Promise.all([store.getCurrentKalender(now), store.getNextKalender(now)]);
+    const events = [current as Kalender, next as Kalender].reduce((arr: EmailEvent[], each) => arr.concat(each.eventsToSend(now)), []);
+    return sendMail(events, callback);
+  } catch (e) {
+    callback(e as Error);
+  }
 }
