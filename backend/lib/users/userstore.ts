@@ -1,6 +1,6 @@
 import User from "jc-shared/user/user";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 const persistence = pers("userstore");
 
 export default {
@@ -11,14 +11,16 @@ export default {
 
   save: async function save(user: User) {
     delete user.password;
-    return persistence.save(user);
+    await persistence.save(user);
+    return user;
   },
 
   saveAll: async function saveAll(users: User[]) {
     users.forEach((u) => {
       delete u.password;
     });
-    return persistence.saveAll(users);
+    await persistence.saveAll(users);
+    return users;
   },
 
   forId: async function forId(id: string) {

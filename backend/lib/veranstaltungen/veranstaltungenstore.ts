@@ -3,7 +3,7 @@ import winston from "winston";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 import { Sort } from "mongodb";
 const persistence = pers("veranstaltungenstore");
 const logger = winston.loggers.get("transactions");
@@ -51,17 +51,18 @@ export default {
 
   getVeranstaltung: async function getVeranstaltung(url: string) {
     const result = await persistence.getByField({ url });
-    return new Veranstaltung(result);
+    return result ? new Veranstaltung(result) : result;
   },
 
   getVeranstaltungForId: async function getVeranstaltungForId(id: string) {
     const result = await persistence.getById(id);
-    return new Veranstaltung(result);
+    return result ? new Veranstaltung(result) : result;
   },
 
   saveVeranstaltung: async function saveVeranstaltung(veranstaltung: Veranstaltung) {
     const object = veranstaltung.toJSON();
     await persistence.save(object);
+    return veranstaltung;
   },
 
   deleteVeranstaltungById: async function deleteVeranstaltungById(id: string) {

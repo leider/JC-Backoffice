@@ -1,6 +1,6 @@
 import MailRule from "jc-shared/mail/mailRule";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 const persistence = pers("mailstore");
 
 export default {
@@ -11,10 +11,11 @@ export default {
 
   removeById: async function removeById(id: string) {
     const result = await persistence.removeById(id);
-    return new MailRule(result);
+    return result ? new MailRule(result) : result;
   },
 
   save: async function save(mailRule: MailRule) {
-    return persistence.save(mailRule.toJSON());
+    await persistence.save(mailRule.toJSON());
+    return mailRule;
   },
 };

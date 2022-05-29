@@ -1,18 +1,19 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 
 const persistence = pers("kalenderstore");
 
 export default {
   getKalender: async function getKalender(id: string) {
     const result = await persistence.getById(id);
-    return new Kalender(result as any);
+    return result ? new Kalender(result as any) : result;
   },
 
   saveKalender: async function saveKalender(kalender: Kalender) {
-    return persistence.save(kalender);
+    await persistence.save(kalender);
+    return kalender;
   },
 
   getCurrentKalender: async function getCurrentKalender(aDatumUhrzeit: DatumUhrzeit) {

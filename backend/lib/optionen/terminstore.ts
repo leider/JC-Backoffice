@@ -1,7 +1,7 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Termin from "jc-shared/optionen/termin";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 import { Sort } from "mongodb";
 
 const persistence = pers("terminstore");
@@ -24,7 +24,8 @@ export default {
   },
 
   save: async function save(termin: Termin) {
-    return persistence.save(termin.toJSON());
+    await persistence.save(termin.toJSON());
+    return termin;
   },
 
   termineBetween: async function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {

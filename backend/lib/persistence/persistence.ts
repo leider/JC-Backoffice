@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Callback, Db, Filter, MongoClient, Sort, UpdateResult } from "mongodb";
-import async, { ErrorCallback } from "async";
+import { Db, Filter, MongoClient, Sort } from "mongodb";
 import conf from "../commons/simpleConfigure";
 import { loggers } from "winston";
 
@@ -8,7 +7,7 @@ const logger = loggers.get("transactions");
 const scriptLogger = loggers.get("scripts");
 
 const DBSTATE = { OPEN: "OPEN", CLOSED: "CLOSED", OPENING: "OPENING" };
-let ourDB: Db | null;
+let ourDB: Db;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
 class Persistence {
@@ -18,129 +17,58 @@ class Persistence {
     this.collectionName = collName;
   }
 
-  list(sortOrder: Sort, callback: Function): void {
-    this.listByField({}, sortOrder, callback);
+  async list(sortOrder: Sort) {
+    return this.listByField({}, sortOrder);
   }
 
-  listByIds(list: string[], sortOrder: Sort, callback: Function): void {
-    this.listByField({ id: { $in: list } }, sortOrder, callback);
+  async listByIds(list: string[], sortOrder: Sort) {
+    return this.listByField({ id: { $in: list } }, sortOrder);
   }
 
-  listByField(searchObject: Filter<any>, sortOrder: Sort, callback: Function): void {
-    performInDB((err: Error | null, db: Db) => {
-      if (err) {
-        return callback(err);
-      }
-      const cursor = db.collection(this.collectionName).find(searchObject, {}).sort(sortOrder);
-      return cursor.count((err1, result) => {
-        if (err1) {
-          return callback(err1);
-        }
-        if (!result) {
-          // If not items found, return empty array
-          return callback(null, []);
-        }
-        cursor.batchSize(result);
-        return cursor.toArray(callback as Callback<any>);
-      });
-    });
-  }
-  getById(id: string, callback: Function): void {
-    this.getByField({ id }, callback);
+  async listByField(searchObject: Filter<any>, sortOrder: Sort) {
+    const db = await getOpenDb();
+    return db.collection(this.collectionName).find(searchObject).sort(sortOrder).toArray();
   }
 
-  getByField(fieldAsObject: Filter<any>, callback: Function): void {
-    performInDB((err: Error | null, db: Db) => {
-      if (err) {
-        return callback(err);
-      }
-      return db
-        .collection(this.collectionName)
-        .find(fieldAsObject)
-        .toArray((err1, result) => {
-          callback(err1, result && result[0]);
-        });
-    });
+  async getById(id: string) {
+    return this.getByField({ id });
   }
 
-  save(object: object & { id?: string }, callback: Function): void {
-    this.update(object, object.id, callback);
+  async getByField(fieldAsObject: Filter<any>) {
+    const db = await getOpenDb();
+    const result = await db.collection(this.collectionName).find(fieldAsObject).toArray();
+    return result[0];
   }
 
-  update(object: object & { id?: string }, storedId: string | undefined, callback: Function): void {
+  async save(object: object & { id?: string }) {
+    return this.update(object, object.id);
+  }
+
+  async update(object: object & { id?: string }, storedId?: string) {
     if (object.id === null || object.id === undefined) {
-      return callback(new Error("Given object has no valid id"));
+      throw new Error("Given object has no valid id");
     }
-    this.getById(object.id, (err: Error | null, oldObject: any) => {
-      if (err) {
-        return callback(err);
-      }
-      logger.info(`about to update ${this.collectionName} old: ${JSON.stringify(oldObject)}`);
-      logger.info(`new: ${JSON.stringify(object)}`);
-      return performInDB((err: Error | null, db: Db) => {
-        if (err) {
-          return callback(err);
-        }
-        const collection = db.collection(this.collectionName);
-        return collection.updateOne({ id: storedId }, { $set: object }, { upsert: true }, callback as Callback<UpdateResult>);
-      });
-    });
+
+    const db = await getOpenDb();
+    const collection = db.collection(this.collectionName);
+    return collection.replaceOne({ id: storedId }, object, { upsert: true });
   }
 
-  removeByUrl(url: string, callback: Function): void {
-    if (url === null || url === undefined) {
-      return callback(new Error("Given object has no valid url"));
-    }
-    this.getByField({ url }, (err: Error | null, oldObject: any) => {
-      if (err) {
-        return callback(err);
-      }
-      logger.info(`about to delete ${this.collectionName} object`);
-      logger.info(JSON.stringify(oldObject));
-
-      return performInDB((err: Error | null, db: Db) => {
-        if (err) {
-          return callback(err);
-        }
-        const collection = db.collection(this.collectionName);
-        return collection.deleteOne({ url: url }, (err1) => {
-          callback(err1);
-        });
-      });
-    });
-  }
-
-  removeById(id: string, callback: Function): void {
+  async removeById(id: string) {
     if (id === null || id === undefined) {
-      return callback(new Error("Given object has no valid id"));
+      throw new Error("Given object has no valid id");
     }
-    this.getById(id, (err: Error | null, oldObject: any) => {
-      if (err) {
-        return callback(err);
+    const db = await getOpenDb();
+    return db.collection(this.collectionName).deleteOne(
+      { id },
+      {
+        writeConcern: { w: 1 },
       }
-      logger.info(`about to delete ${this.collectionName} object`);
-      logger.info(JSON.stringify(oldObject));
-
-      return performInDB((err: Error | null, db: Db) => {
-        if (err) {
-          return callback(err);
-        }
-        const collection = db.collection(this.collectionName);
-        return collection.deleteOne({ id: id }, (err1) => {
-          callback(err1);
-        });
-      });
-    });
+    );
   }
 
-  saveAll(objects: Array<object & { id?: string }>, outerCallback: Function): void {
-    async.each(
-      objects,
-      (each, callback: ErrorCallback) => {
-        this.save(each, callback);
-      },
-      outerCallback as ErrorCallback
-    );
+  saveAll(objects: Array<object & { id?: string }>) {
+    return Promise.all(objects.map((obj) => this.save(obj)));
   }
 }
 
@@ -149,7 +77,7 @@ function logInfo(logMessage: string): void {
   scriptLogger.info(logMessage);
 }
 
-function openDB(): void {
+async function openMongo() {
   if (ourDBConnectionState !== DBSTATE.CLOSED) {
     logInfo("connection state is " + ourDBConnectionState + ". Returning.");
     return;
@@ -158,39 +86,36 @@ function openDB(): void {
   logInfo("Setting connection state to OPENING");
   ourDBConnectionState = DBSTATE.OPENING;
 
-  const client = new MongoClient(conf.get("mongoURL") as string);
   logInfo("Connecting to Mongo");
-  client.connect((err, client) => {
+  try {
     logInfo("In connect callback");
-    if (err || !client) {
-      logInfo("An error occurred: " + err);
-      ourDBConnectionState = DBSTATE.CLOSED;
-      return logger.error(err);
-    }
+    const client = await MongoClient.connect(conf.get("mongoURL") as string);
     const db = client.db("jazzclub");
     ourDB = db;
     ourDBConnectionState = DBSTATE.OPEN;
-    return logInfo("DB state is now OPEN, db = " + JSON.stringify(db.databaseName));
-  });
+    logInfo("DB state is now OPEN, db = jazzclub");
+  } catch (err) {
+    logInfo("An error occurred: " + err);
+    ourDBConnectionState = DBSTATE.CLOSED;
+    logger.error(err);
+  }
 }
 
-function performInDB(callback: Function): void {
+async function getOpenDb(): Promise<Db> {
   if (ourDBConnectionState === DBSTATE.OPEN) {
     if (logOpenOnceOnly === 0) {
       logInfo("connection is open");
       logOpenOnceOnly++;
     }
-    callback(null, ourDB);
-  } else {
-    logInfo("connection is " + ourDBConnectionState + ", opening it and retrying");
-    openDB();
-    setTimeout(function () {
-      performInDB(callback);
-    }, 100);
+    return ourDB;
   }
+  logInfo("connection is " + ourDBConnectionState + ", opening it and retrying");
+  await openMongo();
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return getOpenDb();
 }
 
-openDB();
+openMongo();
 
 export default function (collectionName: string): Persistence {
   return new Persistence(collectionName);

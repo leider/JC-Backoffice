@@ -1,6 +1,6 @@
 import Salesreport from "jc-shared/veranstaltung/salesreport";
 
-import pers from "../persistence/persistenceNew";
+import pers from "../persistence/persistence";
 import { Lineobject } from "./htmlbridge";
 
 const persistence = pers("reservixstore");
@@ -8,10 +8,11 @@ const persistence = pers("reservixstore");
 export default {
   getSalesreport: async function getSalesreport(id: string) {
     const result = await persistence.getById(id);
-    return new Salesreport(result as any);
+    return result ? new Salesreport(result as any) : result;
   },
 
-  saveAll: async function (objects: Array<Lineobject>) {
-    return persistence.saveAll(objects);
+  saveAll: async function (objects: Lineobject[]) {
+    await persistence.saveAll(objects);
+    return objects;
   },
 };

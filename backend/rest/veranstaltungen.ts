@@ -193,7 +193,8 @@ app.post("/upload", async (req: Request, res: Response) => {
       return res.sendStatus(500);
     }
     try {
-      await Promise.all(files.datei.map(copyToDestination));
+      const calls = files.datei.map((datei: { originalFilename: string; path: string }) => copyToDestination(datei, veranstaltung));
+      await Promise.all(calls);
       saveAndReply(res, veranstaltung);
     } catch (e) {
       return res.status(500).send((e as Error).message);

@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 
 import service from "../lib/veranstaltungen/imageService";
-import { reply, resToJson } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 import calendarApp from "./calendar";
 import mailsenderApp from "./mail";
 import optionenApp from "./optionen";
