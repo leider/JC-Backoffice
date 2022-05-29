@@ -7,7 +7,7 @@ import { ComplexDate, Parser } from "ikalendar";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
-import Termin, { TerminEvent } from "jc-shared/optionen/termin";
+import { TerminEvent } from "jc-shared/optionen/termin";
 import User from "jc-shared/user/user";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 
@@ -73,16 +73,9 @@ function termineForIcal(ical: Ical, callback: Function): void {
   });
 }
 
-function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
-  terminstore.termineBetween(start, end, (err?: Error, termine?: Termin[]): void => {
-    if (err) {
-      return callback(err);
-    }
-    return callback(
-      undefined,
-      termine?.map((termin) => termin.asEvent)
-    );
-  });
+async function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit) {
+  const termine = await terminstore.termineBetween(start, end);
+  return termine?.map((termin) => termin.asEvent);
 }
 
 app.get("/fullcalendarevents.json", (req, res) => {
@@ -99,7 +92,14 @@ app.get("/fullcalendarevents.json", (req, res) => {
           return cb(e as Error);
         }
       },
-      termine: (cb) => termineAsEventsBetween(start, end, (err: Error | null, events: TerminEvent[]) => cb(err, events)),
+      termine: async (cb) => {
+        try {
+          const events = await termineAsEventsBetween(start, end);
+          return cb(null, events);
+        } catch (e) {
+          cb(e as Error);
+        }
+      },
       veranstaltungen: (cb) => eventsBetween(start, end, req.user as User, cb),
     },
     (err, results) => {

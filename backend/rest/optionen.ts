@@ -8,7 +8,7 @@ import User from "jc-shared/user/user";
 
 import store from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
-import { reply, resToJson } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 
 const app = express();
 
@@ -58,31 +58,28 @@ app.post("/kalender", async (req: Request, res: Response) => {
   resToJson(res, ical);
 });
 
-app.get("/termine", (req, res) => {
-  terminstore.alle((err?: Error, termine?: Termin[]) => {
-    reply(res, err, termine);
-  });
+app.get("/termine", async (req, res) => {
+  const termine = await terminstore.alle();
+  resToJson(res, termine);
 });
 
-app.post("/termin", (req: Request, res: Response) => {
+app.post("/termin", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const termin = new Termin(req.body);
   delete termin.originalBeschreibung;
-  terminstore.save(termin, (err: Error | null) => {
-    reply(res, err, termin);
-  });
+  await terminstore.save(termin);
+  resToJson(res, termin);
 });
 
-app.delete("/termin", (req: Request, res: Response) => {
+app.delete("/termin", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const id = req.body.id;
-  terminstore.remove(id, (err: Error | null) => {
-    reply(res, err);
-  });
+  await terminstore.remove(id);
+  resToJson(res);
 });
 
 export default app;

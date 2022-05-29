@@ -1,42 +1,37 @@
-import partial from "lodash/partial";
-
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Termin from "jc-shared/optionen/termin";
-import misc from "jc-shared/commons/misc";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
 import { Sort } from "mongodb";
+
 const persistence = pers("terminstore");
 
-function toTerminList(callback: Function, err: Error | null, jsobjects: object[]): void {
-  return misc.toObjectList(Termin, callback, err, jsobjects);
-}
-
-function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort, callback: Function): void {
+async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort) {
   // ranges are DatumUhrzeit
-  persistence.listByField(
+  const result = await persistence.listByField(
     {
       $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
-    sortOrder,
-    partial(toTerminList, callback)
+    sortOrder
   );
+  return result.map((each) => new Termin(each));
 }
 
 export default {
-  alle: function alle(callback: Function): void {
-    persistence.list({ startDate: -1 }, partial(toTerminList, callback));
+  alle: async function alle() {
+    const result = await persistence.list({ startDate: -1 });
+    return result.map((each) => new Termin(each));
   },
 
-  save: function save(termin: Termin, callback: Function): void {
-    persistence.save(termin.toJSON(), callback);
+  save: async function save(termin: Termin) {
+    return persistence.save(termin.toJSON());
   },
 
-  termineBetween: function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, callback: Function): void {
-    byDateRange(rangeFrom, rangeTo, { startDate: 1 }, callback);
+  termineBetween: async function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+    return byDateRange(rangeFrom, rangeTo, { startDate: 1 });
   },
 
-  remove: function remove(id: string, callback: Function): void {
-    persistence.removeById(id, callback);
+  remove: async function remove(id: string) {
+    return persistence.removeById(id);
   },
 };
