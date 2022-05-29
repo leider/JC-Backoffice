@@ -15,18 +15,14 @@ import { salesreportFor } from "../reservix/reservixService";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
-function getVeranstaltungMitReservix(url: string, callback: Function): void {
-  store.getVeranstaltung(url, async (err: Error | null, veranstaltung?: Veranstaltung) => {
-    if (err) {
-      return callback(err);
-    }
-    if (!veranstaltung) {
-      return callback(null, null);
-    }
-    const salesreport = await salesreportFor(veranstaltung.reservixID);
-    veranstaltung.associateSalesreport(salesreport);
-    callback(null, veranstaltung);
-  });
+async function getVeranstaltungMitReservix(url: string) {
+  const veranstaltung = await store.getVeranstaltung(url);
+  if (!veranstaltung) {
+    return null;
+  }
+  const salesreport = await salesreportFor(veranstaltung.reservixID);
+  veranstaltung.associateSalesreport(salesreport);
+  return veranstaltung;
 }
 
 function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user?: User): Veranstaltung[] {
@@ -36,13 +32,11 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user
   return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
-function imgzip(res: Response, next: NextFunction, yymm: string): void {
+async function imgzip(res: Response, next: NextFunction, yymm: string) {
   const start = DatumUhrzeit.forYYMM(yymm);
   const end = start.plus({ monate: 1 });
-  store.byDateRangeInAscendingOrder(start, end, (err: Error | null, result: Veranstaltung[]) => {
-    if (err) {
-      return next(err);
-    }
+  try {
+    const result = await store.byDateRangeInAscendingOrder(start, end);
     const images = flatten(result.map((veranst) => veranst.presse.image))
       // eslint-disable-next-line no-sync
       .filter((filename) => fs.existsSync(uploadDir + "/" + filename))
@@ -69,7 +63,9 @@ function imgzip(res: Response, next: NextFunction, yymm: string): void {
         return zip.finalize();
       }
     );
-  });
+  } catch (e) {
+    next(e);
+  }
 }
 
 export default {

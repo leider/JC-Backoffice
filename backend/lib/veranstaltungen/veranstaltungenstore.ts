@@ -1,88 +1,72 @@
-import partial from "lodash/partial";
 import winston from "winston";
 
-import misc from "jc-shared/commons/misc";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
 import { Sort } from "mongodb";
 const persistence = pers("veranstaltungenstore");
 const logger = winston.loggers.get("transactions");
 
-function toVeranstaltung(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(Veranstaltung, callback, err, jsobject);
-}
-
-function toVeranstaltungenList(callback: Function, err: Error | null, jsobjects: object[]): void {
-  return misc.toObjectList(Veranstaltung, callback, err, jsobjects);
-}
-
-function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort, callback: Function): void {
-  persistence.listByField(
+async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort) {
+  const result = await persistence.listByField(
     {
       $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
-    sortOrder,
-    partial(toVeranstaltungenList, callback)
+    sortOrder
   );
+  return result.map((each) => new Veranstaltung(each));
 }
 
-function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, callback: Function): void {
-  byDateRange(rangeFrom, rangeTo, { startDate: 1 }, callback);
+async function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+  return byDateRange(rangeFrom, rangeTo, { startDate: 1 });
 }
 
-function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, callback: Function): void {
-  byDateRange(rangeFrom, rangeTo, { startDate: -1 }, callback);
+async function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+  return byDateRange(rangeFrom, rangeTo, { startDate: -1 });
 }
 
 export default {
-  zukuenftigeMitGestern: function zukuenftigeMitGestern(callback: Function): void {
+  zukuenftigeMitGestern: async function zukuenftigeMitGestern() {
     const now = new DatumUhrzeit();
-    byDateRangeInAscendingOrder(now.minus({ tage: 1 }), now.plus({ jahre: 10 }), callback);
+    return byDateRangeInAscendingOrder(now.minus({ tage: 1 }), now.plus({ jahre: 10 }));
   },
 
-  zukuenftige: function zukuenftige(callback: Function): void {
+  zukuenftige: async function zukuenftige() {
     const now = new DatumUhrzeit();
-    byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }), callback);
+    return byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }));
   },
 
-  vergangene: function vergangene(callback: Function): void {
+  vergangene: async function vergangene() {
     const now = new DatumUhrzeit();
-    byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now, callback);
+    return byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now);
   },
 
-  alle: function alle(callback: Function): void {
+  alle: async function alle() {
     const now = new DatumUhrzeit();
-    byDateRangeInDescendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }), callback);
+    return byDateRangeInDescendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }));
   },
 
   byDateRangeInAscendingOrder,
 
-  getVeranstaltung: function getVeranstaltung(url: string, callback: Function): void {
-    persistence.getByField({ url }, partial(toVeranstaltung, callback));
+  getVeranstaltung: async function getVeranstaltung(url: string) {
+    const result = await persistence.getByField({ url });
+    return new Veranstaltung(result);
   },
 
-  getVeranstaltungForId: function getVeranstaltungForId(id: string, callback: Function): void {
-    persistence.getById(id, partial(toVeranstaltung, callback));
+  getVeranstaltungForId: async function getVeranstaltungForId(id: string) {
+    const result = await persistence.getById(id);
+    return new Veranstaltung(result);
   },
 
-  saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
+  saveVeranstaltung: async function saveVeranstaltung(veranstaltung: Veranstaltung) {
     const object = veranstaltung.toJSON();
-    persistence.save(object, callback);
+    await persistence.save(object);
   },
 
-  deleteVeranstaltung: function deleteVeranstaltung(url: string, callback: Function): void {
-    persistence.removeByUrl(url, (err?: Error) => {
-      logger.info(`Veranstaltung removed: ${JSON.stringify(url)}`);
-      callback(err);
-    });
-  },
-
-  deleteVeranstaltungById: function deleteVeranstaltungById(id: string, callback: Function): void {
-    persistence.removeById(id, (err?: Error) => {
-      logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
-      callback(err);
-    });
+  deleteVeranstaltungById: async function deleteVeranstaltungById(id: string) {
+    await persistence.removeById(id);
+    logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
+    return;
   },
 };

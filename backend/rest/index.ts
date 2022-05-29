@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 
 import service from "../lib/veranstaltungen/imageService";
-import { reply } from "../lib/commons/replies";
+import { reply, resToJson } from "../lib/commons/replies";
 import calendarApp from "./calendar";
 import mailsenderApp from "./mail";
 import optionenApp from "./optionen";
@@ -28,10 +28,9 @@ app.use("/", usersApp);
 app.use("/", veranstaltungenRestApp);
 app.use("/", wikiApp);
 
-function allImageNames(res: Response): void {
-  service.alleBildNamen((err?: Error, imagenamesOfFiles?: string[]) => {
-    reply(res, err, { names: imagenamesOfFiles });
-  });
+async function allImageNames(res: Response) {
+  const imagenamesOfFiles = await service.alleBildNamen();
+  resToJson(res, { names: imagenamesOfFiles });
 }
 
 app.post("/logout", async (req, res) => {
@@ -47,19 +46,14 @@ app.get("/imagenames", (req, res) => {
   allImageNames(res);
 });
 
-app.post("/imagenames", (req, res) => {
+app.post("/imagenames", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
 
   const rows = req.body as ImageOverviewRow[];
-  service.renameImages(rows, (err) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-    allImageNames(res);
-  });
+  await service.renameImages(rows);
+  allImageNames(res);
 });
 
 app.post("/beleg", (req: Request, res: Response) => {

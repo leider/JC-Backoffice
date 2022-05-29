@@ -33,33 +33,33 @@ function gemaMeldungCsv(res: Response, selected: Veranstaltung[], nachmeldung: b
   res.type("text/csv").send(createCSV(false, selected));
 }
 
-function gemaResult(
+async function gemaResult(
   eventAndDateiart: { event: string[]; dateiart: string },
   res: Response,
   next: NextFunction,
   selector: "vergangene" | "zukuenftige"
-): void {
+) {
   const { event, dateiart } = eventAndDateiart;
   const functionToCall = selector === "vergangene" ? store.alle : store.zukuenftige;
   const nachmeldung = selector === "vergangene";
 
-  functionToCall((err: Error | null, veranstaltungen: Array<Veranstaltung>) => {
-    if (err) {
-      return next(err);
-    }
+  try {
+    const veranstaltungen = await functionToCall();
     const selected = veranstaltungen.filter((veranst) => event.includes(veranst.id || ""));
     if (dateiart === "PDF") {
       return gemaMeldungPdf(selected, nachmeldung, res, next);
     }
     return gemaMeldungCsv(res, selected, nachmeldung);
-  });
+  } catch (e) {
+    return next(e);
+  }
 }
 
-export function gemameldung(
+export async function gemameldung(
   res: Response,
   next: NextFunction,
   transferObject: { selectedIds: string[]; renderart: string; vorNach: "vergangene" | "zukuenftige" }
-): void {
+) {
   const event = transferObject.selectedIds;
   const dateiart = transferObject.renderart;
   const vorNach = transferObject.vorNach;

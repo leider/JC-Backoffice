@@ -13,7 +13,7 @@ import usersService from "jc-backend/lib/users/usersService";
 
 const logger = loggers.get("application");
 
-function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit, callback: Function): void {
+async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit, callback: Function) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
   async function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function) {
@@ -40,17 +40,13 @@ ${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join(
     mailtransport.sendMail(message, callbackInner);
   }
 
-  store.byDateRangeInAscendingOrder(start, maxDay, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err1) {
-      return;
-    }
-    const zuSendende = veranstaltungen.filter((veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
-    if (zuSendende.length === 0) {
-      callback();
-    } else {
-      sendMail(zuSendende, callback);
-    }
-  });
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, maxDay);
+  const zuSendende = veranstaltungen.filter((veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
+  if (zuSendende.length === 0) {
+    callback();
+  } else {
+    sendMail(zuSendende, callback);
+  }
 }
 
 export async function checkPressetexte(now: DatumUhrzeit, callback: Function) {

@@ -1,7 +1,6 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Message from "jc-shared/mail/message";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import User from "jc-shared/user/user";
 
 import config from "jc-backend/lib/commons/simpleConfigure";
 
@@ -40,26 +39,22 @@ function sendMail(verMitUser: VerMitUser, callback: Function): void {
   return mailtransport.sendMail(message, callback);
 }
 
-export function checkStaff(now: DatumUhrzeit, callback: ErrorCallback): void {
+export async function checkStaff(now: DatumUhrzeit, callback: ErrorCallback) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  store.byDateRangeInAscendingOrder(start, end, async (err: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return callback();
+  try {
+    const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+    const users = await userstore.allUsers();
+    const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
+    const zuSendende = veranstaltungen;
+    if (zuSendende.length === 0) {
+      callback();
+    } else {
+      const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
+      async.each(verMitUsers, sendMail, callback);
     }
-    try {
-      const users = await userstore.allUsers();
-      const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
-      const zuSendende = veranstaltungen;
-      if (zuSendende.length === 0) {
-        callback();
-      } else {
-        const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
-        async.each(verMitUsers, sendMail, callback);
-      }
-    } catch (e) {
-      return callback(e as Error);
-    }
-  });
+  } catch (e) {
+    return callback(e as Error);
+  }
 }

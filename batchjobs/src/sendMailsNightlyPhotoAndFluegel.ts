@@ -37,7 +37,7 @@ ${veranstaltungen
   }
 }
 
-function checkForFilter(
+async function checkForFilter(
   // eslint-disable-next-line no-unused-vars
   filterFunction: (veranstaltung: Veranstaltung) => boolean,
   variables: SendMailVariables,
@@ -54,17 +54,13 @@ function checkForFilter(
   const start = now;
   const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
 
-  return store.byDateRangeInAscendingOrder(start, end, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err1) {
-      return;
-    }
-    const zuSendende = veranstaltungen.filter(filterFunction);
-    if (zuSendende.length === 0) {
-      callback();
-    } else {
-      sendMail(zuSendende, variables, callback);
-    }
-  });
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+  const zuSendende = veranstaltungen.filter(filterFunction);
+  if (zuSendende.length === 0) {
+    callback();
+  } else {
+    sendMail(zuSendende, variables, callback);
+  }
 }
 
 export function checkFotograf(now: DatumUhrzeit, callback: Function): void {

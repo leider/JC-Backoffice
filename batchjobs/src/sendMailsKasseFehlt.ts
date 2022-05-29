@@ -2,13 +2,13 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Message from "jc-shared/mail/message";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import User from "jc-shared/user/user";
 
 import config from "jc-backend/lib/commons/simpleConfigure";
 
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
+import { ErrorCallback } from "async";
 
 const logger = loggers.get("application");
 
@@ -56,19 +56,15 @@ ${veranstaltungen
   }
 }
 
-export function checkKasse(now: DatumUhrzeit, callback: Function): void {
+export async function checkKasse(now: DatumUhrzeit, callback: ErrorCallback) {
   const start = now;
   const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
 
-  store.byDateRangeInAscendingOrder(start, end, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err1) {
-      return callback();
-    }
-    const zuSendende = veranstaltungen.filter((veranstaltung) => kasseFehlt(veranstaltung));
-    if (zuSendende.length === 0) {
-      callback();
-    } else {
-      sendMail(zuSendende, callback);
-    }
-  });
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+  const zuSendende = veranstaltungen.filter((veranstaltung) => kasseFehlt(veranstaltung));
+  if (zuSendende.length === 0) {
+    callback();
+  } else {
+    sendMail(zuSendende, callback);
+  }
 }

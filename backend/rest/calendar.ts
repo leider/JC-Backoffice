@@ -1,4 +1,3 @@
-import async from "async";
 import express from "express";
 import superagent from "superagent";
 import flatMap from "lodash/flatMap";
@@ -14,12 +13,12 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import store from "../lib/veranstaltungen/veranstaltungenstore";
 import optionenstore from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
-import { reply } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 
 const app = express();
 
-function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User | undefined, callback: Function): void {
+async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User) {
   function asCalendarEvent(veranstaltung: Veranstaltung): TerminEvent {
     const urlSuffix = user?.accessrights?.isOrgaTeam ? "/allgemeines" : "/preview";
 
@@ -36,15 +35,11 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User | unde
     };
   }
 
-  store.byDateRangeInAscendingOrder(start, end, (err?: Error, veranstaltungen?: Veranstaltung[]) => {
-    if (err) {
-      return callback(err);
-    }
-    return callback(undefined, veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen || [], user).map(asCalendarEvent));
-  });
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+  return veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen || [], user).map(asCalendarEvent);
 }
 
-function termineForIcal(ical: Ical, callback: Function): void {
+async function termineForIcal(ical: Ical) {
   function toIsoString(event?: string | ComplexDate): string {
     if (!event) {
       return "";
@@ -55,22 +50,18 @@ function termineForIcal(ical: Ical, callback: Function): void {
     return toIsoString((event as ComplexDate).value);
   }
 
-  superagent.get(ical.url, (err?: Error, resp?: superagent.Response) => {
-    if (err) {
-      return callback(err);
-    }
-    const parsed = new Parser().parse(resp?.text || "");
-    const eventArray: TerminEvent[] =
-      parsed.events?.map((event) => ({
-        color: ical.color,
-        display: "block",
-        start: toIsoString(event.start),
-        end: toIsoString(event.end || event.start),
-        title: event.summary || "",
-        tooltip: event.summary || "",
-      })) || [];
-    return callback(null, eventArray);
-  });
+  const resp = await superagent.get(ical.url);
+  const parsed = new Parser().parse(resp?.text || "");
+  const eventArray: TerminEvent[] =
+    parsed.events?.map((event) => ({
+      color: ical.color,
+      display: "block",
+      start: toIsoString(event.start),
+      end: toIsoString(event.end || event.start),
+      title: event.summary || "",
+      tooltip: event.summary || "",
+    })) || [];
+  return eventArray;
 }
 
 async function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit) {
@@ -78,44 +69,22 @@ async function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit) {
   return termine?.map((termin) => termin.asEvent);
 }
 
-app.get("/fullcalendarevents.json", (req, res) => {
+app.get("/fullcalendarevents.json", async (req, res) => {
   const start = DatumUhrzeit.forISOString(req.query.start as string);
   const end = DatumUhrzeit.forISOString(req.query.end as string);
 
-  async.parallel<TerminEvent[] | FerienIcals>(
-    {
-      icals: async (cb) => {
-        try {
-          const res = await optionenstore.icals();
-          return cb(null, res);
-        } catch (e) {
-          return cb(e as Error);
-        }
-      },
-      termine: async (cb) => {
-        try {
-          const events = await termineAsEventsBetween(start, end);
-          return cb(null, events);
-        } catch (e) {
-          cb(e as Error);
-        }
-      },
-      veranstaltungen: (cb) => eventsBetween(start, end, req.user as User, cb),
-    },
-    (err, results) => {
-      if (err) {
-        res.status(500).send(err);
-        return;
-      }
-      const icals = (results.icals as FerienIcals).icals;
-      async.map<Ical, TerminEvent>(icals, termineForIcal, (err1, termineForIcals?) => {
-        const events = flatMap(termineForIcals, (x) => x)
-          .concat(results.termine as TerminEvent[])
-          .concat(results.veranstaltungen as TerminEvent[]);
-        reply(res, err1, events);
-      });
-    }
-  );
+  const [cals, termine, veranstaltungen] = await Promise.all([
+    optionenstore.icals(),
+    termineAsEventsBetween(start, end),
+    eventsBetween(start, end, req.user as User),
+  ]);
+  const icals = (cals as FerienIcals).icals;
+
+  const termineForIcals = await Promise.all(icals.map(termineForIcal));
+  const events = flatMap(termineForIcals, (x) => x)
+    .concat(termine as TerminEvent[])
+    .concat(veranstaltungen as TerminEvent[]);
+  resToJson(res, events);
 });
 
 export default app;

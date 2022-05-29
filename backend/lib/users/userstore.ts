@@ -23,7 +23,7 @@ export default {
 
   forId: async function forId(id: string) {
     const result = await persistence.getById(id);
-    return new User(result);
+    return result ? new User(result) : result;
   },
 
   deleteUser: async function deleteUser(id: string) {

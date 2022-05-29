@@ -25,7 +25,7 @@ Liebe Grüße vom Jazzclub Team.`;
 
   let counter = 0;
 
-  function processRule(rule: MailRule, callback: Function): void {
+  async function processRule(rule: MailRule, callback: Function) {
     const startAndEndDay = rule.startAndEndDay(now);
 
     function sendMail(selected: Veranstaltung[], callbackInner: Function): void {
@@ -46,17 +46,13 @@ Liebe Grüße vom Jazzclub Team.`;
       mailtransport.sendMail(message, callbackInner);
     }
 
-    store.byDateRangeInAscendingOrder(startAndEndDay.start, startAndEndDay.end, (err1: Error | null, veranstaltungen: Veranstaltung[]) => {
-      if (err1) {
-        return;
-      }
-      const zuSendende = veranstaltungen.filter((veranstaltung) => isSendable(veranstaltung));
-      if (zuSendende.length === 0) {
-        callback();
-      } else {
-        sendMail(zuSendende, callback);
-      }
-    });
+    const veranstaltungen = await store.byDateRangeInAscendingOrder(startAndEndDay.start, startAndEndDay.end);
+    const zuSendende = veranstaltungen.filter((veranstaltung) => isSendable(veranstaltung));
+    if (zuSendende.length === 0) {
+      callback();
+    } else {
+      sendMail(zuSendende, callback);
+    }
   }
 
   try {

@@ -6,8 +6,6 @@ import { loggers } from "winston";
 import { v4 as uuidv4 } from "uuid";
 import { Builder, Calendar } from "ikalendar";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import User from "jc-shared/user/user";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
@@ -121,10 +119,11 @@ app.get("/imagepreview/:filename", (req, res, next) => {
     });
 });
 
-app.get("/ical/", (req, res) => {
-  store.alle((err: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err || !veranstaltungen) {
-      return res.status(500).send(err);
+app.get("/ical/", async (req, res) => {
+  try {
+    const veranstaltungen = await store.alle();
+    if (!veranstaltungen) {
+      return res.status(500).send();
     }
     const calendar: Calendar = {
       version: "2.0",
@@ -142,7 +141,9 @@ app.get("/ical/", (req, res) => {
     };
     const calString = new Builder(calendar).build();
     return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
-  });
+  } catch (e) {
+    return res.status(500).send();
+  }
 });
 
 app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextFunction) => {
@@ -154,7 +155,7 @@ app.get("/pdf/kassenzettel/:url", (req, res, next) => {
   kassenzettel(res, next, req.params.url);
 });
 
-app.get("/pdf/vertrag/:url/:language", (req, res, next) => {
+app.get("/pdf/vertrag/:url/:language", async (req, res, next) => {
   vertrag(res, next, req.params.url, req.params.language);
 });
 

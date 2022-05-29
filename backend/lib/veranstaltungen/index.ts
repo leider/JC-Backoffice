@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
@@ -11,23 +11,19 @@ const app = express();
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 
-function veranstaltungenForExport(fetcher: Function, req: Request, res: Response, next: NextFunction): void {
+async function veranstaltungenForExport(fetcher: () => Promise<Veranstaltung[]>, req: Request, res: Response) {
   if (!(req.user as User)?.accessrights?.isBookingTeam) {
     return res.redirect("/");
   }
 
-  return fetcher((err: Error | null, veranstaltungen: Veranstaltung[]) => {
-    if (err) {
-      return next(err);
-    }
-    const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
-    return res.type("csv").send(lines);
-  });
+  const veranstaltungen: Veranstaltung[] = await fetcher();
+  const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
+  return res.type("csv").send(lines);
 }
 
-app.get("/zukuenftige/csv", (req, res, next) => veranstaltungenForExport(store.zukuenftigeMitGestern, req, res, next));
+app.get("/zukuenftige/csv", (req, res) => veranstaltungenForExport(store.zukuenftigeMitGestern, req, res));
 
-app.get("/vergangene/csv", (req, res, next) => veranstaltungenForExport(store.vergangene, req, res, next));
+app.get("/vergangene/csv", (req, res) => veranstaltungenForExport(store.vergangene, req, res));
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {
 //   fileexportStadtKarlsruhe.send(req.params.url, (err, result) => {
