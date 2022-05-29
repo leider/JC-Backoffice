@@ -91,7 +91,14 @@ app.get("/fullcalendarevents.json", (req, res) => {
 
   async.parallel<TerminEvent[] | FerienIcals>(
     {
-      icals: optionenstore.icals,
+      icals: async (cb) => {
+        try {
+          const res = await optionenstore.icals();
+          return cb(null, res);
+        } catch (e) {
+          return cb(e as Error);
+        }
+      },
       termine: (cb) => termineAsEventsBetween(start, end, (err: Error | null, events: TerminEvent[]) => cb(err, events)),
       veranstaltungen: (cb) => eventsBetween(start, end, req.user as User, cb),
     },

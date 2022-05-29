@@ -1,39 +1,28 @@
-import partial from "lodash/partial";
-
-import misc from "jc-shared/commons/misc";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Orte from "jc-shared/optionen/orte";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
+
 const persistence = pers("optionenstore");
 
-function toOptionValues(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(OptionValues, callback, err, jsobject);
-}
-
-function toOrte(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(Orte, callback, err, jsobject);
-}
-
-function toIcals(callback: Function, err: Error | null, jsobject: object): void {
-  return misc.toObject(FerienIcals, callback, err, jsobject);
-}
-
 export default {
-  get: function get(callback: Function): void {
-    persistence.getById("instance", partial(toOptionValues, callback));
+  get: async function get() {
+    const result = await persistence.getById("instance");
+    return new OptionValues(result);
   },
 
-  orte: function orte(callback: Function): void {
-    persistence.getById("orte", partial(toOrte, callback));
+  orte: async function orte() {
+    const result = await persistence.getById("orte");
+    return new Orte(result);
   },
 
-  icals: function icals(callback: Function): void {
-    persistence.getById("ferienIcals", partial(toIcals, callback));
+  icals: async function icals() {
+    const result = await persistence.getById("ferienIcals");
+    return new FerienIcals(result);
   },
 
-  save: function save(object: OptionValues | Orte | FerienIcals, callback: Function): void {
-    persistence.save(object.toJSON(), callback);
+  save: async function save(object: OptionValues | Orte | FerienIcals) {
+    return persistence.save(object.toJSON());
   },
 };

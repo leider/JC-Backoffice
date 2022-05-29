@@ -8,60 +8,54 @@ import User from "jc-shared/user/user";
 
 import store from "../lib/optionen/optionenstore";
 import terminstore from "../lib/optionen/terminstore";
-import { reply } from "../lib/commons/replies";
+import { reply, resToJson } from "../lib/commons/replies";
 
 const app = express();
 
-app.get("/optionen", (req: Request, res: Response) => {
-  return store.get((err?: Error, optionen?: OptionValues) => {
-    reply(res, err, optionen);
-  });
+app.get("/optionen", async (req: Request, res: Response) => {
+  const optionen = await store.get();
+  resToJson(res, optionen);
 });
 
-app.post("/optionen", (req: Request, res: Response) => {
+app.post("/optionen", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const optionen = new OptionValues(req.body);
-  store.save(optionen, (err?: Error) => {
-    reply(res, err, optionen);
-  });
+  await store.save(optionen);
+  resToJson(res, optionen);
 });
 
-app.get("/orte", (req: Request, res: Response) => {
-  return store.orte((err?: Error, orte?: Orte) => {
-    reply(res, err, orte);
-  });
+app.get("/orte", async (req: Request, res: Response) => {
+  const orte = await store.orte();
+  resToJson(res, orte);
 });
 
-app.post("/orte", (req: Request, res: Response) => {
+app.post("/orte", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const orte = new Orte(req.body);
-  store.save(orte, (err?: Error) => {
-    reply(res, err, orte);
-  });
+  await store.save(orte);
+  resToJson(res, orte);
 });
 
-app.get("/kalender", (req: Request, res: Response) => {
+app.get("/kalender", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
 
-  return store.icals((err?: Error, icals?: FerienIcals) => {
-    reply(res, err, icals);
-  });
+  const icals = await store.icals();
+  resToJson(res, icals);
 });
 
-app.post("/kalender", (req: Request, res: Response) => {
+app.post("/kalender", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
   const ical = new FerienIcals(req.body);
-  store.save(ical, (err?: Error) => {
-    reply(res, err, ical);
-  });
+  await store.save(ical);
+  resToJson(res, ical);
 });
 
 app.get("/termine", (req, res) => {
