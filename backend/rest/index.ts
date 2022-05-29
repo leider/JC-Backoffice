@@ -34,14 +34,13 @@ function allImageNames(res: Response): void {
   });
 }
 
-app.post("/logout", (req, res) => {
+app.post("/logout", async (req, res) => {
   const oldId = req.cookies["refresh-token"] as string;
   if (!oldId) {
     return res.sendStatus(401);
   }
-  refreshstore.remove(oldId, () => {
-    return res.clearCookie("refresh-token").send({});
-  });
+  await refreshstore.remove(oldId);
+  return res.clearCookie("refresh-token").send({});
 });
 
 app.get("/imagenames", (req, res) => {

@@ -1,4 +1,4 @@
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistenceNew";
 const persistence = pers("refreshstore");
 
 export interface RefreshToken {
@@ -8,15 +8,15 @@ export interface RefreshToken {
 }
 
 export default {
-  save: function save(refreshToken: RefreshToken, callback: Function): void {
-    persistence.save(refreshToken, callback);
+  save: async function save(refreshToken: RefreshToken) {
+    return persistence.save(refreshToken);
   },
 
-  forId: function forId(id: string, callback: Function): void {
-    persistence.getById(id, callback);
+  forId: async function forId(id: string) {
+    return persistence.getById(id);
   },
 
-  remove: function remove(id: string, callback: Function): void {
-    persistence.removeById(id, callback);
+  remove: async function remove(id: string) {
+    return persistence.removeById(id);
   },
 };

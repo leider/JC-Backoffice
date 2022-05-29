@@ -12,11 +12,11 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
 import store from "../veranstaltungen/veranstaltungenstore";
-import { reply } from "../commons/replies";
+import { resToJson } from "../commons/replies";
 import userstore from "../users/userstore";
 import { hashPassword } from "../commons/hashPassword";
 import conf from "../commons/simpleConfigure";
-import refreshstore, { RefreshToken } from "./refreshstore";
+import refreshstore from "./refreshstore";
 import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration";
 
 const appLogger = loggers.get("application");
@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
   return res.redirect("/vue/veranstaltungen");
 });
 
-function createToken(req: Request, res: Response, name: string) {
+async function createToken(req: Request, res: Response, name: string) {
   const ttl = 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
 
   function addRefreshToken(res: Response, refreshTokenId: string) {
@@ -45,11 +45,10 @@ function createToken(req: Request, res: Response, name: string) {
     });
   }
 
-  function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number, callback: Function): void {
-    refreshstore.remove(oldId, () => {
-      const expiry = new Date(Date.now() + ttl);
-      refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry }, callback);
-    });
+  async function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
+    await refreshstore.remove(oldId);
+    const expiry = new Date(Date.now() + ttl);
+    return refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry });
   }
 
   const token = jwt.sign({ id: name }, jwtSecret, {
@@ -57,27 +56,30 @@ function createToken(req: Request, res: Response, name: string) {
   });
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
-  return persistRefreshToken(refreshTokenId, oldId, name, ttl, (err1?: Error) => {
-    if (err1) {
-      return res.sendStatus(401);
-    }
+  try {
+    await persistRefreshToken(refreshTokenId, oldId, name, ttl);
     addRefreshToken(res, refreshTokenId);
-    reply(res, undefined, { token });
-  });
+    resToJson(res, { token });
+  } catch (e) {
+    return res.sendStatus(401);
+  }
 }
 
-app.post("/refreshtoken", (req, res) => {
+app.post("/refreshtoken", async (req, res) => {
   const oldId = req.cookies["refresh-token"] as string;
   if (!oldId) {
     appLogger.warn("refreshToken without cookie called");
     return res.sendStatus(401);
   }
-  refreshstore.forId(oldId, (err?: Error, refreshToken?: RefreshToken) => {
-    if (err || !refreshToken || DatumUhrzeit.forJSDate(refreshToken.expiresAt).istVor(new DatumUhrzeit())) {
+  try {
+    const refreshToken = await refreshstore.forId(oldId);
+    if (!refreshToken || DatumUhrzeit.forJSDate(refreshToken.expiresAt).istVor(new DatumUhrzeit())) {
       return res.sendStatus(401);
     }
     return createToken(req, res, refreshToken.userId);
-  });
+  } catch (e) {
+    return res.sendStatus(401);
+  }
 });
 
 app.post("/login", (req, res) => {
