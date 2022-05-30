@@ -96,11 +96,12 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
   if (veranstaltung) {
     const frischFreigegeben = veranstaltung.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
     if (frischFreigegeben) {
-      kassenzettelToBuchhaltung(new Veranstaltung(req.body), (err1: Error) => {
-        if (err1) {
-          console.log("Kassenzettel Versand an Buchhaltung gescheitert");
-        }
-      });
+      try {
+        await kassenzettelToBuchhaltung(new Veranstaltung(req.body));
+      } catch (e) {
+        console.log("Kassenzettel Versand an Buchhaltung gescheitert");
+        throw e;
+      }
     }
   }
   return saveVeranstaltung(veranstaltung);

@@ -13,7 +13,7 @@ const logger = loggers.get("application");
 
 type SendMailVariables = { name: string; email: string; subject: string; firstLine: string };
 
-async function sendMail(veranstaltungen: Veranstaltung[], variables: SendMailVariables, callback: Function) {
+async function sendMail(veranstaltungen: Veranstaltung[], variables: SendMailVariables) {
   const markdownToSend = `${variables.firstLine}
 
 ---
@@ -26,30 +26,25 @@ ${veranstaltungen
     markdown: markdownToSend,
   });
 
-  try {
-    const bookingAddresses = await usersService.emailsAllerBookingUser();
-    logger.info(`Email Adressen für ${variables.subject}: ${bookingAddresses}`);
-    message.setTo([Message.formatEMailAddress(variables.name, variables.email)]);
-    message.setBcc(bookingAddresses);
-    return mailtransport.sendMail(message, callback);
-  } catch (e) {
-    return callback(e);
-  }
+  const bookingAddresses = await usersService.emailsAllerBookingUser();
+  logger.info(`Email Adressen für ${variables.subject}: ${bookingAddresses}`);
+  message.setTo([Message.formatEMailAddress(variables.name, variables.email)]);
+  message.setBcc(bookingAddresses);
+  return mailtransport.sendMail(message);
 }
 
 async function checkForFilter(
   // eslint-disable-next-line no-unused-vars
   filterFunction: (veranstaltung: Veranstaltung) => boolean,
   variables: SendMailVariables,
-  now: DatumUhrzeit,
-  callback: Function
+  now: DatumUhrzeit
 ) {
   if (now.wochentag !== 0) {
     // Sonntag
-    return callback();
+    return;
   }
   if (!variables.name || !variables.email) {
-    return callback();
+    return;
   }
   const start = now;
   const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
@@ -57,13 +52,13 @@ async function checkForFilter(
   const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
   const zuSendende = veranstaltungen.filter(filterFunction);
   if (zuSendende.length === 0) {
-    callback();
+    return;
   } else {
-    sendMail(zuSendende, variables, callback);
+    return sendMail(zuSendende, variables);
   }
 }
 
-export function checkFotograf(now: DatumUhrzeit, callback: Function): void {
+export async function checkFotograf(now: DatumUhrzeit) {
   const name = config.get("fotograf-name") as string;
   const email = config.get("fotograf-email") as string;
   const subject = "Photographing for Jazzclub";
@@ -75,10 +70,10 @@ export function checkFotograf(now: DatumUhrzeit, callback: Function): void {
     subject,
     firstLine,
   };
-  checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.kopf.fotografBestellen, variables, now, callback);
+  return checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.kopf.fotografBestellen, variables, now);
 }
 
-export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
+export async function checkFluegel(now: DatumUhrzeit) {
   const name = config.get("stimmer-name") as string;
   const email = config.get("stimmer-email") as string;
   const subject = "Flügelstimmen im Jazzclub";
@@ -90,5 +85,5 @@ export function checkFluegel(now: DatumUhrzeit, callback: Function): void {
     subject,
     firstLine,
   };
-  checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.technik.fluegel, variables, now, callback);
+  return checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.technik.fluegel, variables, now);
 }

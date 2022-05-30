@@ -1,4 +1,3 @@
-import async from "async";
 import { loggers } from "winston";
 const logger = loggers.get("application");
 
@@ -17,7 +16,7 @@ function isSendable(veranstaltung: Veranstaltung): boolean {
   return veranstaltung.presse.checked && veranstaltung.kopf.confirmed;
 }
 
-export async function loadRulesAndProcess(now: DatumUhrzeit, callbackOuter: Function) {
+export async function loadRulesAndProcess(now: DatumUhrzeit) {
   const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
 Diese Mail ist automatisch generiert. Bitte informieren Sie uns über Verbesserungen oder Änderungswünsche, speziell bzgl. des Sendedatums, der Sendeperiode und des Anfangs- und Endezeitraums.
 
@@ -25,10 +24,10 @@ Liebe Grüße vom Jazzclub Team.`;
 
   let counter = 0;
 
-  async function processRule(rule: MailRule, callback: Function) {
+  async function processRule(rule: MailRule) {
     const startAndEndDay = rule.startAndEndDay(now);
 
-    function sendMail(selected: Veranstaltung[], callbackInner: Function): void {
+    async function sendMail(selected: Veranstaltung[]) {
       const markdownToSend =
         markdownForRules +
         "\n\n---\n" +
@@ -43,25 +42,20 @@ Liebe Grüße vom Jazzclub Team.`;
       logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
       message.setTo(mailAddress);
       counter++;
-      mailtransport.sendMail(message, callbackInner);
+      return mailtransport.sendMail(message);
     }
 
     const veranstaltungen = await store.byDateRangeInAscendingOrder(startAndEndDay.start, startAndEndDay.end);
     const zuSendende = veranstaltungen.filter((veranstaltung) => isSendable(veranstaltung));
     if (zuSendende.length === 0) {
-      callback();
+      return;
     } else {
-      sendMail(zuSendende, callback);
+      return sendMail(zuSendende);
     }
   }
 
-  try {
-    const rules = await mailstore.all();
-    const relevantRules = rules.filter((rule) => rule.shouldSend(now));
-    async.each(relevantRules, processRule, (errFinal) => {
-      callbackOuter(errFinal, counter);
-    });
-  } catch (e) {
-    callbackOuter();
-  }
+  const rules = await mailstore.all();
+  const relevantRules = rules.filter((rule) => rule.shouldSend(now));
+  await Promise.all(relevantRules.map(processRule));
+  return counter;
 }

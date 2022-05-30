@@ -1,9 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const zipstream = require("zip-stream");
+import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
 import flatten from "lodash/flatten";
 import fs from "fs";
-import async from "async";
 import path from "path";
 
 import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
@@ -48,21 +46,13 @@ async function imgzip(res: Response, next: NextFunction, yymm: string) {
     res.type("zip");
     res.header("Content-Disposition", 'attachment; filename="' + filename + '"');
 
-    const zip = zipstream({ level: 1 });
-    zip.pipe(res); // res is a writable stream
+    const zip = new AdmZip();
+    images.forEach((file) => {
+      zip.addLocalFile(file.path, undefined, file.name);
+    });
 
-    return async.forEachSeries(
-      images,
-      (file, cb) => {
-        zip.entry(fs.createReadStream(file.path), { name: file.name }, cb);
-      },
-      (err1) => {
-        if (err1) {
-          return next(err1);
-        }
-        return zip.finalize();
-      }
-    );
+    const buffer = zip.toBuffer();
+    res.end(buffer);
   } catch (e) {
     next(e);
   }

@@ -28,15 +28,15 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
   };
 }
 
-function sendMail(message: Message, callback: Function): void {
-  sendMailInternal(message, false, callback);
+async function sendMail(message: Message) {
+  return sendMailInternal(message, false);
 }
 
-function sendDatevMail(message: Message, callback: Function): void {
-  sendMailInternal(message, true, callback);
+async function sendDatevMail(message: Message) {
+  return sendMailInternal(message, true);
 }
 
-function sendMailInternal(message: Message, isForDatev: boolean, callback: Function): void {
+async function sendMailInternal(message: Message, isForDatev: boolean) {
   const transportObject = toTransportObject(message, isForDatev);
   if (doNotSendMails) {
     const withoutAttachments = JSON.parse(JSON.stringify(transportObject));
@@ -45,12 +45,12 @@ function sendMailInternal(message: Message, isForDatev: boolean, callback: Funct
     delete transportObject.to;
     transportObject.bcc = doNotSendMails as string;
   }
-  transport.sendMail(transportObject, (err: Error | null) => {
-    if (err) {
-      logger.error(err.stack as string);
-    }
-    callback(err);
-  });
+  try {
+    return transport.sendMail(transportObject);
+  } catch (e) {
+    logger.error((e as Error).stack as string);
+    throw e;
+  }
 }
 
 export default {

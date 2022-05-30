@@ -44,7 +44,7 @@ export async function kassenzettel(res: Response, next: NextFunction, veranstalt
   res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
 }
 
-export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, callback: Function) {
+export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung) {
   const file = path.join(__dirname, "views/kassenzettel.pug");
   const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
   const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
@@ -56,10 +56,8 @@ export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung, ca
     message.pdfBufferAndName = { pdf, name: filenamepdf };
     message.to = conf.get("kassenzettel-email") as string;
     if (!message.to) {
-      return callback();
+      return;
     }
-    mailtransport.sendDatevMail(message, (err2: Error) => {
-      callback(err2);
-    });
+    return mailtransport.sendDatevMail(message);
   });
 }

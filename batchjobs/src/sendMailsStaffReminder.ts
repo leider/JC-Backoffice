@@ -6,7 +6,6 @@ import config from "jc-backend/lib/commons/simpleConfigure";
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import async, { ErrorCallback } from "async";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
@@ -17,7 +16,7 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   return config.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
-function sendMail(verMitUser: VerMitUser, callback: Function): void {
+async function sendMail(verMitUser: VerMitUser) {
   const veranstaltung = verMitUser.veranstaltung;
   const user = verMitUser.user;
 
@@ -35,25 +34,21 @@ function sendMail(verMitUser: VerMitUser, callback: Function): void {
     markdown: markdownToSend,
   });
   message.setTo(user.email);
-  return mailtransport.sendMail(message, callback);
+  return mailtransport.sendMail(message);
 }
 
-export async function checkStaff(now: DatumUhrzeit, callback: ErrorCallback) {
+export async function checkStaff(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  try {
-    const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-    const users = await userstore.allUsers();
-    const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
-    const zuSendende = veranstaltungen;
-    if (zuSendende.length === 0) {
-      callback();
-    } else {
-      const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
-      async.each(verMitUsers, sendMail, callback);
-    }
-  } catch (e) {
-    return callback(e as Error);
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+  const users = await userstore.allUsers();
+  const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
+  const zuSendende = veranstaltungen;
+  if (zuSendende.length === 0) {
+    return;
+  } else {
+    const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
+    return Promise.all(verMitUsers.map(sendMail));
   }
 }

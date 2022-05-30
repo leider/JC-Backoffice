@@ -13,10 +13,10 @@ import usersService from "jc-backend/lib/users/usersService";
 
 const logger = loggers.get("application");
 
-async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit, callback: Function) {
+async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
-  async function sendMail(kaputteVeranstaltungen: Veranstaltung[], callbackInner: Function) {
+  async function sendMail(kaputteVeranstaltungen: Veranstaltung[]) {
     const prefix = config.get("publicUrlPrefix") as string;
     function presseTemplateInternal(veranst: Veranstaltung): string {
       // für interne Mails
@@ -37,27 +37,23 @@ ${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join(
     const bookingAddresses = await usersService.emailsAllerBookingUser();
     logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
     message.setBcc(bookingAddresses);
-    mailtransport.sendMail(message, callbackInner);
+    return mailtransport.sendMail(message);
   }
 
   const veranstaltungen = await store.byDateRangeInAscendingOrder(start, maxDay);
   const zuSendende = veranstaltungen.filter((veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
   if (zuSendende.length === 0) {
-    callback();
+    return;
   } else {
-    sendMail(zuSendende, callback);
+    return sendMail(zuSendende);
   }
 }
 
-export async function checkPressetexte(now: DatumUhrzeit, callback: Function) {
+export async function checkPressetexte(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
-  try {
-    const rules = await mailstore.all();
-    const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
-    processRules(relevantRules, start, end, callback);
-  } catch (e) {
-    callback();
-  }
+  const rules = await mailstore.all();
+  const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
+  return processRules(relevantRules, start, end);
 }

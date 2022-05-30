@@ -29,29 +29,23 @@ describe("Programmheft Mailsender", () => {
   beforeEach(() => {
     sinon.stub(kalenderstore, "getCurrentKalender").resolves(currentKalender);
     sinon.stub(kalenderstore, "getNextKalender").resolves(nextKalender);
-    mailcheck = sinon.stub(mailtransport, "sendMail").callsFake((message, callback) => {
-      callback();
-    });
+    mailcheck = sinon.stub(mailtransport, "sendMail").resolves(undefined);
   });
 
   afterEach(() => {
     sinon.restore();
   });
 
-  it("runs correctly on a day where notificatons lie", (done) => {
-    remindForProgrammheft(april12 as DatumUhrzeit, (err: Error | null | undefined) => {
-      sinon.assert.calledOnce(mailcheck);
-      const message = mailcheck.args[0][0];
-      expect(message.senderAddress("bo@jazzclub.de")).to.equal("bo@jazzclub.de");
-      expect(message.subject).to.equal("Programmheft Action Reminder");
-      done(err);
-    });
+  it("runs correctly on a day where notificatons lie", async () => {
+    await remindForProgrammheft(april12 as DatumUhrzeit);
+    sinon.assert.calledOnce(mailcheck);
+    const message = mailcheck.args[0][0];
+    expect(message.senderAddress("bo@jazzclub.de")).to.equal("bo@jazzclub.de");
+    expect(message.subject).to.equal("Programmheft Action Reminder");
   });
 
-  it("runs correctly on a day where no notificatons lie", (done) => {
-    remindForProgrammheft(april13 as DatumUhrzeit, (err: Error | null | undefined) => {
-      sinon.assert.notCalled(mailcheck);
-      done(err);
-    });
+  it("runs correctly on a day where no notificatons lie", async () => {
+    await remindForProgrammheft(april13 as DatumUhrzeit);
+    sinon.assert.notCalled(mailcheck);
   });
 });

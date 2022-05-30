@@ -1,20 +1,16 @@
 import "jc-backend/configure";
 import "jc-backend/initWinston";
 
-import async from "async";
-import partial from "lodash/partial";
-
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Message from "jc-shared/mail/message";
-import User from "jc-shared/user/user";
 
 import userstore from "jc-backend/lib/users/userstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-
-const receiver = "leider";
 import sendMailsNightly from "./sendMailsNightly";
 
-function closeAndExit(err: Error | undefined): void {
+const receiver = "leider";
+
+function closeAndExit(err?: Error): void {
   if (err) {
     console.log("Error in nightjob...");
     console.log(err.message);
@@ -25,7 +21,7 @@ function closeAndExit(err: Error | undefined): void {
   process.exit();
 }
 
-async function informAdmin(err: Error | undefined, counter?: number) {
+async function informAdmin(err?: Error, counter?: number) {
   if (!err && !counter) {
     return closeAndExit(err);
   }
@@ -38,11 +34,10 @@ Anzahl: ${counter}
 Error: ${err ? err.message : "keiner"}`,
     });
     message.setTo(user.email);
-    return mailtransport.sendMail(message, (err2: Error | undefined) => {
-      closeAndExit(err2);
-    });
+    await mailtransport.sendMail(message);
+    closeAndExit();
   } catch (e) {
-    return closeAndExit(e as any);
+    return closeAndExit(e as Error);
   }
 }
 
@@ -50,17 +45,21 @@ console.log("Starting nightjob...");
 
 const now = new DatumUhrzeit();
 
-async.parallel(
-  {
-    checkFluegel: partial(sendMailsNightly.checkFluegel, now),
-    checkFotograf: partial(sendMailsNightly.checkFotograf, now),
-    checkPresse: partial(sendMailsNightly.checkPressetexte, now),
-    checkKasse: partial(sendMailsNightly.checkKasse, now),
-    send: partial(sendMailsNightly.loadRulesAndProcess, now),
-    remindForProgrammheft: partial(sendMailsNightly.remindForProgrammheft, now),
-    checkStaff: partial(sendMailsNightly.checkStaff, now),
-  },
-  (err: Error | undefined, results) => {
-    informAdmin(err, results.send as number);
+async function run() {
+  try {
+    const results = await Promise.all([
+      sendMailsNightly.loadRulesAndProcess(now),
+      sendMailsNightly.checkFluegel(now),
+      sendMailsNightly.checkFotograf(now),
+      sendMailsNightly.checkPressetexte(now),
+      sendMailsNightly.checkKasse(now),
+      sendMailsNightly.remindForProgrammheft(now),
+      sendMailsNightly.checkStaff(now),
+    ]);
+
+    informAdmin(undefined, results[0] as number);
+  } catch (e) {
+    informAdmin(e as Error);
   }
-);
+}
+run();

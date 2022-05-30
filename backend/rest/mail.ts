@@ -6,7 +6,7 @@ import Message from "jc-shared/mail/message";
 
 import mailstore from "../lib/mailsender/mailstore";
 import MailRule from "jc-shared/mail/mailRule";
-import { reply, resToJson } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 import mailtransport from "../lib/mailsender/mailtransport";
 import store from "../lib/users/userstore";
 
@@ -40,14 +40,13 @@ app.delete("/mailrule", async (req, res) => {
 
 // Mailinglisten und Senden
 
-app.post("/rundmail", (req, res) => {
+app.post("/rundmail", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
   const message = Message.fromJSON(req.body);
-  return mailtransport.sendMail(message, (err: Error | null) => {
-    reply(res, err);
-  });
+  await mailtransport.sendMail(message);
+  resToJson(res);
 });
 
 app.delete("/mailingliste", async (req, res) => {
