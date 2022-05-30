@@ -127,13 +127,9 @@ export default class Preview extends Vue {
   private user = new User({});
   private users: User[] = [];
 
-  created(): void {
-    allUsers((users: User[]) => {
-      this.users = users;
-    });
-    currentUser((user: User) => {
-      this.user = user;
-    });
+  async created() {
+    this.users = (await allUsers()) || [];
+    this.user = await currentUser();
   }
 
   get isOrgaTeam(): boolean {
@@ -198,11 +194,9 @@ ${this.presse.fullyQualifiedJazzclubURL}`) +
   }
 
   @Watch("$url")
-  mounted(): void {
-    veranstaltungForUrl(this.url, (v: Veranstaltung) => {
-      this.veranstaltung = v;
-      document.title = this.veranstaltung.kopf.titelMitPrefix;
-    });
+  async mounted() {
+    this.veranstaltung = (await veranstaltungForUrl(this.url)) || new Veranstaltung({ id: "dummy" });
+    document.title = this.veranstaltung.kopf.titelMitPrefix;
   }
 
   loeschen(): void {

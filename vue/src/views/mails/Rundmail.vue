@@ -85,13 +85,9 @@ export default class Rundmail extends Vue {
     });
   }
 
-  created(): void {
-    allUsers((users: User[]) => {
-      this.users = users;
-    });
-    currentUser((user: User) => {
-      this.user = user;
-    });
+  async created() {
+    this.users = (await allUsers()) || [];
+    this.user = await currentUser();
   }
 }
 </script>

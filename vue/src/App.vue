@@ -72,11 +72,9 @@ export default class App extends Vue {
   private globals = globals;
 
   @Watch("globals", { deep: true })
-  globalsChanged(): void {
+  async globalsChanged() {
     if (globals.jwtToken) {
-      currentUser((user: User) => {
-        this.user = user;
-      });
+      this.user = await currentUser();
 
       wikisubdirs((json: { dirs: string[] }) => {
         this.wikisubdirs = json.dirs;
@@ -86,12 +84,10 @@ export default class App extends Vue {
     }
   }
 
-  created(): void {
-    globals.isAuthenticated((isAuth) => {
+  created() {
+    globals.isAuthenticated(async (isAuth) => {
       if (isAuth) {
-        currentUser((user: User) => {
-          this.user = user;
-        });
+        this.user = await currentUser();
 
         wikisubdirs((json: { dirs: string[] }) => {
           this.wikisubdirs = json.dirs;

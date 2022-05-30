@@ -42,27 +42,26 @@ export default class ImageOverview extends Vue {
     });
   }
 
-  private initObjects(): void {
-    veranstaltungenForTeam("alle", (veranstaltungen: Veranstaltung[]) => {
-      const elementsWithImage = (imageName: string): ImageOverviewVeranstaltung[] => {
-        return this.veranstaltungen.filter((each) => each.images.find((i) => i.localeCompare(imageName) === 0));
-      };
+  private async initObjects() {
+    const veranstaltungen = (await veranstaltungenForTeam("alle")) || [];
+    const elementsWithImage = (imageName: string): ImageOverviewVeranstaltung[] => {
+      return this.veranstaltungen.filter((each) => each.images.find((i) => i.localeCompare(imageName) === 0));
+    };
 
-      function convertString(a: string): string {
-        return a.replace(/\s/g, "_");
-      }
+    function convertString(a: string): string {
+      return a.replace(/\s/g, "_");
+    }
 
-      this.veranstaltungen = veranstaltungen.map((v) => v.suitableForImageOverview);
-      const imagenamesOfVeranstaltungen = uniq(flatten(this.veranstaltungen.map((each) => each.images))).sort();
-      this.imagesWithVeranstaltungen = intersection(this.imagenames, imagenamesOfVeranstaltungen).map((im) => {
-        return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
-      });
-      this.imagesWithVeranstaltungenUnused = differenceBy(this.imagenames, imagenamesOfVeranstaltungen, convertString).map((im) => {
-        return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
-      });
-      this.imagesWithVeranstaltungenNotFound = differenceBy(imagenamesOfVeranstaltungen, this.imagenames, convertString).map((im) => {
-        return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
-      });
+    this.veranstaltungen = veranstaltungen.map((v) => v.suitableForImageOverview);
+    const imagenamesOfVeranstaltungen = uniq(flatten(this.veranstaltungen.map((each) => each.images))).sort();
+    this.imagesWithVeranstaltungen = intersection(this.imagenames, imagenamesOfVeranstaltungen).map((im) => {
+      return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
+    });
+    this.imagesWithVeranstaltungenUnused = differenceBy(this.imagenames, imagenamesOfVeranstaltungen, convertString).map((im) => {
+      return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
+    });
+    this.imagesWithVeranstaltungenNotFound = differenceBy(imagenamesOfVeranstaltungen, this.imagenames, convertString).map((im) => {
+      return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
     });
   }
 

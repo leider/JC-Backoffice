@@ -87,16 +87,12 @@ export default class ManualMail extends Vue {
     });
   }
 
-  created(): void {
+  async created() {
     mailRules((rules: MailRule[]) => {
       this.allRules = rules;
     });
-    currentUser((user: User) => {
-      this.user = user;
-    });
-    veranstaltungenForTeam("zukuenftige", (veranstaltungen: Veranstaltung[]) => {
-      this.veranstaltungen = veranstaltungen;
-    });
+    this.user = await currentUser();
+    this.veranstaltungen = (await veranstaltungenForTeam("zukuenftige")) || [];
   }
 }
 </script>

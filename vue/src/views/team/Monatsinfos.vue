@@ -58,11 +58,9 @@ ${veranstaltung.presse.fullyQualifiedJazzclubURL}`);
   }
 
   @Watch("$url")
-  mounted(): void {
+  async mounted() {
     document.title = "Monatsinfos";
-    veranstaltungenBetween(this.start, this.start.plus({ monate: 1 }), (veranstaltungen: Veranstaltung[]) => {
-      this.veranstaltungen = veranstaltungen;
-    });
+    this.veranstaltungen = (await veranstaltungenBetween(this.start, this.start.plus({ monate: 1 }))) || [];
   }
 
   tabActivated(section: string): void {

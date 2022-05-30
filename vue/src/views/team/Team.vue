@@ -79,18 +79,14 @@ export default class Team extends Vue {
     this.reloadVeranstaltungen();
   }
 
-  reloadUsers() {
-    allUsers((users: User[]) => {
-      this.users = users;
-    });
-    currentUser((user: User) => {
-      this.user = user;
-      if (this.$route.path.startsWith("/veranstaltungen") && !this.realadmin) {
-        if (this.user.id !== "invalidUser") {
-          this.$router.replace({ path: "/team" });
-        }
+  async reloadUsers() {
+    this.users = (await allUsers()) || [];
+    this.user = await currentUser();
+    if (this.$route.path.startsWith("/veranstaltungen") && !this.realadmin) {
+      if (this.user.id !== "invalidUser") {
+        this.$router.replace({ path: "/team" });
       }
-    });
+    }
   }
 
   get dropdownText(): string {
@@ -103,14 +99,12 @@ export default class Team extends Vue {
 
   @Watch("admin")
   @Watch("periode")
-  reloadVeranstaltungen(): void {
+  async reloadVeranstaltungen() {
     document.title = this.realadmin ? "Veranstaltungen" : "Team";
     this.loading = true;
     this.veranstaltungen = [];
-    veranstaltungenForTeam(this.periode, (veranstaltungen: Veranstaltung[]) => {
-      this.veranstaltungen = veranstaltungen;
-      this.loading = false;
-    });
+    this.veranstaltungen = (await veranstaltungenForTeam(this.periode)) || [];
+    this.loading = false;
   }
 
   get webcalUrl(): string {

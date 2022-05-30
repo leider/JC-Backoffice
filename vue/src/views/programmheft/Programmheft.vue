@@ -92,14 +92,12 @@ export default class Programmheft extends Vue {
   }
 
   @Watch("$route")
-  mounted(): void {
+  async mounted() {
     document.title = "Programmheft";
     kalenderFor(this.start.fuerKalenderViews, (kalender: Kalender) => {
       this.kalender = kalender;
     });
-    veranstaltungenBetween(this.start, this.start.plus({ monate: 2 }), (veranstaltungen: Veranstaltung[]) => {
-      this.veranstaltungen = veranstaltungen;
-    });
+    this.veranstaltungen = (await veranstaltungenBetween(this.start, this.start.plus({ monate: 2 }))) || [];
   }
 }
 </script>

@@ -106,10 +106,8 @@ export default class VeranstaltungView extends Vue {
   private allImageNames: string[] = [];
   private editVariables: EditVariables = { hotelpreiseAlsDefault: false, selectedAgentur: "[temporär]", selectedHotel: "[temporär]" };
 
-  created(): void {
-    currentUser((user: User) => {
-      this.user = user;
-    });
+  async created() {
+    this.user = await currentUser();
     optionen((opts: OptionValues) => {
       this.optionen = opts;
     });
@@ -119,9 +117,7 @@ export default class VeranstaltungView extends Vue {
     imagenames((names: string[]) => {
       this.allImageNames = names;
     });
-    allUsers((users: User[]) => {
-      this.users = users;
-    });
+    this.users = (await allUsers()) || [];
   }
 
   get showAllTabs(): boolean {
@@ -153,21 +149,18 @@ export default class VeranstaltungView extends Vue {
   }
 
   @Watch("$url")
-  mounted(): void {
+  async mounted() {
     if (this.url === "new") {
       this.activeSection = "allgemeines";
       this.originalVeranstaltung = new Veranstaltung();
       document.title = "Neue Veranstaltung";
     } else {
-      this.originalVeranstaltung = new Veranstaltung({ id: "dummy" });
-      veranstaltungForUrl(this.url, (v: Veranstaltung) => {
-        this.originalVeranstaltung = v;
-        this.activeSection = this.tab;
-        if (this.tab === "copy") {
-          return this.copy();
-        }
-        document.title = this.originalVeranstaltung.kopf.titel;
-      });
+      this.originalVeranstaltung = (await veranstaltungForUrl(this.url)) || new Veranstaltung({ id: "dummy" });
+      this.activeSection = this.tab;
+      if (this.tab === "copy") {
+        return this.copy();
+      }
+      document.title = this.originalVeranstaltung.kopf.titel;
     }
   }
 

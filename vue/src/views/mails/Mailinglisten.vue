@@ -38,12 +38,10 @@ export default class Mailinglisten extends Vue {
   private mailinglisten: Mailingliste[] = [];
   private users: User[] = [];
 
-  mounted(): void {
+  async mounted() {
     document.title = "Mailinglisten";
-    allUsers((users: User[]) => {
-      this.users = users;
-      this.mailinglisten = new Users(users).mailinglisten;
-    });
+    this.users = (await allUsers()) || [];
+    this.mailinglisten = new Users(this.users).mailinglisten;
   }
 
   neueListe(): void {
