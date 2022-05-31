@@ -67,7 +67,7 @@ export default class Rundmail extends Vue {
     return !!this.subject && !!this.markdown && (this.selectedListen.length > 0 || this.selectedUsers.length > 0);
   }
 
-  sendMail(): void {
+  async sendMail() {
     const groups = this.groupdNames.filter((gr) => this.selectedListen.includes(gr)).map((gr) => lowerFirst(gr).replaceAll(" ", ""));
     const listen = difference(this.selectedListen, this.groupdNames);
     const validUsers = new Users(this.users).filterReceivers(groups, this.selectedUsers, listen).filter((user) => !!user.email);
@@ -75,14 +75,11 @@ export default class Rundmail extends Vue {
 
     const result = new Message({ subject: this.subject, markdown: this.markdown }, this.user.name, this.user.email);
     result.setBcc(emails);
-    sendMail(result, (err?: Error) => {
-      if (!err) {
-        this.subject = "";
-        this.markdown = "";
-        this.selectedListen = [];
-        this.selectedUsers = [];
-      }
-    });
+    await sendMail(result);
+    this.subject = "";
+    this.markdown = "";
+    this.selectedListen = [];
+    this.selectedUsers = [];
   }
 
   async created() {

@@ -65,7 +65,7 @@ export default class ManualMail extends Vue {
     return !!this.subject && !!this.markdown && this.selectedRules.length > 0;
   }
 
-  sendMail(): void {
+  async sendMail() {
     const upcomings = this.veranstaltungen.filter((v) => this.selectedVeranstaltungen.includes(new VeranstaltungFormatter(v).description));
     const rules = this.allRules.filter((r) => this.selectedRules.includes(r.name));
 
@@ -77,20 +77,15 @@ export default class ManualMail extends Vue {
       upcomings.map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin)).join("\n\n---\n");
     const result = new Message({ subject: this.subject, markdown: markdownToSend }, this.user.name, this.user.email);
     result.setBcc(emails);
-    sendMail(result, (err?: Error) => {
-      if (!err) {
-        this.subject = "[Jazzclub manuell] Veranstaltungen für ...";
-        this.markdown = "";
-        this.selectedRules = [];
-        this.selectedVeranstaltungen = [];
-      }
-    });
+    await sendMail(result);
+    this.subject = "[Jazzclub manuell] Veranstaltungen für ...";
+    this.markdown = "";
+    this.selectedRules = [];
+    this.selectedVeranstaltungen = [];
   }
 
   async created() {
-    mailRules((rules: MailRule[]) => {
-      this.allRules = rules;
-    });
+    this.allRules = (await mailRules()) || [];
     this.user = await currentUser();
     this.veranstaltungen = (await veranstaltungenForTeam("zukuenftige")) || [];
   }

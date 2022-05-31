@@ -33,20 +33,18 @@ export default class StaffRow extends Vue {
     return this.section.map((name) => name.toLowerCase()).includes(this.user.id.toLowerCase());
   }
 
-  add(): void {
-    addUserToSection(this.veranstaltung, this.sectionName, (err?: Error) => {
-      if (!err) {
-        this.staff.addUserToSection(this.user, this.sectionName);
-      }
-    });
+  async add() {
+    const result = await addUserToSection(this.veranstaltung, this.sectionName);
+    if (result) {
+      this.staff.addUserToSection(this.user, this.sectionName);
+    }
   }
 
-  remove(): void {
-    removeUserFromSection(this.veranstaltung, this.sectionName, (err?: Error) => {
-      if (!err) {
-        this.staff.removeUserFromSection(this.user, this.sectionName);
-      }
-    });
+  async remove() {
+    const result = await removeUserFromSection(this.veranstaltung, this.sectionName);
+    if (result) {
+      this.staff.removeUserFromSection(this.user, this.sectionName);
+    }
   }
 }
 </script>

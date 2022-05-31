@@ -59,14 +59,10 @@ export default class TermineUndKalender extends Vue {
   @Prop() tab!: string;
 
   @Watch("$url")
-  mounted(): void {
+  async mounted() {
     document.title = "Termine und Kalender";
-    termine((termine: Termin[]) => {
-      this.termine = termine;
-    });
-    kalender((kalender: FerienIcals) => {
-      this.kalender = kalender;
-    });
+    this.termine = (await termine()) || [];
+    this.kalender = (await kalender()) || new FerienIcals();
   }
 
   tabActivated(section: string): void {
@@ -75,18 +71,15 @@ export default class TermineUndKalender extends Vue {
     }
   }
 
-  deleteTermin(termin: Termin) {
+  async deleteTermin(termin: Termin) {
     if (!termin.id) {
       const index = this.termine.indexOf(termin);
       this.termine.splice(index, 1);
       return;
     }
-    deleteTermin(termin.id, (err?: Error) => {
-      if (!err) {
-        const index = this.termine.indexOf(termin);
-        this.termine.splice(index, 1);
-      }
-    });
+    await deleteTermin(termin.id);
+    const index = this.termine.indexOf(termin);
+    this.termine.splice(index, 1);
   }
 
   neuerTerminOderKalender() {
@@ -98,10 +91,8 @@ export default class TermineUndKalender extends Vue {
     }
   }
 
-  saveKalender() {
-    saveKalender(this.kalender, () => {
-      // empty by design
-    });
+  async saveKalender() {
+    await saveKalender(this.kalender);
   }
 
   deleteKalender(kalender: Ical) {

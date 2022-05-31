@@ -108,15 +108,9 @@ export default class VeranstaltungView extends Vue {
 
   async created() {
     this.user = await currentUser();
-    optionen((opts: OptionValues) => {
-      this.optionen = opts;
-    });
-    orte((orte: Orte) => {
-      this.orte = orte;
-    });
-    imagenames((names: string[]) => {
-      this.allImageNames = names;
-    });
+    this.optionen = (await optionen()) || new OptionValues();
+    this.orte = (await orte()) || new Orte();
+    this.allImageNames = await imagenames();
     this.users = (await allUsers()) || [];
   }
 
@@ -175,7 +169,7 @@ export default class VeranstaltungView extends Vue {
     }
   }
 
-  save(): void {
+  async save() {
     const createLogWithDiff = (diff: string): ChangelistItem => {
       return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: this.user.id, diff };
     };
@@ -189,11 +183,10 @@ export default class VeranstaltungView extends Vue {
     }
     if (!this.user.accessrights?.isOrgaTeam && !this.isNew) {
       // prevent saving of optionen
-      return saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {
-        if (!err) {
-          this.originalVeranstaltung = new Veranstaltung(veranstaltung);
-        }
-      });
+      const result = await saveVeranstaltung(this.veranstaltung);
+      if (result) {
+        this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+      }
     }
     this.optionen.addOrUpdateKontakt("agenturen", this.veranstaltung.agentur, this.editVariables.selectedAgentur);
     if (this.veranstaltung.artist.brauchtHotel) {
@@ -206,24 +199,15 @@ export default class VeranstaltungView extends Vue {
     this.optionen.updateBackline("Rockshop", this.veranstaltung.technik.backlineRockshop);
     this.optionen.updateCollection("artists", this.veranstaltung.artist.name);
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    saveOptionenQuiet(this.optionen, (err?: Error, optionen?: any) => {
-      if (err) {
-        feedbackMessages.addError("Oooops. Optionen kaputt", err.message);
-      }
-      if (!err) {
-        this.optionen = new OptionValues(optionen);
-        saveVeranstaltung(this.veranstaltung, (err?: Error, veranstaltung?: Veranstaltung) => {
-          if (!err) {
-            this.originalVeranstaltung = new Veranstaltung(veranstaltung);
-            if (this.isNew) {
-              const url = encodeURIComponent(this.originalVeranstaltung.url || "");
-              this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
-              document.title = this.originalVeranstaltung.kopf.titel;
-            }
-          }
-        });
-      }
-    });
+    const optionen = await saveOptionenQuiet(this.optionen);
+    this.optionen = new OptionValues(optionen);
+    const veranstaltung = await saveVeranstaltung(this.veranstaltung);
+    this.originalVeranstaltung = new Veranstaltung(veranstaltung);
+    if (this.isNew) {
+      const url = encodeURIComponent(this.originalVeranstaltung.url || "");
+      this.$router.replace(`/veranstaltungen/${url}/${this.activeSection}`);
+      document.title = this.originalVeranstaltung.kopf.titel;
+    }
   }
 
   get isNew(): boolean {
@@ -239,13 +223,10 @@ export default class VeranstaltungView extends Vue {
     this.$router.replace(`/veranstaltungen/new/${this.activeSection}`);
   }
 
-  loeschen(): void {
+  async loeschen() {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
-        if (!err) {
-          this.$router.push("/veranstaltungen/");
-        }
-      });
+      await deleteVeranstaltungWithId(this.veranstaltung.id);
+      this.$router.push("/veranstaltungen/");
     }
   }
 

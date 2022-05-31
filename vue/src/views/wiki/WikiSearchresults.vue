@@ -24,16 +24,10 @@ export default class WikiSearchresults extends Vue {
   private matches: { pageName: string; line: string; text: string }[] = [];
 
   @Watch("$route")
-  mounted(): void {
+  async mounted() {
     document.title = "Suchergebnisse";
-    searchWiki(
-      this.suchtext,
-      (err?: Error, result?: { searchtext: string; matches: { pageName: string; line: string; text: string }[] }) => {
-        if (!err) {
-          this.matches = result?.matches || [];
-        }
-      }
-    );
+    const result = await searchWiki(this.suchtext);
+    this.matches = result?.matches || [];
   }
 }
 </script>

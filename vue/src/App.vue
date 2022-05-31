@@ -76,24 +76,18 @@ export default class App extends Vue {
     if (globals.jwtToken) {
       this.user = await currentUser();
 
-      wikisubdirs((json: { dirs: string[] }) => {
-        this.wikisubdirs = json.dirs;
-      });
+      this.wikisubdirs = (await wikisubdirs())?.dirs || [];
     } else {
       this.user = new User({ id: "invalidUser" });
     }
   }
 
-  created() {
-    globals.isAuthenticated(async (isAuth) => {
-      if (isAuth) {
-        this.user = await currentUser();
-
-        wikisubdirs((json: { dirs: string[] }) => {
-          this.wikisubdirs = json.dirs;
-        });
-      }
-    });
+  async created() {
+    const isAuth = await globals.isAuthenticated();
+    if (isAuth) {
+      this.user = await currentUser();
+      this.wikisubdirs = (await wikisubdirs())?.dirs || [];
+    }
   }
 
   get showItem(): boolean {
@@ -110,10 +104,9 @@ export default class App extends Vue {
     return accessrights?.isSuperuser || false;
   }
 
-  logout(): void {
-    logout(() => {
-      this.$router.push("/login");
-    });
+  async logout() {
+    await logout();
+    this.$router.push("/login");
   }
 }
 </script>

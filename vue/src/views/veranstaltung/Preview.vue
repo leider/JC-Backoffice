@@ -199,13 +199,10 @@ ${this.presse.fullyQualifiedJazzclubURL}`) +
     document.title = this.veranstaltung.kopf.titelMitPrefix;
   }
 
-  loeschen(): void {
+  async loeschen() {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
-        if (!err) {
-          this.$router.push("/veranstaltungen/");
-        }
-      });
+      await deleteVeranstaltungWithId(this.veranstaltung.id);
+      this.$router.push("/veranstaltungen/");
     }
   }
 

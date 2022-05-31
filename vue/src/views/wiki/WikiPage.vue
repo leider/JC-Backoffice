@@ -61,21 +61,15 @@ export default class WikiPage extends Vue {
     this.isEdit = false;
   }
 
-  save() {
-    saveWikiPage(this.subdir, this.page, this.content, (err?: Error) => {
-      if (!err) {
-        this.originalContent = this.content;
-        this.isEdit = false;
-      }
-    });
+  async save() {
+    await saveWikiPage(this.subdir, this.page, this.content);
+    this.originalContent = this.content;
+    this.isEdit = false;
   }
 
-  loeschen() {
-    deleteWikiPage(this.subdir, this.page, (err?: Error) => {
-      if (!err) {
-        this.$router.push(`/wiki/${this.subdir}`);
-      }
-    });
+  async loeschen() {
+    await deleteWikiPage(this.subdir, this.page);
+    this.$router.push(`/wiki/${this.subdir}`);
   }
 
   get dirty(): boolean {
@@ -84,12 +78,10 @@ export default class WikiPage extends Vue {
 
   @Watch("page")
   @Watch("subdir")
-  pageChanged() {
+  async pageChanged() {
     document.title = `${this.page} : (${this.subdir})`;
-    wikiPage(this.subdir, this.page, (content: string) => {
-      this.originalContent = content;
-      this.content = content;
-    });
+    this.originalContent = await wikiPage(this.subdir, this.page);
+    this.content = this.originalContent;
   }
 
   mounted(): void {

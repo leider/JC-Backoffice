@@ -30,11 +30,9 @@ import { deleteMailRule, mailRules } from "../../commons/loader";
 export default class MailRules extends Vue {
   private rules: MailRule[] = [];
 
-  mounted(): void {
+  async mounted() {
     document.title = "Mailingregeln";
-    mailRules((rules: MailRule[]) => {
-      this.rules = rules;
-    });
+    this.rules = (await mailRules()) || [];
   }
 
   neueRule(): void {
@@ -44,13 +42,10 @@ export default class MailRules extends Vue {
     this.rules.push(new MailRule());
   }
 
-  deleteRule(rule: MailRule) {
-    deleteMailRule(rule.id, (err?: Error) => {
-      if (!err) {
-        const index = this.rules.indexOf(rule);
-        this.rules.splice(index, 1);
-      }
-    });
+  async deleteRule(rule: MailRule) {
+    await deleteMailRule(rule.id);
+    const index = this.rules.indexOf(rule);
+    this.rules.splice(index, 1);
   }
 }
 </script>

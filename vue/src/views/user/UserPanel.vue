@@ -186,33 +186,24 @@ export default class UserPanel extends Vue {
     return this.canEdit ? `/users/${encodeURIComponent(this.user.id)}` : "";
   }
 
-  saveUser(): void {
-    saveUser(this.user, (err?: Error) => {
-      if (!err) {
-        this.$emit("user-saved");
-      }
-    });
+  async saveUser() {
+    await saveUser(this.user);
+    this.$emit("user-saved");
   }
 
-  deleteUser(): void {
-    deleteUser(this.user, (err?: Error) => {
-      if (!err) {
-        this.$emit("user-saved");
-      }
-    });
+  async deleteUser() {
+    await deleteUser(this.user);
+    this.$emit("user-saved");
   }
 
   resetUsers(): void {
     this.$emit("reload-users");
   }
 
-  changePassword(): void {
+  async changePassword() {
     this.user.password = this.newPass;
-    changePassword(this.user, (err?: Error) => {
-      if (!err) {
-        this.$emit("user-saved");
-      }
-    });
+    await changePassword(this.user);
+    this.$emit("user-saved");
   }
 
   resetPassfields(): void {

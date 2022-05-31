@@ -31,12 +31,15 @@ function getEvents(
   // eslint-disable-next-line no-unused-vars
   failureCallback: (error: { message: string; response?: any; [otherProp: string]: any }) => void
 ): void {
-  calendarEventSources(info.start, info.end, (err: Error, res: any) => {
-    if (err) {
-      return failureCallback(err);
+  async function doit() {
+    try {
+      const res = await calendarEventSources(info.start, info.end);
+      successCallback(res as EventInput[]);
+    } catch (e) {
+      return failureCallback(e as Error);
     }
-    return successCallback(res as EventInput[]);
-  });
+  }
+  doit();
 }
 
 @Component({ components: { FullCalendar } })

@@ -75,12 +75,10 @@ export default class Optionen extends Vue {
   private originalOptionen = new OptionValues();
 
   @Watch("$url")
-  mounted(): void {
+  async mounted() {
     document.title = "Optionen";
-    orte((orte: Orte) => {
-      this.orte = orte;
-    });
-    optionen(this.initOptionen);
+    this.orte = (await orte()) || new Orte();
+    this.initOptionen = (await optionen()) || new OptionValues();
   }
 
   private initOptionen(optionen: OptionValues) {
@@ -115,25 +113,17 @@ export default class Optionen extends Vue {
     }
   }
 
-  saveOrt(): void {
-    saveOrte(this.orte, () => {
-      // empty by design
-    });
+  async saveOrt() {
+    await saveOrte(this.orte);
   }
 
-  saveOptionen(): void {
-    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    saveOptionen(this.optionen, (err?: Error, optionen?: any) => {
-      if (err) {
-        feedbackMessages.addError("Oooops. Optionen kaputt", err.message);
-      }
-
-      if (!err && optionen) {
-        this.initOptionen(new OptionValues(optionen));
-        this.optionenChanged();
-        this.somethingChanged();
-      }
-    });
+  async saveOptionen() {
+    const optionen = await saveOptionen(this.optionen);
+    if (optionen) {
+      this.initOptionen(new OptionValues(optionen));
+      this.optionenChanged();
+      this.somethingChanged();
+    }
   }
 
   deleteOrt(ort: Ort): void {

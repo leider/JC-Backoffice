@@ -31,14 +31,11 @@ export default class MailRuleRow extends Vue {
     this.$emit("loeschen");
   }
 
-  save(): void {
-    saveMailRule(this.rule, (err?: Error) => {
-      if (!err) {
-        this.rule.updateId();
-        this.ruleChanged();
-        this.somethingChanged();
-      }
-    });
+  async save() {
+    await saveMailRule(this.rule);
+    this.rule.updateId();
+    this.ruleChanged();
+    this.somethingChanged();
   }
 
   @Watch("rule")

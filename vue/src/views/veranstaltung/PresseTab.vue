@@ -103,7 +103,7 @@ ${this.presse.fullyQualifiedJazzclubURL}`) +
     }
   }
 
-  saveFiles(): void {
+  async saveFiles() {
     const formData = new FormData();
     formData.append("id", this.veranstaltung.id || "");
     formData.append("typ", "pressefoto");
@@ -111,15 +111,12 @@ ${this.presse.fullyQualifiedJazzclubURL}`) +
       formData.append("datei", file, file.name);
     });
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    uploadFile(formData, (err?: Error, veranstaltung?: any) => {
-      if (!err) {
-        this.filesForUpload = [];
-        const strings = this.presse.image;
-        strings.splice(0, strings.length);
-        const newStrings = new Veranstaltung(veranstaltung).presse.image;
-        newStrings.forEach((s) => strings.push(s));
-      }
-    });
+    const veranstaltung = await uploadFile(formData);
+    this.filesForUpload = [];
+    const strings = this.presse.image;
+    strings.splice(0, strings.length);
+    const newStrings = new Veranstaltung(veranstaltung).presse.image;
+    newStrings.forEach((s) => strings.push(s));
   }
 }
 </script>

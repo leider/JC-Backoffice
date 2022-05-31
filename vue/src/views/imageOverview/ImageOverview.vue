@@ -34,12 +34,10 @@ export default class ImageOverview extends Vue {
   private imagesWithVeranstaltungenUnused: ImageOverviewRow[] = [];
   private imagesWithVeranstaltungenNotFound: ImageOverviewRow[] = [];
 
-  mounted(): void {
+  async mounted() {
     document.title = "Bilder bearbeiten";
-    imagenames((imagenames: string[]) => {
-      this.imagenames = imagenames;
-      this.initObjects();
-    });
+    this.imagenames = await imagenames();
+    this.initObjects();
   }
 
   private async initObjects() {
@@ -76,13 +74,10 @@ export default class ImageOverview extends Vue {
     return this.changedRows.length > 0;
   }
 
-  save(): void {
-    saveImagenames(this.changedRows, (err?: Error, newNames?: { names: string[] }) => {
-      if (!err) {
-        this.imagenames = newNames?.names || [];
-        this.initObjects();
-      }
-    });
+  async save() {
+    const newNames = await saveImagenames(this.changedRows);
+    this.imagenames = newNames?.names || [];
+    this.initObjects();
   }
 }
 </script>

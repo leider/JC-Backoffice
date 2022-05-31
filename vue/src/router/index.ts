@@ -57,17 +57,15 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (!to.path.startsWith("/login")) {
-    globals.isAuthenticated((isAuth: boolean) => {
-      if (!isAuth) {
-        next({ path: "/login", query: { originalURL: to.path } });
-      } else {
-        next();
-      }
-    });
+    const isAuth = await globals.isAuthenticated();
+    if (!isAuth) {
+      return next({ path: "/login", query: { originalURL: to.path } });
+    }
+    return next();
   } else {
-    next();
+    return next();
   }
 });
 

@@ -36,7 +36,7 @@ export default class Belege extends Vue {
   private datum: Date = new Date();
   private kommentar = "";
 
-  saveFiles(): void {
+  async saveFiles() {
     if (!this.kommentar || this.kommentar.trim().length < 1) {
       return feedbackMessages.addError("Angabe fehlt", "Du musst einen Kommentar eingeben!");
     }
@@ -47,14 +47,10 @@ export default class Belege extends Vue {
       formData.append("datei", this.fileForUpload, this.fileForUpload.name);
       formData.append("datum", DatumUhrzeit.forJSDate(this.datum).tagMonatJahrLang);
       formData.append("kommentar", this.kommentar);
-      uploadBeleg(formData, (err?: Error) => {
-        if (!err) {
-          this.fileForUpload = null;
-          this.datum = new Date();
-          this.kommentar = "";
-          return;
-        }
-      });
+      await uploadBeleg(formData);
+      this.fileForUpload = null;
+      this.datum = new Date();
+      this.kommentar = "";
     }
   }
 }

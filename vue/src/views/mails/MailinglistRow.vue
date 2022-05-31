@@ -49,14 +49,11 @@ export default class MailinglistRow extends Vue {
     this.$emit("loeschen");
   }
 
-  save(): void {
-    saveMailinglist(this.mailinglist, (err?: Error) => {
-      if (!err) {
-        this.mailinglist.originalName = this.mailinglist.name;
-        this.listChanged();
-        this.somethingChanged();
-      }
-    });
+  async save() {
+    await saveMailinglist(this.mailinglist);
+    this.mailinglist.originalName = this.mailinglist.name;
+    this.listChanged();
+    this.somethingChanged();
   }
 
   @Watch("mailinglist")

@@ -24,33 +24,29 @@ let refreshTokenState: string;
 export const globals = {
   jwtToken: "",
 
-  isAuthenticated: function isAuthenticated(callback: (isAuth: boolean) => void): void {
+  isAuthenticated: async function isAuthenticated() {
     if (globals.jwtToken) {
       const decoded = jwt.decode(globals.jwtToken) as { [key: string]: any };
       const exp: number = decoded.exp;
       const stillValid = Date.now() + 60000 < exp * 1000; // should be valid one more minute
       if (stillValid) {
-        return callback(true);
+        return true;
       }
     }
     if (refreshTokenState !== "START") {
       refreshTokenState = "START";
-      standardFetchCallback(
-        {
-          method: "POST",
-          url: "/refreshToken",
-          contentType: "json",
-        },
-        (err: any, json: any) => {
-          if (json) {
-            globals.jwtToken = json.token;
-            refreshTokenState = "FINISHED";
-            callback(!err && json.token);
-          }
-        }
-      );
+      const json = await standardFetch({
+        method: "POST",
+        url: "/refreshToken",
+        contentType: "json",
+      });
+      if (json) {
+        globals.jwtToken = json.token;
+        refreshTokenState = "FINISHED";
+        return json.token;
+      }
     } else {
-      callback(false);
+      return false;
     }
   },
 };
@@ -65,42 +61,6 @@ type FetchParams = {
   title?: string;
   text?: string;
 };
-
-function standardFetchCallback(params: FetchParams, callback: Function): void {
-  const options: AxiosRequestConfig = {
-    url: params.url,
-    method: params.method,
-    data: params.data,
-    responseType: params.contentType !== "json" ? "blob" : "json",
-    headers: { Authorization: `Bearer ${globals.jwtToken}` },
-  };
-
-  axios(options)
-    .then((res) => {
-      if (params.title || params.text) {
-        feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
-      }
-      callback(null, res.data);
-    })
-    .catch((err) => {
-      if (err.response.status === 401) {
-        if (router.currentRoute.path !== "/login") {
-          globals.isAuthenticated((isAuth: boolean) => {
-            if (!isAuth) {
-              router.push("/login");
-              callback();
-            }
-          });
-        }
-      }
-
-      if (err.response.text) {
-        feedbackMessages.addError(`Fehler: ${err.response.status} ${err.response.statusText}`, err.response.text);
-        return callback(err.response.statusText);
-      }
-      callback(err);
-    });
-}
 
 async function standardFetch(params: FetchParams) {
   const options: AxiosRequestConfig = {
@@ -121,12 +81,11 @@ async function standardFetch(params: FetchParams) {
     const err = e as any;
     if (err.response.status === 401) {
       if (router.currentRoute.path !== "/login") {
-        globals.isAuthenticated((isAuth: boolean) => {
-          if (!isAuth) {
-            router.push("/login");
-            return;
-          }
-        });
+        const isAuth = await globals.isAuthenticated();
+        if (!isAuth) {
+          router.push("/login");
+          return;
+        }
       }
     }
 
@@ -141,67 +100,50 @@ async function getForType(contentType: ContentType, url: string) {
   return standardFetch({ contentType, url, method: "GET" });
 }
 
-async function getForTypeAsync(contentType: ContentType, url: string, callback: Function) {
-  return standardFetchCallback({ contentType, url, method: "GET" }, callback);
+export async function uploadFile(data: FormData) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/upload",
+    data,
+    title: "Gespeichert",
+    text: "Datei gespeichert",
+    contentType: "other",
+  });
 }
 
-export function uploadFile(data: FormData, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/upload",
-      data,
-      title: "Gespeichert",
-      text: "Datei gespeichert",
-      contentType: "other",
-    },
-    callback
-  );
+export async function uploadBeleg(data: FormData) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/beleg",
+    data,
+    title: "Erfolgreich",
+    text: "Beleg übertragen",
+    contentType: "other",
+  });
 }
 
-export function uploadBeleg(data: FormData, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/beleg",
-      data,
-      title: "Erfolgreich",
-      text: "Beleg übertragen",
-      contentType: "other",
-    },
-    callback
-  );
+export async function logout() {
+  await standardFetch({
+    method: "POST",
+    url: "/rest/logout",
+    contentType: "json",
+  });
+  globals.jwtToken = "";
+  return;
 }
 
-export function logout(callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/logout",
-      contentType: "json",
-    },
-    (err?: Error) => {
-      globals.jwtToken = "";
-      callback(err);
-    }
-  );
-}
-
-export function login(name: string, pass: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/login",
-      data: { name, pass },
-      contentType: "json",
-    },
-    (err: any, json: any) => {
-      if (json) {
-        globals.jwtToken = json.token;
-      }
-      callback(err, json);
-    }
-  );
+export async function login(name: string, pass: string) {
+  const json = await standardFetch({
+    method: "POST",
+    url: "/login",
+    data: { name, pass },
+    contentType: "json",
+  });
+  if (json) {
+    globals.jwtToken = json.token;
+  } else {
+    router.push("/");
+  }
 }
 
 function handleVeranstaltungen(result?: any[]) {
@@ -223,56 +165,44 @@ export async function veranstaltungForUrl(url: string) {
   return result ? new Veranstaltung(result) : result;
 }
 
-export function saveVeranstaltung(veranstaltung: Veranstaltung, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/veranstaltungen",
-      data: veranstaltung.toJSON(),
-      title: "Gespeichert",
-      text: "Veranstaltung gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveVeranstaltung(veranstaltung: Veranstaltung) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/veranstaltungen",
+    data: veranstaltung.toJSON(),
+    title: "Gespeichert",
+    text: "Veranstaltung gespeichert",
+    contentType: "json",
+  });
 }
 
-export function deleteVeranstaltungWithId(id: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: "/rest/veranstaltungen",
-      data: { id },
-      title: "Gelöscht",
-      text: "Veranstaltung gelöscht",
-      contentType: "json",
-    },
-    callback
-  );
+export async function deleteVeranstaltungWithId(id: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/veranstaltungen",
+    data: { id },
+    title: "Gelöscht",
+    text: "Veranstaltung gelöscht",
+    contentType: "json",
+  });
 }
 
-export function addUserToSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
-      data: { section },
-      contentType: "json",
-    },
-    callback
-  );
+export async function addUserToSection(veranstaltung: Veranstaltung, section: StaffType) {
+  return standardFetch({
+    method: "POST",
+    url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
+    data: { section },
+    contentType: "json",
+  });
 }
 
-export function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
-      data: { section },
-      contentType: "json",
-    },
-    callback
-  );
+export async function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType) {
+  return standardFetch({
+    method: "POST",
+    url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
+    data: { section },
+    contentType: "json",
+  });
 }
 
 // User
@@ -292,361 +222,304 @@ export async function allUsers() {
   return result?.users.map((r: any) => new User(r)) || [];
 }
 
-export function saveUser(user: User, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/user",
-      data: user.toJSON(),
-      title: "Gespeichert",
-      text: "Änderungen gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveUser(user: User) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/user",
+    data: user.toJSON(),
+    title: "Gespeichert",
+    text: "Änderungen gespeichert",
+    contentType: "json",
+  });
 }
 
-export function deleteUser(user: User, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: "/rest/user",
-      data: user.toJSON(),
-      title: "Gelöscht",
-      text: "User gelöscht",
-      contentType: "json",
-    },
-    callback
-  );
+export async function deleteUser(user: User) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/user",
+    data: user.toJSON(),
+    title: "Gelöscht",
+    text: "User gelöscht",
+    contentType: "json",
+  });
 }
 
-export function saveNewUser(user: User, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "PUT",
-      url: "/rest/user",
-      data: user.toJSON(),
-      title: "Gespeichert",
-      text: "Neuer User angelegt",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveNewUser(user: User) {
+  return standardFetch({
+    method: "PUT",
+    url: "/rest/user",
+    data: user.toJSON(),
+    title: "Gespeichert",
+    text: "Neuer User angelegt",
+    contentType: "json",
+  });
 }
 
-export function changePassword(user: User, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/user/changePassword",
-      data: user.toJSON(),
-      title: "Gespeichert",
-      text: "Passwort geändert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function changePassword(user: User) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/user/changePassword",
+    data: user.toJSON(),
+    title: "Gespeichert",
+    text: "Passwort geändert",
+    contentType: "json",
+  });
 }
 
 // Programmheft
-export function kalenderFor(jahrMonat: string, callback: Function): void {
-  getForTypeAsync("json", `/rest/programmheft/${jahrMonat}`, (err?: Error, result?: { id: string; text: string }) => {
-    callback(new Kalender(result));
-  });
+export async function kalenderFor(jahrMonat: string) {
+  const result = await getForType("json", `/rest/programmheft/${jahrMonat}`);
+  return result ? new Kalender(result) : result;
 }
 
-export function saveProgrammheft(kalender: Kalender, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/programmheft",
-      data: kalender,
-      title: "Gespeichert",
-      text: "Änderungen gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveProgrammheft(kalender: Kalender) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/programmheft",
+    data: kalender,
+    title: "Gespeichert",
+    text: "Änderungen gespeichert",
+    contentType: "json",
+  });
 }
 
 // Optionen & Termine
-export function optionen(callback: Function): void {
-  getForTypeAsync("json", "/rest/optionen", (err?: Error, result?: any) => callback(new OptionValues(result)));
+export async function optionen() {
+  const result = await getForType("json", "/rest/optionen");
+  return result ? new OptionValues(result) : result;
 }
 
-export function saveOptionen(optionen: OptionValues, callback: Function): void {
+export async function saveOptionen(optionen: OptionValues) {
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
-    return callback(new Error("oops, Optionen kaputt??"));
+    feedbackMessages.addError("Oooops. Optionen kaputt", "");
+    throw new Error("oops, Optionen kaputt??");
   }
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/optionen",
-      data: optionen.toJSON(),
-      title: "Gespeichert",
-      text: "Optionen gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+  return standardFetch({
+    method: "POST",
+    url: "/rest/optionen",
+    data: optionen.toJSON(),
+    title: "Gespeichert",
+    text: "Optionen gespeichert",
+    contentType: "json",
+  });
 }
 
-export function saveOptionenQuiet(optionen: OptionValues, callback: Function): void {
+export async function saveOptionenQuiet(optionen: OptionValues) {
   if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
-    return callback(new Error("oops, Optionen kaputt??"));
+    feedbackMessages.addError("Oooops. Optionen kaputt", "");
+    throw new Error("oops, Optionen kaputt??");
   }
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/optionen",
-      data: optionen.toJSON(),
-      contentType: "json",
-    },
-    callback
-  );
+  return standardFetch({
+    method: "POST",
+    url: "/rest/optionen",
+    data: optionen.toJSON(),
+    contentType: "json",
+  });
 }
 
-export function orte(callback: Function): void {
-  getForTypeAsync("json", "/rest/orte", (err?: Error, result?: any) => callback(new Orte(result)));
+export async function orte() {
+  const result = await getForType("json", "/rest/orte");
+  return result ? new Orte(result) : result;
 }
 
-export function saveOrte(orte: Orte, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/orte",
-      data: orte.toJSON(),
-      title: "Gespeichert",
-      text: "Orte aktualisiert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveOrte(orte: Orte) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/orte",
+    data: orte.toJSON(),
+    title: "Gespeichert",
+    text: "Orte aktualisiert",
+    contentType: "json",
+  });
 }
 
-export function termine(callback: Function): void {
-  getForTypeAsync("json", "/rest/termine", (err?: Error, result?: any) => callback(result?.map((r: any) => new Termin(r))) || []);
+export async function termine() {
+  const result = await getForType("json", "/rest/termine");
+  return result?.map((r: any) => new Termin(r)) || [];
 }
 
-export function saveTermin(termin: Termin, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/termin",
-      data: termin,
-      title: "Gespeichert",
-      text: "Termin gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveTermin(termin: Termin) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/termin",
+    data: termin,
+    title: "Gespeichert",
+    text: "Termin gespeichert",
+    contentType: "json",
+  });
 }
 
-export function deleteTermin(terminID: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: "/rest/termin",
-      data: { id: terminID },
-      title: "Gelöscht",
-      text: "Termin gelöscht",
-      contentType: "json",
-    },
-    callback
-  );
+export async function deleteTermin(terminID: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/termin",
+    data: { id: terminID },
+    title: "Gelöscht",
+    text: "Termin gelöscht",
+    contentType: "json",
+  });
 }
 
-export function kalender(callback: Function): void {
-  getForTypeAsync("json", "/rest/kalender", (err?: Error, result?: any) => callback(new FerienIcals(result)));
+export async function kalender() {
+  const result = await getForType("json", "/rest/kalender");
+  return result ? new FerienIcals(result) : result;
 }
 
-export function saveKalender(kalender: FerienIcals, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/kalender",
-      data: kalender,
-      title: "Gespeichert",
-      text: "Änderungen gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveKalender(kalender: FerienIcals) {
+  standardFetch({
+    method: "POST",
+    url: "/rest/kalender",
+    data: kalender,
+    title: "Gespeichert",
+    text: "Änderungen gespeichert",
+    contentType: "json",
+  });
 }
 
 // Image
-export function imagenames(callback: Function): void {
-  getForTypeAsync("json", "/rest/imagenames", (err?: Error, result?: { names: string[] }) => callback(result?.names));
+export async function imagenames() {
+  const result = await getForType("json", "/rest/imagenames");
+  return result?.names;
 }
 
-export function saveImagenames(rows: ImageOverviewRow[], callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/imagenames",
-      data: rows,
-      title: "Gespeichert",
-      text: "Änderungen gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveImagenames(rows: ImageOverviewRow[]) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/imagenames",
+    data: rows,
+    title: "Gespeichert",
+    text: "Änderungen gespeichert",
+    contentType: "json",
+  });
 }
 
 //Mails intern
-export function sendMail(message: Message, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/rundmail",
-      data: message,
-      title: "Gesendet",
-      text: "Meil geschickt",
-      contentType: "json",
-    },
-    callback
-  );
+export async function sendMail(message: Message) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/rundmail",
+    data: message,
+    title: "Gesendet",
+    text: "Meil geschickt",
+    contentType: "json",
+  });
 }
 
-export function deleteMailinglist(listname: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: "/rest/mailingliste",
-      data: { name: listname },
-      title: "Gelöscht",
-      text: "Liste gelöscht",
-      contentType: "json",
-    },
-    callback
-  );
+export async function deleteMailinglist(listname: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/mailingliste",
+    data: { name: listname },
+    title: "Gelöscht",
+    text: "Liste gelöscht",
+    contentType: "json",
+  });
 }
 
-export function saveMailinglist(list: Mailingliste, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/mailingliste",
-      data: list,
-      title: "Gespeichert",
-      text: "Liste gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveMailinglist(list: Mailingliste) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/mailingliste",
+    data: list,
+    title: "Gespeichert",
+    text: "Liste gespeichert",
+    contentType: "json",
+  });
 }
 
 // Mails für Veranstaltungen
-export function mailRules(callback: Function): void {
-  getForTypeAsync("json", "/rest/mailrule", (err?: Error, result?: any[]) => callback(result?.map((each) => new MailRule(each))) || []);
+export async function mailRules() {
+  const result = await getForType("json", "/rest/mailrule");
+  return result?.map((each: any) => new MailRule(each)) || [];
 }
 
-export function deleteMailRule(ruleID: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: "/rest/mailrule",
-      data: { id: ruleID },
-      title: "Gelöscht",
-      text: "Regel gelöscht",
-      contentType: "json",
-    },
-    callback
-  );
+export async function deleteMailRule(ruleID: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/mailrule",
+    data: { id: ruleID },
+    title: "Gelöscht",
+    text: "Regel gelöscht",
+    contentType: "json",
+  });
 }
 
-export function saveMailRule(rule: MailRule, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/mailrule",
-      data: rule,
-      title: "Gespeichert",
-      text: "Regel gespeichert",
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveMailRule(rule: MailRule) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/mailrule",
+    data: rule,
+    title: "Gespeichert",
+    text: "Regel gespeichert",
+    contentType: "json",
+  });
 }
 
 // Wiki
-export function wikisubdirs(callback: Function): void {
-  getForTypeAsync("json", "/rest/wikidirs", (err?: Error, json?: object) => callback(json || []));
-}
-export function wikiPage(subdir: string, page: string, callback: Function): void {
-  getForTypeAsync("json", `/rest/wikipage/${subdir}/${page}`, (err?: Error, result?: any) => callback(result.content || ""));
+export async function wikisubdirs() {
+  const json = await getForType("json", "/rest/wikidirs");
+  return json || [];
 }
 
-export function saveWikiPage(subdir: string, page: string, content: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: `/rest/wikipage/${subdir}/${page}`,
-      data: { content },
-      title: "Gespeichert",
-      text: "Die Seite wurde gespeichert.",
-      contentType: "json",
-    },
-    callback
-  );
+export async function wikiPage(subdir: string, page: string) {
+  const result = await getForType("json", `/rest/wikipage/${subdir}/${page}`);
+  return result?.content || "";
 }
 
-export function searchWiki(suchtext: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "POST",
-      url: "/rest/wikipage/search",
-      data: { suchtext },
-      contentType: "json",
-    },
-    callback
-  );
+export async function saveWikiPage(subdir: string, page: string, content: string) {
+  return standardFetch({
+    method: "POST",
+    url: `/rest/wikipage/${subdir}/${page}`,
+    data: { content },
+    title: "Gespeichert",
+    text: "Die Seite wurde gespeichert.",
+    contentType: "json",
+  });
 }
 
-export function deleteWikiPage(subdir: string, page: string, callback: Function): void {
-  standardFetchCallback(
-    {
-      method: "DELETE",
-      url: `/rest/wikipage/${subdir}/${page}`,
-      data: { data: "" },
-      contentType: "json",
-    },
-    callback
-  );
+export async function searchWiki(suchtext: string) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/wikipage/search",
+    data: { suchtext },
+    contentType: "json",
+  });
+}
+
+export async function deleteWikiPage(subdir: string, page: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: `/rest/wikipage/${subdir}/${page}`,
+    data: { data: "" },
+    contentType: "json",
+  });
 }
 
 // Calendar
-export function calendarEventSources(start: Date, end: Date, callback: Function): void {
-  getForTypeAsync("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`, callback);
+export async function calendarEventSources(start: Date, end: Date) {
+  return getForType("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`);
 }
 
 // Special
-export function openKassenzettel(veranstaltung: Veranstaltung) {
-  getForTypeAsync("pdf", `/pdf/kassenzettel/${veranstaltung.url}`, (err: Error | null, pdf: any) => {
-    if (!err && pdf) {
-      showFile(pdf);
-    }
-  });
+export async function openKassenzettel(veranstaltung: Veranstaltung) {
+  const pdf = await getForType("pdf", `/pdf/kassenzettel/${veranstaltung.url}`);
+  if (pdf) {
+    showFile(pdf);
+  }
 }
 
-export function openVertrag(veranstaltung: Veranstaltung) {
-  getForTypeAsync(
-    "pdf",
-    `/pdf/vertrag/${veranstaltung.url}/${veranstaltung.vertrag.sprache.toLowerCase()}`,
-    (err: Error | null, pdf: any) => {
-      if (!err && pdf) {
-        showFile(pdf);
-      }
-    }
-  );
+export async function openVertrag(veranstaltung: Veranstaltung) {
+  const pdf = await getForType("pdf", `/pdf/vertrag/${veranstaltung.url}/${veranstaltung.vertrag.sprache.toLowerCase()}`);
+  if (pdf) {
+    showFile(pdf);
+  }
 }
 
-export function imgZip(yymm: string) {
-  getForTypeAsync("zip", `/imgzip/${yymm}`, (err: Error | null, pdf: any) => {
-    if (!err && pdf) {
-      showFile(pdf, `JazzClub_Bilder_${DatumUhrzeit.forYYMM(yymm).fuerKalenderViews}.zip`);
-    }
-  });
+export async function imgZip(yymm: string) {
+  const pdf = await getForType("zip", `/imgzip/${yymm}`);
+  if (pdf) {
+    showFile(pdf, `JazzClub_Bilder_${DatumUhrzeit.forYYMM(yymm).fuerKalenderViews}.zip`);
+  }
 }
 
 function showFile(blob: Blob, downloadAsFilename?: string) {

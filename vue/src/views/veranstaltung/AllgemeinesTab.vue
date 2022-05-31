@@ -247,23 +247,19 @@ export default class AllgemeinesTab extends Vue {
     this.kopf.abgesagt = false;
   }
 
-  saveFiles(): void {
+  async saveFiles() {
     const formData = new FormData();
     formData.append("id", this.veranstaltung.id || "");
     formData.append("typ", "vertrag");
     this.filesForUpload.forEach((file) => {
       formData.append("datei", file, file.name);
     });
-    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    uploadFile(formData, (err?: Error, veranstaltung?: any) => {
-      if (!err) {
-        this.filesForUpload = [];
-        const strings = this.vertrag.datei;
-        strings.splice(0, strings.length);
-        const newStrings = new Veranstaltung(veranstaltung).vertrag.datei;
-        newStrings.forEach((s) => strings.push(s));
-      }
-    });
+    const veranstaltung = await uploadFile(formData);
+    this.filesForUpload = [];
+    const strings = this.vertrag.datei;
+    strings.splice(0, strings.length);
+    const newStrings = new Veranstaltung(veranstaltung).vertrag.datei;
+    newStrings.forEach((s) => strings.push(s));
   }
 
   generateVertrag(): void {

@@ -24,13 +24,9 @@ export default class Login extends Vue {
   private username = "";
   private password = "";
 
-  login(): void {
-    login(this.username, this.password, (err?: Error) => {
-      if (err) {
-        this.$router.push("/");
-      }
-      this.$router.push((this.$route.query.originalURL as string) || "/");
-    });
+  async login() {
+    await login(this.username, this.password);
+    this.$router.push((this.$route.query.originalURL as string) || "/");
   }
 }
 </script>

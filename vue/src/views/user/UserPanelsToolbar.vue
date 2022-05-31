@@ -103,12 +103,10 @@ export default class UserPanelsToolbar extends Vue {
   resetNewUser(): void {
     this.newUser = new User({ gruppen: [""] });
   }
-  createUser(): void {
-    saveNewUser(this.newUser, (err?: Error) => {
-      if (!err) {
-        this.$emit("user-saved");
-      }
-    });
+
+  async createUser() {
+    await saveNewUser(this.newUser);
+    this.$emit("user-saved");
   }
 }
 </script>

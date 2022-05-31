@@ -85,18 +85,14 @@ export default class Programmheft extends Vue {
     return marked.parse(veranstaltung.presse.text || "", { gfm: true, breaks: true, smartLists: true, pedantic: false });
   }
 
-  save(): void {
-    saveProgrammheft(this.kalender, () => {
-      // empty by design
-    });
+  async save() {
+    await saveProgrammheft(this.kalender);
   }
 
   @Watch("$route")
   async mounted() {
     document.title = "Programmheft";
-    kalenderFor(this.start.fuerKalenderViews, (kalender: Kalender) => {
-      this.kalender = kalender;
-    });
+    this.kalender = (await kalenderFor(this.start.fuerKalenderViews)) || new Kalender();
     this.veranstaltungen = (await veranstaltungenBetween(this.start, this.start.plus({ monate: 2 }))) || [];
   }
 }

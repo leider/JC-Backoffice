@@ -77,23 +77,19 @@ export default class TechnikTab extends Vue {
     return this.veranstaltung.kosten;
   }
 
-  saveFiles(): void {
+  async saveFiles() {
     const formData = new FormData();
     formData.append("id", this.veranstaltung.id || "");
     formData.append("typ", "rider");
     this.filesForUpload.forEach((file) => {
       formData.append("datei", file, file.name);
     });
-    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    uploadFile(formData, (err?: Error, veranstaltung?: any) => {
-      if (!err) {
-        this.filesForUpload = [];
-        const strings = this.technik.dateirider;
-        strings.splice(0, strings.length);
-        const newStrings = new Veranstaltung(veranstaltung).technik.dateirider;
-        newStrings.forEach((s) => strings.push(s));
-      }
-    });
+    const veranstaltung = await uploadFile(formData);
+    this.filesForUpload = [];
+    const strings = this.technik.dateirider;
+    strings.splice(0, strings.length);
+    const newStrings = new Veranstaltung(veranstaltung).technik.dateirider;
+    newStrings.forEach((s) => strings.push(s));
   }
 }
 </script>

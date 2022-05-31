@@ -144,23 +144,19 @@ export default class TeamPanelAdmin extends Vue {
     this.expanded = !this.expanded;
   }
 
-  deleteVeranstaltung(): void {
+  async deleteVeranstaltung() {
     if (this.veranstaltung.id) {
-      deleteVeranstaltungWithId(this.veranstaltung.id, (err?: Error) => {
-        if (!err) {
-          this.$emit("deleted");
-        }
-      });
+      await deleteVeranstaltungWithId(this.veranstaltung.id);
+      this.$emit("deleted");
     }
   }
 
-  saveVeranstaltung(): void {
-    saveVeranstaltung(this.veranstaltung, (err: Error | undefined, result: Veranstaltung) => {
-      if (!err && result) {
-        this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
-        this.dirty = false;
-      }
-    });
+  async saveVeranstaltung() {
+    const result = await saveVeranstaltung(this.veranstaltung);
+    if (result) {
+      this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+      this.dirty = false;
+    }
   }
 }
 </script>
