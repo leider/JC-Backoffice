@@ -4,49 +4,46 @@ import User from "jc-shared/user/user";
 import misc from "jc-shared/commons/misc";
 
 import wikiService from "../lib/wiki/wikiService";
-import { reply } from "../lib/commons/replies";
+import { resToJson } from "../lib/commons/replies";
 import Git from "../lib/wiki/gitmech";
+
 const app = express();
 
-app.get("/wikidirs", (req, res) => {
-  Git.lsdirs((err: Error | null, gitdirs: string[]) => {
-    reply(res, err, { dirs: gitdirs });
-  });
+app.get("/wikidirs", async (req, res) => {
+  const gitdirs = await Git.lsdirs();
+  resToJson(res, { dirs: gitdirs });
 });
 
-app.get("/wikipage/:subdir/:page", (req, res) => {
+app.get("/wikipage/:subdir/:page", async (req, res) => {
   const completePageName = `${req.params.subdir}/${misc.normalizeString(req.params.page)}`;
-  wikiService.showPage(completePageName, "HEAD", (err: Error | null, cont: string) => {
-    let error = err;
-    if ((error?.message || "").indexOf("does not exist") > -1) {
-      error = null;
+  try {
+    const content = await wikiService.showPage(completePageName, "HEAD");
+    resToJson(res, { content });
+  } catch (e: any) {
+    if ((e.message || "").indexOf("does not exist") > -1) {
+      return resToJson(res, { content: "" });
     }
-    const content = cont || "";
-    reply(res, error, { content });
-  });
+    throw e;
+  }
 });
 
-app.post("/wikipage/search", (req, res) => {
+app.post("/wikipage/search", async (req, res) => {
   const searchtext = req.body.suchtext;
-  return wikiService.search(searchtext, (err: Error | null, matches: { pageName: string; line: string; text: string }[]) => {
-    reply(res, err, { searchtext, matches });
-  });
+  const matches = wikiService.search;
+  resToJson(res, { searchtext, matches });
 });
 
-app.delete("/wikipage/:subdir/:page", (req, res) => {
+app.delete("/wikipage/:subdir/:page", async (req, res) => {
   const pageName = misc.normalizeString(req.params.page);
-  return wikiService.pageDelete(req.params.subdir, pageName, (req.user as User).asGitAuthor, (err: Error | null) => {
-    reply(res, err);
-  });
+  await wikiService.pageDelete(req.params.subdir, pageName, (req.user as User).asGitAuthor);
+  resToJson(res);
 });
 
-app.post("/wikipage/:subdir/:page", (req, res) => {
+app.post("/wikipage/:subdir/:page", async (req, res) => {
   const pageName = misc.normalizeString(req.params.page);
   const subdir = req.params.subdir;
-  const content = req.body.content;
-  wikiService.pageSave(subdir, pageName, content, (req.user as User).asGitAuthor, (err?: Error) => {
-    reply(res, err, { content });
-  });
+  const content = await wikiService.pageSave(subdir, pageName, req.body.content, (req.user as User).asGitAuthor);
+  resToJson(res, { content });
 });
 
 export default app;
