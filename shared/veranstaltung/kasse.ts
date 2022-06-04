@@ -20,7 +20,7 @@ export default class Kasse {
   einnahmeSonstiges2Text = "";
   anzahlBesucherAK = 0;
   kassenfreigabe? = "";
-  kassenfreigabeAm? = new Date();
+  kassenfreigabeAm?: Date;
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
