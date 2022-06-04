@@ -25,6 +25,7 @@ passport.use(
       user.accessrights = new Accessrights(user);
       return done(null, user);
     } catch (e) {
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       appLogger.error((e as any)?.message || "");
       return done(e);
     }

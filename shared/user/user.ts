@@ -16,6 +16,7 @@ export default class User {
   password?: string; // take care to not persist!
   accessrights?: Accessrights; // transient
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   constructor(object: any) {
     this.id = object.id;
     this.name = object.name;

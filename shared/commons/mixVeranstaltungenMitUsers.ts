@@ -10,7 +10,7 @@ export default function mixVeranstaltungenMitUsers(veranstaltungen: Veranstaltun
       .filter((user) => !!user)
       .map((user) => ({
         veranstaltung,
-        user: user!,
+        user: user || new User({}),
       }));
   });
 }

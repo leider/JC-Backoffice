@@ -28,6 +28,7 @@ async function init() {
     // run a smoke test of git and the repo:
     try {
       await exec("git log -1 --oneline ", { cwd: workTree });
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (e: any) {
       if (/fatal: your current branch 'master' does not have any commits yet/.test(e.message)) {
         throw new Error(`Please add an initial commit to the repository: ${workTree}`);

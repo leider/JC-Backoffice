@@ -44,6 +44,7 @@ export default {
         data1.split("\n").forEach((name) => result.push(name));
       }
       return result;
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (e: any) {
       if (e.message && e.message.split("\n").length < 3) {
         return [];

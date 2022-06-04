@@ -96,9 +96,10 @@ app.post("/login", async (req, res) => {
       return createToken(req, res, name);
     }
     return res.sendStatus(401);
-  } catch (e) {
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  } catch (e: any) {
     appLogger.error("Login error for: " + name);
-    appLogger.error((e as any)?.message || "");
+    appLogger.error(e?.message || "");
     return res.sendStatus(401);
   }
 });

@@ -172,6 +172,7 @@ app.post("/upload", async (req: Request, res: Response) => {
   }
 
   const upload = (req1: Request) =>
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     new Promise<any[]>((resolve, reject) => {
       new Form().parse(req1, function (err, fields, files) {
         if (err) {

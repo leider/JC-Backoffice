@@ -19,6 +19,7 @@ app.get("/wikipage/:subdir/:page", async (req, res) => {
   try {
     const content = await wikiService.showPage(completePageName, "HEAD");
     resToJson(res, { content });
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if ((e.message || "").indexOf("does not exist") > -1) {
       return resToJson(res, { content: "" });

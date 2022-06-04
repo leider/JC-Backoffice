@@ -8,6 +8,7 @@ export default class Eintrittspreise {
   erwarteteBesucher = 0;
   zuschuss = 0;
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   static preisprofilAlt(object: any): any {
     if (object.frei) {
       return { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
