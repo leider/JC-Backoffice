@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "lodash": "4.17.21",
-    "sharp": "0.30.5"
+    "sharp": "0.30.6"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "2.0.0",
