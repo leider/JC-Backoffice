@@ -5,6 +5,8 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 import pers from "../persistence/persistence";
 import { Sort } from "mongodb";
+import misc from "jc-shared/commons/misc";
+
 const persistence = pers("veranstaltungenstore");
 const logger = winston.loggers.get("transactions");
 
@@ -15,7 +17,7 @@ async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortO
     },
     sortOrder
   );
-  return result.map((each) => new Veranstaltung(each));
+  return misc.toObjectList(Veranstaltung, result);
 }
 
 async function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
@@ -51,12 +53,12 @@ export default {
 
   getVeranstaltung: async function getVeranstaltung(url: string) {
     const result = await persistence.getByField({ url });
-    return result ? new Veranstaltung(result) : result;
+    return misc.toObject(Veranstaltung, result);
   },
 
   getVeranstaltungForId: async function getVeranstaltungForId(id: string) {
     const result = await persistence.getById(id);
-    return result ? new Veranstaltung(result) : result;
+    return misc.toObject(Veranstaltung, result);
   },
 
   saveVeranstaltung: async function saveVeranstaltung(veranstaltung: Veranstaltung) {

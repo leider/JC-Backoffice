@@ -1,12 +1,14 @@
 import User from "jc-shared/user/user";
 
 import pers from "../persistence/persistence";
+import misc from "jc-shared/commons/misc";
+
 const persistence = pers("userstore");
 
 export default {
   allUsers: async function allUsers() {
     const result = await persistence.list({ name: 1 });
-    return result.map((each) => new User(each));
+    return misc.toObjectList(User, result);
   },
 
   save: async function save(user: User) {
@@ -25,7 +27,7 @@ export default {
 
   forId: async function forId(id: string) {
     const result = await persistence.getById(id);
-    return result ? new User(result) : result;
+    return misc.toObject(User, result);
   },
 
   deleteUser: async function deleteUser(id: string) {

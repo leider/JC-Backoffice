@@ -54,7 +54,6 @@ import MultiSelect from "../../widgets/MultiSelect.vue";
 import JazzLabel from "../../widgets/JazzLabel.vue";
 import LegendCard from "../../widgets/LegendCard.vue";
 import OrtRow from "./OrtRow.vue";
-import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import { normCrLf } from "@/commons/utilityFunctions";
 
 @Component({
@@ -77,8 +76,9 @@ export default class Optionen extends Vue {
   @Watch("$url")
   async mounted() {
     document.title = "Optionen";
-    this.orte = (await orte()) || new Orte();
-    this.initOptionen = (await optionen()) || new OptionValues();
+    this.orte = await orte();
+    const opt = await optionen();
+    this.initOptionen(opt);
   }
 
   private initOptionen(optionen: OptionValues) {

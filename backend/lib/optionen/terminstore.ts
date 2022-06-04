@@ -3,6 +3,7 @@ import Termin from "jc-shared/optionen/termin";
 
 import pers from "../persistence/persistence";
 import { Sort } from "mongodb";
+import misc from "jc-shared/commons/misc";
 
 const persistence = pers("terminstore");
 
@@ -14,13 +15,13 @@ async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortO
     },
     sortOrder
   );
-  return result.map((each) => new Termin(each));
+  return misc.toObjectList(Termin, result);
 }
 
 export default {
   alle: async function alle() {
     const result = await persistence.list({ startDate: -1 });
-    return result.map((each) => new Termin(each));
+    return misc.toObjectList(Termin, result);
   },
 
   save: async function save(termin: Termin) {
