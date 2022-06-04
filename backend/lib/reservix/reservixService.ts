@@ -2,17 +2,10 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Salesreport from "jc-shared/veranstaltung/salesreport";
 
 import reservixstore from "./reservixstore";
-import { loadSalesreports, Lineobject } from "./htmlbridge";
+import { Lineobject, loadSalesreports } from "./htmlbridge";
 
 async function updateSalesreports() {
-  const results: Lineobject[] = await new Promise((resolve, reject) => {
-    loadSalesreports(null, (err: Error | null, results: Lineobject[]) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(results);
-    });
-  });
+  const results: Lineobject[] = await loadSalesreports();
   const now = new Date();
   const resultsToSave = results.map((each) => {
     each.datum = (each.datum as DatumUhrzeit).toJSDate;

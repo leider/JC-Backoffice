@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import superagent, { Response } from "superagent";
+import superagent from "superagent";
 import { Cheerio, CheerioAPI, load } from "cheerio";
 
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
@@ -37,14 +37,31 @@ function prepareInputsForPost(forminputs: Cheerio<any>, $: CheerioAPI): { [p: st
     }, {});
 }
 
-function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { row: string[] }[] }, callback: Function): void {
+function sanityCheck(headersAndLines: { headers: { row: string[] }[]; lines: { row: string[] }[] }) {
+  function expect(value: boolean, detail: string) {
+    if (!value) {
+      throw new Error(`format of reservix table changed! - ${detail}`);
+    }
+  }
+
+  const headers = headersAndLines.headers;
+  const lines = headersAndLines.lines;
+  expect(headers.length >= 2, `needs to have at least two header lines, but has: ${headers.length}`);
+  expect(headers[0].row.length === 7, `first header line should have 7, but has: ${headers[0].row.length}`);
+  expect(headers[1].row.length === 13, `second header line should have 13, but has: ${headers[1].row.length}`);
+  if (lines.length > 0) {
+    expect(lines[0].row.length === 18, `data line should have 18, but has: ${lines[0].row.length}`);
+  }
+}
+
+function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { row: string[] }[] }) {
   function moneyStringToFloat(string: string): number {
     // remove € and change from german string to float
     return fieldHelpers.parseNumberWithCurrentLocale(string.replace(" €", ""));
   }
 
-  // check headers TODO
-  const lineobjects = headersAndLines.lines
+  sanityCheck(headersAndLines); // throws in case of unexpected content
+  return headersAndLines.lines
     .filter((each) => each.row.length === 18)
     .map((each) => {
       const row = each.row;
@@ -57,10 +74,9 @@ function parseTable(headersAndLines: { headers: { row: string[] }[]; lines: { ro
         brutto: moneyStringToFloat(row[tablepositions.brutto]),
       };
     });
-  callback(null, lineobjects);
 }
 
-function extractResultTableLines(htmlString: string, callback: Function): void {
+function extractResultTableLines(htmlString: string) {
   const $ = load(htmlString);
 
   const asfields = (index: number, element: any): { row: string[] } => ({
@@ -71,97 +87,73 @@ function extractResultTableLines(htmlString: string, callback: Function): void {
   });
   const headers = $(".tablelines tr").not(".rxrow").map(asfields).toArray() as unknown as { row: string[] }[];
   const lines = $(".tablelines .rxrow").map(asfields).toArray() as unknown as { row: string[] }[];
-  parseTable({ headers, lines }, callback);
+  return parseTable({ headers, lines });
 }
 
-function openAuswertungPage(location: string, optionalDateString: string | null, callback: Function): void {
-  superagent.get(location, (err: Error | null, resp: Response) => {
-    if (err) {
-      return callback(err);
-    }
-    const $ = load(resp.text);
-    const logoutURL = $("#page_header_logout a").attr("href");
-    if (optionalDateString) {
-      $("#id_eventdatumvon").val(optionalDateString);
-    }
-    superagent
-      .post(baseURL + "/sales/" + $("#searchForm").attr("action"))
-      .type("form")
-      .send(prepareInputsForPost($("#searchForm :input"), $))
-      .then((resp1: Response) => {
-        superagent.get(baseURL + logoutURL, () => {
-          // logout then parse
-          extractResultTableLines(resp1.text, callback);
-        });
-      });
-  });
+async function openAuswertungPage(location: string, optionalDateString?: string) {
+  const resp = await superagent.get(location);
+  const $ = load(resp.text);
+  const logoutURL = $("#page_header_logout a").attr("href");
+  if (optionalDateString) {
+    $("#id_eventdatumvon").val(optionalDateString);
+  }
+  const postRes = await superagent
+    .post(baseURL + "/sales/" + $("#searchForm").attr("action"))
+    .type("form")
+    .send(prepareInputsForPost($("#searchForm :input"), $));
+  await superagent.get(baseURL + logoutURL);
+  // logout then parse
+  return extractResultTableLines(postRes.text);
 }
 
-function openVerwaltungPage(location: string, optionalDateString: string | null, callback: Function): void {
-  superagent.get(location, (err: Error | null, resp: Response) => {
-    if (err) {
-      return callback(err);
-    }
-    const $ = load(resp.text);
-    const auswertungUrl = $("#content ul li a")
-      .filter(
-        (index, element) =>
-          !!$(element)
-            .html()
-            ?.match(/Detailauswertung/)
-      )
-      .attr("href");
+async function openVerwaltungPage(location: string, optionalDateString?: string) {
+  const resp = await superagent.get(location);
+  const $ = load(resp.text);
+  const auswertungUrl = $("#content ul li a")
+    .filter(
+      (index, element) =>
+        !!$(element)
+          .html()
+          ?.match(/Detailauswertung/)
+    )
+    .attr("href");
 
-    return openAuswertungPage(baseURL + auswertungUrl, optionalDateString, callback);
-  });
+  return openAuswertungPage(baseURL + auswertungUrl, optionalDateString);
 }
 
-function openWelcomePage(location: string, optionalDateString: string | null, callback: Function): void {
-  superagent.get(location, (err: Error | null, resp: Response) => {
-    if (err) {
-      return callback(err);
-    }
-    const $ = load(resp.text);
-    const verwaltungUrl = $("#page_header ul li a")
-      .filter(
-        (index, element) =>
-          !!$(element)
-            .html()
-            ?.match(/Verwaltung/)
-      )
-      .attr("href");
+async function openWelcomePage(location: string, optionalDateString?: string) {
+  const resp = await superagent.get(location);
+  const $ = load(resp.text);
+  const verwaltungUrl = $("#page_header ul li a")
+    .filter(
+      (index, element) =>
+        !!$(element)
+          .html()
+          ?.match(/Verwaltung/)
+    )
+    .attr("href");
 
-    return openVerwaltungPage(baseURL + verwaltungUrl, optionalDateString, callback);
-  });
+  return openVerwaltungPage(baseURL + verwaltungUrl, optionalDateString);
 }
 
 export interface Lineobject {
-  datum: DatumUhrzeit | Date;
-  updated: Date;
+  datum?: DatumUhrzeit | Date;
+  updated?: Date;
   id: string;
   anzahl: number;
   netto: number;
   brutto: number;
 }
 
-export function loadSalesreports(optionalDateString: string | null, callback: Function): void {
-  superagent.get(loginURL, (err: Error | null, res: Response) => {
-    if (err) {
-      return callback(err);
-    }
-    const $ = load(res.text);
-    $("#id_mitarbeiterpw").val(username as string);
-    const inputs = prepareInputsForPost($("#login input"), $);
-    const url = $("#login").attr("action");
-    if (url === undefined) {
-      return callback("Problem beim Laden von Reservix");
-    }
-    return superagent
-      .post(url)
-      .type("form")
-      .send(inputs)
-      .then((res1: Response) => {
-        openWelcomePage(res1.redirects[0], optionalDateString, callback);
-      });
-  });
+export async function loadSalesreports(optionalDateString?: string): Promise<Lineobject[]> {
+  const res = await superagent.get(loginURL);
+  const $ = load(res.text);
+  $("#id_mitarbeiterpw").val(username as string);
+  const inputs = prepareInputsForPost($("#login input"), $);
+  const url = $("#login").attr("action");
+  if (url === undefined) {
+    throw new Error("Problem beim Laden von Reservix");
+  }
+  const postRes = await superagent.post(url).type("form").send(inputs);
+  return openWelcomePage(postRes.redirects[0], optionalDateString);
 }
