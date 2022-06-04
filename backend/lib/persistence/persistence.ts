@@ -88,7 +88,7 @@ async function openMongo() {
 
   logInfo("Connecting to Mongo");
   try {
-    logInfo("In connect callback");
+    logInfo("In connect Promise");
     const client = await MongoClient.connect(conf.get("mongoURL") as string);
     const db = client.db("jazzclub");
     ourDB = db;

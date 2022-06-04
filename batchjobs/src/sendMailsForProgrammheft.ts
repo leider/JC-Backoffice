@@ -19,6 +19,12 @@ export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit
   }
 
   const [current, next] = await Promise.all([store.getCurrentKalender(now), store.getNextKalender(now)]);
-  const events = [current as Kalender, next as Kalender].reduce((arr: EmailEvent[], each) => arr.concat(each.eventsToSend(now)), []);
+  if (!current || !next) {
+    return;
+  }
+  const events = [current as Kalender, next as Kalender].reduce(
+    (previous: EmailEvent[], current) => previous.concat(current.eventsToSend(now)),
+    []
+  );
   return sendMail(events);
 }

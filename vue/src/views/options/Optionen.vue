@@ -126,7 +126,7 @@ export default class Optionen extends Vue {
     }
   }
 
-  deleteOrt(ort: Ort): void {
+  async deleteOrt(ort: Ort) {
     const index = this.orte.orte.indexOf(ort);
     this.orte.orte.splice(index, 1);
     this.saveOrt();
