@@ -1,7 +1,7 @@
 import User from "jc-shared/user/user";
 
 import store from "./userstore";
-import { hashPassword, genSalt } from "../commons/hashPassword";
+import { genSalt, hashPassword } from "../commons/hashPassword";
 
 export default {
   saveNewUserWithPassword: async function saveNewUserWithPassword(user: User) {
@@ -38,10 +38,17 @@ export default {
 
   emailsAllerBookingUser: async function emailsAllerBookingUser() {
     const users = await store.allUsers();
-    const emails = users
+    return users
       .filter((user) => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
       .filter((user) => !!user.email)
       .map((u) => u.email);
-    return emails;
+  },
+
+  emailsAllerAdmins: async function emailsAllerAdmins() {
+    const users = await store.allUsers();
+    return users
+      .filter((user) => (user.gruppen || []).includes("superusers"))
+      .filter((user) => !!user.email)
+      .map((u) => u.email);
   },
 };

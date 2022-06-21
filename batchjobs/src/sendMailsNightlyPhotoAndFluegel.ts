@@ -26,10 +26,10 @@ ${veranstaltungen
     markdown: markdownToSend,
   });
 
-  const bookingAddresses = await usersService.emailsAllerBookingUser();
-  logger.info(`Email Adressen für ${variables.subject}: ${bookingAddresses}`);
+  const adminAddresses = await usersService.emailsAllerAdmins();
+  logger.info(`Email Adressen für ${variables.subject}: ${adminAddresses}`);
   message.setTo([Message.formatEMailAddress(variables.name, variables.email)]);
-  message.setBcc(bookingAddresses);
+  message.setBcc(adminAddresses);
   return mailtransport.sendMail(message);
 }
 
