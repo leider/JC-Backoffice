@@ -131,8 +131,8 @@ block content2
         .col-6
           +signbox('Ort/Datum', 'Künstler')
           div(style="margin-top:5px;")
-          +signbox('Ort/Datum', 'Veranstalter', 'Karlsruhe, 18. März 2018')
+          +signbox('Ort/Datum', 'Veranstalter', 'Karlsruhe, ' + datum.tagMonatJahrLang)
         .col-6
           +signbox('Unterschrift', 'Name Künstler')
           div(style="margin-top:5px;")
-          +signbox('Unterschrift', 'Name Veranstalter', 'niklas', true)
+          +signbox('Unterschrift', 'Name Veranstalter', 'DUMMY', true)
