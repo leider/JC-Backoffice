@@ -9,6 +9,7 @@ import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
 import Users from "jc-shared/user/users";
+import usersService from "jc-backend/lib/users/usersService";
 
 const logger = loggers.get("application");
 
@@ -46,7 +47,8 @@ ${veranstaltungen
 
   const users = await userstore.allUsers();
   const validUsers = new Users(users).getUsersInListe("Abendkasse").filter((user) => !!user.email);
-  const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
+  const adminAddresses = await usersService.emailsAllerAdmins();
+  const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
   message.setBcc(emails);
   return mailtransport.sendMail(message);
