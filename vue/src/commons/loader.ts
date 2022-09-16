@@ -269,7 +269,7 @@ export async function changePassword(user: User) {
 // Programmheft
 export async function kalenderFor(jahrMonat: string) {
   const result = await getForType("json", `/rest/programmheft/${jahrMonat}`);
-  return result ? new Kalender(result) : result;
+  return result?.id ? new Kalender(result) : undefined;
 }
 
 export async function saveProgrammheft(kalender: Kalender) {
