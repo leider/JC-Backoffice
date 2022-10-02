@@ -80,15 +80,6 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit();
   }
 
-  static forReservixString(dateString: string, timeString: string): DatumUhrzeit | undefined {
-    // z.B. So, 12.05.2019, 20:00 Uhr
-    if (dateString) {
-      const string = dateString.replace(/^[a-zA-Z]*, /, "") + " " + (timeString || "00:00 Uhr");
-      return new DatumUhrzeit(dayjs(string.replace(/ Uhr$/, ""), ["DD.MM.YYYY[ ]HH:mm", "DD.MM.YY[ ]HH:mm"]));
-    }
-    return undefined;
-  }
-
   // Rechnen
   plus(options: AdditionOptions): DatumUhrzeit {
     const d = this.value

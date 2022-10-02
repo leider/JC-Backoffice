@@ -12,7 +12,6 @@ import Staff from "./staff";
 import Technik from "./technik";
 import Unterkunft from "./unterkunft";
 import Vertrag from "./vertrag";
-import Salesreport from "./salesreport";
 import VeranstaltungGema from "./veranstaltungGema";
 
 export interface ImageOverviewVeranstaltung {
@@ -40,7 +39,6 @@ export default class Veranstaltung {
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
-  reservixID?: string;
   changelist: ChangelistItem[] = [];
 
   agentur = new Kontakt();
@@ -51,7 +49,6 @@ export default class Veranstaltung {
   kopf = new Kopf();
   kosten = new Kosten();
   presse = new Presse();
-  salesreport = new Salesreport();
   staff = new Staff();
   technik = new Technik();
   vertrag = new Vertrag();
@@ -69,7 +66,6 @@ export default class Veranstaltung {
       kopf: this.kopf.toJSON(),
       kosten: this.kosten.toJSON(),
       presse: this.presse.toJSON(),
-      salesreport: this.salesreport.toJSON(),
       staff: this.staff.toJSON(),
       technik: this.technik.toJSON(),
       unterkunft: this.unterkunft.toJSON(),
@@ -93,7 +89,6 @@ export default class Veranstaltung {
         kasse: new Kasse(object.kasse),
         kosten: new Kosten(object.kosten),
         presse: new Presse(object.presse),
-        salesreport: new Salesreport(object.salesreport),
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
         vertrag: new Vertrag(object.vertrag),
@@ -126,18 +121,11 @@ export default class Veranstaltung {
     this.url = undefined;
     this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
     this.endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
-    this.reservixID = undefined;
     this.staff = new Staff();
     this.unterkunft = new Unterkunft(undefined, new DatumUhrzeit().setUhrzeit(20, 0), []);
     this.kasse = new Kasse();
     this.kopf.confirmed = false;
     this.kopf.abgesagt = false;
-  }
-
-  associateSalesreport(salesreport?: Salesreport): void {
-    if (salesreport) {
-      this.salesreport = salesreport;
-    }
   }
 
   get fullyQualifiedUrl(): string {

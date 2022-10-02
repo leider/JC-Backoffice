@@ -39,10 +39,6 @@ describe("DatumUhrzeit", () => {
       expect(DatumUhrzeit.forGermanString()).to.be.null;
     });
 
-    it("kann aus Reservix Strings erzeugt werden", () => {
-      expect(DatumUhrzeit.forReservixString("So, 12.05.2019", "20:00 Uhr")?.toLocalDateTimeString).to.eql("12.05.2019, 20:00:00");
-    });
-
     it("handles bullshit strings gracefully", () => {
       expect(DatumUhrzeit.forGermanStringOrNow("00.05.2019", "20:00 Uhr").value.isValid()).to.eq(true);
     });

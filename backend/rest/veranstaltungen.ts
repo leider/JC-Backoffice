@@ -11,25 +11,12 @@ import User from "jc-shared/user/user";
 import { resToJson } from "../lib/commons/replies";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
 import store from "../lib/veranstaltungen/veranstaltungenstore";
-import { salesreportFor } from "../lib/reservix/reservixService";
 import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration";
 
 const app = express();
 
 async function standardHandler(res: Response, user: User | undefined, veranstaltungen: Veranstaltung[]) {
-  async function associateReservix(veranstaltung: Veranstaltung) {
-    const reservixID = veranstaltung.reservixID;
-    if (reservixID && (!veranstaltung.salesreport || !veranstaltung.salesreport.istVergangen)) {
-      const salesreport = await salesreportFor(reservixID);
-      veranstaltung.associateSalesreport(salesreport);
-      return store.saveVeranstaltung(veranstaltung);
-    } else {
-      return veranstaltung;
-    }
-  }
-
   const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
-  await Promise.all(result.map(associateReservix));
   resToJson(
     res,
     result.map((v) => v.toJSON())

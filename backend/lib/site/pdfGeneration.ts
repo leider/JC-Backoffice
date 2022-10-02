@@ -35,7 +35,7 @@ export async function vertrag(res: Response, next: NextFunction, veranstaltungUr
 }
 
 export async function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl: string) {
-  const veranstaltung = await veranstaltungenService.getVeranstaltungMitReservix(veranstaltungUrl);
+  const veranstaltung = await veranstaltungenService.getVeranstaltung(veranstaltungUrl);
   if (!veranstaltung) {
     return res.redirect("/");
   }

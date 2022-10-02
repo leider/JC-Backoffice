@@ -16,10 +16,6 @@ export default class VeranstaltungGema {
     return this.veranstaltung.eintrittspreise;
   }
 
-  private get salesreport() {
-    return this.veranstaltung.salesreport;
-  }
-
   private get kooperation(): boolean {
     return this.veranstaltung.kopf.rechnungAnKooperationspartner;
   }
@@ -35,10 +31,10 @@ export default class VeranstaltungGema {
     if (this.eintrittspreise.frei || this.kooperation) {
       return "-";
     }
-    return `${fieldHelpers.formatNumberTwoDigits(this.kasse.einnahmeTicketsEUR + (this.salesreport?.brutto || 0))} €`;
+    return `${fieldHelpers.formatNumberTwoDigits(this.kasse.einnahmeTicketsEUR)} €`;
   }
 
   get anzahlBesucher(): number {
-    return this.kasse.anzahlBesucherAK + (this.salesreport?.anzahl || 0);
+    return this.kasse.anzahlBesucherAK;
   }
 }

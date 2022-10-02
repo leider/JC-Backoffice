@@ -46,12 +46,6 @@
               th.text-right: jazz-currency-display(:value="eintrittspreise.regulaer")
               th.text-right: jazz-currency-display(:value="eintrittspreise.ermaessigt")
               th.text-right: jazz-currency-display(:value="eintrittspreise.mitglied")
-            tr(v-if="veranstaltung.reservixID")
-              th: .form-control-plaintext
-                | Reservix &nbsp;
-                img(src="/img/rex_14x14.png")
-              th.text-right: .form-control-plaintext {{ veranstaltung.salesreport.anzahl }}
-              th.text-right: jazz-currency-display(:value="veranstaltung.salesreport.netto")
             tr(v-if="isAbendkasse"): td.text-right(colspan=3): b-button.btn-kasse(
               :to="`${veranstaltung.fullyQualifiedUrl}/kasse`",
               title="Abendkasse"

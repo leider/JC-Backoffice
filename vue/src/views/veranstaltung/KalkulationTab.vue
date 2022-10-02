@@ -24,17 +24,6 @@
         .col-4
           .form-group
             jazz-currency-display(label="Total", :value="erwarteteEinnahmen")
-      .row(v-if="veranstaltung.reservixID")
-        .col-4
-          .form-group
-            label.float-right Besucher (Reservix):
-            b: span.text-right.form-control-plaintext.float-right {{ salesreport.anzahl }}
-        .col-4
-          .form-group
-            jazz-currency-display(label="Tickets Brutto (Reservix)", :value="salesreport.brutto")
-        .col-4
-          .form-group
-            jazz-currency-display(label="Tickets Netto (Reservix)", :value="salesreport.netto")
     legend-card(section="concert", title="Kostenübersicht / Break-Even", hasMoney="true", :money="kalkulation.dealUeberschussTotal")
       table.table.table-sm.table-striped
         tbody
@@ -83,7 +72,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import OptionValues from "jc-shared/optionen/optionValues";
-import Salesreport from "jc-shared/veranstaltung/salesreport";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
 import MultiSelect from "../../widgets/MultiSelect.vue";
@@ -133,10 +121,6 @@ export default class KalkulationTab extends Vue {
     return this.veranstaltung.eintrittspreise;
   }
 
-  get salesreport(): Salesreport {
-    return this.veranstaltung.salesreport;
-  }
-
   get kalkulation(): VeranstaltungKalkulation {
     return new VeranstaltungKalkulation(this.veranstaltung);
   }
@@ -146,7 +130,7 @@ export default class KalkulationTab extends Vue {
   }
 
   get einnahmenTotal(): number {
-    return this.erwarteteEinnahmen + this.salesreport.netto;
+    return this.erwarteteEinnahmen;
   }
 
   get erwarteteEinnahmen(): number {

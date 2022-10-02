@@ -11,9 +11,6 @@
             h6 {{ veranstaltung.datumForDisplayShort }}
 
           td.text-right: .btn-group
-            .btn.py-0.px-1.color-reservix(v-if="veranstaltung.reservixID")
-              i.logo-reservix
-              | &nbsp; {{ veranstaltung.salesreport.anzahl }}
             b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
       table.position-relative(width="100%")
         tr

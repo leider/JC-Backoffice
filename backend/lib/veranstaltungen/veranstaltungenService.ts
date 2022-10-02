@@ -9,17 +9,14 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import User from "jc-shared/user/user";
 
 import store from "./veranstaltungenstore";
-import { salesreportFor } from "../reservix/reservixService";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
-async function getVeranstaltungMitReservix(url: string) {
+async function getVeranstaltung(url: string) {
   const veranstaltung = await store.getVeranstaltung(url);
   if (!veranstaltung) {
     return null;
   }
-  const salesreport = await salesreportFor(veranstaltung.reservixID);
-  veranstaltung.associateSalesreport(salesreport);
   return veranstaltung;
 }
 
@@ -59,7 +56,7 @@ async function imgzip(res: Response, next: NextFunction, yymm: string) {
 }
 
 export default {
-  getVeranstaltungMitReservix,
+  getVeranstaltung,
   filterUnbestaetigteFuerJedermann,
   imgzip,
 };

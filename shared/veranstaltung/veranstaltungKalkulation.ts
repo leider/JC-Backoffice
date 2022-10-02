@@ -23,10 +23,6 @@ export default class VeranstaltungKalkulation {
     return this.veranstaltung.eintrittspreise;
   }
 
-  private get salesreport() {
-    return this.veranstaltung.salesreport;
-  }
-
   get kostenGesamtEUR(): number {
     return this.kosten.totalEUR + this.unterkunft.kostenTotalEUR + this.kasse.ausgabenOhneGage;
   }
@@ -35,7 +31,7 @@ export default class VeranstaltungKalkulation {
   }
 
   get einnahmenGesamtEUR(): number {
-    return this.salesreport?.netto + this.erwarteterOderEchterEintritt;
+    return this.erwarteterOderEchterEintritt;
   }
 
   get dealAbsolutEUR(): number {
@@ -49,5 +45,4 @@ export default class VeranstaltungKalkulation {
   get dealUeberschussTotal(): number {
     return this.bruttoUeberschussEUR - this.dealAbsolutEUR;
   }
-
 }
