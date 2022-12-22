@@ -107,7 +107,7 @@ export async function uploadFile(data: FormData) {
     data,
     title: "Gespeichert",
     text: "Datei gespeichert",
-    contentType: "other",
+    contentType: "json",
   });
 }
 
@@ -118,7 +118,7 @@ export async function uploadBeleg(data: FormData) {
     data,
     title: "Erfolgreich",
     text: "Beleg übertragen",
-    contentType: "other",
+    contentType: "json",
   });
 }
 
