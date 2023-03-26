@@ -2,32 +2,34 @@ import dayjs, { Dayjs } from "dayjs";
 
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
-
 import duration from "dayjs/plugin/duration";
+
 dayjs.extend(duration);
-
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
 dayjs.extend(isSameOrBefore);
-
 import isoWeek from "dayjs/plugin/isoWeek";
+
 dayjs.extend(isoWeek);
-
 import localizedFormat from "dayjs/plugin/localizedFormat";
+
 dayjs.extend(localizedFormat);
-
 import advancedFormat from "dayjs/plugin/advancedFormat";
+
 dayjs.extend(advancedFormat);
-
 import weekOfYear from "dayjs/plugin/weekOfYear";
+
 dayjs.extend(weekOfYear);
-
 import "dayjs/locale/de";
+
 dayjs.locale("de");
-
 import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
 
+dayjs.extend(utc);
 process.env.TZ = "Europe/Berlin";
+
+import conf from "jc-backend/lib/commons/simpleConfigure";
+// const configuredNow = dayjs(conf.get("nowForDevelopment") as string);
 
 type AdditionOptions = {
   jahre?: number;
@@ -42,7 +44,7 @@ export default class DatumUhrzeit {
   private readonly val: Dayjs;
 
   constructor(dateTime?: Dayjs) {
-    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs();
+    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs(conf.get("nowForDevelopment") as string); //dayjs();
   }
 
   // Konstruktoren

@@ -58,6 +58,10 @@ div
 </template>
 
 <script lang="ts">
+import conf from "jc-backend/lib/commons/simpleConfigure";
+import { nowForDevelopment } from "../../config/server-config.json";
+conf.addProperties({ nowForDevelopment });
+
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
 import { currentUser, wikisubdirs, globals, logout } from "./commons/loader";
