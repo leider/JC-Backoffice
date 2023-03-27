@@ -1,5 +1,5 @@
-import gitExec from "./gitExec";
-import conf from "../commons/simpleConfigure";
+import gitExec from "./gitExec.js";
+import conf from "../../../shared/commons/simpleConfigure.js";
 const workTree = conf.get("wikipath");
 
 function dataToLines(data?: string): string[] {

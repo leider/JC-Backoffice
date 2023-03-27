@@ -1,7 +1,7 @@
-import MailRule from "jc-shared/mail/mailRule";
+import MailRule from "jc-shared/mail/mailRule.js";
 
-import pers from "../persistence/persistence";
-import misc from "jc-shared/commons/misc";
+import pers from "../persistence/persistence.js";
+import misc from "jc-shared/commons/misc.js";
 const persistence = pers("mailstore");
 
 export default {

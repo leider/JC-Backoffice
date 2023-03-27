@@ -1,11 +1,11 @@
 import express from "express";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kalender from "jc-shared/programmheft/kalender";
-import User from "jc-shared/user/user";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Kalender from "jc-shared/programmheft/kalender.js";
+import User from "jc-shared/user/user.js";
 
-import store from "../lib/programmheft/kalenderstore";
-import { resToJson } from "../lib/commons/replies";
+import store from "../lib/programmheft/kalenderstore.js";
+import { resToJson } from "../lib/commons/replies.js";
 
 const app = express();
 

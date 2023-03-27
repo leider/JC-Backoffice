@@ -1,9 +1,9 @@
-import OptionValues from "jc-shared/optionen/optionValues";
-import Orte from "jc-shared/optionen/orte";
-import FerienIcals from "jc-shared/optionen/ferienIcals";
+import OptionValues from "jc-shared/optionen/optionValues.js";
+import Orte from "jc-shared/optionen/orte.js";
+import FerienIcals from "jc-shared/optionen/ferienIcals.js";
 
-import pers from "../persistence/persistence";
-import misc from "jc-shared/commons/misc";
+import pers from "../persistence/persistence.js";
+import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("optionenstore");
 

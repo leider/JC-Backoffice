@@ -1,4 +1,4 @@
-import User from "../user/user";
+import User from "../user/user.js";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
 

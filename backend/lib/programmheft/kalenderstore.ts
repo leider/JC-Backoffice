@@ -1,8 +1,8 @@
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kalender from "jc-shared/programmheft/kalender";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Kalender from "jc-shared/programmheft/kalender.js";
 
-import pers from "../persistence/persistence";
-import misc from "jc-shared/commons/misc";
+import pers from "../persistence/persistence.js";
+import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("kalenderstore");
 

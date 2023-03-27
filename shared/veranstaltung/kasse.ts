@@ -1,5 +1,5 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
-import Misc from "../commons/misc";
+import DatumUhrzeit from "../commons/DatumUhrzeit.js";
+import Misc from "../commons/misc.js";
 
 export default class Kasse {
   anfangsbestandEUR = 0;

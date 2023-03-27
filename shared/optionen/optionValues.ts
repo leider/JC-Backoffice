@@ -1,8 +1,9 @@
-import range from "lodash/range";
-import remove from "lodash/remove";
-import { sortBy, toLower } from "lodash/fp";
-import misc from "../commons/misc";
-import Kontakt from "../veranstaltung/kontakt";
+import range from "lodash/range.js";
+import remove from "lodash/remove.js";
+import sortBy from "lodash/fp/sortBy.js";
+import toLower from "lodash/fp/toLower.js";
+import misc from "../commons/misc.js";
+import Kontakt from "../veranstaltung/kontakt.js";
 
 const sortByNameCaseInsensitive = sortBy(toLower);
 

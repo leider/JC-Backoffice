@@ -9,7 +9,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import mailstore from "jc-backend/lib/mailsender/mailstore";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import conf from "jc-backend/lib/commons/simpleConfigure";
+import conf from "jc-shared/commons/simpleConfigure";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 
 function isSendable(veranstaltung: Veranstaltung): boolean {

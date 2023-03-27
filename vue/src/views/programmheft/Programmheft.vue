@@ -8,9 +8,9 @@
     .col-lg-8.col-sm-12
       .row
         .col-6
-          heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
+          //heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
         .col-6
-          heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
+          //heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
       .row.mt-4
         .col-12
           h4 Farben Hilfe
@@ -50,10 +50,10 @@ import groupBy from "lodash/groupBy";
 import { marked } from "marked";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "../../commons/loader";
-import HeftCalendar from "../calendar/HeftCalendar.vue";
+//import HeftCalendar from "../calendar/HeftCalendar.vue";
 import Markdown from "../../widgets/Markdown.vue";
 
-@Component({ components: { HeftCalendar, Markdown } })
+@Component({ components: { /*HeftCalendar,*/ Markdown } })
 export default class Programmheft extends Vue {
   @Prop() year!: string;
   @Prop() month!: string;

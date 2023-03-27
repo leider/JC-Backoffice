@@ -1,17 +1,17 @@
 import { NextFunction, Response } from "express";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
-import conf from "../commons/simpleConfigure";
-import store from "../veranstaltungen/veranstaltungenstore";
-import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
-import userstore from "../users/userstore";
-import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons";
+import conf from "../../../shared/commons/simpleConfigure.js";
+import store from "../veranstaltungen/veranstaltungenstore.js";
+import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
+import userstore from "../users/userstore.js";
+import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons.js";
 import pug from "pug";
 import path from "path";
-import mailtransport from "../mailsender/mailtransport";
-import Message from "jc-shared/mail/message";
+import mailtransport from "../mailsender/mailtransport.js";
+import Message from "jc-shared/mail/message.js";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 

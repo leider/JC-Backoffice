@@ -3,15 +3,15 @@ import { Form } from "multiparty";
 import fs from "fs";
 import path from "path";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kasse from "jc-shared/veranstaltung/kasse";
-import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Kasse from "jc-shared/veranstaltung/kasse.js";
+import User from "jc-shared/user/user.js";
 
-import { resToJson } from "../lib/commons/replies";
-import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
-import store from "../lib/veranstaltungen/veranstaltungenstore";
-import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration";
+import { resToJson } from "../lib/commons/replies.js";
+import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
+import store from "../lib/veranstaltungen/veranstaltungenstore.js";
+import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration.js";
 
 const app = express();
 

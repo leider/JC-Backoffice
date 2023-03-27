@@ -1,4 +1,4 @@
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistence.js";
 const persistence = pers("refreshstore");
 
 export interface RefreshToken {

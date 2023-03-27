@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import compact from "lodash/compact";
-import DatumUhrzeit from "./DatumUhrzeit";
+import compact from "lodash/compact.js";
+import DatumUhrzeit from "./DatumUhrzeit.js";
 
 function isNumber(aString: string): boolean {
   const number = Number.parseInt(aString);

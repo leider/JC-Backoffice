@@ -1,4 +1,4 @@
-import misc from "../commons/misc";
+import misc from "../commons/misc.js";
 
 export type Sprache = "Deutsch" | "Englisch" | "Regional";
 export type Vertragsart = "Jazzclub" | "Agentur/Künstler" | "JazzClassix";

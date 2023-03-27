@@ -1,3 +1,4 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import sharp from "sharp";
@@ -6,16 +7,16 @@ import { loggers } from "winston";
 import { v4 as uuidv4 } from "uuid";
 import { Builder, Calendar } from "ikalendar";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import veranstaltungenService from "../veranstaltungen/veranstaltungenService";
-import store from "../veranstaltungen/veranstaltungenstore";
-import { resToJson } from "../commons/replies";
-import userstore from "../users/userstore";
-import { hashPassword } from "../commons/hashPassword";
-import conf from "../commons/simpleConfigure";
-import refreshstore from "./refreshstore";
-import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration";
+import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
+import store from "../veranstaltungen/veranstaltungenstore.js";
+import { resToJson } from "../commons/replies.js";
+import userstore from "../users/userstore.js";
+import { hashPassword } from "../commons/hashPassword.js";
+import conf from "../../../shared/commons/simpleConfigure.js";
+import refreshstore from "./refreshstore.js";
+import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration.js";
 
 const appLogger = loggers.get("application");
 

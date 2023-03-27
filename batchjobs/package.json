@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jc-batch",
   "version": "1.0.0",
   "description": "batch jobs for jc",

@@ -1,4 +1,4 @@
-import Veranstaltung from "./veranstaltung";
+import Veranstaltung from "./veranstaltung.js";
 
 export default class VeranstaltungKalkulation {
   private veranstaltung: Veranstaltung;

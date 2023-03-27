@@ -1,4 +1,4 @@
-import Accessrights from "./accessrights";
+import Accessrights from "./accessrights.js";
 
 export default class User {
   id: string;

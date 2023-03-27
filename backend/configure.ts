@@ -1,5 +1,6 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 process.chdir(__dirname);
-import conf, { SimpleConfigure } from "./lib/commons/simpleConfigure";
+import conf, { SimpleConfigure } from "../shared/commons/simpleConfigure.js";
 import path from "path";
 import fs from "fs";
 

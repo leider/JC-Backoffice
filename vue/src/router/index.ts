@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { Vue } from "vue-property-decorator";
 import VueRouter from "vue-router";
 import Team from "../views/team/Team.vue";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -53,7 +53,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
+  base: import.meta.env.BASE_URL,
   routes,
 });
 

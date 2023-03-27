@@ -1,5 +1,5 @@
-import Veranstaltung from "../veranstaltung/veranstaltung";
-import User from "../user/user";
+import Veranstaltung from "../veranstaltung/veranstaltung.js";
+import User from "../user/user.js";
 
 export type VerMitUser = { veranstaltung: Veranstaltung; user: User };
 

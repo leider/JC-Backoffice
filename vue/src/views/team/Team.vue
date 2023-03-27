@@ -44,7 +44,7 @@
                 @deleted="deleted"
               )
         .col-lg-4
-          jazz-calendar.mt-4
+          //jazz-calendar.mt-4
     b-tab(title="Benutzer")
       user-panels(:user="user", :users="users", @reload-users="reloadUsers")
 </template>
@@ -57,12 +57,12 @@ import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import UserPanels from "../user/UserPanels.vue";
 import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader";
-import JazzCalendar from "../calendar/JazzCalendar.vue";
+//import JazzCalendar from "../calendar/JazzCalendar.vue";
 import PanelsForMonat from "./PanelsForMonat.vue";
 import UserPanel from "../user/UserPanel.vue";
 
 @Component({
-  components: { UserPanels, JazzCalendar, UserPanel, PanelsForMonat },
+  components: { UserPanels, /*JazzCalendar,*/ UserPanel, PanelsForMonat },
 })
 export default class Team extends Vue {
   @Prop() admin!: boolean;

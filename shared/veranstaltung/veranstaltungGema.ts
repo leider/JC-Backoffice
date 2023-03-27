@@ -1,5 +1,5 @@
-import Veranstaltung from "./veranstaltung";
-import fieldHelpers from "../commons/fieldHelpers";
+import Veranstaltung from "./veranstaltung.js";
+import fieldHelpers from "../commons/fieldHelpers.js";
 
 export default class VeranstaltungGema {
   private veranstaltung: Veranstaltung;

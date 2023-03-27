@@ -1,14 +1,15 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
-import flatten from "lodash/flatten";
+import flatten from "lodash/flatten.js";
 import fs from "fs";
 import path from "path";
 
-import Veranstaltung from "jc-shared/veranstaltung//veranstaltung";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung//veranstaltung.js";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import User from "jc-shared/user/user.js";
 
-import store from "./veranstaltungenstore";
+import store from "./veranstaltungenstore.js";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 

@@ -1,9 +1,10 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 import path from "path";
 import fs from "fs/promises";
 
-import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
+import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
 
-import store from "./veranstaltungenstore";
+import store from "./veranstaltungenstore.js";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 

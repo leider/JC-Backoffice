@@ -1,4 +1,4 @@
-import { Preisprofil } from "../optionen/optionValues";
+import { Preisprofil } from "../optionen/optionValues.js";
 
 const standardRabattErmaessigt = 2;
 const standardRabattMitglied = 5;

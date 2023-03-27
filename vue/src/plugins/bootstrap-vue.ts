@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { Vue } from "vue-property-decorator";
 
 import { NavPlugin } from "bootstrap-vue/src/components/nav";
 import { NavbarPlugin } from "bootstrap-vue/src/components/navbar";

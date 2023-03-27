@@ -15,7 +15,6 @@
     "axios": "0.27.2",
     "bootstrap-vue": "2.22.0",
     "codemirror": "5.65.4",
-    "jc-backend": "1.0.0",
     "jc-shared": "1.0.0",
     "jose": "4.13.1",
     "rfs": "9.0.6",
@@ -26,27 +25,23 @@
     "vue-router": "3.5.4"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "0.2.2",
     "@types/codemirror": "5.60.5",
     "@types/jsonwebtoken": "8.5.8",
-    "@vue/cli-plugin-babel": "4.5.15",
-    "@vue/cli-plugin-eslint": "4.5.15",
-    "@vue/cli-plugin-router": "4.5.15",
-    "@vue/cli-plugin-typescript": "4.5.15",
-    "@vue/cli-plugin-vuex": "4.5.15",
-    "@vue/cli-service": "4.5.15",
+    "@vitejs/plugin-vue2": "2.2.0",
     "@vue/eslint-config-prettier": "7.0.0",
     "@vue/eslint-config-typescript": "10.0.0",
     "eslint-plugin-vue": "8.6.0",
     "pug-plain-loader": "1.1.0",
-    "sass-loader": "10.2.1",
+    "vite": "4.2.1",
     "vue-template-compiler": "2.6.14",
-    "webpack-bundle-analyzer": "4.5.0"
+    "vite-plugin-vue2": "2.0.3"
   },
   "scripts": {
-    "serve": "rm -rf  ../backend/static/vue && vue-cli-service serve --port 1969",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "dev": "vite --port 1969",
+    "build": "vite build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   }
 }

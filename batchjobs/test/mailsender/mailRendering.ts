@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
 import "jc-backend/configure";
-import conf from "jc-backend/lib/commons/simpleConfigure";
+import conf from "jc-shared/commons/simpleConfigure";
 conf.addProperties({
   "sender-name": "Der Sender",
   "sender-address": "sender@jazz.club",

@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jc-backend",
   "version": "1.0.0",
   "description": "the backend server for jc",
@@ -25,6 +26,7 @@
     "passport-jwt": "4.0.1",
     "popper.js": "1.16.1",
     "puppeteer": "18.0.5",
+    "sharp": "0.31.1",
     "simple-configure": "0.1.6",
     "superagent": "8.0.1",
     "uuid": "9.0.0",

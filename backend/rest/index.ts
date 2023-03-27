@@ -1,21 +1,21 @@
 import express, { Request, Response } from "express";
-import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
+import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
 
-import service from "../lib/veranstaltungen/imageService";
-import { resToJson } from "../lib/commons/replies";
-import calendarApp from "./calendar";
-import mailsenderApp from "./mail";
-import optionenApp from "./optionen";
-import programmheftApp from "./programmheft";
-import usersApp from "./users";
-import veranstaltungenRestApp from "./veranstaltungen";
-import wikiApp from "./wiki";
-import refreshstore from "../lib/site/refreshstore";
-import User from "jc-shared/user/user";
+import service from "../lib/veranstaltungen/imageService.js";
+import { resToJson } from "../lib/commons/replies.js";
+import calendarApp from "./calendar.js";
+import mailsenderApp from "./mail.js";
+import optionenApp from "./optionen.js";
+import programmheftApp from "./programmheft.js";
+import usersApp from "./users.js";
+import veranstaltungenRestApp from "./veranstaltungen.js";
+import wikiApp from "./wiki.js";
+import refreshstore from "../lib/site/refreshstore.js";
+import User from "jc-shared/user/user.js";
 import { Form } from "multiparty";
-import Message from "jc-shared/mail/message";
-import conf from "../lib/commons/simpleConfigure";
-import mailtransport from "../lib/mailsender/mailtransport";
+import Message from "jc-shared/mail/message.js";
+import conf from "../../shared/commons/simpleConfigure.js";
+import mailtransport from "../lib/mailsender/mailtransport.js";
 import fs from "fs/promises";
 
 const app = express();

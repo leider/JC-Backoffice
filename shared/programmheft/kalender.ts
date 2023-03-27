@@ -1,5 +1,5 @@
-import misc from "../commons/misc";
-import DatumUhrzeit from "../commons/DatumUhrzeit";
+import misc from "../commons/misc.js";
+import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 
 export type Event = {
   start: string;

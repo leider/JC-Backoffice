@@ -3,7 +3,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Message from "jc-shared/mail/message";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
-import config from "jc-backend/lib/commons/simpleConfigure";
+import config from "jc-shared/commons/simpleConfigure";
 
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import userstore from "jc-backend/lib/users/userstore";

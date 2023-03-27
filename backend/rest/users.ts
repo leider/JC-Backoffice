@@ -1,10 +1,10 @@
 import express from "express";
 
-import User from "jc-shared/user/user";
+import User from "jc-shared/user/user.js";
 
-import service from "../lib/users/usersService";
-import store from "../lib/users/userstore";
-import { reply, resToJson } from "../lib/commons/replies";
+import service from "../lib/users/usersService.js";
+import store from "../lib/users/userstore.js";
+import { reply, resToJson } from "../lib/commons/replies.js";
 
 const app = express();
 

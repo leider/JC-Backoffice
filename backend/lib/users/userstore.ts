@@ -1,7 +1,7 @@
-import User from "jc-shared/user/user";
+import User from "jc-shared/user/user.js";
 
-import pers from "../persistence/persistence";
-import misc from "jc-shared/commons/misc";
+import pers from "../persistence/persistence.js";
+import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("userstore");
 

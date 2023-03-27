@@ -1,9 +1,9 @@
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Termin from "jc-shared/optionen/termin";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Termin from "jc-shared/optionen/termin.js";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistence.js";
 import { Sort } from "mongodb";
-import misc from "jc-shared/commons/misc";
+import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("terminstore");
 

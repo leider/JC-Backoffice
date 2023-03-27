@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jazzclub-backoffice",
   "description": "The back office for Jazzclub Karlsruhe",
   "version": "1.0.0",
@@ -20,8 +21,7 @@
     "node": ">=14.0"
   },
   "dependencies": {
-    "lodash": "4.17.21",
-    "sharp": "0.31.1"
+    "lodash": "4.17.21"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "2.2.0",

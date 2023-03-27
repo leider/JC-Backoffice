@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import User from "jc-shared/user/user";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import User from "jc-shared/user/user.js";
 
-import store from "./veranstaltungenstore";
+import store from "./veranstaltungenstore.js";
 
 const app = express();
 

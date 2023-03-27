@@ -1,11 +1,11 @@
 import winston from "winston";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import pers from "../persistence/persistence";
+import pers from "../persistence/persistence.js";
 import { Sort } from "mongodb";
-import misc from "jc-shared/commons/misc";
+import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("veranstaltungenstore");
 const logger = winston.loggers.get("transactions");

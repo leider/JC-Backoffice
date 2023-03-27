@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jc-shared",
   "version": "1.0.0",
   "description": "shared classes for jc",

@@ -1,11 +1,11 @@
 import express from "express";
 
-import User from "jc-shared/user/user";
-import misc from "jc-shared/commons/misc";
+import User from "jc-shared/user/user.js";
+import misc from "jc-shared/commons/misc.js";
 
-import wikiService from "../lib/wiki/wikiService";
-import { resToJson } from "../lib/commons/replies";
-import Git from "../lib/wiki/gitmech";
+import wikiService from "../lib/wiki/wikiService.js";
+import { resToJson } from "../lib/commons/replies.js";
+import Git from "../lib/wiki/gitmech.js";
 
 const app = express();
 

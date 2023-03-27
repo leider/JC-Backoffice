@@ -4,7 +4,7 @@ import Message from "jc-shared/mail/message";
 import MailRule from "jc-shared/mail/mailRule";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
-import config from "jc-backend/lib/commons/simpleConfigure";
+import config from "jc-shared/commons/simpleConfigure";
 
 import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
 import mailstore from "jc-backend/lib/mailsender/mailstore";
