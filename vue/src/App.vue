@@ -59,8 +59,13 @@ div
 
 <script lang="ts">
 import conf from "jc-backend/lib/commons/simpleConfigure";
-import { nowForDevelopment } from "../../config/server-config.json";
-conf.addProperties({ nowForDevelopment });
+(async () => {
+  try {
+    const { nowForDevelopment } = await import("../../config/server-config.json");
+    conf.addProperties({ nowForDevelopment });
+    // eslint-disable-next-line no-empty
+  } catch {}
+})();
 
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
