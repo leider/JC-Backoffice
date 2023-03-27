@@ -61,7 +61,8 @@ div
 import conf from "jc-backend/lib/commons/simpleConfigure";
 (async () => {
   try {
-    const { nowForDevelopment } = await import("../../config/server-config.json");
+    const serverconf = "../../config/server-config.json";
+    const { nowForDevelopment } = await import(serverconf);
     conf.addProperties({ nowForDevelopment });
     // eslint-disable-next-line no-empty
   } catch {}
