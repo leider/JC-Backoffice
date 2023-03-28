@@ -59,20 +59,13 @@ div
 
 <script lang="ts">
 import conf from "jc-backend/lib/commons/simpleConfigure";
-(async () => {
-  try {
-    const serverconf = "../../config/server-config.json";
-    const { nowForDevelopment } = await import(serverconf);
-    conf.addProperties({ nowForDevelopment });
-    // eslint-disable-next-line no-empty
-  } catch {}
-})();
-
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
-import { currentUser, wikisubdirs, globals, logout } from "./commons/loader";
+import { currentUser, globals, logout, wikisubdirs } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
+import { nowForDevelopment } from "../../dummy-config/server-config.json";
+conf.addProperties({ nowForDevelopment });
 @Component({
   components: { FeedbackAlerts },
 })

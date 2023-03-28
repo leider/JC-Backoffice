@@ -71,11 +71,12 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
       return saveAndReply(res, new Veranstaltung(req.body));
     } else {
       // Nur Kasse erlaubt
-      if (url || !veranstaltung) {
+      if (url && veranstaltung) {
+        veranstaltung.kasse = new Kasse(req.body.kasse);
+        return saveAndReply(res, veranstaltung);
+      } else {
         return res.status(403).send("Kasse darf nur bestehende speichern");
       }
-      veranstaltung.kasse = new Kasse(req.body.kasse);
-      return saveAndReply(res, veranstaltung);
     }
   }
 

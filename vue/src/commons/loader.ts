@@ -17,7 +17,7 @@ import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import router from "../router";
-import jwt from "jsonwebtoken";
+import * as jose from "jose";
 
 let refreshTokenState: string;
 
@@ -26,7 +26,7 @@ export const globals = {
 
   isAuthenticated: async function isAuthenticated() {
     if (globals.jwtToken) {
-      const decoded = jwt.decode(globals.jwtToken) as { [key: string]: any };
+      const decoded = jose.decodeJwt(globals.jwtToken) as { [key: string]: any };
       const exp: number = decoded.exp;
       const stillValid = Date.now() + 60000 < exp * 1000; // should be valid one more minute
       if (stillValid) {

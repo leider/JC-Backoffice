@@ -186,6 +186,7 @@ export default class VeranstaltungView extends Vue {
       const result = await saveVeranstaltung(this.veranstaltung);
       if (result) {
         this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+        return;
       }
     }
     this.optionen.addOrUpdateKontakt("agenturen", this.veranstaltung.agentur, this.editVariables.selectedAgentur);

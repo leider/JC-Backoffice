@@ -18,9 +18,24 @@ function createConfiguration(): SimpleConfigure {
     emaildomainname: "localhost",
   });
 
+  function addFiles(files: string[]): void {
+    if (!files) {
+      return;
+    }
+    files.forEach((file) => {
+      // eslint-disable-next-line no-sync
+      if (fs.existsSync(file)) {
+        // eslint-disable-next-line no-sync
+        const theFile = fs.readFileSync(file, { encoding: "utf-8" });
+        conf.addProperties(JSON.parse(theFile));
+      }
+    });
+  }
+
   // then, add properties from config files:
   const files = ["mailsender-config.json", "mongo-config.json", "passwordSalt.json", "server-config.json"];
-  conf.addFiles(files.map((file) => configdir + file));
+
+  addFiles(files.map((file) => configdir + file));
 
   return conf;
 }

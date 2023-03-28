@@ -5,7 +5,7 @@ export default class Message {
   senderAddressField?: string;
   to!: string;
   bcc!: string;
-  pdfBufferAndName?: { pdf: Buffer; name: string };
+  pdfBufferAndName?: { pdf: any; name: string };
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   static fromJSON(json: any) {

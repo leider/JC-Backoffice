@@ -29,7 +29,6 @@ dayjs.extend(utc);
 process.env.TZ = "Europe/Berlin";
 
 import conf from "jc-backend/lib/commons/simpleConfigure";
-// const configuredNow = dayjs(conf.get("nowForDevelopment") as string);
 
 type AdditionOptions = {
   jahre?: number;

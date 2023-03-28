@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import sharp from "sharp";
-import jwt from "jsonwebtoken";
+import * as jose from "jose";
 import { loggers } from "winston";
 import { v4 as uuidv4 } from "uuid";
 import { Builder, Calendar } from "ikalendar";
@@ -48,10 +48,10 @@ async function createToken(req: Request, res: Response, name: string) {
     const expiry = new Date(Date.now() + ttl);
     return refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry });
   }
+  const alg = "HS256";
+  const secret = new TextEncoder().encode(jwtSecret);
+  const token = await new jose.SignJWT({ id: name }).setProtectedHeader({ alg }).setIssuedAt().setExpirationTime("15m").sign(secret);
 
-  const token = jwt.sign({ id: name }, jwtSecret, {
-    expiresIn: 15 * 60, // 15 minutes
-  });
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
   try {
