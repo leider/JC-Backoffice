@@ -27,7 +27,7 @@ import utc from "dayjs/plugin/utc.js";
 
 dayjs.extend(utc);
 
-import conf from "jc-backend/lib/commons/simpleConfigure";
+import conf from "./simpleConfigure.js";
 
 type AdditionOptions = {
   jahre?: number;

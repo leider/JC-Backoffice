@@ -58,7 +58,7 @@ div
 </template>
 
 <script lang="ts">
-import conf from "jc-backend/lib/commons/simpleConfigure";
+import conf from "jc-shared/commons/simpleConfigure";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import User from "jc-shared/user/user";
 import { currentUser, globals, logout, wikisubdirs } from "./commons/loader";
