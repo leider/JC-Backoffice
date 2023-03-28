@@ -192,7 +192,10 @@ export default class KasseTab extends Vue {
 
   showAufheben = false;
   showFreigeben = false;
-  freigabeUser = this.kasse.kassenfreigabe || this.user.name;
+
+  get freigabeUser(): string {
+    return this.kasse.kassenfreigabe || this.user.name;
+  }
 
   get kasse(): Kasse {
     return this.veranstaltung.kasse;

@@ -9,6 +9,7 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/vue/",
+  build: { outDir: "../backend/static/vue" },
   plugins: [vue()],
   resolve: {
     alias: {

@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Model, Prop, Vue, Watch } from "vue-property-decorator";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -101,9 +101,31 @@ export default class TeamPanelAdmin extends Vue {
   @Prop() users!: User[];
   @Prop() initiallyExpanded!: boolean;
 
-  private expanded = this.initiallyExpanded;
+  @Model() private expandedState?: boolean;
   private dirty = false;
-  private originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+  private originalVeranstaltungState?: Veranstaltung = undefined;
+
+  get expanded() {
+    if (this.expandedState === undefined) {
+      this.expandedState = this.initiallyExpanded;
+    }
+    return this.expandedState;
+  }
+
+  set expanded(state) {
+    this.expandedState = state;
+  }
+
+  get originalVeranstaltung() {
+    if (this.originalVeranstaltungState === undefined && this.veranstaltung) {
+      this.originalVeranstaltungState = new Veranstaltung(this.veranstaltung.toJSON());
+    }
+    return this.originalVeranstaltungState ?? new Veranstaltung();
+  }
+
+  set originalVeranstaltung(state) {
+    this.originalVeranstaltungState = state;
+  }
 
   close(): void {
     this.expanded = false;
