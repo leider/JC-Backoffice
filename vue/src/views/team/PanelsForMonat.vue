@@ -35,7 +35,7 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Model, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -50,26 +50,20 @@ export default class PanelsForMonat extends Vue {
   @Prop() users!: User[];
   @Prop() admin!: boolean;
   private nearFuture = new DatumUhrzeit().plus({ monate: 1 });
-  @Model() private expandedState?: boolean;
+  private expanded = false;
 
-  get expanded() {
-    if (this.expandedState === undefined) {
-      this.expandedState =
+  @Watch("veranstaltungen")
+  initExpanded() {
+    console.log("Veranstaltungen", this.veranstaltungen);
+    if (this.veranstaltungen) {
+      this.expanded =
         this.datumErsteVeranstaltung.istVor(this.nearFuture) &&
         this.datumErsteVeranstaltung.istNach(new DatumUhrzeit().minus({ monate: 1 }));
     }
-    return this.expandedState;
-  }
-
-  set expanded(state) {
-    this.expandedState = state;
   }
 
   get datumErsteVeranstaltung(): DatumUhrzeit {
-    if (this.veranstaltungen && this.veranstaltungen.length > 0) {
-      return this.veranstaltungen[0]?.startDatumUhrzeit;
-    }
-    return this.nearFuture;
+    return this.veranstaltungen[0].startDatumUhrzeit;
   }
 
   doWithAllPanels(action: string): void {

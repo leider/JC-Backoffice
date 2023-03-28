@@ -17,12 +17,14 @@ function secureAgainstClickjacking(req: Request, res: Response, next: NextFuncti
   next();
 }
 
-export default function (app: express.Express): void {
+export default function (app: express.Express, forDev?: boolean): void {
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compress());
-  app.use("/vue", history({ index: "/index.html" }));
+  if (!forDev) {
+    app.use("/vue", history({ index: "/index.html" }));
+  }
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(passportInitializer);

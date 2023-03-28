@@ -1,3 +1,4 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 import express, { Request, Response } from "express";
 import { Form } from "multiparty";
 import fs from "fs";

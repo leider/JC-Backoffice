@@ -9,6 +9,7 @@ FullCalendar(:options="options")
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import "@fullcalendar/core/vdom.js";
 import FullCalendar, { CalendarOptions } from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";

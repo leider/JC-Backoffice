@@ -103,7 +103,7 @@ export default class TeamPanelAdmin extends Vue {
 
   @Model() private expandedState?: boolean;
   private dirty = false;
-  private originalVeranstaltungState?: Veranstaltung = undefined;
+  private originalVeranstaltung?: Veranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
 
   get expanded() {
     if (this.expandedState === undefined) {
@@ -116,15 +116,12 @@ export default class TeamPanelAdmin extends Vue {
     this.expandedState = state;
   }
 
-  get originalVeranstaltung() {
-    if (this.originalVeranstaltungState === undefined && this.veranstaltung) {
-      this.originalVeranstaltungState = new Veranstaltung(this.veranstaltung.toJSON());
+  @Watch("veranstaltung")
+  initOriginalVeranstaltung() {
+    console.log("VERANSTALTUN WATCH", this.veranstaltung);
+    if (this.veranstaltung) {
+      this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
     }
-    return this.originalVeranstaltungState ?? new Veranstaltung();
-  }
-
-  set originalVeranstaltung(state) {
-    this.originalVeranstaltungState = state;
   }
 
   close(): void {
@@ -138,7 +135,10 @@ export default class TeamPanelAdmin extends Vue {
   @Watch("veranstaltung", { deep: true })
   somethingChanged(): void {
     const dirtybefore = this.dirty;
-    this.dirty = normCrLf(this.originalVeranstaltung.toJSON()) !== normCrLf(this.veranstaltung.toJSON());
+    console.log({ dirtybefore });
+    this.dirty = normCrLf(this.originalVeranstaltung?.toJSON() ?? "") !== normCrLf(this.veranstaltung.toJSON());
+    console.log("ori", this.originalVeranstaltung);
+    console.log("ver", this.veranstaltung);
     if (this.dirty && !dirtybefore) {
       feedbackMessages.addWarning("Achtung", "Du musst die Veranstaltung speichern!");
     }

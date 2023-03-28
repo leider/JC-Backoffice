@@ -1,3 +1,4 @@
+const __dirname = new URL(".", import.meta.url).pathname;
 import { NextFunction, Response } from "express";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
