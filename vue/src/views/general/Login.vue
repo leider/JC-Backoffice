@@ -1,15 +1,16 @@
 <template lang="pug">
 .col-12.col-lg-6
-  p Bitte melde Dich an.
-  .row
-    .col-12
-      jazz-text(v-model="username", label="Benutzername", required)
-  .row
-    .col-12
-      jazz-pass(v-model="password", label="Passwort", required)
-  .row
-    .col-12
-      b-button.float-right.btn.btn-success(@click="login", title="Anmelden") Anmelden
+  b-form(@submit="login")
+    p Bitte melde Dich an.
+    .row
+      .col-12
+        jazz-text(v-model="username", label="Benutzername", required)
+    .row
+      .col-12
+        jazz-pass(v-model="password", label="Passwort", required)
+    .row
+      .col-12
+        b-button.float-right.btn.btn-success(type="submit", title="Anmelden") Anmelden
 </template>
 
 <script lang="ts">
@@ -24,7 +25,8 @@ export default class Login extends Vue {
   private username = "";
   private password = "";
 
-  async login() {
+  async login(event: Event) {
+    event.preventDefault();
     await login(this.username, this.password);
     this.$router.push((this.$route.query.originalURL as string) || "/");
   }
