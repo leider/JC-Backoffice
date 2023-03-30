@@ -1,6 +1,5 @@
-import { defineConfig ,splitVendorChunkPlugin} from "vite";
-// import vue from '@vitejs/plugin-vue' // vue 3
-import { createVuePlugin as vue } from "vite-plugin-vue2"; //vue 2
+import { defineConfig, splitVendorChunkPlugin } from "vite";
+import vue from "@vitejs/plugin-vue2";
 
 import path from "path";
 import express from "express";

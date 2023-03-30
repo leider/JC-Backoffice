@@ -51,7 +51,7 @@
     "clean-ts": "cd backend && yarn clean-ts && cd ../batchjobs && yarn clean-ts && cd ../shared && yarn clean-ts",
     "develop": "yarn clean-ts && yarn compile && cd vue && yarn dev",
     "start": "node --icu-data-dir=node_modules/full-icu backend/start",
-    "test": "cd batchjobs && yarn test && cd ../shared && yarn test",
+    "test": "yarn compile && cd batchjobs && yarn test && cd ../shared && yarn test",
     "lint-all": "cd backend && yarn eslint && cd ../batchjobs && yarn eslint && cd ../shared && yarn eslint && cd ../vue && yarn lint",
     "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules"
   }
