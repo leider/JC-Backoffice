@@ -1,15 +1,15 @@
 import { loggers } from "winston";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Message from "jc-shared/mail/message";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Message from "jc-shared/mail/message.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
-import config from "jc-shared/commons/simpleConfigure";
+import config from "jc-shared/commons/simpleConfigure.js";
 
-import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
-import userstore from "jc-backend/lib/users/userstore";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import Users from "jc-shared/user/users";
-import usersService from "jc-backend/lib/users/usersService";
+import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore.js";
+import userstore from "jc-backend/lib/users/userstore.js";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import Users from "jc-shared/user/users.js";
+import usersService from "jc-backend/lib/users/usersService.js";
 
 const logger = loggers.get("application");
 

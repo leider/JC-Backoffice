@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig ,splitVendorChunkPlugin} from "vite";
 // import vue from '@vitejs/plugin-vue' // vue 3
 import { createVuePlugin as vue } from "vite-plugin-vue2"; //vue 2
 
@@ -12,6 +12,7 @@ export default defineConfig(() => {
     build: { outDir: "../backend/static/vue", emptyOutDir: true },
     plugins: [
       vue(),
+      splitVendorChunkPlugin(),
       {
         name: "vite-plugin-cache-control",
         async configureServer(server) {

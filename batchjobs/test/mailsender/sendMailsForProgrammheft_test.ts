@@ -2,13 +2,13 @@ import { expect } from "chai";
 import sin from "sinon";
 const sinon = sin.createSandbox();
 
-import "jc-backend/configure";
+import "jc-backend/configure.js";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import kalenderstore from "jc-backend/lib/programmheft/kalenderstore";
-import Kalender from "jc-shared/programmheft/kalender";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import { remindForProgrammheft } from "../../src/sendMailsForProgrammheft";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import kalenderstore from "jc-backend/lib/programmheft/kalenderstore.js";
+import Kalender from "jc-shared/programmheft/kalender.js";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import { remindForProgrammheft } from "../../src/sendMailsForProgrammheft.js";
 
 describe("Programmheft Mailsender", () => {
   const april12 = DatumUhrzeit.forGermanString("12.04.2019");

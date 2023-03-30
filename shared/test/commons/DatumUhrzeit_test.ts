@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
-import DatumUhrzeit from "../../commons/DatumUhrzeit";
+import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
 
 describe("DatumUhrzeit", () => {
   describe("creation", () => {

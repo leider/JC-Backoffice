@@ -1,12 +1,12 @@
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Message from "jc-shared/mail/message";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Message from "jc-shared/mail/message.js";
 
-import config from "jc-shared/commons/simpleConfigure";
+import config from "jc-shared/commons/simpleConfigure.js";
 
-import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore";
-import userstore from "jc-backend/lib/users/userstore";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers";
+import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore.js";
+import userstore from "jc-backend/lib/users/userstore.js";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
-import Users from "../../user/users";
-import User from "../../user/user";
+import Users from "../../user/users.js";
+import User from "../../user/user.js";
 
 const user1 = new User({
   id: "user1",

@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
 
-import Kalender, { EmailEvent } from "../../programmheft/kalender";
-import DatumUhrzeit from "../../commons/DatumUhrzeit";
+import Kalender, { EmailEvent } from "../../programmheft/kalender.js";
+import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
 
 describe("Kalender", () => {
   describe("geht korrekt mit id und text um", () => {
