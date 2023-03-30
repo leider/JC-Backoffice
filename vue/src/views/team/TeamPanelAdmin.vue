@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Model, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -101,28 +101,9 @@ export default class TeamPanelAdmin extends Vue {
   @Prop() users!: User[];
   @Prop() initiallyExpanded!: boolean;
 
-  @Model() private expandedState?: boolean;
+  @Prop() expanded!: boolean;
   private dirty = false;
-  private originalVeranstaltung?: Veranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
-
-  get expanded() {
-    if (this.expandedState === undefined) {
-      this.expandedState = this.initiallyExpanded;
-    }
-    return this.expandedState;
-  }
-
-  set expanded(state) {
-    this.expandedState = state;
-  }
-
-  @Watch("veranstaltung")
-  initOriginalVeranstaltung() {
-    console.log("VERANSTALTUN WATCH", this.veranstaltung);
-    if (this.veranstaltung) {
-      this.originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
-    }
-  }
+  private originalVeranstaltung!: Veranstaltung;
 
   close(): void {
     this.expanded = false;
@@ -131,14 +112,14 @@ export default class TeamPanelAdmin extends Vue {
   expand(): void {
     this.expanded = true;
   }
+  mounted() {
+    this.originalVeranstaltung = new Veranstaltung(this.veranstaltung);
+  }
 
   @Watch("veranstaltung", { deep: true })
   somethingChanged(): void {
     const dirtybefore = this.dirty;
-    console.log({ dirtybefore });
-    this.dirty = normCrLf(this.originalVeranstaltung?.toJSON() ?? "") !== normCrLf(this.veranstaltung.toJSON());
-    console.log("ori", this.originalVeranstaltung);
-    console.log("ver", this.veranstaltung);
+    this.dirty = normCrLf(this.originalVeranstaltung.toJSON()) !== normCrLf(this.veranstaltung.toJSON());
     if (this.dirty && !dirtybefore) {
       feedbackMessages.addWarning("Achtung", "Du musst die Veranstaltung speichern!");
     }

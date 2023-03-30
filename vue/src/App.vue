@@ -65,7 +65,9 @@ import { currentUser, globals, logout, wikisubdirs } from "./commons/loader";
 import FeedbackAlerts from "./views/general/FeedbackAlerts.vue";
 
 import { nowForDevelopment } from "../../dummy-config/server-config.json";
-conf.addProperties({ nowForDevelopment });
+if (nowForDevelopment) {
+  conf.addProperties({ nowForDevelopment });
+}
 @Component({
   components: { FeedbackAlerts },
 })

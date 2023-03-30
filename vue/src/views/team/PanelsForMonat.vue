@@ -20,6 +20,7 @@ div
       :ref="veranstaltung.id",
       :veranstaltung="veranstaltung",
       :initiallyExpanded="expanded",
+      :expanded="expanded",
       :user="user"
     )
     team-panel-admin(
@@ -29,13 +30,14 @@ div
       :ref="veranstaltung.id",
       :veranstaltung="veranstaltung",
       :initiallyExpanded="expanded",
+      :expanded="expanded",
       :users="users",
       v-on:deleted="deleted(veranstaltung)"
     )
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -43,29 +45,19 @@ import TeamPanelUser from "./TeamPanelUser.vue";
 import TeamPanelAdmin from "./TeamPanelAdmin.vue";
 
 @Component({ components: { TeamPanelAdmin, TeamPanelUser } })
-export default class PanelsForMonat extends Vue {
+class PanelsForMonat extends Vue {
   @Prop() monat!: string;
   @Prop() veranstaltungen!: Veranstaltung[];
   @Prop() user!: User;
   @Prop() users!: User[];
   @Prop() admin!: boolean;
-  private nearFuture = new DatumUhrzeit().plus({ monate: 1 });
-  private expanded = false;
+  @Prop() datumErsteVeranstaltung!: DatumUhrzeit;
+  @Prop() expanded!: boolean;
 
-  @Watch("veranstaltungen")
-  initExpanded() {
-    console.log("Veranstaltungen", this.veranstaltungen);
-    if (this.veranstaltungen) {
-      this.expanded =
-        this.datumErsteVeranstaltung.istVor(this.nearFuture) &&
-        this.datumErsteVeranstaltung.istNach(new DatumUhrzeit().minus({ monate: 1 }));
-    }
+  deepCopy(veranstaltung: Veranstaltung) {
+    console.log("deepCopy");
+    return new Veranstaltung(veranstaltung.toJSON());
   }
-
-  get datumErsteVeranstaltung(): DatumUhrzeit {
-    return this.veranstaltungen[0].startDatumUhrzeit;
-  }
-
   doWithAllPanels(action: string): void {
     this.veranstaltungen.forEach((v) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,4 +74,5 @@ export default class PanelsForMonat extends Vue {
     this.$emit("deleted", veranstaltung);
   }
 }
+export default PanelsForMonat;
 </script>

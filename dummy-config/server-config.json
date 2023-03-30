@@ -1,5 +1,5 @@
 {
   "publicUrlPrefix": "http://localhost:1969",
   "doNotSendMails": "some email address to send to when testing",
-  "nowForDevelopment": "2020-12-01"
+  "nowForDevelopment": ""
 }

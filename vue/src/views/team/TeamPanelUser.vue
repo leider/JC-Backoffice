@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Model } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -64,19 +64,7 @@ export default class TeamPanelUser extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
   @Prop() initiallyExpanded!: boolean;
-
-  @Model() private expandedState?: boolean;
-
-  get expanded() {
-    if (this.expandedState === undefined) {
-      this.expandedState = this.initiallyExpanded;
-    }
-    return this.expandedState;
-  }
-
-  set expanded(state) {
-    this.expandedState = state;
-  }
+  @Prop() expanded!: boolean;
 
   close(): void {
     this.expanded = false;
