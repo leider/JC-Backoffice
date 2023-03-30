@@ -26,6 +26,7 @@ dayjs.locale("de");
 import utc from "dayjs/plugin/utc.js";
 
 dayjs.extend(utc);
+process.env.TZ = "Europe/Berlin";
 
 import conf from "./simpleConfigure.js";
 
