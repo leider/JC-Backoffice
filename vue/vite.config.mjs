@@ -9,6 +9,9 @@ export default defineConfig(() => {
     root: __dirname,
     base: "/vue/",
     build: { outDir: "../backend/static/vue", emptyOutDir: true },
+    define: {
+      "process": {},
+    },
     plugins: [
       vue(),
       splitVendorChunkPlugin(),

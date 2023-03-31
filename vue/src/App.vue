@@ -122,9 +122,9 @@ export default class App extends Vue {
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../../node_modules/bootstrap-vue/src/index";
 
-@import "../../node_modules/@fullcalendar/common/main.css";
-@import "../../node_modules/@fullcalendar/daygrid/main.css";
-@import "../../node_modules/@fullcalendar/bootstrap/main.css";
+//@import "../../node_modules/@fullcalendar/common/main.css";
+//@import "../../node_modules/@fullcalendar/daygrid/main.css";
+//@import "../../node_modules/@fullcalendar/bootstrap/main.css";
 @import "flaticon-patched.css";
 @import "widgets/vue-multiselect";
 @import "markdown";

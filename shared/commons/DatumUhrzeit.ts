@@ -24,9 +24,12 @@ import "dayjs/locale/de.js";
 
 dayjs.locale("de");
 import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 
 dayjs.extend(utc);
-process.env.TZ = "Europe/Berlin";
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("Europe/Berlin");
 
 import conf from "./simpleConfigure.js";
 

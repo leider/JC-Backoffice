@@ -8,9 +8,9 @@
     .col-lg-8.col-sm-12
       .row
         .col-6
-          heft-calendar(:dateString="start.minus({ monate: 2 }).fuerCalendarWidget", :events="events")
+          heft-calendar(:options="calOptions(2)")
         .col-6
-          heft-calendar(:dateString="start.minus({ monate: 1 }).fuerCalendarWidget", :events="events", height="600")
+          heft-calendar(:options="calOptions(1)", height="600")
       .row.mt-4
         .col-12
           h4 Farben Hilfe
@@ -52,6 +52,10 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetween } from "../../commons/loader";
 import HeftCalendar from "../calendar/HeftCalendar.vue";
 import Markdown from "../../widgets/Markdown.vue";
+import { CalendarOptions } from "@fullcalendar/core";
+import deLocale from "@fullcalendar/core/locales/de";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import bootstrapPlugin from "@fullcalendar/bootstrap";
 
 @Component({ components: { HeftCalendar, Markdown } })
 export default class Programmheft extends Vue {
@@ -94,6 +98,29 @@ export default class Programmheft extends Vue {
     document.title = "Programmheft";
     this.kalender = (await kalenderFor(this.start.fuerKalenderViews)) || new Kalender({ id: this.start.fuerKalenderViews, text: "" });
     this.veranstaltungen = (await veranstaltungenBetween(this.start, this.start.plus({ monate: 2 }))) || [];
+  }
+
+  calOptions(offset: number): CalendarOptions {
+    return {
+      plugins: [dayGridPlugin, bootstrapPlugin],
+      initialView: "dayGridMonth",
+      themeSystem: "bootstrap",
+      bootstrapFontAwesome: false,
+      buttonText: { next: ">", prev: "<" },
+      locales: [deLocale],
+      headerToolbar: { left: "title", center: "", right: "" },
+      views: {
+        month: {
+          titleFormat: { month: "long" },
+          weekNumberFormat: { week: "short" },
+          fixedWeekCount: false,
+          showNonCurrentDates: false,
+        },
+      },
+      contentHeight: 600,
+      initialDate: this.start.minus({ monate: offset }).fuerCalendarWidget,
+      events: this.events,
+    };
   }
 }
 </script>

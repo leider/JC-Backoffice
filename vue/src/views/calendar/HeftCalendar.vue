@@ -8,39 +8,13 @@ FullCalendar(:options="options")
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import "@fullcalendar/core/vdom.js";
-import FullCalendar, { CalendarOptions } from "@fullcalendar/vue";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import bootstrapPlugin from "@fullcalendar/bootstrap";
-import deLocale from "@fullcalendar/core/locales/de";
-import { Event } from "jc-shared/programmheft/kalender";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { CalendarOptions } from "@fullcalendar/core";
+import FullCalendar from "@fullcalendar/vue";
 
 @Component({ components: { FullCalendar } })
 export default class HeftCalendar extends Vue {
-  @Prop() dateString!: string;
-  @Prop() events!: Event[];
-
-  options: CalendarOptions = {
-    plugins: [dayGridPlugin, bootstrapPlugin],
-    initialView: "dayGridMonth",
-    themeSystem: "bootstrap",
-    bootstrapFontAwesome: false,
-    buttonText: { next: ">", prev: "<" },
-    locales: [deLocale],
-    headerToolbar: { left: "title", center: "", right: "" },
-    views: {
-      month: {
-        titleFormat: { month: "long" },
-        weekNumberFormat: { week: "short" },
-        fixedWeekCount: false,
-        showNonCurrentDates: false,
-      },
-    },
-    contentHeight: 600,
-    initialDate: this.dateString,
-    events: this.events,
-  };
+  @Prop() options!: CalendarOptions;
 
   colorFor(arg: { event: any }): { backgroundColor: string; borderColor: string; color: string } {
     return {
@@ -48,11 +22,6 @@ export default class HeftCalendar extends Vue {
       borderColor: arg.event._def.extendedProps.farbe,
       color: "#FFFFFF",
     };
-  }
-
-  @Watch("events")
-  eventsChanged(): void {
-    this.options.events = this.events;
   }
 }
 </script>

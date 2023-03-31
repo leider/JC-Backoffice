@@ -11,13 +11,12 @@ FullCalendar(:options="options")
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Component, Vue } from "vue-property-decorator";
-import "@fullcalendar/core/vdom.js";
-import FullCalendar, { CalendarOptions } from "@fullcalendar/vue/";
+import { CalendarOptions, EventInput } from "@fullcalendar/core";
+import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import bootstrapPlugin from "@fullcalendar/bootstrap";
 import deLocale from "@fullcalendar/core/locales/de";
 import { calendarEventSources } from "@/commons/loader";
-import { EventInput } from "@fullcalendar/common";
 
 function getEvents(
   info: {
