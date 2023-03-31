@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
 import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
+process.env.TZ = "Europe/Berlin";
 
 describe("DatumUhrzeit", () => {
   describe("creation", () => {
