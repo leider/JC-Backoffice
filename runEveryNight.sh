@@ -9,4 +9,4 @@ export NODE_ICU_DATA=$HOME/JC-Backoffice/node_modules/full-icu
 # Include the user-specific profile
 . $HOME/.profile
 # exec node --icu-data-dir=/home/andreas/JC-Backoffice/node_modules/full-icu JC-Backoffice/start.js
-exec node JC-Backoffice/batchjobs/src/index.js
+exec /home/andreas/.nvm/versions/node/v16.20.0/bin/node JC-Backoffice/batchjobs/src/index.js
