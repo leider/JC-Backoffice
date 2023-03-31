@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import User from "jc-shared/user/user";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -64,8 +64,7 @@ export default class TeamPanelUser extends Vue {
   @Prop() veranstaltung!: Veranstaltung;
   @Prop() user!: User;
   @Prop() initiallyExpanded!: boolean;
-
-  private expanded = this.initiallyExpanded;
+  @Prop() expanded!: boolean;
 
   close(): void {
     this.expanded = false;

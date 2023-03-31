@@ -41,6 +41,8 @@
                 :user="user",
                 :users="users",
                 :admin="realadmin",
+                :datum-erste-veranstaltung="getMinDatum(veranstaltungenNachMonat[monat])",
+                :expanded="isExpanded(veranstaltungenNachMonat[monat])",
                 @deleted="deleted"
               )
         .col-lg-4
@@ -60,6 +62,7 @@ import { allUsers, currentUser, veranstaltungenForTeam } from "@/commons/loader"
 import JazzCalendar from "../calendar/JazzCalendar.vue";
 import PanelsForMonat from "./PanelsForMonat.vue";
 import UserPanel from "../user/UserPanel.vue";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 
 @Component({
   components: { UserPanels, JazzCalendar, UserPanel, PanelsForMonat },
@@ -120,6 +123,16 @@ export default class Team extends Vue {
     return Object.keys(this.veranstaltungenNachMonat);
   }
 
+  getMinDatum(veranstaltungen: Veranstaltung[]) {
+    return veranstaltungen[0].startDatumUhrzeit;
+  }
+
+  isExpanded(veranstaltungen: Veranstaltung[]) {
+    return (
+      this.getMinDatum(veranstaltungen).istVor(new DatumUhrzeit().plus({ monate: 1 })) &&
+      this.getMinDatum(veranstaltungen).istNach(new DatumUhrzeit().minus({ monate: 1 }))
+    );
+  }
   otherUsers(): User[] {
     return this.users?.filter((u) => u.id !== this.user.id) || [];
   }

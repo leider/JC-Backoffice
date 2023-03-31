@@ -1,8 +1,8 @@
-import conf from "../commons/simpleConfigure";
+import conf from "../../../shared/commons/simpleConfigure.js";
 import { NextFunction, Response } from "express";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import store from "../veranstaltungen/veranstaltungenstore";
-import { generatePdf, printoptions } from "./pdfCommons";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import store from "../veranstaltungen/veranstaltungenstore.js";
+import { generatePdf, printoptions } from "./pdfCommons.js";
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 

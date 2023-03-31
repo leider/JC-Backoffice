@@ -1,7 +1,15 @@
 <template lang="pug">
 .form-group
   jazz-label(:label="label", :tooltip="tooltip")
-  b-form-input.text-right(v-model="valueString", type="number", :min="min", :max="max", :state="state")
+  b-form-input.text-right(
+    v-model="valueString",
+    type="number",
+    :min="min",
+    :max="max",
+    :state="state",
+    onfocus="this.select()",
+    onclick="this.select()"
+  )
   b-form-invalid-feedback Muss ausgefüllt werden
 </template>
 

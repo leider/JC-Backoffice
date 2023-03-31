@@ -1,9 +1,9 @@
-import Message from "jc-shared/mail/message";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kalender, { EmailEvent } from "jc-shared/programmheft/kalender";
+import Message from "jc-shared/mail/message.js";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Kalender, { EmailEvent } from "jc-shared/programmheft/kalender.js";
 
-import store from "jc-backend/lib/programmheft/kalenderstore";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport";
+import store from "jc-backend/lib/programmheft/kalenderstore.js";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 
 export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit()) {
   async function sendMail(eventsForToday: EmailEvent[]) {

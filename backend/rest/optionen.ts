@@ -1,14 +1,14 @@
 import express, { Request, Response } from "express";
 
-import OptionValues from "jc-shared/optionen/optionValues";
-import Orte from "jc-shared/optionen/orte";
-import FerienIcals from "jc-shared/optionen/ferienIcals";
-import Termin from "jc-shared/optionen/termin";
-import User from "jc-shared/user/user";
+import OptionValues from "jc-shared/optionen/optionValues.js";
+import Orte from "jc-shared/optionen/orte.js";
+import FerienIcals from "jc-shared/optionen/ferienIcals.js";
+import Termin from "jc-shared/optionen/termin.js";
+import User from "jc-shared/user/user.js";
 
-import store from "../lib/optionen/optionenstore";
-import terminstore from "../lib/optionen/terminstore";
-import { resToJson } from "../lib/commons/replies";
+import store from "../lib/optionen/optionenstore.js";
+import terminstore from "../lib/optionen/terminstore.js";
+import { resToJson } from "../lib/commons/replies.js";
 
 const app = express();
 

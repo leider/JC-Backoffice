@@ -1,6 +1,6 @@
 import pug from "pug";
 
-import Renderer from "jc-shared/commons/renderer";
+import Renderer from "jc-shared/commons/renderer.js";
 
 export default class MailBodyRenderer {
   private markdown: string;

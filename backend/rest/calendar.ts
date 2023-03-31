@@ -1,20 +1,20 @@
 import express from "express";
 import superagent from "superagent";
-import flatMap from "lodash/flatMap";
+import flatMap from "lodash/flatMap.js";
 import { ComplexDate, Parser } from "ikalendar";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
-import { TerminEvent } from "jc-shared/optionen/termin";
-import User from "jc-shared/user/user";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals.js";
+import { TerminEvent } from "jc-shared/optionen/termin.js";
+import User from "jc-shared/user/user.js";
+import fieldHelpers from "jc-shared/commons/fieldHelpers.js";
 
-import store from "../lib/veranstaltungen/veranstaltungenstore";
-import optionenstore from "../lib/optionen/optionenstore";
-import terminstore from "../lib/optionen/terminstore";
-import { resToJson } from "../lib/commons/replies";
-import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService";
+import store from "../lib/veranstaltungen/veranstaltungenstore.js";
+import optionenstore from "../lib/optionen/optionenstore.js";
+import terminstore from "../lib/optionen/terminstore.js";
+import { resToJson } from "../lib/commons/replies.js";
+import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
 
 const app = express();
 

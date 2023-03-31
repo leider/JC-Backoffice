@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import misc from "./misc";
+import misc from "./misc.js";
 
 function normalize(str: string): string {
   if (str.trim() === "") {

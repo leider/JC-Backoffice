@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Db, Filter, MongoClient, Sort } from "mongodb";
-import conf from "../commons/simpleConfigure";
+import conf from "../../../shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
 
 const logger = loggers.get("transactions");

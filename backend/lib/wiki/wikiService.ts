@@ -1,6 +1,6 @@
 import Fs from "fs/promises";
 
-import Git from "./gitmech";
+import Git from "./gitmech.js";
 
 export default {
   BLOG_ENTRY_FILE_PATTERN: "blog_*",

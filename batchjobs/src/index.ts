@@ -1,12 +1,12 @@
-import "jc-backend/configure";
-import "jc-backend/initWinston";
+import "jc-backend/configure.js";
+import "jc-backend/initWinston.js";
 
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Message from "jc-shared/mail/message";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import Message from "jc-shared/mail/message.js";
 
-import userstore from "jc-backend/lib/users/userstore";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport";
-import sendMailsNightly from "./sendMailsNightly";
+import userstore from "jc-backend/lib/users/userstore.js";
+import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import sendMailsNightly from "./sendMailsNightly.js";
 
 const receiver = "leider";
 

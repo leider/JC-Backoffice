@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jc-shared",
   "version": "1.0.0",
   "description": "shared classes for jc",
@@ -8,16 +9,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "dayjs": "1.11.5",
-    "deep-object-diff": "1.1.7",
-    "marked": "4.1.1"
+    "dayjs": "1.11.7",
+    "deep-object-diff": "1.1.9",
+    "marked": "4.3.0"
   },
   "devDependencies": {
-    "@types/marked": "4.0.7",
+    "@types/marked": "4.0.8",
     "pug": "3.0.2"
   },
   "scripts": {
-    "test": "../node_modules/.bin/ts-mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.ts",
+    "test": "../node_modules/.bin/mocha --exit --icu-data-dir=../node_modules/full-icu test/**/*.js",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js"

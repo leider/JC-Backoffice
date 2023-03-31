@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import OptionValues from "../../optionen/optionValues";
+import OptionValues from "../../optionen/optionValues.js";
 
 describe("OptionValues constructor sorts lists case insensitive", () => {
   it("typen", () => {

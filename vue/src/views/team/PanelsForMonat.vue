@@ -20,6 +20,7 @@ div
       :ref="veranstaltung.id",
       :veranstaltung="veranstaltung",
       :initiallyExpanded="expanded",
+      :expanded="expanded",
       :user="user"
     )
     team-panel-admin(
@@ -29,6 +30,7 @@ div
       :ref="veranstaltung.id",
       :veranstaltung="veranstaltung",
       :initiallyExpanded="expanded",
+      :expanded="expanded",
       :users="users",
       v-on:deleted="deleted(veranstaltung)"
     )
@@ -43,20 +45,19 @@ import TeamPanelUser from "./TeamPanelUser.vue";
 import TeamPanelAdmin from "./TeamPanelAdmin.vue";
 
 @Component({ components: { TeamPanelAdmin, TeamPanelUser } })
-export default class PanelsForMonat extends Vue {
+class PanelsForMonat extends Vue {
   @Prop() monat!: string;
   @Prop() veranstaltungen!: Veranstaltung[];
   @Prop() user!: User;
   @Prop() users!: User[];
   @Prop() admin!: boolean;
-  private nearFuture = new DatumUhrzeit().plus({ monate: 1 });
-  private expanded =
-    this.datumErsteVeranstaltung.istVor(this.nearFuture) && this.datumErsteVeranstaltung.istNach(new DatumUhrzeit().minus({ monate: 1 }));
+  @Prop() datumErsteVeranstaltung!: DatumUhrzeit;
+  @Prop() expanded!: boolean;
 
-  get datumErsteVeranstaltung(): DatumUhrzeit {
-    return this.veranstaltungen[0].startDatumUhrzeit;
+  deepCopy(veranstaltung: Veranstaltung) {
+    console.log("deepCopy");
+    return new Veranstaltung(veranstaltung.toJSON());
   }
-
   doWithAllPanels(action: string): void {
     this.veranstaltungen.forEach((v) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -73,4 +74,5 @@ export default class PanelsForMonat extends Vue {
     this.$emit("deleted", veranstaltung);
   }
 }
+export default PanelsForMonat;
 </script>

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import fieldHelpers from "../../commons/fieldHelpers";
+import fieldHelpers from "../../commons/fieldHelpers.js";
 
 describe("formatNumberWithCurrentLocale", () => {
   it('formats for "de"', () => {

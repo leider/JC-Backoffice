@@ -1,18 +1,18 @@
-import DatumUhrzeit from "../commons/DatumUhrzeit";
-import Misc from "../commons/misc";
+import DatumUhrzeit from "../commons/DatumUhrzeit.js";
+import Misc from "../commons/misc.js";
 
-import Artist from "./artist";
-import Eintrittspreise from "./eintrittspreise";
-import Kasse from "./kasse";
-import Kontakt from "./kontakt";
-import Kopf from "./kopf";
-import Kosten from "./kosten";
-import Presse from "./presse";
-import Staff from "./staff";
-import Technik from "./technik";
-import Unterkunft from "./unterkunft";
-import Vertrag from "./vertrag";
-import VeranstaltungGema from "./veranstaltungGema";
+import Artist from "./artist.js";
+import Eintrittspreise from "./eintrittspreise.js";
+import Kasse from "./kasse.js";
+import Kontakt from "./kontakt.js";
+import Kopf from "./kopf.js";
+import Kosten from "./kosten.js";
+import Presse from "./presse.js";
+import Staff from "./staff.js";
+import Technik from "./technik.js";
+import Unterkunft from "./unterkunft.js";
+import Vertrag from "./vertrag.js";
+import VeranstaltungGema from "./veranstaltungGema.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;

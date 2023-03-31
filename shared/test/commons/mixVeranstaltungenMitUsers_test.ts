@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import mixVeranstaltungenMitUsers from "../../commons/mixVeranstaltungenMitUsers";
-import Veranstaltung from "../../veranstaltung/veranstaltung";
-import User from "../../user/user";
+import mixVeranstaltungenMitUsers from "../../commons/mixVeranstaltungenMitUsers.js";
+import Veranstaltung from "../../veranstaltung/veranstaltung.js";
+import User from "../../user/user.js";
 
 describe("mixVeranstaltungenMitUsers mixes correctly", () => {
   const vveranstaltungNoStaff = new Veranstaltung({});

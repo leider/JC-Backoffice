@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { Vue } from "vue-property-decorator";
 import "./plugins/bootstrap-vue";
 import App from "./App.vue";
 import router from "./router";

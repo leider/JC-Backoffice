@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jc-batch",
   "version": "1.0.0",
   "description": "batch jobs for jc",
@@ -12,7 +13,7 @@
     "jc-shared": "1.0.0"
   },
   "scripts": {
-    "test": "../node_modules/.bin/ts-mocha --exit test/**/*.ts",
+    "test": "../node_modules/.bin/mocha --exit test/**/*.js",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -f src/*.js test/**/*.js"

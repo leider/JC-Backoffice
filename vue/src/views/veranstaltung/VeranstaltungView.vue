@@ -77,7 +77,6 @@ import DeleteButtonWithDialog from "../../widgets/DeleteButtonWithDialog.vue";
 import KalkulationTab from "./KalkulationTab.vue";
 import TechnikTab from "./TechnikTab.vue";
 import HotelTab from "./HotelTab.vue";
-import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import { normCrLf } from "@/commons/utilityFunctions";
 

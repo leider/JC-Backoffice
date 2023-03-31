@@ -1,34 +1,37 @@
 import dayjs, { Dayjs } from "dayjs";
 
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
 dayjs.extend(customParseFormat);
-import duration from "dayjs/plugin/duration";
+import duration from "dayjs/plugin/duration.js";
 
 dayjs.extend(duration);
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
 
 dayjs.extend(isSameOrBefore);
-import isoWeek from "dayjs/plugin/isoWeek";
+import isoWeek from "dayjs/plugin/isoWeek.js";
 
 dayjs.extend(isoWeek);
-import localizedFormat from "dayjs/plugin/localizedFormat";
+import localizedFormat from "dayjs/plugin/localizedFormat.js";
 
 dayjs.extend(localizedFormat);
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import advancedFormat from "dayjs/plugin/advancedFormat.js";
 
 dayjs.extend(advancedFormat);
-import weekOfYear from "dayjs/plugin/weekOfYear";
+import weekOfYear from "dayjs/plugin/weekOfYear.js";
 
 dayjs.extend(weekOfYear);
-import "dayjs/locale/de";
+import "dayjs/locale/de.js";
 
 dayjs.locale("de");
-import utc from "dayjs/plugin/utc";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 
 dayjs.extend(utc);
-process.env.TZ = "Europe/Berlin";
+dayjs.extend(timezone);
 
-import conf from "jc-backend/lib/commons/simpleConfigure";
+dayjs.tz.setDefault("Europe/Berlin");
+
+import conf from "./simpleConfigure.js";
 
 type AdditionOptions = {
   jahre?: number;

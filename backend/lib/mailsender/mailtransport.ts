@@ -3,11 +3,11 @@ import Mail from "nodemailer/lib/mailer";
 import winston from "winston";
 const logger = winston.loggers.get("application");
 
-import Message from "jc-shared/mail/message";
+import Message from "jc-shared/mail/message.js";
 
-import conf from "../commons/simpleConfigure";
+import conf from "../../../shared/commons/simpleConfigure.js";
 const doNotSendMails = conf.get("doNotSendMails") || "";
-import MailBodyRenderer from "./mailbodyRenderer";
+import MailBodyRenderer from "./mailbodyRenderer.js";
 
 const transport = nodemailer.createTransport(conf.get("transport-options") as object);
 

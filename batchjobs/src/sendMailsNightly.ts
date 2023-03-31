@@ -1,9 +1,9 @@
-import { checkPressetexte } from "./sendMailsPressetextFehlt";
-import { checkKasse } from "./sendMailsKasseFehlt";
-import { checkFluegel, checkFotograf } from "./sendMailsNightlyPhotoAndFluegel";
-import { loadRulesAndProcess } from "./sendMailsForRules";
-import { remindForProgrammheft } from "./sendMailsForProgrammheft";
-import { checkStaff } from "./sendMailsStaffReminder";
+import { checkPressetexte } from "./sendMailsPressetextFehlt.js";
+import { checkKasse } from "./sendMailsKasseFehlt.js";
+import { checkFluegel, checkFotograf } from "./sendMailsNightlyPhotoAndFluegel.js";
+import { loadRulesAndProcess } from "./sendMailsForRules.js";
+import { remindForProgrammheft } from "./sendMailsForProgrammheft.js";
+import { checkStaff } from "./sendMailsStaffReminder.js";
 
 export default {
   loadRulesAndProcess,

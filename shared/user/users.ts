@@ -1,8 +1,8 @@
-import uniq from "lodash/uniq";
-import flatten from "lodash/flatten";
+import uniq from "lodash/uniq.js";
+import flatten from "lodash/flatten.js";
 
-import misc from "../commons/misc";
-import User from "./user";
+import misc from "../commons/misc.js";
+import User from "./user.js";
 
 export class Mailingliste {
   name: string;

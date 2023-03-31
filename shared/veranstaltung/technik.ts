@@ -1,4 +1,4 @@
-import misc from "../commons/misc";
+import misc from "../commons/misc.js";
 
 export default class Technik {
   dateirider: string[] = [];

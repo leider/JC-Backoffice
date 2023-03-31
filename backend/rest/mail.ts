@@ -1,14 +1,14 @@
 import express from "express";
 
-import User from "jc-shared/user/user";
-import { Mailingliste } from "jc-shared/user/users";
-import Message from "jc-shared/mail/message";
+import User from "jc-shared/user/user.js";
+import { Mailingliste } from "jc-shared/user/users.js";
+import Message from "jc-shared/mail/message.js";
 
-import mailstore from "../lib/mailsender/mailstore";
-import MailRule from "jc-shared/mail/mailRule";
-import { resToJson } from "../lib/commons/replies";
-import mailtransport from "../lib/mailsender/mailtransport";
-import store from "../lib/users/userstore";
+import mailstore from "../lib/mailsender/mailstore.js";
+import MailRule from "jc-shared/mail/mailRule.js";
+import { resToJson } from "../lib/commons/replies.js";
+import mailtransport from "../lib/mailsender/mailtransport.js";
+import store from "../lib/users/userstore.js";
 
 const app = express();
 

@@ -101,9 +101,9 @@ export default class TeamPanelAdmin extends Vue {
   @Prop() users!: User[];
   @Prop() initiallyExpanded!: boolean;
 
-  private expanded = this.initiallyExpanded;
+  @Prop() expanded!: boolean;
   private dirty = false;
-  private originalVeranstaltung = new Veranstaltung(this.veranstaltung.toJSON());
+  private originalVeranstaltung!: Veranstaltung;
 
   close(): void {
     this.expanded = false;
@@ -111,6 +111,9 @@ export default class TeamPanelAdmin extends Vue {
 
   expand(): void {
     this.expanded = true;
+  }
+  mounted() {
+    this.originalVeranstaltung = new Veranstaltung(this.veranstaltung);
   }
 
   @Watch("veranstaltung", { deep: true })

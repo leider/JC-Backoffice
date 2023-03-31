@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "jazzclub-backoffice",
   "description": "The back office for Jazzclub Karlsruhe",
   "version": "1.0.0",
@@ -20,38 +21,37 @@
     "node": ">=14.0"
   },
   "dependencies": {
-    "lodash": "4.17.21",
-    "sharp": "0.31.1"
+    "lodash": "4.17.21"
   },
   "devDependencies": {
-    "@prettier/plugin-pug": "2.2.0",
-    "@types/chai": "4.3.3",
-    "@types/lodash": "4.14.186",
-    "@types/mocha": "9.1.1",
-    "@types/node": "17.0.36",
-    "@types/sharp": "0.31.0",
+    "@prettier/plugin-pug": "2.4.2",
+    "@types/chai": "4.3.4",
+    "@types/lodash": "4.14.192",
+    "@types/mocha": "10.0.1",
+    "@types/node": "18.15.11",
+    "@types/sharp": "0.31.1",
     "@types/sinon": "10.0.13",
-    "@typescript-eslint/eslint-plugin": "5.38.1",
-    "@typescript-eslint/parser": "5.38.1",
-    "chai": "4.3.6",
-    "eslint": "7.32.0",
+    "@typescript-eslint/eslint-plugin": "5.57.0",
+    "@typescript-eslint/parser": "5.57.0",
+    "chai": "4.3.7",
+    "eslint": "8.37.0",
     "eslint-plugin-prettier": "4.2.1",
     "full-icu": "1.5.0",
-    "mocha": "10.0.0",
-    "prettier": "2.7.1",
-    "sass": "1.32.13",
-    "sinon": "14.0.0",
+    "mocha": "10.2.0",
+    "prettier": "2.8.7",
+    "sass": "1.60.0",
+    "sinon": "15.0.3",
     "ts-mocha": "10.0.0",
-    "tslib": "2.4.0",
-    "typescript": "4.6.4"
+    "tslib": "2.5.0",
+    "typescript": "5.0.3"
   },
   "scripts": {
     "compile": "cd backend && yarn deploy && cd ../batchjobs && yarn tsc && cd ../shared && yarn tsc",
     "deploy": "yarn compile && cd vue && yarn build",
     "clean-ts": "cd backend && yarn clean-ts && cd ../batchjobs && yarn clean-ts && cd ../shared && yarn clean-ts",
-    "develop": "yarn clean-ts && yarn compile && cd vue && yarn serve",
+    "develop": "yarn clean-ts && yarn compile && cd vue && yarn dev",
     "start": "node --icu-data-dir=node_modules/full-icu backend/start",
-    "test": "cd batchjobs && yarn test && cd ../shared && yarn test",
+    "test": "yarn compile && cd batchjobs && yarn test && cd ../shared && yarn test",
     "lint-all": "cd backend && yarn eslint && cd ../batchjobs && yarn eslint && cd ../shared && yarn eslint && cd ../vue && yarn lint",
     "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules"
   }

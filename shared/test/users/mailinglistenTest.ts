@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import Users, { Mailingliste } from "../../user/users";
-import User from "../../user/user";
+import Users, { Mailingliste } from "../../user/users.js";
+import User from "../../user/user.js";
 
 const user1 = new User({
   id: "user1",

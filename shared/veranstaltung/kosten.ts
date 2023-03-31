@@ -1,4 +1,4 @@
-import fieldHelpers from "../commons/fieldHelpers";
+import fieldHelpers from "../commons/fieldHelpers.js";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;

@@ -1,7 +1,7 @@
-import User from "jc-shared/user/user";
+import User from "jc-shared/user/user.js";
 
-import store from "./userstore";
-import { genSalt, hashPassword } from "../commons/hashPassword";
+import store from "./userstore.js";
+import { genSalt, hashPassword } from "../commons/hashPassword.js";
 
 export default {
   saveNewUserWithPassword: async function saveNewUserWithPassword(user: User) {
