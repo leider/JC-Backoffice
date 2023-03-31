@@ -1,1 +1,1 @@
-require("./backend/start");
+import "./backend/start.js";
