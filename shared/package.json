@@ -9,12 +9,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "dayjs": "1.11.5",
-    "deep-object-diff": "1.1.7",
-    "marked": "4.1.1"
+    "dayjs": "1.11.7",
+    "deep-object-diff": "1.1.9",
+    "marked": "4.3.0"
   },
   "devDependencies": {
-    "@types/marked": "4.0.7",
+    "@types/marked": "4.0.8",
     "pug": "3.0.2"
   },
   "scripts": {
