@@ -17,25 +17,24 @@
 
           td.text-right: .btn-group
             b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
-      table(width="100%", v-else)
-        tr.align-top
-          td.text-left: a(@click="toggleExpanded")
-            b-icon-caret-right
-          td.text-left: a(@click="toggleExpanded")
-            h5 {{ veranstaltung.startDatumUhrzeit.tagNumerisch }}
-          td: a(@click="toggleExpanded")
-            h5 {{ kopf.titelMitPrefix }} &nbsp;
-              small(style="color: inherit") {{ kopf.presseIn }}
-
-          td.text-right: .btn-group
-            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
-      table.position-relative(width="100%", v-if="expanded")
         tr
           td
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h6 {{ kopf.presseIn }}
         tr
           td
           td(colspan=2): a.stretched-link.inherit-color(@click="toggleExpanded"): h5 {{ kopf.titelMitPrefix }}
+      table(width="100%", v-else)
+        tr.align-top
+          td.text-left: a(@click="toggleExpanded")
+            b-icon-caret-right
+          td.text-left: a(@click="toggleExpanded")
+            h5
+              small(style="color: inherit") {{ veranstaltung.startDatumUhrzeit.wochentagTagMonat }}
+              | &nbsp; {{ kopf.titelMitPrefix }} &nbsp;
+              small(style="color: inherit") {{ kopf.ort }}
+
+          td.text-right: .btn-group
+            b-button.btn-secondary.py-0.px-1(:to="veranstaltung.fullyQualifiedUrl + '/preview'"): b-icon-eye-fill
       table(width="100%")
         tr
           td.p-0(width="33%"): checked-button(:veranstaltung="veranstaltung", name="presse")
