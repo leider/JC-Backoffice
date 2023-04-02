@@ -8,6 +8,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "lib": ["esnext"],
+    "allowSyntheticDefaultImports": true,
     "types": ["node", "mocha"]
   },
   "include": ["**/*.ts"],
