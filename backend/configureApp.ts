@@ -23,7 +23,8 @@ export default function (app: express.Express, forDev?: boolean): void {
   app.use(express.json());
   app.use(compress());
   if (!forDev) {
-    app.use("/vue", history({ index: "/index.html" }));
+    app.use("/vue/nested", history());
+    app.use("/vue", history());
   }
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 

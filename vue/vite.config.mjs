@@ -1,16 +1,25 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import vue from "@vitejs/plugin-vue2";
 
-import path from "path";
+import path, { resolve } from "path";
 import express from "express";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
     root: __dirname,
     base: "/vue/",
-    build: { outDir: "../backend/static/vue", emptyOutDir: true },
+    build: {
+      outDir: "../backend/static/vue",
+      emptyOutDir: true,
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, "index.html"),
+          nested: resolve(__dirname, "nested/index.html"),
+        },
+      },
+    },
     define: {
-      "process": {},
+      process: {},
     },
     plugins: [
       vue(),
