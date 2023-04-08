@@ -70,15 +70,15 @@
       table.table.table-striped.table-sm
         tbody
           tr: td(colspan=3): h5.mb-0 Kasse
-          staff-row-admin(label="Eins:", sectionName="kasseV", :users="users", :staff="staff")
-          staff-row-admin(label="Zwei:", sectionName="kasse", :users="users", :staff="staff")
+          staff-row-admin(label="Eins:", sectionName="kasseV", :users="userIds", :staff="staff")
+          staff-row-admin(label="Zwei:", sectionName="kasse", :users="userIds", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Techniker
-          staff-row-admin(label="Eins:", sectionName="technikerV", :users="users", :staff="staff")
-          staff-row-admin(label="Zwei:", sectionName="techniker", :users="users", :staff="staff")
+          staff-row-admin(label="Eins:", sectionName="technikerV", :users="userIds", :staff="staff")
+          staff-row-admin(label="Zwei:", sectionName="techniker", :users="userIds", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Master
-          staff-row-admin(label="", sectionName="mod", :users="users", :staff="staff")
+          staff-row-admin(label="", sectionName="mod", :users="userIds", :staff="staff")
           tr: td(colspan=3): h5.mb-0 Merchandise
-          staff-row-admin(label="", sectionName="merchandise", :users="users", :staff="staff")
+          staff-row-admin(label="", sectionName="merchandise", :users="userIds", :staff="staff")
 </template>
 
 <script lang="ts">
@@ -130,6 +130,10 @@ export default class TeamPanelAdmin extends Vue {
 
   get staff(): Staff {
     return this.veranstaltung.staff;
+  }
+
+  get userIds() {
+    return this.users.map((u) => u.id);
   }
 
   get colorCode(): string {

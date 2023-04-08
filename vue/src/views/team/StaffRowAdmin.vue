@@ -3,7 +3,7 @@ tr
   th: .form-control-plaintext {{ label }}
   td
     .input-group
-      multi-select(v-model="section", :options="userids")
+      multi-select(v-model="section", :options="users")
       .input-group-append
         .input-group-text.pl-1.pr-0
           b-form-checkbox(v-model="checked")
@@ -22,7 +22,7 @@ export default class StaffRowAdmin extends Vue {
   @Prop() sectionName!: StaffType;
   @Prop() label!: string;
   @Prop() staff!: Staff;
-  @Prop() users!: User[];
+  @Prop() users!: string[];
 
   get section(): string[] {
     return this.staff.getStaffCollection(this.sectionName);
@@ -30,10 +30,6 @@ export default class StaffRowAdmin extends Vue {
 
   set section(value: string[]) {
     this.staff.setStaffCollection(this.sectionName, value);
-  }
-
-  get userids(): string[] {
-    return this.users.map((u) => u.id);
   }
 
   get checked(): boolean {
