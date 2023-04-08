@@ -1,5 +1,6 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import vue from "@vitejs/plugin-vue2";
+import react from "@vitejs/plugin-react";
 
 import path, { resolve } from "path";
 import express from "express";
@@ -18,10 +19,8 @@ export default defineConfig(() => {
         },
       },
     },
-    define: {
-      process: {},
-    },
     plugins: [
+      react(),
       vue(),
       splitVendorChunkPlugin(),
       {
