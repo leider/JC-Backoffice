@@ -7,13 +7,13 @@ import createTokenBasedStyles from "@/components/createTokenBasedStyles";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, // default: true
+      refetchOnWindowFocus: false,
     },
   },
 });
 const { useToken } = theme;
 
-function getTokenWithCusotmColors(token: GlobalToken) {
+function createTokenWithCustomColors(token: GlobalToken) {
   const color = {
     ausgaben1: "#d50f36",
     kasse1: "#9185be",
@@ -28,7 +28,7 @@ function getTokenWithCusotmColors(token: GlobalToken) {
     festival: "#9fc442",
     livestream: "#ff29ac",
   };
-  const jc_colors: any = {
+  const jc_colors: { [index: string]: string | number } = {
     classix: color.allgemein2,
     concert: token.colorTextSecondary,
     kooperation: color.kasse1,
@@ -46,20 +46,22 @@ function getTokenWithCusotmColors(token: GlobalToken) {
     copy: token.colorFillSecondary,
     livestream: color.livestream,
   };
-  const result: any = {};
+  const result: { [index: string]: string | number } = {};
   Object.keys(jc_colors).forEach((key) => {
     result[`custom-color-${key}`] = jc_colors[key];
   });
+  result.colorPrimary = "#a01441";
+  result.colorTextDisabled = "#333333";
+  result.borderRadius = 2;
+  result.fontSize = 14;
+
   return result;
 }
 
 function App() {
   const { token } = useToken();
   createTokenBasedStyles(document, token);
-  const jcToken = getTokenWithCusotmColors(token);
-  jcToken.colorPrimary = "#a01441";
-  jcToken.colorTextDisabled = "#333333";
-  jcToken.fontSize = 14;
+  const jcToken = createTokenWithCustomColors(token);
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider

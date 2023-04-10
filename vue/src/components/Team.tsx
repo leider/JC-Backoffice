@@ -1,18 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
-import User from "jc-shared/user/user";
 import { useQueries } from "@tanstack/react-query";
-import { Row, Typography } from "antd";
-import VeranstaltungComp from "@/components/TeamBlockAdmin";
+import { Col, Collapse, ConfigProvider, Row, Typography } from "antd";
+import TeamBlockAdmin from "@/components/TeamBlockAdmin";
+import groupBy from "lodash/groupBy";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import { CaretDown, CaretRight } from "react-bootstrap-icons";
 
-const { Title } = Typography;
-
-interface UserCompProps {
-  user: User;
+interface MonatGroupProps {
+  veranstaltungen: Veranstaltung[];
+  usersAsOptions: { label: string; value: string }[];
+  monat: string;
 }
 
-function UserComp({ user }: UserCompProps) {
-  return <p>{user.name}</p>;
+function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps) {
+  const [expanded, setExpanded] = useState<boolean>(false);
+  useEffect(() => {
+    const minDatum = veranstaltungen[0].startDatumUhrzeit;
+    const jetzt = new DatumUhrzeit();
+    setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
+  }, [veranstaltungen]);
+  return (
+    <>
+      <Row gutter={8}>
+        <Col span={24}>
+          <Collapse
+            size={"small"}
+            activeKey={expanded ? monat : ""}
+            onChange={() => setExpanded(!expanded)}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown size={20} /> : <CaretRight size={20} />)}
+          >
+            <Collapse.Panel
+              key={monat}
+              header={
+                <Typography.Title level={3} style={{ margin: 0 }}>
+                  {monat}
+                </Typography.Title>
+              }
+              className="colpre"
+            ></Collapse.Panel>
+          </Collapse>
+        </Col>
+      </Row>
+      <Row gutter={8}>
+        {veranstaltungen.map((veranstaltung, index) => (
+          <TeamBlockAdmin key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={expanded} />
+        ))}
+      </Row>
+    </>
+  );
 }
 
 function Team() {
@@ -28,24 +65,32 @@ function Team() {
       },
     ],
   });
+
+  function realadmin(): boolean {
+    return true;
+  }
+
+  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
+  const [monate, setMonate] = useState<string[]>([]);
+  useEffect(() => {
+    const filteredVeranstaltungen = veranstaltungen.data?.filter((v) => realadmin() || v.kopf.confirmed);
+    const result = groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    setVeranstaltungenNachMonat(result);
+    setMonate(Object.keys(result));
+  }, [veranstaltungen.data]);
+
   const [usersAsOptions, setUsersAsOptions] = useState<{ label: string; value: string }[] | undefined>([]);
   useEffect(() => {
-    console.log("EFFECT");
     setUsersAsOptions(users.data?.map((user) => ({ label: user.id, value: user.id })));
   }, [users.data]);
 
   return (
     <>
-      <h1>JAZZCLUB in REACT</h1>
-      <p>Text</p>
-      <Row gutter={8}>
-        {veranstaltungen.data?.map((veranstaltung, index) => (
-          <VeranstaltungComp key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={false} />
-        ))}
-      </Row>
-      {users.data?.map((user, index) => (
-        <UserComp key={index} user={user}></UserComp>
-      ))}
+      {monate.map((monat) => {
+        return (
+          <MonatGroup monat={monat} veranstaltungen={veranstaltungenNachMonat[monat]} usersAsOptions={usersAsOptions || []}></MonatGroup>
+        );
+      })}
     </>
   );
 }

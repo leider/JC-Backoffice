@@ -29,7 +29,6 @@ export const globals = {
   isAuthenticated: async function isAuthenticated() {
     if (refreshTokenState === "START") {
       while (refreshTokenState === "START") {
-        console.log("WAITING, is still ", refreshTokenState);
         await sleep(100);
       }
     }
@@ -43,7 +42,6 @@ export const globals = {
     }
     if (refreshTokenState !== "START") {
       refreshTokenState = "START";
-      console.log("STARTING");
       const json = await standardFetch({
         method: "POST",
         url: "/refreshToken",
@@ -52,7 +50,6 @@ export const globals = {
       if (json) {
         globals.jwtToken = json.token;
         refreshTokenState = "FINISHED";
-        console.log("FINISHED");
         return json.token;
       }
     } else {
@@ -73,16 +70,7 @@ type FetchParams = {
 };
 
 async function standardFetch(params: FetchParams) {
-  const options: AxiosRequestConfig = {
-    url: params.url,
-    method: params.method,
-    data: params.data,
-    responseType: params.contentType !== "json" ? "blob" : "json",
-    headers: { Authorization: `Bearer ${globals.jwtToken}` },
-  };
-
   try {
-    console.log("url", params.url);
     if (params.url !== "/refreshToken") {
       await globals.isAuthenticated();
     }
@@ -100,7 +88,7 @@ async function standardFetch(params: FetchParams) {
     }
     return res.data;
   } catch (e) {
-    console.log({ e });
+    /* empty */
   }
 }
 

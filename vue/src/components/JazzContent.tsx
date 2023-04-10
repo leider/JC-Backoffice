@@ -2,7 +2,7 @@ import * as React from "react";
 import { Layout, Menu, theme } from "antd";
 import Team from "./Team";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const JazzContent: React.FC = () => {
   const {
