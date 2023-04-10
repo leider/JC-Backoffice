@@ -25,7 +25,7 @@ Vue.use(VueRouter);
 const routes = [
   { path: "/", redirect: "/veranstaltungen" },
   { path: "/login", component: Login },
-  { path: "/team", component: Team, props: { admin: false, periode: "zukuenftige" } },
+  { path: "/team", component: Team, props: { admin: false, periode: "alle" } },
   { path: "/veranstaltungen", redirect: "/veranstaltungen/zukuenftige" },
   { path: "/veranstaltungen/zukuenftige", component: Team, props: { admin: true, periode: "zukuenftige" } },
   { path: "/veranstaltungen/vergangene", component: Team, props: { admin: true, periode: "vergangene" } },

@@ -55,7 +55,6 @@ class PanelsForMonat extends Vue {
   @Prop() expanded!: boolean;
 
   deepCopy(veranstaltung: Veranstaltung) {
-    console.log("deepCopy");
     return new Veranstaltung(veranstaltung.toJSON());
   }
   doWithAllPanels(action: string): void {

@@ -13,9 +13,9 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionNa
     <Form.Item label={label}>
       <Input.Group>
         <Form.Item label={label} name={["staff", sectionName]} noStyle>
-          <Select mode="multiple" options={usersAsOptions} style={{ width: "80%" }} />
+          <Select mode="multiple" options={usersAsOptions} style={{ width: "90%" }} />
         </Form.Item>
-        <Form.Item name={["staff", sectionName + "NotNeeded"]} valuePropName="checked" noStyle>
+        <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
           <Checkbox style={{ marginLeft: "5px" }} />
         </Form.Item>
       </Input.Group>
