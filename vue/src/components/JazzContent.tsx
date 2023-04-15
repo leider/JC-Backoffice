@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Layout, Menu, theme } from "antd";
-import Team from "./Team";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { LoginState, useAuth } from "@/commons/auth";
+import { useEffect } from "react";
 
 const { Header, Content } = Layout;
 
@@ -8,6 +10,8 @@ const JazzContent: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const { loginState } = useAuth();
+  const { pathname, search } = useLocation();
 
   return (
     <Layout className="layout">
@@ -35,13 +39,22 @@ const JazzContent: React.FC = () => {
           })}
         />
       </Header>
+
       <Content style={{ padding: "0 50px" }}>
         <div className="site-layout-content" style={{ background: colorBgContainer }}>
-          <Team />
+          {pathname !== "/login" && loginState !== LoginState.LOGGED_IN ? (
+            <Navigate
+              to={{
+                pathname: "/login",
+                search: encodeURIComponent(pathname + (search ? search : "")),
+              }}
+            />
+          ) : (
+            <Outlet />
+          )}
         </div>
       </Content>
     </Layout>
   );
 };
-
 export default JazzContent;

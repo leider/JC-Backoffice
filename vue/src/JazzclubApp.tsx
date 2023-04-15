@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/components/JazzContent";
 import { ConfigProvider, GlobalToken, theme } from "antd";
 import createTokenBasedStyles from "@/components/createTokenBasedStyles";
+import { AuthProvider } from "@/commons/auth";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,7 +60,7 @@ function createTokenWithCustomColors(token: GlobalToken) {
   return result;
 }
 
-function App() {
+function JazzclubApp() {
   const { token } = useToken();
   createTokenBasedStyles(document, token);
   const jcToken = createTokenWithCustomColors(token);
@@ -70,10 +72,13 @@ function App() {
           token: jcToken,
         }}
       >
-        <JazzContent />
+        <AuthProvider>
+          <JazzContent />
+        </AuthProvider>
       </ConfigProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
 
-export default App;
+export default JazzclubApp;

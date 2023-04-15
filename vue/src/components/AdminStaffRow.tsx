@@ -1,4 +1,4 @@
-import { Checkbox, Form, Input, Select } from "antd";
+import { Checkbox, Form, Select, Space } from "antd";
 import React from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 
@@ -11,14 +11,14 @@ interface AdminStaffRowProps {
 const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionName, label }: AdminStaffRowProps) => {
   return (
     <Form.Item label={label}>
-      <Input.Group>
+      <Space.Compact block>
         <Form.Item label={label} name={["staff", sectionName]} noStyle>
           <Select mode="multiple" options={usersAsOptions} style={{ width: "90%" }} />
         </Form.Item>
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
-          <Checkbox style={{ marginLeft: "5px" }} />
+          <Checkbox style={{ marginLeft: "5px", marginTop: "5px" }} />
         </Form.Item>
-      </Input.Group>
+      </Space.Compact>
     </Form.Item>
   );
 };
