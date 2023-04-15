@@ -71,17 +71,12 @@ type FetchParams = {
 
 async function standardFetch(params: FetchParams) {
   try {
-    if (params.url !== "/refreshToken") {
-      await globals.isAuthenticated();
-    }
     const options: AxiosRequestConfig = {
       url: params.url,
       method: params.method,
       data: params.data,
       responseType: params.contentType !== "json" ? "blob" : "json",
-      headers: { Authorization: `Bearer ${globals.jwtToken}` },
     };
-
     const res = await axios(options);
     if (params.title || params.text) {
       feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
@@ -150,11 +145,13 @@ export async function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrz
 }
 
 export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
+  console.log("VER START");
   const result = await getForType("json", `/rest/veranstaltungen/${selector}`);
+  console.log("VER MID");
   return handleVeranstaltungen(result);
 }
 
-export async function veranstaltungForUrl(url: string) {
+export async function veranstaltungForUrl(url: string): Promise<Veranstaltung> {
   const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(url)}`);
   return result ? new Veranstaltung(result) : result;
 }

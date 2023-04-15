@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
 import { useQueries } from "@tanstack/react-query";
-import { Col, Collapse, ConfigProvider, Row, Typography } from "antd";
+import { Col, Collapse, Row, Typography } from "antd";
 import TeamBlockAdmin from "@/components/TeamBlockAdmin";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -88,7 +88,12 @@ function Team() {
     <>
       {monate.map((monat) => {
         return (
-          <MonatGroup monat={monat} veranstaltungen={veranstaltungenNachMonat[monat]} usersAsOptions={usersAsOptions || []}></MonatGroup>
+          <MonatGroup
+            key={monat}
+            monat={monat}
+            veranstaltungen={veranstaltungenNachMonat[monat]}
+            usersAsOptions={usersAsOptions || []}
+          ></MonatGroup>
         );
       })}
     </>

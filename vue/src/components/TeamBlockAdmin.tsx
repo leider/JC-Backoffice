@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Button, Col, Collapse, Divider, Form, Row, Space, theme, Typography } from "antd";
 import AdminStaffRow from "@/components/AdminStaffRow";
-import { CaretDown, CaretRight, CashStack, GraphUp, Headphones, HouseDoor, Keyboard, Newspaper } from "react-bootstrap-icons";
+import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
-import { IconForSmallBlock } from "@/components/Icon";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 
 const { Title } = Typography;
@@ -21,8 +20,6 @@ interface HeaderProps {
   veranstaltung: Veranstaltung;
   textColor: string;
 }
-const { useToken } = theme;
-
 function Header({ veranstaltung, textColor }: HeaderProps) {
   const titleStyle = { margin: 0, color: textColor };
   return (
@@ -50,8 +47,6 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
-  const { token } = useToken();
-
   useEffect(() => {
     const deepCopy = veranstaltung.toJSON();
     form.setFieldsValue(deepCopy);
@@ -76,12 +71,12 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
           <Button type="primary">Speichern</Button>
         ) : (
           <Space.Compact size="small">
-            <ButtonInAdminPanel type="allgemein"></ButtonInAdminPanel>
-            <ButtonInAdminPanel type="technik"></ButtonInAdminPanel>
-            <ButtonInAdminPanel type="ausgaben"></ButtonInAdminPanel>
-            <ButtonInAdminPanel type="hotel"></ButtonInAdminPanel>
-            <ButtonInAdminPanel type="kasse"></ButtonInAdminPanel>
-            <ButtonInAdminPanel type="presse"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemein"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse"></ButtonInAdminPanel>
           </Space.Compact>
         )}
       </Row>

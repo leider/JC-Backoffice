@@ -18,9 +18,6 @@ export default function createTokenBasedStyles(document: Document, token: Global
 .ant-table-thead > tr > th .ant-table-filter-trigger-container {
   background: ${bgContainerDisabledColor};
 }
-.ant-form-item {
-  margin-bottom: 4px !important;
-}
 .colpre .ant-collapse-content-box {
   padding: 0 !important;
 }
