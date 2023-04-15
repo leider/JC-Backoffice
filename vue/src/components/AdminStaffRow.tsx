@@ -1,6 +1,7 @@
-import { Checkbox, Form, Select, Space } from "antd";
+import { Form, Select, Space } from "antd";
 import React from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
+import InverseCheckbox from "@/widgets-react/InverseCheckbox";
 
 interface AdminStaffRowProps {
   sectionName: StaffType;
@@ -16,7 +17,7 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionNa
           <Select mode="multiple" options={usersAsOptions} style={{ width: "90%" }} />
         </Form.Item>
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
-          <Checkbox style={{ marginLeft: "5px", marginTop: "5px" }} />
+          <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
         </Form.Item>
       </Space.Compact>
     </Form.Item>

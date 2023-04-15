@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
 import { useQueries } from "@tanstack/react-query";
 import { Col, Collapse, Row, Typography } from "antd";
