@@ -2,7 +2,6 @@ import * as React from "react";
 import { Layout, Menu, theme } from "antd";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { LoginState, useAuth } from "@/commons/auth";
-import { useEffect } from "react";
 
 const { Header, Content } = Layout;
 
@@ -41,20 +40,26 @@ const JazzContent: React.FC = () => {
       </Header>
 
       <Content style={{ padding: "0 50px" }}>
-        <div className="site-layout-content" style={{ background: colorBgContainer }}>
-          {pathname !== "/login" && loginState !== LoginState.LOGGED_IN ? (
-            <Navigate
-              to={{
-                pathname: "/login",
-                search: encodeURIComponent(pathname + (search ? search : "")),
-              }}
-            />
-          ) : (
-            <Outlet />
-          )}
+        <div style={{ background: colorBgContainer }}>
+          <InnerContent pathname={pathname} loginState={loginState} search={search} />
         </div>
       </Content>
     </Layout>
   );
 };
+
+function InnerContent(props: { pathname: string; loginState: LoginState; search: string }) {
+  if (props.pathname !== "/login" && props.loginState !== LoginState.LOGGED_IN) {
+    return (
+      <Navigate
+        to={{
+          pathname: "/login",
+          search: encodeURIComponent(props.pathname + (props.search ? props.search : "")),
+        }}
+      />
+    );
+  } else {
+    return <Outlet />;
+  }
+}
 export default JazzContent;

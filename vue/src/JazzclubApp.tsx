@@ -5,6 +5,7 @@ import { ConfigProvider, GlobalToken, theme } from "antd";
 import createTokenBasedStyles from "@/components/createTokenBasedStyles";
 import { AuthProvider } from "@/commons/auth";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import "./JC-styles.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,18 +53,19 @@ function createTokenWithCustomColors(token: GlobalToken) {
   Object.keys(jc_colors).forEach((key) => {
     result[`custom-color-${key}`] = jc_colors[key];
   });
-  result.colorPrimary = "#a01441";
+  result.colorPrimary = "#337ab7";
   result.colorTextDisabled = "#333333";
-  result.borderRadius = 2;
-  result.fontSize = 14;
+  result.borderRadius = 0;
+  result.fontSize = 12;
+  result.fontFamily = "Montserrat, Helvetica, Arial, sans-serif;";
 
   return result;
 }
 
 function JazzclubApp() {
   const { token } = useToken();
-  createTokenBasedStyles(document, token);
   const jcToken = createTokenWithCustomColors(token);
+  createTokenBasedStyles(document, jcToken);
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider

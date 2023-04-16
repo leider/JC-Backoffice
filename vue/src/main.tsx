@@ -5,8 +5,14 @@ import { routes } from "./router/index-react";
 
 const router = createBrowserRouter(routes, { basename: "/vue/nested" });
 
+const STRICT = false;
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+  STRICT ? (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  ) : (
     <RouterProvider router={router} />
-  </React.StrictMode>
+  )
 );

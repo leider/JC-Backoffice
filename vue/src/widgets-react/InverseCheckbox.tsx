@@ -6,7 +6,9 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 export default function InverseCheckbox(props: CheckboxProps & React.RefAttributes<HTMLInputElement>) {
   const [inverseChecked, setInverseChecked] = useState<boolean>(false);
   useEffect(() => {
-    setInverseChecked(!props.checked);
+    if (props.checked !== undefined) {
+      setInverseChecked(!props.checked);
+    }
   }, [props.checked]);
 
   function privateOnChange(e: CheckboxChangeEvent) {

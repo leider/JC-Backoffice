@@ -20,7 +20,7 @@ import { globals } from "@/commons/loader";
 import Belege from "@/views/belege/Belege.vue";
 */
 
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import JazzclubApp from "../JazzclubApp";
 import * as React from "react";
 import Team from "@/components/Team";
@@ -29,9 +29,12 @@ import Login from "@/components/Login";
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
     element: <JazzclubApp />,
     children: [
+      {
+        path: "/",
+        element: <Navigate to={{ pathname: "/team", search: "zukuenftige" }} />,
+      },
       {
         path: "/login",
         element: <Login />,
