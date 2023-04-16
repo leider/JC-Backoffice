@@ -135,7 +135,7 @@ export async function login(name: string, pass: string) {
   }
 }
 
-function handleVeranstaltungen(result?: any[]) {
+function handleVeranstaltungen(result?: any[]): Veranstaltung[] {
   return result?.map((each: any) => new Veranstaltung(each)) || [];
 }
 
@@ -145,9 +145,7 @@ export async function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrz
 }
 
 export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
-  console.log("VER START");
   const result = await getForType("json", `/rest/veranstaltungen/${selector}`);
-  console.log("VER MID");
   return handleVeranstaltungen(result);
 }
 
@@ -447,9 +445,9 @@ export async function saveMailRule(rule: MailRule) {
 }
 
 // Wiki
-export async function wikisubdirs() {
+export async function wikisubdirs(): Promise<{ dirs: string[] }> {
   const json = await getForType("json", "/rest/wikidirs");
-  return json || [];
+  return json || { dirs: [] };
 }
 
 export async function wikiPage(subdir: string, page: string) {

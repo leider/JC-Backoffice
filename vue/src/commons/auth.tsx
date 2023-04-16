@@ -1,7 +1,9 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
+import User from "jc-shared/user/user";
+import { currentUser, wikisubdirs } from "@/commons/loader-for-react";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
@@ -38,6 +40,8 @@ interface IUseProvideAuth {
    */
   loginState: LoginState;
 
+  context?: ApplicationContext;
+
   /**
    * Function to login with.
    * @memberof IUseProvideAuth
@@ -51,7 +55,10 @@ interface IUseProvideAuth {
   logout: () => Promise<void>;
 }
 
-const initState = { state: "UNDEFINED" };
+export interface ApplicationContext {
+  currentUser: User;
+  wikisubdirs: { dirs: string[] };
+}
 
 /**
  * Provider hook that creates auth object and handles state
@@ -59,6 +66,17 @@ const initState = { state: "UNDEFINED" };
  */
 function useProvideAuth(): IUseProvideAuth {
   const [loginState, setLoginState] = useState(LoginState.UNKNOWN);
+  const [context, setContext] = useState<ApplicationContext | undefined>(undefined);
+  useEffect(() => {
+    async function innerWorker() {
+      if (loginState === LoginState.LOGGED_IN) {
+        const user = await currentUser();
+        const wiki = await wikisubdirs();
+        setContext({ currentUser: user, wikisubdirs: wiki });
+      }
+    }
+    innerWorker();
+  }, [loginState]);
 
   const queryClient = useQueryClient();
 
@@ -138,6 +156,7 @@ function useProvideAuth(): IUseProvideAuth {
 
   return {
     loginState,
+    context,
     login,
     logout,
   };

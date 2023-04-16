@@ -1,13 +1,7 @@
-import { GlobalToken } from "antd";
-
-export default function createTokenBasedStyles(document: Document, token: GlobalToken) {
+export default function createTokenBasedStyles(document: Document, token: { [p: string]: string | number }) {
   const errorBgColor = token.colorErrorBg;
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
-  const errorColor = token.colorError;
-  const successColor = token.colorSuccess;
-  const processingColor = token.colorPrimary;
-  const highlightColor = token.colorHighlight;
-  const borderColor = token.colorBorder;
+  const colorPrimary = token.colorPrimary;
 
   const orrpCustomStyles = `.table-row-error {
   background-color: ${errorBgColor};
@@ -18,40 +12,25 @@ export default function createTokenBasedStyles(document: Document, token: Global
 .ant-table-thead > tr > th .ant-table-filter-trigger-container {
   background: ${bgContainerDisabledColor};
 }
-.colpre .ant-collapse-content-box {
+.monat-header {
+  background-color: ${colorPrimary};
+}
+.monat-header .ant-collapse-header {
+  padding: 4px 8px !important;
+}
+.monat-header .ant-collapse-content-box {
   padding: 0 !important;
 }
-.collection-import-feedback-modal .import-status-failed {
-  color: ${errorColor};
-}
-.collection-import-feedback-modal .import-status-success {
-  color: ${successColor};
-}
-.collection-import-feedback-modal .import-status-pending {
-  color: ${processingColor};
-}
-.collection-import-feedback-modal .failed-imports-section .failed-imports-title .warning-prefix {
-  color: ${errorColor};
-}
+`;
 
-.resizable-drawer-dragger::after {
-  background: ${borderColor};
-}
-.resizable-drawer-dragger:hover {
-  background: ${borderColor};
-}
-.resizable-drawer-dragger:hover::after {
-  background: ${highlightColor};
-}`;
-
-  const ORRP_STYLES = "ORRP-styles";
+  const JC_STYLES = "JC-styles";
   const style = document.createElement("style");
-  style.id = ORRP_STYLES;
+  style.id = JC_STYLES;
   style.innerHTML = orrpCustomStyles;
 
   const head = document.getElementsByTagName("head")[0];
   for (const child of head.children) {
-    if (child.tagName === "STYLE" && child.id === ORRP_STYLES) {
+    if (child.tagName === "STYLE" && child.id === JC_STYLES) {
       return;
     }
   }

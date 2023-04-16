@@ -6,6 +6,8 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
+import { IconForSmallBlock } from "@/components/Icon";
+import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -65,13 +67,16 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
       wrapperCol={{ span: 20 }}
       size="small"
       colon={false}
+      style={{ margin: -12 }}
     >
       <Row justify="end">
         {dirty ? (
-          <Button type="primary">Speichern</Button>
+          <Space.Compact>
+            <ButtonWithIcon icon="CheckSquare" text="Speichern" />
+          </Space.Compact>
         ) : (
-          <Space.Compact size="small">
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemein"></ButtonInAdminPanel>
+          <Space.Compact>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>
@@ -80,24 +85,26 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
           </Space.Compact>
         )}
       </Row>
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Kasse
-      </Divider>
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" />
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Techniker
-      </Divider>
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" />
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Master
-      </Divider>
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Merchandise
-      </Divider>
-      <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" />
+      <div style={{ padding: 8 }}>
+        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+          Kasse
+        </Divider>
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" />
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" />
+        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+          Techniker
+        </Divider>
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" />
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" />
+        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+          Master
+        </Divider>
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" />
+        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+          Merchandise
+        </Divider>
+        <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" />
+      </div>
     </Form>
   );
 }
