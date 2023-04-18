@@ -24,7 +24,7 @@ import { Navigate, RouteObject } from "react-router-dom";
 import JazzclubApp from "../JazzclubApp";
 import * as React from "react";
 import Team from "@/components/Team";
-import VeranstaltungComp from "@/components/VeranstaltungComp";
+import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
 import Login from "@/components/Login";
 
 export const routes: RouteObject[] = [

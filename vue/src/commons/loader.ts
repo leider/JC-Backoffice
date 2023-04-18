@@ -533,7 +533,12 @@ function showFile(blob: Blob, downloadAsFilename?: string) {
     link.download = downloadAsFilename || "temp";
     link.click();
   } else {
-    window.open(objectURL);
+    const link = document.createElement("a");
+    link.href = objectURL;
+    link.target = "_blank";
+    link.download = "temp";
+    link.click();
+    //    window.open(objectURL);
   }
   /*
    */

@@ -273,7 +273,7 @@ export async function saveProgrammheft(kalender: Kalender) {
 }
 
 // Optionen & Termine
-export async function optionen() {
+export async function optionen(): Promise<OptionValues> {
   const result = await getForType("json", "/rest/optionen");
   return result ? new OptionValues(result) : result;
 }

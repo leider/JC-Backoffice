@@ -20,6 +20,7 @@
     "ismobilejs": "1.1.1",
     "jc-shared": "1.0.0",
     "jose": "4.13.1",
+    "numeral": "2.0.6",
     "react": "18.2.0",
     "react-bootstrap-icons": "1.10.3",
     "react-dom": "18.2.0",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "4.29.1",
     "@types/codemirror": "5.60.7",
+    "@types/numeral": "2.0.2",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
     "@vitejs/plugin-react": "3.1.0",

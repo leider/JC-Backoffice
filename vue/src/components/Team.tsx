@@ -119,8 +119,8 @@ function Team() {
         </Col>
         <Col>
           <Space>
-            <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" />
-            <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="dashed" />
+            <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" type="default" />
+            <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="default" />
             <Radio.Group
               value={period.value}
               options={[
@@ -129,7 +129,7 @@ function Team() {
                 { label: "Alle", value: "alle" },
               ]}
               optionType="button"
-              buttonStyle="solid"
+              buttonStyle="outline"
               onChange={(e) => {
                 setSearch({ period: e.target.value });
               }}
