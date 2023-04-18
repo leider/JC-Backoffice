@@ -6,6 +6,10 @@ import createTokenBasedStyles from "@/components/createTokenBasedStyles";
 import { AuthProvider } from "@/commons/auth";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./JC-styles.css";
+import "./flaticon-patched.css";
+import locale_de from "antd/locale/de_DE";
+import "numeral/locales/de";
+import numeral from "numeral";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -66,6 +70,9 @@ function JazzclubApp() {
   const { token } = useToken();
   const jcToken = createTokenWithCustomColors(token);
   createTokenBasedStyles(document, jcToken);
+  numeral.localeData("de").delimiters.thousands = ".";
+  numeral.locale("de");
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
@@ -73,6 +80,7 @@ function JazzclubApp() {
           hashed: false,
           token: jcToken,
         }}
+        locale={locale_de}
       >
         <AuthProvider>
           <JazzContent />

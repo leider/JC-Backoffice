@@ -1,0 +1,126 @@
+import { Form as AntdForm, Input } from "antd";
+import { FunctionComponent, useEffect, useState } from "react";
+
+type TTextField = {
+  /**
+   * The name of the input.
+   * @type {(string | string[])}
+   */
+  name: string | string[];
+
+  /**
+   * The label of the input.
+   * @type {string}
+   */
+  label: string;
+
+  /**
+   * Whether the input value is required.
+   * @type {boolean}
+   */
+  required?: boolean;
+
+  /**
+   * Whether the input is disabled.
+   * @type {boolean}
+   */
+  disabled?: boolean;
+
+  /**
+   * Whether the value should be clearable when disabled.
+   * @type {boolean}
+   */
+  clearOnDisabled?: boolean;
+
+  /**
+   * The inital value.
+   * @type {T}
+   */
+  initialValue?: string;
+
+  /**
+   * An optional tooltip value.
+   * @type {string}
+   */
+  tooltip?: string;
+
+  /**
+   * Callback when the input value has vhanged.
+   */
+  onChange?: (value: any) => void;
+
+  /**
+   * An optional help string.
+   * @type {string}
+   */
+  help?: string;
+};
+
+/**
+ * @param {TTextField} props
+ * @return {*}  {JSX.Element}
+ */
+export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX.Element => {
+  const [rules, setRules] = useState<any[] | undefined>(undefined);
+  useEffect(() => {
+    const rulesToSet: any[] | undefined = props.required
+      ? [
+          {
+            required: props.required,
+          },
+        ]
+      : undefined;
+    setRules(rulesToSet);
+  }, [props.required]);
+
+  return (
+    <AntdForm.Item
+      name={props.name}
+      label={<b>{props.label}:</b>}
+      rules={rules}
+      style={props.label ? {} : { marginBottom: 0 }}
+      initialValue={props.initialValue}
+      valuePropName={"textVal"}
+      trigger={"onText"}
+      tooltip={props.tooltip}
+      help={props.help}
+    >
+      <TextInputEmbedded disabled={props.disabled} clearOnDisabled={props.clearOnDisabled && props.disabled} onChange={props.onChange} />
+    </AntdForm.Item>
+  );
+};
+
+type TTextInputEmbedded = {
+  disabled?: boolean;
+  clearOnDisabled?: boolean;
+  textVal?: string;
+  onText?: (value: any) => void;
+  id?: string;
+  onChange?: (value: any) => void;
+};
+
+const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = (props: TTextInputEmbedded) => {
+  const [value, setValue] = useState<string | undefined>("");
+
+  useEffect(() => {
+    setValue(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
+  }, [props.textVal, props.clearOnDisabled, props.disabled]);
+
+  return (
+    <Input
+      id={props.id}
+      disabled={props.disabled}
+      value={value}
+      onChange={({ target: { value: nextValue } }) => {
+        setValue(nextValue);
+        props.onText!(nextValue);
+        props.onChange?.(nextValue);
+      }}
+      onBlur={({ target: { value: nextValue } }) => {
+        const trimmedValue = nextValue.trim() ? nextValue.trim() : null;
+        props.onText!(trimmedValue);
+        props.onChange?.(trimmedValue);
+      }}
+    />
+  );
+};

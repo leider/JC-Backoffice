@@ -1,23 +1,32 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Row, Tabs, TabsProps, theme } from "antd";
+import { Button, Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { veranstaltungForUrl } from "@/commons/loader-for-react";
+import { optionen as optionenRestCall, orte as orteRestCall, veranstaltungForUrl } from "@/commons/loader-for-react";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import TabAllgemeines from "@/components/veranstaltung/TabAllgemeines";
+import { areDifferent } from "@/commons/comparingAndTransforming";
+import OptionValues from "jc-shared/optionen/optionValues";
+import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
+import Orte from "jc-shared/optionen/orte";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
   const { url } = useParams();
   const veranst = useQuery({ queryKey: ["veranstaltung", url], queryFn: () => veranstaltungForUrl(url || "") });
+  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
+  const locations = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
+  const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
+  const [orte, setOrte] = useState<Orte>(new Orte());
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const { icon } = useColorsAndIconsForSections("allgemeines");
-
+  const [form] = Form.useForm();
   const { useToken } = theme;
   const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
@@ -33,6 +42,18 @@ export default function VeranstaltungComp() {
   }, [veranst.data]);
 
   useEffect(() => {
+    if (opts.data) {
+      setOptionen(opts.data);
+    }
+  }, [opts.data]);
+
+  useEffect(() => {
+    if (locations.data) {
+      setOrte(locations.data);
+    }
+  }, [locations.data]);
+
+  useEffect(() => {
     const page = search.get("page") ?? "";
     if (["allgemeines", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
       setActivePage(page);
@@ -45,7 +66,7 @@ export default function VeranstaltungComp() {
   function TabLabel(props: { type: buttonType; title: string }) {
     return (
       <div
-        style={{ margin: -16, padding: 8 }}
+        style={{ margin: -16, padding: 16 }}
         className={activePage === props.type ? `${"color"}-${props.type}` : `${"tab"}-${props.type}`}
       >
         <IconForSmallBlock iconName={icon(props.type)} /> {props.title}
@@ -57,7 +78,7 @@ export default function VeranstaltungComp() {
     {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: `${veranst.data?.id} 1 ${search} ${url}`,
+      children: <TabAllgemeines optionen={optionen} orte={orte} />,
     },
     {
       key: "technik",
@@ -94,17 +115,34 @@ export default function VeranstaltungComp() {
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [veranstaltung.artist.brauchtHotel, activePage]);
+  }, [veranstaltung.artist.brauchtHotel, activePage, optionen]);
+
+  const [initialValue, setInitialValue] = useState<any>({});
+  const [dirty, setDirty] = useState<boolean>(false);
+
+  useEffect(() => {
+    const deepCopy = toFormObject(veranstaltung);
+    form.setFieldsValue(deepCopy);
+    setInitialValue(toFormObject(veranstaltung));
+  }, [veranstaltung]);
 
   return (
-    <>
+    <Form
+      form={form}
+      onValuesChange={() => {
+        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+      }}
+      layout="vertical"
+    >
       <Row>
         <Col span={12}>
-          <h2 style={{ color: typeColor }}>
+          <Typography.Title level={2} style={{ color: typeColor }}>
             {veranstaltung.kopf.titelMitPrefix}
             <br />
-            <small>am {veranstaltung.datumForDisplayShort}</small>
-          </h2>
+            <small>
+              <small>am {veranstaltung.datumForDisplayShort}</small>
+            </small>
+          </Typography.Title>
         </Col>
         <Col span={12}>
           <Row justify="end">
@@ -119,13 +157,12 @@ export default function VeranstaltungComp() {
       </Row>
       <Tabs
         type="card"
-        defaultActiveKey="technik"
         activeKey={activePage}
         items={tabs}
         onChange={(newPage) => {
           setSearch({ page: newPage });
         }}
       />
-    </>
+    </Form>
   );
 }

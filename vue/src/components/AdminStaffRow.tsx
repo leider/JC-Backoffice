@@ -32,7 +32,7 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionNa
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
             return (
-              <Form.Item label={label} name={["staff", sectionName]} noStyle>
+              <Form.Item name={["staff", sectionName]} noStyle>
                 <Select mode="multiple" options={usersAsOptions} disabled={notNeeded} tagRender={tagRender} style={{ width: "90%" }} />
               </Form.Item>
             );
