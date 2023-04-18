@@ -18,6 +18,7 @@ import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranst
 import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import router from "../router";
 import * as jose from "jose";
+import isMobile from "ismobilejs";
 
 let refreshTokenState: string;
 
@@ -525,11 +526,11 @@ export async function imgZip(yymm: string) {
 function showFile(blob: Blob, downloadAsFilename?: string) {
   const objectURL = window.URL.createObjectURL(blob);
 
-  if (downloadAsFilename) {
+  if (downloadAsFilename || isMobile().any) {
     const link = document.createElement("a");
     link.href = objectURL;
     link.target = "_blank";
-    link.download = downloadAsFilename;
+    link.download = downloadAsFilename || "temp";
     link.click();
   } else {
     window.open(objectURL);
