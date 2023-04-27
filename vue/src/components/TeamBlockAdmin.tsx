@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Button, Col, Collapse, Divider, Form, Row, Space, theme, Typography } from "antd";
+import { Col, Collapse, Divider, Form, Row, Space, theme, Typography } from "antd";
 import AdminStaffRow from "@/components/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
-import { IconForSmallBlock } from "@/components/Icon";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 
 const { Title } = Typography;

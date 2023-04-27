@@ -876,3 +876,6 @@
   text-align: right;
 }
 
+.editor-toolbar {
+  padding: 0 !important;
+}

@@ -1,8 +1,8 @@
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import React, { CSSProperties, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Collapse } from "antd";
 
-export default function CollapsibleForEvents(props: { suffix: string; label: string; children: ReactNode; style?: CSSProperties }) {
+export default function CollapsibleForVeranstaltung(props: { suffix: string; label: string; children: ReactNode; noTopBorder?: boolean }) {
   const [expanded, setExpanded] = useState("content");
   return (
     <Collapse
@@ -10,7 +10,7 @@ export default function CollapsibleForEvents(props: { suffix: string; label: str
       activeKey={expanded}
       expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
       onChange={(key) => setExpanded(key)}
-      style={props.style}
+      style={props.noTopBorder ? {} : { marginTop: "16px" }}
     >
       <Collapse.Panel
         key="content"

@@ -45,7 +45,7 @@ type TTextField = {
   tooltip?: string;
 
   /**
-   * Callback when the input value has vhanged.
+   * Callback when the input value has changed.
    */
   onChange?: (value: any) => void;
 
@@ -54,6 +54,12 @@ type TTextField = {
    * @type {string}
    */
   help?: string;
+
+  /**
+   * Indicates that the input must be a valid E-Mail
+   * @type {boolean}
+   */
+  isEmail?: boolean;
 };
 
 /**
@@ -63,15 +69,18 @@ type TTextField = {
 export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX.Element => {
   const [rules, setRules] = useState<any[] | undefined>(undefined);
   useEffect(() => {
-    const rulesToSet: any[] | undefined = props.required
-      ? [
-          {
-            required: props.required,
-          },
-        ]
-      : undefined;
+    const rulesToSet: any[] = [];
+    if (props.required) {
+      rulesToSet.push({
+        required: true,
+        message: "Du musst einen Wert eingeben",
+      });
+    }
+    if (props.isEmail) {
+      rulesToSet.push({ type: "email", message: "Die Eingabe ist keine gültige E-Mail Adresse" });
+    }
     setRules(rulesToSet);
-  }, [props.required]);
+  }, [props.required, props.isEmail]);
 
   return (
     <AntdForm.Item
