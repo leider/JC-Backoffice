@@ -8,7 +8,7 @@ import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIco
 import { IconForSmallBlock } from "@/components/Icon";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
-import TabAllgemeines from "@/components/veranstaltung/TabAllgemeines";
+import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
@@ -26,7 +26,7 @@ export default function VeranstaltungComp() {
   const [orte, setOrte] = useState<Orte>(new Orte());
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const { icon } = useColorsAndIconsForSections("allgemeines");
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<Veranstaltung>();
   const { useToken } = theme;
   const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
@@ -78,7 +78,7 @@ export default function VeranstaltungComp() {
     {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines optionen={optionen} orte={orte} />,
+      children: <TabAllgemeines form={form} optionen={optionen} orte={orte} brauchtHotelCallback={updateTabs} />,
     },
     {
       key: "technik",
@@ -108,14 +108,18 @@ export default function VeranstaltungComp() {
   ];
   const [tabs, setTabs] = useState<TabsProps["items"]>(allTabs);
   useEffect(() => {
-    if (veranstaltung.artist.brauchtHotel) {
+    updateTabs(veranstaltung.artist.brauchtHotel);
+  }, [veranstaltung.artist.brauchtHotel, activePage, optionen]);
+
+  function updateTabs(brauchtHotel: boolean) {
+    if (brauchtHotel) {
       setTabs(allTabs);
     } else {
-      const result = [...allTabs];
+      const result = [...(allTabs || [])];
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [veranstaltung.artist.brauchtHotel, activePage, optionen]);
+  }
 
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
