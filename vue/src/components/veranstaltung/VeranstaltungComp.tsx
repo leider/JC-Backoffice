@@ -77,7 +77,9 @@ export default function VeranstaltungComp() {
     {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines form={form} optionen={optionen} orte={orte} brauchtHotelCallback={updateTabs} />,
+      children: (
+        <TabAllgemeines veranstaltung={veranstaltung} form={form} optionen={optionen} orte={orte} brauchtHotelCallback={updateTabs} />
+      ),
     },
     {
       key: "technik",
