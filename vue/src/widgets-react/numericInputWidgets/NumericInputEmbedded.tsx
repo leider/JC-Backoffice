@@ -3,7 +3,7 @@ import _ from "lodash";
 import numeral from "numeral";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 
-import { useFormats, useLimits, useSanitizeLocalInput } from "../hooks";
+import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import { INumericInputEmbedded } from "./INumericInputEmbedded";
 
 /**
@@ -43,7 +43,7 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
   };
 
   useEffect(() => {
-    sanitizeLocalInput(!disabled ? number : null);
+    sanitizeLocalInput(number);
   }, [sanitizeLocalInput, number, disabled]);
 
   return (

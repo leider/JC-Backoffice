@@ -14,6 +14,7 @@ import OptionValues from "jc-shared/optionen/optionValues";
 import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
+import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -86,7 +87,7 @@ export default function VeranstaltungComp() {
     {
       key: "ausgaben",
       label: <TabLabel type="ausgaben" title="Kalkulation" />,
-      children: `${veranst.data?.id} 3`,
+      children: <TabKosten optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "hotel",

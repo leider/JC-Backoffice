@@ -20,7 +20,7 @@ export default function TabAllgemeines({ optionen, orte, form, brauchtHotelCallb
   return (
     <Row gutter={12}>
       <Col span={12}>
-        <EventCard optionen={optionen} orte={orte} brauchtHotelCallback={brauchtHotelCallback} />
+        <EventCard form={form} optionen={optionen} orte={orte} brauchtHotelCallback={brauchtHotelCallback} />
         <ArtistCard optionen={optionen} />
         <KommentarCard />
       </Col>
