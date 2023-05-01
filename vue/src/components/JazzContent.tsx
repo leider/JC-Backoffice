@@ -39,7 +39,7 @@ const JazzContent: React.FC = () => {
         />
       </Header>
 
-      <Content style={{ padding: "0 50px" }}>
+      <Content style={{ padding: "5px 5px" }}>
         <div style={{ background: colorBgContainer }}>
           <InnerContent pathname={pathname} loginState={loginState} search={search} />
         </div>
