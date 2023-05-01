@@ -13,6 +13,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
+import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -65,12 +66,9 @@ export default function VeranstaltungComp() {
 
   function TabLabel(props: { type: buttonType; title: string }) {
     return (
-      <div
-        style={{ margin: -16, padding: 16 }}
-        className={activePage === props.type ? `${"color"}-${props.type}` : `${"tab"}-${props.type}`}
-      >
+      <b style={{ margin: -16, padding: 16 }} className={activePage === props.type ? `${"color"}-${props.type}` : `${"tab"}-${props.type}`}>
         <IconForSmallBlock iconName={icon(props.type)} /> {props.title}
-      </div>
+      </b>
     );
   }
 
@@ -83,11 +81,11 @@ export default function VeranstaltungComp() {
     {
       key: "technik",
       label: <TabLabel type="technik" title="Technik" />,
-      children: `${veranst.data?.id} 2`,
+      children: <TabTechnik optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "ausgaben",
-      label: <TabLabel type="ausgaben" title="Ausgaben" />,
+      label: <TabLabel type="ausgaben" title="Kalkulation" />,
       children: `${veranst.data?.id} 3`,
     },
     {
@@ -97,7 +95,7 @@ export default function VeranstaltungComp() {
     },
     {
       key: "kasse",
-      label: <TabLabel type="kasse" title="Kasse" />,
+      label: <TabLabel type="kasse" title="Abendkasse" />,
       children: `${veranst.data?.id} 5`,
     },
     {

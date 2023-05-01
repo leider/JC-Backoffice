@@ -1,8 +1,16 @@
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import React, { ReactNode, useState } from "react";
-import { Collapse } from "antd";
+import { Col, Collapse, Row } from "antd";
+import { formatToGermanNumberString } from "@/commons/utilityFunctions";
+import { isNil } from "lodash";
 
-export default function CollapsibleForVeranstaltung(props: { suffix: string; label: string; children: ReactNode; noTopBorder?: boolean }) {
+export default function CollapsibleForVeranstaltung(props: {
+  suffix: string;
+  label: string;
+  children: ReactNode;
+  noTopBorder?: boolean;
+  amount?: number;
+}) {
   const [expanded, setExpanded] = useState("content");
   return (
     <Collapse
@@ -15,7 +23,23 @@ export default function CollapsibleForVeranstaltung(props: { suffix: string; lab
       <Collapse.Panel
         key="content"
         className={`color-${props.suffix}`}
-        header={<span className={`color-${props.suffix}`}>{props.label}</span>}
+        header={
+          <Row>
+            <Col flex={1}>
+              <span className={`color-${props.suffix}`} style={{ fontSize: 14 }}>
+                <b>{props.label}</b>
+              </span>
+            </Col>
+            <Col flex="auto">&nbsp;</Col>
+            {!isNil(props.amount) && (
+              <Col>
+                <span className={`color-${props.suffix}`} style={{ fontSize: 14 }}>
+                  {formatToGermanNumberString(props.amount)} €
+                </span>
+              </Col>
+            )}
+          </Row>
+        }
       >
         {props.children}
       </Collapse.Panel>
