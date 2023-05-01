@@ -53,25 +53,3 @@ export default function StartEndPickers() {
     </Form.Item>
   );
 }
-
-/*
-    <DatePicker
-      format={"DD.MM.YY"}
-      onChange={(e, s) => {
-        console.log({ s });
-      }}
-    ></DatePicker>
-  </Form.Item>
-  <Form.Item name={["timeRange"]}>
-    <TimePicker.RangePicker
-      format={"HH:mm"}
-      minuteStep={15}
-      onChange={(e, s) => {
-        console.log({ s });
-      }}
-    ></TimePicker.RangePicker>
-  </Form.Item>
-
-  return <Checkbox {...props} checked={inverseChecked} onChange={privateOnChange}></Checkbox>;
-
- */

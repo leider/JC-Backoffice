@@ -1,7 +1,7 @@
-import { Form as AntdForm } from "antd";
-import { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { Form } from "antd";
+import { FunctionComponent, ReactNode, React, useEffect, useState } from "react";
 
-import NumericInputEmbedded from "../numericInputEmbedded/NumericInputEmbedded";
+import NumericInputEmbedded from "./NumericInputEmbedded";
 
 export type CommonWidgetProps<T> = {
   /**
@@ -14,7 +14,7 @@ export type CommonWidgetProps<T> = {
    * The label of the input.
    * @type {string}
    */
-  label: string;
+  label?: string;
 
   /**
    * Whether the input value is required.
@@ -96,9 +96,9 @@ export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberIn
   }, [props.required]);
 
   return (
-    <AntdForm.Item
+    <Form.Item
       name={props.name}
-      label={<b>{props.label}:</b>}
+      label={props.label ? <b>{props.label}:</b> : undefined}
       rules={rules}
       valuePropName="number"
       trigger="onNumber"
@@ -116,6 +116,26 @@ export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberIn
         onChange={props.onChange}
         suffix={props.suffix}
       />
-    </AntdForm.Item>
+    </Form.Item>
+  );
+};
+
+interface NumberInputWithDirectValueParams {
+  value: number;
+  decimals: number;
+  suffix?: string;
+  label?: string;
+}
+
+export const NumberInputWithDirectValue: FunctionComponent<NumberInputWithDirectValueParams> = ({
+  decimals,
+  suffix,
+  value,
+  label,
+}: NumberInputWithDirectValueParams): JSX.Element => {
+  return (
+    <Form.Item label={label && <b>{label}:</b>} noStyle={!label}>
+      <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} disabled />
+    </Form.Item>
   );
 };

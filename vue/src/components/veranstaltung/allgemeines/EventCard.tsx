@@ -3,17 +3,22 @@ import Orte from "jc-shared/optionen/orte";
 import React, { useEffect, useState } from "react";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Checkbox, Col, Form, Row, Select } from "antd";
+import { Checkbox, Col, Form, FormInstance, Row, Select } from "antd";
 import { TextField } from "@/widgets-react/TextField";
 import StartEndPickers from "@/widgets-react/StartEndPickers";
 import SingleSelect from "@/widgets-react/SingleSelect";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import CheckItem from "@/widgets-react/CheckItem";
 import { useAuth } from "@/commons/auth";
+import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
 
-export default function EventCard(props: { optionen: OptionValues; orte: Orte; brauchtHotelCallback: (brauchtHotel: boolean) => void }) {
+export default function EventCard(props: {
+  form: FormInstance;
+  optionen: OptionValues;
+  orte: Orte;
+  brauchtHotelCallback: (brauchtHotel: boolean) => void;
+}) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
-  const [preisprofile, setPreisprofile] = useState<{ label: JSX.Element; value: string }[]>([]);
   useEffect(() => {
     const localOptionen = props.optionen.typen.map((typ) => ({
       label: (
@@ -26,20 +31,6 @@ export default function EventCard(props: { optionen: OptionValues; orte: Orte; b
       value: typ,
     }));
     setEventTypes(localOptionen);
-
-    const localPreisprofile = props.optionen.preisprofile().map((profil) => ({
-      label: (
-        <span>
-          {profil.name}
-          <small>
-            &nbsp;
-            {`(${profil.regulaer},00, ${profil.regulaer - profil.rabattErmaessigt},00, ${profil.regulaer - profil.rabattMitglied},00)`}
-          </small>
-        </span>
-      ),
-      value: profil.name,
-    }));
-    setPreisprofile(localPreisprofile);
   }, [props.optionen]);
   const { context } = useAuth();
 
@@ -97,7 +88,7 @@ export default function EventCard(props: { optionen: OptionValues; orte: Orte; b
           <NumberInput name={["kopf", "flaeche"]} label="Fläche" decimals={0} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kopf", "saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
+          <NumberInput name={["kosten", "saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
         </Col>
       </Row>
       <Row gutter={12}>
@@ -110,9 +101,7 @@ export default function EventCard(props: { optionen: OptionValues; orte: Orte; b
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item label={<b>Preisprofil:</b>} name={["eintrittspreise", "preisprofil"]}>
-            <Select options={preisprofile} />
-          </Form.Item>
+          <PreisprofilSelect form={props.form} optionen={props.optionen} />
         </Col>
         <Col span={8}>
           <SingleSelect name={["kopf", "genre"]} label="Genre" options={props.optionen.genres} />
