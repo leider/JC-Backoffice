@@ -5,7 +5,7 @@ interface SingleSelectParams {
   name: string[];
   label: string;
   options: string[];
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 export default function SingleSelect({ label, name, onChange, options }: SingleSelectParams) {

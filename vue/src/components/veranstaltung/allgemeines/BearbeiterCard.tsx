@@ -1,7 +1,6 @@
 import React from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
-import "easymde/dist/easymde.min.css";
 import { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 
 export default function BearbeiterCard(props: { changelist: ChangelistItem[] }) {
