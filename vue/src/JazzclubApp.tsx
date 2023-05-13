@@ -1,7 +1,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/components/JazzContent";
-import { ConfigProvider, GlobalToken, theme } from "antd";
+import { App, ConfigProvider, GlobalToken, theme } from "antd";
 import createTokenBasedStyles from "@/components/createTokenBasedStyles";
 import { AuthProvider } from "@/commons/auth";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -82,9 +82,11 @@ function JazzclubApp() {
         }}
         locale={locale_de}
       >
-        <AuthProvider>
-          <JazzContent />
-        </AuthProvider>
+        <App>
+          <AuthProvider>
+            <JazzContent />
+          </AuthProvider>
+        </App>
       </ConfigProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
