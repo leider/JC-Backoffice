@@ -15,6 +15,7 @@ import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils"
 import Orte from "jc-shared/optionen/orte";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
 import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
+import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -99,7 +100,7 @@ export default function VeranstaltungComp() {
     {
       key: "kasse",
       label: <TabLabel type="kasse" title="Abendkasse" />,
-      children: `${veranst.data?.id} 5`,
+      children: <TabKasse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "presse",
