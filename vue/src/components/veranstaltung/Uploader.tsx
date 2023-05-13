@@ -1,4 +1,4 @@
-import { Button, FormInstance, Space, Upload, UploadFile, UploadProps } from "antd";
+import { Button, Col, FormInstance, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
 import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
 import { IconForSmallBlock } from "@/components/Icon";
 import React, { useEffect, useState } from "react";
@@ -55,20 +55,36 @@ export default function Uploader({ form, veranstaltung, name, typ }: UoloaderPar
   };
 
   return (
-    <Space align="end">
-      <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} />
-      <Upload {...uploadprops}>
-        <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
-      </Upload>
-      <Button
-        icon={<IconForSmallBlock iconName="Upload" />}
-        type="primary"
-        onClick={saveFiles}
-        disabled={fileList.length === 0}
-        loading={uploading}
-      >
-        &nbsp; {uploading ? "Lädt..." : "Hochladen"}
-      </Button>
-    </Space>
+    <>
+      <Row>
+        <Col>
+          <Space align="end">
+            <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} />
+            <Upload {...uploadprops}>
+              <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
+            </Upload>
+            <Button
+              icon={<IconForSmallBlock iconName="Upload" />}
+              type="primary"
+              onClick={saveFiles}
+              disabled={fileList.length === 0}
+              loading={uploading}
+            >
+              &nbsp; {uploading ? "Lädt..." : "Hochladen"}
+            </Button>
+          </Space>
+        </Col>
+      </Row>
+      <Row style={{ marginTop: 16 }}>
+        <Col>
+          <b>Preview: </b>
+          {(options ?? []).map((opt) => (
+            <Tag key={opt} color="orange">
+              <a href={`/files/${opt}`}>{opt} </a>
+            </Tag>
+          ))}
+        </Col>
+      </Row>
+    </>
   );
 }
