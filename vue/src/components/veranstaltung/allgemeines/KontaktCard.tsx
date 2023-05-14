@@ -44,7 +44,11 @@ export default function KontaktCard({ kontakte, form, selector }: KontaktCardPro
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="allgemeines" label="Agentur" noTopBorder>
+    <CollapsibleForVeranstaltung
+      suffix={selector === "agentur" ? "allgemeines" : "hotel"}
+      label={selector === "agentur" ? "Agentur" : "Hotel"}
+      noTopBorder
+    >
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item label={<b>Auswahl:</b>}>

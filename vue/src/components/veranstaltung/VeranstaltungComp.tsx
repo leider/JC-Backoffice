@@ -11,11 +11,13 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
+import { fromFormObject, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
 import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
 import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
+import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
+import { detailedDiff } from "deep-object-diff";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -79,7 +81,14 @@ export default function VeranstaltungComp() {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
       children: (
-        <TabAllgemeines veranstaltung={veranstaltung} form={form} optionen={optionen} orte={orte} brauchtHotelCallback={updateTabs} />
+        <TabAllgemeines
+          veranstaltung={veranstaltung}
+          form={form}
+          optionen={optionen}
+          orte={orte}
+          brauchtHotelCallback={updateTabs}
+          titleAndDateCallback={updateTitleAndDate}
+        />
       ),
     },
     {
@@ -95,7 +104,7 @@ export default function VeranstaltungComp() {
     {
       key: "hotel",
       label: <TabLabel type="hotel" title="Hotel" />,
-      children: `${veranst.data?.id} 4`,
+      children: <TabHotel optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "kasse",
@@ -111,7 +120,7 @@ export default function VeranstaltungComp() {
   const [tabs, setTabs] = useState<TabsProps["items"]>(allTabs);
   useEffect(() => {
     updateTabs(veranstaltung.artist.brauchtHotel);
-  }, [veranstaltung.artist.brauchtHotel, activePage, optionen]);
+  }, [veranstaltung.artist.brauchtHotel, activePage]);
 
   function updateTabs(brauchtHotel: boolean) {
     if (brauchtHotel) {
@@ -129,13 +138,40 @@ export default function VeranstaltungComp() {
   useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
     form.setFieldsValue(deepCopy);
+    form.validateFields();
     setInitialValue(toFormObject(veranstaltung));
-  }, [veranstaltung]);
+    updateTitleAndDate();
+  }, [form, veranstaltung]);
+
+  const [title, setTitle] = useState<string>("");
+  const [displayDate, setDisplayDate] = useState<string>("");
+
+  function updateTitleAndDate() {
+    const veranstaltung = fromFormObject(form);
+    setTitle(veranstaltung.kopf.titelMitPrefix);
+    setDisplayDate(veranstaltung.datumForDisplayShort);
+
+    const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
+    if (selectedOrt) {
+      form.setFieldsValue({
+        kopf: {
+          pressename: selectedOrt.pressename || veranstaltung.kopf.ort,
+          presseIn: selectedOrt.presseIn || selectedOrt.pressename,
+          flaeche: selectedOrt.flaeche,
+        },
+      });
+    }
+    form.validateFields();
+  }
 
   return (
     <Form
       form={form}
       onValuesChange={() => {
+        const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        console.log({ diff });
+        // console.log({ initialValue });
+        // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       layout="vertical"
@@ -143,10 +179,10 @@ export default function VeranstaltungComp() {
       <Row>
         <Col span={12}>
           <Typography.Title level={2} style={{ color: typeColor }}>
-            {veranstaltung.kopf.titelMitPrefix}
+            {title}
             <br />
             <small>
-              <small>am {veranstaltung.datumForDisplayShort}</small>
+              <small>am {displayDate}</small>
             </small>
           </Typography.Title>
         </Col>
@@ -155,8 +191,17 @@ export default function VeranstaltungComp() {
             <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" style={{ backgroundColor: token["colorError"] }}>
               &nbsp;Löschen
             </Button>
-            <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" style={{ backgroundColor: token["colorTextTertiary"] }}>
+            <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" style={{ backgroundColor: token["colorTextTertiary"] }}>
               &nbsp;Kopieren
+            </Button>
+            <Button
+              htmlType="submit"
+              icon={<IconForSmallBlock iconName="CheckSquare" />}
+              type="primary"
+              style={{ backgroundColor: token["colorSuccess"] }}
+              disabled={!dirty}
+            >
+              &nbsp;Speichern
             </Button>
           </Row>
         </Col>
