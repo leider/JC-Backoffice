@@ -5,7 +5,7 @@ interface SingleSelectParams {
   name: string[];
   label: string;
   options: string[];
-  onChange?: () => void;
+  onChange?: (val: string) => void;
   initialValue?: string;
 }
 

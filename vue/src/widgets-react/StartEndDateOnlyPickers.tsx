@@ -21,7 +21,6 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
           if (dependency) {
             return {
               validator: (_, value: Dayjs[]) => {
-                console.log("BANG");
                 const start: Dayjs = getFieldValue(dependency).start;
                 return value[0].isAfter(start.subtract(7, "days"))
                   ? Promise.resolve()
