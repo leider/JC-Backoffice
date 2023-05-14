@@ -10,7 +10,7 @@ export default function KommentarCard() {
       <Row gutter={12}>
         <Col span={24}>
           <Form.Item label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]}>
-            <SimpleMdeReact options={{ status: false }} />
+            <SimpleMdeReact options={{ status: false, spellChecker: false }} />
           </Form.Item>
         </Col>
       </Row>

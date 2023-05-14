@@ -54,7 +54,7 @@ app.get("/veranstaltungen/:startYYYYMM/:endYYYYMM", async (req, res) => {
 app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
   const veranstaltung = await store.getVeranstaltung(req.params.url);
   if (!veranstaltung) {
-    res.sendStatus(404);
+    return res.sendStatus(404);
   }
   resToJson(res, veranstaltung);
 });

@@ -29,7 +29,6 @@ export default function HotelCard({ form, optionen, veranstaltung }: HotelParams
         form.setFieldsValue({ unterkunft: { ...preise } });
       }
     }
-    console.log({ hotelName });
   }, [hotelName]);
 
   useEffect(() => {

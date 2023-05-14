@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, ConfigProvider, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
+import { Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { optionen as optionenRestCall, orte as orteRestCall, veranstaltungForUrl } from "@/commons/loader-for-react";
+import { optionen as optionenRestCall, orte as orteRestCall, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader-for-react";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -17,8 +17,9 @@ import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
 import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
 import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
-import { detailedDiff } from "deep-object-diff";
+//import { detailedDiff } from "deep-object-diff";
 import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
+import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -115,7 +116,7 @@ export default function VeranstaltungComp() {
     {
       key: "presse",
       label: <TabLabel type="presse" title="Presse" />,
-      children: `${veranst.data?.id} 6`,
+      children: <TabPresse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
   ];
   const [tabs, setTabs] = useState<TabsProps["items"]>(allTabs);
@@ -136,23 +137,29 @@ export default function VeranstaltungComp() {
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
-  useEffect(() => {
+  function initializeForm() {
     const deepCopy = toFormObject(veranstaltung);
     form.setFieldsValue(deepCopy);
-    form.validateFields();
-    setInitialValue(toFormObject(veranstaltung));
+    const initial = toFormObject(veranstaltung);
+    setInitialValue(initial);
     updateStateStuff();
-  }, [form, veranstaltung]);
+    setDirty(areDifferent(initial, deepCopy));
+    form.validateFields();
+  }
+
+  useEffect(initializeForm, [form, veranstaltung]);
 
   const [title, setTitle] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
-  const [isInFuture, setIsInFuture] = useState<boolean>(false);
+  const [isNew, setIsNew] = useState<boolean>(false);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   function updateStateStuff() {
     const veranstaltung = fromFormObject(form);
     setTitle(veranstaltung.kopf.titelMitPrefix);
     setDisplayDate(veranstaltung.datumForDisplayShort);
-    setIsInFuture(!veranstaltung.istVergangen);
+    setIsNew(!veranstaltung.id);
+    setIsConfirmed(veranstaltung.kopf.confirmed);
     const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
     if (selectedOrt) {
       form.setFieldsValue({
@@ -166,6 +173,15 @@ export default function VeranstaltungComp() {
     form.validateFields();
   }
 
+  function saveForm() {
+    form.validateFields().then(() => {
+      const veranst = fromFormObject(form);
+      saveVeranstaltung(veranst);
+      setVeranstaltung(veranst);
+      initializeForm();
+    });
+  }
+
   return (
     <Form
       form={form}
@@ -176,21 +192,31 @@ export default function VeranstaltungComp() {
         // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
+      onFinish={saveForm}
       layout="vertical"
     >
       <Row>
-        <Col span={12}>
+        <Col span={18}>
           <Typography.Title level={2} style={{ color: typeColor }}>
-            {title}
+            {!isNew ? (
+              title
+            ) : (
+              <span>
+                Neue oder kopierte Veranstaltung
+                <small>
+                  <small> (Denk daran, alle Felder zu überprüfen und auszufüllen)</small>
+                </small>
+              </span>
+            )}
             <br />
             <small>
               <small>am {displayDate}</small>
             </small>
           </Typography.Title>
         </Col>
-        <Col span={12}>
+        <Col span={6}>
           <Row justify="end">
-            <DeleteButton disabled={isInFuture} />
+            <DeleteButton disabled={!(isNew || !isConfirmed)} />
             <CopyButton />
             <SaveButton disabled={!dirty} />
           </Row>

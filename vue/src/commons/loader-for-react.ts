@@ -150,6 +150,9 @@ export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergange
 }
 
 export async function veranstaltungForUrl(url: string): Promise<Veranstaltung> {
+  if (url === "new") {
+    return new Veranstaltung();
+  }
   const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(url)}`);
   return result ? new Veranstaltung(result) : result;
 }

@@ -50,7 +50,7 @@ export default function EventCard(props: {
       <Row gutter={12}>
         {isBookingTeam && (
           <Col span={8}>
-            <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" />
+            <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" onChange={props.titleAndDateCallback} />
           </Col>
         )}
         <Col span={8}>

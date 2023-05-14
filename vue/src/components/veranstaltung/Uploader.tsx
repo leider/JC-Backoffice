@@ -1,23 +1,27 @@
-import { Button, Col, FormInstance, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
+import { Button, Col, FormInstance, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
 import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
 import { IconForSmallBlock } from "@/components/Icon";
 import React, { useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { CustomTagProps } from "rc-select/lib/BaseSelect";
 
 interface UoloaderParams {
   form: FormInstance<Veranstaltung>;
   veranstaltung: Veranstaltung;
   name: string[];
   typ: string;
+  onlyImages: boolean;
 }
 
-export default function Uploader({ form, veranstaltung, name, typ }: UoloaderParams) {
+export default function Uploader({ form, veranstaltung, name, typ, onlyImages }: UoloaderParams) {
   const [options, setOptions] = useState<string[]>([]);
+
   useEffect(() => {
-    setOptions(form.getFieldValue(name));
+    setOptions(form.getFieldValue(name) || []);
   }, [veranstaltung, form]);
+
   async function saveFiles() {
     setUploading(true);
     const formData = new FormData();
@@ -53,38 +57,39 @@ export default function Uploader({ form, veranstaltung, name, typ }: UoloaderPar
     },
     fileList,
   };
+  const tagRender = (props: CustomTagProps) => {
+    const content =
+      typ === "pressefoto" ? (
+        <img src={`/imagepreview/${props.label}`} alt="bild" width="100%" />
+      ) : (
+        <a href={`/files/${props.label}`}>{props.label} </a>
+      );
+    return (
+      <Popover content={content} title={typ === "pressefoto" ? "Vorschau" : "Klick zur Ansicht / Download"}>
+        <Tag {...props}>{props.label}</Tag>
+      </Popover>
+    );
+  };
 
   return (
-    <>
-      <Row>
-        <Col>
-          <Space align="end">
-            <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} />
-            <Upload {...uploadprops}>
-              <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
-            </Upload>
-            <Button
-              icon={<IconForSmallBlock iconName="Upload" />}
-              type="primary"
-              onClick={saveFiles}
-              disabled={fileList.length === 0}
-              loading={uploading}
-            >
-              &nbsp; {uploading ? "Lädt..." : "Hochladen"}
-            </Button>
-          </Space>
-        </Col>
-      </Row>
-      <Row style={{ marginTop: 16 }}>
-        <Col>
-          <b>Preview: </b>
-          {(options ?? []).map((opt) => (
-            <Tag key={opt} color="orange">
-              <a href={`/files/${opt}`}>{opt} </a>
-            </Tag>
-          ))}
-        </Col>
-      </Row>
-    </>
+    <Row>
+      <Col>
+        <Space align="end">
+          <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} specialTagRender={tagRender} />
+          <Upload {...uploadprops} accept={onlyImages && "image/*"}>
+            <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
+          </Upload>
+          <Button
+            icon={<IconForSmallBlock iconName="Upload" />}
+            type="primary"
+            onClick={saveFiles}
+            disabled={fileList.length === 0}
+            loading={uploading}
+          >
+            &nbsp; {uploading ? "Lädt..." : "Hochladen"}
+          </Button>
+        </Space>
+      </Col>
+    </Row>
   );
 }
