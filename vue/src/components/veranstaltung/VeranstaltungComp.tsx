@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
+import { Button, Col, ConfigProvider, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { optionen as optionenRestCall, orte as orteRestCall, veranstaltungForUrl } from "@/commons/loader-for-react";
@@ -18,6 +18,7 @@ import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
 import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import { detailedDiff } from "deep-object-diff";
+import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -87,7 +88,7 @@ export default function VeranstaltungComp() {
           optionen={optionen}
           orte={orte}
           brauchtHotelCallback={updateTabs}
-          titleAndDateCallback={updateTitleAndDate}
+          titleAndDateCallback={updateStateStuff}
         />
       ),
     },
@@ -132,7 +133,7 @@ export default function VeranstaltungComp() {
     }
   }
 
-  const [initialValue, setInitialValue] = useState<any>({});
+  const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
   useEffect(() => {
@@ -140,17 +141,18 @@ export default function VeranstaltungComp() {
     form.setFieldsValue(deepCopy);
     form.validateFields();
     setInitialValue(toFormObject(veranstaltung));
-    updateTitleAndDate();
+    updateStateStuff();
   }, [form, veranstaltung]);
 
   const [title, setTitle] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
+  const [isInFuture, setIsInFuture] = useState<boolean>(false);
 
-  function updateTitleAndDate() {
+  function updateStateStuff() {
     const veranstaltung = fromFormObject(form);
     setTitle(veranstaltung.kopf.titelMitPrefix);
     setDisplayDate(veranstaltung.datumForDisplayShort);
-
+    setIsInFuture(!veranstaltung.istVergangen);
     const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
     if (selectedOrt) {
       form.setFieldsValue({
@@ -168,8 +170,8 @@ export default function VeranstaltungComp() {
     <Form
       form={form}
       onValuesChange={() => {
-        const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        console.log({ diff });
+        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        // console.log({ diff });
         // console.log({ initialValue });
         // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
@@ -188,21 +190,9 @@ export default function VeranstaltungComp() {
         </Col>
         <Col span={12}>
           <Row justify="end">
-            <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" style={{ backgroundColor: token["colorError"] }}>
-              &nbsp;Löschen
-            </Button>
-            <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" style={{ backgroundColor: token["colorTextTertiary"] }}>
-              &nbsp;Kopieren
-            </Button>
-            <Button
-              htmlType="submit"
-              icon={<IconForSmallBlock iconName="CheckSquare" />}
-              type="primary"
-              style={{ backgroundColor: token["colorSuccess"] }}
-              disabled={!dirty}
-            >
-              &nbsp;Speichern
-            </Button>
+            <DeleteButton disabled={isInFuture} />
+            <CopyButton />
+            <SaveButton disabled={!dirty} />
           </Row>
         </Col>
       </Row>

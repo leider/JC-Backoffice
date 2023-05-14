@@ -1,9 +1,8 @@
 import OptionValues from "jc-shared/optionen/optionValues";
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, Form, FormInstance, Row } from "antd";
+import { Button, Col, ConfigProvider, Form, FormInstance, Row } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
@@ -89,9 +88,11 @@ ${context?.currentUser.name}`);
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Button block icon={<IconForSmallBlock iconName={"EnvelopeOpen"} />} type="primary" onClick={sendMail}>
-            &nbsp;Reservierungsmail
-          </Button>
+          <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
+            <Button block icon={<IconForSmallBlock iconName={"EnvelopeOpen"} />} type="primary" onClick={sendMail}>
+              &nbsp;Reservierungsmail
+            </Button>
+          </ConfigProvider>
         </Col>
       </Row>
     </>

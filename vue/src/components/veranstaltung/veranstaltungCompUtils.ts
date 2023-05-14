@@ -14,6 +14,7 @@ export function toFormObject(veranstaltung: Veranstaltung): object {
     end: veranstaltung.endDatumUhrzeit.value,
   };
   result.unterkunft.anAbreise = [dayjs(veranstaltung.unterkunft.anreiseDate), dayjs(veranstaltung.unterkunft.abreiseDate)];
+  result.kopf.flaeche = parseInt(result.kopf.flaeche, 10);
   return result;
 }
 export function fromFormObject(form: FormInstance): Veranstaltung {
