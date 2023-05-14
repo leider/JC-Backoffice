@@ -1,7 +1,13 @@
 import { Form, Select } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
 
-export default function MultiSelectWithTags(props: { name: string[]; label: string; options: string[]; style?: CSSProperties }) {
+export default function MultiSelectWithTags(props: {
+  name: string[];
+  label: string;
+  options: string[];
+  style?: CSSProperties;
+  noAdd?: boolean;
+}) {
   const [realOptions, setRealOptions] = useState<{ label: string; value: string }[]>([]);
   useEffect(() => {
     if (!props.options) {
@@ -11,7 +17,7 @@ export default function MultiSelectWithTags(props: { name: string[]; label: stri
   }, [props.options]);
   return (
     <Form.Item label={<b>{props.label}:</b>} name={props.name} style={props.style}>
-      <Select options={realOptions} mode="tags" />
+      <Select options={realOptions} mode={props.noAdd ? "multiple" : "tags"} />
     </Form.Item>
   );
 }

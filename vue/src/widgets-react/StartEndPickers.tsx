@@ -1,9 +1,10 @@
 import { Col, DatePicker, Form, Row, TimePicker } from "antd";
 import * as React from "react";
-import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import { StartAndEnd } from "@/components/veranstaltung/veranstaltungCompUtils";
-function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
+
+function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void; onChange: () => void }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
@@ -18,9 +19,10 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
     if (!startDate) {
       return;
     }
-    const newStart = start.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("day", startDate.get("day"));
-    const newEnd = end.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("day", startDate.get("day"));
+    const newStart = start.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
+    const newEnd = end.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
     props.onDates?.({ start: newStart, end: newEnd });
+    props.onChange();
   }
 
   function timesChanged(times: any) {
@@ -32,6 +34,7 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
     const newStart = start.set("hour", startTime?.get("hour")).set("minute", startTime.get("minute"));
     const newEnd = end.set("hour", endTime?.get("hour")).set("minute", endTime.get("minute"));
     props.onDates?.({ start: newStart, end: newEnd });
+    props.onChange();
   }
 
   return (
@@ -46,10 +49,14 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
   );
 }
 
-export default function StartEndPickers() {
+interface StartEndPickersProps {
+  onChange: () => void;
+}
+
+export default function StartEndPickers({ onChange }: StartEndPickersProps) {
   return (
     <Form.Item label={<b>Datum und Uhrzeit:</b>} name={["startAndEnd"]} valuePropName="dates" trigger="onDates">
-      <EmbeddedPickers />
+      <EmbeddedPickers onChange={onChange} />
     </Form.Item>
   );
 }

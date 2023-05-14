@@ -17,6 +17,7 @@ export default function EventCard(props: {
   optionen: OptionValues;
   orte: Orte;
   brauchtHotelCallback: (brauchtHotel: boolean) => void;
+  titleAndDateCallback: () => void;
 }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function EventCard(props: {
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
       <Row gutter={12}>
         <Col span={8} offset={16}>
-          <CheckItem label="ist abgesagt" name={["kopf", "abgesagt"]} />
+          <CheckItem label="ist abgesagt" name={["kopf", "abgesagt"]} onChange={props.titleAndDateCallback} />
         </Col>
       </Row>
       <Row gutter={12}>
@@ -67,7 +68,7 @@ export default function EventCard(props: {
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <TextField name={["kopf", "titel"]} label="Titel" />
+          <TextField name={["kopf", "titel"]} label="Titel" onChange={props.titleAndDateCallback} />
         </Col>
         <Col span={12}>
           <Form.Item label={<b>Typ:</b>} name={["kopf", "eventTyp"]}>
@@ -77,12 +78,12 @@ export default function EventCard(props: {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <StartEndPickers />
+          <StartEndPickers onChange={props.titleAndDateCallback} />
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={8}>
-          <SingleSelect name={["kopf", "ort"]} label="Ort" options={props.orte.alleNamen()} />
+          <SingleSelect name={["kopf", "ort"]} label="Ort" options={props.orte.alleNamen()} onChange={props.titleAndDateCallback} />
         </Col>
         <Col span={8}>
           <NumberInput name={["kopf", "flaeche"]} label="Fläche" decimals={0} />
