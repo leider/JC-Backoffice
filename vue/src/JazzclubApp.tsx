@@ -77,8 +77,12 @@ function JazzclubApp() {
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
-          hashed: false,
           token: jcToken,
+          components: {
+            Checkbox: {
+              colorPrimary: "#28a745",
+            },
+          },
         }}
         locale={locale_de}
       >
