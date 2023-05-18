@@ -26,6 +26,7 @@ import * as React from "react";
 import Team from "@/components/Team";
 import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
 import Login from "@/components/Login";
+import Optionen from "@/components/options/Optionen";
 
 export const routes: RouteObject[] = [
   {
@@ -44,8 +45,60 @@ export const routes: RouteObject[] = [
         element: <Team />,
       },
       {
+        path: "/veranstaltungen",
+        element: <Team />,
+      },
+      {
         path: "/veranstaltung/:url",
         element: <VeranstaltungComp />,
+      },
+      {
+        path: "/optionen",
+        element: <Optionen />,
+      },
+      {
+        path: "/orte",
+        element: <Optionen />,
+      },
+      {
+        path: "/programmheft",
+        element: <Optionen />,
+      },
+      {
+        path: "/kalender",
+        element: <Optionen />,
+      },
+      {
+        path: "/termine",
+        element: <Optionen />,
+      },
+      {
+        path: "/kassenbericht",
+        element: <Optionen />,
+      },
+      {
+        path: "/imageoverview",
+        element: <Optionen />,
+      },
+      {
+        path: "/mailrules",
+        element: <Optionen />,
+      },
+      {
+        path: "/mailinglists",
+        element: <Optionen />,
+      },
+      {
+        path: "/manualmail",
+        element: <Optionen />,
+      },
+      {
+        path: "/rundmail",
+        element: <Optionen />,
+      },
+      {
+        path: "/belege",
+        element: <Optionen />,
       },
     ],
   },
