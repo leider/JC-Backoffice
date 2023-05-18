@@ -156,6 +156,7 @@ export default function VeranstaltungComp() {
 
   function updateStateStuff() {
     const veranstaltung = fromFormObject(form);
+    document.title = veranstaltung.kopf.titelMitPrefix;
     setTitle(veranstaltung.kopf.titelMitPrefix);
     setDisplayDate(veranstaltung.datumForDisplayShort);
     setIsNew(!veranstaltung.id);
