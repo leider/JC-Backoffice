@@ -25,7 +25,7 @@ const tagRender = (props: CustomTagProps) => {
 
 const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionName, label }: AdminStaffRowProps) => {
   return (
-    <Form.Item label={label}>
+    <Form.Item label={label} style={{ marginBottom: 12 }}>
       <Space.Compact block>
         <DynamicItem
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}

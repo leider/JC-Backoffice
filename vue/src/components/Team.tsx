@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
-import { Button, Col, Collapse, Form, Radio, Row, Select, Space, theme, Typography } from "antd";
+import { Col, Collapse, Radio, Row, Space, Typography } from "antd";
 import TeamBlockAdmin from "@/components/TeamBlockAdmin";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -8,7 +8,6 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useAuth } from "@/commons/auth";
 import { useSearchParams } from "react-router-dom";
-import { IconForSmallBlock } from "@/components/Icon";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 
 interface MonatGroupProps {
@@ -76,7 +75,6 @@ function Team() {
     loadUsers();
   }, []);
 
-  //const context = useAppContext();
   const { context } = useAuth();
   const [realadmin, setRealadmin] = useState<boolean>(false);
   useEffect(() => {
@@ -90,7 +88,7 @@ function Team() {
     const result = groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [veranstaltungen]);
+  }, [veranstaltungen, realadmin]);
 
   const periods = [
     { label: "Zukünftige", value: "zukuenftige" },
@@ -112,42 +110,47 @@ function Team() {
   }, [search]);
 
   return (
-    <>
-      <Row justify="space-between" align="bottom">
-        <Col>
-          <Typography.Title level={1}>Veranstaltungen</Typography.Title>
-        </Col>
-        <Col>
-          <Space>
-            <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" type="default" />
-            <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="default" />
-            <Radio.Group
-              value={period.value}
-              options={[
-                { label: "Zukünftige", value: "zukuenftige" },
-                { label: "Vergangene", value: "vergangene" },
-                { label: "Alle", value: "alle" },
-              ]}
-              optionType="button"
-              buttonStyle="outline"
-              onChange={(e) => {
-                setSearch({ period: e.target.value });
-              }}
-            ></Radio.Group>
-          </Space>
-        </Col>
-      </Row>
-      {monate.map((monat) => {
-        return (
-          <MonatGroup
-            key={monat}
-            monat={monat}
-            veranstaltungen={veranstaltungenNachMonat[monat]}
-            usersAsOptions={usersAsOptions || []}
-          ></MonatGroup>
-        );
-      })}
-    </>
+    <Row gutter={8}>
+      <Col xs={24} xl={16}>
+        <Row justify="space-between" align="bottom">
+          <Col>
+            <Typography.Title level={1}>Veranstaltungen</Typography.Title>
+          </Col>
+          <Col>
+            <Space>
+              <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" type="default" />
+              <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="default" />
+              <Radio.Group
+                value={period.value}
+                options={[
+                  { label: "Zukünftige", value: "zukuenftige" },
+                  { label: "Vergangene", value: "vergangene" },
+                  { label: "Alle", value: "alle" },
+                ]}
+                optionType="button"
+                buttonStyle="outline"
+                onChange={(e) => {
+                  setSearch({ period: e.target.value });
+                }}
+              ></Radio.Group>
+            </Space>
+          </Col>
+        </Row>
+        {monate.map((monat) => {
+          return (
+            <MonatGroup
+              key={monat}
+              monat={monat}
+              veranstaltungen={veranstaltungenNachMonat[monat]}
+              usersAsOptions={usersAsOptions || []}
+            ></MonatGroup>
+          );
+        })}
+      </Col>
+      <Col xs={24} xl={8}>
+        Bang
+      </Col>
+    </Row>
   );
 }
 
