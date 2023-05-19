@@ -1,9 +1,15 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
-import { useParams, useSearchParams } from "react-router-dom";
+import { App, Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { optionen as optionenRestCall, orte as orteRestCall, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader-for-react";
+import {
+  deleteVeranstaltungWithId,
+  optionen as optionenRestCall,
+  orte as orteRestCall,
+  saveVeranstaltung,
+  veranstaltungForUrl,
+} from "@/commons/loader-for-react";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -183,6 +189,32 @@ export default function VeranstaltungComp() {
     });
   }
 
+  const { modal } = App.useApp();
+  const navigate = useNavigate();
+  function deleteVeranstaltung() {
+    const id = form.getFieldValue("id");
+    if (!id) {
+      return;
+    }
+    modal.confirm({
+      type: "confirm",
+      title: "Veranstaltung löschen",
+      content: `Bist Du sicher, dass Du die Veranstaltung "${title}" löschen möchtest?`,
+      onOk: async () => {
+        await deleteVeranstaltungWithId(id);
+        navigate("/");
+      },
+    });
+  }
+
+  function copyVeranstaltung() {
+    const url = form.getFieldValue("url");
+    if (!url) {
+      return;
+    }
+    navigate(`/veranstaltung/copy-of-${url}`);
+  }
+
   return (
     <Form
       form={form}
@@ -217,9 +249,9 @@ export default function VeranstaltungComp() {
         </Col>
         <Col span={6}>
           <Row justify="end">
-            <DeleteButton disabled={!(isNew || !isConfirmed)} />
-            <CopyButton />
-            <SaveButton disabled={!dirty} />
+            <DeleteButton disabled={!(isNew || !isConfirmed)} callback={deleteVeranstaltung} />
+            <CopyButton disabled={isNew} callback={copyVeranstaltung} />
+            <SaveButton disabled={!dirty} callback={saveForm} />
           </Row>
         </Col>
       </Row>

@@ -116,7 +116,7 @@ const JazzContent: React.FC = () => {
     localItems.push({ key: menuKeys.belege, icon: <IconForSmallBlock iconName="Camera" />, label: <Link to="/belege">Belege</Link> });
     const wikisubdirEntries = () =>
       subdirs.map((dir) => {
-        return { key: dir, label: <Link to={`/wiki/${dir}`}>{dir}</Link> };
+        return { key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}`}>{dir}</Link> };
       });
 
     if (subdirs.length > 0) {
