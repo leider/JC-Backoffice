@@ -9,7 +9,7 @@ type ButtonProps = {
 export function SaveButton({ callback, disabled }: ButtonProps) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
-      <Button htmlType="submit" icon={<IconForSmallBlock iconName="CheckSquare" />} type="primary" disabled={disabled}>
+      <Button htmlType="submit" icon={<IconForSmallBlock iconName="CheckSquare" />} type="primary" disabled={disabled} onClick={callback}>
         &nbsp;Speichern
       </Button>
     </ConfigProvider>
@@ -19,16 +19,16 @@ export function SaveButton({ callback, disabled }: ButtonProps) {
 export function DeleteButton({ callback, disabled }: ButtonProps) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
-      <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" disabled={disabled}>
+      <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" disabled={disabled} onClick={callback}>
         &nbsp;Löschen
       </Button>
     </ConfigProvider>
   );
 }
-export function CopyButton({ callback }: ButtonProps) {
+export function CopyButton({ callback, disabled }: ButtonProps) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#6c757d" } }}>
-      <Button icon={<IconForSmallBlock iconName="Files" />} type="primary">
+      <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" disabled={disabled} onClick={callback}>
         &nbsp;Kopieren
       </Button>
     </ConfigProvider>
