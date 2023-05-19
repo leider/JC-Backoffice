@@ -150,14 +150,12 @@ export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergange
 }
 
 export async function veranstaltungForUrl(url: string): Promise<Veranstaltung> {
-  console.log({ url });
   if (url === "new") {
     return new Veranstaltung();
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
     const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(realUrl)}`);
-    console.log({ result });
     if (result) {
       const veranstaltung = new Veranstaltung(result);
       veranstaltung.reset();

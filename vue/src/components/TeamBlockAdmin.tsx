@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, Divider, Form, Row, Space, theme, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Typography } from "antd";
 import AdminStaffRow from "@/components/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -19,12 +19,12 @@ interface TeamBlockAdminProps {
 
 interface HeaderProps {
   veranstaltung: Veranstaltung;
-  textColor: string;
+  expanded?: boolean;
 }
-function Header({ veranstaltung, textColor }: HeaderProps) {
-  const titleStyle = { margin: 0, color: textColor };
-  return (
-    <>
+function Header({ veranstaltung, expanded }: HeaderProps) {
+  const titleStyle = { margin: 0, color: "#FFF" };
+  return expanded ? (
+    <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
       <Title level={5} style={titleStyle}>
         {veranstaltung.datumForDisplayShort}
       </Title>
@@ -34,7 +34,19 @@ function Header({ veranstaltung, textColor }: HeaderProps) {
       <Title level={3} style={titleStyle}>
         {veranstaltung.kopf.titelMitPrefix}
       </Title>
-    </>
+    </ConfigProvider>
+  ) : (
+    <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
+      <Title level={4} style={titleStyle}>
+        {veranstaltung.kopf.titelMitPrefix}
+        <small>
+          <small style={{ fontWeight: 400 }}>
+            {" - "}
+            {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
+          </small>
+        </small>
+      </Title>
+    </ConfigProvider>
   );
 }
 
@@ -54,7 +66,7 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
     setInitialValue(veranstaltung.toJSON());
   }, [veranstaltung]);
 
-  const dividerStyle = { marginTop: "4px", marginBottom: "4px" };
+  const dividerStyle = { marginTop: "4px", marginBottom: "4px", fontWeight: 600 };
 
   return (
     <Form
@@ -122,21 +134,28 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
     setExpanded(initiallyOpen);
   }, [initiallyOpen]);
   return (
-    <Col span={6}>
-      <Collapse
-        style={{ borderColor: color }}
-        size={"small"}
-        activeKey={expanded && veranstaltung.id}
-        onChange={() => {
-          setExpanded(!expanded);
-        }}
-        expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-      >
-        <Panel style={{ backgroundColor: color }} key={veranstaltung.id} header={<Header veranstaltung={veranstaltung} textColor="#fff" />}>
-          <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
-        </Panel>
-      </Collapse>
-    </Col>
+    <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
+      <Col xs={24} sm={12} md={8} xxl={6}>
+        <Collapse
+          style={{ borderColor: color }}
+          size={"small"}
+          activeKey={expanded && veranstaltung.id}
+          onChange={() => {
+            setExpanded(!expanded);
+          }}
+          expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+        >
+          <Panel
+            className="team-block"
+            style={{ backgroundColor: color }}
+            key={veranstaltung.id}
+            header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
+          >
+            <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+          </Panel>
+        </Collapse>
+      </Col>
+    </ConfigProvider>
   );
 }
 

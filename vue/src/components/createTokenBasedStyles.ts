@@ -21,6 +21,9 @@ export default function createTokenBasedStyles(document: Document, token: { [p: 
 .monat-header .ant-collapse-content-box {
   padding: 0 !important;
 }
+.team-block .ant-collapse-header {
+  padding: 2px 2px !important;
+}
 `;
 
   const JC_STYLES = "JC-styles";
