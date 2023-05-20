@@ -67,7 +67,7 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="kalkulation" label="Kosten / Ausgaben" noTopBorder amount={summe}>
+    <CollapsibleForVeranstaltung suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder amount={summe}>
       <Row gutter={12}>
         <Col span={6}>
           <NumberInput name={["kosten", "gagenEUR"]} label={"Gagen"} decimals={2} suffix={"€"} onChange={updateSumme} />

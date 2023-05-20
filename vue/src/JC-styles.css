@@ -888,3 +888,36 @@
 .ant-table.ant-table-small tfoot > tr > td {
   padding: 4px 4px !important;
 }
+
+/*transform fullcalendar's primary to light button*/
+.fc-toolbar .fc-button-primary {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+.fc-toolbar .fc-button-primary:disabled {
+  color: rgba(33, 37, 41, 0.56);
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.fc-daygrid a {
+  color: #212529
+}
+
+.ant-btn-primary {
+  box-shadow: none;
+}
+
+.ant-collapse-expand-icon {
+  padding-inline-end: 4px !important;
+}
+
+.ant-menu-title-content {
+  margin-inline-start: 4px !important;
+}
+
+.ant-menu-overflow-item {
+  padding-inline: 4px !important;
+  margin-inline: 4px !important;
+}

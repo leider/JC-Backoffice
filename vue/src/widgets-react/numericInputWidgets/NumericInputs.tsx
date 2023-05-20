@@ -78,7 +78,7 @@ type NumberInputProps = CommonWidgetProps<number> & {
    * @type {boolean}
    */
   exclusiveMax?: boolean;
-  suffix: ReactNode;
+  suffix?: ReactNode;
 };
 
 /**

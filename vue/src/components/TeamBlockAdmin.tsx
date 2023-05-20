@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Typography } from "antd";
 import AdminStaffRow from "@/components/AdminStaffRow";
@@ -7,6 +7,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
+import { IconForSmallBlock } from "@/components/Icon";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -21,32 +22,82 @@ interface HeaderProps {
   veranstaltung: Veranstaltung;
   expanded?: boolean;
 }
+
+function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  const [fields, setFields] = useState<{ val: boolean; text: string }[]>([]);
+  useEffect(() => {
+    const result = [
+      { val: veranstaltung.presse.checked, text: "Presse" },
+      { val: veranstaltung.technik.checked, text: "Technik" },
+    ];
+    if (veranstaltung.artist.brauchtHotel) {
+      result.push({ val: veranstaltung.unterkunft.checked, text: "Hotel" });
+    }
+    setFields(result);
+  }, [veranstaltung]);
+  const { token } = theme.useToken();
+
+  function NotificationPart({ toggleValue, text, negativeText }: { toggleValue: boolean; text: string; negativeText?: string }) {
+    const common: CSSProperties = { color: "#FFF", textAlign: "start" };
+    const colStyle = { ...common, backgroundColor: toggleValue ? token.colorSuccessBg : token.colorErrorBg };
+    const textStyle = { fontSize: 10, color: toggleValue ? token.colorSuccess : token.colorError };
+    const iconStyle = { ...textStyle, margin: "0 4px" };
+    return (
+      <Col span={6} style={colStyle}>
+        {toggleValue ? (
+          <IconForSmallBlock size={10} iconName="CheckCircle" style={iconStyle} />
+        ) : (
+          <IconForSmallBlock size={10} iconName="QuestionCircle" style={iconStyle} />
+        )}{" "}
+        <Typography.Text style={textStyle}>{toggleValue ? text : negativeText ?? text}</Typography.Text>
+      </Col>
+    );
+  }
+
+  return (
+    <Row>
+      <NotificationPart key="Offen" toggleValue={veranstaltung.kopf.confirmed} text="Fix" negativeText="Offen" />
+      {fields.map((field) => (
+        <NotificationPart key={field.text} toggleValue={field.val} text={field.text} />
+      ))}
+      {fields.length === 2 && (
+        <Col span={6} style={{ textAlign: "start" }}>
+          <Typography.Text style={{ margin: "0 4px", fontSize: 10 }}>kein Hotel</Typography.Text>
+        </Col>
+      )}
+    </Row>
+  );
+}
 function Header({ veranstaltung, expanded }: HeaderProps) {
   const titleStyle = { margin: 0, color: "#FFF" };
-  return expanded ? (
-    <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
-      <Title level={5} style={titleStyle}>
-        {veranstaltung.datumForDisplayShort}
-      </Title>
-      <Title level={5} style={titleStyle}>
-        {veranstaltung.kopf.presseIn}
-      </Title>
-      <Title level={3} style={titleStyle}>
-        {veranstaltung.kopf.titelMitPrefix}
-      </Title>
-    </ConfigProvider>
-  ) : (
-    <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
-      <Title level={4} style={titleStyle}>
-        {veranstaltung.kopf.titelMitPrefix}
-        <small>
-          <small style={{ fontWeight: 400 }}>
-            {" - "}
-            {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
-          </small>
-        </small>
-      </Title>
-    </ConfigProvider>
+  return (
+    <div>
+      {expanded ? (
+        <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
+          <Title level={5} style={titleStyle}>
+            {veranstaltung.datumForDisplayShort}
+          </Title>
+          <Title level={5} style={titleStyle}>
+            {veranstaltung.kopf.presseIn}
+          </Title>
+          <Title level={3} style={titleStyle}>
+            {veranstaltung.kopf.titelMitPrefix}
+          </Title>
+        </ConfigProvider>
+      ) : (
+        <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
+          <Title level={4} style={titleStyle}>
+            {veranstaltung.kopf.titelMitPrefix}
+            <small>
+              <small style={{ fontWeight: 400 }}>
+                {" - "}
+                {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
+              </small>
+            </small>
+          </Title>
+        </ConfigProvider>
+      )}
+    </div>
   );
 }
 
@@ -86,14 +137,14 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
             <ButtonWithIcon icon="CheckSquare" text="Speichern" />
           </Space.Compact>
         ) : (
-          <Space.Compact>
+          <>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse"></ButtonInAdminPanel>
-          </Space.Compact>
+          </>
         )}
       </Row>
       <div style={{ padding: 8 }}>
@@ -136,6 +187,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} md={8} xxl={6}>
+        <Hinweise veranstaltung={veranstaltung} />
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
@@ -151,7 +203,9 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
             key={veranstaltung.id}
             header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
           >
-            <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+            <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+              <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+            </ConfigProvider>
           </Panel>
         </Collapse>
       </Col>

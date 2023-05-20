@@ -37,7 +37,7 @@ function createTokenWithCustomColors(token: GlobalToken) {
   };
   const jc_colors: { [index: string]: string | number } = {
     classix: color.allgemein2,
-    concert: token.colorTextSecondary,
+    concert: "#6c757d",
     kooperation: color.kasse1,
     ausgaben: color.ausgaben1,
     kalkulation: color.ausgaben1,
@@ -62,7 +62,10 @@ function createTokenWithCustomColors(token: GlobalToken) {
   result.borderRadius = 0;
   result.fontSize = 12;
   result.fontFamily = "Montserrat, Helvetica, Arial, sans-serif;";
-
+  result.colorError = "#721c24";
+  result.colorErrorBg = "#f8d7da";
+  result.colorSuccess = "#155724";
+  result.colorSuccessBg = "#d4edda";
   return result;
 }
 

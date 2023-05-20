@@ -7,15 +7,6 @@ export function useColorsAndIconsForSections(type: buttonType) {
   const { useToken } = theme;
   const { token } = useToken() as any;
 
-  const colors: { [index: string]: string } = {
-    allgemeines: token["custom-color-allgemeines"],
-    technik: token["custom-color-technik"],
-    ausgaben: token["custom-color-ausgaben"],
-    hotel: token["custom-color-hotel"],
-    kasse: token["custom-color-kasse"],
-    presse: token["custom-color-presse"],
-  };
-
   const icons: { [index: string]: string } = {
     allgemeines: "Keyboard",
     technik: "Headphones",
@@ -26,7 +17,7 @@ export function useColorsAndIconsForSections(type: buttonType) {
   };
 
   function color(localType = type) {
-    return colors[localType];
+    return token[`custom-color-${localType}`];
   }
 
   function icon(localType = type): IconProps["iconName"] {
