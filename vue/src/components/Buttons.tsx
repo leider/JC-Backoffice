@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Tooltip } from "antd";
+import { Button, ConfigProvider, Tooltip } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
@@ -16,16 +16,29 @@ export function ButtonInAdminPanel({ type, url }: ButtonInAdminPanelProps) {
   const { color, icon } = useColorsAndIconsForSections(type);
 
   return (
-    <Tooltip title={_.capitalize(type)} color={color()}>
-      <Button
-        icon={<IconForSmallBlock iconName={icon()} />}
-        className={`btn-${type}`}
-        type="primary"
-        //style={{ backgroundColor: color() }}
-        onClick={() => {
-          navigate({ pathname: `/veranstaltung/${url}`, search: `page=${type}` });
-        }}
-      />
-    </Tooltip>
+    <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
+      <Tooltip title={_.capitalize(type)} color={color()}>
+        <Button
+          icon={<IconForSmallBlock size={16} iconName={icon()} />}
+          size="medium"
+          type="primary"
+          onClick={() => navigate({ pathname: `/veranstaltung/${url}`, search: `page=${type}` })}
+        />
+      </Tooltip>
+    </ConfigProvider>
+  );
+}
+
+export function ButtonKassenzettel({ callback }: { callback: () => void }) {
+  const { color } = useColorsAndIconsForSections("kasse");
+
+  return (
+    <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
+      <Tooltip title="Kassenzettel als PDF" color={color()}>
+        <Button block icon={<IconForSmallBlock size={16} iconName={"PrinterFill"} />} type="primary" onClick={callback}>
+          &nbsp;Kassenzettel
+        </Button>
+      </Tooltip>
+    </ConfigProvider>
   );
 }

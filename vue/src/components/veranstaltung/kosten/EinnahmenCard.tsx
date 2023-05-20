@@ -31,7 +31,7 @@ export default function EinnahmenCard({ form, optionen, onChange, veranstaltung 
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="kalkulation" label="Einnahmen / Eintritt / Zuschuss" noTopBorder amount={summe}>
+    <CollapsibleForVeranstaltung suffix="ausgaben" label="Einnahmen / Eintritt / Zuschuss" noTopBorder amount={summe}>
       <Row gutter={12}>
         <Col span={12}>
           <PreisprofilSelect form={form} optionen={optionen} onChange={updateSumme} />
@@ -53,7 +53,7 @@ export default function EinnahmenCard({ form, optionen, onChange, veranstaltung 
             nameOfDepending={["eintrittspreise", "preisprofil"]}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue label={"Erm"} decimals={2} suffix={"€"} value={eintritt.mitglied} />;
+              return <NumberInputWithDirectValue label={"Mitgl"} decimals={2} suffix={"€"} value={eintritt.mitglied} />;
             }}
           />
         </Col>

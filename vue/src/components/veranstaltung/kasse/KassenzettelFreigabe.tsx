@@ -7,6 +7,9 @@ import SingleSelect from "@/widgets-react/SingleSelect";
 import { useAuth } from "@/commons/auth";
 import { DynamicItem } from "@/widgets-react/DynamicItem";
 import { TextField } from "@/widgets-react/TextField";
+import { ButtonKassenzettel } from "@/components/Buttons";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import { Dayjs } from "dayjs";
 
 interface KassenzettelFreigabeParams {
   veranstaltung: Veranstaltung;
@@ -70,52 +73,55 @@ export function KassenzettelFreigabe({ veranstaltung, form, setFreigegeben }: Ka
     <>
       <Row gutter={12}>
         <Col span={10}>
-          <Button
-            block
-            icon={<IconForSmallBlock iconName={"PrinterFill"} />}
-            type="primary"
-            onClick={() => openKassenzettel(form.getFieldsValue(true))}
-            className={`btn-kasse`}
-          >
-            &nbsp;Kassenzettel
-          </Button>
+          <ButtonKassenzettel callback={() => openKassenzettel(form.getFieldsValue(true))} />
         </Col>
         <Col span={10} offset={4}>
           <DynamicItem
-            nameOfDepending={["kasse", "kassenfreigabe"]}
+            nameOfDepending={["startDate"]}
             renderWidget={(getFieldValue) => {
-              const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
-              if (!freigabe) {
-                const darfFreigeben = veranstaltung.istVergangen && context?.currentUser.accessrights?.darfKasseFreigeben;
-                return (
-                  <Button
-                    block
-                    icon={<IconForSmallBlock iconName={"Unlock"} />}
-                    type="primary"
-                    onClick={freigeben}
-                    disabled={!darfFreigeben}
-                  >
-                    &nbsp;Kasse freigeben
-                  </Button>
-                );
-              } else {
-                const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
-                return (
-                  <>
-                    <Button
-                      block
-                      icon={<IconForSmallBlock iconName={"Lock"} />}
-                      type="primary"
-                      danger
-                      onClick={freigabeAufheben}
-                      disabled={!darfFreigabeAufheben}
-                    >
-                      &nbsp;Kasse ist freigegeben
-                    </Button>
-                    <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
-                  </>
-                );
-              }
+              const start: Dayjs = getFieldValue("startAndEnd").start;
+              const vergangen = new DatumUhrzeit(start).istVor(new DatumUhrzeit());
+              return (
+                vergangen && (
+                  <DynamicItem
+                    nameOfDepending={["kasse", "kassenfreigabe"]}
+                    renderWidget={(getFieldValue) => {
+                      const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
+                      if (!freigabe) {
+                        const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
+                        return (
+                          <Button
+                            block
+                            icon={<IconForSmallBlock iconName={"Unlock"} />}
+                            type="primary"
+                            onClick={freigeben}
+                            disabled={!darfFreigeben}
+                          >
+                            &nbsp;Kasse freigeben
+                          </Button>
+                        );
+                      } else {
+                        const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
+                        return (
+                          <>
+                            <Button
+                              block
+                              icon={<IconForSmallBlock iconName={"Lock"} />}
+                              type="primary"
+                              danger
+                              onClick={freigabeAufheben}
+                              disabled={!darfFreigabeAufheben}
+                            >
+                              &nbsp;Kasse ist freigegeben
+                            </Button>
+                            <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
+                          </>
+                        );
+                      }
+                    }}
+                  />
+                )
+              );
             }}
           />
         </Col>

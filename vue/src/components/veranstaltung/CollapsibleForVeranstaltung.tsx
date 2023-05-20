@@ -3,8 +3,15 @@ import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { isNil } from "lodash";
+import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 
-export default function CollapsibleForVeranstaltung(props: {
+export default function CollapsibleForVeranstaltung({
+  amount,
+  children,
+  label,
+  noTopBorder,
+  suffix,
+}: {
   suffix: string;
   label: string;
   children: ReactNode;
@@ -12,36 +19,36 @@ export default function CollapsibleForVeranstaltung(props: {
   amount?: number;
 }) {
   const [expanded, setExpanded] = useState("content");
+
+  const { color } = useColorsAndIconsForSections(suffix as buttonType);
+  const farbe = color();
   return (
     <Collapse
-      className={`tab-${props.suffix}`}
       activeKey={expanded}
       expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
       onChange={(key) => setExpanded(key)}
-      style={props.noTopBorder ? {} : { marginTop: "16px" }}
+      style={{ marginTop: noTopBorder ? "" : "16px", backgroundColor: farbe, borderColor: farbe, color: "#FFF" }}
     >
       <Collapse.Panel
         key="content"
-        className={`color-${props.suffix}`}
+        style={{ backgroundColor: farbe, borderColor: farbe, color: "#FFF" }}
         header={
           <Row>
             <Col flex={1}>
-              <span className={`color-${props.suffix}`} style={{ fontSize: 14 }}>
-                <b>{props.label}</b>
+              <span style={{ fontSize: 14, color: "#FFF" }}>
+                <b>{label}</b>
               </span>
             </Col>
             <Col flex="auto">&nbsp;</Col>
-            {!isNil(props.amount) && (
+            {!isNil(amount) && (
               <Col>
-                <span className={`color-${props.suffix}`} style={{ fontSize: 14 }}>
-                  {formatToGermanNumberString(props.amount)} €
-                </span>
+                <span style={{ fontSize: 14, color: "#FFF" }}>{formatToGermanNumberString(amount)} €</span>
               </Col>
             )}
           </Row>
         }
       >
-        {props.children}
+        {children}
       </Collapse.Panel>
     </Collapse>
   );

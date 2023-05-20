@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
-import { Col, Collapse, Radio, Row, Space, Typography } from "antd";
+import { allUsers, calendarEventSources, veranstaltungenForTeam } from "@/commons/loader-for-react";
+import { Button, Col, Collapse, Dropdown, MenuProps, Row, Space, Typography } from "antd";
 import TeamBlockAdmin from "@/components/TeamBlockAdmin";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -9,6 +9,11 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useAuth } from "@/commons/auth";
 import { useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import deLocale from "@fullcalendar/core/locales/de";
+import { EventInput } from "@fullcalendar/core";
+import { IconForSmallBlock } from "@/components/Icon";
 
 interface MonatGroupProps {
   veranstaltungen: Veranstaltung[];
@@ -25,20 +30,20 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
   }, [veranstaltungen]);
   return (
     <>
-      <Row gutter={8}>
+      <Row gutter={8} style={{ backgroundColor: "#d3d3d347" }}>
         <Col span={24}>
           <Collapse
             size={"small"}
             activeKey={expanded ? monat : ""}
             onChange={() => setExpanded(!expanded)}
             expandIcon={({ isActive }) =>
-              isActive ? <CaretDown size={20} style={{ color: "#FFF" }} /> : <CaretRight size={20} style={{ color: "#FFF" }} />
+              isActive ? <CaretDown size={14} style={{ color: "#FFF" }} /> : <CaretRight size={14} style={{ color: "#FFF" }} />
             }
           >
             <Collapse.Panel
               key={monat}
               header={
-                <Typography.Title level={3} style={{ margin: 0, color: "#FFF" }}>
+                <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
                   {monat}
                 </Typography.Title>
               }
@@ -47,7 +52,7 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
           </Collapse>
         </Col>
       </Row>
-      <Row gutter={8}>
+      <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d347" }}>
         {veranstaltungen.map((veranstaltung, index) => (
           <TeamBlockAdmin key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={expanded} />
         ))}
@@ -91,23 +96,47 @@ function Team() {
   }, [veranstaltungen, realadmin]);
 
   const periods = [
-    { label: "Zukünftige", value: "zukuenftige" },
-    { label: "Vergangene", value: "vergangene" },
-    { label: "Alle", value: "alle" },
+    { label: "Zukünftige", key: "zukuenftige", onClick: () => setSearch({ period: "zukuenftige" }) },
+    { label: "Vergangene", key: "vergangene", onClick: () => setSearch({ period: "vergangene" }) },
+    { label: "Alle", key: "alle", onClick: () => setSearch({ period: "alle" }) },
   ];
-  const [period, setPeriod] = useState({ label: "Zukünftige", value: "zukuenftige" });
+  const [period, setPeriod] = useState<string>("Zukünftige");
 
   useEffect(() => {
     const periodOfSearch = search.get("period");
-    const result = periods.find((each) => each.value === periodOfSearch);
+    const result = periods.find((each) => each.key === periodOfSearch);
     if (!result) {
-      setPeriod(periods[0]);
-      setSearch({ period: "zukuenftige" });
+      setPeriod(periods[0].label);
+      setSearch({ period: periods[0].key });
     } else {
-      setPeriod(result);
+      setPeriod(result.label);
     }
-    loadVeranstaltungen((result || periods[0]).value as "zukuenftige" | "vergangene" | "alle");
+    loadVeranstaltungen((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
   }, [search]);
+
+  function getEvents(
+    info: {
+      start: Date;
+      end: Date;
+      startStr: string;
+      endStr: string;
+      timeZone: string;
+    },
+    // eslint-disable-next-line no-unused-vars
+    successCallback: (events: EventInput[]) => void,
+    // eslint-disable-next-line no-unused-vars
+    failureCallback: (error: Error) => void
+  ): void {
+    async function doit() {
+      try {
+        const res = await calendarEventSources(info.start, info.end);
+        successCallback(res as EventInput[]);
+      } catch (e) {
+        return failureCallback(e as Error);
+      }
+    }
+    doit();
+  }
 
   return (
     <Row gutter={8}>
@@ -120,19 +149,18 @@ function Team() {
             <Space>
               <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" type="default" />
               <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="default" />
-              <Radio.Group
-                value={period.value}
-                options={[
-                  { label: "Zukünftige", value: "zukuenftige" },
-                  { label: "Vergangene", value: "vergangene" },
-                  { label: "Alle", value: "alle" },
-                ]}
-                optionType="button"
-                buttonStyle="outline"
-                onChange={(e) => {
-                  setSearch({ period: e.target.value });
+              <Dropdown
+                menu={{
+                  items: periods,
                 }}
-              ></Radio.Group>
+              >
+                <Button>
+                  <Space>
+                    {period}
+                    <IconForSmallBlock size={8} iconName="ChevronDown" />
+                  </Space>
+                </Button>
+              </Dropdown>
             </Space>
           </Col>
         </Row>
@@ -147,8 +175,26 @@ function Team() {
           );
         })}
       </Col>
-      <Col xs={24} xl={8}>
-        Bang
+      <Col xs={24} xl={8} style={{ zIndex: 0 }}>
+        <FullCalendar
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          buttonText={{ next: ">", prev: "<" }}
+          locales={[deLocale]}
+          headerToolbar={{ left: "title", center: "", right: "prev,today,next" }}
+          views={{
+            month: {
+              titleFormat: { month: "short", year: "2-digit" },
+              weekNumberFormat: { week: "short" },
+              fixedWeekCount: false,
+              showNonCurrentDates: false,
+              weekNumbers: true,
+              weekText: "KW",
+            },
+          }}
+          height="auto"
+          events={getEvents}
+        ></FullCalendar>
       </Col>
     </Row>
   );

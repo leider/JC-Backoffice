@@ -14,7 +14,8 @@ import { imagenames } from "@/commons/loader-for-react";
 import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-
+import { IconForSmallBlock } from "@/components/Icon";
+import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 interface PresseCardParams {
   form: FormInstance<Veranstaltung>;
   optionen: OptionValues;
@@ -24,6 +25,7 @@ interface PresseCardParams {
 export default function PresseCard({ form, optionen, veranstaltung }: PresseCardParams) {
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
+  const { icon, color } = useColorsAndIconsForSections("presse");
   function updatePreview() {
     const veranst = fromFormObject(form);
     setPreview(
@@ -54,11 +56,12 @@ ${veranst.presse.fullyQualifiedJazzclubURL}`) +
   }
 
   const [activePage, setActivePage] = useState<string>("final");
-  function TabLabel(props: { kind: string; title: string }) {
+
+  function TabLabel(props: { kind: buttonType; title: string }) {
+    const farbe = color();
+    const active = activePage === props.kind;
     return (
-      <b style={{ margin: -16, padding: 16 }} className={activePage === props.kind ? "color-presse" : "tab-presse"}>
-        {props.title}
-      </b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>{props.title}</b>
     );
   }
 

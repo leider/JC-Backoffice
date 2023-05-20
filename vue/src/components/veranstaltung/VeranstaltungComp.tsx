@@ -38,16 +38,11 @@ export default function VeranstaltungComp() {
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
   const [orte, setOrte] = useState<Orte>(new Orte());
   const [activePage, setActivePage] = useState<string>("allgemeines");
-  const { icon } = useColorsAndIconsForSections("allgemeines");
+  const { icon, color } = useColorsAndIconsForSections("allgemeines");
   const [form] = Form.useForm<Veranstaltung>();
   const { useToken } = theme;
   const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
-  useEffect(() => {
-    const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
-    setTypeColor((token as any)[code]);
-  }, [veranstaltung]);
-
   useEffect(() => {
     if (veranst.data) {
       setVeranstaltung(veranst.data);
@@ -76,10 +71,12 @@ export default function VeranstaltungComp() {
     }
   }, [search]);
 
-  function TabLabel(props: { type: buttonType; title: string }) {
+  function TabLabel({ title, type }: { type: buttonType; title: string }) {
+    const farbe = color(type);
+    const active = activePage === type;
     return (
-      <b style={{ margin: -16, padding: 16 }} className={activePage === props.type ? `${"color"}-${props.type}` : `${"tab"}-${props.type}`}>
-        <IconForSmallBlock iconName={icon(props.type)} /> {props.title}
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
+        <IconForSmallBlock iconName={icon(type)} /> {title}
       </b>
     );
   }
@@ -128,7 +125,7 @@ export default function VeranstaltungComp() {
   const [tabs, setTabs] = useState<TabsProps["items"]>(allTabs);
   useEffect(() => {
     updateTabs(veranstaltung.artist.brauchtHotel);
-  }, [veranstaltung.artist.brauchtHotel, activePage]);
+  }, [veranstaltung.artist.brauchtHotel, activePage, optionen]);
 
   function updateTabs(brauchtHotel: boolean) {
     if (brauchtHotel) {
@@ -177,6 +174,8 @@ export default function VeranstaltungComp() {
         },
       });
     }
+    const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
+    setTypeColor((token as any)[code]);
     form.validateFields();
   }
 
