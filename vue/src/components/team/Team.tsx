@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, calendarEventSources, veranstaltungenForTeam } from "@/commons/loader-for-react";
 import { Button, Col, Collapse, Dropdown, MenuProps, Row, Space, Typography } from "antd";
-import TeamBlockAdmin from "@/components/TeamBlockAdmin";
+import TeamBlockAdmin from "@/components/team/TeamBlockAdmin";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useAuth } from "@/commons/auth";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
 import { EventInput } from "@fullcalendar/core";
 import { IconForSmallBlock } from "@/components/Icon";
+import { PageHeader } from "@ant-design/pro-layout";
 
 interface MonatGroupProps {
   veranstaltungen: Veranstaltung[];
@@ -28,6 +29,8 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
     const jetzt = new DatumUhrzeit();
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
+  const navigate = useNavigate();
+
   return (
     <>
       <Row gutter={8} style={{ backgroundColor: "#d3d3d347" }}>
@@ -43,9 +46,31 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
             <Collapse.Panel
               key={monat}
               header={
-                <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
-                  {monat}
-                </Typography.Title>
+                <Row justify="space-between" align="bottom">
+                  <Col>
+                    <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+                      {monat}
+                    </Typography.Title>
+                  </Col>
+                  <Col>
+                    <Button
+                      ghost
+                      icon={<IconForSmallBlock size={12} iconName="FileText" />}
+                      size="small"
+                      onClick={() => navigate({ pathname: `/infos/${monat}`, search: "tab=pressetexte" })}
+                    >
+                      Pressetexte
+                    </Button>
+                    <Button
+                      ghost
+                      icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
+                      size="small"
+                      onClick={() => navigate({ pathname: `/infos/${monat}`, search: "tab=uebersicht" })}
+                    >
+                      Übersicht
+                    </Button>
+                  </Col>
+                </Row>
               }
               className="monat-header"
             ></Collapse.Panel>
@@ -138,32 +163,39 @@ function Team() {
     doit();
   }
 
+  function renderEventContent(eventInfo: any) {
+    return (
+      <div style={{ whiteSpace: "normal" }}>
+        <b>{eventInfo.timeText !== "00 Uhr" && eventInfo.timeText}</b>
+        <br />
+        <i>{eventInfo.event.title}</i>
+      </div>
+    );
+  }
+
   return (
     <Row gutter={8}>
       <Col xs={24} xl={16}>
-        <Row justify="space-between" align="bottom">
-          <Col>
-            <Typography.Title level={1}>Veranstaltungen</Typography.Title>
-          </Col>
-          <Col>
-            <Space>
-              <ButtonWithIcon icon="FileEarmarkPlus" text="Neu" type="default" />
-              <ButtonWithIcon icon="CalendarWeek" text="Kalender" type="default" />
-              <Dropdown
-                menu={{
-                  items: periods,
-                }}
-              >
-                <Button>
-                  <Space>
-                    {period}
-                    <IconForSmallBlock size={8} iconName="ChevronDown" />
-                  </Space>
-                </Button>
-              </Dropdown>
-            </Space>
-          </Col>
-        </Row>
+        <PageHeader
+          title="Veranstaltungen"
+          extra={[
+            <ButtonWithIcon key="new" icon="FileEarmarkPlus" text="Neu" type="default" />,
+            <ButtonWithIcon key="cal" icon="CalendarWeek" text="Kalender" type="default" />,
+            <Dropdown
+              key="periods"
+              menu={{
+                items: periods,
+              }}
+            >
+              <Button>
+                <Space>
+                  {period}
+                  <IconForSmallBlock size={8} iconName="ChevronDown" />
+                </Space>
+              </Button>
+            </Dropdown>,
+          ]}
+        ></PageHeader>
         {monate.map((monat) => {
           return (
             <MonatGroup
@@ -194,6 +226,7 @@ function Team() {
           }}
           height="auto"
           events={getEvents}
+          eventContent={renderEventContent}
         ></FullCalendar>
       </Col>
     </Row>

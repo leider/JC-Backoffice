@@ -14,8 +14,8 @@ import { imagenames } from "@/commons/loader-for-react";
 import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-import { IconForSmallBlock } from "@/components/Icon";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+
 interface PresseCardParams {
   form: FormInstance<Veranstaltung>;
   optionen: OptionValues;
@@ -25,7 +25,7 @@ interface PresseCardParams {
 export default function PresseCard({ form, optionen, veranstaltung }: PresseCardParams) {
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
-  const { icon, color } = useColorsAndIconsForSections("presse");
+  const { color } = useColorsAndIconsForSections("presse");
   function updatePreview() {
     const veranst = fromFormObject(form);
     setPreview(

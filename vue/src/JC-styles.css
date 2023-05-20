@@ -854,7 +854,9 @@
   width: 14px;
 }
 .color-geplant {
-  color: #f3c1c1 !important;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #f8500d !important;
 }
 
 .ant-form-item-label {
@@ -920,4 +922,13 @@
 .ant-menu-overflow-item {
   padding-inline: 4px !important;
   margin-inline: 4px !important;
+}
+
+.ant-page-header-heading-title {
+  font-size: 32px !important;
+  line-height: 40px !important;
+}
+.ant-page-header-heading-sub-title {
+  font-size: 12px !important;
+  line-height: 14px !important;
 }

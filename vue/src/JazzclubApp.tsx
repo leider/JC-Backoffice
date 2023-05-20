@@ -66,6 +66,11 @@ function createTokenWithCustomColors(token: GlobalToken) {
   result.colorErrorBg = "#f8d7da";
   result.colorSuccess = "#155724";
   result.colorSuccessBg = "#d4edda";
+  result.colorLink = result.colorPrimary;
+  result.colorLinkActive = "#2c4862";
+  result.colorLinkHover = "#2c4862";
+  result.linkHoverDecoration = "underline";
+
   return result;
 }
 
