@@ -1,7 +1,7 @@
 import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Typography } from "antd";
-import AdminStaffRow from "@/components/AdminStaffRow";
+import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";

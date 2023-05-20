@@ -144,6 +144,11 @@ export async function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrz
   return handleVeranstaltungen(result);
 }
 
+export async function veranstaltungenBetweenYYYYMM(start: string, end: string) {
+  const result = await getForType("json", `/rest/veranstaltungen/${start}/${end}`);
+  return handleVeranstaltungen(result);
+}
+
 export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
   const result = await getForType("json", `/rest/veranstaltungen/${selector}`);
   return handleVeranstaltungen(result);

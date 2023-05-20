@@ -23,10 +23,11 @@ import Belege from "@/views/belege/Belege.vue";
 import { Navigate, RouteObject } from "react-router-dom";
 import JazzclubApp from "../JazzclubApp";
 import * as React from "react";
-import Team from "@/components/Team";
+import Team from "@/components/team/Team";
 import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
 import Login from "@/components/Login";
 import Optionen from "@/components/options/Optionen";
+import Info from "@/components/team/Info";
 
 export const routes: RouteObject[] = [
   {
@@ -51,6 +52,10 @@ export const routes: RouteObject[] = [
       {
         path: "/veranstaltung/:url",
         element: <VeranstaltungComp />,
+      },
+      {
+        path: "/infos/:monatJahr",
+        element: <Info />,
       },
       {
         path: "/optionen",

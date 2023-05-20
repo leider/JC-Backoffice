@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row, Tabs, TabsProps, theme, Typography } from "antd";
+import { App, Form, Tabs, TabsProps, Tag, theme } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -26,6 +26,7 @@ import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 //import { detailedDiff } from "deep-object-diff";
 import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
+import { PageHeader } from "@ant-design/pro-layout";
 
 export default function VeranstaltungComp() {
   const [search, setSearch] = useSearchParams();
@@ -159,11 +160,14 @@ export default function VeranstaltungComp() {
 
   function updateStateStuff() {
     const veranstaltung = fromFormObject(form);
-    document.title = veranstaltung.kopf.titelMitPrefix;
+    const localIsNew = !veranstaltung.id;
+
+    document.title = localIsNew ? "Neue oder kopierte Veranstaltung" : veranstaltung.kopf.titel;
     setTitle(veranstaltung.kopf.titelMitPrefix);
     setDisplayDate(veranstaltung.datumForDisplayShort);
-    setIsNew(!veranstaltung.id);
-    setIsConfirmed(veranstaltung.kopf.confirmed);
+    setIsNew(localIsNew);
+    const confirmed = veranstaltung.kopf.confirmed;
+    setIsConfirmed(confirmed);
     const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
     if (selectedOrt) {
       form.setFieldsValue({
@@ -176,6 +180,18 @@ export default function VeranstaltungComp() {
     }
     const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
     setTypeColor((token as any)[code]);
+
+    const tags = [];
+    if (!confirmed) {
+      tags.push(<Tag color={"error"}>Unbestätigt</Tag>);
+    } else {
+      tags.push(<Tag color={"success"}>Bestätigt</Tag>);
+    }
+    if (veranstaltung.kopf.abgesagt) {
+      tags.push(<Tag color={"error"}>ABGESAGT</Tag>);
+    }
+    setTagsForTitle(tags);
+
     form.validateFields();
   }
 
@@ -206,6 +222,8 @@ export default function VeranstaltungComp() {
     });
   }
 
+  const [tagsForTitle, setTagsForTitle] = useState<[]>([]);
+
   function copyVeranstaltung() {
     const url = form.getFieldValue("url");
     if (!url) {
@@ -227,33 +245,18 @@ export default function VeranstaltungComp() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <Row>
-        <Col span={18}>
-          <Typography.Title level={2} style={{ color: typeColor }}>
-            {!isNew ? (
-              title
-            ) : (
-              <span>
-                Neue oder kopierte Veranstaltung
-                <small>
-                  <small> (Denk daran, alle Felder zu überprüfen und auszufüllen)</small>
-                </small>
-              </span>
-            )}
-            <br />
-            <small>
-              <small>am {displayDate}</small>
-            </small>
-          </Typography.Title>
-        </Col>
-        <Col span={6}>
-          <Row justify="end">
-            <DeleteButton disabled={!(isNew || !isConfirmed)} callback={deleteVeranstaltung} />
-            <CopyButton disabled={isNew} callback={copyVeranstaltung} />
-            <SaveButton disabled={!dirty} callback={saveForm} />
-          </Row>
-        </Col>
-      </Row>
+      <PageHeader
+        title={<span style={{ color: typeColor }}>{document.title}</span>}
+        subTitle={<span style={{ color: typeColor }}>{displayDate}</span>}
+        extra={[
+          <DeleteButton key="delete" disabled={!(isNew || !isConfirmed)} callback={deleteVeranstaltung} />,
+          <CopyButton key="copy" disabled={isNew} callback={copyVeranstaltung} />,
+          <SaveButton key="save" disabled={!dirty} callback={saveForm} />,
+        ]}
+        tags={tagsForTitle}
+      >
+        {isNew && <b style={{ color: token["custom-color-ausgaben"] }}> (Denk daran, alle Felder zu überprüfen und auszufüllen)</b>}
+      </PageHeader>
       <Tabs
         type="card"
         activeKey={activePage}
