@@ -30,16 +30,16 @@ export default function TabKasse({ optionen, veranstaltung, form }: TabKasseProp
   return (
     <>
       <Row gutter={12}>
-        <Col span={12}>
+        <Col xs={24} lg={12}>
           <EinnahmenCard form={form} veranstaltung={veranstaltung} disabled={freigegeben} />
           <KassenzettelFreigabe form={form} veranstaltung={veranstaltung} setFreigegeben={setFreigegeben} />
         </Col>
-        <Col span={12}>
+        <Col xs={24} lg={12}>
           <AusgabenCard form={form} veranstaltung={veranstaltung} disabled={freigegeben} />
         </Col>
       </Row>
       <Row gutter={12}>
-        <Col span={6}>
+        <Col xs={12} lg={6}>
           <NumberInput
             name={["kasse", "anfangsbestandEUR"]}
             label="Anfangsbestand Kasse"
@@ -49,7 +49,7 @@ export default function TabKasse({ optionen, veranstaltung, form }: TabKasseProp
             disabled={freigegeben}
           />
         </Col>
-        <Col span={6}>
+        <Col xs={12} lg={6}>
           <DynamicItem
             nameOfDepending={["kasse", "endbestandEUR"]}
             renderWidget={() => (

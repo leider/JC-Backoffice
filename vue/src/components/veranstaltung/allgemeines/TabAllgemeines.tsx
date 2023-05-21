@@ -29,7 +29,7 @@ export default function TabAllgemeines({
 }: TabAllgemeinesProps) {
   return (
     <Row gutter={12}>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <EventCard
           form={form}
           optionen={optionen}
@@ -40,7 +40,7 @@ export default function TabAllgemeines({
         <ArtistCard optionen={optionen} />
         <KommentarCard />
       </Col>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <KontaktCard kontakte={optionen.agenturen} form={form} selector="agentur" />
         <VertragCard form={form} veranstaltung={veranstaltung} />
         <BearbeiterCard changelist={form.getFieldsValue(true).changelist} />

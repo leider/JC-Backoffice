@@ -11,6 +11,7 @@ import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import CheckItem from "@/widgets-react/CheckItem";
 import { useAuth } from "@/commons/auth";
 import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);

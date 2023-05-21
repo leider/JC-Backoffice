@@ -5,6 +5,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import { TextField } from "@/widgets-react/TextField";
 import Kasse from "jc-shared/veranstaltung/kasse";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface AusgabenCardParams {
   form: FormInstance<Veranstaltung>;
@@ -28,9 +29,9 @@ export default function AusgabenCard({ form, veranstaltung, disabled }: Ausgaben
     setSumme(kasse.ausgabenTotalEUR);
     form.setFieldValue(["kasse", "endbestandEUR"], kasse.endbestandEUR);
   }
-
+  const { lg } = useBreakpoint();
   return (
-    <CollapsibleForVeranstaltung suffix="kasse" label="Ausgaben (Bar und mit Beleg)" noTopBorder amount={summe}>
+    <CollapsibleForVeranstaltung suffix="kasse" label="Ausgaben (Bar und mit Beleg)" noTopBorder={lg} amount={summe}>
       <Row gutter={12}>
         <Col span={8}>
           <NumberInput

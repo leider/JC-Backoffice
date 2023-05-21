@@ -11,6 +11,7 @@ import Kasse from "jc-shared/veranstaltung/kasse";
 import NumericInputEmbedded from "@/widgets-react/numericInputWidgets/NumericInputEmbedded";
 import CheckItem from "@/widgets-react/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets-react/numericInputWidgets/NumericInputs";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface AusgabenCardParams {
   optionen: OptionValues;
@@ -65,9 +66,9 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
       )
     );
   }
-
+  const { lg } = useBreakpoint();
   return (
-    <CollapsibleForVeranstaltung suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder amount={summe}>
+    <CollapsibleForVeranstaltung suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
       <Row gutter={12}>
         <Col span={6}>
           <NumberInput name={["kosten", "gagenEUR"]} label={"Gagen"} decimals={2} suffix={"€"} onChange={updateSumme} />

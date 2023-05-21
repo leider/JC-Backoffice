@@ -25,11 +25,11 @@ export default function TabKosten({ veranstaltung, optionen, form }: TabKostenPr
 
   return (
     <Row gutter={12}>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <EinnahmenCard veranstaltung={veranstaltung} optionen={optionen} form={form} onChange={einnahmenChanged} />
         <EinAusCard form={form} ausgaben={ausgaben} einnahmen={einnahmen} />
       </Col>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <AusgabenCard veranstaltung={veranstaltung} optionen={optionen} form={form} onChange={ausgabenChanged} />
       </Col>
     </Row>

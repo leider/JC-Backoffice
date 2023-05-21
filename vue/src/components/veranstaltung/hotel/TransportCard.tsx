@@ -10,6 +10,7 @@ import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
 import CheckItem from "@/widgets-react/CheckItem";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useAuth } from "@/commons/auth";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface TransportParams {
   form: FormInstance<Veranstaltung>;
@@ -54,9 +55,11 @@ ${context?.currentUser.name}`);
 
     window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
   };
+
+  const { lg } = useBreakpoint();
   return (
     <>
-      <CollapsibleForVeranstaltung suffix="hotel" label="Transport" amount={summe} noTopBorder>
+      <CollapsibleForVeranstaltung suffix="hotel" label="Transport" amount={summe} noTopBorder={lg}>
         <Row gutter={12}>
           <Col span={24}>
             <Form.Item label={<b>Anmerkungen:</b>} name={["unterkunft", "kommentar"]}>
