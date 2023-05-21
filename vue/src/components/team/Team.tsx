@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, calendarEventSources, veranstaltungenForTeam } from "@/commons/loader-for-react";
-import { Button, Col, Collapse, Dropdown, MenuProps, Row, Space, Typography } from "antd";
+import { Button, Col, Collapse, Dropdown, Row, Space, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlockAdmin";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -24,8 +24,10 @@ interface MonatGroupProps {
 
 function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps) {
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [yymm, setYymm] = useState<string>("");
   useEffect(() => {
     const minDatum = veranstaltungen[0].startDatumUhrzeit;
+    setYymm(minDatum.fuerUnterseiten);
     const jetzt = new DatumUhrzeit();
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
@@ -57,7 +59,7 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
                       ghost
                       icon={<IconForSmallBlock size={12} iconName="FileText" />}
                       size="small"
-                      onClick={() => navigate({ pathname: `/infos/${monat}`, search: "tab=pressetexte" })}
+                      onClick={() => navigate({ pathname: `/infos/${yymm}`, search: "tab=pressetexte" })}
                     >
                       Pressetexte
                     </Button>
@@ -65,7 +67,7 @@ function MonatGroup({ veranstaltungen, usersAsOptions, monat }: MonatGroupProps)
                       ghost
                       icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
                       size="small"
-                      onClick={() => navigate({ pathname: `/infos/${monat}`, search: "tab=uebersicht" })}
+                      onClick={() => navigate({ pathname: `/infos/${yymm}`, search: "tab=uebersicht" })}
                     >
                       Übersicht
                     </Button>

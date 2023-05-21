@@ -15,6 +15,8 @@ import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { DynamicItem } from "@/widgets-react/DynamicItem";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 
 interface PresseCardParams {
   form: FormInstance<Veranstaltung>;
@@ -26,18 +28,7 @@ export default function PresseCard({ form, optionen, veranstaltung }: PresseCard
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
   const { color } = useColorsAndIconsForSections("presse");
-  function updatePreview() {
-    const veranst = fromFormObject(form);
-    setPreview(
-      Renderer.render(`${new VeranstaltungFormatter(veranst).presseTemplate + veranst.presse.text}
-${veranst.presse.fullyQualifiedJazzclubURL}`) +
-        `<h4>Bilder:</h4>${veranst.presse.image
-          .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
-          .reverse()
-          .join("")}`
-    );
-  }
-  const [preview, setPreview] = useState("");
+  const [veranstForPreview, setVeranstForPreview] = useState<Veranstaltung>(new Veranstaltung());
   const presseText = Form.useWatch(["presse", "text"]);
   const url = Form.useWatch(["presse", "jazzclubURL"]);
   const image = Form.useWatch(["presse", "image"]);
@@ -45,7 +36,9 @@ ${veranst.presse.fullyQualifiedJazzclubURL}`) +
   const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
 
   useEffect(() => {
-    updatePreview();
+    const veranst = fromFormObject(form);
+    setVeranstForPreview(veranst);
+    //updatePreview(veranst);
   }, [presseText, url, image]);
 
   function imageUebernehmen(val: string) {
@@ -100,7 +93,7 @@ ${veranst.presse.fullyQualifiedJazzclubURL}`) +
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col span={12}>
-          <div dangerouslySetInnerHTML={{ __html: preview }} />
+          <PressePreview veranstaltung={veranstForPreview} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>
