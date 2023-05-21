@@ -6,6 +6,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { TextField } from "@/widgets-react/TextField";
 import TextArea from "antd/es/input/TextArea";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -42,12 +43,12 @@ export default function KontaktCard({ kontakte, form, selector }: KontaktCardPro
     };
     form.setFieldsValue(values);
   }
-
+  const { lg } = useBreakpoint();
   return (
     <CollapsibleForVeranstaltung
       suffix={selector === "agentur" ? "allgemeines" : "hotel"}
       label={selector === "agentur" ? "Agentur" : "Hotel"}
-      noTopBorder
+      noTopBorder={lg}
     >
       <Row gutter={12}>
         <Col span={12}>

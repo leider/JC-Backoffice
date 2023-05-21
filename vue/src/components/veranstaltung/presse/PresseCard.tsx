@@ -61,7 +61,7 @@ export default function PresseCard({ form, optionen, veranstaltung }: PresseCard
   return (
     <CollapsibleForVeranstaltung suffix="presse" label="Pressematerial" noTopBorder>
       <Row gutter={12}>
-        <Col span={12}>
+        <Col xs={24} lg={12}>
           <CheckItem name={["presse", "checked"]} label="Ist so OK" />
           <TextField name={["presse", "jazzclubURL"]} label="URL-Suffix bei jazzclub.de" />
           <Tabs
@@ -92,7 +92,7 @@ export default function PresseCard({ form, optionen, veranstaltung }: PresseCard
           <Uploader form={form} veranstaltung={veranstaltung} name={["presse", "image"]} typ={"pressefoto"} />
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
-        <Col span={12}>
+        <Col xs={24} lg={12}>
           <PressePreview veranstaltung={veranstForPreview} />
         </Col>
       </Row>

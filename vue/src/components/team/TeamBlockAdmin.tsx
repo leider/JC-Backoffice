@@ -38,10 +38,11 @@ function Hinweise({ veranstaltung, usersAsOptions }: { veranstaltung: Veranstalt
   }, [veranstaltung]);
   const { token } = theme.useToken();
 
+  const common: CSSProperties = { color: "white", textAlign: "start", whiteSpace: "nowrap", overflow: "hidden" };
+
   function NotificationPart({ toggleValue, text, negativeText }: { toggleValue: boolean; text: string; negativeText?: string }) {
-    const common: CSSProperties = { color: "#FFF", textAlign: "start", whiteSpace: "nowrap", overflow: "hidden" };
     const colStyle = { ...common, backgroundColor: toggleValue ? token.colorSuccessBg : token.colorErrorBg };
-    const textStyle = { fontSize: 10, color: toggleValue ? token.colorSuccess : token.colorError };
+    const textStyle = { fontSize: 12, color: toggleValue ? token.colorSuccess : token.colorError };
     const iconStyle = { ...textStyle, margin: "0 2px" };
     return (
       <Col span={5} style={colStyle}>
@@ -63,7 +64,7 @@ function Hinweise({ veranstaltung, usersAsOptions }: { veranstaltung: Veranstalt
       ))}
       {fields.length === 2 && (
         <Col span={5} style={{ textAlign: "start" }}>
-          <Typography.Text style={{ margin: "0 4px", fontSize: 10 }}>kein Hotel</Typography.Text>
+          <Typography.Text style={{ margin: "0 4px", fontSize: 12, whiteSpace: "nowrap", overflow: "hidden" }}>kein Hotel</Typography.Text>
         </Col>
       )}
       <Col span={4} style={{ textAlign: "center", backgroundColor: token["custom-color-concert"], color: "white" }}>
@@ -76,34 +77,33 @@ function Hinweise({ veranstaltung, usersAsOptions }: { veranstaltung: Veranstalt
 }
 function Header({ veranstaltung, expanded }: HeaderProps) {
   const titleStyle = { margin: 0, color: "#FFF" };
+  function T({ l, t }: { l: number; t: string }) {
+    return (
+      <Title level={l} style={titleStyle}>
+        {t}
+      </Title>
+    );
+  }
   return (
-    <div>
+    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
       {expanded ? (
-        <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
-          <Title level={5} style={titleStyle}>
-            {veranstaltung.datumForDisplayShort}
-          </Title>
-          <Title level={5} style={titleStyle}>
-            {veranstaltung.kopf.presseIn}
-          </Title>
-          <Title level={3} style={titleStyle}>
-            {veranstaltung.kopf.titelMitPrefix}
-          </Title>
-        </ConfigProvider>
+        <>
+          <T l={5} t={veranstaltung.datumForDisplayShort} />
+          <T l={5} t={veranstaltung.kopf.presseIn} />
+          <T l={3} t={veranstaltung.kopf.titelMitPrefix} />
+        </>
       ) : (
-        <ConfigProvider theme={{ token: { fontSize: 10, lineHeight: 10 } }}>
-          <Title level={4} style={titleStyle}>
-            {veranstaltung.kopf.titelMitPrefix}
-            <small>
-              <small style={{ fontWeight: 400 }}>
-                {" - "}
-                {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
-              </small>
+        <Title level={4} style={titleStyle}>
+          {veranstaltung.kopf.titelMitPrefix}
+          <small>
+            <small style={{ fontWeight: 400 }}>
+              {" - "}
+              {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
             </small>
-          </Title>
-        </ConfigProvider>
+          </small>
+        </Title>
       )}
-    </div>
+    </ConfigProvider>
   );
 }
 

@@ -16,11 +16,11 @@ interface TabHotelProps {
 export default function TabHotel({ optionen, veranstaltung, form }: TabHotelProps) {
   return (
     <Row gutter={12}>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <KontaktCard kontakte={optionen.hotels} form={form} selector="hotel" />
         <HotelCard form={form} optionen={optionen} veranstaltung={veranstaltung} />
       </Col>
-      <Col span={12}>
+      <Col xs={24} lg={12}>
         <TransportCard form={form} optionen={optionen} veranstaltung={veranstaltung} />
       </Col>
     </Row>
