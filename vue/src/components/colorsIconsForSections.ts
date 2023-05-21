@@ -14,6 +14,7 @@ export function useColorsAndIconsForSections(type: buttonType) {
     hotel: "HouseDoor",
     kasse: "CashStack",
     presse: "Newspaper",
+    staff: "Staff",
   };
 
   function color(localType = type) {

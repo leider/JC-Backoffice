@@ -28,6 +28,7 @@ import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
 import Login from "@/components/Login";
 import Optionen from "@/components/options/Optionen";
 import Info from "@/components/team/Info";
+import Preview from "@/components/veranstaltung/Preview";
 
 export const routes: RouteObject[] = [
   {
@@ -52,6 +53,10 @@ export const routes: RouteObject[] = [
       {
         path: "/veranstaltung/:url",
         element: <VeranstaltungComp />,
+      },
+      {
+        path: "/veranstaltung/preview/:url",
+        element: <Preview />,
       },
       {
         path: "/infos/:monatJahr",

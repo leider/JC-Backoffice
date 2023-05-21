@@ -183,12 +183,24 @@ export default function VeranstaltungComp() {
 
     const tags = [];
     if (!confirmed) {
-      tags.push(<Tag color={"error"}>Unbestätigt</Tag>);
+      tags.push(
+        <Tag key="unbestaetigt" color={"error"}>
+          Unbestätigt
+        </Tag>
+      );
     } else {
-      tags.push(<Tag color={"success"}>Bestätigt</Tag>);
+      tags.push(
+        <Tag key="bestaetigt" color={"success"}>
+          Bestätigt
+        </Tag>
+      );
     }
     if (veranstaltung.kopf.abgesagt) {
-      tags.push(<Tag color={"error"}>ABGESAGT</Tag>);
+      tags.push(
+        <Tag key="abgesagt" color={"error"}>
+          ABGESAGT
+        </Tag>
+      );
     }
     setTagsForTitle(tags);
 

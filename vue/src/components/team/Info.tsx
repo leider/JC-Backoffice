@@ -6,9 +6,8 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { imgZip, veranstaltungenBetweenYYYYMM } from "@/commons/loader-for-react";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
-import Renderer from "jc-shared/commons/renderer";
 import { IconForSmallBlock } from "@/components/Icon";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 
 export default function Info() {
   const { monatJahr } = useParams(); // als yymm
@@ -50,16 +49,9 @@ export default function Info() {
     return (
       <Row gutter={12}>
         {veranstaltungen.map((veranst) => {
-          const html =
-            Renderer.render(`${new VeranstaltungFormatter(veranst).presseTemplate + veranst.presse.text}
-${veranst.presse.fullyQualifiedJazzclubURL}`) +
-            `<h4>Bilder:</h4>${veranst.presse.image
-              .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
-              .reverse()
-              .join("")}`;
           return (
             <Col lg={12} key={veranst.id}>
-              <div dangerouslySetInnerHTML={{ __html: html }} />
+              <PressePreview veranstaltung={veranst} />
               <Divider />
             </Col>
           );
@@ -144,7 +136,6 @@ ${veranst.presse.fullyQualifiedJazzclubURL}`) +
         onChange={(newPage) => {
           setSearch({ tab: newPage });
         }}
-        ex
       />
     </>
   );

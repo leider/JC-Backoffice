@@ -8,6 +8,7 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";
+import { Link } from "react-router-dom";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -23,7 +24,7 @@ interface HeaderProps {
   expanded?: boolean;
 }
 
-function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+function Hinweise({ veranstaltung, usersAsOptions }: { veranstaltung: Veranstaltung; usersAsOptions: { label: string; value: string }[] }) {
   const [fields, setFields] = useState<{ val: boolean; text: string }[]>([]);
   useEffect(() => {
     const result = [
@@ -38,12 +39,12 @@ function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const { token } = theme.useToken();
 
   function NotificationPart({ toggleValue, text, negativeText }: { toggleValue: boolean; text: string; negativeText?: string }) {
-    const common: CSSProperties = { color: "#FFF", textAlign: "start" };
+    const common: CSSProperties = { color: "#FFF", textAlign: "start", whiteSpace: "nowrap", overflow: "hidden" };
     const colStyle = { ...common, backgroundColor: toggleValue ? token.colorSuccessBg : token.colorErrorBg };
     const textStyle = { fontSize: 10, color: toggleValue ? token.colorSuccess : token.colorError };
-    const iconStyle = { ...textStyle, margin: "0 4px" };
+    const iconStyle = { ...textStyle, margin: "0 2px" };
     return (
-      <Col span={6} style={colStyle}>
+      <Col span={5} style={colStyle}>
         {toggleValue ? (
           <IconForSmallBlock size={10} iconName="CheckCircle" style={iconStyle} />
         ) : (
@@ -61,10 +62,15 @@ function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
         <NotificationPart key={field.text} toggleValue={field.val} text={field.text} />
       ))}
       {fields.length === 2 && (
-        <Col span={6} style={{ textAlign: "start" }}>
+        <Col span={5} style={{ textAlign: "start" }}>
           <Typography.Text style={{ margin: "0 4px", fontSize: 10 }}>kein Hotel</Typography.Text>
         </Col>
       )}
+      <Col span={4} style={{ textAlign: "center", backgroundColor: token["custom-color-concert"], color: "white" }}>
+        <Link to={{ pathname: `/veranstaltung/preview/${veranstaltung.url}` }}>
+          <IconForSmallBlock size={14} iconName="Eye" style={{ color: "white" }} />
+        </Link>
+      </Col>
     </Row>
   );
 }
@@ -187,7 +193,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} md={8} xxl={6}>
-        <Hinweise veranstaltung={veranstaltung} />
+        <Hinweise veranstaltung={veranstaltung} usersAsOptions={usersAsOptions} />
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
