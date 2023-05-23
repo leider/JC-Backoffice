@@ -78,6 +78,7 @@ export default class OptionValues {
       { name: "12,00", regulaer: 12, rabattErmaessigt: 2, rabattMitglied: 5 },
       { name: "15,00", regulaer: 15, rabattErmaessigt: 2, rabattMitglied: 5 },
       { name: "18,00", regulaer: 18, rabattErmaessigt: 2, rabattMitglied: 5 },
+      { name: "20,00", regulaer: 20, rabattErmaessigt: 2, rabattMitglied: 5 },
       { name: "22,00", regulaer: 22, rabattErmaessigt: 2, rabattMitglied: 5 },
       { name: "26,00", regulaer: 26, rabattErmaessigt: 2, rabattMitglied: 5 },
       { name: "30,00", regulaer: 30, rabattErmaessigt: 3, rabattMitglied: 7 },
