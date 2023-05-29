@@ -1,25 +1,17 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Form, Tag, theme } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { Form } from "antd";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import {
-  deleteVeranstaltungWithId,
-  optionen as optionenRestCall,
-  orte as orteRestCall,
-  saveVeranstaltung,
-  veranstaltungForUrl,
-} from "@/commons/loader-for-react";
+import { optionen as optionenRestCall, orte as orteRestCall, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { fromFormObject, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
 //import { detailedDiff } from "deep-object-diff";
-import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
-import { PageHeader } from "@ant-design/pro-layout";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
+import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
@@ -51,9 +43,6 @@ export default function VeranstaltungComp() {
 
   const [form] = Form.useForm<Veranstaltung>();
 
-  const { useToken } = theme;
-  const { token } = useToken();
-  const [typeColor, setTypeColor] = useState<string>("");
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
@@ -69,19 +58,13 @@ export default function VeranstaltungComp() {
 
   useEffect(initializeForm, [form, veranstaltung]);
 
-  const [displayDate, setDisplayDate] = useState<string>("");
   const [isNew, setIsNew] = useState<boolean>(false);
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
 
   function updateStateStuff() {
     const veranstaltung = fromFormObject(form);
     const localIsNew = !veranstaltung.id;
 
-    document.title = localIsNew ? "Neue oder kopierte Veranstaltung" : veranstaltung.kopf.titel;
-    setDisplayDate(veranstaltung.datumForDisplayShort);
     setIsNew(localIsNew);
-    const confirmed = veranstaltung.kopf.confirmed;
-    setIsConfirmed(confirmed);
     const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
     if (selectedOrt) {
       form.setFieldsValue({
@@ -92,31 +75,6 @@ export default function VeranstaltungComp() {
         },
       });
     }
-    const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
-    setTypeColor((token as any)[code]);
-
-    const tags = [];
-    if (!confirmed) {
-      tags.push(
-        <Tag key="unbestaetigt" color={"error"}>
-          Unbestätigt
-        </Tag>
-      );
-    } else {
-      tags.push(
-        <Tag key="bestaetigt" color={"success"}>
-          Bestätigt
-        </Tag>
-      );
-    }
-    if (veranstaltung.kopf.abgesagt) {
-      tags.push(
-        <Tag key="abgesagt" color={"error"}>
-          ABGESAGT
-        </Tag>
-      );
-    }
-    setTagsForTitle(tags);
 
     form.validateFields();
   }
@@ -128,17 +86,6 @@ export default function VeranstaltungComp() {
       setVeranstaltung(veranst);
       initializeForm();
     });
-  }
-
-  const navigate = useNavigate();
-  const [tagsForTitle, setTagsForTitle] = useState<[]>([]);
-
-  function copyVeranstaltung() {
-    const url = form.getFieldValue("url");
-    if (!url) {
-      return;
-    }
-    navigate(`/veranstaltung/copy-of-${url}`);
   }
 
   return (
@@ -154,18 +101,7 @@ export default function VeranstaltungComp() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader
-        title={<span style={{ color: typeColor }}>{document.title}</span>}
-        subTitle={<span style={{ color: typeColor }}>{displayDate}</span>}
-        extra={[
-          <DeleteButton key="delete" disabled={isNew || isConfirmed} />,
-          <CopyButton key="copy" disabled={isNew} callback={copyVeranstaltung} />,
-          <SaveButton key="save" disabled={!dirty} callback={saveForm} />,
-        ]}
-        tags={tagsForTitle}
-      >
-        {isNew && <b style={{ color: token["custom-color-ausgaben"] }}> (Denk daran, alle Felder zu überprüfen und auszufüllen)</b>}
-      </PageHeader>
+      <VeranstaltungPageHeader isNew={isNew} dirty={dirty} />
       <VeranstaltungTabs veranstaltung={veranstaltung} optionen={optionen} orte={orte} form={form} updateStateStuff={updateStateStuff} />
     </Form>
   );
