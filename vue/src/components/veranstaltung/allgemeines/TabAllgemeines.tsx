@@ -14,29 +14,15 @@ interface TabAllgemeinesProps {
   form: FormInstance;
   optionen: OptionValues;
   orte: Orte;
-  brauchtHotelCallback: (brauchtHotel: boolean) => void;
   veranstaltung: Veranstaltung;
   titleAndDateCallback: () => void;
 }
 
-export default function TabAllgemeines({
-  optionen,
-  orte,
-  form,
-  brauchtHotelCallback,
-  veranstaltung,
-  titleAndDateCallback,
-}: TabAllgemeinesProps) {
+export default function TabAllgemeines({ optionen, orte, form, veranstaltung, titleAndDateCallback }: TabAllgemeinesProps) {
   return (
     <Row gutter={12}>
       <Col xs={24} lg={12}>
-        <EventCard
-          form={form}
-          optionen={optionen}
-          orte={orte}
-          brauchtHotelCallback={brauchtHotelCallback}
-          titleAndDateCallback={titleAndDateCallback}
-        />
+        <EventCard form={form} optionen={optionen} orte={orte} titleAndDateCallback={titleAndDateCallback} />
         <ArtistCard optionen={optionen} />
         <KommentarCard />
       </Col>

@@ -11,7 +11,6 @@ import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import CheckItem from "@/widgets-react/CheckItem";
 import { useAuth } from "@/commons/auth";
 import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
@@ -36,11 +35,10 @@ type EventCardProps = {
   form: FormInstance;
   optionen: OptionValues;
   orte: Orte;
-  brauchtHotelCallback: (brauchtHotel: boolean) => void;
   titleAndDateCallback: () => void;
 };
 
-export default function EventCard({ brauchtHotelCallback, form, optionen, orte, titleAndDateCallback }: EventCardProps) {
+export default function EventCard({ form, optionen, orte, titleAndDateCallback }: EventCardProps) {
   const { context } = useAuth();
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
@@ -62,13 +60,7 @@ export default function EventCard({ brauchtHotelCallback, form, optionen, orte, 
           </Col>
         )}
         <Col span={8}>
-          <CheckItem
-            name={["artist", "brauchtHotel"]}
-            label="Braucht Hotel"
-            onChange={(e) => {
-              brauchtHotelCallback(e.target.checked);
-            }}
-          />
+          <CheckItem name={["artist", "brauchtHotel"]} label="Braucht Hotel" />
         </Col>
         <Col span={8}>
           <CheckItem name={["kopf", "fotografBestellen"]} label="Fotograf einladen" />
