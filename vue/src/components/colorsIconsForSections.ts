@@ -3,7 +3,7 @@ import { theme } from "antd";
 
 export type buttonType = "allgemeines" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse";
 
-export function useColorsAndIconsForSections(type: buttonType) {
+export function useColorsAndIconsForSections(type?: buttonType) {
   const { useToken } = theme;
   const { token } = useToken() as any;
 
