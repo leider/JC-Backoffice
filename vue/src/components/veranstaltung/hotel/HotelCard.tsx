@@ -1,22 +1,14 @@
-import OptionValues from "jc-shared/optionen/optionValues";
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { Col, Form, Row } from "antd";
 import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import Unterkunft from "jc-shared/veranstaltung/unterkunft";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import CheckItem from "@/widgets-react/CheckItem";
+import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 
-interface HotelParams {
-  form: FormInstance<Veranstaltung>;
-  optionen: OptionValues;
-  veranstaltung: Veranstaltung;
-}
-
-export default function HotelCard({ form, optionen, veranstaltung }: HotelParams) {
+export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");
 

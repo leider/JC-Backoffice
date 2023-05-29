@@ -1,26 +1,19 @@
-import { Col, FormInstance, Row } from "antd";
+import { Col, Row } from "antd";
 import React, { useState } from "react";
-import OptionValues from "jc-shared/optionen/optionValues";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import EinnahmenCard from "@/components/veranstaltung/kosten/EinnahmenCard";
 import AusgabenCard from "@/components/veranstaltung/kosten/AusgabenCard";
 import EinAusCard from "@/components/veranstaltung/kosten/EinAusCard";
+import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 
-interface TabKostenProps {
-  veranstaltung: Veranstaltung;
-  optionen: OptionValues;
-  form: FormInstance<Veranstaltung>;
-}
-
-export default function TabKosten({ veranstaltung, optionen, form }: TabKostenProps) {
+export default function TabKosten({ veranstaltung, optionen, form }: TabProps) {
   const [einnahmen, setEinnahmen] = useState<number>(0);
   const [ausgaben, setAusgaben] = useState<number>(0);
-  function einnahmenChanged() {
-    setEinnahmen(einnahmen + 1);
+  function einnahmenChanged(sum: number) {
+    setEinnahmen(sum);
   }
 
-  function ausgabenChanged() {
-    setAusgaben(ausgaben + 1);
+  function ausgabenChanged(sum: number) {
+    setAusgaben(sum);
   }
 
   return (

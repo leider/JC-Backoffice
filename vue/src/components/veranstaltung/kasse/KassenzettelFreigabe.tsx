@@ -12,12 +12,10 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
 
 interface KassenzettelFreigabeParams {
-  veranstaltung: Veranstaltung;
   form: FormInstance<Veranstaltung>;
-  setFreigegeben: (value: ((prevState: boolean) => boolean) | boolean) => void;
 }
 
-export function KassenzettelFreigabe({ veranstaltung, form, setFreigegeben }: KassenzettelFreigabeParams) {
+export function KassenzettelFreigabe({ form }: KassenzettelFreigabeParams) {
   const { modal } = App.useApp();
   const { context } = useAuth();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
@@ -32,27 +30,26 @@ export function KassenzettelFreigabe({ veranstaltung, form, setFreigegeben }: Ka
   }, []);
 
   function freigeben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name),
-      modal.confirm({
-        type: "confirm",
-        title: "Kasse freigeben",
-        content: (
-          <Form form={form} layout="vertical">
-            <p>
-              <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
-            </p>
-            <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-            <SingleSelect name={["kasse", "kassenfreigabe"]} label={"User für die Freigabe"} options={usersAsOptions} />
-          </Form>
-        ),
-        onOk: () => {
-          form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
-          setFreigegeben(true);
-        },
-        onCancel: () => {
-          form.setFieldValue(["kasse", "kassenfreigabe"], "");
-        },
-      });
+    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name);
+    modal.confirm({
+      type: "confirm",
+      title: "Kasse freigeben",
+      content: (
+        <Form form={form} layout="vertical">
+          <p>
+            <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
+          </p>
+          <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
+          <SingleSelect name={["kasse", "kassenfreigabe"]} label={"User für die Freigabe"} options={usersAsOptions} />
+        </Form>
+      ),
+      onOk: () => {
+        form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
+      },
+      onCancel: () => {
+        form.setFieldValue(["kasse", "kassenfreigabe"], "");
+      },
+    });
   }
 
   function freigabeAufheben() {
@@ -64,7 +61,6 @@ export function KassenzettelFreigabe({ veranstaltung, form, setFreigegeben }: Ka
         onOk: () => {
           form.setFieldValue(["kasse", "kassenfreigabe"], "");
           form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
-          setFreigegeben(false);
         },
       });
   }

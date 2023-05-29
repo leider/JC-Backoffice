@@ -1,4 +1,3 @@
-import OptionValues from "jc-shared/optionen/optionValues";
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, ConfigProvider, Form, FormInstance, Row } from "antd";
@@ -14,11 +13,10 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface TransportParams {
   form: FormInstance<Veranstaltung>;
-  optionen: OptionValues;
   veranstaltung: Veranstaltung;
 }
 
-export default function TransportCard({ form, optionen, veranstaltung }: TransportParams) {
+export default function TransportCard({ form, veranstaltung }: TransportParams) {
   const [summe, setSumme] = useState<number>(0);
 
   useEffect(() => {

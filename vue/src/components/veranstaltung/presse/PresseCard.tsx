@@ -1,4 +1,3 @@
-import OptionValues from "jc-shared/optionen/optionValues";
 import React, { useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Form, FormInstance, Row, Tabs } from "antd";
@@ -11,20 +10,11 @@ import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets-react/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader-for-react";
-import Renderer from "jc-shared/commons/renderer";
-import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
-import { DynamicItem } from "@/widgets-react/DynamicItem";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 
-interface PresseCardParams {
-  form: FormInstance<Veranstaltung>;
-  optionen: OptionValues;
-  veranstaltung: Veranstaltung;
-}
-
-export default function PresseCard({ form, optionen, veranstaltung }: PresseCardParams) {
+export default function PresseCard({ form, id }: { id?: string; form: FormInstance<Veranstaltung> }) {
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
   const { color } = useColorsAndIconsForSections("presse");
@@ -89,7 +79,7 @@ export default function PresseCard({ form, optionen, veranstaltung }: PresseCard
               },
             ]}
           />
-          <Uploader form={form} veranstaltung={veranstaltung} name={["presse", "image"]} typ={"pressefoto"} />
+          <Uploader form={form} id={id} name={["presse", "image"]} typ={"pressefoto"} />
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col xs={24} lg={12}>

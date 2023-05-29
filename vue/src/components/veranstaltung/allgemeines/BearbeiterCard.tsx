@@ -3,10 +3,10 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Row } from "antd";
 import { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 
-export default function BearbeiterCard(props: { changelist: ChangelistItem[] }) {
+export default function BearbeiterCard({ changelist }: { changelist: ChangelistItem[] }) {
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Bearbeiter">
-      {props.changelist?.map((item, idx) => (
+      {changelist?.map((item, idx) => (
         <Row gutter={12} key={idx}>
           <Col span={24}>
             <details>

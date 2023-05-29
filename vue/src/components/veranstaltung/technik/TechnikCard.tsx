@@ -39,7 +39,7 @@ export default function TechnikCard({ form, optionen: { backlineJazzclub, backli
       </Row>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader form={form} veranstaltung={veranstaltung} name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader form={form} id={veranstaltung.id} name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
       <Row gutter={12}>

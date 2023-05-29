@@ -11,6 +11,7 @@ import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import CheckItem from "@/widgets-react/CheckItem";
 import { useAuth } from "@/commons/auth";
 import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
+import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
@@ -35,10 +36,9 @@ type EventCardProps = {
   form: FormInstance;
   optionen: OptionValues;
   orte: Orte;
-  titleAndDateCallback: () => void;
 };
 
-export default function EventCard({ form, optionen, orte, titleAndDateCallback }: EventCardProps) {
+export default function EventCard({ form, optionen, orte }: EventCardProps) {
   const { context } = useAuth();
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
@@ -46,17 +46,35 @@ export default function EventCard({ form, optionen, orte, titleAndDateCallback }
     setIsBookingTeam(!!context?.currentUser.accessrights?.isBookingTeam);
   }, [context]);
 
+  function ortChanged() {
+    const veranstaltung = fromFormObject(form);
+    const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
+    if (selectedOrt) {
+      form.setFieldsValue({
+        kopf: {
+          pressename: selectedOrt.pressename || veranstaltung.kopf.ort,
+          presseIn: selectedOrt.presseIn || selectedOrt.pressename,
+          flaeche: selectedOrt.flaeche,
+        },
+      });
+    }
+
+    form.validateFields();
+  }
+
+  useEffect(ortChanged, [orte]);
+
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
       <Row gutter={12}>
         <Col span={8} offset={16}>
-          <CheckItem label="ist abgesagt" name={["kopf", "abgesagt"]} onChange={titleAndDateCallback} />
+          <CheckItem label="ist abgesagt" name={["kopf", "abgesagt"]} />
         </Col>
       </Row>
       <Row gutter={12}>
         {isBookingTeam && (
           <Col span={8}>
-            <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" onChange={titleAndDateCallback} />
+            <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" />
           </Col>
         )}
         <Col span={8}>
@@ -68,22 +86,22 @@ export default function EventCard({ form, optionen, orte, titleAndDateCallback }
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <TextField name={["kopf", "titel"]} label="Titel" onChange={titleAndDateCallback} />
+          <TextField name={["kopf", "titel"]} label="Titel" />
         </Col>
         <Col span={12}>
           <Form.Item label={<b>Typ:</b>} name={["kopf", "eventTyp"]}>
-            <EventTypeSelect optionen={optionen} onChange={titleAndDateCallback} />
+            <EventTypeSelect optionen={optionen} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <StartEndPickers onChange={titleAndDateCallback} />
+          <StartEndPickers />
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={8}>
-          <SingleSelect name={["kopf", "ort"]} label="Ort" options={orte.alleNamen()} onChange={titleAndDateCallback} />
+          <SingleSelect name={["kopf", "ort"]} label="Ort" options={orte.alleNamen()} onChange={ortChanged} />
         </Col>
         <Col span={8}>
           <NumberInput name={["kopf", "flaeche"]} label="Fläche" decimals={0} />

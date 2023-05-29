@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { StartAndEnd } from "@/components/veranstaltung/veranstaltungCompUtils";
 
-function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void; onChange: () => void }) {
+function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
@@ -22,7 +22,6 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
     const newStart = start.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
     const newEnd = end.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
     props.onDates?.({ start: newStart, end: newEnd });
-    props.onChange();
   }
 
   function timesChanged(times: any) {
@@ -34,7 +33,6 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
     const newStart = start.set("hour", startTime?.get("hour")).set("minute", startTime.get("minute"));
     const newEnd = end.set("hour", endTime?.get("hour")).set("minute", endTime.get("minute"));
     props.onDates?.({ start: newStart, end: newEnd });
-    props.onChange();
   }
 
   return (
@@ -49,14 +47,10 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
   );
 }
 
-interface StartEndPickersProps {
-  onChange: () => void;
-}
-
-export default function StartEndPickers({ onChange }: StartEndPickersProps) {
+export default function StartEndPickers() {
   return (
     <Form.Item label={<b>Datum und Uhrzeit:</b>} name={["startAndEnd"]} valuePropName="dates" trigger="onDates">
-      <EmbeddedPickers onChange={onChange} />
+      <EmbeddedPickers />
     </Form.Item>
   );
 }

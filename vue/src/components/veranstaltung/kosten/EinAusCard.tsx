@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, FormInstance, Row, Table } from "antd";
+import { Col, Form, FormInstance, Row, Table } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
 import { ColumnsType } from "antd/es/table";
@@ -13,9 +13,11 @@ interface AusgabenCardParams {
 }
 export default function EinAusCard({ einnahmen, ausgaben, form }: AusgabenCardParams) {
   const [kalk, setKalk] = useState<VeranstaltungKalkulation | undefined>(undefined);
+
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], { form, preserve: true });
   useEffect(() => {
     updateKalk();
-  }, [einnahmen, ausgaben, form]);
+  }, [einnahmen, ausgaben, form, brauchtHotel]);
 
   function updateKalk() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));
