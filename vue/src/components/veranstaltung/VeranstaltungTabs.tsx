@@ -46,10 +46,6 @@ export default function VeranstaltungTabs({
   const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"]);
 
   useEffect(() => {
-    console.log({ brauchtHotel });
-  }, [brauchtHotel]);
-
-  useEffect(() => {
     const page = search.get("page") ?? "";
     if (["allgemeines", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
       setActivePage(page);

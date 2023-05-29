@@ -69,7 +69,6 @@ export default function VeranstaltungComp() {
 
   useEffect(initializeForm, [form, veranstaltung]);
 
-  const [title, setTitle] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
   const [isNew, setIsNew] = useState<boolean>(false);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
@@ -79,7 +78,6 @@ export default function VeranstaltungComp() {
     const localIsNew = !veranstaltung.id;
 
     document.title = localIsNew ? "Neue oder kopierte Veranstaltung" : veranstaltung.kopf.titel;
-    setTitle(veranstaltung.kopf.titelMitPrefix);
     setDisplayDate(veranstaltung.datumForDisplayShort);
     setIsNew(localIsNew);
     const confirmed = veranstaltung.kopf.confirmed;
@@ -132,24 +130,7 @@ export default function VeranstaltungComp() {
     });
   }
 
-  const { modal } = App.useApp();
   const navigate = useNavigate();
-  function deleteVeranstaltung() {
-    const id = form.getFieldValue("id");
-    if (!id) {
-      return;
-    }
-    modal.confirm({
-      type: "confirm",
-      title: "Veranstaltung löschen",
-      content: `Bist Du sicher, dass Du die Veranstaltung "${title}" löschen möchtest?`,
-      onOk: async () => {
-        await deleteVeranstaltungWithId(id);
-        navigate("/");
-      },
-    });
-  }
-
   const [tagsForTitle, setTagsForTitle] = useState<[]>([]);
 
   function copyVeranstaltung() {
@@ -177,7 +158,7 @@ export default function VeranstaltungComp() {
         title={<span style={{ color: typeColor }}>{document.title}</span>}
         subTitle={<span style={{ color: typeColor }}>{displayDate}</span>}
         extra={[
-          <DeleteButton key="delete" disabled={!(isNew || !isConfirmed)} callback={deleteVeranstaltung} />,
+          <DeleteButton key="delete" disabled={isNew || isConfirmed} />,
           <CopyButton key="copy" disabled={isNew} callback={copyVeranstaltung} />,
           <SaveButton key="save" disabled={!dirty} callback={saveForm} />,
         ]}
