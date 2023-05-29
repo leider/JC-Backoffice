@@ -14,16 +14,11 @@ import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
 
-function TabLabel({ title, type, activePage }: { type: buttonType; title: string; activePage: string }) {
-  const { icon, color } = useColorsAndIconsForSections();
-
-  const farbe = color(type);
-  const active = activePage === type;
-  return (
-    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
-      <IconForSmallBlock iconName={icon(type)} /> {title}
-    </b>
-  );
+export interface TabProps {
+  form: FormInstance<Veranstaltung>;
+  veranstaltung?: Veranstaltung;
+  optionen?: OptionValues;
+  orte?: Orte;
 }
 
 export default function VeranstaltungTabs({
@@ -31,19 +26,17 @@ export default function VeranstaltungTabs({
   orte,
   veranstaltung,
   form,
-  updateStateStuff,
 }: {
   veranstaltung: Veranstaltung;
   optionen: OptionValues;
   orte: Orte;
   form: FormInstance<Veranstaltung>;
-  updateStateStuff: () => void;
 }) {
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"]);
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], { form, preserve: true });
 
   useEffect(() => {
     const page = search.get("page") ?? "";
@@ -55,37 +48,48 @@ export default function VeranstaltungTabs({
     }
   }, [search]);
 
+  function TabLabel({ title, type }: { type: buttonType; title: string }) {
+    const { icon, color } = useColorsAndIconsForSections();
+    const active = activePage === type;
+
+    const farbe = color(type);
+
+    return (
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
+        <IconForSmallBlock iconName={icon(type)} /> {title}
+      </b>
+    );
+  }
+
   const allTabs: TabsProps["items"] = [
     {
       key: "allgemeines",
-      label: <TabLabel type="allgemeines" title="Allgemeines" activePage={activePage} />,
-      children: (
-        <TabAllgemeines veranstaltung={veranstaltung} form={form} optionen={optionen} orte={orte} titleAndDateCallback={updateStateStuff} />
-      ),
+      label: <TabLabel type="allgemeines" title="Allgemeines" />,
+      children: <TabAllgemeines optionen={optionen} veranstaltung={veranstaltung} form={form} orte={orte} />,
     },
     {
       key: "technik",
-      label: <TabLabel type="technik" title="Technik" activePage={activePage} />,
+      label: <TabLabel type="technik" title="Technik" />,
       children: <TabTechnik optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "ausgaben",
-      label: <TabLabel type="ausgaben" title="Kalkulation" activePage={activePage} />,
+      label: <TabLabel type="ausgaben" title="Kalkulation" />,
       children: <TabKosten optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "hotel",
-      label: <TabLabel type="hotel" title="Hotel" activePage={activePage} />,
-      children: <TabHotel optionen={optionen} veranstaltung={veranstaltung} form={form} />,
+      label: <TabLabel type="hotel" title="Hotel" />,
+      children: <TabHotel veranstaltung={veranstaltung} optionen={optionen} form={form} />,
     },
     {
       key: "kasse",
-      label: <TabLabel type="kasse" title="Abendkasse" activePage={activePage} />,
-      children: <TabKasse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
+      label: <TabLabel type="kasse" title="Abendkasse" />,
+      children: <TabKasse veranstaltung={veranstaltung} form={form} />,
     },
     {
       key: "presse",
-      label: <TabLabel type="presse" title="Presse" activePage={activePage} />,
+      label: <TabLabel type="presse" title="Presse" />,
       children: <TabPresse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
     },
   ];
@@ -98,7 +102,7 @@ export default function VeranstaltungTabs({
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [brauchtHotel]);
+  }, [brauchtHotel, optionen, activePage]);
 
   return (
     <Tabs

@@ -24,7 +24,8 @@ export default class VeranstaltungKalkulation {
   }
 
   get kostenGesamtEUR(): number {
-    return this.kosten.totalEUR + this.unterkunft.kostenTotalEUR + this.kasse.ausgabenOhneGage;
+    const hotelkosten = this.veranstaltung.artist.brauchtHotel ? this.unterkunft.kostenTotalEUR : 0;
+    return this.kosten.totalEUR + hotelkosten + this.kasse.ausgabenOhneGage;
   }
   get erwarteterOderEchterEintritt(): number {
     return this.kasse.istFreigegeben ? this.kasse.einnahmeTicketsEUR : this.eintrittspreise.erwarteterEintritt;

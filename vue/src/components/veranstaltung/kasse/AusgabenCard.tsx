@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, FormInstance, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import { TextField } from "@/widgets-react/TextField";
 import Kasse from "jc-shared/veranstaltung/kasse";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { KasseCardProps } from "@/components/veranstaltung/kasse/TabKasse";
 
-interface AusgabenCardParams {
-  form: FormInstance<Veranstaltung>;
-  veranstaltung: Veranstaltung;
-  disabled: boolean;
-}
-
-export default function AusgabenCard({ form, veranstaltung, disabled }: AusgabenCardParams) {
+export default function AusgabenCard({ form, disabled }: KasseCardProps) {
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
     setReadonly(disabled);
@@ -22,7 +16,7 @@ export default function AusgabenCard({ form, veranstaltung, disabled }: Ausgaben
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
     updateSumme();
-  }, [veranstaltung]);
+  });
 
   function updateSumme() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));

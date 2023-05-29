@@ -7,25 +7,25 @@ import { uploadFile } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 
-interface UoloaderParams {
+interface UploaderParams {
   form: FormInstance<Veranstaltung>;
-  veranstaltung: Veranstaltung;
+  id?: string;
   name: string[];
   typ: string;
   onlyImages: boolean;
 }
 
-export default function Uploader({ form, veranstaltung, name, typ, onlyImages }: UoloaderParams) {
+export default function Uploader({ form, id, name, typ, onlyImages }: UploaderParams) {
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
     setOptions(form.getFieldValue(name) || []);
-  }, [veranstaltung, form]);
+  }, [id, form]);
 
   async function saveFiles() {
     setUploading(true);
     const formData = new FormData();
-    formData.append("id", veranstaltung.id || "");
+    formData.append("id", id || "");
     formData.append("typ", typ);
     fileList.forEach((file) => {
       formData.append("datei", file as RcFile, file.name);

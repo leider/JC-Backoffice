@@ -53,6 +53,7 @@ export default function VeranstaltungComp() {
     setInitialValue(initial);
     updateStateStuff();
     setDirty(areDifferent(initial, deepCopy));
+    setIsNew(!veranstaltung.id);
     form.validateFields();
   }
 
@@ -61,21 +62,6 @@ export default function VeranstaltungComp() {
   const [isNew, setIsNew] = useState<boolean>(false);
 
   function updateStateStuff() {
-    const veranstaltung = fromFormObject(form);
-    const localIsNew = !veranstaltung.id;
-
-    setIsNew(localIsNew);
-    const selectedOrt = orte.orte.find((o) => o.name === veranstaltung.kopf.ort);
-    if (selectedOrt) {
-      form.setFieldsValue({
-        kopf: {
-          pressename: selectedOrt.pressename || veranstaltung.kopf.ort,
-          presseIn: selectedOrt.presseIn || selectedOrt.pressename,
-          flaeche: selectedOrt.flaeche,
-        },
-      });
-    }
-
     form.validateFields();
   }
 
@@ -101,8 +87,8 @@ export default function VeranstaltungComp() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <VeranstaltungPageHeader isNew={isNew} dirty={dirty} />
-      <VeranstaltungTabs veranstaltung={veranstaltung} optionen={optionen} orte={orte} form={form} updateStateStuff={updateStateStuff} />
+      <VeranstaltungPageHeader isNew={isNew} dirty={dirty} form={form} />
+      <VeranstaltungTabs veranstaltung={veranstaltung} optionen={optionen} orte={orte} form={form} />
     </Form>
   );
 }

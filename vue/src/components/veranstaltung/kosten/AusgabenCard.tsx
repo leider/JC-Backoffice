@@ -8,7 +8,6 @@ import SingleSelect from "@/widgets-react/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
 import { DynamicItem } from "@/widgets-react/DynamicItem";
 import Kasse from "jc-shared/veranstaltung/kasse";
-import NumericInputEmbedded from "@/widgets-react/numericInputWidgets/NumericInputEmbedded";
 import CheckItem from "@/widgets-react/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets-react/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -16,7 +15,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 interface AusgabenCardParams {
   optionen: OptionValues;
   form: FormInstance<Veranstaltung>;
-  onChange: () => void;
+  onChange: (sum: number) => void;
   veranstaltung: Veranstaltung;
 }
 export default function AusgabenCard({ form, onChange, veranstaltung }: AusgabenCardParams) {
@@ -29,7 +28,7 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
     const veranst = new Veranstaltung(form.getFieldsValue(true));
     const sum = veranst.kasse.ausgabenOhneGage + veranst.kosten.totalEUR;
     setSumme(sum);
-    onChange();
+    onChange(sum);
   }
 
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];

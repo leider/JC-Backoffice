@@ -13,7 +13,7 @@ import { NumberInputWithDirectValue } from "@/widgets-react/numericInputWidgets/
 interface EinnahmenCardParams {
   optionen: OptionValues;
   form: FormInstance<Veranstaltung>;
-  onChange: () => void;
+  onChange: (sum: number) => void;
   veranstaltung: Veranstaltung;
 }
 export default function EinnahmenCard({ form, optionen, onChange, veranstaltung }: EinnahmenCardParams) {
@@ -27,7 +27,7 @@ export default function EinnahmenCard({ form, optionen, onChange, veranstaltung 
     const kalk = new VeranstaltungKalkulation(veranst);
     const sum = veranst.eintrittspreise.zuschuss + kalk.erwarteterOderEchterEintritt;
     setSumme(sum);
-    onChange();
+    onChange(sum);
   }
 
   return (

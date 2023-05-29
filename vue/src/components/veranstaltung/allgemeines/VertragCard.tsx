@@ -55,7 +55,7 @@ export default function VertragCard({ form, veranstaltung }: VertragCardParams) 
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Uploader form={form} veranstaltung={veranstaltung} name={["vertrag", "datei"]} typ={"vertrag"} />
+          <Uploader form={form} id={veranstaltung.id} name={["vertrag", "datei"]} typ={"vertrag"} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>
