@@ -114,7 +114,7 @@ export async function uploadBeleg(data: FormData) {
   });
 }
 
-export async function logout() {
+export async function logoutManually() {
   await standardFetch({
     method: "POST",
     url: "/rest/logout",

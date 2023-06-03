@@ -131,10 +131,10 @@ export default function VeranstaltungComp() {
     <Form
       form={form}
       onValuesChange={() => {
-        const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        console.log({ diff });
-        console.log({ initialValue });
-        console.log({ form: form.getFieldsValue(true) });
+        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        // console.log({ diff });
+        // console.log({ initialValue });
+        // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}
