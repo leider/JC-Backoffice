@@ -32,7 +32,7 @@ const JazzContent: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const { loginState, context } = useAuth();
+  const { loginState, context, logout } = useAuth();
   const { pathname, search } = useLocation();
   const [activeElement, setActiveElement] = useState<string>("");
   const [subdirs, setSubdirs] = useState<string[]>([]);
@@ -127,6 +127,19 @@ const JazzContent: React.FC = () => {
         children: wikisubdirEntries(),
       });
     }
+    localItems.push({
+      key: "logout",
+      icon: <IconForSmallBlock iconName="PersonCircle" />,
+      label: (
+        <a
+          onClick={() => {
+            logout();
+          }}
+        >
+          Abmelden
+        </a>
+      ),
+    });
     setItems(localItems);
   }, [context, subdirs]);
 

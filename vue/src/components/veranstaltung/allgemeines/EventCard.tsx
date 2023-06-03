@@ -72,11 +72,9 @@ export default function EventCard({ form, optionen, orte }: EventCardProps) {
         </Col>
       </Row>
       <Row gutter={12}>
-        {isBookingTeam && (
-          <Col span={8}>
-            <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" />
-          </Col>
-        )}
+        <Col span={8}>
+          <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" disabled={!isBookingTeam} />
+        </Col>
         <Col span={8}>
           <CheckItem name={["artist", "brauchtHotel"]} label="Braucht Hotel" />
         </Col>

@@ -3,14 +3,11 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
 import User from "jc-shared/user/user";
-import { currentUser, wikisubdirs } from "@/commons/loader-for-react";
+import { currentUser, logoutManually, wikisubdirs } from "@/commons/loader-for-react";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
     return axios.post("/login", { name, pass });
-  }
-  logoutPost() {
-    return axios.post("/security/logout");
   }
   refreshTokenPost() {
     return axios.post("/refreshToken");
@@ -128,13 +125,14 @@ function useProvideAuth(): IUseProvideAuth {
 
   async function logout() {
     try {
-      await authApi.logoutPost();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      delete (axios.defaults.headers as any).Authorization;
+      console.log("MANUAL");
+      await logoutManually();
+      setLoginState(LoginState.LOGGED_OUT);
     } catch (_) {
       // so what?
     } finally {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (axios.defaults.headers as any).Authorization;
-      setLoginState(LoginState.LOGGED_OUT);
       queryClient.invalidateQueries();
     }
   }
