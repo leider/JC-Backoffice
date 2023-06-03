@@ -1,17 +1,26 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Form } from "antd";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { optionen as optionenRestCall, orte as orteRestCall, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader-for-react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  optionen as optionenRestCall,
+  orte as orteRestCall,
+  saveOptionen,
+  saveVeranstaltung,
+  veranstaltungForUrl,
+} from "@/commons/loader-for-react";
+import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { fromFormObject, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
+import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
-//import { detailedDiff } from "deep-object-diff";
+import { detailedDiff } from "deep-object-diff";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
+import { differenceFor } from "jc-shared/commons/compareObjects";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import { useAuth } from "@/commons/auth";
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
@@ -41,17 +50,33 @@ export default function VeranstaltungComp() {
     }
   }, [locations.data]);
 
+  const queryClient = useQueryClient();
+
+  // When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key
+  const mutateVeranstaltung = useMutation({
+    mutationFn: saveVeranstaltung,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung", url] });
+      navigate({ pathname: `/veranstaltung/${data.url}`, search: `page=${search.get("page")}` }, { replace: true });
+    },
+  });
+  const mutateOptionen = useMutation({
+    mutationFn: saveOptionen,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["optionen"] });
+    },
+  });
+
   const [form] = Form.useForm<Veranstaltung>();
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
-
+  const { context } = useAuth();
   function initializeForm() {
     const deepCopy = toFormObject(veranstaltung);
     form.setFieldsValue(deepCopy);
     const initial = toFormObject(veranstaltung);
     setInitialValue(initial);
-    updateStateStuff();
     setDirty(areDifferent(initial, deepCopy));
     setIsNew(!veranstaltung.id);
     form.validateFields();
@@ -61,16 +86,44 @@ export default function VeranstaltungComp() {
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
-  function updateStateStuff() {
-    form.validateFields();
-  }
-
+  const navigate = useNavigate();
+  const [search] = useSearchParams();
   function saveForm() {
-    form.validateFields().then(() => {
+    form.validateFields().then(async () => {
+      const createLogWithDiff = (diff: string): ChangelistItem => {
+        return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: context?.currentUser?.id || "", diff };
+      };
+
       const veranst = fromFormObject(form);
-      saveVeranstaltung(veranst);
-      setVeranstaltung(veranst);
-      initializeForm();
+
+      const untypedVeranstaltung = veranst as any;
+      const originalVeranst = fromFormObjectAsAny(initialValue);
+      if (isNew) {
+        veranst.initializeIdAndUrl();
+        veranst.changelist = [createLogWithDiff("Angelegt")];
+      } else {
+        const diff = differenceFor(originalVeranst, veranst);
+        veranst.changelist.unshift(createLogWithDiff(diff));
+      }
+      if (!context?.currentUser.accessrights?.isOrgaTeam && !isNew) {
+        // prevent saving of optionen
+        return mutateVeranstaltung.mutate(veranst);
+      }
+      optionen.addOrUpdateKontakt("agenturen", veranst.agentur, untypedVeranstaltung.agenturauswahl);
+      delete untypedVeranstaltung.agenturauswahl;
+      if (veranst.artist.brauchtHotel) {
+        optionen.addOrUpdateKontakt("hotels", veranst.hotel, untypedVeranstaltung.hotelauswahl);
+        delete untypedVeranstaltung.hotelauswahl;
+        if (untypedVeranstaltung.hotelpreiseAlsDefault) {
+          optionen.updateHotelpreise(veranst.hotel, veranst.unterkunft.zimmerPreise);
+          delete untypedVeranstaltung.hotelpreiseAlsDefault;
+        }
+      }
+      optionen.updateBackline("Jazzclub", veranst.technik.backlineJazzclub);
+      optionen.updateBackline("Rockshop", veranst.technik.backlineRockshop);
+      optionen.updateCollection("artists", veranst.artist.name);
+      mutateOptionen.mutate(optionen);
+      mutateVeranstaltung.mutate(veranst);
     });
   }
 
@@ -78,10 +131,10 @@ export default function VeranstaltungComp() {
     <Form
       form={form}
       onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
+        const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        console.log({ diff });
+        console.log({ initialValue });
+        console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}

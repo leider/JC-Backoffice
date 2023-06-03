@@ -18,7 +18,11 @@ export function toFormObject(veranstaltung: Veranstaltung): object {
   return result;
 }
 export function fromFormObject(form: FormInstance): Veranstaltung {
-  const fieldsValues = _.cloneDeep(form.getFieldsValue(true));
+  return fromFormObjectAsAny(form.getFieldsValue(true));
+}
+
+export function fromFormObjectAsAny(formObject: any): Veranstaltung {
+  const fieldsValues = _.cloneDeep(formObject);
   fieldsValues.startDate = fieldsValues.startAndEnd.start.toDate();
   fieldsValues.endDate = fieldsValues.startAndEnd.end.toDate();
   const unterkunft = fieldsValues.unterkunft;

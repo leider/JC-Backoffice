@@ -23,7 +23,13 @@ export function stripNullOrUndefined<T>(data: T & { [index: string]: any }): T {
 }
 
 export function withoutNulldocUndefined<T>(data: T & { [index: string]: any }): T {
-  return stripNullOrUndefined(cloneDeep(data));
+  const attributesToIgnore = ["agenturauswahl", "hotelauswahl"];
+  const clone = stripNullOrUndefined(cloneDeep(data));
+  console.log({ clone });
+  attributesToIgnore.forEach((att) => {
+    delete (clone as any)[att];
+  });
+  return clone;
 }
 
 export function areDifferent(left: any, right: any) {
