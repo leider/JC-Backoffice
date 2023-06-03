@@ -1,5 +1,5 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt";
-import { Col, Form, FormInstance, Row, Select } from "antd";
+import { Col, Form, FormInstance, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
@@ -7,6 +7,7 @@ import { TextField } from "@/widgets-react/TextField";
 import TextArea from "antd/es/input/TextArea";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import SingleSelect from "@/widgets-react/SingleSelect";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -14,17 +15,12 @@ type KontaktCardProps = {
   selector: "agentur" | "hotel";
 };
 export default function KontaktCard({ kontakte, form, selector }: KontaktCardProps) {
-  const [auswahlen, setAuswahlen] = useState<{ label: string; value: string }[]>([]);
+  const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
     const names = _.uniq(kontakte.map((k) => k.name))
       .filter((name) => !!name)
       .sort();
-    setAuswahlen(
-      ["[temporär]", "[neu]"].concat(names).map((name) => ({
-        label: name,
-        value: name,
-      }))
-    );
+    setAuswahlen(["[temporär]", "[neu]"].concat(names));
   }, [kontakte]);
 
   function auswahlChanged(name: string) {
@@ -52,9 +48,13 @@ export default function KontaktCard({ kontakte, form, selector }: KontaktCardPro
     >
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label={<b>Auswahl:</b>}>
-            <Select options={auswahlen} defaultValue="[temporär]" onSelect={auswahlChanged} />
-          </Form.Item>
+          <SingleSelect
+            name={[`${selector}auswahl`]}
+            label="Auswahl"
+            options={auswahlen}
+            initialValue="[temporär]"
+            onChange={auswahlChanged}
+          />
           <TextField name={[selector, "name"]} label="Name" />
         </Col>
         <Col span={12}>

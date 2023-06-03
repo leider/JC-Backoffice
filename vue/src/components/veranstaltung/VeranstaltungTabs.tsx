@@ -102,7 +102,7 @@ export default function VeranstaltungTabs({
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [brauchtHotel, optionen, activePage]);
+  }, [brauchtHotel, optionen, activePage, veranstaltung]);
 
   return (
     <Tabs
