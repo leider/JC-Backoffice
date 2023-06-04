@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, calendarEventSources, veranstaltungenForTeam } from "@/commons/loader-for-react";
-import { Col, Row } from "antd";
+import { Button, Col, Dropdown, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
@@ -10,10 +10,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
 import { EventInput } from "@fullcalendar/core";
+import { IconForSmallBlock } from "@/components/Icon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 
-function Team() {
+export default function Veranstaltungen() {
+  const [search, setSearch] = useSearchParams();
+
   const [usersAsOptions, setUsersAsOptions] = useState<{ label: string; value: string }[] | undefined>([]);
 
   async function loadUsers() {
@@ -22,15 +25,13 @@ function Team() {
   }
 
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
-  async function loadVeranstaltungen() {
-    const result = await veranstaltungenForTeam("zukuenftige");
+  async function loadVeranstaltungen(period: "zukuenftige" | "vergangene" | "alle") {
+    const result = await veranstaltungenForTeam(period);
     setVeranstaltungen(result);
   }
   useEffect(() => {
     loadUsers();
-    loadVeranstaltungen();
   }, []);
-
   const { context } = useAuth();
   const [realadmin, setRealadmin] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -48,6 +49,25 @@ function Team() {
     }
     setRealadmin(!!accessrights?.isSuperuser);
   }, [veranstaltungen, realadmin, context]);
+
+  const periods = [
+    { label: "Zukünftige", key: "zukuenftige", onClick: () => setSearch({ period: "zukuenftige" }) },
+    { label: "Vergangene", key: "vergangene", onClick: () => setSearch({ period: "vergangene" }) },
+    { label: "Alle", key: "alle", onClick: () => setSearch({ period: "alle" }) },
+  ];
+  const [period, setPeriod] = useState<string>("Zukünftige");
+
+  useEffect(() => {
+    const periodOfSearch = search.get("period");
+    const result = periods.find((each) => each.key === periodOfSearch);
+    if (!result) {
+      setPeriod(periods[0].label);
+      setSearch({ period: periods[0].key });
+    } else {
+      setPeriod(result.label);
+    }
+    loadVeranstaltungen((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
+  }, [search]);
 
   function getEvents(
     info: {
@@ -87,15 +107,25 @@ function Team() {
     <Row gutter={8}>
       <Col xs={24} xl={16}>
         <PageHeader
-          footer={
-            <p>
-              <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor
-              der Veranstaltung da zu sein!
-            </p>
-          }
-          title="Team"
-          extra={[<ButtonWithIcon key="cal" icon="CalendarWeek" text="Kalender" type="default" />]}
-        />
+          title="Veranstaltungen"
+          extra={[
+            <ButtonWithIcon key="new" icon="FileEarmarkPlus" text="Neu" type="default" />,
+            <ButtonWithIcon key="cal" icon="CalendarWeek" text="Kalender" type="default" />,
+            <Dropdown
+              key="periods"
+              menu={{
+                items: periods,
+              }}
+            >
+              <Button>
+                <Space>
+                  {period}
+                  <IconForSmallBlock size={8} iconName="ChevronDown" />
+                </Space>
+              </Button>
+            </Dropdown>,
+          ]}
+        ></PageHeader>
         {monate.map((monat) => {
           return (
             <TeamMonatGroup
@@ -103,7 +133,7 @@ function Team() {
               monat={monat}
               veranstaltungen={veranstaltungenNachMonat[monat]}
               usersAsOptions={usersAsOptions || []}
-              renderTeam={true}
+              renderTeam={false}
             />
           );
         })}
@@ -133,5 +163,3 @@ function Team() {
     </Row>
   );
 }
-
-export default Team;

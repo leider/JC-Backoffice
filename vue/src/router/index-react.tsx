@@ -29,6 +29,7 @@ import Login from "@/components/Login";
 import Optionen from "@/components/options/Optionen";
 import Info from "@/components/team/Info";
 import Preview from "@/components/veranstaltung/Preview";
+import Veranstaltungen from "@/components/team/Veranstaltungen";
 
 export const routes: RouteObject[] = [
   {
@@ -36,7 +37,7 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Navigate to={{ pathname: "/team", search: "zukuenftige" }} />,
+        element: <Navigate to={{ pathname: "/veranstaltungen", search: "zukuenftige" }} />,
       },
       {
         path: "/login",
@@ -48,7 +49,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/veranstaltungen",
-        element: <Team />,
+        element: <Veranstaltungen />,
       },
       {
         path: "/veranstaltung/:url",
