@@ -152,16 +152,18 @@ const JazzContent: React.FC = () => {
   return (
     <Layout>
       <Header style={{ position: "sticky", top: 0, zIndex: 1, width: "100%", paddingInline: "20px" }}>
-        <div
-          style={{
-            float: "left",
-            width: "54px",
-            height: "40px",
-            margin: "12px 12px 0px 0px",
-          }}
-        >
-          <img src={"/img/logo_weiss.png"} alt="Jazzclub Logo" />
-        </div>
+        <Link to={"/"}>
+          <div
+            style={{
+              float: "left",
+              width: "54px",
+              height: "40px",
+              margin: "12px 12px 0px 0px",
+            }}
+          >
+            <img src={"/img/logo_weiss.png"} alt="Jazzclub Logo" />
+          </div>
+        </Link>
         <Menu theme="dark" mode="horizontal" items={items} selectedKeys={[activeElement]} />
       </Header>
 

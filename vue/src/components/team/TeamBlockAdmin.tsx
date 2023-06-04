@@ -24,7 +24,7 @@ interface HeaderProps {
   expanded?: boolean;
 }
 
-function Hinweise({ veranstaltung, usersAsOptions }: { veranstaltung: Veranstaltung; usersAsOptions: { label: string; value: string }[] }) {
+function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const [fields, setFields] = useState<{ val: boolean; text: string }[]>([]);
   useEffect(() => {
     const result = [
@@ -193,7 +193,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} md={8} xxl={6}>
-        <Hinweise veranstaltung={veranstaltung} usersAsOptions={usersAsOptions} />
+        <Hinweise veranstaltung={veranstaltung} />
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
