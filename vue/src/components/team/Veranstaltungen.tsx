@@ -44,7 +44,7 @@ export default function Veranstaltungen() {
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
     const accessrights = context?.currentUser.accessrights;
-    if (location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
+    if (accessrights !== undefined && location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
       navigate("/team");
     }
     setRealadmin(!!accessrights?.isSuperuser);
