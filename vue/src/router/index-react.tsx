@@ -30,6 +30,7 @@ import Optionen from "@/components/options/Optionen";
 import Info from "@/components/team/Info";
 import Preview from "@/components/veranstaltung/Preview";
 import Veranstaltungen from "@/components/team/Veranstaltungen";
+import Users from "@/components/users/Users";
 
 export const routes: RouteObject[] = [
   {
@@ -62,6 +63,10 @@ export const routes: RouteObject[] = [
       {
         path: "/infos/:monatJahr",
         element: <Info />,
+      },
+      {
+        path: "/users",
+        element: <Users />,
       },
       {
         path: "/optionen",

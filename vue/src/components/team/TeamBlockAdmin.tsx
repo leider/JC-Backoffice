@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Tooltip, Typography } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -8,7 +8,8 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { co } from "@fullcalendar/core/internal-common";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -193,7 +194,6 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} md={8} xxl={6}>
-        <Hinweise veranstaltung={veranstaltung} />
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
@@ -208,6 +208,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
             style={{ backgroundColor: color }}
             key={veranstaltung.id}
             header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
+            extra={<Extras veranstaltung={veranstaltung} />}
           >
             <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
               <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
@@ -216,6 +217,73 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
         </Collapse>
       </Col>
     </ConfigProvider>
+  );
+}
+
+function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  const [tooltip, setTooltip] = useState<string>("");
+  const [confirmed, setConfirmed] = useState<boolean>(true);
+  const [overallState, setOverallState] = useState<boolean>(true);
+
+  const { token } = theme.useToken();
+  const green = token.colorSuccess;
+  const red = token.colorError;
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const bestaetigt = veranstaltung.kopf.confirmed;
+    const presse = veranstaltung.presse.checked;
+    const technik = veranstaltung.technik.checked;
+    const hotel = veranstaltung.artist.brauchtHotel ? veranstaltung.unterkunft.checked : true;
+    setOverallState(presse && technik && hotel);
+
+    let tt: string;
+    if (!bestaetigt) {
+      tt = "Noch unbestätigt";
+    } else {
+      const texte = [];
+      if (!presse) texte.push("Presse fehlt");
+      if (!technik) texte.push("Technik fehlt");
+      if (!hotel) texte.push("Hotel fehlt");
+      tt = texte.join(", ");
+    }
+    setConfirmed(bestaetigt);
+    setTooltip(tt);
+  }, [veranstaltung]);
+
+  const color = overallState ? green : red;
+  const colorConf = confirmed ? green : red;
+
+  return (
+    <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
+      <Tooltip title={confirmed ? "Bestätigt" : "Noch unbestätigt"} color={colorConf}>
+        <IconForSmallBlock size={12} iconName={confirmed ? "LockFill" : "UnlockFill"} color={colorConf} />
+      </Tooltip>
+      {confirmed && (
+        <Tooltip title={overallState ? "Alles in Ordnung" : tooltip} color={color}>
+          <IconForSmallBlock size={12} iconName={overallState ? "HandThumbsUpFill" : "SignStopFill"} color={color} />
+        </Tooltip>
+      )}
+      <Tooltip title="Vorschau" color={token["custom-color-concert"]}>
+        <span
+          onClick={(event) => {
+            // If you don't want click extra trigger collapse, you can prevent this:
+            event.stopPropagation();
+            navigate(`/veranstaltung/preview/${veranstaltung.url}`);
+          }}
+        >
+          <IconForSmallBlock
+            size={16}
+            iconName={"EyeFill"}
+            color={token["custom-color-concert"]}
+            style={{
+              margin: "-4px 0",
+            }}
+          />
+        </span>
+      </Tooltip>
+    </Space>
   );
 }
 

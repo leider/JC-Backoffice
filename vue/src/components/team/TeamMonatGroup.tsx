@@ -28,7 +28,7 @@ export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat,
 
   return (
     <>
-      <Row gutter={8} style={{ backgroundColor: "#d3d3d347" }}>
+      <Row gutter={8} style={{ backgroundColor: "#d3d3d3" }}>
         <Col span={24}>
           <Collapse
             size={"small"}

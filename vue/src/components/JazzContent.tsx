@@ -26,6 +26,7 @@ enum menuKeys {
   team = "team",
   belege = "belege",
   wiki = "wiki",
+  users = "users",
 }
 
 const JazzContent: React.FC = () => {
@@ -128,17 +129,25 @@ const JazzContent: React.FC = () => {
       });
     }
     localItems.push({
-      key: "logout",
-      icon: <IconForSmallBlock iconName="PersonCircle" />,
-      label: (
-        <a
-          onClick={() => {
-            logout();
-          }}
-        >
-          Abmelden
-        </a>
-      ),
+      key: menuKeys.users,
+      icon: <IconForSmallBlock iconName="PeopleFill" />,
+      children: [
+        { key: "allUsers", icon: <IconForSmallBlock iconName="PersonLinesFill" />, label: <Link to={"/users"}>Übersicht</Link> },
+        {
+          key: "logout",
+          icon: <IconForSmallBlock iconName="PersonFillX" />,
+          label: (
+            <a
+              onClick={() => {
+                logout();
+              }}
+            >
+              Abmelden
+            </a>
+          ),
+        },
+      ],
+      label: "Users",
     });
     setItems(localItems);
   }, [context, subdirs]);
