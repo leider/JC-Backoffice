@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { allUsers, calendarEventSources, veranstaltungenForTeam } from "@/commons/loader-for-react";
+import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
 import { Col, Row } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import deLocale from "@fullcalendar/core/locales/de";
-import { EventInput } from "@fullcalendar/core";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
+import TeamCalendar from "@/components/team/TeamCalendar";
 
 function Team() {
   const [usersAsOptions, setUsersAsOptions] = useState<{ label: string; value: string }[] | undefined>([]);
@@ -33,8 +29,6 @@ function Team() {
 
   const { context } = useAuth();
   const [realadmin, setRealadmin] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const location = useLocation();
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
   const [monate, setMonate] = useState<string[]>([]);
   useEffect(() => {
@@ -43,45 +37,8 @@ function Team() {
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
     const accessrights = context?.currentUser.accessrights;
-    if (location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
-      navigate("/team");
-    }
     setRealadmin(!!accessrights?.isSuperuser);
   }, [veranstaltungen, realadmin, context]);
-
-  function getEvents(
-    info: {
-      start: Date;
-      end: Date;
-      startStr: string;
-      endStr: string;
-      timeZone: string;
-    },
-    // eslint-disable-next-line no-unused-vars
-    successCallback: (events: EventInput[]) => void,
-    // eslint-disable-next-line no-unused-vars
-    failureCallback: (error: Error) => void
-  ): void {
-    async function doit() {
-      try {
-        const res = await calendarEventSources(info.start, info.end);
-        successCallback(res as EventInput[]);
-      } catch (e) {
-        return failureCallback(e as Error);
-      }
-    }
-    doit();
-  }
-
-  function renderEventContent(eventInfo: any) {
-    return (
-      <div style={{ whiteSpace: "normal" }}>
-        <b>{eventInfo.timeText !== "00 Uhr" && eventInfo.timeText}</b>
-        <br />
-        <i>{eventInfo.event.title}</i>
-      </div>
-    );
-  }
 
   return (
     <Row gutter={8}>
@@ -109,26 +66,7 @@ function Team() {
         })}
       </Col>
       <Col xs={24} xl={8} style={{ zIndex: 0 }}>
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          initialView="dayGridMonth"
-          buttonText={{ next: ">", prev: "<" }}
-          locales={[deLocale]}
-          headerToolbar={{ left: "title", center: "", right: "prev,today,next" }}
-          views={{
-            month: {
-              titleFormat: { month: "short", year: "2-digit" },
-              weekNumberFormat: { week: "short" },
-              fixedWeekCount: false,
-              showNonCurrentDates: false,
-              weekNumbers: true,
-              weekText: "KW",
-            },
-          }}
-          height="auto"
-          events={getEvents}
-          eventContent={renderEventContent}
-        ></FullCalendar>
+        <TeamCalendar />
       </Col>
     </Row>
   );

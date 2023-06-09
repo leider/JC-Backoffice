@@ -43,6 +43,10 @@ export default class Accessrights {
     return this.isSuperuser || this.rechte.includes("kassenfreigabe");
   }
 
+  get everybody(): boolean {
+    return true;
+  }
+
   canEditUser(userid: string): boolean {
     return this.isSuperuser || this.memberId === userid;
   }

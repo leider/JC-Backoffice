@@ -62,10 +62,8 @@ function createTokenWithCustomColors(token: GlobalToken) {
   result.borderRadius = 0;
   result.fontSize = 12;
   result.fontFamily = "Montserrat, Helvetica, Arial, sans-serif;";
-  result.colorError = "#721c24";
-  result.colorErrorBg = "#f8d7da";
-  result.colorSuccess = "#155724";
-  result.colorSuccessBg = "#d4edda";
+  result.colorError = "#c71c2c";
+  result.colorSuccess = "#28a745";
   result.colorLink = result.colorPrimary;
   result.colorLinkActive = "#2c4862";
   result.colorLinkHover = "#2c4862";
@@ -88,7 +86,7 @@ function JazzclubApp() {
           token: jcToken,
           components: {
             Checkbox: {
-              colorPrimary: "#28a745",
+              colorPrimary: jcToken.colorSuccess as string,
             },
           },
         }}

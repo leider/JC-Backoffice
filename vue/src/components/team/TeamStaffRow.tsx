@@ -6,6 +6,7 @@ import { IconForSmallBlock } from "@/components/Icon";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
+import { ButtonStaff } from "@/components/Buttons";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -67,15 +68,7 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ usersAsOptions, sectionName
         <DisplayNames />
       </Col>
       <Col span={4}>
-        {ids.includes(currentUser.id) ? (
-          <ConfigProvider theme={{ token: { colorPrimary: "#721c24" } }}>
-            <Button icon={<IconForSmallBlock size={14} iconName={"DashCircleFill"} />} size="small" type="primary" onClick={removeUser} />
-          </ConfigProvider>
-        ) : (
-          <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
-            <Button icon={<IconForSmallBlock size={14} iconName={"PlusCircleFill"} />} size="small" type="primary" onClick={addUser} />
-          </ConfigProvider>
-        )}
+        {ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />}
       </Col>
     </Row>
   );
