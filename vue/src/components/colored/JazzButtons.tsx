@@ -17,7 +17,7 @@ export function SaveButton({ disabled }: ButtonProps) {
   );
 }
 
-export function DeleteButton({ disabled }: ButtonProps) {
+export function DeleteButton({ disabled, id }: ButtonProps & { id: string }) {
   const { modal } = App.useApp();
   const navigate = useNavigate();
   function callback() {
@@ -52,7 +52,7 @@ export function CopyButton({ disabled, url }: ButtonProps & { url?: string }) {
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#6c757d" } }}>
-      <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" disabled={disabled} onClick={callback}>
+      <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" disabled={disabled || !url} onClick={callback}>
         &nbsp;Kopieren
       </Button>
     </ConfigProvider>

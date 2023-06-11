@@ -26,7 +26,7 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: "Muss eingegeben werden",
+                message: "Du musst einen Wert eingeben",
               },
             ]}
           >
@@ -39,7 +39,7 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: "Muss eingegeben werden",
+                message: "Du musst einen Wert eingeben",
               },
             ]}
           >

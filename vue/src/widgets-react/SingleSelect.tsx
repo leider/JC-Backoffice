@@ -2,7 +2,7 @@ import { Form, Select } from "antd";
 import React, { useEffect, useState } from "react";
 
 interface SingleSelectParams {
-  name: string[];
+  name: string[] | string;
   label: string;
   options: string[];
   onChange?: (val: string) => void;
