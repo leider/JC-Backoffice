@@ -31,6 +31,7 @@ import Info from "@/components/team/Info";
 import Preview from "@/components/veranstaltung/Preview";
 import Veranstaltungen from "@/components/team/Veranstaltungen";
 import Users from "@/components/users/Users";
+import OrtePage from "@/components/options/OrtePage";
 
 export const routes: RouteObject[] = [
   {
@@ -74,7 +75,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/orte",
-        element: <Optionen />,
+        element: <OrtePage />,
       },
       {
         path: "/programmheft",
