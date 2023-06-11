@@ -3,7 +3,7 @@ import React, { CSSProperties, useEffect, useState } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 
 export default function MultiSelectWithTags(props: {
-  name: string[];
+  name: string[] | string;
   label: string;
   options: string[];
   style?: CSSProperties;
