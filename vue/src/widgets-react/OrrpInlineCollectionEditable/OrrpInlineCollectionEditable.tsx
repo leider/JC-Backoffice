@@ -50,11 +50,6 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
               },
             },
       empty: props.required && name === 0 ? "dummy" : undefined,
-      copy: () => {
-        const selected = props.form.getFieldValue(props.embeddedArrayPath.concat([name.toString(10)]));
-        add(selected);
-        props.onChange?.("CHANGED");
-      },
     };
   }
 

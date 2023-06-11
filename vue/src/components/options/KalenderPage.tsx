@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orte as orteRestCall, saveOrte } from "@/commons/loader-for-react";
+import { kalender, orte as orteRestCall, saveKalender, saveOrte } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
@@ -8,42 +8,43 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
+import FerienIcals from "jc-shared/optionen/ferienIcals";
 
-export default function OrtePage() {
-  const ortQuery = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
-  const [orte, setOrte] = useState<Orte>(new Orte());
+export default function KalenderPage() {
+  const ferienIcalsQuery = useQuery({ queryKey: ["ferienIcals"], queryFn: kalender });
+  const [ferienIcals, setFerienIcals] = useState<FerienIcals>(new FerienIcals());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (ortQuery.data) {
-      setOrte(ortQuery.data);
+    if (ferienIcalsQuery.data) {
+      setFerienIcals(ferienIcalsQuery.data);
     }
-  }, [ortQuery.data]);
+  }, [ferienIcalsQuery.data]);
 
   const mutateOrte = useMutation({
-    mutationFn: saveOrte,
+    mutationFn: saveKalender,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orte"] });
+      queryClient.invalidateQueries({ queryKey: ["ferienIcals"] });
     },
   });
 
   const [form] = Form.useForm<Orte>();
 
   function initializeForm() {
-    const deepCopy = orte.toJSON();
+    const deepCopy = ferienIcals.toJSON();
     form.setFieldsValue(deepCopy);
-    const initial = orte.toJSON();
+    const initial = ferienIcals.toJSON();
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
   }
-  useEffect(initializeForm, [form, orte]);
+  useEffect(initializeForm, [form, ferienIcals]);
 
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateOrte.mutate(new Orte(form.getFieldsValue(true)));
+      mutateOrte.mutate(new FerienIcals(form.getFieldsValue(true)));
     });
   }
 
@@ -52,29 +53,23 @@ export default function OrtePage() {
       fieldName: "name",
       label: "Name",
       type: "text",
+      width: "m",
+      required: true,
+    },
+    {
+      fieldName: "url",
+      label: "URL",
+      type: "text",
       width: "l",
       required: true,
     },
     {
-      fieldName: "flaeche",
-      label: "Fläche",
-      type: "integer",
+      fieldName: "typ",
+      label: "Typ",
+      type: "text",
       width: "s",
       required: true,
-    },
-    {
-      fieldName: "pressename",
-      label: "Für Presse",
-      type: "text",
-      width: "l",
-      required: true,
-    },
-    {
-      fieldName: "presseIn",
-      label: 'Für Presse mit "in"',
-      type: "text",
-      width: "l",
-      required: true,
+      filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];
   return (
@@ -90,10 +85,10 @@ export default function OrtePage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Orte" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
+      <PageHeader title="Kalender" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
       <Row gutter={12}>
         <Col span={24}>
-          <OrrpInlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["orte"]} />
+          <OrrpInlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["icals"]} />
         </Col>
       </Row>
     </Form>

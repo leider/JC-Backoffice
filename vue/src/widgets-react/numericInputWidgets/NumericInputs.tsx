@@ -92,7 +92,7 @@ export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberIn
   const [rules, setRules] = useState<any[] | undefined>(undefined);
 
   useEffect(() => {
-    setRules([{ required: props.required, message: "Du musst einen Wert eingeben" }]);
+    setRules([{ required: props.required }]);
   }, [props.required]);
 
   return (

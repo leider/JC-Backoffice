@@ -91,6 +91,7 @@ function JazzclubApp() {
           },
         }}
         locale={locale_de}
+        form={{ validateMessages: { required: "Du musst einen Wert eingeben" } }}
       >
         <App>
           <AuthProvider>

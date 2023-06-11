@@ -87,12 +87,7 @@ export default function EventCard({ form, optionen, orte }: EventCardProps) {
           <TextField name={["kopf", "titel"]} label="Titel" required />
         </Col>
         <Col span={12}>
-          <Form.Item
-            label={<b>Typ:</b>}
-            name={["kopf", "eventTyp"]}
-            required
-            rules={[{ required: true, message: "Du musst einen Wert eingeben" }]}
-          >
+          <Form.Item label={<b>Typ:</b>} name={["kopf", "eventTyp"]} required rules={[{ required: true }]}>
             <EventTypeSelect optionen={optionen} />
           </Form.Item>
         </Col>

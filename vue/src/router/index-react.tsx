@@ -32,6 +32,7 @@ import Preview from "@/components/veranstaltung/Preview";
 import Veranstaltungen from "@/components/team/Veranstaltungen";
 import Users from "@/components/users/Users";
 import OrtePage from "@/components/options/OrtePage";
+import KalenderPage from "@/components/options/KalenderPage";
 
 export const routes: RouteObject[] = [
   {
@@ -83,7 +84,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/kalender",
-        element: <Optionen />,
+        element: <KalenderPage />,
       },
       {
         path: "/termine",
