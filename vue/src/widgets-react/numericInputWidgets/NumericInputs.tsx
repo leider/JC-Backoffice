@@ -1,5 +1,5 @@
 import { Form } from "antd";
-import { FunctionComponent, ReactNode, React, useEffect, useState } from "react";
+import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
 
@@ -92,7 +92,7 @@ export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberIn
   const [rules, setRules] = useState<any[] | undefined>(undefined);
 
   useEffect(() => {
-    setRules([{ required: props.required }]);
+    setRules([{ required: props.required, message: "Du musst einen Wert eingeben" }]);
   }, [props.required]);
 
   return (

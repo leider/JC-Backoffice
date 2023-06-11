@@ -85,7 +85,7 @@ export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX
   return (
     <AntdForm.Item
       name={props.name}
-      label={<b>{props.label}:</b>}
+      label={props.label ? <b>{props.label}:</b> : ""}
       rules={rules}
       style={props.label ? {} : { marginBottom: 0 }}
       initialValue={props.initialValue}
