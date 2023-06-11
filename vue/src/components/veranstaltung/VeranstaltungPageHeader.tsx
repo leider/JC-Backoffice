@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { Form, FormInstance, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
@@ -66,10 +66,11 @@ export default function VeranstaltungPageHeader({
 
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
+  const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <PageHeader
-      title={<span style={{ color: typeColor }}>{document.title}</span>}
-      subTitle={<span style={{ color: typeColor }}>{displayDate}</span>}
+      title={<span style={titleStyle}>{document.title}</span>}
+      subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         <CopyButton key="copy" disabled={isNew} url={url} />,
