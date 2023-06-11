@@ -73,7 +73,6 @@ export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX
     if (props.required) {
       rulesToSet.push({
         required: true,
-        message: "Du musst einen Wert eingeben",
       });
     }
     if (props.isEmail) {
