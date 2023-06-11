@@ -69,7 +69,7 @@ export default function Veranstaltungen() {
         <PageHeader
           title="Veranstaltungen"
           extra={[
-            <ButtonWithIcon key="new" icon="FileEarmarkPlus" text="Neu" type="default" />,
+            <ButtonWithIcon key="new" icon="FileEarmarkPlus" text="Neu" type="default" onClick={() => navigate("/veranstaltung/new")} />,
             <ButtonWithIcon key="cal" icon="CalendarWeek" text="Kalender" type="default" />,
             <Dropdown
               key="periods"

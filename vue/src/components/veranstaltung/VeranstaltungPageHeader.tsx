@@ -71,7 +71,7 @@ export default function VeranstaltungPageHeader({
       title={<span style={{ color: typeColor }}>{document.title}</span>}
       subTitle={<span style={{ color: typeColor }}>{displayDate}</span>}
       extra={[
-        <DeleteButton key="delete" disabled={isNew || confirmed} />,
+        <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         <CopyButton key="copy" disabled={isNew} url={url} />,
         <SaveButton key="save" disabled={!dirty} />,
       ]}

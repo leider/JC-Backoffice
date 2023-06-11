@@ -54,7 +54,12 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
   }, [type]);
   return (
     <Tooltip title={text[type]} color={color}>
-      <span onClick={callback}>
+      <span
+        onClick={(event) => {
+          event.stopPropagation();
+          callback();
+        }}
+      >
         <IconForSmallBlock size={16} color={color} iconName={iconName[type] as any} />
       </span>
     </Tooltip>
