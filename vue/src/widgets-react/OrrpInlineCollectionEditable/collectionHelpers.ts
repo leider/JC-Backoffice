@@ -1,49 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {CollectionHeight} from '../types';
-import {CollectionColDesc} from './OrrpInlineCollectionEditable/types';
+import { CollectionHeight } from "../types";
+import { CollectionColDesc } from "./OrrpInlineCollectionEditable/types";
 
 export const initialSpan = (desc: CollectionColDesc) => {
   switch (desc.width) {
-    case 'xs':
+    case "xs":
       return 3;
-    case 's':
+    case "s":
       return 4;
-    case 'm':
+    case "m":
       return 6;
-    case 'l':
+    case "l":
       return 8;
-    case 'xl':
+    case "xl":
       return 12;
     default:
-      throw new Error(
-          'A number width is not allowed for OrrpInlineCollectionEditable'
-      );
+      throw new Error("A number width is not allowed for OrrpInlineCollectionEditable");
   }
 };
 
 export const getCollectionHeightsInPixel = (height: CollectionHeight) => {
   switch (height) {
-    case 'xs':
+    case "xs":
       return 160;
-    case 'sm':
+    case "sm":
       return 240;
-    case 'md':
+    case "md":
       return 360;
-    case 'lg':
+    case "lg":
       return 560;
-    case 'xl':
+    case "xl":
       return 760;
     default:
-      throw new Error(
-          'The entered collection height is not within the list of possible options.'
-      );
+      throw new Error("The entered collection height is not within the list of possible options.");
   }
 };
 
-export function addInitialValueFromObjectToColDescs(
-    colDesc: CollectionColDesc[],
-    initialValue?: any[]
-) {
+export function addInitialValueFromObjectToColDescs(colDesc: CollectionColDesc[], initialValue?: any[]) {
   if (!initialValue || !initialValue[0]) {
     return;
   }
@@ -65,22 +58,17 @@ export function addInitialValueFromObjectToColDescs(
  * @param {*} value the value to check.
  * @return {*}  {boolean}
  */
-export function isDuplicate(
-    embeddedArrayPath: string[] | null,
-    fieldName: string,
-    fieldsValue: any,
-    value: any
-): boolean {
+export function isDuplicate(embeddedArrayPath: string[] | null, fieldName: string, fieldsValue: any, value: any): boolean {
   function duplicates(values: any[]) {
     return values.filter((item, index) => index !== values.indexOf(item));
   }
 
   const extracted =
-      embeddedArrayPath === null
-          ? fieldsValue
-          : embeddedArrayPath.reduce((objectToWorkWith, pathElement) => {
-            return objectToWorkWith[pathElement];
-          }, fieldsValue);
+    embeddedArrayPath === null
+      ? fieldsValue
+      : embeddedArrayPath.reduce((objectToWorkWith, pathElement) => {
+          return objectToWorkWith[pathElement];
+        }, fieldsValue);
   const extractedFiltered = extracted?.filter((each: any) => each !== undefined && each !== null);
   const fieldValuesOnly = extractedFiltered?.map((each: any) => each[fieldName]);
   return duplicates(fieldValuesOnly ?? []).includes(value);

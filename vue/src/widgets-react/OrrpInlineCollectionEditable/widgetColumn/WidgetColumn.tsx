@@ -15,7 +15,7 @@ import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
  * @return {*}  {JSX.Element}
  */
 export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetColumn): JSX.Element => {
-  const { desc, name, colSpans, disabled } = props;
+  const { desc, name, colSpans, disabled, uniqueValuesValidator } = props;
 
   const commonProps = {
     name: [name.toString(10)].concat(desc.fieldName),
@@ -34,7 +34,7 @@ export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetCol
       Widget = desc.filters ? (
         <SingleSelect options={desc.filters} {...commonProps} />
       ) : (
-        <TextField onChange={desc.onChange} {...commonProps} />
+        <TextField onChange={desc.onChange} {...commonProps} uniqueValuesValidator={uniqueValuesValidator} />
       );
       break;
     case "integer":

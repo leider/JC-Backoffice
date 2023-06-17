@@ -50,6 +50,11 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
               },
             },
       empty: props.required && name === 0 ? "dummy" : undefined,
+      copy: () => {
+        const selected = props.form.getFieldValue(props.embeddedArrayPath.concat([name.toString(10)]));
+        add(selected, name);
+        props.onChange?.("CHANGED");
+      },
     };
   }
 
@@ -121,7 +126,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                           validator: (_: any, value: any) => {
                             const fieldsValue = props.form.getFieldsValue(props.embeddedArrayPath);
                             const dupes = isDuplicate(props.embeddedArrayPath, desc.fieldName, fieldsValue, value);
-                            return !dupes ? Promise.resolve() : Promise.reject(new Error(t("common:duplicate-value")));
+                            return !dupes ? Promise.resolve() : Promise.reject(new Error("Doppelter Wert"));
                           },
                         };
                       }
@@ -133,7 +138,6 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                           colSpans={colSpans}
                           disabled={props.disabled || desc.disabled}
                           uniqueValuesValidator={uniqueValuesValidator}
-                          waitForOptionsToLoad={desc.waitForOptionsToLoad}
                         />
                       );
                     })}

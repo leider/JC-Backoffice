@@ -41,12 +41,12 @@ export default function OrrpTableActions(props: { actions: ActionCallbacks; test
     }
     if (key === "delete") {
       return !props.actions.delete?.confirm ? (
-        <Tooltip title={key} key={key}>
+        <Tooltip title={tooltipWithKey[key]} key={key}>
           <Popconfirm
             placement="topLeft"
             key="delete"
-            title={"Witklich löschen?"}
-            onConfirm={props.actions.delete.callback}
+            title={"Wirklich löschen?"}
+            onConfirm={props.actions.delete?.callback}
             okText="Ja"
             cancelText="Nein"
           >
@@ -54,7 +54,7 @@ export default function OrrpTableActions(props: { actions: ActionCallbacks; test
           </Popconfirm>
         </Tooltip>
       ) : (
-        <Tooltip title={key} key={key}>
+        <Tooltip title={tooltipWithKey[key]} key={key}>
           <Button type="text" icon={iconForKey(key)} onClick={props.actions.delete?.callback} data-testid={`${props.testid}_delete`} />
         </Tooltip>
       );
@@ -64,11 +64,18 @@ export default function OrrpTableActions(props: { actions: ActionCallbacks; test
     }
 
     return (
-      <Tooltip title={key} key={key}>
+      <Tooltip title={tooltipWithKey[key]} key={key}>
         <Button type="text" icon={iconForKey(key)} onClick={props.actions[key]} data-testid={`${props.testid}_${key}`} />
       </Tooltip>
     );
   }
+
+  const tooltipWithKey = {
+    copy: "Kopieren",
+    edit: "Bearbeiten",
+    delete: "Löschen",
+    view: "Anzeigen",
+  };
 
   const items = ["copy", "edit", "delete", "view", "empty"]
     .map((key) => createItem(key as "copy" | "edit" | "view" | "delete" | "empty"))
