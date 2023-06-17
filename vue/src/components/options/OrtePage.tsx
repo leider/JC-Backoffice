@@ -54,6 +54,7 @@ export default function OrtePage() {
       type: "text",
       width: "l",
       required: true,
+      uniqueValues: true,
     },
     {
       fieldName: "flaeche",

@@ -1,5 +1,6 @@
 import { Form as AntdForm, Input } from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
+import { RuleRender } from "antd/lib/form";
 
 type TTextField = {
   /**
@@ -60,6 +61,12 @@ type TTextField = {
    * @type {boolean}
    */
   isEmail?: boolean;
+
+  /**
+   * Callback function to generate a unique value.
+   * @type {RuleRender}
+   */
+  uniqueValuesValidator?: RuleRender;
 };
 
 /**
@@ -75,11 +82,14 @@ export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX
         required: true,
       });
     }
+    if (props.uniqueValuesValidator) {
+      rulesToSet.push(props.uniqueValuesValidator);
+    }
     if (props.isEmail) {
       rulesToSet.push({ type: "email", message: "Die Eingabe ist keine gültige E-Mail Adresse" });
     }
     setRules(rulesToSet);
-  }, [props.required, props.isEmail]);
+  }, [props.required, props.isEmail, props.uniqueValuesValidator]);
 
   return (
     <AntdForm.Item

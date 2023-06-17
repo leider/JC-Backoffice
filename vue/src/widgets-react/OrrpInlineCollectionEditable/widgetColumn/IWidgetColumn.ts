@@ -33,4 +33,11 @@ export interface IWidgetColumn {
    * @memberof IWidgetColumn
    */
   disabled?: boolean;
+
+  /**
+   * An unique values validator function.
+   * @type {*}
+   * @memberof IWidgetColumn
+   */
+  uniqueValuesValidator?: any;
 }

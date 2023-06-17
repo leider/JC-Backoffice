@@ -55,6 +55,7 @@ export default function KalenderPage() {
       type: "text",
       width: "m",
       required: true,
+      uniqueValues: true,
     },
     {
       fieldName: "url",
@@ -62,6 +63,7 @@ export default function KalenderPage() {
       type: "text",
       width: "l",
       required: true,
+      uniqueValues: true,
     },
     {
       fieldName: "typ",
