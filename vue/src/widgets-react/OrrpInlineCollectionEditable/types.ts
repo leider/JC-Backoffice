@@ -78,7 +78,6 @@ export interface ColDesc {
   max?: number | string;
   exclusiveMax?: boolean;
   pattern?: RegExp;
-  nestedNamePathInIdColumn?: string[]; // TODO is this obsolete?
   /**
    * special disable functionality for migration matrices
    */
