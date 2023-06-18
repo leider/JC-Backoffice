@@ -1,17 +1,17 @@
-import { Button, Col, ConfigProvider, Row, Tag } from "antd";
+import { Col, Row, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import { useAuth } from "@/commons/auth";
-import { IconForSmallBlock } from "@/components/Icon";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
 import { ButtonStaff } from "@/components/Buttons";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
   label: string;
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   veranstaltung: Veranstaltung;
 }
 

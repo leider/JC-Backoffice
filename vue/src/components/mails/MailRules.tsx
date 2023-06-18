@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mailRules as mailRulesRestCall, saveMailRule } from "@/commons/loader-for-react";
+import { deleteMailRule, mailRules as mailRulesRestCall, saveMailRule } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import _ from "lodash";
+import { saveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({ queryKey: ["mailRules"], queryFn: mailRulesRestCall });
@@ -30,6 +31,13 @@ export default function MailRules() {
     },
   });
 
+  const deleteRules = useMutation({
+    mutationFn: deleteMailRule,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mailRules"] });
+    },
+  });
+
   const [form] = Form.useForm<{ allRules: MailRule[] }>();
 
   function initializeForm() {
@@ -43,15 +51,15 @@ export default function MailRules() {
   useEffect(initializeForm, [form, mailRules]);
 
   function saveForm() {
-    form.validateFields().then(async () => {
-      const newRules: any[] = form.getFieldsValue(true).allRules;
-      const oldRules = initialValue.allRules;
-      const found = _.differenceWith(oldRules, newRules, _.isEqual).map((r) => r.id);
-      console.log({ newRules });
-      console.log({ found });
-      const changed = (newRules.filter((r) => found.includes(r.id)) || []).map((r) => new MailRule(_.cloneDeep(r)));
-      changed.forEach((rule) => mutateRules.mutate(rule));
-    });
+    form.validateFields().then(
+      saveCollection({
+        newItems: form.getFieldsValue(true).allRules,
+        oldItems: initialValue.allRules,
+        saveMutation: mutateRules,
+        deleteMutation: deleteRules,
+        mapper: (item) => new MailRule(_.cloneDeep(item)),
+      })
+    );
   }
 
   const columnDescriptions: CollectionColDesc[] = [

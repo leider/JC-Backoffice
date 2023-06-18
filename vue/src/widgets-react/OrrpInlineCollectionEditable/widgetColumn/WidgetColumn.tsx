@@ -8,6 +8,7 @@ import SingleSelect from "@/widgets-react/SingleSelect";
 import { NumberInput } from "@/widgets-react/numericInputWidgets";
 import CheckItem from "@/widgets-react/CheckItem";
 import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
+import UserMultiSelect from "@/components/team/UserMultiSelect";
 
 /**
  Orrp inline collection table widget column component.
@@ -30,6 +31,9 @@ export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetCol
   // or else form errors won't be rendered because the fields are recreated too often
   let Widget: JSX.Element | null = null;
   switch (desc.type) {
+    case "user":
+      Widget = <UserMultiSelect usersAsOptions={desc.usersAsOptions!} {...commonProps} />;
+      break;
     case "text":
       Widget = desc.filters ? (
         <SingleSelect options={desc.filters} {...commonProps} />

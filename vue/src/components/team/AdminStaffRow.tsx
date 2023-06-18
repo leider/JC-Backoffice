@@ -1,27 +1,15 @@
-import { Form, Select, Space, Tag, Tooltip } from "antd";
+import { Form, Space } from "antd";
 import React from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import InverseCheckbox from "@/widgets-react/InverseCheckbox";
-import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { DynamicItem } from "@/widgets-react/DynamicItem";
+import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelect";
+
 interface AdminStaffRowProps {
   sectionName: StaffType;
   label: string;
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
 }
-
-const tagRender = (props: CustomTagProps) => {
-  const { label, value, closable, onClose } = props;
-  const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-  return (
-    <Tag onMouseDown={onPreventMouseDown} closable={closable} onClose={onClose} style={{ marginRight: 3, paddingInline: 3 }}>
-      <Tooltip title={label}>{value}</Tooltip>
-    </Tag>
-  );
-};
 
 const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionName, label }: AdminStaffRowProps) => {
   return (
@@ -32,9 +20,12 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionNa
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
             return (
-              <Form.Item name={["staff", sectionName]} noStyle>
-                <Select mode="multiple" options={usersAsOptions} disabled={notNeeded} tagRender={tagRender} style={{ width: "90%" }} />
-              </Form.Item>
+              <UserMultiSelect
+                name={["staff", sectionName]}
+                usersAsOptions={usersAsOptions}
+                disabled={notNeeded}
+                style={{ width: "90%" }}
+              />
             );
           }}
         />

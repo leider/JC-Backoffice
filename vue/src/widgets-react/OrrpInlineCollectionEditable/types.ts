@@ -1,7 +1,10 @@
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
+
 export type ColDescWithIdx = CollectionColDesc & {
   idx: number;
   alignValueWithMin?: boolean;
   disabled?: boolean;
+  usersAsOptions?: UsersAsOption[];
 };
 
 export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl" | number;
@@ -11,6 +14,7 @@ export type CollectionColDesc = Omit<ColDesc, "width" | "fieldName"> & {
   fieldName: string;
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only
+  usersAsOptions?: UsersAsOption[];
 };
 
 export type ActionCallbackType = (item: any, idx: number) => void;
@@ -27,6 +31,7 @@ export interface ActionParams {
 }
 
 export type ColType =
+  | "user"
   | "id"
   | "idArray"
   | "date"

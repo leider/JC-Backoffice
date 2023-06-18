@@ -7,10 +7,11 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { IconForSmallBlock } from "@/components/Icon";
 import TeamBlockNormal from "@/components/team/TeamBlockNormal";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 interface MonatGroupProps {
   veranstaltungen: Veranstaltung[];
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   monat: string;
   renderTeam: boolean;
 }

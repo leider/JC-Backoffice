@@ -40,4 +40,5 @@ export interface IWidgetColumn {
    * @memberof IWidgetColumn
    */
   uniqueValuesValidator?: any;
+  usersAsAoptions?: { label: string; value: string }[];
 }

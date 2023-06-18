@@ -1,6 +1,7 @@
 import { Form, Select } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 export default function MultiSelectWithTags(props: {
   name: string[] | string;
@@ -11,7 +12,7 @@ export default function MultiSelectWithTags(props: {
   onChange?: () => void;
   specialTagRender?: (props: CustomTagProps) => JSX.Element;
 }) {
-  const [realOptions, setRealOptions] = useState<{ label: string; value: string }[]>([]);
+  const [realOptions, setRealOptions] = useState<UsersAsOption[]>([]);
   useEffect(() => {
     if (!props.options) {
       return;
