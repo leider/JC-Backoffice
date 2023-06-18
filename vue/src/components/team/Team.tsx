@@ -8,9 +8,10 @@ import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 function Team() {
-  const [usersAsOptions, setUsersAsOptions] = useState<{ label: string; value: string }[] | undefined>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
 
   async function loadUsers() {
     const users = await allUsers();

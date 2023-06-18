@@ -105,8 +105,8 @@ const JazzContent: React.FC = () => {
               type: "group",
               label: "Senden",
               children: [
-                { key: menuKeys.manualmail, label: <Link to="/manualmail">Regeln</Link> },
-                { key: menuKeys.rundmail, label: <Link to="/rundmail">Listen</Link> },
+                { key: menuKeys.manualmail, label: <Link to="/manualmail">Manuell</Link> },
+                { key: menuKeys.rundmail, label: <Link to="/rundmail">Rundmail</Link> },
               ],
             },
           ],

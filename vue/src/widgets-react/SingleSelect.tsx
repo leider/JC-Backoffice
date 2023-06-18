@@ -1,5 +1,6 @@
 import { Form, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 interface SingleSelectParams {
   name: string[] | string;
@@ -11,7 +12,7 @@ interface SingleSelectParams {
 }
 
 export default function SingleSelect({ label, name, onChange, options, initialValue, required }: SingleSelectParams) {
-  const [realOptions, setRealOptions] = useState<{ label: string; value: string }[]>([]);
+  const [realOptions, setRealOptions] = useState<UsersAsOption[]>([]);
   useEffect(() => {
     if (!options) {
       return;

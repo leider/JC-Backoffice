@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { saveTermin, termine as allTermine } from "@/commons/loader-for-react";
+import { deleteTermin, saveTermin, termine as allTermine } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
@@ -11,6 +11,7 @@ import Termin from "jc-shared/optionen/termin";
 import _ from "lodash";
 import { detailedDiff } from "deep-object-diff";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
+import { saveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -32,6 +33,13 @@ export default function TerminePage() {
     },
   });
 
+  const deleteTerminMutation = useMutation({
+    mutationFn: deleteTermin,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["termine"] });
+    },
+  });
+
   const [form] = Form.useForm<{ allTermine: Termin[] }>();
 
   function initializeForm() {
@@ -45,13 +53,15 @@ export default function TerminePage() {
   useEffect(initializeForm, [form, termine]);
 
   function saveForm() {
-    form.validateFields().then(async () => {
-      const newTermine: any[] = form.getFieldsValue(true).allTermine;
-      const oldTermine = initialValue.allTermine;
-      const found = _.differenceWith(oldTermine, newTermine, _.isEqual).map((t) => t.id);
-      const changed = (newTermine.filter((t) => found.includes(t.id)) || []).map((t) => fromFormObjectAsAny(t));
-      changed.forEach((termin) => mutateTermin.mutate(termin));
-    });
+    form.validateFields().then(
+      saveCollection({
+        oldItems: initialValue.allTermine,
+        newItems: form.getFieldsValue(true).allTermine,
+        saveMutation: mutateTermin,
+        deleteMutation: deleteTerminMutation,
+        mapper: (item) => fromFormObjectAsAny(item),
+      })
+    );
   }
 
   const columnDescriptions: CollectionColDesc[] = [

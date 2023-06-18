@@ -10,13 +10,14 @@ import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";
 import { Link, useNavigate } from "react-router-dom";
 import { co } from "@fullcalendar/core/internal-common";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   initiallyOpen: boolean;
 }
 
@@ -109,7 +110,7 @@ function Header({ veranstaltung, expanded }: HeaderProps) {
 }
 
 interface ContentProps {
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   veranstaltung: Veranstaltung;
 }
 

@@ -6,13 +6,14 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
 import { Link, useNavigate } from "react-router-dom";
+import { UsersAsOption } from "@/components/team/UserMultiSelect";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   initiallyOpen: boolean;
 }
 
@@ -29,23 +30,6 @@ function Header({ veranstaltung, expanded }: HeaderProps) {
       <Title level={l} style={titleStyle}>
         {t}
       </Title>
-    );
-  }
-
-  function TitleTwoRows({ l, t }: { l: number; t: string }) {
-    return (
-      <Row>
-        <Col span={20}>
-          <Title level={l} style={titleStyle}>
-            {t}
-          </Title>
-        </Col>
-        <Col span={4} style={{ textAlign: "center", backgroundColor: token["custom-color-concert"], color: "white" }}>
-          <Link to={{ pathname: `/veranstaltung/preview/${veranstaltung.url}` }}>
-            <IconForSmallBlock size={14} iconName="Eye" style={{ color: "white" }} />
-          </Link>
-        </Col>
-      </Row>
     );
   }
 
@@ -73,7 +57,7 @@ function Header({ veranstaltung, expanded }: HeaderProps) {
 }
 
 interface ContentProps {
-  usersAsOptions: { label: string; value: string }[];
+  usersAsOptions: UsersAsOption[];
   veranstaltung: Veranstaltung;
 }
 

@@ -52,8 +52,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
       empty: props.required && name === 0 ? "dummy" : undefined,
       copy: () => {
         const selected = props.form.getFieldValue(props.embeddedArrayPath.concat([name.toString(10)]));
-        delete selected.id;
-        add(selected, name);
+        add({ ...selected, id: `${selected.id}copy` }, name);
         props.onChange?.("CHANGED");
       },
     };
