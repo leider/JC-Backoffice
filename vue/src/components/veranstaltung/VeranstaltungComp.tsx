@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Form } from "antd";
+import { App, Form, notification } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -52,12 +52,19 @@ export default function VeranstaltungComp() {
 
   const queryClient = useQueryClient();
 
+  const { notification } = App.useApp();
+
   // When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key
   const mutateVeranstaltung = useMutation({
     mutationFn: saveVeranstaltung,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", url] });
       navigate({ pathname: `/veranstaltung/${data.url}`, search: `page=${search.get("page")}` }, { replace: true });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Veranstaltung wurde gespeichert",
+        duration: 5,
+      });
     },
   });
   const mutateOptionen = useMutation({

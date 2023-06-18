@@ -20,8 +20,7 @@ enum menuKeys {
   imageoverview = "imageoverview",
   mailrules = "mailrules",
   mailinglists = "mailinglists",
-  manualmail = "manualmail",
-  rundmail = "rundmail",
+  sendmail = "sendmail",
   mail = "mail",
   team = "team",
   belege = "belege",
@@ -66,16 +65,16 @@ const JazzContent: React.FC = () => {
           type: "group",
           label: "Optionen und Orte",
           children: [
-            { key: menuKeys.optionen, label: <Link to="/optionen">Optionen</Link> },
-            { key: menuKeys.orte, label: <Link to="/orte">Orte</Link> },
+            { key: menuKeys.optionen, icon: <IconForSmallBlock iconName="FuelPump" />, label: <Link to="/optionen">Optionen</Link> },
+            { key: menuKeys.orte, icon: <IconForSmallBlock iconName="Houses" />, label: <Link to="/orte">Orte</Link> },
           ],
         },
         {
           type: "group",
           label: "Kalender und Termine",
           children: [
-            { key: menuKeys.kalender, label: <Link to="/kalender">Kalender</Link> },
-            { key: menuKeys.termine, label: <Link to="/termine">Termine</Link> },
+            { key: menuKeys.kalender, icon: <IconForSmallBlock iconName="Calendar2Range" />, label: <Link to="/kalender">Kalender</Link> },
+            { key: menuKeys.termine, icon: <IconForSmallBlock iconName="Calendar2Month" />, label: <Link to="/termine">Termine</Link> },
           ],
         },
         { key: menuKeys.kassenbericht, label: <Link to="/kassenbericht">Kassenbericht</Link> },
@@ -93,22 +92,9 @@ const JazzContent: React.FC = () => {
           icon: <IconForSmallBlock iconName="EnvelopeFill" />,
           label: "Mails...",
           children: [
-            {
-              type: "group",
-              label: "Regeln und Listen",
-              children: [
-                { key: menuKeys.mailrules, label: <Link to="/mailrules">Regeln</Link> },
-                { key: menuKeys.mailinglists, label: <Link to="/mailinglists">Listen</Link> },
-              ],
-            },
-            {
-              type: "group",
-              label: "Senden",
-              children: [
-                { key: menuKeys.manualmail, label: <Link to="/manualmail">Manuell</Link> },
-                { key: menuKeys.rundmail, label: <Link to="/rundmail">Rundmail</Link> },
-              ],
-            },
+            { key: menuKeys.mailrules, icon: <IconForSmallBlock iconName="ListStars" />, label: <Link to="/mailrules">Regeln</Link> },
+            { key: menuKeys.mailinglists, icon: <IconForSmallBlock iconName="ListCheck" />, label: <Link to="/mailinglists">Listen</Link> },
+            { key: menuKeys.sendmail, icon: <IconForSmallBlock iconName="Send" />, label: <Link to="/sendmail">Mail senden...</Link> },
           ],
         });
       }

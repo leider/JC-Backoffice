@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { useMutation, UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { allUsers, deleteMailinglist, saveMailinglist } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -7,11 +7,9 @@ import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
-import _ from "lodash";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import { fromFormObjectAsAny, toFormObject } from "@/components/mails/mailinglistCompUtils";
-import { detailedDiff } from "deep-object-diff";
 import { saveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailingLists() {
