@@ -1,16 +1,20 @@
-import React, { CSSProperties, useEffect, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, ConfigProvider, Divider, Form, Row, Space, theme, Tooltip, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
+import { Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip, Typography } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
-import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";
-import { Link, useNavigate } from "react-router-dom";
-import { co } from "@fullcalendar/core/internal-common";
+import { useNavigate } from "react-router-dom";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import { useAuth } from "@/commons/auth";
+import { differenceFor } from "jc-shared/commons/compareObjects";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { saveVeranstaltung } from "@/commons/loader-for-react";
+import { SaveButton } from "@/components/colored/JazzButtons";
 
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -26,57 +30,6 @@ interface HeaderProps {
   expanded?: boolean;
 }
 
-function Hinweise({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  const [fields, setFields] = useState<{ val: boolean; text: string }[]>([]);
-  useEffect(() => {
-    const result = [
-      { val: veranstaltung.presse.checked, text: "Presse" },
-      { val: veranstaltung.technik.checked, text: "Technik" },
-    ];
-    if (veranstaltung.artist.brauchtHotel) {
-      result.push({ val: veranstaltung.unterkunft.checked, text: "Hotel" });
-    }
-    setFields(result);
-  }, [veranstaltung]);
-  const { token } = theme.useToken();
-
-  const common: CSSProperties = { color: "white", textAlign: "start", whiteSpace: "nowrap", overflow: "hidden" };
-
-  function NotificationPart({ toggleValue, text, negativeText }: { toggleValue: boolean; text: string; negativeText?: string }) {
-    const colStyle = { ...common, backgroundColor: toggleValue ? token.colorSuccessBg : token.colorErrorBg };
-    const textStyle = { fontSize: 12, color: toggleValue ? token.colorSuccess : token.colorError };
-    const iconStyle = { ...textStyle, margin: "0 2px" };
-    return (
-      <Col span={5} style={colStyle}>
-        {toggleValue ? (
-          <IconForSmallBlock size={10} iconName="CheckCircle" style={iconStyle} />
-        ) : (
-          <IconForSmallBlock size={10} iconName="QuestionCircle" style={iconStyle} />
-        )}{" "}
-        <Typography.Text style={textStyle}>{toggleValue ? text : negativeText ?? text}</Typography.Text>
-      </Col>
-    );
-  }
-
-  return (
-    <Row>
-      <NotificationPart key="Offen" toggleValue={veranstaltung.kopf.confirmed} text="Fix" negativeText="Offen" />
-      {fields.map((field) => (
-        <NotificationPart key={field.text} toggleValue={field.val} text={field.text} />
-      ))}
-      {fields.length === 2 && (
-        <Col span={5} style={{ textAlign: "start" }}>
-          <Typography.Text style={{ margin: "0 4px", fontSize: 12, whiteSpace: "nowrap", overflow: "hidden" }}>kein Hotel</Typography.Text>
-        </Col>
-      )}
-      <Col span={4} style={{ textAlign: "center", backgroundColor: token["custom-color-concert"], color: "white" }}>
-        <Link to={{ pathname: `/veranstaltung/preview/${veranstaltung.url}` }}>
-          <IconForSmallBlock size={14} iconName="Eye" style={{ color: "white" }} />
-        </Link>
-      </Col>
-    </Row>
-  );
-}
 function Header({ veranstaltung, expanded }: HeaderProps) {
   const titleStyle = { margin: 0, color: "#FFF" };
   function T({ l, t }: { l: number; t: string }) {
@@ -114,18 +67,53 @@ interface ContentProps {
   veranstaltung: Veranstaltung;
 }
 
-function Content({ usersAsOptions, veranstaltung }: ContentProps) {
+function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
   const [form] = Form.useForm();
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
+  const { context } = useAuth();
 
-  useEffect(() => {
+  const initialize = () => {
     const deepCopy = veranstaltung.toJSON();
     form.setFieldsValue(deepCopy);
     setInitialValue(veranstaltung.toJSON());
-  }, [veranstaltung]);
+    setDirty(false);
+  };
+  useEffect(initialize, [veranstaltung]);
+
+  useEffect(() => {
+    setVeranstaltung(veranst);
+  }, [veranst]);
 
   const dividerStyle = { marginTop: "4px", marginBottom: "4px", fontWeight: 600 };
+
+  const queryClient = useQueryClient();
+  const mutateVeranstaltung = useMutation({
+    mutationFn: saveVeranstaltung,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung", veranstaltung.url] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Veranstaltung wurde gespeichert",
+        duration: 5,
+      });
+    },
+  });
+
+  function saveForm() {
+    form.validateFields().then(async () => {
+      const createLogWithDiff = (diff: string): ChangelistItem => {
+        return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: context?.currentUser?.id || "", diff };
+      };
+      const veranst = form.getFieldsValue(true);
+      const diff = differenceFor(initialValue, veranst);
+      veranst.changelist.unshift(createLogWithDiff(diff));
+      const result = new Veranstaltung(veranst);
+      setVeranstaltung(result);
+      return mutateVeranstaltung.mutate(result);
+    });
+  }
 
   return (
     <Form
@@ -133,6 +121,7 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
       onValuesChange={() => {
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
+      onFinish={saveForm}
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 20 }}
       size="small"
@@ -142,7 +131,7 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
       <Row justify="end">
         {dirty ? (
           <Space.Compact>
-            <ButtonWithIcon icon="CheckSquare" text="Speichern" />
+            <SaveButton />
           </Space.Compact>
         ) : (
           <>
