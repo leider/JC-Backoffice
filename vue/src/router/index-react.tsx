@@ -36,6 +36,7 @@ import KalenderPage from "@/components/options/KalenderPage";
 import TerminePage from "@/components/options/TerminePage";
 import MailRules from "@/components/mails/MailRules";
 import MailingLists from "@/components/mails/MailingLists";
+import SendMail from "@/components/mails/SendMail";
 
 export const routes: RouteObject[] = [
   {
@@ -110,8 +111,8 @@ export const routes: RouteObject[] = [
         element: <MailingLists />,
       },
       {
-        path: "/manualmail",
-        element: <Optionen />,
+        path: "/sendmail",
+        element: <SendMail />,
       },
       {
         path: "/rundmail",

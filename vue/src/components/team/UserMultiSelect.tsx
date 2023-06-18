@@ -8,6 +8,8 @@ export default function UserMultiSelect(props: {
   usersAsOptions: UsersAsOption[];
   disabled?: boolean;
   style?: CSSProperties;
+  label?: string;
+  onChange?: (value: any) => void;
 }) {
   const tagRender = (props: CustomTagProps) => {
     // eslint-disable-next-line react/prop-types
@@ -24,8 +26,15 @@ export default function UserMultiSelect(props: {
   };
 
   return (
-    <Form.Item name={props.name} noStyle>
-      <Select mode="multiple" options={props.usersAsOptions} disabled={props.disabled} tagRender={tagRender} style={props.style} />
+    <Form.Item label={props.label ? <b>{props.label}:</b> : undefined} name={props.name} noStyle={!props.label}>
+      <Select
+        mode="multiple"
+        options={props.usersAsOptions}
+        disabled={props.disabled}
+        tagRender={tagRender}
+        style={props.style}
+        onChange={props.onChange}
+      />
     </Form.Item>
   );
 }

@@ -9,7 +9,7 @@ export default function MultiSelectWithTags(props: {
   options: string[];
   style?: CSSProperties;
   noAdd?: boolean;
-  onChange?: () => void;
+  onChange?: (value: any) => void;
   specialTagRender?: (props: CustomTagProps) => JSX.Element;
 }) {
   const [realOptions, setRealOptions] = useState<UsersAsOption[]>([]);

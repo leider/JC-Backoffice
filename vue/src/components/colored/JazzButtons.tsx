@@ -17,6 +17,16 @@ export function SaveButton({ disabled }: ButtonProps) {
   );
 }
 
+export function SendButton({ disabled }: ButtonProps) {
+  return (
+    <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
+      <Button htmlType="submit" icon={<IconForSmallBlock iconName="Send" />} type="primary" disabled={disabled}>
+        &nbsp;Senden
+      </Button>
+    </ConfigProvider>
+  );
+}
+
 export function DeleteButton({ disabled, id }: ButtonProps & { id: string }) {
   const { modal } = App.useApp();
   const navigate = useNavigate();

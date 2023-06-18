@@ -438,7 +438,7 @@ export async function saveMailinglist(list: Mailingliste) {
 }
 
 // Mails für Veranstaltungen
-export async function mailRules() {
+export async function mailRules(): Promise<MailRule[]> {
   const result = await getForType("json", "/rest/mailrule");
   return result?.map((each: any) => new MailRule(each)) || [];
 }
