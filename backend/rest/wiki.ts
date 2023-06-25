@@ -30,7 +30,7 @@ app.get("/wikipage/:subdir/:page", async (req, res) => {
 
 app.post("/wikipage/search", async (req, res) => {
   const searchtext = req.body.suchtext;
-  const matches = wikiService.search;
+  const matches = await wikiService.search(searchtext);
   resToJson(res, { searchtext, matches });
 });
 
