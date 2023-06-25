@@ -101,12 +101,12 @@ const JazzContent: React.FC = () => {
     }
     localItems.push({ key: menuKeys.team, icon: <IconForSmallBlock iconName="People" />, label: <Link to="/team">Team</Link> });
     localItems.push({ key: menuKeys.belege, icon: <IconForSmallBlock iconName="Camera" />, label: <Link to="/belege">Belege</Link> });
-    const wikisubdirEntries = () =>
-      subdirs.map((dir) => {
-        return { key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}`}>{dir}</Link> };
-      });
-
     if (subdirs.length > 0) {
+      const wikisubdirEntries = () =>
+        subdirs.map((dir) => {
+          return { key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}/`}>{dir}</Link> };
+        });
+
       localItems.push({
         key: menuKeys.wiki,
         icon: <IconForSmallBlock iconName="Journals" />,

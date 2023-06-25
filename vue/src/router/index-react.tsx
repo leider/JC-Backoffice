@@ -38,6 +38,7 @@ import MailRules from "@/components/mails/MailRules";
 import MailingLists from "@/components/mails/MailingLists";
 import SendMail from "@/components/mails/SendMail";
 import Belege from "@/components/belege/Belege";
+import WikiPage from "@/components/wiki/WikiPage";
 
 export const routes: RouteObject[] = [
   {
@@ -118,6 +119,10 @@ export const routes: RouteObject[] = [
       {
         path: "/belege",
         element: <Belege />,
+      },
+      {
+        path: "/wiki/:subdir/:page?",
+        element: <WikiPage />,
       },
     ],
   },
