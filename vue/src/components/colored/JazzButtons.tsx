@@ -11,7 +11,7 @@ export function SaveButton({ disabled }: ButtonProps) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
       <Button htmlType="submit" icon={<IconForSmallBlock iconName="CheckSquare" />} type="primary" disabled={disabled}>
-        &nbsp;Speichern
+        Speichern
       </Button>
     </ConfigProvider>
   );
@@ -21,7 +21,7 @@ export function SendButton({ disabled }: ButtonProps) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
       <Button htmlType="submit" icon={<IconForSmallBlock iconName="Send" />} type="primary" disabled={disabled}>
-        &nbsp;Senden
+        Senden
       </Button>
     </ConfigProvider>
   );

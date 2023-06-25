@@ -40,7 +40,11 @@ export default defineConfig(() => {
             if (req.url.startsWith("/vue/nested") && req.url.match(/^\/vue\/nested.*[^.]{5}$/)) {
               req.url = "/vue/nested/";
             } else if (req.url.startsWith("/vue/nested") && !req.url.match(/^\/vue\/nested.*[^.]{5}$/)) {
-              req.url = req.url.replace("/nested", "");
+              if (req.url.startsWith("/vue/nested/wiki")) {
+                req.url = req.url.replace("/nested/wiki", "");
+              } else {
+                req.url = req.url.replace("/nested", "");
+              }
             }
             next();
           });
