@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Renderer from "jc-shared/commons/renderer";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import SimpleMdeReact from "react-simplemde-editor";
@@ -21,6 +21,8 @@ export default function WikiPage() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
@@ -53,7 +55,12 @@ export default function WikiPage() {
 
   const { Search } = Input;
   const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
-  function onSearch() {}
+  function onSearch(value: string) {
+    if (value.length < 2) {
+      return;
+    }
+    navigate(`/wiki/searchresults/${value}`);
+  }
   function saveForm() {
     form.validateFields().then(async () => {
       mutateContent.mutate(form.getFieldValue("content"));

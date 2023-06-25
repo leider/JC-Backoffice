@@ -45,7 +45,7 @@ export function DeleteButton({ disabled, id }: ButtonProps & { id: string }) {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
       <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" disabled={disabled} onClick={callback}>
-        &nbsp;Löschen
+        Löschen
       </Button>
     </ConfigProvider>
   );
