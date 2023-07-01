@@ -40,6 +40,8 @@ import SendMail from "@/components/mails/SendMail";
 import Belege from "@/components/belege/Belege";
 import WikiPage from "@/components/wiki/WikiPage";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults";
+import Programmheft from "@/components/programmheft/Programmheft";
+import Kassenbericht from "@/components/options/Kassenbericht";
 
 export const routes: RouteObject[] = [
   {
@@ -86,8 +88,8 @@ export const routes: RouteObject[] = [
         element: <OrtePage />,
       },
       {
-        path: "/programmheft",
-        element: <Optionen />,
+        path: "/programmheft/:year?/:month?",
+        element: <Programmheft />,
       },
       {
         path: "/kalender",
@@ -99,7 +101,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/kassenbericht",
-        element: <Optionen />,
+        element: <Kassenbericht />,
       },
       {
         path: "/imageoverview",
