@@ -8,8 +8,6 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
-import _ from "lodash";
-import { detailedDiff } from "deep-object-diff";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
 import { saveCollection } from "@/components/colored/collectionChangeHelpers";
 

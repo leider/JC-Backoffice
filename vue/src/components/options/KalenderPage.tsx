@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { kalender, orte as orteRestCall, saveKalender, saveOrte } from "@/commons/loader-for-react";
+import { kalender, saveKalender } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";

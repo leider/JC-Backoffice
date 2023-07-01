@@ -73,7 +73,7 @@ export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat,
           </Collapse>
         </Col>
       </Row>
-      <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d347" }}>
+      <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3" }}>
         {veranstaltungen.map((veranstaltung, index) =>
           renderTeam ? (
             <TeamBlockNormal key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={expanded} />
