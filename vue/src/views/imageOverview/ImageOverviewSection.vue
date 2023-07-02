@@ -14,8 +14,8 @@ legend-card(section="allgemeines", :title="title")
                 b-icon-eyeglasses(scale="1.5")
         td
           span.form-control-plaintext(v-for="v in row.veranstaltungen", :key="v.id")
-            a.font-weight-bold(:href="`/vue${v.fullyQualifiedUrl}/presse`") {{ v.titel }}
-            | &nbsp; {{ v.startDate.tagMonatJahrKompakt }}
+            a.font-weight-bold(:href="`/vue/veranstaltungen${v.url}/presse`") {{ v.titel }}
+            | &nbsp; {{ v.startDate }}
 </template>
 
 <script lang="ts">

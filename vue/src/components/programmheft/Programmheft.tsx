@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { kalenderFor, veranstaltungenBetweenYYYYMM } from "@/commons/loader-for-react";
+import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Collapse, Form, Row, Typography } from "antd";
@@ -68,7 +68,12 @@ export default function Programmheft() {
     setMonate(Object.keys(result));
   }, [veranstaltungen]);
 
-  const mutateContent = useMutation({});
+  const mutateContent = useMutation({
+    mutationFn: saveProgrammheft,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["kalender"] });
+    },
+  });
 
   const [form] = Form.useForm<Kalender>();
 
@@ -85,8 +90,9 @@ export default function Programmheft() {
   const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateContent.mutate(form.getFieldValue("content"));
-      setKalender(form.getFieldValue("content"));
+      const kalenderNew = new Kalender(form.getFieldsValue(true));
+      mutateContent.mutate(kalenderNew);
+      setKalender(kalenderNew);
     });
   }
 
