@@ -14,13 +14,13 @@ html
     .container-fluid
       .row
         .col-12
-          .float-right
+          .float-end
             img(src=publicUrlPrefix + '/reporting/logo.png', height="80")
       .row
         .col-12
-          .float-right
+          .float-end
             address
-              strong Jazzclub Karlsruhe e.V. <br>
+              strong Jazzclub Ettlingen e.V. <br>
               | Leopoldstr. 13 <br>
               | 76133 Karlsruhe
           h1(style="white-space: nowrap") Abendkasse
@@ -70,40 +70,40 @@ html
           table.table.table-bordered.table-sm
             tr
               th Anfangsbestand Kasse:
-              td.text-right: +currencyOrEmpty(kasse.anfangsbestandEUR)
+              td.text-end: +currencyOrEmpty(kasse.anfangsbestandEUR)
             tr
               th Einnahmen:
-              td.text-right: +currencyOrEmpty(kasse.einnahmeTotalEUR)
+              td.text-end: +currencyOrEmpty(kasse.einnahmeTotalEUR)
             tr
               th Ausgaben:
-              td.text-right: +currencyOrEmpty(kasse.ausgabenTotalEUR * -1)
+              td.text-end: +currencyOrEmpty(kasse.ausgabenTotalEUR * -1)
             tr
               th Endbestand Kasse:
-              td.text-right: +currencyOrEmpty(kasse.endbestandEUR)
+              td.text-end: +currencyOrEmpty(kasse.endbestandEUR)
       .row
         .col-6
-          table.table.table-bordered.table-striped.table-sm
+          table.table.table-bordered.table-sm
             tr: th.text-center(colspan=3) Einnahmen
             tr
               th Verwendungszweck
               th Beleg-Nr.
-              th.text-right Betrag
+              th.text-end Betrag
             tr
               td Ticketverkauf
               td
-              td.text-right: +currencyOrEmpty(kasse.einnahmeTicketsEUR)
+              td.text-end: +currencyOrEmpty(kasse.einnahmeTicketsEUR)
             tr
               td Bareinlage
               td
-              td.text-right: +currencyOrEmpty(kasse.einnahmeBankEUR)
+              td.text-end: +currencyOrEmpty(kasse.einnahmeBankEUR)
             tr
               td #{kasse.einnahmeSonstiges1Text}
               td
-              td.text-right: +currencyOrEmpty(kasse.einnahmeSonstiges1EUR)
+              td.text-end: +currencyOrEmpty(kasse.einnahmeSonstiges1EUR)
             tr
               td #{kasse.einnahmeSonstiges2Text}
               td
-              td.text-right: +currencyOrEmpty(kasse.einnahmeSonstiges2EUR)
+              td.text-end: +currencyOrEmpty(kasse.einnahmeSonstiges2EUR)
             tr
               td &nbsp;
               td
@@ -115,42 +115,42 @@ html
             tr
               th Summe
               td
-              td.text-right: b: +currencyOrEmpty(kasse.einnahmeTotalEUR)
+              td.text-end: b: +currencyOrEmpty(kasse.einnahmeTotalEUR)
 
         .col-6
-          table.table.table-bordered.table-striped.table-sm
+          table.table.table-bordered.table-sm
             tr: th.text-center(colspan=3) Ausgaben
             tr
               th Verwendungszweck
               th Beleg-Nr.
-              th.text-right Betrag
+              th.text-end Betrag
             tr
               td Catering
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeCateringEUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeCateringEUR)
             tr
               td Personal
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeHelferEUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeHelferEUR)
             tr
               td #{kasse.ausgabeSonstiges1Text}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges1EUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeSonstiges1EUR)
             tr
               td #{kasse.ausgabeSonstiges2Text}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges2EUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeSonstiges2EUR)
             tr
               td #{kasse.ausgabeSonstiges3Text}
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeSonstiges3EUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeSonstiges3EUR)
             tr
               td An Bank
               td
-              td.text-right: +currencyOrEmpty(kasse.ausgabeBankEUR)
+              td.text-end: +currencyOrEmpty(kasse.ausgabeBankEUR)
             tr
               th Summe
               td
-              td.text-right: b: +currencyOrEmpty(kasse.ausgabenTotalEUR)
+              td.text-end: b: +currencyOrEmpty(kasse.ausgabenTotalEUR)
       +signbox(veranstaltung.datumForDisplay, 'Kassierer/-in', kassierer)
       +signbox(kasse.freigabeDisplayDatum, 'Freigegeben', kasse.kassenfreigabe)

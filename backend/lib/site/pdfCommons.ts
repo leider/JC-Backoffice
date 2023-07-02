@@ -7,7 +7,7 @@ export function generatePdf(options: PDFOptions, res: Response, next: NextFuncti
       next(err);
     } else {
       (async (): Promise<void> => {
-        const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+        const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
         const page = await browser.newPage();
         await page.emulateMediaType("screen");
         await page.goto(`data:text/html,${html}`, {
@@ -31,7 +31,7 @@ export const printoptions: PDFOptions = {
 
 export function generatePdfLocally(html: string, callback: Function): void {
   (async (): Promise<void> => {
-    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+    const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
     const page = await browser.newPage();
     await page.emulateMediaType("screen");
     await page.goto(`data:text/html,${html}`, {
