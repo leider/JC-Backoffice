@@ -42,6 +42,7 @@ import WikiPage from "@/components/wiki/WikiPage";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults";
 import Programmheft from "@/components/programmheft/Programmheft";
 import Kassenbericht from "@/components/options/Kassenbericht";
+import ImageOverview from "@/components/options/ImageOverview";
 
 export const routes: RouteObject[] = [
   {
@@ -105,7 +106,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "/imageoverview",
-        element: <Optionen />,
+        element: <ImageOverview />,
       },
       {
         path: "/mailrules",

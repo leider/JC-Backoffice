@@ -16,9 +16,9 @@ import VeranstaltungGema from "./veranstaltungGema.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
-  startDate: DatumUhrzeit;
+  startDate: string;
   titel: string;
-  fullyQualifiedUrl: string;
+  url: string;
   images: string[];
 }
 
@@ -136,9 +136,9 @@ export default class Veranstaltung {
   get suitableForImageOverview(): ImageOverviewVeranstaltung {
     return {
       id: this.id || "",
-      startDate: this.startDatumUhrzeit,
+      startDate: this.startDatumUhrzeit.tagMonatJahrKompakt,
       titel: this.kopf.titel,
-      fullyQualifiedUrl: this.fullyQualifiedUrl,
+      url: this.url || "",
       images: this.presse.image,
     };
   }
