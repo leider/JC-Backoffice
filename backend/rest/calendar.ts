@@ -20,12 +20,10 @@ const app = express();
 
 async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User) {
   function asCalendarEvent(veranstaltung: Veranstaltung): TerminEvent {
-    const urlSuffix = user?.accessrights?.isOrgaTeam ? "/allgemeines" : "/preview";
-
     return {
       start: veranstaltung.startDate.toISOString(),
       end: veranstaltung.endDate.toISOString(),
-      url: "/vue" + veranstaltung.fullyQualifiedUrl + urlSuffix,
+      url: `/vue/veranstaltung/${user?.accessrights?.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(veranstaltung.url || "")}`,
       title: veranstaltung.kopf.titelMitPrefix,
       tooltip: veranstaltung.tooltipInfos,
       className:

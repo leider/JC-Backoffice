@@ -1,5 +1,4 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
-import vue from "@vitejs/plugin-vue2";
 import react from "@vitejs/plugin-react";
 
 import path, { resolve } from "path";
@@ -15,14 +14,12 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),
-          nested: resolve(__dirname, "nested/index.html"),
         },
       },
     },
     plugins: [
       react(),
-      vue(),
-      splitVendorChunkPlugin(),
+      //splitVendorChunkPlugin(),
       {
         name: "vite-plugin-cache-control",
         async configureServer(server) {
@@ -33,31 +30,12 @@ export default defineConfig(() => {
           server.middlewares.use(app);
         },
       },
-      {
-        name: "rewrite-middleware",
-        configureServer(serve) {
-          serve.middlewares.use((req, res, next) => {
-            if (req.url.startsWith("/vue/nested") && req.url.match(/^\/vue\/nested.*[^.]{5}$/)) {
-              req.url = "/vue/nested/";
-            } else if (req.url.startsWith("/vue/nested") && !req.url.match(/^\/vue\/nested.*[^.]{5}$/)) {
-              if (req.url.startsWith("/vue/nested/wiki")) {
-                req.url = req.url.replace("/nested/wiki", "");
-              } else if (req.url.startsWith("/vue/nested/programmheft")) {
-                req.url = req.url.replace("/nested/programmheft", "");
-              } else {
-                req.url = req.url.replace("/nested", "");
-              }
-            }
-            next();
-          });
-        },
-      },
     ],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
-      extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+      extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
     },
   };
 });

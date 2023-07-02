@@ -15,7 +15,6 @@ import FerienIcals from "jc-shared/optionen/ferienIcals";
 import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
-import { feedbackMessages } from "@/views/general/FeedbackMessages";
 import * as jose from "jose";
 import isMobile from "ismobilejs";
 
@@ -66,8 +65,6 @@ type FetchParams = {
   contentType: ContentType;
   method: Method;
   data?: any;
-  title?: string;
-  text?: string;
 };
 
 async function standardFetch(params: FetchParams) {
@@ -79,9 +76,6 @@ async function standardFetch(params: FetchParams) {
       responseType: params.contentType !== "json" ? "blob" : "json",
     };
     const res = await axios(options);
-    if (params.title || params.text) {
-      feedbackMessages.addSuccess(params.title || "Erfolgreich", params.text || "---");
-    }
     return res.data;
   } catch (e) {
     /* empty */
@@ -97,8 +91,6 @@ export async function uploadFile(data: FormData) {
     method: "POST",
     url: "/rest/upload",
     data,
-    title: "Gespeichert",
-    text: "Datei gespeichert",
     contentType: "json",
   });
 }
@@ -108,8 +100,6 @@ export async function uploadBeleg(data: FormData) {
     method: "POST",
     url: "/rest/beleg",
     data,
-    title: "Erfolgreich",
-    text: "Beleg übertragen",
     contentType: "json",
   });
 }
@@ -180,8 +170,6 @@ export async function saveVeranstaltung(veranstaltung: Veranstaltung) {
     method: "POST",
     url: "/rest/veranstaltungen",
     data: veranstaltung.toJSON(),
-    title: "Gespeichert",
-    text: "Veranstaltung gespeichert",
     contentType: "json",
   });
 }
@@ -191,8 +179,6 @@ export async function deleteVeranstaltungWithId(id: string) {
     method: "DELETE",
     url: "/rest/veranstaltungen",
     data: { id },
-    title: "Gelöscht",
-    text: "Veranstaltung gelöscht",
     contentType: "json",
   });
 }
@@ -237,8 +223,6 @@ export async function saveUser(user: User) {
     method: "POST",
     url: "/rest/user",
     data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
     contentType: "json",
   });
 }
@@ -248,8 +232,6 @@ export async function deleteUser(user: User) {
     method: "DELETE",
     url: "/rest/user",
     data: user.toJSON(),
-    title: "Gelöscht",
-    text: "User gelöscht",
     contentType: "json",
   });
 }
@@ -259,8 +241,6 @@ export async function saveNewUser(user: User) {
     method: "PUT",
     url: "/rest/user",
     data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Neuer User angelegt",
     contentType: "json",
   });
 }
@@ -270,8 +250,6 @@ export async function changePassword(user: User) {
     method: "POST",
     url: "/rest/user/changePassword",
     data: user.toJSON(),
-    title: "Gespeichert",
-    text: "Passwort geändert",
     contentType: "json",
   });
 }
@@ -287,8 +265,6 @@ export async function saveProgrammheft(kalender: Kalender) {
     method: "POST",
     url: "/rest/programmheft",
     data: kalender,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
     contentType: "json",
   });
 }
@@ -300,25 +276,15 @@ export async function optionen(): Promise<OptionValues> {
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
-    feedbackMessages.addError("Oooops. Optionen kaputt", "");
-    throw new Error("oops, Optionen kaputt??");
-  }
   return standardFetch({
     method: "POST",
     url: "/rest/optionen",
     data: optionen.toJSON(),
-    title: "Gespeichert",
-    text: "Optionen gespeichert",
     contentType: "json",
   });
 }
 
 export async function saveOptionenQuiet(optionen: OptionValues) {
-  if (optionen.agenturen.length === 0 || optionen.hotels.length === 0 || optionen.kooperationen.length === 0) {
-    feedbackMessages.addError("Oooops. Optionen kaputt", "");
-    throw new Error("oops, Optionen kaputt??");
-  }
   return standardFetch({
     method: "POST",
     url: "/rest/optionen",
@@ -337,8 +303,6 @@ export async function saveOrte(orte: Orte) {
     method: "POST",
     url: "/rest/orte",
     data: orte.toJSON(),
-    title: "Gespeichert",
-    text: "Orte aktualisiert",
     contentType: "json",
   });
 }
@@ -353,8 +317,6 @@ export async function saveTermin(termin: Termin) {
     method: "POST",
     url: "/rest/termin",
     data: termin,
-    title: "Gespeichert",
-    text: "Termin gespeichert",
     contentType: "json",
   });
 }
@@ -364,8 +326,6 @@ export async function deleteTermin(terminID: string) {
     method: "DELETE",
     url: "/rest/termin",
     data: { id: terminID },
-    title: "Gelöscht",
-    text: "Termin gelöscht",
     contentType: "json",
   });
 }
@@ -380,8 +340,6 @@ export async function saveKalender(kalender: FerienIcals) {
     method: "POST",
     url: "/rest/kalender",
     data: kalender,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
     contentType: "json",
   });
 }
@@ -397,8 +355,6 @@ export async function saveImagenames(rows: ImageOverviewRow[]) {
     method: "POST",
     url: "/rest/imagenames",
     data: rows,
-    title: "Gespeichert",
-    text: "Änderungen gespeichert",
     contentType: "json",
   });
 }
@@ -409,8 +365,6 @@ export async function sendMail(message: Message) {
     method: "POST",
     url: "/rest/rundmail",
     data: message,
-    title: "Gesendet",
-    text: "Meil geschickt",
     contentType: "json",
   });
 }
@@ -420,8 +374,6 @@ export async function deleteMailinglist(listname: string) {
     method: "DELETE",
     url: "/rest/mailingliste",
     data: { name: listname },
-    title: "Gelöscht",
-    text: "Liste gelöscht",
     contentType: "json",
   });
 }
@@ -431,8 +383,6 @@ export async function saveMailinglist(list: Mailingliste) {
     method: "POST",
     url: "/rest/mailingliste",
     data: list,
-    title: "Gespeichert",
-    text: "Liste gespeichert",
     contentType: "json",
   });
 }
@@ -448,8 +398,6 @@ export async function deleteMailRule(ruleID: string) {
     method: "DELETE",
     url: "/rest/mailrule",
     data: { id: ruleID },
-    title: "Gelöscht",
-    text: "Regel gelöscht",
     contentType: "json",
   });
 }
@@ -459,8 +407,6 @@ export async function saveMailRule(rule: MailRule) {
     method: "POST",
     url: "/rest/mailrule",
     data: rule,
-    title: "Gespeichert",
-    text: "Regel gespeichert",
     contentType: "json",
   });
 }
@@ -481,8 +427,6 @@ export async function saveWikiPage(subdir: string, page: string, content: string
     method: "POST",
     url: `/rest/wikipage/${subdir}/${page}`,
     data: { content },
-    title: "Gespeichert",
-    text: "Die Seite wurde gespeichert.",
     contentType: "json",
   });
 }
