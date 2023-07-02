@@ -59,7 +59,15 @@ function Team() {
             </p>
           }
           title="Team"
-          extra={[<ButtonWithIcon key="cal" icon="CalendarWeek" text="Kalender" type="default" />]}
+          extra={[
+            <ButtonWithIcon
+              key="cal"
+              icon="CalendarWeek"
+              text="Kalender"
+              type="default"
+              href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
+            />,
+          ]}
         />
         {monate.map((monat) => {
           return (
