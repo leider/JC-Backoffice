@@ -45,7 +45,7 @@ export function ChangePasswordModal({
                   required: true,
                   message: "Du musst einen Wert eingeben",
                 },
-                { len: 6, message: "Mindestens 6 Zeichen" },
+                { min: 6, message: "Mindestens 6 Zeichen" },
               ]}
             >
               <Input.Password />

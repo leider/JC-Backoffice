@@ -20,7 +20,7 @@ export default function EinnahmenCard({ form, disabled }: KasseCardProps) {
   function updateSumme() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     setSumme(kasse.einnahmeTotalEUR);
-    form.setFieldValue(["kasse", "endbestandEUR"], kasse.endbestandEUR);
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
   return (

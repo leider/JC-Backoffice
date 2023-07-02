@@ -24,6 +24,8 @@ export default function WikiPage() {
 
   const navigate = useNavigate();
 
+  document.title = `Wiki | ${realPage}`;
+
   useEffect(() => {
     if (data) {
       setWikipage(data);

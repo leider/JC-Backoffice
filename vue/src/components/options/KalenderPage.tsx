@@ -17,6 +17,8 @@ export default function KalenderPage() {
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  document.title = "Kalender";
+
   useEffect(() => {
     if (ferienIcalsQuery.data) {
       setFerienIcals(ferienIcalsQuery.data);

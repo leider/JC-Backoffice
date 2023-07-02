@@ -31,6 +31,7 @@ export default function ImageOverview() {
     },
   });
 
+  document.title = "Bilder bearbeiten";
   function suitableForImageOverview(veranstaltung: Veranstaltung): ImageOverviewVeranstaltung {
     return {
       id: veranstaltung.id || "",
