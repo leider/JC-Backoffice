@@ -18,6 +18,8 @@ export default function MailRules() {
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  document.title = "Mailregeln";
+
   useEffect(() => {
     if (mailRuleQuery.data) {
       setMailRules(mailRuleQuery.data);

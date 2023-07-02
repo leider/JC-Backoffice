@@ -32,6 +32,8 @@ function Team() {
   const [realadmin, setRealadmin] = useState<boolean>(false);
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
   const [monate, setMonate] = useState<string[]>([]);
+
+  document.title = "Team";
   useEffect(() => {
     const filteredVeranstaltungen = veranstaltungen.filter((v) => v.kopf.confirmed || realadmin);
     const result = groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);

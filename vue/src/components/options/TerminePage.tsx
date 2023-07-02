@@ -18,6 +18,8 @@ export default function TerminePage() {
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  document.title = "Termine";
+
   useEffect(() => {
     if (termineQuery.data) {
       setTermine(termineQuery.data);

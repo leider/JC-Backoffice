@@ -14,6 +14,8 @@ export default function Belege() {
 
   const [form] = Form.useForm<any>();
 
+  document.title = "Beleg Hochladen";
+
   function initializeForm() {
     document.title = "Manuelle Nachricht";
     form.setFieldsValue({

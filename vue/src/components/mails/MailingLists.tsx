@@ -21,6 +21,8 @@ export default function MailingLists() {
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
   const queryClient = useQueryClient();
 
+  document.title = "Maillinglisten";
+
   useEffect(() => {
     if (usersQuery.data) {
       setUsers(usersQuery.data);

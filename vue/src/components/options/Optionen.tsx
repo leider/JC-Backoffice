@@ -18,6 +18,8 @@ export default function Optionen() {
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  document.title = "Optionen";
+
   useEffect(() => {
     if (opts.data) {
       setOptionen(opts.data);

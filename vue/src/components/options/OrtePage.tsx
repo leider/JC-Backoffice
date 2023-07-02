@@ -16,6 +16,8 @@ export default function OrtePage() {
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
+  document.title = "Orte";
+
   useEffect(() => {
     if (ortQuery.data) {
       setOrte(ortQuery.data);

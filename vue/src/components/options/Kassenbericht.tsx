@@ -7,6 +7,8 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 export default function Kassenbericht() {
   const [monate, setMonate] = useState<DatumUhrzeit[]>([]);
 
+  document.title = "Kassenbericht";
+
   useEffect(() => {
     const result: DatumUhrzeit[] = [];
     let current = new DatumUhrzeit().minus({ monate: 6 });

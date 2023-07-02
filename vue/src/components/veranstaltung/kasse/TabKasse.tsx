@@ -17,7 +17,7 @@ export interface KasseCardProps {
 export default function TabKasse({ form }: TabProps) {
   function anfangsbestandChanged() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
-    form.setFieldValue(["kasse", "endbestandEUR"], kasse.endbestandEUR);
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
   useEffect(() => anfangsbestandChanged, [form]);
@@ -48,10 +48,8 @@ export default function TabKasse({ form }: TabProps) {
         </Col>
         <Col xs={12} lg={6}>
           <DynamicItem
-            nameOfDepending={["kasse", "endbestandEUR"]}
-            renderWidget={() => (
-              <NumberInput disabled name={["kasse", "endbestandEUR"]} label="Endbestand Kasse" decimals={2} suffix={"€"} />
-            )}
+            nameOfDepending="endbestandEUR"
+            renderWidget={() => <NumberInput disabled name={"endbestandEUR"} label="Endbestand Kasse" decimals={2} suffix={"€"} />}
           />
         </Col>
       </Row>

@@ -21,7 +21,7 @@ export default function AusgabenCard({ form, disabled }: KasseCardProps) {
   function updateSumme() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     setSumme(kasse.ausgabenTotalEUR);
-    form.setFieldValue(["kasse", "endbestandEUR"], kasse.endbestandEUR);
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
   const { lg } = useBreakpoint();
   return (

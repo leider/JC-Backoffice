@@ -51,6 +51,8 @@ export default function Programmheft() {
 
   const navigate = useNavigate();
 
+  document.title = "Programmheft";
+
   useEffect(() => {
     if (dataKalender) {
       setKalender(dataKalender);

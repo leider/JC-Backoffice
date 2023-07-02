@@ -142,7 +142,7 @@ export default function VeranstaltungComp() {
         // console.log({ diff });
         // console.log({ initialValue });
         // console.log({ form: form.getFieldsValue(true) });
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl"]));
+        setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
       }}
       onFinish={saveForm}
       layout="vertical"

@@ -16,7 +16,6 @@ import SimpleMdeReact from "react-simplemde-editor";
 import _ from "lodash";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelect";
-import SingleSelect from "@/widgets-react/SingleSelect";
 import Message from "jc-shared/mail/message";
 
 export default function SendMail() {
@@ -44,6 +43,8 @@ export default function SendMail() {
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
 
   const [canSend, setCanSend] = useState<boolean>(false);
+
+  document.title = "Mail Senden";
 
   useEffect(() => {
     if (mailRuleQuery.data) {

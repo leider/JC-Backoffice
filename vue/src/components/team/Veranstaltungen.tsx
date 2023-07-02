@@ -35,6 +35,8 @@ export default function Veranstaltungen() {
   const location = useLocation();
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
   const [monate, setMonate] = useState<string[]>([]);
+
+  document.title = "Veranstaltungen";
   useEffect(() => {
     const result = groupBy(veranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);

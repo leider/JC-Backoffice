@@ -18,6 +18,7 @@ export default function Users() {
   const { context } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
+  document.title = "Userübersicht";
   async function loadUsers() {
     const users = await allUsers();
     users.forEach((u) => {
