@@ -44,7 +44,7 @@ export default function VeranstaltungTabs({
       setActivePage(page);
     } else {
       setActivePage("allgemeines");
-      setSearch({ page: "allgemeines" });
+      setSearch({ page: "allgemeines" }, { replace: true });
     }
   }, [search]);
 

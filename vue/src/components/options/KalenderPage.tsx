@@ -25,7 +25,7 @@ export default function KalenderPage() {
     }
   }, [ferienIcalsQuery.data]);
 
-  const mutateOrte = useMutation({
+  const mutateKalender = useMutation({
     mutationFn: saveKalender,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ferienIcals"] });
@@ -46,7 +46,7 @@ export default function KalenderPage() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateOrte.mutate(new FerienIcals(form.getFieldsValue(true)));
+      mutateKalender.mutate(new FerienIcals(form.getFieldsValue(true)));
     });
   }
 

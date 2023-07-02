@@ -10,10 +10,11 @@ import User from "jc-shared/user/user";
 import Accessrights from "jc-shared/user/accessrights";
 import { NewUserModal } from "@/components/users/UserModals";
 import UserPanel from "@/components/users/UserPanel";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Users() {
   const [newUserOpen, setNewUserOpen] = useState<boolean>(false);
-
+  const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
   const [users, setUsers] = useState<User[]>([]);
   const { context } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -29,8 +30,15 @@ export default function Users() {
   }
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    if (userQuery.data) {
+      const users = userQuery.data;
+      users.forEach((u) => {
+        u.accessrights = new Accessrights(u);
+      });
+      setUsers(users);
+      setSelectedUsers(users);
+    }
+  }, [userQuery.data]);
 
   function radioOption(icon: keyof typeof icons, label: string, value: string) {
     return {
