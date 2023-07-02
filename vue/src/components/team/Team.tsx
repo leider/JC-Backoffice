@@ -9,27 +9,34 @@ import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import { useQuery } from "@tanstack/react-query";
 
 function Team() {
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
 
-  async function loadUsers() {
-    const users = await allUsers();
-    setUsersAsOptions(users.map((user) => ({ label: user.name, value: user.id })));
-  }
+  const veranstQuery = useQuery({ queryKey: ["veranstaltung"], queryFn: () => veranstaltungenForTeam("zukuenftige") });
+  const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
 
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
-  async function loadVeranstaltungen() {
-    const result = await veranstaltungenForTeam("zukuenftige");
-    setVeranstaltungen(result);
-  }
   useEffect(() => {
-    loadUsers();
-    loadVeranstaltungen();
-  }, []);
+    if (veranstQuery.data) {
+      setVeranstaltungen(veranstQuery.data);
+    }
+  }, [veranstQuery.data]);
+
+  useEffect(() => {
+    if (userQuery.data) {
+      setUsersAsOptions(userQuery.data.map((user) => ({ label: user.name, value: user.id })));
+    }
+  }, [userQuery.data]);
 
   const { context } = useAuth();
   const [realadmin, setRealadmin] = useState<boolean>(false);
+  useEffect(() => {
+    const accessrights = context?.currentUser.accessrights;
+    setRealadmin(!!accessrights?.isSuperuser);
+  }, [context]);
+
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
@@ -39,8 +46,6 @@ function Team() {
     const result = groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
-    const accessrights = context?.currentUser.accessrights;
-    setRealadmin(!!accessrights?.isSuperuser);
   }, [veranstaltungen, realadmin, context]);
 
   return (

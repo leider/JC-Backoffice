@@ -15,7 +15,6 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import Orte from "jc-shared/optionen/orte";
-import { detailedDiff } from "deep-object-diff";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
 import { differenceFor } from "jc-shared/commons/compareObjects";

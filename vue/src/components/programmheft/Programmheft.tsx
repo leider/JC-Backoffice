@@ -14,7 +14,6 @@ import Kalender from "jc-shared/programmheft/kalender";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
 import groupBy from "lodash/groupBy";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { marked } from "marked";
 
 export default function Programmheft() {

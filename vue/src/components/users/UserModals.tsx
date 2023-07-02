@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Input, Modal, Row } from "antd";
+import { Col, Form, FormInstance, Input, Modal, notification, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader-for-react";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -8,6 +8,7 @@ import SingleSelect from "@/widgets-react/SingleSelect";
 import CheckItem from "@/widgets-react/CheckItem";
 import React, { useEffect, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function ChangePasswordModal({
   isOpen,
@@ -20,14 +21,26 @@ export function ChangePasswordModal({
   user: User;
 }) {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
+  const mutatePassword = useMutation({
+    mutationFn: changePassword,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users", user.id] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Änderungen gespeichert",
+        duration: 5,
+      });
+      setIsOpen(false);
+    },
+  });
 
   useEffect(() => {
     form.setFieldsValue(user.toJSONWithoutPass());
   }, [form, user]);
   async function saveForm() {
     form.validateFields().then(async () => {
-      await changePassword(new User(form.getFieldsValue(true)));
-      setIsOpen(false);
+      mutatePassword.mutate(new User(form.getFieldsValue(true)));
     });
   }
 
@@ -56,20 +69,25 @@ export function ChangePasswordModal({
     </Modal>
   );
 }
-export function NewUserModal({
-  isOpen,
-  setIsOpen,
-  loadUsers,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  loadUsers: () => void;
-}) {
+export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
+  const mutateNewUser = useMutation({
+    mutationFn: saveNewUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Änderungen gespeichert",
+        duration: 5,
+      });
+      setIsOpen(false);
+    },
+  });
+
   async function saveForm() {
     form.validateFields().then(async () => {
-      await saveNewUser(new User(form.getFieldsValue(true)));
-      loadUsers();
+      mutateNewUser.mutate(new User(form.getFieldsValue(true)));
       setIsOpen(false);
     });
   }
@@ -128,13 +146,26 @@ export function EditUserModal({
     form.validateFields();
   }
   useEffect(initializeForm, [form, user]);
+  const queryClient = useQueryClient();
+  const mutateUser = useMutation({
+    mutationFn: saveUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Änderungen gespeichert",
+        duration: 5,
+      });
+      setIsOpen(false);
+    },
+  });
+
   async function saveForm() {
     if (!dirty) {
       setIsOpen(false);
     }
     form.validateFields().then(async () => {
-      await saveUser(new User(form.getFieldsValue(true)));
-      loadUsers();
+      mutateUser.mutate(new User(form.getFieldsValue(true)));
       setIsOpen(false);
     });
   }

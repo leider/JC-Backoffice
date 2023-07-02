@@ -1,12 +1,13 @@
-import { Col, Row, Tag } from "antd";
+import { App, Col, Row, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import { useAuth } from "@/commons/auth";
-import { addUserToSection, removeUserFromSection } from "@/commons/loader-for-react";
+import { addUserToSection, removeUserFromSection, saveVeranstaltung } from "@/commons/loader-for-react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
 import { ButtonStaff } from "@/components/Buttons";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -32,19 +33,28 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ usersAsOptions, sectionName
     setCurrentUser(context?.currentUser || new User({}));
   }, [context]);
 
-  async function addUser() {
-    const result = await addUserToSection(veranstaltung, sectionName);
-    if (result) {
+  const queryClient = useQueryClient();
+  const mutateAdd = useMutation({
+    mutationFn: async (veranst: Veranstaltung) => addUserToSection(veranst, sectionName),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
       veranstaltung.staff.addUserToSection(currentUser, sectionName);
       updateStuff();
-    }
-  }
-  async function removeUser() {
-    const result = await removeUserFromSection(veranstaltung, sectionName);
-    if (result) {
+    },
+  });
+  const mutateRemove = useMutation({
+    mutationFn: async (veranst: Veranstaltung) => removeUserFromSection(veranst, sectionName),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
       veranstaltung.staff.removeUserFromSection(currentUser, sectionName);
       updateStuff();
-    }
+    },
+  });
+  async function addUser() {
+    mutateAdd.mutate(veranstaltung);
+  }
+  async function removeUser() {
+    mutateRemove.mutate(veranstaltung);
   }
 
   function DisplayNames() {
