@@ -3,13 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteMailRule, mailRules as mailRulesRestCall, saveMailRule } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import _ from "lodash";
-import { saveCollection } from "@/components/colored/collectionChangeHelpers";
+import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({ queryKey: ["mailRules"], queryFn: mailRulesRestCall });
@@ -17,6 +17,9 @@ export default function MailRules() {
   const [initialValue, setInitialValue] = useState<{ allRules: any[] }>({ allRules: [] });
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
+
+  const saveCollection = useSaveCollection(notification);
 
   document.title = "Mailregeln";
 
@@ -71,6 +74,7 @@ export default function MailRules() {
       type: "text",
       width: "l",
       required: true,
+      uniqueValues: true,
     },
     {
       fieldName: "email",

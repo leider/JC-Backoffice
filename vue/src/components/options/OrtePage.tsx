@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { orte as orteRestCall, saveOrte } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
@@ -15,6 +15,7 @@ export default function OrtePage() {
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
 
   document.title = "Orte";
 
@@ -28,6 +29,11 @@ export default function OrtePage() {
     mutationFn: saveOrte,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orte"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Orte wurden gespeichert",
+        duration: 5,
+      });
     },
   });
 

@@ -2,7 +2,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Collapse, Form, Row, Typography } from "antd";
+import { App, Button, Col, Collapse, Form, Row, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -49,6 +49,7 @@ export default function Programmheft() {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
+  const { notification } = App.useApp();
 
   document.title = "Programmheft";
 
@@ -73,6 +74,11 @@ export default function Programmheft() {
     mutationFn: saveProgrammheft,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["kalender"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Das Programmheft wurde gespeichert",
+        duration: 5,
+      });
     },
   });
 

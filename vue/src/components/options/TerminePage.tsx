@@ -3,13 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTermin, saveTermin, termine as allTermine } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
-import { saveCollection } from "@/components/colored/collectionChangeHelpers";
+import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -17,6 +17,9 @@ export default function TerminePage() {
   const [initialValue, setInitialValue] = useState<{ allTermine: any[] }>({ allTermine: [] });
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
+
+  const saveCollection = useSaveCollection(notification);
 
   document.title = "Termine";
 

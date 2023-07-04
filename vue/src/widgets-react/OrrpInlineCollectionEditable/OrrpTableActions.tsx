@@ -41,7 +41,7 @@ export default function OrrpTableActions(props: { actions: ActionCallbacks; test
     }
     if (key === "delete") {
       return !props.actions.delete?.confirm ? (
-        <Tooltip title={tooltipWithKey[key]} key={key}>
+        <Tooltip placement="left" title={tooltipWithKey[key]} key={key}>
           <Popconfirm
             placement="topLeft"
             key="delete"
@@ -64,7 +64,7 @@ export default function OrrpTableActions(props: { actions: ActionCallbacks; test
     }
 
     return (
-      <Tooltip title={tooltipWithKey[key]} key={key}>
+      <Tooltip placement="left" title={tooltipWithKey[key]} key={key}>
         <Button type="text" icon={iconForKey(key)} onClick={props.actions[key]} data-testid={`${props.testid}_${key}`} />
       </Tooltip>
     );
