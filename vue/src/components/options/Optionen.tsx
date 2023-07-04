@@ -4,7 +4,7 @@ import { optionen as optionenRestCall, saveOptionen } from "@/commons/loader-for
 import * as React from "react";
 import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { Col, Form, Row, Tabs, TabsProps } from "antd";
+import { App, Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
@@ -26,10 +26,16 @@ export default function Optionen() {
     }
   }, [opts.data]);
 
+  const { notification } = App.useApp();
   const mutateOptionen = useMutation({
     mutationFn: saveOptionen,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["optionen"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Optionen wurden gespeichert",
+        duration: 5,
+      });
     },
   });
 

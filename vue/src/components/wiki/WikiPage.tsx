@@ -2,7 +2,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { saveWikiPage, wikiPage } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Form, Input, Row } from "antd";
+import { App, Button, Col, Form, Input, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Renderer from "jc-shared/commons/renderer";
@@ -21,6 +21,7 @@ export default function WikiPage() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
 
   const navigate = useNavigate();
 
@@ -38,6 +39,11 @@ export default function WikiPage() {
     mutationFn: (content) => saveWikiPage(subdir!, realPage, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wiki"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Seite wurde gespeichert",
+        duration: 5,
+      });
     },
   });
 

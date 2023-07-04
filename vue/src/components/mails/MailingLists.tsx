@@ -3,14 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { allUsers, deleteMailinglist, saveMailinglist } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, notification, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import { fromFormObjectAsAny, toFormObject } from "@/components/mails/mailinglistCompUtils";
-import { saveCollection } from "@/components/colored/collectionChangeHelpers";
+import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailingLists() {
   const usersQuery = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
@@ -20,7 +20,9 @@ export default function MailingLists() {
   const [dirty, setDirty] = useState<boolean>(false);
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
 
+  const saveCollection = useSaveCollection(notification);
   document.title = "Maillinglisten";
 
   useEffect(() => {
@@ -76,6 +78,7 @@ export default function MailingLists() {
       type: "text",
       width: "s",
       required: true,
+      uniqueValues: true,
     },
     {
       fieldName: "users",

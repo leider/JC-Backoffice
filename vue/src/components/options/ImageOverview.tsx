@@ -1,7 +1,7 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, saveImagenames, veranstaltungenForTeam } from "@/commons/loader-for-react";
@@ -23,11 +23,17 @@ export default function ImageOverview() {
   const [veranstaltungen, setVeranstaltungen] = useState<ImageOverviewVeranstaltung[]>([]);
   const [form] = Form.useForm<{ with: ImageOverviewRow[]; notFound: ImageOverviewRow[]; unused: ImageOverviewRow[] }>();
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
 
   const mutateImages = useMutation({
     mutationFn: saveImagenames,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["imagenames"] });
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Änderungen wurden gespeichert",
+        duration: 5,
+      });
     },
   });
 

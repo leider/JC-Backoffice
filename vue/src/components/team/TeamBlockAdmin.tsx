@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip, Typography } from "antd";
+import { App, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip, Typography } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -89,6 +89,7 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
   const dividerStyle = { marginTop: "4px", marginBottom: "4px", fontWeight: 600 };
 
   const queryClient = useQueryClient();
+
   const mutateVeranstaltung = useMutation({
     mutationFn: saveVeranstaltung,
     onSuccess: () => {
