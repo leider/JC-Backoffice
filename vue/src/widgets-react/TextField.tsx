@@ -13,7 +13,7 @@ type TTextField = {
    * The label of the input.
    * @type {string}
    */
-  label: string;
+  label?: string;
 
   /**
    * Whether the input value is required.
@@ -86,7 +86,10 @@ export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX
       rulesToSet.push(props.uniqueValuesValidator);
     }
     if (props.isEmail) {
-      rulesToSet.push({ type: "email", message: "Die Eingabe ist keine gültige E-Mail Adresse" });
+      rulesToSet.push({
+        type: "email",
+        message: "Die Eingabe ist keine gültige E-Mail Adresse",
+      });
     }
     setRules(rulesToSet);
   }, [props.required, props.isEmail, props.uniqueValuesValidator]);

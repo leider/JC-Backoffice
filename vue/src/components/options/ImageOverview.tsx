@@ -17,11 +17,21 @@ import FormItem from "antd/es/form/FormItem";
 import { NamePath } from "rc-field-form/es/interface";
 
 export default function ImageOverview() {
-  const imagesQuery = useQuery({ queryKey: ["imagenames"], queryFn: imagenamesQuery });
-  const veranstaltungenQuery = useQuery({ queryKey: ["veranstaltungenAlle"], queryFn: () => veranstaltungenForTeam("alle") });
+  const imagesQuery = useQuery({
+    queryKey: ["imagenames"],
+    queryFn: imagenamesQuery,
+  });
+  const veranstaltungenQuery = useQuery({
+    queryKey: ["veranstaltungenAlle"],
+    queryFn: () => veranstaltungenForTeam("alle"),
+  });
   const [imagenames, setImagenames] = useState<string[]>([]);
   const [veranstaltungen, setVeranstaltungen] = useState<ImageOverviewVeranstaltung[]>([]);
-  const [form] = Form.useForm<{ with: ImageOverviewRow[]; notFound: ImageOverviewRow[]; unused: ImageOverviewRow[] }>();
+  const [form] = Form.useForm<{
+    with: ImageOverviewRow[];
+    notFound: ImageOverviewRow[];
+    unused: ImageOverviewRow[];
+  }>();
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
@@ -72,11 +82,19 @@ export default function ImageOverview() {
       const imagenamesOfVeranstaltungen = uniq(flatten(veranstaltungen.map((each) => each.images))).sort();
 
       const imagesWithVeranstaltungen: ImageOverviewRow[] = intersection(imagenames, imagenamesOfVeranstaltungen).map((im) => {
-        return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
+        return {
+          image: im,
+          newname: im,
+          veranstaltungen: elementsWithImage(im),
+        };
       });
       const imagesWithVeranstaltungenUnused: ImageOverviewRow[] = differenceBy(imagenames, imagenamesOfVeranstaltungen, convertString).map(
         (im) => {
-          return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
+          return {
+            image: im,
+            newname: im,
+            veranstaltungen: elementsWithImage(im),
+          };
         }
       );
       const imagesWithVeranstaltungenNotFound: ImageOverviewRow[] = differenceBy(
@@ -84,7 +102,11 @@ export default function ImageOverview() {
         imagenames,
         convertString
       ).map((im) => {
-        return { image: im, newname: im, veranstaltungen: elementsWithImage(im) };
+        return {
+          image: im,
+          newname: im,
+          veranstaltungen: elementsWithImage(im),
+        };
       });
       form.setFieldsValue({
         with: imagesWithVeranstaltungen,

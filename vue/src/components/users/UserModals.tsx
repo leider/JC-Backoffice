@@ -10,16 +10,7 @@ import React, { useEffect, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export function ChangePasswordModal({
-  isOpen,
-  setIsOpen,
-  user,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  loadUsers: () => void;
-  user: User;
-}) {
+export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const mutatePassword = useMutation({
@@ -122,7 +113,6 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
 export function EditUserModal({
   isOpen,
   setIsOpen,
-  loadUsers,
   user,
   isSuperUser,
 }: {

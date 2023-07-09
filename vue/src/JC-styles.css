@@ -862,7 +862,7 @@
 .ant-form-item-label {
   padding-bottom: 0 !important;
 }
-.ant-tabs-top >.ant-tabs-nav {
+.ant-tabs-top > .ant-tabs-nav {
   margin: 0;
 }
 
@@ -874,7 +874,7 @@
   text-align: right;
 }
 
-.ant-input[inputmode='numeric'] {
+.ant-input[inputmode="numeric"] {
   text-align: right;
 }
 
@@ -904,7 +904,7 @@
 }
 
 .fc-daygrid a {
-  color: #212529
+  color: #212529;
 }
 
 .ant-btn-primary {

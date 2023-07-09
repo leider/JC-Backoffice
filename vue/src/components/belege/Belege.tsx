@@ -47,6 +47,7 @@ export default function Belege() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const uploadprops: UploadProps = {
+    // @ts-ignore
     onRemove: (file) => {
       setFileList([]);
     },

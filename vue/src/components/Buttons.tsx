@@ -20,9 +20,14 @@ export function ButtonInAdminPanel({ type, url }: ButtonInAdminPanelProps) {
       <Tooltip title={_.capitalize(type)} color={color()}>
         <Button
           icon={<IconForSmallBlock size={16} iconName={icon()} />}
-          size="medium"
+          size="middle"
           type="primary"
-          onClick={() => navigate({ pathname: `/veranstaltung/${url}`, search: `page=${type}` })}
+          onClick={() =>
+            navigate({
+              pathname: `/veranstaltung/${url}`,
+              search: `page=${type}`,
+            })
+          }
         />
       </Tooltip>
     </ConfigProvider>

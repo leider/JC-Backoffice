@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CollectionHeight } from "../types";
-import { CollectionColDesc } from "./OrrpInlineCollectionEditable/types";
+import { CollectionHeight, CollectionColDesc } from "./types";
 
 export const initialSpan = (desc: CollectionColDesc) => {
   switch (desc.width) {

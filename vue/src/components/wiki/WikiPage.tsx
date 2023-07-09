@@ -14,7 +14,10 @@ import { IconForSmallBlock } from "@/components/Icon";
 export default function WikiPage() {
   const { subdir, page } = useParams();
   const realPage = page || "index";
-  const { data } = useQuery({ queryKey: ["wiki", `${subdir}-${realPage}`], queryFn: () => wikiPage(subdir!, realPage) });
+  const { data } = useQuery({
+    queryKey: ["wiki", `${subdir}-${realPage}`],
+    queryFn: () => wikiPage(subdir!, realPage),
+  });
   const [wikipage, setWikipage] = useState<string>("");
   const [rendered, setRendered] = useState<string>("");
   const [initialValue, setInitialValue] = useState<object>({});
@@ -62,7 +65,15 @@ export default function WikiPage() {
   useEffect(initializeForm, [form, wikipage]);
 
   const { Search } = Input;
-  const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
+  const editorOptions = useMemo(
+    () => ({
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      minHeight: "500px",
+    }),
+    []
+  );
   function onSearch(value: string) {
     if (value.length < 2) {
       return;
@@ -102,7 +113,9 @@ export default function WikiPage() {
       <PageHeader
         title="Wiki"
         subTitle={realPage}
-        breadcrumb={{ items: [{ title: <Link to={`/wiki/${subdir}/`}>{subdir}</Link> }] }}
+        breadcrumb={{
+          items: [{ title: <Link to={`/wiki/${subdir}/`}>{subdir}</Link> }],
+        }}
         extra={[
           <Search key="Search" placeholder="Wiki durchsuchen..." onSearch={onSearch} style={{ width: 200 }} />,
           <Button key="edit" icon={<IconForSmallBlock iconName="FileEarmarkText" />} type="primary" onClick={editOrUndo}>

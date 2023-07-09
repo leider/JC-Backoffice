@@ -11,12 +11,18 @@ import Users, { Mailingliste } from "jc-shared/user/users";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import { fromFormObjectAsAny, toFormObject } from "@/components/mails/mailinglistCompUtils";
 import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
+import User from "jc-shared/user/user.ts";
 
 export default function MailingLists() {
-  const usersQuery = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
+  const usersQuery = useQuery({
+    queryKey: ["users"],
+    queryFn: () => allUsers(),
+  });
   const [users, setUsers] = useState<User[]>([]);
   const [mailingLists, setMailingLists] = useState<any[]>([]);
-  const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({ allLists: [] });
+  const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
+    allLists: [],
+  });
   const [dirty, setDirty] = useState<boolean>(false);
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
   const queryClient = useQueryClient();

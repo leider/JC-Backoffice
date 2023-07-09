@@ -1,6 +1,6 @@
-import { Form } from 'antd';
-import { NamePath, StoreValue } from 'rc-field-form/es/interface';
-import { FunctionComponent } from 'react';
+import { Form } from "antd";
+import { NamePath, StoreValue } from "rc-field-form/es/interface";
+import { FunctionComponent } from "react";
 
 interface IDynamicItem {
   /**
@@ -14,10 +14,7 @@ interface IDynamicItem {
    * Callback to render the widget.
    * @memberof IDynamicItem
    */
-  renderWidget: (
-    getFieldValue: (name: NamePath) => StoreValue,
-    setFieldsValue: (value: any) => void
-  ) => JSX.Element;
+  renderWidget: (getFieldValue: (name: NamePath) => StoreValue, setFieldsValue: (value: any) => void) => JSX.Element;
 }
 
 /**
@@ -25,31 +22,18 @@ interface IDynamicItem {
  * @param {IDynamicItem} props
  * @return {*}  {JSX.Element}
  */
-export const DynamicItem: FunctionComponent<IDynamicItem> = (
-  props: IDynamicItem
-): JSX.Element => (
+export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem): JSX.Element => (
   <Form.Item
     noStyle
     shouldUpdate={(prevValues, curValues) => {
       if (Array.isArray(props.nameOfDepending)) {
-        const prev = props.nameOfDepending.reduce(
-          (prev: any, curr) => prev && prev[curr],
-          prevValues
-        );
-        const curr = props.nameOfDepending.reduce(
-          (prev: any, curr) => prev && prev[curr],
-          curValues
-        );
+        const prev = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], prevValues);
+        const curr = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], curValues);
         return prev !== curr;
       }
-      return (
-        prevValues[props.nameOfDepending as string] !==
-        curValues[props.nameOfDepending as string]
-      );
+      return prevValues[props.nameOfDepending as string] !== curValues[props.nameOfDepending as string];
     }}
   >
-    {({ getFieldValue, setFieldsValue }) =>
-      props.renderWidget(getFieldValue, setFieldsValue)
-    }
+    {({ getFieldValue, setFieldsValue }) => props.renderWidget(getFieldValue, setFieldsValue)}
   </Form.Item>
 );

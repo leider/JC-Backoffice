@@ -3,7 +3,11 @@ import { Mailingliste } from "jc-shared/user/users";
 import User from "jc-shared/user/user";
 
 export function toFormObject(liste: Mailingliste): object {
-  return { id: liste.originalName, name: liste.name, users: liste.users.map((u) => u.id) };
+  return {
+    id: liste.originalName,
+    name: liste.name,
+    users: liste.users.map((u) => u.id),
+  };
 }
 export function fromFormObjectAsAny(formObject: any, users: User[]): Mailingliste {
   return new Mailingliste(

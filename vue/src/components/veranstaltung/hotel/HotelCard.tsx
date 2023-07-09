@@ -15,7 +15,7 @@ export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {
   const hotelName = Form.useWatch(["hotel", "name"]);
 
   useEffect(() => {
-    if (optionen.hotels.find((h) => h.name === hotelName)) {
+    if (optionen?.hotels.find((h) => h.name === hotelName)) {
       const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
       if (preise) {
         form.setFieldsValue({ unterkunft: { ...preise } });

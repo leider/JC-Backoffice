@@ -33,7 +33,9 @@ export const globals = {
       }
     }
     if (globals.jwtToken) {
-      const decoded = jose.decodeJwt(globals.jwtToken) as { [key: string]: any };
+      const decoded = jose.decodeJwt(globals.jwtToken) as {
+        [key: string]: any;
+      };
       const exp: number = decoded.exp;
       const stillValid = Date.now() + 60000 < exp * 1000; // should be valid one more minute
       if (stillValid) {

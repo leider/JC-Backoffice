@@ -65,19 +65,38 @@ const JazzContent: React.FC = () => {
           type: "group",
           label: "Optionen und Orte",
           children: [
-            { key: menuKeys.optionen, icon: <IconForSmallBlock iconName="FuelPump" />, label: <Link to="/optionen">Optionen</Link> },
-            { key: menuKeys.orte, icon: <IconForSmallBlock iconName="Houses" />, label: <Link to="/orte">Orte</Link> },
+            {
+              key: menuKeys.optionen,
+              icon: <IconForSmallBlock iconName="FuelPump" />,
+              label: <Link to="/optionen">Optionen</Link>,
+            },
+            {
+              key: menuKeys.orte,
+              icon: <IconForSmallBlock iconName="Houses" />,
+              label: <Link to="/orte">Orte</Link>,
+            },
           ],
         },
         {
           type: "group",
           label: "Kalender und Termine",
           children: [
-            { key: menuKeys.kalender, icon: <IconForSmallBlock iconName="Calendar2Range" />, label: <Link to="/kalender">Kalender</Link> },
-            { key: menuKeys.termine, icon: <IconForSmallBlock iconName="Calendar2Month" />, label: <Link to="/termine">Termine</Link> },
+            {
+              key: menuKeys.kalender,
+              icon: <IconForSmallBlock iconName="Calendar2Range" />,
+              label: <Link to="/kalender">Kalender</Link>,
+            },
+            {
+              key: menuKeys.termine,
+              icon: <IconForSmallBlock iconName="Calendar2Month" />,
+              label: <Link to="/termine">Termine</Link>,
+            },
           ],
         },
-        { key: menuKeys.kassenbericht, label: <Link to="/kassenbericht">Kassenbericht</Link> },
+        {
+          key: menuKeys.kassenbericht,
+          label: <Link to="/kassenbericht">Kassenbericht</Link>,
+        },
       ];
       localItems.push({
         key: menuKeys.option,
@@ -86,25 +105,51 @@ const JazzContent: React.FC = () => {
         children: optionenChildren,
       });
       if (context?.currentUser?.accessrights?.isSuperuser) {
-        optionenChildren.push({ key: menuKeys.imageoverview, label: <Link to="/imageoverview">Bilder verwalten</Link> });
+        optionenChildren.push({
+          key: menuKeys.imageoverview,
+          label: <Link to="/imageoverview">Bilder verwalten</Link>,
+        });
         localItems.push({
           key: menuKeys.mail,
           icon: <IconForSmallBlock iconName="EnvelopeFill" />,
           label: "Mails...",
           children: [
-            { key: menuKeys.mailrules, icon: <IconForSmallBlock iconName="ListStars" />, label: <Link to="/mailrules">Regeln</Link> },
-            { key: menuKeys.mailinglists, icon: <IconForSmallBlock iconName="ListCheck" />, label: <Link to="/mailinglists">Listen</Link> },
-            { key: menuKeys.sendmail, icon: <IconForSmallBlock iconName="Send" />, label: <Link to="/sendmail">Mail senden...</Link> },
+            {
+              key: menuKeys.mailrules,
+              icon: <IconForSmallBlock iconName="ListStars" />,
+              label: <Link to="/mailrules">Regeln</Link>,
+            },
+            {
+              key: menuKeys.mailinglists,
+              icon: <IconForSmallBlock iconName="ListCheck" />,
+              label: <Link to="/mailinglists">Listen</Link>,
+            },
+            {
+              key: menuKeys.sendmail,
+              icon: <IconForSmallBlock iconName="Send" />,
+              label: <Link to="/sendmail">Mail senden...</Link>,
+            },
           ],
         });
       }
     }
-    localItems.push({ key: menuKeys.team, icon: <IconForSmallBlock iconName="People" />, label: <Link to="/team">Team</Link> });
-    localItems.push({ key: menuKeys.belege, icon: <IconForSmallBlock iconName="Camera" />, label: <Link to="/belege">Belege</Link> });
+    localItems.push({
+      key: menuKeys.team,
+      icon: <IconForSmallBlock iconName="People" />,
+      label: <Link to="/team">Team</Link>,
+    });
+    localItems.push({
+      key: menuKeys.belege,
+      icon: <IconForSmallBlock iconName="Camera" />,
+      label: <Link to="/belege">Belege</Link>,
+    });
     if (subdirs.length > 0) {
       const wikisubdirEntries = () =>
         subdirs.map((dir) => {
-          return { key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}/`}>{dir}</Link> };
+          return {
+            key: `wiki-${dir}`,
+            label: <Link to={`/wiki/${dir}/`}>{dir}</Link>,
+          };
         });
 
       localItems.push({
@@ -118,7 +163,11 @@ const JazzContent: React.FC = () => {
       key: menuKeys.users,
       icon: <IconForSmallBlock iconName="PeopleFill" />,
       children: [
-        { key: "allUsers", icon: <IconForSmallBlock iconName="PersonLinesFill" />, label: <Link to={"/users"}>Übersicht</Link> },
+        {
+          key: "allUsers",
+          icon: <IconForSmallBlock iconName="PersonLinesFill" />,
+          label: <Link to={"/users"}>Übersicht</Link>,
+        },
         {
           key: "logout",
           icon: <IconForSmallBlock iconName="PersonFillX" />,
@@ -146,7 +195,15 @@ const JazzContent: React.FC = () => {
 
   return (
     <Layout>
-      <Header style={{ position: "sticky", top: 0, zIndex: 1, width: "100%", paddingInline: "20px" }}>
+      <Header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          width: "100%",
+          paddingInline: "20px",
+        }}
+      >
         <Link to={"/"}>
           <div
             style={{

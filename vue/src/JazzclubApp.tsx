@@ -1,10 +1,8 @@
-import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/components/JazzContent";
 import { App, ConfigProvider, GlobalToken, theme } from "antd";
 import createTokenBasedStyles from "@/components/createTokenBasedStyles";
 import { AuthProvider } from "@/commons/auth";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./JC-styles.css";
 import "./flaticon-patched.css";
 import locale_de from "antd/locale/de_DE";
@@ -91,7 +89,9 @@ function JazzclubApp() {
           },
         }}
         locale={locale_de}
-        form={{ validateMessages: { required: "Du musst einen Wert eingeben" } }}
+        form={{
+          validateMessages: { required: "Du musst einen Wert eingeben" },
+        }}
       >
         <App>
           <AuthProvider>
@@ -99,7 +99,6 @@ function JazzclubApp() {
           </AuthProvider>
         </App>
       </ConfigProvider>
-      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

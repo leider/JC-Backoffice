@@ -19,11 +19,25 @@ import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelec
 import Message from "jc-shared/mail/message";
 
 export default function SendMail() {
-  const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
+  const editorOptions = useMemo(
+    () => ({
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      minHeight: "500px",
+    }),
+    []
+  );
 
-  const mailRuleQuery = useQuery({ queryKey: ["mailRules"], queryFn: mailRulesRestCall });
+  const mailRuleQuery = useQuery({
+    queryKey: ["mailRules"],
+    queryFn: mailRulesRestCall,
+  });
   const usersQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
-  const veranstaltungenQuery = useQuery({ queryKey: ["veranstaltungenZukuenftig"], queryFn: () => veranstaltungenForTeam("zukuenftige") });
+  const veranstaltungenQuery = useQuery({
+    queryKey: ["veranstaltungenZukuenftig"],
+    queryFn: () => veranstaltungenForTeam("zukuenftige"),
+  });
   const { context } = useAuth();
 
   const [rules, setRules] = useState<MailRule[]>([]);
@@ -110,7 +124,10 @@ export default function SendMail() {
   function updateEffectiveUsers() {
     const usersFromLists = selectedLists.flatMap((list) => list.users);
     const allUsersFromListsAndUsers = selectedUsers.concat(usersFromLists).map((user) => ({ name: user.name, email: user.email }));
-    const allRuleUsers = selectedRules.map((rule) => ({ name: rule.name, email: rule.email }));
+    const allRuleUsers = selectedRules.map((rule) => ({
+      name: rule.name,
+      email: rule.email,
+    }));
     setEffectiveUsers(_.sortBy(_.uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
   }
 

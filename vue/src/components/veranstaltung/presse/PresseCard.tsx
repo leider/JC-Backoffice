@@ -15,7 +15,10 @@ import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIco
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 
 export default function PresseCard({ form, id }: { id?: string; form: FormInstance<Veranstaltung> }) {
-  const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
+  const allimages = useQuery({
+    queryKey: ["imagenames"],
+    queryFn: () => imagenames(),
+  });
 
   const { color } = useColorsAndIconsForSections("presse");
   const [veranstForPreview, setVeranstForPreview] = useState<Veranstaltung>(new Veranstaltung());
@@ -23,7 +26,15 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
   const url = Form.useWatch(["presse", "jazzclubURL"]);
   const image = Form.useWatch(["presse", "image"]);
 
-  const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
+  const editorOptions = useMemo(
+    () => ({
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      minHeight: "500px",
+    }),
+    []
+  );
 
   useEffect(() => {
     const veranst = fromFormObject(form);
@@ -44,7 +55,16 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
     const farbe = color();
     const active = activePage === props.kind;
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>{props.title}</b>
+      <b
+        style={{
+          margin: -16,
+          padding: 16,
+          backgroundColor: active ? farbe : "inherit",
+          color: active ? "#FFF" : farbe,
+        }}
+      >
+        {props.title}
+      </b>
     );
   }
 
@@ -61,7 +81,7 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
             items={[
               {
                 key: "final",
-                label: <TabLabel kind="final" title="Finaler Text" />,
+                label: <TabLabel kind="allgemeines" title="Finaler Text" />,
                 children: (
                   <Form.Item label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "text"]}>
                     <SimpleMdeReact autoFocus options={editorOptions} />
@@ -70,7 +90,7 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
               },
               {
                 key: "original",
-                label: <TabLabel kind="original" title="Originaler Text" />,
+                label: <TabLabel kind="allgemeines" title="Originaler Text" />,
                 children: (
                   <Form.Item label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]}>
                     <SimpleMdeReact autoFocus options={editorOptions} />

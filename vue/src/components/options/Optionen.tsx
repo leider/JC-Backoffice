@@ -59,7 +59,18 @@ export default function Optionen() {
 
     const farbe = color("allgemeines");
 
-    return <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>{title}</b>;
+    return (
+      <b
+        style={{
+          margin: -16,
+          padding: 16,
+          backgroundColor: active ? farbe : "inherit",
+          color: active ? "#FFF" : farbe,
+        }}
+      >
+        {title}
+      </b>
+    );
   }
 
   const tabs: TabsProps["items"] = [

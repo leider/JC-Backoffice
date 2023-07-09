@@ -42,7 +42,18 @@ export default function Info() {
   function TabLabel({ title, type }: { type: string; title: string }) {
     const farbe = color();
     const active = activePage === type;
-    return <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>{title}</b>;
+    return (
+      <b
+        style={{
+          margin: -16,
+          padding: 16,
+          backgroundColor: active ? farbe : "inherit",
+          color: active ? "#FFF" : farbe,
+        }}
+      >
+        {title}
+      </b>
+    );
   }
 
   function Pressetexte() {

@@ -75,7 +75,10 @@ function StaffList({
 export default function Preview() {
   const { url } = useParams();
   const navigate = useNavigate();
-  const veranst = useQuery({ queryKey: ["veranstaltung", url], queryFn: () => veranstaltungForUrl(url || "") });
+  const veranst = useQuery({
+    queryKey: ["veranstaltung", url],
+    queryFn: () => veranstaltungForUrl(url || ""),
+  });
   const theUsers = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
@@ -160,7 +163,14 @@ export default function Preview() {
                 )}
                 <Row gutter={12}>
                   <Col span={10} offset={14}>
-                    <ButtonAbendkasse callback={() => navigate({ pathname: `/veranstaltung/${url}`, search: "page=kasse" })} />
+                    <ButtonAbendkasse
+                      callback={() =>
+                        navigate({
+                          pathname: `/veranstaltung/${url}`,
+                          search: "page=kasse",
+                        })
+                      }
+                    />
                   </Col>{" "}
                 </Row>
               </Col>
@@ -168,7 +178,11 @@ export default function Preview() {
           </CollapsibleForVeranstaltung>
           {veranstaltung.kopf.beschreibung?.trim() && (
             <CollapsibleForVeranstaltung suffix="allgemeines" label="Informationen">
-              <div dangerouslySetInnerHTML={{ __html: renderer.render(veranstaltung.kopf.beschreibung) }} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: renderer.render(veranstaltung.kopf.beschreibung),
+                }}
+              />
             </CollapsibleForVeranstaltung>
           )}
           <CollapsibleForVeranstaltung suffix="technik" label="Technik">

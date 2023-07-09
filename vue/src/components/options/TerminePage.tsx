@@ -14,7 +14,9 @@ import { useSaveCollection } from "@/components/colored/collectionChangeHelpers"
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
   const [termine, setTermine] = useState<Termin[]>([]);
-  const [initialValue, setInitialValue] = useState<{ allTermine: any[] }>({ allTermine: [] });
+  const [initialValue, setInitialValue] = useState<{ allTermine: any[] }>({
+    allTermine: [],
+  });
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
@@ -46,9 +48,13 @@ export default function TerminePage() {
   const [form] = Form.useForm<{ allTermine: Termin[] }>();
 
   function initializeForm() {
-    const deepCopy = { allTermine: termine.map((termin) => toFormObject(termin)) };
+    const deepCopy = {
+      allTermine: termine.map((termin) => toFormObject(termin)),
+    };
     form.setFieldsValue(deepCopy);
-    const initial = { allTermine: termine.map((termin) => toFormObject(termin)) };
+    const initial = {
+      allTermine: termine.map((termin) => toFormObject(termin)),
+    };
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();

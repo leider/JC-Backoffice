@@ -3,7 +3,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, FormInstance, Row, Table } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 
 interface AusgabenCardParams {
@@ -14,7 +14,10 @@ interface AusgabenCardParams {
 export default function EinAusCard({ einnahmen, ausgaben, form }: AusgabenCardParams) {
   const [kalk, setKalk] = useState<VeranstaltungKalkulation | undefined>(undefined);
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+    form,
+    preserve: true,
+  });
   useEffect(() => {
     updateKalk();
   }, [einnahmen, ausgaben, form, brauchtHotel]);
@@ -28,8 +31,14 @@ export default function EinAusCard({ einnahmen, ausgaben, form }: AusgabenCardPa
     return `${formatToGermanNumberString(amount)} €`;
   }
 
-  const columns: ColumnsType = [
-    { title: "", dataIndex: "first", key: "first", render: (text) => <b>{text}</b>, align: "right" },
+  const columns: ColumnType<any>[] = [
+    {
+      title: "",
+      dataIndex: "first",
+      key: "first",
+      render: (text) => <b>{text}</b>,
+      align: "right",
+    },
     { title: "Einnahmen", dataIndex: "second", key: "second", align: "right" },
     { title: "Ausgaben", dataIndex: "third", key: "third", align: "right" },
     { title: "Überschuss", dataIndex: "fourth", key: "fourth", align: "right" },

@@ -32,7 +32,7 @@ interface HeaderProps {
 
 function Header({ veranstaltung, expanded }: HeaderProps) {
   const titleStyle = { margin: 0, color: "#FFF" };
-  function T({ l, t }: { l: number; t: string }) {
+  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
       <Title level={l} style={titleStyle}>
         {t}
@@ -86,14 +86,20 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
     setVeranstaltung(veranst);
   }, [veranst]);
 
-  const dividerStyle = { marginTop: "4px", marginBottom: "4px", fontWeight: 600 };
+  const dividerStyle = {
+    marginTop: "4px",
+    marginBottom: "4px",
+    fontWeight: 600,
+  };
 
   const queryClient = useQueryClient();
 
   const mutateVeranstaltung = useMutation({
     mutationFn: saveVeranstaltung,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung", veranstaltung.url] });
+      queryClient.invalidateQueries({
+        queryKey: ["veranstaltung", veranstaltung.url],
+      });
       notification.open({
         message: "Speichern erfolgreich",
         description: "Die Veranstaltung wurde gespeichert",
@@ -105,7 +111,11 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
   function saveForm() {
     form.validateFields().then(async () => {
       const createLogWithDiff = (diff: string): ChangelistItem => {
-        return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: context?.currentUser?.id || "", diff };
+        return {
+          zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
+          bearbeiter: context?.currentUser?.id || "",
+          diff,
+        };
       };
       const veranst = form.getFieldsValue(true);
       const diff = differenceFor(initialValue, veranst);
@@ -188,7 +198,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
-          activeKey={expanded && veranstaltung.id}
+          activeKey={expanded ? veranstaltung.id : undefined}
           onChange={() => {
             setExpanded(!expanded);
           }}
@@ -197,7 +207,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
           <Panel
             className="team-block"
             style={{ backgroundColor: color }}
-            key={veranstaltung.id}
+            key={veranstaltung.id || ""}
             header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
             extra={<Extras veranstaltung={veranstaltung} />}
           >
@@ -256,7 +266,11 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
           <IconForSmallBlock size={12} iconName={overallState ? "HandThumbsUpFill" : "SignStopFill"} color={color} />
         </Tooltip>
       )}
-      <Tooltip title="Vorschau" color={token["custom-color-concert"]}>
+      <Tooltip
+        title="Vorschau"
+        // @ts-ignore
+        color={token["custom-color-concert"]}
+      >
         <span
           onClick={(event) => {
             // If you don't want click extra trigger collapse, you can prevent this:
@@ -267,6 +281,7 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
           <IconForSmallBlock
             size={16}
             iconName={"EyeFill"}
+            // @ts-ignore
             color={token["custom-color-concert"]}
             style={{
               margin: "-4px 0",

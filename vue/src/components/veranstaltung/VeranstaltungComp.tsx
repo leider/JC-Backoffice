@@ -23,7 +23,10 @@ import { useAuth } from "@/commons/auth";
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
-  const veranst = useQuery({ queryKey: ["veranstaltung", url], queryFn: () => veranstaltungForUrl(url || "") });
+  const veranst = useQuery({
+    queryKey: ["veranstaltung", url],
+    queryFn: () => veranstaltungForUrl(url || ""),
+  });
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
   const locations = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
 
@@ -58,7 +61,13 @@ export default function VeranstaltungComp() {
     mutationFn: saveVeranstaltung,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", url] });
-      navigate({ pathname: `/veranstaltung/${data.url}`, search: `page=${search.get("page")}` }, { replace: true });
+      navigate(
+        {
+          pathname: `/veranstaltung/${data.url}`,
+          search: `page=${search.get("page")}`,
+        },
+        { replace: true }
+      );
       notification.open({
         message: "Speichern erfolgreich",
         description: "Die Veranstaltung wurde gespeichert",
@@ -97,7 +106,11 @@ export default function VeranstaltungComp() {
   function saveForm() {
     form.validateFields().then(async () => {
       const createLogWithDiff = (diff: string): ChangelistItem => {
-        return { zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch, bearbeiter: context?.currentUser?.id || "", diff };
+        return {
+          zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
+          bearbeiter: context?.currentUser?.id || "",
+          diff,
+        };
       };
 
       const veranst = fromFormObject(form);
