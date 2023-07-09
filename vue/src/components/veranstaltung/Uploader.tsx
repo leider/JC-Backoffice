@@ -12,10 +12,10 @@ interface UploaderParams {
   id?: string;
   name: string[];
   typ: string;
-  onlyImages: boolean;
+  onlyImages?: boolean;
 }
 
-export default function Uploader({ form, id, name, typ, onlyImages }: UploaderParams) {
+export default function Uploader({ form, id, name, typ, onlyImages = false }: UploaderParams) {
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function Uploader({ form, id, name, typ, onlyImages }: UploaderPa
       <Col>
         <Space align="end">
           <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} specialTagRender={tagRender} />
-          <Upload {...uploadprops} accept={onlyImages && "image/*"}>
+          <Upload {...uploadprops} accept={onlyImages ? "image/*" : undefined}>
             <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
           </Upload>
           <Button

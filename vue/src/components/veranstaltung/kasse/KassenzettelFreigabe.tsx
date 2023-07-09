@@ -77,46 +77,46 @@ export function KassenzettelFreigabe({ form }: KassenzettelFreigabeParams) {
             renderWidget={(getFieldValue) => {
               const start: Dayjs = getFieldValue("startAndEnd").start;
               const vergangen = new DatumUhrzeit(start).istVor(new DatumUhrzeit());
-              return (
-                vergangen && (
-                  <DynamicItem
-                    nameOfDepending={["kasse", "kassenfreigabe"]}
-                    renderWidget={(getFieldValue) => {
-                      const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
-                      if (!freigabe) {
-                        const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
-                        return (
+              return vergangen ? (
+                <DynamicItem
+                  nameOfDepending={["kasse", "kassenfreigabe"]}
+                  renderWidget={(getFieldValue) => {
+                    const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
+                    if (!freigabe) {
+                      const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
+                      return (
+                        <Button
+                          block
+                          icon={<IconForSmallBlock iconName={"Unlock"} />}
+                          type="primary"
+                          onClick={freigeben}
+                          disabled={!darfFreigeben}
+                        >
+                          &nbsp;Kasse freigeben
+                        </Button>
+                      );
+                    } else {
+                      const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
+                      return (
+                        <>
                           <Button
                             block
-                            icon={<IconForSmallBlock iconName={"Unlock"} />}
+                            icon={<IconForSmallBlock iconName={"Lock"} />}
                             type="primary"
-                            onClick={freigeben}
-                            disabled={!darfFreigeben}
+                            danger
+                            onClick={freigabeAufheben}
+                            disabled={!darfFreigabeAufheben}
                           >
-                            &nbsp;Kasse freigeben
+                            &nbsp;Kasse ist freigegeben
                           </Button>
-                        );
-                      } else {
-                        const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
-                        return (
-                          <>
-                            <Button
-                              block
-                              icon={<IconForSmallBlock iconName={"Lock"} />}
-                              type="primary"
-                              danger
-                              onClick={freigabeAufheben}
-                              disabled={!darfFreigabeAufheben}
-                            >
-                              &nbsp;Kasse ist freigegeben
-                            </Button>
-                            <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
-                          </>
-                        );
-                      }
-                    }}
-                  />
-                )
+                          <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
+                        </>
+                      );
+                    }
+                  }}
+                />
+              ) : (
+                <></>
               );
             }}
           />

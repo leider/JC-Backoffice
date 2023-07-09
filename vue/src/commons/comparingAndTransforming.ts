@@ -1,5 +1,4 @@
 import { cloneDeep, isEqual } from "lodash";
-import { T } from "@fullcalendar/core/internal-common";
 
 /**
  * this function will modify data!

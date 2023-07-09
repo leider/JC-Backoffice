@@ -1,12 +1,10 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
-import React, { LegacyRef, useRef } from "react";
-import { EventInput } from "@fullcalendar/core";
-import { calendarEventSources } from "@/commons/loader-for-react";
-import { VNodeRef } from "vue/types/vnode";
+import React, { useRef } from "react";
+import { Event } from "jc-shared/programmheft/kalender";
 
-export default function HeftCalendar(props: { initialDate: string; events: [Event] }) {
+export default function HeftCalendar(props: { initialDate: string; events: Event[] }) {
   function renderEventContent(eventInfo: any) {
     return (
       <div style={colorFor(eventInfo)}>
@@ -14,7 +12,12 @@ export default function HeftCalendar(props: { initialDate: string; events: [Even
       </div>
     );
   }
-  function colorFor(event: { event: any }): { backgroundColor: string; borderColor: string; color: string; whiteSpace: any } {
+  function colorFor(event: { event: any }): {
+    backgroundColor: string;
+    borderColor: string;
+    color: string;
+    whiteSpace: any;
+  } {
     return {
       backgroundColor: event.event._def.extendedProps.farbe,
       borderColor: event.event._def.extendedProps.farbe,
@@ -23,10 +26,11 @@ export default function HeftCalendar(props: { initialDate: string; events: [Even
     };
   }
 
-  const calRef = useRef();
+  const calRef = useRef<FullCalendar>();
   calRef.current?.getApi().gotoDate(props.initialDate);
   return (
     <FullCalendar
+      // @ts-ignore
       ref={calRef}
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"

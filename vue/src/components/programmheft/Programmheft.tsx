@@ -40,7 +40,9 @@ export default function Programmheft() {
   });
   const [kalender, setKalender] = useState<Kalender>(new Kalender());
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
+  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
+    [index: string]: Veranstaltung[];
+  }>({});
   const [monate, setMonate] = useState<string[]>([]);
   const [unbestaetigte, setUnbestaetigte] = useState<Veranstaltung[]>([]);
 
@@ -94,7 +96,15 @@ export default function Programmheft() {
   }
   useEffect(initializeForm, [form, kalender]);
 
-  const editorOptions = useMemo(() => ({ status: false, spellChecker: false, sideBySideFullscreen: false, minHeight: "500px" }), []);
+  const editorOptions = useMemo(
+    () => ({
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      minHeight: "500px",
+    }),
+    []
+  );
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
@@ -112,7 +122,12 @@ export default function Programmheft() {
   }
 
   function rendered(veranst: Veranstaltung) {
-    return marked.parse(veranst.presse.text || "", { gfm: true, breaks: true, smartLists: true, pedantic: false });
+    return marked.parse(veranst.presse.text || "", {
+      gfm: true,
+      breaks: true,
+      smartLists: true,
+      pedantic: false,
+    });
   }
 
   return (
@@ -168,7 +183,13 @@ export default function Programmheft() {
       </Row>
       {unbestaetigte.length > 0 && <h2>Es gibt noch unbestätigte Veranstaltungen</h2>}
       {unbestaetigte.map((veranst) => (
-        <Link key={veranst.id} to={{ pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`, search: "page=allgemeines" }}>
+        <Link
+          key={veranst.id}
+          to={{
+            pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
+            search: "page=allgemeines",
+          }}
+        >
           {veranst.kopf.titelMitPrefix}
         </Link>
       ))}
@@ -191,9 +212,15 @@ export default function Programmheft() {
             {veranstaltungenNachMonat[monat].map((veranst) => (
               <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
                 <Collapse.Panel
+                  key={veranst.id || ""}
                   className="team-block"
                   header={
-                    <Link to={{ pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`, search: "page=presse" }}>
+                    <Link
+                      to={{
+                        pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
+                        search: "page=presse",
+                      }}
+                    >
                       <Typography.Title level={4} style={{ margin: 0 }}>
                         {veranst.datumForDisplayShort}
                       </Typography.Title>

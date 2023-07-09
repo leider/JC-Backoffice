@@ -12,9 +12,14 @@ import _ from "lodash";
 import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailRules() {
-  const mailRuleQuery = useQuery({ queryKey: ["mailRules"], queryFn: mailRulesRestCall });
+  const mailRuleQuery = useQuery({
+    queryKey: ["mailRules"],
+    queryFn: mailRulesRestCall,
+  });
   const [mailRules, setMailRules] = useState<MailRule[]>([]);
-  const [initialValue, setInitialValue] = useState<{ allRules: any[] }>({ allRules: [] });
+  const [initialValue, setInitialValue] = useState<{ allRules: any[] }>({
+    allRules: [],
+  });
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { notification } = App.useApp();

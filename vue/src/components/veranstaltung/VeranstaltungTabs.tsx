@@ -36,7 +36,10 @@ export default function VeranstaltungTabs({
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+    form,
+    preserve: true,
+  });
 
   useEffect(() => {
     const page = search.get("page") ?? "";
@@ -55,7 +58,14 @@ export default function VeranstaltungTabs({
     const farbe = color(type);
 
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
+      <b
+        style={{
+          margin: -16,
+          padding: 16,
+          backgroundColor: active ? farbe : "inherit",
+          color: active ? "#FFF" : farbe,
+        }}
+      >
         <IconForSmallBlock iconName={icon(type)} /> {title}
       </b>
     );

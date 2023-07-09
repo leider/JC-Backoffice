@@ -53,7 +53,12 @@ export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat,
                       ghost
                       icon={<IconForSmallBlock size={12} iconName="FileText" />}
                       size="small"
-                      onClick={() => navigate({ pathname: `/team/${yymm}`, search: "tab=pressetexte" })}
+                      onClick={() =>
+                        navigate({
+                          pathname: `/team/${yymm}`,
+                          search: "tab=pressetexte",
+                        })
+                      }
                     >
                       Pressetexte
                     </Button>
@@ -61,7 +66,12 @@ export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat,
                       ghost
                       icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
                       size="small"
-                      onClick={() => navigate({ pathname: `/team/${yymm}`, search: "tab=uebersicht" })}
+                      onClick={() =>
+                        navigate({
+                          pathname: `/team/${yymm}`,
+                          search: "tab=uebersicht",
+                        })
+                      }
                     >
                       Übersicht
                     </Button>

@@ -11,7 +11,10 @@ import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 
 export default function KalenderPage() {
-  const ferienIcalsQuery = useQuery({ queryKey: ["ferienIcals"], queryFn: kalender });
+  const ferienIcalsQuery = useQuery({
+    queryKey: ["ferienIcals"],
+    queryFn: kalender,
+  });
   const [ferienIcals, setFerienIcals] = useState<FerienIcals>(new FerienIcals());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);

@@ -53,7 +53,7 @@ export default function Users() {
 
   return (
     <>
-      <NewUserModal isOpen={newUserOpen} setIsOpen={setNewUserOpen} loadUsers={loadUsers} />
+      <NewUserModal isOpen={newUserOpen} setIsOpen={setNewUserOpen} />
       <Row gutter={8}>
         <Col span={24}>
           <PageHeader
@@ -70,7 +70,14 @@ export default function Users() {
                 buttonStyle="solid"
                 defaultValue="everybody"
                 onChange={(event) => {
-                  setSelectedUsers(users.filter((u) => (u.accessrights ? u.accessrights[event.target.value] : undefined)));
+                  setSelectedUsers(
+                    users.filter((u) =>
+                      u.accessrights
+                        ? // @ts-ignore
+                          u.accessrights[event.target.value]
+                        : undefined
+                    )
+                  );
                 }}
               />
             }

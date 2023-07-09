@@ -18,7 +18,7 @@ export default function CollapsibleForVeranstaltung({
   noTopBorder?: boolean;
   amount?: number;
 }) {
-  const [expanded, setExpanded] = useState("content");
+  const [expanded, setExpanded] = useState<string>("content");
 
   const { color } = useColorsAndIconsForSections(suffix as buttonType);
   const farbe = color();
@@ -26,8 +26,13 @@ export default function CollapsibleForVeranstaltung({
     <Collapse
       activeKey={expanded}
       expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-      onChange={(key) => setExpanded(key)}
-      style={{ marginTop: noTopBorder ? "" : "16px", backgroundColor: farbe, borderColor: farbe, color: "#FFF" }}
+      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
+      style={{
+        marginTop: noTopBorder ? "" : "16px",
+        backgroundColor: farbe,
+        borderColor: farbe,
+        color: "#FFF",
+      }}
     >
       <Collapse.Panel
         key="content"

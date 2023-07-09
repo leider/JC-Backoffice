@@ -8,7 +8,10 @@ import { Link, useParams } from "react-router-dom";
 
 export default function WikiSearchresults() {
   const { searchtext } = useParams();
-  const { data } = useQuery({ queryKey: ["wiki", `${searchtext}`], queryFn: () => searchWiki(searchtext!) });
+  const { data } = useQuery({
+    queryKey: ["wiki", `${searchtext}`],
+    queryFn: () => searchWiki(searchtext!),
+  });
   const [matches, setMatches] = useState<{ pageName: string; line: string; text: string }[]>([]);
 
   useEffect(() => {

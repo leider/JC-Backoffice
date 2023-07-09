@@ -25,7 +25,7 @@ interface HeaderProps {
 function Header({ veranstaltung, expanded }: HeaderProps) {
   const { token } = theme.useToken();
   const titleStyle = { margin: 0, color: "#FFF" };
-  function T({ l, t }: { l: number; t: string }) {
+  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
       <Title level={l} style={titleStyle}>
         {t}
@@ -62,7 +62,11 @@ interface ContentProps {
 }
 
 function Content({ usersAsOptions, veranstaltung }: ContentProps) {
-  const dividerStyle = { marginTop: "4px", marginBottom: "4px", fontWeight: 600 };
+  const dividerStyle = {
+    marginTop: "4px",
+    marginBottom: "4px",
+    fontWeight: 600,
+  };
 
   return (
     <div style={{ padding: 8 }}>
@@ -108,7 +112,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
-          activeKey={expanded && veranstaltung.id}
+          activeKey={expanded ? veranstaltung.id : ""}
           onChange={() => {
             setExpanded(!expanded);
           }}
@@ -117,9 +121,10 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
           <Panel
             className="team-block"
             style={{ backgroundColor: color }}
-            key={veranstaltung.id}
+            key={veranstaltung.id || ""}
             header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
             extra={
+              // @ts-ignore
               <Tooltip title="Vorschau" color={token["custom-color-concert"]}>
                 <span
                   onClick={(event) => {
@@ -131,6 +136,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
                   <IconForSmallBlock
                     size={16}
                     iconName={"EyeFill"}
+                    // @ts-ignore
                     color={token["custom-color-concert"]}
                     style={{
                       margin: "-4px 0",

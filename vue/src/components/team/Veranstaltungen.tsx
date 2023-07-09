@@ -33,7 +33,9 @@ export default function Veranstaltungen() {
   const { context } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
+  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
+    [index: string]: Veranstaltung[];
+  }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
   document.title = "Veranstaltungen";
@@ -48,9 +50,21 @@ export default function Veranstaltungen() {
   }, [veranstaltungen, context]);
 
   const periods = [
-    { label: "Zukünftige", key: "zukuenftige", onClick: () => setSearch({ period: "zukuenftige" }) },
-    { label: "Vergangene", key: "vergangene", onClick: () => setSearch({ period: "vergangene" }) },
-    { label: "Alle", key: "alle", onClick: () => setSearch({ period: "alle" }) },
+    {
+      label: "Zukünftige",
+      key: "zukuenftige",
+      onClick: () => setSearch({ period: "zukuenftige" }),
+    },
+    {
+      label: "Vergangene",
+      key: "vergangene",
+      onClick: () => setSearch({ period: "vergangene" }),
+    },
+    {
+      label: "Alle",
+      key: "alle",
+      onClick: () => setSearch({ period: "alle" }),
+    },
   ];
   const [period, setPeriod] = useState<string>("Zukünftige");
 

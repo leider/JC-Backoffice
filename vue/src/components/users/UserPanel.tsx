@@ -47,12 +47,12 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
         setIsOpen={setEditUserOpen}
         loadUsers={loadUsers}
         user={user}
-        isSuperUser={currentUser.accessrights?.isSuperuser}
+        isSuperUser={currentUser.accessrights?.isSuperuser || false}
       />
       <ChangePasswordModal isOpen={passwordOpen} setIsOpen={setPasswordOpen} user={user} />
       <Collapse
         size="small"
-        activeKey={expanded && user.id}
+        activeKey={expanded ? user.id : undefined}
         onChange={() => {
           setExpanded(!expanded);
         }}

@@ -25,11 +25,23 @@ export default function VeranstaltungPageHeader({
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
-  const confirmed = Form.useWatch(["kopf", "confirmed"], { form, preserve: true });
-  const abgesagt = Form.useWatch(["kopf", "abgesagt"], { form, preserve: true });
-  const eventTyp = Form.useWatch(["kopf", "eventTyp"], { form, preserve: true });
+  const confirmed = Form.useWatch(["kopf", "confirmed"], {
+    form,
+    preserve: true,
+  });
+  const abgesagt = Form.useWatch(["kopf", "abgesagt"], {
+    form,
+    preserve: true,
+  });
+  const eventTyp = Form.useWatch(["kopf", "eventTyp"], {
+    form,
+    preserve: true,
+  });
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = Form.useWatch(["startAndEnd", "start"], { form, preserve: true });
+  const startDate = Form.useWatch(["startAndEnd", "start"], {
+    form,
+    preserve: true,
+  });
 
   function updateState() {
     const tags = [];
@@ -78,7 +90,18 @@ export default function VeranstaltungPageHeader({
       ]}
       tags={tagsForTitle}
     >
-      {isNew && <b style={{ color: token["custom-color-ausgaben"] }}> (Denk daran, alle Felder zu überprüfen und auszufüllen)</b>}
+      {isNew && (
+        <b
+          style={{
+            color:
+              // @ts-ignore
+              token["custom-color-ausgaben"],
+          }}
+        >
+          {" "}
+          (Denk daran, alle Felder zu überprüfen und auszufüllen)
+        </b>
+      )}
     </PageHeader>
   );
 }

@@ -14,7 +14,10 @@ import { useQuery } from "@tanstack/react-query";
 function Team() {
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
 
-  const veranstQuery = useQuery({ queryKey: ["veranstaltung"], queryFn: () => veranstaltungenForTeam("zukuenftige") });
+  const veranstQuery = useQuery({
+    queryKey: ["veranstaltung"],
+    queryFn: () => veranstaltungenForTeam("zukuenftige"),
+  });
   const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
 
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
@@ -37,7 +40,9 @@ function Team() {
     setRealadmin(!!accessrights?.isSuperuser);
   }, [context]);
 
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{ [index: string]: Veranstaltung[] }>({});
+  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
+    [index: string]: Veranstaltung[];
+  }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
   document.title = "Team";
