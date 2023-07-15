@@ -9,6 +9,8 @@ import MailRule from "jc-shared/mail/mailRule.js";
 import { resToJson } from "../lib/commons/replies.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import store from "../lib/users/userstore.js";
+import misc from "jc-shared/commons/misc.js";
+import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
 
 const app = express();
 
@@ -19,6 +21,22 @@ app.get("/mailrule", async (req, res) => {
   const rules = await mailstore.all();
   const result = rules?.map((r) => r.toJSON());
   resToJson(res, result);
+});
+
+app.post("/mailrules", async (req, res) => {
+  if (!(req.user as User)?.accessrights?.isSuperuser) {
+    return res.sendStatus(403);
+  }
+  const oldRules = await mailstore.all();
+  const newRules = misc.toObjectList(MailRule, req.body);
+  const { changed, deletedIds } = calculateChangedAndDeleted(
+    newRules.map((r) => r.toJSON()),
+    oldRules.map((r) => r.toJSON())
+  );
+
+  await mailstore.saveAll(changed);
+  await mailstore.removeAll(deletedIds);
+  resToJson(res, await mailstore.all());
 });
 
 app.post("/mailrule", async (req, res) => {
