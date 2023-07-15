@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteTermin, saveTermin, termine as allTermine } from "@/commons/loader-for-react";
+import { saveTermine, termine as allTermine } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
@@ -21,8 +21,6 @@ export default function TerminePage() {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
-  const saveCollection = useSaveCollection(notification);
-
   document.title = "Termine";
 
   useEffect(() => {
@@ -31,15 +29,8 @@ export default function TerminePage() {
     }
   }, [termineQuery.data]);
 
-  const mutateTermin = useMutation({
-    mutationFn: saveTermin,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["termine"] });
-    },
-  });
-
-  const deleteTerminMutation = useMutation({
-    mutationFn: deleteTermin,
+  const mutateTermine = useMutation({
+    mutationFn: saveTermine,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["termine"] });
     },
@@ -62,15 +53,9 @@ export default function TerminePage() {
   useEffect(initializeForm, [form, termine]);
 
   function saveForm() {
-    form.validateFields().then(
-      saveCollection({
-        oldItems: initialValue.allTermine,
-        newItems: form.getFieldsValue(true).allTermine,
-        saveMutation: mutateTermin,
-        deleteMutation: deleteTerminMutation,
-        mapper: (item) => fromFormObjectAsAny(item),
-      })
-    );
+    form.validateFields().then(async () => {
+      mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
+    });
   }
 
   const columnDescriptions: CollectionColDesc[] = [

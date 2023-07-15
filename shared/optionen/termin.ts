@@ -17,7 +17,6 @@ export interface TerminEvent {
 export default class Termin {
   id?: string;
   beschreibung?: string;
-  originalBeschreibung?: string;
   typ: TerminType = "Sonstiges";
   startDate: Date = new DatumUhrzeit().toJSDate;
   endDate: Date = this.startDate;
@@ -27,7 +26,6 @@ export default class Termin {
     if (object) {
       this.id = object.id;
       this.beschreibung = object.beschreibung;
-      this.originalBeschreibung = object.beschreibung;
       this.typ = object.typ;
       this.startDate = Misc.stringOrDateToDate(object.startDate) || new DatumUhrzeit().toJSDate;
       this.endDate = Misc.stringOrDateToDate(object.endDate) || this.startDate;

@@ -9,6 +9,8 @@ import User from "jc-shared/user/user.js";
 import store from "../lib/optionen/optionenstore.js";
 import terminstore from "../lib/optionen/terminstore.js";
 import { resToJson } from "../lib/commons/replies.js";
+import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
+import misc from "jc-shared/commons/misc.js";
 
 const app = express();
 
@@ -63,23 +65,23 @@ app.get("/termine", async (req, res) => {
   resToJson(res, termine);
 });
 
-app.post("/termin", async (req: Request, res: Response) => {
+app.post("/termine", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
-  const termin = new Termin(req.body);
-  delete termin.originalBeschreibung;
-  await terminstore.save(termin);
-  resToJson(res, termin);
-});
-
-app.delete("/termin", async (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
+  function deleteLeagcyField(termin: any) {
+    delete termin.originalBeschreibung; // legacy field
+    return termin;
   }
-  const id = req.body.id;
-  await terminstore.remove(id);
-  resToJson(res);
-});
 
+  const oldTermine = ((await terminstore.alle()) as (Termin & { id: string })[]).map(deleteLeagcyField);
+  const newTermine = (misc.toObjectList(Termin, req.body) as (Termin & { id: string })[]).map(deleteLeagcyField);
+  const { changed, deletedIds } = calculateChangedAndDeleted(
+    newTermine.map((t) => t.toJSON()),
+    oldTermine.map((t) => t.toJSON())
+  );
+  await terminstore.saveAll(changed);
+  await terminstore.removeAll(deletedIds);
+  resToJson(res, await terminstore.alle());
+});
 export default app;

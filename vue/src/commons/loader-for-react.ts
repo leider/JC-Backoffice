@@ -314,20 +314,11 @@ export async function termine() {
   return result?.map((r: any) => new Termin(r)) || [];
 }
 
-export async function saveTermin(termin: Termin) {
+export async function saveTermine(termine: Termin[]) {
   return standardFetch({
     method: "POST",
-    url: "/rest/termin",
-    data: termin,
-    contentType: "json",
-  });
-}
-
-export async function deleteTermin(terminID: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/termin",
-    data: { id: terminID },
+    url: "/rest/termine",
+    data: termine,
     contentType: "json",
   });
 }
