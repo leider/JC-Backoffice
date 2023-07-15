@@ -386,20 +386,11 @@ export async function mailRules(): Promise<MailRule[]> {
   return result?.map((each: any) => new MailRule(each)) || [];
 }
 
-export async function deleteMailRule(ruleID: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/mailrule",
-    data: { id: ruleID },
-    contentType: "json",
-  });
-}
-
-export async function saveMailRule(rule: MailRule) {
+export async function saveMailRules(rules: MailRule[]) {
   return standardFetch({
     method: "POST",
-    url: "/rest/mailrule",
-    data: rule,
+    url: "/rest/mailrules",
+    data: rules,
     contentType: "json",
   });
 }

@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteMailRule, mailRules as mailRulesRestCall, saveMailRule } from "@/commons/loader-for-react";
+import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
@@ -8,8 +8,6 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
-import _ from "lodash";
-import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -24,8 +22,6 @@ export default function MailRules() {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
-  const saveCollection = useSaveCollection(notification);
-
   document.title = "Mailregeln";
 
   useEffect(() => {
@@ -35,14 +31,7 @@ export default function MailRules() {
   }, [mailRuleQuery.data]);
 
   const mutateRules = useMutation({
-    mutationFn: saveMailRule,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["mailRules"] });
-    },
-  });
-
-  const deleteRules = useMutation({
-    mutationFn: deleteMailRule,
+    mutationFn: saveMailRules,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mailRules"] });
     },
@@ -61,15 +50,14 @@ export default function MailRules() {
   useEffect(initializeForm, [form, mailRules]);
 
   function saveForm() {
-    form.validateFields().then(
-      saveCollection({
-        newItems: form.getFieldsValue(true).allRules,
-        oldItems: initialValue.allRules,
-        saveMutation: mutateRules,
-        deleteMutation: deleteRules,
-        mapper: (item) => new MailRule(_.cloneDeep(item)),
-      })
-    );
+    form.validateFields().then(async () => {
+      mutateRules.mutate(form.getFieldsValue(true).allRules);
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Änderungen wurden gespeichert",
+        duration: 5,
+      });
+    });
   }
 
   const columnDescriptions: CollectionColDesc[] = [

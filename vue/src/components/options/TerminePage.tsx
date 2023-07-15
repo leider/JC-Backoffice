@@ -9,7 +9,6 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
-import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -55,6 +54,11 @@ export default function TerminePage() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Änderungen wurden gespeichert",
+        duration: 5,
+      });
     });
   }
 
