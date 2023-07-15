@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 1969",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
     "@ant-design/pro-components": "2.6.3",

@@ -67,6 +67,22 @@ class Persistence {
     );
   }
 
+  async removeAllByIds(ids: string[]) {
+    if (ids === null || ids === undefined) {
+      throw new Error("Given object has no valid id");
+    }
+    if (ids.length === 0) {
+      return { acknowledged: true, deletedCount: 0 };
+    }
+    const db = await getOpenDb();
+    return db.collection(this.collectionName).deleteMany(
+      { id: { $in: ids } },
+      {
+        writeConcern: { w: 1 },
+      }
+    );
+  }
+
   saveAll(objects: Array<object & { id?: string }>) {
     return Promise.all(objects.map((obj) => this.save(obj)));
   }

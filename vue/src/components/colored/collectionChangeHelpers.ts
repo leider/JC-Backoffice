@@ -40,16 +40,3 @@ export function useSaveCollection(notification: NotificationInstance) {
   }
   return saveCollection;
 }
-export function saveCollection({ oldItems, newItems, mapper, saveMutation, deleteMutation }: SaveCollectionParams) {
-  const { notification } = App.useApp();
-  return async () => {
-    const { deletedIds, changed } = calculateChangedAndDeleted(newItems, oldItems, mapper);
-    changed.forEach((item) => saveMutation.mutate(item));
-    deletedIds.forEach((idAsName) => deleteMutation.mutate(idAsName));
-    notification.open({
-      message: "Speichern erfolgreich",
-      description: "Die Änderungen wurden gespeichert",
-      duration: 5,
-    });
-  };
-}

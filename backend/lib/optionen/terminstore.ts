@@ -29,11 +29,20 @@ export default {
     return termin;
   },
 
+  saveAll: async function saveAll(termine: Termin[]) {
+    await persistence.saveAll(termine);
+    return termine;
+  },
+
   termineBetween: async function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
     return byDateRange(rangeFrom, rangeTo, { startDate: 1 });
   },
 
   remove: async function remove(id: string) {
     return persistence.removeById(id);
+  },
+
+  removeAll: async function removeAll(ids: string[]) {
+    return persistence.removeAllByIds(ids);
   },
 };
