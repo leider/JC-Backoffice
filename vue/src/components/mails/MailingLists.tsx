@@ -1,24 +1,20 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { allUsers, deleteMailinglist, saveMailinglist } from "@/commons/loader-for-react";
+import { allUsers, saveMailinglists } from "@/commons/loader-for-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, notification, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
-import { fromFormObjectAsAny, toFormObject } from "@/components/mails/mailinglistCompUtils";
-import { useSaveCollection } from "@/components/colored/collectionChangeHelpers";
-import User from "jc-shared/user/user.ts";
 
 export default function MailingLists() {
   const usersQuery = useQuery({
     queryKey: ["users"],
     queryFn: () => allUsers(),
   });
-  const [users, setUsers] = useState<User[]>([]);
   const [mailingLists, setMailingLists] = useState<any[]>([]);
   const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
     allLists: [],
@@ -28,26 +24,17 @@ export default function MailingLists() {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
-  const saveCollection = useSaveCollection(notification);
   document.title = "Maillinglisten";
 
   useEffect(() => {
     if (usersQuery.data) {
-      setUsers(usersQuery.data);
       setMailingLists(new Users(usersQuery.data).mailinglisten);
       setUsersAsOptions(usersQuery.data.map((user) => ({ label: user.name, value: user.id })));
     }
   }, [usersQuery.data]);
 
   const mutateLists = useMutation({
-    mutationFn: saveMailinglist,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-    },
-  });
-
-  const deleteLists = useMutation({
-    mutationFn: deleteMailinglist,
+    mutationFn: saveMailinglists,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
@@ -56,6 +43,12 @@ export default function MailingLists() {
   const [form] = Form.useForm<{ allLists: Mailingliste[] }>();
 
   function initializeForm() {
+    function toFormObject(liste: Mailingliste): object {
+      return {
+        name: liste.name,
+        users: liste.users.map((u) => u.id),
+      };
+    }
     const deepCopy = { allLists: mailingLists.map((l) => toFormObject(l)) };
     form.setFieldsValue(deepCopy);
     const initial = { allLists: mailingLists.map((l) => toFormObject(l)) };
@@ -66,15 +59,14 @@ export default function MailingLists() {
   useEffect(initializeForm, [form, mailingLists]);
 
   function saveForm() {
-    form.validateFields().then(
-      saveCollection({
-        oldItems: initialValue.allLists,
-        newItems: form.getFieldsValue(true).allLists,
-        mapper: (item: any) => fromFormObjectAsAny(item, users),
-        saveMutation: mutateLists,
-        deleteMutation: deleteLists,
-      })
-    );
+    form.validateFields().then(async () => {
+      mutateLists.mutate(form.getFieldsValue(true).allLists);
+      notification.open({
+        message: "Speichern erfolgreich",
+        description: "Die Änderungen wurden gespeichert",
+        duration: 5,
+      });
+    });
   }
 
   const columnDescriptions: CollectionColDesc[] = [

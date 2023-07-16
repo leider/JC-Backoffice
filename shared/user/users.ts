@@ -6,13 +6,11 @@ import User from "./user.js";
 
 export class Mailingliste {
   name: string;
-  originalName?: string;
   users: User[];
 
-  constructor(name: string, usersInListe: User[], originalName?: string) {
+  constructor(name: string, usersInListe: User[]) {
     this.name = name;
     this.users = usersInListe;
-    this.originalName = originalName || name;
   }
 }
 
