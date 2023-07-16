@@ -1,9 +1,9 @@
 import { Button, Col, FormInstance, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
-import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
+import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { IconForSmallBlock } from "@/components/Icon";
 import React, { useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
-import { uploadFile } from "@/commons/loader-for-react";
+import { uploadFile } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 

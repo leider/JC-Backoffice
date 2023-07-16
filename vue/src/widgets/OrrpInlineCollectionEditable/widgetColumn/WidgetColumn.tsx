@@ -3,11 +3,11 @@ import React, { FunctionComponent } from "react";
 
 import { Column } from "../column/Column";
 import { IWidgetColumn } from "./IWidgetColumn";
-import { TextField } from "@/widgets-react/TextField";
-import SingleSelect from "@/widgets-react/SingleSelect";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import CheckItem from "@/widgets-react/CheckItem";
-import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
+import { TextField } from "@/widgets/TextField";
+import SingleSelect from "@/widgets/SingleSelect";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import CheckItem from "@/widgets/CheckItem";
+import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
 
 /**

@@ -2,7 +2,7 @@ import { App, Col, Row, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import { useAuth } from "@/commons/auth";
-import { addUserToSection, removeUserFromSection, saveVeranstaltung } from "@/commons/loader-for-react";
+import { addUserToSection, removeUserFromSection, saveVeranstaltung } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
 import { ButtonStaff } from "@/components/Buttons";

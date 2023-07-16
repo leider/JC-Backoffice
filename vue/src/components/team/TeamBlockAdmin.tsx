@@ -13,7 +13,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/auth";
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveVeranstaltung } from "@/commons/loader-for-react";
+import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
 
 const { Title } = Typography;

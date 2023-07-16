@@ -3,11 +3,11 @@ import { Col, Form, FormInstance, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { TextField } from "@/widgets-react/TextField";
+import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import SingleSelect from "@/widgets-react/SingleSelect";
+import SingleSelect from "@/widgets/SingleSelect";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];

@@ -1,8 +1,8 @@
 import { Col, Row } from "antd";
-import { TextField } from "@/widgets-react/TextField";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
-import SingleSelect from "@/widgets-react/SingleSelect";
+import { TextField } from "@/widgets/TextField";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
+import SingleSelect from "@/widgets/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
 import React from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";

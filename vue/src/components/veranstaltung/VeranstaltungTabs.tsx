@@ -13,6 +13,7 @@ import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "@/commons/auth.tsx";
 
 export interface TabProps {
   form: FormInstance<Veranstaltung>;
@@ -35,6 +36,8 @@ export default function VeranstaltungTabs({
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
+  const { context } = useAuth();
+  const onlyKasse = !context?.currentUser.accessrights?.isOrgaTeam;
 
   const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
     form,
@@ -71,6 +74,11 @@ export default function VeranstaltungTabs({
     );
   }
 
+  const kasseTab = {
+    key: "kasse",
+    label: <TabLabel type="kasse" title="Abendkasse" />,
+    children: <TabKasse veranstaltung={veranstaltung} form={form} />,
+  };
   const allTabs: TabsProps["items"] = [
     {
       key: "allgemeines",
@@ -92,11 +100,7 @@ export default function VeranstaltungTabs({
       label: <TabLabel type="hotel" title="Hotel" />,
       children: <TabHotel veranstaltung={veranstaltung} optionen={optionen} form={form} />,
     },
-    {
-      key: "kasse",
-      label: <TabLabel type="kasse" title="Abendkasse" />,
-      children: <TabKasse veranstaltung={veranstaltung} form={form} />,
-    },
+    kasseTab,
     {
       key: "presse",
       label: <TabLabel type="presse" title="Presse" />,
@@ -105,6 +109,9 @@ export default function VeranstaltungTabs({
   ];
 
   useEffect(() => {
+    if (onlyKasse) {
+      return setTabs([kasseTab]);
+    }
     if (brauchtHotel) {
       setTabs(allTabs);
     } else {
@@ -112,7 +119,7 @@ export default function VeranstaltungTabs({
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [brauchtHotel, optionen, activePage, veranstaltung]);
+  }, [brauchtHotel, optionen, activePage, veranstaltung, onlyKasse]);
 
   return (
     <Tabs

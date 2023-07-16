@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Checkbox, Col, Form, FormInstance, Row, Select, SelectProps } from "antd";
-import { TextField } from "@/widgets-react/TextField";
-import StartEndPickers from "@/widgets-react/StartEndPickers";
-import SingleSelect from "@/widgets-react/SingleSelect";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import CheckItem from "@/widgets-react/CheckItem";
+import { TextField } from "@/widgets/TextField";
+import StartEndPickers from "@/widgets/StartEndPickers";
+import SingleSelect from "@/widgets/SingleSelect";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import CheckItem from "@/widgets/CheckItem";
 import { useAuth } from "@/commons/auth";
-import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
+import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {

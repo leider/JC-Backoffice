@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
+import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Dropdown, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";

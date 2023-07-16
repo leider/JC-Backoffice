@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
 import React from "react";
 import { EventInput } from "@fullcalendar/core";
-import { calendarEventSources } from "@/commons/loader-for-react";
+import { calendarEventSources } from "@/commons/loader.ts";
 
 export default function TeamCalendar() {
   function getEvents(

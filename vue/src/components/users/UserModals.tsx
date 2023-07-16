@@ -1,11 +1,11 @@
 import { Col, Form, FormInstance, Input, Modal, notification, Row } from "antd";
-import { changePassword, saveNewUser, saveUser } from "@/commons/loader-for-react";
+import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { PageHeader } from "@ant-design/pro-layout";
-import { TextField } from "@/widgets-react/TextField";
-import SingleSelect from "@/widgets-react/SingleSelect";
-import CheckItem from "@/widgets-react/CheckItem";
+import { TextField } from "@/widgets/TextField";
+import SingleSelect from "@/widgets/SingleSelect";
+import CheckItem from "@/widgets/CheckItem";
 import React, { useEffect, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

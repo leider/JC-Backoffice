@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
 import User from "jc-shared/user/user";
-import { currentUser, logoutManually, wikisubdirs } from "@/commons/loader-for-react";
+import { currentUser, logoutManually, wikisubdirs } from "@/commons/loader.ts";
 
 class AuthApi {
   loginPost(name: string, pass: string) {

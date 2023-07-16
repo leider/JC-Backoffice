@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { searchWiki } from "@/commons/loader-for-react";
+import { searchWiki } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";

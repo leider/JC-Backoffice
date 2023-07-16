@@ -2,7 +2,7 @@ import { App, Button, ConfigProvider } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteVeranstaltungWithId } from "@/commons/loader-for-react";
+import { deleteVeranstaltungWithId } from "@/commons/loader.ts";
 
 type ButtonProps = {
   disabled?: boolean;

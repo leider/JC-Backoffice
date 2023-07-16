@@ -9,7 +9,7 @@ import {
   saveOptionen,
   saveVeranstaltung,
   veranstaltungForUrl,
-} from "@/commons/loader-for-react";
+} from "@/commons/loader.ts";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import OptionValues from "jc-shared/optionen/optionValues";

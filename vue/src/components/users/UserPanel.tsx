@@ -6,7 +6,7 @@ import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { ButtonInUsers } from "@/components/Buttons";
 import { IconForSmallBlock } from "@/components/Icon";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
-import { deleteUser } from "@/commons/loader-for-react";
+import { deleteUser } from "@/commons/loader.ts";
 
 export default function UserPanel({ user, currentUser, loadUsers }: { user: User; currentUser: User; loadUsers: () => void }) {
   const [expanded, setExpanded] = useState<boolean>(false);
