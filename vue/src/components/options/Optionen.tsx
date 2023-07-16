@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { optionen as optionenRestCall, saveOptionen } from "@/commons/loader-for-react";
+import { optionen as optionenRestCall, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
@@ -8,7 +8,7 @@ import { App, Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
+import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 
 export default function Optionen() {

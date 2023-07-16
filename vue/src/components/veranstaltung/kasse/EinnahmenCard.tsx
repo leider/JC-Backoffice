@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import { TextField } from "@/widgets-react/TextField";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/veranstaltung/kasse";
 import { KasseCardProps } from "@/components/veranstaltung/kasse/TabKasse";
 

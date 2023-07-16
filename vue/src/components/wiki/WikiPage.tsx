@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { saveWikiPage, wikiPage } from "@/commons/loader-for-react";
+import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { App, Button, Col, Form, Input, Row } from "antd";

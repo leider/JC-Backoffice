@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader-for-react";
+import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { App, Button, Col, Collapse, Form, Row, Typography } from "antd";

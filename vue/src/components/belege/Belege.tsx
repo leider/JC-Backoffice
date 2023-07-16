@@ -1,5 +1,5 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { uploadBeleg } from "@/commons/loader-for-react";
+import { uploadBeleg } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Button, Col, DatePicker, Form, Row, Upload, UploadFile, UploadProps } from "antd";
@@ -47,8 +47,7 @@ export default function Belege() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const uploadprops: UploadProps = {
-    // @ts-ignore
-    onRemove: (file) => {
+    onRemove: () => {
       setFileList([]);
     },
     beforeUpload: (file) => {

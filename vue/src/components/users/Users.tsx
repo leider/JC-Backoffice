@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { allUsers } from "@/commons/loader-for-react";
+import { allUsers } from "@/commons/loader.ts";
 import { Col, Radio, Row } from "antd";
 import { useAuth } from "@/commons/auth";
-import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { PageHeader } from "@ant-design/pro-layout";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as icons from "react-bootstrap-icons";

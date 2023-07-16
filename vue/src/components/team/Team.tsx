@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { allUsers, veranstaltungenForTeam } from "@/commons/loader-for-react";
+import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
 import { Col, Row } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
-import ButtonWithIcon from "@/widgets-react/ButtonWithIcon";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";

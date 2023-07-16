@@ -1,12 +1,12 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader-for-react";
+import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
+import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 
 export default function MailRules() {

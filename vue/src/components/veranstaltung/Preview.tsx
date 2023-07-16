@@ -6,7 +6,7 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, veranstaltungForUrl } from "@/commons/loader-for-react";
+import { allUsers, veranstaltungForUrl } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
@@ -14,10 +14,14 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import renderer from "jc-shared/commons/renderer";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 import Kontakt from "jc-shared/veranstaltung/kontakt";
+import { useAuth } from "@/commons/auth.tsx";
 
 function ButtonAbendkasse({ callback }: { callback: () => void }) {
   const { color, icon } = useColorsAndIconsForSections("kasse");
-
+  const { context } = useAuth();
+  if (!context?.currentUser.accessrights?.isAbendkasse) {
+    return;
+  }
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
       <Tooltip title="Abendkasse" color={color()}>
@@ -52,6 +56,9 @@ function StaffList({
   }
   if (parts.normal) {
     names = names.concat(usersForNames(staff[parts.normal]).map((user) => ({ user, bold: false })));
+  }
+  if (names.length === 0) {
+    names.push({ user: new User({ name: "n.a." }), bold: false });
   }
 
   function renderItem(item: { user: User; bold: boolean }) {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, Form, FormInstance, Row, Select } from "antd";
-import SingleSelect from "@/widgets-react/SingleSelect";
+import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/veranstaltung/vertrag";
-import { DynamicItem } from "@/widgets-react/DynamicItem";
+import { DynamicItem } from "@/widgets/DynamicItem";
 import { useAuth } from "@/commons/auth";
-import { openVertrag } from "@/commons/loader-for-react";
+import { openVertrag } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Uploader from "@/components/veranstaltung/Uploader";
 

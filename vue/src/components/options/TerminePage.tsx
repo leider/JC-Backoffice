@@ -1,12 +1,12 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { saveTermine, termine as allTermine } from "@/commons/loader-for-react";
+import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
+import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
 

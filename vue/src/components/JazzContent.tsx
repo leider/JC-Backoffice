@@ -5,7 +5,7 @@ import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { LoginState, useAuth } from "@/commons/auth";
 import { IconForSmallBlock } from "@/components/Icon";
 import { ItemType } from "antd/es/menu/hooks/useItems";
-import { wikisubdirs } from "@/commons/loader-for-react";
+import { wikisubdirs } from "@/commons/loader.ts";
 
 const { Header, Content } = Layout;
 enum menuKeys {
@@ -55,11 +55,30 @@ const JazzContent: React.FC = () => {
         icon: <IconForSmallBlock iconName="Speaker" />,
         label: <Link to="/veranstaltungen">Veranstaltungen</Link>,
       });
-      localItems.push({
-        key: menuKeys.programmheft,
-        icon: <IconForSmallBlock iconName="Calendar2Check" />,
-        label: <Link to="/programmheft">Programmheft</Link>,
-      });
+      if (context?.currentUser?.accessrights?.isSuperuser) {
+        localItems.push({
+          key: menuKeys.mail,
+          icon: <IconForSmallBlock iconName="EnvelopeFill" />,
+          label: "Mails...",
+          children: [
+            {
+              key: menuKeys.mailrules,
+              icon: <IconForSmallBlock iconName="ListStars" />,
+              label: <Link to="/mailrules">Regeln</Link>,
+            },
+            {
+              key: menuKeys.mailinglists,
+              icon: <IconForSmallBlock iconName="ListCheck" />,
+              label: <Link to="/mailinglists">Listen</Link>,
+            },
+            {
+              key: menuKeys.sendmail,
+              icon: <IconForSmallBlock iconName="Send" />,
+              label: <Link to="/sendmail">Mail senden...</Link>,
+            },
+          ],
+        });
+      }
       const optionenChildren: ItemType[] = [
         {
           type: "group",
@@ -109,28 +128,6 @@ const JazzContent: React.FC = () => {
           key: menuKeys.imageoverview,
           label: <Link to="/imageoverview">Bilder verwalten</Link>,
         });
-        localItems.push({
-          key: menuKeys.mail,
-          icon: <IconForSmallBlock iconName="EnvelopeFill" />,
-          label: "Mails...",
-          children: [
-            {
-              key: menuKeys.mailrules,
-              icon: <IconForSmallBlock iconName="ListStars" />,
-              label: <Link to="/mailrules">Regeln</Link>,
-            },
-            {
-              key: menuKeys.mailinglists,
-              icon: <IconForSmallBlock iconName="ListCheck" />,
-              label: <Link to="/mailinglists">Listen</Link>,
-            },
-            {
-              key: menuKeys.sendmail,
-              icon: <IconForSmallBlock iconName="Send" />,
-              label: <Link to="/sendmail">Mail senden...</Link>,
-            },
-          ],
-        });
       }
     }
     localItems.push({
@@ -143,6 +140,13 @@ const JazzContent: React.FC = () => {
       icon: <IconForSmallBlock iconName="Camera" />,
       label: <Link to="/belege">Belege</Link>,
     });
+    if (context?.currentUser?.accessrights?.isOrgaTeam) {
+      localItems.push({
+        key: menuKeys.programmheft,
+        icon: <IconForSmallBlock iconName="Calendar2Check" />,
+        label: <Link to="/programmheft">Programmheft</Link>,
+      });
+    }
     if (subdirs.length > 0) {
       const wikisubdirEntries = () =>
         subdirs.map((dir) => {

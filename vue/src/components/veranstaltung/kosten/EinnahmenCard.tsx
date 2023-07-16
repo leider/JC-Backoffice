@@ -3,12 +3,12 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, FormInstance, Row } from "antd";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import PreisprofilSelect from "@/widgets-react/PreisprofilSelect";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
+import PreisprofilSelect from "@/widgets/PreisprofilSelect";
+import { NumberInput } from "@/widgets/numericInputWidgets";
 import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
-import { DynamicItem } from "@/widgets-react/DynamicItem";
+import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
-import { NumberInputWithDirectValue } from "@/widgets-react/numericInputWidgets/NumericInputs";
+import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 
 interface EinnahmenCardParams {
   optionen: OptionValues;

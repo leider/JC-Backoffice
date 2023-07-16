@@ -1,13 +1,13 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { kalender, saveKalender } from "@/commons/loader-for-react";
+import { kalender, saveKalender } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets-react/OrrpInlineCollectionEditable";
+import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 
 export default function KalenderPage() {

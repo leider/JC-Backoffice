@@ -3,13 +3,13 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, FormInstance, Row } from "antd";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
-import SingleSelect from "@/widgets-react/SingleSelect";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import SingleSelect from "@/widgets/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
-import { DynamicItem } from "@/widgets-react/DynamicItem";
+import { DynamicItem } from "@/widgets/DynamicItem";
 import Kasse from "jc-shared/veranstaltung/kasse";
-import CheckItem from "@/widgets-react/CheckItem";
-import { NumberInputWithDirectValue } from "@/widgets-react/numericInputWidgets/NumericInputs";
+import CheckItem from "@/widgets/CheckItem";
+import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface AusgabenCardParams {

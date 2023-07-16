@@ -3,10 +3,10 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Button, Col, ConfigProvider, Form, FormInstance, Row } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import TextArea from "antd/es/input/TextArea";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
+import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-import MultiSelectWithTags from "@/widgets-react/MultiSelectWithTags";
-import CheckItem from "@/widgets-react/CheckItem";
+import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
+import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useAuth } from "@/commons/auth";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";

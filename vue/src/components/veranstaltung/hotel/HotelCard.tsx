@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Form, Row } from "antd";
-import StartEndDateOnlyPickers from "@/widgets-react/StartEndDateOnlyPickers";
+import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers";
 import TextArea from "antd/es/input/TextArea";
-import { NumberInput } from "@/widgets-react/numericInputWidgets";
+import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-import CheckItem from "@/widgets-react/CheckItem";
+import CheckItem from "@/widgets/CheckItem";
 import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 
 export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {

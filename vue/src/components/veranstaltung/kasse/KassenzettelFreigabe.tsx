@@ -1,12 +1,12 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { App, Button, Col, Form, FormInstance, Row } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
-import { allUsers, openKassenzettel } from "@/commons/loader-for-react";
+import { allUsers, openKassenzettel } from "@/commons/loader.ts";
 import React, { useEffect, useState } from "react";
-import SingleSelect from "@/widgets-react/SingleSelect";
+import SingleSelect from "@/widgets/SingleSelect";
 import { useAuth } from "@/commons/auth";
-import { DynamicItem } from "@/widgets-react/DynamicItem";
-import { TextField } from "@/widgets-react/TextField";
+import { DynamicItem } from "@/widgets/DynamicItem";
+import { TextField } from "@/widgets/TextField";
 import { ButtonKassenzettel } from "@/components/Buttons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
