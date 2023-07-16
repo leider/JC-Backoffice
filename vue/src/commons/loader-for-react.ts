@@ -362,20 +362,11 @@ export async function sendMail(message: Message) {
   });
 }
 
-export async function deleteMailinglist(listname: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/mailingliste",
-    data: { name: listname },
-    contentType: "json",
-  });
-}
-
-export async function saveMailinglist(list: Mailingliste) {
+export async function saveMailinglists(lists: Mailingliste[]) {
   return standardFetch({
     method: "POST",
-    url: "/rest/mailingliste",
-    data: list,
+    url: "/rest/mailinglisten",
+    data: lists,
     contentType: "json",
   });
 }

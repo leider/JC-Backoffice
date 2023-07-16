@@ -1,14 +1,14 @@
 import express from "express";
 
 import User from "jc-shared/user/user.js";
-import { Mailingliste } from "jc-shared/user/users.js";
+import Users, { Mailingliste } from "jc-shared/user/users.js";
 import Message from "jc-shared/mail/message.js";
 
 import mailstore from "../lib/mailsender/mailstore.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 import { resToJson } from "../lib/commons/replies.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
-import store from "../lib/users/userstore.js";
+import userstore from "../lib/users/userstore.js";
 import misc from "jc-shared/commons/misc.js";
 import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
 
@@ -67,28 +67,22 @@ app.post("/rundmail", async (req, res) => {
   resToJson(res);
 });
 
-app.delete("/mailingliste", async (req, res) => {
+app.post("/mailinglisten", async (req, res) => {
   if (!(req.user as User)?.accessrights?.isSuperuser) {
     return res.sendStatus(403);
   }
-  const listname = req.body.name;
-  const users = await store.allUsers();
-  users?.forEach((u) => u.unsubscribeFromList(listname));
-  await store.saveAll(users || []);
-  resToJson(res);
-});
+  const users = await userstore.allUsers();
+  const newLists = req.body as Mailingliste[];
 
-app.post("/mailingliste", async (req, res) => {
-  if (!(req.user as User)?.accessrights?.isSuperuser) {
-    return res.sendStatus(403);
-  }
-  const list = new Mailingliste(req.body.name, req.body.users, req.body.originalName);
-  const users = await store.allUsers();
-  users?.forEach((u) => u.unsubscribeFromList(list.originalName));
-  const selectedUsers = users?.filter((u) => list.users.map((lu) => lu.id).includes(u.id));
-  selectedUsers?.forEach((u) => u.subscribeList(list.name));
-  await store.saveAll(users || []);
-  resToJson(res);
+  users?.forEach((u) => (u.mailinglisten = []));
+
+  newLists.forEach((list) => {
+    const selectedUsers = users?.filter((u) => list.users.includes(u.id));
+    selectedUsers?.forEach((u) => u.subscribeList(list.name));
+  });
+
+  await userstore.saveAll(users || []);
+  resToJson(res, users);
 });
 
 export default app;
