@@ -54,6 +54,14 @@ class Persistence {
     return collection.replaceOne({ id: storedId }, object, { upsert: true });
   }
 
+  async removeWithQuery(query: object) {
+    if (query === null || query === undefined) {
+      throw new Error("Given object has no valid query");
+    }
+    const db = await getOpenDb();
+    return db.collection(this.collectionName).deleteMany(query);
+  }
+
   async removeById(id: string) {
     if (id === null || id === undefined) {
       throw new Error("Given object has no valid id");

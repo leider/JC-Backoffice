@@ -11,7 +11,6 @@ import { Col } from "antd";
  */
 export const HeaderColumn: FunctionComponent<IHeaderColumn> = (props: IHeaderColumn) => {
   const { desc, colSpans } = props;
-  console.log({ colSpans });
   const labelText = desc.label || desc.fieldName;
 
   const theLabel = (

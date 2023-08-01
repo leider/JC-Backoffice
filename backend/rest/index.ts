@@ -10,7 +10,6 @@ import programmheftApp from "./programmheft.js";
 import usersApp from "./users.js";
 import veranstaltungenRestApp from "./veranstaltungen.js";
 import wikiApp from "./wiki.js";
-import refreshstore from "../lib/site/refreshstore.js";
 import User from "jc-shared/user/user.js";
 import { Form } from "multiparty";
 import Message from "jc-shared/mail/message.js";
@@ -32,15 +31,6 @@ async function allImageNames(res: Response) {
   const imagenamesOfFiles = await service.alleBildNamen();
   resToJson(res, { names: imagenamesOfFiles });
 }
-
-app.post("/logout", async (req, res) => {
-  const oldId = req.cookies["refresh-token"] as string;
-  if (!oldId) {
-    return res.sendStatus(401);
-  }
-  await refreshstore.remove(oldId);
-  return res.clearCookie("refresh-token").send({});
-});
 
 app.get("/imagenames", (req, res) => {
   allImageNames(res);

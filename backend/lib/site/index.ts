@@ -45,7 +45,7 @@ async function createToken(req: Request, res: Response, name: string) {
   }
 
   async function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
-    await refreshstore.remove(oldId);
+    await refreshstore.removeExpired();
     const expiry = new Date(Date.now() + ttl);
     return refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry });
   }
@@ -103,6 +103,20 @@ app.post("/login", async (req, res) => {
     appLogger.error(e?.message || "");
     return res.sendStatus(401);
   }
+});
+
+app.post("/logout", async (req, res) => {
+  const oldId = req.cookies["refresh-token"] as string;
+  if (!oldId) {
+    return res.sendStatus(401);
+  }
+  await refreshstore.removeExpired();
+  res.cookie("refresh-token", "", {
+    maxAge: 0,
+    httpOnly: true,
+    secure: false,
+  });
+  return res.clearCookie("refresh-token").send({});
 });
 
 const uploadDir = path.join(__dirname, "../../static/upload");

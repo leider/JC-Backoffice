@@ -15,51 +15,7 @@ import FerienIcals from "jc-shared/optionen/ferienIcals";
 import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
-import * as jose from "jose";
 import isMobile from "ismobilejs";
-
-let refreshTokenState: string;
-
-function sleep(ms: number) {
-  return new Promise((_) => setTimeout(_, ms));
-}
-export const globals = {
-  jwtToken: "",
-
-  isAuthenticated: async function isAuthenticated() {
-    if (refreshTokenState === "START") {
-      while (refreshTokenState === "START") {
-        await sleep(100);
-      }
-    }
-    if (globals.jwtToken) {
-      const decoded = jose.decodeJwt(globals.jwtToken) as {
-        [key: string]: any;
-      };
-      const exp: number = decoded.exp;
-      const stillValid = Date.now() + 60000 < exp * 1000; // should be valid one more minute
-      if (stillValid) {
-        return true;
-      }
-    }
-    if (refreshTokenState !== "START") {
-      refreshTokenState = "START";
-      const json = await standardFetch({
-        method: "POST",
-        url: "/refreshToken",
-        contentType: "json",
-      });
-      if (json) {
-        globals.jwtToken = json.token;
-        refreshTokenState = "FINISHED";
-        return json.token;
-      }
-    } else {
-      return false;
-    }
-  },
-};
-
 type ContentType = "json" | "pdf" | "zip" | "other";
 
 type FetchParams = {
@@ -104,28 +60,6 @@ export async function uploadBeleg(data: FormData) {
     data,
     contentType: "json",
   });
-}
-
-export async function logoutManually() {
-  await standardFetch({
-    method: "POST",
-    url: "/rest/logout",
-    contentType: "json",
-  });
-  globals.jwtToken = "";
-  return;
-}
-
-export async function login(name: string, pass: string) {
-  const json = await standardFetch({
-    method: "POST",
-    url: "/login",
-    data: { name, pass },
-    contentType: "json",
-  });
-  if (json) {
-    globals.jwtToken = json.token;
-  }
 }
 
 function handleVeranstaltungen(result?: any[]): Veranstaltung[] {

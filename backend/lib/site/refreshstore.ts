@@ -17,7 +17,7 @@ export default {
     return persistence.getById(id);
   },
 
-  remove: async function remove(id: string) {
-    return persistence.removeById(id);
+  removeExpired: async function removeExpired() {
+    return persistence.removeWithQuery({ expiresAt: { $lt: new Date() } });
   },
 };
