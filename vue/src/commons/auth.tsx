@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
 import User from "jc-shared/user/user";
-import { currentUser, logoutManually, wikisubdirs } from "@/commons/loader.ts";
+import { currentUser, wikisubdirs } from "@/commons/loader.ts";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
@@ -11,6 +11,9 @@ class AuthApi {
   }
   refreshTokenPost() {
     return axios.post("/refreshToken");
+  }
+  logoutManually() {
+    return axios.post("/logout");
   }
 }
 
@@ -86,10 +89,10 @@ function useProvideAuth(): IUseProvideAuth {
     setTimeout(
       async () => {
         try {
-          console.log("REFRESH");
           const newToken = await authApi.refreshTokenPost();
+          const decoded: any = jose.decodeJwt(newToken.data.token);
           setAuthHeader(newToken.data.token);
-          scheduleTokenRefresh(newToken.data.expires - Date.now());
+          scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
         } catch (_) {
           console.log("LOGGIN OUT", _);
           logout();
@@ -127,8 +130,7 @@ function useProvideAuth(): IUseProvideAuth {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       delete (axios.defaults.headers as any).Authorization;
-      console.log("MANUAL");
-      await logoutManually();
+      await authApi.logoutManually();
       setLoginState(LoginState.LOGGED_OUT);
     } catch (_) {
       // so what?
