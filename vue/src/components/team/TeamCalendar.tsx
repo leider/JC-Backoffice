@@ -31,10 +31,14 @@ export default function TeamCalendar() {
   }
 
   function renderEventContent(eventInfo: any) {
-    return (
+    return eventInfo.timeText !== "00 Uhr" ? (
       <div style={{ whiteSpace: "normal" }}>
-        <b>{eventInfo.timeText !== "00 Uhr" && eventInfo.timeText}</b>
+        <b>{eventInfo.timeText}</b>
         <br />
+        <i>{eventInfo.event.title}</i>
+      </div>
+    ) : (
+      <div style={{ whiteSpace: "normal" }}>
         <i>{eventInfo.event.title}</i>
       </div>
     );
