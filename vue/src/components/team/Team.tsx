@@ -55,7 +55,7 @@ function Team() {
 
   return (
     <Row gutter={8}>
-      <Col xs={24} xl={16}>
+      <Col xs={{ span: 24, order: 2 }} xl={{ span: 16, order: 1 }}>
         <PageHeader
           footer={
             <p>
@@ -86,7 +86,7 @@ function Team() {
           );
         })}
       </Col>
-      <Col xs={24} xl={8} style={{ zIndex: 0 }}>
+      <Col xs={{ span: 24, order: 1 }} xl={{ span: 8, order: 2 }} style={{ zIndex: 0 }}>
         <TeamCalendar />
       </Col>
     </Row>
