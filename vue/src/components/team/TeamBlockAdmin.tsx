@@ -244,8 +244,8 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
       tt = "Noch unbestätigt";
     } else {
       const texte = [];
-      if (!presse) texte.push("Presse fehlt");
-      if (!technik) texte.push("Technik fehlt");
+      if (!presse) texte.push("Presse nicht OK");
+      if (!technik) texte.push("Technik nicht OK");
       if (!hotel) texte.push("Hotel fehlt");
       tt = texte.join(", ");
     }

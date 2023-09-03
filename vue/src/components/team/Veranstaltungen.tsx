@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, Dropdown, Row, Space } from "antd";
+import { Button, Col, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
@@ -11,12 +11,16 @@ import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import SingleSelect from "@/widgets/SingleSelect.tsx";
+import _ from "lodash";
 
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
+  const PRESSEFILTERS = ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"];
 
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
 
+  const [form] = Form.useForm();
   async function loadUsers() {
     const users = await allUsers();
     setUsersAsOptions(users.map((user) => ({ label: user.name, value: user.id })));
@@ -33,6 +37,8 @@ export default function Veranstaltungen() {
   const { context } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [pressefilter, setPressefilter] = useState<string | null>("");
+
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
     [index: string]: Veranstaltung[];
   }>({});
@@ -40,14 +46,38 @@ export default function Veranstaltungen() {
 
   document.title = "Veranstaltungen";
   useEffect(() => {
-    const result = groupBy(veranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
-    setVeranstaltungenNachMonat(result);
-    setMonate(Object.keys(result));
     const accessrights = context?.currentUser.accessrights;
     if (accessrights !== undefined && location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
       navigate("/team");
     }
-  }, [veranstaltungen, context]);
+  }, [context]);
+
+  useEffect(() => {
+    let filtered = veranstaltungen;
+    if (!_.isEmpty(pressefilter)) {
+      filtered = filtered.filter((ver) => {
+        if (pressefilter === PRESSEFILTERS[1]) {
+          // OK
+          return ver.presse.checked;
+        }
+        if (pressefilter === PRESSEFILTERS[2]) {
+          // not OK
+          return !ver.presse.checked;
+        }
+        if (pressefilter === PRESSEFILTERS[3]) {
+          // no final text
+          return _.isEmpty(ver.presse.text);
+        }
+        if (pressefilter === PRESSEFILTERS[4]) {
+          // no original text
+          return _.isEmpty(ver.presse.originalText);
+        }
+      });
+    }
+    const result = groupBy(filtered, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    setVeranstaltungenNachMonat(result);
+    setMonate(Object.keys(result));
+  }, [pressefilter, veranstaltungen]);
 
   const periods = [
     {
@@ -109,6 +139,13 @@ export default function Veranstaltungen() {
             </Dropdown>,
           ]}
         ></PageHeader>
+        <Form form={form} autoComplete="off">
+          <Row gutter={8}>
+            <Col span={8}>
+              <SingleSelect name="Presse" label="Filter Presse" options={PRESSEFILTERS} onChange={setPressefilter} />
+            </Col>
+          </Row>
+        </Form>
         {monate.map((monat) => {
           return (
             <TeamMonatGroup
