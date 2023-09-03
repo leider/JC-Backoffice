@@ -23,8 +23,10 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
   const { color } = useColorsAndIconsForSections("presse");
   const [veranstForPreview, setVeranstForPreview] = useState<Veranstaltung>(new Veranstaltung());
   const presseText = Form.useWatch(["presse", "text"]);
+  const presseOriText = Form.useWatch(["presse", "originalText"]);
   const url = Form.useWatch(["presse", "jazzclubURL"]);
   const image = Form.useWatch(["presse", "image"]);
+  const ok = Form.useWatch(["presse", "checked"]);
 
   const editorOptions = useMemo(
     () => ({
@@ -40,7 +42,7 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
     const veranst = fromFormObject(form);
     setVeranstForPreview(veranst);
     //updatePreview(veranst);
-  }, [presseText, url, image]);
+  }, [presseText, url, image, ok, presseOriText]);
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];
