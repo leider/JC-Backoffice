@@ -7,12 +7,30 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import CheckItem from "@/widgets/CheckItem";
 import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import { Dayjs } from "dayjs";
+import _ from "lodash";
 
 export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");
 
   const hotelName = Form.useWatch(["hotel", "name"]);
+
+  const datumDerVeranstaltung = Form.useWatch(["startAndEnd"], {
+    form,
+    preserve: true,
+  });
+
+  useEffect(() => {
+    const start = datumDerVeranstaltung?.start as Dayjs;
+    if (start) {
+      const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
+      if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
+        const startCopy = _.cloneDeep(start);
+        form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, startCopy]);
+      }
+    }
+  }, [datumDerVeranstaltung]);
 
   useEffect(() => {
     if (optionen?.hotels.find((h) => h.name === hotelName)) {
@@ -26,6 +44,7 @@ export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {
   useEffect(() => {
     updateSumme();
   }, [veranstaltung, form]);
+
   function updateSumme() {
     const veranstaltung = fromFormObject(form);
     setSumme(veranstaltung.unterkunft.roomsTotalEUR);

@@ -17,6 +17,7 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
       name={name}
       style={label ? {} : { marginBottom: 0 }}
       dependencies={dependency ? [dependency] : undefined}
+      hasFeedback
       rules={
         dependency
           ? [
