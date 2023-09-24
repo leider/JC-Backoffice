@@ -135,9 +135,9 @@ export default function Info() {
       <PageHeader
         title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
         extra={
-          <Button icon={<IconForSmallBlock size={16} iconName={"Download"} onClick={() => imgZip(monatJahr!)} />}>
-            Alle Bilder als ZIP
-          </Button>
+          <a href={`/imgzip/${monatJahr!}`}>
+            <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Alle Bilder als ZIP</Button>
+          </a>
         }
       ></PageHeader>
       <Tabs
