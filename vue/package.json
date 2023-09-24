@@ -10,33 +10,33 @@
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
-    "@ant-design/pro-components": "2.6.3",
-    "@fullcalendar/core": "6.1.8",
-    "@fullcalendar/daygrid": "6.1.8",
-    "@fullcalendar/react": "6.1.8",
-    "@tanstack/react-query": "4.29.19",
-    "antd": "5.6.3",
+    "@ant-design/pro-components": "2.6.23",
+    "@fullcalendar/core": "6.1.9",
+    "@fullcalendar/daygrid": "6.1.9",
+    "@fullcalendar/react": "6.1.9",
+    "@tanstack/react-query": "4.35.3",
+    "antd": "5.9.2",
     "axios": "1.4.0",
     "codemirror": "6.0.1",
     "easymde": "2.18.0",
     "ismobilejs": "1.1.1",
     "jc-shared": "1.0.0",
-    "jose": "4.14.4",
+    "jose": "4.14.6",
     "numeral": "2.0.6",
     "react": "18.2.0",
     "react-bootstrap-icons": "1.10.3",
     "react-dom": "18.2.0",
-    "react-router-dom": "6.14.1",
+    "react-router-dom": "6.14.2",
     "react-simplemde-editor": "5.2.0"
   },
   "devDependencies": {
-    "@types/numeral": "2.0.2",
-    "@types/react": "^18.0.37",
+    "@types/numeral": "2.0.3",
+    "@types/react": "18.2.22",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^4.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "numeral": "2.0.6",
-    "vite": "^4.3.9"
+    "vite": "4.4.9"
   }
 }

@@ -8,6 +8,8 @@ const router = createBrowserRouter(routes, { basename: "/vue" });
 const STRICT = false;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   STRICT ? (
     <React.StrictMode>
       <RouterProvider router={router} />

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 
-export default function InverseCheckbox(props: CheckboxProps & React.RefAttributes<HTMLInputElement>) {
+export default function InverseCheckbox(props: CheckboxProps) {
   const [inverseChecked, setInverseChecked] = useState<boolean>(false);
   useEffect(() => {
     if (props.checked !== undefined) {
