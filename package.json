@@ -46,8 +46,7 @@
     "typescript": "5.2.2"
   },
   "resolutions": {
-    "dayjs": "1.11.10",
-    "rrule": "2.6.8"
+    "dayjs": "1.11.10"
   },
   "scripts": {
     "compile": "cd backend && yarn deploy && cd ../batchjobs && yarn tsc && cd ../shared && yarn tsc",

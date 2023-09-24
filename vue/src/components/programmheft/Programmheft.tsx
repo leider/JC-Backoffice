@@ -31,7 +31,7 @@ export default function Programmheft() {
       kalenderFor(
         `${year ?? new DatumUhrzeit().naechsterUngeraderMonat.format("YYYY")}/${
           month ?? new DatumUhrzeit().naechsterUngeraderMonat.format("MM")
-        }`
+        }`,
       ),
   });
   const { data: dataveranstaltungen } = useQuery({
@@ -103,7 +103,7 @@ export default function Programmheft() {
       sideBySideFullscreen: false,
       minHeight: "500px",
     }),
-    []
+    [],
   );
   function saveForm() {
     form.validateFields().then(async () => {
@@ -125,7 +125,6 @@ export default function Programmheft() {
     return marked.parse(veranst.presse.text || "", {
       gfm: true,
       breaks: true,
-      smartLists: true,
       pedantic: false,
     });
   }

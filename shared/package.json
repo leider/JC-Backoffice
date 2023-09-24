@@ -11,10 +11,9 @@
   "dependencies": {
     "dayjs": "1.11.10",
     "deep-object-diff": "1.1.9",
-    "marked": "4.3.0"
+    "marked": "9.0.3"
   },
   "devDependencies": {
-    "@types/marked": "4.0.8",
     "pug": "3.0.2"
   },
   "scripts": {

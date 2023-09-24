@@ -11,9 +11,7 @@ function normalize(str: string): string {
 marked.setOptions({
   gfm: true,
   breaks: true,
-  smartLists: true,
   pedantic: false,
-  sanitize: false, // To be able to add iframes
 });
 
 function evalTags(text: string, subdir?: string): string {
