@@ -1,6 +1,7 @@
 import { defineConfig, splitVendorChunkPlugin } from "vite";
 import react from "@vitejs/plugin-react";
 
+import { VitePWA } from "vite-plugin-pwa";
 // @ts-ignore
 import path, { resolve } from "path";
 // @ts-ignore
@@ -32,6 +33,7 @@ export default defineConfig(() => {
           server.middlewares.use(app);
         },
       },
+      VitePWA({ registerType: "autoUpdate" }),
     ],
     resolve: {
       alias: {
