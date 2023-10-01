@@ -34,12 +34,15 @@ export default defineConfig(() => {
         },
       },
       VitePWA({
+        selfDestroying: false,
         registerType: "autoUpdate",
-        includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
+        injectRegister: "inline",
+        includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
         manifest: {
           name: "Jazzclub Backoffice",
           short_name: "BO Jazz",
           description: "Die Backoffice Anwendung des Jazzclub",
+          lang: "de",
           theme_color: "#000000",
           icons: [
             {

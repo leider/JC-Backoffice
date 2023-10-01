@@ -124,8 +124,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
             key={veranstaltung.id || ""}
             header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
             extra={
-              // @ts-ignore
-              <Tooltip title="Vorschau" color={token["custom-color-concert"]}>
+              <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
                 <span
                   onClick={(event) => {
                     // If you don't want click extra trigger collapse, you can prevent this:
@@ -136,8 +135,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
                   <IconForSmallBlock
                     size={16}
                     iconName={"EyeFill"}
-                    // @ts-ignore
-                    color={token["custom-color-concert"]}
+                    color={(token as any)["custom-color-concert"]}
                     style={{
                       margin: "-4px 0",
                     }}

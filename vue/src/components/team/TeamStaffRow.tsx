@@ -21,12 +21,16 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ usersAsOptions, sectionName
   const [names, setNames] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
 
+  const [notNeeded, setNotNeeded] = useState<boolean>(false);
+
   const { context } = useAuth();
 
   const updateStuff = () => {
     const staffCollection = veranstaltung.staff.getStaffCollection(sectionName);
     setIds(staffCollection);
     setNames(usersAsOptions.filter((user) => staffCollection.includes(user.value)).map((user) => user.label));
+
+    setNotNeeded(veranstaltung.staff[`${sectionName}NotNeeded`]);
   };
   useEffect(updateStuff, [veranstaltung]);
   useEffect(() => {
@@ -71,15 +75,25 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ usersAsOptions, sectionName
 
   return (
     <Row gutter={8}>
-      <Col span={4}>
-        <b>{label}</b>
-      </Col>
-      <Col span={16}>
-        <DisplayNames />
-      </Col>
-      <Col span={4}>
-        {ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />}
-      </Col>
+      <Col span={4}>{notNeeded ? <>{label}</> : <b>{label}</b>}</Col>
+      {notNeeded ? (
+        <Col span={14} offset={6}>
+          <Tag>niemand nötig</Tag>
+        </Col>
+      ) : (
+        <>
+          <Col span={16}>
+            <DisplayNames />{" "}
+          </Col>
+          <Col span={4}>
+            {ids.includes(currentUser.id) ? (
+              <ButtonStaff add={false} callback={removeUser} />
+            ) : (
+              <ButtonStaff add={true} callback={addUser} />
+            )}
+          </Col>
+        </>
+      )}
     </Row>
   );
 };
