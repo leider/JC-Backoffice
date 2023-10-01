@@ -34,7 +34,7 @@ export default defineConfig(() => {
         },
       },
       VitePWA({
-        selfDestroying: false,
+        selfDestroying: true,
         registerType: "autoUpdate",
         injectRegister: "inline",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
