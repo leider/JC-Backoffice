@@ -217,7 +217,7 @@ const JazzContent: React.FC = () => {
               margin: "12px 12px 0px 0px",
             }}
           >
-            <img src={"/img/logo_weiss.png"} alt="Jazzclub Logo" />
+            <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
           </div>
         </Link>
         <Menu theme="dark" mode="horizontal" items={items} selectedKeys={[activeElement]} />
