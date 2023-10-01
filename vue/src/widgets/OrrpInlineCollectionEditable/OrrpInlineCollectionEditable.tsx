@@ -18,7 +18,7 @@ import { WidgetColumn } from "./widgetColumn/WidgetColumn";
  * @return {*}  {JSX.Element}
  */
 const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEditable> = (
-  props: TOrrpInlineCollectionEditable
+  props: TOrrpInlineCollectionEditable,
 ): JSX.Element => {
   if ("columnDescriptions" in props) {
     addInitialValueFromObjectToColDescs(props.columnDescriptions, props.initialValue);
@@ -37,7 +37,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
   function createCallbacks(
     name: number,
     remove: (index: number | number[]) => void,
-    add: (defaultValue?: StoreValue, insertIndex?: number) => void
+    add: (defaultValue?: StoreValue, insertIndex?: number) => void,
   ): ActionCallbacks {
     return {
       delete:
@@ -71,7 +71,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
   }, [props.disabled, props.clearOnDisabled]);
 
   return (
-    <Form.Item label={props.label} style={{ flexWrap: "nowrap" }} className="inline-collection-editable-container">
+    <Form.Item label={props.label} style={{ flexWrap: "nowrap" }}>
       <Form.List name={props.embeddedArrayPath} initialValue={props.initialValue} rules={props.rules}>
         {(fields, { add, remove }, { errors }) => {
           return (

@@ -1,59 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, ConfigProvider, Divider, Row, theme, Tooltip, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
 import TeamStaffRow from "@/components/team/TeamStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
 
-const { Title } = Typography;
 const { Panel } = Collapse;
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
   usersAsOptions: UsersAsOption[];
   initiallyOpen: boolean;
-}
-
-interface HeaderProps {
-  veranstaltung: Veranstaltung;
-  expanded?: boolean;
-}
-
-function Header({ veranstaltung, expanded }: HeaderProps) {
-  const { token } = theme.useToken();
-  const titleStyle = { margin: 0, color: "#FFF" };
-  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
-    return (
-      <Title level={l} style={titleStyle}>
-        {t}
-      </Title>
-    );
-  }
-
-  return (
-    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
-      {expanded ? (
-        <>
-          <T l={5} t={veranstaltung.datumForDisplayShort} />
-          <T l={5} t={veranstaltung.kopf.presseIn} />
-          <T l={3} t={veranstaltung.kopf.titelMitPrefix} />
-        </>
-      ) : (
-        <Title level={4} style={titleStyle}>
-          {veranstaltung.kopf.titelMitPrefix}
-          <small>
-            <small style={{ fontWeight: 400 }}>
-              {" - "}
-              {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
-            </small>
-          </small>
-        </Title>
-      )}
-    </ConfigProvider>
-  );
 }
 
 interface ContentProps {
@@ -122,26 +83,28 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
             className="team-block"
             style={{ backgroundColor: color }}
             key={veranstaltung.id || ""}
-            header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
+            header={<TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />}
             extra={
-              <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
-                <span
-                  onClick={(event) => {
-                    // If you don't want click extra trigger collapse, you can prevent this:
-                    event.stopPropagation();
-                    navigate(`/veranstaltung/preview/${veranstaltung.url}`);
-                  }}
-                >
-                  <IconForSmallBlock
-                    size={16}
-                    iconName={"EyeFill"}
-                    color={(token as any)["custom-color-concert"]}
-                    style={{
-                      margin: "-4px 0",
+              <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
+                <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
+                  <span
+                    onClick={(event) => {
+                      // If you don't want click extra trigger collapse, you can prevent this:
+                      event.stopPropagation();
+                      navigate(`/veranstaltung/preview/${veranstaltung.url}`);
                     }}
-                  />
-                </span>
-              </Tooltip>
+                  >
+                    <IconForSmallBlock
+                      size={16}
+                      iconName={"EyeFill"}
+                      color={(token as any)["custom-color-concert"]}
+                      style={{
+                        margin: "-4px 0",
+                      }}
+                    />
+                  </span>
+                </Tooltip>
+              </Space>
             }
           >
             <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>

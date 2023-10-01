@@ -223,7 +223,7 @@ const JazzContent: React.FC = () => {
         <Menu theme="dark" mode="horizontal" items={items} selectedKeys={[activeElement]} />
       </Header>
 
-      <Content style={{ padding: "5px 5px" }}>
+      <Content style={{ padding: "1em" }}>
         <div style={{ background: colorBgContainer }}>
           <InnerContent pathname={pathname} loginState={loginState} search={search} />
         </div>

@@ -172,6 +172,10 @@ export default class DatumUhrzeit {
     return this.format("ddd DD. MMMM");
   }
 
+  get wochentagTagMonatShort(): string {
+    return this.format("ddd DD. MMM");
+  }
+
   get tagMonatJahrKompakt(): string {
     return this.format("DD.MM.YYYY");
   }

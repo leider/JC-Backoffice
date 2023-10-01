@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
-import { App, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -15,51 +15,14 @@ import { differenceFor } from "jc-shared/commons/compareObjects";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
+import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
 
-const { Title } = Typography;
 const { Panel } = Collapse;
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
   usersAsOptions: UsersAsOption[];
   initiallyOpen: boolean;
-}
-
-interface HeaderProps {
-  veranstaltung: Veranstaltung;
-  expanded?: boolean;
-}
-
-function Header({ veranstaltung, expanded }: HeaderProps) {
-  const titleStyle = { margin: 0, color: "#FFF" };
-  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
-    return (
-      <Title level={l} style={titleStyle}>
-        {t}
-      </Title>
-    );
-  }
-  return (
-    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
-      {expanded ? (
-        <>
-          <T l={5} t={veranstaltung.datumForDisplayShort} />
-          <T l={5} t={veranstaltung.kopf.presseIn} />
-          <T l={3} t={veranstaltung.kopf.titelMitPrefix} />
-        </>
-      ) : (
-        <Title level={4} style={titleStyle}>
-          {veranstaltung.kopf.titelMitPrefix}
-          <small>
-            <small style={{ fontWeight: 400 }}>
-              {" - "}
-              {veranstaltung.startDatumUhrzeit.wochentagTagMonat}, {veranstaltung.kopf.ort}
-            </small>
-          </small>
-        </Title>
-      )}
-    </ConfigProvider>
-  );
 }
 
 interface ContentProps {
@@ -208,7 +171,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
             className="team-block"
             style={{ backgroundColor: color }}
             key={veranstaltung.id || ""}
-            header={<Header veranstaltung={veranstaltung} expanded={expanded} />}
+            header={<TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />}
             extra={<Extras veranstaltung={veranstaltung} />}
           >
             <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
@@ -266,11 +229,7 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
           <IconForSmallBlock size={12} iconName={overallState ? "HandThumbsUpFill" : "SignStopFill"} color={color} />
         </Tooltip>
       )}
-      <Tooltip
-        title="Vorschau"
-        // @ts-ignore
-        color={token["custom-color-concert"]}
-      >
+      <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
         <span
           onClick={(event) => {
             // If you don't want click extra trigger collapse, you can prevent this:
@@ -281,8 +240,7 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
           <IconForSmallBlock
             size={16}
             iconName={"EyeFill"}
-            // @ts-ignore
-            color={token["custom-color-concert"]}
+            color={(token as any)["custom-color-concert"]}
             style={{
               margin: "-4px 0",
             }}
