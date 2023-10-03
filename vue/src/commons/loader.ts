@@ -16,6 +16,7 @@ import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 import isMobile from "ismobilejs";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 type ContentType = "json" | "pdf" | "zip" | "other";
 
 type FetchParams = {
@@ -135,6 +136,16 @@ export async function removeUserFromSection(veranstaltung: Veranstaltung, sectio
     data: { section },
     contentType: "json",
   });
+}
+
+// Vermietungen
+function handleVermietungen(result?: any[]): Vermietung[] {
+  return result?.map((each: any) => new Vermietung(each)) || [];
+}
+
+export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
+  const result = await getForType("json", `/rest/vermietungen/${selector}`);
+  return handleVermietungen(result);
 }
 
 // User

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
+import React, { useEffect, useMemo, useState } from "react";
+import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -13,11 +13,11 @@ import TeamCalendar from "@/components/team/TeamCalendar";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import _ from "lodash";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
-  const PRESSEFILTERS = ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"];
-
+  const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
   const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
 
   const [form] = Form.useForm();
@@ -27,9 +27,12 @@ export default function Veranstaltungen() {
   }
 
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
+  const [vermietungen, setVermietungen] = useState<Vermietung[]>([]);
   async function loadVeranstaltungen(period: "zukuenftige" | "vergangene" | "alle") {
     const result = await veranstaltungenForTeam(period);
     setVeranstaltungen(result);
+    const verm = await vermietungenForTeam(period);
+    setVermietungen(verm);
   }
   useEffect(() => {
     loadUsers();
@@ -39,8 +42,8 @@ export default function Veranstaltungen() {
   const location = useLocation();
   const [pressefilter, setPressefilter] = useState<string | null>("");
 
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
-    [index: string]: Veranstaltung[];
+  const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
+    [index: string]: (Veranstaltung | Vermietung)[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
@@ -74,10 +77,13 @@ export default function Veranstaltungen() {
         }
       });
     }
-    const result = groupBy(filtered, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
-    setVeranstaltungenNachMonat(result);
+    const gigOrRent: (Veranstaltung | Vermietung)[] = [];
+    gigOrRent.push(...filtered);
+    gigOrRent.push(...vermietungen);
+    const result = groupBy(gigOrRent, (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [pressefilter, veranstaltungen]);
+  }, [pressefilter, veranstaltungen, vermietungen, PRESSEFILTERS]);
 
   const periods = [
     {
@@ -116,7 +122,20 @@ export default function Veranstaltungen() {
         <PageHeader
           title="Veranstaltungen"
           extra={[
-            <ButtonWithIcon key="new" icon="FileEarmarkPlus" text="Neu" type="default" onClick={() => navigate("/veranstaltung/new")} />,
+            <ButtonWithIcon
+              key="new"
+              icon="FileEarmarkPlus"
+              text="Neue Veranstaltung"
+              type="default"
+              onClick={() => navigate("/veranstaltung/new")}
+            />,
+            <ButtonWithIcon
+              key="newVermietung"
+              icon="FileEarmarkEasel"
+              text="Neue Vermietung"
+              type="default"
+              onClick={() => navigate("/vermietung/new")}
+            />,
             <ButtonWithIcon
               key="cal"
               icon="CalendarWeek"
@@ -138,7 +157,7 @@ export default function Veranstaltungen() {
               </Button>
             </Dropdown>,
           ]}
-        ></PageHeader>
+        />
         <Form form={form} autoComplete="off">
           <Row gutter={8}>
             <Col span={8}>
@@ -151,7 +170,7 @@ export default function Veranstaltungen() {
             <TeamMonatGroup
               key={monat}
               monat={monat}
-              veranstaltungen={veranstaltungenNachMonat[monat]}
+              veranstaltungenUndVermietungen={veranstaltungenUndVermietungenNachMonat[monat]}
               usersAsOptions={usersAsOptions || []}
               renderTeam={false}
             />

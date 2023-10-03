@@ -79,7 +79,7 @@ function Team() {
             <TeamMonatGroup
               key={monat}
               monat={monat}
-              veranstaltungen={veranstaltungenNachMonat[monat]}
+              veranstaltungenUndVermietungen={veranstaltungenNachMonat[monat]}
               usersAsOptions={usersAsOptions || []}
               renderTeam={true}
             />

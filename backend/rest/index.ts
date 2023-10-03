@@ -9,6 +9,7 @@ import optionenApp from "./optionen.js";
 import programmheftApp from "./programmheft.js";
 import usersApp from "./users.js";
 import veranstaltungenRestApp from "./veranstaltungen.js";
+import vermietungenRestApp from "./vermietungen.js";
 import wikiApp from "./wiki.js";
 import User from "jc-shared/user/user.js";
 import { Form } from "multiparty";
@@ -25,6 +26,7 @@ app.use("/", optionenApp);
 app.use("/", programmheftApp);
 app.use("/", usersApp);
 app.use("/", veranstaltungenRestApp);
+app.use("/", vermietungenRestApp);
 app.use("/", wikiApp);
 
 async function allImageNames(res: Response) {

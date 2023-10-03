@@ -8,23 +8,25 @@ import { useNavigate } from "react-router-dom";
 import { IconForSmallBlock } from "@/components/Icon";
 import TeamBlockNormal from "@/components/team/TeamBlockNormal";
 import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import TeamBlockVermietung from "@/components/team/TeamBlockVermietung.tsx";
 
 interface MonatGroupProps {
-  veranstaltungen: Veranstaltung[];
+  veranstaltungenUndVermietungen: (Veranstaltung | Vermietung)[];
   usersAsOptions: UsersAsOption[];
   monat: string;
   renderTeam: boolean;
 }
 
-export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat, renderTeam }: MonatGroupProps) {
+export default function TeamMonatGroup({ veranstaltungenUndVermietungen, usersAsOptions, monat, renderTeam }: MonatGroupProps) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [yymm, setYymm] = useState<string>("");
   useEffect(() => {
-    const minDatum = veranstaltungen[0].startDatumUhrzeit;
+    const minDatum = veranstaltungenUndVermietungen[0].startDatumUhrzeit;
     setYymm(minDatum.fuerUnterseiten);
     const jetzt = new DatumUhrzeit();
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
-  }, [veranstaltungen]);
+  }, [veranstaltungenUndVermietungen]);
   const navigate = useNavigate();
 
   return (
@@ -84,13 +86,26 @@ export default function TeamMonatGroup({ veranstaltungen, usersAsOptions, monat,
         </Col>
       </Row>
       <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3" }}>
-        {veranstaltungen.map((veranstaltung, index) =>
-          renderTeam ? (
-            <TeamBlockNormal key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={expanded} />
+        {veranstaltungenUndVermietungen.map((veranstaltung, index) => {
+          if (veranstaltung.isVermietung) {
+            return <TeamBlockVermietung key={index} vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />;
+          }
+          return renderTeam ? (
+            <TeamBlockNormal
+              key={index}
+              veranstaltung={veranstaltung as Veranstaltung}
+              usersAsOptions={usersAsOptions || []}
+              initiallyOpen={expanded}
+            />
           ) : (
-            <TeamBlockAdmin key={index} veranstaltung={veranstaltung} usersAsOptions={usersAsOptions || []} initiallyOpen={expanded} />
-          )
-        )}
+            <TeamBlockAdmin
+              key={index}
+              veranstaltung={veranstaltung as Veranstaltung}
+              usersAsOptions={usersAsOptions || []}
+              initiallyOpen={expanded}
+            />
+          );
+        })}
       </Row>
     </>
   );
