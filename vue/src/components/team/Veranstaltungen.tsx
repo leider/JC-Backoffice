@@ -50,7 +50,7 @@ export default function Veranstaltungen() {
     if (accessrights !== undefined && location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
       navigate("/team");
     }
-  }, [context]);
+  }, [context, location.pathname, navigate]);
 
   useEffect(() => {
     let filtered = veranstaltungen;

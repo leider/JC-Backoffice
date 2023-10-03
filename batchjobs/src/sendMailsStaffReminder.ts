@@ -22,12 +22,12 @@ async function sendMail(verMitUser: VerMitUser) {
 
   const markdownToSend = `## Hallo ${user.name}! Bei folgender Veranstaltung bist Du im Staff eingetragen!:
 
-<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranstaltung.url || ""))}">${veranstaltung.kopf.titelMitPrefix} am ${
+<a href="${toFullQualifiedUrl("veranstaltung", encodeURIComponent(veranstaltung.url || ""))}">${veranstaltung.kopf.titelMitPrefix} am ${
     veranstaltung.datumForDisplayShort
   } ${veranstaltung.kopf.presseInEcht}</a>
 
 --- 
-<a href="${toFullQualifiedUrl("teamseite", "")}">Zur Teamseite</a>`;
+<a href="${toFullQualifiedUrl("team", "")}">Zur Teamseite</a>`;
 
   const message = new Message({
     subject: "[JAZZCLUB REMINDER] Du hast Dich zum Arbeiten eingetragen!",

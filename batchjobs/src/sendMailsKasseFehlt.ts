@@ -32,13 +32,13 @@ async function sendMail(veranstaltungen: Veranstaltung[]) {
 ${veranstaltungen
   .map(
     (veranst) =>
-      `<a href="${toFullQualifiedUrl("veranstaltungen", encodeURIComponent(veranst.url || ""))}">` +
-      `${veranst.kopf.titelMitPrefix} am ${veranst.datumForDisplayShort} ${veranst.kopf.presseInEcht}</a>`
+      `<a href="${toFullQualifiedUrl("veranstaltung", encodeURIComponent(veranst.url || ""))}">` +
+      `${veranst.kopf.titelMitPrefix} am ${veranst.datumForDisplayShort} ${veranst.kopf.presseInEcht}</a>`,
   )
   .join("\n\n---\n")}
 
 --- 
-<a href="${toFullQualifiedUrl("teamseite", "")}">Zur Teamseite</a>`;
+<a href="${toFullQualifiedUrl("team", "")}">Zur Teamseite</a>`;
 
   const message = new Message({
     subject: "Kassenpersonal für Veranstaltungen gesucht",

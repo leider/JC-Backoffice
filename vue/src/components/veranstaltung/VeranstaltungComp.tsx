@@ -23,6 +23,7 @@ import { useAuth } from "@/commons/auth";
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
+
   const veranst = useQuery({
     queryKey: ["veranstaltung", url],
     queryFn: () => veranstaltungForUrl(url || ""),
@@ -66,7 +67,7 @@ export default function VeranstaltungComp() {
           pathname: `/veranstaltung/${data.url}`,
           search: `page=${search.get("page")}`,
         },
-        { replace: true }
+        { replace: true },
       );
       notification.open({
         message: "Speichern erfolgreich",
@@ -87,6 +88,7 @@ export default function VeranstaltungComp() {
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const { context } = useAuth();
+  const navigate = useNavigate();
   function initializeForm() {
     const deepCopy = toFormObject(veranstaltung);
     form.setFieldsValue(deepCopy);
@@ -98,10 +100,15 @@ export default function VeranstaltungComp() {
   }
 
   useEffect(initializeForm, [form, veranstaltung]);
+  useEffect(() => {
+    const accessrights = context?.currentUser.accessrights;
+    if (accessrights !== undefined && !accessrights?.isOrgaTeam) {
+      navigate(`/veranstaltung/preview/${url}`);
+    }
+  }, [context, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
-  const navigate = useNavigate();
   const [search] = useSearchParams();
   function saveForm() {
     form.validateFields().then(async () => {

@@ -39,8 +39,20 @@ export const routes: RouteObject[] = [
         element: <Team />,
       },
       {
+        path: "/teamseite",
+        element: <Navigate replace to="/team" />,
+      },
+      {
         path: "/veranstaltungen",
         element: <Veranstaltungen />,
+      },
+      {
+        path: "/veranstaltungen/:url",
+        element: <VeranstaltungComp />,
+      },
+      {
+        path: "/veranstaltungen/preview/:url",
+        element: <Preview />,
       },
       {
         path: "/veranstaltung/:url",
