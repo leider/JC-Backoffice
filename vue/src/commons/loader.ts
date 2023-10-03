@@ -148,6 +148,44 @@ export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene"
   return handleVermietungen(result);
 }
 
+export async function vermietungForUrl(url: string): Promise<Vermietung> {
+  if (url === "new") {
+    return new Vermietung();
+  }
+  if (url.startsWith("copy-of-")) {
+    const realUrl = url.substring(8);
+    const result = await getForType("json", `/rest/vermietungen/${encodeURIComponent(realUrl)}`);
+    if (result) {
+      const vermietung = new Vermietung(result);
+      vermietung.reset();
+      vermietung.titel = `Kopie von ${vermietung.titel}`;
+      return vermietung;
+    } else {
+      return result;
+    }
+  }
+  const result = await getForType("json", `/rest/vermietungen/${encodeURIComponent(url)}`);
+  return result ? new Vermietung(result) : result;
+}
+
+export async function saveVermietung(vermietung: Vermietung) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/vermietungen",
+    data: vermietung.toJSON(),
+    contentType: "json",
+  });
+}
+
+export async function deleteVermietungWithId(id: string) {
+  return standardFetch({
+    method: "DELETE",
+    url: "/rest/vermietungen",
+    data: { id },
+    contentType: "json",
+  });
+}
+
 // User
 export async function currentUser() {
   try {

@@ -2,26 +2,16 @@ import * as React from "react";
 import { CSSProperties, useEffect, useState } from "react";
 import { Form, FormInstance, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
-export default function VeranstaltungPageHeader({
-  isNew,
-  dirty,
-  form,
-}: {
-  isNew: boolean;
-  dirty: boolean;
-  form: FormInstance<Veranstaltung>;
-}) {
+export default function VermietungPageHeader({ isNew, dirty, form }: { isNew: boolean; dirty: boolean; form: FormInstance<Vermietung> }) {
   const { url } = useParams();
 
   const { useToken } = theme;
   const { token } = useToken();
-  const [typeColor, setTypeColor] = useState<string>("");
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
@@ -29,15 +19,7 @@ export default function VeranstaltungPageHeader({
     form,
     preserve: true,
   });
-  const abgesagt = Form.useWatch(["kopf", "abgesagt"], {
-    form,
-    preserve: true,
-  });
-  const eventTyp = Form.useWatch(["kopf", "eventTyp"], {
-    form,
-    preserve: true,
-  });
-  const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
+  const titel = Form.useWatch(["titel"], { form, preserve: true });
   const startDate = Form.useWatch(["startAndEnd", "start"], {
     form,
     preserve: true,
@@ -58,34 +40,24 @@ export default function VeranstaltungPageHeader({
         </Tag>,
       );
     }
-    if (abgesagt) {
-      tags.push(
-        <Tag key="abgesagt" color={"error"}>
-          ABGESAGT
-        </Tag>,
-      );
-    }
     setTagsForTitle(tags);
 
-    const code = `custom-color-${fieldHelpers.cssColorCode(eventTyp)}`;
-    setTypeColor((token as any)[code]);
-
-    document.title = isNew ? "Neue oder kopierte Veranstaltung" : titel;
+    document.title = isNew ? "Neue oder kopierte Vermietung" : titel;
 
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
   }
-  useEffect(updateState, [confirmed, abgesagt, eventTyp, titel, startDate]);
+  useEffect(updateState, [confirmed, titel, startDate, isNew]);
 
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
-  const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
+  const titleStyle: CSSProperties = { color: token.colorPrimary, whiteSpace: "normal" };
   return (
     <PageHeader
       title={<span style={titleStyle}>{document.title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
-        <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
-        <CopyButton key="copy" disabled={isNew} url={url} />,
+        <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
+        <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
         <SaveButton key="save" disabled={!dirty} />,
       ]}
       tags={tagsForTitle}

@@ -21,6 +21,7 @@ import WikiSearchresults from "@/components/wiki/WikiSearchresults";
 import Programmheft from "@/components/programmheft/Programmheft";
 import Kassenbericht from "@/components/options/Kassenbericht";
 import ImageOverview from "@/components/options/ImageOverview";
+import VermietungComp from "@/components/vermietung/VermietungComp.tsx";
 
 export const routes: RouteObject[] = [
   {
@@ -61,6 +62,10 @@ export const routes: RouteObject[] = [
       {
         path: "/veranstaltung/preview/:url",
         element: <Preview />,
+      },
+      {
+        path: "/vermietung/:url",
+        element: <VermietungComp />,
       },
       {
         path: "/team/:monatJahr",

@@ -3,7 +3,6 @@ import { Col, Collapse, ConfigProvider, Row, Space, theme, Tooltip, Typography }
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { IconForSmallBlock } from "@/components/Icon.tsx";
-import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
 
 const { Panel } = Collapse;
@@ -45,7 +44,7 @@ function VermietungHeader({ vermietung, expanded }: VermietungHeaderProps) {
       {expanded ? (
         <>
           <T l={5} t={vermietung.datumForDisplayShort} />
-          <T l={5} t={vermietung.titel} />
+          <T l={3} t={vermietung.titel} />
         </>
       ) : (
         <>
@@ -68,8 +67,10 @@ interface TeamBlockVermietungProps {
 
 export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamBlockVermietungProps) {
   const [color, setColor] = useState<string>("");
+  const { useToken } = theme;
+  const { token } = useToken();
   useEffect(() => {
-    setColor(vermietung.confirmed ? "green" : "red");
+    setColor(token.colorPrimary);
   }, [vermietung]);
 
   const [expanded, setExpanded] = useState<boolean>();
@@ -97,7 +98,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
           >
             <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
               <Row justify="end">
-                <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines"></ButtonInAdminPanel>
+                <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
               </Row>
 
               <div style={{ padding: 8 }}>

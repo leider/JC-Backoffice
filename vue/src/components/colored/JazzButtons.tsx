@@ -2,7 +2,7 @@ import { App, Button, ConfigProvider } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteVeranstaltungWithId } from "@/commons/loader.ts";
+import { deleteVeranstaltungWithId, deleteVermietungWithId } from "@/commons/loader.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -27,16 +27,16 @@ export function SendButton({ disabled }: ButtonProps) {
   );
 }
 
-export function DeleteButton({ disabled, id }: ButtonProps & { id: string }) {
+export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id: string; isVermietung?: boolean }) {
   const { modal } = App.useApp();
   const navigate = useNavigate();
   function callback() {
     modal.confirm({
       type: "confirm",
-      title: "Veranstaltung löschen",
-      content: `Bist Du sicher, dass Du die Veranstaltung "${document.title}" löschen möchtest?`,
+      title: `${isVermietung ? "Vermietung" : "Veranstaltung"} löschen`,
+      content: `Bist Du sicher, dass Du die ${isVermietung ? "Vermietung" : "Veranstaltung"} "${document.title}" löschen möchtest?`,
       onOk: async () => {
-        await deleteVeranstaltungWithId(id);
+        (await isVermietung) ? deleteVermietungWithId(id) : deleteVeranstaltungWithId(id);
         navigate("/");
       },
     });
@@ -50,14 +50,14 @@ export function DeleteButton({ disabled, id }: ButtonProps & { id: string }) {
     </ConfigProvider>
   );
 }
-export function CopyButton({ disabled, url }: ButtonProps & { url?: string }) {
+export function CopyButton({ disabled, url, isVermietung }: ButtonProps & { url?: string; isVermietung?: boolean }) {
   const navigate = useNavigate();
 
   function callback() {
     if (!url) {
       return;
     }
-    navigate(`/veranstaltung/copy-of-${url}`);
+    navigate(`/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`);
   }
 
   return (

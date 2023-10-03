@@ -8,9 +8,10 @@ import _ from "lodash";
 interface ButtonInAdminPanelProps {
   type: buttonType;
   url: string;
+  isVermietung?: boolean;
 }
 
-export function ButtonInAdminPanel({ type, url }: ButtonInAdminPanelProps) {
+export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
   const navigate = useNavigate();
 
   const { color, icon } = useColorsAndIconsForSections(type);
@@ -24,7 +25,7 @@ export function ButtonInAdminPanel({ type, url }: ButtonInAdminPanelProps) {
           type="primary"
           onClick={() =>
             navigate({
-              pathname: `/veranstaltung/${url}`,
+              pathname: `/${isVermietung ? "vermietung" : "veranstaltung"}/${url}`,
               search: `page=${type}`,
             })
           }

@@ -80,7 +80,10 @@ export default function Veranstaltungen() {
     const gigOrRent: (Veranstaltung | Vermietung)[] = [];
     gigOrRent.push(...filtered);
     gigOrRent.push(...vermietungen);
-    const result = groupBy(gigOrRent, (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(
+      _.sortBy(gigOrRent, "startDate"),
+      (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt,
+    );
     setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [pressefilter, veranstaltungen, vermietungen, PRESSEFILTERS]);
