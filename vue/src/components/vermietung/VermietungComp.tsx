@@ -16,6 +16,8 @@ import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect.tsx";
+import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
+import SimpleMdeReact from "react-simplemde-editor";
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -109,21 +111,32 @@ export default function VermietungComp() {
       layout="vertical"
     >
       <VermietungPageHeader isNew={isNew} dirty={dirty} form={form} />
-      <Row gutter={12}>
-        <Col span={8}>
-          <CheckItem name={["confirmed"]} label="Ist bestätigt" />
-        </Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={12}>
-          <TextField name={["titel"]} label="Titel" required />
-        </Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={24}>
-          <StartEndPickers />
-        </Col>
-      </Row>
+      <Col xs={24} lg={12}>
+        <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
+          <Row gutter={12}>
+            <Col span={8}>
+              <CheckItem name={["confirmed"]} label="Ist bestätigt" />
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={12}>
+              <TextField name={["titel"]} label="Titel" required />
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={24}>
+              <StartEndPickers />
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={24}>
+              <Form.Item label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]}>
+                <SimpleMdeReact options={{ status: false, spellChecker: false }} />
+              </Form.Item>
+            </Col>
+          </Row>
+        </CollapsibleForVeranstaltung>
+      </Col>
     </Form>
   );
 }

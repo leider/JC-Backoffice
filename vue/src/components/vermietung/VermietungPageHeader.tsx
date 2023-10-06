@@ -15,7 +15,7 @@ export default function VermietungPageHeader({ isNew, dirty, form }: { isNew: bo
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
-  const confirmed = Form.useWatch(["kopf", "confirmed"], {
+  const confirmed = Form.useWatch(["confirmed"], {
     form,
     preserve: true,
   });

@@ -97,12 +97,11 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
             extra={<Extras vermietung={vermietung} />}
           >
             <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-              <Row justify="end">
-                <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
-              </Row>
-
-              <div style={{ padding: 8 }}>
-                <h1>Vermietung</h1>
+              <div style={{ margin: -12 }}>
+                <Row justify="end">
+                  <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
+                </Row>
+                <h1 style={{ padding: 8 }}>Vermietung</h1>
               </div>
             </ConfigProvider>
           </Panel>
