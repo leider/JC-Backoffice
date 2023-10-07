@@ -208,7 +208,7 @@ const JazzContent: React.FC = () => {
           paddingInline: "20px",
         }}
       >
-        <Link to={"/"}>
+        <Link to={"/"} onClick={() => location.reload()}>
           <div
             style={{
               float: "left",
