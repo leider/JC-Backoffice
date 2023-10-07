@@ -110,6 +110,17 @@ export default function VeranstaltungComp() {
   const [isNew, setIsNew] = useState<boolean>(false);
 
   const [search] = useSearchParams();
+
+  function validateForErrors() {
+    form.validateFields().catch(() => {
+      notification.open({
+        type: "error",
+        message: "Fehler",
+        description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+        duration: 5,
+      });
+    });
+  }
   function saveForm() {
     form.validateFields().then(async () => {
       const createLogWithDiff = (diff: string): ChangelistItem => {
@@ -163,6 +174,7 @@ export default function VeranstaltungComp() {
         // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
       }}
+      onClick={validateForErrors}
       onFinish={saveForm}
       layout="vertical"
     >
