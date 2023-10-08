@@ -1,4 +1,5 @@
 import { Preisprofil } from "../optionen/optionValues.js";
+import _ from "lodash";
 
 const standardRabattErmaessigt = 2;
 const standardRabattMitglied = 5;
@@ -52,11 +53,11 @@ export default class Eintrittspreise {
   }
 
   private get rabattErmaessigt(): number {
-    return this.preisprofil.rabattErmaessigt || standardRabattErmaessigt;
+    return _.isNil(this.preisprofil.rabattErmaessigt) ? standardRabattErmaessigt : this.preisprofil.rabattErmaessigt;
   }
 
   private get rabattMitglied(): number {
-    return this.preisprofil.rabattMitglied || standardRabattMitglied;
+    return _.isNil(this.preisprofil.rabattMitglied) ? standardRabattMitglied : this.preisprofil.rabattMitglied;
   }
 
   get ermaessigt(): number {
