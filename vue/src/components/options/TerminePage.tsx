@@ -76,7 +76,6 @@ export default function TerminePage() {
       type: "text",
       width: "m",
       required: true,
-      uniqueValues: true,
     },
     {
       fieldName: "typ",
