@@ -102,7 +102,7 @@ export default function VeranstaltungComp() {
   useEffect(initializeForm, [form, veranstaltung]);
   useEffect(() => {
     const accessrights = context?.currentUser.accessrights;
-    if (accessrights !== undefined && !accessrights?.isOrgaTeam) {
+    if (accessrights !== undefined && !accessrights?.isAbendkasse) {
       navigate(`/veranstaltung/preview/${url}`);
     }
   }, [context, navigate, url]);

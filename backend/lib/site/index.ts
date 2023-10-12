@@ -179,4 +179,8 @@ app.get("/imgzip/:yymm", (req, res, next) => {
   veranstaltungenService.imgzip(res, next, req.params.yymm);
 });
 
+app.get("/imgzipForVeranstaltung/:url", (req, res, next) => {
+  veranstaltungenService.imgzipForVeranstaltung(res, next, req.params.url);
+});
+
 export default app;

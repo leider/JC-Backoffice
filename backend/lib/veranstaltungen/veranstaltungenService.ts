@@ -28,18 +28,15 @@ function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user
   return veranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
-async function imgzip(res: Response, next: NextFunction, yymm: string) {
-  const start = DatumUhrzeit.forYYMM(yymm);
-  const end = start.plus({ monate: 1 });
+function zipVeranstaltungen(veranstaltungen: Veranstaltung[], name: string, res: Response, next: NextFunction) {
   try {
-    const result = await store.byDateRangeInAscendingOrder(start, end);
-    const images = flatten(result.map((veranst) => veranst.presse.image))
+    const images = flatten(veranstaltungen.map((veranst) => veranst.presse.image))
       // eslint-disable-next-line no-sync
       .filter((filename) => fs.existsSync(uploadDir + "/" + filename))
       .map((filename) => {
         return { path: uploadDir + "/" + filename, name: filename };
       });
-    const filename = "Jazzclub Bilder " + start.monatJahrKompakt + ".zip";
+    const filename = `Jazzclub Bilder ${name}.zip`;
 
     res.type("zip");
     res.header("Content-Disposition", 'attachment; filename="' + filename + '"');
@@ -56,8 +53,23 @@ async function imgzip(res: Response, next: NextFunction, yymm: string) {
   }
 }
 
+async function imgzip(res: Response, next: NextFunction, yymm: string) {
+  const start = DatumUhrzeit.forYYMM(yymm);
+  const end = start.plus({ monate: 1 });
+  const name = start.monatJahrKompakt;
+  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
+  zipVeranstaltungen(veranstaltungen, name, res, next);
+}
+
+async function imgzipForVeranstaltung(res: Response, next: NextFunction, url: string) {
+  const name = url;
+  const veranstaltungen: Veranstaltung[] = [await getVeranstaltung(url)];
+  zipVeranstaltungen(veranstaltungen, name, res, next);
+}
+
 export default {
   getVeranstaltung,
   filterUnbestaetigteFuerJedermann,
   imgzip,
+  imgzipForVeranstaltung,
 };
