@@ -9,7 +9,7 @@ export default function TabHotel({ veranstaltung, optionen, form }: TabProps) {
   return (
     <Row gutter={12}>
       <Col xs={24} lg={12}>
-        <KontaktCard kontakte={optionen!.hotels} form={form} selector="hotel" />
+        <KontaktCard kontakte={optionen!.hotels} form={form} selector="hotel" noTopBorder />
         <HotelCard form={form} optionen={optionen} veranstaltung={veranstaltung} />
       </Col>
       <Col xs={24} lg={12}>

@@ -12,8 +12,9 @@ type KontaktCardProps = {
   kontakte: Kontakt[];
   form: FormInstance<Veranstaltung>;
   selector: "agentur" | "hotel";
+  noTopBorder?: boolean;
 };
-export default function KontaktCard({ kontakte, form, selector }: KontaktCardProps) {
+export default function KontaktCard({ kontakte, form, selector, noTopBorder }: KontaktCardProps) {
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
     const names = _.uniq(kontakte.map((k) => k.name))
@@ -42,6 +43,7 @@ export default function KontaktCard({ kontakte, form, selector }: KontaktCardPro
     <CollapsibleForVeranstaltung
       suffix={selector === "agentur" ? "allgemeines" : "hotel"}
       label={selector === "agentur" ? "Agentur" : "Hotel"}
+      noTopBorder={noTopBorder}
     >
       <Row gutter={12}>
         <Col span={12}>

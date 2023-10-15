@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
-import { Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
+import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, Tag, theme, Tooltip } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -16,8 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-
-const { Panel } = Collapse;
+import _ from "lodash";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -36,6 +35,8 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
   const { context } = useAuth();
+  const { token } = theme.useToken();
+  const navigate = useNavigate();
 
   const initialize = () => {
     const deepCopy = veranstaltung.toJSON();
@@ -112,32 +113,56 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben"></ButtonInAdminPanel>
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>
+            {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>}
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse"></ButtonInAdminPanel>
             <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse"></ButtonInAdminPanel>
+            <ConfigProvider theme={{ token: { colorPrimary: (token as any)["custom-color-concert"] } }}>
+              <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
+                <Button
+                  icon={<IconForSmallBlock size={16} iconName={"EyeFill"} />}
+                  size="middle"
+                  type="primary"
+                  onClick={() =>
+                    navigate({
+                      pathname: `/${"veranstaltung/preview"}/${veranstaltung.url}`,
+                    })
+                  }
+                />
+              </Tooltip>
+            </ConfigProvider>
           </>
         )}
       </Row>
-      <div style={{ padding: 8 }}>
-        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-          Kasse
-        </Divider>
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" />
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" />
-        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-          Techniker
-        </Divider>
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" />
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" />
-        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-          Master
-        </Divider>
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" />
-        <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-          Merchandise
-        </Divider>
-        <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" />
-      </div>
+      <Collapse
+        items={[
+          {
+            label: "Mitarbeiter (Klicken zum anzeigen)",
+            key: "mitarbeiter",
+            children: (
+              <div style={{ padding: 8 }}>
+                <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+                  Kasse
+                </Divider>
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" />
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" />
+                <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+                  Techniker
+                </Divider>
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" />
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" />
+                <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+                  Master
+                </Divider>
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" />
+                <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
+                  Merchandise
+                </Divider>
+                <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" />
+              </div>
+            ),
+          },
+        ]}
+      />
     </Form>
   );
 }
@@ -166,88 +191,66 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
             setExpanded(!expanded);
           }}
           expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-        >
-          <Panel
-            className="team-block"
-            style={{ backgroundColor: color }}
-            key={veranstaltung.id || ""}
-            header={<TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />}
-            extra={<Extras veranstaltung={veranstaltung} />}
-          >
-            <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-              <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
-            </ConfigProvider>
-          </Panel>
-        </Collapse>
+          items={[
+            {
+              key: veranstaltung.id || "",
+              style: { backgroundColor: color },
+              className: "team-block",
+              label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
+              extra: expanded && <Extras veranstaltung={veranstaltung} />,
+              children: (
+                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+                  <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+                </ConfigProvider>
+              ),
+            },
+          ]}
+        />
       </Col>
     </ConfigProvider>
   );
 }
-
 function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  const [tooltip, setTooltip] = useState<string>("");
-  const [confirmed, setConfirmed] = useState<boolean>(true);
-  const [overallState, setOverallState] = useState<boolean>(true);
-
-  const { token } = theme.useToken();
-  const green = token.colorSuccess;
-  const red = token.colorError;
-
-  const navigate = useNavigate();
+  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
   useEffect(() => {
-    const bestaetigt = veranstaltung.kopf.confirmed;
-    const presse = veranstaltung.presse.checked;
-    const technik = veranstaltung.technik.checked;
-    const hotel = veranstaltung.artist.brauchtHotel ? veranstaltung.unterkunft.checked : true;
-    setOverallState(presse && technik && hotel);
-
-    let tt: string;
-    if (!bestaetigt) {
-      tt = "Noch unbestätigt";
-    } else {
-      const texte = [];
-      if (!presse) texte.push("Presse nicht OK");
-      if (!technik) texte.push("Technik nicht OK");
-      if (!hotel) texte.push("Hotel fehlt");
-      tt = texte.join(", ");
+    function HeaderTag({ label, color }: { label: string; color: boolean }) {
+      return (
+        <Tag key={label} color={color ? "success" : "error"} style={{ border: 0, paddingLeft: 3, paddingRight: 3 }}>
+          {label}
+        </Tag>
+      );
     }
-    setConfirmed(bestaetigt);
-    setTooltip(tt);
+
+    const confirmed = veranstaltung.kopf.confirmed;
+    const technikOK = veranstaltung.technik.checked;
+    const presseOK = veranstaltung.presse.checked;
+    const homepage = veranstaltung.kopf.kannAufHomePage;
+    const social = veranstaltung.kopf.kannInSocialMedia;
+    const abgesagt = veranstaltung.kopf.abgesagt;
+    const brauchtHotel = veranstaltung.artist.brauchtHotel;
+    const hotel = veranstaltung.unterkunft.bestaetigt;
+
+    const taggies: { label: string; color: boolean }[] = [
+      { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
+      { label: "Technik", color: technikOK },
+      { label: "Presse", color: presseOK },
+      { label: "Homepage", color: homepage },
+      { label: "Social Media", color: social },
+    ];
+    if (abgesagt) {
+      taggies.unshift({ label: "ABGESAGT", color: false });
+    }
+    if (brauchtHotel) {
+      taggies.push({ label: "Hotel", color: hotel });
+    }
+    setTagsForTitle(taggies.map((tag) => <HeaderTag label={tag.label} color={tag.color}></HeaderTag>));
   }, [veranstaltung]);
 
-  const color = overallState ? green : red;
-  const colorConf = confirmed ? green : red;
-
   return (
-    <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
-      <Tooltip title={confirmed ? "Bestätigt" : "Noch unbestätigt"} color={colorConf}>
-        <IconForSmallBlock size={12} iconName={confirmed ? "LockFill" : "UnlockFill"} color={colorConf} />
-      </Tooltip>
-      {confirmed && (
-        <Tooltip title={overallState ? "Alles in Ordnung" : tooltip} color={color}>
-          <IconForSmallBlock size={12} iconName={overallState ? "HandThumbsUpFill" : "SignStopFill"} color={color} />
-        </Tooltip>
-      )}
-      <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
-        <span
-          onClick={(event) => {
-            // If you don't want click extra trigger collapse, you can prevent this:
-            event.stopPropagation();
-            navigate(`/veranstaltung/preview/${veranstaltung.url}`);
-          }}
-        >
-          <IconForSmallBlock
-            size={16}
-            iconName={"EyeFill"}
-            color={(token as any)["custom-color-concert"]}
-            style={{
-              margin: "-4px 0",
-            }}
-          />
-        </span>
-      </Tooltip>
-    </Space>
+    <ConfigProvider theme={{ token: { fontSize: 11 } }}>
+      <div style={{ width: "70px" }}>{tagsForTitle}</div>
+    </ConfigProvider>
   );
 }
 

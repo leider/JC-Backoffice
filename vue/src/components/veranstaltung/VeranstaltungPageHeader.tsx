@@ -64,6 +64,14 @@ export default function VeranstaltungPageHeader({
     form,
     preserve: true,
   });
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+    form,
+    preserve: true,
+  });
+  const hotel = Form.useWatch(["unterkunft", "bestaetigt"], {
+    form,
+    preserve: true,
+  });
 
   useEffect(() => {
     const code = `custom-color-${fieldHelpers.cssColorCode(eventTyp)}`;
@@ -73,25 +81,28 @@ export default function VeranstaltungPageHeader({
   }, [isNew, token, eventTyp, titel, startDate]);
 
   useEffect(() => {
-    function HeaderTag({ label, color }: { label: string; color: string }) {
+    function HeaderTag({ label, color }: { label: string; color: boolean }) {
       return (
-        <Tag key={label} color={color}>
+        <Tag key={label} color={color ? "success" : "error"}>
           {label}
         </Tag>
       );
     }
-    const taggies: { label: string; color: string }[] = [
-      { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed ? "success" : "error" },
-      { label: "Technik", color: technikOK ? "success" : "error" },
-      { label: "Presse", color: presseOK ? "success" : "error" },
-      { label: "Homepage", color: homepage ? "success" : "error" },
-      { label: "Social Media", color: social ? "success" : "error" },
+    const taggies: { label: string; color: boolean }[] = [
+      { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
+      { label: "Technik", color: technikOK },
+      { label: "Presse", color: presseOK },
+      { label: "Homepage", color: homepage },
+      { label: "Social Media", color: social },
     ];
     if (abgesagt) {
-      taggies.unshift({ label: "ABGESAGT", color: "error" });
+      taggies.unshift({ label: "ABGESAGT", color: false });
+    }
+    if (brauchtHotel) {
+      taggies.push({ label: "Hotel", color: hotel });
     }
     setTagsForTitle(taggies.map((tag) => <HeaderTag label={tag.label} color={tag.color}></HeaderTag>));
-  }, [confirmed, abgesagt, technikOK, presseOK, homepage, social]);
+  }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
 
   useEffect(() => {
     setIsOrga(context?.currentUser?.accessrights?.isOrgaTeam || false);
