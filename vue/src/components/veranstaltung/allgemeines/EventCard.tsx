@@ -67,18 +67,25 @@ export default function EventCard({ form, optionen, orte }: EventCardProps) {
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
       <Row gutter={12}>
-        <Col span={8} offset={16}>
-          <CheckItem label="ist abgesagt" name={["kopf", "abgesagt"]} />
-        </Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={8}>
+        <Col span={6}>
           <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" disabled={!isBookingTeam} />
         </Col>
-        <Col span={8}>
+        <Col span={6}>
+          <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />
+        </Col>
+        <Col span={6}>
+          <CheckItem name={["presse", "checked"]} label="Presse OK" />
+        </Col>
+        <Col span={6}>
+          <CheckItem label="Ist abgesagt" name={["kopf", "abgesagt"]} />
+        </Col>
+        <Col span={6}>
           <CheckItem name={["artist", "brauchtHotel"]} label="Braucht Hotel" />
         </Col>
-        <Col span={8}>
+        <Col span={6}>
+          <CheckItem name={["technik", "fluegel"]} label="Flügel stimmen" />
+        </Col>
+        <Col span={6}>
           <CheckItem name={["kopf", "fotografBestellen"]} label="Fotograf einladen" />
         </Col>
       </Row>

@@ -6,7 +6,6 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import SingleSelect from "@/widgets/SingleSelect";
 
 type KontaktCardProps = {
@@ -39,12 +38,10 @@ export default function KontaktCard({ kontakte, form, selector }: KontaktCardPro
     };
     form.setFieldsValue(values);
   }
-  const { lg } = useBreakpoint();
   return (
     <CollapsibleForVeranstaltung
       suffix={selector === "agentur" ? "allgemeines" : "hotel"}
       label={selector === "agentur" ? "Agentur" : "Hotel"}
-      noTopBorder={lg}
     >
       <Row gutter={12}>
         <Col span={12}>

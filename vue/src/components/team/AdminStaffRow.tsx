@@ -7,7 +7,7 @@ import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelec
 
 interface AdminStaffRowProps {
   sectionName: StaffType;
-  label: string;
+  label?: string;
   usersAsOptions: UsersAsOption[];
 }
 

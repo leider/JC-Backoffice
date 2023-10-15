@@ -7,6 +7,7 @@ import KontaktCard from "@/components/veranstaltung/allgemeines/KontaktCard";
 import VertragCard from "@/components/veranstaltung/allgemeines/VertragCard";
 import BearbeiterCard from "@/components/veranstaltung/allgemeines/BearbeiterCard";
 import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 
 export default function TabAllgemeines({ optionen, orte, form, veranstaltung }: TabProps) {
   return (
@@ -17,6 +18,7 @@ export default function TabAllgemeines({ optionen, orte, form, veranstaltung }: 
         <KommentarCard />
       </Col>
       <Col xs={24} lg={12}>
+        <MitarbeiterCard />
         <KontaktCard kontakte={optionen!.agenturen} form={form} selector="agentur" />
         <VertragCard form={form} veranstaltung={veranstaltung!} />
         <BearbeiterCard veranstaltung={veranstaltung!} />
