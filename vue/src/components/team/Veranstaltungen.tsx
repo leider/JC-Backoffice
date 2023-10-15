@@ -14,6 +14,7 @@ import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import _ from "lodash";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
@@ -125,20 +126,7 @@ export default function Veranstaltungen() {
         <PageHeader
           title="Veranstaltungen"
           extra={[
-            <ButtonWithIcon
-              key="new"
-              icon="FileEarmarkPlus"
-              text="Neue Veranstaltung"
-              type="default"
-              onClick={() => navigate("/veranstaltung/new")}
-            />,
-            <ButtonWithIcon
-              key="newVermietung"
-              icon="FileEarmarkEasel"
-              text="Neue Vermietung"
-              type="default"
-              onClick={() => navigate("/vermietung/new")}
-            />,
+            <NewButtons />,
             <ButtonWithIcon
               key="cal"
               icon="CalendarWeek"

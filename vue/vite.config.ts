@@ -44,12 +44,12 @@ export default defineConfig(() => {
           theme_color: "#000000",
           icons: [
             {
-              src: "/img/logo-square-192.png",
+              src: "/vue/img/logo-square-192.png",
               sizes: "192x192",
               type: "image/png",
             },
             {
-              src: "/img/logo-square-512.png",
+              src: "/vue/img/logo-square-512.png",
               sizes: "512x512",
               type: "image/png",
             },

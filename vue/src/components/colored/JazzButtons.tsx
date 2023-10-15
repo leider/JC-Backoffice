@@ -30,6 +30,26 @@ export function SendButton({ disabled }: ButtonProps) {
   );
 }
 
+export function NewButtons() {
+  const navigate = useNavigate();
+  const items = [
+    { key: "Veranstaltung", label: "Neue Veranstaltung", icon: <IconForSmallBlock iconName="FileEarmarkPlus" /> },
+    { key: "Vermietung", label: "Neue Vermietung", icon: <IconForSmallBlock iconName="FileEarmarkEasel" /> },
+  ];
+  function onMenuClick(e: { key: string }): void {
+    if (e.key === "Veranstaltung") {
+      return navigate("/veranstaltung/new");
+    }
+    if (e.key === "Vermietung") {
+      return navigate("/vermietung/new");
+    }
+  }
+  return (
+    <Dropdown.Button type="default" menu={{ items, onClick: onMenuClick }}>
+      Neu
+    </Dropdown.Button>
+  );
+}
 export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veranstaltung: Veranstaltung }) {
   const items = [
     { key: "ExcelKalk", label: "Kalkulation (Excel)", icon: <IconForSmallBlock iconName="FileEarmarkSpreadsheet" /> },

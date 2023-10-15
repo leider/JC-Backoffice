@@ -244,7 +244,7 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
     if (brauchtHotel) {
       taggies.push({ label: "Hotel", color: hotel });
     }
-    setTagsForTitle(taggies.map((tag) => <HeaderTag label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
   }, [veranstaltung]);
 
   return (
