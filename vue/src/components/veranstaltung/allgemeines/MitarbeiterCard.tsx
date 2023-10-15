@@ -61,15 +61,23 @@ export default function MitarbeiterCard() {
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Mitarbeiter" noTopBorder={lg}>
-      <Divider style={dividerStyle}>Master</Divider>
+      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+        Master
+      </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} sectionName="mod" />
-      <Divider style={dividerStyle}>Kasse</Divider>
+      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+        Kasse
+      </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="kasseV" />
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="kasse" />
-      <Divider style={dividerStyle}>Techniker</Divider>
+      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+        Techniker
+      </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="technikerV" />
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="techniker" />
-      <Divider style={dividerStyle}>Merchandise</Divider>
+      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+        Merchandise
+      </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} sectionName="merchandise" />
     </CollapsibleForVeranstaltung>
   );

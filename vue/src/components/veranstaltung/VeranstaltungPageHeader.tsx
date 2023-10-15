@@ -31,14 +31,6 @@ export default function VeranstaltungPageHeader({
 
   const [isOrga, setIsOrga] = useState<boolean>(false);
 
-  const confirmed = Form.useWatch(["kopf", "confirmed"], {
-    form,
-    preserve: true,
-  });
-  const abgesagt = Form.useWatch(["kopf", "abgesagt"], {
-    form,
-    preserve: true,
-  });
   const eventTyp = Form.useWatch(["kopf", "eventTyp"], {
     form,
     preserve: true,
@@ -48,39 +40,58 @@ export default function VeranstaltungPageHeader({
     form,
     preserve: true,
   });
+  const confirmed = Form.useWatch(["kopf", "confirmed"], {
+    form,
+    preserve: true,
+  });
+  const abgesagt = Form.useWatch(["kopf", "abgesagt"], {
+    form,
+    preserve: true,
+  });
+  const technikOK = Form.useWatch(["technik", "checked"], {
+    form,
+    preserve: true,
+  });
+  const presseOK = Form.useWatch(["presse", "checked"], {
+    form,
+    preserve: true,
+  });
+  const homepage = Form.useWatch(["kopf", "kannAufHomePage"], {
+    form,
+    preserve: true,
+  });
+  const social = Form.useWatch(["kopf", "kannInSocialMedia"], {
+    form,
+    preserve: true,
+  });
 
-  function updateState() {
-    const tags = [];
-    if (!confirmed) {
-      tags.push(
-        <Tag key="unbestaetigt" color={"error"}>
-          Unbestätigt
-        </Tag>,
-      );
-    } else {
-      tags.push(
-        <Tag key="bestaetigt" color={"success"}>
-          Bestätigt
-        </Tag>,
-      );
-    }
-    if (abgesagt) {
-      tags.push(
-        <Tag key="abgesagt" color={"error"}>
-          ABGESAGT
-        </Tag>,
-      );
-    }
-    setTagsForTitle(tags);
-
+  useEffect(() => {
     const code = `custom-color-${fieldHelpers.cssColorCode(eventTyp)}`;
     setTypeColor((token as any)[code]);
-
     document.title = isNew ? "Neue oder kopierte Veranstaltung" : titel;
-
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
-  }
-  useEffect(updateState, [isNew, token, confirmed, abgesagt, eventTyp, titel, startDate]);
+  }, [isNew, token, eventTyp, titel, startDate]);
+
+  useEffect(() => {
+    function HeaderTag({ label, color }: { label: string; color: string }) {
+      return (
+        <Tag key={label} color={color}>
+          {label}
+        </Tag>
+      );
+    }
+    const taggies: { label: string; color: string }[] = [
+      { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed ? "success" : "error" },
+      { label: "Technik", color: technikOK ? "success" : "error" },
+      { label: "Presse", color: presseOK ? "success" : "error" },
+      { label: "Homepage", color: homepage ? "success" : "error" },
+      { label: "Social Media", color: social ? "success" : "error" },
+    ];
+    if (abgesagt) {
+      taggies.unshift({ label: "ABGESAGT", color: "error" });
+    }
+    setTagsForTitle(taggies.map((tag) => <HeaderTag label={tag.label} color={tag.color}></HeaderTag>));
+  }, [confirmed, abgesagt, technikOK, presseOK, homepage, social]);
 
   useEffect(() => {
     setIsOrga(context?.currentUser?.accessrights?.isOrgaTeam || false);
