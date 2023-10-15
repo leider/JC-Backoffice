@@ -428,9 +428,16 @@ export async function openVertrag(veranstaltung: Veranstaltung) {
 }
 
 export async function imgZip(yymm: string) {
-  const pdf = await getForType("zip", `/imgzip/${yymm}`);
-  if (pdf) {
-    showFile(pdf, `JazzClub_Bilder_${DatumUhrzeit.forYYMM(yymm).fuerKalenderViews}.zip`);
+  const zip = await getForType("zip", `/imgzip/${yymm}`);
+  if (zip) {
+    showFile(zip, `JazzClub_Bilder_${DatumUhrzeit.forYYMM(yymm).fuerKalenderViews}.zip`);
+  }
+}
+
+export async function imgzipForVeranstaltung(veranstaltung: Veranstaltung) {
+  const zip = await getForType("zip", `/imgzipForVeranstaltung/${veranstaltung.url}`);
+  if (zip) {
+    showFile(zip, `JazzClub_Bilder_${veranstaltung.kopf.titel}.zip`);
   }
 }
 

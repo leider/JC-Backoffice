@@ -1,8 +1,11 @@
-import { App, Button, ConfigProvider } from "antd";
+import { App, Button, ConfigProvider, Dropdown } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteVeranstaltungWithId, deleteVermietungWithId } from "@/commons/loader.ts";
+import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import { utils, writeFileXLSX } from "xlsx";
+import { createExcelData } from "jc-shared/excelPreparation/excelFormatters.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -23,6 +26,46 @@ export function SendButton({ disabled }: ButtonProps) {
       <Button htmlType="submit" icon={<IconForSmallBlock iconName="Send" />} type="primary" disabled={disabled}>
         Senden
       </Button>
+    </ConfigProvider>
+  );
+}
+
+export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veranstaltung: Veranstaltung }) {
+  const items = [
+    { key: "ExcelKalk", label: "Kalkulation (Excel)", icon: <IconForSmallBlock iconName="FileEarmarkSpreadsheet" /> },
+    { key: "Pressefotos", label: "Pressefotos (Zip)", icon: <IconForSmallBlock iconName="FileEarmarkImage" /> },
+    { key: "Kassenzettel", label: "Kassenzettel (Pdf)", icon: <IconForSmallBlock iconName="Printer" /> },
+  ];
+
+  function onMenuClick(e: { key: string }): void {
+    if (e.key === "ExcelKalk") {
+      const sheet = utils.json_to_sheet(createExcelData(veranstaltung));
+      sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];
+      const book = utils.book_new();
+      utils.book_append_sheet(
+        book,
+        sheet,
+        veranstaltung?.kopf?.titel
+          .replace(/\s/g, "-")
+          .replace(/\//g, "-")
+          .replace(/[^a-zA-Z0-9\- _]/g, "")
+          .slice(0, 30) || "data",
+      );
+      return writeFileXLSX(book, "JAZZ.xlsx");
+    }
+    if (e.key === "Pressefotos") {
+      imgzipForVeranstaltung(veranstaltung);
+    }
+    if (e.key === "Kassenzettel") {
+      openKassenzettel(veranstaltung);
+    }
+  }
+
+  return (
+    <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
+      <Dropdown.Button type="primary" menu={{ items, onClick: onMenuClick }} disabled={disabled}>
+        Exportieren
+      </Dropdown.Button>
     </ConfigProvider>
   );
 }

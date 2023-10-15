@@ -106,9 +106,6 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col xs={24} lg={12}>
-          <a href={`/imgzipForVeranstaltung/${veranstForPreview.url}`}>
-            <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Originalbilder als ZIP</Button>
-          </a>
           <PressePreview veranstaltung={veranstForPreview} />
         </Col>
       </Row>

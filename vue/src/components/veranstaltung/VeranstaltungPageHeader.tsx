@@ -3,27 +3,33 @@ import { CSSProperties, useEffect, useState } from "react";
 import { Form, FormInstance, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
-import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
+import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { useAuth } from "@/commons/auth.tsx";
 
 export default function VeranstaltungPageHeader({
+  veranstaltung,
   isNew,
   dirty,
   form,
 }: {
+  veranstaltung: Veranstaltung;
   isNew: boolean;
   dirty: boolean;
   form: FormInstance<Veranstaltung>;
 }) {
   const { url } = useParams();
 
+  const { context } = useAuth();
   const { useToken } = theme;
   const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
-
   const [displayDate, setDisplayDate] = useState<string>("");
+  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+
+  const [isOrga, setIsOrga] = useState<boolean>(false);
 
   const confirmed = Form.useWatch(["kopf", "confirmed"], {
     form,
@@ -74,9 +80,11 @@ export default function VeranstaltungPageHeader({
 
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
   }
-  useEffect(updateState, [confirmed, abgesagt, eventTyp, titel, startDate]);
+  useEffect(updateState, [isNew, token, confirmed, abgesagt, eventTyp, titel, startDate]);
 
-  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+  useEffect(() => {
+    setIsOrga(context?.currentUser?.accessrights?.isOrgaTeam || false);
+  }, [context, setIsOrga]);
 
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
@@ -84,8 +92,9 @@ export default function VeranstaltungPageHeader({
       title={<span style={titleStyle}>{document.title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
-        <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
-        <CopyButton key="copy" disabled={isNew} url={url} />,
+        isOrga && <ExportButtons key="exports" disabled={isNew} veranstaltung={veranstaltung} />,
+        isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
+        isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
         <SaveButton key="save" disabled={!dirty} />,
       ]}
       tags={tagsForTitle}
@@ -96,7 +105,6 @@ export default function VeranstaltungPageHeader({
             color: (token as any)["custom-color-ausgaben"],
           }}
         >
-          {" "}
           (Denk daran, alle Felder zu überprüfen und auszufüllen)
         </b>
       )}

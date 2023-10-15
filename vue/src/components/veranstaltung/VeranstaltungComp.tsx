@@ -178,7 +178,7 @@ export default function VeranstaltungComp() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <VeranstaltungPageHeader isNew={isNew} dirty={dirty} form={form} />
+      <VeranstaltungPageHeader veranstaltung={veranstaltung} isNew={isNew} dirty={dirty} form={form} />
       <VeranstaltungTabs veranstaltung={veranstaltung} optionen={optionen} orte={orte} form={form} />
     </Form>
   );
