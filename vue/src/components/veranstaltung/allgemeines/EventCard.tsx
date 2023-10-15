@@ -64,30 +64,26 @@ export default function EventCard({ form, optionen, orte }: EventCardProps) {
 
   useEffect(ortChanged, [orte]);
 
+  function Checker({ name, label, disabled }: { label: string; name: string[]; disabled?: boolean }) {
+    return (
+      <Col span={6}>
+        <CheckItem name={name} label={label} disabled={disabled} />
+      </Col>
+    );
+  }
+
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
       <Row gutter={12}>
-        <Col span={6}>
-          <CheckItem name={["kopf", "confirmed"]} label="Ist bestätigt" disabled={!isBookingTeam} />
-        </Col>
-        <Col span={6}>
-          <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />
-        </Col>
-        <Col span={6}>
-          <CheckItem name={["presse", "checked"]} label="Presse OK" />
-        </Col>
-        <Col span={6}>
-          <CheckItem label="Ist abgesagt" name={["kopf", "abgesagt"]} />
-        </Col>
-        <Col span={6}>
-          <CheckItem name={["artist", "brauchtHotel"]} label="Braucht Hotel" />
-        </Col>
-        <Col span={6}>
-          <CheckItem name={["technik", "fluegel"]} label="Flügel stimmen" />
-        </Col>
-        <Col span={6}>
-          <CheckItem name={["kopf", "fotografBestellen"]} label="Fotograf einladen" />
-        </Col>
+        <Checker label="Ist bestätigt" name={["kopf", "confirmed"]} disabled={!isBookingTeam} />
+        <Checker label="Technik ist geklärt" name={["technik", "checked"]} />
+        <Checker label="Presse OK" name={["presse", "checked"]} />
+        <Checker label="Ist abgesagt" name={["kopf", "abgesagt"]} />
+        <Checker label="Braucht Hotel" name={["artist", "brauchtHotel"]} />
+        <Checker label="Flügel stimmen" name={["technik", "fluegel"]} />
+        <Checker label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
+        <Checker label="Kann Homepage" name={["kopf", "kannAufHomePage"]} />
+        <Checker label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
       </Row>
       <Row gutter={12}>
         <Col span={12}>

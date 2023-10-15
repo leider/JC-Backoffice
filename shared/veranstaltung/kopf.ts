@@ -12,6 +12,8 @@ export default class Kopf {
   rechnungAnKooperation = false;
   abgesagt = false;
   fotografBestellen = false;
+  kannAufHomePage = false;
+  kannInSocialMedia = false;
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
