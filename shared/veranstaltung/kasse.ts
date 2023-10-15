@@ -48,15 +48,19 @@ export default class Kasse {
     return this.ausgabeBankEUR + this.ausgabenOhneGage;
   }
 
+  get einnahmeOhneBankUndTickets(): number {
+    return this.einnahmeSonstiges1EUR + this.einnahmeSonstiges2EUR;
+  }
+
   get einnahmeTotalEUR(): number {
-    return this.einnahmeBankEUR + this.einnahmeSonstiges1EUR + this.einnahmeSonstiges2EUR + this.einnahmeTicketsEUR;
+    return this.einnahmeBankEUR + this.einnahmeOhneBankUndTickets + this.einnahmeTicketsEUR;
   }
 
   get endbestandEUR(): number {
     return this.anfangsbestandEUR + this.einnahmeTotalEUR - this.ausgabenTotalEUR;
   }
 
-// @ts-ignore
+  // @ts-ignore
   set endbestandEUR(betrag: number) {
     // no op
   }
