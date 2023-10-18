@@ -174,7 +174,14 @@ export default function VeranstaltungComp() {
         // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
       }}
-      onClick={validateForErrors}
+      onFinishFailed={() => {
+        notification.open({
+          type: "error",
+          message: "Fehler",
+          description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+          duration: 5,
+        });
+      }}
       onFinish={saveForm}
       layout="vertical"
     >
