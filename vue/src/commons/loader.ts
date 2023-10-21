@@ -425,10 +425,11 @@ export async function openVertrag(veranstaltung: Veranstaltung) {
   }
 }
 
-export async function imgZip(yymm: string) {
-  const zip = await getForType("zip", `/imgzip/${yymm}`);
-  if (zip) {
-    showFile(zip, `JazzClub_Bilder_${DatumUhrzeit.forYYMM(yymm).fuerKalenderViews}.zip`);
+export async function imgFullsize(url: any) {
+  console.log({ url });
+  const img = await getForType("other", `/upload/${url}`);
+  if (img) {
+    showFile(img, url);
   }
 }
 

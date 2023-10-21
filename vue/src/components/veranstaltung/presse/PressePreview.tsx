@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Image, Space } from "antd";
+import { DownloadOutlined, ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
 import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import _ from "lodash";
+import { imgFullsize } from "@/commons/loader.ts";
+import "./preview.css";
 
 export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   function updatePreview(veranstaltung: Veranstaltung) {
@@ -16,12 +20,8 @@ export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung 
         `## ${infoline1}
 ## ${infoline2}
 ${new VeranstaltungFormatter(veranstaltung).presseTemplate + textToUse}
-${presse.fullyQualifiedJazzclubURL}`
-      ) +
-        `<h4>Bilder:</h4>${presse.image
-          .map((i) => `<p><img src="/imagepreview/${i}" width="100%"></p>`)
-          .reverse()
-          .join("")}`
+${presse.fullyQualifiedJazzclubURL}`,
+      ) + `<h4>Bilder:</h4>`,
     );
   }
 
@@ -30,5 +30,25 @@ ${presse.fullyQualifiedJazzclubURL}`
     updatePreview(veranstaltung);
   }, [veranstaltung]);
 
-  return <div dangerouslySetInnerHTML={{ __html: preview }} />;
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: preview }} />
+      {veranstaltung.presse.image.map((img) => (
+        <Image
+          src={`/imagepreview/${img}`}
+          width={400}
+          preview={{
+            src: `/upload/${img}`,
+            toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
+              <Space size={12} className="toolbar-wrapper">
+                <DownloadOutlined onClick={() => imgFullsize(img)} />
+                <ZoomOutOutlined disabled={scale === 1} onClick={onZoomOut} />
+                <ZoomInOutlined disabled={scale === 50} onClick={onZoomIn} />
+              </Space>
+            ),
+          }}
+        />
+      ))}
+    </>
+  );
 }
