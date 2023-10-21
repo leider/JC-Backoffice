@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Divider, Form, Row, Space } from "antd";
+import { Col, Divider, Form, Row } from "antd";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { useQuery } from "@tanstack/react-query";
 import { allUsers } from "@/commons/loader.ts";
-import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelect.tsx";
+import UserMultiSelect from "@/components/team/UserMultiSelect.tsx";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface MitarbeiterRowProps {
   sectionName: StaffType;
   label?: string;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
 }
 
 function MitarbeiterRow({ usersAsOptions, sectionName, label }: MitarbeiterRowProps) {
@@ -52,7 +53,7 @@ export default function MitarbeiterCard() {
   };
 
   const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
-  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
   useEffect(() => {
     if (userQuery.data) {
       setUsersAsOptions(userQuery.data.map((user) => ({ label: user.name, value: user.id })));

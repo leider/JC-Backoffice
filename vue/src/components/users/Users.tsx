@@ -70,14 +70,8 @@ export default function Users() {
                 buttonStyle="solid"
                 defaultValue="everybody"
                 onChange={(event) => {
-                  setSelectedUsers(
-                    users.filter((u) =>
-                      u.accessrights
-                        ? // @ts-ignore
-                          u.accessrights[event.target.value]
-                        : undefined
-                    )
-                  );
+                  const val: "isSuperuser" | "isBookingTeam" | "isOrgaTeam" | "isAbendkasse" | "everybody" = event.target.value;
+                  setSelectedUsers(users.filter((u) => (u.accessrights ? u.accessrights[val] : undefined)));
                 }}
               />
             }

@@ -5,8 +5,6 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { IconForSmallBlock } from "@/components/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
 
-const { Panel } = Collapse;
-
 const { Title } = Typography;
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
@@ -88,24 +86,26 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
             setExpanded(!expanded);
           }}
           expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-        >
-          <Panel
-            className="team-block"
-            style={{ backgroundColor: color }}
-            key={vermietung.id || ""}
-            header={<VermietungHeader vermietung={vermietung} expanded={expanded} />}
-            extra={<Extras vermietung={vermietung} />}
-          >
-            <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-              <div style={{ margin: -12 }}>
-                <Row justify="end">
-                  <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
-                </Row>
-                <h1 style={{ padding: 8 }}>Vermietung</h1>
-              </div>
-            </ConfigProvider>
-          </Panel>
-        </Collapse>
+          items={[
+            {
+              key: vermietung.id || "",
+              style: { backgroundColor: color },
+              className: "team-block",
+              label: <VermietungHeader vermietung={vermietung} expanded={expanded} />,
+              extra: <Extras vermietung={vermietung} />,
+              children: (
+                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+                  <div style={{ margin: -12 }}>
+                    <Row justify="end">
+                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
+                    </Row>
+                    <h1 style={{ padding: 8 }}>Vermietung</h1>
+                  </div>
+                </ConfigProvider>
+              ),
+            },
+          ]}
+        />
       </Col>
     </ConfigProvider>
   );

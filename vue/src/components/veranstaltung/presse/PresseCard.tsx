@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, Form, FormInstance, Row, Tabs } from "antd";
+import { Col, Form, FormInstance, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -13,7 +13,6 @@ import { imagenames } from "@/commons/loader.ts";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
 
 export default function PresseCard({ form, id }: { id?: string; form: FormInstance<Veranstaltung> }) {
   const allimages = useQuery({

@@ -8,7 +8,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 export default function MailingLists() {
   const usersQuery = useQuery({
@@ -20,7 +20,7 @@ export default function MailingLists() {
     allLists: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);
-  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
@@ -83,7 +83,7 @@ export default function MailingLists() {
       label: "Users",
       type: "user",
       width: "s",
-      usersAsOptions: usersAsOptions,
+      labelsAndValues: usersAsOptions,
       required: true,
     },
   ];

@@ -1,18 +1,17 @@
 import { Form, Select, Tag, Tooltip } from "antd";
 import React, { CSSProperties } from "react";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
-export type UsersAsOption = { label: string; value: string };
 export default function UserMultiSelect(props: {
   name: string[] | string;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   disabled?: boolean;
   style?: CSSProperties;
   label?: string;
   onChange?: (value: any) => void;
 }) {
   const tagRender = (props: CustomTagProps) => {
-    // eslint-disable-next-line react/prop-types
     const { label, value, closable, onClose } = props;
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
       event.preventDefault();

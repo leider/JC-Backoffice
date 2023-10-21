@@ -31,10 +31,10 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
 
       strValue !== originalStringFromWidget && setValue(strValue);
     },
-    [number, displayFormat, onNumber]
+    [number, displayFormat, onNumber],
   );
 
-  const sanitizeLocalInput = useSanitizeLocalInput(updateValue, internalFormat, disabled, minLimit, maxLimit);
+  const sanitizeLocalInput = useSanitizeLocalInput(updateValue, internalFormat, minLimit, maxLimit);
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = ({ target: { value: widgetInput } }) => {
     const result = widgetInput ? numeral(widgetInput).value() || 0 : null;

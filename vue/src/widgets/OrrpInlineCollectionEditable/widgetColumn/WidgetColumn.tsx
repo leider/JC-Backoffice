@@ -32,7 +32,7 @@ export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetCol
   let Widget: JSX.Element | null = null;
   switch (desc.type) {
     case "user":
-      Widget = <UserMultiSelect usersAsOptions={desc.usersAsOptions!} {...commonProps} />;
+      Widget = <UserMultiSelect usersAsOptions={desc.labelsAndValues!} {...commonProps} />;
       break;
     case "text":
       Widget = desc.filters ? (

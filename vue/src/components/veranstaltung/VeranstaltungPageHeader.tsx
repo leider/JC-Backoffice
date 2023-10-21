@@ -101,7 +101,7 @@ export default function VeranstaltungPageHeader({
     if (brauchtHotel) {
       taggies.push({ label: "Hotel", color: hotel });
     }
-    setTagsForTitle(taggies.map((tag) => <HeaderTag label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
   }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
 
   useEffect(() => {

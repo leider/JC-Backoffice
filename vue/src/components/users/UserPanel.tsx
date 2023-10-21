@@ -57,68 +57,72 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
           setExpanded(!expanded);
         }}
         expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
-      >
-        <Collapse.Panel
-          style={self ? { backgroundColor: lightGreen } : undefined}
-          key={user.id}
-          extra={
-            <Space>
-              {canEdit && <ButtonInUsers type="edit" callback={() => setEditUserOpen(true)} />}
-              {canEdit && <ButtonInUsers type="changepass" callback={() => setPasswordOpen(true)} />}
-              {(currentUser.accessrights?.isSuperuser || false) && !self && (
-                <ButtonInUsers
-                  type="delete"
-                  callback={() => {
-                    modal.confirm({
-                      type: "confirm",
-                      title: "User löschen",
-                      content: `Bist Du sicher, dass Du den User "${user.name}" löschen möchtest?`,
-                      onOk: async () => {
-                        await deleteUser(user);
-                        loadUsers();
-                      },
-                    });
-                  }}
-                />
-              )}
-            </Space>
-          }
-          header={
-            <span>
-              <IconForSmallBlock iconName={icon} /> {user.name}
-            </span>
-          }
-        >
-          <Row gutter={8}>
-            <Col span={8}>
-              <b>Username:</b>
-            </Col>
-            <Col span={16}>{user.id}</Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={8}>
-              <b>E-Mail:</b>
-            </Col>
-            <Col span={16}>
-              <a href={`mailto:${user.email}`}>{user.email}</a>
-            </Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={8}>
-              <b>T-Shirt:</b>
-            </Col>
-            <Col span={16}>{user.tshirt}</Col>
-          </Row>
-          <Row gutter={8}>
-            <Col span={8}>
-              <b>Telefon:</b>
-            </Col>
-            <Col span={16}>
-              <a href={"tel:" + user.tel}> {user.tel}</a>
-            </Col>
-          </Row>
-        </Collapse.Panel>
-      </Collapse>
+        items={[
+          {
+            key: user.id,
+            style: self ? { backgroundColor: lightGreen } : undefined,
+            extra: (
+              <Space>
+                {canEdit && <ButtonInUsers type="edit" callback={() => setEditUserOpen(true)} />}
+                {canEdit && <ButtonInUsers type="changepass" callback={() => setPasswordOpen(true)} />}
+                {(currentUser.accessrights?.isSuperuser || false) && !self && (
+                  <ButtonInUsers
+                    type="delete"
+                    callback={() => {
+                      modal.confirm({
+                        type: "confirm",
+                        title: "User löschen",
+                        content: `Bist Du sicher, dass Du den User "${user.name}" löschen möchtest?`,
+                        onOk: async () => {
+                          await deleteUser(user);
+                          loadUsers();
+                        },
+                      });
+                    }}
+                  />
+                )}
+              </Space>
+            ),
+            label: (
+              <span>
+                <IconForSmallBlock iconName={icon} /> {user.name}
+              </span>
+            ),
+            children: (
+              <>
+                <Row gutter={8}>
+                  <Col span={8}>
+                    <b>Username:</b>
+                  </Col>
+                  <Col span={16}>{user.id}</Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={8}>
+                    <b>E-Mail:</b>
+                  </Col>
+                  <Col span={16}>
+                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                  </Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={8}>
+                    <b>T-Shirt:</b>
+                  </Col>
+                  <Col span={16}>{user.tshirt}</Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={8}>
+                    <b>Telefon:</b>
+                  </Col>
+                  <Col span={16}>
+                    <a href={"tel:" + user.tel}> {user.tel}</a>
+                  </Col>
+                </Row>
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   );
 }

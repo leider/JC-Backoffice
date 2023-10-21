@@ -126,7 +126,7 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = (props: TTextIn
   useEffect(() => {
     setValue(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
     props.onText?.(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
-  }, [props.textVal, props.clearOnDisabled, props.disabled]);
+  }, [props.textVal, props.clearOnDisabled, props.disabled, props.onText]);
 
   return (
     <Input

@@ -3,12 +3,13 @@ import React from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import InverseCheckbox from "@/widgets/InverseCheckbox";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelect";
+import UserMultiSelect from "@/components/team/UserMultiSelect";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface AdminStaffRowProps {
   sectionName: StaffType;
   label?: string;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
 }
 
 const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionName, label }: AdminStaffRowProps) => {

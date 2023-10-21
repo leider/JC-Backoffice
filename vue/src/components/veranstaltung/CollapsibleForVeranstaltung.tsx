@@ -33,28 +33,28 @@ export default function CollapsibleForVeranstaltung({
         borderColor: farbe,
         color: "#FFF",
       }}
-    >
-      <Collapse.Panel
-        key="content"
-        style={{ backgroundColor: farbe, borderColor: farbe, color: "#FFF" }}
-        header={
-          <Row>
-            <Col flex={1}>
-              <span style={{ fontSize: 18, color: "#FFF" }}>
-                <b>{label}</b>
-              </span>
-            </Col>
-            <Col flex="auto">&nbsp;</Col>
-            {!isNil(amount) && (
-              <Col>
-                <span style={{ fontSize: 18, color: "#FFF" }}>{formatToGermanNumberString(amount)} €</span>
+      items={[
+        {
+          key: "content",
+          style: { backgroundColor: farbe, borderColor: farbe, color: "#FFF" },
+          label: (
+            <Row>
+              <Col flex={1}>
+                <span style={{ fontSize: 18, color: "#FFF" }}>
+                  <b>{label}</b>
+                </span>
               </Col>
-            )}
-          </Row>
-        }
-      >
-        {children}
-      </Collapse.Panel>
-    </Collapse>
+              <Col flex="auto">&nbsp;</Col>
+              {!isNil(amount) && (
+                <Col>
+                  <span style={{ fontSize: 18, color: "#FFF" }}>{formatToGermanNumberString(amount)} €</span>
+                </Col>
+              )}
+            </Row>
+          ),
+          children,
+        },
+      ]}
+    />
   );
 }

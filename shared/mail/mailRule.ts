@@ -16,7 +16,6 @@ interface RuleLogic {
 
 class RuleLogicEmpty implements RuleLogic {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  // @ts-ignore
   shouldSend(datumUhrzeit: DatumUhrzeit): boolean {
     return false;
   }

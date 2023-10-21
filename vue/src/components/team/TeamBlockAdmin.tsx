@@ -8,7 +8,6 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/auth";
 import { differenceFor } from "jc-shared/commons/compareObjects";
@@ -16,16 +15,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-import _ from "lodash";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   initiallyOpen: boolean;
 }
 
 interface ContentProps {
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 

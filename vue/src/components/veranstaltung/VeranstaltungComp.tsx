@@ -111,16 +111,6 @@ export default function VeranstaltungComp() {
 
   const [search] = useSearchParams();
 
-  function validateForErrors() {
-    form.validateFields().catch(() => {
-      notification.open({
-        type: "error",
-        message: "Fehler",
-        description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
-        duration: 5,
-      });
-    });
-  }
   function saveForm() {
     form.validateFields().then(async () => {
       const createLogWithDiff = (diff: string): ChangelistItem => {

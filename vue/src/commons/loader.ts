@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
 import axios, { AxiosRequestConfig, Method } from "axios";
 
 import User from "jc-shared/user/user";

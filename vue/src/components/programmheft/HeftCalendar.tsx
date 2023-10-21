@@ -26,11 +26,10 @@ export default function HeftCalendar(props: { initialDate: string; events: Event
     };
   }
 
-  const calRef = useRef<FullCalendar>();
+  const calRef = useRef<FullCalendar>(null);
   calRef.current?.getApi().gotoDate(props.initialDate);
   return (
     <FullCalendar
-      // @ts-ignore
       ref={calRef}
       plugins={[dayGridPlugin]}
       initialView="dayGridMonth"

@@ -15,8 +15,9 @@ import { TextField } from "@/widgets/TextField";
 import SimpleMdeReact from "react-simplemde-editor";
 import _ from "lodash";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import UserMultiSelect, { UsersAsOption } from "@/components/team/UserMultiSelect";
+import UserMultiSelect from "@/components/team/UserMultiSelect";
 import Message from "jc-shared/mail/message";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -26,7 +27,7 @@ export default function SendMail() {
       sideBySideFullscreen: false,
       minHeight: "500px",
     }),
-    []
+    [],
   );
 
   const mailRuleQuery = useQuery({
@@ -47,7 +48,7 @@ export default function SendMail() {
   const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
   const [mailingListsDescriptions, setMailingListsDescriptions] = useState<string[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[]>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [selectedLists, setSelectedLists] = useState<Mailingliste[]>([]);
@@ -135,7 +136,7 @@ export default function SendMail() {
     form.validateFields().then(async () => {
       const mail = form.getFieldsValue(true);
       const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
-        mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description)
+        mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
       );
       const addresses = effectiveUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
       const markdownToSend =

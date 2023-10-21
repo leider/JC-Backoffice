@@ -7,4 +7,3 @@ const format = new Intl.NumberFormat("de-DE", {
 export function formatToGermanNumberString(amount: number): string {
   return format.format(amount);
 }
-/* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/

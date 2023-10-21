@@ -1,5 +1,4 @@
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
-import VeranstaltungKalkulation from "../veranstaltung/veranstaltungKalkulation.js";
 
 export function createExcelData(veranstaltung: Veranstaltung) {
   const kasse = veranstaltung.kasse;

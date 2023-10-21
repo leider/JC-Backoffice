@@ -104,7 +104,7 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
       <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
       {kassenZeile()}
       <Row gutter={12}>
-        <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gagenBAR"]} />
+        <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gageBAR"]} />
       </Row>
     </CollapsibleForVeranstaltung>
   );

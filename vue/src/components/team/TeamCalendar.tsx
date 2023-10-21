@@ -14,10 +14,8 @@ export default function TeamCalendar() {
       endStr: string;
       timeZone: string;
     },
-    // eslint-disable-next-line no-unused-vars
     successCallback: (events: EventInput[]) => void,
-    // eslint-disable-next-line no-unused-vars
-    failureCallback: (error: Error) => void
+    failureCallback: (error: Error) => void,
   ): void {
     async function doit() {
       try {

@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Checkbox, Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import { useAuth } from "@/commons/auth";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
@@ -13,9 +12,6 @@ import { fromFormObject, toFormObject } from "@/components/vermietung/vermietung
 import CheckItem from "@/widgets/CheckItem.tsx";
 import { TextField } from "@/widgets/TextField.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
-import SingleSelect from "@/widgets/SingleSelect.tsx";
-import { NumberInput } from "@/widgets/numericInputWidgets";
-import PreisprofilSelect from "@/widgets/PreisprofilSelect.tsx";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import SimpleMdeReact from "react-simplemde-editor";
 

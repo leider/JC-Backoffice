@@ -14,7 +14,7 @@ import Kalender from "jc-shared/programmheft/kalender";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
 import groupBy from "lodash/groupBy";
-import { marked } from "marked";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 
 export default function Programmheft() {
   const { year, month } = useParams();
@@ -121,14 +121,6 @@ export default function Programmheft() {
     navigate(`/programmheft/${start.plus({ monate: 2 }).fuerKalenderViews}`);
   }
 
-  function rendered(veranst: Veranstaltung) {
-    return marked.parse(veranst.presse.text || "", {
-      gfm: true,
-      breaks: true,
-      pedantic: false,
-    });
-  }
-
   return (
     <Form
       form={form}
@@ -154,10 +146,10 @@ export default function Programmheft() {
       <Row gutter={12}>
         <Col xs={24} lg={16}>
           <Row gutter={12}>
-            <Col span={12}>
+            <Col span={12} style={{ zIndex: 0 }}>
               <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
             </Col>
-            <Col span={12}>
+            <Col span={12} style={{ zIndex: 0 }}>
               <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
             </Col>
           </Row>
@@ -210,29 +202,7 @@ export default function Programmheft() {
           <Row gutter={[8, 8]}>
             {veranstaltungenNachMonat[monat].map((veranst) => (
               <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
-                <Collapse.Panel
-                  key={veranst.id || ""}
-                  className="team-block"
-                  header={
-                    <Link
-                      to={{
-                        pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
-                        search: "page=presse",
-                      }}
-                    >
-                      <Typography.Title level={4} style={{ margin: 0 }}>
-                        {veranst.datumForDisplayShort}
-                      </Typography.Title>
-                      <Typography.Title level={4} style={{ margin: 0 }}>
-                        {veranst.kopf.presseInEcht}
-                      </Typography.Title>
-                      <Typography.Title level={3} style={{ margin: 0 }}>
-                        {veranst.kopf.titelMitPrefix}
-                      </Typography.Title>
-                    </Link>
-                  }
-                ></Collapse.Panel>
-                <div dangerouslySetInnerHTML={{ __html: rendered(veranst) }} />
+                <PressePreview veranstaltung={veranst} />
               </Col>
             ))}
           </Row>

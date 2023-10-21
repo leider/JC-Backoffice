@@ -1,10 +1,10 @@
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 export type ColDescWithIdx = CollectionColDesc & {
   idx: number;
   alignValueWithMin?: boolean;
   disabled?: boolean;
-  usersAsOptions?: UsersAsOption[];
+  labelsAndValues?: LabelAndValue[];
 };
 
 export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl" | number;
@@ -14,7 +14,7 @@ export type CollectionColDesc = Omit<ColDesc, "width" | "fieldName"> & {
   fieldName: string;
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only
-  usersAsOptions?: UsersAsOption[];
+  labelsAndValues?: LabelAndValue[];
 };
 
 export type ActionCallbackType = (item: any, idx: number) => void;

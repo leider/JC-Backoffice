@@ -7,13 +7,13 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { IconForSmallBlock } from "@/components/Icon";
 import TeamBlockNormal from "@/components/team/TeamBlockNormal";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TeamBlockVermietung from "@/components/team/TeamBlockVermietung.tsx";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface MonatGroupProps {
   veranstaltungenUndVermietungen: (Veranstaltung | Vermietung)[];
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   monat: string;
   renderTeam: boolean;
 }
@@ -40,49 +40,50 @@ export default function TeamMonatGroup({ veranstaltungenUndVermietungen, usersAs
             expandIcon={({ isActive }) =>
               isActive ? <CaretDown size={14} style={{ color: "#FFF" }} /> : <CaretRight size={14} style={{ color: "#FFF" }} />
             }
-          >
-            <Collapse.Panel
-              key={monat}
-              header={
-                <Row justify="space-between" align="bottom">
-                  <Col>
-                    <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
-                      {monat}
-                    </Typography.Title>
-                  </Col>
-                  <Col>
-                    <Button
-                      ghost
-                      icon={<IconForSmallBlock size={12} iconName="FileText" />}
-                      size="small"
-                      onClick={() =>
-                        navigate({
-                          pathname: `/team/${yymm}`,
-                          search: "tab=pressetexte",
-                        })
-                      }
-                    >
-                      Pressetexte
-                    </Button>
-                    <Button
-                      ghost
-                      icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
-                      size="small"
-                      onClick={() =>
-                        navigate({
-                          pathname: `/team/${yymm}`,
-                          search: "tab=uebersicht",
-                        })
-                      }
-                    >
-                      Übersicht
-                    </Button>
-                  </Col>
-                </Row>
-              }
-              className="monat-header"
-            />
-          </Collapse>
+            items={[
+              {
+                key: monat,
+                className: "monat-header",
+                label: (
+                  <Row justify="space-between" align="bottom">
+                    <Col>
+                      <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+                        {monat}
+                      </Typography.Title>
+                    </Col>
+                    <Col>
+                      <Button
+                        ghost
+                        icon={<IconForSmallBlock size={12} iconName="FileText" />}
+                        size="small"
+                        onClick={() =>
+                          navigate({
+                            pathname: `/team/${yymm}`,
+                            search: "tab=pressetexte",
+                          })
+                        }
+                      >
+                        Pressetexte
+                      </Button>
+                      <Button
+                        ghost
+                        icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
+                        size="small"
+                        onClick={() =>
+                          navigate({
+                            pathname: `/team/${yymm}`,
+                            search: "tab=uebersicht",
+                          })
+                        }
+                      >
+                        Übersicht
+                      </Button>
+                    </Col>
+                  </Row>
+                ),
+              },
+            ]}
+          />
         </Col>
       </Row>
       <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3" }}>

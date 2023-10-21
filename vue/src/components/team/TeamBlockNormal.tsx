@@ -6,19 +6,17 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import fieldHelpers from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-
-const { Panel } = Collapse;
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   initiallyOpen: boolean;
 }
 
 interface ContentProps {
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 
@@ -78,14 +76,12 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
             setExpanded(!expanded);
           }}
           expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-        >
-          <Panel
-            className="team-block"
-            style={{ backgroundColor: color }}
-            key={veranstaltung.id || ""}
-            header={<TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />}
-            extra={
-              <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
+          items={[
+            {
+              key: veranstaltung.id || "",
+              style: { backgroundColor: color },
+              label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
+              extra: (
                 <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
                   <span
                     onClick={(event) => {
@@ -94,24 +90,27 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
                       navigate(`/veranstaltung/preview/${veranstaltung.url}`);
                     }}
                   >
-                    <IconForSmallBlock
-                      size={16}
-                      iconName={"EyeFill"}
-                      color={(token as any)["custom-color-concert"]}
-                      style={{
-                        margin: "-4px 0",
-                      }}
-                    />
+                    <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
+                      <IconForSmallBlock
+                        size={16}
+                        iconName={"EyeFill"}
+                        color={(token as any)["custom-color-concert"]}
+                        style={{
+                          margin: "-4px 0",
+                        }}
+                      />
+                    </Space>
                   </span>
                 </Tooltip>
-              </Space>
-            }
-          >
-            <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-              <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
-            </ConfigProvider>
-          </Panel>
-        </Collapse>
+              ),
+              children: (
+                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+                  <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+                </ConfigProvider>
+              ),
+            },
+          ]}
+        />
       </Col>
     </ConfigProvider>
   );

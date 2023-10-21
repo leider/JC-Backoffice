@@ -1,7 +1,7 @@
 import express from "express";
 
 import User from "jc-shared/user/user.js";
-import Users, { Mailingliste } from "jc-shared/user/users.js";
+import { Mailingliste } from "jc-shared/user/users.js";
 import Message from "jc-shared/mail/message.js";
 
 import mailstore from "../lib/mailsender/mailstore.js";
@@ -31,7 +31,7 @@ app.post("/mailrules", async (req, res) => {
   const newRules = misc.toObjectList(MailRule, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newRules.map((r) => r.toJSON()),
-    oldRules.map((r) => r.toJSON())
+    oldRules.map((r) => r.toJSON()),
   );
 
   await mailstore.saveAll(changed);

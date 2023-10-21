@@ -8,11 +8,11 @@ import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import { useQuery } from "@tanstack/react-query";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 function Team() {
-  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[] | undefined>([]);
 
   const veranstQuery = useQuery({
     queryKey: ["veranstaltung"],

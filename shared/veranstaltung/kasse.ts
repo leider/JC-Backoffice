@@ -60,7 +60,6 @@ export default class Kasse {
     return this.anfangsbestandEUR + this.einnahmeTotalEUR - this.ausgabenTotalEUR;
   }
 
-  // @ts-ignore
   set endbestandEUR(betrag: number) {
     // no op
   }

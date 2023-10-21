@@ -6,13 +6,13 @@ import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
 import { ButtonStaff } from "@/components/Buttons";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
   label: string;
-  usersAsOptions: UsersAsOption[];
+  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 

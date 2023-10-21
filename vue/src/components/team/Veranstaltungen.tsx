@@ -10,8 +10,7 @@ import { IconForSmallBlock } from "@/components/Icon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
-import { UsersAsOption } from "@/components/team/UserMultiSelect";
-import SingleSelect from "@/widgets/SingleSelect.tsx";
+import SingleSelect, { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import _ from "lodash";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
@@ -19,7 +18,7 @@ import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
   const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
-  const [usersAsOptions, setUsersAsOptions] = useState<UsersAsOption[] | undefined>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[] | undefined>([]);
 
   const [form] = Form.useForm();
   async function loadUsers() {
@@ -126,7 +125,7 @@ export default function Veranstaltungen() {
         <PageHeader
           title="Veranstaltungen"
           extra={[
-            <NewButtons />,
+            <NewButtons key="newButtons" />,
             <ButtonWithIcon
               key="cal"
               icon="CalendarWeek"

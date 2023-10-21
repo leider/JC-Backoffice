@@ -71,9 +71,8 @@ export const useLimits = (decimals: number, initialMin?: number, imitialMax?: nu
 export const useSanitizeLocalInput = (
   updateValue: (newValue: number | null, originalStringFromWidget?: string | null) => void,
   internalFormat: string,
-  disabled?: boolean,
   minLimit?: number,
-  maxLimit?: number
+  maxLimit?: number,
 ) => {
   return useCallback(
     (input?: string | number | null, originalStringFromWidget?: string | null) => {
@@ -86,6 +85,6 @@ export const useSanitizeLocalInput = (
 
       updateValue(numValue, originalStringFromWidget);
     },
-    [updateValue, internalFormat, disabled, minLimit, maxLimit]
+    [updateValue, internalFormat, minLimit, maxLimit],
   );
 };

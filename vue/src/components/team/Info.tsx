@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
 import { PageHeader } from "@ant-design/pro-layout";
-import { imgZip, veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { IconForSmallBlock } from "@/components/Icon";
