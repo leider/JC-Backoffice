@@ -67,7 +67,6 @@ export default function BigKalender() {
       form={form}
       onChange={() => {
         calRef.current?.getApi().refetchEvents();
-        console.log(form.getFieldsValue(true));
       }}
     >
       <PageHeader title="Kalenderübersicht" extra={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
