@@ -13,8 +13,11 @@ import fieldHelpers from "jc-shared/commons/fieldHelpers.js";
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
 import optionenstore from "../lib/optionen/optionenstore.js";
 import terminstore from "../lib/optionen/terminstore.js";
+import vermietungenstore from "../lib/vermietungen/vermietungenstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
+import Vermietung from "jc-shared/vermietung/vermietung";
+import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 
 const app = express();
 
@@ -33,6 +36,22 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User
 
   const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
   return veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user).map(asCalendarEvent);
+}
+
+async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User) {
+  function asCalendarEvent(vermietung: Vermietung): TerminEvent {
+    return {
+      start: vermietung.startDate.toISOString(),
+      end: vermietung.endDate.toISOString(),
+      url: user?.accessrights?.isOrgaTeam ? `/vue/vermietung/${encodeURIComponent(vermietung.url || "")}` : "",
+      title: vermietung.titel,
+      tooltip: "",
+      className: (!vermietung.confirmed ? "color-geplant " : "") + "color-allgemeines",
+    };
+  }
+
+  const vermietungen = await vermietungenstore.byDateRangeInAscendingOrder(start, end);
+  return vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map(asCalendarEvent);
 }
 
 async function termineForIcal(ical: Ical) {
@@ -76,10 +95,11 @@ app.get("/fullcalendarevents.json", async (req, res) => {
     ? (JSON.parse(req.query.options as string) as unknown as TerminFilterOptions)
     : undefined;
 
-  const [cals, termine, veranstaltungen] = await Promise.all([
+  const [cals, termine, veranstaltungen, vermietungen] = await Promise.all([
     optionenstore.icals(),
     termineAsEventsBetween(start, end, options),
     eventsBetween(start, end, req.user as User),
+    vermietungenBetween(start, end, req.user as User),
   ]);
 
   const icals = (cals as FerienIcals).icals.filter((ical) => {
@@ -92,7 +112,8 @@ app.get("/fullcalendarevents.json", async (req, res) => {
   const termineForIcals = await Promise.all(icals.map(termineForIcal));
   const events = flatMap(termineForIcals, (x) => x)
     .concat(termine as TerminEvent[])
-    .concat(veranstaltungen as TerminEvent[]);
+    .concat(veranstaltungen as TerminEvent[])
+    .concat(vermietungen as TerminEvent[]);
   resToJson(res, events);
 });
 
