@@ -246,7 +246,7 @@ export default function Preview() {
               <AddressBlock kontakt={veranstaltung.agentur} />
             </CollapsibleForVeranstaltung>
           )}
-          {veranstaltung.unterkunft.anzahlZimmer > 0 && (
+          {veranstaltung.artist.brauchtHotel && veranstaltung.unterkunft.anzahlZimmer > 0 && (
             <CollapsibleForVeranstaltung
               suffix="hotel"
               label={`Hotel: ${veranstaltung.unterkunft.anzahlZimmer} Zimmer für ${veranstaltung.unterkunft.anzNacht}`}
