@@ -4,6 +4,7 @@ import deLocale from "@fullcalendar/core/locales/de";
 import React from "react";
 import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
+import { Tooltip } from "antd";
 
 export default function TeamCalendar() {
   function getEvents(
@@ -29,16 +30,13 @@ export default function TeamCalendar() {
   }
 
   function renderEventContent(eventInfo: any) {
-    return eventInfo.timeText !== "00 Uhr" ? (
-      <div style={{ whiteSpace: "normal" }}>
-        <b>{eventInfo.timeText}</b>
-        <br />
-        <i>{eventInfo.event.title}</i>
-      </div>
-    ) : (
-      <div style={{ whiteSpace: "normal" }}>
-        <i>{eventInfo.event.title}</i>
-      </div>
+    return (
+      <Tooltip title={eventInfo.event.title}>
+        <span>
+          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
+          <i>{eventInfo.event.title}</i>
+        </span>
+      </Tooltip>
     );
   }
 

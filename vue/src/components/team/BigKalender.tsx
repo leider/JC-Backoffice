@@ -1,5 +1,5 @@
 import React, { createRef } from "react";
-import { Checkbox, Col, Form, FormInstance, Row } from "antd";
+import { Checkbox, Col, Form, FormInstance, Row, Tooltip } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
 import { EventInput } from "@fullcalendar/core";
@@ -34,13 +34,13 @@ export default function BigKalender() {
   }
 
   function renderEventContent(eventInfo: any) {
-    return eventInfo.timeText !== "00 Uhr" ? (
-      <span>
-        <b>{eventInfo.timeText} </b>
-        <i>{eventInfo.event.title}</i>
-      </span>
-    ) : (
-      <i>{eventInfo.event.title}</i>
+    return (
+      <Tooltip title={eventInfo.event.title}>
+        <span>
+          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
+          <i>{eventInfo.event.title}</i>
+        </span>
+      </Tooltip>
     );
   }
   const [form] = Form.useForm<TerminFilterOptions>();
