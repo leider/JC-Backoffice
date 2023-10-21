@@ -14,17 +14,17 @@ function stringOrDateToDate(object?: string | Date): Date | undefined {
   return typeof object === "string" ? DatumUhrzeit.forISOString(object).toJSDate : object;
 }
 
-function toObject(Constructor: any, jsobject?: object) {
+function toObject<T>(Constructor: any, jsobject?: object) {
   if (jsobject) {
     delete (jsobject as any)._csrf;
     delete (jsobject as any)._id;
-    return new Constructor(jsobject);
+    return new Constructor(jsobject) as T;
   }
   return null;
 }
 
-function toObjectList(Constructor: any, jsobjects?: object[]) {
-  return (jsobjects || []).map((each) => toObject(Constructor, each));
+function toObjectList<T>(Constructor: any, jsobjects?: object[]) {
+  return (jsobjects || []).map((each) => toObject<T>(Constructor, each)).filter((each): each is T => each !== null);
 }
 
 function toArray(elem?: string | string[]): Array<string> {

@@ -11,6 +11,9 @@ const uploadDir = path.join(__dirname, "../../static/upload");
 async function renameImage(oldname: string, newname: string, veranstIds: string[]) {
   async function updateVeranstaltung(id: string) {
     const veranstaltung = await store.getVeranstaltungForId(id);
+    if (!veranstaltung) {
+      return;
+    }
     veranstaltung.updateImageName(oldname, newname);
     return store.saveVeranstaltung(veranstaltung);
   }
@@ -24,7 +27,7 @@ async function renameImages(rows: ImageOverviewRow[]) {
     return renameImage(
       row.image,
       row.newname,
-      row.veranstaltungen.map((v) => v.id)
+      row.veranstaltungen.map((v) => v.id),
     );
   }
   return Promise.all(rows.map(renameRow));

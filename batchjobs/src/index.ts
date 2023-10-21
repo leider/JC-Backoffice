@@ -33,7 +33,7 @@ async function informAdmin(err?: Error, counter?: number) {
 Anzahl: ${counter}
 Error: ${err ? err.message : "keiner"}`,
     });
-    message.setTo(user.email);
+    message.setTo(user!.email);
     await mailtransport.sendMail(message);
     closeAndExit();
   } catch (e) {

@@ -22,6 +22,7 @@ import Programmheft from "@/components/programmheft/Programmheft";
 import Kassenbericht from "@/components/options/Kassenbericht";
 import ImageOverview from "@/components/options/ImageOverview";
 import VermietungComp from "@/components/vermietung/VermietungComp.tsx";
+import BigKalender from "@/components/team/BigKalender.tsx";
 
 export const routes: RouteObject[] = [
   {
@@ -46,6 +47,10 @@ export const routes: RouteObject[] = [
       {
         path: "/veranstaltungen",
         element: <Veranstaltungen />,
+      },
+      {
+        path: "/kalenderuebersicht",
+        element: <BigKalender />,
       },
       {
         path: "/veranstaltungen/:url",

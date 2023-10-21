@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any*/
-
 import Termin, { TerminType } from "./termin.js";
 
 export class Ical {

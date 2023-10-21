@@ -15,9 +15,9 @@ async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortO
     {
       $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
-    sortOrder
+    sortOrder,
   );
-  return misc.toObjectList(Veranstaltung, result);
+  return misc.toObjectList<Veranstaltung>(Veranstaltung, result);
 }
 
 async function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
@@ -53,12 +53,12 @@ export default {
 
   getVeranstaltung: async function getVeranstaltung(url: string) {
     const result = await persistence.getByField({ url });
-    return misc.toObject(Veranstaltung, result);
+    return misc.toObject<Veranstaltung>(Veranstaltung, result);
   },
 
   getVeranstaltungForId: async function getVeranstaltungForId(id: string) {
     const result = await persistence.getById(id);
-    return misc.toObject(Veranstaltung, result);
+    return misc.toObject<Veranstaltung>(Veranstaltung, result);
   },
 
   saveVeranstaltung: async function saveVeranstaltung(veranstaltung: Veranstaltung) {

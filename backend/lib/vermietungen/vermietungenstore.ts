@@ -17,7 +17,7 @@ async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortO
     },
     sortOrder,
   );
-  return misc.toObjectList(Vermietung, result);
+  return misc.toObjectList<Vermietung>(Vermietung, result);
 }
 
 async function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {

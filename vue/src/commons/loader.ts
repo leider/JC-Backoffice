@@ -8,7 +8,7 @@ import Orte from "jc-shared/optionen/orte";
 import Message from "jc-shared/mail/message";
 import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
-import Termin from "jc-shared/optionen/termin";
+import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
@@ -406,8 +406,18 @@ export async function deleteWikiPage(subdir: string, page: string) {
 }
 
 // Calendar
-export async function calendarEventSources(start: Date, end: Date) {
+export async function calendarEventSources(start: Date, end: Date, options?: TerminFilterOptions) {
+  if (options) {
+    return getForType(
+      "json",
+      `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&options=${JSON.stringify(options)}`,
+    );
+  }
   return getForType("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`);
+}
+
+export async function fcveranstaltungen(start: Date, end: Date) {
+  return getForType("json", `/rest/fcveranstaltungen.json?start=${start.toISOString()}&end=${end.toISOString()}`);
 }
 
 // Special

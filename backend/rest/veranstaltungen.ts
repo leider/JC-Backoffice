@@ -20,7 +20,7 @@ async function standardHandler(res: Response, user: User | undefined, veranstalt
   const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
   resToJson(
     res,
-    result.map((v) => v.toJSON())
+    result.map((v) => v.toJSON()),
   );
 }
 
@@ -92,8 +92,9 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
         throw e;
       }
     }
+    return saveVeranstaltung(veranstaltung);
   }
-  return saveVeranstaltung(veranstaltung);
+  return veranstaltung;
 });
 
 app.delete("/veranstaltungen", async (req: Request, res: Response) => {

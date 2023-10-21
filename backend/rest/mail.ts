@@ -28,7 +28,7 @@ app.post("/mailrules", async (req, res) => {
     return res.sendStatus(403);
   }
   const oldRules = await mailstore.all();
-  const newRules = misc.toObjectList(MailRule, req.body);
+  const newRules = misc.toObjectList<MailRule>(MailRule, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newRules.map((r) => r.toJSON()),
     oldRules.map((r) => r.toJSON()),
@@ -77,7 +77,8 @@ app.post("/mailinglisten", async (req, res) => {
   users?.forEach((u) => (u.mailinglisten = []));
 
   newLists.forEach((list) => {
-    const selectedUsers = users?.filter((u) => list.users.includes(u.id));
+    const listusers = list.users.map((u) => u.id);
+    const selectedUsers = users?.filter((u) => listusers.includes(u.id));
     selectedUsers?.forEach((u) => u.subscribeList(list.name));
   });
 

@@ -1569,10 +1569,17 @@
   dependencies:
     preact "~10.12.1"
 
-"@fullcalendar/daygrid@6.1.9":
+"@fullcalendar/daygrid@6.1.9", "@fullcalendar/daygrid@~6.1.9":
   version "6.1.9"
   resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.9.tgz#efb8aabb2f928ac0b05a77c5443accb546ae5818"
   integrity sha512-o/6joH/7lmVHXAkbaa/tUbzWYnGp/LgfdiFyYPkqQbjKEeivNZWF1WhHqFbhx0zbFONSHtrvkjY2bjr+Ef2quQ==
+
+"@fullcalendar/multimonth@6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/multimonth/-/multimonth-6.1.9.tgz#d261e05a7754398c4c82cfab2ace7469cb8417e6"
+  integrity sha512-YpH1NL6RzdM1wO2nFJ3pNMo9xhd6i2WuE+e7SnGi7q1lO+ZZ77h5Fja5JKcpuIQUFHpi+m6vTzihIV8DT44NnQ==
+  dependencies:
+    "@fullcalendar/daygrid" "~6.1.9"
 
 "@fullcalendar/react@6.1.9":
   version "6.1.9"

@@ -10,6 +10,7 @@ import { wikisubdirs } from "@/commons/loader.ts";
 const { Header, Content } = Layout;
 enum menuKeys {
   veranstaltung = "veranstaltung",
+  kalenderuebersicht = "kalenderuebersicht",
   optionen = "optionen",
   option = "option",
   programmheft = "programmheft",
@@ -54,6 +55,11 @@ const JazzContent: React.FC = () => {
         key: menuKeys.veranstaltung,
         icon: <IconForSmallBlock iconName="Speaker" />,
         label: <Link to="/veranstaltungen">Veranstaltungen</Link>,
+      });
+      localItems.push({
+        key: menuKeys.kalenderuebersicht,
+        icon: <IconForSmallBlock iconName="Calendar2Range" />,
+        label: <Link to="/kalenderuebersicht">Kalender</Link>,
       });
       if (context?.currentUser?.accessrights?.isSuperuser) {
         localItems.push({

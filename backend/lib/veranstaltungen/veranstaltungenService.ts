@@ -63,7 +63,11 @@ async function imgzip(res: Response, next: NextFunction, yymm: string) {
 
 async function imgzipForVeranstaltung(res: Response, next: NextFunction, url: string) {
   const name = url;
-  const veranstaltungen: Veranstaltung[] = [await getVeranstaltung(url)];
+  const veranstaltung = await getVeranstaltung(url);
+  if (!veranstaltung) {
+    return;
+  }
+  const veranstaltungen: Veranstaltung[] = [veranstaltung];
   zipVeranstaltungen(veranstaltungen, name, res, next);
 }
 

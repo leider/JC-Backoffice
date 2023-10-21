@@ -13,9 +13,9 @@ async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortO
     {
       $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
     },
-    sortOrder
+    sortOrder,
   );
-  return misc.toObjectList(Termin, result);
+  return misc.toObjectList<Termin>(Termin, result);
 }
 
 export default {

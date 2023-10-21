@@ -8,12 +8,12 @@ const persistence = pers("mailstore");
 export default {
   all: async function all() {
     const result = await persistence.list({});
-    return misc.toObjectList(MailRule, result);
+    return misc.toObjectList<MailRule>(MailRule, result);
   },
 
   removeById: async function removeById(id: string) {
     const result = await persistence.removeById(id);
-    return misc.toObject(MailRule, result);
+    return misc.toObject<MailRule>(MailRule, result);
   },
 
   removeAll: async function removeAll(ids: string[]) {

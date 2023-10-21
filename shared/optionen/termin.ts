@@ -3,6 +3,10 @@ import Misc from "../commons/misc.js";
 
 export type TerminType = "Sonstiges" | "Feiertag" | "Ferien" | "Vermietung";
 
+export type TerminFilterOptions = {
+  icals: TerminType[];
+  termine: TerminType[];
+};
 export interface TerminEvent {
   start: string;
   end: string;

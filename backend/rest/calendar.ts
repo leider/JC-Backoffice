@@ -6,7 +6,7 @@ import { ComplexDate, Parser } from "ikalendar";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals.js";
-import { TerminEvent } from "jc-shared/optionen/termin.js";
+import { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.js";
 import User from "jc-shared/user/user.js";
 import fieldHelpers from "jc-shared/commons/fieldHelpers.js";
 
@@ -27,14 +27,12 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User
       title: veranstaltung.kopf.titelMitPrefix,
       tooltip: veranstaltung.tooltipInfos,
       className:
-        (!veranstaltung.kopf.confirmed ? "color-geplant " : "") +
-        "verySmall color-" +
-        fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
+        (!veranstaltung.kopf.confirmed ? "color-geplant " : "") + "color-" + fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
     };
   }
 
   const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-  return veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen || [], user).map(asCalendarEvent);
+  return veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user).map(asCalendarEvent);
 }
 
 async function termineForIcal(ical: Ical) {
@@ -62,21 +60,34 @@ async function termineForIcal(ical: Ical) {
   return eventArray;
 }
 
-async function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit) {
+async function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?: TerminFilterOptions) {
   const termine = await terminstore.termineBetween(start, end);
-  return termine?.map((termin) => termin.asEvent);
+  let filteredTermine = termine;
+  if (options) {
+    filteredTermine = termine.filter((termin) => options.termine?.includes(termin.typ));
+  }
+  return filteredTermine?.map((termin) => termin.asEvent);
 }
 
 app.get("/fullcalendarevents.json", async (req, res) => {
   const start = DatumUhrzeit.forISOString(req.query.start as string);
   const end = DatumUhrzeit.forISOString(req.query.end as string);
+  const options: TerminFilterOptions | undefined = req.query.options
+    ? (JSON.parse(req.query.options as string) as unknown as TerminFilterOptions)
+    : undefined;
 
   const [cals, termine, veranstaltungen] = await Promise.all([
     optionenstore.icals(),
-    termineAsEventsBetween(start, end),
+    termineAsEventsBetween(start, end, options),
     eventsBetween(start, end, req.user as User),
   ]);
-  const icals = (cals as FerienIcals).icals;
+
+  const icals = (cals as FerienIcals).icals.filter((ical) => {
+    if (!options) {
+      return true;
+    }
+    return options.icals?.includes(ical.typ);
+  });
 
   const termineForIcals = await Promise.all(icals.map(termineForIcal));
   const events = flatMap(termineForIcals, (x) => x)
