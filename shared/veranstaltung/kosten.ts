@@ -1,7 +1,19 @@
-import fieldHelpers from "../commons/fieldHelpers.js";
-
 function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
+}
+
+function formatNumberTwoDigits(number: string | number): string {
+  if (typeof number === "string") {
+    return number;
+  }
+  if (number !== 0 && !number) {
+    return "";
+  }
+  return new Intl.NumberFormat("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: false,
+  }).format(number || 0);
 }
 
 export default class Kosten {
@@ -41,7 +53,7 @@ export default class Kosten {
   }
 
   get gagenTotalEURformatted(): string {
-    return fieldHelpers.formatNumberTwoDigits(this.gagenTotalEUR);
+    return formatNumberTwoDigits(this.gagenTotalEUR);
   }
 
   get dealAlsFaktor(): number {

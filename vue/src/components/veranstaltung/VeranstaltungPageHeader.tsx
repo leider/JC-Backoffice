@@ -2,7 +2,7 @@ import * as React from "react";
 import { CSSProperties, useEffect, useState } from "react";
 import { Form, FormInstance, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import cssColor from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -74,7 +74,7 @@ export default function VeranstaltungPageHeader({
   });
 
   useEffect(() => {
-    const code = `custom-color-${fieldHelpers.cssColorCode(eventTyp)}`;
+    const code = `custom-color-${cssColor(eventTyp)}`;
     setTypeColor((token as any)[code]);
     document.title = isNew ? "Neue oder kopierte Veranstaltung" : titel;
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);

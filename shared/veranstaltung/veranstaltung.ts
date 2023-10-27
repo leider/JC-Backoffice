@@ -12,7 +12,6 @@ import Staff from "./staff.js";
 import Technik from "./technik.js";
 import Unterkunft from "./unterkunft.js";
 import Vertrag from "./vertrag.js";
-import VeranstaltungGema from "./veranstaltungGema.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -174,11 +173,6 @@ export default class Veranstaltung {
 
   get istVergangen(): boolean {
     return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
-  }
-
-  // GEMA
-  get gema(): VeranstaltungGema {
-    return new VeranstaltungGema(this);
   }
 
   // iCal

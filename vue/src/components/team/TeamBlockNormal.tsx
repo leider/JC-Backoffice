@@ -3,7 +3,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
 import TeamStaffRow from "@/components/team/TeamStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import cssColor from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
@@ -57,7 +57,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
   const navigate = useNavigate();
   const [color, setColor] = useState<string>("");
   useEffect(() => {
-    const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
+    const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
     setColor((token as any)[code]);
   }, [veranstaltung]);
 

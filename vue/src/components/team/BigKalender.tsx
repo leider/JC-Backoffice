@@ -1,14 +1,12 @@
 import React, { createRef } from "react";
-import { Checkbox, Col, Form, FormInstance, Row, Tooltip } from "antd";
+import { Checkbox, Col, Form, Row, Tooltip } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
 import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { PageHeader } from "@ant-design/pro-layout";
-import CheckItem from "@/widgets/CheckItem.tsx";
-import login from "@/components/Login.tsx";
-import { TerminFilterOptions, TerminType } from "jc-shared/optionen/termin.ts";
+import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";

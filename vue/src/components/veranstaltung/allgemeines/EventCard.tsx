@@ -1,7 +1,7 @@
 import OptionValues from "jc-shared/optionen/optionValues";
 import Orte from "jc-shared/optionen/orte";
 import React, { useEffect, useState } from "react";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import cssColor from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Checkbox, Col, Form, FormInstance, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -17,13 +17,7 @@ function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
   useEffect(() => {
     const localOptionen = props.optionen.typen.map((typ) => ({
-      label: (
-        <span className={fieldHelpers.cssIconClass(typ)}>
-          <span className={`text-${fieldHelpers.cssColorCode(typ)}`} style={{ marginLeft: 8 }}>
-            {typ}
-          </span>
-        </span>
-      ),
+      label: <span className={`text-${cssColor(typ)}`}>{typ}</span>,
       value: typ,
     }));
     setEventTypes(localOptionen);

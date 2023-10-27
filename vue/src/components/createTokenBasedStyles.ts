@@ -1,9 +1,43 @@
-export default function createTokenBasedStyles(document: Document, token: { [p: string]: string | number }) {
+export const veranstaltungTypeColors: { [index: string]: string } = {
+  classix: "#4faee3",
+  homegrown: "#24719d",
+  concert: "#6c757d",
+  festival: "#9fc442",
+  kooperation: "#9185be",
+  livestream: "#ff29ac",
+  session: "#dea71f",
+  soulcafe: "#f07f31",
+};
+
+export function createTokenBasedStyles(document: Document, token: { [p: string]: string | number }) {
   const errorBgColor = token.colorErrorBg;
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
   const colorPrimary = token.colorPrimary;
 
-  const orrpCustomStyles = `.table-row-error {
+  const colorClasses = Object.keys(veranstaltungTypeColors).map(
+    (key) =>
+      `.color-${key}{
+      background-color: ${veranstaltungTypeColors[key]};
+      border-color: ${veranstaltungTypeColors[key]};
+      color: #fff !important;
+      overflow: hidden;
+    }
+    
+    .text-${key}{
+      color: ${veranstaltungTypeColors[key]};
+    }`,
+  );
+
+  const orrpCustomStyles =
+    colorClasses.join("\n") +
+    `
+.color-geplant {
+  border-style: solid;
+  border-width: 3px;
+  border-color: #f8500d !important;
+}
+
+.table-row-error {
   background-color: ${errorBgColor};
 }
 

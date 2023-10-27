@@ -8,7 +8,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals.js";
 import { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.js";
 import User from "jc-shared/user/user.js";
-import fieldHelpers from "jc-shared/commons/fieldHelpers.js";
+import cssColor from "jc-shared/commons/fieldHelpers.js";
 
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
 import optionenstore from "../lib/optionen/optionenstore.js";
@@ -29,8 +29,7 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User
       url: `/vue/veranstaltung/${user?.accessrights?.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(veranstaltung.url || "")}`,
       title: veranstaltung.kopf.titelMitPrefix,
       tooltip: veranstaltung.tooltipInfos,
-      className:
-        (!veranstaltung.kopf.confirmed ? "color-geplant " : "") + "color-" + fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp),
+      className: (!veranstaltung.kopf.confirmed ? "color-geplant " : "") + "color-" + cssColor(veranstaltung.kopf.eventTyp),
     };
   }
 

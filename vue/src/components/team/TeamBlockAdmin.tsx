@@ -4,7 +4,7 @@ import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import cssColor from "jc-shared/commons/fieldHelpers";
 import { ButtonInAdminPanel } from "@/components/Buttons";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
@@ -171,7 +171,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
   const { token } = useToken();
   const [color, setColor] = useState<string>("");
   useEffect(() => {
-    const code = `custom-color-${fieldHelpers.cssColorCode(veranstaltung.kopf.eventTyp)}`;
+    const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
     setColor((token as any)[code]);
   }, [veranstaltung]);
 

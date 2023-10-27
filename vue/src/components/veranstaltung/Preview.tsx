@@ -2,7 +2,7 @@ import { Button, Col, ConfigProvider, Divider, List, Row, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { PageHeader } from "@ant-design/pro-layout";
-import fieldHelpers from "jc-shared/commons/fieldHelpers";
+import cssColor from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -107,8 +107,7 @@ export default function Preview() {
     <div>
       <PageHeader
         title={
-          <span className={fieldHelpers.cssIconClass(veranstaltung.kopf.eventTyp)}>
-            {" "}
+          <span className={`text-${cssColor(veranstaltung.kopf.eventTyp)}`}>
             {veranstaltung.kopf.titelMitPrefix} {veranstaltung.kopf.presseInEcht}
           </span>
         }
