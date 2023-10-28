@@ -37,7 +37,7 @@ export default function EinnahmenCard({ form, optionen, onChange, veranstaltung 
           <PreisprofilSelect form={form} optionen={optionen} onChange={updateSumme} />
         </Col>
         <Col span={4}>
-          <NumberInput name={["eintrittspreise", "preisprofil", "regulaer"]} label={"Reg"} decimals={2} suffix={"€"} disabled />;
+          <NumberInput name={["eintrittspreise", "preisprofil", "regulaer"]} label={"Reg"} decimals={2} suffix={"€"} disabled />
         </Col>
         <Col span={4}>
           <DynamicItem

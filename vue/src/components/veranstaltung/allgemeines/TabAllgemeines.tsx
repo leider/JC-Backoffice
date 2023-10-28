@@ -8,6 +8,7 @@ import VertragCard from "@/components/veranstaltung/allgemeines/VertragCard";
 import BearbeiterCard from "@/components/veranstaltung/allgemeines/BearbeiterCard";
 import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
+import { NumberInput } from "@/widgets/numericInputWidgets";
 
 export default function TabAllgemeines({ optionen, orte, form, veranstaltung }: TabProps) {
   return (
@@ -19,7 +20,13 @@ export default function TabAllgemeines({ optionen, orte, form, veranstaltung }: 
       </Col>
       <Col xs={24} lg={12}>
         <MitarbeiterCard />
-        <KontaktCard kontakte={optionen!.agenturen} form={form} selector="agentur" />
+        <KontaktCard kontakte={optionen!.agenturen} form={form} selector="agentur">
+          <Row gutter={12}>
+            <Col span={12}>
+              <NumberInput name={["kosten", "provisionAgentur"]} label="Provision" decimals={2} suffix="€" />
+            </Col>
+          </Row>
+        </KontaktCard>
         <VertragCard form={form} veranstaltung={veranstaltung!} />
         <BearbeiterCard veranstaltung={veranstaltung!} />
       </Col>

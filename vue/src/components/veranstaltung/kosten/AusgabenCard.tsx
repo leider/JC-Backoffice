@@ -11,6 +11,7 @@ import Kasse from "jc-shared/veranstaltung/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { TextField } from "@/widgets/TextField.tsx";
 
 interface AusgabenCardParams {
   optionen: OptionValues;
@@ -20,13 +21,25 @@ interface AusgabenCardParams {
 }
 export default function AusgabenCard({ form, onChange, veranstaltung }: AusgabenCardParams) {
   const [summe, setSumme] = useState<number>(0);
+
+  const unterkunft = Form.useWatch(["unterkunft"], {
+    form,
+    preserve: true,
+  });
+
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+    form,
+    preserve: true,
+  });
+
   useEffect(() => {
     updateSumme();
-  }, [form, veranstaltung]);
+  }, [form, veranstaltung, unterkunft, brauchtHotel]);
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));
-    const sum = veranst.kasse.ausgabenOhneGage + veranst.kosten.totalEUR;
+    const sum =
+      veranst.kasse.ausgabenOhneGage + veranst.kosten.totalEUR + (veranst.artist.brauchtHotel ? veranst.unterkunft.kostenTotalEUR : 0);
     setSumme(sum);
     onChange(sum);
   }
@@ -48,6 +61,19 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
     );
   }
 
+  function LabelCurrencyChangeableRow({ label, path }: { label: string; path: string[] }) {
+    return (
+      <Row gutter={12}>
+        <Col span={18}>
+          <TextField label={label} name={[path[0], path[1] + "Label"]} initialValue={label} />
+        </Col>
+        <Col span={6}>
+          <NumberInput label="Betrag" name={path} decimals={2} suffix="€" onChange={updateSumme} />
+        </Col>
+      </Row>
+    );
+  }
+
   function kassenZeile() {
     const kasse = new Kasse(form.getFieldValue("kasse"));
     return (
@@ -62,6 +88,38 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
             <NumberInputWithDirectValue value={kasse.ausgabenOhneGage} suffix="€" decimals={2} />
           </Col>
         </Row>
+      )
+    );
+  }
+  function hotelZeile() {
+    const veranst = new Veranstaltung(form.getFieldsValue(true));
+    const unterkunft = veranst?.unterkunft;
+    const artist = veranst?.artist;
+
+    return (
+      artist?.brauchtHotel && (
+        <>
+          <Row gutter={12}>
+            <Col span={18}>
+              <Form.Item>
+                <b>Hotel:</b>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <NumberInputWithDirectValue value={unterkunft?.roomsTotalEUR || 0} suffix="€" decimals={2} />
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={18}>
+              <Form.Item>
+                <b>Hotel (Transport):</b>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <NumberInputWithDirectValue value={unterkunft?.transportEUR || 0} suffix="€" decimals={2} />
+            </Col>
+          </Row>
+        </>
       )
     );
   }
@@ -95,14 +153,16 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
           />
         </Col>
       </Row>
+      <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />
       <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
       <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
       <LabelCurrencyRow label="Saalmiete" path={["kosten", "saalmiete"]} />
-      <LabelCurrencyRow label="Werbung 1" path={["kosten", "werbung1"]} />
-      <LabelCurrencyRow label="Werbung 2" path={["kosten", "werbung2"]} />
-      <LabelCurrencyRow label="Werbung 3" path={["kosten", "werbung3"]} />
+      <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
+      <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
+      <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} />
       <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
       {kassenZeile()}
+      {hotelZeile()}
       <Row gutter={12}>
         <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gageBAR"]} />
       </Row>

@@ -1,6 +1,6 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt";
 import { Col, Form, FormInstance, Row } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import _ from "lodash";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { TextField } from "@/widgets/TextField";
@@ -14,7 +14,7 @@ type KontaktCardProps = {
   selector: "agentur" | "hotel";
   noTopBorder?: boolean;
 };
-export default function KontaktCard({ kontakte, form, selector, noTopBorder }: KontaktCardProps) {
+export default function KontaktCard({ kontakte, form, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
     const names = _.uniq(kontakte.map((k) => k.name))
@@ -70,6 +70,7 @@ export default function KontaktCard({ kontakte, form, selector, noTopBorder }: K
           <TextField name={[selector, "email"]} label="E-Mail" isEmail />
         </Col>
       </Row>
+      {children}
     </CollapsibleForVeranstaltung>
   );
 }

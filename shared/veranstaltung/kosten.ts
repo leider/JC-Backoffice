@@ -24,9 +24,13 @@ export default class Kosten {
   technikAngebot1EUR = 0;
   fluegelstimmerEUR = 0;
   gagenEUR = 0;
+  provisionAgentur = 0;
   werbung1 = 0;
   werbung2 = 0;
   werbung3 = 0;
+  werbung1Label = "Werbung 1";
+  werbung2Label = "Werbung 2";
+  werbung3Label = "Werbung 3";
   personal = 0;
   gagenSteuer: string | null = null;
   deal: string | null = null;
@@ -66,6 +70,15 @@ export default class Kosten {
   }
 
   get totalEUR(): number {
-    return this.gagenTotalEUR + this.backlineUndTechnikEUR + this.saalmiete + this.werbung1 + this.werbung2 + this.werbung3 + this.personal;
+    return (
+      this.gagenTotalEUR +
+      this.provisionAgentur +
+      this.backlineUndTechnikEUR +
+      this.saalmiete +
+      this.werbung1 +
+      this.werbung2 +
+      this.werbung3 +
+      this.personal
+    );
   }
 }

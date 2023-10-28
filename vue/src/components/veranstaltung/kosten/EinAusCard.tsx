@@ -18,10 +18,15 @@ export default function EinAusCard({ einnahmen, ausgaben, form }: AusgabenCardPa
     form,
     preserve: true,
   });
+  const deal = Form.useWatch(["kosten", "deal"], {
+    form,
+    preserve: true,
+  });
+
   useEffect(() => {
     const veranst = new Veranstaltung(form.getFieldsValue(true));
     setKalk(new VeranstaltungKalkulation(veranst));
-  }, [einnahmen, ausgaben, form, brauchtHotel]);
+  }, [einnahmen, ausgaben, form, brauchtHotel, deal]);
 
   function format(amount: number): string {
     return `${formatToGermanNumberString(amount)} €`;
@@ -35,7 +40,7 @@ export default function EinAusCard({ einnahmen, ausgaben, form }: AusgabenCardPa
       render: (text) => <b>{text}</b>,
       align: "right",
     },
-    { title: "Einnahmen", dataIndex: "second", key: "second", align: "right" },
+    { title: "Eintritt", dataIndex: "second", key: "second", align: "right" },
     { title: "Ausgaben", dataIndex: "third", key: "third", align: "right" },
     { title: "Überschuss", dataIndex: "fourth", key: "fourth", align: "right" },
   ];

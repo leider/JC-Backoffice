@@ -128,7 +128,6 @@ const demo = {
     suiteEUR: 0,
     transportEUR: 0,
     kommentar: "",
-    transportText: "",
     sonstiges: [],
     angefragt: false,
     bestaetigt: false,

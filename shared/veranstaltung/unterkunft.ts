@@ -10,7 +10,6 @@ export default class Unterkunft {
   suiteEUR = 0;
   transportEUR = 0;
   kommentar = "";
-  transportText = "";
   sonstiges: string[] = [];
   angefragt = false;
   bestaetigt = false;
