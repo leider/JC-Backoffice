@@ -159,10 +159,6 @@ export default class Veranstaltung {
     return this.startDatumUhrzeit.minus({ stunden: 2 });
   }
 
-  get minimalStartForEdit(): DatumUhrzeit {
-    return this.startDatumUhrzeit.istVor(new DatumUhrzeit()) ? this.startDatumUhrzeit : new DatumUhrzeit();
-  }
-
   get datumForDisplay(): string {
     return this.startDatumUhrzeit.tagMonatJahrLang;
   }

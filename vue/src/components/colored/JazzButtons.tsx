@@ -1,4 +1,4 @@
-import { App, Button, ConfigProvider, Dropdown } from "antd";
+import { App, Button, ConfigProvider, Dropdown, Space } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
@@ -83,9 +83,13 @@ export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veran
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
-      <Dropdown.Button type="primary" menu={{ items, onClick: onMenuClick }} disabled={disabled}>
-        Exportieren
-      </Dropdown.Button>
+      <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>
+        <Button type="primary">
+          <Space>
+            Exportieren <IconForSmallBlock iconName="ChevronDown" />
+          </Space>
+        </Button>
+      </Dropdown>
     </ConfigProvider>
   );
 }

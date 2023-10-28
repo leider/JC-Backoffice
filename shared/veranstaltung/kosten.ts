@@ -22,6 +22,7 @@ export default class Kosten {
   backlineEUR = 0;
   saalmiete = 0;
   technikAngebot1EUR = 0;
+  fluegelstimmerEUR = 0;
   gagenEUR = 0;
   werbung1 = 0;
   werbung2 = 0;
@@ -61,7 +62,7 @@ export default class Kosten {
   }
 
   get backlineUndTechnikEUR(): number {
-    return this.backlineEUR + this.technikAngebot1EUR;
+    return this.backlineEUR + this.technikAngebot1EUR + this.fluegelstimmerEUR;
   }
 
   get totalEUR(): number {
