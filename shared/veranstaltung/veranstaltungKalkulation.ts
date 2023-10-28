@@ -28,7 +28,9 @@ export default class VeranstaltungKalkulation {
     return this.kosten.totalEUR + hotelkosten + this.kasse.ausgabenOhneGage;
   }
   get erwarteterOderEchterEintritt(): number {
-    return this.kasse.istFreigegeben ? this.kasse.einnahmeTicketsEUR : this.eintrittspreise.erwarteterEintritt;
+    return (
+      (this.kasse.istFreigegeben ? this.kasse.einnahmeTicketsEUR : this.eintrittspreise.erwarteterEintritt) + this.kasse.einnahmenReservix
+    );
   }
 
   get einnahmenGesamtEUR(): number {

@@ -21,6 +21,7 @@ export default class Kasse {
   anzahlBesucherAK = 0;
   kassenfreigabe? = "";
   kassenfreigabeAm?: Date;
+  einnahmenReservix = 0; // darf nicht in kassenberechnung
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {

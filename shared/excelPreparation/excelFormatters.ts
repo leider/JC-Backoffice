@@ -10,6 +10,11 @@ export function createExcelData(veranstaltung: Veranstaltung) {
     Einnahme: kasse.einnahmeTicketsEUR,
     Ausgabe: "",
   };
+  const reservixRow = {
+    Art: "Eintritt Reservix",
+    Einnahme: kasse.einnahmenReservix,
+    Ausgabe: "",
+  };
   const barEinnahmenRow = { Art: "Bar Einnahmen", Einnahme: kasse.einnahmeOhneBankUndTickets, Ausgabe: "" };
   const barEinlageRow = { Art: "Bar Einlage", Einnahme: kasse.einnahmeBankEUR, Ausgabe: "" };
   const zuschussRow = { Art: "Zuschüsse", Einnahme: veranstaltung.eintrittspreise.zuschuss, Ausgabe: "" };
@@ -34,6 +39,7 @@ export function createExcelData(veranstaltung: Veranstaltung) {
 
   return [
     eintrittRow,
+    reservixRow,
     barEinnahmenRow,
     barEinlageRow,
     zuschussRow,

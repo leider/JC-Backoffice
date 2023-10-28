@@ -60,6 +60,11 @@ export default function EinnahmenCard({ form, optionen, onChange, veranstaltung 
       </Row>
       <Row gutter={12}>
         <Col span={12}>
+          <NumberInput name={["kasse", "einnahmenReservix"]} label={"Reservix"} decimals={2} suffix={"€"} onChange={updateSumme} />
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={12}>
           <NumberInput name={["eintrittspreise", "zuschuss"]} label={"Zuschüsse"} decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
         <Col span={12}>
