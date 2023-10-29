@@ -7,7 +7,7 @@ export default function TabTechnik({ optionen, form }: VermietungTabProps) {
   return (
     <Row gutter={12}>
       <Col span={24}>
-        <TechnikCard form={form} optionen={optionen!} />
+        <TechnikCard form={form!} optionen={optionen!} />
       </Col>
     </Row>
   );
