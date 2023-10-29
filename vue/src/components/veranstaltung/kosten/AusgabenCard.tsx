@@ -12,6 +12,7 @@ import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
+import Technik from "jc-shared/veranstaltung/technik.ts";
 
 interface AusgabenCardParams {
   optionen: OptionValues;
@@ -32,9 +33,14 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
     preserve: true,
   });
 
+  const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {
+    form,
+    preserve: true,
+  });
+
   useEffect(() => {
     updateSumme();
-  }, [form, veranstaltung, unterkunft, brauchtHotel]);
+  }, [form, veranstaltung, unterkunft, brauchtHotel, fluegelstimmerEUR]);
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));
@@ -71,6 +77,25 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
           <NumberInput label="Betrag" name={path} decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
       </Row>
+    );
+  }
+
+  function fluegelZeile() {
+    const technik = new Technik(form.getFieldValue("technik"));
+    const fluegelEUR = form.getFieldValue(["kosten", "fluegelstimmerEUR"]);
+    return (
+      technik.fluegel && (
+        <Row gutter={12}>
+          <Col span={18}>
+            <Form.Item>
+              <b>Fluegelstimmer:</b>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <NumberInputWithDirectValue value={fluegelEUR} suffix="€" decimals={2} />
+          </Col>
+        </Row>
+      )
     );
   }
 
@@ -156,6 +181,7 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />
       <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
       <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
+      {fluegelZeile()}
       <LabelCurrencyRow label="Saalmiete" path={["kosten", "saalmiete"]} />
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
