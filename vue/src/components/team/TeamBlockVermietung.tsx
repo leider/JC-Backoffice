@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Col, Collapse, ConfigProvider, Row, Space, theme, Tooltip, Typography } from "antd";
+import { Button, Col, Collapse, ConfigProvider, Row, Tag, theme, Tooltip, Typography } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
+import { IconForSmallBlock } from "@/components/Icon.tsx";
 
 const { Title } = Typography;
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
   const { token } = theme.useToken();
-  const green = token.colorSuccess;
-  const red = token.colorError;
 
-  const colorConf = vermietung.confirmed ? green : red;
+  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+
+  useEffect(() => {
+    function HeaderTag({ label, color }: { label: string; color: boolean }) {
+      return (
+        <Tag key={label} color={color ? "success" : "error"} style={{ border: 0, paddingLeft: 3, paddingRight: 3 }}>
+          {label}
+        </Tag>
+      );
+    }
+
+    const confirmed = vermietung.kopf.confirmed;
+    const technikOK = vermietung.technik.checked;
+    //const presseOK = vermietung.presse.checked;
+    const homepage = vermietung.kopf.kannAufHomePage;
+    const social = vermietung.kopf.kannInSocialMedia;
+
+    const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
+    if (vermietung.brauchtTechnik) {
+      taggies.push({ label: "Technik", color: technikOK });
+    }
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
+
+    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+  }, [vermietung]);
 
   return (
-    <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
-      <Tooltip title={vermietung.confirmed ? "Bestätigt" : "Noch unbestätigt"} color={colorConf}>
-        <IconForSmallBlock size={12} iconName={vermietung.confirmed ? "LockFill" : "UnlockFill"} color={colorConf} />
-      </Tooltip>
-    </Space>
+    <ConfigProvider theme={{ token: { fontSize: 11 } }}>
+      <div style={{ width: "70px" }}>{tagsForTitle}</div>
+    </ConfigProvider>
   );
 }
 interface VermietungHeaderProps {
@@ -28,7 +48,7 @@ interface VermietungHeaderProps {
 }
 
 function VermietungHeader({ vermietung, expanded }: VermietungHeaderProps) {
-  const titleStyle = { margin: 0, color: "#FFF" };
+  const titleStyle = { margin: 0 };
   function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
       <Title level={l} style={titleStyle}>
@@ -42,12 +62,12 @@ function VermietungHeader({ vermietung, expanded }: VermietungHeaderProps) {
       {expanded ? (
         <>
           <T l={5} t={vermietung.datumForDisplayShort} />
-          <T l={3} t={vermietung.titel} />
+          <T l={3} t={vermietung.kopf.titel + " (Vermietung)"} />
         </>
       ) : (
         <>
           <Title level={4} style={titleStyle}>
-            {vermietung.titel}
+            {vermietung.kopf.titel} (Vermietung)
             <br />
             <small>
               <small style={{ fontWeight: 400 }}>{vermietung.startDatumUhrzeit.wochentagTagMonatShort}</small>
@@ -68,7 +88,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
   const { useToken } = theme;
   const { token } = useToken();
   useEffect(() => {
-    setColor(token.colorPrimary);
+    setColor((token as any)["custom-color-vermietung"]);
   }, [vermietung]);
 
   const [expanded, setExpanded] = useState<boolean>();
@@ -97,9 +117,14 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
                   <div style={{ margin: -12 }}>
                     <Row justify="end">
-                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung></ButtonInAdminPanel>
+                      <span>
+                        <h3 style={{ marginBlockStart: 4, marginBlockEnd: 0, marginInlineEnd: 8 }}>Vermietung</h3>
+                      </span>
+                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung />
+                      {vermietung.brauchtTechnik && <ButtonInAdminPanel url={vermietung.url ?? ""} type="technik" isVermietung />}
+                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="ausgaben" isVermietung />
+                      {/*<ButtonInAdminPanel url={vermietung.url ?? ""} type="presse"></ButtonInAdminPanel>*/}
                     </Row>
-                    <h1 style={{ padding: 8 }}>Vermietung</h1>
                   </div>
                 </ConfigProvider>
               ),

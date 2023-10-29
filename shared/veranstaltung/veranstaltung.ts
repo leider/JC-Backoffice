@@ -128,6 +128,10 @@ export default class Veranstaltung {
     this.kasse = new Kasse();
     this.kopf.confirmed = false;
     this.kopf.abgesagt = false;
+    this.kopf.rechnungAnKooperation = false;
+    this.kopf.fotografBestellen = false;
+    this.kopf.kannAufHomePage = false;
+    this.kopf.kannInSocialMedia = false;
   }
 
   get fullyQualifiedUrl(): string {

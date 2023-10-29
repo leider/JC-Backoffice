@@ -6,9 +6,10 @@ import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 interface UploaderParams {
-  form: FormInstance<Veranstaltung>;
+  form: FormInstance<Veranstaltung | Vermietung>;
   id?: string;
   name: string[];
   typ: string;

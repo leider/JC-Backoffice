@@ -7,6 +7,7 @@ export const veranstaltungTypeColors: { [index: string]: string } = {
   livestream: "#ff29ac",
   session: "#dea71f",
   soulcafe: "#f07f31",
+  vermietung: "#f6eee1",
 };
 
 export function createTokenBasedStyles(document: Document, token: { [p: string]: string | number }) {
@@ -19,7 +20,7 @@ export function createTokenBasedStyles(document: Document, token: { [p: string]:
       `.color-${key}{
       background-color: ${veranstaltungTypeColors[key]};
       border-color: ${veranstaltungTypeColors[key]};
-      color: #fff !important;
+      color: ${key === "vermietung" ? token.colorText : "#fff"} !important;
       overflow: hidden;
     }
     
@@ -35,6 +36,10 @@ export function createTokenBasedStyles(document: Document, token: { [p: string]:
   border-style: solid;
   border-width: 3px;
   border-color: #f8500d !important;
+}
+
+.ical-event {
+  overflow: hidden;
 }
 
 .table-row-error {

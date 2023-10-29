@@ -3,7 +3,7 @@ export default class Kopf {
   eventTyp = "";
   flaeche = "";
   kooperation = "";
-  ort = "Jubez";
+  ort = "Jazzclub";
   titel = "";
   pressename = "";
   presseIn = "";

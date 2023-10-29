@@ -142,7 +142,7 @@ export default function Veranstaltungen() {
               <Button>
                 <Space>
                   {period}
-                  <IconForSmallBlock size={8} iconName="ChevronDown" />
+                  <IconForSmallBlock iconName="ChevronDown" />
                 </Space>
               </Button>
             </Dropdown>,

@@ -15,24 +15,14 @@ import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/commons/auth.tsx";
 
-export interface TabProps {
+export interface VeranstaltungTabProps {
   form: FormInstance<Veranstaltung>;
   veranstaltung?: Veranstaltung;
   optionen?: OptionValues;
   orte?: Orte;
 }
 
-export default function VeranstaltungTabs({
-  optionen,
-  orte,
-  veranstaltung,
-  form,
-}: {
-  veranstaltung: Veranstaltung;
-  optionen: OptionValues;
-  orte: Orte;
-  form: FormInstance<Veranstaltung>;
-}) {
+export default function VeranstaltungTabs({ optionen, orte, veranstaltung, form }: VeranstaltungTabProps) {
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
@@ -88,7 +78,7 @@ export default function VeranstaltungTabs({
     {
       key: "technik",
       label: <TabLabel type="technik" title="Technik" />,
-      children: <TabTechnik optionen={optionen} veranstaltung={veranstaltung} form={form} />,
+      children: <TabTechnik optionen={optionen} form={form} />,
     },
     {
       key: "ausgaben",
@@ -104,7 +94,7 @@ export default function VeranstaltungTabs({
     {
       key: "presse",
       label: <TabLabel type="presse" title="Presse" />,
-      children: <TabPresse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
+      children: <TabPresse optionen={optionen!} veranstaltung={veranstaltung!} form={form} />,
     },
   ];
 

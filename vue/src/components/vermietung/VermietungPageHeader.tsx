@@ -2,7 +2,7 @@ import * as React from "react";
 import { CSSProperties, useEffect, useState } from "react";
 import { Form, FormInstance, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
-import { CopyButton, DeleteButton, SaveButton } from "@/components/colored/JazzButtons";
+import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -15,47 +15,62 @@ export default function VermietungPageHeader({ isNew, dirty, form }: { isNew: bo
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
-  const confirmed = Form.useWatch(["confirmed"], {
+  const confirmed = Form.useWatch(["kopf", "confirmed"], {
     form,
     preserve: true,
   });
-  const titel = Form.useWatch(["titel"], { form, preserve: true });
+  const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
   const startDate = Form.useWatch(["startAndEnd", "start"], {
     form,
     preserve: true,
   });
+  const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+    form,
+    preserve: true,
+  });
+  const technikOK = Form.useWatch(["technik", "checked"], {
+    form,
+    preserve: true,
+  });
+  const homepage = Form.useWatch(["kopf", "kannAufHomePage"], {
+    form,
+    preserve: true,
+  });
+  const social = Form.useWatch(["kopf", "kannInSocialMedia"], {
+    form,
+    preserve: true,
+  });
 
-  function updateState() {
-    const tags = [];
-    if (!confirmed) {
-      tags.push(
-        <Tag key="unbestaetigt" color={"error"}>
-          Unbestätigt
-        </Tag>,
-      );
-    } else {
-      tags.push(
-        <Tag key="bestaetigt" color={"success"}>
-          Bestätigt
-        </Tag>,
+  useEffect(() => {
+    document.title = isNew ? "Neue oder kopierte Vermietung" : titel;
+    setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
+  }, [titel, startDate, isNew]);
+
+  useEffect(() => {
+    function HeaderTag({ label, color }: { label: string; color: boolean }) {
+      return (
+        <Tag key={label} color={color ? "success" : "error"}>
+          {label}
+        </Tag>
       );
     }
-    setTagsForTitle(tags);
-
-    document.title = isNew ? "Neue oder kopierte Vermietung" : titel;
-
-    setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
-  }
-  useEffect(updateState, [confirmed, titel, startDate, isNew]);
+    const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
+    if (brauchtTechnik) {
+      taggies.push({ label: "Technik", color: technikOK });
+    }
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
+    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+  }, [confirmed, brauchtTechnik, technikOK, homepage, social]);
 
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
-  const titleStyle: CSSProperties = { color: token.colorPrimary, whiteSpace: "normal" };
+  const titleStyle: CSSProperties = { color: token.colorText, whiteSpace: "normal" };
   return (
     <PageHeader
-      title={<span style={titleStyle}>{document.title}</span>}
+      title={<span style={titleStyle}>Vermietung - {document.title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
+        <ExportExcelVermietungButton key="excel" disabled={isNew} vermietung={new Vermietung(form.getFieldsValue(true))} />,
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
         <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
         <SaveButton key="save" disabled={!dirty} />,

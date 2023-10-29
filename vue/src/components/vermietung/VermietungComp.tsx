@@ -1,19 +1,16 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { App, Form } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
+import { optionen as optionenRestCall, saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useAuth } from "@/commons/auth";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
-import CheckItem from "@/widgets/CheckItem.tsx";
-import { TextField } from "@/widgets/TextField.tsx";
-import StartEndPickers from "@/widgets/StartEndPickers.tsx";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
-import SimpleMdeReact from "react-simplemde-editor";
+import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
+import OptionValues from "jc-shared/optionen/optionValues.ts";
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -22,14 +19,21 @@ export default function VermietungComp() {
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
+  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
 
   const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung());
+  const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
 
   useEffect(() => {
     if (vermiet.data) {
       setVermietung(vermiet.data);
     }
   }, [vermiet.data]);
+  useEffect(() => {
+    if (opts.data) {
+      setOptionen(opts.data);
+    }
+  }, [opts.data]);
 
   const queryClient = useQueryClient();
 
@@ -103,36 +107,19 @@ export default function VermietungComp() {
         // console.log({ form: form.getFieldsValue(true) });
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
+      onFinishFailed={() => {
+        notification.open({
+          type: "error",
+          message: "Fehler",
+          description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+          duration: 5,
+        });
+      }}
       onFinish={saveForm}
       layout="vertical"
     >
       <VermietungPageHeader isNew={isNew} dirty={dirty} form={form} />
-      <Col xs={24} lg={12}>
-        <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
-          <Row gutter={12}>
-            <Col span={8}>
-              <CheckItem name={["confirmed"]} label="Ist bestätigt" />
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={12}>
-              <TextField name={["titel"]} label="Titel" required />
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={24}>
-              <StartEndPickers />
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={24}>
-              <Form.Item label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]}>
-                <SimpleMdeReact options={{ status: false, spellChecker: false }} />
-              </Form.Item>
-            </Col>
-          </Row>
-        </CollapsibleForVeranstaltung>
-      </Col>
+      <VermietungTabs form={form} optionen={optionen} />
     </Form>
   );
 }

@@ -6,11 +6,11 @@ import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import CheckItem from "@/widgets/CheckItem";
-import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import { VeranstaltungTabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 import { Dayjs } from "dayjs";
 import _ from "lodash";
 
-export default function HotelCard({ form, optionen, veranstaltung }: TabProps) {
+export default function HotelCard({ form, optionen, veranstaltung }: VeranstaltungTabProps) {
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");
 

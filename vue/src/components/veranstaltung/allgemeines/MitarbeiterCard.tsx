@@ -44,7 +44,7 @@ function MitarbeiterRow({ usersAsOptions, sectionName, label }: MitarbeiterRowPr
     </Row>
   );
 }
-export default function MitarbeiterCard() {
+export default function MitarbeiterCard({ forVermietung }: { forVermietung?: boolean }) {
   const { lg } = useBreakpoint();
   const dividerStyle = {
     marginTop: 0,
@@ -66,20 +66,28 @@ export default function MitarbeiterCard() {
         Master
       </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} sectionName="mod" />
-      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
-        Kasse
-      </Divider>
-      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="kasseV" />
-      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="kasse" />
+      {!forVermietung && (
+        <>
+          <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+            Kasse
+          </Divider>
+          <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="kasseV" />
+          <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="kasse" />
+        </>
+      )}
       <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
         Techniker
       </Divider>
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="technikerV" />
       <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="techniker" />
-      <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
-        Merchandise
-      </Divider>
-      <MitarbeiterRow usersAsOptions={usersAsOptions} sectionName="merchandise" />
+      {!forVermietung && (
+        <>
+          <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
+            Merchandise
+          </Divider>
+          <MitarbeiterRow usersAsOptions={usersAsOptions} sectionName="merchandise" />
+        </>
+      )}
     </CollapsibleForVeranstaltung>
   );
 }

@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import EinnahmenCard from "@/components/veranstaltung/kosten/EinnahmenCard";
 import AusgabenCard from "@/components/veranstaltung/kosten/AusgabenCard";
 import EinAusCard from "@/components/veranstaltung/kosten/EinAusCard";
-import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import { VeranstaltungTabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 
-export default function TabKosten({ veranstaltung, optionen, form }: TabProps) {
+export default function TabKosten({ veranstaltung, optionen, form }: VeranstaltungTabProps) {
   const [einnahmen, setEinnahmen] = useState<number>(0);
   const [ausgaben, setAusgaben] = useState<number>(0);
   function einnahmenChanged(sum: number) {

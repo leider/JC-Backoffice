@@ -1,5 +1,6 @@
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
 import VeranstaltungKalkulation from "../veranstaltung/veranstaltungKalkulation.js";
+import Vermietung from "../vermietung/vermietung";
 
 export function createExcelData(veranstaltung: Veranstaltung) {
   const kasse = veranstaltung.kasse;
@@ -58,5 +59,36 @@ export function createExcelData(veranstaltung: Veranstaltung) {
     personalRow,
     hotelRow,
     hotelTransportRow,
+  ];
+}
+export function createExcelDataVermietung(vermietung: Vermietung) {
+  // Einnahmen
+  const saalmieteRow = {
+    Art: "Saalmiete",
+    Einnahme: vermietung.saalmiete,
+    Ausgabe: "",
+  };
+  // Ausgaben
+
+  const kosten = vermietung.kosten;
+  const gagenRow = { Art: "Gagen", Einnahme: "", Ausgabe: kosten.gagenTotalEUR };
+  const backlineRockshopRow = { Art: "Backline Rockshop", Einnahme: "", Ausgabe: kosten.backlineEUR };
+  const technikZumietungRow = { Art: "Technik Zumietung", Einnahme: "", Ausgabe: kosten.technikAngebot1EUR };
+  const fluegelStimmerRow = { Art: "Flügelstimmer", Einnahme: "", Ausgabe: kosten.fluegelstimmerEUR };
+  const werbung1Row = { Art: kosten.werbung1Label, Einnahme: "", Ausgabe: kosten.werbung1 };
+  const werbung2Row = { Art: kosten.werbung2Label, Einnahme: "", Ausgabe: kosten.werbung2 };
+  const werbung3Row = { Art: kosten.werbung3Label, Einnahme: "", Ausgabe: kosten.werbung3 };
+  const personalRow = { Art: "Personal (unbar)", Einnahme: "", Ausgabe: kosten.personal };
+
+  return [
+    saalmieteRow,
+    gagenRow,
+    backlineRockshopRow,
+    technikZumietungRow,
+    fluegelStimmerRow,
+    werbung1Row,
+    werbung2Row,
+    werbung3Row,
+    personalRow,
   ];
 }

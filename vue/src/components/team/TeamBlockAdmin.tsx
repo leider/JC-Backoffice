@@ -109,12 +109,12 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
           </Space.Compact>
         ) : (
           <>
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines"></ButtonInAdminPanel>
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik"></ButtonInAdminPanel>
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben"></ButtonInAdminPanel>
-            {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel"></ButtonInAdminPanel>}
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse"></ButtonInAdminPanel>
-            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse"></ButtonInAdminPanel>
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines" />
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik" />
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben" />
+            {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel" />}
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse" />
+            <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse" />
             <ConfigProvider theme={{ token: { colorPrimary: (token as any)["custom-color-concert"] } }}>
               <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
                 <Button

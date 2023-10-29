@@ -6,7 +6,7 @@ import { KassenzettelFreigabe } from "@/components/veranstaltung/kasse/Kassenzet
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import Kasse from "jc-shared/veranstaltung/kasse";
-import { TabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import { VeranstaltungTabProps } from "@/components/veranstaltung/VeranstaltungTabs";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 
 export interface KasseCardProps {
@@ -14,7 +14,7 @@ export interface KasseCardProps {
   disabled: boolean;
 }
 
-export default function TabKasse({ form }: TabProps) {
+export default function TabKasse({ form }: VeranstaltungTabProps) {
   function anfangsbestandChanged() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     form.setFieldValue("endbestandEUR", kasse.endbestandEUR);

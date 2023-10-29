@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
-import { createExcelData } from "jc-shared/excelPreparation/excelFormatters.ts";
+import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -45,9 +46,13 @@ export function NewButtons() {
     }
   }
   return (
-    <Dropdown.Button type="default" menu={{ items, onClick: onMenuClick }}>
-      Neu
-    </Dropdown.Button>
+    <Dropdown menu={{ items, onClick: onMenuClick }}>
+      <Button type="default">
+        <Space>
+          Neu <IconForSmallBlock iconName="ChevronDown" />
+        </Space>
+      </Button>
+    </Dropdown>
   );
 }
 export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veranstaltung: Veranstaltung }) {
@@ -90,6 +95,32 @@ export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veran
           </Space>
         </Button>
       </Dropdown>
+    </ConfigProvider>
+  );
+}
+
+export function ExportExcelVermietungButton({ disabled, vermietung }: ButtonProps & { vermietung: Vermietung }) {
+  function click() {
+    const sheet = utils.json_to_sheet(createExcelDataVermietung(vermietung));
+    sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];
+    const book = utils.book_new();
+    utils.book_append_sheet(
+      book,
+      sheet,
+      vermietung?.kopf?.titel
+        .replace(/\s/g, "-")
+        .replace(/\//g, "-")
+        .replace(/[^a-zA-Z0-9\- _]/g, "")
+        .slice(0, 30) || "data",
+    );
+    return writeFileXLSX(book, "JAZZ.xlsx");
+  }
+
+  return (
+    <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
+      <Button type="primary" disabled={disabled} icon={<IconForSmallBlock iconName="FileEarmarkSpreadsheet" />} onClick={click}>
+        Kalkulation (Excel)
+      </Button>
     </ConfigProvider>
   );
 }

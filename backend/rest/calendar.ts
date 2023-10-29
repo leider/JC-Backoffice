@@ -43,9 +43,9 @@ async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?
       start: vermietung.startDate.toISOString(),
       end: vermietung.endDate.toISOString(),
       url: user?.accessrights?.isOrgaTeam ? `/vue/vermietung/${encodeURIComponent(vermietung.url || "")}` : "",
-      title: vermietung.titel,
+      title: vermietung.kopf.titel,
       tooltip: "",
-      className: (!vermietung.confirmed ? "color-geplant " : "") + "color-allgemeines",
+      className: (!vermietung.kopf.confirmed ? "color-geplant " : "") + "color-vermietung",
     };
   }
 
@@ -74,6 +74,7 @@ async function termineForIcal(ical: Ical) {
       end: toIsoString(event.end || event.start),
       title: event.summary || "",
       tooltip: event.summary || "",
+      className: "ical-event",
     })) || [];
   return eventArray;
 }
