@@ -1,20 +1,22 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt";
-import { Col, Form, FormInstance, Row } from "antd";
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import { Col, Form, Row } from "antd";
+import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
 import _ from "lodash";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import SingleSelect from "@/widgets/SingleSelect";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
-  form: FormInstance<Veranstaltung>;
   selector: "agentur" | "hotel";
   noTopBorder?: boolean;
 };
-export default function KontaktCard({ kontakte, form, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
+export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
     const names = _.uniq(kontakte.map((k) => k.name))

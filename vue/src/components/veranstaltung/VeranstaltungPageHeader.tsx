@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CSSProperties, useEffect, useState } from "react";
-import { Form, FormInstance, Tag, theme } from "antd";
+import { CSSProperties, useContext, useEffect, useState } from "react";
+import { Form, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
 import cssColor from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
@@ -8,18 +8,11 @@ import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth.tsx";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function VeranstaltungPageHeader({
-  veranstaltung,
-  isNew,
-  dirty,
-  form,
-}: {
-  veranstaltung: Veranstaltung;
-  isNew: boolean;
-  dirty: boolean;
-  form: FormInstance<Veranstaltung>;
-}) {
+export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
   const { url } = useParams();
 
   const { context } = useAuth();
@@ -114,7 +107,7 @@ export default function VeranstaltungPageHeader({
       title={<span style={titleStyle}>{document.title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
-        isOrga && <ExportButtons key="exports" disabled={isNew} veranstaltung={veranstaltung} />,
+        isOrga && <ExportButtons key="exports" disabled={isNew} />,
         isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
         <SaveButton key="save" disabled={!dirty} />,

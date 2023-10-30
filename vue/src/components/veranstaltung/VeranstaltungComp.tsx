@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { App, Form } from "antd";
+import { createContext, useEffect, useState } from "react";
+import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -20,6 +20,8 @@ import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPag
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/auth";
+
+export const VeranstaltungContext = createContext<{ form: FormInstance<Veranstaltung>; optionen: OptionValues; orte: Orte } | null>(null);
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
@@ -155,28 +157,30 @@ export default function VeranstaltungComp() {
   }
 
   return (
-    <Form
-      form={form}
-      onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
-      }}
-      onFinishFailed={() => {
-        notification.open({
-          type: "error",
-          message: "Fehler",
-          description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
-          duration: 5,
-        });
-      }}
-      onFinish={saveForm}
-      layout="vertical"
-    >
-      <VeranstaltungPageHeader veranstaltung={veranstaltung} isNew={isNew} dirty={dirty} form={form} />
-      <VeranstaltungTabs veranstaltung={veranstaltung} optionen={optionen} orte={orte} form={form} />
-    </Form>
+    <VeranstaltungContext.Provider value={{ form, optionen, orte }}>
+      <Form
+        form={form}
+        onValuesChange={() => {
+          // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+          // console.log({ diff });
+          // console.log({ initialValue });
+          // console.log({ form: form.getFieldsValue(true) });
+          setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+        }}
+        onFinishFailed={() => {
+          notification.open({
+            type: "error",
+            message: "Fehler",
+            description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+            duration: 5,
+          });
+        }}
+        onFinish={saveForm}
+        layout="vertical"
+      >
+        <VeranstaltungPageHeader isNew={isNew} dirty={dirty} />
+        <VeranstaltungTabs />
+      </Form>
+    </VeranstaltungContext.Provider>
   );
 }

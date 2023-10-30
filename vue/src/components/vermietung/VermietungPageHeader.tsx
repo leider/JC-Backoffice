@@ -1,13 +1,16 @@
 import * as React from "react";
-import { CSSProperties, useEffect, useState } from "react";
-import { Form, FormInstance, Tag, theme } from "antd";
+import { CSSProperties, useContext, useEffect, useState } from "react";
+import { Form, Tag, theme } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
-export default function VermietungPageHeader({ isNew, dirty, form }: { isNew: boolean; dirty: boolean; form: FormInstance<Vermietung> }) {
+export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+
   const { url } = useParams();
 
   const { useToken } = theme;
@@ -65,12 +68,13 @@ export default function VermietungPageHeader({ isNew, dirty, form }: { isNew: bo
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
   const titleStyle: CSSProperties = { color: token.colorText, whiteSpace: "normal" };
+
   return (
     <PageHeader
       title={<span style={titleStyle}>Vermietung - {document.title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
-        <ExportExcelVermietungButton key="excel" disabled={isNew} vermietung={new Vermietung(form.getFieldsValue(true))} />,
+        <ExportExcelVermietungButton key="excel" disabled={isNew} />,
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
         <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
         <SaveButton key="save" disabled={!dirty} />,

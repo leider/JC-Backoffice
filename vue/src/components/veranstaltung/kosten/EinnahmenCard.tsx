@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, FormInstance, Row } from "antd";
-import OptionValues from "jc-shared/optionen/optionValues";
+import { Col, Row } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -9,18 +8,20 @@ import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalku
 import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 interface EinnahmenCardParams {
-  optionen: OptionValues;
-  form: FormInstance<Veranstaltung>;
   onChange: (sum: number) => void;
-  veranstaltung: Veranstaltung;
 }
-export default function EinnahmenCard({ form, optionen, onChange, veranstaltung }: EinnahmenCardParams) {
+export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+  const optionen = veranstContext!.optionen;
+
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
     updateSumme();
-  }, [form, veranstaltung]);
+  }, [form]);
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));

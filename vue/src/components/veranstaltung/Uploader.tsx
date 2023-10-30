@@ -10,23 +10,22 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 interface UploaderParams {
   form: FormInstance<Veranstaltung | Vermietung>;
-  id?: string;
   name: string[];
   typ: string;
   onlyImages?: boolean;
 }
 
-export default function Uploader({ form, id, name, typ, onlyImages = false }: UploaderParams) {
+export default function Uploader({ form, name, typ, onlyImages = false }: UploaderParams) {
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
     setOptions(form.getFieldValue(name) || []);
-  }, [id, form]);
+  }, [form]);
 
   async function saveFiles() {
     setUploading(true);
     const formData = new FormData();
-    formData.append("id", id || "");
+    formData.append("id", form.getFieldValue("id") || "");
     formData.append("typ", typ);
     fileList.forEach((file) => {
       formData.append("datei", file as RcFile, file.name);

@@ -1,7 +1,6 @@
-import OptionValues from "jc-shared/optionen/optionValues";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, FormInstance, Row } from "antd";
+import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
@@ -10,19 +9,17 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Uploader from "@/components/veranstaltung/Uploader";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-interface TechnikCardParams {
-  form: FormInstance<Veranstaltung>;
-  optionen: OptionValues;
-}
+export default function TechnikCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+  const { backlineJazzclub, backlineRockshop } = veranstContext!.optionen;
 
-export default function TechnikCard({ form, optionen: { backlineJazzclub, backlineRockshop } }: TechnikCardParams) {
   const [summe, setSumme] = useState<number>(0);
-  const [id, setId] = useState<string | undefined>(undefined);
   useEffect(() => {
     const veranstaltung = new Veranstaltung(form.getFieldsValue(true));
     setSumme(veranstaltung.kosten.backlineUndTechnikEUR);
-    setId(veranstaltung.id);
   }, [form]);
 
   function updateSumme() {
@@ -67,7 +64,7 @@ export default function TechnikCard({ form, optionen: { backlineJazzclub, backli
       </Row>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader form={form} id={id} name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader form={form} name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
       <Row gutter={12}>

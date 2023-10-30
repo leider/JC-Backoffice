@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/veranstaltung/kasse";
 import { KasseCardProps } from "@/components/veranstaltung/kasse/TabKasse";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function EinnahmenCard({ form, disabled }: KasseCardProps) {
+export default function EinnahmenCard({ disabled }: KasseCardProps) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
     setReadonly(disabled);

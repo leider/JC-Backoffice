@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
 
-export default function BearbeiterCard({ veranstaltung }: { veranstaltung?: Veranstaltung }) {
+export default function BearbeiterCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Bearbeiter">
-      {veranstaltung?.changelist?.map((item, idx) => (
-        <Row gutter={12} key={idx}>
+      {form.getFieldValue("changelist")?.map((item: ChangelistItem) => (
+        <Row gutter={12} key={item.zeitpunkt}>
           <Col span={24}>
             <details>
               <summary>

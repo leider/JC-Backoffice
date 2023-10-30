@@ -1,21 +1,19 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Form, FormInstance, Tabs, TabsProps } from "antd";
+import { useContext, useEffect, useState } from "react";
+import { Form, Tabs, TabsProps } from "antd";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
-import OptionValues from "jc-shared/optionen/optionValues";
 import { useSearchParams } from "react-router-dom";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
 import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
-export interface VermietungTabProps {
-  form?: FormInstance<Vermietung>;
-  optionen?: OptionValues;
-}
+export default function VermietungTabs() {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+  const optionen = context!.optionen;
 
-export default function VermietungTabs({ form, optionen }: VermietungTabProps) {
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
@@ -67,18 +65,18 @@ export default function VermietungTabs({ form, optionen }: VermietungTabProps) {
     const tabAllgemeines = {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines optionen={optionen} />,
+      children: <TabAllgemeines />,
     };
 
     const tabTechnik = {
       key: "technik",
       label: <TabLabel type="technik" title="Technik" />,
-      children: <TabTechnik optionen={optionen} form={form} />,
+      children: <TabTechnik />,
     };
     const tabKosten = {
       key: "ausgaben",
       label: <TabLabel type="ausgaben" title="Kalkulation" />,
-      children: <TabKosten form={form} />,
+      children: <TabKosten />,
     };
 
     const result = [tabAllgemeines];

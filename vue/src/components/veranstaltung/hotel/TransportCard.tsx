@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, ConfigProvider, Form, FormInstance, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import { Button, Col, ConfigProvider, Form, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
@@ -10,18 +9,17 @@ import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useAuth } from "@/commons/auth";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-interface TransportParams {
-  form: FormInstance<Veranstaltung>;
-  veranstaltung: Veranstaltung;
-}
+export default function TransportCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
 
-export default function TransportCard({ form, veranstaltung }: TransportParams) {
   const [summe, setSumme] = useState<number>(0);
 
   useEffect(() => {
     updateSumme();
-  }, [veranstaltung, form]);
+  }, [form]);
   function updateSumme() {
     const veranstaltung = fromFormObject(form);
     setSumme(veranstaltung.unterkunft.transportEUR);

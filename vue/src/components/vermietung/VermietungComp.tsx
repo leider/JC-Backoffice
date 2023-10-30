@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { App, Form } from "antd";
+import { createContext, useEffect, useState } from "react";
+import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { optionen as optionenRestCall, saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
@@ -11,6 +11,8 @@ import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.t
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
+
+export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues } | null>(null);
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -98,28 +100,30 @@ export default function VermietungComp() {
   }
 
   return (
-    <Form
-      form={form}
-      onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
-      }}
-      onFinishFailed={() => {
-        notification.open({
-          type: "error",
-          message: "Fehler",
-          description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
-          duration: 5,
-        });
-      }}
-      onFinish={saveForm}
-      layout="vertical"
-    >
-      <VermietungPageHeader isNew={isNew} dirty={dirty} form={form} />
-      <VermietungTabs form={form} optionen={optionen} />
-    </Form>
+    <VermietungContext.Provider value={{ form, optionen }}>
+      <Form
+        form={form}
+        onValuesChange={() => {
+          // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+          // console.log({ diff });
+          // console.log({ initialValue });
+          // console.log({ form: form.getFieldsValue(true) });
+          setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+        }}
+        onFinishFailed={() => {
+          notification.open({
+            type: "error",
+            message: "Fehler",
+            description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+            duration: 5,
+          });
+        }}
+        onFinish={saveForm}
+        layout="vertical"
+      >
+        <VermietungPageHeader isNew={isNew} dirty={dirty} />
+        <VermietungTabs />
+      </Form>
+    </VermietungContext.Provider>
   );
 }

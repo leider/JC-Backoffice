@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row } from "antd";
-import OptionValues from "jc-shared/optionen/optionValues";
+import { Col, Form, Row } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -13,14 +12,15 @@ import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/Numeri
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
 import Technik from "jc-shared/veranstaltung/technik.ts";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 interface AusgabenCardParams {
-  optionen: OptionValues;
-  form: FormInstance<Veranstaltung>;
   onChange: (sum: number) => void;
-  veranstaltung: Veranstaltung;
 }
-export default function AusgabenCard({ form, onChange, veranstaltung }: AusgabenCardParams) {
+export default function AusgabenCard({ onChange }: AusgabenCardParams) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   const [summe, setSumme] = useState<number>(0);
 
   const unterkunft = Form.useWatch(["unterkunft"], {
@@ -50,7 +50,7 @@ export default function AusgabenCard({ form, onChange, veranstaltung }: Ausgaben
 
   useEffect(() => {
     updateSumme();
-  }, [form, veranstaltung, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR]);
+  }, [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR]);
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));

@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row, Tabs } from "antd";
+import { Col, Form, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -13,8 +13,12 @@ import { imagenames } from "@/commons/loader.ts";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function PresseCard({ form, id }: { id?: string; form: FormInstance<Veranstaltung> }) {
+export default function PresseCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   const allimages = useQuery({
     queryKey: ["imagenames"],
     queryFn: () => imagenames(),
@@ -101,7 +105,7 @@ export default function PresseCard({ form, id }: { id?: string; form: FormInstan
               },
             ]}
           />
-          <Uploader form={form} id={id} name={["presse", "image"]} typ={"pressefoto"} />
+          <Uploader form={form} name={["presse", "image"]} typ={"pressefoto"} />
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col xs={24} lg={12}>

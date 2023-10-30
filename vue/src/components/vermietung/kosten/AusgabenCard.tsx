@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
@@ -9,11 +9,12 @@ import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/Numeri
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
-interface AusgabenCardParams {
-  form: FormInstance<Vermietung>;
-}
-export default function AusgabenCard({ form }: AusgabenCardParams) {
+export default function AusgabenCard() {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+
   const [summe, setSumme] = useState<number>(0);
 
   const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {

@@ -1,19 +1,21 @@
 import { Col, Row } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import HotelCard from "@/components/veranstaltung/hotel/HotelCard";
 import KontaktCard from "@/components/veranstaltung/allgemeines/KontaktCard";
 import TransportCard from "@/components/veranstaltung/hotel/TransportCard";
-import { VeranstaltungTabProps } from "@/components/veranstaltung/VeranstaltungTabs";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function TabHotel({ veranstaltung, optionen, form }: VeranstaltungTabProps) {
+export default function TabHotel() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const optionen = veranstContext!.optionen;
   return (
     <Row gutter={12}>
       <Col xs={24} lg={12}>
-        <KontaktCard kontakte={optionen!.hotels} form={form} selector="hotel" noTopBorder />
-        <HotelCard form={form} optionen={optionen} veranstaltung={veranstaltung} />
+        <KontaktCard kontakte={optionen!.hotels} selector="hotel" noTopBorder />
+        <HotelCard />
       </Col>
       <Col xs={24} lg={12}>
-        <TransportCard form={form} veranstaltung={veranstaltung!} />
+        <TransportCard />
       </Col>
     </Row>
   );

@@ -1,12 +1,13 @@
 import { App, Button, ConfigProvider, Dropdown, Space } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import * as React from "react";
+import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -55,7 +56,11 @@ export function NewButtons() {
     </Dropdown>
   );
 }
-export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veranstaltung: Veranstaltung }) {
+export function ExportButtons({ disabled }: ButtonProps) {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+  const veranstaltung = useMemo(() => form.getFieldsValue(true), [form]);
+
   const items = [
     { key: "ExcelKalk", label: "Kalkulation (Excel)", icon: <IconForSmallBlock iconName="FileEarmarkSpreadsheet" /> },
     { key: "Pressefotos", label: "Pressefotos (Zip)", icon: <IconForSmallBlock iconName="FileEarmarkImage" /> },
@@ -99,7 +104,12 @@ export function ExportButtons({ disabled, veranstaltung }: ButtonProps & { veran
   );
 }
 
-export function ExportExcelVermietungButton({ disabled, vermietung }: ButtonProps & { vermietung: Vermietung }) {
+export function ExportExcelVermietungButton({ disabled }: ButtonProps) {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+
+  const vermietung = useMemo(() => form.getFieldsValue(true), [form]);
+
   function click() {
     const sheet = utils.json_to_sheet(createExcelDataVermietung(vermietung));
     sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];

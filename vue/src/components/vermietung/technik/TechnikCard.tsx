@@ -1,7 +1,6 @@
-import OptionValues from "jc-shared/optionen/optionValues";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, FormInstance, Row } from "antd";
+import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
@@ -10,19 +9,17 @@ import Uploader from "@/components/veranstaltung/Uploader";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
-interface TechnikCardParams {
-  form: FormInstance<Vermietung>;
-  optionen: OptionValues;
-}
+export default function TechnikCard() {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+  const { backlineJazzclub, backlineRockshop } = context!.optionen;
 
-export default function TechnikCard({ form, optionen: { backlineJazzclub, backlineRockshop } }: TechnikCardParams) {
   const [summe, setSumme] = useState<number>(0);
-  const [id, setId] = useState<string | undefined>(undefined);
   useEffect(() => {
     const vermietung = new Vermietung(form.getFieldsValue(true));
     setSumme(vermietung.kosten.backlineUndTechnikEUR);
-    setId(vermietung.id);
   }, [form]);
 
   function updateSumme() {
@@ -67,7 +64,7 @@ export default function TechnikCard({ form, optionen: { backlineJazzclub, backli
       </Row>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader form={form} id={id} name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader form={form} name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
       <Row gutter={12}>

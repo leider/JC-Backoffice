@@ -4,10 +4,14 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import SingleSelect from "@/widgets/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
-import React from "react";
+import React, { useContext } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function ArtistCard({ artists }: { artists: string[] }) {
+export default function ArtistCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const optionen = veranstContext!.optionen;
+
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Künstler">
       <Row gutter={12}>
@@ -23,7 +27,7 @@ export default function ArtistCard({ artists }: { artists: string[] }) {
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <MultiSelectWithTags name={["artist", "name"]} label="Namen" options={artists} />
+          <MultiSelectWithTags name={["artist", "name"]} label="Namen" options={optionen.artists} />
         </Col>
         <Col span={6}>
           <NumberInput name={["kosten", "gagenEUR"]} label="Gage (Netto)" decimals={2} suffix="€" />

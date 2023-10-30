@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, Form, FormInstance, Row, Select } from "antd";
+import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/veranstaltung/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { useAuth } from "@/commons/auth";
 import { openVertrag } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Uploader from "@/components/veranstaltung/Uploader";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-interface VertragCardParams {
-  form: FormInstance<Veranstaltung>;
-  veranstaltung: Veranstaltung;
-}
+export default function VertragCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
 
-export default function VertragCard({ form, veranstaltung }: VertragCardParams) {
   const { context } = useAuth();
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
@@ -55,7 +53,7 @@ export default function VertragCard({ form, veranstaltung }: VertragCardParams) 
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Uploader form={form} id={veranstaltung.id} name={["vertrag", "datei"]} typ={"vertrag"} />
+          <Uploader form={form} name={["vertrag", "datei"]} typ={"vertrag"} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>

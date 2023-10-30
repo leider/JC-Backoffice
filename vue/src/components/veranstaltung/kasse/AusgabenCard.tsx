@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -6,8 +6,12 @@ import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/veranstaltung/kasse";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { KasseCardProps } from "@/components/veranstaltung/kasse/TabKasse";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-export default function AusgabenCard({ form, disabled }: KasseCardProps) {
+export default function AusgabenCard({ disabled }: KasseCardProps) {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
     setReadonly(disabled);

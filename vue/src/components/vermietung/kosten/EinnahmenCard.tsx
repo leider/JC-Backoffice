@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
-interface EinnahmenCardParams {
-  form: FormInstance<Vermietung>;
-}
-export default function EinnahmenCard({ form }: EinnahmenCardParams) {
+export default function EinnahmenCard() {
+  const context = useContext(VermietungContext);
+  const form = context!.form;
+
   const [summe, setSumme] = useState<number>(0);
 
   const saalmiete = Form.useWatch("saalmiete", {

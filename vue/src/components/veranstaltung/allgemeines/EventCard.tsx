@@ -1,9 +1,8 @@
 import OptionValues from "jc-shared/optionen/optionValues";
-import Orte from "jc-shared/optionen/orte";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cssColor from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Checkbox, Col, Form, FormInstance, Row, Select, SelectProps } from "antd";
+import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
 import StartEndPickers from "@/widgets/StartEndPickers";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -12,6 +11,7 @@ import CheckItem from "@/widgets/CheckItem";
 import { useAuth } from "@/commons/auth";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
@@ -26,13 +26,12 @@ function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   return <Select options={eventTypes} {...props} />;
 }
 
-type EventCardProps = {
-  form: FormInstance;
-  optionen: OptionValues;
-  orte: Orte;
-};
+export default function EventCard() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+  const optionen = veranstContext!.optionen;
+  const orte = veranstContext!.orte;
 
-export default function EventCard({ form, optionen, orte }: EventCardProps) {
   const { context } = useAuth();
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);

@@ -1,13 +1,12 @@
 import { Col, Row } from "antd";
 import React from "react";
-import { VermietungTabProps } from "@/components/vermietung/VermietungTabs.tsx";
 import TechnikCard from "@/components/vermietung/technik/TechnikCard.tsx";
 
-export default function TabTechnik({ optionen, form }: VermietungTabProps) {
+export default function TabTechnik() {
   return (
     <Row gutter={12}>
       <Col span={24}>
-        <TechnikCard form={form!} optionen={optionen!} />
+        <TechnikCard />
       </Col>
     </Row>
   );

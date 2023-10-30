@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Form, FormInstance, Tabs, TabsProps } from "antd";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
@@ -14,6 +14,7 @@ import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/commons/auth.tsx";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 export interface VeranstaltungTabProps {
   form: FormInstance<Veranstaltung>;
@@ -22,7 +23,11 @@ export interface VeranstaltungTabProps {
   orte?: Orte;
 }
 
-export default function VeranstaltungTabs({ optionen, orte, veranstaltung, form }: VeranstaltungTabProps) {
+export default function VeranstaltungTabs() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+  const optionen = veranstContext!.optionen;
+
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
@@ -67,34 +72,34 @@ export default function VeranstaltungTabs({ optionen, orte, veranstaltung, form 
   const kasseTab = {
     key: "kasse",
     label: <TabLabel type="kasse" title="Abendkasse" />,
-    children: <TabKasse veranstaltung={veranstaltung} form={form} />,
+    children: <TabKasse />,
   };
   const allTabs: TabsProps["items"] = [
     {
       key: "allgemeines",
       label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines optionen={optionen} veranstaltung={veranstaltung} form={form} orte={orte} />,
+      children: <TabAllgemeines />,
     },
     {
       key: "technik",
       label: <TabLabel type="technik" title="Technik" />,
-      children: <TabTechnik optionen={optionen} form={form} />,
+      children: <TabTechnik />,
     },
     {
       key: "ausgaben",
       label: <TabLabel type="ausgaben" title="Kalkulation" />,
-      children: <TabKosten optionen={optionen} veranstaltung={veranstaltung} form={form} />,
+      children: <TabKosten />,
     },
     {
       key: "hotel",
       label: <TabLabel type="hotel" title="Hotel" />,
-      children: <TabHotel veranstaltung={veranstaltung} optionen={optionen} form={form} />,
+      children: <TabHotel />,
     },
     kasseTab,
     {
       key: "presse",
       label: <TabLabel type="presse" title="Presse" />,
-      children: <TabPresse optionen={optionen!} veranstaltung={veranstaltung!} form={form} />,
+      children: <TabPresse />,
     },
   ];
 
@@ -109,7 +114,7 @@ export default function VeranstaltungTabs({ optionen, orte, veranstaltung, form 
       result.splice(3, 1);
       setTabs(result);
     }
-  }, [brauchtHotel, optionen, activePage, veranstaltung, onlyKasse]);
+  }, [brauchtHotel, optionen, activePage, onlyKasse]);
 
   return (
     <Tabs

@@ -2,7 +2,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { App, Button, Col, Form, FormInstance, Row } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import { allUsers, openKassenzettel } from "@/commons/loader.ts";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useAuth } from "@/commons/auth";
 import { DynamicItem } from "@/widgets/DynamicItem";
@@ -10,12 +10,12 @@ import { TextField } from "@/widgets/TextField";
 import { ButtonKassenzettel } from "@/components/Buttons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
-interface KassenzettelFreigabeParams {
-  form: FormInstance<Veranstaltung>;
-}
+export function KassenzettelFreigabe() {
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
 
-export function KassenzettelFreigabe({ form }: KassenzettelFreigabeParams) {
   const { modal } = App.useApp();
   const { context } = useAuth();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
