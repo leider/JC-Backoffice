@@ -5,31 +5,31 @@ import MailRule from "jc-shared/mail/mailRule.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
-
-import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
+import Vermietung from "jc-shared/vermietung/vermietung.js";
+import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 
 const logger = loggers.get("application");
 
 async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
-  async function sendMail(kaputteVeranstaltungen: Veranstaltung[]) {
+  async function sendMail(kaputte: (Veranstaltung | Vermietung)[]) {
     const prefix = config.get("publicUrlPrefix") as string;
-    function presseTemplateInternal(veranst: Veranstaltung): string {
+    function presseTemplateInternal(ver: Veranstaltung | Vermietung): string {
       // für interne Mails
-      return `### [${veranst.kopf.titelMitPrefix}](${prefix}/vue${veranst.fullyQualifiedUrl}/presse)
-#### ${veranst.startDatumUhrzeit.fuerPresse} ${veranst.kopf.presseInEcht}
+      return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
+#### ${ver.startDatumUhrzeit.fuerPresse} ${ver.kopf.presseInEcht}
 
 `;
     }
 
-    const markdownToSend = `## Folgende Veranstaltungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
+    const markdownToSend = `## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
-${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
+${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
     const message = new Message({
       subject: "Veranstaltungen ohne Pressetext",
       markdown: markdownToSend,
@@ -40,12 +40,16 @@ ${kaputteVeranstaltungen.map((veranst) => presseTemplateInternal(veranst)).join(
     return mailtransport.sendMail(message);
   }
 
-  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, maxDay);
-  const zuSendende = veranstaltungen.filter((veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed);
-  if (zuSendende.length === 0) {
+  const kaputteZuSendende = await byDateRangeInAscendingOrder({
+    from: start,
+    to: maxDay,
+    veranstaltungenFilter: (veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed,
+    vermietungenFilter: (vermietung) => vermietung.brauchtPresse && !vermietung.presse.checked && vermietung.kopf.confirmed,
+  });
+  if (kaputteZuSendende.length === 0) {
     return;
   } else {
-    return sendMail(zuSendende);
+    return sendMail(kaputteZuSendende);
   }
 }
 

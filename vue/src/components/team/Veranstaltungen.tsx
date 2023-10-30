@@ -84,9 +84,7 @@ export default function Veranstaltungen() {
         }
       });
     }
-    const gigOrRent: (Veranstaltung | Vermietung)[] = [];
-    gigOrRent.push(...filtered);
-    gigOrRent.push(...vermietungen);
+    const gigOrRent: (Veranstaltung | Vermietung)[] = [...filtered, ...vermietungen];
     const result = groupBy(
       _.sortBy(gigOrRent, "startDate"),
       (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt,

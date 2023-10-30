@@ -29,9 +29,9 @@ async function informAdmin(err?: Error, counter?: number) {
     const user = await userstore.forId(receiver);
     const message = new Message({
       subject: "[B-O Jazzclub] Mails sent",
-      markdown: `Nightly Mails have been sent
-Anzahl: ${counter}
-Error: ${err ? err.message : "keiner"}`,
+      markdown: `${counter} nightly Mails for Presse have been sent.
+            
+${err ? "Es gibt Fehler! " + err.message : ""}`,
     });
     message.setTo(user!.email);
     await mailtransport.sendMail(message);

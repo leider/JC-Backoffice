@@ -4,20 +4,20 @@ import Message from "jc-shared/mail/message.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
-
-import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
+import Vermietung from "jc-shared/vermietung/vermietung.js";
+import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 
 const logger = loggers.get("application");
 
 type SendMailVariables = { name: string; email: string; subject: string; firstLine: string };
 
-async function sendMail(veranstaltungen: Veranstaltung[], variables: SendMailVariables) {
+async function sendMail(stuffToSend: (Veranstaltung | Vermietung)[], variables: SendMailVariables) {
   const markdownToSend = `${variables.firstLine}
 
 ---
-${veranstaltungen
+${stuffToSend
   .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht)
   .join("\n\n---\n")}`;
 
@@ -35,9 +35,9 @@ ${veranstaltungen
 
 async function checkForFilter(
   // eslint-disable-next-line no-unused-vars
-  filterFunction: (veranstaltung: Veranstaltung) => boolean,
+  filterFunction: (ver: Veranstaltung | Vermietung) => boolean,
   variables: SendMailVariables,
-  now: DatumUhrzeit
+  now: DatumUhrzeit,
 ) {
   if (now.wochentag !== 0) {
     // Sonntag
@@ -49,8 +49,12 @@ async function checkForFilter(
   const start = now;
   const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
 
-  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-  const zuSendende = veranstaltungen.filter(filterFunction);
+  const zuSendende = await byDateRangeInAscendingOrder({
+    from: start,
+    to: end,
+    veranstaltungenFilter: filterFunction,
+    vermietungenFilter: filterFunction,
+  });
   if (zuSendende.length === 0) {
     return;
   } else {
@@ -70,7 +74,17 @@ export async function checkFotograf(now: DatumUhrzeit) {
     subject,
     firstLine,
   };
-  return checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.kopf.fotografBestellen, variables, now);
+  return checkForFilter(
+    (ver: Veranstaltung | Vermietung) => {
+      const satisfied = ver.kopf.fotografBestellen && ver.kopf.confirmed;
+      if (ver.isVermietung) {
+        return (ver as Vermietung).brauchtPresse && satisfied;
+      }
+      return satisfied;
+    },
+    variables,
+    now,
+  );
 }
 
 export async function checkFluegel(now: DatumUhrzeit) {
@@ -85,5 +99,15 @@ export async function checkFluegel(now: DatumUhrzeit) {
     subject,
     firstLine,
   };
-  return checkForFilter((veranstaltung: Veranstaltung) => veranstaltung.technik.fluegel, variables, now);
+  return checkForFilter(
+    (ver: Veranstaltung | Vermietung) => {
+      const satisfied = ver.technik.fluegel && ver.kopf.confirmed;
+      if (ver.isVermietung) {
+        return (ver as Vermietung).brauchtTechnik && satisfied;
+      }
+      return satisfied;
+    },
+    variables,
+    now,
+  );
 }

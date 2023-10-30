@@ -1,19 +1,24 @@
 import { loggers } from "winston";
-const logger = loggers.get("application");
-
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
-
-import store from "jc-backend/lib/veranstaltungen/veranstaltungenstore.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter.js";
+import Vermietung from "jc-shared/vermietung/vermietung.js";
+import VermietungFormatter from "jc-shared/vermietung/vermietungFormatter.js";
+import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 
-function isSendable(veranstaltung: Veranstaltung): boolean {
-  return veranstaltung.presse.checked && veranstaltung.kopf.confirmed;
+const logger = loggers.get("application");
+
+function isSendable(ver: Veranstaltung | Vermietung): boolean {
+  const satisfied = ver.presse.checked && ver.kopf.confirmed;
+  if (ver.isVermietung) {
+    return (ver as Vermietung).brauchtPresse && satisfied;
+  }
+  return satisfied;
 }
 
 export async function loadRulesAndProcess(now: DatumUhrzeit) {
@@ -27,12 +32,17 @@ Liebe Grüße vom Jazzclub Team.`;
   async function processRule(rule: MailRule) {
     const startAndEndDay = rule.startAndEndDay(now);
 
-    async function sendMail(selected: Veranstaltung[]) {
+    async function sendMail(selected: (Veranstaltung | Vermietung)[]) {
       const markdownToSend =
         markdownForRules +
         "\n\n---\n" +
         selected
-          .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(conf.get("publicUrlPrefix") as string))
+          .map((veranst) => {
+            if (veranst.isVermietung) {
+              return new VermietungFormatter(veranst as Vermietung).presseTextForMail(conf.get("publicUrlPrefix") as string);
+            }
+            return new VeranstaltungFormatter(veranst as Veranstaltung).presseTextForMail(conf.get("publicUrlPrefix") as string);
+          })
           .join("\n\n---\n");
       const message = new Message({
         subject: rule.subject(now),
@@ -45,8 +55,13 @@ Liebe Grüße vom Jazzclub Team.`;
       return mailtransport.sendMail(message);
     }
 
-    const veranstaltungen = await store.byDateRangeInAscendingOrder(startAndEndDay.start, startAndEndDay.end);
-    const zuSendende = veranstaltungen.filter((veranstaltung) => isSendable(veranstaltung));
+    const zuSendende = await byDateRangeInAscendingOrder({
+      from: startAndEndDay.start,
+      to: startAndEndDay.end,
+      veranstaltungenFilter: isSendable,
+      vermietungenFilter: isSendable,
+    });
+
     if (zuSendende.length === 0) {
       return;
     } else {

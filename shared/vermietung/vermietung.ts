@@ -101,7 +101,7 @@ export default class Vermietung {
   }
 
   get fullyQualifiedUrl(): string {
-    return "/vermietungen/" + encodeURIComponent(this.url || "");
+    return "/vermietung/" + encodeURIComponent(this.url || "");
   }
 
   // Dates and Times
