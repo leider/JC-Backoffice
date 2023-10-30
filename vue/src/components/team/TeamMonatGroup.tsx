@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Collapse, Row, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlockAdmin";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -9,16 +9,17 @@ import { IconForSmallBlock } from "@/components/Icon";
 import TeamBlockNormal from "@/components/team/TeamBlockNormal";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TeamBlockVermietung from "@/components/team/TeamBlockVermietung.tsx";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface MonatGroupProps {
-  veranstaltungenUndVermietungen: (Veranstaltung | Vermietung)[];
-  usersAsOptions: LabelAndValue[];
   monat: string;
-  renderTeam: boolean;
+  renderTeam?: boolean;
 }
 
-export default function TeamMonatGroup({ veranstaltungenUndVermietungen, usersAsOptions, monat, renderTeam }: MonatGroupProps) {
+export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
+  const context = useContext(TeamContext);
+  const veranstaltungenUndVermietungen = context!.veranstaltungenUndVermietungenNachMonat[monat];
+
   const [expanded, setExpanded] = useState<boolean>(false);
   const [yymm, setYymm] = useState<string>("");
   useEffect(() => {
@@ -92,19 +93,9 @@ export default function TeamMonatGroup({ veranstaltungenUndVermietungen, usersAs
             return <TeamBlockVermietung key={index} vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />;
           }
           return renderTeam ? (
-            <TeamBlockNormal
-              key={index}
-              veranstaltung={veranstaltung as Veranstaltung}
-              usersAsOptions={usersAsOptions || []}
-              initiallyOpen={expanded}
-            />
+            <TeamBlockNormal key={index} veranstaltung={veranstaltung as Veranstaltung} initiallyOpen={expanded} />
           ) : (
-            <TeamBlockAdmin
-              key={index}
-              veranstaltung={veranstaltung as Veranstaltung}
-              usersAsOptions={usersAsOptions || []}
-              initiallyOpen={expanded}
-            />
+            <TeamBlockAdmin key={index} veranstaltung={veranstaltung as Veranstaltung} initiallyOpen={expanded} />
           );
         })}
       </Row>

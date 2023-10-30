@@ -8,6 +8,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -57,7 +58,7 @@ export function NewButtons() {
   );
 }
 export function ExportButtons({ disabled }: ButtonProps) {
-  const context = useContext(VermietungContext);
+  const context = useContext(VeranstaltungContext);
   const form = context!.form;
   const veranstaltung = useMemo(() => form.getFieldsValue(true), [form]);
 

@@ -15,20 +15,17 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: LabelAndValue[];
   initiallyOpen: boolean;
 }
 
 interface ContentProps {
-  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 
-function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
+function Content({ veranstaltung: veranst }: ContentProps) {
   const [form] = Form.useForm();
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -142,21 +139,21 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
                 <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
                   Kasse
                 </Divider>
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" />
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" />
+                <AdminStaffRow label="Eins:" sectionName="kasseV" />
+                <AdminStaffRow label="Zwei:" sectionName="kasse" />
                 <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
                   Techniker
                 </Divider>
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" />
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" />
+                <AdminStaffRow label="Eins:" sectionName="technikerV" />
+                <AdminStaffRow label="Zwei:" sectionName="techniker" />
                 <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
                   Master
                 </Divider>
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" />
+                <AdminStaffRow label="&nbsp;" sectionName="mod" />
                 <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
                   Merchandise
                 </Divider>
-                <AdminStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" />
+                <AdminStaffRow label="&nbsp;" sectionName="merchandise" />
               </div>
             ),
           },
@@ -166,7 +163,7 @@ function Content({ usersAsOptions, veranstaltung: veranst }: ContentProps) {
   );
 }
 
-function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBlockAdminProps) {
+function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   const { useToken } = theme;
   const { token } = useToken();
   const [color, setColor] = useState<string>("");
@@ -199,7 +196,7 @@ function TeamBlockAdmin({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBl
               extra: expanded && <Extras veranstaltung={veranstaltung} />,
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+                  <Content veranstaltung={veranstaltung}></Content>
                 </ConfigProvider>
               ),
             },

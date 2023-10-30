@@ -10,8 +10,8 @@ export default function BearbeiterCard() {
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Bearbeiter">
-      {form.getFieldValue("changelist")?.map((item: ChangelistItem) => (
-        <Row gutter={12} key={item.zeitpunkt}>
+      {form.getFieldValue("changelist")?.map((item: ChangelistItem, idx: number) => (
+        <Row gutter={12} key={idx}>
           <Col span={24}>
             <details>
               <summary>

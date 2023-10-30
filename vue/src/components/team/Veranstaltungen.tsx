@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
@@ -15,10 +15,17 @@ import _ from "lodash";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 
+export const TeamContext = createContext<{
+  veranstaltungenUndVermietungenNachMonat: {
+    [index: string]: (Veranstaltung | Vermietung)[];
+  };
+  usersAsOptions: LabelAndValue[];
+} | null>(null);
+
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
   const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[] | undefined>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
 
   const [form] = Form.useForm();
   async function loadUsers() {
@@ -155,17 +162,11 @@ export default function Veranstaltungen() {
             </Col>
           </Row>
         </Form>
-        {monate.map((monat) => {
-          return (
-            <TeamMonatGroup
-              key={monat}
-              monat={monat}
-              veranstaltungenUndVermietungen={veranstaltungenUndVermietungenNachMonat[monat]}
-              usersAsOptions={usersAsOptions || []}
-              renderTeam={false}
-            />
-          );
-        })}
+        <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
+          {monate.map((monat) => {
+            return <TeamMonatGroup key={monat} monat={monat} />;
+          })}
+        </TeamContext.Provider>
       </Col>
       <Col xs={{ span: 24, order: 1 }} xl={{ span: 8, order: 2 }} style={{ zIndex: 0 }}>
         <TeamCalendar />

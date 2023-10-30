@@ -1,5 +1,5 @@
 import { Col, Row, Tag } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import { useAuth } from "@/commons/auth";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
@@ -7,16 +7,18 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import User from "jc-shared/user/user";
 import { ButtonStaff } from "@/components/Buttons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
   label: string;
-  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 
-const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ usersAsOptions, sectionName, label, veranstaltung }: TeamStaffRowProps) => {
+const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranstaltung }: TeamStaffRowProps) => {
+  const teamContext = useContext(TeamContext);
+  const usersAsOptions = teamContext!.usersAsOptions;
+
   const [ids, setIds] = useState<string[]>([]);
   const [names, setNames] = useState<string[]>([]);
   const [currentUser, setCurrentUser] = useState<User>(new User({}));

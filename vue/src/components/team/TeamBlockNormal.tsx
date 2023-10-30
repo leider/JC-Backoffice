@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
 import TeamStaffRow from "@/components/team/TeamStaffRow";
@@ -7,20 +7,18 @@ import cssColor from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
-  usersAsOptions: LabelAndValue[];
   initiallyOpen: boolean;
 }
 
 interface ContentProps {
-  usersAsOptions: LabelAndValue[];
   veranstaltung: Veranstaltung;
 }
 
-function Content({ usersAsOptions, veranstaltung }: ContentProps) {
+function Content({ veranstaltung }: ContentProps) {
   const dividerStyle = {
     marginTop: "4px",
     marginBottom: "4px",
@@ -32,26 +30,26 @@ function Content({ usersAsOptions, veranstaltung }: ContentProps) {
       <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
         Kasse
       </Divider>
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="kasseV" veranstaltung={veranstaltung} />
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="kasse" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Eins:" sectionName="kasseV" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Zwei:" sectionName="kasse" veranstaltung={veranstaltung} />
       <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
         Techniker
       </Divider>
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="Eins:" sectionName="technikerV" veranstaltung={veranstaltung} />
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="Zwei:" sectionName="techniker" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Eins:" sectionName="technikerV" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Zwei:" sectionName="techniker" veranstaltung={veranstaltung} />
       <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
         Master
       </Divider>
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="mod" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="&nbsp;" sectionName="mod" veranstaltung={veranstaltung} />
       <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
         Merchandise
       </Divider>
-      <TeamStaffRow usersAsOptions={usersAsOptions} label="&nbsp;" sectionName="merchandise" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="&nbsp;" sectionName="merchandise" veranstaltung={veranstaltung} />
     </div>
   );
 }
 
-export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initiallyOpen }: TeamBlockAdminProps) {
+export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   const { useToken } = theme;
   const { token } = useToken();
   const navigate = useNavigate();
@@ -105,7 +103,7 @@ export default function TeamBlockNormal({ veranstaltung, usersAsOptions, initial
               ),
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <Content veranstaltung={veranstaltung} usersAsOptions={usersAsOptions}></Content>
+                  <Content veranstaltung={veranstaltung}></Content>
                 </ConfigProvider>
               ),
             },

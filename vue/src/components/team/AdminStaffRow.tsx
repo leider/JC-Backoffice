@@ -1,18 +1,21 @@
 import { Form, Space } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import InverseCheckbox from "@/widgets/InverseCheckbox";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface AdminStaffRowProps {
   sectionName: StaffType;
   label?: string;
-  usersAsOptions: LabelAndValue[];
 }
 
-const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ usersAsOptions, sectionName, label }: AdminStaffRowProps) => {
+const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ sectionName, label }: AdminStaffRowProps) => {
+  const teamContext = useContext(TeamContext);
+  const usersAsOptions = teamContext!.usersAsOptions;
+
   return (
     <Form.Item label={label} style={{ marginBottom: 12 }}>
       <Space.Compact block>

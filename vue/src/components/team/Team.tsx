@@ -10,9 +10,10 @@ import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import { useQuery } from "@tanstack/react-query";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 function Team() {
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[] | undefined>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
 
   const veranstQuery = useQuery({
     queryKey: ["veranstaltung"],
@@ -74,17 +75,11 @@ function Team() {
             />,
           ]}
         />
-        {monate.map((monat) => {
-          return (
-            <TeamMonatGroup
-              key={monat}
-              monat={monat}
-              veranstaltungenUndVermietungen={veranstaltungenNachMonat[monat]}
-              usersAsOptions={usersAsOptions || []}
-              renderTeam={true}
-            />
-          );
-        })}
+        <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
+          {monate.map((monat) => {
+            return <TeamMonatGroup key={monat} monat={monat} renderTeam />;
+          })}
+        </TeamContext.Provider>
       </Col>
       <Col xs={{ span: 24, order: 1 }} xl={{ span: 8, order: 2 }} style={{ zIndex: 0 }}>
         <TeamCalendar />
