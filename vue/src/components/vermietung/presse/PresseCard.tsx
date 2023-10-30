@@ -3,21 +3,21 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Uploader from "@/components/veranstaltung/Uploader";
 import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
-import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
-import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { fromFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
+import { PressePreview } from "@/components/vermietung/presse/PressePreview.tsx";
 
 export default function PresseCard() {
-  const veranstContext = useContext(VeranstaltungContext);
-  const form = veranstContext!.form;
+  const mietContext = useContext(VermietungContext);
+  const form = mietContext!.form;
 
   const allimages = useQuery({
     queryKey: ["imagenames"],
@@ -25,7 +25,7 @@ export default function PresseCard() {
   });
 
   const { color } = useColorsAndIconsForSections("presse");
-  const [veranstForPreview, setVeranstForPreview] = useState<Veranstaltung>(new Veranstaltung());
+  const [mietForPreview, setMietForPreview] = useState<Vermietung>(new Vermietung());
   const presseText = Form.useWatch(["presse", "text"]);
   const presseOriText = Form.useWatch(["presse", "originalText"]);
   const url = Form.useWatch(["presse", "jazzclubURL"]);
@@ -43,9 +43,8 @@ export default function PresseCard() {
   );
 
   useEffect(() => {
-    const veranst = fromFormObject(form);
-    setVeranstForPreview(veranst);
-    //updatePreview(veranst);
+    const vermietung = fromFormObject(form);
+    setMietForPreview(vermietung);
   }, [presseText, url, image, ok, presseOriText]);
 
   function imageUebernehmen(val: string) {
@@ -109,7 +108,7 @@ export default function PresseCard() {
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col xs={24} lg={12}>
-          <PressePreview veranstaltung={veranstForPreview} />
+          <PressePreview vermietung={mietForPreview} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>

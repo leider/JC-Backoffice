@@ -8,6 +8,7 @@ import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.t
 import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 
 export default function VermietungTabs() {
   const context = useContext(VermietungContext);
@@ -48,15 +49,11 @@ export default function VermietungTabs() {
     );
   }
 
-  /*
-    {
-      key: "presse",
-      label: <TabLabel type="presse" title="Presse" />,
-      children: <TabPresse optionen={optionen} veranstaltung={veranstaltung} form={form} />,
-    },
-*/
-
   const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+    form,
+    preserve: true,
+  });
+  const brauchtPresse = Form.useWatch("brauchtPresse", {
     form,
     preserve: true,
   });
@@ -79,13 +76,22 @@ export default function VermietungTabs() {
       children: <TabKosten />,
     };
 
+    const tabPresse = {
+      key: "presse",
+      label: <TabLabel type="presse" title="Presse" />,
+      children: <TabPresse />,
+    };
+
     const result = [tabAllgemeines];
     if (brauchtTechnik) {
       result.push(tabTechnik);
     }
     result.push(tabKosten);
+    if (brauchtPresse) {
+      result.push(tabPresse);
+    }
     setTabs(result);
-  }, [activePage, optionen, brauchtTechnik]);
+  }, [activePage, optionen, brauchtTechnik, brauchtPresse]);
 
   return (
     <Tabs

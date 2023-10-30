@@ -32,7 +32,15 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     form,
     preserve: true,
   });
+  const brauchtPresse = Form.useWatch("brauchtPresse", {
+    form,
+    preserve: true,
+  });
   const technikOK = Form.useWatch(["technik", "checked"], {
+    form,
+    preserve: true,
+  });
+  const presseOK = Form.useWatch(["presse", "checked"], {
     form,
     preserve: true,
   });
@@ -55,9 +63,12 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     if (brauchtTechnik) {
       taggies.push({ label: "Technik", color: technikOK });
     }
+    if (brauchtPresse) {
+      taggies.push({ label: "Presse", color: presseOK });
+    }
     taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
     setTagsForTitle(headerTags(taggies));
-  }, [confirmed, brauchtTechnik, technikOK, homepage, social]);
+  }, [confirmed, brauchtTechnik, brauchtPresse, technikOK, presseOK, homepage, social]);
 
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 

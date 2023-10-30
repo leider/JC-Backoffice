@@ -14,13 +14,16 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
   useEffect(() => {
     const confirmed = vermietung.kopf.confirmed;
     const technikOK = vermietung.technik.checked;
-    //const presseOK = vermietung.presse.checked;
+    const presseOK = vermietung.presse.checked;
     const homepage = vermietung.kopf.kannAufHomePage;
     const social = vermietung.kopf.kannInSocialMedia;
 
     const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
     if (vermietung.brauchtTechnik) {
       taggies.push({ label: "Technik", color: technikOK });
+    }
+    if (vermietung.brauchtPresse) {
+      taggies.push({ label: "Presse", color: presseOK });
     }
     taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
 
@@ -114,7 +117,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
                       <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung />
                       {vermietung.brauchtTechnik && <ButtonInAdminPanel url={vermietung.url ?? ""} type="technik" isVermietung />}
                       <ButtonInAdminPanel url={vermietung.url ?? ""} type="ausgaben" isVermietung />
-                      {/*<ButtonInAdminPanel url={vermietung.url ?? ""} type="presse"></ButtonInAdminPanel>*/}
+                      {vermietung.brauchtPresse && <ButtonInAdminPanel url={vermietung.url ?? ""} type="presse" isVermietung />}
                     </Row>
                   </div>
                 </ConfigProvider>
