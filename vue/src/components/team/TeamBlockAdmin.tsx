@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung } from "@/commons/loader.ts";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
+import headerTags from "@/components/colored/headerTags.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -210,14 +211,6 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
   useEffect(() => {
-    function HeaderTag({ label, color }: { label: string; color: boolean }) {
-      return (
-        <Tag key={label} color={color ? "success" : "error"} style={{ border: 0, paddingLeft: 3, paddingRight: 3 }}>
-          {label}
-        </Tag>
-      );
-    }
-
     const confirmed = veranstaltung.kopf.confirmed;
     const technikOK = veranstaltung.technik.checked;
     const presseOK = veranstaltung.presse.checked;
@@ -240,7 +233,7 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
     if (brauchtHotel) {
       taggies.push({ label: "Hotel", color: hotel });
     }
-    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(headerTags(taggies, true));
   }, [veranstaltung]);
 
   return (

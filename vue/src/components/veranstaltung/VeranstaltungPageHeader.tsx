@@ -6,9 +6,9 @@ import cssColor from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth.tsx";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import headerTags from "@/components/colored/headerTags.tsx";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
@@ -74,13 +74,6 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   }, [isNew, token, eventTyp, titel, startDate]);
 
   useEffect(() => {
-    function HeaderTag({ label, color }: { label: string; color: boolean }) {
-      return (
-        <Tag key={label} color={color ? "success" : "error"}>
-          {label}
-        </Tag>
-      );
-    }
     const taggies: { label: string; color: boolean }[] = [
       { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
       { label: "Technik", color: technikOK },
@@ -94,7 +87,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
     if (brauchtHotel) {
       taggies.push({ label: "Hotel", color: hotel });
     }
-    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(headerTags(taggies));
   }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
 
   useEffect(() => {

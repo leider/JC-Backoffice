@@ -6,6 +6,7 @@ import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } fro
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import headerTags from "@/components/colored/headerTags.tsx";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
@@ -50,19 +51,12 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
   }, [titel, startDate, isNew]);
 
   useEffect(() => {
-    function HeaderTag({ label, color }: { label: string; color: boolean }) {
-      return (
-        <Tag key={label} color={color ? "success" : "error"}>
-          {label}
-        </Tag>
-      );
-    }
     const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
     if (brauchtTechnik) {
       taggies.push({ label: "Technik", color: technikOK });
     }
     taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
-    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(headerTags(taggies));
   }, [confirmed, brauchtTechnik, technikOK, homepage, social]);
 
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);

@@ -4,23 +4,14 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
 import { IconForSmallBlock } from "@/components/Icon.tsx";
+import headerTags from "@/components/colored/headerTags.tsx";
 
 const { Title } = Typography;
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
-  const { token } = theme.useToken();
-
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
 
   useEffect(() => {
-    function HeaderTag({ label, color }: { label: string; color: boolean }) {
-      return (
-        <Tag key={label} color={color ? "success" : "error"} style={{ border: 0, paddingLeft: 3, paddingRight: 3 }}>
-          {label}
-        </Tag>
-      );
-    }
-
     const confirmed = vermietung.kopf.confirmed;
     const technikOK = vermietung.technik.checked;
     //const presseOK = vermietung.presse.checked;
@@ -33,7 +24,7 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
     }
     taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
 
-    setTagsForTitle(taggies.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>));
+    setTagsForTitle(headerTags(taggies, true));
   }, [vermietung]);
 
   return (
