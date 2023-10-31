@@ -436,7 +436,6 @@ export async function openVertrag(veranstaltung: Veranstaltung) {
 }
 
 export async function imgFullsize(url: any) {
-  console.log({ url });
   const img = await getForType("other", `/upload/${url}`);
   if (img) {
     showFile(img, url);

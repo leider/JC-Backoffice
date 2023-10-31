@@ -33,17 +33,16 @@ export default function Veranstaltungen() {
     setUsersAsOptions(users.map((user) => ({ label: user.name, value: user.id })));
   }
 
-  const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
-  const [vermietungen, setVermietungen] = useState<Vermietung[]>([]);
-  async function loadVeranstaltungen(period: "zukuenftige" | "vergangene" | "alle") {
+  const [alle, setAlle] = useState<(Veranstaltung | Vermietung)[]>([]);
+  async function loadAlle(period: "zukuenftige" | "vergangene" | "alle") {
     const result = await veranstaltungenForTeam(period);
-    setVeranstaltungen(result);
     const verm = await vermietungenForTeam(period);
-    setVermietungen(verm);
+    setAlle(_.sortBy([...result, ...verm], "startDate"));
   }
   useEffect(() => {
     loadUsers();
   }, []);
+
   const { context } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -63,9 +62,15 @@ export default function Veranstaltungen() {
   }, [context, location.pathname, navigate]);
 
   useEffect(() => {
-    let filtered = veranstaltungen;
+    if (alle.length === 0) {
+      return;
+    }
+    let filtered = alle;
     if (!_.isEmpty(pressefilter)) {
       filtered = filtered.filter((ver) => {
+        if (ver.isVermietung && !(ver as Vermietung).brauchtPresse) {
+          return true;
+        }
         if (pressefilter === PRESSEFILTERS[1]) {
           // OK
           return ver.presse.checked;
@@ -84,14 +89,10 @@ export default function Veranstaltungen() {
         }
       });
     }
-    const gigOrRent: (Veranstaltung | Vermietung)[] = [...filtered, ...vermietungen];
-    const result = groupBy(
-      _.sortBy(gigOrRent, "startDate"),
-      (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt,
-    );
+    const result = groupBy(filtered, (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [pressefilter, veranstaltungen, vermietungen, PRESSEFILTERS]);
+  }, [pressefilter, alle, PRESSEFILTERS]);
 
   const periods = [
     {
@@ -117,12 +118,11 @@ export default function Veranstaltungen() {
       const periodOfSearch = search.get("period");
       const result = periods.find((each) => each.key === periodOfSearch);
       if (!result) {
-        setPeriod(periods[0].label);
         setSearch({ period: periods[0].key });
       } else {
         setPeriod(result.label);
+        loadAlle((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
       }
-      loadVeranstaltungen((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [search],
   );

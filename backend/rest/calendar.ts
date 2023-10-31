@@ -102,12 +102,13 @@ app.get("/fullcalendarevents.json", async (req, res) => {
     vermietungenBetween(start, end, req.user as User),
   ]);
 
-  const icals = (cals as FerienIcals).icals.filter((ical) => {
-    if (!options) {
-      return true;
-    }
-    return options.icals?.includes(ical.typ);
-  });
+  const icals =
+    (cals as FerienIcals)?.icals.filter((ical) => {
+      if (!options) {
+        return true;
+      }
+      return options.icals?.includes(ical.typ);
+    }) || [];
 
   const termineForIcals = await Promise.all(icals.map(termineForIcal));
   const events = flatMap(termineForIcals, (x) => x)

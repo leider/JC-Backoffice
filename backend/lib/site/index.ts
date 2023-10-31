@@ -17,6 +17,8 @@ import { hashPassword } from "../commons/hashPassword.js";
 import conf from "../../../shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
 import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration.js";
+import usersService from "../users/usersService.js";
+import User from "jc-shared/user/user.js";
 
 const appLogger = loggers.get("application");
 
@@ -91,6 +93,13 @@ app.post("/login", async (req, res) => {
     if (!user) {
       appLogger.error("Login error for: " + name);
       appLogger.error("user not found");
+      const all = await userstore.allUsers();
+      if (all.length === 0) {
+        appLogger.info("No Users found, initializing Database.");
+        const firstUser = new User({ id: name, password: pass, gruppen: ["superusers"] });
+        await usersService.saveNewUserWithPassword(firstUser);
+        return createToken(req, res, name);
+      }
       return res.sendStatus(401);
     }
     if (hashPassword(pass, user.salt) === user.hashedPassword) {

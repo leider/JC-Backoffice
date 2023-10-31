@@ -1,33 +1,36 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
-import React from "react";
+import React, { useCallback } from "react";
 import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
 import { Tooltip } from "antd";
 
 export default function TeamCalendar() {
-  function getEvents(
-    info: {
-      start: Date;
-      end: Date;
-      startStr: string;
-      endStr: string;
-      timeZone: string;
-    },
-    successCallback: (events: EventInput[]) => void,
-    failureCallback: (error: Error) => void,
-  ): void {
-    async function doit() {
-      try {
-        const res = await calendarEventSources(info.start, info.end);
-        successCallback(res as EventInput[]);
-      } catch (e) {
-        return failureCallback(e as Error);
+  const getEvents = useCallback(
+    (
+      info: {
+        start: Date;
+        end: Date;
+        startStr: string;
+        endStr: string;
+        timeZone: string;
+      },
+      successCallback: (events: EventInput[]) => void,
+      failureCallback: (error: Error) => void,
+    ) => {
+      async function doit() {
+        try {
+          const res = await calendarEventSources(info.start, info.end);
+          successCallback(res as EventInput[]);
+        } catch (e) {
+          return failureCallback(e as Error);
+        }
       }
-    }
-    doit();
-  }
+      doit();
+    },
+    [],
+  );
 
   function renderEventContent(eventInfo: any) {
     return (

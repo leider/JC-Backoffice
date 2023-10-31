@@ -71,7 +71,7 @@ class Persistence {
       { id },
       {
         writeConcern: { w: 1 },
-      }
+      },
     );
   }
 
@@ -87,7 +87,7 @@ class Persistence {
       { id: { $in: ids } },
       {
         writeConcern: { w: 1 },
-      }
+      },
     );
   }
 
@@ -114,10 +114,10 @@ async function openMongo() {
   try {
     logInfo("In connect Promise");
     const client = await MongoClient.connect(conf.get("mongoURL") as string);
-    const db = client.db("jazzclub");
+    const db = client.db();
     ourDB = db;
     ourDBConnectionState = DBSTATE.OPEN;
-    logInfo("DB state is now OPEN, db = jazzclub");
+    logInfo(`DB state is now OPEN, db = ${conf.get("mongoURL")}`);
   } catch (err) {
     logInfo("An error occurred: " + err);
     ourDBConnectionState = DBSTATE.CLOSED;

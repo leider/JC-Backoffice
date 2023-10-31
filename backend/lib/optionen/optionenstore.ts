@@ -10,17 +10,17 @@ const persistence = pers("optionenstore");
 export default {
   get: async function get() {
     const result = await persistence.getById("instance");
-    return misc.toObject(OptionValues, result);
+    return misc.toObject<OptionValues>(OptionValues, result);
   },
 
   orte: async function orte() {
     const result = await persistence.getById("orte");
-    return misc.toObject(Orte, result);
+    return misc.toObject<Orte>(Orte, result);
   },
 
   icals: async function icals() {
     const result = await persistence.getById("ferienIcals");
-    return misc.toObject(FerienIcals, result);
+    return misc.toObject<FerienIcals>(FerienIcals, result);
   },
 
   save: async function save(object: OptionValues | Orte | FerienIcals) {
