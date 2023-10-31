@@ -70,51 +70,56 @@ export default function ImageOverview() {
     }
   }, [veranstaltungenQuery.data]);
 
-  useEffect(() => {
-    function convertString(a: string): string {
-      return a.replace(/\s/g, "_");
-    }
-    if (veranstaltungenQuery.data) {
-      const elementsWithImage = (imageName: string): ImageOverviewVeranstaltung[] => {
-        return veranstaltungen.filter((each) => each.images.find((i) => i.localeCompare(imageName) === 0));
-      };
-
-      const imagenamesOfVeranstaltungen = uniq(flatten(veranstaltungen.map((each) => each.images))).sort();
-
-      const imagesWithVeranstaltungen: ImageOverviewRow[] = intersection(imagenames, imagenamesOfVeranstaltungen).map((im) => {
-        return {
-          image: im,
-          newname: im,
-          veranstaltungen: elementsWithImage(im),
+  useEffect(
+    () => {
+      function convertString(a: string): string {
+        return a.replace(/\s/g, "_");
+      }
+      if (veranstaltungenQuery.data) {
+        const elementsWithImage = (imageName: string): ImageOverviewVeranstaltung[] => {
+          return veranstaltungen.filter((each) => each.images.find((i) => i.localeCompare(imageName) === 0));
         };
-      });
-      const imagesWithVeranstaltungenUnused: ImageOverviewRow[] = differenceBy(imagenames, imagenamesOfVeranstaltungen, convertString).map(
-        (im) => {
+
+        const imagenamesOfVeranstaltungen = uniq(flatten(veranstaltungen.map((each) => each.images))).sort();
+
+        const imagesWithVeranstaltungen: ImageOverviewRow[] = intersection(imagenames, imagenamesOfVeranstaltungen).map((im) => {
           return {
             image: im,
             newname: im,
             veranstaltungen: elementsWithImage(im),
           };
-        }
-      );
-      const imagesWithVeranstaltungenNotFound: ImageOverviewRow[] = differenceBy(
-        imagenamesOfVeranstaltungen,
-        imagenames,
-        convertString
-      ).map((im) => {
-        return {
-          image: im,
-          newname: im,
-          veranstaltungen: elementsWithImage(im),
-        };
-      });
-      form.setFieldsValue({
-        with: imagesWithVeranstaltungen,
-        notFound: imagesWithVeranstaltungenNotFound,
-        unused: imagesWithVeranstaltungenUnused,
-      });
-    }
-  }, [form, veranstaltungen]);
+        });
+        const imagesWithVeranstaltungenUnused: ImageOverviewRow[] = differenceBy(
+          imagenames,
+          imagenamesOfVeranstaltungen,
+          convertString,
+        ).map((im) => {
+          return {
+            image: im,
+            newname: im,
+            veranstaltungen: elementsWithImage(im),
+          };
+        });
+        const imagesWithVeranstaltungenNotFound: ImageOverviewRow[] = differenceBy(
+          imagenamesOfVeranstaltungen,
+          imagenames,
+          convertString,
+        ).map((im) => {
+          return {
+            image: im,
+            newname: im,
+            veranstaltungen: elementsWithImage(im),
+          };
+        });
+        form.setFieldsValue({
+          with: imagesWithVeranstaltungen,
+          notFound: imagesWithVeranstaltungenNotFound,
+          unused: imagesWithVeranstaltungenUnused,
+        });
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form, veranstaltungen],
+  );
 
   function saveForm() {
     const formValues = form.getFieldsValue(true);

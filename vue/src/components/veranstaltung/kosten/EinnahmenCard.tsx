@@ -19,9 +19,12 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   const optionen = veranstContext!.optionen;
 
   const [summe, setSumme] = useState<number>(0);
-  useEffect(() => {
-    updateSumme();
-  }, [form]);
+  useEffect(
+    () => {
+      updateSumme();
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form],
+  );
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));

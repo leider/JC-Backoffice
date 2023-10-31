@@ -16,9 +16,12 @@ export default function EinnahmenCard() {
     preserve: true,
   });
 
-  useEffect(() => {
-    updateSumme();
-  }, [form, saalmiete]);
+  useEffect(
+    () => {
+      updateSumme();
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form, saalmiete],
+  );
 
   function updateSumme() {
     const verm = new Vermietung(form.getFieldsValue(true));

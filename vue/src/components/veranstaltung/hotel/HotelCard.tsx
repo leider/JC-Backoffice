@@ -25,29 +25,38 @@ export default function HotelCard() {
     preserve: true,
   });
 
-  useEffect(() => {
-    const start = datumDerVeranstaltung?.start as Dayjs;
-    if (start) {
-      const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
-      if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
-        const startCopy = _.cloneDeep(start);
-        form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, startCopy]);
+  useEffect(
+    () => {
+      const start = datumDerVeranstaltung?.start as Dayjs;
+      if (start) {
+        const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
+        if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
+          const startCopy = _.cloneDeep(start);
+          form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, startCopy]);
+        }
       }
-    }
-  }, [datumDerVeranstaltung]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [datumDerVeranstaltung],
+  );
 
-  useEffect(() => {
-    if (optionen?.hotels.find((h) => h.name === hotelName)) {
-      const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
-      if (preise) {
-        form.setFieldsValue({ unterkunft: { ...preise } });
+  useEffect(
+    () => {
+      if (optionen?.hotels.find((h) => h.name === hotelName)) {
+        const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
+        if (preise) {
+          form.setFieldsValue({ unterkunft: { ...preise } });
+        }
       }
-    }
-  }, [hotelName]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hotelName],
+  );
 
-  useEffect(() => {
-    updateSumme();
-  }, [form]);
+  useEffect(
+    () => {
+      updateSumme();
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form],
+  );
 
   function updateSumme() {
     const veranstaltung = fromFormObject(form);

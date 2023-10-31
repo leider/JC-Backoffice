@@ -48,154 +48,157 @@ const JazzContent: React.FC = () => {
   }, [loginState]);
 
   const [items, setItems] = useState<any[]>([]);
-  useEffect(() => {
-    const localItems: ItemType[] = [];
-    if (context?.currentUser?.accessrights?.isOrgaTeam) {
-      localItems.push({
-        key: menuKeys.veranstaltung,
-        icon: <IconForSmallBlock iconName="Speaker" />,
-        label: <Link to="/veranstaltungen">Veranstaltungen</Link>,
-      });
-      localItems.push({
-        key: menuKeys.kalenderuebersicht,
-        icon: <IconForSmallBlock iconName="Calendar2Range" />,
-        label: <Link to="/kalenderuebersicht">Kalender</Link>,
-      });
-      if (context?.currentUser?.accessrights?.isSuperuser) {
+  useEffect(
+    () => {
+      const localItems: ItemType[] = [];
+      if (context?.currentUser?.accessrights?.isOrgaTeam) {
         localItems.push({
-          key: menuKeys.mail,
-          icon: <IconForSmallBlock iconName="EnvelopeFill" />,
-          label: "Mails...",
-          children: [
-            {
-              key: menuKeys.mailrules,
-              icon: <IconForSmallBlock iconName="ListStars" />,
-              label: <Link to="/mailrules">Regeln</Link>,
-            },
-            {
-              key: menuKeys.mailinglists,
-              icon: <IconForSmallBlock iconName="ListCheck" />,
-              label: <Link to="/mailinglists">Listen</Link>,
-            },
-            {
-              key: menuKeys.sendmail,
-              icon: <IconForSmallBlock iconName="Send" />,
-              label: <Link to="/sendmail">Mail senden...</Link>,
-            },
-          ],
+          key: menuKeys.veranstaltung,
+          icon: <IconForSmallBlock iconName="Speaker" />,
+          label: <Link to="/veranstaltungen">Veranstaltungen</Link>,
+        });
+        localItems.push({
+          key: menuKeys.kalenderuebersicht,
+          icon: <IconForSmallBlock iconName="Calendar2Range" />,
+          label: <Link to="/kalenderuebersicht">Kalender</Link>,
+        });
+        if (context?.currentUser?.accessrights?.isSuperuser) {
+          localItems.push({
+            key: menuKeys.mail,
+            icon: <IconForSmallBlock iconName="EnvelopeFill" />,
+            label: "Mails...",
+            children: [
+              {
+                key: menuKeys.mailrules,
+                icon: <IconForSmallBlock iconName="ListStars" />,
+                label: <Link to="/mailrules">Regeln</Link>,
+              },
+              {
+                key: menuKeys.mailinglists,
+                icon: <IconForSmallBlock iconName="ListCheck" />,
+                label: <Link to="/mailinglists">Listen</Link>,
+              },
+              {
+                key: menuKeys.sendmail,
+                icon: <IconForSmallBlock iconName="Send" />,
+                label: <Link to="/sendmail">Mail senden...</Link>,
+              },
+            ],
+          });
+        }
+        const optionenChildren: ItemType[] = [
+          {
+            type: "group",
+            label: "Optionen und Orte",
+            children: [
+              {
+                key: menuKeys.optionen,
+                icon: <IconForSmallBlock iconName="FuelPump" />,
+                label: <Link to="/optionen">Optionen</Link>,
+              },
+              {
+                key: menuKeys.orte,
+                icon: <IconForSmallBlock iconName="Houses" />,
+                label: <Link to="/orte">Orte</Link>,
+              },
+            ],
+          },
+          {
+            type: "group",
+            label: "Kalender und Termine",
+            children: [
+              {
+                key: menuKeys.kalender,
+                icon: <IconForSmallBlock iconName="Calendar2Range" />,
+                label: <Link to="/kalender">Kalender</Link>,
+              },
+              {
+                key: menuKeys.termine,
+                icon: <IconForSmallBlock iconName="Calendar2Month" />,
+                label: <Link to="/termine">Termine</Link>,
+              },
+            ],
+          },
+          {
+            key: menuKeys.kassenbericht,
+            label: <Link to="/kassenbericht">Kassenbericht</Link>,
+          },
+        ];
+        localItems.push({
+          key: menuKeys.option,
+          icon: <IconForSmallBlock iconName="Toggles" />,
+          label: "Optionen...",
+          children: optionenChildren,
+        });
+        if (context?.currentUser?.accessrights?.isSuperuser) {
+          optionenChildren.push({
+            key: menuKeys.imageoverview,
+            label: <Link to="/imageoverview">Bilder verwalten</Link>,
+          });
+        }
+      }
+      localItems.push({
+        key: menuKeys.team,
+        icon: <IconForSmallBlock iconName="People" />,
+        label: <Link to="/team">Team</Link>,
+      });
+      localItems.push({
+        key: menuKeys.belege,
+        icon: <IconForSmallBlock iconName="Camera" />,
+        label: <Link to="/belege">Belege</Link>,
+      });
+      if (context?.currentUser?.accessrights?.isOrgaTeam) {
+        localItems.push({
+          key: menuKeys.programmheft,
+          icon: <IconForSmallBlock iconName="Calendar2Check" />,
+          label: <Link to="/programmheft">Programmheft</Link>,
         });
       }
-      const optionenChildren: ItemType[] = [
-        {
-          type: "group",
-          label: "Optionen und Orte",
-          children: [
-            {
-              key: menuKeys.optionen,
-              icon: <IconForSmallBlock iconName="FuelPump" />,
-              label: <Link to="/optionen">Optionen</Link>,
-            },
-            {
-              key: menuKeys.orte,
-              icon: <IconForSmallBlock iconName="Houses" />,
-              label: <Link to="/orte">Orte</Link>,
-            },
-          ],
-        },
-        {
-          type: "group",
-          label: "Kalender und Termine",
-          children: [
-            {
-              key: menuKeys.kalender,
-              icon: <IconForSmallBlock iconName="Calendar2Range" />,
-              label: <Link to="/kalender">Kalender</Link>,
-            },
-            {
-              key: menuKeys.termine,
-              icon: <IconForSmallBlock iconName="Calendar2Month" />,
-              label: <Link to="/termine">Termine</Link>,
-            },
-          ],
-        },
-        {
-          key: menuKeys.kassenbericht,
-          label: <Link to="/kassenbericht">Kassenbericht</Link>,
-        },
-      ];
-      localItems.push({
-        key: menuKeys.option,
-        icon: <IconForSmallBlock iconName="Toggles" />,
-        label: "Optionen...",
-        children: optionenChildren,
-      });
-      if (context?.currentUser?.accessrights?.isSuperuser) {
-        optionenChildren.push({
-          key: menuKeys.imageoverview,
-          label: <Link to="/imageoverview">Bilder verwalten</Link>,
-        });
-      }
-    }
-    localItems.push({
-      key: menuKeys.team,
-      icon: <IconForSmallBlock iconName="People" />,
-      label: <Link to="/team">Team</Link>,
-    });
-    localItems.push({
-      key: menuKeys.belege,
-      icon: <IconForSmallBlock iconName="Camera" />,
-      label: <Link to="/belege">Belege</Link>,
-    });
-    if (context?.currentUser?.accessrights?.isOrgaTeam) {
-      localItems.push({
-        key: menuKeys.programmheft,
-        icon: <IconForSmallBlock iconName="Calendar2Check" />,
-        label: <Link to="/programmheft">Programmheft</Link>,
-      });
-    }
-    if (subdirs.length > 0) {
-      const wikisubdirEntries = () =>
-        subdirs.map((dir) => {
-          return {
-            key: `wiki-${dir}`,
-            label: <Link to={`/wiki/${dir}/`}>{dir}</Link>,
-          };
-        });
+      if (subdirs.length > 0) {
+        const wikisubdirEntries = () =>
+          subdirs.map((dir) => {
+            return {
+              key: `wiki-${dir}`,
+              label: <Link to={`/wiki/${dir}/`}>{dir}</Link>,
+            };
+          });
 
+        localItems.push({
+          key: menuKeys.wiki,
+          icon: <IconForSmallBlock iconName="Journals" />,
+          label: "Wiki...",
+          children: wikisubdirEntries(),
+        });
+      }
       localItems.push({
-        key: menuKeys.wiki,
-        icon: <IconForSmallBlock iconName="Journals" />,
-        label: "Wiki...",
-        children: wikisubdirEntries(),
+        key: menuKeys.users,
+        icon: <IconForSmallBlock iconName="PeopleFill" />,
+        children: [
+          {
+            key: "allUsers",
+            icon: <IconForSmallBlock iconName="PersonLinesFill" />,
+            label: <Link to={"/users"}>Übersicht</Link>,
+          },
+          {
+            key: "logout",
+            icon: <IconForSmallBlock iconName="PersonFillX" />,
+            label: (
+              <a
+                onClick={() => {
+                  logout();
+                }}
+              >
+                Abmelden
+              </a>
+            ),
+          },
+        ],
+        label: "Users",
       });
-    }
-    localItems.push({
-      key: menuKeys.users,
-      icon: <IconForSmallBlock iconName="PeopleFill" />,
-      children: [
-        {
-          key: "allUsers",
-          icon: <IconForSmallBlock iconName="PersonLinesFill" />,
-          label: <Link to={"/users"}>Übersicht</Link>,
-        },
-        {
-          key: "logout",
-          icon: <IconForSmallBlock iconName="PersonFillX" />,
-          label: (
-            <a
-              onClick={() => {
-                logout();
-              }}
-            >
-              Abmelden
-            </a>
-          ),
-        },
-      ],
-      label: "Users",
-    });
-    setItems(localItems);
-  }, [context, subdirs]);
+      setItems(localItems);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [context, subdirs],
+  );
 
   useEffect(() => {
     const result = Object.keys(menuKeys).find((key) => pathname.search(key) > 0);

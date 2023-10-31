@@ -69,16 +69,11 @@ app.post("/termine", async (req: Request, res: Response) => {
   if (!(req.user as User)?.accessrights?.isOrgaTeam) {
     return res.sendStatus(403);
   }
-  function deleteLeagcyField(termin: any) {
-    delete termin.originalBeschreibung; // legacy field
-    return termin;
-  }
-
-  const oldTermine = ((await terminstore.alle()) as (Termin & { id: string })[]).map(deleteLeagcyField);
-  const newTermine = (misc.toObjectList(Termin, req.body) as (Termin & { id: string })[]).map(deleteLeagcyField);
+  const oldTermine = (await terminstore.alle()) as (Termin & { id: string })[];
+  const newTermine = misc.toObjectList(Termin, req.body) as (Termin & { id: string })[];
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newTermine.map((t) => t.toJSON()),
-    oldTermine.map((t) => t.toJSON())
+    oldTermine.map((t) => t.toJSON()),
   );
   await terminstore.saveAll(changed);
   await terminstore.removeAll(deletedIds);

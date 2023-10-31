@@ -1,5 +1,4 @@
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { App, Button, Col, Form, FormInstance, Row } from "antd";
+import { App, Button, Col, Form, Row } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
 import { allUsers, openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useState } from "react";

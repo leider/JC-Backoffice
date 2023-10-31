@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useState } from "react";
-import { Form, Tag, theme } from "antd";
+import { Form, theme } from "antd";
 import { useParams } from "react-router-dom";
 import cssColor from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";

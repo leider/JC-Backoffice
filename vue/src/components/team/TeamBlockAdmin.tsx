@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
-import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, Tag, theme, Tooltip } from "antd";
+import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
 import AdminStaffRow from "@/components/team/AdminStaffRow";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -41,7 +41,10 @@ function Content({ veranstaltung: veranst }: ContentProps) {
     setInitialValue(veranstaltung.toJSON());
     setDirty(false);
   };
-  useEffect(initialize, [veranstaltung]);
+  useEffect(
+    initialize, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [veranstaltung],
+  );
 
   useEffect(() => {
     setVeranstaltung(veranst);
@@ -168,10 +171,13 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   const { useToken } = theme;
   const { token } = useToken();
   const [color, setColor] = useState<string>("");
-  useEffect(() => {
-    const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
-    setColor((token as any)[code]);
-  }, [veranstaltung]);
+  useEffect(
+    () => {
+      const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
+      setColor((token as any)[code]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [veranstaltung],
+  );
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {

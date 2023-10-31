@@ -9,7 +9,7 @@ import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
-import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { fromFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
@@ -42,10 +42,13 @@ export default function PresseCard() {
     [],
   );
 
-  useEffect(() => {
-    const vermietung = fromFormObject(form);
-    setMietForPreview(vermietung);
-  }, [presseText, url, image, ok, presseOriText]);
+  useEffect(
+    () => {
+      const vermietung = fromFormObject(form);
+      setMietForPreview(vermietung);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [presseText, url, image, ok, presseOriText],
+  );
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];

@@ -69,52 +69,54 @@ export default function VeranstaltungTabs() {
     );
   }
 
-  const kasseTab = {
-    key: "kasse",
-    label: <TabLabel type="kasse" title="Abendkasse" />,
-    children: <TabKasse />,
-  };
-  const allTabs: TabsProps["items"] = [
-    {
-      key: "allgemeines",
-      label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines />,
-    },
-    {
-      key: "technik",
-      label: <TabLabel type="technik" title="Technik" />,
-      children: <TabTechnik />,
-    },
-    {
-      key: "ausgaben",
-      label: <TabLabel type="ausgaben" title="Kalkulation" />,
-      children: <TabKosten />,
-    },
-    {
-      key: "hotel",
-      label: <TabLabel type="hotel" title="Hotel" />,
-      children: <TabHotel />,
-    },
-    kasseTab,
-    {
-      key: "presse",
-      label: <TabLabel type="presse" title="Presse" />,
-      children: <TabPresse />,
-    },
-  ];
-
-  useEffect(() => {
-    if (onlyKasse) {
-      return setTabs([kasseTab]);
-    }
-    if (brauchtHotel) {
-      setTabs(allTabs);
-    } else {
-      const result = [...(allTabs || [])];
-      result.splice(3, 1);
-      setTabs(result);
-    }
-  }, [brauchtHotel, optionen, activePage, onlyKasse]);
+  useEffect(
+    () => {
+      const kasseTab = {
+        key: "kasse",
+        label: <TabLabel type="kasse" title="Abendkasse" />,
+        children: <TabKasse />,
+      };
+      const allTabs: TabsProps["items"] = [
+        {
+          key: "allgemeines",
+          label: <TabLabel type="allgemeines" title="Allgemeines" />,
+          children: <TabAllgemeines />,
+        },
+        {
+          key: "technik",
+          label: <TabLabel type="technik" title="Technik" />,
+          children: <TabTechnik />,
+        },
+        {
+          key: "ausgaben",
+          label: <TabLabel type="ausgaben" title="Kalkulation" />,
+          children: <TabKosten />,
+        },
+        {
+          key: "hotel",
+          label: <TabLabel type="hotel" title="Hotel" />,
+          children: <TabHotel />,
+        },
+        kasseTab,
+        {
+          key: "presse",
+          label: <TabLabel type="presse" title="Presse" />,
+          children: <TabPresse />,
+        },
+      ];
+      if (onlyKasse) {
+        return setTabs([kasseTab]);
+      }
+      if (brauchtHotel) {
+        setTabs(allTabs);
+      } else {
+        const result = [...(allTabs || [])];
+        result.splice(3, 1);
+        setTabs(result);
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [brauchtHotel, optionen, activePage, onlyKasse],
+  );
 
   return (
     <Tabs

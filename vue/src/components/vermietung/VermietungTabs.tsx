@@ -19,15 +19,18 @@ export default function VermietungTabs() {
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
 
-  useEffect(() => {
-    const page = search.get("page") ?? "";
-    if (["allgemeines", "technik", "ausgaben", "presse"].includes(page)) {
-      setActivePage(page);
-    } else {
-      setActivePage("allgemeines");
-      setSearch({ page: "allgemeines" }, { replace: true });
-    }
-  }, [search]);
+  useEffect(
+    () => {
+      const page = search.get("page") ?? "";
+      if (["allgemeines", "technik", "ausgaben", "presse"].includes(page)) {
+        setActivePage(page);
+      } else {
+        setActivePage("allgemeines");
+        setSearch({ page: "allgemeines" }, { replace: true });
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [search],
+  );
 
   function TabLabel({ title, type }: { type: buttonType; title: string }) {
     const { icon, color } = useColorsAndIconsForSections();
@@ -58,40 +61,43 @@ export default function VermietungTabs() {
     preserve: true,
   });
 
-  useEffect(() => {
-    const tabAllgemeines = {
-      key: "allgemeines",
-      label: <TabLabel type="allgemeines" title="Allgemeines" />,
-      children: <TabAllgemeines />,
-    };
+  useEffect(
+    () => {
+      const tabAllgemeines = {
+        key: "allgemeines",
+        label: <TabLabel type="allgemeines" title="Allgemeines" />,
+        children: <TabAllgemeines />,
+      };
 
-    const tabTechnik = {
-      key: "technik",
-      label: <TabLabel type="technik" title="Technik" />,
-      children: <TabTechnik />,
-    };
-    const tabKosten = {
-      key: "ausgaben",
-      label: <TabLabel type="ausgaben" title="Kalkulation" />,
-      children: <TabKosten />,
-    };
+      const tabTechnik = {
+        key: "technik",
+        label: <TabLabel type="technik" title="Technik" />,
+        children: <TabTechnik />,
+      };
+      const tabKosten = {
+        key: "ausgaben",
+        label: <TabLabel type="ausgaben" title="Kalkulation" />,
+        children: <TabKosten />,
+      };
 
-    const tabPresse = {
-      key: "presse",
-      label: <TabLabel type="presse" title="Presse" />,
-      children: <TabPresse />,
-    };
+      const tabPresse = {
+        key: "presse",
+        label: <TabLabel type="presse" title="Presse" />,
+        children: <TabPresse />,
+      };
 
-    const result = [tabAllgemeines];
-    if (brauchtTechnik) {
-      result.push(tabTechnik);
-    }
-    result.push(tabKosten);
-    if (brauchtPresse) {
-      result.push(tabPresse);
-    }
-    setTabs(result);
-  }, [activePage, optionen, brauchtTechnik, brauchtPresse]);
+      const result = [tabAllgemeines];
+      if (brauchtTechnik) {
+        result.push(tabTechnik);
+      }
+      result.push(tabKosten);
+      if (brauchtPresse) {
+        result.push(tabPresse);
+      }
+      setTabs(result);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activePage, optionen, brauchtTechnik, brauchtPresse],
+  );
 
   return (
     <Tabs

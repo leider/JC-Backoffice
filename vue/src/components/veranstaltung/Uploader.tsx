@@ -18,9 +18,12 @@ interface UploaderParams {
 export default function Uploader({ form, name, typ, onlyImages = false }: UploaderParams) {
   const [options, setOptions] = useState<string[]>([]);
 
-  useEffect(() => {
-    setOptions(form.getFieldValue(name) || []);
-  }, [form]);
+  useEffect(
+    () => {
+      setOptions(form.getFieldValue(name) || []);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form],
+  );
 
   async function saveFiles() {
     setUploading(true);

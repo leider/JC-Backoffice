@@ -55,7 +55,10 @@ export default function EventCard() {
     form.validateFields();
   }
 
-  useEffect(ortChanged, [orte]);
+  useEffect(
+    ortChanged, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [orte],
+  );
 
   function Checker({ name, label, disabled }: { label: string; name: string[]; disabled?: boolean }) {
     return (

@@ -123,10 +123,14 @@ type TTextInputEmbedded = {
 const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = (props: TTextInputEmbedded) => {
   const [value, setValue] = useState<string | undefined>("");
 
-  useEffect(() => {
-    setValue(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
-    props.onText?.(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
-  }, [props.textVal, props.clearOnDisabled, props.disabled, props.onText]);
+  useEffect(
+    () => {
+      setValue(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
+      props.onText?.(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.textVal, props.clearOnDisabled, props.disabled, props.onText],
+  );
 
   return (
     <Input

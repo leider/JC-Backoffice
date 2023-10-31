@@ -2,6 +2,7 @@ import { Form } from "antd";
 import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
+import { Rule } from "antd/es/form";
 
 export type CommonWidgetProps<T> = {
   /**
@@ -43,7 +44,7 @@ export type CommonWidgetProps<T> = {
   /**
    * Callback when the input value has vhanged.
    */
-  onChange?: (value: any) => void;
+  onChange?: (value: number | null) => void;
 
   /**
    * An optional help string.
@@ -89,7 +90,7 @@ type NumberInputProps = CommonWidgetProps<number> & {
  * @return {*}  {JSX.Element}
  */
 export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberInputProps): JSX.Element => {
-  const [rules, setRules] = useState<any[] | undefined>(undefined);
+  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
   useEffect(() => {
     setRules([{ required: props.required }]);

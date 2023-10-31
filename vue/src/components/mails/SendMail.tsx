@@ -119,10 +119,6 @@ export default function SendMail() {
   }
 
   useEffect(() => {
-    updateEffectiveUsers();
-  }, [selectedUsers, selectedLists, selectedRules]);
-
-  function updateEffectiveUsers() {
     const usersFromLists = selectedLists.flatMap((list) => list.users);
     const allUsersFromListsAndUsers = selectedUsers.concat(usersFromLists).map((user) => ({ name: user.name, email: user.email }));
     const allRuleUsers = selectedRules.map((rule) => ({
@@ -130,7 +126,7 @@ export default function SendMail() {
       email: rule.email,
     }));
     setEffectiveUsers(_.sortBy(_.uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
-  }
+  }, [selectedUsers, selectedLists, selectedRules]);
 
   function send() {
     form.validateFields().then(async () => {

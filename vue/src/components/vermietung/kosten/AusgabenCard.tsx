@@ -37,9 +37,12 @@ export default function AusgabenCard() {
     preserve: true,
   });
 
-  useEffect(() => {
-    updateSumme();
-  }, [form, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR, brauchtTechnik]);
+  useEffect(
+    () => {
+      updateSumme();
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR, brauchtTechnik],
+  );
 
   function updateSumme() {
     const verm = new Vermietung(form.getFieldsValue(true));

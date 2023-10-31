@@ -64,11 +64,15 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
     return result;
   }, []);
 
-  useEffect(() => {
-    if (props.clearOnDisabled && props.disabled) {
-      props.form.setFieldsValue(emptyArray);
-    }
-  }, [props.disabled, props.clearOnDisabled]);
+  useEffect(
+    () => {
+      if (props.clearOnDisabled && props.disabled) {
+        props.form.setFieldsValue(emptyArray);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.disabled, props.clearOnDisabled],
+  );
 
   return (
     <Form.Item label={props.label} style={{ flexWrap: "nowrap" }}>

@@ -31,6 +31,7 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
 
       strValue !== originalStringFromWidget && setValue(strValue);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [number, displayFormat, onNumber],
   );
 

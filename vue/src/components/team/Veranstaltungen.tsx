@@ -112,17 +112,20 @@ export default function Veranstaltungen() {
   ];
   const [period, setPeriod] = useState<string>("Zukünftige");
 
-  useEffect(() => {
-    const periodOfSearch = search.get("period");
-    const result = periods.find((each) => each.key === periodOfSearch);
-    if (!result) {
-      setPeriod(periods[0].label);
-      setSearch({ period: periods[0].key });
-    } else {
-      setPeriod(result.label);
-    }
-    loadVeranstaltungen((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
-  }, [search]);
+  useEffect(
+    () => {
+      const periodOfSearch = search.get("period");
+      const result = periods.find((each) => each.key === periodOfSearch);
+      if (!result) {
+        setPeriod(periods[0].label);
+        setSearch({ period: periods[0].key });
+      } else {
+        setPeriod(result.label);
+      }
+      loadVeranstaltungen((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [search],
+  );
 
   return (
     <Row gutter={8}>

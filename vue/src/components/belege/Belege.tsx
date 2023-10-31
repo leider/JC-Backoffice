@@ -57,7 +57,10 @@ export default function Belege() {
     fileList,
   };
 
-  useEffect(valuesChanged, [fileList]);
+  useEffect(
+    valuesChanged, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fileList],
+  );
 
   function valuesChanged() {
     form

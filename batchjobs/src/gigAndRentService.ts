@@ -13,7 +13,9 @@ export async function byDateRangeInAscendingOrder({
 }: {
   from: DatumUhrzeit;
   to: DatumUhrzeit;
+  // eslint-disable-next-line no-unused-vars
   veranstaltungenFilter?: (ver: Veranstaltung) => boolean;
+  // eslint-disable-next-line no-unused-vars
   vermietungenFilter?: (ver: Vermietung) => boolean;
 }) {
   const alwaysTrue = () => true;

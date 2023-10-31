@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Collapse, ConfigProvider, Row, Tag, theme, Tooltip, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Row, theme, Typography } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 
 const { Title } = Typography;
@@ -81,9 +80,12 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
   const [color, setColor] = useState<string>("");
   const { useToken } = theme;
   const { token } = useToken();
-  useEffect(() => {
-    setColor((token as any)["custom-color-vermietung"]);
-  }, [vermietung]);
+  useEffect(
+    () => {
+      setColor((token as any)["custom-color-vermietung"]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [vermietung],
+  );
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {

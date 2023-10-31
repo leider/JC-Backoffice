@@ -34,7 +34,10 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
 
     setNotNeeded(veranstaltung.staff[`${sectionName}NotNeeded`]);
   };
-  useEffect(updateStuff, [veranstaltung]);
+  useEffect(
+    updateStuff, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [veranstaltung],
+  );
   useEffect(() => {
     setCurrentUser(context?.currentUser || new User({}));
   }, [context]);

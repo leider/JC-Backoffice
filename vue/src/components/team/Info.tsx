@@ -27,15 +27,18 @@ export default function Info() {
     load();
   }, [monatJahr]);
 
-  useEffect(() => {
-    const tab = search.get("tab") ?? "";
-    if (["pressetexte", "uebersicht"].includes(tab)) {
-      setActivePage(tab);
-    } else {
-      setActivePage("pressetexte");
-      setSearch({ tab: "pressetexte" });
-    }
-  }, [search]);
+  useEffect(
+    () => {
+      const tab = search.get("tab") ?? "";
+      if (["pressetexte", "uebersicht"].includes(tab)) {
+        setActivePage(tab);
+      } else {
+        setActivePage("pressetexte");
+        setSearch({ tab: "pressetexte" });
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [search],
+  );
 
   const { color } = useColorsAndIconsForSections("allgemeines");
 

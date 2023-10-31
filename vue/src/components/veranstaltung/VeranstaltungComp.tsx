@@ -71,9 +71,10 @@ export default function VeranstaltungComp() {
         },
         { replace: true },
       );
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Veranstaltung wurde gespeichert",
+        placement: "topLeft",
         duration: 5,
       });
     },
@@ -168,10 +169,10 @@ export default function VeranstaltungComp() {
           setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
         }}
         onFinishFailed={() => {
-          notification.open({
-            type: "error",
+          notification.error({
             message: "Fehler",
             description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
+            placement: "topLeft",
             duration: 5,
           });
         }}

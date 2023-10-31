@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, FormInstance, Row, Table } from "antd";
+import { Col, Form, Row, Table } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
 import { ColumnType } from "antd/es/table";

@@ -55,9 +55,13 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
     delete: "Trash",
   };
 
-  useEffect(() => {
-    setColor(colors[type]);
-  }, [type]);
+  useEffect(
+    () => {
+      setColor(colors[type]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [type],
+  );
+
   return (
     <Tooltip title={text[type]} color={color}>
       <span
@@ -91,9 +95,12 @@ export function ButtonStaff({ callback, add }: { add: boolean; callback: () => v
   const { useToken } = theme;
 
   const token = useToken().token;
-  useEffect(() => {
-    setColor(add ? token.colorSuccess : token.colorError);
-  }, [add]);
+  useEffect(
+    () => {
+      setColor(add ? token.colorSuccess : token.colorError);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [add],
+  );
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
       <Tooltip title={add ? "Zusagen" : "Absagen"} color={color}>

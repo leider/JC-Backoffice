@@ -4,7 +4,6 @@ import * as React from "react";
 import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";

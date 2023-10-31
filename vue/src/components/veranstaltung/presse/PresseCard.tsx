@@ -11,7 +11,7 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
@@ -42,11 +42,13 @@ export default function PresseCard() {
     [],
   );
 
-  useEffect(() => {
-    const veranst = fromFormObject(form);
-    setVeranstForPreview(veranst);
-    //updatePreview(veranst);
-  }, [presseText, url, image, ok, presseOriText]);
+  useEffect(
+    () => {
+      const veranst = fromFormObject(form);
+      setVeranstForPreview(veranst);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [presseText, url, image, ok, presseOriText],
+  );
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];

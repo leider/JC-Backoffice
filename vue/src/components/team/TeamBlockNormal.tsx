@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
 import TeamStaffRow from "@/components/team/TeamStaffRow";
@@ -7,7 +7,6 @@ import cssColor from "jc-shared/commons/fieldHelpers";
 import { IconForSmallBlock } from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
-import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -54,10 +53,13 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
   const { token } = useToken();
   const navigate = useNavigate();
   const [color, setColor] = useState<string>("");
-  useEffect(() => {
-    const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
-    setColor((token as any)[code]);
-  }, [veranstaltung]);
+  useEffect(
+    () => {
+      const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
+      setColor((token as any)[code]);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [veranstaltung],
+  );
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {

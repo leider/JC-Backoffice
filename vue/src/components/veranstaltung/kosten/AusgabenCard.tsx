@@ -48,9 +48,12 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     preserve: true,
   });
 
-  useEffect(() => {
-    updateSumme();
-  }, [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR]);
+  useEffect(
+    () => {
+      updateSumme();
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR],
+  );
 
   function updateSumme() {
     const veranst = new Veranstaltung(form.getFieldsValue(true));
