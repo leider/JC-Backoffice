@@ -108,7 +108,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
               style: { backgroundColor: color },
               className: "team-block",
               label: <VermietungHeader vermietung={vermietung} expanded={expanded} />,
-              extra: <Extras vermietung={vermietung} />,
+              extra: expanded && <Extras vermietung={vermietung} />,
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
                   <div style={{ margin: -12 }}>
