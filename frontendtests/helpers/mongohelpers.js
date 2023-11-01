@@ -29,7 +29,7 @@ class dbHelper extends Helper {
 
   async createData(collectionName, filename) {
     console.log(`CREATE OBJECT ${filename} IN COLLECTION ${collectionName}`);
-    const json = await fs.readFile(`./data/${collectionName}/${filename}.json`, "utf8");
+    const json = await fs.readFile(`${__dirname}/../data/${collectionName}/${filename}.json`, "utf8");
     const object = JSON.parse(json);
 
     const client = await mongodb.MongoClient.connect(url);

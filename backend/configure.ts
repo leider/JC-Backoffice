@@ -5,11 +5,7 @@ import path from "path";
 import fs from "fs";
 
 function createConfiguration(): SimpleConfigure {
-  let confDir = "config";
-  const myArgs = process.argv.slice(2);
-  if (myArgs.length > 0) {
-    confDir = myArgs[0];
-  }
+  const confDir = process.env.CONF || "config";
 
   let configdir = path.join(__dirname, `../${confDir}/`);
   try {

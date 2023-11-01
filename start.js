@@ -1,1 +1,2 @@
-import "./backend/start.js";
+import { start } from "./backend/start.js";
+start();

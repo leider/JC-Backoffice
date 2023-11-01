@@ -8,6 +8,7 @@ setCommonPlugins();
 
 const mongoHelper = require("./helpers/mongohelpers");
 
+let server;
 /** @type {CodeceptJS.MainConfig} */
 exports.config = {
   tests: "./*_test.js",
@@ -15,7 +16,7 @@ exports.config = {
   helpers: {
     Playwright: {
       browser: "chromium",
-      url: "http://localhost:1969",
+      url: "http://localhost:1970",
       locale: "de",
       show: false,
       keepCookies: true,
@@ -53,10 +54,15 @@ exports.config = {
     I: "./steps_file.js",
   },
   async bootstrap() {
+    process.env.CONF = "config-it";
+    server = await import("../backend/start.js");
+    server.start("config-it");
     await new mongoHelper().createData("userstore", "admin");
   },
   async teardown() {
     await new mongoHelper().dropAllCollections();
+    server.stop();
+    process.exit(0);
   },
   name: "frontendtests",
 };
