@@ -1,6 +1,7 @@
 const mongodb = require("mongodb");
 const mongoConfig = require("../../config-it/mongo-config.json");
 const Helper = require("@codeceptjs/helper");
+const fs = require("fs/promises");
 const url = mongoConfig.mongoURL;
 
 class dbHelper extends Helper {
@@ -23,6 +24,17 @@ class dbHelper extends Helper {
         writeConcern: { w: 1 },
       },
     );
+    await client.close();
+  }
+
+  async createData(collectionName, filename) {
+    console.log(`CREATE OBJECT ${filename} IN COLLECTION ${collectionName}`);
+    const json = await fs.readFile(`./data/${collectionName}/${filename}.json`, "utf8");
+    const object = JSON.parse(json);
+
+    const client = await mongodb.MongoClient.connect(url);
+    const db = client.db();
+    await db.collection(collectionName).replaceOne({ id: object.id }, object, { upsert: true });
     await client.close();
   }
 }

@@ -6,6 +6,8 @@ setHeadlessWhen(process.env.HEADLESS);
 // enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
 setCommonPlugins();
 
+const mongoHelper = require("./helpers/mongohelpers");
+
 /** @type {CodeceptJS.MainConfig} */
 exports.config = {
   tests: "./*_test.js",
@@ -33,6 +35,7 @@ exports.config = {
             I.fillField("Benutzername", "admin");
             I.fillField("Passwort", "admin");
             I.click("Anmelden");
+            I.wait(0.2);
           },
           check: (I) => {
             I.amOnPage("/");
@@ -48,6 +51,12 @@ exports.config = {
   },
   include: {
     I: "./steps_file.js",
+  },
+  async bootstrap() {
+    await new mongoHelper().createData("userstore", "admin");
+  },
+  async teardown() {
+    await new mongoHelper().dropAllCollections();
   },
   name: "frontendtests",
 };

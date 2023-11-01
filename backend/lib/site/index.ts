@@ -89,7 +89,7 @@ app.post("/login", async (req, res) => {
 
   try {
     const user = await userstore.forId(name);
-    appLogger.info("Login for: " + name);
+    appLogger.info("Try Login for: " + name);
     if (!user) {
       appLogger.error("Login error for: " + name);
       appLogger.error("user not found");
@@ -103,6 +103,7 @@ app.post("/login", async (req, res) => {
       return res.sendStatus(401);
     }
     if (hashPassword(pass, user.salt) === user.hashedPassword) {
+      appLogger.info("Successful Login for: " + name);
       return createToken(req, res, name);
     }
     return res.sendStatus(401);
