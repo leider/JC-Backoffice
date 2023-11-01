@@ -1,0 +1,15 @@
+{
+  "transport-options": {
+    "streamTransport": true
+  },
+  "sender-name": "Jazzclub Backoffice",
+  "sender-address": "bo@jazzclub.de",
+  "stimmer-name": "Andreas Leidig",
+  "stimmer-email": "leider@me.com",
+  "fotograf-name": "Andreas Leidig",
+  "fotograf-email": "leider@me.com",
+  "kassenzettel-email": "leider@me.com",
+  "beleg-email": "leider@me.com",
+  "sender-address-datev": "bo@jazzclub.de",
+  "doNotSendMails": "derleider@web.de"
+}

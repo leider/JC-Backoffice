@@ -18,3 +18,4 @@ jazzclubmongo*
 /batchjobs/**/*.js
 *.map
 .tscache/
+/frontendtests/output/

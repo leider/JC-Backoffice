@@ -18,7 +18,7 @@
   "license": "(MIT OR Apache-2.0)",
   "main": "",
   "engines": {
-    "node": ">=14.0"
+    "node": ">=18.0"
   },
   "dependencies": {
     "lodash": "4.17.21"

@@ -73,7 +73,7 @@ export default class Kasse {
 
   freigabeErfolgtDurch(name: string): void {
     this.kassenfreigabe = name;
-    this.kassenfreigabeAm = new Date();
+    this.kassenfreigabeAm = new DatumUhrzeit().toJSDate;
   }
 
   freigabeRueckgaengig(): void {

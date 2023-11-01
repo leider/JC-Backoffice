@@ -17,7 +17,12 @@ jobs:
     strategy:
       matrix:
         node-version: [18]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
 
     steps:
     - uses: actions/checkout@v3
@@ -29,3 +34,7 @@ jobs:
     - run: yarn install --frozen-lockfile
     - run: yarn test
     - run: yarn deploy
+    - run: |
+        cd frontendtests
+        yarn install
+        

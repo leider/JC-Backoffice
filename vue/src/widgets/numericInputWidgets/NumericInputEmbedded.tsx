@@ -49,6 +49,7 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
 
   return (
     <Input
+      id={props.id}
       inputMode="numeric"
       onBlur={handleBlur}
       disabled={disabled}

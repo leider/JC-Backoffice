@@ -66,5 +66,6 @@ export interface INumericInputEmbedded {
    * @memberof INumericInputEmbedded
    */
   onChange?: (value: any) => void;
+  id?: string;
   suffix?: ReactNode;
 }
