@@ -8,6 +8,7 @@ Scenario("Erzeuge Typen und Orte", ({ I }) => {
   I.deleteObjectInCollection("instance", "optionenstore");
   I.deleteObjectInCollection("orte", "optionenstore");
   I.amOnPage("/vue/optionen");
+  I.see("Typen");
   I.fillField("Typen", "Club Konzert\nHomegrown\n");
   I.click("Speichern");
   I.amOnPage("/vue/orte");
