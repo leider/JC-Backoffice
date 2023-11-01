@@ -5,7 +5,13 @@ import path from "path";
 import fs from "fs";
 
 function createConfiguration(): SimpleConfigure {
-  let configdir = path.join(__dirname, "../config/");
+  let confDir = "config";
+  const myArgs = process.argv.slice(2);
+  if (myArgs.length > 0) {
+    confDir = myArgs[0];
+  }
+
+  let configdir = path.join(__dirname, `../${confDir}/`);
   try {
     // eslint-disable-next-line no-sync
     fs.statSync(configdir);

@@ -7,5 +7,6 @@
   "stimmer-name": "Andreas Leidig",
   "stimmer-email": "changethis@me.com",
   "kassenzettel-email": "changethis@me.com",
-  "sender-address-datev": "changethis@me.com"
+  "sender-address-datev": "changethis@me.com",
+  "doNotSendMails": "some email address to send to when testing"
 }
