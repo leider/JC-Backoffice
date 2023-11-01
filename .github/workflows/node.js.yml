@@ -36,5 +36,6 @@ jobs:
     - run: yarn deploy
     - run: |
         cd frontendtests
-        yarn install
+        yarn install --frozen-lockfile
+        yarn app-and-test
         
