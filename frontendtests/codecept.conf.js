@@ -35,7 +35,7 @@ exports.config = {
             I.fillField("Benutzername", "admin");
             I.fillField("Passwort", "admin");
             I.click("Anmelden");
-            I.wait(0.2);
+            I.wait(1);
           },
           check: (I) => {
             I.amOnPage("/");
