@@ -67,7 +67,7 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
   // checkFreigabeChanged
   const url = req.body.url;
 
-  async function saveVeranstaltung(veranstaltung?: Veranstaltung) {
+  async function saveVeranstaltung(veranstaltung: Veranstaltung | null) {
     if (user?.accessrights?.isOrgaTeam) {
       return saveAndReply(res, new Veranstaltung(req.body));
     } else {
@@ -92,9 +92,8 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
         throw e;
       }
     }
-    return saveVeranstaltung(veranstaltung);
   }
-  return veranstaltung;
+  return saveVeranstaltung(veranstaltung);
 });
 
 app.delete("/veranstaltungen", async (req: Request, res: Response) => {

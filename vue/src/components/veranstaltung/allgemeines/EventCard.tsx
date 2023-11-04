@@ -23,7 +23,7 @@ function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
     setEventTypes(localOptionen);
   }, [props.optionen]);
 
-  return <Select options={eventTypes} {...props} />;
+  return <Select options={eventTypes} {...props} showSearch />;
 }
 
 export default function EventCard() {

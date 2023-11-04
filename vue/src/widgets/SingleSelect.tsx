@@ -29,7 +29,7 @@ export default function SingleSelect({ label, name, onChange, options, initialVa
       style={label ? {} : { marginBottom: 0 }}
       initialValue={initialValue}
     >
-      <Select options={realOptions} onChange={onChange} />
+      <Select options={realOptions} onChange={onChange} showSearch />
     </Form.Item>
   );
 }
