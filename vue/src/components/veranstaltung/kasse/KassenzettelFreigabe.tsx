@@ -10,6 +10,7 @@ import { ButtonKassenzettel } from "@/components/Buttons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useForm } from "antd/es/form/Form";
 
 export function KassenzettelFreigabe() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -28,40 +29,44 @@ export function KassenzettelFreigabe() {
     loadUsers();
   }, []);
 
+  const [innerForm] = useForm();
+
   function freigeben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name);
     modal.confirm({
       type: "confirm",
       title: "Kasse freigeben",
       content: (
-        <Form form={form} layout="vertical">
+        <Form form={innerForm} layout="vertical">
           <p>
             <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-          <SingleSelect name={["kasse", "kassenfreigabe"]} label={"User für die Freigabe"} options={usersAsOptions} />
+          <SingleSelect
+            name="freigeber"
+            label={"User für die Freigabe"}
+            options={usersAsOptions}
+            initialValue={context?.currentUser.name}
+          />
         </Form>
       ),
       onOk: () => {
+        form.setFieldValue(["kasse", "kassenfreigabe"], innerForm.getFieldValue("freigeber"));
         form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
-      },
-      onCancel: () => {
-        form.setFieldValue(["kasse", "kassenfreigabe"], "");
       },
     });
   }
 
   function freigabeAufheben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name),
-      modal.confirm({
-        type: "confirm",
-        title: "Kassenfreigabe rückgängig",
-        content: "Bist Du sicher?",
-        onOk: () => {
-          form.setFieldValue(["kasse", "kassenfreigabe"], "");
-          form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
-        },
-      });
+    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name);
+    modal.confirm({
+      type: "confirm",
+      title: "Kassenfreigabe rückgängig",
+      content: "Bist Du sicher?",
+      onOk: () => {
+        form.setFieldValue(["kasse", "kassenfreigabe"], "");
+        form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
+      },
+    });
   }
 
   return (
