@@ -33,12 +33,13 @@ export default function VeranstaltungComp() {
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
   const locations = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
 
-  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
+  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung({ id: "unknown" }));
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
   const [orte, setOrte] = useState<Orte>(new Orte());
 
   useEffect(() => {
     if (veranst.data) {
+      form.setFieldValue(["kopf", "titel"], "");
       setVeranstaltung(veranst.data);
     }
   }, [veranst.data]);

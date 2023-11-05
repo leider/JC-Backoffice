@@ -1,0 +1,179 @@
+{
+  "id": "orte",
+  "orte": [
+    {
+      "name": "Alte Hackerei",
+      "flaeche": "90",
+      "presseIn": "in der Alten Hackerei",
+      "pressename": "Alte Hackerei"
+    },
+    {
+      "name": "altes Stadion / UNI",
+      "flaeche": "100",
+      "presseIn": "im alten Stadion / UNI",
+      "pressename": "altes Stadion / UNI"
+    },
+    {
+      "name": "Badischer Kunstverein",
+      "flaeche": "35",
+      "presseIn": "im Badischen Kunstverein",
+      "pressename": "Badischer Kunstverein"
+    },
+    {
+      "name": "Badisches Staatstheater",
+      "flaeche": "200",
+      "presseIn": "im Badischen Staatstheater",
+      "pressename": "Badisches Staatstheater"
+    },
+    {
+      "name": "Badisches Staatstheater Studio",
+      "flaeche": "80",
+      "presseIn": "im Badisches Staatstheater Studio",
+      "pressename": "Badisches Staatstheater Studio"
+    },
+    {
+      "name": "Das Fest",
+      "flaeche": "0",
+      "presseIn": "auf das Fest",
+      "pressename": "Das Fest"
+    },
+    {
+      "name": "Ev. Stadtkirche Durlach",
+      "flaeche": "0",
+      "presseIn": "in der ev. Stadtkirche Durlach",
+      "pressename": "Ev. Stadtkirche Durlach"
+    },
+    {
+      "name": "Jazzclub",
+      "flaeche": "100",
+      "presseIn": "im Jazzclub Karlsruhe",
+      "pressename": "Jazzclub Karlsruhe"
+    },
+    {
+      "name": "Jubez Café",
+      "flaeche": "60",
+      "presseIn": "im Jubez Café",
+      "pressename": "Jubez Café"
+    },
+    {
+      "name": "Jubez großer Saal",
+      "flaeche": "100",
+      "presseIn": "im großen Saal des Jubez",
+      "pressename": "Jubez großer Saal"
+    },
+    {
+      "name": "Kinemathek Karlsruhe",
+      "flaeche": "120",
+      "presseIn": "in der Kinemathek Karlsruhe",
+      "pressename": "Kinemathek Karlsruhe"
+    },
+    {
+      "name": "Kohi",
+      "flaeche": "30",
+      "presseIn": "im Kohi",
+      "pressename": "Kohi"
+    },
+    {
+      "name": "Kultur in der Klotze",
+      "flaeche": "",
+      "presseIn": "bei Kultur in der Klotze",
+      "pressename": "Kultur in der Klotze"
+    },
+    {
+      "name": "Lichthof der BGV",
+      "flaeche": "100",
+      "presseIn": "im Lichthof der BGV",
+      "pressename": "Lichthof der BGV"
+    },
+    {
+      "name": "Markuskirche",
+      "flaeche": "80",
+      "presseIn": "in der Markuskirche",
+      "pressename": "die Markuskirche"
+    },
+    {
+      "name": "Online",
+      "flaeche": "",
+      "presseIn": "im Livestream",
+      "pressename": "Onlinekonzert"
+    },
+    {
+      "name": "Passagenhof der Kaiserpassage",
+      "flaeche": "200",
+      "presseIn": "im Passagenhof der Kaiserpassage",
+      "pressename": "Passagenhof der Kaiserpassage"
+    },
+    {
+      "name": "Sandkorn Theater",
+      "flaeche": "120",
+      "presseIn": "im Sandkorn Theater",
+      "pressename": "Sandkorn Theater"
+    },
+    {
+      "name": "Schauburg",
+      "flaeche": "",
+      "presseIn": "in der Schauburg",
+      "pressename": "Schauburg"
+    },
+    {
+      "name": "Schloß Karlsruhe",
+      "flaeche": "",
+      "presseIn": "am Schloß Karlsruhe",
+      "pressename": "Schloß Karlsruhe"
+    },
+    {
+      "name": "Substage",
+      "flaeche": "500",
+      "presseIn": "im Substage",
+      "pressename": "Substage"
+    },
+    {
+      "name": "Tempel",
+      "flaeche": "130",
+      "presseIn": "im Tempel",
+      "pressename": "Tempel"
+    },
+    {
+      "name": "Tollhaus",
+      "flaeche": "120",
+      "presseIn": "im Tollhaus",
+      "pressename": "Tollhaus"
+    },
+    {
+      "name": "ToujoursKultur / Alter Schlachthof",
+      "flaeche": "100",
+      "presseIn": "ToujoursKultur / Alter Schlachthof",
+      "pressename": "ToujoursKultur / Alter Schlachthof"
+    },
+    {
+      "name": "ZKM_Foyer",
+      "flaeche": "150",
+      "presseIn": "im ZKM Foyer",
+      "pressename": "ZKM Foyer"
+    },
+    {
+      "name": "ZKM_Kubus",
+      "flaeche": "150",
+      "presseIn": "im ZKM Kubus",
+      "pressename": "ZKM Kubus"
+    },
+    {
+      "name": "ZKM_Lounge",
+      "flaeche": "80",
+      "presseIn": "in der  Lounge des ZKM",
+      "pressename": "ZKM Lounge"
+    },
+    {
+      "name": "ZKM_Medientheater",
+      "flaeche": "120",
+      "presseIn": "im ZKM Medientheater",
+      "pressename": "ZKM Medientheater"
+    },
+    {
+      "name": "ZKM_Vortragssaal",
+      "flaeche": "60",
+      "presseIn": "im ZKM Vortragssaal",
+      "pressename": "ZKM Vortragssaal"
+    }
+  ]
+}

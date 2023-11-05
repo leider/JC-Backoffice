@@ -5,12 +5,13 @@ Before(({ login }) => {
 });
 
 Scenario("Erzeuge Typen und Orte", ({ I }) => {
-  I.deleteObjectInCollection("instance", "optionenstore");
-  I.deleteObjectInCollection("orte", "optionenstore");
+  I.deleteObjectInCollection("optionenstore", "instance");
+  I.deleteObjectInCollection("optionenstore", "orte");
   I.amOnPage("/vue/optionen");
   I.see("Typen");
   I.fillField("Typen", "Club Konzert\nHomegrown\n");
   I.click("Speichern");
+
   I.amOnPage("/vue/orte");
   I.click(`(//button[@data-testid="orte_add"])`);
   I.click("#orte_0_name");

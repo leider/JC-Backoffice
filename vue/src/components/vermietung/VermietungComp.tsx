@@ -23,7 +23,7 @@ export default function VermietungComp() {
   });
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
 
-  const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung());
+  const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung({ id: "unknown" }));
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
 
   useEffect(() => {

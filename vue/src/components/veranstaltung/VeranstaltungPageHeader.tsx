@@ -66,10 +66,14 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
     preserve: true,
   });
 
+  const [title, setTitle] = useState<string>("");
+
   useEffect(() => {
     const code = `custom-color-${cssColor(eventTyp)}`;
     setTypeColor((token as any)[code]);
-    document.title = isNew ? "Neue oder kopierte Veranstaltung" : titel;
+    const tempTitle = isNew ? "Neue oder kopierte Veranstaltung" : titel || "";
+    setTitle(tempTitle);
+    document.title = tempTitle;
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
   }, [isNew, token, eventTyp, titel, startDate]);
 
@@ -97,7 +101,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <PageHeader
-      title={<span style={titleStyle}>{document.title}</span>}
+      title={<span style={titleStyle}>{title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
         isOrga && <ExportButtons key="exports" disabled={isNew} />,

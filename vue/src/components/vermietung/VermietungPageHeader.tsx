@@ -53,8 +53,12 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     preserve: true,
   });
 
+  const [title, setTitle] = useState<string>("");
+
   useEffect(() => {
-    document.title = isNew ? "Neue oder kopierte Vermietung" : titel;
+    const tempTitle = isNew ? "Neue oder kopierte Vermietung" : titel || "";
+    setTitle(tempTitle);
+    document.title = tempTitle;
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
   }, [titel, startDate, isNew]);
 
@@ -76,7 +80,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   return (
     <PageHeader
-      title={<span style={titleStyle}>Vermietung - {document.title}</span>}
+      title={<span style={titleStyle}>Vermietung - {title}</span>}
       subTitle={<span style={titleStyle}>{displayDate}</span>}
       extra={[
         <ExportExcelVermietungButton key="excel" disabled={isNew} />,

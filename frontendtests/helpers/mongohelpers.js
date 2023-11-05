@@ -14,7 +14,7 @@ class dbHelper extends Helper {
     await client.close();
   }
 
-  async deleteObjectInCollection(id, collectionName) {
+  async deleteObjectInCollection(collectionName, id) {
     console.log(`DELETE OBJECT ${id} IN COLLECTION ${collectionName}`);
     const client = await mongodb.MongoClient.connect(url);
     const db = client.db();
@@ -25,6 +25,14 @@ class dbHelper extends Helper {
       },
     );
     await client.close();
+  }
+
+  async loadObjectInCollection(collectionName, id) {
+    const client = await mongodb.MongoClient.connect(url);
+    const db = client.db();
+    const result = await db.collection(collectionName).findOne({ id });
+    await client.close();
+    return result;
   }
 
   async createData(collectionName, filename) {
