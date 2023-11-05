@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
 import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
+import dayjs from "dayjs";
 process.env.TZ = "Europe/Berlin";
 
 describe("DatumUhrzeit", () => {
@@ -211,22 +212,22 @@ describe("DatumUhrzeit", () => {
   describe("Spezialmethoden", () => {
     it("findet vorhergehenden oder aktuellen ungeraden Monat", () => {
       expect(DatumUhrzeit.forISOString("2020-04-30").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-03-30").value
+        DatumUhrzeit.forISOString("2020-03-30").value,
       );
       expect(DatumUhrzeit.forISOString("2020-03-20").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-03-20").value
+        DatumUhrzeit.forISOString("2020-03-20").value,
       );
       expect(DatumUhrzeit.forISOString("2020-02-29").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-01-29").value
+        DatumUhrzeit.forISOString("2020-01-29").value,
       );
       expect(DatumUhrzeit.forISOString("2020-01-20").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-01-20").value
+        DatumUhrzeit.forISOString("2020-01-20").value,
       );
       expect(DatumUhrzeit.forISOString("2020-12-31").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-11-30").value
+        DatumUhrzeit.forISOString("2020-11-30").value,
       );
       expect(DatumUhrzeit.forISOString("2020-11-20").vorigerOderAktuellerUngeraderMonat.value).to.eql(
-        DatumUhrzeit.forISOString("2020-11-20").value
+        DatumUhrzeit.forISOString("2020-11-20").value,
       );
     });
 
@@ -262,6 +263,20 @@ describe("DatumUhrzeit", () => {
 
       expect(januar01.setTag(5).value).to.eql(januar05.value);
       expect(januar01.setUhrzeit(5, 23).value).to.eql(DatumUhrzeit.forISOString("2019-01-01T05:23:00").value);
+    });
+  });
+
+  describe("moving keeps time", () => {
+    it("when moved to past", () => {
+      expect(DatumUhrzeit.forISOString("2020-02-02 14:30").moveByDifferenceDays(dayjs("2020-01-30 22:15"))).eql(
+        DatumUhrzeit.forISOString("2020-01-30 14:30").value,
+      );
+    });
+
+    it("when moved to future", () => {
+      expect(DatumUhrzeit.forISOString("2020-02-02 14:30").moveByDifferenceDays(dayjs("2022-01-30 22:15"))).eql(
+        DatumUhrzeit.forISOString("2022-01-30 14:30").value,
+      );
     });
   });
 });

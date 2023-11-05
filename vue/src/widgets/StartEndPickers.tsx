@@ -1,8 +1,10 @@
-import { Col, DatePicker, Form, Row, TimePicker } from "antd";
+import { Col, DatePicker, Form, Row } from "antd";
+import { IntRange } from "rc-picker/lib/interface";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { StartAndEnd } from "@/components/veranstaltung/veranstaltungCompUtils";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
@@ -15,33 +17,30 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
     }
   }, [props.dates]);
 
-  function dateChanged(startDate: Dayjs | null) {
-    if (!startDate) {
-      return;
+  function onCalendarChange(dates: (Dayjs | null)[] | null) {
+    const startNew = dates?.[0];
+    const endNew = dates?.[1];
+    if (!startNew && endNew) {
+      return props.onDates?.({ start: new DatumUhrzeit(start).moveByDifferenceDays(endNew), end: endNew });
     }
-    const newStart = start.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
-    const newEnd = end.set("year", startDate?.get("year")).set("month", startDate.get("month")).set("date", startDate.get("date"));
-    props.onDates?.({ start: newStart, end: newEnd });
-  }
-
-  function timesChanged(times: any) {
-    if (!times) {
-      return;
+    if (!endNew && startNew) {
+      return props.onDates?.({ start: startNew, end: new DatumUhrzeit(end).moveByDifferenceDays(startNew) });
     }
-    const startTime: Dayjs = times[0];
-    const endTime: Dayjs = times[1];
-    const newStart = start.set("hour", startTime?.get("hour")).set("minute", startTime.get("minute"));
-    const newEnd = end.set("hour", endTime?.get("hour")).set("minute", endTime.get("minute"));
-    props.onDates?.({ start: newStart, end: newEnd });
+    if (startNew && endNew) {
+      props.onDates?.({ start: startNew, end: endNew.add(startNew.diff(start)) });
+    }
   }
 
   return (
     <Row gutter={12}>
       <Col>
-        <DatePicker allowClear={false} format={"ddd DD.MM.YY"} value={start} onChange={dateChanged} />
-      </Col>
-      <Col span={12}>
-        <TimePicker.RangePicker allowClear={false} format={"HH:mm"} value={[start, end]} minuteStep={15} onChange={timesChanged} />
+        <DatePicker.RangePicker
+          showTime
+          minuteStep={30 as IntRange<1, 59>}
+          format={["ddd DD.MM.YY HH:mm", "DDMMYY HH:mm"]}
+          value={[start, end]}
+          onCalendarChange={onCalendarChange}
+        />
       </Col>
     </Row>
   );
@@ -49,7 +48,7 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
 
 export default function StartEndPickers() {
   return (
-    <Form.Item label={<b>Datum und Uhrzeit:</b>} name={["startAndEnd"]} valuePropName="dates" trigger="onDates">
+    <Form.Item label={<b>Datum und Uhrzeit:</b>} name="startAndEnd" valuePropName="dates" trigger="onDates">
       <EmbeddedPickers />
     </Form.Item>
   );

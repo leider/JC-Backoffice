@@ -17,6 +17,7 @@
     "pug": "3.0.2"
   },
   "scripts": {
+    "test-recompiled": "yarn tsc && yarn test",
     "test": "../node_modules/.bin/mocha --exit test/**/*.js",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
