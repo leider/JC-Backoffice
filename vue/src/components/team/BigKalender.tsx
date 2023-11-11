@@ -1,5 +1,5 @@
 import React, { createRef } from "react";
-import { Checkbox, Col, Form, Row, Tooltip } from "antd";
+import { Checkbox, Col, Form, Row } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
 import { EventInput } from "@fullcalendar/core";
@@ -7,6 +7,7 @@ import { calendarEventSources } from "@/commons/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { PageHeader } from "@ant-design/pro-layout";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
+import { renderEventContent } from "@/components/team/TeamCalendar.tsx";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
@@ -31,16 +32,6 @@ export default function BigKalender() {
     doit();
   }
 
-  function renderEventContent(eventInfo: any) {
-    return (
-      <Tooltip title={eventInfo.event.title}>
-        <span>
-          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
-          <i>{eventInfo.event.title}</i>
-        </span>
-      </Tooltip>
-    );
-  }
   const [form] = Form.useForm<TerminFilterOptions>();
 
   function IcalCheck() {

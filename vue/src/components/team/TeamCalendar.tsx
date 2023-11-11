@@ -6,6 +6,21 @@ import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
 import { Tooltip } from "antd";
 
+export function renderEventContent(eventInfo: { timeText: string; event: { title: string } }) {
+  return (
+    <Tooltip
+      title={
+        <span>
+          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
+          <i>{eventInfo.event.title}</i>
+        </span>
+      }
+    >
+      {eventInfo.event.title}
+    </Tooltip>
+  );
+}
+
 export default function TeamCalendar() {
   const getEvents = useCallback(
     (
@@ -31,17 +46,6 @@ export default function TeamCalendar() {
     },
     [],
   );
-
-  function renderEventContent(eventInfo: any) {
-    return (
-      <Tooltip title={eventInfo.event.title}>
-        <span>
-          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
-          <i>{eventInfo.event.title}</i>
-        </span>
-      </Tooltip>
-    );
-  }
 
   return (
     <FullCalendar
