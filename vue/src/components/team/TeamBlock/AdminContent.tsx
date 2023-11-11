@@ -1,5 +1,5 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Button, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
+import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/commons/auth.tsx";
 import { useNavigate } from "react-router-dom";
@@ -118,64 +118,57 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       colon={false}
       style={{ margin: -12 }}
     >
-      <Row justify="end">
-        {showMitarbeiter ? (
-          <>
-            <span>
-              <h3
-                style={{ marginBlockStart: 4, marginBlockEnd: 0, marginInlineEnd: 8 }}
-                onClick={() => {
-                  setShowMitarbeiter(!showMitarbeiter);
-                }}
-              >
-                Mitarbeiter...
-              </h3>
-            </span>
-            <SaveButton disabled={!dirty} />
-          </>
-        ) : (
-          <>
-            <span>
-              <h3
-                style={{ marginBlockStart: 4, marginBlockEnd: 0, marginInlineEnd: 8 }}
-                onClick={() => {
-                  setShowMitarbeiter(!showMitarbeiter);
-                }}
-              >
-                Mitarbeiter...
-              </h3>
-            </span>
-            <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={isVermietung()} />
-            {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
-              <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={isVermietung()} />
+      <Row>
+        <Col span={8}>
+          <h3
+            style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
+            onClick={() => {
+              setShowMitarbeiter(!showMitarbeiter);
+            }}
+          >
+            Mitarbeiter...
+          </h3>
+        </Col>
+        <Col span={16}>
+          <Row justify="end">
+            {showMitarbeiter ? (
+              <SaveButton disabled={!dirty} />
+            ) : (
+              <>
+                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={isVermietung()} />
+                {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={isVermietung()} />
+                )}
+                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={isVermietung()} />
+                {veranstaltungOderVermietung.artist.brauchtHotel && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="hotel" />
+                )}
+                {!isVermietung() && <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="kasse" />}
+                {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={isVermietung()} />
+                )}
+                {!isVermietung() && (
+                  <ConfigProvider theme={{ token: { colorPrimary: (token as any)["custom-color-concert"] } }}>
+                    <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
+                      <Button
+                        icon={<IconForSmallBlock size={16} iconName={"EyeFill"} />}
+                        size="middle"
+                        type="primary"
+                        onClick={() =>
+                          navigate({
+                            pathname: `/${"veranstaltung/preview"}/${veranstaltungOderVermietung.url}`,
+                          })
+                        }
+                      />
+                    </Tooltip>
+                  </ConfigProvider>
+                )}
+              </>
             )}
-            <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={isVermietung()} />
-            {veranstaltungOderVermietung.artist.brauchtHotel && (
-              <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="hotel" />
-            )}
-            {!isVermietung() && <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="kasse" />}
-            {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
-              <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={isVermietung()} />
-            )}
-            {!isVermietung() && (
-              <ConfigProvider theme={{ token: { colorPrimary: (token as any)["custom-color-concert"] } }}>
-                <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
-                  <Button
-                    icon={<IconForSmallBlock size={16} iconName={"EyeFill"} />}
-                    size="middle"
-                    type="primary"
-                    onClick={() =>
-                      navigate({
-                        pathname: `/${"veranstaltung/preview"}/${veranstaltungOderVermietung.url}`,
-                      })
-                    }
-                  />
-                </Tooltip>
-              </ConfigProvider>
-            )}
-          </>
-        )}
+          </Row>
+        </Col>
       </Row>
+
       <Collapse
         ghost
         activeKey={showMitarbeiter ? "mitarbeiter" : ""}
