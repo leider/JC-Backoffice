@@ -4,10 +4,11 @@ import * as React from "react";
 import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import { utils, writeFileXLSX } from "xlsx";
-import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { asExcelKalk } from "@/commons/utilityFunctions.ts";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -69,19 +70,7 @@ export function ExportButtons({ disabled }: ButtonProps) {
 
   function onMenuClick(e: { key: string }): void {
     if (e.key === "ExcelKalk") {
-      const sheet = utils.json_to_sheet(createExcelData(veranstaltung));
-      sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];
-      const book = utils.book_new();
-      utils.book_append_sheet(
-        book,
-        sheet,
-        veranstaltung?.kopf?.titel
-          .replace(/\s/g, "-")
-          .replace(/\//g, "-")
-          .replace(/[^a-zA-Z0-9\- _]/g, "")
-          .slice(0, 30) || "data",
-      );
-      return writeFileXLSX(book, "JAZZ.xlsx");
+      asExcelKalk([new Veranstaltung(veranstaltung)]);
     }
     if (e.key === "Pressefotos") {
       imgzipForVeranstaltung(veranstaltung);
@@ -111,19 +100,7 @@ export function ExportExcelVermietungButton({ disabled }: ButtonProps) {
   const vermietung = useMemo(() => form.getFieldsValue(true), [form]);
 
   function click() {
-    const sheet = utils.json_to_sheet(createExcelDataVermietung(vermietung));
-    sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];
-    const book = utils.book_new();
-    utils.book_append_sheet(
-      book,
-      sheet,
-      vermietung?.kopf?.titel
-        .replace(/\s/g, "-")
-        .replace(/\//g, "-")
-        .replace(/[^a-zA-Z0-9\- _]/g, "")
-        .slice(0, 30) || "data",
-    );
-    return writeFileXLSX(book, "JAZZ.xlsx");
+    asExcelKalk([new Vermietung(vermietung)]);
   }
 
   return (
