@@ -119,7 +119,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       style={{ margin: -12 }}
     >
       <Row>
-        <Col span={8}>
+        <Col span={6}>
           <h3
             style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
             onClick={() => {
@@ -129,7 +129,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
             Mitarbeiter...
           </h3>
         </Col>
-        <Col span={16}>
+        <Col span={18}>
           <Row justify="end">
             {showMitarbeiter ? (
               <SaveButton disabled={!dirty} />

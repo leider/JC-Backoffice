@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
-import { Col, Row } from "antd";
+import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
@@ -54,37 +54,53 @@ function Team() {
     setMonate(Object.keys(result));
   }, [veranstaltungen, realadmin, context]);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
-    <Row gutter={8}>
-      <Col xs={{ span: 24, order: 2 }} xl={{ span: 16, order: 1 }}>
-        <PageHeader
-          footer={
-            <p>
-              <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor
-              der Veranstaltung da zu sein!
-            </p>
-          }
-          title="Team"
-          extra={[
-            <ButtonWithIcon
-              key="cal"
-              icon="CalendarWeek"
-              text="Kalender"
-              type="default"
-              href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
-            />,
-          ]}
-        />
-        <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
-          {monate.map((monat) => {
-            return <TeamMonatGroup key={monat} monat={monat} renderTeam />;
-          })}
-        </TeamContext.Provider>
-      </Col>
-      <Col xs={{ span: 24, order: 1 }} xl={{ span: 8, order: 2 }} style={{ zIndex: 0 }}>
+    <>
+      <Row gutter={8}>
+        <Col>
+          <PageHeader
+            footer={
+              <p>
+                <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor
+                der Veranstaltung da zu sein!
+              </p>
+            }
+            title={
+              <Space>
+                Team
+                <div style={{ marginTop: "-16px" }}>
+                  <ButtonWithIcon key="openCal" icon="Calendar2Month" type="primary" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                </div>
+              </Space>
+            }
+          />
+          <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
+            {monate.map((monat) => {
+              return <TeamMonatGroup key={monat} monat={monat} renderTeam />;
+            })}
+          </TeamContext.Provider>
+        </Col>
+      </Row>
+      <Drawer
+        title={
+          <ButtonWithIcon
+            key="cal"
+            icon="CalendarWeek"
+            text="Kalender exportieren..."
+            type="default"
+            href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
+          />
+        }
+        placement="right"
+        onClose={() => setDrawerOpen(false)}
+        open={drawerOpen}
+        size="large"
+      >
         <TeamCalendar />
-      </Col>
-    </Row>
+      </Drawer>
+    </>
   );
 }
 

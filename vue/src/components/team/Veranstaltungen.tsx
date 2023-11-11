@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { allUsers, veranstaltungenBetweenYYYYMM, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, ConfigProvider, DatePicker, Dropdown, Form, Modal, Row, Space, TimeRangePickerProps } from "antd";
+import { Button, Col, ConfigProvider, DatePicker, Drawer, Dropdown, Form, Modal, Row, Space, TimeRangePickerProps } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
@@ -17,6 +17,7 @@ import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import { useForm } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
+import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -131,122 +132,70 @@ export default function Veranstaltungen() {
     [search],
   );
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
-    <Row gutter={8}>
-      <Col xs={{ span: 24, order: 2 }} xl={{ span: 16, order: 1 }}>
-        <PageHeader
-          title="Veranstaltungen"
-          extra={[
-            <NewButtons key="newButtons" />,
-            <ButtonWithIcon
-              key="cal"
-              icon="CalendarWeek"
-              text="Kalender"
-              type="default"
-              href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
-            />,
-            <Dropdown
-              key="periods"
-              menu={{
-                items: periods,
-              }}
-            >
-              <Button>
-                <Space>
-                  {period}
-                  <IconForSmallBlock iconName="ChevronDown" />
-                </Space>
-              </Button>
-            </Dropdown>,
-          ]}
-        />
-        <Form form={form} autoComplete="off">
-          <Row gutter={8} justify="end">
-            <Col span={8}>
-              <SingleSelect name="Presse" label="Filter Presse" options={PRESSEFILTERS} onChange={setPressefilter} />
-            </Col>
-            <Col>
-              <SelectRangeForExcelModal isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} alle={alle} />
-              <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
-                <Button
-                  type="primary"
-                  icon={<IconForSmallBlock iconName="FileEarmarkSpreadsheet" />}
-                  onClick={() => {
-                    setIsExcelExportOpen(true);
-                  }}
-                >
-                  Kalkulation (Excel)
+    <>
+      <Row gutter={8}>
+        <Col>
+          <PageHeader
+            title={
+              <Space>
+                Veranstaltungen
+                <div style={{ marginTop: "-16px" }}>
+                  <ButtonWithIcon key="openCal" icon="Calendar2Month" type="primary" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                </div>
+              </Space>
+            }
+            extra={[
+              <ExcelMultiExportButton key="excel" alle={alle}></ExcelMultiExportButton>,
+              <NewButtons key="newButtons" />,
+              <Dropdown
+                key="periods"
+                menu={{
+                  items: periods,
+                }}
+              >
+                <Button>
+                  <Space>
+                    {period}
+                    <IconForSmallBlock iconName="ChevronDown" />
+                  </Space>
                 </Button>
-              </ConfigProvider>
-            </Col>
-          </Row>
-        </Form>
-        <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
-          {monate.map((monat) => {
-            return <TeamMonatGroup key={monat} monat={monat} />;
-          })}
-        </TeamContext.Provider>
-      </Col>
-      <Col xs={{ span: 24, order: 1 }} xl={{ span: 8, order: 2 }} style={{ zIndex: 0 }}>
+              </Dropdown>,
+            ]}
+          />
+          <Form form={form} autoComplete="off">
+            <Row gutter={8}>
+              <Col xs={24} sm={8} lg={6}>
+                <SingleSelect name="Presse" label="Filter Presse" options={PRESSEFILTERS} onChange={setPressefilter} />
+              </Col>
+            </Row>
+          </Form>
+          <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
+            {monate.map((monat) => {
+              return <TeamMonatGroup key={monat} monat={monat} />;
+            })}
+          </TeamContext.Provider>
+        </Col>
+      </Row>
+      <Drawer
+        title={
+          <ButtonWithIcon
+            key="cal"
+            icon="CalendarWeek"
+            text="Kalender exportieren..."
+            type="default"
+            href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
+          />
+        }
+        placement="right"
+        onClose={() => setDrawerOpen(false)}
+        open={drawerOpen}
+        size="large"
+      >
         <TeamCalendar />
-      </Col>
-    </Row>
-  );
-}
-
-function SelectRangeForExcelModal({
-  isOpen,
-  setIsOpen,
-  alle,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  alle: { startDate: Date }[];
-}) {
-  const [form] = useForm();
-  const [first, setFirst] = useState<Dayjs>(dayjs());
-  const [last, setLast] = useState<Dayjs>(dayjs());
-  useEffect(() => {
-    if (alle.length > 0) {
-      setFirst(dayjs(alle[0].startDate));
-      setLast(dayjs(alle[alle.length - 1].startDate));
-    }
-  }, [alle]);
-
-  useEffect(() => {
-    if (isOpen) {
-      form.setFieldValue("zeitraum", [first, last]);
-    }
-  }, [form, first, last, isOpen]);
-
-  const rangePresets: TimeRangePickerProps["presets"] = [
-    { label: "Wie angezeigt", value: [first, last] },
-    { label: "Letzte 6 Monate", value: [dayjs().add(-6, "month"), dayjs()] },
-    { label: "Letzte 12 Monate", value: [dayjs().add(-12, "month"), dayjs()] },
-    { label: "Aktuelles Kalenderjahr", value: [dayjs().month(0), dayjs().month(11)] },
-    { label: "Letztes Kalenderjahr", value: [dayjs().month(0).add(-1, "year"), dayjs().month(11).add(-1, "year")] },
-  ];
-
-  async function ok() {
-    const [from, to] = form.getFieldValue("zeitraum") as [Dayjs, Dayjs];
-    const vers = await veranstaltungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
-    const bestaetigte = vers.filter((ver) => ver.kopf.confirmed);
-    asExcelKalk(bestaetigte);
-    setIsOpen(false);
-  }
-
-  return (
-    <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={ok} closable={false} maskClosable={false}>
-      <Form form={form} onFinish={ok} layout="vertical" autoComplete="off">
-        <PageHeader title="Excel Export" />
-        <Row gutter={8}>
-          <Col span={24}>
-            <Form.Item label={<b>Zeitraum für den Export:</b>} name="zeitraum">
-              <DatePicker.RangePicker format={"MMM YYYY"} picker="month" presets={rangePresets} />
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
-    </Modal>
+      </Drawer>
+    </>
   );
 }

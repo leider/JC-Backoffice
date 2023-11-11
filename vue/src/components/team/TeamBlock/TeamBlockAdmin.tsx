@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
-import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import { Col, Collapse, ConfigProvider, theme } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import cssColor from "jc-shared/commons/fieldHelpers.ts";
-import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
-import { useNavigate } from "react-router-dom";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { useAuth } from "@/commons/auth.tsx";
-import { differenceFor } from "jc-shared/commons/compareObjects.ts";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveVeranstaltung } from "@/commons/loader.ts";
-import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
@@ -41,7 +30,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   }, [initiallyOpen]);
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
-      <Col xs={24} sm={12} md={8} xxl={6}>
+      <Col xs={24} sm={12} lg={8} xl={6} xxl={4}>
         <Collapse
           style={{ borderColor: color }}
           size={"small"}
