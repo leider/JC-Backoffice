@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Collapse, ConfigProvider, Row, theme, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Row, theme } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
-
-const { Title } = Typography;
+import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
+import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
   const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
@@ -32,42 +32,6 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
   return (
     <ConfigProvider theme={{ token: { fontSize: 11 } }}>
       <div style={{ width: "70px" }}>{tagsForTitle}</div>
-    </ConfigProvider>
-  );
-}
-interface VermietungHeaderProps {
-  vermietung: Vermietung;
-  expanded?: boolean;
-}
-
-function VermietungHeader({ vermietung, expanded }: VermietungHeaderProps) {
-  const titleStyle = { margin: 0 };
-  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
-    return (
-      <Title level={l} style={titleStyle}>
-        {t}
-      </Title>
-    );
-  }
-
-  return (
-    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
-      {expanded ? (
-        <>
-          <T l={5} t={vermietung.datumForDisplayShort} />
-          <T l={3} t={vermietung.kopf.titel + " (Vermietung)"} />
-        </>
-      ) : (
-        <>
-          <Title level={4} style={titleStyle}>
-            {vermietung.kopf.titel} (Vermietung)
-            <br />
-            <small>
-              <small style={{ fontWeight: 400 }}>{vermietung.startDatumUhrzeit.wochentagTagMonatShort}</small>
-            </small>
-          </Title>
-        </>
-      )}
     </ConfigProvider>
   );
 }
@@ -101,27 +65,17 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
           onChange={() => {
             setExpanded(!expanded);
           }}
-          expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+          expandIcon={({ isActive }) => (isActive ? <CaretDown /> : <CaretRight />)}
           items={[
             {
               key: vermietung.id || "",
               style: { backgroundColor: color },
               className: "team-block",
-              label: <VermietungHeader vermietung={vermietung} expanded={expanded} />,
+              label: <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={expanded} />,
               extra: expanded && <Extras vermietung={vermietung} />,
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <div style={{ margin: -12 }}>
-                    <Row justify="end">
-                      <span>
-                        <h3 style={{ marginBlockStart: 4, marginBlockEnd: 0, marginInlineEnd: 8 }}>Vermietung</h3>
-                      </span>
-                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="allgemeines" isVermietung />
-                      {vermietung.brauchtTechnik && <ButtonInAdminPanel url={vermietung.url ?? ""} type="technik" isVermietung />}
-                      <ButtonInAdminPanel url={vermietung.url ?? ""} type="ausgaben" isVermietung />
-                      {vermietung.brauchtPresse && <ButtonInAdminPanel url={vermietung.url ?? ""} type="presse" isVermietung />}
-                    </Row>
-                  </div>
+                  <AdminContent veranstaltungOderVermietung={vermietung}></AdminContent>{" "}
                 </ConfigProvider>
               ),
             },

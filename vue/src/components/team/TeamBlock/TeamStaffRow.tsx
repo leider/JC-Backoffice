@@ -1,11 +1,11 @@
 import { Col, Row, Tag } from "antd";
 import React, { useContext, useEffect, useState } from "react";
-import { StaffType } from "jc-shared/veranstaltung/staff";
-import { useAuth } from "@/commons/auth";
+import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import { useAuth } from "@/commons/auth.tsx";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import User from "jc-shared/user/user";
-import { ButtonStaff } from "@/components/Buttons";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import User from "jc-shared/user/user.ts";
+import { ButtonStaff } from "@/components/Buttons.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
@@ -102,5 +102,4 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
     </Row>
   );
 };
-//ids.includes(currentUser) ? "JA" : "NEIN"
 export default TeamStaffRow;

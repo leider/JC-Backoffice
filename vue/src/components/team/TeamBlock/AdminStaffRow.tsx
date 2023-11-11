@@ -1,9 +1,9 @@
 import { Form, Space } from "antd";
 import React, { useContext } from "react";
-import { StaffType } from "jc-shared/veranstaltung/staff";
-import InverseCheckbox from "@/widgets/InverseCheckbox";
-import { DynamicItem } from "@/widgets/DynamicItem";
-import UserMultiSelect from "@/components/team/UserMultiSelect";
+import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
+import { DynamicItem } from "@/widgets/DynamicItem.tsx";
+import UserMultiSelect from "@/components/team/UserMultiSelect.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface AdminStaffRowProps {

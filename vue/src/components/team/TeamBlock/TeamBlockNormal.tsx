@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
-import TeamStaffRow from "@/components/team/TeamStaffRow";
+import TeamStaffRow from "@/components/team/TeamBlock/TeamStaffRow.tsx";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import cssColor from "jc-shared/commons/fieldHelpers";
-import { IconForSmallBlock } from "@/components/Icon";
+import cssColor from "jc-shared/commons/fieldHelpers.ts";
+import { IconForSmallBlock } from "@/components/Icon.tsx";
 import { useNavigate } from "react-router-dom";
-import TeamBlockHeader from "@/components/team/TeamBlockHeader.tsx";
+import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -80,7 +80,7 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
             {
               key: veranstaltung.id || "",
               style: { backgroundColor: color },
-              label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
+              label: <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={expanded} />,
               extra: (
                 <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
                   <span

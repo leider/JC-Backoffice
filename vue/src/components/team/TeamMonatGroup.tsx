@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Collapse, Row, Typography } from "antd";
-import TeamBlockAdmin from "@/components/team/TeamBlockAdmin";
+import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { IconForSmallBlock } from "@/components/Icon";
-import TeamBlockNormal from "@/components/team/TeamBlockNormal";
+import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import TeamBlockVermietung from "@/components/team/TeamBlockVermietung.tsx";
+import TeamBlockVermietung from "@/components/team/TeamBlock/TeamBlockVermietung.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface MonatGroupProps {
