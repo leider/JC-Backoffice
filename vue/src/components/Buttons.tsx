@@ -86,13 +86,15 @@ export function ButtonKassenzettel({ callback }: { callback: () => void }) {
   const { color } = useColorsAndIconsForSections("kasse");
 
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
-      <Tooltip title="Kassenzettel als PDF" color={color()}>
-        <Button block icon={<IconForSmallBlock size={16} iconName={"PrinterFill"} />} type="primary" onClick={callback}>
-          &nbsp;Kassenzettel
-        </Button>
-      </Tooltip>
-    </ConfigProvider>
+    <ButtonWithIcon
+      block
+      text="Kassenzettel"
+      icon="PrinterFill"
+      type="primary"
+      onClick={callback}
+      tooltipTitle="Kassenzettel asl PDF"
+      color={color()}
+    />
   );
 }
 

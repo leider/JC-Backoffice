@@ -17,6 +17,7 @@ export default function ButtonWithIcon({
   tooltipTitle,
   color,
   size,
+  block,
 }: {
   icon?: IconProps["iconName"];
   text?: string;
@@ -29,6 +30,7 @@ export default function ButtonWithIcon({
   tooltipTitle?: string;
   color?: string;
   size?: SizeType;
+  block?: boolean;
 }) {
   const [button, setButton] = useState<JSX.Element | undefined>(undefined);
 
@@ -43,6 +45,7 @@ export default function ButtonWithIcon({
         disabled={disabled}
         htmlType={htmlType}
         size={size}
+        block={block}
       >
         {text && text}
       </Button>,

@@ -11,6 +11,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useForm } from "antd/es/form/Form";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 export function KassenzettelFreigabe() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -89,15 +90,14 @@ export function KassenzettelFreigabe() {
                     if (!freigabe) {
                       const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
                       return (
-                        <Button
+                        <ButtonWithIcon
                           block
-                          icon={<IconForSmallBlock iconName={"Unlock"} />}
+                          text="Kasse freigeben..."
+                          icon={"Unlock"}
                           type="primary"
                           onClick={freigeben}
                           disabled={!darfFreigeben}
-                        >
-                          &nbsp;Kasse freigeben
-                        </Button>
+                        />
                       );
                     } else {
                       const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
