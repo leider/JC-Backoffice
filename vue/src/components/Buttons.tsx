@@ -22,6 +22,7 @@ export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPan
       type="primary"
       href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/${url}?page=${type}`}
       color={color()}
+      size="small"
     />
   );
 }
@@ -35,6 +36,7 @@ export function ButtonPreview({ veranstaltung }: { veranstaltung: Veranstaltung 
       href={`/vue/${"veranstaltung/preview"}/${veranstaltung.url}`}
       tooltipTitle="Vorschau"
       color={token.colorSuccess}
+      size="small"
     />
   );
 }

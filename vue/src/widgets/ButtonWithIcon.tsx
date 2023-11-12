@@ -35,7 +35,7 @@ export default function ButtonWithIcon({
   useEffect(() => {
     setButton(
       <Button
-        icon={icon && <IconForSmallBlock iconName={icon} />}
+        icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
         type={type || "primary"}
         onClick={onClick}
         href={href}
