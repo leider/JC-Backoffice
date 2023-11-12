@@ -146,6 +146,11 @@ export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene"
   return handleVermietungen(result);
 }
 
+export async function vermietungenBetweenYYYYMM(start: string, end: string) {
+  const result = await getForType("json", `/rest/vermietungen/${start}/${end}`);
+  return handleVermietungen(result);
+}
+
 export async function vermietungForUrl(url: string): Promise<Vermietung> {
   if (url === "new") {
     return new Vermietung();

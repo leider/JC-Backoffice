@@ -5,9 +5,10 @@ import { IconForSmallBlock } from "@/components/Icon.tsx";
 import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
-import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import { PageHeader } from "@ant-design/pro-layout";
+import _ from "lodash";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -48,7 +49,8 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
     async function ok() {
       const [from, to] = form.getFieldValue("zeitraum") as [Dayjs, Dayjs];
       const vers = await veranstaltungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
-      const bestaetigte = vers.filter((ver) => ver.kopf.confirmed);
+      const verm = await vermietungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
+      const bestaetigte = _.sortBy([...vers, ...verm], "startDate").filter((ver) => ver.kopf.confirmed);
       asExcelKalk(bestaetigte);
       setIsOpen(false);
     }

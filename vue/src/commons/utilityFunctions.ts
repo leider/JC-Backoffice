@@ -2,6 +2,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { prepareExcel } from "jc-shared/excelPreparation/excelKumulierer.ts";
 
 const format = new Intl.NumberFormat("de-DE", {
   minimumFractionDigits: 2,
@@ -15,11 +16,15 @@ export function formatToGermanNumberString(amount: number): string {
 
 export function asExcelKalk(veranVermiet: (Veranstaltung | Vermietung)[]) {
   const book = utils.book_new();
+  const sheet = utils.json_to_sheet(prepareExcel(veranVermiet));
+  sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];
+  utils.book_append_sheet(book, sheet, "Übersicht");
+
   veranVermiet.forEach((ver) => {
     const sheet = utils.json_to_sheet(
       ver.isVermietung ? createExcelDataVermietung(ver as Vermietung) : createExcelData(ver as Veranstaltung),
     );
-    sheet["!cols"] = [{ wch: 30 }, { wch: 10 }, { wch: 10 }];
+    sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];
     utils.book_append_sheet(
       book,
       sheet,
