@@ -4,7 +4,6 @@ import EinnahmenCard from "@/components/veranstaltung/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/veranstaltung/kasse/AusgabenCard";
 import { KassenzettelFreigabe } from "@/components/veranstaltung/kasse/KassenzettelFreigabe";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { DynamicItem } from "@/widgets/DynamicItem";
 import Kasse from "jc-shared/veranstaltung/kasse";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
@@ -20,7 +19,7 @@ export default function TabKasse() {
     form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
-  useEffect(() => anfangsbestandChanged, [form]);
+  useEffect(anfangsbestandChanged, [form]);
 
   const freigabe = Form.useWatch(["kasse", "kassenfreigabe"]);
 
@@ -47,10 +46,7 @@ export default function TabKasse() {
           />
         </Col>
         <Col xs={12} lg={6}>
-          <DynamicItem
-            nameOfDepending="endbestandEUR"
-            renderWidget={() => <NumberInput disabled name={"endbestandEUR"} label="Endbestand Kasse" decimals={2} suffix={"€"} />}
-          />
+          <NumberInput disabled name={"endbestandEUR"} label="Endbestand Kasse" decimals={2} suffix={"€"} />
         </Col>
       </Row>
     </>

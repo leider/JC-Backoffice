@@ -4,24 +4,8 @@ import deLocale from "@fullcalendar/core/locales/de";
 import React, { useCallback } from "react";
 import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
-import { Tooltip } from "antd";
 import multiMonthPlugin from "@fullcalendar/multimonth";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
-
-export function renderEventContent(eventInfo: { timeText: string; event: { title: string } }) {
-  return (
-    <Tooltip
-      title={
-        <span>
-          {eventInfo.timeText !== "00 Uhr" && <b>{eventInfo.timeText} </b>}
-          <i>{eventInfo.event.title}</i>
-        </span>
-      }
-    >
-      {eventInfo.event.title}
-    </Tooltip>
-  );
-}
+import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 
 export default function TeamCalendar() {
   const getEvents = useCallback(

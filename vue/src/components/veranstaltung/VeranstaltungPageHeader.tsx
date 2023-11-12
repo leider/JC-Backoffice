@@ -20,7 +20,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
-  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
 
   const [isOrga, setIsOrga] = useState<boolean>(false);
 

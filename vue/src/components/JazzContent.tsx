@@ -46,7 +46,7 @@ const JazzContent: React.FC = () => {
     }
   }, [loginState]);
 
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<ItemType[]>([]);
   useEffect(
     () => {
       const localItems: ItemType[] = [];

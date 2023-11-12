@@ -1,7 +1,6 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 const format = new Intl.NumberFormat("de-DE", {

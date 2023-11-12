@@ -1,6 +1,6 @@
 import { Form as AntdForm, Input } from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
-import { RuleRender } from "antd/lib/form";
+import { Rule } from "antd/es/form";
 
 type TTextField = {
   /**
@@ -48,7 +48,7 @@ type TTextField = {
   /**
    * Callback when the input value has changed.
    */
-  onChange?: (value: any) => void;
+  onChange?: (value: string | null) => void;
 
   /**
    * An optional help string.
@@ -64,9 +64,9 @@ type TTextField = {
 
   /**
    * Callback function to generate a unique value.
-   * @type {RuleRender}
+   * @type {Rule}
    */
-  uniqueValuesValidator?: RuleRender;
+  uniqueValuesValidator?: Rule;
 };
 
 /**
@@ -74,9 +74,9 @@ type TTextField = {
  * @return {*}  {JSX.Element}
  */
 export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX.Element => {
-  const [rules, setRules] = useState<any[] | undefined>(undefined);
+  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
-    const rulesToSet: any[] = [];
+    const rulesToSet: Rule[] = [];
     if (props.required) {
       rulesToSet.push({
         required: true,
@@ -115,9 +115,9 @@ type TTextInputEmbedded = {
   disabled?: boolean;
   clearOnDisabled?: boolean;
   textVal?: string;
-  onText?: (value: any) => void;
+  onText?: (value: string | null) => void;
   id?: string;
-  onChange?: (value: any) => void;
+  onChange?: (value: string | null) => void;
 };
 
 const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = (props: TTextInputEmbedded) => {

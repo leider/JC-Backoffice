@@ -14,7 +14,7 @@ interface IDynamicItem {
    * Callback to render the widget.
    * @memberof IDynamicItem
    */
-  renderWidget: (getFieldValue: (name: NamePath) => StoreValue, setFieldsValue: (value: any) => void) => JSX.Element;
+  renderWidget: (getFieldValue: (name: NamePath) => StoreValue) => JSX.Element;
 }
 
 /**
@@ -34,6 +34,6 @@ export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem
       return prevValues[props.nameOfDepending as string] !== curValues[props.nameOfDepending as string];
     }}
   >
-    {({ getFieldValue, setFieldsValue }) => props.renderWidget(getFieldValue, setFieldsValue)}
+    {({ getFieldValue }) => props.renderWidget(getFieldValue)}
   </Form.Item>
 );

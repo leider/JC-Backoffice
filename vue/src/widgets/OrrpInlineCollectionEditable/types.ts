@@ -56,7 +56,6 @@ export type ColType =
  *
  */
 export type ColumnWidth = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-export type ColumnItemSuffix = string | ((row: any) => string);
 
 /**
  * Define a Column in a columnar Widget

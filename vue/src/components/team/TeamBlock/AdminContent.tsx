@@ -1,5 +1,5 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, Divider, Form, notification, Row, theme } from "antd";
+import { Col, Collapse, Divider, Form, notification, Row } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/commons/auth.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,7 +11,6 @@ import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { ButtonInAdminPanel, ButtonPreview } from "@/components/Buttons.tsx";
 import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;
@@ -23,7 +22,6 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());
   const { context } = useAuth();
-  const { token } = theme.useToken();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const isVermietung = useCallback(() => {

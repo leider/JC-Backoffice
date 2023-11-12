@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock, IconProps } from "@/components/Icon";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import _ from "lodash";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
@@ -76,7 +76,7 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
           callback();
         }}
       >
-        <IconForSmallBlock size={16} color={color} iconName={iconName[type] as any} />
+        <IconForSmallBlock size={16} color={color} iconName={iconName[type] as IconProps["iconName"]} />
       </span>
     </Tooltip>
   );

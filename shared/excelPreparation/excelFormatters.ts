@@ -1,7 +1,6 @@
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
 import VeranstaltungKalkulation from "../veranstaltung/veranstaltungKalkulation.js";
 import Vermietung from "../vermietung/vermietung.js";
-import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 
 export function createExcelData(veranstaltung: Veranstaltung) {
   const kasse = veranstaltung.kasse;

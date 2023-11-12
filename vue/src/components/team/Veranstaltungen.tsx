@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { allUsers, veranstaltungenBetweenYYYYMM, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, ConfigProvider, DatePicker, Drawer, Dropdown, Form, Modal, Row, Space, TimeRangePickerProps } from "antd";
+import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
+import { Button, Col, Drawer, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/auth";
@@ -14,9 +14,6 @@ import SingleSelect, { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import _ from "lodash";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
-import { useForm } from "antd/es/form/Form";
-import dayjs, { Dayjs } from "dayjs";
-import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 
 export const TeamContext = createContext<{
@@ -30,7 +27,6 @@ export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
   const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
   const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
-  const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
 
   const [form] = Form.useForm();
   async function loadUsers() {

@@ -25,6 +25,7 @@ export const VeranstaltungContext = createContext<{ form: FormInstance<Veranstal
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
+  const [form] = Form.useForm<Veranstaltung>();
 
   const veranst = useQuery({
     queryKey: ["veranstaltung", url],
@@ -42,7 +43,7 @@ export default function VeranstaltungComp() {
       form.setFieldValue(["kopf", "titel"], "");
       setVeranstaltung(veranst.data);
     }
-  }, [veranst.data]);
+  }, [veranst.data, form]);
 
   useEffect(() => {
     if (opts.data) {
@@ -86,8 +87,6 @@ export default function VeranstaltungComp() {
       queryClient.invalidateQueries({ queryKey: ["optionen"] });
     },
   });
-
-  const [form] = Form.useForm<Veranstaltung>();
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);

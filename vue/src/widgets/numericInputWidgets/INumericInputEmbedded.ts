@@ -59,13 +59,13 @@ export interface INumericInputEmbedded {
    * Callback for when the number is updated.
    * @memberof INumericInputEmbedded
    */
-  onNumber?: (value: any) => void;
+  onNumber?: (value: number | null) => void;
 
   /**
    * Callback for when the number is changed.
    * @memberof INumericInputEmbedded
    */
-  onChange?: (value: any) => void;
+  onChange?: (value: number | null) => void;
   id?: string;
   suffix?: ReactNode;
 }

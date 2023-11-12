@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Col, Collapse, ConfigProvider, Row, theme } from "antd";
+import { Col, Collapse, ConfigProvider, theme } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
-  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     const confirmed = vermietung.kopf.confirmed;

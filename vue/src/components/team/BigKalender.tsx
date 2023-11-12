@@ -7,7 +7,7 @@ import { calendarEventSources } from "@/commons/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { PageHeader } from "@ant-design/pro-layout";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
-import { renderEventContent } from "@/components/team/TeamCalendar.tsx";
+import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";

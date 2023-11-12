@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, ConfigProvider, Space, theme, Tooltip } from "antd";
+import { Col, Collapse, ConfigProvider, theme } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import cssColor from "jc-shared/commons/fieldHelpers.ts";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
-import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
-import Team from "@/components/team/Team.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { ButtonPreview } from "@/components/Buttons.tsx";
 
 interface TeamBlockAdminProps {
@@ -19,7 +15,6 @@ interface TeamBlockAdminProps {
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   const { useToken } = theme;
   const { token } = useToken();
-  const navigate = useNavigate();
   const [color, setColor] = useState<string>("");
   useEffect(
     () => {

@@ -11,6 +11,7 @@ import { calcSpans, createKey } from "./inlineCollectionEditableHelpers";
 import { TOrrpInlineCollectionEditable } from "./IOrrpInlineCollectionEditable";
 import { ColDescWithIdx } from "./types";
 import { WidgetColumn } from "./widgetColumn/WidgetColumn";
+import { Rule } from "antd/es/form";
 
 /**
  * An editable collection table.
@@ -124,7 +125,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                     data-testid={`orp-inline-collection-editable-row-${key}`}
                   >
                     {colDescriptors.map((desc) => {
-                      let uniqueValuesValidator;
+                      let uniqueValuesValidator: Rule | undefined;
                       if (desc.uniqueValues) {
                         uniqueValuesValidator = {
                           validator: (_: any, value: any) => {

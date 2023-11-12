@@ -1,4 +1,5 @@
 import { ColDescWithIdx } from "../types";
+import { Rule } from "antd/es/form";
 
 /**
  * Properties for the Orrp inline collection table widget column component.
@@ -39,6 +40,6 @@ export interface IWidgetColumn {
    * @type {*}
    * @memberof IWidgetColumn
    */
-  uniqueValuesValidator?: any;
+  uniqueValuesValidator?: Rule;
   usersAsAoptions?: { label: string; value: string }[];
 }
