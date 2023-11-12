@@ -84,11 +84,11 @@ function Team() {
         </Col>
       </Row>
       <Drawer
-        title={
+        extra={
           <ButtonWithIcon
             key="cal"
             icon="CalendarWeek"
-            text="Kalender exportieren..."
+            text="ical..."
             type="default"
             href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
           />

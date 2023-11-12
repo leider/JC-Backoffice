@@ -180,14 +180,19 @@ export default function Veranstaltungen() {
         </Col>
       </Row>
       <Drawer
-        title={
-          <ButtonWithIcon
-            key="cal"
-            icon="CalendarWeek"
-            text="Kalender exportieren..."
-            type="default"
-            href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
-          />
+        extra={
+          <>
+            {context?.currentUser?.accessrights?.isOrgaTeam && (
+              <ButtonWithIcon key="bigcal" icon="Calendar2Range" text="Kalenderübersicht" type="default" href="/vue/kalenderuebersicht" />
+            )}
+            <ButtonWithIcon
+              key="cal"
+              icon="CalendarWeek"
+              text="ical..."
+              type="default"
+              href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
+            />
+          </>
         }
         placement="right"
         onClose={() => setDrawerOpen(false)}

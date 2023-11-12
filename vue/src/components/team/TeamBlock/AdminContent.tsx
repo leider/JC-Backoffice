@@ -1,18 +1,17 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Button, Col, Collapse, ConfigProvider, Divider, Form, notification, Row, Space, theme, Tooltip } from "antd";
+import { Col, Collapse, Divider, Form, notification, Row, theme } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/commons/auth.tsx";
-import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { differenceFor } from "jc-shared/commons/compareObjects.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
-import { ButtonInAdminPanel } from "@/components/Buttons.tsx";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
+import { ButtonInAdminPanel, ButtonPreview } from "@/components/Buttons.tsx";
 import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;
@@ -25,7 +24,6 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());
   const { context } = useAuth();
   const { token } = theme.useToken();
-  const navigate = useNavigate();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const isVermietung = useCallback(() => {
@@ -147,22 +145,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
                 {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={isVermietung()} />
                 )}
-                {!isVermietung() && (
-                  <ConfigProvider theme={{ token: { colorPrimary: (token as any)["custom-color-concert"] } }}>
-                    <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
-                      <Button
-                        icon={<IconForSmallBlock size={16} iconName={"EyeFill"} />}
-                        size="middle"
-                        type="primary"
-                        onClick={() =>
-                          navigate({
-                            pathname: `/${"veranstaltung/preview"}/${veranstaltungOderVermietung.url}`,
-                          })
-                        }
-                      />
-                    </Tooltip>
-                  </ConfigProvider>
-                )}
+                {!isVermietung() && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Veranstaltung} />}
               </>
             )}
           </Row>

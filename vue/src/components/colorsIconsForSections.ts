@@ -17,7 +17,7 @@ export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
     staff: "Staff",
   };
 
-  function color(localType = type) {
+  function color(localType = type): string {
     return token[`custom-color-${localType}`];
   }
 

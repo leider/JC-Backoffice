@@ -9,28 +9,17 @@ import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungCo
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 type ButtonProps = {
   disabled?: boolean;
 };
 export function SaveButton({ disabled }: ButtonProps) {
-  return (
-    <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
-      <Button htmlType="submit" icon={<IconForSmallBlock iconName="CheckSquare" />} type="primary" disabled={disabled}>
-        Speichern
-      </Button>
-    </ConfigProvider>
-  );
+  return <ButtonWithIcon text="Speichern" htmlType="submit" icon="CheckSquare" type="primary" disabled={disabled} color="#28a745" />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
-  return (
-    <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
-      <Button htmlType="submit" icon={<IconForSmallBlock iconName="Send" />} type="primary" disabled={disabled}>
-        Senden
-      </Button>
-    </ConfigProvider>
-  );
+  return <ButtonWithIcon text="Senden" htmlType="submit" icon="Send" type="primary" disabled={disabled} color="#28a745" />;
 }
 
 export function NewButtons() {
@@ -97,18 +86,19 @@ export function ExportExcelVermietungButton({ disabled }: ButtonProps) {
   const context = useContext(VermietungContext);
   const form = context!.form;
 
-  const vermietung = useMemo(() => form.getFieldsValue(true), [form]);
-
   function click() {
-    asExcelKalk([new Vermietung(vermietung)]);
+    asExcelKalk([new Vermietung(form.getFieldsValue(true))]);
   }
 
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
-      <Button type="primary" disabled={disabled} icon={<IconForSmallBlock iconName="FileEarmarkSpreadsheet" />} onClick={click}>
-        Kalkulation (Excel)
-      </Button>
-    </ConfigProvider>
+    <ButtonWithIcon
+      text="Kalkulation (Excel)"
+      type="primary"
+      disabled={disabled}
+      icon="FileEarmarkSpreadsheet"
+      onClick={click}
+      color="#5900b9"
+    />
   );
 }
 
@@ -127,29 +117,17 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
     });
   }
 
-  return (
-    <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
-      <Button icon={<IconForSmallBlock iconName="Trash" />} type="primary" disabled={disabled} onClick={callback}>
-        Löschen
-      </Button>
-    </ConfigProvider>
-  );
+  return <ButtonWithIcon text="Löschen" icon="Trash" type="primary" disabled={disabled} onClick={callback} color="#dc3545" />;
 }
 export function CopyButton({ disabled, url, isVermietung }: ButtonProps & { url?: string; isVermietung?: boolean }) {
-  const navigate = useNavigate();
-
-  function callback() {
-    if (!url) {
-      return;
-    }
-    navigate(`/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`);
-  }
-
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: "#6c757d" } }}>
-      <Button icon={<IconForSmallBlock iconName="Files" />} type="primary" disabled={disabled || !url} onClick={callback}>
-        &nbsp;Kopieren
-      </Button>
-    </ConfigProvider>
+    <ButtonWithIcon
+      text="Kopieren"
+      icon="Files"
+      type="primary"
+      disabled={disabled || !url}
+      href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`}
+      color="#6c757d"
+    />
   );
 }

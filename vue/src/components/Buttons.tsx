@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { IconForSmallBlock } from "@/components/Icon";
-import { useNavigate } from "react-router-dom";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import _ from "lodash";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ButtonInAdminPanelProps {
   type: buttonType;
@@ -12,26 +13,29 @@ interface ButtonInAdminPanelProps {
 }
 
 export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
-  const navigate = useNavigate();
-
   const { color, icon } = useColorsAndIconsForSections(type);
 
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
-      <Tooltip title={_.capitalize(type)} color={color()}>
-        <Button
-          icon={<IconForSmallBlock size={16} iconName={icon()} />}
-          size="middle"
-          type="primary"
-          onClick={() =>
-            navigate({
-              pathname: `/${isVermietung ? "vermietung" : "veranstaltung"}/${url}`,
-              search: `page=${type}`,
-            })
-          }
-        />
-      </Tooltip>
-    </ConfigProvider>
+    <ButtonWithIcon
+      tooltipTitle={_.capitalize(type)}
+      icon={icon()}
+      type="primary"
+      href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/${url}?page=${type}`}
+      color={color()}
+    />
+  );
+}
+
+export function ButtonPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  const { token } = theme.useToken();
+  return (
+    <ButtonWithIcon
+      icon="EyeFill"
+      type="primary"
+      href={`/vue/${"veranstaltung/preview"}/${veranstaltung.url}`}
+      tooltipTitle="Vorschau"
+      color={token.colorSuccess}
+    />
   );
 }
 
@@ -102,15 +106,13 @@ export function ButtonStaff({ callback, add }: { add: boolean; callback: () => v
     [add],
   );
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip title={add ? "Zusagen" : "Absagen"} color={color}>
-        <Button
-          icon={<IconForSmallBlock size={14} iconName={add ? "PlusCircleFill" : "DashCircleFill"} />}
-          size="small"
-          type="primary"
-          onClick={callback}
-        />
-      </Tooltip>
-    </ConfigProvider>
+    <ButtonWithIcon
+      size="small"
+      icon={add ? "PlusCircleFill" : "DashCircleFill"}
+      type="primary"
+      onClick={callback}
+      tooltipTitle={add ? "Zusagen" : "Absagen"}
+      color={color}
+    />
   );
 }

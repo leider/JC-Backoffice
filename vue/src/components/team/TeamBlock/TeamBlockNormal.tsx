@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import Team from "@/components/team/Team.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import { ButtonPreview } from "@/components/Buttons.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -47,33 +49,8 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
               key: veranstaltung.id || "",
               style: { backgroundColor: color },
               label: <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={expanded} />,
-              extra: (
-                <Tooltip title="Vorschau" color={(token as any)["custom-color-concert"]}>
-                  <span
-                    onClick={(event) => {
-                      // If you don't want click extra trigger collapse, you can prevent this:
-                      event.stopPropagation();
-                      navigate(`/veranstaltung/preview/${veranstaltung.url}`);
-                    }}
-                  >
-                    <Space style={{ backgroundColor: "#FFF", padding: "0 8px" }}>
-                      <IconForSmallBlock
-                        size={16}
-                        iconName={"EyeFill"}
-                        color={(token as any)["custom-color-concert"]}
-                        style={{
-                          margin: "-4px 0",
-                        }}
-                      />
-                    </Space>
-                  </span>
-                </Tooltip>
-              ),
-              children: (
-                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <TeamContent veranstaltung={veranstaltung} />
-                </ConfigProvider>
-              ),
+              extra: <ButtonPreview veranstaltung={veranstaltung} />,
+              children: <TeamContent veranstaltung={veranstaltung} />,
             },
           ]}
         />
