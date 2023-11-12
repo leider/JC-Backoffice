@@ -79,27 +79,17 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
   }
 
   return (
-    <Row gutter={8}>
-      <Col span={4}>{notNeeded ? <>{label}</> : <b>{label}</b>}</Col>
-      {notNeeded ? (
-        <Col span={14} offset={6}>
-          <Tag>niemand nötig</Tag>
+    !notNeeded && (
+      <Row gutter={8}>
+        <Col span={4}>{<b>{label}</b>}</Col>
+        <Col span={16}>
+          <DisplayNames />{" "}
         </Col>
-      ) : (
-        <>
-          <Col span={16}>
-            <DisplayNames />{" "}
-          </Col>
-          <Col span={4}>
-            {ids.includes(currentUser.id) ? (
-              <ButtonStaff add={false} callback={removeUser} />
-            ) : (
-              <ButtonStaff add={true} callback={addUser} />
-            )}
-          </Col>
-        </>
-      )}
-    </Row>
+        <Col span={4}>
+          {ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />}
+        </Col>
+      </Row>
+    )
   );
 };
 export default TeamStaffRow;

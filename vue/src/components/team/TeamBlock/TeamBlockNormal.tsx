@@ -1,51 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, ConfigProvider, Divider, Space, theme, Tooltip } from "antd";
-import TeamStaffRow from "@/components/team/TeamBlock/TeamStaffRow.tsx";
+import { Col, Collapse, ConfigProvider, Space, theme, Tooltip } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import cssColor from "jc-shared/commons/fieldHelpers.ts";
 import { IconForSmallBlock } from "@/components/Icon.tsx";
 import { useNavigate } from "react-router-dom";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
+import Team from "@/components/team/Team.tsx";
+import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
   initiallyOpen: boolean;
-}
-
-interface ContentProps {
-  veranstaltung: Veranstaltung;
-}
-
-function Content({ veranstaltung }: ContentProps) {
-  const dividerStyle = {
-    marginTop: "4px",
-    marginBottom: "4px",
-    fontWeight: 600,
-  };
-
-  return (
-    <div style={{ padding: 8 }}>
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Kasse
-      </Divider>
-      <TeamStaffRow label="Eins:" sectionName="kasseV" veranstaltung={veranstaltung} />
-      <TeamStaffRow label="Zwei:" sectionName="kasse" veranstaltung={veranstaltung} />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Techniker
-      </Divider>
-      <TeamStaffRow label="Eins:" sectionName="technikerV" veranstaltung={veranstaltung} />
-      <TeamStaffRow label="Zwei:" sectionName="techniker" veranstaltung={veranstaltung} />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Master
-      </Divider>
-      <TeamStaffRow label="&nbsp;" sectionName="mod" veranstaltung={veranstaltung} />
-      <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-        Merchandise
-      </Divider>
-      <TeamStaffRow label="&nbsp;" sectionName="merchandise" veranstaltung={veranstaltung} />
-    </div>
-  );
 }
 
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
@@ -105,7 +71,7 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
               ),
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <Content veranstaltung={veranstaltung}></Content>
+                  <TeamContent veranstaltung={veranstaltung} />
                 </ConfigProvider>
               ),
             },
