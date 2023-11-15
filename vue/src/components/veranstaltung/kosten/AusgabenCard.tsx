@@ -93,25 +93,6 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     );
   }
 
-  function fluegelZeile() {
-    const technik = new Technik(form.getFieldValue("technik"));
-    const fluegelEUR = form.getFieldValue(["kosten", "fluegelstimmerEUR"]);
-    return (
-      technik.fluegel && (
-        <Row gutter={12}>
-          <Col span={18}>
-            <Form.Item>
-              <b>Fluegelstimmer:</b>
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <NumberInputWithDirectValue value={fluegelEUR} suffix="€" decimals={2} />
-          </Col>
-        </Row>
-      )
-    );
-  }
-
   function kassenZeile() {
     const kasse = new Kasse(form.getFieldValue("kasse"));
     return (
@@ -194,7 +175,9 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />
       <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
       <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
-      {fluegelZeile()}
+      {new Technik(form.getFieldValue("technik")).fluegel && (
+        <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} />
+      )}
       <LabelCurrencyRow label="Saalmiete" path={["kosten", "saalmiete"]} />
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
