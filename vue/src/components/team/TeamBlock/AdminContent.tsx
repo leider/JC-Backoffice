@@ -11,6 +11,7 @@ import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { ButtonInAdminPanel, ButtonPreview } from "@/components/Buttons.tsx";
 import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { IconForSmallBlock } from "@/components/Icon.tsx";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;
@@ -122,7 +123,10 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
               setShowMitarbeiter(!showMitarbeiter);
             }}
           >
-            Mitarbeiter...
+            <span>
+              <IconForSmallBlock iconName="UniversalAccess" />
+              &nbsp;...
+            </span>
           </h3>
         </Col>
         <Col span={18}>

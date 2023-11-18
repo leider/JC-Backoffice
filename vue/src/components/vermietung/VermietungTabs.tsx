@@ -9,6 +9,7 @@ import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
+import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 
 export default function VermietungTabs() {
   const context = useContext(VermietungContext);
@@ -22,7 +23,7 @@ export default function VermietungTabs() {
   useEffect(
     () => {
       const page = search.get("page") ?? "";
-      if (["allgemeines", "technik", "ausgaben", "presse"].includes(page)) {
+      if (["allgemeines", "angebot", "technik", "ausgaben", "presse"].includes(page)) {
         setActivePage(page);
       } else {
         setActivePage("allgemeines");
@@ -68,6 +69,11 @@ export default function VermietungTabs() {
         label: <TabLabel type="allgemeines" title="Allgemeines" />,
         children: <TabAllgemeines />,
       };
+      const tabAngebot = {
+        key: "angebot",
+        label: <TabLabel type="angebot" title="Angebot / Vertrag" />,
+        children: <TabAngebot />,
+      };
 
       const tabTechnik = {
         key: "technik",
@@ -86,7 +92,7 @@ export default function VermietungTabs() {
         children: <TabPresse />,
       };
 
-      const result = [tabAllgemeines];
+      const result = [tabAllgemeines, tabAngebot];
       if (brauchtTechnik) {
         result.push(tabTechnik);
       }

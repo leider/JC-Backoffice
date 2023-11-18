@@ -6,14 +6,12 @@ import Kosten from "../veranstaltung/kosten.js";
 import Kopf from "../veranstaltung/kopf.js";
 import Presse from "../veranstaltung/presse.js";
 import Artist from "../veranstaltung/artist.js";
+import Angebot from "./angebot.js";
 
 export default class Vermietung {
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
-  beschreibung? = ""; // legacy
-  titel? = ""; // legacy
-  confirmed? = false; // legacy
   url? = "";
   saalmiete? = undefined;
   brauchtTechnik = false;
@@ -25,6 +23,7 @@ export default class Vermietung {
   presse = new Presse();
   staff = new Staff();
   technik = new Technik();
+  angebot = new Angebot();
 
   toJSON(): object {
     const result = {};
@@ -35,6 +34,7 @@ export default class Vermietung {
       presse: this.presse.toJSON(),
       staff: this.staff.toJSON(),
       technik: this.technik.toJSON(),
+      angebot: this.angebot.toJSON(),
     });
     return result;
   }
@@ -52,19 +52,8 @@ export default class Vermietung {
         presse: new Presse(object.presse),
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
+        angebot: new Angebot(object.angebot),
       });
-      if (object.confirmed) {
-        // leagcy - can be removed 2024
-        this.kopf.confirmed = object.confirmed;
-      }
-      if (object.beschreibung) {
-        // leagcy - can be removed 2024
-        this.kopf.beschreibung = object.beschreibung;
-      }
-      if (object.titel) {
-        // leagcy - can be removed 2024
-        this.kopf.titel = object.titel;
-      }
     }
   }
 

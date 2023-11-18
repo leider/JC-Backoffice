@@ -14,7 +14,7 @@ function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user?: Use
   if (user?.accessrights?.isBookingTeam) {
     return vermietungen;
   }
-  return vermietungen.filter((v) => v.confirmed);
+  return vermietungen.filter((v) => v.kopf.confirmed);
 }
 
 export default {

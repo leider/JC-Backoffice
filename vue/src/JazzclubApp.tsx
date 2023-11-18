@@ -23,7 +23,7 @@ function createTokenWithCustomColors(token: GlobalToken) {
     ausgaben: "#d50f36",
     copy: token.colorFillSecondary,
     hotel: "#66267b",
-    kalkulation: "#d50f36",
+    angebot: "#328300",
     kasse: "#9185be",
     presse: "#95c22e",
     staff: "#dea71f",
