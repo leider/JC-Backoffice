@@ -441,7 +441,7 @@ export async function openVertrag(veranstaltung: Veranstaltung) {
 }
 
 export async function openAngebotRechnung(vermietung: Vermietung) {
-  const pdf = await getForType("pdf", `/pdf/vermietungAngebot/${vermietung.url}/${vermietung.art.toLowerCase()}`);
+  const pdf = await getForType("pdf", `/pdf/vermietungAngebot/${vermietung.url}/${vermietung.art}`);
   if (pdf) {
     showFile(pdf);
   }

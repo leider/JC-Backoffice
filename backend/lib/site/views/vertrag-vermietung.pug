@@ -11,21 +11,20 @@ block adresse
 block content1
   - var start = vermietung.startDatumUhrzeit;
   - var ende = vermietung.endDatumUhrzeit;
-  - var istAngebot = art === "angebot"
+  - var istAngebot = art === "Angebot"
 
   .row
     .col-7
-      p: b #{istAngebot ? "Angebot" : "Rechnung"} an #{vermietung.vertragspartner.name}
+      p: b #{art} an #{vermietung.vertragspartner.name}
     .col-5
       p.text-end Karlsruhe, #{datum.tagMonatJahrLang}
 
   .row
     .col-12
-      p: b.
-        Vermietung unserer Räumlichkeiten am #{start.tagMonatJahrLang} von #{start.uhrzeitKompakt} bis #{ende.uhrzeitKompakt} Uhr.
+      p Vermietung unserer Räumlichkeiten am #{start.tagMonatJahrLang} von #{start.uhrzeitKompakt} bis #{ende.uhrzeitKompakt} Uhr.
       p.
         Sehr geehrte Damen und Herren,<br>
-        wir freuen uns, Ihnen folgendes Angebot unterbreiten zu können.
+        #{istAngebot ? "wir freuen uns, Ihnen folgendes Angebot unterbreiten zu können." : `anbei finden Sie ${art === "Rechnung" ? "unsere Rechnung" : "den Vertrag"}.`}
 
       table.table.table-bordered.table-sm
         - var zeile = 0

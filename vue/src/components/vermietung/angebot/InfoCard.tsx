@@ -54,7 +54,7 @@ export default function InfoCard() {
       </Row>
       <Row gutter={12}>
         <Col span={16}>
-          <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag"]} />
+          <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag", "Rechnung"]} />
         </Col>
         <Col span={8}>
           <DynamicItem
