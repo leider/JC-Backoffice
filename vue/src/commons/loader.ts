@@ -161,7 +161,7 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
     if (result) {
       const vermietung = new Vermietung(result);
       vermietung.reset();
-      vermietung.titel = `Kopie von ${vermietung.titel}`;
+      vermietung.kopf.titel = `Kopie von ${vermietung.kopf.titel}`;
       return vermietung;
     } else {
       return result;
@@ -435,6 +435,13 @@ export async function openKassenzettel(veranstaltung: Veranstaltung) {
 
 export async function openVertrag(veranstaltung: Veranstaltung) {
   const pdf = await getForType("pdf", `/pdf/vertrag/${veranstaltung.url}/${veranstaltung.vertrag.sprache.toLowerCase()}`);
+  if (pdf) {
+    showFile(pdf);
+  }
+}
+
+export async function openAngebotRechnung(vermietung: Vermietung) {
+  const pdf = await getForType("pdf", `/pdf/vermietungAngebot/${vermietung.url}/${vermietung.art.toLowerCase()}`);
   if (pdf) {
     showFile(pdf);
   }

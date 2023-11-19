@@ -7,6 +7,7 @@ import Kopf from "../veranstaltung/kopf.js";
 import Presse from "../veranstaltung/presse.js";
 import Artist from "../veranstaltung/artist.js";
 import Angebot from "./angebot.js";
+import Kontakt from "../veranstaltung/kontakt.js";
 
 export default class Vermietung {
   id?: string;
@@ -16,6 +17,7 @@ export default class Vermietung {
   saalmiete? = undefined;
   brauchtTechnik = false;
   brauchtPresse = false;
+  art = "Angebot";
 
   artist = new Artist();
   kopf = new Kopf();
@@ -24,6 +26,7 @@ export default class Vermietung {
   staff = new Staff();
   technik = new Technik();
   angebot = new Angebot();
+  vertragspartner = new Kontakt();
 
   toJSON(): object {
     const result = {};
@@ -35,6 +38,7 @@ export default class Vermietung {
       staff: this.staff.toJSON(),
       technik: this.technik.toJSON(),
       angebot: this.angebot.toJSON(),
+      vertragspartner: this.vertragspartner.toJSON(),
     });
     return result;
   }
@@ -53,6 +57,7 @@ export default class Vermietung {
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
         angebot: new Angebot(object.angebot),
+        vertragspartner: new Kontakt(object.vertragspartner),
       });
     }
   }

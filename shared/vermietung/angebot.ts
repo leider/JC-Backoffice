@@ -1,3 +1,5 @@
+import renderer from "../commons/renderer.js";
+
 export type AngebotStatus = "offen" | "verschickt" | "angenommen" | "abgerechnet";
 
 export default class Angebot {
@@ -15,6 +17,7 @@ export default class Angebot {
   reinigungBar = 0;
   fluegel = 0;
   status: AngebotStatus = "offen";
+  beschreibung = "";
 
   toJSON(): any {
     return Object.assign({}, this);
@@ -24,9 +27,10 @@ export default class Angebot {
     Object.assign(this, object);
   }
   get saalmieteTotal(): number {
-    const miete = this.saalmiete;
-    const rabatt = (miete * this.saalmieteRabatt) / 100;
-    return miete - rabatt;
+    return this.saalmiete + this.saalmieteRabattEUR;
+  }
+  get saalmieteRabattEUR(): number {
+    return -((this.saalmiete * this.saalmieteRabatt) / 100);
   }
   get tontechnikerTotal(): number {
     return this.tontechnikerAnzahl * this.tontechnikerBetrag;
@@ -41,6 +45,9 @@ export default class Angebot {
     return this.barpersonalAnzahl * this.barpersonalBetrag;
   }
 
+  get renderedBeschreibung(): string {
+    return renderer.render(this.beschreibung || "");
+  }
   get summe(): number {
     return (
       this.saalmieteTotal +

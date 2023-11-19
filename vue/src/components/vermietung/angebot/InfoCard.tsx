@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, ConfigProvider, Form, Radio, Row } from "antd";
+import { Button, Col, ConfigProvider, Form, Radio, Row } from "antd";
 import SimpleMdeReact from "react-simplemde-editor";
 import { IconForSmallBlock } from "@/components/Icon.tsx";
 import * as icons from "react-bootstrap-icons";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
+import SingleSelect from "@/widgets/SingleSelect.tsx";
+import { DynamicItem } from "@/widgets/DynamicItem.tsx";
+import { openAngebotRechnung } from "@/commons/loader.ts";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
 export default function InfoCard() {
+  const veranstContext = useContext(VermietungContext);
+  const form = veranstContext!.form;
+
   function radioOption(icon: keyof typeof icons, label: string, value: AngebotStatus) {
     return {
       label: (
@@ -43,6 +50,30 @@ export default function InfoCard() {
           <Form.Item label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]}>
             <SimpleMdeReact options={{ status: false, spellChecker: false }} />
           </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={16}>
+          <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag"]} />
+        </Col>
+        <Col span={8}>
+          <DynamicItem
+            nameOfDepending={"id"}
+            renderWidget={(getFieldValue) => {
+              return (
+                <Form.Item label="&nbsp;">
+                  <Button
+                    block
+                    type="primary"
+                    disabled={!getFieldValue("id")}
+                    onClick={() => openAngebotRechnung(form.getFieldsValue(true))}
+                  >
+                    Generieren
+                  </Button>
+                </Form.Item>
+              );
+            }}
+          />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>

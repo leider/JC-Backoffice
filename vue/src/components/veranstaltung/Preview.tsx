@@ -260,7 +260,7 @@ export default function Preview() {
 }
 
 function AddressBlock({ kontakt }: { kontakt: Kontakt }) {
-  const lines = kontakt.adresse.split("\r");
+  const lines = kontakt.adresse.match(/[^\r\n]+/g) || [];
   return (
     <address>
       <strong>{kontakt.name}</strong>

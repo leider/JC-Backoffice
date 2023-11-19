@@ -16,7 +16,7 @@ import userstore from "../users/userstore.js";
 import { hashPassword } from "../commons/hashPassword.js";
 import conf from "../../../shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
-import { kassenbericht, kassenzettel, vertrag } from "./pdfGeneration.js";
+import { kassenbericht, kassenzettel, vermietungAngebot, vertrag } from "./pdfGeneration.js";
 import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
 
@@ -183,6 +183,10 @@ app.get("/pdf/kassenzettel/:url", (req, res, next) => {
 
 app.get("/pdf/vertrag/:url/:language", async (req, res, next) => {
   vertrag(res, next, req.params.url, req.params.language);
+});
+
+app.get("/pdf/vermietungAngebot/:url/:art", async (req, res, next) => {
+  vermietungAngebot(res, next, req.params.url, req.params.art);
 });
 
 app.get("/imgzip/:yymm", (req, res, next) => {

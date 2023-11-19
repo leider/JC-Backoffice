@@ -19,23 +19,24 @@ export default class Kontakt {
 
   get strasse(): string {
     if (this.adresse) {
-      const lines = this.adresse.split("\r\n");
-      return lines[0] || "-";
+      const lines = this.adresse.match(/[^\r\n]+/g);
+      return lines?.[0] || "-";
     }
     return "-";
   }
 
   get ort(): string {
     if (this.adresse) {
-      const lines = this.adresse.split("\r\n");
-      return lines[1] || "-";
+      const lines = this.adresse.match(/[^\r\n]+/g);
+      return lines?.[1] || "-";
     }
     return "-";
   }
 
   get einzeiligeAdresse(): string {
     if (this.adresse) {
-      return this.adresse.replace("\r\n", ", ");
+      const lines = this.adresse.match(/[^\r\n]+/g);
+      return lines?.join(", ") || "";
     }
     return "-";
   }

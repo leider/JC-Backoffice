@@ -76,14 +76,16 @@ html
           block content1
         .col-3
           +sidebar
-        .col-12
-          p.text-center(style="margin-top:15px") Seite 1 von 2
+        unless einseitig
+          .col-12
+            p.text-center(style="margin-top:15px") Seite 1 von 2
 
-      #Seite2.row(style="page-break-inside: avoid;")
-        .col-9
-          #content2(style="margin-top:10px")
-          block content2
-        .col-3
-          +sidebar
-        .col-12
-          p.text-center(style="margin-top:15px") Seite 2 von 2
+      unless einseitig
+        #Seite2.row(style="page-break-inside: avoid;")
+          .col-9
+            #content2(style="margin-top:10px")
+            block content2
+          .col-3
+            +sidebar
+          .col-12
+            p.text-center(style="margin-top:15px") Seite 2 von 2

@@ -1,3 +1,5 @@
+import vermietungen from "../../rest/vermietungen";
+
 const __dirname = new URL(".", import.meta.url).pathname;
 import { NextFunction, Response } from "express";
 
@@ -6,6 +8,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 import conf from "../../../shared/commons/simpleConfigure.js";
 import store from "../veranstaltungen/veranstaltungenstore.js";
+import vermietungenstore from "../vermietungen/vermietungenstore.js";
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
 import userstore from "../users/userstore.js";
 import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons.js";
@@ -31,7 +34,19 @@ export async function vertrag(res: Response, next: NextFunction, veranstaltungUr
   return res.render(
     `vertrag-${sprache}`,
     { veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix },
-    generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next)
+    generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next),
+  );
+}
+
+export async function vermietungAngebot(res: Response, next: NextFunction, vermietungUrl: string, art: string) {
+  const vermietung = await vermietungenstore.getVermietung(vermietungUrl);
+  if (!vermietung) {
+    return res.redirect("/");
+  }
+  return res.render(
+    "vertrag-vermietung",
+    { vermietung, datum: new DatumUhrzeit(), art, publicUrlPrefix, einseitig: true },
+    generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next),
   );
 }
 

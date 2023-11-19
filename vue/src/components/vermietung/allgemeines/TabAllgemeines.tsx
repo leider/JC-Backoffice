@@ -4,6 +4,7 @@ import KommentarCard from "@/components/veranstaltung/allgemeines/KommentarCard"
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 import EventCard from "@/components/vermietung/allgemeines/EventCard.tsx";
 import ArtistCard from "@/components/vermietung/allgemeines/ArtistCard.tsx";
+import VertragspartnerCard from "@/components/vermietung/allgemeines/VertragspartnerCard.tsx";
 
 export default function TabAllgemeines() {
   return (
@@ -15,6 +16,7 @@ export default function TabAllgemeines() {
       </Col>
       <Col xs={24} lg={12}>
         <MitarbeiterCard forVermietung />
+        <VertragspartnerCard />
       </Col>
     </Row>
   );
