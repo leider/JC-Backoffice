@@ -182,7 +182,11 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
       <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} />
+      <LabelCurrencyRow label="Catering Musiker (unbar)" path={["kosten", "cateringMusiker"]} />
+      <LabelCurrencyRow label="Catering Personal (unbar)" path={["kosten", "cateringPersonal"]} />
       <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
+      <LabelCurrencyRow label="Tontechniker (unbar)" path={["kosten", "tontechniker"]} />
+      <LabelCurrencyRow label="Lichttechniker (unbar)" path={["kosten", "lichttechniker"]} />
       {kassenZeile()}
       {hotelZeile()}
       <Row gutter={12}>

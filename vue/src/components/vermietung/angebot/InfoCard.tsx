@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, ConfigProvider, Form, Radio, Row } from "antd";
 import SimpleMdeReact from "react-simplemde-editor";
@@ -9,40 +9,41 @@ import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { TextField } from "@/widgets/TextField.tsx";
 
 export default function InfoCard() {
   const veranstContext = useContext(VermietungContext);
   const form = veranstContext!.form;
 
-  function radioOption(icon: keyof typeof icons, label: string, value: AngebotStatus) {
-    return {
-      label: (
-        <b>
-          <IconForSmallBlock iconName={icon} /> &nbsp; {label}
-        </b>
-      ),
-      value: value,
-    };
-  }
+  const statusse = useMemo(() => {
+    function radioOption(icon: keyof typeof icons, label: string, value: AngebotStatus) {
+      return {
+        label: (
+          <b>
+            <IconForSmallBlock iconName={icon} /> &nbsp; {label}
+          </b>
+        ),
+        value: value,
+      };
+    }
+
+    return [
+      radioOption("QuestionCircleFill", "Angebot", "offen"),
+      radioOption("ExclamationCircleFill", "Verschickt", "verschickt"),
+      radioOption("CheckCircleFill", "Angenommen", "angenommen"),
+      radioOption("Coin", "Rechnung", "abgerechnet"),
+    ];
+  }, []);
 
   return (
     <CollapsibleForVeranstaltung suffix="angebot" label="Infos" noTopBorder>
       <Row gutter={12}>
         <Col span={24}>
-          <Form.Item name={["angebot", "status"]} label={<b>Status:</b>} initialValue="offen">
-            <ConfigProvider theme={{ token: { colorPrimary: "#328300" } }}>
-              <Radio.Group
-                optionType="button"
-                buttonStyle="solid"
-                options={[
-                  radioOption("QuestionCircleFill", "Angebot", "offen"),
-                  radioOption("ExclamationCircleFill", "Verschickt", "verschickt"),
-                  radioOption("CheckCircleFill", "Angenommen", "angenommen"),
-                  radioOption("Coin", "Rechnung", "abgerechnet"),
-                ]}
-              />
-            </ConfigProvider>
-          </Form.Item>
+          <ConfigProvider theme={{ token: { colorPrimary: "#328300" } }}>
+            <Form.Item name={["angebot", "status"]} initialValue="offen">
+              <Radio.Group optionType="button" buttonStyle="solid" options={statusse} />
+            </Form.Item>
+          </ConfigProvider>
         </Col>
       </Row>
       <Row gutter={12}>

@@ -35,6 +35,10 @@ export default class Kosten {
   gagenSteuer: string | null = null;
   deal: string | null = null;
   gageBAR = false;
+  cateringMusiker = 0;
+  cateringPersonal = 0;
+  tontechniker = 0;
+  lichttechniker = 0;
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
@@ -78,7 +82,11 @@ export default class Kosten {
       this.werbung1 +
       this.werbung2 +
       this.werbung3 +
-      this.personal
+      this.personal +
+      this.cateringPersonal +
+      this.cateringMusiker +
+      this.tontechniker +
+      this.lichttechniker
     );
   }
 }

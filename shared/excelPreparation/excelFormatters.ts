@@ -39,6 +39,10 @@ export function createExcelData(veranstaltung: Veranstaltung) {
   const werbung2Row = { Art: kosten.werbung2Label, Einnahme: "", Ausgabe: kosten.werbung2 || 0 };
   const werbung3Row = { Art: kosten.werbung3Label, Einnahme: "", Ausgabe: kosten.werbung3 || 0 };
   const personalRow = { Art: "Personal (unbar)", Einnahme: "", Ausgabe: kosten.personal || 0 };
+  const tontechnikerRow = { Art: "Tontechniker", Einnahme: "", Ausgabe: kosten.tontechniker || 0 };
+  const lichttechnikerRow = { Art: "Lichttechniker", Einnahme: "", Ausgabe: kosten.lichttechniker || 0 };
+  const cateringMusikerRow = { Art: "Catering (Musiker)", Einnahme: "", Ausgabe: kosten.cateringMusiker || 0 };
+  const cateringPersonalRow = { Art: "Catering (Personal)", Einnahme: "", Ausgabe: kosten.cateringPersonal || 0 };
   const hotelRow = { Art: "Hotel", Einnahme: "", Ausgabe: veranstaltung.unterkunft.roomsTotalEUR || 0 };
   const hotelTransportRow = { Art: "Hotel (Transport)", Einnahme: "", Ausgabe: veranstaltung.unterkunft.transportEUR || 0 };
 
@@ -63,6 +67,10 @@ export function createExcelData(veranstaltung: Veranstaltung) {
     werbung2Row,
     werbung3Row,
     personalRow,
+    tontechnikerRow,
+    lichttechnikerRow,
+    cateringMusikerRow,
+    cateringPersonalRow,
     hotelRow,
     hotelTransportRow,
   ];

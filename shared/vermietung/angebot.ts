@@ -15,8 +15,15 @@ export default class Angebot {
   barpersonalAnzahl = 1;
   barpersonalBetrag = 0;
   reinigungBar = 0;
+  abenddienst = 0;
   fluegel = 0;
   status: AngebotStatus = "offen";
+  frei1 = "";
+  frei1EUR = 0;
+  frei2 = "";
+  frei2EUR = 0;
+  frei3 = "";
+  frei3EUR = 0;
   beschreibung = "";
 
   toJSON(): any {
@@ -57,7 +64,11 @@ export default class Angebot {
       this.barpersonalTotal +
       this.reinigungHaus +
       this.reinigungBar +
-      this.fluegel
+      this.fluegel +
+      this.frei1EUR +
+      this.frei2EUR +
+      this.frei3EUR +
+      this.abenddienst
     );
   }
 }

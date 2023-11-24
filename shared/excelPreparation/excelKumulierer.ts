@@ -98,6 +98,10 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Veranstaltung): Kennzahlen {
     Flügelstimmer: ausgabe(kosten.fluegelstimmerEUR),
     "Saalmiete (extern)": ausgabe(kosten.saalmiete),
     Personal: ausgabe(kosten.personal),
+    Tontechniker: ausgabe(kosten.tontechniker),
+    Lichttechniker: ausgabe(kosten.lichttechniker),
+    "Catering Musiker": ausgabe(kosten.cateringMusiker),
+    "Catering Personal": ausgabe(kosten.cateringPersonal),
     Hotel: ausgabe(veranstaltung.unterkunft.roomsTotalEUR),
     "Hotel (Transport)": ausgabe(veranstaltung.unterkunft.transportEUR),
   };

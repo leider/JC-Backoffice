@@ -177,8 +177,8 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
                     <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
                       Techniker
                     </Divider>
-                    <AdminStaffRow label="Eins:" sectionName="technikerV" />
-                    <AdminStaffRow label="Zwei:" sectionName="techniker" />
+                    <AdminStaffRow label="Ton:" sectionName="technikerV" />
+                    <AdminStaffRow label="Licht:" sectionName="techniker" />
                   </>
                 )}
                 <Divider orientationMargin={0} orientation="left" style={dividerStyle}>

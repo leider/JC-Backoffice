@@ -40,8 +40,8 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
           Techniker
         </Divider>
       )}
-      <TeamStaffRow label="Eins:" sectionName="technikerV" veranstaltung={veranstaltung} />
-      <TeamStaffRow label="Zwei:" sectionName="techniker" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Ton:" sectionName="technikerV" veranstaltung={veranstaltung} />
+      <TeamStaffRow label="Licht:" sectionName="techniker" veranstaltung={veranstaltung} />
       {masterNeeded && (
         <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
           Master

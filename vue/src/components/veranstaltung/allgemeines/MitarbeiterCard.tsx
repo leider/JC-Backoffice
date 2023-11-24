@@ -78,8 +78,8 @@ export default function MitarbeiterCard({ forVermietung }: { forVermietung?: boo
       <Divider orientation="left" orientationMargin={0} style={dividerStyle}>
         Techniker
       </Divider>
-      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Eins" sectionName="technikerV" />
-      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Zwei" sectionName="techniker" />
+      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Ton" sectionName="technikerV" />
+      <MitarbeiterRow usersAsOptions={usersAsOptions} label="Licht" sectionName="techniker" />
       {!forVermietung && (
         <>
           <Divider orientation="left" orientationMargin={0} style={dividerStyle}>

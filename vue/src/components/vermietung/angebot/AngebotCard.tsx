@@ -7,6 +7,7 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 import Angebot from "jc-shared/vermietung/angebot.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { TextField } from "@/widgets/TextField.tsx";
 
 export default function AngebotCard() {
   const context = useContext(VermietungContext);
@@ -16,7 +17,8 @@ export default function AngebotCard() {
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
     setReadonly(false);
-  }, []);
+    updateSumme();
+  }, [updateSumme, setReadonly]);
 
   function updateSumme() {
     const angebot = new Angebot(form.getFieldValue("angebot"));
@@ -24,6 +26,34 @@ export default function AngebotCard() {
   }
 
   const { lg } = useBreakpoint();
+
+  function FreiRow({ nummer }: { nummer: number }) {
+    return (
+      <Row gutter={12}>
+        <Col span={16}>
+          <DynamicItem
+            nameOfDepending={["angebot", `frei${nummer}EUR`]}
+            renderWidget={(getFieldValue) => {
+              const betrag = getFieldValue(["angebot", `frei${nummer}EUR`]);
+              return (
+                <TextField label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} disabled={readonly} required={betrag > 0} />
+              );
+            }}
+          />
+        </Col>
+        <Col span={8}>
+          <NumberInput
+            name={["angebot", `frei${nummer}EUR`]}
+            label="Betrag"
+            decimals={2}
+            suffix="€"
+            onChange={updateSumme}
+            disabled={readonly}
+          />
+        </Col>
+      </Row>
+    );
+  }
 
   return (
     <CollapsibleForVeranstaltung suffix="angebot" label="Posten" noTopBorder={lg} amount={summe}>
@@ -69,7 +99,7 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput
             name={["angebot", "tontechnikerAnzahl"]}
-            label="Tontechnik (Anzahl)"
+            label="Tontechniker (Anzahl)"
             decimals={0}
             onChange={updateSumme}
             disabled={readonly}
@@ -78,7 +108,7 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput
             name={["angebot", "tontechnikerBetrag"]}
-            label="Tontechnik (Einzelpreis)"
+            label="Tontechniker (Einzelpreis)"
             decimals={2}
             suffix="€"
             onChange={updateSumme}
@@ -106,7 +136,7 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput
             name={["angebot", "lichttechnikerAnzahl"]}
-            label="Lichttechnik (Anzahl)"
+            label="Lichttechniker (Anzahl)"
             decimals={0}
             onChange={updateSumme}
             disabled={readonly}
@@ -115,7 +145,7 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput
             name={["angebot", "lichttechnikerBetrag"]}
-            label="Lichttechnik (Einzelpreis)"
+            label="Lichttechniker (Einzelpreis)"
             decimals={2}
             suffix="€"
             onChange={updateSumme}
@@ -179,6 +209,18 @@ export default function AngebotCard() {
       <Row gutter={12}>
         <Col span={8}>
           <NumberInput
+            name={["angebot", "fluegel"]}
+            label="Flügel (Einzelpreis)"
+            decimals={2}
+            suffix="€"
+            onChange={updateSumme}
+            disabled={readonly}
+          />
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={8}>
+          <NumberInput
             name={["angebot", "barpersonalAnzahl"]}
             label="Bar Personal (Anzahl)"
             decimals={0}
@@ -216,8 +258,8 @@ export default function AngebotCard() {
       <Row gutter={12}>
         <Col span={8}>
           <NumberInput
-            name={["angebot", "fluegel"]}
-            label="Flügel (Einzelpreis)"
+            name={["angebot", "abenddienst"]}
+            label="Abenddienst"
             decimals={2}
             suffix="€"
             onChange={updateSumme}
@@ -245,6 +287,9 @@ export default function AngebotCard() {
           />
         </Col>
       </Row>
+      <FreiRow nummer={1} />
+      <FreiRow nummer={2} />
+      <FreiRow nummer={3} />
     </CollapsibleForVeranstaltung>
   );
 }

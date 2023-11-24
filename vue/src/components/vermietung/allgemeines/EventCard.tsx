@@ -50,7 +50,7 @@ export default function EventCard() {
           <TextField name={["kopf", "titel"]} label="Titel" required />
         </Col>
         <Col span={8}>
-          <NumberInput name={["saalmiete"]} label="Saalmiete" decimals={2} suffix="€" required />
+          <NumberInput name={["saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
         </Col>
       </Row>
       <Row gutter={12}>

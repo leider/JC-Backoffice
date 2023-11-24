@@ -103,7 +103,7 @@ block content1
             if hatRabatt
               td #{""}
             td.text-end: b: +currencyOrEmpty(angebot.barpersonalTotal)
-        if angebot.barpersonalTotal
+        if angebot.reinigungBar
           tr
             td.text-end #{++zeile}.
             td Bar (Reinigung)
@@ -112,6 +112,42 @@ block content1
             if hatRabatt
               td #{""}
             td.text-end: b: +currencyOrEmpty(angebot.reinigungBar)
+        if angebot.abenddienst
+          tr
+            td.text-end #{++zeile}.
+            td Abenddienst
+            td.text-end 1
+            td.text-end: +currencyOrEmpty(angebot.abenddienst)
+            if hatRabatt
+              td #{""}
+            td.text-end: b: +currencyOrEmpty(angebot.abenddienst)
+        if angebot.frei1
+          tr
+            td.text-end #{++zeile}.
+            td #{angebot.frei1}
+            td.text-end 1
+            td.text-end: +currencyOrEmpty(angebot.frei1EUR)
+            if hatRabatt
+              td #{""}
+            td.text-end: b: +currencyOrEmpty(angebot.frei1EUR)
+        if angebot.frei2
+          tr
+            td.text-end #{++zeile}.
+            td #{angebot.frei2}
+            td.text-end 1
+            td.text-end: +currencyOrEmpty(angebot.frei2EUR)
+            if hatRabatt
+              td #{""}
+            td.text-end: b: +currencyOrEmpty(angebot.frei2EUR)
+        if angebot.frei3
+          tr
+            td.text-end #{++zeile}.
+            td #{angebot.frei3}
+            td.text-end 1
+            td.text-end: +currencyOrEmpty(angebot.frei3EUR)
+            if hatRabatt
+              td #{""}
+            td.text-end: b: +currencyOrEmpty(angebot.frei3EUR)
         tr
           td.text-end(colspan=2) Summe netto
           td.text-end(colspan=anzahlSpalten-2): +currencyOrEmpty(angebot.summe)

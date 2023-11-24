@@ -7,10 +7,10 @@ export default function TabAngebot() {
   return (
     <Row gutter={12}>
       <Col xs={24} lg={12}>
-        <InfoCard />
+        <AngebotCard />
       </Col>
       <Col xs={24} lg={12}>
-        <AngebotCard />
+        <InfoCard />
       </Col>
     </Row>
   );

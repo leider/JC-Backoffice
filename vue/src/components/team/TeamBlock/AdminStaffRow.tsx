@@ -27,7 +27,7 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ sectionName, label }: Adm
                 name={["staff", sectionName]}
                 usersAsOptions={usersAsOptions}
                 disabled={notNeeded}
-                style={{ width: "90%" }}
+                style={{ width: "100%" }}
               />
             );
           }}

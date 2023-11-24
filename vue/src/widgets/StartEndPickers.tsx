@@ -48,7 +48,7 @@ function EmbeddedPickers(props: { dates?: StartAndEnd; onDates?: (val: StartAndE
 
 export default function StartEndPickers() {
   return (
-    <Form.Item label={<b>Datum und Uhrzeit:</b>} name="startAndEnd" valuePropName="dates" trigger="onDates">
+    <Form.Item label={<b>Datum und Uhrzeit:</b>} name="startAndEnd" valuePropName="dates" trigger="onDates" required>
       <EmbeddedPickers />
     </Form.Item>
   );
