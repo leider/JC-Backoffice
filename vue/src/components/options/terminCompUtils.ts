@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import _ from "lodash";
 import Termin from "jc-shared/optionen/termin";
+import cloneDeep from "lodash/cloneDeep";
 
 export function toFormObject(termin: Termin): object {
   const result: any = termin.toJSON();
@@ -8,7 +8,7 @@ export function toFormObject(termin: Termin): object {
   return result;
 }
 export function fromFormObjectAsAny(formObject: any): Termin {
-  const fieldsValues = _.cloneDeep(formObject);
+  const fieldsValues = cloneDeep(formObject);
   fieldsValues.startDate = fieldsValues.period[0].toDate();
   fieldsValues.endDate = fieldsValues.period[1].toDate();
 

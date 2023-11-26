@@ -11,10 +11,11 @@ import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import SingleSelect, { LabelAndValue } from "@/widgets/SingleSelect.tsx";
-import _ from "lodash";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
+import sortBy from "lodash/sortBy";
+import isEmpty from "lodash/isEmpty";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -38,7 +39,7 @@ export default function Veranstaltungen() {
   async function loadAlle(period: "zukuenftige" | "vergangene" | "alle") {
     const result = await veranstaltungenForTeam(period);
     const verm = await vermietungenForTeam(period);
-    setAlle(_.sortBy([...result, ...verm], "startDate"));
+    setAlle(sortBy([...result, ...verm], "startDate"));
   }
   useEffect(() => {
     loadUsers();
@@ -67,7 +68,7 @@ export default function Veranstaltungen() {
       return;
     }
     let filtered = alle;
-    if (!_.isEmpty(pressefilter)) {
+    if (!isEmpty(pressefilter)) {
       filtered = filtered.filter((ver) => {
         if (ver.isVermietung && !(ver as Vermietung).brauchtPresse) {
           return true;
@@ -82,11 +83,11 @@ export default function Veranstaltungen() {
         }
         if (pressefilter === PRESSEFILTERS[3]) {
           // no final text
-          return _.isEmpty(ver.presse.text);
+          return isEmpty(ver.presse.text);
         }
         if (pressefilter === PRESSEFILTERS[4]) {
           // no original text
-          return _.isEmpty(ver.presse.originalText);
+          return isEmpty(ver.presse.originalText);
         }
       });
     }

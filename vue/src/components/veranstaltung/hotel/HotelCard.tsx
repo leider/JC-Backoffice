@@ -7,8 +7,8 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import CheckItem from "@/widgets/CheckItem";
 import { Dayjs } from "dayjs";
-import _ from "lodash";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import cloneDeep from "lodash/cloneDeep";
 
 export default function HotelCard() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -31,7 +31,7 @@ export default function HotelCard() {
       if (start) {
         const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
         if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
-          const startCopy = _.cloneDeep(start);
+          const startCopy = cloneDeep(start);
           form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, startCopy]);
         }
       }

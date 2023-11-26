@@ -13,11 +13,13 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import { TextField } from "@/widgets/TextField";
 import SimpleMdeReact from "react-simplemde-editor";
-import _ from "lodash";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
 import Message from "jc-shared/mail/message";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import uniq from "lodash/uniq";
+import uniqBy from "lodash/uniqBy";
+import sortBy from "lodash/sortBy";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -64,7 +66,7 @@ export default function SendMail() {
   useEffect(() => {
     if (mailRuleQuery.data) {
       setRules(mailRuleQuery.data);
-      setRulesDescriptions(_.sortBy(_.uniq(mailRuleQuery.data.map((rule) => rule.name))));
+      setRulesDescriptions(sortBy(uniq(mailRuleQuery.data.map((rule) => rule.name))));
     }
     if (veranstaltungenQuery.data) {
       setVeranstaltungen(veranstaltungenQuery.data);
@@ -73,7 +75,7 @@ export default function SendMail() {
     if (usersQuery.data) {
       const mailinglisten = new Users(usersQuery.data).mailinglisten;
       setMailingLists(mailinglisten);
-      setMailingListsDescriptions(_.sortBy(mailinglisten.map((liste) => liste.name)));
+      setMailingListsDescriptions(sortBy(mailinglisten.map((liste) => liste.name)));
       setUsers(usersQuery.data);
       setUsersAsOptions(usersQuery.data.map((user) => ({ label: user.name, value: user.id })));
     }
@@ -125,7 +127,7 @@ export default function SendMail() {
       name: rule.name,
       email: rule.email,
     }));
-    setEffectiveUsers(_.sortBy(_.uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
+    setEffectiveUsers(sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
   }, [selectedUsers, selectedLists, selectedRules]);
 
   function send() {

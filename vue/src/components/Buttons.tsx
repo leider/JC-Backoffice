@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, ConfigProvider, theme, Tooltip } from "antd";
+import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/components/Icon";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
-import _ from "lodash";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import capitalize from "lodash/capitalize";
 
 interface ButtonInAdminPanelProps {
   type: buttonType;
@@ -17,7 +17,7 @@ export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPan
 
   return (
     <ButtonWithIcon
-      tooltipTitle={_.capitalize(type)}
+      tooltipTitle={capitalize(type)}
       icon={icon()}
       type="primary"
       href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/${url}?page=${type}`}

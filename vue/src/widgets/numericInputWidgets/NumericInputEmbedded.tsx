@@ -1,10 +1,10 @@
 import { Input } from "antd";
-import _ from "lodash";
 import numeral from "numeral";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 
 import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import { INumericInputEmbedded } from "./INumericInputEmbedded";
+import isEqual from "lodash/isEqual";
 
 /**
  * Numeric input component.
@@ -23,7 +23,7 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
     (newValue: number | null, originalStringFromWidget?: string | null) => {
       const oldValue = numeral(number ?? null).value();
       number !== newValue && onNumber!(newValue);
-      if (!_.isEqual(oldValue, newValue)) {
+      if (!isEqual(oldValue, newValue)) {
         onChange?.(newValue);
       }
 

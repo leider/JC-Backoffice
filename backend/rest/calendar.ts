@@ -16,8 +16,8 @@ import terminstore from "../lib/optionen/terminstore.js";
 import vermietungenstore from "../lib/vermietungen/vermietungenstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
-import Vermietung from "jc-shared/vermietung/vermietung";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
+import Vermietung from "jc-shared/vermietung/vermietung.js";
 
 const app = express();
 

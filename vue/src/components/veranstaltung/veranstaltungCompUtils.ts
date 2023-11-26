@@ -1,7 +1,7 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import dayjs, { Dayjs } from "dayjs";
 import { FormInstance } from "antd";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 export type StartAndEnd = {
   start: Dayjs;
@@ -22,7 +22,7 @@ export function fromFormObject(form: FormInstance): Veranstaltung {
 }
 
 export function fromFormObjectAsAny(formObject: any): Veranstaltung {
-  const fieldsValues = _.cloneDeep(formObject);
+  const fieldsValues = cloneDeep(formObject);
   fieldsValues.startDate = fieldsValues.startAndEnd.start.toDate();
   fieldsValues.endDate = fieldsValues.startAndEnd.end.toDate();
   const unterkunft = fieldsValues.unterkunft;

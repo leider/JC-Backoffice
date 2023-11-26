@@ -4,16 +4,16 @@ import { DownloadOutlined, ZoomInOutlined, ZoomOutOutlined } from "@ant-design/i
 import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import _ from "lodash";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
+import isEmpty from "lodash/isEmpty";
 
 export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   function updatePreview(veranstaltung: Veranstaltung) {
     const presse = veranstaltung.presse;
-    const textToUse = _.isEmpty(presse.text) ? presse.originalText : presse.text;
+    const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
     const infoline1 = presse.checked ? "" : "ACHTUNG: Presse ist NICHT OK\n";
-    const infoline2 = _.isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
+    const infoline2 = isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
     presse.checked ? "Presse ist OK" : "ACHTUNG: Presse ist NICHT OK\n";
     setPreview(
       Renderer.render(
@@ -35,6 +35,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
       <div dangerouslySetInnerHTML={{ __html: preview }} />
       {veranstaltung.presse.image.map((img) => (
         <Image
+          key={img}
           src={`/imagepreview/${img}`}
           width={400}
           preview={{

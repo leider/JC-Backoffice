@@ -2,7 +2,7 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
-import { isNil } from "lodash";
+import isNil from "lodash/isNil";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 
 export default function CollapsibleForVeranstaltung({

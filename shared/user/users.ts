@@ -1,8 +1,7 @@
-import uniq from "lodash/uniq.js";
-import flatten from "lodash/flatten.js";
-
-import misc from "../commons/misc.js";
 import User from "./user.js";
+import misc from "../commons/misc.js";
+import flatten from "lodash/flatten.js";
+import uniq from "lodash/uniq.js";
 
 export class Mailingliste {
   name: string;
@@ -33,9 +32,9 @@ class Users {
             misc
               .toArray(groupsFromBody)
               .concat("superusers")
-              .map((group) => this.users.filter((user) => user.gruppen.includes(group)))
-          )
-        )
+              .map((group) => this.users.filter((user) => user.gruppen.includes(group))),
+          ),
+        ),
       );
     }
     if (listenFromBody && listenFromBody.length > 0) {

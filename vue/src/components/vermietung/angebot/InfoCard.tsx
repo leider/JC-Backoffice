@@ -9,7 +9,6 @@ import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
-import { TextField } from "@/widgets/TextField.tsx";
 
 export default function InfoCard() {
   const veranstContext = useContext(VermietungContext);

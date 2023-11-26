@@ -1,5 +1,9 @@
 import { detailedDiff } from "deep-object-diff";
-import _ from "lodash";
+import isEqual from "lodash/isEqual.js";
+import difference from "lodash/difference.js";
+import differenceWith from "lodash/differenceWith.js";
+import map from "lodash/map.js";
+import uniq from "lodash/uniq.js";
 
 export function differenceFor(a = {}, b = {}): string {
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
@@ -9,14 +13,14 @@ export function differenceFor(a = {}, b = {}): string {
 }
 
 export function calculateChangedAndDeleted<T extends { id: string }>(newItems: T[], oldItems: T[]) {
-  const currentIds: string[] = _.map(newItems, "id");
-  const oldIds: string[] = _.map(oldItems, "id");
+  const currentIds: string[] = map(newItems, "id");
+  const oldIds: string[] = map(oldItems, "id");
 
-  const deletedIds = _.difference(oldIds, currentIds);
-  const addedIds = _.difference(currentIds, oldIds);
+  const deletedIds = difference(oldIds, currentIds);
+  const addedIds = difference(currentIds, oldIds);
 
-  const changedIds: string[] = _.map(_.differenceWith(oldItems, newItems, _.isEqual), "id");
-  const allChangedIds = _.uniq(addedIds.concat(changedIds));
+  const changedIds: string[] = map(differenceWith(oldItems, newItems, isEqual), "id");
+  const allChangedIds = uniq(addedIds.concat(changedIds));
 
   const changed = newItems.filter((item) => allChangedIds.includes(item.id)) || [];
   return { deletedIds, changed };

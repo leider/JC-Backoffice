@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Image, Space } from "antd";
 import { DownloadOutlined, ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
 import Renderer from "jc-shared/commons/renderer";
-import _ from "lodash";
 import { imgFullsize } from "@/commons/loader.ts";
 import "../../veranstaltung/presse/preview.css";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungFormatter from "jc-shared/vermietung/vermietungFormatter.ts";
+import isEmpty from "lodash/isEmpty";
 
 export function PressePreview({ vermietung }: { vermietung: Vermietung }) {
   function updatePreview(vermietung: Vermietung) {
     const presse = vermietung.presse;
-    const textToUse = _.isEmpty(presse.text) ? presse.originalText : presse.text;
+    const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
     const infoline1 = presse.checked ? "" : "ACHTUNG: Presse ist NICHT OK\n";
-    const infoline2 = _.isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
+    const infoline2 = isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
     presse.checked ? "Presse ist OK" : "ACHTUNG: Presse ist NICHT OK\n";
     setPreview(
       Renderer.render(

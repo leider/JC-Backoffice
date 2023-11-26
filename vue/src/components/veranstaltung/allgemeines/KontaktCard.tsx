@@ -1,12 +1,12 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt";
 import { Col, Form, Row } from "antd";
 import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
-import _ from "lodash";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import SingleSelect from "@/widgets/SingleSelect";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import uniq from "lodash/uniq";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -19,7 +19,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
 
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
-    const names = _.uniq(kontakte.map((k) => k.name))
+    const names = uniq(kontakte.map((k) => k.name))
       .filter((name) => !!name)
       .sort();
     setAuswahlen(["[temporär]", "[neu]"].concat(names));

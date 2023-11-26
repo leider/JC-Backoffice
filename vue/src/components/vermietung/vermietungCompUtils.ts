@@ -1,7 +1,7 @@
 import Vermietung from "jc-shared/vermietung/vermietung";
 import { Dayjs } from "dayjs";
 import { FormInstance } from "antd";
-import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 export type StartAndEnd = {
   start: Dayjs;
@@ -20,7 +20,7 @@ export function fromFormObject(form: FormInstance): Vermietung {
 }
 
 export function fromFormObjectAsAny(formObject: any): Vermietung {
-  const fieldsValues = _.cloneDeep(formObject);
+  const fieldsValues = cloneDeep(formObject);
   fieldsValues.startDate = fieldsValues.startAndEnd.start.toDate();
   fieldsValues.endDate = fieldsValues.startAndEnd.end.toDate();
 

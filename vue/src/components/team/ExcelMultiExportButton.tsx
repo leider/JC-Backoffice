@@ -8,7 +8,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import { PageHeader } from "@ant-design/pro-layout";
-import _ from "lodash";
+import sortBy from "lodash/sortBy";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -50,7 +50,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
       const [from, to] = form.getFieldValue("zeitraum") as [Dayjs, Dayjs];
       const vers = await veranstaltungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
       const verm = await vermietungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
-      const bestaetigte = _.sortBy([...vers, ...verm], "startDate").filter((ver) => ver.kopf.confirmed);
+      const bestaetigte = sortBy([...vers, ...verm], "startDate").filter((ver) => ver.kopf.confirmed);
       asExcelKalk(bestaetigte);
       setIsOpen(false);
     }
