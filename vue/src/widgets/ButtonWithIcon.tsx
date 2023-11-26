@@ -4,6 +4,7 @@ import { Button, ConfigProvider, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { ButtonHTMLType } from "antd/es/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export default function ButtonWithIcon({
   href,
@@ -18,6 +19,7 @@ export default function ButtonWithIcon({
   color,
   size,
   block,
+  loading,
 }: {
   icon?: IconProps["iconName"];
   text?: string;
@@ -31,8 +33,11 @@ export default function ButtonWithIcon({
   color?: string;
   size?: SizeType;
   block?: boolean;
+  loading?: boolean;
 }) {
   const [button, setButton] = useState<JSX.Element | undefined>(undefined);
+
+  const { sm } = useBreakpoint();
 
   useEffect(() => {
     setButton(
@@ -46,11 +51,13 @@ export default function ButtonWithIcon({
         htmlType={htmlType}
         size={size}
         block={block}
+        title={!sm && text ? text : undefined}
+        loading={loading}
       >
-        {text && text}
+        {sm && text && text}
       </Button>,
     );
-  }, [text, icon, type, onClick, href, target, disabled, htmlType, size]);
+  }, [sm, text, icon, type, onClick, href, target, disabled, htmlType, size, block]);
 
   return color ? (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>

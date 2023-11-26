@@ -32,7 +32,8 @@ export default function HotelCard() {
         const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
         if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
           const startCopy = cloneDeep(start);
-          form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, startCopy]);
+          const end = startCopy.add(1, "day");
+          form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, end]);
         }
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps

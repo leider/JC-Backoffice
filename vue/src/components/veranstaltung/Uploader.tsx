@@ -1,12 +1,12 @@
-import { Button, Col, FormInstance, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
+import { Col, FormInstance, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import { IconForSmallBlock } from "@/components/Icon";
 import React, { useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 interface UploaderParams {
   form: FormInstance<Veranstaltung | Vermietung>;
@@ -80,17 +80,15 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
         <Space align="end">
           <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} specialTagRender={tagRender} />
           <Upload {...uploadprops} accept={onlyImages ? "image/*" : undefined}>
-            <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}> &nbsp; Auswählen</Button>
+            <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" type="default" />
           </Upload>
-          <Button
-            icon={<IconForSmallBlock iconName="Upload" />}
-            type="primary"
+          <ButtonWithIcon
+            text={uploading ? "Lädt..." : "Hochladen"}
+            icon="Upload"
             onClick={saveFiles}
             disabled={fileList.length === 0}
             loading={uploading}
-          >
-            &nbsp; {uploading ? "Lädt..." : "Hochladen"}
-          </Button>
+          />
         </Space>
       </Col>
     </Row>

@@ -7,6 +7,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   function updatePreview(veranstaltung: Veranstaltung) {
@@ -30,6 +31,8 @@ ${presse.fullyQualifiedJazzclubURL}`,
     updatePreview(veranstaltung);
   }, [veranstaltung]);
 
+  const { sm } = useBreakpoint();
+
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
@@ -37,7 +40,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
         <Image
           key={img}
           src={`/imagepreview/${img}`}
-          width={400}
+          width={sm ? 400 : 320}
           preview={{
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (

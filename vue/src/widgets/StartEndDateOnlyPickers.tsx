@@ -29,6 +29,12 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
                     : Promise.reject(new Error("Darf frühestens 1 Woche vor der Veranstaltung liegen"));
                 },
               }),
+              () => ({
+                validator: (_, value: Dayjs[]) => {
+                  const difference = value[1].diff(value[0]);
+                  return difference ? Promise.resolve() : Promise.reject(new Error("Muss mindestens 1 Nacht sein"));
+                },
+              }),
             ]
           : []
       }
