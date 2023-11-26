@@ -72,7 +72,7 @@ function StaffList({
     return <List.Item>{item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}</List.Item>;
   }
 
-  return notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
+  return !notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
 }
 
 export default function Preview() {
@@ -129,14 +129,14 @@ export default function Preview() {
                   header="Kasse"
                   staff={veranstaltung.staff}
                   parts={{ verant: "kasseV", normal: "kasse" }}
-                  notNeeded={veranstaltung.staff.kasseNotNeeded}
+                  notNeeded={veranstaltung.staff.kasseNotNeeded && veranstaltung.staff.kasseVNotNeeded}
                   theUsers={users}
                 />
                 <StaffList
                   header="Technik"
                   staff={veranstaltung.staff}
                   parts={{ verant: "technikerV", normal: "techniker" }}
-                  notNeeded={veranstaltung.staff.technikerNotNeeded}
+                  notNeeded={veranstaltung.staff.technikerNotNeeded && veranstaltung.staff.technikerVNotNeeded}
                   theUsers={users}
                 />
                 <StaffList
