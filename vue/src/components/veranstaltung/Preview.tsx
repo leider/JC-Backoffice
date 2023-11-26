@@ -1,5 +1,5 @@
-import { Button, Col, ConfigProvider, Divider, List, Row, Tooltip } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, ConfigProvider, Divider, List, Row, theme, Tooltip } from "antd";
+import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { PageHeader } from "@ant-design/pro-layout";
 import cssColor from "jc-shared/commons/fieldHelpers";
@@ -69,14 +69,10 @@ function StaffList({
         </>
       );
     }
-    return (
-      <List.Item>
-        {notNeeded ? <span>Nicht nötig</span> : item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}
-      </List.Item>
-    );
+    return <List.Item>{item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}</List.Item>;
   }
 
-  return <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
+  return notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
 }
 
 export default function Preview() {
@@ -103,23 +99,27 @@ export default function Preview() {
     }
   }, [theUsers.data]);
 
+  const { useToken } = theme;
+  const { token } = useToken();
+  const typeColor = (token as any)[`custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`];
+  const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <div>
       <PageHeader
         title={
-          <span className={`text-${cssColor(veranstaltung.kopf.eventTyp)}`}>
+          <span style={titleStyle}>
             {veranstaltung.kopf.titelMitPrefix} {veranstaltung.kopf.presseInEcht}
           </span>
         }
-        subTitle={`am ${veranstaltung.datumForDisplayShort}`}
-      ></PageHeader>
+        subTitle={<span style={titleStyle}>{veranstaltung.datumForDisplayShort}</span>}
+      />
       <Row gutter={12}>
         <Col xs={24} lg={12}>
           <CollapsibleForVeranstaltung suffix="staff" label="Staff">
             <Row gutter={12}>
               <Col span={24}>
                 <StaffList
-                  header="MoD"
+                  header="Master"
                   staff={veranstaltung.staff}
                   parts={{ verant: "mod" }}
                   notNeeded={veranstaltung.staff.modNotNeeded}
