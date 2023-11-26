@@ -1,10 +1,9 @@
 import User from "jc-shared/user/user";
 import React, { useEffect, useState } from "react";
-import * as icons from "react-bootstrap-icons";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { ButtonInUsers } from "@/components/Buttons";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock, icons } from "@/components/Icon";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
 import { deleteUser } from "@/commons/loader.ts";
 
