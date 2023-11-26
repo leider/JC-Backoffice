@@ -27,10 +27,6 @@ export default class Kopf {
     }
   }
 
-  get isValid(): boolean {
-    return this.titel.length > 0;
-  }
-
   private get isKooperation(): boolean {
     return !!this.kooperation && this.kooperation !== "_";
   }

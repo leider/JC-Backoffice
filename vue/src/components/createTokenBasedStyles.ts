@@ -1,31 +1,74 @@
-export const veranstaltungTypeColors: { [index: string]: string } = {
-  classix: "#4faee3",
-  homegrown: "#24719d",
-  concert: "#6c757d",
-  festival: "#9fc442",
-  kooperation: "#9185be",
-  livestream: "#ff29ac",
-  session: "#dea71f",
-  soulcafe: "#f07f31",
-  vermietung: "#f6eee1",
+import cssColor from "jc-shared/commons/fieldHelpers.ts";
+import { GlobalToken, theme } from "antd";
+
+function jazzColors(colorCopy: string) {
+  return {
+    allgemeines: "#05498c",
+    angebot: "#328300",
+    ausgaben: "#d50f36",
+    classix: "#4faee3",
+    concert: "#6c757d",
+    copy: colorCopy,
+    festival: "#9fc442",
+    homegrown: "#24719d",
+    hotel: "#66267b",
+    kasse: "#9185be",
+    kooperation: "#9185be",
+    livestream: "#ff29ac",
+    presse: "#95c22e",
+    session: "#dea71f",
+    soulcafe: "#f07f31",
+    staff: "#dea71f",
+    technik: "#009285",
+    vermietung: "#f6eee1",
+  };
+}
+
+export const customColors: { [index: string]: string | number } = {
+  colorPrimary: "#337ab7",
+  colorLink: "#337ab7",
+  colorTextDisabled: "#333333",
+  borderRadius: 0,
+  fontSize: 12,
+  fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
+  colorError: "#c71c2c",
+  colorSuccess: "#28a745",
+  colorLinkActive: "#2c4862",
+  colorLinkHover: "#2c4862",
+  linkHoverDecoration: "underline",
 };
 
-export function createTokenBasedStyles(document: Document, token: { [p: string]: string | number }) {
+export function useTypeCustomColors() {
+  const { useToken } = theme;
+  const { token } = useToken();
+  const typeColors = jazzColors(token.colorFillSecondary);
+  const keyType = Object.keys(typeColors) as unknown as keyof typeof typeColors;
+
+  function colorForEventTyp(typ: string): string {
+    return typeColors[cssColor(typ) as typeof keyType];
+  }
+
+  return { colorForEventTyp, typeColors };
+}
+
+export function createTokenBasedStyles(document: Document, token: GlobalToken) {
+  const jazzColor = jazzColors(token.colorFillSecondary);
+
   const errorBgColor = token.colorErrorBg;
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
-  const colorPrimary = token.colorPrimary;
+  const colorPrimary = customColors.colorPrimary;
 
-  const colorClasses = Object.keys(veranstaltungTypeColors).map(
+  const colorClasses = (Object.keys(jazzColor) as (keyof typeof jazzColor)[]).map(
     (key) =>
       `.color-${key}{
-      background-color: ${veranstaltungTypeColors[key]};
-      border-color: ${veranstaltungTypeColors[key]};
+      background-color: ${jazzColor[key]};
+      border-color: ${jazzColor[key]};
       color: ${key === "vermietung" ? token.colorText : "#fff"} !important;
       overflow: hidden;
     }
     
     .text-${key}{
-      color: ${veranstaltungTypeColors[key]};
+      color: ${jazzColor[key]};
     }`,
   );
 

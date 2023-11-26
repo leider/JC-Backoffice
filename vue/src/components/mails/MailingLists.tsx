@@ -15,7 +15,8 @@ export default function MailingLists() {
     queryKey: ["users"],
     queryFn: () => allUsers(),
   });
-  const [mailingLists, setMailingLists] = useState<any[]>([]);
+  const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
     allLists: [],
   });
@@ -40,7 +41,8 @@ export default function MailingLists() {
     },
   });
 
-  const [form] = Form.useForm<{ allLists: Mailingliste[] }>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [form] = Form.useForm<{ allLists: any[] }>();
 
   function initializeForm() {
     function toFormObject(liste: Mailingliste): object {

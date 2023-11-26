@@ -5,7 +5,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { optionen as optionenRestCall, saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";

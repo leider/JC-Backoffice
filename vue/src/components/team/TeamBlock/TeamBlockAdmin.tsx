@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, ConfigProvider, theme } from "antd";
+import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import cssColor from "jc-shared/commons/fieldHelpers.ts";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -13,13 +13,12 @@ interface TeamBlockAdminProps {
 }
 
 function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const { useToken } = theme;
-  const { token } = useToken();
   const [color, setColor] = useState<string>("");
+
+  const { colorForEventTyp } = useTypeCustomColors();
   useEffect(
     () => {
-      const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
-      setColor((token as any)[code]);
+      setColor(colorForEventTyp(veranstaltung.kopf.eventTyp));
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [veranstaltung],
   );
@@ -59,7 +58,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   );
 }
 function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  const [tagsForTitle, setTagsForTitle] = useState<any[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     const confirmed = veranstaltung.kopf.confirmed;

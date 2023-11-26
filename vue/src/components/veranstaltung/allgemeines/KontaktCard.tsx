@@ -31,7 +31,10 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
     }
     const kontakt = kontakte.find((k) => k.name === name);
     const result = new Kontakt(kontakt);
-    const values: any = {};
+    const values: {
+      agentur?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
+      hotel?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
+    } = {};
     values[selector] = {
       adresse: result.adresse,
       ansprechpartner: result.ansprechpartner,

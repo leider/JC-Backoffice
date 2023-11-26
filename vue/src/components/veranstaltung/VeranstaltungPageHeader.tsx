@@ -1,14 +1,14 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useState } from "react";
-import { Form, theme } from "antd";
+import { Form } from "antd";
 import { useParams } from "react-router-dom";
-import cssColor from "jc-shared/commons/fieldHelpers";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { useAuth } from "@/commons/auth.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
@@ -16,8 +16,6 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   const { url } = useParams();
 
   const { context } = useAuth();
-  const { useToken } = theme;
-  const { token } = useToken();
   const [typeColor, setTypeColor] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
   const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
@@ -67,15 +65,15 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   });
 
   const [title, setTitle] = useState<string>("");
+  const { colorForEventTyp, typeColors } = useTypeCustomColors();
 
   useEffect(() => {
-    const code = `custom-color-${cssColor(eventTyp)}`;
-    setTypeColor((token as any)[code]);
+    setTypeColor(colorForEventTyp(eventTyp));
     const tempTitle = isNew ? "Neue oder kopierte Veranstaltung" : titel || "";
     setTitle(tempTitle);
     document.title = tempTitle;
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
-  }, [isNew, token, eventTyp, titel, startDate]);
+  }, [isNew, eventTyp, titel, startDate, colorForEventTyp]);
 
   useEffect(() => {
     const taggies: { label: string; color: boolean }[] = [
@@ -114,7 +112,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
       {isNew && (
         <b
           style={{
-            color: (token as any)["custom-color-ausgaben"],
+            color: typeColors["ausgaben"],
           }}
         >
           (Denk daran, alle Felder zu überprüfen und auszufüllen)

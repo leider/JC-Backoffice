@@ -1,9 +1,10 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
 import User from "jc-shared/user/user";
 import { currentUser, wikisubdirs } from "@/commons/loader.ts";
+import { AuthContext, LoginState } from "./authConsts";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
@@ -18,19 +19,6 @@ class AuthApi {
 }
 
 const authApi = new AuthApi();
-
-/**
- * The different loggin states the user can be in.
- * @export
- * @enum {number}
- */
-export enum LoginState {
-  UNKNOWN,
-  PENDING,
-  CREDENTIALS_INVALID,
-  LOGGED_IN,
-  LOGGED_OUT,
-}
 
 interface IUseProvideAuth {
   /**
@@ -81,8 +69,7 @@ function useProvideAuth(): IUseProvideAuth {
   const queryClient = useQueryClient();
 
   function setAuthHeader(token: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (axios.defaults.headers as any).Authorization = `Bearer ${token}`;
+    axios.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
   async function scheduleTokenRefresh(inMs: number) {
@@ -90,7 +77,7 @@ function useProvideAuth(): IUseProvideAuth {
       async () => {
         try {
           const newToken = await authApi.refreshTokenPost();
-          const decoded: any = jose.decodeJwt(newToken.data.token);
+          const decoded = jose.decodeJwt<{ exp: number }>(newToken.data.token);
           setAuthHeader(newToken.data.token);
           scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
         } catch (_) {
@@ -99,12 +86,12 @@ function useProvideAuth(): IUseProvideAuth {
         }
       },
       // request new token one minute before it expires
-      inMs - 60_000
+      inMs - 60_000,
     );
   }
 
   function setTokenAndLoginState(info: string) {
-    const decoded = jose.decodeJwt(info) as { [key: string]: any };
+    const decoded = jose.decodeJwt<{ exp: number }>(info);
     setAuthHeader(info);
     setLoginState(LoginState.LOGGED_IN);
     scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
@@ -128,8 +115,7 @@ function useProvideAuth(): IUseProvideAuth {
 
   async function logout() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      delete (axios.defaults.headers as any).Authorization;
+      delete axios.defaults.headers.Authorization;
       await authApi.logoutManually();
       setLoginState(LoginState.LOGGED_OUT);
     } catch (_) {
@@ -164,23 +150,11 @@ function useProvideAuth(): IUseProvideAuth {
 
 export type Auth = ReturnType<typeof useProvideAuth>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const AuthContext = createContext<Auth>(null as any);
-
 /**
  * Provider component that wraps the app and makes an auth object
  * available to any child component that calls useAuth()
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function AuthProvider({ children }: { children: any }) {
+export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const auth = useProvideAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-}
-
-/**
- * Hook for child components to get the auth object
- * and re-render when it changes.
- */
-export const useAuth = () => {
-  return useContext(AuthContext);
 };

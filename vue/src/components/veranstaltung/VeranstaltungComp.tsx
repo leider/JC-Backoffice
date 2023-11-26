@@ -19,7 +19,7 @@ import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 
 export const VeranstaltungContext = createContext<{ form: FormInstance<Veranstaltung>; optionen: OptionValues; orte: Orte } | null>(null);
 
@@ -126,6 +126,7 @@ export default function VeranstaltungComp() {
 
       const veranst = fromFormObject(form);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const untypedVeranstaltung = veranst as any;
       const originalVeranst = fromFormObjectAsAny(initialValue);
       if (isNew) {

@@ -2,7 +2,7 @@ import MailRule from "jc-shared/mail/mailRule.js";
 
 import pers from "../persistence/persistence.js";
 import misc from "jc-shared/commons/misc.js";
-import Termin from "jc-shared/optionen/termin.js";
+
 const persistence = pers("mailstore");
 
 export default {
@@ -25,8 +25,8 @@ export default {
     return mailRule;
   },
 
-  saveAll: async function saveAll(termine: Termin[]) {
-    await persistence.saveAll(termine);
-    return termine;
+  saveAll: async function saveAll(mailRules: MailRule[]) {
+    await persistence.saveAll(mailRules);
+    return mailRules;
   },
 };

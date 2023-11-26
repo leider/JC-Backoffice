@@ -18,6 +18,7 @@ interface CommonParams {
   /**
    * The initial value of the field
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue?: any;
 
   /**
@@ -59,6 +60,7 @@ interface CommonParams {
    * optional callback for changes;
    * @param value
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
 
   /**

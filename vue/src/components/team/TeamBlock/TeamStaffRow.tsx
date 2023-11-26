@@ -1,7 +1,7 @@
 import { Col, Row, Tag } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
-import { useAuth } from "@/commons/auth.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import User from "jc-shared/user/user.ts";

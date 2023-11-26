@@ -1,5 +1,5 @@
 import { Button, Col, Form, Row, Input } from "antd";
-import { LoginState, useAuth } from "@/commons/auth";
+import { LoginState, useAuth } from "@/commons/authConsts.ts";
 import { Navigate, useLocation } from "react-router-dom";
 import React from "react";
 

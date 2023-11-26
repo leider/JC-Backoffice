@@ -27,7 +27,9 @@ export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem
     noStyle
     shouldUpdate={(prevValues, curValues) => {
       if (Array.isArray(props.nameOfDepending)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const prev = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], prevValues);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const curr = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], curValues);
         return prev !== curr;
       }

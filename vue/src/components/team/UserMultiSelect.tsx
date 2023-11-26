@@ -9,7 +9,7 @@ export default function UserMultiSelect(props: {
   disabled?: boolean;
   style?: CSSProperties;
   label?: string;
-  onChange?: (value: any) => void;
+  onChange?: (value: string[]) => void;
 }) {
   const tagRender = (props: CustomTagProps) => {
     const { label, value, closable, onClose } = props;

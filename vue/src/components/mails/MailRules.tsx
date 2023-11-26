@@ -15,7 +15,7 @@ export default function MailRules() {
     queryFn: mailRulesRestCall,
   });
   const [mailRules, setMailRules] = useState<MailRule[]>([]);
-  const [initialValue, setInitialValue] = useState<{ allRules: any[] }>({
+  const [initialValue, setInitialValue] = useState<{ allRules: MailRule[] }>({
     allRules: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);

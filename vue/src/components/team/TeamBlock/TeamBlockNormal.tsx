@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, ConfigProvider, theme } from "antd";
+import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import cssColor from "jc-shared/commons/fieldHelpers.ts";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import { ButtonPreview } from "@/components/Buttons.tsx";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -13,13 +13,12 @@ interface TeamBlockAdminProps {
 }
 
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const { useToken } = theme;
-  const { token } = useToken();
   const [color, setColor] = useState<string>("");
+  const { colorForEventTyp } = useTypeCustomColors();
+
   useEffect(
     () => {
-      const code = `custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`;
-      setColor((token as any)[code]);
+      setColor(colorForEventTyp(veranstaltung.kopf.eventTyp));
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [veranstaltung],
   );

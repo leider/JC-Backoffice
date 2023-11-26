@@ -3,24 +3,29 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
 import React, { useRef } from "react";
 import { Event } from "jc-shared/programmheft/kalender";
+import { Property } from "csstype";
 
 export default function HeftCalendar(props: { initialDate: string; events: Event[] }) {
-  function renderEventContent(eventInfo: any) {
+  interface LocalUsedEvent {
+    title: string;
+    _def: { extendedProps: { farbe: string } };
+  }
+  function renderEventContent(eventInfo: { event: LocalUsedEvent }) {
     return (
-      <div style={colorFor(eventInfo)}>
+      <div style={colorFor(eventInfo.event)}>
         <i>{eventInfo.event.title}</i>
       </div>
     );
   }
-  function colorFor(event: { event: any }): {
+  function colorFor(event: LocalUsedEvent): {
     backgroundColor: string;
     borderColor: string;
     color: string;
-    whiteSpace: any;
+    whiteSpace: Property.WhiteSpace;
   } {
     return {
-      backgroundColor: event.event._def.extendedProps.farbe,
-      borderColor: event.event._def.extendedProps.farbe,
+      backgroundColor: event._def.extendedProps.farbe,
+      borderColor: event._def.extendedProps.farbe,
       color: "#FFFFFF",
       whiteSpace: "normal",
     };

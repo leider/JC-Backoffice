@@ -1,4 +1,3 @@
-import range from "lodash/range.js";
 import remove from "lodash/remove.js";
 import sortBy from "lodash/fp/sortBy.js";
 import toLower from "lodash/fp/toLower.js";
@@ -89,10 +88,6 @@ export default class OptionValues {
       { name: "38,00", regulaer: 38, rabattErmaessigt: 3, rabattMitglied: 7 },
       { name: "42,00", regulaer: 42, rabattErmaessigt: 3, rabattMitglied: 7 },
     ];
-  }
-
-  noOfEmails(): number[] {
-    return range(1, 16);
   }
 
   addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection: string): void {

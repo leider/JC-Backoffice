@@ -8,6 +8,7 @@ export type StartAndEnd = {
   end: Dayjs;
 };
 export function toFormObject(veranstaltung: Veranstaltung): object {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = veranstaltung.toJSON();
   result.startAndEnd = {
     start: veranstaltung.startDatumUhrzeit.value,
@@ -21,6 +22,7 @@ export function fromFormObject(form: FormInstance): Veranstaltung {
   return fromFormObjectAsAny(form.getFieldsValue(true));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function fromFormObjectAsAny(formObject: any): Veranstaltung {
   const fieldsValues = cloneDeep(formObject);
   fieldsValues.startDate = fieldsValues.startAndEnd.start.toDate();

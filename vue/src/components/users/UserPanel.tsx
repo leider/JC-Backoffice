@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { ButtonInUsers } from "@/components/Buttons";
-import { IconForSmallBlock, icons } from "@/components/Icon";
+import { IconForSmallBlock } from "@/components/Icon";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
 import { deleteUser } from "@/commons/loader.ts";
+import { icons } from "@/components/Icons.tsx";
 
 export default function UserPanel({ user, currentUser, loadUsers }: { user: User; currentUser: User; loadUsers: () => void }) {
   const [expanded, setExpanded] = useState<boolean>(false);

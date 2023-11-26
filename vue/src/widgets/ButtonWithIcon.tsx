@@ -57,7 +57,7 @@ export default function ButtonWithIcon({
         {sm && text && text}
       </Button>,
     );
-  }, [sm, text, icon, type, onClick, href, target, disabled, htmlType, size, block]);
+  }, [sm, text, icon, type, onClick, href, target, disabled, htmlType, size, block, loading]);
 
   return color ? (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>

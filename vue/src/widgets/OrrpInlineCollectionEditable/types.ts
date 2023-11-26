@@ -12,16 +12,19 @@ export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl" | number;
 export type CollectionColDesc = Omit<ColDesc, "width" | "fieldName"> & {
   width: CollectionColumnWidth;
   fieldName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only
   labelsAndValues?: LabelAndValue[];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionCallbackType = (item: any, idx: number) => void;
 
 export interface ActionParams {
   copy?: boolean;
   copyCallback?: ActionCallbackType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   deleteCallback?: (items: any[]) => void;
   askBeforeDelete?: boolean;
   edit?: boolean;
@@ -72,10 +75,12 @@ export interface ColDesc {
   urlPrefix?: string;
   actionParams?: ActionParams;
   required?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isPercentage?: (row: any) => boolean;
   /**
    * use only if you do not provide an initial value for the collection itself
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue?: any;
   min?: number | string;
   exclusiveMin?: boolean;

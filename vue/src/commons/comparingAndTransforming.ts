@@ -6,7 +6,8 @@ import isEqual from "lodash/isEqual";
  *
  * @param data an object
  */
-export function stripNullOrUndefined<T>(data: T & { [index: string]: any }): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function stripNullOrUndefined<T>(data: T & { [index: string]: any }): T {
   if (!data) {
     return data;
   }
@@ -23,7 +24,8 @@ export function stripNullOrUndefined<T>(data: T & { [index: string]: any }): T {
   return data;
 }
 
-export function withoutNulldocUndefined<T>(data: T & { [p: string]: any }, propertiesToIgnore?: string[]): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function withoutNullOrUndefinedStrippedBy<T>(data: T & { [p: string]: any }, propertiesToIgnore?: string[]): T {
   const clone = cloneDeep(data);
   propertiesToIgnore?.forEach((key) => {
     delete clone[key];
@@ -31,6 +33,7 @@ export function withoutNulldocUndefined<T>(data: T & { [p: string]: any }, prope
   return stripNullOrUndefined(clone);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function areDifferent(left: any, right: any, propertiesToIgnore?: string[]) {
-  return !isEqual(withoutNulldocUndefined(left, propertiesToIgnore), withoutNulldocUndefined(right, propertiesToIgnore));
+  return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
 }

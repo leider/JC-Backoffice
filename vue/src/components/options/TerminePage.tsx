@@ -13,6 +13,7 @@ import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCo
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
   const [termine, setTermine] = useState<Termin[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<{ allTermine: any[] }>({
     allTermine: [],
   });
@@ -35,7 +36,8 @@ export default function TerminePage() {
     },
   });
 
-  const [form] = Form.useForm<{ allTermine: Termin[] }>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [form] = Form.useForm<{ allTermine: any[] }>();
 
   function initializeForm() {
     const deepCopy = {

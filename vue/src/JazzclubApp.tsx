@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/components/JazzContent";
-import { App, ConfigProvider, GlobalToken, theme } from "antd";
-import { createTokenBasedStyles, veranstaltungTypeColors } from "@/components/createTokenBasedStyles";
+import { App, ConfigProvider, theme } from "antd";
+import { createTokenBasedStyles, customColors } from "@/components/createTokenBasedStyles";
 import { AuthProvider } from "@/commons/auth";
 import "./JC-styles.css";
 import locale_de from "antd/locale/de_DE";
@@ -15,57 +15,22 @@ const queryClient = new QueryClient({
     },
   },
 });
-const { useToken } = theme;
-
-function createTokenWithCustomColors(token: GlobalToken) {
-  const jc_colors: { [index: string]: string } = {
-    allgemeines: "#05498c",
-    ausgaben: "#d50f36",
-    copy: token.colorFillSecondary,
-    hotel: "#66267b",
-    angebot: "#328300",
-    kasse: "#9185be",
-    presse: "#95c22e",
-    staff: "#dea71f",
-    technik: "#009285",
-  };
-  const result: { [index: string]: string | number } = {};
-  Object.keys(jc_colors).forEach((key) => {
-    result[`custom-color-${key}`] = jc_colors[key];
-  });
-  Object.keys(veranstaltungTypeColors).forEach((key) => {
-    result[`custom-color-${key}`] = veranstaltungTypeColors[key];
-  });
-  result.colorPrimary = "#337ab7";
-  result.colorTextDisabled = "#333333";
-  result.borderRadius = 0;
-  result.fontSize = 12;
-  result.fontFamily = "Montserrat, Helvetica, Arial, sans-serif;";
-  result.colorError = "#c71c2c";
-  result.colorSuccess = "#28a745";
-  result.colorLink = result.colorPrimary;
-  result.colorLinkActive = "#2c4862";
-  result.colorLinkHover = "#2c4862";
-  result.linkHoverDecoration = "underline";
-
-  return result;
-}
 
 function JazzclubApp() {
+  const { useToken } = theme;
   const { token } = useToken();
-  const jcToken = createTokenWithCustomColors(token);
-  createTokenBasedStyles(document, jcToken);
+
+  createTokenBasedStyles(document, token);
   numeral.localeData("de").delimiters.thousands = ".";
   numeral.locale("de");
-
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
-          token: jcToken,
+          token: customColors,
           components: {
             Checkbox: {
-              colorPrimary: jcToken.colorSuccess as string,
+              colorPrimary: customColors.colorSuccess as string,
             },
           },
         }}

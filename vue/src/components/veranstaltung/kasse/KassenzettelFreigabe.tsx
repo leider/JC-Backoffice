@@ -3,7 +3,7 @@ import { IconForSmallBlock } from "@/components/Icon";
 import { allUsers, openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { TextField } from "@/widgets/TextField";
 import { ButtonKassenzettel } from "@/components/Buttons";

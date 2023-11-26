@@ -5,7 +5,7 @@ import User from "../../user/user.js";
 import Vermietung from "../../vermietung/vermietung.js";
 
 describe("mixVeranstaltungenMitUsers mixes correctly", () => {
-  const vveranstaltungNoStaff = new Veranstaltung({});
+  const veranstaltungNoStaff = new Veranstaltung({});
   const veranstaltung1 = new Veranstaltung({ staff: { kasse: ["Peter"] } });
   const veranstaltung2 = new Veranstaltung({ staff: { kasse: ["Paul"] } });
   const veranstaltung3 = new Veranstaltung({ staff: { kasse: ["Peter", "Paul"] } });
@@ -20,7 +20,7 @@ describe("mixVeranstaltungenMitUsers mixes correctly", () => {
   });
 
   it("if veranstaltung has no staff", () => {
-    const result = mixVeranstaltungenMitUsers([vveranstaltungNoStaff], [peter]);
+    const result = mixVeranstaltungenMitUsers([veranstaltungNoStaff], [peter]);
     expect(result).to.eql([]);
   });
 
@@ -40,7 +40,7 @@ describe("mixVeranstaltungenMitUsers mixes correctly", () => {
   });
 
   it("altogether mix", () => {
-    const result = mixVeranstaltungenMitUsers([veranstaltung1, veranstaltung2, veranstaltung3, vveranstaltungNoStaff], [peter, paul]);
+    const result = mixVeranstaltungenMitUsers([veranstaltung1, veranstaltung2, veranstaltung3, veranstaltungNoStaff], [peter, paul]);
     expect(result).to.eql([
       { veranstaltung: veranstaltung1, user: peter },
       { veranstaltung: veranstaltung3, user: peter },
@@ -49,7 +49,7 @@ describe("mixVeranstaltungenMitUsers mixes correctly", () => {
 
   it("altogether mix with Vermietung", () => {
     const result = mixVeranstaltungenMitUsers(
-      [veranstaltung1, veranstaltung2, veranstaltung3, vveranstaltungNoStaff, vermietung],
+      [veranstaltung1, veranstaltung2, veranstaltung3, veranstaltungNoStaff, vermietung],
       [peter, paul],
     );
     expect(result).to.eql([

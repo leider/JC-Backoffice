@@ -8,7 +8,7 @@ import StartEndPickers from "@/widgets/StartEndPickers";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";

@@ -101,9 +101,6 @@ export default class Veranstaltung {
   get isVermietung(): boolean {
     return false;
   }
-  get isValid(): boolean {
-    return this.kopf.isValid && this.startDatumUhrzeit.istVorOderAn(this.endDatumUhrzeit);
-  }
 
   static createUrlFrom(date: Date, titel: string): string {
     return DatumUhrzeit.forJSDate(date).fuerCalendarWidget + "-" + Misc.normalizeString(titel);

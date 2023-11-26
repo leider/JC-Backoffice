@@ -4,7 +4,7 @@ import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/veranstaltung/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/components/veranstaltung/Uploader";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";

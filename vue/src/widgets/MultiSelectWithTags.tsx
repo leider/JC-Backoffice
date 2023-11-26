@@ -9,6 +9,7 @@ export default function MultiSelectWithTags(props: {
   options: string[];
   style?: CSSProperties;
   noAdd?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
   specialTagRender?: (props: CustomTagProps) => JSX.Element;
 }) {

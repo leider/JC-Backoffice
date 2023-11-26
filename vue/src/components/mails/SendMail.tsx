@@ -7,7 +7,7 @@ import { Col, Form, Row, Tag } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User from "jc-shared/user/user";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
@@ -87,7 +87,14 @@ export default function SendMail() {
     }
   }, [context]);
 
-  const [form] = Form.useForm<any>();
+  const [form] = Form.useForm<{
+    subject: string;
+    markdown: string;
+    selectedRules: MailRule[];
+    selectedVeranstaltungen: Veranstaltung[];
+    selectedLists: Mailingliste[];
+    selectedUsers: User[];
+  }>();
 
   function initializeForm() {
     document.title = "Manuelle Nachricht";

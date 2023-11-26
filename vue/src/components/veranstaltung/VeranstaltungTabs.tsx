@@ -13,7 +13,7 @@ import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "@/commons/auth.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 export interface VeranstaltungTabProps {
@@ -47,7 +47,7 @@ export default function VeranstaltungTabs() {
       setActivePage("allgemeines");
       setSearch({ page: "allgemeines" }, { replace: true });
     }
-  }, [search]);
+  }, [search, setSearch]);
 
   function TabLabel({ title, type }: { type: buttonType; title: string }) {
     const { icon, color } = useColorsAndIconsForSections();

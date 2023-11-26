@@ -5,12 +5,14 @@ export class Ical {
   url = "";
   typ: TerminType = "Sonstiges";
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
     if (object) {
       Object.assign(this, object);
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
     return Object.assign({}, this);
   }
@@ -24,20 +26,17 @@ export default class FerienIcals {
   id = "ferienIcals";
   icals: Ical[] = [];
 
-  static fromJSON(object?: any): FerienIcals {
-    return new FerienIcals(object);
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
     if (object && object.icals) {
-      this.icals = (object.icals || []).map((each: any) => new Ical(each));
+      this.icals = ((object.icals || []) as Ical[]).map((each) => new Ical(each));
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
-    const res: any = {};
-    Object.assign(res, this);
-    res.icals = this.icals.map((i) => i.toJSON());
-    return res;
+    return Object.assign({}, this, {
+      icals: this.icals.map((i) => i.toJSON()),
+    });
   }
 }

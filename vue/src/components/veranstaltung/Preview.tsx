@@ -1,8 +1,7 @@
-import { Button, Col, ConfigProvider, Divider, List, Row, theme, Tooltip } from "antd";
+import { Button, Col, ConfigProvider, Divider, List, Row, Tooltip } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { PageHeader } from "@ant-design/pro-layout";
-import cssColor from "jc-shared/commons/fieldHelpers";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +13,8 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import renderer from "jc-shared/commons/renderer";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 import Kontakt from "jc-shared/veranstaltung/kontakt";
-import { useAuth } from "@/commons/auth.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 function ButtonAbendkasse({ callback }: { callback: () => void }) {
   const { color, icon } = useColorsAndIconsForSections("kasse");
@@ -99,9 +99,9 @@ export default function Preview() {
     }
   }, [theUsers.data]);
 
-  const { useToken } = theme;
-  const { token } = useToken();
-  const typeColor = (token as any)[`custom-color-${cssColor(veranstaltung.kopf.eventTyp)}`];
+  const { colorForEventTyp } = useTypeCustomColors();
+
+  const typeColor = colorForEventTyp(veranstaltung.kopf.eventTyp);
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <div>

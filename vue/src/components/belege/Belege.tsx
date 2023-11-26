@@ -2,17 +2,17 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { uploadBeleg } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, DatePicker, Form, Row, Upload, UploadFile, UploadProps } from "antd";
-import { IconForSmallBlock } from "@/components/Icon";
-import dayjs from "dayjs";
+import { Col, DatePicker, Form, Row, Upload, UploadFile, UploadProps } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RcFile } from "antd/es/upload";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 export default function Belege() {
   const [canSend, setCanSend] = useState<boolean>(false);
 
-  const [form] = Form.useForm<any>();
+  const [form] = Form.useForm<{ datum: Dayjs; kommentar: string | null }>();
 
   document.title = "Beleg Hochladen";
 
@@ -85,16 +85,15 @@ export default function Belege() {
           </div>
         }
         extra={[
-          <Button
+          <ButtonWithIcon
+            text={uploading ? "Lädt..." : "Hochladen"}
             key="sendBeleg"
             htmlType="submit"
-            icon={<IconForSmallBlock iconName="Upload" />}
+            icon="Upload"
             type="primary"
             disabled={!canSend}
             loading={uploading}
-          >
-            {uploading ? "Lädt..." : "Hochladen"}
-          </Button>,
+          />,
         ]}
       ></PageHeader>
       <Row gutter={12}>
@@ -106,7 +105,7 @@ export default function Belege() {
         <Col span={12}>
           <Row>
             <Upload {...uploadprops}>
-              <Button icon={<IconForSmallBlock iconName="FileEarmarkPlus" />}>Auswählen</Button>
+              <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" />
             </Upload>
           </Row>
         </Col>

@@ -1,7 +1,7 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
 import { Col, Collapse, Divider, Form, notification, Row } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { useAuth } from "@/commons/auth.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -19,6 +19,7 @@ interface ContentProps {
 
 export default function AdminContent({ veranstaltungOderVermietung: veranVermiet }: ContentProps) {
   const [form] = Form.useForm();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());

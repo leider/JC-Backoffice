@@ -1,11 +1,10 @@
 import { IconProps } from "@/components/Icon";
-import { theme } from "antd";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 export type buttonType = "allgemeines" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 
 export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
-  const { useToken } = theme;
-  const { token } = useToken() as any;
+  const { typeColors } = useTypeCustomColors();
 
   const icons: { [index: string]: IconProps["iconName"] } = {
     allgemeines: "Keyboard",
@@ -19,7 +18,7 @@ export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
   };
 
   function color(localType = type): string {
-    return token[`custom-color-${localType}`];
+    return typeColors[localType];
   }
 
   function icon(localType = type): IconProps["iconName"] {

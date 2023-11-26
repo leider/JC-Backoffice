@@ -3,7 +3,7 @@ import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons
 import { Button, Col, Drawer, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { IconForSmallBlock } from "@/components/Icon";

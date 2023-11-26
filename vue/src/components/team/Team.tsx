@@ -3,7 +3,7 @@ import { allUsers, veranstaltungenForTeam } from "@/commons/loader.ts";
 import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";

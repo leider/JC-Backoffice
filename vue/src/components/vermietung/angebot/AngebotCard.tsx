@@ -15,10 +15,12 @@ export default function AngebotCard() {
 
   const [summe, setSumme] = useState<number>(0);
   const [readonly, setReadonly] = useState<boolean>(false);
+
   useEffect(() => {
     setReadonly(false);
     updateSumme();
-  }, [updateSumme, setReadonly]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function updateSumme() {
     const angebot = new Angebot(form.getFieldValue("angebot"));

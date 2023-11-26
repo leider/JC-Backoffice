@@ -7,7 +7,7 @@ import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtil
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/components/Icon";
-import { useAuth } from "@/commons/auth";
+import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 

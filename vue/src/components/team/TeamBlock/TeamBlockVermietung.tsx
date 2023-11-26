@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Collapse, ConfigProvider, theme } from "antd";
+import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
   const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
@@ -41,13 +42,13 @@ interface TeamBlockVermietungProps {
 
 export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamBlockVermietungProps) {
   const [color, setColor] = useState<string>("");
-  const { useToken } = theme;
-  const { token } = useToken();
+  const { typeColors } = useTypeCustomColors();
+
   useEffect(
     () => {
-      setColor((token as any)["custom-color-vermietung"]);
+      setColor(typeColors["vermietung"]);
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [vermietung],
+    [],
   );
 
   const [expanded, setExpanded] = useState<boolean>();

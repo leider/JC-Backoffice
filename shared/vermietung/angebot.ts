@@ -26,10 +26,12 @@ export default class Angebot {
   frei3EUR = 0;
   beschreibung = "";
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
     return Object.assign({}, this);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
     Object.assign(this, object);
   }

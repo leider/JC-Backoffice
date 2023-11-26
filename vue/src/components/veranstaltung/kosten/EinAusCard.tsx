@@ -35,6 +35,7 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
     return `${formatToGermanNumberString(amount)} €`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnType<any>[] = [
     {
       title: "",
