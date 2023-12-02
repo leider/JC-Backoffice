@@ -120,12 +120,12 @@ block content2
       p.
         §15 The contractual parties assure by their signature, that they comprehend the agreement, that they are in full legal capacity and authorized to sign.
 
-      .row(style="margin-top: 24px")
+      .row.mt-4
         .col-6
-          +signbox('Place/Date', 'Artist')
-          div(style="margin-top: 5px")
-          +signbox('Place/Date', 'Organizer', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          +signbox('Artist', 'Place/Date')
+          .mt-3
+          +signbox('Organizer', 'Place/Date', 'Karlsruhe, ' + datum.tagMonatJahrLang)
         .col-6
           +signbox('Signature', 'Name of Artist')
-          div(style="margin-top: 5px")
+          .mt-3
           +signbox('Signature', 'Name of Organizer', 'DUMMY', true)

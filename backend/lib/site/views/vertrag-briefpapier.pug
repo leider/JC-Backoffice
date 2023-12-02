@@ -1,17 +1,17 @@
 mixin signbox(title, party, optionalText, unterschrift)
   .row
-    .col-4
-      p(style="line-height:3;") #{title}:
-    .col-8
-      if (optionalText)
-        if (unterschrift)
-          p(style="line-height:3;border-bottom:1px dotted")
-            img(src=publicUrlPrefix + '/reporting/niklas.png', height="22")
+    .col-3
+      p.small #{title}:
+    .col-9
+      p.mb-0(style="border-bottom:1px dotted")
+        if (optionalText)
+          if (unterschrift)
+            img(src=publicUrlPrefix + '/reporting/niklas.png', height="22", style="margin-top:-10px")
+          else
+            | #{optionalText}
         else
-          p(style="line-height:3;border-bottom:1px dotted;") #{optionalText}
-      else
-        p(style="line-height:3;border-bottom:1px dotted;") &nbsp;
-      p.text-center(style="margin-top:-10px; font-size:6px;") #{party}
+          | &nbsp;
+      p.small.text-center #{party}
 
 mixin bild(name)
   div(style="margin-top:40px")

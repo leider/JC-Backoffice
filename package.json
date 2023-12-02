@@ -24,7 +24,6 @@
     "lodash": "4.17.21"
   },
   "devDependencies": {
-    "@prettier/plugin-pug": "3.0.0",
     "@types/chai": "4.3.11",
     "@types/lodash": "4.14.202",
     "@types/mocha": "10.0.6",

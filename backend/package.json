@@ -24,14 +24,16 @@
     "nodemailer": "6.9.7",
     "passport": "0.7.0",
     "passport-jwt": "4.0.1",
+    "pug": "3.0.2",
     "puppeteer": "21.5.2",
-    "sharp": "0.32.6",
+    "sharp": "0.33.0",
     "simple-configure": "0.1.6",
     "superagent": "8.1.2",
     "uuid": "9.0.1",
     "winston": "3.11.0"
   },
   "devDependencies": {
+    "@prettier/plugin-pug": "3.0.0",
     "@types/adm-zip": "0.5.5",
     "@types/body-parser": "1.19.5",
     "@types/compression": "1.7.5",

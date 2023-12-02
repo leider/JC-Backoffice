@@ -1,27 +1,12 @@
-// we are overriding the following values from the original bootstrap variables.scss
+  // we are overriding the following values from the original bootstrap variables.scss
 
-$enable-responsive-font-sizes: true;
-
-$primary: #337ab7;
-$warning: #f5bd7e;
-$info: #5e8db3;
-
-$font-family-sans-serif: "Montserrat", Helvetica, Arial, sans-serif;
+$font-family-sans-serif: "Montserrat";
 
 $font-size-base: 0.8rem;
-$rfs-base-font-size: 0.8rem;
 
 $headings-font-weight: bold;
 $small-font-size: 60%;
 
 $grid-gutter-width: 16px;
-
-$label-margin-bottom: 0rem;
-
-$input-disabled-bg: #f8f9fa;
-$input-color: #212529;
-
-$custom-control-indicator-checked-bg: #28a745;
-$custom-control-indicator-checked-disabled-bg: rgba(#28a745, 0.5);
 
 $print-page-size: a4;

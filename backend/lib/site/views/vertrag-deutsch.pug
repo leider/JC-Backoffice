@@ -127,12 +127,12 @@ block content2
       p.
         §15 Die Vertragspartner versichern durch ihre Unterschrift, dass sie den Vertrag verstanden haben, in vollem Umfang geschäftsfähig und zur Unterschrift bevollmächtigt sind
 
-      .row(style="margin-top:24px;")
+      .row.mt-4
         .col-6
-          +signbox('Ort/Datum', 'Künstler')
-          div(style="margin-top:5px;")
-          +signbox('Ort/Datum', 'Veranstalter', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          +signbox('Künstler', 'Ort/Datum')
+          .mt-3
+          +signbox('Veranstalter', 'Ort/Datum', 'Karlsruhe, ' + datum.tagMonatJahrLang)
         .col-6
           +signbox('Unterschrift', 'Name Künstler')
-          div(style="margin-top:5px;")
+          .mt-3
           +signbox('Unterschrift', 'Name Veranstalter', 'DUMMY', true)
