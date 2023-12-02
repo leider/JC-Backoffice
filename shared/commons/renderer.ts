@@ -58,7 +58,7 @@ export default {
     if (content === undefined || content === null) {
       return "";
     }
-    const rendered = marked(evalTags(content, subdir));
+    const rendered = marked(evalTags(content, subdir)) as string;
     return enhanceTableTag(rendered);
   },
   normalize,

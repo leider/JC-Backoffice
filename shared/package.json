@@ -11,7 +11,7 @@
   "dependencies": {
     "dayjs": "1.11.10",
     "deep-object-diff": "1.1.9",
-    "marked": "10.0.0"
+    "marked": "11.0.0"
   },
   "devDependencies": {
     "pug": "3.0.2"
