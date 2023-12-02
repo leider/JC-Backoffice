@@ -17,7 +17,7 @@
     "express": "4.18.2",
     "express-async-errors": "3.1.1",
     "ikalendar": "1.5.0",
-    "jc-shared": "1.0.0",
+    "jc-shared": "workspace:^",
     "mongodb": "6.3.0",
     "morgan": "1.10.0",
     "multiparty": "4.2.3",
@@ -56,7 +56,7 @@
     "deploy": "yarn sass && yarn tsc",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc lib/**/*.ts rest/**/*.ts *.ts",
-    "clean-ts": "rm -rf lib/**/*.js rest/*.js configure.js configureApp.js initWinston.js reservixLoad.js start.js",
+    "clean-ts": "rm -rf lib/**/*.js rest/*.js configure.js configureApp.js initWinston.js start.js",
     "sass": "../node_modules/.bin/sass sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
   }
 }

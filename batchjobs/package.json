@@ -9,12 +9,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "jc-backend": "1.0.0",
-    "jc-shared": "1.0.0"
+    "jc-backend": "workspace:^",
+    "jc-shared": "workspace:^"
   },
   "scripts": {
     "test": "../node_modules/.bin/mocha --exit test/**/*.js",
-    "tsc": "../node_modules/typescript/bin/tsc",
+    "deploy": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -f src/*.js test/**/*.js"
   }
