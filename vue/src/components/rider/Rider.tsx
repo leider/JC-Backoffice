@@ -1,8 +1,9 @@
 import type { FC } from "react";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Container } from "@/components/rider/Container.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { Checkbox, Col, Row } from "antd";
 
 export const Rider: FC = () => {
   const [hideSourceOnDrag, setHideSourceOnDrag] = useState(true);
@@ -10,13 +11,18 @@ export const Rider: FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Container hideSourceOnDrag={hideSourceOnDrag} />
-      <p>
-        <label htmlFor="hideSourceOnDrag">
-          <input id="hideSourceOnDrag" type="checkbox" role="checkbox" checked={hideSourceOnDrag} onChange={toggle} />
-          <small>Hide the source item while dragging</small>
-        </label>
-      </p>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Container hideSourceOnDrag={hideSourceOnDrag} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Checkbox onChange={toggle} checked={hideSourceOnDrag}>
+            <b>Nicht zeigen</b>
+          </Checkbox>
+        </Col>
+      </Row>
     </DndProvider>
   );
 };
