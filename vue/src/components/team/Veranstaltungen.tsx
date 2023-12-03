@@ -180,7 +180,7 @@ export default function Veranstaltungen() {
         extra={
           <>
             {context?.currentUser?.accessrights?.isOrgaTeam && (
-              <ButtonWithIcon key="bigcal" icon="Calendar2Range" text="Kalenderübersicht" type="default" href="/vue/kalenderuebersicht" />
+              <ButtonWithIcon key="bigcal" icon="Calendar2Range" text="Kalenderübersicht" type="default" to="/kalenderuebersicht" />
             )}
             <ButtonWithIcon
               key="cal"

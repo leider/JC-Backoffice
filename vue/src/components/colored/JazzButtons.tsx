@@ -126,7 +126,7 @@ export function CopyButton({ disabled, url, isVermietung }: ButtonProps & { url?
       icon="Files"
       type="primary"
       disabled={disabled || !url}
-      href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`}
+      to={`/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`}
       color="#6c757d"
     />
   );
