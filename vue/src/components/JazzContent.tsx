@@ -8,6 +8,8 @@ import { ItemType } from "antd/es/menu/hooks/useItems";
 import { wikisubdirs } from "@/commons/loader.ts";
 
 const { Header, Content } = Layout;
+
+const EXPERIMENTAL = true;
 enum menuKeys {
   veranstaltung = "veranstaltung",
   optionen = "optionen",
@@ -26,6 +28,7 @@ enum menuKeys {
   belege = "belege",
   wiki = "wiki",
   users = "users",
+  rider = "rider",
 }
 
 const JazzContent: React.FC = () => {
@@ -190,6 +193,13 @@ const JazzContent: React.FC = () => {
         label: "Users",
       });
       setItems(localItems);
+      if (context?.currentUser?.accessrights?.isOrgaTeam && EXPERIMENTAL) {
+        localItems.push({
+          key: menuKeys.rider,
+          icon: <IconForSmallBlock iconName="UniversalAccess" />,
+          label: <Link to="/rider">Rider</Link>,
+        });
+      }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [context, subdirs],
   );
