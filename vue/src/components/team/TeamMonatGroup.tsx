@@ -32,7 +32,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
 
   return (
     <>
-      <Row gutter={8} style={{ backgroundColor: "#d3d3d3" }}>
+      <Row gutter={0} style={{ backgroundColor: "#d3d3d3" }}>
         <Col span={24}>
           <Collapse
             size={"small"}
@@ -87,7 +87,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
           />
         </Col>
       </Row>
-      <Row gutter={[8, 8]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3" }}>
+      <Row gutter={[4, 4]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3", marginLeft: 0, marginRight: 0 }}>
         {veranstaltungenUndVermietungen.map((veranstaltung, index) => {
           if (veranstaltung.isVermietung) {
             return <TeamBlockVermietung key={index} vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />;

@@ -97,9 +97,6 @@ export function createTokenBasedStyles(document: Document, token: GlobalToken) {
 .monat-header {
   background-color: ${colorPrimary};
 }
-.monat-header .ant-collapse-header {
-  padding: 4px 8px !important;
-}
 .monat-header .ant-collapse-content-box {
   padding: 0 !important;
 }

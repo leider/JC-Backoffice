@@ -95,7 +95,7 @@ export default function Belege() {
             loading={uploading}
           />,
         ]}
-      ></PageHeader>
+      />
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item label={<b>Datum des Belegs:</b>} initialValue={dayjs()} name="datum">
