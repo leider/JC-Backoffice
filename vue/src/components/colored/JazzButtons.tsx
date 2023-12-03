@@ -62,10 +62,10 @@ export function ExportButtons({ disabled }: ButtonProps) {
       asExcelKalk([new Veranstaltung(veranstaltung)]);
     }
     if (e.key === "Pressefotos") {
-      imgzipForVeranstaltung(veranstaltung);
+      imgzipForVeranstaltung(new Veranstaltung(veranstaltung));
     }
     if (e.key === "Kassenzettel") {
-      openKassenzettel(veranstaltung);
+      openKassenzettel(new Veranstaltung(veranstaltung));
     }
   }
 
