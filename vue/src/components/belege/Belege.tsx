@@ -72,8 +72,8 @@ export default function Belege() {
   return (
     <Form form={form} onValuesChange={valuesChanged} onFinish={send} layout="vertical">
       <PageHeader
-        title="Beleg Hochladen"
-        subTitle="Einen Beleg direkt an die Buchhaltung schicken"
+        title={<span style={{ whiteSpace: "normal" }}>Beleg Hochladen</span>}
+        subTitle={<span style={{ whiteSpace: "normal" }}>Einen Beleg direkt an die Buchhaltung schicken</span>}
         footer={
           <div>
             <p>Denk daran, uns den Beleg noch im Original zukommen zu lassen.</p>

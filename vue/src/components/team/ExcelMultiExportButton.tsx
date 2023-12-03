@@ -9,6 +9,7 @@ import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commo
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import { PageHeader } from "@ant-design/pro-layout";
 import sortBy from "lodash/sortBy";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -74,17 +75,15 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
   return (
     <>
       <SelectRangeForExcelModal isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} alle={alle} />
-      <ConfigProvider theme={{ token: { colorPrimary: "#5900b9" } }}>
-        <Button
-          type="primary"
-          icon={<IconForSmallBlock iconName="FileEarmarkSpreadsheet" />}
-          onClick={() => {
-            setIsExcelExportOpen(true);
-          }}
-        >
-          Kalkulation (Excel)
-        </Button>
-      </ConfigProvider>
+      <ButtonWithIcon
+        text="Kalkulation (Excel)"
+        type="primary"
+        icon="FileEarmarkSpreadsheet"
+        onClick={() => {
+          setIsExcelExportOpen(true);
+        }}
+        color="#5900b9"
+      />
     </>
   );
 }
