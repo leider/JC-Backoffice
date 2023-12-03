@@ -14,13 +14,13 @@ interface ButtonInAdminPanelProps {
 
 export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
   const { color, icon } = useColorsAndIconsForSections(type);
-
+  console.log({ path: `/${isVermietung ? "vermietung" : "veranstaltung"}/${encodeURIComponent(url)}` });
   return (
     <ButtonWithIcon
       tooltipTitle={capitalize(type)}
       icon={icon()}
       type="primary"
-      href={`/vue/${isVermietung ? "vermietung" : "veranstaltung"}/${url}?page=${type}`}
+      to={`/${isVermietung ? "vermietung" : "veranstaltung"}/${encodeURIComponent(url)}?page=${type}`}
       color={color()}
       size="small"
     />
@@ -33,7 +33,7 @@ export function ButtonPreview({ veranstaltung }: { veranstaltung: Veranstaltung 
     <ButtonWithIcon
       icon="EyeFill"
       type="primary"
-      href={`/vue/${"veranstaltung/preview"}/${veranstaltung.url}`}
+      to={`/${"veranstaltung/preview"}/${veranstaltung.url}`}
       tooltipTitle="Vorschau"
       color={token.colorSuccess}
       size="small"
