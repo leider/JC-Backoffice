@@ -88,6 +88,7 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
       try {
         await kassenzettelToBuchhaltung(new Veranstaltung(req.body));
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.log("Kassenzettel Versand an Buchhaltung gescheitert");
         throw e;
       }

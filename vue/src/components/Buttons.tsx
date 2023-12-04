@@ -14,7 +14,6 @@ interface ButtonInAdminPanelProps {
 
 export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
   const { color, icon } = useColorsAndIconsForSections(type);
-  console.log({ path: `/${isVermietung ? "vermietung" : "veranstaltung"}/${encodeURIComponent(url)}` });
   return (
     <ButtonWithIcon
       tooltipTitle={capitalize(type)}

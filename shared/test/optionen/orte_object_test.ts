@@ -16,6 +16,7 @@ describe("Orte", () => {
     const orte = new Orte({
       orte: [peter, zappa, anna],
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const orteJson = (orte.toJSON() as any).orte as Ort[];
     orteJson.forEach((ort) => {
       const keys = Object.keys(ort);

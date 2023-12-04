@@ -39,6 +39,7 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
       const strings = name.reduce((prev, curr) => prev[curr], newVeranstaltung);
       form.setFieldValue(name, strings);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error("Oops");
     } finally {
       setUploading(false);

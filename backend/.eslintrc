@@ -16,6 +16,7 @@
     "no-alert": 2,
     "no-eval": 2,
     "no-process-exit": 2,
+    "no-console": "error",
     "curly": [2, "all"],
     "eqeqeq": 2,
     "@typescript-eslint/no-explicit-any": "warn",

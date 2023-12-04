@@ -1,7 +1,6 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { Button, Col, ConfigProvider, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
+import { Col, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";

@@ -81,6 +81,7 @@ function useProvideAuth(): IUseProvideAuth {
           setAuthHeader(newToken.data.token);
           scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
         } catch (_) {
+          // eslint-disable-next-line no-console
           console.log("LOGGIN OUT", _);
           logout();
         }

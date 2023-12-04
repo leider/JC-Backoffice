@@ -12,9 +12,12 @@ const receiver = "leider";
 
 function closeAndExit(err?: Error): void {
   if (err) {
+    // eslint-disable-next-line no-console
     console.log("Error in nightjob...");
+    // eslint-disable-next-line no-console
     console.log(err.message);
   } else {
+    // eslint-disable-next-line no-console
     console.log("Terminating nightjob...");
   }
   // eslint-disable-next-line no-process-exit
@@ -40,7 +43,7 @@ ${err ? "Es gibt Fehler! " + err.message : ""}`,
     return closeAndExit(e as Error);
   }
 }
-
+// eslint-disable-next-line no-console
 console.log("Starting nightjob...");
 
 const now = new DatumUhrzeit();

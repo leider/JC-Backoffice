@@ -44,7 +44,6 @@ export default function ButtonWithIcon({
 
   useEffect(() => {
     if (to) {
-      console.log({ to });
       setButton(
         <Link to={to}>
           <Button
