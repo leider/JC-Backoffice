@@ -6,9 +6,9 @@ import { IColumn } from "./IColumn";
 /**
  * Orrp inline collection column component.
  * @param {PropsWithChildren<IColumn>} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export const Column: FunctionComponent<PropsWithChildren<IColumn>> = (props: PropsWithChildren<IColumn>): JSX.Element => {
+export const Column: FunctionComponent<PropsWithChildren<IColumn>> = (props: PropsWithChildren<IColumn>): React.ReactElement => {
   const { desc, children, colSpans, className } = props;
 
   return (

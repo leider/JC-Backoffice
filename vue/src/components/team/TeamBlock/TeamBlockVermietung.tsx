@@ -8,7 +8,7 @@ import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
 import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
-  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   useEffect(() => {
     const confirmed = vermietung.kopf.confirmed;

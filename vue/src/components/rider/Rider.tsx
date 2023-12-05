@@ -1,94 +1,78 @@
 import type { FC } from "react";
 import React, { createContext, useCallback, useRef, useState } from "react";
-import { Container } from "@/components/rider/Container.tsx";
+import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
 import { DndProvider, XYCoord } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Col, Row } from "antd";
 import { BoxParams } from "@/components/rider/types.ts";
+import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 
 export const BoxesContext = createContext<{
   sourceBoxes: BoxParams[];
   targetBoxes: BoxParams[];
-  moveBox: (x: { containerId: string; id: string; left: number; top: number; title: string; initialOffset: XYCoord | null }) => void;
+  moveBox: (x: { containerId: string; offset?: XYCoord | null; delta?: XYCoord | null; item: BoxParams }) => void;
 }>({
   sourceBoxes: [],
   targetBoxes: [],
   moveBox: () => {},
 });
 
+const inventory = [
+  { id: "Rhodes", top: 0, left: 0, content: <div style={{ width: 120, height: 60 }}>Rhodes</div> },
+  { id: "Drums", top: 0, left: 0, content: <div style={{ width: 40, height: 100 }}>Drums</div> },
+];
 export const Rider: FC = () => {
-  const cont1 = useRef<HTMLDivElement | null>(null);
-  const cont2 = useRef<HTMLDivElement | null>(null);
+  const targetContainer = useRef<HTMLDivElement | null>(null);
 
-  const [sourceBoxes, setSourceBoxes] = useState<BoxParams[]>([
-    { id: "Rhodes", top: 20, left: 20, title: "Rhodes" },
-    { id: "Drums", top: 180, left: 20, title: "Drums" },
-  ]);
+  const [sourceBoxes, setSourceBoxes] = useState<BoxParams[]>(inventory);
 
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
 
-  const getDistance = useCallback(() => {
-    if (cont1.current && cont2.current) {
-      const left = cont1.current.getBoundingClientRect();
-      const right = cont2.current.getBoundingClientRect();
-      return { horizontal: right.x - left.x };
-    }
-    return { horizontal: 0 };
-  }, [cont1, cont2]);
-
   const moveBox = useCallback(
-    ({
-      containerId,
-      id,
-      left,
-      top,
-      title,
-      initialOffset,
-    }: {
-      containerId: string;
-      id: string;
-      left: number;
-      top: number;
-      title: string;
-      initialOffset: XYCoord | null;
-    }) => {
-      const boxes = containerId === "source" ? sourceBoxes : targetBoxes;
-      const setBoxes = containerId === "source" ? setSourceBoxes : setTargetBoxes;
-      const oppositeBoxes = containerId !== "source" ? sourceBoxes : targetBoxes;
-      const setOppositeBoxes = containerId !== "source" ? setSourceBoxes : setTargetBoxes;
-      const alreadyIn = boxes.map((b) => b.id).includes(id);
+    ({ containerId, offset, delta, item }: { containerId: string; offset?: XYCoord | null; delta?: XYCoord | null; item: BoxParams }) => {
+      const isSource = containerId === "source";
+      const boxes = isSource ? sourceBoxes : targetBoxes;
+      const setBoxes = isSource ? setSourceBoxes : setTargetBoxes;
+      const oppositeBoxes = !isSource ? sourceBoxes : targetBoxes;
+      const setOppositeBoxes = !isSource ? setSourceBoxes : setTargetBoxes;
+      const alreadyIn = boxes.map((b) => b.id).includes(item.id);
       const result = [...boxes];
-      if (alreadyIn) {
-        const box = result.find((b) => b.id === id);
+      if (!isSource && alreadyIn) {
+        const box = result.find((b) => b.id === item.id);
         if (box) {
+          const left = Math.round(item.left + (delta?.x || 0));
+          const top = Math.round(item.top + (delta?.y || 0));
           box.left = left;
           box.top = top;
+          return setBoxes(result);
         }
-        setBoxes(result);
-      } else {
-        const distance = getDistance().horizontal;
-        const newLeft = (initialOffset?.x || 0) > distance ? left + distance : left - distance;
-        result.push({ id, left: newLeft, top, title });
-        const otherBoxes = oppositeBoxes.filter((b) => b.id !== id);
-        setBoxes(result);
-        setOppositeBoxes(otherBoxes);
       }
+      let newLeft = 0;
+      let newTop = 0;
+      if (!isSource) {
+        const rect = targetContainer.current?.getBoundingClientRect();
+        newLeft = (offset?.x || 0) - (rect?.x || 0);
+        newTop = (offset?.y || 0) - (rect?.y || 0);
+      }
+
+      const otherBoxes = oppositeBoxes.filter((b) => b.id !== item.id);
+      result.push({ ...item, left: newLeft, top: newTop });
+      setBoxes(result);
+      setOppositeBoxes(otherBoxes);
     },
-    [getDistance, sourceBoxes, targetBoxes],
+    [sourceBoxes, targetBoxes],
   );
 
   return (
     <DndProvider backend={HTML5Backend}>
       <BoxesContext.Provider value={{ sourceBoxes, targetBoxes, moveBox }}>
-        <Row gutter={16}>
+        <Row gutter={16} style={{ paddingTop: "32px" }}>
           <Col span={6}>
-            <div ref={cont1}>
-              <Container id="source" />
-            </div>
+            <SourceContainer />
           </Col>
           <Col span={18}>
-            <div ref={cont2}>
-              <Container id="target" />
+            <div ref={targetContainer}>
+              <TargetContainer />
             </div>
           </Col>
         </Row>

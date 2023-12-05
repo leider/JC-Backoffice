@@ -14,7 +14,7 @@ import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtil
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
-  const [eventTypes, setEventTypes] = useState<{ label: JSX.Element; value: string }[]>([]);
+  const [eventTypes, setEventTypes] = useState<{ label: React.ReactElement; value: string }[]>([]);
   useEffect(() => {
     const localOptionen = props.optionen.typen.map((typ) => ({
       label: <span className={`text-${cssColor(typ)}`}>{typ}</span>,

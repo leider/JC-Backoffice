@@ -14,15 +14,15 @@ interface IDynamicItem {
    * Callback to render the widget.
    * @memberof IDynamicItem
    */
-  renderWidget: (getFieldValue: (name: NamePath) => StoreValue) => JSX.Element;
+  renderWidget: (getFieldValue: (name: NamePath) => StoreValue) => React.ReactElement;
 }
 
 /**
  * A dynamic form component.
  * @param {IDynamicItem} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem): JSX.Element => (
+export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem): React.ReactElement => (
   <Form.Item
     noStyle
     shouldUpdate={(prevValues, curValues) => {

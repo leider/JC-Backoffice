@@ -11,7 +11,7 @@ export default function MultiSelectWithTags(props: {
   noAdd?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (value: any) => void;
-  specialTagRender?: (props: CustomTagProps) => JSX.Element;
+  specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
   const [realOptions, setRealOptions] = useState<LabelAndValue[]>([]);
   useEffect(() => {

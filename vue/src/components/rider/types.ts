@@ -1,18 +1,15 @@
-export interface DragItem {
+export interface DragItem extends BoxParams {
   type: string;
-  id: string;
-  top: number;
-  left: number;
-  title: string;
 }
 
 export const ItemTypes = {
   BOX: "box",
+  SourceElement: "source-element",
 };
 
 export interface BoxParams {
   id: string;
   top: number;
   left: number;
-  title: string;
+  content: React.ReactElement;
 }
