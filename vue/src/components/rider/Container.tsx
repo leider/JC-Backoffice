@@ -1,12 +1,12 @@
-import update from "immutability-helper";
 import type { CSSProperties, FC } from "react";
-import { useCallback, useState } from "react";
-import type { XYCoord } from "react-dnd";
+import { useCallback, useContext } from "react";
+import type { DropTargetMonitor, XYCoord } from "react-dnd";
 import { useDrop } from "react-dnd";
 
 import { Box } from "./Box.js";
-import type { DragItem } from "./interfaces.js";
-import { ItemTypes } from "./ItemTypes.js";
+import type { DragItem } from "./types.ts";
+import { BoxesContext } from "@/components/rider/Rider.tsx";
+import { ItemTypes } from "./types.ts";
 
 const styles: CSSProperties = {
   width: "100%",
@@ -16,65 +16,36 @@ const styles: CSSProperties = {
 };
 
 export interface ContainerProps {
-  hideSourceOnDrag: boolean;
+  id: string;
 }
 
-export interface ContainerState {
-  boxes: { [key: string]: { top: number; left: number; title: string } };
-}
+export const Container: FC<ContainerProps> = ({ id }) => {
+  const boxesContext = useContext(BoxesContext);
 
-export const Container: FC<ContainerProps> = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState<{
-    [key: string]: {
-      top: number;
-      left: number;
-      title: string;
-    };
-  }>({
-    a: { top: 20, left: 80, title: "Drag me around" },
-    b: { top: 180, left: 20, title: "Drag me too" },
-  });
-
-  const moveBox = useCallback(
-    (id: string, left: number, top: number) => {
-      setBoxes(
-        update(boxes, {
-          [id]: {
-            $merge: { left, top },
-          },
-        }),
-      );
-    },
-    [boxes, setBoxes],
-  );
+  const boxes = useCallback(() => {
+    return id === "source" ? boxesContext.sourceBoxes : boxesContext.targetBoxes;
+  }, [boxesContext, id]);
 
   const [, drop] = useDrop(
     () => ({
       accept: ItemTypes.BOX,
-      drop(item: DragItem, monitor: { getDifferenceFromInitialOffset: () => any }) {
+      drop(item: DragItem, monitor: DropTargetMonitor<DragItem, undefined>) {
         const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+        const initialOffset = monitor.getInitialSourceClientOffset();
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
-        moveBox(item.id, left, top);
+        boxesContext.moveBox({ containerId: id, id: item.id, left, top, title: item.title, initialOffset });
         return undefined;
       },
     }),
-    [moveBox],
+    [boxesContext],
   );
 
   return (
     <div ref={drop} style={styles}>
-      {Object.keys(boxes).map((key) => {
-        const { left, top, title } = boxes[key] as {
-          top: number;
-          left: number;
-          title: string;
-        };
-        return (
-          <Box key={key} id={key} left={left} top={top} hideSourceOnDrag={hideSourceOnDrag}>
-            {title}
-          </Box>
-        );
+      {boxes().map((each) => {
+        const { id, left, top, title } = each;
+        return <Box key={id} id={id} left={left} top={top} hideSourceOnDrag={false} title={title} />;
       })}
     </div>
   );

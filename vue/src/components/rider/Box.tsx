@@ -1,7 +1,6 @@
-import type { CSSProperties, FC, ReactNode } from "react";
+import type { CSSProperties, FC } from "react";
 import { useDrag } from "react-dnd";
-
-import { ItemTypes } from "./ItemTypes.js";
+import { ItemTypes } from "@/components/rider/types.ts";
 
 const style: CSSProperties = {
   position: "absolute",
@@ -12,18 +11,18 @@ const style: CSSProperties = {
 };
 
 export interface BoxProps {
-  id: any;
+  id: string;
   left: number;
   top: number;
   hideSourceOnDrag?: boolean;
-  children?: ReactNode;
+  title: string;
 }
 
-export const Box: FC<BoxProps> = ({ id, left, top, hideSourceOnDrag, children }) => {
+export const Box: FC<BoxProps> = ({ id, left, top, hideSourceOnDrag, title }) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.BOX,
-      item: { id, left, top },
+      item: { id, left, top, title },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
@@ -36,7 +35,7 @@ export const Box: FC<BoxProps> = ({ id, left, top, hideSourceOnDrag, children })
   }
   return (
     <div className="box" ref={drag} style={{ ...style, left, top }} data-testid="box">
-      {children}
+      {title}
     </div>
   );
 };
