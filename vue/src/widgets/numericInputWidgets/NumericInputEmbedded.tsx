@@ -9,9 +9,9 @@ import isEqual from "lodash/isEqual";
 /**
  * Numeric input component.
  * @param {INumericInputEmbedded} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: INumericInputEmbedded): JSX.Element => {
+const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: INumericInputEmbedded): React.ReactElement => {
   const { number, decimals, min, max, exclusiveMin, exclusiveMax, disabled, onChange, onNumber, suffix } = props;
 
   const [value, setValue] = useState<string | undefined>("");

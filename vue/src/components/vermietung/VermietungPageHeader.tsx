@@ -75,7 +75,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     setTagsForTitle(headerTags(taggies));
   }, [confirmed, brauchtTechnik, brauchtPresse, technikOK, presseOK, homepage, social]);
 
-  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   const titleStyle: CSSProperties = { color: token.colorText, whiteSpace: "normal" };
 

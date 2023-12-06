@@ -38,7 +38,7 @@ export default function ButtonWithIcon({
   block?: boolean;
   loading?: boolean;
 }) {
-  const [button, setButton] = useState<JSX.Element | undefined>(undefined);
+  const [button, setButton] = useState<React.ReactElement | undefined>(undefined);
 
   const { sm } = useBreakpoint();
 

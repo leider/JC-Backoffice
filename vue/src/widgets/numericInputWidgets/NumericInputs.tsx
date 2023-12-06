@@ -87,9 +87,9 @@ type NumberInputProps = CommonWidgetProps<number> & {
  *
  * You can set upper and lower limts to it, and tell if they should be inclusive or exclusive.
  * @param {NumberInputProps} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberInputProps): JSX.Element => {
+export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberInputProps): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export const NumberInputWithDirectValue: FunctionComponent<NumberInputWithDirect
   suffix,
   value,
   label,
-}: NumberInputWithDirectValueParams): JSX.Element => {
+}: NumberInputWithDirectValueParams): React.ReactElement => {
   return (
     <Form.Item label={label && <b>{label}:</b>} noStyle={!label}>
       <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} disabled />

@@ -23,6 +23,7 @@ import Kassenbericht from "@/components/options/Kassenbericht";
 import ImageOverview from "@/components/options/ImageOverview";
 import VermietungComp from "@/components/vermietung/VermietungComp.tsx";
 import BigKalender from "@/components/team/BigKalender.tsx";
+import { Rider } from "@/components/rider/Rider.tsx";
 
 export const routes: RouteObject[] = [
   {
@@ -131,6 +132,10 @@ export const routes: RouteObject[] = [
       {
         path: "/wiki/searchresults/:searchtext",
         element: <WikiSearchresults />,
+      },
+      {
+        path: "/rider",
+        element: <Rider />,
       },
     ],
   },

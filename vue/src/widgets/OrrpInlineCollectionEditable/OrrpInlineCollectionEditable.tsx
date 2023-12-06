@@ -16,11 +16,11 @@ import { Rule } from "antd/es/form";
 /**
  * An editable collection table.
  * @param {TOrrpInlineCollectionEditable} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
 const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEditable> = (
   props: TOrrpInlineCollectionEditable,
-): JSX.Element => {
+): React.ReactElement => {
   if ("columnDescriptions" in props) {
     addInitialValueFromObjectToColDescs(props.columnDescriptions, props.initialValue);
   }

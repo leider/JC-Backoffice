@@ -31,7 +31,7 @@ interface InternalPreisprofilSelectParams {
 }
 
 function InternalPreisprofilSelect({ onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {
-  const [preisprofile, setPreisprofile] = useState<{ label: JSX.Element; value: string }[]>([]);
+  const [preisprofile, setPreisprofile] = useState<{ label: React.ReactElement; value: string }[]>([]);
   useEffect(() => {
     const localPreisprofile = optionen.preisprofile().map((profil) => ({
       label: (

@@ -18,7 +18,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   const { context } = useAuth();
   const [typeColor, setTypeColor] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
-  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   const [isOrga, setIsOrga] = useState<boolean>(false);
 

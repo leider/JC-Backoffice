@@ -58,7 +58,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   );
 }
 function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  const [tagsForTitle, setTagsForTitle] = useState<JSX.Element[]>([]);
+  const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   useEffect(() => {
     const confirmed = veranstaltung.kopf.confirmed;

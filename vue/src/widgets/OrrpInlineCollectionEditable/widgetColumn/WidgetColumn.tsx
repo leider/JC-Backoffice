@@ -13,9 +13,9 @@ import UserMultiSelect from "@/components/team/UserMultiSelect";
 /**
  Orrp inline collection table widget column component.
  * @param {IWidgetColumn} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetColumn): JSX.Element => {
+export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetColumn): React.ReactElement => {
   const { desc, name, colSpans, disabled, uniqueValuesValidator } = props;
 
   const commonProps = {
@@ -29,7 +29,7 @@ export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetCol
 
   // Important to not make this a JSX-Element invoked like <Widget />
   // or else form errors won't be rendered because the fields are recreated too often
-  let Widget: JSX.Element | null = null;
+  let Widget: React.ReactElement | null = null;
   switch (desc.type) {
     case "user":
       Widget = <UserMultiSelect usersAsOptions={desc.labelsAndValues!} {...commonProps} />;

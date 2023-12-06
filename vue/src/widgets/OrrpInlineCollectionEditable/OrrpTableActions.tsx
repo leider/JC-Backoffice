@@ -17,9 +17,9 @@ type Actions = keyof ActionCallbacks;
  * @param {{
  *   actions: ActionCallbacks;
  * }} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export default function OrrpTableActions(props: { actions: ActionCallbacks; testid: string }): JSX.Element {
+export default function OrrpTableActions(props: { actions: ActionCallbacks; testid: string }): React.ReactElement {
   function iconForKey(key: Actions) {
     switch (key) {
       case "copy":

@@ -71,9 +71,9 @@ type TTextField = {
 
 /**
  * @param {TTextField} props
- * @return {*}  {JSX.Element}
+ * @return {*}  {React.ReactElement}
  */
-export const TextField: FunctionComponent<TTextField> = (props: TTextField): JSX.Element => {
+export const TextField: FunctionComponent<TTextField> = (props: TTextField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
