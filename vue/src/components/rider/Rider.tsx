@@ -1,8 +1,9 @@
 import type { FC } from "react";
-import React, { createContext, useCallback, useRef, useState } from "react";
+import React, { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
 import { DndProvider, XYCoord } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Row } from "antd";
 import { BoxParams } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
@@ -27,6 +28,16 @@ export const Rider: FC = () => {
   const [sourceBoxes, setSourceBoxes] = useState<BoxParams[]>(inventory);
 
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
+
+  const [isTouch, setIsTouch] = useState<boolean>(false);
+  useEffect(() => {
+    try {
+      document.createEvent("TouchEvent");
+      setIsTouch(true);
+    } catch {
+      setIsTouch(false);
+    }
+  }, []);
 
   const moveBox = useCallback(
     ({ containerId, offset, delta, item }: { containerId: string; offset?: XYCoord | null; delta?: XYCoord | null; item: BoxParams }) => {
@@ -64,7 +75,7 @@ export const Rider: FC = () => {
   );
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={isTouch ? TouchBackend : HTML5Backend}>
       <BoxesContext.Provider value={{ sourceBoxes, targetBoxes, moveBox }}>
         <Row gutter={16} style={{ paddingTop: "32px" }}>
           <Col span={6}>
