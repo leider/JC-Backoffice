@@ -4,9 +4,12 @@ import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
 import { DndProvider, XYCoord } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { Col, Row } from "antd";
+import { Col, Row, Upload, UploadProps } from "antd";
 import { BoxParams } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
+import { PageHeader } from "@ant-design/pro-layout";
+import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import { exportRiderAsJson } from "@/commons/loader.ts";
 
 export const BoxesContext = createContext<{
   sourceBoxes: BoxParams[];
@@ -30,6 +33,7 @@ export const Rider: FC = () => {
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
 
   const [isTouch, setIsTouch] = useState<boolean>(false);
+
   useEffect(() => {
     try {
       document.createEvent("TouchEvent");
@@ -74,20 +78,61 @@ export const Rider: FC = () => {
     [sourceBoxes, targetBoxes],
   );
 
+  function downloadRider() {
+    function removeContent(boxes: BoxParams[]) {
+      return boxes.map((box) => ({ id: box.id, top: box.top, left: box.left }));
+    }
+    const riderJson = { sourceBoxes: removeContent(sourceBoxes), targetBoxes: removeContent(targetBoxes) };
+    exportRiderAsJson(riderJson);
+  }
+
+  const uploadprops: UploadProps = {
+    beforeUpload: () => {
+      return false;
+    },
+    showUploadList: false,
+
+    async onChange(info) {
+      function prepareImport(boxes: BoxParams[]) {
+        return boxes.map((box) => ({ ...box, content: inventory.find((each) => each.id === box.id)?.content || <></> }));
+      }
+
+      if (info.fileList.length) {
+        const result = await info.fileList[0].originFileObj?.text();
+        if (result) {
+          const rider = JSON.parse(result);
+          setSourceBoxes(prepareImport(rider.sourceBoxes));
+          setTargetBoxes(prepareImport(rider.targetBoxes));
+        }
+      }
+    },
+  };
+
   return (
-    <DndProvider backend={isTouch ? TouchBackend : HTML5Backend}>
-      <BoxesContext.Provider value={{ sourceBoxes, targetBoxes, moveBox }}>
-        <Row gutter={16} style={{ paddingTop: "32px" }}>
-          <Col span={6}>
-            <SourceContainer />
-          </Col>
-          <Col span={18}>
-            <div ref={targetContainer}>
-              <TargetContainer />
-            </div>
-          </Col>
-        </Row>
-      </BoxesContext.Provider>
-    </DndProvider>
+    <>
+      <PageHeader
+        title="Rider"
+        extra={[
+          <ButtonWithIcon key="Export" text="Export" icon="Download" onClick={downloadRider} />,
+          <Upload key="Import" {...uploadprops}>
+            <ButtonWithIcon text="Import" icon="Upload" />
+          </Upload>,
+        ]}
+      />
+      <DndProvider backend={isTouch ? TouchBackend : HTML5Backend}>
+        <BoxesContext.Provider value={{ sourceBoxes, targetBoxes, moveBox }}>
+          <Row gutter={16} style={{ paddingTop: "32px" }}>
+            <Col span={6}>
+              <SourceContainer />
+            </Col>
+            <Col span={18}>
+              <div ref={targetContainer}>
+                <TargetContainer />
+              </div>
+            </Col>
+          </Row>
+        </BoxesContext.Provider>
+      </DndProvider>
+    </>
   );
 };

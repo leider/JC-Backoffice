@@ -427,6 +427,16 @@ export async function fcveranstaltungen(start: Date, end: Date) {
 }
 
 // Special
+
+export async function exportRiderAsJson(riderJson: any) {
+  const str = JSON.stringify(riderJson);
+  const bytes = new TextEncoder().encode(str);
+  const blob = new Blob([bytes], {
+    type: "application/json;charset=utf-8",
+  });
+  return showFile(blob, "rider.json");
+}
+
 export async function openKassenzettel(veranstaltung: Veranstaltung) {
   const pdf = await getForType("pdf", `/pdf/kassenzettel/${veranstaltung.url}`);
   if (pdf) {
