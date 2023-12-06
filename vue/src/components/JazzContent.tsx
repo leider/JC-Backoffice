@@ -9,7 +9,6 @@ import { wikisubdirs } from "@/commons/loader.ts";
 
 const { Header, Content } = Layout;
 
-const EXPERIMENTAL = true;
 enum menuKeys {
   veranstaltung = "veranstaltung",
   optionen = "optionen",
@@ -193,7 +192,7 @@ const JazzContent: React.FC = () => {
         label: "Users",
       });
       setItems(localItems);
-      if (context?.currentUser?.accessrights?.isOrgaTeam && EXPERIMENTAL) {
+      if (context?.currentUser?.accessrights?.isBookingTeam) {
         localItems.push({
           key: menuKeys.rider,
           icon: <IconForSmallBlock iconName="UniversalAccess" />,
