@@ -26,16 +26,14 @@ export const BoxesContext = createContext<{
 export const Rider: FC = () => {
   const inventory = useMemo(
     () =>
-      rawInventory.map((inv) => {
-        return {
-          id: inv.id,
-          title: inv.title,
-          top: 0,
-          left: 0,
-          content: <InventoryContent inv={inv} />,
-          category: inv.category,
-        };
-      }),
+      rawInventory.map((inv) => ({
+        id: inv.id,
+        title: inv.title,
+        top: 0,
+        left: 0,
+        content: <InventoryContent inv={inv} />,
+        category: inv.category,
+      })),
     [],
   );
 
@@ -93,7 +91,7 @@ export const Rider: FC = () => {
 
   function downloadRider() {
     function removeContent(boxes: BoxParams[]) {
-      return boxes.map((box) => ({ id: box.id, top: box.top, left: box.left }));
+      return boxes.map((box) => ({ category: box.category, id: box.id, top: box.top, left: box.left }));
     }
     const riderJson = { sourceBoxes: removeContent(sourceBoxes), targetBoxes: removeContent(targetBoxes) };
     exportRiderAsJson(riderJson);
@@ -107,7 +105,10 @@ export const Rider: FC = () => {
 
     async onChange(info) {
       function prepareImport(boxes: BoxParams[]) {
-        return boxes.map((box) => ({ ...box, content: inventory.find((each) => each.id === box.id)?.content || <></> }));
+        return boxes.map((box) => {
+          const inv = inventory.find((each) => each.id === box.id);
+          return { ...box, title: inv?.title || "", content: inv?.content || <></> };
+        });
       }
 
       if (info.fileList.length) {
