@@ -18,4 +18,5 @@ export interface InventoryElement {
   id: string;
   width: number;
   height: number;
+  img?: { src: string; width?: number; height?: number };
 }

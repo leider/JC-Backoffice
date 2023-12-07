@@ -22,7 +22,7 @@ export const Box: FC<BoxParams> = (item) => {
   );
 
   return (
-    <div ref={drag} style={{ ...style, left: item.left, top: item.top }} data-testid="box">
+    <div ref={drag} style={{ ...style, left: item.left, top: item.top }}>
       {item.content}
     </div>
   );

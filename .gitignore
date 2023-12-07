@@ -19,3 +19,5 @@ jazzclubmongo*
 *.map
 .tscache/
 /frontendtests/output/
+/mongocollections
+mongoimport_jc.sh

@@ -10,6 +10,7 @@ import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { exportRiderAsJson } from "@/commons/loader.ts";
+import { InventoryContent } from "@/components/rider/InventoryContent.tsx";
 
 export const BoxesContext = createContext<{
   sourceBoxes: BoxParams[];
@@ -22,10 +23,10 @@ export const BoxesContext = createContext<{
 });
 
 const rawInventory: InventoryElement[] = [
-  { id: "Flügel (Yamaha)", width: 150, height: 200 },
+  { id: "Flügel (Yamaha)", width: 150, height: 200, img: { src: "pianoa.svg", width: 150, height: 200 } },
   { id: "Klavierbank", width: 65, height: 33 },
-  { id: "Rhodes Mark I", width: 115, height: 60 },
-  { id: "Nord Stage 4", width: 107, height: 32 },
+  { id: "Rhodes Mark I", width: 115, height: 60, img: { src: "Rhodes.png", width: 115 } },
+  { id: "Nord Stage 4 compact", width: 107, height: 32, img: { src: "Nord.png" } },
   { id: "Drums (Yamaha)", width: 180, height: 180 },
   { id: "Drums (Gretsch)", width: 180, height: 180 },
   { id: "Markbass 4x10", width: 60, height: 48 },
@@ -43,7 +44,7 @@ export const Rider: FC = () => {
           id: inv.id,
           top: 0,
           left: 0,
-          content: <div style={{ width: inv.width, height: inv.height }}>{inv.id}</div>,
+          content: <InventoryContent inv={inv} />,
         };
       }),
     [],
