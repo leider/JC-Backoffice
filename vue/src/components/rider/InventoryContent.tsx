@@ -9,7 +9,9 @@ export function InventoryContent({ inv }: { inv: InventoryElement }) {
         {inv.img ? (
           <img src={"img/" + inv.img.src} width={inv.img.width} height={inv.img.height} alt={inv.title} />
         ) : (
-          <div style={{ textAlign: "center", fontSize: "10px", textOverflow: "ellipsis", overflow: "hidden" }}>{inv.title}</div>
+          <div style={{ textAlign: "center", fontSize: "10px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
+            {inv.title}
+          </div>
         )}
       </div>
     </Popover>
