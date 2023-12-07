@@ -25,7 +25,7 @@ export const SourceContainer: FC = () => {
 
   return (
     <div ref={drop} style={{ height: "600px", border: "1px solid black" }}>
-      <Row gutter={12} style={{ maxHeight: "600px", overflowX: "auto", padding: "12px" }}>
+      <Row gutter={12} style={{ maxHeight: "600px", overflowX: "auto" }}>
         {boxes.map((each) => {
           return <SourceElement key={each.id} id={each.id} top={each.top} left={each.left} content={each.content} />;
         })}

@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import React, { createContext, useCallback, useEffect, useRef, useState } from "react";
+import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
 import { DndProvider, XYCoord } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Row, Upload, UploadProps } from "antd";
-import { BoxParams } from "@/components/rider/types.ts";
+import { BoxParams, InventoryElement } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
@@ -21,18 +21,33 @@ export const BoxesContext = createContext<{
   moveBox: () => {},
 });
 
-const inventory = [
-  { id: "Rhodes", top: 0, left: 0, content: <div style={{ width: 120, height: 60 }}>Rhodes</div> },
-  { id: "Drums", top: 0, left: 0, content: <div style={{ width: 40, height: 100 }}>Drums</div> },
+const rawInventory: InventoryElement[] = [
+  { id: "Flügel (Yamaha)", width: 150, height: 200 },
+  { id: "Klavierbank", width: 65, height: 33 },
+  { id: "Rhodes Mark I", width: 115, height: 60 },
+  { id: "Nord Stage 4", width: 107, height: 32 },
+  { id: "Drums (Yamaha)", width: 180, height: 180 },
+  { id: "Drums (Gretsch)", width: 180, height: 180 },
+  { id: "Markbass 4x10", width: 60, height: 48 },
+  { id: "Gallien-Krueger Combo MB150", width: 35, height: 22 },
+  { id: "Fender Twin Reverb", width: 68, height: 27 },
+  { id: "Roland Jazzchorus", width: 55, height: 24 },
+  { id: "Polytone 12", width: 40, height: 35 },
 ];
+
 export const Rider: FC = () => {
-  const targetContainer = useRef<HTMLDivElement | null>(null);
-
-  const [sourceBoxes, setSourceBoxes] = useState<BoxParams[]>(inventory);
-
-  const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
-
-  const [isTouch, setIsTouch] = useState<boolean>(false);
+  const inventory = useMemo(
+    () =>
+      rawInventory.map((inv) => {
+        return {
+          id: inv.id,
+          top: 0,
+          left: 0,
+          content: <div style={{ width: inv.width, height: inv.height }}>{inv.id}</div>,
+        };
+      }),
+    [],
+  );
 
   useEffect(() => {
     try {
@@ -42,6 +57,14 @@ export const Rider: FC = () => {
       setIsTouch(false);
     }
   }, []);
+
+  const targetContainer = useRef<HTMLDivElement | null>(null);
+
+  const [sourceBoxes, setSourceBoxes] = useState<BoxParams[]>(inventory);
+
+  const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
+
+  const [isTouch, setIsTouch] = useState<boolean>(false);
 
   const moveBox = useCallback(
     ({ containerId, offset, delta, item }: { containerId: string; offset?: XYCoord | null; delta?: XYCoord | null; item: BoxParams }) => {

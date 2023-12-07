@@ -13,3 +13,9 @@ export interface BoxParams {
   left: number;
   content: React.ReactElement;
 }
+
+export interface InventoryElement {
+  id: string;
+  width: number;
+  height: number;
+}

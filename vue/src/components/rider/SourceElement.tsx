@@ -16,8 +16,8 @@ export const SourceElement: FC<BoxParams> = (item) => {
   );
 
   return (
-    <Col>
-      <div ref={drag} style={{ border: "1px dotted black" }}>
+    <Col style={{ padding: 0 }}>
+      <div ref={drag} style={{ border: "1px dotted black", margin: 12, padding: 0 }}>
         {item.content}
       </div>
     </Col>
