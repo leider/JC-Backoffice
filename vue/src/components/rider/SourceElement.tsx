@@ -1,25 +1,23 @@
-import type { FC } from "react";
 import { useDrag } from "react-dnd";
 import { BoxParams, ItemTypes } from "@/components/rider/types.ts";
-import { Col } from "antd";
+import { List } from "antd";
 
-export const SourceElement: FC<BoxParams> = (item) => {
-  const [, drag] = useDrag(
-    () => ({
+export function SourceElement({ item }: { item: BoxParams }) {
+  const [, drag] = useDrag(() => {
+    return {
       type: ItemTypes.SourceElement,
       item,
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
-    }),
-    [item],
-  );
+    };
+  }, [item]);
 
   return (
-    <Col style={{ padding: 0 }}>
-      <div ref={drag} style={{ border: "1px dotted black", margin: 12, padding: 0 }}>
-        {item.content}
+    <List.Item>
+      <div ref={drag} style={{ width: "100%" }}>
+        <div style={{ width: "100%" }}>{item.title}</div>
       </div>
-    </Col>
+    </List.Item>
   );
-};
+}

@@ -9,7 +9,7 @@ const style: CSSProperties = {
   cursor: "move",
 };
 
-export const Box: FC<BoxParams> = (item) => {
+export const Box: FC<{ item: BoxParams }> = ({ item }) => {
   const [, drag] = useDrag(
     () => ({
       type: ItemTypes.BOX,

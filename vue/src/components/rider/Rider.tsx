@@ -5,12 +5,13 @@ import { DndProvider, XYCoord } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Row, Upload, UploadProps } from "antd";
-import { BoxParams, InventoryElement } from "@/components/rider/types.ts";
+import { BoxParams } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { exportRiderAsJson } from "@/commons/loader.ts";
 import { InventoryContent } from "@/components/rider/InventoryContent.tsx";
+import { rawInventory } from "@/components/rider/Inventory.ts";
 
 export const BoxesContext = createContext<{
   sourceBoxes: BoxParams[];
@@ -22,29 +23,17 @@ export const BoxesContext = createContext<{
   moveBox: () => {},
 });
 
-const rawInventory: InventoryElement[] = [
-  { id: "Flügel (Yamaha)", width: 150, height: 200, img: { src: "pianoa.svg", width: 150, height: 200 } },
-  { id: "Klavierbank", width: 65, height: 33 },
-  { id: "Rhodes Mark I", width: 115, height: 60, img: { src: "Rhodes.png", width: 115 } },
-  { id: "Nord Stage 4 compact", width: 107, height: 32, img: { src: "Nord.png" } },
-  { id: "Drums (Yamaha)", width: 180, height: 180 },
-  { id: "Drums (Gretsch)", width: 180, height: 180 },
-  { id: "Markbass 4x10", width: 60, height: 48 },
-  { id: "Gallien-Krueger Combo MB150", width: 35, height: 22 },
-  { id: "Fender Twin Reverb", width: 68, height: 27 },
-  { id: "Roland Jazzchorus", width: 55, height: 24 },
-  { id: "Polytone 12", width: 40, height: 35 },
-];
-
 export const Rider: FC = () => {
   const inventory = useMemo(
     () =>
       rawInventory.map((inv) => {
         return {
           id: inv.id,
+          title: inv.title,
           top: 0,
           left: 0,
           content: <InventoryContent inv={inv} />,
+          category: inv.category,
         };
       }),
     [],
@@ -146,10 +135,13 @@ export const Rider: FC = () => {
       <DndProvider backend={isTouch ? TouchBackend : HTML5Backend}>
         <BoxesContext.Provider value={{ sourceBoxes, targetBoxes, moveBox }}>
           <Row gutter={16} style={{ paddingTop: "32px" }}>
-            <Col span={6}>
-              <SourceContainer />
+            <Col span={4}>
+              <SourceContainer cat="Keys" />
+              <SourceContainer cat="Drums" />
+              <SourceContainer cat="Bass" />
+              <SourceContainer cat="Guitar" />
             </Col>
-            <Col span={18}>
+            <Col span={20}>
               <div ref={targetContainer}>
                 <TargetContainer />
               </div>

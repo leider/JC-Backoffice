@@ -35,8 +35,7 @@ export const TargetContainer: FC = () => {
   return (
     <div ref={drop} style={styles}>
       {boxesContext.targetBoxes.map((each) => {
-        const { id, left, top, content } = each;
-        return <Box key={id} id={id} left={left} top={top} content={content} />;
+        return <Box key={each.id} item={each} />;
       })}
     </div>
   );

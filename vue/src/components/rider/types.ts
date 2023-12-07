@@ -9,14 +9,11 @@ export const ItemTypes = {
 
 export interface BoxParams {
   id: string;
+  title: string;
   top: number;
   left: number;
   content: React.ReactElement;
+  category: Category;
 }
 
-export interface InventoryElement {
-  id: string;
-  width: number;
-  height: number;
-  img?: { src: string; width?: number; height?: number };
-}
+export type Category = "Keys" | "Drums" | "Bass" | "Guitar";
