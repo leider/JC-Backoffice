@@ -19,6 +19,7 @@ export interface BoxParams extends InventoryElement {
   top: number;
   left: number;
   degree: number;
+  level: number;
 }
 
 export interface DragItem extends BoxParams {

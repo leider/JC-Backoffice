@@ -95,7 +95,14 @@ export const Rider: FC = () => {
 
   function downloadRider() {
     function removeContent(boxes: BoxParams[]) {
-      return boxes.map((box) => ({ category: box.category, id: box.id, top: box.top, left: box.left, degree: box.degree }));
+      return boxes.map((box) => ({
+        category: box.category,
+        id: box.id,
+        top: box.top,
+        left: box.left,
+        degree: box.degree,
+        level: box.level,
+      }));
     }
     const riderJson = { targetBoxes: removeContent(targetBoxes) };
     exportRiderAsJson(riderJson);
@@ -111,7 +118,9 @@ export const Rider: FC = () => {
       function prepareImport(boxes: BoxParams[]) {
         return boxes.map((box) => {
           const inv = inventory.find((each) => each.id === box.id);
-          return inv ? { ...inv, top: box.top, left: box.left, degree: box.degree } : { ...rawInventory[0], top: 0, left: 0, degree: 0 };
+          return inv
+            ? { ...inv, top: box.top, left: box.left, degree: box.degree, level: box.level }
+            : { ...rawInventory[0], top: 0, left: 0, degree: 0, level: 0 };
         });
       }
 
