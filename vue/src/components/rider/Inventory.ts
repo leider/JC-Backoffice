@@ -1,14 +1,4 @@
-import { Category } from "@/components/rider/types.ts";
-
-export interface InventoryElement {
-  id: string;
-  title: string;
-  width: number;
-  height: number;
-  img?: { src: string; width?: number; height?: number };
-  photo?: { src: string; width?: number; height?: number };
-  category: Category;
-}
+import { InventoryElement } from "@/components/rider/types.ts";
 
 export const rawInventory: InventoryElement[] = [
   {
@@ -39,8 +29,22 @@ export const rawInventory: InventoryElement[] = [
     img: { src: "Nord.png" },
     photo: { src: "NordStage.png" },
   },
-  { category: "Drums", id: "DrumsYamaha", title: "Drums (Yamaha)", width: 180, height: 180 },
-  { category: "Drums", id: "DrumsGretsch", title: "Drums (Gretsch)", width: 180, height: 180 },
+  {
+    category: "Drums",
+    id: "DrumsYamaha",
+    title: "Drums (Yamaha)",
+    width: 180,
+    height: 180,
+    img: { src: "Drums.png", width: 180, height: 180 },
+  },
+  {
+    category: "Drums",
+    id: "DrumsGretsch",
+    title: "Drums (Gretsch)",
+    width: 180,
+    height: 180,
+    img: { src: "Drums.png", width: 180, height: 180 },
+  },
   { category: "Bass", id: "Markbass", title: 'Bass Amp Markbass 4x10"', width: 60, height: 48, photo: { src: "Markbass.png" } },
   {
     category: "Bass",

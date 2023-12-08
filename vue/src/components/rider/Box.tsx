@@ -1,8 +1,7 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
-import { BoxParams, ItemTypes } from "@/components/rider/types.ts";
-import { InventoryElement } from "@/components/rider/Inventory.ts";
+import { BoxParams, InventoryElement, ItemTypes } from "@/components/rider/types.ts";
 import { Popover, Slider } from "antd";
 
 const style: CSSProperties = {

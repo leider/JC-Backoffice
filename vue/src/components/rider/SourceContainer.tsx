@@ -18,7 +18,7 @@ export const SourceContainer: FC<{ cat: Category }> = ({ cat }) => {
     () => ({
       accept: ItemTypes.BOX,
       drop(item: DragItem) {
-        boxesContext.moveBox({ containerId: "source", item: item });
+        boxesContext.dropOntoSource({ item: item });
         return undefined;
       },
     }),
@@ -26,11 +26,8 @@ export const SourceContainer: FC<{ cat: Category }> = ({ cat }) => {
   );
 
   return (
-    <>
-      <h4 style={{ marginLeft: 12, marginBottom: 0 }}>{cat}:</h4>
-      <div ref={drop}>
-        <List bordered size="small" dataSource={boxes} renderItem={(each) => <SourceElement item={each} />} />
-      </div>
-    </>
+    <div ref={drop}>
+      <List bordered size="small" dataSource={boxes} renderItem={(each) => <SourceElement item={each} />} />
+    </div>
   );
 };

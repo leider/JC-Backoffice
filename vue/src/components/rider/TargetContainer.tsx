@@ -26,7 +26,7 @@ export const TargetContainer: FC = () => {
         const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
         const offset = monitor.getSourceClientOffset();
 
-        boxesContext.moveBox({ containerId: "target", offset, delta, item: { ...item } });
+        boxesContext.dropOntoTarget({ offset, delta, item: { ...item } });
         return undefined;
       },
     }),

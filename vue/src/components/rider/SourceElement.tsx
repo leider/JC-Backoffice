@@ -1,8 +1,8 @@
 import { useDrag } from "react-dnd";
-import { BoxParams, ItemTypes } from "@/components/rider/types.ts";
+import { InventoryElement, ItemTypes } from "@/components/rider/types.ts";
 import { List } from "antd";
 
-export function SourceElement({ item }: { item: BoxParams }) {
+export function SourceElement({ item }: { item: InventoryElement }) {
   const [, drag] = useDrag(() => {
     return {
       type: ItemTypes.SourceElement,
