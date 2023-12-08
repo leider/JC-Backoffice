@@ -10,7 +10,6 @@ import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { exportRiderAsJson } from "@/commons/loader.ts";
-import { InventoryContent } from "@/components/rider/InventoryContent.tsx";
 import { rawInventory } from "@/components/rider/Inventory.ts";
 
 export const BoxesContext = createContext<{
@@ -27,12 +26,10 @@ export const Rider: FC = () => {
   const inventory = useMemo(
     () =>
       rawInventory.map((inv) => ({
-        id: inv.id,
-        title: inv.title,
+        ...inv,
         top: 0,
         left: 0,
-        content: <InventoryContent inv={inv} />,
-        category: inv.category,
+        degree: 0,
       })),
     [],
   );
@@ -91,7 +88,7 @@ export const Rider: FC = () => {
 
   function downloadRider() {
     function removeContent(boxes: BoxParams[]) {
-      return boxes.map((box) => ({ category: box.category, id: box.id, top: box.top, left: box.left }));
+      return boxes.map((box) => ({ category: box.category, id: box.id, top: box.top, left: box.left, degree: box.degree }));
     }
     const riderJson = { sourceBoxes: removeContent(sourceBoxes), targetBoxes: removeContent(targetBoxes) };
     exportRiderAsJson(riderJson);
@@ -107,7 +104,8 @@ export const Rider: FC = () => {
       function prepareImport(boxes: BoxParams[]) {
         return boxes.map((box) => {
           const inv = inventory.find((each) => each.id === box.id);
-          return { ...box, title: inv?.title || "", content: inv?.content || <></> };
+          if (inv) return { ...inv, top: box.top, left: box.left, degree: box.degree };
+          else return { ...rawInventory[0], top: 0, left: 0, degree: 0 };
         });
       }
 

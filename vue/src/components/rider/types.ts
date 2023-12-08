@@ -1,3 +1,5 @@
+import { InventoryElement } from "@/components/rider/Inventory.ts";
+
 export interface DragItem extends BoxParams {
   type: string;
 }
@@ -7,13 +9,10 @@ export const ItemTypes = {
   SourceElement: "source-element",
 };
 
-export interface BoxParams {
-  id: string;
-  title: string;
+export interface BoxParams extends InventoryElement {
   top: number;
   left: number;
-  content: React.ReactElement;
-  category: Category;
+  degree: number;
 }
 
 export type Category = "Keys" | "Drums" | "Bass" | "Guitar";

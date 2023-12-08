@@ -8,11 +8,12 @@ import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { BoxesContext } from "@/components/rider/Rider.tsx";
 
-const styles: CSSProperties = {
+const style: CSSProperties = {
   width: "100%",
   height: 600,
   border: "1px solid black",
   position: "relative",
+  overflow: "clip",
 };
 
 export const TargetContainer: FC = () => {
@@ -33,7 +34,7 @@ export const TargetContainer: FC = () => {
   );
 
   return (
-    <div ref={drop} style={styles}>
+    <div ref={drop} style={style}>
       {boxesContext.targetBoxes.map((each) => {
         return <Box key={each.id} item={each} />;
       })}
