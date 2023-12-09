@@ -1,4 +1,4 @@
-export type Category = "Keys" | "Drums" | "Bass" | "Guitar";
+export type Category = "Keys" | "Drums" | "Bass" | "Guitar" | "Extra";
 
 export const ItemTypes = {
   BOX: "box",
@@ -20,6 +20,7 @@ export interface BoxParams extends InventoryElement {
   left: number;
   degree: number;
   level: number;
+  comment?: string;
 }
 
 export interface DragItem extends BoxParams {

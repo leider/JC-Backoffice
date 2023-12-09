@@ -29,7 +29,6 @@
     "sharp": "0.33.0",
     "simple-configure": "0.1.6",
     "superagent": "8.1.2",
-    "uuid": "9.0.1",
     "winston": "3.11.0"
   },
   "devDependencies": {
@@ -48,8 +47,7 @@
     "@types/pug": "2.0.10",
     "@types/puppeteer": "7.0.4",
     "@types/serve-favicon": "2.5.7",
-    "@types/superagent": "4.1.24",
-    "@types/uuid": "9.0.7"
+    "@types/superagent": "4.1.24"
   },
   "resolutions": {
     "sharp": "0.32.6"

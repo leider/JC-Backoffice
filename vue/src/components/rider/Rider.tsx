@@ -11,6 +11,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { exportRiderAsJson } from "@/commons/loader.ts";
 import { rawInventory } from "@/components/rider/Inventory.ts";
+import { ExtrasContainer } from "@/components/rider/ExtrasContainer.tsx";
 
 export const BoxesContext = createContext<{
   sourceBoxes: InventoryElement[];
@@ -55,12 +56,8 @@ export const Rider: FC = () => {
 
   const dropOntoTarget = useCallback(
     ({ offset, delta, item }: { offset?: XYCoord | null; delta?: XYCoord | null; item: BoxParams }) => {
-      const boxes = targetBoxes;
-      const setBoxes = setTargetBoxes;
-      const oppositeBoxes = sourceBoxes;
-      const setOppositeBoxes = setSourceBoxes;
-      const alreadyIn = boxes.map((b) => b.id).includes(item.id);
-      const result = [...boxes];
+      const alreadyIn = targetBoxes.map((b) => b.id).includes(item.id);
+      const result = [...targetBoxes];
       if (alreadyIn) {
         const box = result.find((b) => b.id === item.id);
         if (box) {
@@ -75,10 +72,10 @@ export const Rider: FC = () => {
       const newLeft = (offset?.x || 0) - (rect?.x || 0);
       const newTop = (offset?.y || 0) - (rect?.y || 0);
 
-      const otherBoxes = oppositeBoxes.filter((b) => b.id !== item.id);
-      result.push({ ...item, left: newLeft, top: newTop });
-      setBoxes(result);
-      setOppositeBoxes(otherBoxes);
+      const otherBoxes = sourceBoxes.filter((b) => b.id !== item.id);
+      result.push({ ...item, left: newLeft, top: newTop, width: item.width, height: item.height });
+      setTargetBoxes(result);
+      setSourceBoxes(otherBoxes);
     },
     [sourceBoxes, targetBoxes],
   );
@@ -94,18 +91,7 @@ export const Rider: FC = () => {
   );
 
   function downloadRider() {
-    function removeContent(boxes: BoxParams[]) {
-      return boxes.map((box) => ({
-        category: box.category,
-        id: box.id,
-        top: box.top,
-        left: box.left,
-        degree: box.degree,
-        level: box.level,
-      }));
-    }
-    const riderJson = { targetBoxes: removeContent(targetBoxes) };
-    exportRiderAsJson(riderJson);
+    exportRiderAsJson(targetBoxes);
   }
 
   const uploadprops: UploadProps = {
@@ -118,23 +104,21 @@ export const Rider: FC = () => {
       function prepareImport(boxes: BoxParams[]) {
         return boxes.map((box) => {
           const inv = inventory.find((each) => each.id === box.id);
-          return inv
-            ? { ...inv, top: box.top, left: box.left, degree: box.degree, level: box.level }
-            : { ...rawInventory[0], top: 0, left: 0, degree: 0, level: 0 };
+          return inv ? { ...inv, top: box.top, left: box.left, degree: box.degree, level: box.level } : box;
         });
       }
 
       function calculateSources(boxes: BoxParams[]) {
         const boxIds = boxes.map((box) => box.id);
-        return inventory.filter((inv) => boxIds.includes(inv.id));
+        return inventory.filter((inv) => !boxIds.includes(inv.id));
       }
 
       if (info.fileList.length) {
         const result = await info.fileList[0].originFileObj?.text();
         if (result) {
           const rider = JSON.parse(result);
-          setSourceBoxes(calculateSources(rider.targetBoxes));
-          setTargetBoxes(prepareImport(rider.targetBoxes));
+          setSourceBoxes(calculateSources(rider));
+          setTargetBoxes(prepareImport(rider));
         }
       }
     },
@@ -142,9 +126,11 @@ export const Rider: FC = () => {
 
   const items = useMemo(
     () =>
-      (["Keys", "Drums", "Bass", "Guitar"] as Category[]).map((key) => {
-        return { key, label: key, children: <SourceContainer cat={key} /> };
-      }),
+      (["Keys", "Drums", "Bass", "Guitar"] as Category[])
+        .map((key) => {
+          return { key, label: key as string, children: <SourceContainer cat={key} /> };
+        })
+        .concat([{ key: "Extra", label: "Extras", children: <ExtrasContainer /> }]),
     [],
   );
 
