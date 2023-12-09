@@ -10,7 +10,7 @@ export interface InventoryElement {
   category: Category;
 }
 
-export const rawInventory: InventoryElement[] = [
+export const Inventory: InventoryElement[] = [
   {
     category: "Keys",
     id: "Flügel",

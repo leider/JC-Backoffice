@@ -6,7 +6,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   optionen as optionenRestCall,
   orte as orteRestCall,
+  riderFor,
   saveOptionen,
+  saveRider,
   saveVeranstaltung,
   veranstaltungForUrl,
 } from "@/commons/loader.ts";
@@ -20,8 +22,13 @@ import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPag
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/authConsts.ts";
+import { Rider } from "jc-shared/rider/rider.ts";
 
-export const VeranstaltungContext = createContext<{ form: FormInstance<Veranstaltung>; optionen: OptionValues; orte: Orte } | null>(null);
+export const VeranstaltungContext = createContext<{
+  form: FormInstance<Veranstaltung>;
+  optionen: OptionValues;
+  orte: Orte;
+} | null>(null);
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
@@ -33,10 +40,12 @@ export default function VeranstaltungComp() {
   });
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
   const locations = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
+  const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung({ id: "unknown" }));
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
   const [orte, setOrte] = useState<Orte>(new Orte());
+  const [rider, setRider] = useState<Rider>(new Rider());
 
   useEffect(() => {
     if (veranst.data) {
@@ -56,6 +65,12 @@ export default function VeranstaltungComp() {
       setOrte(locations.data);
     }
   }, [locations.data]);
+
+  useEffect(() => {
+    if (riderQuery.data) {
+      setRider(riderQuery.data);
+    }
+  }, [riderQuery.data]);
 
   const queryClient = useQueryClient();
 
@@ -81,6 +96,7 @@ export default function VeranstaltungComp() {
       });
     },
   });
+
   const mutateOptionen = useMutation({
     mutationFn: saveOptionen,
     onSuccess: () => {
@@ -88,21 +104,31 @@ export default function VeranstaltungComp() {
     },
   });
 
+  const mutateRider = useMutation({
+    mutationFn: saveRider,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rider", url] });
+    },
+  });
+
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const { context } = useAuth();
   const navigate = useNavigate();
-  function initializeForm() {
+
+  useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
     form.setFieldsValue(deepCopy);
+    form.setFieldValue("riderBoxes", rider.boxes);
     const initial = toFormObject(veranstaltung);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (initial as any).riderBoxes = rider.boxes;
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
     setIsNew(!veranstaltung.id);
     form.validateFields();
-  }
+  }, [form, veranstaltung, rider]);
 
-  useEffect(initializeForm, [form, veranstaltung]);
   useEffect(() => {
     const accessrights = context?.currentUser.accessrights;
     if (accessrights !== undefined && !accessrights?.isAbendkasse) {
@@ -154,6 +180,10 @@ export default function VeranstaltungComp() {
       optionen.updateBackline("Rockshop", veranst.technik.backlineRockshop);
       optionen.updateCollection("artists", veranst.artist.name);
       mutateOptionen.mutate(optionen);
+      const boxes = form.getFieldValue("riderBoxes");
+      const newrider = new Rider({ id: url, startDate: veranstaltung.startDate, boxes });
+      mutateRider.mutate(newrider);
+      setRider(newrider);
       mutateVeranstaltung.mutate(veranst);
     });
   }

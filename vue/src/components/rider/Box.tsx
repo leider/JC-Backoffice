@@ -1,10 +1,11 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDrag } from "react-dnd";
-import { BoxParams, ItemTypes } from "@/components/rider/types.ts";
+import { ItemTypes } from "@/components/rider/types.ts";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { InventoryElement } from "@/components/rider/Inventory.ts";
+import { InventoryElement } from "jc-shared/rider/inventory.ts";
+import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const style: CSSProperties = {
   position: "absolute",
@@ -13,7 +14,7 @@ const style: CSSProperties = {
   cursor: "move",
 };
 
-export const Box: FC<{ item: BoxParams }> = ({ item }) => {
+export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ item, callback }) => {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -151,7 +152,12 @@ export const Box: FC<{ item: BoxParams }> = ({ item }) => {
 
   return (
     <div ref={drag} style={{ ...style, left: item.left, top: item.top, rotate: `${degree}deg`, zIndex: level }}>
-      <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="click">
+      <Popover
+        title={title}
+        content={isExtra ? PopContentForExtras() : PopContent(item)}
+        trigger="click"
+        onOpenChange={() => callback(item.id)}
+      >
         <div style={{ width, height }}>
           {item.img ? (
             <img src={"/riderimg/" + item.img.src} width={item.img.width} height={item.img.height} alt={item.title} />

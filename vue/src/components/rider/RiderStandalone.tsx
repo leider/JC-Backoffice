@@ -1,9 +1,9 @@
 import type { FC } from "react";
 import React, { useState } from "react";
-import { BoxParams } from "@/components/rider/types.ts";
 import { PageHeader } from "@ant-design/pro-layout";
 import { ExportRiderButton, ImportRiderButton } from "@/components/rider/ExportImport.tsx";
 import { RiderComp } from "@/components/rider/RiderComp.tsx";
+import { BoxParams } from "jc-shared/rider/rider.ts";
 
 export const RiderStandalone: FC = () => {
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);

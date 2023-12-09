@@ -1,9 +1,9 @@
-import { BoxParams } from "@/components/rider/types.ts";
 import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
 import { exportRiderAsJson } from "@/commons/loader.ts";
 import React from "react";
 import { App, Upload, UploadProps } from "antd";
-import { rawInventory } from "@/components/rider/Inventory.ts";
+import { Inventory } from "jc-shared/rider/inventory.ts";
+import { BoxParams } from "jc-shared/rider/rider.ts";
 
 export function ExportRiderButton({ boxes }: { boxes: BoxParams[] }) {
   return (
@@ -35,7 +35,7 @@ export function ImportRiderButton({ setTargetBoxes }: { setTargetBoxes: (boxes: 
           try {
             setTargetBoxes(
               (JSON.parse(result) as BoxParams[]).map((box) => {
-                const inv = rawInventory.find((each) => each.id === box.id);
+                const inv = Inventory.find((each) => each.id === box.id);
                 return inv ? { ...box, ...inv } : box;
               }),
             );

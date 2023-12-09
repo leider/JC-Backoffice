@@ -16,6 +16,8 @@ import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { Rider } from "jc-shared/rider/rider.ts";
+
 type ContentType = "json" | "pdf" | "zip" | "other";
 
 type FetchParams = {
@@ -258,6 +260,21 @@ export async function saveProgrammheft(kalender: Kalender) {
   });
 }
 
+// Rider
+export async function riderFor(url: string) {
+  const result = await getForType("json", `/rest/riders/${url}`);
+  return new Rider(result);
+}
+
+export async function saveRider(rider: Rider) {
+  return standardFetch({
+    method: "POST",
+    url: "/rest/riders",
+    data: rider,
+    contentType: "json",
+  });
+}
+
 // Optionen & Termine
 export async function optionen(): Promise<OptionValues> {
   const result = await getForType("json", "/rest/optionen");
@@ -420,10 +437,6 @@ export async function calendarEventSources(start: Date, end: Date, options?: Ter
     );
   }
   return getForType("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`);
-}
-
-export async function fcveranstaltungen(start: Date, end: Date) {
-  return getForType("json", `/rest/fcveranstaltungen.json?start=${start.toISOString()}&end=${end.toISOString()}`);
 }
 
 // Special

@@ -5,7 +5,7 @@ import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { List } from "antd";
 import { SourceElement } from "@/components/rider/SourceElement.tsx";
-import { Category, InventoryElement } from "@/components/rider/Inventory.ts";
+import { Category, InventoryElement } from "jc-shared/rider/inventory.ts";
 
 export const SourceContainer: FC<{
   cat: Category;

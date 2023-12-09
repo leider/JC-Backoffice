@@ -5,7 +5,8 @@ import { useDrop } from "react-dnd";
 
 import { Box } from "./Box.js";
 import type { DragItem } from "./types.ts";
-import { BoxParams, ItemTypes } from "./types.ts";
+import { ItemTypes } from "./types.ts";
+import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const style: CSSProperties = {
   width: "100%",
@@ -32,8 +33,9 @@ export const TargetContainer: FC<{
           const delta = monitor.getDifferenceFromInitialOffset() || { x: 0, y: 0 };
           const box = result.find((b) => b.id === item.id);
           if (box) {
-            box.left = item.left + delta.x;
-            box.top = item.top + delta.y;
+            result.splice(result.indexOf(box), 1);
+            const newBox = { ...box, left: item.left + delta.x, top: item.top + delta.y };
+            result.push(newBox);
             setTargetBoxes(result);
           }
           return undefined;
@@ -50,11 +52,22 @@ export const TargetContainer: FC<{
     [targetBoxes],
   );
 
+  function boxChanged(id: string) {
+    const result = [...targetBoxes]; // copy existing items
+    const box = result.find((b) => b.id === id);
+    if (box) {
+      result.splice(result.indexOf(box), 1);
+      const newBox = { ...box };
+      result.push(newBox);
+      setTargetBoxes(result);
+    }
+  }
+
   return (
     <div ref={targetContainer}>
       <div ref={dropTarget} style={style}>
         {targetBoxes.map((each) => {
-          return <Box key={each.id} item={each} />;
+          return <Box key={each.id} item={each} callback={boxChanged} />;
         })}
       </div>
     </div>

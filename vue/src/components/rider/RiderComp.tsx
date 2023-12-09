@@ -5,11 +5,11 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Collapse, ConfigProvider, Row } from "antd";
-import { BoxParams } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
-import { Category, InventoryElement, rawInventory } from "@/components/rider/Inventory.ts";
+import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
+import { BoxParams } from "jc-shared/rider/rider.ts";
 
-export const RiderComp: FC<{ targetBoxes: BoxParams[]; setTargetBoxes: (boxes: BoxParams[]) => void }> = ({
+export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }> = ({
   targetBoxes,
   setTargetBoxes,
 }) => {
@@ -22,19 +22,19 @@ export const RiderComp: FC<{ targetBoxes: BoxParams[]; setTargetBoxes: (boxes: B
     }
   }, []);
 
-  const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(rawInventory);
+  const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
   const [isTouch, setIsTouch] = useState<boolean>(false);
 
   useEffect(() => {
-    const boxIds = targetBoxes.map((box) => box.id);
-    setSourceBoxes(rawInventory.filter((inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
+    const boxIds = targetBoxes!.map((box) => box.id);
+    setSourceBoxes(Inventory.filter((inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
   }, [targetBoxes]);
 
   const itemDroppedOntoSource = useCallback(
     (id: string) => {
-      setTargetBoxes(targetBoxes.filter((b) => b.id !== id));
+      setTargetBoxes!(targetBoxes!.filter((b) => b.id !== id));
     },
-    [targetBoxes],
+    [setTargetBoxes, targetBoxes],
   );
 
   const sourceComponents = useMemo(
@@ -66,7 +66,7 @@ export const RiderComp: FC<{ targetBoxes: BoxParams[]; setTargetBoxes: (boxes: B
           </ConfigProvider>
         </Col>
         <Col span={20}>
-          <TargetContainer targetBoxes={targetBoxes} setTargetBoxes={setTargetBoxes} />
+          <TargetContainer targetBoxes={targetBoxes!} setTargetBoxes={setTargetBoxes!} />
         </Col>
       </Row>
     </DndProvider>
