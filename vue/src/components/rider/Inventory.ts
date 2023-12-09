@@ -74,4 +74,5 @@ export const rawInventory: InventoryElement[] = [
   },
   { category: "Guitar", id: "Jazzchorus", title: "Roland Jazzchorus", width: 55, height: 24, photo: { src: "Roland.png" } },
   { category: "Guitar", id: "Polytone 12", title: 'Polytone Amp 12"', width: 40, height: 35, photo: { src: "Polytone.png" } },
+  { category: "Extra", id: "Extra", title: "Eigener Inhalt", width: 50, height: 50 },
 ];

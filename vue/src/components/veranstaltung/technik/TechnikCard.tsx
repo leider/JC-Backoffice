@@ -35,7 +35,7 @@ export default function TechnikCard() {
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="technik" label="Rider und Backline" noTopBorder amount={summe}>
+    <CollapsibleForVeranstaltung suffix="technik" label="Backline" noTopBorder amount={summe}>
       <Row gutter={12}>
         <Col span={8}>
           <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />

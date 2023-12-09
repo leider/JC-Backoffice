@@ -1,12 +1,11 @@
 import type { CSSProperties, FC } from "react";
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import type { DropTargetMonitor } from "react-dnd";
 import { useDrop } from "react-dnd";
 
 import { Box } from "./Box.js";
 import type { DragItem } from "./types.ts";
-import { ItemTypes } from "./types.ts";
-import { BoxesContext } from "@/components/rider/Rider.tsx";
+import { BoxParams, ItemTypes } from "./types.ts";
 
 const style: CSSProperties = {
   width: "100%",
@@ -16,8 +15,10 @@ const style: CSSProperties = {
   overflow: "clip",
 };
 
-export const TargetContainer: FC = () => {
-  const { sourceBoxes, targetBoxes, setSourceBoxes, setTargetBoxes } = useContext(BoxesContext);
+export const TargetContainer: FC<{
+  targetBoxes: BoxParams[];
+  setTargetBoxes: (boxes: BoxParams[]) => void;
+}> = ({ targetBoxes, setTargetBoxes }) => {
   const targetContainer = useRef<HTMLDivElement | null>(null);
 
   const [, dropTarget] = useDrop(
@@ -43,11 +44,10 @@ export const TargetContainer: FC = () => {
         const rect = targetContainer.current?.getBoundingClientRect() || { x: 0, y: 0 };
         result.push({ ...item, left: offset.x - rect.x, top: offset.y - rect.y });
         setTargetBoxes(result);
-        setSourceBoxes(sourceBoxes.filter((b) => b.id !== item.id)); // remove added box from predefined sources
         return undefined;
       },
     }),
-    [sourceBoxes, targetBoxes],
+    [targetBoxes],
   );
 
   return (

@@ -2,12 +2,13 @@ import { useDrag } from "react-dnd";
 import { ItemTypes } from "@/components/rider/types.ts";
 import { List } from "antd";
 import { InventoryElement } from "@/components/rider/Inventory.ts";
+import { v4 as uuidv4 } from "uuid";
 
 export function SourceElement({ item }: { item: InventoryElement }) {
   const [, drag] = useDrag(() => {
     return {
       type: ItemTypes.SourceElement,
-      item,
+      item: () => (item.category === "Extra" ? { ...item, id: item.id + uuidv4(), left: 0, top: 0 } : item),
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),

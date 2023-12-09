@@ -1,16 +1,17 @@
 import type { FC } from "react";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { useDrop } from "react-dnd";
 import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
-import { BoxesContext } from "@/components/rider/Rider.tsx";
 import { List } from "antd";
 import { SourceElement } from "@/components/rider/SourceElement.tsx";
-import { Category } from "@/components/rider/Inventory.ts";
+import { Category, InventoryElement } from "@/components/rider/Inventory.ts";
 
-export const SourceContainer: FC<{ cat: Category }> = ({ cat }) => {
-  const { sourceBoxes, setSourceBoxes, targetBoxes, setTargetBoxes } = useContext(BoxesContext);
-
+export const SourceContainer: FC<{
+  cat: Category;
+  sourceBoxes: InventoryElement[];
+  dropCallback: (id: string) => void;
+}> = ({ cat, sourceBoxes, dropCallback }) => {
   const boxes = useMemo(() => {
     return sourceBoxes.filter((box) => box.category === cat);
   }, [sourceBoxes, cat]);
@@ -19,14 +20,11 @@ export const SourceContainer: FC<{ cat: Category }> = ({ cat }) => {
     () => ({
       accept: ItemTypes.BOX,
       drop: (item: DragItem) => {
-        const result = [...sourceBoxes];
-        result.push({ ...item });
-        setSourceBoxes(result);
-        setTargetBoxes(targetBoxes.filter((b) => b.id !== item.id));
+        dropCallback(item.id);
         return undefined;
       },
     }),
-    [sourceBoxes, targetBoxes, setSourceBoxes, setTargetBoxes],
+    [sourceBoxes],
   );
 
   return (
