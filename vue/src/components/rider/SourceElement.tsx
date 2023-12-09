@@ -1,5 +1,5 @@
 import { useDrag } from "react-dnd";
-import { ItemTypes } from "@/components/rider/types.ts";
+import { ItemTypes } from "./types.ts";
 import { List } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { InventoryElement } from "jc-shared/rider/inventory.ts";

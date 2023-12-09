@@ -21,3 +21,4 @@ jazzclubmongo*
 /frontendtests/output/
 /mongocollections
 mongoimport_jc.sh
+/backend/static/rider/

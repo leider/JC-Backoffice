@@ -192,13 +192,6 @@ const JazzContent: React.FC = () => {
         label: "Users",
       });
       setItems(localItems);
-      if (context?.currentUser?.accessrights?.isBookingTeam) {
-        localItems.push({
-          key: menuKeys.rider,
-          icon: <IconForSmallBlock iconName="UniversalAccess" />,
-          label: <Link to="/rider">Rider</Link>,
-        });
-      }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [context, subdirs],
   );

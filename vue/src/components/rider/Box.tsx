@@ -1,7 +1,7 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDrag } from "react-dnd";
-import { ItemTypes } from "@/components/rider/types.ts";
+import { ItemTypes } from "./types.ts";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { InventoryElement } from "jc-shared/rider/inventory.ts";

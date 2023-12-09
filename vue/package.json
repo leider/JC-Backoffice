@@ -1,10 +1,10 @@
 {
-  "name": "vue",
+  "name": "jc-vue",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port 1969",
-    "build": "vite build",
+    "deploy": "vite build",
     "eslint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
@@ -21,6 +21,7 @@
     "easymde": "2.18.0",
     "immutability-helper": "3.1.1",
     "ismobilejs": "1.1.1",
+    "jc-shared": "workspace:^",
     "jose": "5.1.3",
     "numeral": "2.0.6",
     "react": "18.2.0",

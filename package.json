@@ -9,7 +9,8 @@
     "backend",
     "batchjobs",
     "vue",
-    "shared"
+    "shared",
+    "rider"
   ],
   "repository": {
     "type": "git",
@@ -50,7 +51,7 @@
   "scripts": {
     "compile": "yarn workspaces foreach --all -p run deploy",
     "clean-ts": "yarn workspaces foreach --all -p run clean-ts",
-    "deploy": "yarn workspaces foreach --all -p run deploy && cd vue && yarn build",
+    "deploy": "yarn workspaces foreach --all -p run deploy",
     "develop": "yarn compile && cd vue && yarn dev",
     "dev": "cd vue && yarn dev",
     "start": "node start",

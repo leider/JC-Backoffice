@@ -1,0 +1,18 @@
+{
+  "name": "rider",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 1969",
+    "deploy": "vite build",
+    "eslint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "serve": "rm -rf  ../backend/static/rider && vite preview --port 1969"
+  },
+  "dependencies": {
+    "jc-vue": "workspace:^"
+  },
+  "devDependencies": {
+    "vite": "5.0.4"
+  },
+  "packageManager": "yarn@4.0.2"
+}

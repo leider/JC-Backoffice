@@ -1,11 +1,11 @@
 import type { FC } from "react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
+import { TargetContainer } from "./TargetContainer.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Collapse, ConfigProvider, Row } from "antd";
-import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
+import { SourceContainer } from "./SourceContainer.tsx";
 import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 

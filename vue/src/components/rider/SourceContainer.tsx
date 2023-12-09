@@ -4,7 +4,7 @@ import { useDrop } from "react-dnd";
 import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { List } from "antd";
-import { SourceElement } from "@/components/rider/SourceElement.tsx";
+import { SourceElement } from "./SourceElement.tsx";
 import { Category, InventoryElement } from "jc-shared/rider/inventory.ts";
 
 export const SourceContainer: FC<{

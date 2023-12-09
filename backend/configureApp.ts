@@ -10,6 +10,7 @@ import passport from "passport";
 import "./initWinston.js";
 import restApp from "./rest/index.js";
 import siteApp from "./lib/site/index.js";
+import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
 
 function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
@@ -24,6 +25,7 @@ export default function (app: express.Express, forDev?: boolean): void {
   app.use(compress());
   if (!forDev) {
     app.use("/vue", history());
+    app.use("/rider", history());
   }
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
@@ -33,4 +35,5 @@ export default function (app: express.Express, forDev?: boolean): void {
 
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, restApp);
+  app.use("/ridersrest/", ridersrest);
 }
