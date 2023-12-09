@@ -28,6 +28,7 @@ import { Rider } from "@/components/rider/Rider.tsx";
 export const routes: RouteObject[] = [
   {
     element: <JazzclubApp />,
+    errorElement: <Navigate to={"/"} />,
     children: [
       {
         path: "/",

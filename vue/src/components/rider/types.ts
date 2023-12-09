@@ -1,19 +1,9 @@
-export type Category = "Keys" | "Drums" | "Bass" | "Guitar" | "Extra";
+import { InventoryElement } from "@/components/rider/Inventory.ts";
 
 export const ItemTypes = {
   BOX: "box",
   SourceElement: "source-element",
 };
-
-export interface InventoryElement {
-  id: string;
-  title: string;
-  width: number;
-  height: number;
-  img?: { src: string; width?: number; height?: number };
-  photo?: { src: string; width?: number; height?: number };
-  category: Category;
-}
 
 export interface BoxParams extends InventoryElement {
   top: number;

@@ -1,28 +1,32 @@
 import type { FC } from "react";
 import { useContext, useMemo } from "react";
 import { useDrop } from "react-dnd";
-import type { Category, DragItem } from "./types.ts";
+import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { BoxesContext } from "@/components/rider/Rider.tsx";
 import { List } from "antd";
 import { SourceElement } from "@/components/rider/SourceElement.tsx";
+import { Category } from "@/components/rider/Inventory.ts";
 
 export const SourceContainer: FC<{ cat: Category }> = ({ cat }) => {
-  const boxesContext = useContext(BoxesContext);
+  const { sourceBoxes, setSourceBoxes, targetBoxes, setTargetBoxes } = useContext(BoxesContext);
 
   const boxes = useMemo(() => {
-    return boxesContext.sourceBoxes.filter((box) => box.category === cat);
-  }, [boxesContext, cat]);
+    return sourceBoxes.filter((box) => box.category === cat);
+  }, [sourceBoxes, cat]);
 
   const [, drop] = useDrop(
     () => ({
       accept: ItemTypes.BOX,
-      drop(item: DragItem) {
-        boxesContext.dropOntoSource({ item: item });
+      drop: (item: DragItem) => {
+        const result = [...sourceBoxes];
+        result.push({ ...item });
+        setSourceBoxes(result);
+        setTargetBoxes(targetBoxes.filter((b) => b.id !== item.id));
         return undefined;
       },
     }),
-    [boxesContext],
+    [sourceBoxes, targetBoxes, setSourceBoxes, setTargetBoxes],
   );
 
   return (

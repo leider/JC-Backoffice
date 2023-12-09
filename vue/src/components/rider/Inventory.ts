@@ -1,4 +1,14 @@
-import { InventoryElement } from "@/components/rider/types.ts";
+export type Category = "Keys" | "Drums" | "Bass" | "Guitar" | "Extra";
+
+export interface InventoryElement {
+  id: string;
+  title: string;
+  width: number;
+  height: number;
+  img?: { src: string; width?: number; height?: number };
+  photo?: { src: string; width?: number; height?: number };
+  category: Category;
+}
 
 export const rawInventory: InventoryElement[] = [
   {

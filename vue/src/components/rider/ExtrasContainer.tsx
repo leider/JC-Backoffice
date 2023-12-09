@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { useMemo } from "react";
-import type { InventoryElement } from "./types.ts";
 import { List } from "antd";
 import { ExtrasElement } from "@/components/rider/ExtrasElement.tsx";
+import { InventoryElement } from "@/components/rider/Inventory.ts";
 
 export const ExtrasContainer: FC = () => {
   const boxes: InventoryElement[] = useMemo(() => {

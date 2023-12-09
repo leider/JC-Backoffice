@@ -1,9 +1,10 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDrag } from "react-dnd";
-import { BoxParams, InventoryElement, ItemTypes } from "@/components/rider/types.ts";
+import { BoxParams, ItemTypes } from "@/components/rider/types.ts";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { InventoryElement } from "@/components/rider/Inventory.ts";
 
 const style: CSSProperties = {
   position: "absolute",
@@ -70,7 +71,7 @@ export const Box: FC<{ item: BoxParams }> = ({ item }) => {
       <>
         {inv.photo && (
           <div>
-            <img src={`img/${inv.photo?.src}`} alt="Popup Photo" />
+            <img src={`/riderimg/${inv.photo?.src}`} alt="Popup Photo" />
           </div>
         )}
         {RotateAndLevelRow()}
@@ -153,7 +154,7 @@ export const Box: FC<{ item: BoxParams }> = ({ item }) => {
       <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="click">
         <div style={{ width, height }}>
           {item.img ? (
-            <img src={"img/" + item.img.src} width={item.img.width} height={item.img.height} alt={item.title} />
+            <img src={"/riderimg/" + item.img.src} width={item.img.width} height={item.img.height} alt={item.title} />
           ) : (
             <div style={{ textAlign: "center", fontSize: "10px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
               {title}

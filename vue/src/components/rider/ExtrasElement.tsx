@@ -1,7 +1,8 @@
 import { useDrag } from "react-dnd";
-import { InventoryElement, ItemTypes } from "@/components/rider/types.ts";
+import { ItemTypes } from "@/components/rider/types.ts";
 import { List } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import { InventoryElement } from "@/components/rider/Inventory.ts";
 
 export function ExtrasElement({ item }: { item: InventoryElement }) {
   const [, drag] = useDrag(() => {
