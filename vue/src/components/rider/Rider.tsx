@@ -4,7 +4,7 @@ import { TargetContainer } from "@/components/rider/TargetContainer.tsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { Col, Collapse, ConfigProvider, Row, Upload, UploadProps } from "antd";
+import { App, Col, Collapse, ConfigProvider, Row, Upload, UploadProps } from "antd";
 import { BoxParams } from "@/components/rider/types.ts";
 import { SourceContainer } from "@/components/rider/SourceContainer.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
@@ -30,9 +30,6 @@ export const Rider: FC = () => {
     () =>
       rawInventory.map((inv) => ({
         ...inv,
-        top: 0,
-        left: 0,
-        degree: 0,
       })),
     [],
   );
@@ -52,35 +49,39 @@ export const Rider: FC = () => {
 
   const [isTouch, setIsTouch] = useState<boolean>(false);
 
+  const { notification } = App.useApp();
   function downloadRider() {
     exportRiderAsJson(targetBoxes);
   }
 
   const uploadprops: UploadProps = {
+    accept: "application/json",
     beforeUpload: () => {
       return false;
     },
+    maxCount: 1,
     showUploadList: false,
-
     onChange: async (info) => {
-      function prepareImport(boxes: BoxParams[]) {
-        return boxes.map((box) => {
-          const inv = inventory.find((each) => each.id === box.id);
-          return inv ? { ...inv, top: box.top, left: box.left, degree: box.degree, level: box.level } : box;
-        });
-      }
-
-      function calculateSources(boxes: BoxParams[]) {
-        const boxIds = boxes.map((box) => box.id);
-        return inventory.filter((inv) => !boxIds.includes(inv.id));
-      }
-
       if (info.fileList.length) {
         const result = await info.fileList[0].originFileObj?.text();
         if (result) {
-          const rider = JSON.parse(result);
-          setSourceBoxes(calculateSources(rider));
-          setTargetBoxes(prepareImport(rider));
+          try {
+            const boxes = JSON.parse(result) as BoxParams[];
+            const boxIds = boxes.map((box) => box.id);
+            setSourceBoxes(inventory.filter((inv) => !boxIds.includes(inv.id)));
+            setTargetBoxes(
+              boxes.map((box) => {
+                const inv = inventory.find((each) => each.id === box.id);
+                return inv ? { ...box, ...inv } : box;
+              }),
+            );
+          } catch (e) {
+            notification.error({
+              message: "Fehler",
+              description: `Datei kann nicht interpretiert werden.
+${e}`,
+            });
+          }
         }
       }
     },
