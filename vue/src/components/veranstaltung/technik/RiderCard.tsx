@@ -21,7 +21,7 @@ ${href}
 Liebe Grüße,
 Dein Jazzclub Team
     `);
-  }, [search]);
+  }, [href]);
 
   return (
     <CollapsibleForVeranstaltung suffix="technik" label="Rider">
