@@ -5,6 +5,7 @@ import * as jose from "jose";
 import User from "jc-shared/user/user";
 import { currentUser, wikisubdirs } from "@/commons/loader.ts";
 import { AuthContext, LoginState } from "./authConsts";
+import { useLocation, useNavigate } from "react-router-dom";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
@@ -55,6 +56,10 @@ export interface ApplicationContext {
 function useProvideAuth(): IUseProvideAuth {
   const [loginState, setLoginState] = useState(LoginState.UNKNOWN);
   const [context, setContext] = useState<ApplicationContext | undefined>(undefined);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     async function innerWorker() {
       if (loginState === LoginState.LOGGED_IN) {
@@ -130,9 +135,11 @@ function useProvideAuth(): IUseProvideAuth {
     try {
       const newToken = await authApi.refreshTokenPost();
       setTokenAndLoginState(newToken.data.token);
-    } catch (_) {
+    } catch (e) {
       // some token cookies are non existent in the backend (already deleted -> false positive)
-      return;
+      if (location.pathname !== "/login") {
+        return navigate({ pathname: "/login", search: encodeURIComponent("/") });
+      }
     }
   }
 
