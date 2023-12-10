@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
+    link(href=publicUrlPrefix + '/fonts/fonts.css', rel="stylesheet")
+
+  body
+    div#container(style="position: relative; width: 100%; height: 720px; border: 1px solid black; overflow: clip")
+      div(style="position: absolute; left: 10px; top: 10px;")
+        h3 #{veranstaltung.kopf.titel} #{" "}
+          small #{veranstaltung.datumForDisplayShort}
+
+      each box in boxes
+        if box.img
+          div(id=box.id, style=box.divStyleForImg): img(src=`${publicUrlPrefix}/riderimg/${box.img.src}`, style=box.imgStyle)
+        else
+          div(id=box.id, style=box.divStyleForBox): b(style="background-color: black; color: white;") &uarr; Front &uarr;
+        script.
+          function doit() {
+            const boxObj = !{JSON.stringify(box)}
+            if (boxObj.img) {
+              return;
+            }
+            const container = document.getElementById("container");
+            const elem = document.getElementById(boxObj.id);
+            const rect = (elem.getBoundingClientRect());
+            const surr = document.createElement("div");
+            surr.style.position = "absolute";
+            surr.style.textAlign = "left";
+            surr.style.fontSize = "10px";
+            surr.style.padding = "4px";
+            surr.style.left = rect.left+"px";
+            surr.style.top = rect.top+"px";
+            surr.style.width = rect.width+"px";
+            surr.style.height = rect.height+"px";
+            surr.style.zIndex = 10;
+            surr.innerHTML = "<p><b>"+boxObj.title+"</b></p><p>"+boxObj.comment+"</p>"
+            container.appendChild(surr)
+          }
+          doit()
+

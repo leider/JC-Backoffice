@@ -23,12 +23,17 @@ Dein Jazzclub Team
     `);
   }, [href]);
 
+  const printref = useMemo(() => {
+    return href.replace("rider", "pdf/rider");
+  }, [href]);
+
   return (
     <CollapsibleForVeranstaltung suffix="technik" label="Rider">
       <Row gutter={12}>
         <Col span={24}>
           <PageHeader
             extra={[
+              <ButtonWithIcon key={"pdf"} icon={"Printer"} text="PDF" href={printref} target="_blank" />,
               <ButtonWithIcon
                 key={"sendrider"}
                 icon={"EnvelopeFill"}

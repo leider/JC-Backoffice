@@ -1,10 +1,9 @@
-const __dirname = new URL(".", import.meta.url).pathname;
 import { NextFunction, Response } from "express";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
-import conf from "../../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import store from "../veranstaltungen/veranstaltungenstore.js";
 import vermietungenstore from "../vermietungen/vermietungenstore.js";
 import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
@@ -14,6 +13,10 @@ import pug from "pug";
 import path from "path";
 import mailtransport from "../mailsender/mailtransport.js";
 import Message from "jc-shared/mail/message.js";
+import riderstore from "../rider/riderstore.js";
+import { PrintableBox } from "jc-shared/rider/rider.js";
+
+const __dirname = new URL(".", import.meta.url).pathname;
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
@@ -56,6 +59,32 @@ export async function kassenzettel(res: Response, next: NextFunction, veranstalt
   const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
   const kassierer = user?.name || "";
   res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
+}
+
+export async function riderPdf(res: Response, next: NextFunction, url: string) {
+  const rider = await riderstore.getRider(url);
+  const veranstaltung = await veranstaltungenService.getVeranstaltung(url);
+
+  if (!rider) {
+    return res.redirect("/");
+  }
+  const boxes = rider.boxes.map((box) => new PrintableBox(box));
+
+  //return res.render("rider", { boxes, veranstaltung, publicUrlPrefix });
+  res.render(
+    "rider",
+    { boxes, veranstaltung, publicUrlPrefix },
+    generatePdf(
+      {
+        format: "a4",
+        landscape: true,
+        scale: 1,
+        margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
+      },
+      res,
+      next,
+    ),
+  );
 }
 
 export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung) {

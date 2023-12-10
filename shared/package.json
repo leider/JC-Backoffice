@@ -21,7 +21,8 @@
   "scripts": {
     "test-recompiled": "yarn tsc && yarn test",
     "test": "../node_modules/.bin/mocha --exit test/**/*.js",
-    "deploy": "../node_modules/typescript/bin/tsc",
+    "compile": "../node_modules/typescript/bin/tsc",
+    "deploy": "yarn compile",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
     "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js"
   }

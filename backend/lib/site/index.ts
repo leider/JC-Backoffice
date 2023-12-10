@@ -1,5 +1,5 @@
-const __dirname = new URL(".", import.meta.url).pathname;
-import express, { NextFunction, Request, Response } from "express";
+import pdfEndpoints from "../pdf/pdfEndpoints.js";
+import express, { Request, Response } from "express";
 import path from "path";
 import sharp from "sharp";
 import jwt from "jsonwebtoken";
@@ -16,9 +16,10 @@ import userstore from "../users/userstore.js";
 import { hashPassword } from "../commons/hashPassword.js";
 import conf from "../../../shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
-import { kassenbericht, kassenzettel, vermietungAngebot, vertrag } from "./pdfGeneration.js";
 import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
+
+const __dirname = new URL(".", import.meta.url).pathname;
 
 const appLogger = loggers.get("application");
 
@@ -172,23 +173,6 @@ app.get("/ical/", async (req, res) => {
   }
 });
 
-app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextFunction) => {
-  const datum = DatumUhrzeit.forYYYYMM(req.params.year + "" + req.params.month);
-  kassenbericht(res, next, datum);
-});
-
-app.get("/pdf/kassenzettel/:url", (req, res, next) => {
-  kassenzettel(res, next, req.params.url);
-});
-
-app.get("/pdf/vertrag/:url/:language", async (req, res, next) => {
-  vertrag(res, next, req.params.url, req.params.language);
-});
-
-app.get("/pdf/vermietungAngebot/:url/:art", async (req, res, next) => {
-  vermietungAngebot(res, next, req.params.url, req.params.art);
-});
-
 app.get("/imgzip/:yymm", (req, res, next) => {
   veranstaltungenService.imgzip(res, next, req.params.yymm);
 });
@@ -196,5 +180,7 @@ app.get("/imgzip/:yymm", (req, res, next) => {
 app.get("/imgzipForVeranstaltung/:url", (req, res, next) => {
   veranstaltungenService.imgzipForVeranstaltung(res, next, req.params.url);
 });
+
+app.use("/pdf", pdfEndpoints);
 
 export default app;

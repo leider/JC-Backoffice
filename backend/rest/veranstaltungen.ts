@@ -12,7 +12,7 @@ import User from "jc-shared/user/user.js";
 import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
-import { kassenzettelToBuchhaltung } from "../lib/site/pdfGeneration.js";
+import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 
 const app = express();
 

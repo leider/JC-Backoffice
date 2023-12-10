@@ -49,7 +49,7 @@
     "dayjs": "1.11.10"
   },
   "scripts": {
-    "compile": "yarn workspaces foreach --all -p run deploy",
+    "compile": "yarn workspaces foreach --all -p run compile",
     "clean-ts": "yarn workspaces foreach --all -p run clean-ts",
     "deploy": "yarn workspaces foreach --all -p run deploy",
     "develop": "yarn compile && cd vue && yarn dev",

@@ -25,7 +25,7 @@ export default function Kassenbericht() {
         <PageHeader title="Kassenberichte" />
         {monate.map((monat) => (
           <p key={monat.monatJahrKompakt}>
-            <a href={"/kassenbericht/" + monat.fuerKalenderViews} target="_blank">
+            <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank">
               Kassenbericht {monat.monatJahrKompakt}
             </a>
           </p>
