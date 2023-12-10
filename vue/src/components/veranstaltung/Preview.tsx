@@ -1,11 +1,11 @@
 import { Button, Col, ConfigProvider, Divider, List, Row, Tooltip } from "antd";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useMemo, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { PageHeader } from "@ant-design/pro-layout";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, veranstaltungForUrl } from "@/commons/loader.ts";
+import { allUsers, riderFor, veranstaltungForUrl } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
@@ -15,6 +15,7 @@ import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 import Kontakt from "jc-shared/veranstaltung/kontakt";
 import { useAuth } from "@/commons/authConsts.ts";
 import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
+import { Rider } from "jc-shared/rider/rider.ts";
 
 function ButtonAbendkasse({ callback }: { callback: () => void }) {
   const { color, icon } = useColorsAndIconsForSections("kasse");
@@ -83,9 +84,15 @@ export default function Preview() {
     queryFn: () => veranstaltungForUrl(url || ""),
   });
   const theUsers = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
+  const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
   const [users, setUsers] = useState<User[]>([]);
+  const [rider, setRider] = useState<Rider>(new Rider());
+
+  const printref = useMemo(() => {
+    return window.location.href.replace("vue/veranstaltung/preview", "pdf/rider");
+  }, []);
 
   useEffect(() => {
     if (veranst.data) {
@@ -98,6 +105,12 @@ export default function Preview() {
       setUsers(theUsers.data);
     }
   }, [theUsers.data]);
+
+  useEffect(() => {
+    if (riderQuery.data) {
+      setRider(riderQuery.data);
+    }
+  }, [riderQuery.data]);
 
   const { colorForEventTyp } = useTypeCustomColors();
 
@@ -227,9 +240,18 @@ export default function Preview() {
                   <ul>
                     {veranstaltung.technik.dateirider.map((item) => (
                       <li key={item}>
-                        <a href={`/files/${item}`}>{item}</a>
+                        <a href={`/files/${item}`} target="_blank">
+                          {item}
+                        </a>
                       </li>
                     ))}
+                    {rider?.boxes.length > 0 && (
+                      <li key="riderurl">
+                        <a href={printref} target="_blank">
+                          {`Rider-${url}.pdf`}
+                        </a>
+                      </li>
+                    )}
                   </ul>
                 </Col>
               )}
