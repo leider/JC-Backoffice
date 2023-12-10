@@ -35,7 +35,7 @@ html
             surr.style.width = rect.width+"px";
             surr.style.height = rect.height+"px";
             surr.style.zIndex = 10;
-            surr.innerHTML = "<p><b>"+boxObj.title+"</b></p><p>"+boxObj.comment+"</p>"
+            surr.innerHTML = "<p><b>"+boxObj.title+"</b></p><p>"+(boxObj.comment || "")+"</p>"
             container.appendChild(surr)
           }
           doit()
