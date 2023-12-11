@@ -17,7 +17,7 @@ export const Inventory: InventoryElement[] = [
     title: "Flügel (Yamaha)",
     width: 150,
     height: 200,
-    img: { src: "pianoschema.svg", width: 150, height: 200 },
+    img: { src: "pianoschema.png", width: 150, height: 200 },
     photo: { src: "yamaha.jpg", width: 150, height: 200 },
   },
   { category: "Keys", id: "Klavierbank", title: "Klavierbank", width: 65, height: 33, photo: { src: "Bench.png" } },
