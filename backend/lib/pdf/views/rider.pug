@@ -1,5 +1,5 @@
 doctype html
-html
+html(style="-webkit-print-color-adjust: exact;")
   head
     meta(charset="utf-8")
     link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
@@ -15,7 +15,7 @@ html
         if box.img
           div(id=box.id, style=box.divStyleForImg): img(src=`${publicUrlPrefix}/riderimg/${box.img.src}`, style=box.imgStyle)
         else
-          div(id=box.id, style=box.divStyleForBox): b(style="background-color: black; color: white;") &uarr; Front &uarr;
+          div(id=box.id, style=box.divStyleForBox): b(style="background-color: lightsalmon; color: white;") &uarr; Front &uarr;
         script.
           function doit() {
             const boxObj = !{JSON.stringify(box)}

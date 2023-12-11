@@ -9,9 +9,20 @@ import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const style: CSSProperties = {
   position: "absolute",
+  cursor: "move",
+};
+
+const styleInner: CSSProperties = {
   border: "0.2px solid gray",
   backgroundColor: "white",
-  cursor: "move",
+};
+
+const styleText: CSSProperties = {
+  textAlign: "center",
+  fontSize: "10px",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
 };
 
 export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ item, callback }) => {
@@ -151,20 +162,18 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
   );
 
   return (
-    <div ref={drag} style={{ ...style, left: item.left, top: item.top, rotate: `${degree}deg`, zIndex: level }}>
+    <div ref={drag} style={{ ...style, left: item.left, top: item.top }}>
       <Popover
         title={title}
         content={isExtra ? PopContentForExtras() : PopContent(item)}
         trigger="click"
         onOpenChange={() => callback(item.id)}
       >
-        <div style={{ width, height }}>
+        <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level }}>
           {item.img ? (
             <img src={"/riderimg/" + item.img.src} width={item.img.width} height={item.img.height} alt={item.title} />
           ) : (
-            <div style={{ textAlign: "center", fontSize: "10px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>
-              {title}
-            </div>
+            <div style={styleText}>{title}</div>
           )}
         </div>
       </Popover>
