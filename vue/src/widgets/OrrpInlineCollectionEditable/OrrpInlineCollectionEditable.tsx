@@ -94,7 +94,7 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                           type="text"
                           icon={<PlusOutlined />}
                           onClick={() => {
-                            add();
+                            add({}, 0);
                             props.onChange?.("CHANGED");
                           }}
                           disabled={!!props.maxRows && fields.length >= (props.maxRows || 0)}
