@@ -234,7 +234,7 @@ export default function Preview() {
                   <Divider />
                 </Col>
               )}
-              {veranstaltung.technik.dateirider.length > 0 && (
+              {veranstaltung.technik.dateirider.length > 0 ? (
                 <Col span={24}>
                   <b>Dateien:</b>
                   <ul>
@@ -254,6 +254,19 @@ export default function Preview() {
                     )}
                   </ul>
                 </Col>
+              ) : (
+                rider?.boxes.length > 0 && (
+                  <Col span={24}>
+                    <b>Dateien:</b>
+                    <ul>
+                      <li key="riderurl">
+                        <a href={printref} target="_blank">
+                          {`Rider-${url}.pdf`}
+                        </a>
+                      </li>
+                    </ul>
+                  </Col>
+                )
               )}
             </Row>
           </CollapsibleForVeranstaltung>
