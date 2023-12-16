@@ -18,6 +18,7 @@ import conf from "../../../shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
 import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
+import fs from "fs";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
@@ -133,6 +134,18 @@ app.post("/logout", async (req, res) => {
 const uploadDir = path.join(__dirname, "../../static/upload");
 
 app.get("/imagepreview/:filename", (req, res, next) => {
+  // eslint-disable-next-line no-sync
+  if (!fs.existsSync(uploadDir + "/" + req.params.filename)) {
+    return sharp(uploadDir + "/../No-Image-Placeholder.svg").toBuffer((err, buffer) => {
+      if (err) {
+        if (err.message === "Input file is missing") {
+          return next();
+        }
+        return next(err);
+      }
+      res.send(buffer);
+    });
+  }
   sharp(uploadDir + "/" + req.params.filename)
     .resize({ width: 800 })
     .toBuffer((err, buffer) => {

@@ -35,8 +35,9 @@ ${presse.fullyQualifiedJazzclubURL}`,
       <div dangerouslySetInnerHTML={{ __html: preview }} />
       {vermietung.presse.image.map((img) => (
         <Image
+          key={img}
           src={`/imagepreview/${img}`}
-          width={400}
+          width={"100%"}
           preview={{
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
