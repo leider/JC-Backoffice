@@ -5,7 +5,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, riderFor, veranstaltungForUrl } from "@/commons/loader.ts";
+import { allUsers, optionen as optionenRestCall, riderFor, veranstaltungForUrl } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/components/Icon";
@@ -14,8 +14,8 @@ import renderer from "jc-shared/commons/renderer";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff";
 import Kontakt from "jc-shared/veranstaltung/kontakt";
 import { useAuth } from "@/commons/authConsts.ts";
-import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
+import groupBy from "lodash/groupBy";
 
 function ButtonAbendkasse({ callback }: { callback: () => void }) {
   const { color, icon } = useColorsAndIconsForSections("kasse");
@@ -83,16 +83,24 @@ export default function Preview() {
     queryKey: ["veranstaltung", url],
     queryFn: () => veranstaltungForUrl(url || ""),
   });
-  const theUsers = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
+  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
+  const theUsers = useQuery({ queryKey: ["users"], queryFn: allUsers });
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
   const [users, setUsers] = useState<User[]>([]);
   const [rider, setRider] = useState<Rider>(new Rider());
-
+  const [typeColor, setTypeColor] = useState<string | undefined>("");
   const printref = useMemo(() => {
     return window.location.href.replace("vue/veranstaltung/preview", "pdf/rider");
   }, []);
+
+  useEffect(() => {
+    if (opts.data && veranstaltung) {
+      const typByName = groupBy(opts.data?.typenPlus || [], "name");
+      setTypeColor(typByName[veranstaltung.kopf.eventTyp]?.[0].color);
+    }
+  }, [opts.data, veranstaltung]);
 
   useEffect(() => {
     if (veranst.data) {
@@ -112,9 +120,6 @@ export default function Preview() {
     }
   }, [riderQuery.data]);
 
-  const { colorForEventTyp } = useTypeCustomColors();
-
-  const typeColor = colorForEventTyp(veranstaltung.kopf.eventTyp);
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <div>

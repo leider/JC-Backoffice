@@ -1,3 +1,5 @@
+import optionenstore from "../optionen/optionenstore.js";
+
 const __dirname = new URL(".", import.meta.url).pathname;
 import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
@@ -10,6 +12,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import User from "jc-shared/user/user.js";
 
 import store from "./veranstaltungenstore.js";
+import groupBy from "lodash/groupBy.js";
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
@@ -21,11 +24,17 @@ async function getVeranstaltung(url: string) {
   return veranstaltung;
 }
 
-function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user?: User): Veranstaltung[] {
+async function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user?: User): Promise<Veranstaltung[]> {
+  const optionen = await optionenstore.get();
+  const typByName = groupBy(optionen?.typenPlus || [], "name");
+  const enrichedVeranstaltungen = veranstaltungen.map((v) => {
+    v.kopf.eventTypRich = typByName[v.kopf.eventTyp]?.[0];
+    return v;
+  });
   if (user?.accessrights?.isBookingTeam) {
-    return veranstaltungen;
+    return enrichedVeranstaltungen;
   }
-  return veranstaltungen.filter((v) => v.kopf.confirmed);
+  return enrichedVeranstaltungen.filter((v) => v.kopf.confirmed);
 }
 
 function zipVeranstaltungen(veranstaltungen: Veranstaltung[], name: string, res: Response, next: NextFunction) {

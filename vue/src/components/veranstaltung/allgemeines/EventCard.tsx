@@ -1,6 +1,5 @@
 import OptionValues from "jc-shared/optionen/optionValues";
-import React, { useContext, useEffect, useState } from "react";
-import cssColor from "jc-shared/commons/fieldHelpers";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -12,16 +11,25 @@ import { useAuth } from "@/commons/authConsts.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import groupBy from "lodash/groupBy";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
-  const [eventTypes, setEventTypes] = useState<{ label: React.ReactElement; value: string }[]>([]);
-  useEffect(() => {
-    const localOptionen = props.optionen.typen.map((typ) => ({
-      label: <span className={`text-${cssColor(typ)}`}>{typ}</span>,
-      value: typ,
-    }));
-    setEventTypes(localOptionen);
+  const typByName = useMemo(() => {
+    return groupBy(props.optionen.typenPlus || [], "name");
   }, [props.optionen]);
+
+  const typToDisplay = useCallback(
+    (typ: string) => {
+      const color = typByName[typ]?.[0].color;
+      return {
+        label: <span style={{ color }}>{typ}</span>,
+        value: typ,
+      };
+    },
+    [typByName],
+  );
+
+  const eventTypes = useMemo(() => props.optionen.typen.map(typToDisplay), [props.optionen.typen, typToDisplay]);
 
   return <Select options={eventTypes} {...props} showSearch />;
 }

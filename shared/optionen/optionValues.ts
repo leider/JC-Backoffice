@@ -13,6 +13,34 @@ export type Hotelpreise = {
   suiteEUR: number;
 };
 
+export type TypMitMehr = {
+  name: string;
+  kasse1: boolean;
+  kasse2: boolean;
+  techniker1: boolean;
+  techniker2: boolean;
+  master: boolean;
+  merchandise: boolean;
+  color: string;
+};
+
+function colorForTyp(typ: string): string {
+  const colormap: { [index: string]: string } = {
+    "Club Konzert": "#4faee3",
+    Homegrown: "#24719d",
+    JamSession: "#dea71f",
+    "Jazz und Literatur": "#9185be",
+    JazzClassix: "#4faee3",
+    JazzFestival: "#9fc442",
+    "JC im Kunstverein": "#9185be",
+    Kino: "#9185be",
+    Kooperation: "#9185be",
+    Livestream: "#ff29ac",
+    Soulcafé: "#f07f31",
+  };
+  return colormap[typ] || "#6c757d";
+}
+
 export type Preisprofil = {
   name: string;
   regulaer: number;
@@ -60,6 +88,7 @@ export default class OptionValues {
   hotelpreise: Hotelpreise[] = [];
   genres: string[] = [];
   typen: string[] = [];
+  typenPlus: TypMitMehr[] = [];
   kooperationen: string[] = [];
   backlineJazzclub: string[] = [];
   backlineRockshop: string[] = [];
@@ -90,6 +119,9 @@ export default class OptionValues {
         artists: sortByNameCaseInsensitive(object.artists || []),
         preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) =>
           a.regulaer > b.regulaer ? 1 : -1,
+        ),
+        typenPlus: (object.typenPlus || (object.typen || []).map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))).sort(
+          (a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
         ),
       });
     }

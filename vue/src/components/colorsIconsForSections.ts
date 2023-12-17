@@ -1,10 +1,19 @@
 import { IconProps } from "@/components/Icon";
-import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 export type buttonType = "allgemeines" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 
 export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
-  const { typeColors } = useTypeCustomColors();
+  const jazzColors = {
+    allgemeines: "#05498c",
+    angebot: "#328300",
+    ausgaben: "#d50f36",
+    hotel: "#66267b",
+    kasse: "#9185be",
+    presse: "#95c22e",
+    staff: "#dea71f",
+    technik: "#009285",
+    vermietung: "#f6eee1",
+  };
 
   const icons: { [index: string]: IconProps["iconName"] } = {
     allgemeines: "Keyboard",
@@ -18,7 +27,7 @@ export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
   };
 
   function color(localType = type): string {
-    return typeColors[localType];
+    return jazzColors[localType];
   }
 
   function icon(localType = type): IconProps["iconName"] {

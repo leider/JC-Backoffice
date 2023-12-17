@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CSSProperties, useContext, useEffect, useState } from "react";
+import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { Form } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
@@ -8,15 +8,15 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
-import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
+import groupBy from "lodash/groupBy";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
   const form = veranstContext!.form;
+  const optionen = veranstContext!.optionen;
   const { url } = useParams();
 
   const { context } = useAuth();
-  const [typeColor, setTypeColor] = useState<string>("");
   const [displayDate, setDisplayDate] = useState<string>("");
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
@@ -26,6 +26,12 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
     form,
     preserve: true,
   });
+
+  const typeColor = useMemo(() => {
+    const typByName = groupBy(optionen?.typenPlus || [], "name");
+    return typByName[eventTyp]?.[0].color;
+  }, [optionen, eventTyp]);
+
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
   const startDate = Form.useWatch(["startAndEnd", "start"], {
     form,
@@ -65,15 +71,13 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   });
 
   const [title, setTitle] = useState<string>("");
-  const { colorForEventTyp, typeColors } = useTypeCustomColors();
 
   useEffect(() => {
-    setTypeColor(colorForEventTyp(eventTyp));
     const tempTitle = isNew ? "Neue oder kopierte Veranstaltung" : titel || "";
     setTitle(tempTitle);
     document.title = tempTitle;
     setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
-  }, [isNew, eventTyp, titel, startDate, colorForEventTyp]);
+  }, [isNew, eventTyp, titel, startDate]);
 
   useEffect(() => {
     const taggies: { label: string; color: boolean }[] = [
@@ -112,7 +116,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
       {isNew && (
         <b
           style={{
-            color: typeColors["ausgaben"],
+            color: "#d50f36",
           }}
         >
           (Denk daran, alle Felder zu überprüfen und auszufüllen)

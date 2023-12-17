@@ -75,7 +75,18 @@ export default function Optionen() {
     );
   }
 
-  const columns: CollectionColDesc[] = [
+  const columnsTypen: CollectionColDesc[] = [
+    { type: "text", label: "Name", required: true, fieldName: "name", width: "xl" },
+    { type: "boolean", label: "Master", fieldName: "master", width: "m" },
+    { type: "boolean", label: "Kasse1", fieldName: "kasse1", width: "m" },
+    { type: "boolean", label: "Kasse2", fieldName: "kasse2", width: "m" },
+    { type: "boolean", label: "Tech1", fieldName: "techniker1", width: "m" },
+    { type: "boolean", label: "Tech2", fieldName: "techniker2", width: "m" },
+    { type: "boolean", label: "Merch", fieldName: "merchandise", width: "m" },
+    { type: "color", label: "Farbe", fieldName: "color", width: "m" },
+  ];
+
+  const columnsPreisprofile: CollectionColDesc[] = [
     { type: "text", label: "Name", required: true, fieldName: "name", width: "m" },
     { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", width: "m", min: 0 },
     { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "m", min: 0, initialValue: 0 },
@@ -92,6 +103,7 @@ export default function Optionen() {
             <Col xs={24} lg={12}>
               <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
                 <MultiSelectWithTags name="typen" label={"Typen"} options={optionen.typen} />
+                <OrrpInlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
                 <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
               </CollapsibleForVeranstaltung>
@@ -101,7 +113,7 @@ export default function Optionen() {
                 <p>
                   <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
                 </p>
-                <OrrpInlineCollectionEditable columnDescriptions={columns} embeddedArrayPath={["preisprofile"]} form={form} />
+                <OrrpInlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
               </CollapsibleForVeranstaltung>
             </Col>
           </Row>

@@ -12,7 +12,9 @@ export interface TerminEvent {
   end: string;
   title: string;
   tooltip: string;
-  color?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  borderColor?: string;
   display?: string;
   className?: string;
   url?: string;
@@ -72,7 +74,9 @@ export default class Termin {
   get asEvent(): TerminEvent {
     return {
       display: "block",
-      color: Termin.colorForType(this.typ),
+      borderColor: Termin.colorForType(this.typ),
+      backgroundColor: Termin.colorForType(this.typ),
+      textColor: "#fff",
       start: this.startDate.toISOString(),
       end: this.endDate.toISOString(),
       title: this.beschreibung || "",

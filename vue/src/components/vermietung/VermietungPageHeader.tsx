@@ -7,7 +7,6 @@ import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
-import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
@@ -17,7 +16,6 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   const { useToken } = theme;
   const { token } = useToken();
-  const { typeColors } = useTypeCustomColors();
   const [displayDate, setDisplayDate] = useState<string>("");
 
   const confirmed = Form.useWatch(["kopf", "confirmed"], {
@@ -94,7 +92,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
       {isNew && (
         <b
           style={{
-            color: typeColors["ausgaben"],
+            color: "#d50f36",
           }}
         >
           {" "}

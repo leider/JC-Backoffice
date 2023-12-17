@@ -1,6 +1,9 @@
+import { TypMitMehr } from "../optionen/optionValues.js";
+
 export default class Kopf {
   beschreibung = "";
   eventTyp = "";
+  eventTypRich?: TypMitMehr;
   flaeche = "";
   kooperation = "";
   ort = "Jazzclub";

@@ -1,28 +1,4 @@
-import cssColor from "jc-shared/commons/fieldHelpers.ts";
-import { GlobalToken, theme } from "antd";
-
-function jazzColors(colorCopy: string) {
-  return {
-    allgemeines: "#05498c",
-    angebot: "#328300",
-    ausgaben: "#d50f36",
-    classix: "#4faee3",
-    concert: "#6c757d",
-    copy: colorCopy,
-    festival: "#9fc442",
-    homegrown: "#24719d",
-    hotel: "#66267b",
-    kasse: "#9185be",
-    kooperation: "#9185be",
-    livestream: "#ff29ac",
-    presse: "#95c22e",
-    session: "#dea71f",
-    soulcafe: "#f07f31",
-    staff: "#dea71f",
-    technik: "#009285",
-    vermietung: "#f6eee1",
-  };
-}
+import { GlobalToken } from "antd";
 
 export const customColors: { [index: string]: string | number } = {
   colorPrimary: "#337ab7",
@@ -38,53 +14,16 @@ export const customColors: { [index: string]: string | number } = {
   linkHoverDecoration: "underline",
 };
 
-export function useTypeCustomColors() {
-  const { useToken } = theme;
-  const { token } = useToken();
-  const typeColors = jazzColors(token.colorFillSecondary);
-  const keyType = Object.keys(typeColors) as unknown as keyof typeof typeColors;
-
-  function colorForEventTyp(typ: string): string {
-    return typeColors[cssColor(typ) as typeof keyType];
-  }
-
-  return { colorForEventTyp, typeColors };
-}
-
 export function createTokenBasedStyles(document: Document, token: GlobalToken) {
-  const jazzColor = jazzColors(token.colorFillSecondary);
-
   const errorBgColor = token.colorErrorBg;
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
   const colorPrimary = customColors.colorPrimary;
 
-  const colorClasses = (Object.keys(jazzColor) as (keyof typeof jazzColor)[]).map(
-    (key) =>
-      `.color-${key}{
-      background-color: ${jazzColor[key]};
-      border-color: ${jazzColor[key]};
-      color: ${key === "vermietung" ? token.colorText : "#fff"} !important;
-      overflow: hidden;
-    }
-    
-    .text-${key}{
-      color: ${jazzColor[key]};
-    }`,
-  );
-
-  const orrpCustomStyles =
-    colorClasses.join("\n") +
-    `
-.color-geplant {
-  border-style: solid;
-  border-width: 3px;
-  border-color: #f8500d !important;
-}
-
-.ical-event {
+  const orrpCustomStyles = `
+ .no-overflow {
   overflow: hidden;
-}
-
+ }
+ 
 .table-row-error {
   background-color: ${errorBgColor};
 }

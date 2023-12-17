@@ -9,6 +9,7 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
+import { ColorField } from "@/widgets/ColorField.tsx";
 
 /**
  Orrp inline collection table widget column component.
@@ -31,6 +32,9 @@ export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetCol
   // or else form errors won't be rendered because the fields are recreated too often
   let Widget: React.ReactElement | null = null;
   switch (desc.type) {
+    case "color":
+      Widget = <ColorField {...commonProps} />;
+      break;
     case "user":
       Widget = <UserMultiSelect usersAsOptions={desc.labelsAndValues!} {...commonProps} />;
       break;

@@ -34,6 +34,7 @@ export interface ActionParams {
 }
 
 export type ColType =
+  | "color"
   | "user"
   | "id"
   | "idArray"

@@ -5,7 +5,6 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import { ButtonPreview } from "@/components/Buttons.tsx";
-import { useTypeCustomColors } from "@/components/createTokenBasedStyles.ts";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -13,15 +12,11 @@ interface TeamBlockAdminProps {
 }
 
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const [color, setColor] = useState<string>("");
-  const { colorForEventTyp } = useTypeCustomColors();
+  const [color, setColor] = useState<string | undefined>("");
 
-  useEffect(
-    () => {
-      setColor(colorForEventTyp(veranstaltung.kopf.eventTyp));
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [veranstaltung],
-  );
+  useEffect(() => {
+    setColor(veranstaltung.kopf.eventTypRich?.color);
+  }, [veranstaltung]);
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {

@@ -5,10 +5,10 @@ export default function CheckItem(
   props: Omit<CheckboxProps, "name"> & {
     name: string[] | string;
     label: string;
-  }
+  },
 ) {
   return (
-    <Form.Item name={props.name} valuePropName="checked">
+    <Form.Item name={props.name} style={props.label ? {} : { marginBottom: 0 }} valuePropName="checked">
       <Checkbox onChange={props.onChange} disabled={props.disabled}>
         <b>{props.label}</b>
       </Checkbox>

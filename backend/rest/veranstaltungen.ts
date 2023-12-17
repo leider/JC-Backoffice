@@ -17,7 +17,7 @@ import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 const app = express();
 
 async function standardHandler(res: Response, user: User | undefined, veranstaltungen: Veranstaltung[]) {
-  const result = veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
+  const result = await veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
   resToJson(
     res,
     result.map((v) => v.toJSON()),
