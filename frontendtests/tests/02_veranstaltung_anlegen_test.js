@@ -25,6 +25,7 @@ Scenario("Erzeuge Typen und Orte", async ({ I }) => {
     beschreibung: "",
     confirmed: false,
     eventTyp: "Club Konzert",
+    eventTypRich: null,
     flaeche: 100,
     fotografBestellen: false,
     genre: "",
