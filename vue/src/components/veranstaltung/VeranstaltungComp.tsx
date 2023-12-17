@@ -23,6 +23,7 @@ import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/authConsts.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
+//import { detailedDiff } from "deep-object-diff";
 
 export const VeranstaltungContext = createContext<{
   form: FormInstance<Veranstaltung>;

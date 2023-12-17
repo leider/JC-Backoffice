@@ -10,6 +10,8 @@ import { useColorsAndIconsForSections } from "@/components/colorsIconsForSection
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
 
 export default function Optionen() {
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
@@ -73,28 +75,45 @@ export default function Optionen() {
     );
   }
 
+  const columns: CollectionColDesc[] = [
+    { type: "text", label: "Name", required: true, fieldName: "name", width: "m" },
+    { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", width: "m", min: 0 },
+    { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "m", min: 0, initialValue: 0 },
+    { type: "integer", label: "Rabatt Mitglied", required: true, fieldName: "rabattMitglied", width: "m", min: 0, initialValue: 0 },
+  ];
+  const { lg } = useBreakpoint();
   const tabs: TabsProps["items"] = [
     {
       key: "optionen",
       label: <TabLabel type="optionen" title="Optionen" />,
       children: (
-        <Row gutter={12}>
-          <Col span={24}>
-            <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
-              <Row gutter={12}>
-                <Col span={24}>
-                  <MultiSelectWithTags name="typen" label={"Typen"} options={optionen.typen} />
-                  <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
-                  <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
-                </Col>
-              </Row>
-            </CollapsibleForVeranstaltung>
-            <CollapsibleForVeranstaltung suffix="technik" label="Backlines">
-              <MultiSelectWithTags name="backlineJazzclub" label={"Jazzclub"} options={optionen.backlineJazzclub} />
-              <MultiSelectWithTags name="backlineRockshop" label={"Rockshop"} options={optionen.backlineRockshop} />
-            </CollapsibleForVeranstaltung>
-          </Col>
-        </Row>
+        <>
+          <Row gutter={12}>
+            <Col xs={24} lg={12}>
+              <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
+                <MultiSelectWithTags name="typen" label={"Typen"} options={optionen.typen} />
+                <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
+                <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
+              </CollapsibleForVeranstaltung>
+            </Col>
+            <Col xs={24} lg={12}>
+              <CollapsibleForVeranstaltung suffix="ausgaben" label="Preisprofile" noTopBorder={lg}>
+                <p>
+                  <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
+                </p>
+                <OrrpInlineCollectionEditable columnDescriptions={columns} embeddedArrayPath={["preisprofile"]} form={form} />
+              </CollapsibleForVeranstaltung>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={24}>
+              <CollapsibleForVeranstaltung suffix="technik" label="Backlines">
+                <MultiSelectWithTags name="backlineJazzclub" label={"Jazzclub"} options={optionen.backlineJazzclub} />
+                <MultiSelectWithTags name="backlineRockshop" label={"Rockshop"} options={optionen.backlineRockshop} />
+              </CollapsibleForVeranstaltung>
+            </Col>
+          </Row>
+        </>
       ),
     },
     {

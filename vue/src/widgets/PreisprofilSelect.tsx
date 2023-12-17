@@ -31,12 +31,11 @@ interface InternalPreisprofilSelectParams {
 }
 
 function InternalPreisprofilSelect({ onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {
-  const [preisprofile, setPreisprofile] = useState<{ label: React.ReactElement; value: string }[]>([]);
-  useEffect(() => {
-    const localPreisprofile = optionen.preisprofile().map((profil) => ({
+  function profilToDisplay(profil: Preisprofil) {
+    return {
       label: (
         <span>
-          {profil.name}
+          {profil.name} {profil.veraltet ? "(Nicht aktuell)" : ""}
           <small>
             &nbsp;
             {`(${profil.regulaer},00, ${profil.regulaer - profil.rabattErmaessigt},00, ${profil.regulaer - profil.rabattMitglied},00)`}
@@ -44,21 +43,31 @@ function InternalPreisprofilSelect({ onValueAsObject, optionen, valueAsObject, o
         </span>
       ),
       value: profil.name,
-    }));
-    setPreisprofile(localPreisprofile);
-  }, [optionen]);
+    };
+  }
+
+  const alleProfile = useMemo<Preisprofil[]>(() => {
+    const result = [...optionen.preisprofile];
+    if (valueAsObject && !optionen.preisprofile.find((each) => each.name === valueAsObject.name)) {
+      result.push({ ...valueAsObject, veraltet: true });
+    }
+    return result.sort((a, b) => (a.regulaer > b.regulaer ? 1 : -1));
+  }, [optionen, valueAsObject]);
+
+  const displayProfile = useMemo(() => {
+    return alleProfile.map(profilToDisplay);
+  }, [alleProfile]);
 
   const [valueAsString, setValueAsString] = useState<string | undefined>();
   useEffect(() => {
     setValueAsString(valueAsObject?.name);
   }, [valueAsObject]);
 
-  const alleProfile = useMemo<Preisprofil[]>(() => optionen.preisprofile(), [optionen]);
   function selectedToPreisprofil(profilName: string) {
     const selectedProfil = alleProfile.find((profil) => profil.name === profilName);
     onValueAsObject?.(selectedProfil);
     onChange?.(selectedProfil);
   }
 
-  return <Select options={preisprofile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
+  return <Select options={displayProfile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
 }

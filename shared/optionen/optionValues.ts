@@ -18,7 +18,42 @@ export type Preisprofil = {
   regulaer: number;
   rabattErmaessigt: number;
   rabattMitglied: number;
+  veraltet?: boolean;
 };
+
+function preisprofileInitial(): Preisprofil[] {
+  return [
+    {
+      name: "Kooperation",
+      regulaer: 0,
+      rabattErmaessigt: 0,
+      rabattMitglied: 0,
+    },
+    {
+      name: "Freier Eintritt",
+      regulaer: 0,
+      rabattErmaessigt: 0,
+      rabattMitglied: 0,
+    },
+    { name: "Classix", regulaer: 5, rabattErmaessigt: 1, rabattMitglied: 5 },
+    { name: "6,00", regulaer: 6, rabattErmaessigt: 1, rabattMitglied: 2 },
+    { name: "8,00", regulaer: 8, rabattErmaessigt: 2, rabattMitglied: 4 },
+    { name: "10,00", regulaer: 10, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "12,00", regulaer: 12, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "12,00 fest", regulaer: 12, rabattErmaessigt: 0, rabattMitglied: 0 },
+    { name: "15,00", regulaer: 15, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "18,00", regulaer: 18, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "20,00", regulaer: 20, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "22,00", regulaer: 22, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "25,00", regulaer: 25, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "26,00", regulaer: 26, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "30,00", regulaer: 30, rabattErmaessigt: 3, rabattMitglied: 7 },
+    { name: "34,00", regulaer: 34, rabattErmaessigt: 3, rabattMitglied: 7 },
+    { name: "42,00", regulaer: 42, rabattErmaessigt: 3, rabattMitglied: 7 },
+    { name: "35,00", regulaer: 35, rabattErmaessigt: 2, rabattMitglied: 5 },
+    { name: "38,00", regulaer: 38, rabattErmaessigt: 3, rabattMitglied: 7 },
+  ];
+}
 
 export default class OptionValues {
   id = "instance";
@@ -31,6 +66,7 @@ export default class OptionValues {
   artists: string[] = [];
   agenturen: Kontakt[] = [];
   hotels: Kontakt[] = [];
+  preisprofile: Preisprofil[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(object?: any): OptionValues {
@@ -52,42 +88,11 @@ export default class OptionValues {
         backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
         backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
         artists: sortByNameCaseInsensitive(object.artists || []),
+        preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) =>
+          a.regulaer > b.regulaer ? 1 : -1,
+        ),
       });
     }
-  }
-
-  preisprofile(): Preisprofil[] {
-    return [
-      {
-        name: "Kooperation",
-        regulaer: 0,
-        rabattErmaessigt: 0,
-        rabattMitglied: 0,
-      },
-      {
-        name: "Freier Eintritt",
-        regulaer: 0,
-        rabattErmaessigt: 0,
-        rabattMitglied: 0,
-      },
-      { name: "Classix", regulaer: 5, rabattErmaessigt: 1, rabattMitglied: 5 },
-      { name: "6,00", regulaer: 6, rabattErmaessigt: 1, rabattMitglied: 2 },
-      { name: "8,00", regulaer: 8, rabattErmaessigt: 2, rabattMitglied: 4 },
-      { name: "10,00", regulaer: 10, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "12,00", regulaer: 12, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "12,00 fest", regulaer: 12, rabattErmaessigt: 0, rabattMitglied: 0 },
-      { name: "15,00", regulaer: 15, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "18,00", regulaer: 18, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "20,00", regulaer: 20, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "22,00", regulaer: 22, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "25,00", regulaer: 25, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "26,00", regulaer: 26, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "30,00", regulaer: 30, rabattErmaessigt: 3, rabattMitglied: 7 },
-      { name: "34,00", regulaer: 34, rabattErmaessigt: 3, rabattMitglied: 7 },
-      { name: "35,00", regulaer: 35, rabattErmaessigt: 2, rabattMitglied: 5 },
-      { name: "38,00", regulaer: 38, rabattErmaessigt: 3, rabattMitglied: 7 },
-      { name: "42,00", regulaer: 42, rabattErmaessigt: 3, rabattMitglied: 7 },
-    ];
   }
 
   addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection: string): void {
