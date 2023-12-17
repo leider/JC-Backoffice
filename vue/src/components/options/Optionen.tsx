@@ -77,11 +77,11 @@ export default function Optionen() {
 
   const columnsTypen: CollectionColDesc[] = [
     { type: "text", label: "Name", required: true, fieldName: "name", width: "xl" },
-    { type: "boolean", label: "Master", fieldName: "master", width: "m" },
-    { type: "boolean", label: "Kasse1", fieldName: "kasse1", width: "m" },
-    { type: "boolean", label: "Kasse2", fieldName: "kasse2", width: "m" },
-    { type: "boolean", label: "Tech1", fieldName: "techniker1", width: "m" },
-    { type: "boolean", label: "Tech2", fieldName: "techniker2", width: "m" },
+    { type: "boolean", label: "Master", fieldName: "mod", width: "m" },
+    { type: "boolean", label: "Kasse1", fieldName: "kasseV", width: "m" },
+    { type: "boolean", label: "Kasse2", fieldName: "kasse", width: "m" },
+    { type: "boolean", label: "Tech1", fieldName: "technikerV", width: "m" },
+    { type: "boolean", label: "Tech2", fieldName: "techniker", width: "m" },
     { type: "boolean", label: "Merch", fieldName: "merchandise", width: "m" },
     { type: "color", label: "Farbe", fieldName: "color", width: "m" },
   ];

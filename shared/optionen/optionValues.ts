@@ -14,13 +14,15 @@ export type Hotelpreise = {
 };
 
 export type TypMitMehr = {
-  name: string;
-  kasse1: boolean;
-  kasse2: boolean;
-  techniker1: boolean;
-  techniker2: boolean;
-  master: boolean;
+  [index: string]: boolean;
+  kasse: boolean;
+  kasseV: boolean;
+  techniker: boolean;
+  technikerV: boolean;
+  mod: boolean;
   merchandise: boolean;
+} & {
+  name: string;
   color: string;
 };
 

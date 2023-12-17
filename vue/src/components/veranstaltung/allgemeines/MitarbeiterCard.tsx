@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Divider, Form, Row } from "antd";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -9,6 +9,9 @@ import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { useWatch } from "antd/es/form/Form";
+import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import groupBy from "lodash/groupBy";
 
 interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -51,6 +54,33 @@ export default function MitarbeiterCard({ forVermietung }: { forVermietung?: boo
     marginBottom: 0,
     fontWeight: 600,
   };
+
+  const veranstContext = useContext(VeranstaltungContext);
+  const form = veranstContext!.form;
+  const optionen = veranstContext!.optionen;
+
+  const eventTyp = useWatch(["kopf", "eventTyp"], {
+    form,
+    preserve: true,
+  });
+
+  const id = useWatch("id", {
+    form,
+    preserve: true,
+  });
+
+  const preselection = useMemo(() => {
+    const typByName = groupBy(optionen?.typenPlus || [], "name");
+    return typByName[eventTyp]?.[0];
+  }, [optionen, eventTyp]);
+
+  useEffect(() => {
+    if (preselection && !id) {
+      ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
+        form.setFieldValue(["staff", key + "NotNeeded"], !preselection[key]);
+      });
+    }
+  }, [form, id, preselection]);
 
   const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
   const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
