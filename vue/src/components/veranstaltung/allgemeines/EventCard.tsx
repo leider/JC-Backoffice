@@ -1,5 +1,5 @@
-import OptionValues from "jc-shared/optionen/optionValues";
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import OptionValues, { TypMitMehr } from "jc-shared/optionen/optionValues";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -11,25 +11,17 @@ import { useAuth } from "@/commons/authConsts.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
-import groupBy from "lodash/groupBy";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
-  const typByName = useMemo(() => {
-    return groupBy(props.optionen.typenPlus || [], "name");
-  }, [props.optionen]);
-
-  const typToDisplay = useCallback(
-    (typ: string) => {
-      const color = typByName[typ]?.[0].color;
+  const eventTypes = useMemo(() => {
+    function typToDisplay(typ: TypMitMehr) {
       return {
-        label: <span style={{ color }}>{typ}</span>,
-        value: typ,
+        label: <span style={{ color: typ.color }}>{typ.name}</span>,
+        value: typ.name,
       };
-    },
-    [typByName],
-  );
-
-  const eventTypes = useMemo(() => props.optionen.typen.map(typToDisplay), [props.optionen.typen, typToDisplay]);
+    }
+    return props.optionen.typenPlus.map(typToDisplay);
+  }, [props.optionen.typenPlus]);
 
   return <Select options={eventTypes} {...props} showSearch />;
 }
