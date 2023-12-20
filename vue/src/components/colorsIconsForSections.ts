@@ -7,6 +7,7 @@ export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
     allgemeines: "#05498c",
     angebot: "#328300",
     ausgaben: "#d50f36",
+    concert: "#6c757d",
     hotel: "#66267b",
     kasse: "#9185be",
     presse: "#95c22e",

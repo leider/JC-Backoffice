@@ -105,6 +105,12 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Veranstaltung): Kennzahlen {
     Hotel: ausgabe(veranstaltung.unterkunft.roomsTotalEUR),
     "Hotel (Transport)": ausgabe(veranstaltung.unterkunft.transportEUR),
   };
+  if (kasse.einnahmeSonstiges1EUR && kasse.einnahmeSonstiges1EUR !== 0) {
+    result[kasse.einnahmeSonstiges1Text || "Einnahme Sonstiges 1"] = einnahme(kasse.einnahmeSonstiges1EUR);
+  }
+  if (kasse.einnahmeSonstiges2EUR && kasse.einnahmeSonstiges2EUR !== 0) {
+    result[kasse.einnahmeSonstiges2Text || "Einnahme Sonstiges 2"] = einnahme(kasse.einnahmeSonstiges2EUR);
+  }
   if (kosten.werbung1 && kosten.werbung1 !== 0) {
     result[kosten.werbung1Label] = ausgabe(kosten.werbung1);
   }

@@ -102,7 +102,6 @@ export default function Optionen() {
           <Row gutter={12}>
             <Col xs={24} lg={12}>
               <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
-                <MultiSelectWithTags name="typen" label={"Typen"} options={optionen.typen} />
                 <OrrpInlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
                 <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
