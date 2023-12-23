@@ -1,9 +1,16 @@
 import { Form, Select } from "antd";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useMemo } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
-export default function MultiSelectWithTags(props: {
+export default function MultiSelectWithTags({
+  name,
+  label,
+  options,
+  style,
+  noAdd,
+  onChange,
+  specialTagRender,
+}: {
   name: string[] | string;
   label: string;
   options: string[];
@@ -13,17 +20,13 @@ export default function MultiSelectWithTags(props: {
   onChange?: (value: any) => void;
   specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
-  const [realOptions, setRealOptions] = useState<LabelAndValue[]>([]);
-  useEffect(() => {
-    if (!props.options) {
-      return;
-    }
-    setRealOptions(props.options.map((opt) => ({ label: opt, value: opt })));
-  }, [props.options]);
+  const realOptions = useMemo(() => {
+    return options.map((opt) => ({ label: opt, value: opt }));
+  }, [options]);
 
   return (
-    <Form.Item label={<b>{props.label}:</b>} name={props.name} style={props.style}>
-      <Select options={realOptions} mode={props.noAdd ? "multiple" : "tags"} onChange={props.onChange} tagRender={props.specialTagRender} />
+    <Form.Item label={<b>{label}:</b>} name={name} style={style}>
+      <Select options={realOptions} mode={noAdd ? "multiple" : "tags"} onChange={onChange} tagRender={specialTagRender} />
     </Form.Item>
   );
 }

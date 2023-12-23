@@ -7,7 +7,7 @@ import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
+import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 
 export default function OrtePage() {
   const ortQuery = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
@@ -100,9 +100,9 @@ export default function OrtePage() {
       layout="vertical"
     >
       <PageHeader title="Orte" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <OrrpInlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["orte"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["orte"]} />
         </Col>
       </Row>
     </Form>

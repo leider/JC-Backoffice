@@ -3,7 +3,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, Row } from "antd";
 import { RiderComp } from "@/components/rider/RiderComp.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useLocation } from "react-router-dom";
 
 export default function RiderCard() {

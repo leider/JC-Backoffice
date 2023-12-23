@@ -1,11 +1,11 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Event } from "jc-shared/programmheft/kalender";
 import { Property } from "csstype";
 
-export default function HeftCalendar(props: { initialDate: string; events: Event[] }) {
+export default function HeftCalendar({ events, initialDate }: { initialDate: string; events: Event[] }) {
   interface LocalUsedEvent {
     title: string;
     _def: { extendedProps: { farbe: string } };
@@ -32,7 +32,10 @@ export default function HeftCalendar(props: { initialDate: string; events: Event
   }
 
   const calRef = useRef<FullCalendar>(null);
-  calRef.current?.getApi().gotoDate(props.initialDate);
+  useEffect(() => {
+    calRef.current?.getApi().gotoDate(initialDate);
+  }, [initialDate]);
+
   return (
     <FullCalendar
       ref={calRef}
@@ -50,9 +53,9 @@ export default function HeftCalendar(props: { initialDate: string; events: Event
         },
       }}
       contentHeight={600}
-      initialDate={props.initialDate}
+      initialDate={initialDate}
       //events={getEvents}
-      events={props.events}
+      events={events}
       eventContent={renderEventContent}
     />
   );

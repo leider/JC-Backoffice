@@ -62,7 +62,6 @@ export const useLimits = (decimals: number, initialMin?: number, imitialMax?: nu
  *
  * @param updateValue A function to execute when sanitizing is complete
  * @param internalFormat The format of the value when doing calculation with it
- * @param disabled A boolean to tell if the widget is disabled
  * @param minLimit Lower limit
  * @param maxLimit Upper limit
  *

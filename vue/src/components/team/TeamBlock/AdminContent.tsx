@@ -8,10 +8,11 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { differenceFor } from "jc-shared/commons/compareObjects.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
-import { ButtonInAdminPanel, ButtonPreview } from "@/components/Buttons.tsx";
 import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPanel.tsx";
+import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;

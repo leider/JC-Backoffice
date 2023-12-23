@@ -8,7 +8,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";

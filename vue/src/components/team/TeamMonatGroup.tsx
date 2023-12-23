@@ -5,7 +5,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TeamBlockVermietung from "@/components/team/TeamBlock/TeamBlockVermietung.tsx";

@@ -1,13 +1,13 @@
-import { Col, Row, Tag } from "antd";
+import { Col, Row, Tag, theme } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { useAuth } from "@/commons/authConsts.ts";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import User from "jc-shared/user/user.ts";
-import { ButtonStaff } from "@/components/Buttons.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -67,10 +67,13 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
   }
 
   function DisplayNames() {
+    const { useToken } = theme;
+    const token = useToken().token;
+
     return (
       <>
         {names.map((name) => (
-          <Tag color={name === currentUser.name ? "#28a745" : undefined} key={name}>
+          <Tag color={name === currentUser.name ? token.colorSuccess : undefined} key={name}>
             {name}
           </Tag>
         ))}

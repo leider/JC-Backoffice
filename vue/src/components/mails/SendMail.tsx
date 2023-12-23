@@ -170,7 +170,7 @@ export default function SendMail() {
       layout="vertical"
     >
       <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!canSend || effectiveUsers.length === 0} />]}></PageHeader>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={12}>
           <MultiSelectWithTags
             name="selectedVeranstaltungen"
@@ -183,7 +183,7 @@ export default function SendMail() {
           <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} onChange={rulesChanged} />
         </Col>
       </Row>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={12}>
           <MultiSelectWithTags
             name="selectedLists"
@@ -196,7 +196,7 @@ export default function SendMail() {
           <UserMultiSelect name="selectedUsers" label="Users" usersAsOptions={usersAsOptions} onChange={usersChanged} />
         </Col>
       </Row>
-      <Row gutter={12} style={{ marginBottom: 24 }}>
+      <Row gutter={12} style={{ marginBottom: 24, marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
           <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
           {effectiveUsers.map((u) => (
@@ -206,7 +206,7 @@ export default function SendMail() {
           ))}
         </Col>
       </Row>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
           <TextField name="subject" label="Subject" required />
         </Col>

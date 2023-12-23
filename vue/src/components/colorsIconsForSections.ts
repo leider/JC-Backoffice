@@ -1,4 +1,4 @@
-import { IconProps } from "@/components/Icon";
+import { IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 export type buttonType = "allgemeines" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 

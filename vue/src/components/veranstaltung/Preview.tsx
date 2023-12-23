@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { allUsers, optionen as optionenRestCall, riderFor, veranstaltungForUrl } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import renderer from "jc-shared/commons/renderer";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff";

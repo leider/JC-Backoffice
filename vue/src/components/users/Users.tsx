@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { allUsers } from "@/commons/loader.ts";
 import { Col, Radio, Row } from "antd";
 import { useAuth } from "@/commons/authConsts.ts";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import User from "jc-shared/user/user";
 import Accessrights from "jc-shared/user/accessrights";
 import { NewUserModal } from "@/components/users/UserModals";
 import UserPanel from "@/components/users/UserPanel";
 import { useQuery } from "@tanstack/react-query";
-import { icons } from "@/components/Icons.tsx";
+import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 
 export default function Users() {
   const [newUserOpen, setNewUserOpen] = useState<boolean>(false);

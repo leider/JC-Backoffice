@@ -4,7 +4,7 @@ import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/authConsts.ts";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";

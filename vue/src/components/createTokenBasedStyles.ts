@@ -19,7 +19,7 @@ export function createTokenBasedStyles(document: Document, token: GlobalToken) {
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
   const colorPrimary = customColors.colorPrimary;
 
-  const orrpCustomStyles = `
+  const jcCustomStyles = `
  .no-overflow {
   overflow: hidden;
  }
@@ -50,7 +50,7 @@ export function createTokenBasedStyles(document: Document, token: GlobalToken) {
   const JC_STYLES = "JC-styles";
   const style = document.createElement("style");
   style.id = JC_STYLES;
-  style.innerHTML = orrpCustomStyles;
+  style.innerHTML = jcCustomStyles;
 
   const head = document.getElementsByTagName("head")[0];
   for (const child of head.children) {

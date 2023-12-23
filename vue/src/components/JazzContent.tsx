@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Layout, Menu, theme } from "antd";
 import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { LoginState, useAuth } from "@/commons/authConsts.ts";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import { wikisubdirs } from "@/commons/loader.ts";
 

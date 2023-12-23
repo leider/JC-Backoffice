@@ -9,7 +9,7 @@ import Renderer from "jc-shared/commons/renderer";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 export default function WikiPage() {
   const { subdir, page } = useParams();
@@ -72,7 +72,7 @@ export default function WikiPage() {
       sideBySideFullscreen: false,
       minHeight: "500px",
     }),
-    []
+    [],
   );
   function onSearch(value: string) {
     if (value.length < 2) {

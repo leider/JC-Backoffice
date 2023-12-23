@@ -12,6 +12,7 @@ import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useWatch } from "antd/es/form/Form";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import groupBy from "lodash/groupBy";
+import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 
 interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -56,8 +57,9 @@ export default function MitarbeiterCard({ forVermietung }: { forVermietung?: boo
   };
 
   const veranstContext = useContext(VeranstaltungContext);
-  const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
+  const vermietContext = useContext(VermietungContext);
+  const form = (veranstContext || vermietContext)?.form;
+  const optionen = (veranstContext || vermietContext)?.optionen;
 
   const eventTyp = useWatch(["kopf", "eventTyp"], {
     form,
@@ -77,7 +79,7 @@ export default function MitarbeiterCard({ forVermietung }: { forVermietung?: boo
   useEffect(() => {
     if (preselection && !id) {
       ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
-        form.setFieldValue(["staff", key + "NotNeeded"], !preselection[key]);
+        form!.setFieldValue(["staff", key + "NotNeeded"], !preselection[key]);
       });
     }
   }, [form, id, preselection]);

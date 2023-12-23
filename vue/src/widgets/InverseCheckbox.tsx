@@ -16,5 +16,5 @@ export default function InverseCheckbox(props: CheckboxProps) {
     props.onChange?.(e);
   }
 
-  return <Checkbox {...props} checked={inverseChecked} onChange={privateOnChange}></Checkbox>;
+  return <Checkbox {...props} checked={inverseChecked} onChange={privateOnChange} />;
 }

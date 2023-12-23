@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Form, Row } from "antd";
-import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers";
+import StartEndDateOnlyPickers from "@/components/veranstaltung/hotel/StartEndDateOnlyPickers.tsx";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";

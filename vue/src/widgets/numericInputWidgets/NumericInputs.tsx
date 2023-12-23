@@ -1,10 +1,10 @@
 import { Form } from "antd";
-import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import React, { FC, ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
 import { Rule } from "antd/es/form";
 
-export type CommonWidgetProps<T> = {
+type NumberInputProps = {
   /**
    * The name of the input.
    * @type {(string | string[])}
@@ -33,27 +33,13 @@ export type CommonWidgetProps<T> = {
    * The inital value.
    * @type {T}
    */
-  initialValue?: T;
-
-  /**
-   * An optional tooltip value.
-   * @type {string}
-   */
-  tooltip?: string;
+  initialValue?: number;
 
   /**
    * Callback when the input value has vhanged.
    */
   onChange?: (value: number | null) => void;
 
-  /**
-   * An optional help string.
-   * @type {string}
-   */
-  help?: string;
-};
-
-type NumberInputProps = CommonWidgetProps<number> & {
   decimals: number;
 
   /**
@@ -89,33 +75,45 @@ type NumberInputProps = CommonWidgetProps<number> & {
  * @param {NumberInputProps} props
  * @return {*}  {React.ReactElement}
  */
-export const NumberInput: FunctionComponent<NumberInputProps> = (props: NumberInputProps): React.ReactElement => {
+export const NumberInput: FC<NumberInputProps> = ({
+  decimals,
+  required,
+  suffix,
+  label,
+  max,
+  exclusiveMax,
+  min,
+  exclusiveMin,
+  name,
+  onChange,
+  initialValue,
+  disabled,
+}: NumberInputProps): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
   useEffect(() => {
-    setRules([{ required: props.required }]);
-  }, [props.required]);
+    setRules([{ required: required }]);
+  }, [required]);
 
   return (
     <Form.Item
-      name={props.name}
-      label={props.label ? <b>{props.label}:</b> : undefined}
+      name={name}
+      label={label ? <b>{label}:</b> : undefined}
       rules={rules}
       valuePropName="number"
       trigger="onNumber"
-      style={props.label ? {} : { marginBottom: 0 }}
-      initialValue={props.initialValue}
-      tooltip={props.tooltip}
+      style={label ? {} : { marginBottom: 0 }}
+      initialValue={initialValue}
     >
       <NumericInputEmbedded
-        decimals={props.decimals}
-        disabled={props.disabled}
-        min={props.min}
-        exclusiveMin={props.exclusiveMin}
-        exclusiveMax={props.exclusiveMax}
-        max={props.max}
-        onChange={props.onChange}
-        suffix={props.suffix}
+        decimals={decimals}
+        disabled={disabled}
+        min={min}
+        exclusiveMin={exclusiveMin}
+        exclusiveMax={exclusiveMax}
+        max={max}
+        onChange={onChange}
+        suffix={suffix}
       />
     </Form.Item>
   );
@@ -128,7 +126,7 @@ interface NumberInputWithDirectValueParams {
   label?: string;
 }
 
-export const NumberInputWithDirectValue: FunctionComponent<NumberInputWithDirectValueParams> = ({
+export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = ({
   decimals,
   suffix,
   value,

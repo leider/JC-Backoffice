@@ -7,7 +7,7 @@ export type ColDescWithIdx = CollectionColDesc & {
   labelsAndValues?: LabelAndValue[];
 };
 
-export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl" | number;
+export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl";
 
 export type CollectionColDesc = Omit<ColDesc, "width" | "fieldName"> & {
   width: CollectionColumnWidth;
@@ -95,4 +95,4 @@ export interface ColDesc {
   uniqueValues?: boolean;
 }
 
-export type CollectionHeight = "xs" | "sm" | "md" | "lg" | "xl" | undefined;
+export type CollectionHeight = "xs" | "sm" | "md" | "lg" | "xl";

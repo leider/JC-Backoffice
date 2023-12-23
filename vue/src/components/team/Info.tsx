@@ -6,7 +6,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 
 export default function Info() {

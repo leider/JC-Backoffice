@@ -32,25 +32,25 @@ type TColorField = {
  * @param {TColorField} props
  * @return {*}  {React.ReactElement}
  */
-export const ColorField: FunctionComponent<TColorField> = (props: TColorField): React.ReactElement => {
+export const ColorField: FunctionComponent<TColorField> = ({ name, label, required, initialValue }: TColorField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
-    if (props.required) {
+    if (required) {
       rulesToSet.push({
         required: true,
       });
     }
     setRules(rulesToSet);
-  }, [props.required]);
+  }, [required]);
 
   return (
     <AntdForm.Item
-      name={props.name}
-      label={props.label ? <b>{props.label}:</b> : ""}
+      name={name}
+      label={label ? <b>{label}:</b> : ""}
       rules={rules}
-      style={props.label ? {} : { marginBottom: 0 }}
-      initialValue={props.initialValue}
+      style={label ? {} : { marginBottom: 0 }}
+      initialValue={initialValue}
       valuePropName={"colorVal"}
       trigger={"onColor"}
     >

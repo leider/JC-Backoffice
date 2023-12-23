@@ -1,40 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CollectionHeight, CollectionColDesc } from "./types";
+import { CollectionColDesc, CollectionHeight } from "./types";
 
-export const initialSpan = (desc: CollectionColDesc) => {
-  switch (desc.width) {
-    case "xs":
-      return 3;
-    case "s":
-      return 4;
-    case "m":
-      return 6;
-    case "l":
-      return 8;
-    case "xl":
-      return 12;
-    default:
-      throw new Error("A number width is not allowed for OrrpInlineCollectionEditable");
-  }
-};
+export function initialSpan(desc: CollectionColDesc) {
+  return { xs: 3, s: 4, m: 6, l: 8, xl: 12 }[desc.width];
+}
 
-export const getCollectionHeightsInPixel = (height: CollectionHeight) => {
-  switch (height) {
-    case "xs":
-      return 160;
-    case "sm":
-      return 240;
-    case "md":
-      return 360;
-    case "lg":
-      return 560;
-    case "xl":
-      return 760;
-    default:
-      throw new Error("The entered collection height is not within the list of possible options.");
-  }
-};
+export function getCollectionHeightsInPixel(height: CollectionHeight) {
+  return { xs: 160, sm: 240, md: 360, lg: 560, xl: 760 }[height];
+}
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function addInitialValueFromObjectToColDescs(colDesc: CollectionColDesc[], initialValue?: any[]) {
   if (!initialValue || !initialValue[0]) {
     return;
@@ -57,7 +31,9 @@ export function addInitialValueFromObjectToColDescs(colDesc: CollectionColDesc[]
  * @param {*} value the value to check.
  * @return {*}  {boolean}
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isDuplicate(embeddedArrayPath: string[] | null, fieldName: string, fieldsValue: any, value: any): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function duplicates(values: any[]) {
     return values.filter((item, index) => index !== values.indexOf(item));
   }
@@ -68,7 +44,27 @@ export function isDuplicate(embeddedArrayPath: string[] | null, fieldName: strin
       : embeddedArrayPath.reduce((objectToWorkWith, pathElement) => {
           return objectToWorkWith[pathElement];
         }, fieldsValue);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const extractedFiltered = extracted?.filter((each: any) => each !== undefined && each !== null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fieldValuesOnly = extractedFiltered?.map((each: any) => each[fieldName]);
   return duplicates(fieldValuesOnly ?? []).includes(value);
+}
+
+export function calcSpans(allColsWithAction: CollectionColDesc[]) {
+  function sum(nums: number[]) {
+    return nums.reduce((result, curr) => result + curr, 0);
+  }
+
+  const allWidths = allColsWithAction.map(initialSpan);
+  const totalWidth = sum(allWidths);
+  const relation = totalWidth / 24; //calc relative factor
+  const adjustedWidths = allWidths.map((each) => Math.trunc(each / relation));
+  const adjustedSum = sum(adjustedWidths) - 24; // see difference
+  adjustedWidths[adjustedWidths.length - 1] = adjustedWidths[adjustedWidths.length - 1] - adjustedSum;
+  return adjustedWidths;
+}
+
+export function createKey(desc: CollectionColDesc, outerKey: number) {
+  return `${outerKey}-${desc.fieldName}`;
 }

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, ConfigProvider, Form, Row } from "antd";
+import { Button, Col, ConfigProvider, Form, Row, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
@@ -56,6 +56,9 @@ ${context?.currentUser.name}`);
   };
 
   const { lg } = useBreakpoint();
+  const { useToken } = theme;
+  const token = useToken().token;
+
   return (
     <>
       <CollapsibleForVeranstaltung suffix="hotel" label="Transport" amount={summe} noTopBorder={lg}>
@@ -90,7 +93,7 @@ ${context?.currentUser.name}`);
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <ConfigProvider theme={{ token: { colorPrimary: "#28a745" } }}>
+          <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
             <Button block icon={<IconForSmallBlock iconName={"EnvelopeOpen"} />} type="primary" onClick={sendMail}>
               &nbsp;Reservierungsmail
             </Button>

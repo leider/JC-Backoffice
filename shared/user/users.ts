@@ -5,11 +5,11 @@ import uniq from "lodash/uniq.js";
 
 export class Mailingliste {
   name: string;
-  users: User[];
+  users: string[];
 
   constructor(name: string, usersInListe: User[]) {
     this.name = name;
-    this.users = usersInListe;
+    this.users = usersInListe.map((u) => u.id);
   }
 }
 

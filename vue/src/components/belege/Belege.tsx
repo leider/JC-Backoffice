@@ -7,7 +7,7 @@ import dayjs, { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RcFile } from "antd/es/upload";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function Belege() {
   const [canSend, setCanSend] = useState<boolean>(false);

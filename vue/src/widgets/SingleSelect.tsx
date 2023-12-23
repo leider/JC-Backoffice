@@ -1,5 +1,5 @@
 import { Form, Select } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 
 interface SingleSelectParams {
   name: string[] | string;
@@ -13,13 +13,8 @@ interface SingleSelectParams {
 export type LabelAndValue = { label: string; value: string };
 
 export default function SingleSelect({ label, name, onChange, options, initialValue, required }: SingleSelectParams) {
-  const [realOptions, setRealOptions] = useState<LabelAndValue[]>([]);
-  useEffect(() => {
-    if (!options) {
-      return;
-    }
-    setRealOptions(options.map((opt) => ({ label: opt, value: opt })));
-  }, [options]);
+  const realOptions = useMemo(() => options.map((opt) => ({ label: opt, value: opt })), [options]);
+
   return (
     <Form.Item
       label={label ? <b>{label}:</b> : ""}

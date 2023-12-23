@@ -2,11 +2,11 @@ import User from "jc-shared/user/user";
 import React, { useEffect, useState } from "react";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
-import { ButtonInUsers } from "@/components/Buttons";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
 import { deleteUser } from "@/commons/loader.ts";
-import { icons } from "@/components/Icons.tsx";
+import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
+import { ButtonInUsers } from "@/components/users/ButtonInUsers.tsx";
 
 export default function UserPanel({ user, currentUser, loadUsers }: { user: User; currentUser: User; loadUsers: () => void }) {
   const [expanded, setExpanded] = useState<boolean>(false);

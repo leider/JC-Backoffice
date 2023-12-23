@@ -40,21 +40,9 @@ type TTextField = {
   initialValue?: string;
 
   /**
-   * An optional tooltip value.
-   * @type {string}
-   */
-  tooltip?: string;
-
-  /**
    * Callback when the input value has changed.
    */
   onChange?: (value: string | null) => void;
-
-  /**
-   * An optional help string.
-   * @type {string}
-   */
-  help?: string;
 
   /**
    * Indicates that the input must be a valid E-Mail
@@ -73,40 +61,48 @@ type TTextField = {
  * @param {TTextField} props
  * @return {*}  {React.ReactElement}
  */
-export const TextField: FunctionComponent<TTextField> = (props: TTextField): React.ReactElement => {
+export const TextField: FunctionComponent<TTextField> = ({
+  required,
+  uniqueValuesValidator,
+  initialValue,
+  isEmail,
+  label,
+  name,
+  disabled,
+  clearOnDisabled,
+  onChange,
+}: TTextField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
-    if (props.required) {
+    if (required) {
       rulesToSet.push({
         required: true,
       });
     }
-    if (props.uniqueValuesValidator) {
-      rulesToSet.push(props.uniqueValuesValidator);
+    if (uniqueValuesValidator) {
+      rulesToSet.push(uniqueValuesValidator);
     }
-    if (props.isEmail) {
+    if (isEmail) {
       rulesToSet.push({
         type: "email",
         message: "Die Eingabe ist keine gültige E-Mail Adresse",
       });
     }
     setRules(rulesToSet);
-  }, [props.required, props.isEmail, props.uniqueValuesValidator]);
+  }, [required, isEmail, uniqueValuesValidator]);
 
   return (
     <AntdForm.Item
-      name={props.name}
-      label={props.label ? <b>{props.label}:</b> : ""}
+      name={name}
+      label={label ? <b>{label}:</b> : ""}
       rules={rules}
-      style={props.label ? {} : { marginBottom: 0 }}
-      initialValue={props.initialValue}
+      style={label ? {} : { marginBottom: 0 }}
+      initialValue={initialValue}
       valuePropName={"textVal"}
       trigger={"onText"}
-      tooltip={props.tooltip}
-      help={props.help}
     >
-      <TextInputEmbedded disabled={props.disabled} clearOnDisabled={props.clearOnDisabled && props.disabled} onChange={props.onChange} />
+      <TextInputEmbedded disabled={disabled} clearOnDisabled={clearOnDisabled && disabled} onChange={onChange} />
     </AntdForm.Item>
   );
 };
@@ -116,36 +112,36 @@ type TTextInputEmbedded = {
   clearOnDisabled?: boolean;
   textVal?: string;
   onText?: (value: string | null) => void;
-  id?: string;
   onChange?: (value: string | null) => void;
 };
 
-const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = (props: TTextInputEmbedded) => {
+const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
+  onText,
+  textVal,
+  clearOnDisabled,
+  disabled,
+  onChange,
+}: TTextInputEmbedded) => {
   const [value, setValue] = useState<string | undefined>("");
 
-  useEffect(
-    () => {
-      setValue(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
-      props.onText?.(!(props.clearOnDisabled && props.disabled) ? props.textVal || "" : "");
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.textVal, props.clearOnDisabled, props.disabled, props.onText],
-  );
+  useEffect(() => {
+    setValue(!(clearOnDisabled && disabled) ? textVal || "" : "");
+    onText?.(!(clearOnDisabled && disabled) ? textVal || "" : "");
+  }, [textVal, clearOnDisabled, disabled, onText]);
 
   return (
     <Input
-      id={props.id}
-      disabled={props.disabled}
+      disabled={disabled}
       value={value}
       onChange={({ target: { value: nextValue } }) => {
         setValue(nextValue);
-        props.onText!(nextValue);
-        props.onChange?.(nextValue);
+        onText!(nextValue);
+        onChange?.(nextValue);
       }}
       onBlur={({ target: { value: nextValue } }) => {
         const trimmedValue = nextValue.trim() ? nextValue.trim() : null;
-        props.onText!(trimmedValue);
-        props.onChange?.(trimmedValue);
+        onText!(trimmedValue);
+        onChange?.(trimmedValue);
       }}
     />
   );

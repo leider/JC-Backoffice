@@ -12,14 +12,14 @@ export interface ActionCallbacks {
 type Actions = keyof ActionCallbacks;
 
 /**
- * Orrp table actions.
+ * Table actions.
  * @export
  * @param {{
  *   actions: ActionCallbacks;
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function OrrpTableActions(props: { actions: ActionCallbacks; testid: string }): React.ReactElement {
+export default function InlineEditableActions(props: { actions: ActionCallbacks; testid: string }): React.ReactElement {
   function iconForKey(key: Actions) {
     switch (key) {
       case "copy":

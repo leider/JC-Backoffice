@@ -1,14 +1,14 @@
 import React, { useContext, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Button, Col, ConfigProvider, Form, Radio, Row } from "antd";
+import { Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
 import SimpleMdeReact from "react-simplemde-editor";
-import { IconForSmallBlock } from "@/components/Icon.tsx";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
-import { icons } from "@/components/Icons.tsx";
+import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 
 export default function InfoCard() {
   const veranstContext = useContext(VermietungContext);
@@ -34,11 +34,13 @@ export default function InfoCard() {
     ];
   }, []);
 
+  const { useToken } = theme;
+  const token = useToken().token;
   return (
     <CollapsibleForVeranstaltung suffix="angebot" label="Infos" noTopBorder>
       <Row gutter={12}>
         <Col span={24}>
-          <ConfigProvider theme={{ token: { colorPrimary: "#328300" } }}>
+          <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
             <Form.Item name={["angebot", "status"]} initialValue="offen">
               <Radio.Group optionType="button" buttonStyle="solid" options={statusse} />
             </Form.Item>

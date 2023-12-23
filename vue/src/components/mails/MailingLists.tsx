@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
+import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
@@ -48,7 +48,7 @@ export default function MailingLists() {
     function toFormObject(liste: Mailingliste): object {
       return {
         name: liste.name,
-        users: liste.users.map((u) => u.id),
+        users: liste.users,
       };
     }
     const deepCopy = { allLists: mailingLists.map((l) => toFormObject(l)) };
@@ -103,9 +103,9 @@ export default function MailingLists() {
       layout="vertical"
     >
       <PageHeader title="Mailinglisten" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <OrrpInlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allLists"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allLists"]} />
         </Col>
       </Row>
     </Form>

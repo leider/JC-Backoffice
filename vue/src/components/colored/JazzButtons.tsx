@@ -1,5 +1,5 @@
-import { App, Button, ConfigProvider, Dropdown, Space } from "antd";
-import { IconForSmallBlock } from "@/components/Icon";
+import { App, Button, ConfigProvider, Dropdown, Space, theme } from "antd";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,17 +9,33 @@ import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungCo
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 type ButtonProps = {
   disabled?: boolean;
 };
+function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean }) {
+  const { useToken } = theme;
+  const token = useToken().token;
+
+  return (
+    <ButtonWithIcon
+      text={isSend ? "Senden" : "Speichern"}
+      htmlType="submit"
+      icon={isSend ? "Send" : "CheckSquare"}
+      type="primary"
+      disabled={disabled}
+      color={token.colorSuccess}
+    />
+  );
+}
+
 export function SaveButton({ disabled }: ButtonProps) {
-  return <ButtonWithIcon text="Speichern" htmlType="submit" icon="CheckSquare" type="primary" disabled={disabled} color="#28a745" />;
+  return <SaveOrSendButton isSend={false} disabled={disabled} />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
-  return <ButtonWithIcon text="Senden" htmlType="submit" icon="Send" type="primary" disabled={disabled} color="#28a745" />;
+  return <SaveOrSendButton isSend={true} disabled={disabled} />;
 }
 
 export function NewButtons() {

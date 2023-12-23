@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
+import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
 
@@ -101,9 +101,9 @@ export default function TerminePage() {
       layout="vertical"
     >
       <PageHeader title="Termine" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12}>
+      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <OrrpInlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allTermine"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allTermine"]} />
         </Col>
       </Row>
     </Form>

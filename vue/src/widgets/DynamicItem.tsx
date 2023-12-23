@@ -22,20 +22,20 @@ interface IDynamicItem {
  * @param {IDynamicItem} props
  * @return {*}  {React.ReactElement}
  */
-export const DynamicItem: FunctionComponent<IDynamicItem> = (props: IDynamicItem): React.ReactElement => (
+export const DynamicItem: FunctionComponent<IDynamicItem> = ({ nameOfDepending, renderWidget }: IDynamicItem): React.ReactElement => (
   <Form.Item
     noStyle
     shouldUpdate={(prevValues, curValues) => {
-      if (Array.isArray(props.nameOfDepending)) {
+      if (Array.isArray(nameOfDepending)) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const prev = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], prevValues);
+        const prev = nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], prevValues);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const curr = props.nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], curValues);
+        const curr = nameOfDepending.reduce((prev: any, curr) => prev && prev[curr], curValues);
         return prev !== curr;
       }
-      return prevValues[props.nameOfDepending as string] !== curValues[props.nameOfDepending as string];
+      return prevValues[nameOfDepending as string] !== curValues[nameOfDepending as string];
     }}
   >
-    {({ getFieldValue }) => props.renderWidget(getFieldValue)}
+    {({ getFieldValue }) => renderWidget(getFieldValue)}
   </Form.Item>
 );

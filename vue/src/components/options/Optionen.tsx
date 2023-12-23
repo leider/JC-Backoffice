@@ -11,7 +11,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc, OrrpInlineCollectionEditable } from "@/widgets/OrrpInlineCollectionEditable";
+import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 
 export default function Optionen() {
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
@@ -102,7 +102,7 @@ export default function Optionen() {
           <Row gutter={12}>
             <Col xs={24} lg={12}>
               <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
-                <OrrpInlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
+                <InlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
                 <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
               </CollapsibleForVeranstaltung>
@@ -112,7 +112,7 @@ export default function Optionen() {
                 <p>
                   <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
                 </p>
-                <OrrpInlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
+                <InlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
               </CollapsibleForVeranstaltung>
             </Col>
           </Row>

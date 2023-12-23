@@ -1,15 +1,31 @@
-import { FunctionComponent } from "react";
+import { FC } from "react";
 
 import { Column } from "../column/Column";
-import { IHeaderColumn } from "./IHeaderColumn";
 import { Col } from "antd";
+import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
+
+interface IHeaderColumn {
+  /**
+   * The description of the column header.
+   * @type {ColDescWithIdx}
+   * @memberof IHeaderColumn
+   */
+  desc: ColDescWithIdx;
+
+  /**
+   * The span of the header column.
+   * @type {number[]}
+   * @memberof IHeaderColumn
+   */
+  colSpans: number[];
+}
 
 /**
- * Orrp Inline collection table header column.
+ * Inline collection table header column.
  * @param {IHeaderColumn} props
  * @return {*}
  */
-export const HeaderColumn: FunctionComponent<IHeaderColumn> = (props: IHeaderColumn) => {
+export const HeaderColumn: FC<IHeaderColumn> = (props: IHeaderColumn) => {
   const { desc, colSpans } = props;
   const labelText = desc.label || desc.fieldName;
 

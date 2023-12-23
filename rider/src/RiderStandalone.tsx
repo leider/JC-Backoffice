@@ -5,7 +5,8 @@ import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveRider } from "@/loader.ts";
 import { RiderComp } from "jc-vue/src/components/rider/RiderComp.tsx";
-import ButtonWithIcon from "jc-vue/src/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "../../vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { theme } from "antd";
 
 export const RiderStandalone: FC = () => {
   const url = window.location.pathname.replace("/rider/", "");
@@ -33,6 +34,8 @@ export const RiderStandalone: FC = () => {
     rider.boxes = targetBoxes;
     mutateRider.mutate(rider);
   }
+  const { useToken } = theme;
+  const token = useToken().token;
 
   return (
     <>
@@ -46,7 +49,7 @@ export const RiderStandalone: FC = () => {
               icon="CheckSquare"
               type="primary"
               disabled={!isSuccess}
-              color="#28a745"
+              color={token.colorSuccess}
               onClick={save}
             />,
           ]

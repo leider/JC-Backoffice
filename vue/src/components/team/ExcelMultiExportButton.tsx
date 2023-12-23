@@ -8,7 +8,7 @@ import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commo
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import { PageHeader } from "@ant-design/pro-layout";
 import sortBy from "lodash/sortBy";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);

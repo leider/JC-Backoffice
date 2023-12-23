@@ -1,19 +1,91 @@
 import { Input } from "antd";
 import numeral from "numeral";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 
 import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
-import { INumericInputEmbedded } from "./INumericInputEmbedded";
 import isEqual from "lodash/isEqual";
+
+interface INumericInputEmbedded {
+  /**
+   * The number;
+   * @type {(number | null)}
+   * @memberof INumericInputEmbedded
+   */
+  number?: number | null;
+
+  /**
+   * The number of decimals.
+   * @type {number}
+   * @memberof INumericInputEmbedded
+   */
+  decimals: number;
+
+  /**
+   * Whether the input is disabled.
+   * @type {boolean}
+   * @memberof INumericInputEmbedded
+   */
+  disabled?: boolean;
+
+  /**
+   * The minimum number.
+   * @type {number}
+   * @memberof INumericInputEmbedded
+   */
+  min?: number;
+
+  /**
+   * The maximum number.
+   * @type {number}
+   * @memberof INumericInputEmbedded
+   */
+  max?: number;
+
+  /**
+   * The exclusive minimum.
+   * @type {boolean}
+   * @memberof INumericInputEmbedded
+   */
+  exclusiveMin?: boolean;
+
+  /**
+   * The exclusive maximum.
+   * @type {boolean}
+   * @memberof INumericInputEmbedded
+   */
+  exclusiveMax?: boolean;
+
+  /**
+   * Callback for when the number is updated.
+   * @memberof INumericInputEmbedded
+   */
+  onNumber?: (value: number | null) => void;
+
+  /**
+   * Callback for when the number is changed.
+   * @memberof INumericInputEmbedded
+   */
+  onChange?: (value: number | null) => void;
+  suffix?: ReactNode;
+}
 
 /**
  * Numeric input component.
  * @param {INumericInputEmbedded} props
  * @return {*}  {React.ReactElement}
  */
-const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: INumericInputEmbedded): React.ReactElement => {
-  const { number, decimals, min, max, exclusiveMin, exclusiveMax, disabled, onChange, onNumber, suffix } = props;
-
+const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
+  number,
+  decimals,
+  min,
+  max,
+  exclusiveMin,
+  exclusiveMax,
+  disabled,
+  onChange,
+  onNumber,
+  suffix,
+}: INumericInputEmbedded): React.ReactElement => {
   const [value, setValue] = useState<string | undefined>("");
 
   const { internalFormat, displayFormat } = useFormats(decimals);
@@ -49,7 +121,6 @@ const NumericInputEmbedded: FunctionComponent<INumericInputEmbedded> = (props: I
 
   return (
     <Input
-      id={props.id}
       inputMode="numeric"
       onBlur={handleBlur}
       disabled={disabled}

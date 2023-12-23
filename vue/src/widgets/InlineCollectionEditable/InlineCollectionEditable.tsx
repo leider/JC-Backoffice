@@ -1,31 +1,114 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Row, Tooltip } from "antd";
-import { StoreValue } from "rc-field-form/lib/interface";
-import React, { FunctionComponent, useEffect } from "react";
+import { Button, Col, Form, FormInstance, Row, Tooltip } from "antd";
+import { StoreValue, ValidatorRule } from "rc-field-form/lib/interface";
+import React, { FC, useEffect } from "react";
 
-import OrrpTableActions, { ActionCallbacks } from "./OrrpTableActions";
-import { addInitialValueFromObjectToColDescs, getCollectionHeightsInPixel, isDuplicate } from "./collectionHelpers";
+import InlineEditableActions, { ActionCallbacks } from "./InlineEditableActions.tsx";
 import { HeaderColumn } from "./headerColumn/HeaderColumn";
-import { calcSpans, createKey } from "./inlineCollectionEditableHelpers";
-import { TOrrpInlineCollectionEditable } from "./IOrrpInlineCollectionEditable";
-import { ColDescWithIdx } from "./types";
+import {
+  addInitialValueFromObjectToColDescs,
+  calcSpans,
+  createKey,
+  getCollectionHeightsInPixel,
+  isDuplicate,
+} from "./inlineCollectionEditableHelpers";
+import { ColDescWithIdx, CollectionColDesc, CollectionHeight } from "./types";
 import { WidgetColumn } from "./widgetColumn/WidgetColumn";
 import { Rule } from "antd/es/form";
 
+interface IInlineCollectionEditable {
+  /**
+   * Array that describes the path in the form object
+   * leading to this field.
+   */
+  embeddedArrayPath: string[];
+
+  /**
+   * Antd's form
+   */
+  form: FormInstance;
+
+  /**
+   * The initial value of the field
+   */
+  initialValue?: any;
+
+  /**
+   * The text label of the field
+   */
+  label?: string;
+
+  /**
+   * Whether or not this field is required
+   */
+  required?: boolean;
+
+  /**
+   * number of allowed columns
+   */
+  maxRows?: number;
+
+  /**
+   * Whether or not this field is disabled (no plus sign)
+   */
+  disabled?: boolean;
+
+  /**
+   * Whether or not this field will be emptied on disable
+   */
+  clearOnDisabled?: boolean;
+
+  /**
+   * A fixed max height
+   */
+  maxHeight?: string;
+
+  /**
+   * The standardized height of the component
+   */
+  height?: CollectionHeight;
+
+  /**
+   * optional callback for changes;
+   * @param value
+   */
+  onChange?: (value: any) => void;
+
+  /**
+   * List of rules to be checked on "submit". Example see "HaircutModal.tsx"
+   * @type {ValidatorRule[]}
+   * @memberof CommonParams
+   */
+  rules?: ValidatorRule[] /**
+   * What the columns look like
+   */;
+  columnDescriptions: CollectionColDesc[];
+}
+
 /**
  * An editable collection table.
- * @param {TOrrpInlineCollectionEditable} props
+ * @param {IInlineCollectionEditable} props
  * @return {*}  {React.ReactElement}
  */
-const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEditable> = (
-  props: TOrrpInlineCollectionEditable,
-): React.ReactElement => {
-  if ("columnDescriptions" in props) {
-    addInitialValueFromObjectToColDescs(props.columnDescriptions, props.initialValue);
-  }
+const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
+  initialValue,
+  disabled,
+  clearOnDisabled,
+  label,
+  form,
+  onChange,
+  embeddedArrayPath,
+  height,
+  maxHeight,
+  maxRows,
+  required,
+  rules,
+  columnDescriptions,
+}: IInlineCollectionEditable): React.ReactElement => {
+  addInitialValueFromObjectToColDescs(columnDescriptions, initialValue);
 
-  const colDescriptors: ColDescWithIdx[] = props.columnDescriptions.map((d, idx) => ({ ...d, idx }));
+  const colDescriptors: ColDescWithIdx[] = columnDescriptions.map((d, idx) => ({ ...d, idx }));
   const actionColDesc: ColDescWithIdx = {
     width: "xs",
     type: "basic",
@@ -42,24 +125,24 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
   ): ActionCallbacks {
     return {
       delete:
-        props.required && name === 0
+        required && name === 0
           ? undefined
           : {
               callback: () => {
                 remove(name);
-                props.onChange?.("CHANGED");
+                onChange?.("CHANGED");
               },
             },
-      empty: props.required && name === 0 ? "dummy" : undefined,
+      empty: required && name === 0 ? "dummy" : undefined,
       copy: () => {
-        const selected = props.form.getFieldValue(props.embeddedArrayPath.concat([name.toString(10)]));
+        const selected = form.getFieldValue(embeddedArrayPath.concat([name.toString(10)]));
         add({ ...selected, id: `${selected.id}copy` }, name);
-        props.onChange?.("CHANGED");
+        onChange?.("CHANGED");
       },
     };
   }
 
-  const emptyArray = props.embeddedArrayPath.reduceRight((prev: any, curr) => {
+  const emptyArray = embeddedArrayPath.reduceRight((prev: any, curr) => {
     const result: any = {};
     result[curr] = prev;
     return result;
@@ -67,17 +150,18 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
 
   useEffect(
     () => {
-      if (props.clearOnDisabled && props.disabled) {
-        props.form.setFieldsValue(emptyArray);
+      if (clearOnDisabled && disabled) {
+        form.setFieldsValue(emptyArray);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [props.disabled, props.clearOnDisabled],
+    [disabled, clearOnDisabled],
   );
 
   return (
-    <Form.Item label={props.label} style={{ flexWrap: "nowrap" }}>
-      <Form.List name={props.embeddedArrayPath} initialValue={props.initialValue} rules={props.rules}>
+    <>
+      {label && <Form.Item label={label} style={{ flexWrap: "nowrap" }} />}
+      <Form.List name={embeddedArrayPath} initialValue={initialValue} rules={rules}>
         {(fields, { add, remove }, { errors }) => {
           return (
             <>
@@ -90,14 +174,14 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                     <>
                       <Tooltip title="Neu">
                         <Button
-                          data-testid={`${props.embeddedArrayPath.join("_")}_add`}
+                          data-testid={`${embeddedArrayPath.join("_")}_add`}
                           type="text"
                           icon={<PlusOutlined />}
                           onClick={() => {
                             add({}, 0);
-                            props.onChange?.("CHANGED");
+                            onChange?.("CHANGED");
                           }}
-                          disabled={!!props.maxRows && fields.length >= (props.maxRows || 0)}
+                          disabled={!!maxRows && fields.length >= (maxRows || 0)}
                         />
                       </Tooltip>
                       <Button type="text" key={"dummyHeader"} icon={<PlusOutlined style={{ color: "#FFF" }} />} />
@@ -108,12 +192,12 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
 
               <div
                 style={{
-                  maxHeight: props.height
+                  maxHeight: height
                     ? // Todo: It would be great to have the top part dynamically, buut, it brings rerender issues
-                      `${getCollectionHeightsInPixel(props.height) - 60}px`
-                    : props.maxHeight,
+                      `${getCollectionHeightsInPixel(height) - 60}px`
+                    : maxHeight,
                   overflowX: "hidden",
-                  overflowY: props.maxHeight ? "auto" : "initial",
+                  overflowY: maxHeight ? "auto" : "initial",
                 }}
               >
                 {fields.map(({ key, name }) => (
@@ -129,8 +213,8 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                       if (desc.uniqueValues) {
                         uniqueValuesValidator = {
                           validator: (_: any, value: any) => {
-                            const fieldsValue = props.form.getFieldsValue(props.embeddedArrayPath);
-                            const dupes = isDuplicate(props.embeddedArrayPath, desc.fieldName, fieldsValue, value);
+                            const fieldsValue = form.getFieldsValue(embeddedArrayPath);
+                            const dupes = isDuplicate(embeddedArrayPath, desc.fieldName, fieldsValue, value);
                             return !dupes ? Promise.resolve() : Promise.reject(new Error("Doppelter Wert"));
                           },
                         };
@@ -141,15 +225,15 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
                           name={name}
                           key={createKey(desc, name)}
                           colSpans={colSpans}
-                          disabled={props.disabled || desc.disabled}
+                          disabled={disabled || desc.disabled}
                           uniqueValuesValidator={uniqueValuesValidator}
                         />
                       );
                     })}
                     <Col key={createKey(actionColDesc, key)} flex={"none"}>
-                      <OrrpTableActions
+                      <InlineEditableActions
                         actions={createCallbacks(name, remove, add)}
-                        testid={`${props.embeddedArrayPath.join("_")}_${key}`}
+                        testid={`${embeddedArrayPath.join("_")}_${key}`}
                       />
                     </Col>
                   </Row>
@@ -160,8 +244,8 @@ const OrrpInlineCollectionEditable: FunctionComponent<TOrrpInlineCollectionEdita
           );
         }}
       </Form.List>
-    </Form.Item>
+    </>
   );
 };
 
-export default OrrpInlineCollectionEditable;
+export default InlineCollectionEditable;

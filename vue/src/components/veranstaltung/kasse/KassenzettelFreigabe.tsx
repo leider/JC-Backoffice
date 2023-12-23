@@ -1,17 +1,17 @@
 import { App, Button, Col, Form, Row } from "antd";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { allUsers, openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useAuth } from "@/commons/authConsts.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { TextField } from "@/widgets/TextField";
-import { ButtonKassenzettel } from "@/components/Buttons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useForm } from "antd/es/form/Form";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections.ts";
 
 export function KassenzettelFreigabe() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -70,11 +70,21 @@ export function KassenzettelFreigabe() {
     });
   }
 
+  const { color } = useColorsAndIconsForSections("kasse");
+
   return (
     <>
       <Row gutter={12}>
         <Col span={10}>
-          <ButtonKassenzettel callback={() => openKassenzettel(form.getFieldsValue(true))} />
+          <ButtonWithIcon
+            block
+            text="Kassenzettel"
+            icon="PrinterFill"
+            type="primary"
+            onClick={() => openKassenzettel(form.getFieldsValue(true))}
+            tooltipTitle="Kassenzettel asl PDF"
+            color={color()}
+          />
         </Col>
         <Col span={10} offset={4}>
           <DynamicItem

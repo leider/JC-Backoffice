@@ -6,7 +6,7 @@ import { uploadFile } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import ButtonWithIcon from "@/widgets/ButtonWithIcon.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 interface UploaderParams {
   form: FormInstance<Veranstaltung | Vermietung>;

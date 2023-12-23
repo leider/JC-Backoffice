@@ -1,4 +1,4 @@
-import { IconForSmallBlock, IconProps } from "../components/Icon";
+import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import React, { useEffect, useState } from "react";
 import { Button, ConfigProvider, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";

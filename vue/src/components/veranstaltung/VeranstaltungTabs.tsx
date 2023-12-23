@@ -2,7 +2,7 @@ import * as React from "react";
 import { useContext, useEffect, useState } from "react";
 import { Form, FormInstance, Tabs, TabsProps } from "antd";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
-import { IconForSmallBlock } from "@/components/Icon";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
 import OptionValues from "jc-shared/optionen/optionValues";

@@ -77,8 +77,7 @@ app.post("/mailinglisten", async (req, res) => {
   users?.forEach((u) => (u.mailinglisten = []));
 
   newLists.forEach((list) => {
-    const listusers = list.users.map((u) => u.id);
-    const selectedUsers = users?.filter((u) => listusers.includes(u.id));
+    const selectedUsers = users?.filter((u) => list.users.includes(u.id));
     selectedUsers?.forEach((u) => u.subscribeList(list.name));
   });
 

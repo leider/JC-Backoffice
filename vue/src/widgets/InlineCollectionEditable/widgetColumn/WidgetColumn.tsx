@@ -1,24 +1,67 @@
 import { Col } from "antd";
-import React, { FunctionComponent } from "react";
+import React, { FC } from "react";
 
 import { Column } from "../column/Column";
-import { IWidgetColumn } from "./IWidgetColumn";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers";
+import StartEndDateOnlyPickers from "@/components/veranstaltung/hotel/StartEndDateOnlyPickers.tsx";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
 import { ColorField } from "@/widgets/ColorField.tsx";
+import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
+import { Rule } from "antd/es/form";
+
+interface IWidgetColumn {
+  /**
+   * The description of the column.
+   * @type {ColDescWithIdx}
+   * @memberof IWidgetColumn
+   */
+  desc: ColDescWithIdx;
+
+  /**
+   * The name of the column.
+   * @type {number}
+   * @memberof IWidgetColumn
+   */
+  name: number;
+
+  /**
+   * The column span.
+   * @type {number[]}
+   * @memberof IWidgetColumn
+   */
+  colSpans: number[];
+
+  /**
+   * Whether the column is disabled.
+   * @type {boolean}
+   * @memberof IWidgetColumn
+   */
+  disabled?: boolean;
+
+  /**
+   * An unique values validator function.
+   * @type {*}
+   * @memberof IWidgetColumn
+   */
+  uniqueValuesValidator?: Rule;
+  usersAsAoptions?: { label: string; value: string }[];
+}
 
 /**
- Orrp inline collection table widget column component.
+ Inline collection table widget column component.
  * @param {IWidgetColumn} props
  * @return {*}  {React.ReactElement}
  */
-export const WidgetColumn: FunctionComponent<IWidgetColumn> = (props: IWidgetColumn): React.ReactElement => {
-  const { desc, name, colSpans, disabled, uniqueValuesValidator } = props;
-
+export const WidgetColumn: FC<IWidgetColumn> = ({
+  desc,
+  name,
+  colSpans,
+  disabled,
+  uniqueValuesValidator,
+}: IWidgetColumn): React.ReactElement => {
   const commonProps = {
     name: [name.toString(10)].concat(desc.fieldName),
     label: "",

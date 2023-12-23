@@ -1,10 +1,10 @@
 import { Tag } from "antd";
 import * as React from "react";
 
-export interface LabelColor {
+type LabelColor = {
   label: string;
   color: boolean;
-}
+};
 
 export default function headerTags(labelsColors: LabelColor[], withStyle = false) {
   function HeaderTag({ label, color }: LabelColor) {
@@ -14,5 +14,5 @@ export default function headerTags(labelsColors: LabelColor[], withStyle = false
       </Tag>
     );
   }
-  return labelsColors.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color}></HeaderTag>);
+  return labelsColors.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} />);
 }

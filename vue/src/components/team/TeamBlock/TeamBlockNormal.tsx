@@ -4,7 +4,7 @@ import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
-import { ButtonPreview } from "@/components/Buttons.tsx";
+import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
