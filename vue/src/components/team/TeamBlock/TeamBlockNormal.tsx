@@ -15,7 +15,7 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
   const [color, setColor] = useState<string | undefined>("");
 
   useEffect(() => {
-    setColor(veranstaltung.kopf.eventTypRich?.color);
+    setColor(veranstaltung.kopf.eventTypRich?.color || "#6c757d");
   }, [veranstaltung]);
 
   const [expanded, setExpanded] = useState<boolean>();

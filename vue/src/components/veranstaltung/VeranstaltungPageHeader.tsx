@@ -29,7 +29,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
 
   const typeColor = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
-    return typByName[eventTyp]?.[0].color;
+    return typByName[eventTyp]?.[0].color || "#6c757d";
   }, [optionen, eventTyp]);
 
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });

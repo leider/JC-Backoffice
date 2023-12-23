@@ -98,7 +98,7 @@ export default function Preview() {
   useEffect(() => {
     if (opts.data && veranstaltung) {
       const typByName = groupBy(opts.data?.typenPlus || [], "name");
-      setTypeColor(typByName[veranstaltung.kopf.eventTyp]?.[0].color);
+      setTypeColor(typByName[veranstaltung.kopf.eventTyp]?.[0].color || "#6c757d");
     }
   }, [opts.data, veranstaltung]);
 
