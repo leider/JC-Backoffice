@@ -14,10 +14,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18]
-
     services:
       mongodb:
         image: mongo
@@ -25,11 +21,11 @@ jobs:
           - 27017:27017
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - name: Use Node.js v18
+      uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '18x'
         cache: 'yarn'
     - run: yarn install --immutable
     - run: yarn lint
