@@ -1,4 +1,4 @@
-import { Popconfirm, Tooltip } from "antd";
+import { Popconfirm } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export interface ActionCallbacks {
