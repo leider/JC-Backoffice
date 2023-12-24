@@ -23,6 +23,7 @@ import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { useAuth } from "@/commons/authConsts.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 //import { detailedDiff } from "deep-object-diff";
 
 export const VeranstaltungContext = createContext<{
@@ -47,10 +48,12 @@ export default function VeranstaltungComp() {
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
   const [orte, setOrte] = useState<Orte>(new Orte());
   const [rider, setRider] = useState<Rider>(new Rider());
+  const [initialValue, setInitialValue] = useState<object>({});
+  const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty, true);
 
   useEffect(() => {
     if (veranst.data) {
-      form.setFieldValue(["kopf", "titel"], "");
       setVeranstaltung(veranst.data);
     }
   }, [veranst.data, form]);
@@ -112,8 +115,6 @@ export default function VeranstaltungComp() {
     },
   });
 
-  const [initialValue, setInitialValue] = useState<object>({});
-  const [dirty, setDirty] = useState<boolean>(false);
   const { context } = useAuth();
   const navigate = useNavigate();
 

@@ -8,12 +8,15 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function OrtePage() {
   const ortQuery = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
   const [orte, setOrte] = useState<Orte>(new Orte());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 

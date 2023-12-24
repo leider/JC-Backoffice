@@ -15,6 +15,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
 import groupBy from "lodash/groupBy";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function Programmheft() {
   const { year, month } = useParams();
@@ -48,6 +49,8 @@ export default function Programmheft() {
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();

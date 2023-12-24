@@ -20,6 +20,7 @@ import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -59,7 +60,8 @@ export default function SendMail() {
 
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
 
-  const [canSend, setCanSend] = useState<boolean>(false);
+  const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
 
   document.title = "Mail Senden";
 
@@ -128,14 +130,15 @@ export default function SendMail() {
   }
 
   useEffect(() => {
-    const usersFromLists = selectedLists.flatMap((list) => list.users);
+    const userIdsFromLists = selectedLists.flatMap((list) => list.users);
+    const usersFromLists = users.filter((user) => userIdsFromLists.includes(user.id));
     const allUsersFromListsAndUsers = selectedUsers.concat(usersFromLists).map((user) => ({ name: user.name, email: user.email }));
     const allRuleUsers = selectedRules.map((rule) => ({
       name: rule.name,
       email: rule.email,
     }));
     setEffectiveUsers(sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
-  }, [selectedUsers, selectedLists, selectedRules]);
+  }, [selectedUsers, selectedLists, selectedRules, users]);
 
   function send() {
     form.validateFields().then(async () => {
@@ -163,13 +166,13 @@ export default function SendMail() {
       onValuesChange={() => {
         form
           .validateFields()
-          .then((value) => setCanSend(!!value.markdown))
-          .catch((value) => setCanSend(value.errorFields.length === 0 && !!value.values.markdown));
+          .then((value) => setDirty(!!value.markdown))
+          .catch((value) => setDirty(value.errorFields.length === 0 && !!value.values.markdown));
       }}
       onFinish={send}
       layout="vertical"
     >
-      <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!canSend || effectiveUsers.length === 0} />]}></PageHeader>
+      <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]}></PageHeader>
       <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={12}>
           <MultiSelectWithTags

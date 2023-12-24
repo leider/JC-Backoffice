@@ -1,5 +1,5 @@
 import { Form as AntdForm, Input } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
 
 type TTextField = {
@@ -69,7 +69,6 @@ export const TextField: FunctionComponent<TTextField> = ({
   label,
   name,
   disabled,
-  clearOnDisabled,
   onChange,
 }: TTextField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
@@ -102,46 +101,37 @@ export const TextField: FunctionComponent<TTextField> = ({
       valuePropName={"textVal"}
       trigger={"onText"}
     >
-      <TextInputEmbedded disabled={disabled} clearOnDisabled={clearOnDisabled && disabled} onChange={onChange} />
+      <TextInputEmbedded disabled={disabled} onChange={onChange} />
     </AntdForm.Item>
   );
 };
 
 type TTextInputEmbedded = {
   disabled?: boolean;
-  clearOnDisabled?: boolean;
   textVal?: string;
   onText?: (value: string | null) => void;
   onChange?: (value: string | null) => void;
 };
 
-const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
-  onText,
-  textVal,
-  clearOnDisabled,
-  disabled,
-  onChange,
-}: TTextInputEmbedded) => {
-  const [value, setValue] = useState<string | undefined>("");
-
-  useEffect(() => {
-    setValue(!(clearOnDisabled && disabled) ? textVal || "" : "");
-    onText?.(!(clearOnDisabled && disabled) ? textVal || "" : "");
-  }, [textVal, clearOnDisabled, disabled, onText]);
+const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, textVal, disabled, onChange }: TTextInputEmbedded) => {
+  const changed = useCallback(
+    (text: string, trim?: boolean) => {
+      const trimmedValue = trim ? text.trim() : text;
+      onChange?.(trimmedValue);
+      onText?.(trimmedValue);
+    },
+    [onChange, onText],
+  );
 
   return (
     <Input
       disabled={disabled}
-      value={value}
+      value={textVal}
       onChange={({ target: { value: nextValue } }) => {
-        setValue(nextValue);
-        onText!(nextValue);
-        onChange?.(nextValue);
+        changed(nextValue);
       }}
       onBlur={({ target: { value: nextValue } }) => {
-        const trimmedValue = nextValue.trim() ? nextValue.trim() : null;
-        onText!(trimmedValue);
-        onChange?.(trimmedValue);
+        changed(nextValue, true);
       }}
     />
   );

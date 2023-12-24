@@ -11,6 +11,7 @@ import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.t
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues } | null>(null);
 
@@ -65,6 +66,8 @@ export default function VermietungComp() {
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty, true);
+
   const { context } = useAuth();
   const navigate = useNavigate();
   function initializeForm() {

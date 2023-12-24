@@ -4,7 +4,7 @@ export default class Kopf {
   beschreibung = "";
   eventTyp = "";
   eventTypRich?: TypMitMehr;
-  flaeche = "";
+  flaeche = 0;
   kooperation = "";
   ort = "Jazzclub";
   titel = "";

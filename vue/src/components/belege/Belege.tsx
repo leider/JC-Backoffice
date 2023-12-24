@@ -8,9 +8,11 @@ import TextArea from "antd/es/input/TextArea";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RcFile } from "antd/es/upload";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function Belege() {
-  const [canSend, setCanSend] = useState<boolean>(false);
+  const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
 
   const [form] = Form.useForm<{ datum: Dayjs; kommentar: string | null }>();
 
@@ -25,7 +27,7 @@ export default function Belege() {
     form.validateFields();
     setFileList([]);
     setUploading(false);
-    setCanSend(false);
+    setDirty(false);
   }
   useEffect(initializeForm, [form]);
 
@@ -65,8 +67,8 @@ export default function Belege() {
   function valuesChanged() {
     form
       .validateFields()
-      .then((value) => setCanSend(!!value.kommentar && fileList.length > 0))
-      .catch((value) => setCanSend(value.errorFields.length === 0 && !!value.komentar && value.fileList.length > 0));
+      .then((value) => setDirty(!!value.kommentar && fileList.length > 0))
+      .catch((value) => setDirty(value.errorFields.length === 0 && !!value.komentar && value.fileList.length > 0));
   }
 
   return (
@@ -91,7 +93,7 @@ export default function Belege() {
             htmlType="submit"
             icon="Upload"
             type="primary"
-            disabled={!canSend}
+            disabled={!dirty}
             loading={uploading}
           />,
         ]}

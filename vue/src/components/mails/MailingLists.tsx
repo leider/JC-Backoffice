@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function MailingLists() {
   const usersQuery = useQuery({
@@ -25,6 +26,7 @@ export default function MailingLists() {
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
+  useDirtyBlocker(dirty);
   document.title = "Maillinglisten";
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -18,6 +19,8 @@ export default function TerminePage() {
     allTermine: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 

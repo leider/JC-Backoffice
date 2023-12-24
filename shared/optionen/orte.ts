@@ -9,7 +9,7 @@ const sortByNameCaseInsensitive = sortBy(flowRight(toLower, prop("name")));
 
 export class Ort {
   name = "";
-  flaeche = "";
+  flaeche = 0;
   presseIn?: string;
   pressename?: string;
 

@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -18,6 +19,8 @@ export default function KalenderPage() {
   const [ferienIcals, setFerienIcals] = useState<FerienIcals>(new FerienIcals());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 

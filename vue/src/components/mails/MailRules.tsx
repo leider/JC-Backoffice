@@ -8,6 +8,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -19,6 +20,8 @@ export default function MailRules() {
     allRules: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 

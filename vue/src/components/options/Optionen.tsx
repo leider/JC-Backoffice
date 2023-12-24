@@ -12,12 +12,15 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function Optionen() {
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
   const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+  useDirtyBlocker(dirty);
+
   const queryClient = useQueryClient();
 
   document.title = "Optionen";
