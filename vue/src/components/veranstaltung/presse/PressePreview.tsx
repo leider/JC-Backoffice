@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Image, Space } from "antd";
-import { DownloadOutlined, ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
 import Renderer from "jc-shared/commons/renderer";
-import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
+import VeranstaltungVermietungFormatter from "../../../../../shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  function updatePreview(veranstaltung: Veranstaltung) {
-    const presse = veranstaltung.presse;
+export function PressePreview({ veranstVermiet }: { veranstVermiet: Veranstaltung | Vermietung }) {
+  function updatePreview(veranstVermiet: Veranstaltung | Vermietung) {
+    const presse = veranstVermiet.presse;
     const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
     const infoline1 = presse.checked ? "" : "ACHTUNG: Presse ist NICHT OK\n";
     const infoline2 = isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
@@ -19,7 +20,7 @@ export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung 
       Renderer.render(
         `## ${infoline1}
 ## ${infoline2}
-${new VeranstaltungFormatter(veranstaltung).presseTemplate + textToUse}
+${new VeranstaltungVermietungFormatter(veranstVermiet).presseTemplate + textToUse}
 ${presse.fullyQualifiedJazzclubURL}`,
       ) + `<h4>Bilder:</h4>`,
     );
@@ -27,13 +28,13 @@ ${presse.fullyQualifiedJazzclubURL}`,
 
   const [preview, setPreview] = useState("");
   useEffect(() => {
-    updatePreview(veranstaltung);
-  }, [veranstaltung]);
+    updatePreview(veranstVermiet);
+  }, [veranstVermiet]);
 
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
-      {veranstaltung.presse.image.map((img) => (
+      {veranstVermiet.presse.image.map((img) => (
         <Image
           key={img}
           src={`/imagepreview/${img}`}
@@ -42,9 +43,9 @@ ${presse.fullyQualifiedJazzclubURL}`,
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
               <Space size={12} className="toolbar-wrapper">
-                <DownloadOutlined onClick={() => imgFullsize(img)} />
-                <ZoomOutOutlined disabled={scale === 1} onClick={onZoomOut} />
-                <ZoomInOutlined disabled={scale === 50} onClick={onZoomIn} />
+                <ButtonWithIcon type="text" icon="Download" iconColor="white" onClick={() => imgFullsize(img)} />
+                <ButtonWithIcon type="text" icon="ZoomOut" iconColor="white" onClick={onZoomOut} disabled={scale === 1} />
+                <ButtonWithIcon type="text" icon="ZoomIn" iconColor="white" onClick={onZoomIn} disabled={scale === 50} />
               </Space>
             ),
           }}

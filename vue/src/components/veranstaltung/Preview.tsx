@@ -278,7 +278,7 @@ export default function Preview() {
         </Col>
         <Col xs={24} lg={12}>
           <CollapsibleForVeranstaltung suffix="presse" label="Pressetext">
-            <PressePreview veranstaltung={veranstaltung} />
+            <PressePreview veranstVermiet={veranstaltung} />
           </CollapsibleForVeranstaltung>
           {veranstaltung.agentur.name && (
             <CollapsibleForVeranstaltung suffix="allgemeines" label="Agentur">

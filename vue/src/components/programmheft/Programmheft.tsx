@@ -205,7 +205,7 @@ export default function Programmheft() {
           <Row gutter={[8, 8]}>
             {veranstaltungenNachMonat[monat].map((veranst) => (
               <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
-                <PressePreview veranstaltung={veranst} />
+                <PressePreview veranstVermiet={veranst} />
               </Col>
             ))}
           </Row>

@@ -50,6 +50,7 @@ import {
   PersonLinesFill,
   PersonPlus,
   PlusCircleFill,
+  PlusLg,
   Printer,
   PrinterFill,
   QuestionCircleFill,
@@ -61,6 +62,8 @@ import {
   Unlock,
   Upload,
   Wallet2,
+  ZoomIn,
+  ZoomOut,
 } from "react-bootstrap-icons";
 
 export const icons = {
@@ -115,6 +118,7 @@ export const icons = {
   PersonLinesFill,
   PersonPlus,
   PlusCircleFill,
+  PlusLg,
   Printer,
   PrinterFill,
   QuestionCircleFill,
@@ -126,4 +130,6 @@ export const icons = {
   Unlock,
   Upload,
   Wallet2,
+  ZoomIn,
+  ZoomOut,
 };

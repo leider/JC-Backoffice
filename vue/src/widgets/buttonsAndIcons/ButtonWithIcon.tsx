@@ -6,11 +6,13 @@ import { ButtonHTMLType } from "antd/es/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { Link, To } from "react-router-dom";
+import { TooltipPlacement } from "antd/es/tooltip";
 
 export default function ButtonWithIcon({
   href,
   to,
   icon,
+  iconColor,
   onClick,
   target,
   text,
@@ -18,12 +20,14 @@ export default function ButtonWithIcon({
   disabled,
   htmlType,
   tooltipTitle,
+  tooltipPlacement,
   color,
   size,
   block,
   loading,
 }: {
   icon?: IconProps["iconName"];
+  iconColor?: string;
   text?: string;
   type?: BaseButtonProps["type"];
   onClick?: () => void;
@@ -33,6 +37,7 @@ export default function ButtonWithIcon({
   disabled?: boolean;
   htmlType?: ButtonHTMLType;
   tooltipTitle?: string;
+  tooltipPlacement?: TooltipPlacement;
   color?: string;
   size?: SizeType;
   block?: boolean;
@@ -47,7 +52,7 @@ export default function ButtonWithIcon({
       setButton(
         <Link to={to}>
           <Button
-            icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
+            icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} color={iconColor} />}
             type={type || "primary"}
             onClick={onClick}
             target={target}
@@ -65,7 +70,7 @@ export default function ButtonWithIcon({
     } else {
       setButton(
         <Button
-          icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
+          icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} color={iconColor} />}
           type={type || "primary"}
           onClick={onClick}
           href={href}
@@ -86,7 +91,7 @@ export default function ButtonWithIcon({
   return color ? (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
       {tooltipTitle ? (
-        <Tooltip title={tooltipTitle} color={color}>
+        <Tooltip title={tooltipTitle} color={color} placement={tooltipPlacement || "top"}>
           {button}
         </Tooltip>
       ) : (
@@ -94,7 +99,9 @@ export default function ButtonWithIcon({
       )}
     </ConfigProvider>
   ) : tooltipTitle ? (
-    <Tooltip title={tooltipTitle}>{button}</Tooltip>
+    <Tooltip title={tooltipTitle} placement={tooltipPlacement || "top"}>
+      {button}
+    </Tooltip>
   ) : (
     button
   );

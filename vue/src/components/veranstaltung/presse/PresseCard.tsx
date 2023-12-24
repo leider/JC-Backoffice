@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, Row, Tabs } from "antd";
+import { Col, Form, FormInstance, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
@@ -10,22 +10,21 @@ import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
-import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
+import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/veranstaltung/veranstaltungCompUtils";
+import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils";
 import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
-export default function PresseCard() {
-  const veranstContext = useContext(VeranstaltungContext);
-  const form = veranstContext!.form;
-
+export default function PresseCard({ form, isVermietung }: { form: FormInstance; isVermietung: boolean }) {
   const allimages = useQuery({
     queryKey: ["imagenames"],
     queryFn: () => imagenames(),
   });
 
   const { color } = useColorsAndIconsForSections("presse");
-  const [veranstForPreview, setVeranstForPreview] = useState<Veranstaltung>(new Veranstaltung());
+  const [verForPreview, setVerForPreview] = useState<Veranstaltung | Vermietung>(isVermietung ? new Vermietung() : new Veranstaltung());
+
   const presseText = Form.useWatch(["presse", "text"]);
   const presseOriText = Form.useWatch(["presse", "originalText"]);
   const url = Form.useWatch(["presse", "jazzclubURL"]);
@@ -42,13 +41,13 @@ export default function PresseCard() {
     [],
   );
 
-  useEffect(
-    () => {
-      const veranst = fromFormObject(form);
-      setVeranstForPreview(veranst);
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [presseText, url, image, ok, presseOriText],
-  );
+  useEffect(() => {
+    if (isVermietung) {
+      setVerForPreview(fromFormObjectVermietung(form));
+    } else {
+      setVerForPreview(fromFormObjectVeranstaltung(form));
+    }
+  }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];
@@ -111,7 +110,7 @@ export default function PresseCard() {
           <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
         </Col>
         <Col xs={24} lg={12}>
-          <PressePreview veranstaltung={veranstForPreview} />
+          <PressePreview veranstVermiet={verForPreview} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>

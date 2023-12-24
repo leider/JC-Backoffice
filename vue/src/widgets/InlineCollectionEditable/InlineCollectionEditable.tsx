@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Form, FormInstance, Row, Tooltip } from "antd";
 import { StoreValue, ValidatorRule } from "rc-field-form/lib/interface";
 import React, { FC, useEffect } from "react";
@@ -16,6 +15,7 @@ import {
 import { ColDescWithIdx, CollectionColDesc, CollectionHeight } from "./types";
 import { WidgetColumn } from "./widgetColumn/WidgetColumn";
 import { Rule } from "antd/es/form";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 interface IInlineCollectionEditable {
   /**
@@ -102,7 +102,6 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
   height,
   maxHeight,
   maxRows,
-  required,
   rules,
   columnDescriptions,
 }: IInlineCollectionEditable): React.ReactElement => {
@@ -124,16 +123,10 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
     add: (defaultValue?: StoreValue, insertIndex?: number) => void,
   ): ActionCallbacks {
     return {
-      delete:
-        required && name === 0
-          ? undefined
-          : {
-              callback: () => {
-                remove(name);
-                onChange?.("CHANGED");
-              },
-            },
-      empty: required && name === 0 ? "dummy" : undefined,
+      delete: () => {
+        remove(name);
+        onChange?.("CHANGED");
+      },
       copy: () => {
         const selected = form.getFieldValue(embeddedArrayPath.concat([name.toString(10)]));
         add({ ...selected, id: `${selected.id}copy` }, name);
@@ -169,25 +162,22 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
                 {colDescriptors.map((desc) => (
                   <HeaderColumn desc={desc} colSpans={colSpans} key={createKey(desc, -1)} />
                 ))}
-                {
-                  <Col key={createKey(actionColDesc, -1)} flex={"none"}>
-                    <>
-                      <Tooltip title="Neu">
-                        <Button
-                          data-testid={`${embeddedArrayPath.join("_")}_add`}
-                          type="text"
-                          icon={<PlusOutlined />}
-                          onClick={() => {
-                            add({}, 0);
-                            onChange?.("CHANGED");
-                          }}
-                          disabled={!!maxRows && fields.length >= (maxRows || 0)}
-                        />
-                      </Tooltip>
-                      <Button type="text" key={"dummyHeader"} icon={<PlusOutlined style={{ color: "#FFF" }} />} />
-                    </>
-                  </Col>
-                }
+                <Col key={createKey(actionColDesc, -1)} flex={"none"}>
+                  <Tooltip title="Neu">
+                    <ButtonWithIcon
+                      data-testid={`${embeddedArrayPath.join("_")}_add`}
+                      type="text"
+                      icon="PlusLg"
+                      tooltipTitle="Neue Zeile"
+                      onClick={() => {
+                        add({}, 0);
+                        onChange?.("CHANGED");
+                      }}
+                      disabled={!!maxRows && fields.length >= (maxRows || 0)}
+                    />
+                  </Tooltip>
+                  <Button type="text" style={{ cursor: "auto" }} disabled />
+                </Col>
               </Row>
 
               <div

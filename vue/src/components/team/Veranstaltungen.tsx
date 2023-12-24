@@ -163,7 +163,7 @@ export default function Veranstaltungen() {
             ]}
           />
           <Form form={form} autoComplete="off">
-            <Row gutter={8}>
+            <Row gutter={8} style={{ marginLeft: 0 }}>
               <Col xs={24} sm={8} lg={6}>
                 <SingleSelect name="Presse" label="Filter Presse" options={PRESSEFILTERS} onChange={setPressefilter} />
               </Col>

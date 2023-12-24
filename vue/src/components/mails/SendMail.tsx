@@ -10,7 +10,7 @@ import User from "jc-shared/user/user";
 import { useAuth } from "@/commons/authConsts.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import VeranstaltungFormatter from "jc-shared/veranstaltung/veranstaltungFormatter";
+import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter";
 import { TextField } from "@/widgets/TextField";
 import SimpleMdeReact from "react-simplemde-editor";
 import Users, { Mailingliste } from "jc-shared/user/users";
@@ -72,7 +72,7 @@ export default function SendMail() {
     }
     if (veranstaltungenQuery.data) {
       setVeranstaltungen(veranstaltungenQuery.data);
-      setVeranstaltungenDescriptions(veranstaltungenQuery.data.map((v) => new VeranstaltungFormatter(v).description));
+      setVeranstaltungenDescriptions(veranstaltungenQuery.data.map((v) => new VeranstaltungVermietungFormatter(v).description));
     }
     if (usersQuery.data) {
       const mailinglisten = new Users(usersQuery.data).mailinglisten;
@@ -144,14 +144,14 @@ export default function SendMail() {
     form.validateFields().then(async () => {
       const mail = form.getFieldsValue(true);
       const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
-        mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
+        mail.selectedVeranstaltungen.includes(new VeranstaltungVermietungFormatter(ver).description),
       );
       const addresses = effectiveUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
       const markdownToSend =
         mail.markdown +
         "\n\n---\n" +
         selectedVeranstaltungen
-          .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin))
+          .map((veranst) => new VeranstaltungVermietungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
       const result = new Message({ subject: mail.subject, markdown: markdownToSend }, currentUser.name, currentUser.email);
       result.setBcc(addresses);
