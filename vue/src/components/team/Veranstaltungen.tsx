@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, Drawer, Dropdown, Form, Row, Space } from "antd";
+import { Button, Col, Drawer, Dropdown, Form, Row, Space, theme } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useAuth } from "@/commons/authConsts.ts";
@@ -16,6 +16,8 @@ import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 import sortBy from "lodash/sortBy";
 import isEmpty from "lodash/isEmpty";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -130,6 +132,8 @@ export default function Veranstaltungen() {
   );
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { useToken } = theme;
+  const token = useToken().token;
 
   return (
     <>
@@ -140,7 +144,7 @@ export default function Veranstaltungen() {
               <Space>
                 Veranstaltungen
                 <div style={{ marginTop: "-16px" }}>
-                  <ButtonWithIcon key="openCal" icon="Calendar2Month" type="primary" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                  <ButtonWithIcon key="openCal" icon="Calendar2Month" text="Zeigen" onClick={() => setDrawerOpen(true)} />
                 </div>
               </Space>
             }
@@ -180,15 +184,16 @@ export default function Veranstaltungen() {
         extra={
           <>
             {context?.currentUser?.accessrights?.isOrgaTeam && (
-              <ButtonWithIcon key="bigcal" icon="Calendar2Range" text="Kalenderübersicht" type="default" to="/kalenderuebersicht" />
+              <ButtonWithIconAndLink
+                key="bigcal"
+                icon="Calendar2Range"
+                color={token.colorPrimary}
+                text="Kalenderübersicht"
+                type="default"
+                to="/kalenderuebersicht"
+              />
             )}
-            <ButtonWithIcon
-              key="cal"
-              icon="CalendarWeek"
-              text="ical..."
-              type="default"
-              href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
-            />
+            <ButtonIcal />
           </>
         }
         placement="right"

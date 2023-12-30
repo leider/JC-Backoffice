@@ -103,7 +103,7 @@ export default function MailRules() {
       <PageHeader title="Mailing Regeln" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
       <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allRules"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allRules"]} />
         </Col>
       </Row>
     </Form>

@@ -107,7 +107,7 @@ export default function MailingLists() {
       <PageHeader title="Mailinglisten" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
       <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allLists"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allLists"]} />
         </Col>
       </Row>
     </Form>

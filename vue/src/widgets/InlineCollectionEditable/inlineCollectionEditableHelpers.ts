@@ -8,18 +8,6 @@ export function getCollectionHeightsInPixel(height: CollectionHeight) {
   return { xs: 160, sm: 240, md: 360, lg: 560, xl: 760 }[height];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function addInitialValueFromObjectToColDescs(colDesc: CollectionColDesc[], initialValue?: any[]) {
-  if (!initialValue || !initialValue[0]) {
-    return;
-  }
-  const initialValueElement = initialValue[0];
-  Object.keys(initialValueElement).forEach((key) => {
-    const descriptor = colDesc.find((desc) => desc.fieldName === key);
-    descriptor && (descriptor.initialValue = initialValueElement[key]);
-  });
-}
-
 /**
  * This function checks that an array property residing in "fieldsValue", denoted
  * by "embeddedArrayPath" has no duplicate values for property "fieldName" and

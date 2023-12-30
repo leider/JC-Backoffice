@@ -76,7 +76,6 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
       <SelectRangeForExcelModal isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} alle={alle} />
       <ButtonWithIcon
         text="Kalkulation (Excel)"
-        type="primary"
         icon="FileEarmarkSpreadsheet"
         onClick={() => {
           setIsExcelExportOpen(true);

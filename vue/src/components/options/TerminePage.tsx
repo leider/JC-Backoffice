@@ -106,7 +106,7 @@ export default function TerminePage() {
       <PageHeader title="Termine" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
       <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
         <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} label="" embeddedArrayPath={["allTermine"]} />
+          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allTermine"]} />
         </Col>
       </Row>
     </Form>

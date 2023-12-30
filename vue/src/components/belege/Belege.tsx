@@ -90,9 +90,8 @@ export default function Belege() {
           <ButtonWithIcon
             text={uploading ? "Lädt..." : "Hochladen"}
             key="sendBeleg"
-            htmlType="submit"
+            onClick="submit"
             icon="Upload"
-            type="primary"
             disabled={!dirty}
             loading={uploading}
           />,

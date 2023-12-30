@@ -1,18 +1,16 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { theme } from "antd";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import React from "react";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
 export function ButtonPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const { token } = theme.useToken();
   return (
-    <ButtonWithIcon
+    <ButtonWithIconAndLink
       icon="EyeFill"
-      type="primary"
       to={`/${"veranstaltung/preview"}/${veranstaltung.url}`}
       tooltipTitle="Vorschau"
       color={token.colorSuccess}
-      size="small"
     />
   );
 }

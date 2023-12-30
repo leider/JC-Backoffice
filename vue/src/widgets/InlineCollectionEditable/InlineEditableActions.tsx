@@ -1,5 +1,6 @@
-import { Popconfirm } from "antd";
+import { ConfigProvider, Modal } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { useState } from "react";
 
 export interface ActionCallbacks {
   copy: () => void;
@@ -14,9 +15,26 @@ export interface ActionCallbacks {
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function InlineEditableActions(props: { actions: ActionCallbacks; testid: string }): React.ReactElement {
+export default function InlineEditableActions(props: { actions: ActionCallbacks }): React.ReactElement {
+  const [open, setOpen] = useState(false);
   return (
     <>
+      <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
+        <Modal
+          title="Löschen"
+          open={open}
+          onOk={() => {
+            props.actions.delete();
+            setOpen(false);
+          }}
+          onCancel={() => setOpen(false)}
+          okText="Löschen"
+          cancelText="Och nö"
+        >
+          <p>Die Zeile wird gelöscht.</p>
+          <p>Bist Du sicher?.</p>
+        </Modal>
+      </ConfigProvider>
       <ButtonWithIcon
         key="copy"
         type="text"
@@ -24,24 +42,8 @@ export default function InlineEditableActions(props: { actions: ActionCallbacks;
         onClick={props.actions.copy}
         tooltipTitle="Zeile Kopieren"
         tooltipPlacement="leftTop"
-        data-testid={`${props.testid}_${"copy"}`}
       />
-      <Popconfirm
-        placement="topLeft"
-        key="delete"
-        title={"Wirklich löschen?"}
-        onConfirm={props.actions.delete}
-        okText="Ja"
-        cancelText="Nein"
-      >
-        <ButtonWithIcon
-          type="text"
-          icon="Trash"
-          tooltipTitle="Zeile Löschen"
-          tooltipPlacement="leftTop"
-          data-testid={`${props.testid}_delete`}
-        />
-      </Popconfirm>
+      <ButtonWithIcon type="text" icon="Trash" tooltipTitle="Zeile Löschen" tooltipPlacement="leftTop" onClick={() => setOpen(true)} />
     </>
   );
 }

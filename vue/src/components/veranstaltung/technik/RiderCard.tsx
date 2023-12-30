@@ -3,8 +3,8 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, Row } from "antd";
 import { RiderComp } from "@/components/rider/RiderComp.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useLocation } from "react-router-dom";
+import ButtonForRider from "@/components/veranstaltung/technik/ButtonForRider.tsx";
 
 export default function RiderCard() {
   const { search } = useLocation();
@@ -33,14 +33,14 @@ Dein Jazzclub Team
         <Col span={24}>
           <PageHeader
             extra={[
-              <ButtonWithIcon key={"pdf"} icon={"Printer"} text="PDF" href={printref} target="_blank" />,
-              <ButtonWithIcon
+              <ButtonForRider key={"pdf"} icon={"Printer"} text="PDF" href={printref} />,
+              <ButtonForRider
                 key={"sendrider"}
                 icon={"EnvelopeFill"}
                 text="Als E-Mail..."
-                href={"mailto:?subject=" + "Rider für Jazzclub bearbeiten" + "&body=" + text}
+                href={`mailto:?subject=Rider für Jazzclub bearbeiten&body=${text}`}
               />,
-              <ButtonWithIcon key={"linkrider"} icon={"EyeFill"} text="Vorschau" href={href} target="_blank" />,
+              <ButtonForRider key={"linkrider"} icon={"EyeFill"} text="Vorschau" href={href} />,
             ]}
           />
           <Form.Item name="riderBoxes" valuePropName="targetBoxes" trigger="setTargetBoxes">

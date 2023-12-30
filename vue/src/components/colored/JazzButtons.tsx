@@ -10,6 +10,7 @@ import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -21,9 +22,8 @@ function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean 
   return (
     <ButtonWithIcon
       text={isSend ? "Senden" : "Speichern"}
-      htmlType="submit"
+      onClick="submit"
       icon={isSend ? "Send" : "CheckSquare"}
-      type="primary"
       disabled={disabled}
       color={token.colorSuccess}
     />
@@ -106,16 +106,7 @@ export function ExportExcelVermietungButton({ disabled }: ButtonProps) {
     asExcelKalk([new Vermietung(form.getFieldsValue(true))]);
   }
 
-  return (
-    <ButtonWithIcon
-      text="Kalkulation (Excel)"
-      type="primary"
-      disabled={disabled}
-      icon="FileEarmarkSpreadsheet"
-      onClick={click}
-      color="#5900b9"
-    />
-  );
+  return <ButtonWithIcon text="Kalkulation (Excel)" disabled={disabled} icon="FileEarmarkSpreadsheet" onClick={click} color="#5900b9" />;
 }
 
 export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id: string; isVermietung?: boolean }) {
@@ -133,17 +124,16 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
     });
   }
 
-  return <ButtonWithIcon text="Löschen" icon="Trash" type="primary" disabled={disabled} onClick={callback} color="#dc3545" />;
+  return <ButtonWithIcon text="Löschen" icon="Trash" disabled={disabled} onClick={callback} color="#dc3545" />;
 }
 export function CopyButton({ disabled, url, isVermietung }: ButtonProps & { url?: string; isVermietung?: boolean }) {
   return (
-    <ButtonWithIcon
-      text="Kopieren"
+    <ButtonWithIconAndLink
       icon="Files"
-      type="primary"
-      disabled={disabled || !url}
       to={`/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`}
       color="#6c757d"
+      text="Kopieren"
+      disabled={disabled || !url}
     />
   );
 }

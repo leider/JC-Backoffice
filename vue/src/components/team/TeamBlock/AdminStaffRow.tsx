@@ -22,14 +22,7 @@ const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ sectionName, label }: Adm
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return (
-              <UserMultiSelect
-                name={["staff", sectionName]}
-                usersAsOptions={usersAsOptions}
-                disabled={notNeeded}
-                style={{ width: "100%" }}
-              />
-            );
+            return <UserMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
           }}
         />
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>

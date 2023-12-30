@@ -28,15 +28,7 @@ function MitarbeiterRow({ usersAsOptions, sectionName, label }: MitarbeiterRowPr
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return (
-              <UserMultiSelect
-                label={label}
-                name={["staff", sectionName]}
-                usersAsOptions={usersAsOptions}
-                disabled={notNeeded}
-                style={{ width: "100%" }}
-              />
-            );
+            return <UserMultiSelect label={label} name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
           }}
         />
       </Col>

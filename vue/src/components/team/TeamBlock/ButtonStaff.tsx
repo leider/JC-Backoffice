@@ -14,7 +14,6 @@ export function ButtonStaff({ callback, add }: { add: boolean; callback: () => v
     <ButtonWithIcon
       size="small"
       icon={add ? "PlusCircleFill" : "DashCircleFill"}
-      type="primary"
       onClick={callback}
       tooltipTitle={add ? "Zusagen" : "Absagen"}
       color={color}

@@ -80,7 +80,6 @@ export function KassenzettelFreigabe() {
             block
             text="Kassenzettel"
             icon="PrinterFill"
-            type="primary"
             onClick={() => openKassenzettel(form.getFieldsValue(true))}
             tooltipTitle="Kassenzettel asl PDF"
             color={color()}
@@ -100,14 +99,7 @@ export function KassenzettelFreigabe() {
                     if (!freigabe) {
                       const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
                       return (
-                        <ButtonWithIcon
-                          block
-                          text="Kasse freigeben..."
-                          icon={"Unlock"}
-                          type="primary"
-                          onClick={freigeben}
-                          disabled={!darfFreigeben}
-                        />
+                        <ButtonWithIcon block text="Kasse freigeben..." icon={"Unlock"} onClick={freigeben} disabled={!darfFreigeben} />
                       );
                     } else {
                       const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;

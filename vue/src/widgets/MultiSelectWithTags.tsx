@@ -26,7 +26,13 @@ export default function MultiSelectWithTags({
 
   return (
     <Form.Item label={<b>{label}:</b>} name={name} style={style}>
-      <Select options={realOptions} mode={noAdd ? "multiple" : "tags"} onChange={onChange} tagRender={specialTagRender} />
+      <Select
+        options={realOptions}
+        mode={noAdd ? "multiple" : "tags"}
+        onChange={onChange}
+        tagRender={specialTagRender}
+        style={{ width: "100%" }}
+      />
     </Form.Item>
   );
 }

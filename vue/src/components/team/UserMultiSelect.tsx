@@ -3,7 +3,14 @@ import React, { CSSProperties } from "react";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
-export default function UserMultiSelect(props: {
+export default function UserMultiSelect({
+  name,
+  usersAsOptions,
+  disabled,
+  style,
+  label,
+  onChange,
+}: {
   name: string[] | string;
   usersAsOptions: LabelAndValue[];
   disabled?: boolean;
@@ -11,8 +18,7 @@ export default function UserMultiSelect(props: {
   label?: string;
   onChange?: (value: string[]) => void;
 }) {
-  const tagRender = (props: CustomTagProps) => {
-    const { label, value, closable, onClose } = props;
+  const tagRender = ({ label, value, closable, onClose }: CustomTagProps) => {
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
       event.preventDefault();
       event.stopPropagation();
@@ -25,14 +31,14 @@ export default function UserMultiSelect(props: {
   };
 
   return (
-    <Form.Item label={props.label ? <b>{props.label}:</b> : undefined} name={props.name} noStyle={!props.label}>
+    <Form.Item label={label ? <b>{label}:</b> : undefined} name={name} noStyle={!label}>
       <Select
         mode="multiple"
-        options={props.usersAsOptions}
-        disabled={props.disabled}
+        options={usersAsOptions}
+        disabled={disabled}
         tagRender={tagRender}
-        style={props.style}
-        onChange={props.onChange}
+        style={{ ...style, width: "100%" }}
+        onChange={onChange}
       />
     </Form.Item>
   );

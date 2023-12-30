@@ -11,6 +11,7 @@ import TeamCalendar from "@/components/team/TeamCalendar";
 import { useQuery } from "@tanstack/react-query";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 
 function Team() {
   const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
@@ -71,7 +72,7 @@ function Team() {
               <Space>
                 Team
                 <div style={{ marginTop: "-16px" }}>
-                  <ButtonWithIcon key="openCal" icon="Calendar2Month" type="primary" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                  <ButtonWithIcon key="openCal" icon="Calendar2Month" text="Zeigen" onClick={() => setDrawerOpen(true)} />
                 </div>
               </Space>
             }
@@ -83,21 +84,7 @@ function Team() {
           </TeamContext.Provider>
         </Col>
       </Row>
-      <Drawer
-        extra={
-          <ButtonWithIcon
-            key="cal"
-            icon="CalendarWeek"
-            text="ical..."
-            type="default"
-            href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
-          />
-        }
-        placement="right"
-        onClose={() => setDrawerOpen(false)}
-        open={drawerOpen}
-        size="large"
-      >
+      <Drawer extra={<ButtonIcal />} placement="right" onClose={() => setDrawerOpen(false)} open={drawerOpen} size="large">
         <TeamCalendar />
       </Drawer>
     </>

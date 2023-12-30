@@ -1,7 +1,7 @@
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections.ts";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import capitalize from "lodash/capitalize";
 import React from "react";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
 interface ButtonInAdminPanelProps {
   type: buttonType;
@@ -12,13 +12,11 @@ interface ButtonInAdminPanelProps {
 export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
   const { color, icon } = useColorsAndIconsForSections(type);
   return (
-    <ButtonWithIcon
-      tooltipTitle={capitalize(type)}
+    <ButtonWithIconAndLink
       icon={icon()}
-      type="primary"
+      tooltipTitle={capitalize(type)}
       to={`/${isVermietung ? "vermietung" : "veranstaltung"}/${encodeURIComponent(url)}?page=${type}`}
       color={color()}
-      size="small"
     />
   );
 }

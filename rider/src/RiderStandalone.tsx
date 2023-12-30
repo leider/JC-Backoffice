@@ -47,7 +47,6 @@ export const RiderStandalone: FC = () => {
               key="save"
               text="Speichern"
               icon="CheckSquare"
-              type="primary"
               disabled={!isSuccess}
               color={token.colorSuccess}
               onClick={save}

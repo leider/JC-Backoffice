@@ -70,15 +70,11 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
     const { useToken } = theme;
     const token = useToken().token;
 
-    return (
-      <>
-        {names.map((name) => (
-          <Tag color={name === currentUser.name ? token.colorSuccess : undefined} key={name}>
-            {name}
-          </Tag>
-        ))}
-      </>
-    );
+    return names.map((name) => (
+      <Tag color={name === currentUser.name ? token.colorSuccess : undefined} key={name}>
+        {name}
+      </Tag>
+    ));
   }
 
   return (

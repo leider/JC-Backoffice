@@ -1,7 +1,7 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { Divider } from "antd";
 import TeamStaffRow from "@/components/team/TeamBlock/TeamStaffRow.tsx";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 
 interface ContentProps {
   veranstaltung: Veranstaltung;
@@ -14,20 +14,20 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
     fontWeight: 600,
   };
 
-  const [kasseNeeded, setKasseNeeded] = useState(true);
-  const [technikerNeeded, setTechnikerNeeded] = useState(true);
-  const [masterNeeded, setMasterNeeded] = useState(true);
-  const [merchNeeded, setMerchNeeded] = useState(true);
+  const kasseNeeded = useMemo(() => !(veranstaltung.staff.kasseVNotNeeded && veranstaltung.staff.kasseNotNeeded), [veranstaltung]);
+  const technikerNeeded = useMemo(
+    () => !(veranstaltung.staff.technikerVNotNeeded && veranstaltung.staff.technikerNotNeeded),
+    [veranstaltung],
+  );
+  const masterNeeded = useMemo(() => !veranstaltung.staff.modNotNeeded, [veranstaltung]);
+  const merchNeeded = useMemo(() => !veranstaltung.staff.merchandiseNotNeeded, [veranstaltung]);
+  const somebodyNeeded = useMemo(
+    () => kasseNeeded || technikerNeeded || masterNeeded || merchNeeded,
+    [kasseNeeded, masterNeeded, merchNeeded, technikerNeeded],
+  );
 
-  useEffect(() => {
-    setKasseNeeded(!(veranstaltung.staff.kasseVNotNeeded && veranstaltung.staff.kasseNotNeeded));
-    setTechnikerNeeded(!(veranstaltung.staff.technikerVNotNeeded && veranstaltung.staff.technikerNotNeeded));
-    setMasterNeeded(!veranstaltung.staff.modNotNeeded);
-    setMerchNeeded(!veranstaltung.staff.merchandiseNotNeeded);
-  }, [veranstaltung]);
-
-  return (
-    <div style={{ padding: 8 }}>
+  return somebodyNeeded ? (
+    <div>
       {kasseNeeded && (
         <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
           Kasse
@@ -55,5 +55,7 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
       )}
       <TeamStaffRow label="&nbsp;" sectionName="merchandise" veranstaltung={veranstaltung} />
     </div>
+  ) : (
+    <p>Niemand benötigt.</p>
   );
 }

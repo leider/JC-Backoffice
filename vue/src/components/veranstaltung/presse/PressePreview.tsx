@@ -7,7 +7,7 @@ import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 
 export function PressePreview({ veranstVermiet }: { veranstVermiet: Veranstaltung | Vermietung }) {
   function updatePreview(veranstVermiet: Veranstaltung | Vermietung) {
@@ -43,9 +43,9 @@ ${presse.fullyQualifiedJazzclubURL}`,
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
               <Space size={12} className="toolbar-wrapper">
-                <ButtonWithIcon type="text" icon="Download" iconColor="white" onClick={() => imgFullsize(img)} />
-                <ButtonWithIcon type="text" icon="ZoomOut" iconColor="white" onClick={onZoomOut} disabled={scale === 1} />
-                <ButtonWithIcon type="text" icon="ZoomIn" iconColor="white" onClick={onZoomIn} disabled={scale === 50} />
+                <ButtonForImagePreview icon="Download" onClick={() => imgFullsize(img)} />
+                <ButtonForImagePreview icon="ZoomOut" onClick={onZoomOut} disabled={scale === 1} />
+                <ButtonForImagePreview icon="ZoomIn" onClick={onZoomIn} disabled={scale === 50} />
               </Space>
             ),
           }}
