@@ -18,7 +18,7 @@ interface MonatGroupProps {
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
   const context = useContext(TeamContext);
-  const veranstaltungenUndVermietungen = context!.veranstaltungenUndVermietungenNachMonat[monat];
+  const veranstaltungenUndVermietungen = context.veranstaltungenUndVermietungenNachMonat[monat];
 
   const [expanded, setExpanded] = useState<boolean>(false);
   const [yymm, setYymm] = useState<string>("");

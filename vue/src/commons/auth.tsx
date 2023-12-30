@@ -29,7 +29,7 @@ interface IUseProvideAuth {
    */
   loginState: LoginState;
 
-  context?: ApplicationContext;
+  context: ApplicationContext;
 
   /**
    * Function to login with.
@@ -44,7 +44,7 @@ interface IUseProvideAuth {
   logout: () => Promise<void>;
 }
 
-export interface ApplicationContext {
+interface ApplicationContext {
   currentUser: User;
   wikisubdirs: { dirs: string[] };
 }
@@ -55,7 +55,7 @@ export interface ApplicationContext {
  */
 function useProvideAuth(): IUseProvideAuth {
   const [loginState, setLoginState] = useState(LoginState.UNKNOWN);
-  const [context, setContext] = useState<ApplicationContext | undefined>(undefined);
+  const [context, setContext] = useState<ApplicationContext>({ currentUser: new User({}), wikisubdirs: { dirs: [] } });
 
   const navigate = useNavigate();
   const location = useLocation();

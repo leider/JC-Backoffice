@@ -24,7 +24,7 @@ export const TeamContext = createContext<{
     [index: string]: (Veranstaltung | Vermietung)[];
   };
   usersAsOptions: LabelAndValue[];
-} | null>(null);
+}>({ veranstaltungenUndVermietungenNachMonat: {}, usersAsOptions: [] });
 
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();

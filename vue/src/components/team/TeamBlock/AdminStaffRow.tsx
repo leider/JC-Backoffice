@@ -13,7 +13,7 @@ interface AdminStaffRowProps {
 
 const AdminStaffRow: React.FC<AdminStaffRowProps> = ({ sectionName, label }: AdminStaffRowProps) => {
   const teamContext = useContext(TeamContext);
-  const usersAsOptions = teamContext!.usersAsOptions;
+  const usersAsOptions = teamContext.usersAsOptions;
 
   return (
     <Form.Item label={label} style={{ marginBottom: 12 }}>

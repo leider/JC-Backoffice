@@ -1,5 +1,5 @@
-import { Col, Row, Tag, theme } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import { Tag, theme } from "antd";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { useAuth } from "@/commons/authConsts.ts";
 import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
@@ -11,36 +11,54 @@ import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
-  label: string;
   veranstaltung: Veranstaltung;
 }
 
-const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranstaltung }: TeamStaffRowProps) => {
+export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const teamContext = useContext(TeamContext);
-  const usersAsOptions = teamContext!.usersAsOptions;
+  const usersAsOptions = teamContext.usersAsOptions;
 
-  const [ids, setIds] = useState<string[]>([]);
   const [names, setNames] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<User>(new User({}));
 
-  const [notNeeded, setNotNeeded] = useState<boolean>(false);
+  const { useToken } = theme;
+  const token = useToken().token;
+
+  useEffect(() => {
+    const staffCollection = veranstaltung.staff.getStaffCollection(sectionName);
+    setNames(usersAsOptions.filter((user) => staffCollection.includes(user.value)).map((user) => user.label));
+  }, [sectionName, usersAsOptions, veranstaltung.staff]);
 
   const { context } = useAuth();
+  const currentUser = useMemo(() => context.currentUser, [context.currentUser]);
 
-  const updateStuff = () => {
-    const staffCollection = veranstaltung.staff.getStaffCollection(sectionName);
-    setIds(staffCollection);
-    setNames(usersAsOptions.filter((user) => staffCollection.includes(user.value)).map((user) => user.label));
-
-    setNotNeeded(veranstaltung.staff[`${sectionName}NotNeeded`]);
-  };
-  useEffect(
-    updateStuff, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [veranstaltung],
+  return names.length > 0 ? (
+    names.map((name) => (
+      <Tag color={name === currentUser.name ? token.colorSuccess : undefined} key={name}>
+        {name}
+      </Tag>
+    ))
+  ) : (
+    <span>Hier könnten wir Dich brauchen...</span>
   );
+}
+
+export function ActionButton({
+  sectionName,
+  veranstaltung,
+  staffUpdated,
+}: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
+  const [ids, setIds] = useState<string[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>(new User({}));
+
+  const { context } = useAuth();
   useEffect(() => {
     setCurrentUser(context?.currentUser || new User({}));
   }, [context]);
+
+  useEffect(() => {
+    const staffCollection = veranstaltung.staff.getStaffCollection(sectionName);
+    setIds(staffCollection);
+  }, [sectionName, veranstaltung.staff]);
 
   const queryClient = useQueryClient();
   const mutateAdd = useMutation({
@@ -48,7 +66,7 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
       veranstaltung.staff.addUserToSection(currentUser, sectionName);
-      updateStuff();
+      staffUpdated(new Veranstaltung(data));
     },
   });
   const mutateRemove = useMutation({
@@ -56,7 +74,7 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
       veranstaltung.staff.removeUserFromSection(currentUser, sectionName);
-      updateStuff();
+      staffUpdated(new Veranstaltung(data));
     },
   });
   async function addUser() {
@@ -65,30 +83,5 @@ const TeamStaffRow: React.FC<TeamStaffRowProps> = ({ sectionName, label, veranst
   async function removeUser() {
     mutateRemove.mutate(veranstaltung);
   }
-
-  function DisplayNames() {
-    const { useToken } = theme;
-    const token = useToken().token;
-
-    return names.map((name) => (
-      <Tag color={name === currentUser.name ? token.colorSuccess : undefined} key={name}>
-        {name}
-      </Tag>
-    ));
-  }
-
-  return (
-    !notNeeded && (
-      <Row gutter={8}>
-        <Col span={4}>{<b>{label}</b>}</Col>
-        <Col span={16}>
-          <DisplayNames />{" "}
-        </Col>
-        <Col span={4}>
-          {ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />}
-        </Col>
-      </Row>
-    )
-  );
-};
-export default TeamStaffRow;
+  return ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />;
+}
