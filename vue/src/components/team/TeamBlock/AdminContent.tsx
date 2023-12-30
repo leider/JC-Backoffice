@@ -1,6 +1,6 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, Divider, Form, notification, Row } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { Col, Collapse, Form, notification, Row } from "antd";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/commons/authConsts.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
@@ -8,11 +8,12 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { differenceFor } from "jc-shared/commons/compareObjects.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
-import AdminStaffRow from "@/components/team/TeamBlock/AdminStaffRow.tsx";
+import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPanel.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
+import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;
@@ -27,18 +28,21 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const { context } = useAuth();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
-  const isVermietung = useCallback(() => {
+  const teamContext = useContext(TeamContext);
+  const usersAsOptions = teamContext.usersAsOptions;
+
+  const forVermietung = useMemo(() => {
     return veranstaltungOderVermietung.isVermietung;
   }, [veranstaltungOderVermietung]);
 
-  const initialize = () => {
-    const deepCopy = veranstaltungOderVermietung.toJSON();
-    form.setFieldsValue(deepCopy);
-    setInitialValue(veranstaltungOderVermietung.toJSON());
-    setDirty(false);
-  };
   useEffect(
-    initialize, // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => {
+      const deepCopy = veranstaltungOderVermietung.toJSON();
+      form.resetFields();
+      form.setFieldsValue(deepCopy);
+      setInitialValue(veranstaltungOderVermietung.toJSON());
+      setDirty(false);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [veranstaltungOderVermietung],
   );
 
@@ -46,13 +50,9 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
     setVeranstaltungOderVermietung(veranVermiet);
   }, [veranVermiet]);
 
-  const dividerStyle = {
-    marginTop: "4px",
-    marginBottom: "4px",
-    fontWeight: 600,
-  };
-
   const queryClient = useQueryClient();
+
+  const brauchtTechnik = useMemo(() => (veranstaltungOderVermietung as Vermietung).brauchtTechnik, [veranstaltungOderVermietung]);
 
   const mutateVeranstaltung = useMutation({
     mutationFn: saveVeranstaltung,
@@ -91,7 +91,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
     form.validateFields().then(async () => {
       const veranst = form.getFieldsValue(true);
       let result;
-      if (isVermietung()) {
+      if (forVermietung) {
         result = new Vermietung(veranst);
         mutateVermietung.mutate(result);
       } else {
@@ -111,10 +111,8 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 20 }}
+      layout="vertical"
       size="small"
-      colon={false}
       style={{ margin: -12 }}
     >
       <Row>
@@ -137,22 +135,22 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
               <SaveButton disabled={!dirty} />
             ) : (
               <>
-                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={isVermietung()} />
-                {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={isVermietung()} />
+                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={forVermietung} />
+                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={forVermietung} />
                 )}
-                {isVermietung() && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="angebot" isVermietung={isVermietung()} />
+                {forVermietung && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="angebot" isVermietung={forVermietung} />
                 )}
-                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={isVermietung()} />
+                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={forVermietung} />
                 {veranstaltungOderVermietung.artist.brauchtHotel && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="hotel" />
                 )}
-                {!isVermietung() && <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="kasse" />}
-                {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={isVermietung()} />
+                {!forVermietung && <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="kasse" />}
+                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={forVermietung} />
                 )}
-                {!isVermietung() && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Veranstaltung} />}
+                {!forVermietung && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Veranstaltung} />}
               </>
             )}
           </Row>
@@ -168,36 +166,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
             key: "mitarbeiter",
             children: (
               <div style={{ padding: 8 }}>
-                {!isVermietung() && (
-                  <>
-                    <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-                      Kasse
-                    </Divider>
-                    <AdminStaffRow label="Eins:" sectionName="kasseV" />
-                    <AdminStaffRow label="Zwei:" sectionName="kasse" />
-                  </>
-                )}
-                {(!isVermietung() || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
-                  <>
-                    <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-                      Techniker
-                    </Divider>
-                    <AdminStaffRow label="Ton:" sectionName="technikerV" />
-                    <AdminStaffRow label="Licht:" sectionName="techniker" />
-                  </>
-                )}
-                <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-                  Master
-                </Divider>
-                <AdminStaffRow label="&nbsp;" sectionName="mod" />
-                {!isVermietung() && (
-                  <>
-                    <Divider orientationMargin={0} orientation="left" style={dividerStyle}>
-                      Merchandise
-                    </Divider>
-                    <AdminStaffRow label="&nbsp;" sectionName="merchandise" />
-                  </>
-                )}
+                <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
               </div>
             ),
           },

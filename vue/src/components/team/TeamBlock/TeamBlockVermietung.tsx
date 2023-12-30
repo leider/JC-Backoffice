@@ -64,7 +64,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
               extra: expanded && <Extras vermietung={vermietung} />,
               children: (
                 <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <AdminContent veranstaltungOderVermietung={vermietung}></AdminContent>{" "}
+                  <AdminContent veranstaltungOderVermietung={vermietung} />
                 </ConfigProvider>
               ),
             },
