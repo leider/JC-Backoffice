@@ -112,7 +112,7 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
       Widget = <StartEndDateOnlyPickers {...commonProps} />;
       break;
   }
-  return desc.idx === colSpans.length - 2 ? (
+  return desc.idx === 0 ? (
     <Col flex={"auto"}>{Widget}</Col>
   ) : (
     <Column desc={desc} colSpans={colSpans}>

@@ -6,7 +6,7 @@ import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
 import Login from "@/components/Login";
 import Optionen from "@/components/options/Optionen";
 import Info from "@/components/team/Info";
-import Preview from "@/components/veranstaltung/Preview";
+import Preview from "@/components/veranstaltung/preview/Preview.tsx";
 import Veranstaltungen from "@/components/team/Veranstaltungen";
 import Users from "@/components/users/Users";
 import OrtePage from "@/components/options/OrtePage";

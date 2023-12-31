@@ -63,7 +63,7 @@ export default function OrtePage() {
       fieldName: "name",
       label: "Name",
       type: "text",
-      width: "l",
+      width: "m",
       required: true,
       uniqueValues: true,
     },

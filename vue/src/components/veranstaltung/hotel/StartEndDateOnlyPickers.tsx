@@ -39,7 +39,7 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
           : []
       }
     >
-      <DatePicker.RangePicker allowClear={false} format={"ddd DD.MM.YY"} onChange={onChange} />
+      <DatePicker.RangePicker allowClear={false} format={"ddd DD.MM.YY"} onChange={onChange} style={{ width: "100%" }} />
     </Form.Item>
   );
 }

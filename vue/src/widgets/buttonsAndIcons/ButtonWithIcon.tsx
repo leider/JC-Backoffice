@@ -1,5 +1,5 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
@@ -18,6 +18,7 @@ export default function ButtonWithIcon({
   size,
   block,
   loading,
+  style,
 }: {
   icon?: IconProps["iconName"];
   text?: string;
@@ -30,6 +31,7 @@ export default function ButtonWithIcon({
   size?: SizeType;
   block?: boolean;
   loading?: boolean;
+  style?: CSSProperties;
 }) {
   const { useToken } = theme;
   const token = useToken().token;
@@ -49,6 +51,7 @@ export default function ButtonWithIcon({
           block={block}
           title={!sm && text ? text : undefined}
           loading={loading}
+          style={style}
         >
           {sm && text && text}
         </Button>

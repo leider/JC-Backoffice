@@ -1,10 +1,9 @@
-const __dirname = new URL(".", import.meta.url).pathname;
 import express, { Request, Response } from "express";
 import { Form } from "multiparty";
 import fs from "fs";
 import path from "path";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Kasse from "jc-shared/veranstaltung/kasse.js";
 import User from "jc-shared/user/user.js";
@@ -13,6 +12,8 @@ import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
+
+const __dirname = new URL(".", import.meta.url).pathname;
 
 const app = express();
 
@@ -120,6 +121,17 @@ app.post("/veranstaltungen/:url/addUserToSection", async (req: Request, res: Res
 
 app.post("/veranstaltungen/:url/removeUserFromSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("removeUserFromSection", req, res);
+});
+
+app.post("/veranstaltungen/:url/updateGastInSection", async (req: Request, res: Response) => {
+  const veranstaltung = await store.getVeranstaltung(req.params.url);
+  if (!veranstaltung) {
+    return res.sendStatus(404);
+  }
+  const { item, art }: { item: NameWithNumber; art: GastArt } = req.body;
+  const liste: NameWithNumber[] = art === "gast" ? veranstaltung.gaesteliste : veranstaltung.reservierungen;
+  (liste.find((entry) => entry.name === item.name) || { alreadyIn: 0 }).alreadyIn = item.alreadyIn;
+  return saveAndReply(res, veranstaltung);
 });
 
 app.post("/upload", async (req: Request, res: Response) => {

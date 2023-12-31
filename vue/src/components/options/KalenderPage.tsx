@@ -75,7 +75,7 @@ export default function KalenderPage() {
       fieldName: "url",
       label: "URL",
       type: "text",
-      width: "l",
+      width: "xl",
       required: true,
       uniqueValues: true,
     },

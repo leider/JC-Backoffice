@@ -2,9 +2,8 @@ import { Tag, theme } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { useAuth } from "@/commons/authConsts.ts";
-import { addUserToSection, removeUserFromSection } from "@/commons/loader.ts";
+import { addOrRemoveUserToSection } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import User from "jc-shared/user/user.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
@@ -42,46 +41,40 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   );
 }
 
-export function ActionButton({
+export function AddRemoveStaffButton({
   sectionName,
   veranstaltung,
   staffUpdated,
 }: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
-  const [ids, setIds] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<User>(new User({}));
-
+  const [isIn, setIsIn] = useState(false);
   const { context } = useAuth();
-  useEffect(() => {
-    setCurrentUser(context?.currentUser || new User({}));
-  }, [context]);
 
   useEffect(() => {
-    const staffCollection = veranstaltung.staff.getStaffCollection(sectionName);
-    setIds(staffCollection);
-  }, [sectionName, veranstaltung.staff]);
+    setIsIn(veranstaltung.staff.getStaffCollection(sectionName).includes(context.currentUser.id));
+  }, [context.currentUser.id, sectionName, veranstaltung.staff]);
 
   const queryClient = useQueryClient();
-  const mutateAdd = useMutation({
-    mutationFn: async (veranst: Veranstaltung) => addUserToSection(veranst, sectionName),
+  const mutate = useMutation({
+    mutationFn: async (add: boolean) => addOrRemoveUserToSection(veranstaltung, sectionName, add),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
-      veranstaltung.staff.addUserToSection(currentUser, sectionName);
       staffUpdated(new Veranstaltung(data));
     },
   });
-  const mutateRemove = useMutation({
-    mutationFn: async (veranst: Veranstaltung) => removeUserFromSection(veranst, sectionName),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
-      veranstaltung.staff.removeUserFromSection(currentUser, sectionName);
-      staffUpdated(new Veranstaltung(data));
-    },
-  });
-  async function addUser() {
-    mutateAdd.mutate(veranstaltung);
-  }
-  async function removeUser() {
-    mutateRemove.mutate(veranstaltung);
-  }
-  return ids.includes(currentUser.id) ? <ButtonStaff add={false} callback={removeUser} /> : <ButtonStaff add={true} callback={addUser} />;
+
+  return isIn ? (
+    <ButtonStaff
+      add={false}
+      callback={async function () {
+        mutate.mutate(false);
+      }}
+    />
+  ) : (
+    <ButtonStaff
+      add={true}
+      callback={async function () {
+        mutate.mutate(true);
+      }}
+    />
+  );
 }

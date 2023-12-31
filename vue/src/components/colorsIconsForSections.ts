@@ -1,10 +1,11 @@
 import { IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
-export type buttonType = "allgemeines" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
+export type buttonType = "allgemeines" | "gaeste" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 
 export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
   const jazzColors = {
     allgemeines: "#05498c",
+    gaeste: "#834a00",
     angebot: "#328300",
     ausgaben: "#d50f36",
     concert: "#6c757d",
@@ -18,6 +19,7 @@ export function useColorsAndIconsForSections(type: buttonType = "allgemeines") {
 
   const icons: { [index: string]: IconProps["iconName"] } = {
     allgemeines: "Keyboard",
+    gaeste: "People",
     technik: "Headphones",
     ausgaben: "GraphUp",
     hotel: "HouseDoor",

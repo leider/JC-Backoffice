@@ -33,12 +33,22 @@ export interface ChangelistItem {
   diff: string;
 }
 
+export interface NameWithNumber {
+  name: string;
+  comment: string;
+  number: number;
+  alreadyIn: number;
+}
+
+export type GastArt = "res" | "gast";
 export default class Veranstaltung {
   id?: string;
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
   changelist: ChangelistItem[] = [];
+  gaesteliste: NameWithNumber[] = [];
+  reservierungen: NameWithNumber[] = [];
 
   agentur = new Kontakt();
   artist = new Artist();

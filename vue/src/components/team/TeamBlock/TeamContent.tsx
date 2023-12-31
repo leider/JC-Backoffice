@@ -1,6 +1,6 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { List } from "antd";
-import { ActionButton, ActiveUsers } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
+import { AddRemoveStaffButton, ActiveUsers } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
 import React, { useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
@@ -63,7 +63,7 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
       dataSource={activeRows}
       renderItem={(item) => (
         <List.Item
-          extra={<ActionButton veranstaltung={veranstaltungForStaff} sectionName={item.sectionName} staffUpdated={staffUpdated} />}
+          extra={<AddRemoveStaffButton veranstaltung={veranstaltungForStaff} sectionName={item.sectionName} staffUpdated={staffUpdated} />}
         >
           <List.Item.Meta
             title={item.title}

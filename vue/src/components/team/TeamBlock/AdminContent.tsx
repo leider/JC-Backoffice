@@ -136,6 +136,9 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
             ) : (
               <>
                 <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={forVermietung} />
+                {!forVermietung && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="gaeste" isVermietung={forVermietung} />
+                )}
                 {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={forVermietung} />
                 )}

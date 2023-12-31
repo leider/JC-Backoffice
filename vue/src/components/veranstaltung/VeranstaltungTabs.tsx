@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { Form, FormInstance, Tabs, TabsProps } from "antd";
+import { Form, Tabs, TabsProps } from "antd";
 import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
-import OptionValues from "jc-shared/optionen/optionValues";
-import Orte from "jc-shared/optionen/orte";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
 import TabKosten from "@/components/veranstaltung/kosten/TabKosten";
 import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
@@ -15,13 +12,7 @@ import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
-
-export interface VeranstaltungTabProps {
-  form: FormInstance<Veranstaltung>;
-  veranstaltung?: Veranstaltung;
-  optionen?: OptionValues;
-  orte?: Orte;
-}
+import TabGaeste from "@/components/veranstaltung/gaeste/TabGaeste.tsx";
 
 export default function VeranstaltungTabs() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -41,7 +32,7 @@ export default function VeranstaltungTabs() {
 
   useEffect(() => {
     const page = search.get("page") ?? "";
-    if (["allgemeines", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
+    if (["allgemeines", "gaeste", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
       setActivePage(page);
     } else {
       setActivePage("allgemeines");
@@ -83,6 +74,11 @@ export default function VeranstaltungTabs() {
           children: <TabAllgemeines />,
         },
         {
+          key: "gaeste",
+          label: <TabLabel type="gaeste" title="Gäste am Abend" />,
+          children: <TabGaeste />,
+        },
+        {
           key: "technik",
           label: <TabLabel type="technik" title="Technik" />,
           children: <TabTechnik />,
@@ -111,7 +107,7 @@ export default function VeranstaltungTabs() {
         setTabs(allTabs);
       } else {
         const result = [...(allTabs || [])];
-        result.splice(3, 1);
+        result.splice(4, 1);
         setTabs(result);
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps

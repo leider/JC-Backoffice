@@ -72,14 +72,14 @@ export default function TerminePage() {
       fieldName: "period",
       label: "Start und Ende",
       type: "date",
-      width: "m",
+      width: "s",
       required: true,
     },
     {
       fieldName: "beschreibung",
       label: "Beschreibung",
       type: "text",
-      width: "m",
+      width: "l",
       required: true,
     },
     {

@@ -82,8 +82,9 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
                   onClick={() => {
                     add({}, 0);
                   }}
+                  style={{ paddingTop: 0, paddingBlock: 0, height: "initial" }}
                 />
-                <Button type="text" style={{ cursor: "auto" }} disabled />
+                <Button type="text" style={{ cursor: "auto", paddingTop: 0, paddingBlock: 0, height: "initial" }} disabled />
               </Col>
             </Row>
 

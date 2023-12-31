@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { theme } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export function ButtonStaff({ callback, add }: { add: boolean; callback: () => void }) {
+export function ButtonStaff({ callback, add, disabled }: { add: boolean; callback: () => void; disabled?: boolean }) {
   const { useToken } = theme;
   const token = useToken().token;
 
@@ -17,6 +17,7 @@ export function ButtonStaff({ callback, add }: { add: boolean; callback: () => v
       onClick={callback}
       tooltipTitle={add ? "Zusagen" : "Absagen"}
       color={color}
+      disabled={disabled}
     />
   );
 }

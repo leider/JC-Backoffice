@@ -13,7 +13,7 @@ import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
-import Veranstaltung, { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung";
+import Veranstaltung, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
@@ -121,20 +121,22 @@ export async function deleteVeranstaltungWithId(id: string) {
   });
 }
 
-export async function addUserToSection(veranstaltung: Veranstaltung, section: StaffType) {
+// Staff
+export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/addUserToSection`,
+    url: `/rest/${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
     data: { section },
     contentType: "json",
   });
 }
 
-export async function removeUserFromSection(veranstaltung: Veranstaltung, section: StaffType) {
+// Gäste
+export async function updateGastInSection(veranstaltung: Veranstaltung, item: NameWithNumber, art: GastArt) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/removeUserFromSection`,
-    data: { section },
+    url: `/rest/${veranstaltung.fullyQualifiedUrl}/updateGastInSection`,
+    data: { item, art },
     contentType: "json",
   });
 }

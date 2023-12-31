@@ -1,7 +1,7 @@
 import { CollectionColDesc, CollectionHeight } from "./types";
 
 export function initialSpan(desc: CollectionColDesc) {
-  return { xs: 3, s: 4, m: 6, l: 8, xl: 12 }[desc.width];
+  return { xs: 2, s: 4, m: 6, l: 8, xl: 12 }[desc.width];
 }
 
 export function getCollectionHeightsInPixel(height: CollectionHeight) {

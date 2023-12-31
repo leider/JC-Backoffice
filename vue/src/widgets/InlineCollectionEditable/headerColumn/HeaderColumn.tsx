@@ -34,7 +34,7 @@ export const HeaderColumn: FC<IHeaderColumn> = (props: IHeaderColumn) => {
       {labelText}
     </label>
   );
-  return desc.idx === colSpans.length - 2 ? (
+  return desc.idx === 0 ? (
     <Col flex={"auto"} className="ant-form-item-label">
       {theLabel}
     </Col>
