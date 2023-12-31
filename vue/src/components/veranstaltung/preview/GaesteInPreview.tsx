@@ -1,7 +1,7 @@
 import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { List } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { updateGastInSection } from "@/commons/loader.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,11 +54,12 @@ export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Vera
   }
 
   function GastResList({ source, art }: { source: NameWithNumber[]; art: GastArt }) {
+    const dataSource = useMemo(() => source.sort((a, b) => a.name.localeCompare(b.name)), [source]);
     return (
       <List
         size="small"
         header={<h2 style={{ margin: 0 }}>{art === "gast" ? "Gästeliste" : "Reservierungen"}</h2>}
-        dataSource={source}
+        dataSource={dataSource}
         renderItem={(item) => (
           <List.Item
             style={{ paddingLeft: 0, paddingRight: 0 }}
@@ -68,7 +69,7 @@ export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Vera
               <AddOrRemoveGastButton item={item} art={art} add={false} veranstaltung={veranstaltung} onChange={listChanged} />,
             ]}
           >
-            <List.Item.Meta title={`${item.name} (${item.number} mal)`} description={item.comment} />
+            <List.Item.Meta title={`${item.name} (${item.number} Karten)`} description={item.comment} />
           </List.Item>
         )}
       />
