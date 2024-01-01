@@ -107,13 +107,14 @@ export const TextField: FunctionComponent<TTextField> = ({
 };
 
 type TTextInputEmbedded = {
+  id?: string;
   disabled?: boolean;
   textVal?: string;
   onText?: (value: string | null) => void;
   onChange?: (value: string | null) => void;
 };
 
-const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, textVal, disabled, onChange }: TTextInputEmbedded) => {
+const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, textVal, disabled, onChange, id }: TTextInputEmbedded) => {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -125,6 +126,7 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, text
 
   return (
     <Input
+      id={id}
       disabled={disabled}
       value={textVal}
       onChange={({ target: { value: nextValue } }) => {

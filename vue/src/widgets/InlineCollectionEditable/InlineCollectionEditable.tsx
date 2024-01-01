@@ -76,6 +76,7 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
               ))}
               <Col key={createKey(actionColDesc, -1)} flex={"none"}>
                 <ButtonWithIcon
+                  testid={`${embeddedArrayPath.join("_")}_add`}
                   type="text"
                   icon="PlusLg"
                   tooltipTitle="Neue Zeile"
@@ -100,7 +101,7 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
                   key={key}
                   gutter={8}
                   style={{ marginBottom: "0.2em" }}
-                  data-testid={`orp-inline-collection-editable-row-${key}`}
+                  data-testid={`${embeddedArrayPath.join("_")}row-${key}`}
                 >
                   {colDescriptors.map((desc) => {
                     let uniqueValuesValidator: Rule | undefined;

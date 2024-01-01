@@ -6,6 +6,7 @@ import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import isEqual from "lodash/isEqual";
 
 interface INumericInputEmbedded {
+  id?: string;
   /**
    * The number;
    * @type {(number | null)}
@@ -85,6 +86,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   onChange,
   onNumber,
   suffix,
+  id,
 }: INumericInputEmbedded): React.ReactElement => {
   const [value, setValue] = useState<string | undefined>("");
 
@@ -121,6 +123,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
 
   return (
     <Input
+      id={id}
       inputMode="numeric"
       onBlur={handleBlur}
       disabled={disabled}

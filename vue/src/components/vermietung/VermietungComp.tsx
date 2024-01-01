@@ -44,7 +44,10 @@ export default function VermietungComp() {
 
   // When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key
   const mutateVermietung = useMutation({
-    mutationFn: saveVermietung,
+    mutationFn: (vermiet: Vermietung) => {
+      setDirty(false);
+      return saveVermietung(vermiet);
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["vermietung", url] });
       navigate(

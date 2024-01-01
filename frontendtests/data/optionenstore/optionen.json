@@ -1,19 +1,75 @@
 {
   "id": "instance",
-  "typen": [
-    "Club Konzert",
-    "Homegrown",
-    "JamSession",
-    "Jazz und Literatur",
-    "JazzClassix",
-    "JazzFestival",
-    "JC im Kunstverein",
-    "Jubez Cafe",
-    "Jubez Saal",
-    "Kino",
-    "Kooperation",
-    "Livestream",
-    "Soulcafé",
-    "Vermietung"
+  "typenPlus": [
+    {
+      "name": "Christmas",
+      "color": "#b71111d3"
+    },
+    {
+      "name": "Club Konzert",
+      "color": "#4faee3",
+      "mod": true,
+      "kasseV": true,
+      "technikerV": true,
+      "techniker": true
+    },
+    {
+      "name": "Homegrown",
+      "color": "#24719d",
+      "mod": true,
+      "kasseV": true
+    },
+    {
+      "name": "JamSession",
+      "color": "#dea71f",
+      "mod": true,
+      "kasse": true
+    },
+    {
+      "name": "Jazz und Literatur",
+      "color": "#9185be"
+    },
+    {
+      "name": "JazzClassix",
+      "color": "#de4fe3"
+    },
+    {
+      "name": "JazzFestival",
+      "color": "#9fc442"
+    },
+    {
+      "name": "JC im Kunstverein",
+      "color": "#9185be"
+    },
+    {
+      "name": "Jubez Cafe",
+      "color": "#6c757d"
+    },
+    {
+      "name": "Jubez Saal",
+      "color": "#6c757d"
+    },
+    {
+      "name": "Kino",
+      "color": "#9185be"
+    },
+    {
+      "name": "Kooperation",
+      "color": "#9185be"
+    },
+    {
+      "name": "Livestream",
+      "color": "#ff29ac"
+    },
+    {
+      "name": "Soulcafé",
+      "color": "#f07f31",
+      "merchandise": true,
+      "techniker": true,
+      "technikerV": true,
+      "kasse": true,
+      "kasseV": true,
+      "mod": true
+    }
   ]
 }

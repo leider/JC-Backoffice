@@ -19,6 +19,7 @@ export default function ButtonWithIcon({
   block,
   loading,
   style,
+  testid,
 }: {
   icon?: IconProps["iconName"];
   text?: string;
@@ -32,6 +33,7 @@ export default function ButtonWithIcon({
   block?: boolean;
   loading?: boolean;
   style?: CSSProperties;
+  testid?: string;
 }) {
   const { useToken } = theme;
   const token = useToken().token;
@@ -52,6 +54,7 @@ export default function ButtonWithIcon({
           title={!sm && text ? text : undefined}
           loading={loading}
           style={style}
+          data-testid={testid}
         >
           {sm && text && text}
         </Button>

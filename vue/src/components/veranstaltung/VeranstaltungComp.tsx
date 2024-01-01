@@ -80,9 +80,11 @@ export default function VeranstaltungComp() {
 
   const { notification } = App.useApp();
 
-  // When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key
   const mutateVeranstaltung = useMutation({
-    mutationFn: saveVeranstaltung,
+    mutationFn: (veranst: Veranstaltung) => {
+      setDirty(false);
+      return saveVeranstaltung(veranst);
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", url] });
       navigate(
