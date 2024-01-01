@@ -6,7 +6,6 @@ import { App } from "antd";
 export function useDirtyBlocker(dirty: boolean, checkPathnameOnly = false) {
   const shouldBlock = useCallback<BlockerFunction>(
     ({ currentLocation, nextLocation }) => {
-      console.log({ currentLocation, nextLocation, dirty });
       return dirty && (checkPathnameOnly ? currentLocation.pathname !== nextLocation.pathname : true);
     },
     [checkPathnameOnly, dirty],
