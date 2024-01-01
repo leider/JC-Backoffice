@@ -24,14 +24,14 @@ async function getVeranstaltung(url: string) {
   return veranstaltung;
 }
 
-async function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user?: User): Promise<Veranstaltung[]> {
+async function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user: User): Promise<Veranstaltung[]> {
   const optionen = await optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
   const enrichedVeranstaltungen = veranstaltungen.map((v) => {
     v.kopf.eventTypRich = typByName[v.kopf.eventTyp]?.[0];
     return v;
   });
-  if (user?.accessrights?.isBookingTeam) {
+  if (user.accessrights.isBookingTeam) {
     return enrichedVeranstaltungen;
   }
   return enrichedVeranstaltungen.filter((v) => v.kopf.confirmed);

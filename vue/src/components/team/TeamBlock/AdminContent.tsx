@@ -85,7 +85,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   function saveForm() {
     const createLogWithDiff = (diff: string): ChangelistItem => ({
       zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-      bearbeiter: context?.currentUser?.id || "",
+      bearbeiter: context.currentUser.id || "",
       diff,
     });
     form.validateFields().then(async () => {

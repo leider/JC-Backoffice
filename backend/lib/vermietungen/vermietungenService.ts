@@ -10,8 +10,8 @@ async function getVermietung(url: string) {
   return vermietung;
 }
 
-function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user?: User): Vermietung[] {
-  if (user?.accessrights?.isBookingTeam) {
+function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user: User): Vermietung[] {
+  if (user.accessrights.isBookingTeam) {
     return vermietungen;
   }
   return vermietungen.filter((v) => v.kopf.confirmed);

@@ -23,14 +23,14 @@ import { TypMitMehr } from "jc-shared/optionen/optionValues.js";
 
 const app = express();
 
-async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User) {
+async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   function asCalendarEvent(veranstaltung: Veranstaltung, typByName: Dictionary<TypMitMehr[]>): TerminEvent {
     const color = typByName[veranstaltung.kopf.eventTyp]?.[0].color || "#6c757d";
     return {
       display: "block",
       start: veranstaltung.startDate.toISOString(),
       end: veranstaltung.endDate.toISOString(),
-      url: `/vue/veranstaltung/${user?.accessrights?.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(veranstaltung.url || "")}`,
+      url: `/vue/veranstaltung/${user.accessrights.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(veranstaltung.url || "")}`,
       title: veranstaltung.kopf.titelMitPrefix,
       tooltip: veranstaltung.tooltipInfos,
       backgroundColor: color,
@@ -47,13 +47,13 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User
   return unbest.map((ver) => asCalendarEvent(ver, typByName));
 }
 
-async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user?: User) {
+async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   function asCalendarEvent(vermietung: Vermietung): TerminEvent {
     return {
       display: "block",
       start: vermietung.startDate.toISOString(),
       end: vermietung.endDate.toISOString(),
-      url: user?.accessrights?.isOrgaTeam ? `/vue/vermietung/${encodeURIComponent(vermietung.url || "")}` : "",
+      url: user.accessrights.isOrgaTeam ? `/vue/vermietung/${encodeURIComponent(vermietung.url || "")}` : "",
       title: vermietung.kopf.titel,
       tooltip: "",
       backgroundColor: "#f6eee1",

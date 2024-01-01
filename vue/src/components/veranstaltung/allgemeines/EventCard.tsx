@@ -36,7 +36,7 @@ export default function EventCard() {
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
   useEffect(() => {
-    setIsBookingTeam(!!context?.currentUser.accessrights?.isBookingTeam);
+    setIsBookingTeam(context.currentUser.accessrights.isBookingTeam);
   }, [context]);
 
   function ortChanged() {

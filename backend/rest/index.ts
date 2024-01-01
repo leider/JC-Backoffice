@@ -18,6 +18,7 @@ import Message from "jc-shared/mail/message.js";
 import conf from "../../shared/commons/simpleConfigure.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import fs from "fs/promises";
+import { checkSuperuser } from "./checkAccessHandlers.js";
 
 const app = express();
 
@@ -40,22 +41,13 @@ app.get("/imagenames", (req, res) => {
   allImageNames(res);
 });
 
-app.post("/imagenames", async (req, res) => {
-  if (!(req.user as User)?.accessrights?.isSuperuser) {
-    return res.sendStatus(403);
-  }
-
+app.post("/imagenames", [checkSuperuser], async (req: Request, res: Response) => {
   const rows = req.body as ImageOverviewRow[];
   await service.renameImages(rows);
   allImageNames(res);
 });
 
 app.post("/beleg", async (req: Request, res: Response) => {
-  const user = req.user as User;
-  if (!user?.accessrights?.isSuperuser) {
-    return res.sendStatus(403);
-  }
-
   const upload = (req1: Request) =>
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     new Promise<any[]>((resolve, reject) => {
@@ -75,18 +67,17 @@ app.post("/beleg", async (req: Request, res: Response) => {
 
   if (files.datei) {
     const datei = files.datei[0];
-    // eslint-disable-next-line no-sync
     const buffer = await fs.readFile(datei.path);
     const filename = datei.originalFilename.replace(/[()/]/g, "_");
 
     const subject = "Beleg aus Back-Office";
-    const markdown = `Beleg von ${user.name} am ${datum}
+    const markdown = `Beleg von ${(req.user as User).name} am ${datum}
 
 ${kommentar}`;
     const message = new Message({ subject, markdown: markdown });
     message.pdfBufferAndName = { pdf: buffer, name: filename };
     message.to = conf.get("beleg-email") as string;
-    message.bcc = user.email || "";
+    message.bcc = (req.user as User).email || "";
     if (!message.to) {
       return res.status(500).send("Kein Empfänger");
     }

@@ -58,8 +58,6 @@ export default function SendMail() {
   const [selectedRules, setSelectedRules] = useState<MailRule[]>([]);
   const [effectiveUsers, setEffectiveUsers] = useState<{ name: string; email: string }[]>([]);
 
-  const [currentUser, setCurrentUser] = useState<User>(new User({}));
-
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
 
@@ -82,12 +80,6 @@ export default function SendMail() {
       setUsersAsOptions(usersQuery.data.map((user) => ({ label: user.name, value: user.id })));
     }
   }, [mailRuleQuery.data, veranstaltungenQuery.data, usersQuery.data]);
-
-  useEffect(() => {
-    if (context?.currentUser) {
-      setCurrentUser(context?.currentUser);
-    }
-  }, [context]);
 
   const [form] = Form.useForm<{
     subject: string;
@@ -153,7 +145,7 @@ export default function SendMail() {
         selectedVeranstaltungen
           .map((veranst) => new VeranstaltungVermietungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
-      const result = new Message({ subject: mail.subject, markdown: markdownToSend }, currentUser.name, currentUser.email);
+      const result = new Message({ subject: mail.subject, markdown: markdownToSend }, context.currentUser.name, context.currentUser.email);
       result.setBcc(addresses);
       await sendMail(result);
       initializeForm();

@@ -13,7 +13,7 @@ export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: 
   function ButtonAbendkasse({ callback }: { callback: () => void }) {
     const { color, icon } = useColorsAndIconsForSections("kasse");
     const { context } = useAuth();
-    if (!context?.currentUser.accessrights?.isAbendkasse) {
+    if (!context.currentUser.accessrights.isAbendkasse) {
       return;
     }
     return (

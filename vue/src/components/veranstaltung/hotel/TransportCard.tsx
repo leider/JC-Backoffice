@@ -50,7 +50,7 @@ Die Namen der Gäste lauten:
 ${unterkunft.kommentar}
 
 Mit freundlichen Grüßen,
-${context?.currentUser.name}`);
+${context.currentUser.name}`);
 
     window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
   };

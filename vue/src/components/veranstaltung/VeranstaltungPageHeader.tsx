@@ -97,7 +97,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
 
   useEffect(() => {
-    setIsOrga(context?.currentUser?.accessrights?.isOrgaTeam || false);
+    setIsOrga(context.currentUser.accessrights.isOrgaTeam);
   }, [context, setIsOrga]);
 
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };

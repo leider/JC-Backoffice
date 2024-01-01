@@ -6,12 +6,12 @@ import User from "jc-shared/user/user.js";
 
 import { resToJson } from "../lib/commons/replies.js";
 import store from "../lib/vermietungen/vermietungenstore.js";
+import { checkOrgateam } from "./checkAccessHandlers.js";
 
 const app = express();
 
 async function standardHandler(req: Request, res: Response, vermietungen: Vermietung[]) {
-  const user = req.user as User;
-  if (!user?.accessrights?.isOrgaTeam) {
+  if (!(req.user as User).accessrights.isOrgaTeam) {
     return resToJson(res, []);
   }
   resToJson(
@@ -55,18 +55,11 @@ app.get("/vermietungen/:url", async (req: Request, res: Response) => {
   resToJson(res, vermietung);
 });
 
-app.post("/vermietungen", async (req: Request, res: Response) => {
-  const user = req.user as User;
-  if (!user?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
+app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
   return saveAndReply(res, new Vermietung(req.body));
 });
 
-app.delete("/vermietungen", async (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
+app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
   await store.deleteVermietungById(req.body.id);
   resToJson(res);
 });

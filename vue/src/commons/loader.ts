@@ -11,7 +11,6 @@ import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
 import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
-import Accessrights from "jc-shared/user/accessrights";
 import { StaffType } from "jc-shared/veranstaltung/staff";
 import Veranstaltung, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung";
 import isMobile from "ismobilejs";
@@ -198,9 +197,7 @@ export async function deleteVermietungWithId(id: string) {
 export async function currentUser() {
   try {
     const result = await getForType("json", "/rest/users/current");
-    const user = new User(result);
-    user.accessrights = new Accessrights(user);
-    return user;
+    return new User(result);
   } catch {
     return new User("invalidUser");
   }

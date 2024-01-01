@@ -42,12 +42,7 @@ export function KassenzettelFreigabe() {
             <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-          <SingleSelect
-            name="freigeber"
-            label={"User für die Freigabe"}
-            options={usersAsOptions}
-            initialValue={context?.currentUser.name}
-          />
+          <SingleSelect name="freigeber" label={"User für die Freigabe"} options={usersAsOptions} initialValue={context.currentUser.name} />
         </Form>
       ),
       onOk: () => {
@@ -58,7 +53,7 @@ export function KassenzettelFreigabe() {
   }
 
   function freigabeAufheben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], context?.currentUser.name);
+    form.setFieldValue(["kasse", "kassenfreigabe"], context.currentUser.name);
     modal.confirm({
       type: "confirm",
       title: "Kassenfreigabe rückgängig",
@@ -97,12 +92,12 @@ export function KassenzettelFreigabe() {
                   renderWidget={(getFieldValue) => {
                     const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
                     if (!freigabe) {
-                      const darfFreigeben = context?.currentUser.accessrights?.darfKasseFreigeben;
+                      const darfFreigeben = context.currentUser.accessrights.darfKasseFreigeben;
                       return (
                         <ButtonWithIcon block text="Kasse freigeben..." icon={"Unlock"} onClick={freigeben} disabled={!darfFreigeben} />
                       );
                     } else {
-                      const darfFreigabeAufheben = context?.currentUser.accessrights?.isSuperuser;
+                      const darfFreigabeAufheben = context.currentUser.accessrights.isSuperuser;
                       return (
                         <>
                           <Button

@@ -38,8 +38,7 @@ function Team() {
   const { context } = useAuth();
   const [realadmin, setRealadmin] = useState<boolean>(false);
   useEffect(() => {
-    const accessrights = context?.currentUser.accessrights;
-    setRealadmin(!!accessrights?.isSuperuser);
+    setRealadmin(context.currentUser.accessrights.isSuperuser);
   }, [context]);
 
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{

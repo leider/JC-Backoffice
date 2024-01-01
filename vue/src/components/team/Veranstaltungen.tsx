@@ -59,8 +59,8 @@ export default function Veranstaltungen() {
 
   document.title = "Veranstaltungen";
   useEffect(() => {
-    const accessrights = context?.currentUser.accessrights;
-    if (accessrights !== undefined && location.pathname !== "/team" && !accessrights?.isOrgaTeam) {
+    const accessrights = context.currentUser.accessrights;
+    if (location.pathname !== "/team" && !accessrights.isOrgaTeam) {
       navigate("/team");
     }
   }, [context, location.pathname, navigate]);
@@ -183,7 +183,7 @@ export default function Veranstaltungen() {
       <Drawer
         extra={
           <>
-            {context?.currentUser?.accessrights?.isOrgaTeam && (
+            {context.currentUser.accessrights.isOrgaTeam && (
               <ButtonWithIconAndLink
                 key="bigcal"
                 icon="Calendar2Range"

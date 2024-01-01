@@ -17,7 +17,7 @@ export default function VertragCard() {
 
   const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
   useEffect(() => {
-    setIsBookingTeam(!!context?.currentUser.accessrights?.isBookingTeam);
+    setIsBookingTeam(context.currentUser.accessrights.isBookingTeam);
   }, [context]);
 
   return (

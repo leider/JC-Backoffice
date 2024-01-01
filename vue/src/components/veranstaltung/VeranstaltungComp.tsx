@@ -134,8 +134,8 @@ export default function VeranstaltungComp() {
   }, [form, veranstaltung, rider]);
 
   useEffect(() => {
-    const accessrights = context?.currentUser.accessrights;
-    if (accessrights !== undefined && !accessrights?.isAbendkasse) {
+    const accessrights = context.currentUser.accessrights;
+    if (!accessrights.isAbendkasse) {
       navigate(`/veranstaltung/preview/${url}`);
     }
   }, [context, navigate, url]);
@@ -149,7 +149,7 @@ export default function VeranstaltungComp() {
       const createLogWithDiff = (diff: string): ChangelistItem => {
         return {
           zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-          bearbeiter: context?.currentUser?.id || "",
+          bearbeiter: context.currentUser.id,
           diff,
         };
       };
@@ -166,7 +166,7 @@ export default function VeranstaltungComp() {
         const diff = differenceFor(originalVeranst, veranst);
         veranst.changelist.unshift(createLogWithDiff(diff));
       }
-      if (!context?.currentUser.accessrights?.isOrgaTeam && !isNew) {
+      if (!context.currentUser.accessrights.isOrgaTeam && !isNew) {
         // prevent saving of optionen
         return mutateVeranstaltung.mutate(veranst);
       }

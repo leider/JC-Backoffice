@@ -21,7 +21,7 @@ class AuthApi {
 
 const authApi = new AuthApi();
 
-interface IUseProvideAuth {
+export interface IUseProvideAuth {
   /**
    * The current login state.
    * @type {LoginState}
@@ -155,8 +155,6 @@ function useProvideAuth(): IUseProvideAuth {
     logout,
   };
 }
-
-export type Auth = ReturnType<typeof useProvideAuth>;
 
 /**
  * Provider component that wraps the app and makes an auth object

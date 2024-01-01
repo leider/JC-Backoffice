@@ -23,7 +23,7 @@ export default function VeranstaltungTabs() {
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
   const { context } = useAuth();
-  const onlyKasse = !context?.currentUser.accessrights?.isOrgaTeam;
+  const onlyKasse = !context.currentUser.accessrights.isOrgaTeam;
 
   const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
     form,

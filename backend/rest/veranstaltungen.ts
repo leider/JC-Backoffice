@@ -12,12 +12,13 @@ import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
+import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
 const app = express();
 
-async function standardHandler(res: Response, user: User | undefined, veranstaltungen: Veranstaltung[]) {
+async function standardHandler(res: Response, user: User, veranstaltungen: Veranstaltung[]) {
   const result = await veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
   resToJson(
     res,
@@ -60,16 +61,13 @@ app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
   resToJson(res, veranstaltung);
 });
 
-app.post("/veranstaltungen", async (req: Request, res: Response) => {
+app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Response) => {
   const user = req.user as User;
-  if (!user?.accessrights?.isAbendkasse) {
-    return res.sendStatus(403);
-  }
   // checkFreigabeChanged
   const url = req.body.url;
 
   async function saveVeranstaltung(veranstaltung: Veranstaltung | null) {
-    if (user?.accessrights?.isOrgaTeam) {
+    if (user.accessrights.isOrgaTeam) {
       return saveAndReply(res, new Veranstaltung(req.body));
     } else {
       // Nur Kasse erlaubt
@@ -98,10 +96,7 @@ app.post("/veranstaltungen", async (req: Request, res: Response) => {
   return saveVeranstaltung(veranstaltung);
 });
 
-app.delete("/veranstaltungen", async (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
+app.delete("/veranstaltungen", [checkOrgateam], async (req: Request, res: Response) => {
   await store.deleteVeranstaltungById(req.body.id);
   resToJson(res);
 });
@@ -134,10 +129,7 @@ app.post("/veranstaltungen/:url/updateGastInSection", async (req: Request, res: 
   return saveAndReply(res, veranstaltung);
 });
 
-app.post("/upload", async (req: Request, res: Response) => {
-  if (!(req.user as User)?.accessrights?.isOrgaTeam) {
-    return res.sendStatus(403);
-  }
+app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
   const uploadDir = path.join(__dirname, "../static/upload");
   const filesDir = path.join(__dirname, "../static/files");
 

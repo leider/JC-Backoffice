@@ -85,8 +85,8 @@ export default function VermietungComp() {
 
   useEffect(initializeForm, [form, vermietung]);
   useEffect(() => {
-    const accessrights = context?.currentUser.accessrights;
-    if (accessrights !== undefined && !accessrights?.isOrgaTeam) {
+    const accessrights = context.currentUser.accessrights;
+    if (!accessrights.isOrgaTeam) {
       navigate(`/team`);
     }
   }, [context, navigate, url]);

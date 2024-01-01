@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
-import { Auth } from "@/commons/auth.tsx";
+import { IUseProvideAuth } from "@/commons/auth.tsx";
+import User from "jc-shared/user/user.ts";
 
 /**
  * The different login states the user can be in.
@@ -13,7 +14,12 @@ export enum LoginState {
   LOGGED_IN,
   LOGGED_OUT,
 }
-export const AuthContext = createContext<Auth>({ loginState: LoginState.UNKNOWN, login: async () => {}, logout: async () => {} });
+export const AuthContext = createContext<IUseProvideAuth>({
+  context: { currentUser: new User({}), wikisubdirs: { dirs: [] } },
+  loginState: LoginState.UNKNOWN,
+  login: async () => {},
+  logout: async () => {},
+});
 
 /**
  * Hook for child components to get the auth object

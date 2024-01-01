@@ -6,7 +6,6 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import User from "jc-shared/user/user";
-import Accessrights from "jc-shared/user/accessrights";
 import { NewUserModal } from "@/components/users/UserModals";
 import UserPanel from "@/components/users/UserPanel";
 import { useQuery } from "@tanstack/react-query";
@@ -22,9 +21,6 @@ export default function Users() {
   document.title = "Userübersicht";
   async function loadUsers() {
     const users = await allUsers();
-    users.forEach((u) => {
-      u.accessrights = new Accessrights(u);
-    });
     setUsers(users);
     setSelectedUsers(users);
   }
@@ -32,9 +28,6 @@ export default function Users() {
   useEffect(() => {
     if (userQuery.data) {
       const users = userQuery.data;
-      users.forEach((u) => {
-        u.accessrights = new Accessrights(u);
-      });
       setUsers(users);
       setSelectedUsers(users);
     }
@@ -77,7 +70,7 @@ export default function Users() {
             }
             title="Übersicht über die User"
             extra={
-              context?.currentUser?.accessrights?.isSuperuser && (
+              context.currentUser.accessrights.isSuperuser && (
                 <ButtonWithIcon key="usernew" icon="PersonPlus" text="Neuer Benutzer" type="default" onClick={() => setNewUserOpen(true)} />
               )
             }
@@ -87,7 +80,7 @@ export default function Users() {
       <Row gutter={8}>
         {selectedUsers.map((user) => (
           <Col key={user.id} xs={24} sm={12} md={8} xxl={6}>
-            <UserPanel user={user} currentUser={context?.currentUser || new User({})} loadUsers={loadUsers} />
+            <UserPanel user={user} currentUser={context.currentUser || new User({})} loadUsers={loadUsers} />
           </Col>
         ))}
       </Row>

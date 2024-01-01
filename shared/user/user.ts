@@ -14,7 +14,7 @@ export default class User {
   mailinglisten: string[];
   wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
-  accessrights?: Accessrights; // transient
+  accessrightsTransient?: Accessrights; // transient
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   constructor(object: any) {
@@ -32,12 +32,13 @@ export default class User {
     this.rechte = object.rechte || [];
 
     this.mailinglisten = object.mailinglisten || [];
+    this.accessrightsTransient = undefined;
   }
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     const result = Object.assign({}, this);
-    delete result.accessrights;
+    delete result.accessrightsTransient;
     return result;
   }
 
@@ -61,5 +62,12 @@ export default class User {
 
   subscribeList(listname: string): void {
     this.mailinglisten.push(listname);
+  }
+
+  get accessrights(): Accessrights {
+    if (!this.accessrightsTransient) {
+      this.accessrightsTransient = new Accessrights(this);
+    }
+    return this.accessrightsTransient;
   }
 }

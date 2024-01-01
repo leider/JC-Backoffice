@@ -18,18 +18,18 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
   const { modal } = App.useApp();
 
   useEffect(() => {
-    setCanEdit(currentUser.accessrights?.canEditUser(user.id) || false);
+    setCanEdit(currentUser.accessrights.canEditUser(user.id));
     setSelf(currentUser.id === user.id);
-    if (user.accessrights?.isSuperuser) {
+    if (user.accessrights.isSuperuser) {
       return setIcon("EmojiSunglasses");
     }
-    if (user.accessrights?.isBookingTeam) {
+    if (user.accessrights.isBookingTeam) {
       return setIcon("PersonCheck");
     }
-    if (user.accessrights?.isOrgaTeam) {
+    if (user.accessrights.isOrgaTeam) {
       return setIcon("Building");
     }
-    if (user.accessrights?.isAbendkasse) {
+    if (user.accessrights.isAbendkasse) {
       return setIcon("Wallet2");
     }
     setIcon("Dash");
@@ -47,7 +47,7 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
         setIsOpen={setEditUserOpen}
         loadUsers={loadUsers}
         user={user}
-        isSuperUser={currentUser.accessrights?.isSuperuser || false}
+        isSuperUser={currentUser.accessrights.isSuperuser}
       />
       <ChangePasswordModal isOpen={passwordOpen} setIsOpen={setPasswordOpen} user={user} />
       <Collapse
@@ -65,7 +65,7 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
               <Space>
                 {canEdit && <ButtonInUsers type="edit" callback={() => setEditUserOpen(true)} />}
                 {canEdit && <ButtonInUsers type="changepass" callback={() => setPasswordOpen(true)} />}
-                {(currentUser.accessrights?.isSuperuser || false) && !self && (
+                {currentUser.accessrights.isSuperuser && !self && (
                   <ButtonInUsers
                     type="delete"
                     callback={() => {
