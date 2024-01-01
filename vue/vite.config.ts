@@ -32,9 +32,8 @@ export default defineConfig(() => {
         },
       },
       VitePWA({
-        selfDestroying: true,
         registerType: "autoUpdate",
-        injectRegister: "inline",
+        injectRegister: "auto",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
         manifest: {
           name: "Jazzclub Backoffice",

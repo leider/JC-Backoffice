@@ -7,6 +7,7 @@ import "./JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
+import useUpdateApp from "@/useUpdateApp.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,6 +18,7 @@ const queryClient = new QueryClient({
 });
 
 function JazzclubApp() {
+  useUpdateApp();
   const { useToken } = theme;
   const { token } = useToken();
 
