@@ -37,6 +37,8 @@ async function standardFetch(params: FetchParams) {
     const res = await axios(options);
     return res.data;
   } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log("standardFetch", e);
     /* empty */
   }
 }

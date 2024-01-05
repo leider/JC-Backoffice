@@ -1,11 +1,11 @@
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { Col, List, Row } from "antd";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import User from "jc-shared/user/user.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { useQuery } from "@tanstack/react-query";
-import { allUsers } from "@/commons/loader.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+
 function StaffList({
   header,
   notNeeded,
@@ -48,14 +48,7 @@ function StaffList({
   return !notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
 }
 export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
-  const [users, setUsers] = useState<User[]>([]);
-  const theUsers = useQuery({ queryKey: ["users"], queryFn: allUsers });
-  useEffect(() => {
-    if (theUsers.data) {
-      setUsers(theUsers.data);
-    }
-  }, [theUsers.data]);
-
+  const { allUsers } = useJazzContext();
   return (
     <CollapsibleForVeranstaltung suffix="staff" label="Staff">
       <Row gutter={12}>
@@ -65,28 +58,28 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
             staff={veranstaltung.staff}
             parts={{ verant: "mod" }}
             notNeeded={veranstaltung.staff.modNotNeeded}
-            theUsers={users}
+            theUsers={allUsers}
           />
           <StaffList
             header="Kasse"
             staff={veranstaltung.staff}
             parts={{ verant: "kasseV", normal: "kasse" }}
             notNeeded={veranstaltung.staff.kasseNotNeeded && veranstaltung.staff.kasseVNotNeeded}
-            theUsers={users}
+            theUsers={allUsers}
           />
           <StaffList
             header="Technik"
             staff={veranstaltung.staff}
             parts={{ verant: "technikerV", normal: "techniker" }}
             notNeeded={veranstaltung.staff.technikerNotNeeded && veranstaltung.staff.technikerVNotNeeded}
-            theUsers={users}
+            theUsers={allUsers}
           />
           <StaffList
             header="Merchandise"
             staff={veranstaltung.staff}
             parts={{ normal: "merchandise" }}
             notNeeded={veranstaltung.staff.merchandiseNotNeeded}
-            theUsers={users}
+            theUsers={allUsers}
           />
         </Col>
       </Row>

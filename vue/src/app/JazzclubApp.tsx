@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import JazzContent from "@/components/JazzContent";
+import JazzContent from "@/components/content/JazzContent.tsx";
 import { App, ConfigProvider, theme } from "antd";
-import { createTokenBasedStyles, customColors } from "@/components/createTokenBasedStyles";
-import { AuthProvider } from "@/commons/auth";
+import { createTokenBasedStyles, customColors } from "@/app/createTokenBasedStyles.ts";
 import "./JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
-import useUpdateApp from "@/useUpdateApp.ts";
+import useUpdateApp from "@/app/useUpdateApp.ts";
+import { AuthProvider } from "@/commons/auth.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {

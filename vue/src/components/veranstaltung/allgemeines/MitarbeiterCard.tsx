@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { useQuery } from "@tanstack/react-query";
-import { allUsers } from "@/commons/loader.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useWatch } from "antd/es/form/Form";
@@ -10,6 +8,7 @@ import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungCo
 import groupBy from "lodash/groupBy";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -24,6 +23,8 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
   const vermietContext = useContext(VermietungContext);
   const form = (veranstContext || vermietContext)?.form;
   const optionen = (veranstContext || vermietContext)?.optionen;
+
+  const { allUsers } = useJazzContext();
 
   const eventTyp = useWatch(["kopf", "eventTyp"], {
     form,
@@ -53,13 +54,7 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     }
   }, [form, id, preselection]);
 
-  const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
-  useEffect(() => {
-    if (userQuery.data) {
-      setUsersAsOptions(userQuery.data.map((user) => ({ label: user.name, value: user.id })));
-    }
-  }, [userQuery.data]);
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Mitarbeiter" noTopBorder={lg}>

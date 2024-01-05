@@ -1,12 +1,12 @@
 import { Tag, theme } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
-import { useAuth } from "@/commons/authConsts.ts";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -27,8 +27,7 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
     setNames(usersAsOptions.filter((user) => staffCollection.includes(user.value)).map((user) => user.label));
   }, [sectionName, usersAsOptions, veranstaltung.staff]);
 
-  const { context } = useAuth();
-  const currentUser = useMemo(() => context.currentUser, [context.currentUser]);
+  const { currentUser } = useJazzContext();
 
   return names.length > 0 ? (
     names.map((name) => (
@@ -46,12 +45,12 @@ export function AddRemoveStaffButton({
   veranstaltung,
   staffUpdated,
 }: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
-  const [isIn, setIsIn] = useState(false);
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
 
-  useEffect(() => {
-    setIsIn(veranstaltung.staff.getStaffCollection(sectionName).includes(context.currentUser.id));
-  }, [context.currentUser.id, sectionName, veranstaltung.staff]);
+  const isIn = useMemo(
+    () => veranstaltung.staff.getStaffCollection(sectionName).includes(currentUser.id),
+    [currentUser.id, sectionName, veranstaltung.staff],
+  );
 
   const queryClient = useQueryClient();
   const mutate = useMutation({

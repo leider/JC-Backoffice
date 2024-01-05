@@ -1,9 +1,8 @@
 import { App, Button, Col, Form, Row } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { allUsers, openKassenzettel } from "@/commons/loader.ts";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
-import { useAuth } from "@/commons/authConsts.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -11,14 +10,15 @@ import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useForm } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections.ts";
+import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export function KassenzettelFreigabe() {
   const veranstContext = useContext(VeranstaltungContext);
   const form = veranstContext!.form;
 
   const { modal } = App.useApp();
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
 
   async function loadUsers() {
@@ -42,7 +42,7 @@ export function KassenzettelFreigabe() {
             <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-          <SingleSelect name="freigeber" label={"User für die Freigabe"} options={usersAsOptions} initialValue={context.currentUser.name} />
+          <SingleSelect name="freigeber" label={"User für die Freigabe"} options={usersAsOptions} initialValue={currentUser.name} />
         </Form>
       ),
       onOk: () => {
@@ -53,7 +53,7 @@ export function KassenzettelFreigabe() {
   }
 
   function freigabeAufheben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], context.currentUser.name);
+    form.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
     modal.confirm({
       type: "confirm",
       title: "Kassenfreigabe rückgängig",
@@ -66,6 +66,8 @@ export function KassenzettelFreigabe() {
   }
 
   const { color } = useColorsAndIconsForSections("kasse");
+  const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
+  const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 
   return (
     <>
@@ -92,12 +94,10 @@ export function KassenzettelFreigabe() {
                   renderWidget={(getFieldValue) => {
                     const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
                     if (!freigabe) {
-                      const darfFreigeben = context.currentUser.accessrights.darfKasseFreigeben;
                       return (
                         <ButtonWithIcon block text="Kasse freigeben..." icon={"Unlock"} onClick={freigeben} disabled={!darfFreigeben} />
                       );
                     } else {
-                      const darfFreigabeAufheben = context.currentUser.accessrights.isSuperuser;
                       return (
                         <>
                           <Button

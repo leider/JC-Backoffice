@@ -42,13 +42,7 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
   const lightGreen = useToken().token.colorSuccessBgHover;
   return (
     <>
-      <EditUserModal
-        isOpen={editUserOpen}
-        setIsOpen={setEditUserOpen}
-        loadUsers={loadUsers}
-        user={user}
-        isSuperUser={currentUser.accessrights.isSuperuser}
-      />
+      <EditUserModal isOpen={editUserOpen} setIsOpen={setEditUserOpen} user={user} isSuperUser={currentUser.accessrights.isSuperuser} />
       <ChangePasswordModal isOpen={passwordOpen} setIsOpen={setPasswordOpen} user={user} />
       <Collapse
         size="small"

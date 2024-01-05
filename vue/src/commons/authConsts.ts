@@ -1,6 +1,5 @@
 import { createContext, useContext } from "react";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
-import User from "jc-shared/user/user.ts";
 
 /**
  * The different login states the user can be in.
@@ -15,7 +14,6 @@ export enum LoginState {
   LOGGED_OUT,
 }
 export const AuthContext = createContext<IUseProvideAuth>({
-  context: { currentUser: new User({}), wikisubdirs: { dirs: [] } },
   loginState: LoginState.UNKNOWN,
   login: async () => {},
   logout: async () => {},

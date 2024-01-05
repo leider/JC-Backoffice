@@ -18,6 +18,16 @@ function secureAgainstClickjacking(req: Request, res: Response, next: NextFuncti
   next();
 }
 
+function handle404(req: Request, res: Response): void {
+  res.redirect("/");
+}
+
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, no-unused-vars
+function handle500(error: any, req: Request, res: Response, next: NextFunction): void {
+  // express needs four arguments!
+  res.redirect("/");
+}
+
 export default function (app: express.Express, forDev?: boolean): void {
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: true }));
@@ -36,4 +46,6 @@ export default function (app: express.Express, forDev?: boolean): void {
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, restApp);
   app.use("/ridersrest/", ridersrest);
+  app.use(handle404);
+  app.use(handle500);
 }

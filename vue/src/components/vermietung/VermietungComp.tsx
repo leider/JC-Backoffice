@@ -5,13 +5,13 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { optionen as optionenRestCall, saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import { useAuth } from "@/commons/authConsts.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues } | null>(null);
 
@@ -71,7 +71,7 @@ export default function VermietungComp() {
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty, true);
 
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const navigate = useNavigate();
   function initializeForm() {
     const deepCopy = toFormObject(vermietung);
@@ -85,11 +85,11 @@ export default function VermietungComp() {
 
   useEffect(initializeForm, [form, vermietung]);
   useEffect(() => {
-    const accessrights = context.currentUser.accessrights;
+    const accessrights = currentUser.accessrights;
     if (!accessrights.isOrgaTeam) {
       navigate(`/team`);
     }
-  }, [context, navigate, url]);
+  }, [currentUser.accessrights, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
 

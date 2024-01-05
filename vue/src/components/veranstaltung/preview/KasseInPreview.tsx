@@ -2,18 +2,18 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Button, Col, ConfigProvider, Row, Tooltip } from "antd";
 import React from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections.ts";
-import { useAuth } from "@/commons/authConsts.ts";
+import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useNavigate } from "react-router-dom";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: Veranstaltung; url?: string }) {
   const navigate = useNavigate();
 
   function ButtonAbendkasse({ callback }: { callback: () => void }) {
     const { color, icon } = useColorsAndIconsForSections("kasse");
-    const { context } = useAuth();
-    if (!context.currentUser.accessrights.isAbendkasse) {
+    const { currentUser } = useJazzContext();
+    if (!currentUser.accessrights.isAbendkasse) {
       return;
     }
     return (

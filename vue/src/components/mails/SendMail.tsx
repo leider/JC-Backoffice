@@ -1,13 +1,12 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, mailRules as mailRulesRestCall, sendMail, veranstaltungenForTeam } from "@/commons/loader.ts";
+import { mailRules as mailRulesRestCall, sendMail, veranstaltungenForTeam } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Tag } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User from "jc-shared/user/user";
-import { useAuth } from "@/commons/authConsts.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter";
@@ -16,11 +15,11 @@ import SimpleMdeReact from "react-simplemde-editor";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import UserMultiSelect from "@/components/team/UserMultiSelect";
 import Message from "jc-shared/mail/message";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -37,21 +36,22 @@ export default function SendMail() {
     queryKey: ["mailRules"],
     queryFn: mailRulesRestCall,
   });
-  const usersQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
   const veranstaltungenQuery = useQuery({
     queryKey: ["veranstaltungenZukuenftig"],
     queryFn: () => veranstaltungenForTeam("zukuenftige"),
   });
-  const { context } = useAuth();
+  const { allUsers, currentUser } = useJazzContext();
+
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
+
+  const mailingLists = useMemo(() => new Users(allUsers).mailinglisten, [allUsers]);
+
+  const mailingListsDescriptions = useMemo(() => sortBy(mailingLists.map((liste) => liste.name)), [mailingLists]);
 
   const [rules, setRules] = useState<MailRule[]>([]);
   const [rulesDescriptions, setRulesDescriptions] = useState<string[]>([]);
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
   const [veranstaltungenDescriptions, setVeranstaltungenDescriptions] = useState<string[]>([]);
-  const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
-  const [mailingListsDescriptions, setMailingListsDescriptions] = useState<string[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [selectedLists, setSelectedLists] = useState<Mailingliste[]>([]);
@@ -72,14 +72,7 @@ export default function SendMail() {
       setVeranstaltungen(veranstaltungenQuery.data);
       setVeranstaltungenDescriptions(veranstaltungenQuery.data.map((v) => new VeranstaltungVermietungFormatter(v).description));
     }
-    if (usersQuery.data) {
-      const mailinglisten = new Users(usersQuery.data).mailinglisten;
-      setMailingLists(mailinglisten);
-      setMailingListsDescriptions(sortBy(mailinglisten.map((liste) => liste.name)));
-      setUsers(usersQuery.data);
-      setUsersAsOptions(usersQuery.data.map((user) => ({ label: user.name, value: user.id })));
-    }
-  }, [mailRuleQuery.data, veranstaltungenQuery.data, usersQuery.data]);
+  }, [mailRuleQuery.data, veranstaltungenQuery.data]);
 
   const [form] = Form.useForm<{
     subject: string;
@@ -118,19 +111,19 @@ export default function SendMail() {
   }
 
   function usersChanged(value: string[]) {
-    setSelectedUsers(users.filter((user) => value.includes(user.id)));
+    setSelectedUsers(allUsers.filter((user) => value.includes(user.id)));
   }
 
   useEffect(() => {
     const userIdsFromLists = selectedLists.flatMap((list) => list.users);
-    const usersFromLists = users.filter((user) => userIdsFromLists.includes(user.id));
+    const usersFromLists = allUsers.filter((user) => userIdsFromLists.includes(user.id));
     const allUsersFromListsAndUsers = selectedUsers.concat(usersFromLists).map((user) => ({ name: user.name, email: user.email }));
     const allRuleUsers = selectedRules.map((rule) => ({
       name: rule.name,
       email: rule.email,
     }));
     setEffectiveUsers(sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
-  }, [selectedUsers, selectedLists, selectedRules, users]);
+  }, [selectedUsers, selectedLists, selectedRules, allUsers]);
 
   function send() {
     form.validateFields().then(async () => {
@@ -145,7 +138,7 @@ export default function SendMail() {
         selectedVeranstaltungen
           .map((veranst) => new VeranstaltungVermietungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
-      const result = new Message({ subject: mail.subject, markdown: markdownToSend }, context.currentUser.name, context.currentUser.email);
+      const result = new Message({ subject: mail.subject, markdown: markdownToSend }, currentUser.name, currentUser.email);
       result.setBcc(addresses);
       await sendMail(result);
       initializeForm();

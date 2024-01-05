@@ -1,4 +1,4 @@
-import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections.ts";
+import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import capitalize from "lodash/capitalize";
 import React from "react";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";

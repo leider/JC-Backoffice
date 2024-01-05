@@ -14,6 +14,9 @@ import KasseInPreview from "@/components/veranstaltung/preview/KasseInPreview.ts
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
 import GaesteInPreview from "@/components/veranstaltung/preview/GaesteInPreview.tsx";
+import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function Preview() {
   const { url } = useParams();
@@ -21,6 +24,8 @@ export default function Preview() {
     queryKey: ["veranstaltung", url],
     queryFn: () => veranstaltungForUrl(url || ""),
   });
+  const { currentUser } = useJazzContext();
+
   const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
@@ -39,6 +44,19 @@ export default function Preview() {
     }
   }, [veranst.data]);
 
+  function EditButton() {
+    const type: buttonType = "allgemeines";
+    const { color, icon } = useColorsAndIconsForSections(type);
+    return (
+      <ButtonWithIconAndLink
+        icon={icon()}
+        to={`/veranstaltung/${encodeURIComponent(url ?? "")}?page=${type}`}
+        color={color()}
+        text="Bearbeiten..."
+      />
+    );
+  }
+
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (
     <div>
@@ -49,6 +67,7 @@ export default function Preview() {
           </span>
         }
         subTitle={<span style={titleStyle}>{veranstaltung.datumForDisplayShort}</span>}
+        extra={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />
       <Row gutter={12}>
         <Col xs={24} lg={12}>

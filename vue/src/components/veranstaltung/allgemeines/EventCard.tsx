@@ -1,5 +1,5 @@
 import OptionValues, { TypMitMehr } from "jc-shared/optionen/optionValues";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -7,10 +7,10 @@ import StartEndPickers from "@/widgets/StartEndPickers";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import { useAuth } from "@/commons/authConsts.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const eventTypes = useMemo(() => {
@@ -32,12 +32,9 @@ export default function EventCard() {
   const optionen = veranstContext!.optionen;
   const orte = veranstContext!.orte;
 
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
 
-  const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
-  useEffect(() => {
-    setIsBookingTeam(context.currentUser.accessrights.isBookingTeam);
-  }, [context]);
+  const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   function ortChanged() {
     const veranstaltung = fromFormObject(form);

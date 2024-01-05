@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Input, Modal, notification, Row } from "antd";
+import { App, Col, Form, FormInstance, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
   const mutatePassword = useMutation({
     mutationFn: changePassword,
     onSuccess: () => {
@@ -63,6 +64,7 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
 export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const { notification } = App.useApp();
   const mutateNewUser = useMutation({
     mutationFn: saveNewUser,
     onSuccess: () => {
@@ -118,12 +120,11 @@ export function EditUserModal({
 }: {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  loadUsers: () => void;
   user: User;
   isSuperUser: boolean;
 }) {
   const [form] = Form.useForm();
-
+  const { notification } = App.useApp();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 

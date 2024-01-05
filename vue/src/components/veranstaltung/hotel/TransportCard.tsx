@@ -7,9 +7,9 @@ import { fromFormObject } from "@/components/veranstaltung/veranstaltungCompUtil
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TransportCard() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -27,7 +27,7 @@ export default function TransportCard() {
     const veranstaltung = fromFormObject(form);
     setSumme(veranstaltung.unterkunft.transportEUR);
   }
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const sendMail = () => {
     const veranstaltung = fromFormObject(form);
     const unterkunft = veranstaltung.unterkunft;
@@ -50,7 +50,7 @@ Die Namen der Gäste lauten:
 ${unterkunft.kommentar}
 
 Mit freundlichen Grüßen,
-${context.currentUser.name}`);
+${currentUser.name}`);
 
     window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
   };

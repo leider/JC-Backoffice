@@ -5,10 +5,10 @@ import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
@@ -16,7 +16,7 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   const optionen = veranstContext!.optionen;
   const { url } = useParams();
 
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const [displayDate, setDisplayDate] = useState<string>("");
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
@@ -97,8 +97,8 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
   }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
 
   useEffect(() => {
-    setIsOrga(context.currentUser.accessrights.isOrgaTeam);
-  }, [context, setIsOrga]);
+    setIsOrga(currentUser.accessrights.isOrgaTeam);
+  }, [currentUser.accessrights.isOrgaTeam, setIsOrga]);
 
   const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
   return (

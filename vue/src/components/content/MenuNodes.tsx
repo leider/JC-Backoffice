@@ -1,10 +1,10 @@
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { Link } from "react-router-dom";
 import * as React from "react";
+import { useMemo } from "react";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { useAuth } from "@/commons/authConsts.ts";
-import { useMemo } from "react";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -29,7 +29,6 @@ export enum menuKeys {
 
 export default function useMenuNodes(accessrights: Accessrights, subdirs: string[]) {
   const { logout } = useAuth();
-
   const wikisubdirEntries = useMemo(
     () =>
       subdirs.map((dir) => {

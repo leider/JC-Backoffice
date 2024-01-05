@@ -21,9 +21,9 @@ import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
 import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { useAuth } from "@/commons/authConsts.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 //import { detailedDiff } from "deep-object-diff";
 
 export const VeranstaltungContext = createContext<{
@@ -117,7 +117,7 @@ export default function VeranstaltungComp() {
     },
   });
 
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,11 +134,11 @@ export default function VeranstaltungComp() {
   }, [form, veranstaltung, rider]);
 
   useEffect(() => {
-    const accessrights = context.currentUser.accessrights;
+    const accessrights = currentUser.accessrights;
     if (!accessrights.isAbendkasse) {
       navigate(`/veranstaltung/preview/${url}`);
     }
-  }, [context, navigate, url]);
+  }, [currentUser.accessrights, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
@@ -149,7 +149,7 @@ export default function VeranstaltungComp() {
       const createLogWithDiff = (diff: string): ChangelistItem => {
         return {
           zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-          bearbeiter: context.currentUser.id,
+          bearbeiter: currentUser.id,
           diff,
         };
       };
@@ -166,7 +166,7 @@ export default function VeranstaltungComp() {
         const diff = differenceFor(originalVeranst, veranst);
         veranst.changelist.unshift(createLogWithDiff(diff));
       }
-      if (!context.currentUser.accessrights.isOrgaTeam && !isNew) {
+      if (!currentUser.accessrights.isOrgaTeam && !isNew) {
         // prevent saving of optionen
         return mutateVeranstaltung.mutate(veranst);
       }

@@ -1,9 +1,8 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { allUsers, veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
+import { veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Drawer, Dropdown, Form, Row, Space, theme } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import { useAuth } from "@/commons/authConsts.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -18,6 +17,7 @@ import sortBy from "lodash/sortBy";
 import isEmpty from "lodash/isEmpty";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -29,28 +29,20 @@ export const TeamContext = createContext<{
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
   const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
 
   const [form] = Form.useForm();
-  async function loadUsers() {
-    const users = await allUsers();
-    setUsersAsOptions(users.map((user) => ({ label: user.name, value: user.id })));
-  }
-
   const [alle, setAlle] = useState<(Veranstaltung | Vermietung)[]>([]);
   async function loadAlle(period: "zukuenftige" | "vergangene" | "alle") {
     const result = await veranstaltungenForTeam(period);
     const verm = await vermietungenForTeam(period);
     setAlle(sortBy([...result, ...verm], "startDate"));
   }
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const { context } = useAuth();
+  const { allUsers, currentUser } = useJazzContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [pressefilter, setPressefilter] = useState<string | null>("");
+
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
 
   const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
     [index: string]: (Veranstaltung | Vermietung)[];
@@ -59,11 +51,11 @@ export default function Veranstaltungen() {
 
   document.title = "Veranstaltungen";
   useEffect(() => {
-    const accessrights = context.currentUser.accessrights;
-    if (location.pathname !== "/team" && !accessrights.isOrgaTeam) {
+    const accessrights = currentUser.accessrights;
+    if (currentUser.id && location.pathname !== "/team" && !accessrights.isOrgaTeam) {
       navigate("/team");
     }
-  }, [context, location.pathname, navigate]);
+  }, [currentUser.accessrights, currentUser.id, location.pathname, navigate]);
 
   useEffect(() => {
     if (alle.length === 0) {
@@ -183,7 +175,7 @@ export default function Veranstaltungen() {
       <Drawer
         extra={
           <>
-            {context.currentUser.accessrights.isOrgaTeam && (
+            {currentUser.accessrights.isOrgaTeam && (
               <ButtonWithIconAndLink
                 key="bigcal"
                 icon="Calendar2Range"

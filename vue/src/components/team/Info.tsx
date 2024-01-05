@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
 import { PageHeader } from "@ant-design/pro-layout";
 import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";

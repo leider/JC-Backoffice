@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { allUsers } from "@/commons/loader.ts";
 import { Col, Radio, Row } from "antd";
-import { useAuth } from "@/commons/authConsts.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -10,12 +9,13 @@ import { NewUserModal } from "@/components/users/UserModals";
 import UserPanel from "@/components/users/UserPanel";
 import { useQuery } from "@tanstack/react-query";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function Users() {
   const [newUserOpen, setNewUserOpen] = useState<boolean>(false);
   const userQuery = useQuery({ queryKey: ["users"], queryFn: allUsers });
   const [users, setUsers] = useState<User[]>([]);
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
   document.title = "Userübersicht";
@@ -70,7 +70,7 @@ export default function Users() {
             }
             title="Übersicht über die User"
             extra={
-              context.currentUser.accessrights.isSuperuser && (
+              currentUser.accessrights.isSuperuser && (
                 <ButtonWithIcon key="usernew" icon="PersonPlus" text="Neuer Benutzer" type="default" onClick={() => setNewUserOpen(true)} />
               )
             }
@@ -80,7 +80,7 @@ export default function Users() {
       <Row gutter={8}>
         {selectedUsers.map((user) => (
           <Col key={user.id} xs={24} sm={12} md={8} xxl={6}>
-            <UserPanel user={user} currentUser={context.currentUser || new User({})} loadUsers={loadUsers} />
+            <UserPanel user={user} currentUser={currentUser || new User({})} loadUsers={loadUsers} />
           </Col>
         ))}
       </Row>

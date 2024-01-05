@@ -3,7 +3,7 @@ import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import isNil from "lodash/isNil";
-import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 
 export default function CollapsibleForVeranstaltung({
   amount,

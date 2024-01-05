@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/JazzContent.tsx";
 import { App, ConfigProvider, theme } from "antd";
-import { createTokenBasedStyles, customColors } from "jc-vue/src/components/createTokenBasedStyles";
-import "jc-vue/src/JC-styles.css";
+import { createTokenBasedStyles, customColors } from "../../vue/src/app/createTokenBasedStyles.ts";
+import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 
 const queryClient = new QueryClient({

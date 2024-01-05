@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { App, Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";

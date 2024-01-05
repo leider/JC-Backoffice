@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
 import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils";
-import { useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 

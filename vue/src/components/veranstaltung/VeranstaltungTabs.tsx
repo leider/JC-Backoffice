@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Form, Tabs, TabsProps } from "antd";
-import { buttonType, useColorsAndIconsForSections } from "@/components/colorsIconsForSections";
+import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
@@ -10,9 +10,9 @@ import TabKasse from "@/components/veranstaltung/kasse/TabKasse";
 import TabHotel from "@/components/veranstaltung/hotel/TabHotel";
 import TabPresse from "@/components/veranstaltung/presse/TabPresse";
 import { useSearchParams } from "react-router-dom";
-import { useAuth } from "@/commons/authConsts.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import TabGaeste from "@/components/veranstaltung/gaeste/TabGaeste.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VeranstaltungTabs() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -22,8 +22,8 @@ export default function VeranstaltungTabs() {
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
-  const { context } = useAuth();
-  const onlyKasse = !context.currentUser.accessrights.isOrgaTeam;
+  const { currentUser } = useJazzContext();
+  const onlyKasse = useMemo(() => !currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
   const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
     form,

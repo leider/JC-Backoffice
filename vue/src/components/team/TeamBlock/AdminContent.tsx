@@ -1,7 +1,6 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
 import { Col, Collapse, Form, notification, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/commons/authConsts.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -14,6 +13,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPanel.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface ContentProps {
   veranstaltungOderVermietung: Veranstaltung | Vermietung;
@@ -25,7 +25,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const teamContext = useContext(TeamContext);
@@ -85,7 +85,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   function saveForm() {
     const createLogWithDiff = (diff: string): ChangelistItem => ({
       zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-      bearbeiter: context.currentUser.id || "",
+      bearbeiter: currentUser.id || "",
       diff,
     });
     form.validateFields().then(async () => {

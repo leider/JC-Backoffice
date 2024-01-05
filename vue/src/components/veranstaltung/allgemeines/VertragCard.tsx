@@ -1,24 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/veranstaltung/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import { useAuth } from "@/commons/authConsts.ts";
 import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/components/veranstaltung/Uploader";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VertragCard() {
   const veranstContext = useContext(VeranstaltungContext);
   const form = veranstContext!.form;
 
-  const { context } = useAuth();
+  const { currentUser } = useJazzContext();
 
-  const [isBookingTeam, setIsBookingTeam] = useState<boolean>(false);
-  useEffect(() => {
-    setIsBookingTeam(context.currentUser.accessrights.isBookingTeam);
-  }, [context]);
+  const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Vertrag">

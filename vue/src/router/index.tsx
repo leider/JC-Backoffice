@@ -1,9 +1,9 @@
 import { Navigate, RouteObject } from "react-router-dom";
-import JazzclubApp from "../JazzclubApp";
+import JazzclubApp from "../app/JazzclubApp.tsx";
 import * as React from "react";
 import Team from "@/components/team/Team";
 import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp";
-import Login from "@/components/Login";
+import Login from "@/app/Login.tsx";
 import Optionen from "@/components/options/Optionen";
 import Info from "@/components/team/Info";
 import Preview from "@/components/veranstaltung/preview/Preview.tsx";
