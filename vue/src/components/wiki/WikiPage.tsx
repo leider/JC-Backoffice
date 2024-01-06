@@ -10,6 +10,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper";
 
 export default function WikiPage() {
   const { subdir, page } = useParams();
@@ -124,17 +125,19 @@ export default function WikiPage() {
           <SaveButton key="save" disabled={!dirty} />,
         ]}
       />
-      <Row gutter={12}>
-        <Col span={24}>
-          {isEdit ? (
-            <Form.Item name={["content"]}>
-              <SimpleMdeReact autoFocus options={editorOptions} />
-            </Form.Item>
-          ) : (
-            <div dangerouslySetInnerHTML={{ __html: rendered }} />
-          )}
-        </Col>
-      </Row>
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            {isEdit ? (
+              <Form.Item name={["content"]}>
+                <SimpleMdeReact autoFocus options={editorOptions} />
+              </Form.Item>
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: rendered }} />
+            )}
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

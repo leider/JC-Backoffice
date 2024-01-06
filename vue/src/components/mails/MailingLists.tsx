@@ -10,6 +10,7 @@ import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCol
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function MailingLists() {
   const usersQuery = useQuery({
@@ -105,11 +106,13 @@ export default function MailingLists() {
       layout="vertical"
     >
       <PageHeader title="Mailinglisten" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allLists"]} />
-        </Col>
-      </Row>
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allLists"]} />
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

@@ -9,6 +9,7 @@ import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -101,11 +102,13 @@ export default function MailRules() {
       layout="vertical"
     >
       <PageHeader title="Mailing Regeln" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allRules"]} />
-        </Col>
-      </Row>
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allRules"]} />
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

@@ -7,8 +7,9 @@ import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModal
 import { deleteUser } from "@/commons/loader.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import { ButtonInUsers } from "@/components/users/ButtonInUsers.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export default function UserPanel({ user, currentUser, loadUsers }: { user: User; currentUser: User; loadUsers: () => void }) {
+export default function UserPanel({ user, currentUser }: { user: User; currentUser: User }) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [icon, setIcon] = useState<keyof typeof icons>("PersonBadge");
   const [editUserOpen, setEditUserOpen] = useState<boolean>(false);
@@ -16,6 +17,14 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
   const [self, setSelf] = useState<boolean>(false);
   const [canEdit, setCanEdit] = useState<boolean>(false);
   const { modal } = App.useApp();
+  const queryClient = useQueryClient();
+
+  const mutateDeletion = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
 
   useEffect(() => {
     setCanEdit(currentUser.accessrights.canEditUser(user.id));
@@ -67,10 +76,7 @@ export default function UserPanel({ user, currentUser, loadUsers }: { user: User
                         type: "confirm",
                         title: "User löschen",
                         content: `Bist Du sicher, dass Du den User "${user.name}" löschen möchtest?`,
-                        onOk: async () => {
-                          await deleteUser(user);
-                          loadUsers();
-                        },
+                        onOk: () => mutateDeletion.mutate(user),
                       });
                     }}
                   />

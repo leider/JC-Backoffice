@@ -2,13 +2,14 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { uploadBeleg } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, DatePicker, Form, Row, Upload, UploadFile, UploadProps } from "antd";
+import { Col, DatePicker, Form, Row, Space, Upload, UploadFile, UploadProps } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RcFile } from "antd/es/upload";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function Belege() {
   const [dirty, setDirty] = useState<boolean>(false);
@@ -97,28 +98,25 @@ export default function Belege() {
           />,
         ]}
       />
-      <Row gutter={12}>
-        <Col span={12}>
-          <Form.Item label={<b>Datum des Belegs:</b>} initialValue={dayjs()} name="datum">
-            <DatePicker allowClear={false} format={"ddd DD.MM.YYYY"} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Row>
-            <Upload {...uploadprops}>
-              <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" />
-            </Upload>
-          </Row>
-        </Col>
-      </Row>
-
-      <Row gutter={12}>
-        <Col span={24}>
-          <Form.Item label={<b>Kommentar:</b>} name="kommentar" required>
-            <TextArea rows={10} />
-          </Form.Item>
-        </Col>
-      </Row>
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            <Space>
+              <Form.Item label={<b>Datum des Belegs:</b>} initialValue={dayjs()} name="datum">
+                <DatePicker allowClear={false} format={"ddd DD.MM.YYYY"} />
+              </Form.Item>
+              <Upload {...uploadprops}>
+                <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" />
+              </Upload>
+            </Space>
+          </Col>
+          <Col span={24}>
+            <Form.Item label={<b>Kommentar:</b>} name="kommentar" required>
+              <TextArea rows={10} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

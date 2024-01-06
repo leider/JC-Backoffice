@@ -20,6 +20,7 @@ import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -157,53 +158,55 @@ export default function SendMail() {
       onFinish={send}
       layout="vertical"
     >
-      <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]}></PageHeader>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={12}>
-          <MultiSelectWithTags
-            name="selectedVeranstaltungen"
-            label="Veranstaltungen"
-            options={veranstaltungenDescriptions}
-            onChange={veranstaltungChanged}
-          />
-        </Col>
-        <Col span={12}>
-          <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} onChange={rulesChanged} />
-        </Col>
-      </Row>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={12}>
-          <MultiSelectWithTags
-            name="selectedLists"
-            label="Gruppen / Mailinglisten"
-            options={mailingListsDescriptions}
-            onChange={listsChanged}
-          />
-        </Col>
-        <Col span={12}>
-          <UserMultiSelect name="selectedUsers" label="Users" usersAsOptions={usersAsOptions} onChange={usersChanged} />
-        </Col>
-      </Row>
-      <Row gutter={12} style={{ marginBottom: 24, marginLeft: 0, marginRight: 0 }}>
-        <Col span={24}>
-          <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
-          {effectiveUsers.map((u) => (
-            <Tag key={u.email} color={"purple"}>
-              <b>{u.name}</b> ({u.email})
-            </Tag>
-          ))}
-        </Col>
-      </Row>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={24}>
-          <TextField name="subject" label="Subject" required />
-        </Col>
-        <Col span={24}>
-          <Form.Item label={<b>Anschreiben:</b>} name="markdown" required>
-            <SimpleMdeReact autoFocus options={editorOptions} />
-          </Form.Item>
-        </Col>
-      </Row>
+      <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={12}>
+            <MultiSelectWithTags
+              name="selectedVeranstaltungen"
+              label="Veranstaltungen"
+              options={veranstaltungenDescriptions}
+              onChange={veranstaltungChanged}
+            />
+          </Col>
+          <Col span={12}>
+            <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} onChange={rulesChanged} />
+          </Col>
+        </Row>
+        <Row gutter={12}>
+          <Col span={12}>
+            <MultiSelectWithTags
+              name="selectedLists"
+              label="Gruppen / Mailinglisten"
+              options={mailingListsDescriptions}
+              onChange={listsChanged}
+            />
+          </Col>
+          <Col span={12}>
+            <UserMultiSelect name="selectedUsers" label="Users" usersAsOptions={usersAsOptions} onChange={usersChanged} />
+          </Col>
+        </Row>
+        <Row gutter={12} style={{ marginBottom: 24 }}>
+          <Col span={24}>
+            <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
+            {effectiveUsers.map((u) => (
+              <Tag key={u.email} color={"purple"}>
+                <b>{u.name}</b> ({u.email})
+              </Tag>
+            ))}
+          </Col>
+        </Row>
+        <Row gutter={12}>
+          <Col span={24}>
+            <TextField name="subject" label="Subject" required />
+          </Col>
+          <Col span={24}>
+            <Form.Item label={<b>Anschreiben:</b>} name="markdown" required>
+              <SimpleMdeReact autoFocus options={editorOptions} />
+            </Form.Item>
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

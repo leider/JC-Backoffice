@@ -3,6 +3,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function Kassenbericht() {
   const [monate, setMonate] = useState<DatumUhrzeit[]>([]);
@@ -20,17 +21,21 @@ export default function Kassenbericht() {
   }, []);
 
   return (
-    <Row gutter={12}>
-      <Col span={24}>
-        <PageHeader title="Kassenberichte" />
-        {monate.map((monat) => (
-          <p key={monat.monatJahrKompakt}>
-            <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank">
-              Kassenbericht {monat.monatJahrKompakt}
-            </a>
-          </p>
-        ))}
-      </Col>
-    </Row>
+    <>
+      <PageHeader title="Kassenberichte" />
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            {monate.map((monat) => (
+              <p key={monat.monatJahrKompakt}>
+                <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank">
+                  Kassenbericht {monat.monatJahrKompakt}
+                </a>
+              </p>
+            ))}
+          </Col>
+        </Row>
+      </RowWrapper>
+    </>
   );
 }

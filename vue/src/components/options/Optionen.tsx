@@ -104,8 +104,10 @@ export default function Optionen() {
         <>
           <Row gutter={12}>
             <Col xs={24} lg={12}>
-              <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen" noTopBorder>
+              <CollapsibleForVeranstaltung suffix="allgemeines" label="Typen" noTopBorder>
                 <InlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
+              </CollapsibleForVeranstaltung>
+              <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen">
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
                 <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
               </CollapsibleForVeranstaltung>

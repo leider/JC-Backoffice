@@ -16,6 +16,7 @@ import HeftCalendar from "@/components/programmheft/HeftCalendar";
 import groupBy from "lodash/groupBy";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function Programmheft() {
   const { year, month } = useParams();
@@ -146,71 +147,73 @@ export default function Programmheft() {
           <SaveButton key="save" disabled={!dirty} />,
         ]}
       />
-      <Row gutter={12}>
-        <Col xs={24} lg={16}>
-          <Row gutter={12}>
-            <Col span={12} style={{ zIndex: 0 }}>
-              <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
-            </Col>
-            <Col span={12} style={{ zIndex: 0 }}>
-              <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={24}>
-              <h4>Farben Hilfe</h4>
-              <p>
-                Du kannst entweder eine{" "}
-                <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">
-                  Farbe mit Namen eintragen
-                </a>{" "}
-                oder einen HEX-Code als "#RGB" oder "#RRGGBB".
-              </p>
-            </Col>
-          </Row>
-        </Col>
-        <Col xs={24} lg={8}>
-          <Form.Item name={"text"}>
-            <SimpleMdeReact autoFocus options={editorOptions} />
-          </Form.Item>
-        </Col>
-      </Row>
-      {unbestaetigte.length > 0 && <h2>Es gibt noch unbestätigte Veranstaltungen</h2>}
-      {unbestaetigte.map((veranst) => (
-        <Link
-          key={veranst.id}
-          to={{
-            pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
-            search: "page=allgemeines",
-          }}
-        >
-          {veranst.kopf.titelMitPrefix}
-        </Link>
-      ))}
-      {monate.map((monat) => (
-        <div key={monat}>
-          <Row gutter={12}>
-            <Col span={24}>
-              <Collapse.Panel
-                key={monat}
-                header={
-                  <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
-                    {monat}
-                  </Typography.Title>
-                }
-                className="monat-header"
-              ></Collapse.Panel>
-            </Col>
-          </Row>
-          <Row gutter={[8, 8]}>
-            {veranstaltungenNachMonat[monat].map((veranst) => (
-              <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
-                <PressePreview veranstVermiet={veranst} />
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col xs={24} lg={16}>
+            <Row gutter={12}>
+              <Col span={12} style={{ zIndex: 0 }}>
+                <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
               </Col>
-            ))}
-          </Row>
-        </div>
-      ))}
+              <Col span={12} style={{ zIndex: 0 }}>
+                <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
+              </Col>
+            </Row>
+            <Row gutter={12}>
+              <Col span={24}>
+                <h4>Farben Hilfe</h4>
+                <p>
+                  Du kannst entweder eine{" "}
+                  <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">
+                    Farbe mit Namen eintragen
+                  </a>{" "}
+                  oder einen HEX-Code als "#RGB" oder "#RRGGBB".
+                </p>
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={24} lg={8}>
+            <Form.Item name={"text"}>
+              <SimpleMdeReact autoFocus options={editorOptions} />
+            </Form.Item>
+          </Col>
+        </Row>
+        {unbestaetigte.length > 0 && <h2>Es gibt noch unbestätigte Veranstaltungen</h2>}
+        {unbestaetigte.map((veranst) => (
+          <Link
+            key={veranst.id}
+            to={{
+              pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
+              search: "page=allgemeines",
+            }}
+          >
+            {veranst.kopf.titelMitPrefix}
+          </Link>
+        ))}
+        {monate.map((monat) => (
+          <div key={monat}>
+            <Row gutter={12}>
+              <Col span={24}>
+                <Collapse.Panel
+                  key={monat}
+                  header={
+                    <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+                      {monat}
+                    </Typography.Title>
+                  }
+                  className="monat-header"
+                ></Collapse.Panel>
+              </Col>
+            </Row>
+            <Row gutter={[8, 8]}>
+              {veranstaltungenNachMonat[monat].map((veranst) => (
+                <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
+                  <PressePreview veranstVermiet={veranst} />
+                </Col>
+              ))}
+            </Row>
+          </div>
+        ))}
+      </RowWrapper>
     </Form>
   );
 }

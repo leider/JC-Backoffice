@@ -10,6 +10,7 @@ import Orte from "jc-shared/optionen/orte";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -101,12 +102,14 @@ export default function KalenderPage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Kalender" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
-      <Row gutter={12} style={{ marginLeft: 0, marginRight: 0 }}>
-        <Col span={24}>
-          <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["icals"]} />
-        </Col>
-      </Row>
+      <PageHeader title="Kalender" extra={[<SaveButton key="save" disabled={!dirty} />]} />
+      <RowWrapper>
+        <Row gutter={12}>
+          <Col span={24}>
+            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["icals"]} />
+          </Col>
+        </Row>
+      </RowWrapper>
     </Form>
   );
 }

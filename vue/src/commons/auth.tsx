@@ -1,8 +1,8 @@
 import axios from "axios";
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
-import { AuthContext, LoginState } from "./authConsts";
+import { LoginState } from "./authConsts";
 import { useLocation, useNavigate } from "react-router-dom";
 
 class AuthApi {
@@ -100,9 +100,9 @@ export function useProvideAuth(): IUseProvideAuth {
 
   async function logout() {
     try {
+      setLoginState(LoginState.LOGGED_OUT);
       delete axios.defaults.headers.Authorization;
       await authApi.logoutManually();
-      setLoginState(LoginState.LOGGED_OUT);
     } catch (_) {
       // so what?
     } finally {
@@ -123,7 +123,6 @@ export function useProvideAuth(): IUseProvideAuth {
   }
 
   if (loginState === LoginState.UNKNOWN) {
-    //setLoginState(LoginState.PENDING);
     checkLoginStateInitially();
   }
 
