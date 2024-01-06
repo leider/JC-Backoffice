@@ -7,7 +7,6 @@ import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
-import { AuthProvider } from "@/commons/auth.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +18,7 @@ const queryClient = new QueryClient({
 
 function JazzclubApp() {
   useUpdateApp();
+
   const { useToken } = theme;
   const { token } = useToken();
 
@@ -42,9 +42,7 @@ function JazzclubApp() {
         }}
       >
         <App>
-          <AuthProvider>
-            <JazzContent />
-          </AuthProvider>
+          <JazzContent />
         </App>
       </ConfigProvider>
     </QueryClientProvider>

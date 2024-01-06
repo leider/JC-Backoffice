@@ -46,6 +46,8 @@ export default function (app: express.Express, forDev?: boolean): void {
   const authenticator = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticator, restApp);
   app.use("/ridersrest/", ridersrest);
-  app.use(handle404);
-  app.use(handle500);
+  if (!forDev) {
+    app.use(handle404);
+    app.use(handle500);
+  }
 }

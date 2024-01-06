@@ -44,7 +44,7 @@ export interface IUseProvideAuth {
  * Provider hook that creates auth object and handles state
  * @return {*}  {IUseProvideAuth}
  */
-function useProvideAuth(): IUseProvideAuth {
+export function useProvideAuth(): IUseProvideAuth {
   const [loginState, setLoginState] = useState(LoginState.UNKNOWN);
 
   const navigate = useNavigate();
@@ -133,12 +133,3 @@ function useProvideAuth(): IUseProvideAuth {
     logout,
   };
 }
-
-/**
- * Provider component that wraps the app and makes an auth object
- * available to any child component that calls useAuth()
- */
-export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-};

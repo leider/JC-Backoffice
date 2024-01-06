@@ -2,7 +2,8 @@ import { createContext, useContext, useMemo } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, wikisubdirs } from "@/commons/loader.ts";
-import { LoginState, useAuth } from "@/commons/authConsts.ts";
+import { LoginState } from "@/commons/authConsts.ts";
+import { IUseProvideAuth } from "@/commons/auth.tsx";
 
 const emptyContext = { currentUser: new User({}), wikisubdirs: [], allUsers: [] };
 
@@ -13,8 +14,8 @@ type SharedGlobals = {
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
-export function useCreateJazzContext(): SharedGlobals {
-  const { loginState } = useAuth();
+export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
+  const { loginState } = auth;
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
   const [usersQuery, wikidirsQuery, currentQuery] = useQueries({
     queries: [
