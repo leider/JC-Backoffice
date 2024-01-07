@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
 import { PageHeader } from "@ant-design/pro-layout";
 import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Info() {
   const { monatJahr } = useParams(); // als yymm
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("pressetexte");
-  const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
 
-  useEffect(() => {
-    async function load() {
-      if (monatJahr) {
-        const start = DatumUhrzeit.forYYMM(monatJahr).yyyyMM;
-        const end = DatumUhrzeit.forYYMM(monatJahr).plus({ monate: 1 }).yyyyMM;
-        const res = await veranstaltungenBetweenYYYYMM(start, end);
-        setVeranstaltungen(res);
-      }
-    }
-    load();
+  const start = useMemo(() => {
+    return DatumUhrzeit.forYYMM(monatJahr || "");
   }, [monatJahr]);
+
+  const end = useMemo(() => {
+    return DatumUhrzeit.forYYMM(monatJahr || "").plus({ monate: 1 });
+  }, [monatJahr]);
+
+  const { data } = useQuery({
+    queryKey: ["veranstaltung", `${start.yyyyMM}`],
+    queryFn: () => veranstaltungenBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
+  });
+
+  const veranstaltungen = useMemo(() => data ?? [], [data]);
 
   useEffect(
     () => {
@@ -40,10 +42,10 @@ export default function Info() {
     [search],
   );
 
-  const { color } = useColorsAndIconsForSections("allgemeines");
+  const { color } = colorsAndIconsForSections;
 
   function TabLabel({ title, type }: { type: string; title: string }) {
-    const farbe = color();
+    const farbe = color("allgemeines");
     const active = activePage === type;
     return (
       <b

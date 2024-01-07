@@ -5,7 +5,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { optionen as optionenRestCall, veranstaltungForUrl } from "@/commons/loader.ts";
+import { veranstaltungForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import groupBy from "lodash/groupBy";
@@ -14,7 +14,7 @@ import KasseInPreview from "@/components/veranstaltung/preview/KasseInPreview.ts
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
 import GaesteInPreview from "@/components/veranstaltung/preview/GaesteInPreview.tsx";
-import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
@@ -24,19 +24,19 @@ export default function Preview() {
     queryKey: ["veranstaltung", url],
     queryFn: () => veranstaltungForUrl(url || ""),
   });
-  const { currentUser } = useJazzContext();
-
-  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
+  const { currentUser, optionen } = useJazzContext();
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
   const [typeColor, setTypeColor] = useState<string | undefined>("");
 
+  document.title = veranstaltung.kopf.titelMitPrefix;
+
   useEffect(() => {
-    if (opts.data && veranstaltung) {
-      const typByName = groupBy(opts.data?.typenPlus || [], "name");
+    if (optionen && veranstaltung) {
+      const typByName = groupBy(optionen.typenPlus || [], "name");
       setTypeColor(typByName[veranstaltung.kopf.eventTyp]?.[0].color || "#6c757d");
     }
-  }, [opts.data, veranstaltung]);
+  }, [optionen, veranstaltung]);
 
   useEffect(() => {
     if (veranst.data) {
@@ -46,12 +46,12 @@ export default function Preview() {
 
   function EditButton() {
     const type: buttonType = "allgemeines";
-    const { color, icon } = useColorsAndIconsForSections(type);
+    const { color, icon } = colorsAndIconsForSections;
     return (
       <ButtonWithIconAndLink
-        icon={icon()}
+        icon={icon(type)}
         to={`/veranstaltung/${encodeURIComponent(url ?? "")}?page=${type}`}
-        color={color()}
+        color={color(type)}
         text="Bearbeiten..."
       />
     );

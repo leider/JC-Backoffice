@@ -9,14 +9,15 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface EinnahmenCardParams {
   onChange: (sum: number) => void;
 }
 export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen } = useJazzContext();
   const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(

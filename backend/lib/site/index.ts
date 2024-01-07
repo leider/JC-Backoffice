@@ -118,10 +118,6 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  const oldId = req.cookies["refresh-token"] as string;
-  if (!oldId) {
-    return res.sendStatus(401);
-  }
   await refreshstore.removeExpired();
   res.cookie("refresh-token", "", {
     maxAge: 0,

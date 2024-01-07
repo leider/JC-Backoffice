@@ -3,7 +3,6 @@ import axios, { AxiosRequestConfig, Method } from "axios";
 
 import User from "jc-shared/user/user";
 import Kalender from "jc-shared/programmheft/kalender";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Orte from "jc-shared/optionen/orte";
 import Message from "jc-shared/mail/message";
@@ -37,8 +36,6 @@ async function standardFetch(params: FetchParams) {
     const res = await axios(options);
     return res.data;
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log("standardFetch", e);
     /* empty */
   }
 }
@@ -67,11 +64,6 @@ export async function uploadBeleg(data: FormData) {
 
 function handleVeranstaltungen(result?: any[]): Veranstaltung[] {
   return result?.map((each: any) => new Veranstaltung(each)) || [];
-}
-
-export async function veranstaltungenBetween(start: DatumUhrzeit, end: DatumUhrzeit) {
-  const result = await getForType("json", `/rest/veranstaltungen/${start.yyyyMM}/${end.yyyyMM}`);
-  return handleVeranstaltungen(result);
 }
 
 export async function veranstaltungenBetweenYYYYMM(start: string, end: string) {
@@ -283,15 +275,6 @@ export async function optionen(): Promise<OptionValues> {
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/optionen",
-    data: optionen.toJSON(),
-    contentType: "json",
-  });
-}
-
-export async function saveOptionenQuiet(optionen: OptionValues) {
   return standardFetch({
     method: "POST",
     url: "/rest/optionen",

@@ -56,7 +56,7 @@ export function AddRemoveStaffButton({
   const mutate = useMutation({
     mutationFn: async (add: boolean) => addOrRemoveUserToSection(veranstaltung, sectionName, add),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
       staffUpdated(new Veranstaltung(data));
     },
   });

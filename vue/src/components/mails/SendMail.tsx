@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, sendMail, veranstaltungenForTeam } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Form, Row, Tag } from "antd";
+import { App, Col, Form, Row, Tag } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User from "jc-shared/user/user";
@@ -18,9 +18,9 @@ import Message from "jc-shared/mail/message";
 import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
-import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -32,6 +32,8 @@ export default function SendMail() {
     }),
     [],
   );
+
+  const navigate = useNavigate();
 
   const mailRuleQuery = useQuery({
     queryKey: ["mailRules"],
@@ -60,8 +62,7 @@ export default function SendMail() {
   const [effectiveUsers, setEffectiveUsers] = useState<{ name: string; email: string }[]>([]);
 
   const [dirty, setDirty] = useState<boolean>(false);
-  useDirtyBlocker(dirty);
-
+  const { notification } = App.useApp();
   document.title = "Mail Senden";
 
   useEffect(() => {
@@ -143,6 +144,13 @@ export default function SendMail() {
       result.setBcc(addresses);
       await sendMail(result);
       initializeForm();
+      notification.success({
+        message: "Erfolgreich",
+        description: "Deine Mail wurde gesendet.",
+        placement: "topLeft",
+        duration: 3,
+      });
+      navigate("/");
     });
   }
 

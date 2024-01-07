@@ -1,13 +1,12 @@
 import { Col, Row } from "antd";
-import React, { useContext } from "react";
+import React from "react";
 import HotelCard from "@/components/veranstaltung/hotel/HotelCard";
 import KontaktCard from "@/components/veranstaltung/allgemeines/KontaktCard";
 import TransportCard from "@/components/veranstaltung/hotel/TransportCard";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TabHotel() {
-  const veranstContext = useContext(VeranstaltungContext);
-  const optionen = veranstContext!.optionen;
+  const { optionen } = useJazzContext();
   return (
     <Row gutter={12}>
       <Col xs={24} lg={12}>

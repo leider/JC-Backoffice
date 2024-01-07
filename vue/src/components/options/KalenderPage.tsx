@@ -37,10 +37,11 @@ export default function KalenderPage() {
     mutationFn: saveKalender,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ferienIcals"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Kalender wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });

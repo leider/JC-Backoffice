@@ -58,12 +58,13 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
     mutationFn: saveVeranstaltung,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["veranstaltung", veranstaltungOderVermietung.url],
+        queryKey: ["veranstaltung"],
       });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Veranstaltung wurde gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });
@@ -72,12 +73,13 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
     mutationFn: saveVermietung,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["vermietung", veranstaltungOderVermietung.url],
+        queryKey: ["vermietung"],
       });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Vermietung wurde gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });

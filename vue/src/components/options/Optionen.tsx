@@ -1,22 +1,22 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { optionen as optionenRestCall, saveOptionen } from "@/commons/loader.ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { App, Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function Optionen() {
-  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
-  const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
+  const { optionen } = useJazzContext();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
@@ -25,21 +25,16 @@ export default function Optionen() {
 
   document.title = "Optionen";
 
-  useEffect(() => {
-    if (opts.data) {
-      setOptionen(opts.data);
-    }
-  }, [opts.data]);
-
   const { notification } = App.useApp();
   const mutateOptionen = useMutation({
     mutationFn: saveOptionen,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["optionen"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Optionen wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });
@@ -59,7 +54,7 @@ export default function Optionen() {
   const [activePage, setActivePage] = useState<string>("optionen");
 
   function TabLabel({ title, type }: { type: string; title: string }) {
-    const { color } = useColorsAndIconsForSections();
+    const { color } = colorsAndIconsForSections;
     const active = activePage === type;
 
     const farbe = color("allgemeines");

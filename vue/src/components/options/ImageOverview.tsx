@@ -39,10 +39,11 @@ export default function ImageOverview() {
     mutationFn: saveImagenames,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["imagenames"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Änderungen wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });

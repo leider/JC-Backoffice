@@ -1,7 +1,7 @@
 import { App, Button, ConfigProvider, Dropdown, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
@@ -11,6 +11,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -65,7 +66,6 @@ export function NewButtons() {
 export function ExportButtons({ disabled }: ButtonProps) {
   const context = useContext(VeranstaltungContext);
   const form = context!.form;
-  const veranstaltung = useMemo(() => form.getFieldsValue(true), [form]);
 
   const items = [
     { key: "ExcelKalk", label: "Kalkulation (Excel)", icon: <IconForSmallBlock iconName="FileEarmarkSpreadsheet" /> },
@@ -74,6 +74,7 @@ export function ExportButtons({ disabled }: ButtonProps) {
   ];
 
   function onMenuClick(e: { key: string }): void {
+    const veranstaltung = form.getFieldsValue(true);
     if (e.key === "ExcelKalk") {
       asExcelKalk([new Veranstaltung(veranstaltung)]);
     }
@@ -112,14 +113,29 @@ export function ExportExcelVermietungButton({ disabled }: ButtonProps) {
 export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id: string; isVermietung?: boolean }) {
   const { modal } = App.useApp();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const deleteVeranstaltung = useMutation({
+    mutationFn: deleteVeranstaltungWithId,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+      navigate("/");
+    },
+  });
+  const deleteVermietung = useMutation({
+    mutationFn: deleteVermietungWithId,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vermietung"] });
+      navigate("/");
+    },
+  });
   function callback() {
     modal.confirm({
       type: "confirm",
       title: `${isVermietung ? "Vermietung" : "Veranstaltung"} löschen`,
       content: `Bist Du sicher, dass Du die ${isVermietung ? "Vermietung" : "Veranstaltung"} "${document.title}" löschen möchtest?`,
-      onOk: async () => {
-        (await isVermietung) ? deleteVermietungWithId(id) : deleteVeranstaltungWithId(id);
-        navigate("/");
+      onOk: () => {
+        isVermietung ? deleteVermietung.mutate(id) : deleteVeranstaltung.mutate(id);
       },
     });
   }

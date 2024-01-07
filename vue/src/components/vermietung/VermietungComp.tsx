@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { optionen as optionenRestCall, saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
+import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
@@ -22,21 +22,14 @@ export default function VermietungComp() {
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
-  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
 
   const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung({ id: "unknown" }));
-  const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
 
   useEffect(() => {
     if (vermiet.data) {
       setVermietung(vermiet.data);
     }
   }, [vermiet.data]);
-  useEffect(() => {
-    if (opts.data) {
-      setOptionen(opts.data);
-    }
-  }, [opts.data]);
 
   const queryClient = useQueryClient();
 
@@ -49,7 +42,7 @@ export default function VermietungComp() {
       return saveVermietung(vermiet);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["vermietung", url] });
+      queryClient.invalidateQueries({ queryKey: ["vermietung"] });
       navigate(
         {
           pathname: `/vermietung/${data.url}`,
@@ -57,10 +50,11 @@ export default function VermietungComp() {
         },
         { replace: true },
       );
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Vermietung wurde gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });
@@ -71,7 +65,7 @@ export default function VermietungComp() {
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty, true);
 
-  const { currentUser } = useJazzContext();
+  const { currentUser, optionen } = useJazzContext();
   const navigate = useNavigate();
   function initializeForm() {
     const deepCopy = toFormObject(vermietung);
@@ -117,7 +111,7 @@ export default function VermietungComp() {
           setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
         }}
         onFinishFailed={() => {
-          notification.open({
+          notification.error({
             type: "error",
             message: "Fehler",
             description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",

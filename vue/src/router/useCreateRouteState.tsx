@@ -165,15 +165,21 @@ const orgaTeamPattern = [
   "/sendmail",
 ].join("|");
 
+const kassePattern = ["veranstaltung/:url"].join("|");
+
 const superuserPattern = ["/imageoverview"].join("|");
 export function useCreateRouteState(): RouteState {
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
   const routes = useMemo(() => {
     const isOrgaTeam = currentUser.id ? currentUser.accessrights.isOrgaTeam : true;
     const isSuperuser = currentUser.id ? currentUser.accessrights.isSuperuser : true;
+    const isKasse = currentUser.id ? currentUser.accessrights.isAbendkasse : true;
     const newChildren =
       allRoutes[0].children?.filter((route) => {
         const currentPath = route.path;
+        if (new RegExp(kassePattern).test(currentPath || "")) {
+          return isKasse;
+        }
         if (new RegExp(orgaTeamPattern).test(currentPath || "")) {
           return isOrgaTeam;
         }

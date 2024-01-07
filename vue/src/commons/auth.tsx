@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import * as jose from "jose";
 import { LoginState } from "./authConsts";
@@ -9,8 +9,9 @@ class AuthApi {
   loginPost(name: string, pass: string) {
     return axios.post("/login", { name, pass });
   }
-  refreshTokenPost() {
-    return axios.post("/refreshToken");
+  async refreshTokenPost() {
+    const result = await axios.post("/refreshToken");
+    return result.data.token;
   }
   logoutManually() {
     return axios.post("/logout");
@@ -52,53 +53,58 @@ export function useProvideAuth(): IUseProvideAuth {
 
   const queryClient = useQueryClient();
 
-  function setAuthHeader(token: string) {
-    axios.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-
-  async function scheduleTokenRefresh(inMs: number) {
+  const scheduleTokenRefresh = async (inMs: number) => {
     setTimeout(
       async () => {
         try {
-          const newToken = await authApi.refreshTokenPost();
-          const decoded = jose.decodeJwt<{ exp: number }>(newToken.data.token);
-          setAuthHeader(newToken.data.token);
-          scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
+          const token = await authApi.refreshTokenPost();
+          setAuthHeader(token);
         } catch (_) {
-          // eslint-disable-next-line no-console
-          console.log("LOGGIN OUT", _);
           logout();
         }
       },
       // request new token one minute before it expires
       inMs - 60_000,
     );
-  }
+  };
 
-  function setTokenAndLoginState(info: string) {
-    const decoded = jose.decodeJwt<{ exp: number }>(info);
-    setAuthHeader(info);
-    setLoginState(LoginState.LOGGED_IN);
-    scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
-  }
+  const setAuthHeader = useCallback(
+    (token: string) => {
+      const decoded = jose.decodeJwt<{ exp: number }>(token);
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+      scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  const setTokenForAuthHeader = useCallback(
+    async (token: string) => {
+      await queryClient.invalidateQueries();
+      setAuthHeader(token);
+      setLoginState(LoginState.LOGGED_IN);
+    },
+    [queryClient, setAuthHeader],
+  );
 
   async function login(username: string, password: string) {
     setLoginState(LoginState.PENDING);
     try {
       const token = await authApi.loginPost(username, password);
-      setTokenAndLoginState(token.data.token);
-      await queryClient.invalidateQueries();
+      setTokenForAuthHeader(token.data.token);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.response?.status === 401) {
+      if (error?.response?.status === 401) {
+        if (!location.pathname.startsWith("/login")) {
+          window.location.reload();
+        }
         setLoginState(LoginState.CREDENTIALS_INVALID);
       } else {
-        setLoginState(LoginState.LOGGED_OUT);
+        logout();
       }
     }
   }
 
-  async function logout() {
+  const logout = useCallback(async () => {
     try {
       setLoginState(LoginState.LOGGED_OUT);
       delete axios.defaults.headers.Authorization;
@@ -107,24 +113,25 @@ export function useProvideAuth(): IUseProvideAuth {
       // so what?
     } finally {
       queryClient.invalidateQueries();
-    }
-  }
-
-  async function checkLoginStateInitially() {
-    try {
-      const newToken = await authApi.refreshTokenPost();
-      setTokenAndLoginState(newToken.data.token);
-    } catch (e) {
-      // some token cookies are non existent in the backend (already deleted -> false positive)
       if (location.pathname !== "/login") {
-        return navigate({ pathname: "/login", search: encodeURIComponent("/") });
+        navigate({ pathname: "/login", search: encodeURIComponent("/") });
       }
     }
-  }
+  }, [location.pathname, navigate, queryClient]);
 
-  if (loginState === LoginState.UNKNOWN) {
-    checkLoginStateInitially();
-  }
+  useEffect(() => {
+    async function doit() {
+      if (loginState === LoginState.UNKNOWN) {
+        try {
+          const token = await authApi.refreshTokenPost();
+          setTokenForAuthHeader(token);
+        } catch (e) {
+          logout();
+        }
+      }
+    }
+    doit();
+  }, [loginState, logout, setTokenForAuthHeader]);
 
   return {
     loginState,

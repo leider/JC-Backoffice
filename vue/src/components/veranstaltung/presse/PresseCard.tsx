@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
 import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/veranstaltung/veranstaltungCompUtils";
 import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils";
-import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
@@ -22,7 +22,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
     queryFn: () => imagenames(),
   });
 
-  const { color } = useColorsAndIconsForSections("presse");
+  const { color } = colorsAndIconsForSections;
   const [verForPreview, setVerForPreview] = useState<Veranstaltung | Vermietung>(isVermietung ? new Vermietung() : new Veranstaltung());
 
   const presseText = Form.useWatch(["presse", "text"]);
@@ -59,7 +59,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
   const [activePage, setActivePage] = useState<string>("final");
 
   function TabLabel(props: { kind: string; title: string }) {
-    const farbe = color();
+    const farbe = color("presse");
     const active = activePage === props.kind;
     return (
       <b

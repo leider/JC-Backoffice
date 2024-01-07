@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { useContext } from "react";
+import React from "react";
 import EventCard from "@/components/veranstaltung/allgemeines/EventCard";
 import ArtistCard from "@/components/veranstaltung/allgemeines/ArtistCard";
 import KommentarCard from "@/components/veranstaltung/allgemeines/KommentarCard";
@@ -8,11 +8,10 @@ import VertragCard from "@/components/veranstaltung/allgemeines/VertragCard";
 import BearbeiterCard from "@/components/veranstaltung/allgemeines/BearbeiterCard";
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TabAllgemeines() {
-  const veranstContext = useContext(VeranstaltungContext);
-  const optionen = veranstContext!.optionen;
+  const { optionen } = useJazzContext();
 
   return (
     <Row gutter={12}>

@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { orte as orteRestCall, saveOrte } from "@/commons/loader.ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
@@ -10,33 +10,27 @@ import Orte from "jc-shared/optionen/orte";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function OrtePage() {
-  const ortQuery = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
-  const [orte, setOrte] = useState<Orte>(new Orte());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
-
+  const { orte } = useJazzContext();
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
 
   document.title = "Orte";
 
-  useEffect(() => {
-    if (ortQuery.data) {
-      setOrte(ortQuery.data);
-    }
-  }, [ortQuery.data]);
-
   const mutateOrte = useMutation({
     mutationFn: saveOrte,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orte"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Orte wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });

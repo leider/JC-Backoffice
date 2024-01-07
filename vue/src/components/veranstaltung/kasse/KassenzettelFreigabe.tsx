@@ -1,6 +1,6 @@
 import { App, Button, Col, Form, Row } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { allUsers, openKassenzettel } from "@/commons/loader.ts";
+import { openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
@@ -10,7 +10,7 @@ import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useForm } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export function KassenzettelFreigabe() {
@@ -18,17 +18,12 @@ export function KassenzettelFreigabe() {
   const form = veranstContext!.form;
 
   const { modal } = App.useApp();
-  const { currentUser } = useJazzContext();
+  const { currentUser, allUsers } = useJazzContext();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
 
-  async function loadUsers() {
-    const users = await allUsers();
-    setUsersAsOptions(users.map((user) => user.name));
-  }
-
   useEffect(() => {
-    loadUsers();
-  }, []);
+    setUsersAsOptions(allUsers.map((user) => user.name));
+  }, [allUsers]);
 
   const [innerForm] = useForm();
 
@@ -65,7 +60,7 @@ export function KassenzettelFreigabe() {
     });
   }
 
-  const { color } = useColorsAndIconsForSections("kasse");
+  const { color } = colorsAndIconsForSections;
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 
@@ -79,7 +74,7 @@ export function KassenzettelFreigabe() {
             icon="PrinterFill"
             onClick={() => openKassenzettel(form.getFieldsValue(true))}
             tooltipTitle="Kassenzettel asl PDF"
-            color={color()}
+            color={color("kasse")}
           />
         </Col>
         <Col span={10} offset={4}>

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Form, Tabs, TabsProps } from "antd";
-import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TabAllgemeines from "@/components/veranstaltung/allgemeines/TabAllgemeines";
 import TabTechnik from "@/components/veranstaltung/technik/TabTechnik";
@@ -16,8 +16,8 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VeranstaltungTabs() {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen } = useJazzContext();
   const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
 
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
@@ -32,87 +32,91 @@ export default function VeranstaltungTabs() {
 
   useEffect(() => {
     const page = search.get("page") ?? "";
+    if (onlyKasse) {
+      setActivePage("kasse");
+      setSearch({ page: "kasse" }, { replace: true });
+      return;
+    }
     if (["allgemeines", "gaeste", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
       setActivePage(page);
     } else {
       setActivePage("allgemeines");
       setSearch({ page: "allgemeines" }, { replace: true });
     }
-  }, [search, setSearch]);
+  }, [onlyKasse, search, setSearch]);
 
-  function TabLabel({ title, type }: { type: buttonType; title: string }) {
-    const { icon, color } = useColorsAndIconsForSections();
-    const active = activePage === type;
+  const TabLabel = useCallback(
+    ({ title, type }: { type: buttonType; title: string }) => {
+      const { icon, color } = colorsAndIconsForSections;
+      const active = activePage === type;
 
-    const farbe = color(type);
+      const farbe = color(type);
 
-    return (
-      <b
-        style={{
-          margin: -16,
-          padding: 16,
-          backgroundColor: active ? farbe : "inherit",
-          color: active ? "#FFF" : farbe,
-        }}
-      >
-        <IconForSmallBlock iconName={icon(type)} /> {title}
-      </b>
-    );
-  }
-
-  useEffect(
-    () => {
-      const kasseTab = {
-        key: "kasse",
-        label: <TabLabel type="kasse" title="Abendkasse" />,
-        children: <TabKasse />,
-      };
-      const allTabs: TabsProps["items"] = [
-        {
-          key: "allgemeines",
-          label: <TabLabel type="allgemeines" title="Allgemeines" />,
-          children: <TabAllgemeines />,
-        },
-        {
-          key: "gaeste",
-          label: <TabLabel type="gaeste" title="Gäste am Abend" />,
-          children: <TabGaeste />,
-        },
-        {
-          key: "technik",
-          label: <TabLabel type="technik" title="Technik" />,
-          children: <TabTechnik />,
-        },
-        {
-          key: "ausgaben",
-          label: <TabLabel type="ausgaben" title="Kalkulation" />,
-          children: <TabKosten />,
-        },
-        {
-          key: "hotel",
-          label: <TabLabel type="hotel" title="Hotel" />,
-          children: <TabHotel />,
-        },
-        kasseTab,
-        {
-          key: "presse",
-          label: <TabLabel type="presse" title="Presse" />,
-          children: <TabPresse />,
-        },
-      ];
-      if (onlyKasse) {
-        return setTabs([kasseTab]);
-      }
-      if (brauchtHotel) {
-        setTabs(allTabs);
-      } else {
-        const result = [...(allTabs || [])];
-        result.splice(4, 1);
-        setTabs(result);
-      }
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [brauchtHotel, optionen, activePage, onlyKasse],
+      return (
+        <b
+          style={{
+            margin: -16,
+            padding: 16,
+            backgroundColor: active ? farbe : "inherit",
+            color: active ? "#FFF" : farbe,
+          }}
+        >
+          <IconForSmallBlock iconName={icon(type)} /> {title}
+        </b>
+      );
+    },
+    [activePage],
   );
+  useEffect(() => {
+    const kasseTab = {
+      key: "kasse",
+      label: <TabLabel type="kasse" title="Abendkasse" />,
+      children: <TabKasse />,
+    };
+    const allTabs: TabsProps["items"] = [
+      {
+        key: "allgemeines",
+        label: <TabLabel type="allgemeines" title="Allgemeines" />,
+        children: <TabAllgemeines />,
+      },
+      {
+        key: "gaeste",
+        label: <TabLabel type="gaeste" title="Gäste am Abend" />,
+        children: <TabGaeste />,
+      },
+      {
+        key: "technik",
+        label: <TabLabel type="technik" title="Technik" />,
+        children: <TabTechnik />,
+      },
+      {
+        key: "ausgaben",
+        label: <TabLabel type="ausgaben" title="Kalkulation" />,
+        children: <TabKosten />,
+      },
+      {
+        key: "hotel",
+        label: <TabLabel type="hotel" title="Hotel" />,
+        children: <TabHotel />,
+      },
+      kasseTab,
+      {
+        key: "presse",
+        label: <TabLabel type="presse" title="Presse" />,
+        children: <TabPresse />,
+      },
+    ];
+    if (onlyKasse) {
+      return setTabs([kasseTab]);
+    }
+    if (brauchtHotel) {
+      setTabs(allTabs);
+    } else {
+      const result = [...(allTabs || [])];
+      result.splice(4, 1);
+      setTabs(result);
+    }
+  }, [brauchtHotel, optionen, activePage, onlyKasse, TabLabel]);
 
   return (
     <Tabs

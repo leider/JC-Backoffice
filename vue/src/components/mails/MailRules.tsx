@@ -56,10 +56,11 @@ export default function MailRules() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateRules.mutate(form.getFieldsValue(true).allRules);
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Änderungen wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     });
   }

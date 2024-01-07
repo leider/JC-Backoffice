@@ -18,6 +18,7 @@ import isEmpty from "lodash/isEmpty";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useQueries } from "@tanstack/react-query";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -28,15 +29,61 @@ export const TeamContext = createContext<{
 
 export default function Veranstaltungen() {
   const [search, setSearch] = useSearchParams();
+  const periods = useMemo(() => {
+    return [
+      {
+        label: "Zukünftige",
+        key: "zukuenftige",
+        onClick: () => setSearch({ period: "zukuenftige" }),
+      },
+      {
+        label: "Vergangene",
+        key: "vergangene",
+        onClick: () => setSearch({ period: "vergangene" }),
+      },
+      {
+        label: "Alle",
+        key: "alle",
+        onClick: () => setSearch({ period: "alle" }),
+      },
+    ];
+  }, [setSearch]);
+
   const PRESSEFILTERS = useMemo(() => ["", "Nur OK", "Nur nicht OK", "Kein finaler Text", "Kein originaler Text"], []);
 
   const [form] = Form.useForm();
-  const [alle, setAlle] = useState<(Veranstaltung | Vermietung)[]>([]);
-  async function loadAlle(period: "zukuenftige" | "vergangene" | "alle") {
-    const result = await veranstaltungenForTeam(period);
-    const verm = await vermietungenForTeam(period);
-    setAlle(sortBy([...result, ...verm], "startDate"));
-  }
+
+  const [period, setPeriod] = useState<string>("Zukünftige");
+
+  const selectedPeriod: "zukuenftige" | "vergangene" | "alle" = useMemo(() => {
+    return (search.get("period") || periods[0].key) as "zukuenftige" | "vergangene" | "alle";
+  }, [periods, search]);
+
+  useEffect(() => {
+    const periodOfSearch = search.get("period");
+    const result = periods.find((each) => each.key === periodOfSearch);
+    if (!result) {
+      setSearch({ period: periods[0].key });
+      setPeriod("Zukünftige");
+    } else {
+      setPeriod(result.label);
+    }
+  }, [periods, search, setSearch]);
+
+  const queryResult = useQueries({
+    queries: [
+      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => veranstaltungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 5 },
+      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 5 },
+    ],
+    combine: ([a, b]) => {
+      if (a?.data && b?.data) {
+        return sortBy([...a.data, ...b.data], "startDate");
+      }
+      return [];
+    },
+  });
+  const alle = useMemo(() => queryResult, [queryResult]);
+
   const { allUsers, currentUser } = useJazzContext();
   const navigate = useNavigate();
   const location = useLocation();
@@ -89,39 +136,6 @@ export default function Veranstaltungen() {
     setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [pressefilter, alle, PRESSEFILTERS]);
-
-  const periods = [
-    {
-      label: "Zukünftige",
-      key: "zukuenftige",
-      onClick: () => setSearch({ period: "zukuenftige" }),
-    },
-    {
-      label: "Vergangene",
-      key: "vergangene",
-      onClick: () => setSearch({ period: "vergangene" }),
-    },
-    {
-      label: "Alle",
-      key: "alle",
-      onClick: () => setSearch({ period: "alle" }),
-    },
-  ];
-  const [period, setPeriod] = useState<string>("Zukünftige");
-
-  useEffect(
-    () => {
-      const periodOfSearch = search.get("period");
-      const result = periods.find((each) => each.key === periodOfSearch);
-      if (!result) {
-        setSearch({ period: periods[0].key });
-      } else {
-        setPeriod(result.label);
-        loadAlle((result || periods[0]).key as "zukuenftige" | "vergangene" | "alle");
-      }
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search],
-  );
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { useToken } = theme;

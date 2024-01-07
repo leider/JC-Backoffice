@@ -1,29 +1,23 @@
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
-import { Button, Col, ConfigProvider, Row, Tooltip } from "antd";
+import { Col, Row } from "antd";
 import React from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useNavigate } from "react-router-dom";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: Veranstaltung; url?: string }) {
   const navigate = useNavigate();
 
   function ButtonAbendkasse({ callback }: { callback: () => void }) {
-    const { color, icon } = useColorsAndIconsForSections("kasse");
+    const { color, icon } = colorsAndIconsForSections;
     const { currentUser } = useJazzContext();
     if (!currentUser.accessrights.isAbendkasse) {
       return;
     }
     return (
-      <ConfigProvider theme={{ token: { colorPrimary: color() } }}>
-        <Tooltip title="Abendkasse" color={color()}>
-          <Button block icon={<IconForSmallBlock size={16} iconName={icon()} />} type="primary" onClick={callback}>
-            Abendkasse
-          </Button>
-        </Tooltip>
-      </ConfigProvider>
+      <ButtonWithIcon block text="Abendkasse" tooltipTitle="Abendkasse" color={color("kasse")} icon={icon("kasse")} onClick={callback} />
     );
   }
 

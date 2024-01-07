@@ -15,6 +15,9 @@ export function formatToGermanNumberString(amount: number): string {
 }
 
 export function asExcelKalk(veranVermiet: (Veranstaltung | Vermietung)[]) {
+  if (veranVermiet.length < 1) {
+    return;
+  }
   const book = utils.book_new();
   const sheet = utils.json_to_sheet(prepareExcel(veranVermiet));
   sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];

@@ -3,20 +3,10 @@ import { createContext, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  optionen as optionenRestCall,
-  orte as orteRestCall,
-  riderFor,
-  saveOptionen,
-  saveRider,
-  saveVeranstaltung,
-  veranstaltungForUrl,
-} from "@/commons/loader.ts";
+import { riderFor, saveOptionen, saveRider, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader.ts";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import OptionValues from "jc-shared/optionen/optionValues";
 import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
-import Orte from "jc-shared/optionen/orte";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
 import { differenceFor } from "jc-shared/commons/compareObjects";
@@ -28,8 +18,6 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export const VeranstaltungContext = createContext<{
   form: FormInstance<Veranstaltung>;
-  optionen: OptionValues;
-  orte: Orte;
 } | null>(null);
 
 export default function VeranstaltungComp() {
@@ -40,13 +28,9 @@ export default function VeranstaltungComp() {
     queryKey: ["veranstaltung", url],
     queryFn: () => veranstaltungForUrl(url || ""),
   });
-  const opts = useQuery({ queryKey: ["optionen"], queryFn: optionenRestCall });
-  const locations = useQuery({ queryKey: ["orte"], queryFn: orteRestCall });
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung({ id: "unknown" }));
-  const [optionen, setOptionen] = useState<OptionValues>(new OptionValues());
-  const [orte, setOrte] = useState<Orte>(new Orte());
   const [rider, setRider] = useState<Rider>(new Rider());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -57,18 +41,6 @@ export default function VeranstaltungComp() {
       setVeranstaltung(veranst.data);
     }
   }, [veranst.data, form]);
-
-  useEffect(() => {
-    if (opts.data) {
-      setOptionen(opts.data);
-    }
-  }, [opts.data]);
-
-  useEffect(() => {
-    if (locations.data) {
-      setOrte(locations.data);
-    }
-  }, [locations.data]);
 
   useEffect(() => {
     if (riderQuery.data) {
@@ -98,7 +70,7 @@ export default function VeranstaltungComp() {
         message: "Speichern erfolgreich",
         description: "Die Veranstaltung wurde gespeichert",
         placement: "topLeft",
-        duration: 5,
+        duration: 3,
       });
     },
   });
@@ -117,7 +89,7 @@ export default function VeranstaltungComp() {
     },
   });
 
-  const { currentUser } = useJazzContext();
+  const { currentUser, optionen } = useJazzContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -135,10 +107,10 @@ export default function VeranstaltungComp() {
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
-    if (!accessrights.isAbendkasse) {
+    if (currentUser.id && !accessrights.isAbendkasse) {
       navigate(`/veranstaltung/preview/${url}`);
     }
-  }, [currentUser.accessrights, navigate, url]);
+  }, [currentUser.accessrights, currentUser.id, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
@@ -193,7 +165,7 @@ export default function VeranstaltungComp() {
   }
 
   return (
-    <VeranstaltungContext.Provider value={{ form, optionen, orte }}>
+    <VeranstaltungContext.Provider value={{ form }}>
       <Form
         form={form}
         onValuesChange={() => {

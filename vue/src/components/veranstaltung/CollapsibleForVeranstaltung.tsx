@@ -3,7 +3,7 @@ import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import isNil from "lodash/isNil";
-import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 
 export default function CollapsibleForVeranstaltung({
   amount,
@@ -20,8 +20,8 @@ export default function CollapsibleForVeranstaltung({
 }) {
   const [expanded, setExpanded] = useState<string>("content");
 
-  const { color } = useColorsAndIconsForSections(suffix as buttonType);
-  const farbe = color();
+  const { color } = colorsAndIconsForSections;
+  const farbe = color(suffix as buttonType);
   return (
     <Collapse
       activeKey={expanded}

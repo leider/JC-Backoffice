@@ -6,6 +6,7 @@ import { Header } from "antd/es/layout/layout";
 import useMenuNodes from "@/components/content/MenuNodes.tsx";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Accessrights from "jc-shared/user/accessrights.ts";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
@@ -14,7 +15,11 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
   }, [wikisubdirs]);
 
   const accessrights = useMemo(() => {
-    return currentUser.accessrights;
+    if (currentUser.id) {
+      return currentUser.accessrights;
+    } else {
+      return new Accessrights();
+    }
   }, [currentUser]);
 
   const submenus = useMenuNodes(accessrights, subdirs);

@@ -10,11 +10,13 @@ import Uploader from "@/components/veranstaltung/Uploader";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TechnikCard() {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen } = useJazzContext();
   const form = veranstContext!.form;
-  const { backlineJazzclub, backlineRockshop } = veranstContext!.optionen;
+  const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {

@@ -21,8 +21,8 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
 
   const veranstContext = useContext(VeranstaltungContext);
   const vermietContext = useContext(VermietungContext);
+  const { optionen } = useJazzContext();
   const form = (veranstContext || vermietContext)?.form;
-  const optionen = (veranstContext || vermietContext)?.optionen;
 
   const { allUsers } = useJazzContext();
 

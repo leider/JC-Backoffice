@@ -18,10 +18,11 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
     mutationFn: changePassword,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users", user.id] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Änderungen gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
       setIsOpen(false);
     },
@@ -65,14 +66,16 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { notification } = App.useApp();
+
   const mutateNewUser = useMutation({
     mutationFn: saveNewUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Änderungen gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
       setIsOpen(false);
     },
@@ -142,10 +145,11 @@ export function EditUserModal({
     mutationFn: saveUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Änderungen gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
       setIsOpen(false);
     },

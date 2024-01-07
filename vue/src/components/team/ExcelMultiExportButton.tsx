@@ -1,14 +1,15 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Col, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
-import React, { useEffect, useState } from "react";
-import { useForm } from "antd/es/form/Form";
+import React, { useEffect, useMemo, useState } from "react";
+import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
 import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import { PageHeader } from "@ant-design/pro-layout";
 import sortBy from "lodash/sortBy";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { useQueries } from "@tanstack/react-query";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -46,18 +47,34 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
       { label: "Letztes Kalenderjahr", value: [dayjs().month(0).add(-1, "year"), dayjs().month(11).add(-1, "year")] },
     ];
 
-    async function ok() {
-      const [from, to] = form.getFieldValue("zeitraum") as [Dayjs, Dayjs];
-      const vers = await veranstaltungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
-      const verm = await vermietungenBetweenYYYYMM(from.format("YYYYMM"), to.format("YYYYMM"));
-      const bestaetigte = sortBy([...vers, ...verm], "startDate").filter((ver) => ver.kopf.confirmed);
+    const zeitraum = useWatch("zeitraum", { form, preserve: true });
+
+    const fromTo = useMemo(() => {
+      const [from, to] = (zeitraum as [Dayjs, Dayjs]) || [dayjs(), dayjs()];
+      return [from.format("YYYYMM"), to.format("YYYYMM")];
+    }, [zeitraum]);
+
+    const bestaetigte = useQueries({
+      queries: [
+        { enabled: isOpen, queryKey: ["veranstaltung", fromTo], queryFn: () => veranstaltungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
+        { enabled: isOpen, queryKey: ["vermietung", fromTo], queryFn: () => vermietungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
+      ],
+      combine: ([a, b]) => {
+        if (a?.data && b?.data) {
+          return sortBy([...a.data, ...b.data], "startDate").filter((ver) => ver.kopf.confirmed);
+        }
+        return [];
+      },
+    });
+
+    async function okClicked() {
       asExcelKalk(bestaetigte);
       setIsOpen(false);
     }
 
     return (
-      <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={ok} closable={false} maskClosable={false}>
-        <Form form={form} onFinish={ok} layout="vertical" autoComplete="off">
+      <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
+        <Form form={form} layout="vertical" autoComplete="off">
           <PageHeader title="Excel Export" />
           <Row gutter={8}>
             <Col span={24}>

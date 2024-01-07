@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
 import { Form, Tabs, TabsProps } from "antd";
-import { buttonType, useColorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useSearchParams } from "react-router-dom";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
@@ -34,7 +34,7 @@ export default function VermietungTabs() {
   );
 
   function TabLabel({ title, type }: { type: buttonType; title: string }) {
-    const { icon, color } = useColorsAndIconsForSections();
+    const { icon, color } = colorsAndIconsForSections;
     const active = activePage === type;
 
     const farbe = color(type);

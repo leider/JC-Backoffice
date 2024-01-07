@@ -37,7 +37,7 @@ export default function Programmheft() {
       ),
   });
   const { data: dataveranstaltungen } = useQuery({
-    queryKey: ["veranstaltung", `${year}-${month}`],
+    queryKey: ["veranstaltung", `${start.yyyyMM}`],
     queryFn: () => veranstaltungenBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
   });
   const [kalender, setKalender] = useState<Kalender>(new Kalender());
@@ -80,10 +80,11 @@ export default function Programmheft() {
     mutationFn: saveProgrammheft,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["kalender"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Das Programmheft wurde gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });

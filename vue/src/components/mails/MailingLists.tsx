@@ -1,6 +1,6 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { allUsers, saveMailinglists } from "@/commons/loader.ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { saveMailinglists } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { App, Col, Form, Row } from "antd";
@@ -11,12 +11,10 @@ import Users, { Mailingliste } from "jc-shared/user/users";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function MailingLists() {
-  const usersQuery = useQuery({
-    queryKey: ["users"],
-    queryFn: () => allUsers(),
-  });
+  const { allUsers } = useJazzContext();
   const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
@@ -31,11 +29,9 @@ export default function MailingLists() {
   document.title = "Maillinglisten";
 
   useEffect(() => {
-    if (usersQuery.data) {
-      setMailingLists(new Users(usersQuery.data).mailinglisten);
-      setUsersAsOptions(usersQuery.data.map((user) => ({ label: user.name, value: user.id })));
-    }
-  }, [usersQuery.data]);
+    setMailingLists(new Users(allUsers).mailinglisten);
+    setUsersAsOptions(allUsers.map((user) => ({ label: user.name, value: user.id })));
+  }, [allUsers]);
 
   const mutateLists = useMutation({
     mutationFn: saveMailinglists,
@@ -48,15 +44,15 @@ export default function MailingLists() {
   const [form] = Form.useForm<{ allLists: any[] }>();
 
   function initializeForm() {
-    function toFormObject(liste: Mailingliste): object {
+    function toFormObject(liste: Mailingliste) {
       return {
         name: liste.name,
         users: liste.users,
       };
     }
-    const deepCopy = { allLists: mailingLists.map((l) => toFormObject(l)) };
+    const deepCopy = { allLists: mailingLists.map((l) => toFormObject(l)).sort((a, b) => a.name.localeCompare(b.name)) };
     form.setFieldsValue(deepCopy);
-    const initial = { allLists: mailingLists.map((l) => toFormObject(l)) };
+    const initial = { allLists: mailingLists.map((l) => toFormObject(l)).sort((a, b) => a.name.localeCompare(b.name)) };
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
@@ -66,10 +62,11 @@ export default function MailingLists() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateLists.mutate(form.getFieldsValue(true).allLists);
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Änderungen wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     });
   }

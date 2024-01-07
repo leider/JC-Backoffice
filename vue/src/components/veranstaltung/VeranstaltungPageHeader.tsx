@@ -12,8 +12,8 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen } = useJazzContext();
   const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
   const { url } = useParams();
 
   const { currentUser } = useJazzContext();

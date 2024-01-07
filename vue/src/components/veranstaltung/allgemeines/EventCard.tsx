@@ -28,9 +28,8 @@ function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
 
 export default function EventCard() {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen, orte } = useJazzContext();
   const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
-  const orte = veranstContext!.orte;
 
   const { currentUser } = useJazzContext();
 

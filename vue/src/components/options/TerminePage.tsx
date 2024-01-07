@@ -60,10 +60,11 @@ export default function TerminePage() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Änderungen wurden gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     });
   }

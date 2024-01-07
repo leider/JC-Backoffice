@@ -14,8 +14,9 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function Team() {
   const veranstQuery = useQuery({
-    queryKey: ["veranstaltung"],
+    queryKey: ["veranstaltung", "zukuenftige"],
     queryFn: () => veranstaltungenForTeam("zukuenftige"),
+    staleTime: 1000 * 60 * 5,
   });
 
   const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);

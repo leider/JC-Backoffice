@@ -1,7 +1,7 @@
 import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { List } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { updateGastInSection } from "@/commons/loader.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -43,15 +43,15 @@ function AddOrRemoveGastButton({
 export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const [gaesteliste, setGaesteliste] = useState<NameWithNumber[]>([]);
   const [reservierungen, setReservierungen] = useState<NameWithNumber[]>([]);
-  useEffect(() => {
-    setGaesteliste(veranstaltung.gaesteliste);
-    setReservierungen(veranstaltung.reservierungen);
-  }, [veranstaltung.gaesteliste, veranstaltung.reservierungen]);
 
-  function listChanged(veranst: Veranstaltung) {
+  const listChanged = useCallback((veranst: Veranstaltung) => {
     setGaesteliste(veranst.gaesteliste);
     setReservierungen(veranst.reservierungen);
-  }
+  }, []);
+
+  useEffect(() => {
+    listChanged(veranstaltung);
+  }, [listChanged, veranstaltung]);
 
   function GastResList({ source, art }: { source: NameWithNumber[]; art: GastArt }) {
     const dataSource = useMemo(() => source.sort((a, b) => a.name.localeCompare(b.name)), [source]);
@@ -77,8 +77,7 @@ export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Vera
   }
 
   return (
-    gaesteliste.length > 0 &&
-    reservierungen.length > 0 && (
+    (gaesteliste.length > 0 || reservierungen.length > 0) && (
       <CollapsibleForVeranstaltung suffix="gaeste" label="Gästeliste / Reservierungen">
         {gaesteliste.length > 0 && <GastResList source={gaesteliste} art="gast" />}
         {reservierungen.length > 0 && <GastResList source={reservierungen} art="res" />}

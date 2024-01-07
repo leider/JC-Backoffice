@@ -9,11 +9,13 @@ import CheckItem from "@/widgets/CheckItem";
 import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import cloneDeep from "lodash/cloneDeep";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function HotelCard() {
   const veranstContext = useContext(VeranstaltungContext);
+  const { optionen } = useJazzContext();
+
   const form = veranstContext!.form;
-  const optionen = veranstContext!.optionen;
 
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");

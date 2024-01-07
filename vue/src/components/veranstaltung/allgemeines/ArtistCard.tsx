@@ -4,13 +4,12 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import SingleSelect from "@/widgets/SingleSelect";
 import Kosten from "jc-shared/veranstaltung/kosten";
-import React, { useContext } from "react";
+import React from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function ArtistCard() {
-  const veranstContext = useContext(VeranstaltungContext);
-  const optionen = veranstContext!.optionen;
+  const { optionen } = useJazzContext();
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Künstler">

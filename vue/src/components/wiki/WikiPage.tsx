@@ -43,10 +43,11 @@ export default function WikiPage() {
     mutationFn: (content) => saveWikiPage(subdir!, realPage, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wiki"] });
-      notification.open({
+      notification.success({
         message: "Speichern erfolgreich",
         description: "Die Seite wurde gespeichert",
-        duration: 5,
+        placement: "topLeft",
+        duration: 3,
       });
     },
   });
