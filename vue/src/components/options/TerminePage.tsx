@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
@@ -11,6 +11,7 @@ import Termin from "jc-shared/optionen/termin";
 import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -21,9 +22,8 @@ export default function TerminePage() {
   });
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
-
+  const { showSuccess } = useJazzContext();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
 
   document.title = "Termine";
 
@@ -60,12 +60,7 @@ export default function TerminePage() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Änderungen wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
     });
   }
 

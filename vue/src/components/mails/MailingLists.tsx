@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveMailinglists } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
@@ -14,7 +14,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function MailingLists() {
-  const { allUsers } = useJazzContext();
+  const { allUsers, showSuccess } = useJazzContext();
   const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
@@ -23,7 +23,6 @@ export default function MailingLists() {
   const [dirty, setDirty] = useState<boolean>(false);
   const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
 
   useDirtyBlocker(dirty);
   document.title = "Maillinglisten";
@@ -62,12 +61,7 @@ export default function MailingLists() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateLists.mutate(form.getFieldsValue(true).allLists);
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Änderungen wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
     });
   }
 

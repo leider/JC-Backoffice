@@ -50,12 +50,7 @@ export default function VermietungComp() {
         },
         { replace: true },
       );
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Vermietung wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Vermietung wurde gespeichert" });
     },
   });
 
@@ -65,7 +60,7 @@ export default function VermietungComp() {
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty, true);
 
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();
   function initializeForm() {
     const deepCopy = toFormObject(vermietung);

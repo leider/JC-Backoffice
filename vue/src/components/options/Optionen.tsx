@@ -4,7 +4,7 @@ import { saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { App, Col, Form, Row, Tabs, TabsProps } from "antd";
+import { Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
@@ -16,7 +16,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function Optionen() {
-  const { optionen } = useJazzContext();
+  const { optionen, showSuccess } = useJazzContext();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
@@ -25,17 +25,11 @@ export default function Optionen() {
 
   document.title = "Optionen";
 
-  const { notification } = App.useApp();
   const mutateOptionen = useMutation({
     mutationFn: saveOptionen,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["optionen"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Optionen wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Optionen wurden gespeichert" });
     },
   });
 

@@ -3,13 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -22,9 +23,8 @@ export default function MailRules() {
   });
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
-
+  const { showSuccess } = useJazzContext();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
 
   document.title = "Mailregeln";
 
@@ -56,12 +56,7 @@ export default function MailRules() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateRules.mutate(form.getFieldsValue(true).allRules);
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Änderungen wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
     });
   }
 

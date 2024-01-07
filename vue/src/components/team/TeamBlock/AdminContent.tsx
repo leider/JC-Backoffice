@@ -1,5 +1,5 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, Form, notification, Row } from "antd";
+import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
@@ -25,7 +25,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());
-  const { currentUser } = useJazzContext();
+  const { currentUser, showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const teamContext = useContext(TeamContext);
@@ -60,12 +60,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       queryClient.invalidateQueries({
         queryKey: ["veranstaltung"],
       });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Veranstaltung wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
     },
   });
 
@@ -75,12 +70,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       queryClient.invalidateQueries({
         queryKey: ["vermietung"],
       });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Vermietung wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die VerMietung wurde gespeichert" });
     },
   });
 

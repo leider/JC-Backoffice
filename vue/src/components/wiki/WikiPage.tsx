@@ -2,7 +2,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { App, Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Renderer from "jc-shared/commons/renderer";
@@ -11,6 +11,7 @@ import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function WikiPage() {
   const { subdir, page } = useParams();
@@ -25,7 +26,7 @@ export default function WikiPage() {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dirty, setDirty] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
+  const { showSuccess } = useJazzContext();
 
   const navigate = useNavigate();
 
@@ -43,12 +44,7 @@ export default function WikiPage() {
     mutationFn: (content) => saveWikiPage(subdir!, realPage, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wiki"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Seite wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Seite wurde gespeichert" });
     },
   });
 

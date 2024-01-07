@@ -1,4 +1,4 @@
-import { App, Col, Form, FormInstance, Input, Modal, Row } from "antd";
+import { Col, Form, FormInstance, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -9,21 +9,17 @@ import CheckItem from "@/widgets/CheckItem";
 import React, { useEffect, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
+  const { showSuccess } = useJazzContext();
   const mutatePassword = useMutation({
     mutationFn: changePassword,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users", user.id] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Änderungen gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
       setIsOpen(false);
     },
   });
@@ -65,18 +61,13 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
 export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
+  const { showSuccess } = useJazzContext();
 
   const mutateNewUser = useMutation({
     mutationFn: saveNewUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Änderungen gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
       setIsOpen(false);
     },
   });
@@ -127,7 +118,7 @@ export function EditUserModal({
   isSuperUser: boolean;
 }) {
   const [form] = Form.useForm();
-  const { notification } = App.useApp();
+  const { showSuccess } = useJazzContext();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
@@ -145,12 +136,7 @@ export function EditUserModal({
     mutationFn: saveUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Änderungen gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
       setIsOpen(false);
     },
   });

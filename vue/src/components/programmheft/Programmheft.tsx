@@ -2,7 +2,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { App, Button, Col, Collapse, Form, Row, Typography } from "antd";
+import { Button, Col, Collapse, Form, Row, Typography } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -17,9 +17,11 @@ import groupBy from "lodash/groupBy";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function Programmheft() {
   const { year, month } = useParams();
+  const { showSuccess } = useJazzContext();
 
   const defaultYear = new DatumUhrzeit().naechsterUngeraderMonat.format("YYYY");
   const defaultMonth = new DatumUhrzeit().naechsterUngeraderMonat.format("MM");
@@ -55,7 +57,6 @@ export default function Programmheft() {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
-  const { notification } = App.useApp();
 
   document.title = "Programmheft";
 
@@ -80,12 +81,7 @@ export default function Programmheft() {
     mutationFn: saveProgrammheft,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["kalender"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Das Programmheft wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Das Programmheft wurde gespeichert" });
     },
   });
 

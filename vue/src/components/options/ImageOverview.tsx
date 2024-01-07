@@ -1,7 +1,7 @@
 import { PageHeader } from "@ant-design/pro-layout";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, saveImagenames, veranstaltungenForTeam } from "@/commons/loader.ts";
@@ -15,8 +15,10 @@ import { TextField } from "@/widgets/TextField";
 import { Link } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import { NamePath } from "rc-field-form/es/interface";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function ImageOverview() {
+  const { showSuccess } = useJazzContext();
   const imagesQuery = useQuery({
     queryKey: ["imagenames"],
     queryFn: imagenamesQuery,
@@ -33,18 +35,12 @@ export default function ImageOverview() {
     unused: ImageOverviewRow[];
   }>();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
 
   const mutateImages = useMutation({
     mutationFn: saveImagenames,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["imagenames"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Änderungen wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({});
     },
   });
 

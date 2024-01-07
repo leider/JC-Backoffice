@@ -7,8 +7,16 @@ import { IUseProvideAuth } from "@/commons/auth.tsx";
 import { RouterContext } from "@/router/JazzRouter.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
+import { App } from "antd";
 
-const emptyContext = { currentUser: new User({}), wikisubdirs: [], allUsers: [], optionen: new OptionValues(), orte: new Orte() };
+const emptyContext = {
+  currentUser: new User({}),
+  wikisubdirs: [],
+  allUsers: [],
+  optionen: new OptionValues(),
+  orte: new Orte(),
+  showSuccess: () => {},
+};
 
 type SharedGlobals = {
   currentUser: User;
@@ -16,6 +24,7 @@ type SharedGlobals = {
   allUsers: User[];
   optionen: OptionValues;
   orte: Orte;
+  showSuccess: ({ text, title }: { text?: string; title?: string }) => void;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -23,7 +32,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
-  const context: SharedGlobals = useQueries({
+  const context: Omit<SharedGlobals, "showSuccess"> = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers() },
       { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs() },
@@ -44,12 +53,22 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       return emptyContext;
     },
   });
+  const { notification } = App.useApp();
+
+  function showSuccess({ text = "Die Änderungen wurden gespeichert", title = "Speichern erfolgreich" }) {
+    notification.success({
+      message: title,
+      description: text,
+      placement: "topLeft",
+      duration: 3,
+    });
+  }
 
   useEffect(() => {
     setCurrentUser(context.currentUser);
   }, [context.currentUser, setCurrentUser]);
 
-  return context;
+  return { ...context, showSuccess };
 }
 
 export function useJazzContext() {

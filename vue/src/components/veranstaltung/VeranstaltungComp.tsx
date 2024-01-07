@@ -66,12 +66,7 @@ export default function VeranstaltungComp() {
         },
         { replace: true },
       );
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Veranstaltung wurde gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
     },
   });
 
@@ -89,7 +84,7 @@ export default function VeranstaltungComp() {
     },
   });
 
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();
 
   useEffect(() => {

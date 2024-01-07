@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { kalender, saveKalender } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
@@ -11,6 +11,7 @@ import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCol
 import FerienIcals from "jc-shared/optionen/ferienIcals";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -21,9 +22,8 @@ export default function KalenderPage() {
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
-
+  const { showSuccess } = useJazzContext();
   const queryClient = useQueryClient();
-  const { notification } = App.useApp();
 
   document.title = "Kalender";
 
@@ -37,12 +37,7 @@ export default function KalenderPage() {
     mutationFn: saveKalender,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ferienIcals"] });
-      notification.success({
-        message: "Speichern erfolgreich",
-        description: "Die Kalender wurden gespeichert",
-        placement: "topLeft",
-        duration: 3,
-      });
+      showSuccess({ text: "Die Kalender wurden gespeichert" });
     },
   });
 
