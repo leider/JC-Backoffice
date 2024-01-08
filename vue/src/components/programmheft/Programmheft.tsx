@@ -1,54 +1,45 @@
 import { PageHeader } from "@ant-design/pro-layout";
-import { kalenderFor, saveProgrammheft, veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Collapse, Form, Row, Typography } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Col, Form, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import Kalender from "jc-shared/programmheft/kalender";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Kalender, { Event } from "jc-shared/programmheft/kalender";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
-import groupBy from "lodash/groupBy";
-import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/ProgrammheftVeranstaltungenRow.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function Programmheft() {
-  const { year, month } = useParams();
+  const [search, setSearch] = useSearchParams();
+  const [year, month] = useMemo(() => {
+    return [search.get("year"), search.get("month")];
+  }, [search]);
   const { showSuccess } = useJazzContext();
 
-  const defaultYear = new DatumUhrzeit().naechsterUngeraderMonat.format("YYYY");
-  const defaultMonth = new DatumUhrzeit().naechsterUngeraderMonat.format("MM");
-  const realYear = year || defaultYear;
-  const realMonth = month || defaultMonth;
-  const start = (DatumUhrzeit.forYYYYMM(`${realYear}${realMonth}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
+  const naechsterUngeraderMonat = new DatumUhrzeit().naechsterUngeraderMonat;
+
+  const defaultYear = naechsterUngeraderMonat.format("YYYY");
+  const defaultMonth = naechsterUngeraderMonat.format("MM");
+  const realYear = useMemo(() => year ?? defaultYear, [defaultYear, year]);
+  const realMonth = useMemo(() => month ?? defaultMonth, [defaultMonth, month]);
+
+  const start = useMemo(() => {
+    return (DatumUhrzeit.forYYYYMM(`${realYear}${realMonth}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
+  }, [realMonth, realYear]);
 
   const { data: dataKalender } = useQuery({
-    queryKey: ["kalender", `${year}-${month}`],
-    queryFn: () =>
-      kalenderFor(
-        `${year ?? new DatumUhrzeit().naechsterUngeraderMonat.format("YYYY")}/${
-          month ?? new DatumUhrzeit().naechsterUngeraderMonat.format("MM")
-        }`,
-      ),
-  });
-  const { data: dataveranstaltungen } = useQuery({
-    queryKey: ["veranstaltung", `${start.yyyyMM}`],
-    queryFn: () => veranstaltungenBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
+    queryKey: ["kalender", `${realYear}-${realMonth}`],
+    queryFn: () => kalenderFor(`${realYear}/${realMonth}`),
   });
   const [kalender, setKalender] = useState<Kalender>(new Kalender());
-  const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
-    [index: string]: Veranstaltung[];
-  }>({});
-  const [monate, setMonate] = useState<string[]>([]);
-  const [unbestaetigte, setUnbestaetigte] = useState<Veranstaltung[]>([]);
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -56,26 +47,13 @@ export default function Programmheft() {
 
   const queryClient = useQueryClient();
 
-  const navigate = useNavigate();
-
   document.title = "Programmheft";
 
   useEffect(() => {
     if (dataKalender) {
       setKalender(dataKalender);
     }
-    if (dataveranstaltungen) {
-      setVeranstaltungen(dataveranstaltungen);
-    }
-  }, [dataKalender, dataveranstaltungen, start]);
-
-  useEffect(() => {
-    const filteredVeranstaltungen = veranstaltungen.filter((v) => v.kopf.confirmed);
-    const result = groupBy(filteredVeranstaltungen, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
-    setVeranstaltungenNachMonat(result);
-    setUnbestaetigte(veranstaltungen.filter((v) => !v.kopf.confirmed));
-    setMonate(Object.keys(result));
-  }, [veranstaltungen]);
+  }, [dataKalender]);
 
   const mutateContent = useMutation({
     mutationFn: saveProgrammheft,
@@ -87,15 +65,15 @@ export default function Programmheft() {
 
   const [form] = Form.useForm<Kalender>();
 
-  function initializeForm() {
+  useEffect(() => {
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
     setInitialValue(initial);
     form.setFieldsValue(deepCopy);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
-  }
-  useEffect(initializeForm, [form, kalender]);
+    setEvents(kalender.asEvents());
+  }, [form, kalender]);
 
   const editorOptions = useMemo(
     () => ({
@@ -106,6 +84,7 @@ export default function Programmheft() {
     }),
     [],
   );
+
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
@@ -114,13 +93,19 @@ export default function Programmheft() {
     });
   }
 
-  function previous() {
-    navigate(`/programmheft/${start.minus({ monate: 2 }).fuerKalenderViews}`);
+  function textChanged() {
+    setEvents(new Kalender(form.getFieldsValue(true)).asEvents());
   }
+  const [events, setEvents] = useState<Event[]>([]);
+  const previous = useCallback(() => {
+    const nextDate = start.minus({ monate: 2 });
+    setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
+  }, [start, setSearch]);
 
-  function next() {
-    navigate(`/programmheft/${start.plus({ monate: 2 }).fuerKalenderViews}`);
-  }
+  const next = useCallback(() => {
+    const nextDate = start.plus({ monate: 2 });
+    setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
+  }, [start, setSearch]);
 
   return (
     <Form
@@ -139,27 +124,23 @@ export default function Programmheft() {
         title="Programmheft"
         subTitle={`${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
         extra={[
-          <Button key="prev" icon={<IconForSmallBlock iconName="ArrowBarLeft" onClick={previous} />} />,
-          <Button key="next" icon={<IconForSmallBlock iconName="ArrowBarRight" onClick={next} />} />,
+          <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
+          <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
           <SaveButton key="save" disabled={!dirty} />,
         ]}
       />
       <RowWrapper>
         <Row gutter={12}>
           <Col xs={24} lg={8} style={{ zIndex: 0 }}>
-            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
+            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} />
           </Col>
           <Col xs={24} lg={8} style={{ zIndex: 0 }}>
-            <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
+            <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={events} />
           </Col>
           <Col xs={24} lg={8}>
             <Form.Item name={"text"}>
-              <SimpleMdeReact autoFocus options={editorOptions} />
+              <SimpleMdeReact autoFocus options={editorOptions} onBlur={textChanged} />
             </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={12}>
-          <Col span={24}>
             <h4>Farben Hilfe</h4>
             <p>
               Du kannst entweder eine{" "}
@@ -170,43 +151,7 @@ export default function Programmheft() {
             </p>
           </Col>
         </Row>
-
-        {unbestaetigte.length > 0 && <h2>Es gibt noch unbestätigte Veranstaltungen</h2>}
-        {unbestaetigte.map((veranst) => (
-          <Link
-            key={veranst.id}
-            to={{
-              pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
-              search: "page=allgemeines",
-            }}
-          >
-            {veranst.kopf.titelMitPrefix}
-          </Link>
-        ))}
-        {monate.map((monat) => (
-          <div key={monat}>
-            <Row gutter={12}>
-              <Col span={24}>
-                <Collapse.Panel
-                  key={monat}
-                  header={
-                    <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
-                      {monat}
-                    </Typography.Title>
-                  }
-                  className="monat-header"
-                ></Collapse.Panel>
-              </Col>
-            </Row>
-            <Row gutter={[8, 8]}>
-              {veranstaltungenNachMonat[monat].map((veranst) => (
-                <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
-                  <PressePreview veranstVermiet={veranst} />
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ))}
+        <ProgrammheftVeranstaltungenRow start={start} />
       </RowWrapper>
     </Form>
   );

@@ -97,7 +97,7 @@ const allRoutes: RouteObject[] = [
         element: <OrtePage />,
       },
       {
-        path: "/programmheft/:year?/:month?",
+        path: "/programmheft",
         element: <Programmheft />,
       },
       {
@@ -156,7 +156,7 @@ const orgaTeamPattern = [
   "kalenderuebersicht",
   "optionen",
   "orte",
-  "/programmheft/:year?/:month?",
+  "/programmheft",
   "/kalender",
   "/termine",
   "/kassenbericht",
