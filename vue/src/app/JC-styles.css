@@ -30,6 +30,10 @@
   padding: 4px 4px !important;
 }
 
+.ant-radio-button-wrapper-checked {
+  z-index: 0 !important;
+}
+
 /*transform fullcalendar's primary to light button*/
 .fc-toolbar .fc-button-primary {
   color: #212529;

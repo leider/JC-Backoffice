@@ -8,6 +8,7 @@ import multiMonthPlugin from "@fullcalendar/multimonth";
 import { PageHeader } from "@ant-design/pro-layout";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
@@ -51,6 +52,7 @@ export default function BigKalender() {
   }
 
   const calRef = createRef<FullCalendar>();
+  const { lg } = useBreakpoint();
   return (
     <Form
       form={form}
@@ -67,6 +69,7 @@ export default function BigKalender() {
             initialView="Sechs"
             locales={[deLocale]}
             headerToolbar={{ left: "title", center: "Sechs,Vier,Zwölf", right: "prev,today,next" }}
+            titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
             views={{
               Zwölf: {
                 type: "multiMonth",
@@ -81,6 +84,7 @@ export default function BigKalender() {
                 duration: { months: 6 },
               },
             }}
+            height="auto"
             multiMonthMaxColumns={4}
             eventSources={[getEvents]}
             eventContent={renderEventContent}

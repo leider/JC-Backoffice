@@ -6,6 +6,7 @@ import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export default function TeamCalendar() {
   const getEvents = useCallback(
@@ -32,16 +33,16 @@ export default function TeamCalendar() {
     },
     [],
   );
-
+  const { lg } = useBreakpoint();
   return (
     <FullCalendar
       plugins={[dayGridPlugin, multiMonthPlugin]}
       initialView="dayGridMonth"
       locales={[deLocale]}
       headerToolbar={{ left: "title", center: "dayGridMonth,Vier", right: "prev,today,next" }}
+      titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
       views={{
         month: {
-          titleFormat: { month: "short", year: "2-digit" },
           weekNumberFormat: { week: "short" },
           fixedWeekCount: false,
           showNonCurrentDates: false,

@@ -146,27 +146,11 @@ export default function Programmheft() {
       />
       <RowWrapper>
         <Row gutter={12}>
-          <Col xs={24} lg={16}>
-            <Row gutter={12}>
-              <Col span={12} style={{ zIndex: 0 }}>
-                <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
-              </Col>
-              <Col span={12} style={{ zIndex: 0 }}>
-                <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
-              </Col>
-            </Row>
-            <Row gutter={12}>
-              <Col span={24}>
-                <h4>Farben Hilfe</h4>
-                <p>
-                  Du kannst entweder eine{" "}
-                  <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">
-                    Farbe mit Namen eintragen
-                  </a>{" "}
-                  oder einen HEX-Code als "#RGB" oder "#RRGGBB".
-                </p>
-              </Col>
-            </Row>
+          <Col xs={24} lg={8} style={{ zIndex: 0 }}>
+            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={kalender.asEvents()} />
+          </Col>
+          <Col xs={24} lg={8} style={{ zIndex: 0 }}>
+            <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={kalender.asEvents()} />
           </Col>
           <Col xs={24} lg={8}>
             <Form.Item name={"text"}>
@@ -174,6 +158,19 @@ export default function Programmheft() {
             </Form.Item>
           </Col>
         </Row>
+        <Row gutter={12}>
+          <Col span={24}>
+            <h4>Farben Hilfe</h4>
+            <p>
+              Du kannst entweder eine{" "}
+              <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">
+                Farbe mit Namen eintragen
+              </a>{" "}
+              oder einen HEX-Code als "#RGB" oder "#RRGGBB".
+            </p>
+          </Col>
+        </Row>
+
         {unbestaetigte.length > 0 && <h2>Es gibt noch unbestätigte Veranstaltungen</h2>}
         {unbestaetigte.map((veranst) => (
           <Link

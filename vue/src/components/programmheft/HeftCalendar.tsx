@@ -54,7 +54,6 @@ export default function HeftCalendar({ events, initialDate }: { initialDate: str
       }}
       contentHeight={600}
       initialDate={initialDate}
-      //events={getEvents}
       events={events}
       eventContent={renderEventContent}
     />
