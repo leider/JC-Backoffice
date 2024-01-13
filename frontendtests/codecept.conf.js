@@ -42,7 +42,7 @@ exports.config = {
             I.amOnPage("/");
             I.dontSee("Benutzername");
           },
-          fetch: () => {},
+          fetch: () => "yes",
           restore: () => {},
         },
       },
