@@ -40,7 +40,7 @@ exports.config = {
           },
           check: (I) => {
             I.amOnPage("/");
-            I.dontSee("Benutzername");
+            I.see("admin");
           },
           fetch: () => "yes",
           restore: () => {},

@@ -9,6 +9,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useAuth } from "@/commons/authConsts.ts";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
@@ -50,7 +51,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
   }, [accessrights, subdirs.length, submenus]);
 
   const [userMenu, setUserMenu] = useState<ItemType>();
-
+  const { lg } = useBreakpoint();
   useEffect(() => {
     const userMenuStatic = {
       key: menuKeys.users,
@@ -78,9 +79,10 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
       label: "Users",
     };
     const copiedUserMenu = { ...userMenuStatic };
-    copiedUserMenu.label = currentUser.id || "Users";
+    const id = currentUser.id;
+    copiedUserMenu.label = (!lg && id && id.length > 10 ? id.substring(0, 8) + "..." : id) || "Users";
     setUserMenu(copiedUserMenu);
-  }, [currentUser.id, logout]);
+  }, [currentUser.id, lg, logout]);
 
   return (
     <Header
@@ -110,7 +112,13 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-        <Menu theme="dark" mode="horizontal" items={currentUser.id ? items : []} selectedKeys={[activeElement]} style={{ flexGrow: 2 }} />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          items={currentUser.id ? items : []}
+          selectedKeys={[activeElement]}
+          style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
+        />
         <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
       </div>
     </Header>

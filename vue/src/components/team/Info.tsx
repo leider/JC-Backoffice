@@ -8,6 +8,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import { useQuery } from "@tanstack/react-query";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function Info() {
   const { monatJahr } = useParams(); // als yymm
@@ -63,22 +64,24 @@ export default function Info() {
 
   function Pressetexte() {
     return (
-      <Row gutter={12}>
-        {veranstaltungen.map((veranst) => {
-          return (
-            <Col lg={12} key={veranst.id}>
-              <PressePreview veranstVermiet={veranst} />
-              <Divider />
-            </Col>
-          );
-        })}
-      </Row>
+      <RowWrapper>
+        <Row gutter={12}>
+          {veranstaltungen.map((veranst) => {
+            return (
+              <Col lg={12} key={veranst.id}>
+                <PressePreview veranstVermiet={veranst} />
+                <Divider />
+              </Col>
+            );
+          })}
+        </Row>
+      </RowWrapper>
     );
   }
 
   function Uebersicht() {
     return (
-      <>
+      <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
             {veranstaltungen.map((veranst) => (
@@ -118,7 +121,7 @@ export default function Info() {
               </Col>
             ))}
         </Row>
-      </>
+      </RowWrapper>
     );
   }
 
