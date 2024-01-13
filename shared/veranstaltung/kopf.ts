@@ -4,12 +4,12 @@ export default class Kopf {
   beschreibung = "";
   eventTyp = "";
   eventTypRich?: TypMitMehr;
-  flaeche = 0;
+  flaeche = 100;
   kooperation = "";
   ort = "Jazzclub";
   titel = "";
-  pressename = "";
-  presseIn = "";
+  pressename = "Jazzclub Karlsruhe";
+  presseIn = "im Jazzclub Karlsruhe";
   genre = "";
   confirmed = false;
   rechnungAnKooperation = false;
