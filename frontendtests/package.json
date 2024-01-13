@@ -14,7 +14,8 @@
     "playwright": "1.40.1"
   },
   "scripts": {
-    "app": "cross-env CONF=config-it node ../start",
+    "startTestserver": "cross-env CONF=config-it node ../start",
+    "stopTestserver": "./stopTestserver.sh",
     "test": "codeceptjs run"
   }
 }

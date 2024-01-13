@@ -32,7 +32,7 @@ export default function VeranstaltungTabs() {
 
   useEffect(() => {
     const page = search.get("page") ?? "";
-    if (onlyKasse) {
+    if (currentUser.id && onlyKasse) {
       setActivePage("kasse");
       setSearch({ page: "kasse" }, { replace: true });
       return;
@@ -43,7 +43,7 @@ export default function VeranstaltungTabs() {
       setActivePage("allgemeines");
       setSearch({ page: "allgemeines" }, { replace: true });
     }
-  }, [onlyKasse, search, setSearch]);
+  }, [currentUser.id, onlyKasse, search, setSearch]);
 
   const TabLabel = useCallback(
     ({ title, type }: { type: buttonType; title: string }) => {

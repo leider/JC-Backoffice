@@ -114,7 +114,7 @@ export function useProvideAuth(): IUseProvideAuth {
     } finally {
       queryClient.invalidateQueries();
       if (location.pathname !== "/login") {
-        navigate({ pathname: "/login", search: encodeURIComponent("/") });
+        navigate({ pathname: "/login", search: encodeURIComponent(location.pathname) });
       }
     }
   }, [location.pathname, navigate, queryClient]);

@@ -35,5 +35,4 @@ jobs:
         cd frontendtests
         yarn install --immutable
         yarn playwright install chromium
-        yarn test
-        
+        ./startRunStop.sh
