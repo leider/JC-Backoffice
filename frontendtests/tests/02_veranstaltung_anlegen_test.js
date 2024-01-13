@@ -16,7 +16,6 @@ Scenario("Erzeuge Typen und Orte", async ({ I }) => {
   I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\n");
   I.fillField("Titel", "Konzert #1");
   I.fillField("Typ", "Club Konzert\n");
-  I.wait(30);
   I.click("Speichern");
   I.wait(0.5);
 

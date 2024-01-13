@@ -10,7 +10,7 @@ class dbHelper extends Helper {
     const client = await mongodb.MongoClient.connect(url);
     const db = client.db();
     const collections = await db.collections();
-    await Promise.all(collections.map((coll) => coll.drop()));
+    await Promise.all(collections.filter((coll) => coll.collectionName !== "refreshstore").map((coll) => coll.drop()));
     await client.close();
   }
 
