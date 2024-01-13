@@ -27,6 +27,9 @@ jobs:
       with:
         node-version: '18.x'
         cache: 'yarn'
+    - uses: szenius/set-timezone@v1.2
+      with:
+        timezoneLinux: "Europe/Berlin"
     - run: yarn install --immutable
     - run: yarn lint
     - run: yarn test
