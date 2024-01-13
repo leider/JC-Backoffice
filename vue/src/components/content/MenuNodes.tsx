@@ -4,7 +4,6 @@ import * as React from "react";
 import { useMemo } from "react";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import Accessrights from "jc-shared/user/accessrights.ts";
-import { useAuth } from "@/commons/authConsts.ts";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -28,7 +27,6 @@ export enum menuKeys {
 }
 
 export default function useMenuNodes(accessrights: Accessrights, subdirs: string[]) {
-  const { logout } = useAuth();
   const wikisubdirEntries = useMemo(
     () =>
       subdirs.map((dir) => {
@@ -138,32 +136,6 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     label: <Link to="/programmheft">Programmheft</Link>,
   };
 
-  const userMenu = {
-    key: menuKeys.users,
-    icon: <IconForSmallBlock iconName="PeopleFill" />,
-    children: [
-      {
-        key: "allUsers",
-        icon: <IconForSmallBlock iconName="PersonLinesFill" />,
-        label: <Link to={"/users"}>Übersicht</Link>,
-      },
-      {
-        key: "logout",
-        icon: <IconForSmallBlock iconName="PersonFillX" />,
-        label: (
-          <a
-            onClick={() => {
-              logout();
-            }}
-          >
-            Abmelden
-          </a>
-        ),
-      },
-    ],
-    label: "Users",
-  };
-
   const wikiMenu = {
     key: menuKeys.wiki,
     icon: <IconForSmallBlock iconName="Journals" />,
@@ -171,5 +143,5 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     children: wikisubdirEntries,
   };
 
-  return { belegeMenu, mailMenu, optionenMenu, programmheftMenu, teamMenu, userMenu, veranstaltungMenu, wikiMenu };
+  return { belegeMenu, mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu };
 }

@@ -9,6 +9,7 @@ export default function ButtonWithIconAndLink({
   to,
   icon,
   color,
+  block,
   tooltipTitle,
   text,
   disabled,
@@ -17,6 +18,7 @@ export default function ButtonWithIconAndLink({
   to: To;
   icon: IconProps["iconName"];
   color: string;
+  block?: boolean;
   tooltipTitle?: string;
   text?: string;
   disabled?: boolean;
@@ -33,6 +35,7 @@ export default function ButtonWithIconAndLink({
             type={type || "primary"}
             size={text ? undefined : "small"}
             disabled={disabled}
+            block={block}
           >
             {sm && text && text}
           </Button>

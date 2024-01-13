@@ -3,21 +3,28 @@ import { Col, Row } from "antd";
 import React from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import { useNavigate } from "react-router-dom";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
 export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: Veranstaltung; url?: string }) {
-  const navigate = useNavigate();
-
-  function ButtonAbendkasse({ callback }: { callback: () => void }) {
+  function ButtonAbendkasse() {
     const { color, icon } = colorsAndIconsForSections;
     const { currentUser } = useJazzContext();
     if (!currentUser.accessrights.isAbendkasse) {
       return;
     }
     return (
-      <ButtonWithIcon block text="Abendkasse" tooltipTitle="Abendkasse" color={color("kasse")} icon={icon("kasse")} onClick={callback} />
+      <ButtonWithIconAndLink
+        block
+        text="Abendkasse"
+        tooltipTitle="Abendkasse"
+        color={color("kasse")}
+        icon={icon("kasse")}
+        to={{
+          pathname: `/veranstaltung/${url}`,
+          search: "page=kasse",
+        }}
+      />
     );
   }
 
@@ -42,14 +49,7 @@ export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: 
           )}
           <Row gutter={12}>
             <Col span={10} offset={14}>
-              <ButtonAbendkasse
-                callback={() =>
-                  navigate({
-                    pathname: `/veranstaltung/${url}`,
-                    search: "page=kasse",
-                  })
-                }
-              />
+              <ButtonAbendkasse />
             </Col>{" "}
           </Row>
         </Col>

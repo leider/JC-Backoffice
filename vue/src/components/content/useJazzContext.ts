@@ -32,6 +32,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
+
   const context: Omit<SharedGlobals, "showSuccess"> = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers() },
@@ -44,8 +45,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data) {
         return {
           allUsers: usersQuery.data,
-          currentUser: currentQuery.data,
           wikisubdirs: wikidirsQuery.data.dirs,
+          currentUser: currentQuery.data,
           optionen: optionenQuery.data,
           orte: orteQuery.data,
         };
@@ -64,11 +65,13 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     });
   }
 
-  useEffect(() => {
-    setCurrentUser(context.currentUser);
-  }, [context.currentUser, setCurrentUser]);
+  const exposedContext = useMemo(() => (isAuthenticated ? context : emptyContext), [context, isAuthenticated]);
 
-  return { ...context, showSuccess };
+  useEffect(() => {
+    setCurrentUser(exposedContext.currentUser);
+  }, [exposedContext.currentUser, setCurrentUser]);
+
+  return { ...exposedContext, showSuccess };
 }
 
 export function useJazzContext() {

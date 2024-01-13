@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import * as React from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
-import useMenuNodes from "@/components/content/MenuNodes.tsx";
+import useMenuNodes, { menuKeys } from "@/components/content/MenuNodes.tsx";
 import { ItemType } from "antd/es/menu/hooks/useItems";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Accessrights from "jc-shared/user/accessrights.ts";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { useAuth } from "@/commons/authConsts.ts";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
+  const { logout } = useAuth();
   const subdirs = useMemo(() => {
     return wikisubdirs;
   }, [wikisubdirs]);
@@ -45,6 +48,40 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
     }
     return localItems;
   }, [accessrights, subdirs.length, submenus]);
+
+  const [userMenu, setUserMenu] = useState<ItemType>();
+
+  useEffect(() => {
+    const userMenuStatic = {
+      key: menuKeys.users,
+      icon: <IconForSmallBlock iconName="PeopleFill" />,
+      children: [
+        {
+          key: "allUsers",
+          icon: <IconForSmallBlock iconName="PersonLinesFill" />,
+          label: <Link to={"/users"}>Übersicht</Link>,
+        },
+        {
+          key: "logout",
+          icon: <IconForSmallBlock iconName="PersonFillX" />,
+          label: (
+            <a
+              onClick={() => {
+                logout();
+              }}
+            >
+              Abmelden
+            </a>
+          ),
+        },
+      ],
+      label: "Users",
+    };
+    const copiedUserMenu = { ...userMenuStatic };
+    copiedUserMenu.label = currentUser.id || "Users";
+    setUserMenu(copiedUserMenu);
+  }, [currentUser.id, logout]);
+
   return (
     <Header
       style={{
@@ -73,8 +110,8 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-        <Menu theme="dark" mode="horizontal" items={items} selectedKeys={[activeElement]} style={{ flexGrow: 2 }} />
-        <Menu theme="dark" mode="horizontal" items={[submenus.userMenu]} selectedKeys={[activeElement]} />
+        <Menu theme="dark" mode="horizontal" items={currentUser.id ? items : []} selectedKeys={[activeElement]} style={{ flexGrow: 2 }} />
+        <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
       </div>
     </Header>
   );
