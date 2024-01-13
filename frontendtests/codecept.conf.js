@@ -54,15 +54,10 @@ exports.config = {
     I: "./steps_file.js",
   },
   async bootstrap() {
-    process.env.CONF = "config-it";
-    server = await import("../backend/start.js");
-    server.start("config-it");
     await new mongoHelper().createData("userstore", "admin");
   },
   async teardown() {
     await new mongoHelper().dropAllCollections();
-    server.stop();
-    process.exit(0);
   },
   name: "frontendtests",
 };
