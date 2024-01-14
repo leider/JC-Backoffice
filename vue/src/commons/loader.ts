@@ -328,7 +328,7 @@ export async function saveKalender(kalender: FerienIcals) {
 // Image
 export async function imagenames() {
   const result = await getForType("json", "/rest/imagenames");
-  return result?.names;
+  return (result?.names as string[]) || [];
 }
 
 export async function saveImagenames(rows: ImageOverviewRow[]) {

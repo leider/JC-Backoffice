@@ -18,7 +18,7 @@ import Programmheft from "@/components/programmheft/Programmheft.tsx";
 import KalenderPage from "@/components/options/KalenderPage.tsx";
 import TerminePage from "@/components/options/TerminePage.tsx";
 import Kassenbericht from "@/components/options/Kassenbericht.tsx";
-import ImageOverview from "@/components/options/ImageOverview.tsx";
+import ImageOverview from "@/components/options/imageoverview/ImageOverview.tsx";
 import MailRules from "@/components/mails/MailRules.tsx";
 import MailingLists from "@/components/mails/MailingLists.tsx";
 import SendMail from "@/components/mails/SendMail.tsx";
