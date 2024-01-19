@@ -8,6 +8,7 @@ import InnerContent from "@/components/content/InnerContent.tsx";
 import { useProvideAuth } from "@/commons/auth.tsx";
 import { AuthContext } from "@/commons/authConsts";
 import { JazzHeader } from "@/components/content/JazzHeader.tsx";
+import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpFields.tsx";
 
 const { Content } = Layout;
 
@@ -35,6 +36,7 @@ const JazzContent: React.FC = () => {
           <JazzHeader activeElement={activeElement} />
           <Content style={{ minHeight: "calc(100vh - 65px)" }}>
             <div style={{ background: colorBgContainer }}>
+              <TellUserToFillHelpFields />
               <InnerContent />
             </div>
           </Content>

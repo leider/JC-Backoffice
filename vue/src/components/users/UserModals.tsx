@@ -1,4 +1,4 @@
-import { Col, Form, FormInstance, Input, Modal, Row } from "antd";
+import { Col, Divider, Form, FormInstance, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -117,7 +117,7 @@ export function EditUserModal({
   user: User;
   isSuperUser: boolean;
 }) {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<User>();
   const { showSuccess } = useJazzContext();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -147,7 +147,6 @@ export function EditUserModal({
     }
     form.validateFields().then(async () => {
       mutateUser.mutate(new User(form.getFieldsValue(true)));
-      setIsOpen(false);
     });
   }
 
@@ -186,6 +185,7 @@ function EditFields({ form, isSuperUser }: { form: FormInstance; isSuperUser: bo
         <TextField name={"name"} label="Vollständiger Name" required />
         <TextField name={"email"} label="E-Mail" isEmail required />
         <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff" />
+        <IchKannFields />
         <TextField name={"tel"} label="Telefon" />
         <SingleSelect
           name="tshirt"
@@ -221,5 +221,29 @@ function EditFields({ form, isSuperUser }: { form: FormInstance; isSuperUser: bo
         )}
       </Col>
     </Row>
+  );
+}
+
+export function IchKannFields() {
+  return (
+    <>
+      <Divider orientation="left" orientationMargin="0">
+        Ich kann helfen bei...
+      </Divider>
+      <Row gutter={8}>
+        <Col span={6}>
+          <CheckItem name="kannKasse" label="Kasse" />
+        </Col>
+        <Col span={6}>
+          <CheckItem name="kannTon" label="Ton" />
+        </Col>
+        <Col span={6}>
+          <CheckItem name="kannLicht" label="Licht" />
+        </Col>
+        <Col span={6}>
+          <CheckItem name="kannMaster" label="Master" />
+        </Col>
+      </Row>
+    </>
   );
 }

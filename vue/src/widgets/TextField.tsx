@@ -127,6 +127,7 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, text
   return (
     <Input
       id={id}
+      autoComplete="off"
       disabled={disabled}
       value={textVal}
       onChange={({ target: { value: nextValue } }) => {

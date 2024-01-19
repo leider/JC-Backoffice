@@ -16,6 +16,11 @@ export default class User {
   password?: string; // take care to not persist!
   accessrightsTransient?: Accessrights; // transient
 
+  kannKasse?: boolean;
+  kannTon?: boolean;
+  kannLicht?: boolean;
+  kannMaster?: boolean;
+
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   constructor(object: any) {
     this.id = object.id;
@@ -27,6 +32,11 @@ export default class User {
     this.tshirt = object.tshirt;
     this.password = object.password;
     this.wantsEmailReminders = object.wantsEmailReminders;
+
+    this.kannKasse = object.kannKasse;
+    this.kannTon = object.kannTon;
+    this.kannLicht = object.kannLicht;
+    this.kannMaster = object.kannMaster;
 
     this.gruppen = object.gruppen || [];
     this.rechte = object.rechte || [];
