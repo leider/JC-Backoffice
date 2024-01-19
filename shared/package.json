@@ -11,12 +11,12 @@
   "dependencies": {
     "dayjs": "1.11.10",
     "deep-object-diff": "1.1.9",
-    "marked": "11.1.0"
+    "marked": "11.1.1"
   },
   "devDependencies": {
     "eslint": "8.56.0",
-    "eslint-plugin-prettier": "5.1.2",
-    "prettier": "3.1.1"
+    "eslint-plugin-prettier": "5.1.3",
+    "prettier": "3.2.4"
   },
   "scripts": {
     "test-recompiled": "yarn tsc && yarn test",
