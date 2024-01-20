@@ -4,12 +4,14 @@ import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 function InnerSelect({
+  id,
   realOptions,
   noAdd,
   onChange,
   specialTagRender,
   value,
 }: {
+  id?: string;
   realOptions: LabelAndValue[];
   noAdd?: boolean;
   onChange?: (value: string[]) => void;
@@ -20,6 +22,7 @@ function InnerSelect({
 
   return (
     <Select
+      id={id}
       options={filtered}
       mode={noAdd ? "multiple" : "tags"}
       value={value}
