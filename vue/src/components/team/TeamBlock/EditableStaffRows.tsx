@@ -2,11 +2,10 @@ import { Form, Space } from "antd";
 import React from "react";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
-import UserMultiSelect from "@/components/team/UserMultiSelect.tsx";
 import { MitarbeiterRowProps } from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import MitarbeiterMultiSelect, { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 
-const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }: MitarbeiterRowProps) => {
+const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }) => {
   return (
     <Form.Item label={<b>{label}:</b>} style={{ marginBottom: 12 }}>
       <Space.Compact block>
@@ -14,7 +13,7 @@ const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, 
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return <UserMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
+            return <MitarbeiterMultiSelect sectionName={sectionName} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
           }}
         />
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
@@ -31,7 +30,7 @@ export default function EditableStaffRows({
   brauchtTechnik,
 }: {
   forVermietung: boolean;
-  usersAsOptions: LabelAndValue[];
+  usersAsOptions: UserWithKann[];
   brauchtTechnik: boolean;
 }) {
   return (

@@ -89,7 +89,7 @@ export default function Veranstaltungen() {
   const location = useLocation();
   const [pressefilter, setPressefilter] = useState<string | null>("");
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
     [index: string]: (Veranstaltung | Vermietung)[];

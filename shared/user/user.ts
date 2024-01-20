@@ -1,5 +1,7 @@
 import Accessrights from "./accessrights.js";
+import isNil from "lodash/isNil.js";
 
+export type KannSection = "Kasse" | "Ton" | "Licht" | "Master";
 export default class User {
   id: string;
   name!: string;
@@ -72,6 +74,27 @@ export default class User {
 
   subscribeList(listname: string): void {
     this.mailinglisten.push(listname);
+  }
+
+  get hatKeineKannsGefuellt(): boolean {
+    return isNil(this.kannKasse) && isNil(this.kannTon) && isNil(this.kannLicht) && isNil(this.kannMaster);
+  }
+
+  get kannSections(): KannSection[] {
+    const result: KannSection[] = [];
+    if (this.kannKasse) {
+      result.push("Kasse");
+    }
+    if (this.kannTon) {
+      result.push("Ton");
+    }
+    if (this.kannLicht) {
+      result.push("Licht");
+    }
+    if (this.kannMaster) {
+      result.push("Master");
+    }
+    return result;
   }
 
   get accessrights(): Accessrights {

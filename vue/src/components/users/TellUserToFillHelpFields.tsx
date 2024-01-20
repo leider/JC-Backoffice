@@ -6,7 +6,6 @@ import { IchKannFields } from "@/components/users/UserModals.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveUser } from "@/commons/loader.ts";
 import { PageHeader } from "@ant-design/pro-layout";
-import isNil from "lodash/isNil";
 
 export function TellUserToFillHelpFields() {
   const { currentUser } = useJazzContext();
@@ -24,7 +23,7 @@ export function TellUserToFillHelpFields() {
 
   useEffect(() => {
     if (currentUser.id) {
-      if (isNil(currentUser.kannKasse) && isNil(currentUser.kannTon) && isNil(currentUser.kannLicht) && isNil(currentUser.kannMaster)) {
+      if (currentUser.hatKeineKannsGefuellt) {
         const deepCopy = currentUser.toJSONWithoutPass();
         form.setFieldsValue(deepCopy);
         setIsOpen(true);

@@ -2,18 +2,18 @@ import React, { useContext, useEffect, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useWatch } from "antd/es/form/Form";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import groupBy from "lodash/groupBy";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
   label?: string;
-  usersAsOptions: LabelAndValue[];
+  usersAsOptions: UserWithKann[];
 }
 
 export default function MitarbeiterCard({ forVermietung = false }: { forVermietung?: boolean }) {
@@ -54,7 +54,7 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     }
   }, [form, id, preselection]);
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Mitarbeiter" noTopBorder={lg}>
