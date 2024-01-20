@@ -9,7 +9,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
-import SingleSelect, { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import SingleSelect from "@/widgets/SingleSelect.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
@@ -19,12 +19,13 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useQueries } from "@tanstack/react-query";
+import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
     [index: string]: (Veranstaltung | Vermietung)[];
   };
-  usersAsOptions: LabelAndValue[];
+  usersAsOptions: UserWithKann[];
 }>({ veranstaltungenUndVermietungenNachMonat: {}, usersAsOptions: [] });
 
 export default function Veranstaltungen() {

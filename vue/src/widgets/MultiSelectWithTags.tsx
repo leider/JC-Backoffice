@@ -1,6 +1,7 @@
 import { Form, Select } from "antd";
 import React, { CSSProperties, useMemo } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
+import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 
 export default function MultiSelectWithTags({
   name,
@@ -8,7 +9,6 @@ export default function MultiSelectWithTags({
   options,
   style,
   noAdd,
-  onChange,
   specialTagRender,
 }: {
   name: string[] | string;
@@ -16,23 +16,41 @@ export default function MultiSelectWithTags({
   options: string[];
   style?: CSSProperties;
   noAdd?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange?: (value: any) => void;
   specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
-  const realOptions = useMemo(() => {
-    return options.map((opt) => ({ label: opt, value: opt }));
-  }, [options]);
+  const realOptions = useMemo(() => options.map((opt) => ({ label: opt, value: opt })), [options]);
 
   return (
     <Form.Item label={<b>{label}:</b>} name={name} style={style}>
-      <Select
-        options={realOptions}
-        mode={noAdd ? "multiple" : "tags"}
-        onChange={onChange}
-        tagRender={specialTagRender}
-        style={{ width: "100%" }}
-      />
+      <InnerSelect realOptions={realOptions} noAdd={noAdd} specialTagRender={specialTagRender} />
     </Form.Item>
+  );
+}
+
+function InnerSelect({
+  realOptions,
+  noAdd,
+  onChange,
+  specialTagRender,
+  value,
+}: {
+  realOptions: LabelAndValue[];
+  noAdd?: boolean;
+  onChange?: (value: string[]) => void;
+  value?: string[];
+  specialTagRender?: (props: CustomTagProps) => React.ReactElement;
+}) {
+  const filtered = useMemo(() => {
+    return realOptions.filter((u) => !value?.includes(u.value));
+  }, [realOptions, value]);
+
+  return (
+    <Select
+      options={filtered}
+      mode={noAdd ? "multiple" : "tags"}
+      onChange={onChange}
+      tagRender={specialTagRender}
+      style={{ width: "100%" }}
+    />
   );
 }

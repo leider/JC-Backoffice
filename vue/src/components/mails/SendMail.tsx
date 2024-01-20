@@ -13,7 +13,7 @@ import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/V
 import { TextField } from "@/widgets/TextField";
 import SimpleMdeReact from "react-simplemde-editor";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import UserMultiSelect from "@/components/team/UserMultiSelect";
+import UserMultiSelect from "@/widgets/UserMultiSelect.tsx";
 import Message from "jc-shared/mail/message";
 import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
@@ -21,6 +21,7 @@ import sortBy from "lodash/sortBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useNavigate } from "react-router-dom";
+import MitarbeiterMultiSelect from "@/components/team/MitarbeiterMultiSelect.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -47,7 +48,7 @@ export default function SendMail() {
   });
   const { allUsers, currentUser } = useJazzContext();
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   const mailingLists = useMemo(() => new Users(allUsers).mailinglisten, [allUsers]);
 
@@ -80,10 +81,10 @@ export default function SendMail() {
   const [form] = Form.useForm<{
     subject: string;
     markdown: string;
-    selectedRules: MailRule[];
-    selectedVeranstaltungen: Veranstaltung[];
-    selectedLists: Mailingliste[];
-    selectedUsers: User[];
+    selectedRules: string[];
+    selectedVeranstaltungen: string[];
+    selectedLists: string[];
+    selectedUsers: string[];
   }>();
 
   function initializeForm() {
@@ -100,22 +101,44 @@ export default function SendMail() {
   }
   useEffect(initializeForm, [form]);
 
-  function veranstaltungChanged() {
-    const value = form.getFieldsValue(true);
-    if (value.selectedVeranstaltungen.length > 0 && value.subject === "") {
+  const selectedVeranstaltungenChanged = Form.useWatch("selectedVeranstaltungen", {
+    form,
+  });
+
+  const selectedRulesChanged = Form.useWatch("selectedRules", {
+    form,
+  });
+
+  const selectedListsChanged = Form.useWatch("selectedLists", {
+    form,
+  });
+
+  const selectedUsersChanged = Form.useWatch("selectedUsers", {
+    form,
+  });
+
+  const subject = Form.useWatch("subject", {
+    form,
+  });
+
+  useEffect(() => {
+    setSelectedUsers(allUsers.filter((user) => (selectedUsersChanged || []).includes(user.id)));
+    setSelectedLists(mailingLists.filter((list) => (selectedListsChanged || []).includes(list.name)));
+    setSelectedRules(rules.filter((rule) => (selectedRulesChanged || []).includes(rule.name)));
+    if (selectedVeranstaltungenChanged?.length || (0 > 0 && subject === "")) {
       form.setFieldValue("subject", "[Jazzclub manuell] Veranstaltungen für ...");
     }
-  }
-  function rulesChanged(value: string[]) {
-    setSelectedRules(rules.filter((rule) => value.includes(rule.name)));
-  }
-  function listsChanged(value: string[]) {
-    setSelectedLists(mailingLists.filter((list) => value.includes(list.name)));
-  }
-
-  function usersChanged(value: string[]) {
-    setSelectedUsers(allUsers.filter((user) => value.includes(user.id)));
-  }
+  }, [
+    allUsers,
+    selectedUsersChanged,
+    selectedRulesChanged,
+    selectedListsChanged,
+    mailingLists,
+    rules,
+    selectedVeranstaltungenChanged,
+    subject,
+    form,
+  ]);
 
   useEffect(() => {
     const userIdsFromLists = selectedLists.flatMap((list) => list.users);
@@ -166,28 +189,24 @@ export default function SendMail() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={12}>
-            <MultiSelectWithTags
-              name="selectedVeranstaltungen"
-              label="Veranstaltungen"
-              options={veranstaltungenDescriptions}
-              onChange={veranstaltungChanged}
-            />
+            <MultiSelectWithTags name="selectedVeranstaltungen" label="Veranstaltungen" options={veranstaltungenDescriptions} noAdd />
           </Col>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} onChange={rulesChanged} />
+            <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} noAdd />
           </Col>
         </Row>
         <Row gutter={12}>
           <Col span={12}>
-            <MultiSelectWithTags
-              name="selectedLists"
-              label="Gruppen / Mailinglisten"
-              options={mailingListsDescriptions}
-              onChange={listsChanged}
-            />
+            {/*<UserMultiSelect*/}
+            {/*  name="selectedLists"*/}
+            {/*  label="Gruppen / Mailinglisten"*/}
+            {/*  usersAsOptions={mailingListsDescriptions.map((s) => ({ label: s, value: s }))}*/}
+            {/*/>*/}
+            <MultiSelectWithTags name="selectedLists" label="Gruppen / Mailinglisten" options={mailingListsDescriptions} noAdd />
           </Col>
           <Col span={12}>
-            <UserMultiSelect name="selectedUsers" label="Users" usersAsOptions={usersAsOptions} onChange={usersChanged} />
+            <UserMultiSelect name="selectedUsers" label="Users" usersAsOptions={usersAsOptions} />
+            <MitarbeiterMultiSelect name="selectedUsers" usersAsOptions={usersAsOptions} label="Users" />
           </Col>
         </Row>
         <Row gutter={12} style={{ marginBottom: 24 }}>

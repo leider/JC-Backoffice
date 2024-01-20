@@ -7,7 +7,7 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import StartEndDateOnlyPickers from "@/components/veranstaltung/hotel/StartEndDateOnlyPickers.tsx";
-import UserMultiSelect from "@/components/team/UserMultiSelect";
+import UserMultiSelect from "@/widgets/UserMultiSelect.tsx";
 import { ColorField } from "@/widgets/ColorField.tsx";
 import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
 import { Rule } from "antd/es/form";

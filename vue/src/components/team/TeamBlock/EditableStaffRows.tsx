@@ -13,7 +13,7 @@ const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, 
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return <MitarbeiterMultiSelect sectionName={sectionName} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
+            return <MitarbeiterMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
           }}
         />
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
