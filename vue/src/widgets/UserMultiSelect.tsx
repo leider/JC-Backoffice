@@ -1,6 +1,7 @@
 import { Form, Select } from "antd";
-import React from "react";
+import React, { useMemo } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 
 function InnerSelect({
   usersAsOptions,
@@ -13,9 +14,20 @@ function InnerSelect({
   onChange?: (value: string[]) => void;
   value?: string[];
 }) {
-  const filtered = usersAsOptions.filter((u) => !value?.includes(u.value));
+  const tagRender = useTagRenderForUser(usersAsOptions);
+  const filtered = useMemo(() => usersAsOptions.filter((u) => !value?.includes(u.value)), [usersAsOptions, value]);
 
-  return <Select mode="multiple" options={filtered} disabled={disabled} style={{ width: "100%" }} onChange={onChange} />;
+  return (
+    <Select
+      mode="multiple"
+      options={filtered}
+      disabled={disabled}
+      style={{ width: "100%" }}
+      tagRender={tagRender}
+      onChange={onChange}
+      value={value}
+    />
+  );
 }
 
 export default function UserMultiSelect({

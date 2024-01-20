@@ -3,6 +3,7 @@ import React from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType } from "antd/es/select";
+import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
@@ -47,6 +48,7 @@ function InnerSelect({
 }) {
   const renderInList = (row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />;
 
+  const tagRender = useTagRenderForUser(usersAsOptions);
   const filterOption = (searchString: string, row?: UserWithKann) =>
     row?.value.toLowerCase().includes(searchString.toLowerCase()) ||
     row?.label.toLowerCase().includes(searchString.toLowerCase()) ||
@@ -59,6 +61,7 @@ function InnerSelect({
     <Select
       mode="multiple"
       options={filtered}
+      tagRender={tagRender}
       optionRender={renderInList}
       disabled={disabled}
       style={{ width: "100%" }}
@@ -66,6 +69,7 @@ function InnerSelect({
       filterOption={filterOption}
       placeholder="Tippen zum Suchen nach irgendwas"
       onChange={onChange}
+      value={value}
     />
   );
 }

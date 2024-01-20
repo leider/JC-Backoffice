@@ -28,7 +28,7 @@ function Team() {
 
   const { allUsers, currentUser } = useJazzContext();
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id })), [allUsers]);
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   const [realadmin, setRealadmin] = useState<boolean>(false);
   useEffect(() => {
