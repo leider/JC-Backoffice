@@ -33,12 +33,15 @@ app.set("view engine", "pug");
 
 app.locals.pretty = true;
 
+const refreshTTL = (conf.get("refreshTTL") as number) || 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
+const jwtTTL = (conf.get("jwtTTL") as number) || 15 * 60; // 15 minutes
+
 app.get("/", (req, res) => {
   return res.redirect("/vue/veranstaltungen");
 });
 
 async function createToken(req: Request, res: Response, name: string) {
-  const ttl = 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
+  const ttl = refreshTTL;
 
   function addRefreshToken(res: Response, refreshTokenId: string) {
     res.cookie("refresh-token", refreshTokenId, {
@@ -50,13 +53,12 @@ async function createToken(req: Request, res: Response, name: string) {
 
   async function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
     await refreshstore.removeExpired();
+    await refreshstore.removeWithOldId(oldId);
     const expiry = new Date(Date.now() + ttl);
     return refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry });
   }
 
-  const token = jwt.sign({ id: name }, jwtSecret, {
-    expiresIn: 15 * 60, // 15 minutes
-  });
+  const token = jwt.sign({ id: name }, jwtSecret, { expiresIn: jwtTTL });
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
   try {
