@@ -20,8 +20,4 @@ export default {
   removeExpired: async function removeExpired() {
     return persistence.removeWithQuery({ expiresAt: { $lt: new Date() } });
   },
-
-  removeWithOldId: async function removeWithOldId(oldId: string) {
-    return persistence.removeWithQuery({ id: { $eq: oldId } });
-  },
 };
