@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import * as jose from "jose";
 import { LoginState } from "./authConsts";
 import { useLocation, useNavigate } from "react-router-dom";
+import { refreshTokenPost } from "@/commons/loader.ts";
 
 class AuthApi {
   loginPost(name: string, pass: string) {
@@ -53,44 +53,12 @@ export function useProvideAuth(): IUseProvideAuth {
 
   const queryClient = useQueryClient();
 
-  const scheduleTokenRefresh = async (inMs: number) => {
-    setTimeout(
-      async () => {
-        try {
-          const token = await authApi.refreshTokenPost();
-          setAuthHeader(token);
-        } catch (_) {
-          logout();
-        }
-      },
-      // request new token one minute before it expires
-      inMs - 60_000,
-    );
-  };
-
-  const setAuthHeader = useCallback(
-    (token: string) => {
-      const decoded = jose.decodeJwt<{ exp: number }>(token);
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
-      scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
-  const setTokenForAuthHeader = useCallback(
-    async (token: string) => {
-      await queryClient.invalidateQueries();
-      setAuthHeader(token);
-      setLoginState(LoginState.LOGGED_IN);
-    },
-    [queryClient, setAuthHeader],
-  );
-
   async function login(username: string, password: string) {
     setLoginState(LoginState.PENDING);
     try {
       const token = await authApi.loginPost(username, password);
-      setTokenForAuthHeader(token.data.token);
+      refreshTokenPost(token.data.token);
+      setLoginState(LoginState.LOGGED_IN);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 401) {
@@ -122,16 +90,16 @@ export function useProvideAuth(): IUseProvideAuth {
   useEffect(() => {
     async function doit() {
       if (loginState === LoginState.UNKNOWN) {
-        try {
-          const token = await authApi.refreshTokenPost();
-          setTokenForAuthHeader(token);
-        } catch (e) {
+        const token = await refreshTokenPost();
+        if (token) {
+          setLoginState(LoginState.LOGGED_IN);
+        } else {
           logout();
         }
       }
     }
     doit();
-  }, [loginState, logout, setTokenForAuthHeader]);
+  }, [loginState, logout]);
 
   return {
     loginState,
