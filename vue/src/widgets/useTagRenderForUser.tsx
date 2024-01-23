@@ -10,7 +10,7 @@ export function useTagRenderForUser(usersAsOptions: LabelAndValue[]) {
       event.stopPropagation();
     };
 
-    const label = usersAsOptions.filter((item) => item.value === value)[0].label;
+    const label = usersAsOptions.filter((item) => item.value === value)?.[0]?.label;
 
     return (
       <Tag onMouseDown={onPreventMouseDown} closable={closable} onClose={onClose} style={{ marginRight: 3, paddingInline: 3 }}>
