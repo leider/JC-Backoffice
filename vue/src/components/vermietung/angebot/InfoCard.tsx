@@ -49,7 +49,7 @@ export default function InfoCard() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Form.Item label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]}>
+          <Form.Item label={<b>Zusätzliche Infos (erscheinen NACH SPEICHERN im Angebot):</b>} name={["angebot", "beschreibung"]}>
             <SimpleMdeReact options={{ status: false, spellChecker: false }} />
           </Form.Item>
         </Col>

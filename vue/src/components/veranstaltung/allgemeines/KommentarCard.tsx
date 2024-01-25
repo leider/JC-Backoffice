@@ -11,7 +11,7 @@ export default function KommentarCard() {
       <Row gutter={12}>
         <Col span={24}>
           <Link to={`?page=gaeste`}>
-            <b>Reservierungen und Gäasteliste jetzt unter diesem Tab!</b>
+            <b>Reservierungen und Gästeliste jetzt unter diesem Tab!</b>
           </Link>
           <Form.Item label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]}>
             <SimpleMdeReact options={{ status: false, spellChecker: false }} />

@@ -34,7 +34,7 @@ export async function vertrag(res: Response, next: NextFunction, veranstaltungUr
   const sprache = language === "regional" ? "deutsch" : language;
   return res.render(
     `vertrag-${sprache}`,
-    { veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix },
+    { veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix, email: "vertrag" },
     generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next),
   );
 }
@@ -46,7 +46,7 @@ export async function vermietungAngebot(res: Response, next: NextFunction, vermi
   }
   return res.render(
     "vertrag-vermietung",
-    { vermietung, datum: new DatumUhrzeit(), art, publicUrlPrefix, einseitig: true },
+    { vermietung, datum: new DatumUhrzeit(), art, publicUrlPrefix, einseitig: true, email: "event" },
     generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next),
   );
 }

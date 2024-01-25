@@ -21,35 +21,32 @@ mixin sidebar
   img(src=publicUrlPrefix + '/reporting/logo.png', height="80")
   div(style="font-size:6px;margin-top:60px")
     p
-      .blau Veranstalter
-      | Jazzclub Karlsruhe e.V.<br>
-      | Kaiserstraße 70-74<br>
+      b Jazzclub Karlsruhe e.V.<br>
+      | Kaiserpassage 6<br>
       | 76133 Karlsruhe<br>
     p
       .blau Kontakt
-      | E-Mail: vertrag@jazzclub.de<br>
+      | E-Mail: #{email}@jazzclub.de<br>
       | Web: jazzclub.de<br>
     p
       .blau Bankverbindung
-      | Sparkasse Karlsruhe - Ettlingen<br>
+      | Sparkasse Karlsruhe<br>
       | IBAN: DE69 6605 0101 0010 1743 24 <br>
-      | BIC: KARSDE66<br>
+      | BIC: KARSDE66XXX<br>
     p
       .blau Vorsitzende
       | Niklas Braun, Torsten Antoni, Steffen Schuhmacher<br>
     p
-      .blau Geschäftsführung
-      | Julia Madeleine Hildenbrand<br>
-    p
       .blau Vereinsregister
       | VR Nr. 100827<br>
-      | Gerichtsstand ist Karlsruhe<br>
       | Registergericht ist das Amtsgericht Karlsruhe<br>
-  +bild('union')
-  +bild('bawue')
-  +bild('stadt')
-  +bild('meka')
+      | Gerichtsstand ist Karlsruhe<br>
+  +bild('jazzverband')
   +bild('ring')
+  +bild('jazzunion')
+  +bild('livekomm')
+  +bild('city')
+  +bild('meka')
 
 doctype html
 html
@@ -70,7 +67,7 @@ html
                 small(style="font-size:6px;")
                   b Jazzclub Karlsruhe e.V.&nbsp;
                   span.blau |&nbsp;
-                  | Kaiserstraße 70-74&nbsp;
+                  | Kaiserpassage 6&nbsp;
                   span.blau |&nbsp;
                   | 76133 Karlsruhe
                 p &nbsp;

@@ -58,6 +58,7 @@ async function run() {
       sendMailsNightly.checkKasse(now),
       sendMailsNightly.remindForProgrammheft(now),
       sendMailsNightly.checkStaff(now),
+      sendMailsNightly.checkBar(now),
     ]);
 
     informAdmin(undefined, results[0] as number);

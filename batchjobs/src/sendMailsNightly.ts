@@ -4,6 +4,7 @@ import { checkFluegel, checkFotograf } from "./sendMailsNightlyPhotoAndFluegel.j
 import { loadRulesAndProcess } from "./sendMailsForRules.js";
 import { remindForProgrammheft } from "./sendMailsForProgrammheft.js";
 import { checkStaff } from "./sendMailsStaffReminder.js";
+import { checkBar } from "./sendMailsNightlyBar.js";
 
 export default {
   loadRulesAndProcess,
@@ -13,4 +14,5 @@ export default {
   checkFotograf,
   remindForProgrammheft,
   checkStaff,
+  checkBar,
 };
