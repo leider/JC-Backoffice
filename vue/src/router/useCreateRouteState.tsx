@@ -25,7 +25,6 @@ import SendMail from "@/components/mails/SendMail.tsx";
 import Belege from "@/components/belege/Belege.tsx";
 import WikiPage from "@/components/wiki/WikiPage.tsx";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
-import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
 
 export type RouteState = {
   routes: RouteObject[];
@@ -35,7 +34,7 @@ export type RouteState = {
 const allRoutes: RouteObject[] = [
   {
     element: <JazzclubApp />,
-    errorElement: <ErrorBoundary />,
+    errorElement: <Navigate to={"/"} />,
     children: [
       {
         path: "/",

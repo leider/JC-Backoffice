@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { Blocker, BlockerFunction } from "react-router";
+import { unstable_Blocker as Blocker, unstable_BlockerFunction as BlockerFunction } from "react-router";
 import { useBlocker } from "react-router-dom";
 import { App } from "antd";
 
