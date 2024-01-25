@@ -78,7 +78,7 @@ export default function VermietungComp() {
     if (currentUser.id && !accessrights.isOrgaTeam) {
       navigate(`/team`);
     }
-  }, [currentUser.accessrights, navigate, url]);
+  }, [currentUser, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
