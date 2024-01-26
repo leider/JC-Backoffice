@@ -21,6 +21,10 @@
   padding: 0 !important;
 }
 
+.ant-collapse-content {
+  border-top: 0 !important;
+}
+
 .ant-table.ant-table-small .ant-table-title,
 .ant-table.ant-table-small .ant-table-footer,
 .ant-table.ant-table-small .ant-table-thead > tr > th,
@@ -81,4 +85,14 @@ pre {
   white-space: -moz-pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
+}
+
+.monat-header .ant-collapse-content-box {
+  padding: 0 !important;
+}
+.team-block .ant-collapse-header {
+  padding: 2px 2px 0px !important;
+}
+.ant-collapse-header {
+  padding: 4px 8px !important;
 }

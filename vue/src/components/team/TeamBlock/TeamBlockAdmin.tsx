@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
@@ -12,16 +12,13 @@ interface TeamBlockAdminProps {
 }
 
 function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const [color, setColor] = useState<string | undefined>("");
-
-  useEffect(() => {
-    setColor(veranstaltung.kopf.eventTypRich?.color || "#6c757d");
-  }, [veranstaltung]);
+  const color = useMemo(() => veranstaltung.kopf.eventTypRich?.color || "#6c757d", [veranstaltung.kopf.eventTypRich?.color]);
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {
     setExpanded(initiallyOpen);
   }, [initiallyOpen]);
+
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} lg={8} xl={6} xxl={4}>

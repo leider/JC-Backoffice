@@ -26,6 +26,9 @@ const JazzContent: React.FC = () => {
     if (pathname.search("preview") > 0) {
       return setActiveElement("team");
     }
+    if (pathname.search("vermietung") > 0) {
+      return setActiveElement("veranstaltung");
+    }
     setActiveElement(result || "");
   }, [pathname]);
 

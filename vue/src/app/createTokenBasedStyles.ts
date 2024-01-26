@@ -36,15 +36,6 @@ export function createTokenBasedStyles(document: Document, token: GlobalToken) {
 .monat-header {
   background-color: ${colorPrimary};
 }
-.monat-header .ant-collapse-content-box {
-  padding: 0 !important;
-}
-.team-block .ant-collapse-header {
-  padding: 2px 2px !important;
-}
-.ant-collapse-header {
-  padding: 4px 8px !important;
-}
 `;
 
   const JC_STYLES = "JC-styles";

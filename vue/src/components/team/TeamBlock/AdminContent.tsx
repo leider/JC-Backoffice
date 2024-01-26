@@ -1,5 +1,5 @@
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
-import { Col, Collapse, Form, Row } from "antd";
+import { Col, Collapse, ConfigProvider, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
@@ -96,6 +96,16 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
     });
   }
 
+  const color = useMemo(
+    () => (veranstaltungOderVermietung.isVermietung ? "#f6eee1" : veranstaltungOderVermietung.kopf.eventTypRich?.color || "#6c757d"),
+    [veranstaltungOderVermietung],
+  );
+
+  const textColor = useMemo(
+    () => (veranstaltungOderVermietung.isVermietung ? "black" : "white"),
+    [veranstaltungOderVermietung.isVermietung],
+  );
+
   return (
     <Form
       form={form}
@@ -105,7 +115,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       onFinish={saveForm}
       layout="vertical"
       size="small"
-      style={{ margin: -12 }}
+      style={{ margin: -12, backgroundColor: color, borderColor: color }}
     >
       <Row>
         <Col span={6}>
@@ -115,15 +125,15 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
               setShowMitarbeiter(!showMitarbeiter);
             }}
           >
-            <span>
-              <IconForSmallBlock iconName="UniversalAccess" />
+            <span style={{ color: textColor }}>
+              <IconForSmallBlock iconName="UniversalAccess" color={textColor} />
               &nbsp;...
             </span>
           </h3>
         </Col>
         <Col span={18}>
-          <Row justify="end">
-            {showMitarbeiter ? (
+          <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
+            {showMitarbeiter && dirty ? (
               <SaveButton disabled={!dirty} />
             ) : (
               <>
@@ -131,11 +141,11 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
                 {!forVermietung && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="gaeste" isVermietung={forVermietung} />
                 )}
-                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={forVermietung} />
-                )}
                 {forVermietung && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="angebot" isVermietung={forVermietung} />
+                )}
+                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
+                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={forVermietung} />
                 )}
                 <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={forVermietung} />
                 {veranstaltungOderVermietung.artist.brauchtHotel && (
@@ -151,7 +161,6 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
           </Row>
         </Col>
       </Row>
-
       <Collapse
         ghost
         activeKey={showMitarbeiter ? "mitarbeiter" : ""}
@@ -160,7 +169,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
             showArrow: false,
             key: "mitarbeiter",
             children: (
-              <div style={{ padding: 8 }}>
+              <div style={{ padding: 8, margin: -8, marginTop: -12, backgroundColor: "white", borderColor: "white" }}>
                 <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
               </div>
             ),
