@@ -10,7 +10,6 @@ import User from "jc-shared/user/user";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter";
 import { TextField } from "@/widgets/TextField";
-import SimpleMdeReact from "react-simplemde-editor";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import Message from "jc-shared/mail/message";
 import uniq from "lodash/uniq";
@@ -20,6 +19,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useNavigate } from "react-router-dom";
 import MitarbeiterMultiSelect from "@/components/team/MitarbeiterMultiSelect.tsx";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -198,9 +198,7 @@ export default function SendMail() {
             <TextField name="subject" label="Subject" required />
           </Col>
           <Col span={24}>
-            <Form.Item label={<b>Anschreiben:</b>} name="markdown" required>
-              <SimpleMdeReact autoFocus options={editorOptions} />
-            </Form.Item>
+            <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" options={editorOptions} />
           </Col>
         </Row>
       </RowWrapper>

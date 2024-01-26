@@ -7,11 +7,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Renderer from "jc-shared/commons/renderer";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function WikiPage() {
   const { subdir, page } = useParams();
@@ -125,13 +125,7 @@ export default function WikiPage() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            {isEdit ? (
-              <Form.Item name={["content"]}>
-                <SimpleMdeReact autoFocus options={editorOptions} />
-              </Form.Item>
-            ) : (
-              <div dangerouslySetInnerHTML={{ __html: rendered }} />
-            )}
+            {isEdit ? <MarkdownEditor name="content" options={editorOptions} /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
           </Col>
         </Row>
       </RowWrapper>

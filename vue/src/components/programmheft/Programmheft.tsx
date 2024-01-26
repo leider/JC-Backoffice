@@ -6,7 +6,6 @@ import { Col, Form, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import SimpleMdeReact from "react-simplemde-editor";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender, { Event } from "jc-shared/programmheft/kalender";
@@ -16,6 +15,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/ProgrammheftVeranstaltungenRow.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -138,9 +138,7 @@ export default function Programmheft() {
             <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={events} />
           </Col>
           <Col xs={24} lg={8}>
-            <Form.Item name={"text"}>
-              <SimpleMdeReact autoFocus options={editorOptions} onBlur={textChanged} />
-            </Form.Item>
+            <MarkdownEditor name="text" options={editorOptions} onBlur={textChanged} />
             <h4>Farben Hilfe</h4>
             <p>
               Du kannst entweder eine{" "}

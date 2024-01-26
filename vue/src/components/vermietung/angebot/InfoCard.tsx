@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
-import SimpleMdeReact from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
@@ -9,6 +9,7 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function InfoCard() {
   const veranstContext = useContext(VermietungContext);
@@ -49,9 +50,7 @@ export default function InfoCard() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Form.Item label={<b>Zusätzliche Infos (erscheinen NACH SPEICHERN im Angebot):</b>} name={["angebot", "beschreibung"]}>
-            <SimpleMdeReact options={{ status: false, spellChecker: false }} />
-          </Form.Item>
+          <MarkdownEditor label={<b>Zusätzliche Infos (erscheinen NACH SPEICHERN im Angebot):</b>} name={["angebot", "beschreibung"]} />
         </Col>
       </Row>
       <Row gutter={12}>

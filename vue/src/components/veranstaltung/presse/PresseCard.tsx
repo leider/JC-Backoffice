@@ -5,7 +5,6 @@ import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import Uploader from "@/components/veranstaltung/Uploader";
-import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +14,7 @@ import { fromFormObject as fromFormObjectVermietung } from "@/components/vermiet
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function PresseCard({ form, isVermietung }: { form: FormInstance; isVermietung: boolean }) {
   const allimages = useQuery({
@@ -90,24 +90,33 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
                 key: "final",
                 label: <TabLabel kind="final" title="Finaler Text" />,
                 children: (
-                  <Form.Item label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "text"]}>
-                    <SimpleMdeReact autoFocus options={editorOptions} />
-                  </Form.Item>
+                  <MarkdownEditor
+                    label={<b>Formatierter Text für die Pressemitteilung:</b>}
+                    name={["presse", "text"]}
+                    options={editorOptions}
+                  />
                 ),
               },
               {
                 key: "original",
                 label: <TabLabel kind="original" title="Originaler Text" />,
                 children: (
-                  <Form.Item label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]}>
-                    <SimpleMdeReact autoFocus options={editorOptions} />
-                  </Form.Item>
+                  <MarkdownEditor
+                    label={<b>Formatierter Text für die Pressemitteilung:</b>}
+                    name={["presse", "originalText"]}
+                    options={editorOptions}
+                  />
                 ),
               },
             ]}
           />
           <Uploader form={form} name={["presse", "image"]} typ={"pressefoto"} />
-          <SingleSelect name={["tempimage"]} label={"Vorhandene Bilder übernehmen"} options={allimages.data} onChange={imageUebernehmen} />
+          <SingleSelect
+            name={["tempimage"]}
+            label={"Vorhandene Bilder übernehmen"}
+            options={allimages.data || []}
+            onChange={imageUebernehmen}
+          />
         </Col>
         <Col xs={24} lg={12}>
           <PressePreview veranstVermiet={verForPreview} />

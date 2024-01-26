@@ -62,7 +62,7 @@ export default function VermietungComp() {
 
   const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();
-  function initializeForm() {
+  useEffect(() => {
     const deepCopy = toFormObject(vermietung);
     form.setFieldsValue(deepCopy);
     const initial = toFormObject(vermietung);
@@ -70,9 +70,7 @@ export default function VermietungComp() {
     setDirty(areDifferent(initial, deepCopy));
     setIsNew(!vermietung.id);
     form.validateFields();
-  }
-
-  useEffect(initializeForm, [form, vermietung]);
+  }, [form, vermietung]);
   useEffect(() => {
     const accessrights = currentUser.accessrights;
     if (currentUser.id && !accessrights.isOrgaTeam) {

@@ -1,9 +1,8 @@
 import React from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Form, Row } from "antd";
-import SimpleMdeReact from "react-simplemde-editor";
-import "easymde/dist/easymde.min.css";
+import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function KommentarCard() {
   return (
@@ -13,9 +12,7 @@ export default function KommentarCard() {
           <Link to={`?page=gaeste`}>
             <b>Reservierungen und Gästeliste jetzt unter diesem Tab!</b>
           </Link>
-          <Form.Item label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]}>
-            <SimpleMdeReact options={{ status: false, spellChecker: false }} />
-          </Form.Item>
+          <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]} />
         </Col>
       </Row>
     </CollapsibleForVeranstaltung>
