@@ -48,14 +48,14 @@ async function createToken(req: Request, res: Response, name: string) {
       maxAge: ttl,
       httpOnly: true,
       secure: false,
+      sameSite: "strict",
     });
   }
 
   async function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
     await refreshstore.removeExpired();
-    await refreshstore.removeWithOldId(oldId);
     const expiry = new Date(Date.now() + ttl);
-    return refreshstore.save({ id: refreshTokenId, userId: name, expiresAt: expiry });
+    return refreshstore.save({ id: oldId || refreshTokenId, userId: name, expiresAt: expiry });
   }
 
   const token = jwt.sign({ id: name }, jwtSecret, { expiresIn: jwtTTL });
@@ -63,7 +63,7 @@ async function createToken(req: Request, res: Response, name: string) {
   const oldId = (req.cookies["refresh-token"] as string) || "";
   try {
     await persistRefreshToken(refreshTokenId, oldId, name, ttl);
-    addRefreshToken(res, refreshTokenId);
+    addRefreshToken(res, oldId || refreshTokenId);
     resToJson(res, { token });
   } catch (e) {
     return res.sendStatus(401);
