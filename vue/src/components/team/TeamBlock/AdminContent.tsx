@@ -4,8 +4,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { differenceFor } from "jc-shared/commons/compareObjects.ts";
-import { areDifferent } from "@/commons/comparingAndTransforming.ts";
+import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -87,7 +86,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
         result = new Vermietung(veranst);
         mutateVermietung.mutate(result);
       } else {
-        const diff = differenceFor(initialValue, veranst);
+        const diff = differenceFor(initialValue, veranst, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
         veranst.changelist.unshift(createLogWithDiff(diff));
         result = new Veranstaltung(veranst);
         mutateVeranstaltung.mutate(result);

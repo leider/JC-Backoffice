@@ -19,6 +19,7 @@ export default function VertragCard() {
 
   return (
     <CollapsibleForVeranstaltung suffix="allgemeines" label="Vertrag">
+      {veranstContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={9}>
           <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten()} />
@@ -37,7 +38,7 @@ export default function VertragCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={!isBookingTeam || !getFieldValue("id")}
+                    disabled={veranstContext?.isDirty || !isBookingTeam || !getFieldValue("id")}
                     onClick={() => openVertrag(form.getFieldsValue(true))}
                   >
                     Generieren

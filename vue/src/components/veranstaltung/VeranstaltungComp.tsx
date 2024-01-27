@@ -5,11 +5,10 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveOptionen, saveRider, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader.ts";
 import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
-import { areDifferent } from "@/commons/comparingAndTransforming";
+import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming";
 import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
 import VeranstaltungPageHeader from "@/components/veranstaltung/VeranstaltungPageHeader";
-import { differenceFor } from "jc-shared/commons/compareObjects";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
@@ -18,11 +17,21 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export const VeranstaltungContext = createContext<{
   form: FormInstance<Veranstaltung>;
+  isDirty: boolean;
 } | null>(null);
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
   const [form] = Form.useForm<Veranstaltung>();
+
+  const agenturauswahl = Form.useWatch("agenturauswahl", { form });
+
+  useEffect(
+    () => {
+      setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [agenturauswahl],
+  );
 
   const veranst = useQuery({
     queryKey: ["veranstaltung", url],
@@ -89,13 +98,14 @@ export default function VeranstaltungComp() {
 
   useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (deepCopy as any).riderBoxes = rider.boxes;
     form.setFieldsValue(deepCopy);
-    form.setFieldValue("riderBoxes", rider.boxes);
     const initial = toFormObject(veranstaltung);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (initial as any).riderBoxes = rider.boxes;
     setInitialValue(initial);
-    setDirty(areDifferent(initial, deepCopy));
+    setDirty(areDifferent(initial, deepCopy, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
     setIsNew(!veranstaltung.id);
     form.validateFields();
   }, [form, veranstaltung, rider]);
@@ -130,7 +140,7 @@ export default function VeranstaltungComp() {
         veranst.initializeIdAndUrl();
         veranst.changelist = [createLogWithDiff("Angelegt")];
       } else {
-        const diff = differenceFor(originalVeranst, veranst);
+        const diff = differenceFor(originalVeranst, veranst, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
         veranst.changelist.unshift(createLogWithDiff(diff));
       }
       if (!currentUser.accessrights.isOrgaTeam && !isNew) {
@@ -160,7 +170,7 @@ export default function VeranstaltungComp() {
   }
 
   return (
-    <VeranstaltungContext.Provider value={{ form }}>
+    <VeranstaltungContext.Provider value={{ form, isDirty: dirty }}>
       <Form
         form={form}
         onValuesChange={() => {

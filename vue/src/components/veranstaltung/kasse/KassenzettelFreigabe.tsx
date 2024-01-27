@@ -72,8 +72,9 @@ export function KassenzettelFreigabe() {
             block
             text="Kassenzettel"
             icon="PrinterFill"
+            disabled={veranstContext?.isDirty}
             onClick={() => openKassenzettel(form.getFieldsValue(true))}
-            tooltipTitle="Kassenzettel asl PDF"
+            tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
           />
         </Col>
@@ -90,7 +91,13 @@ export function KassenzettelFreigabe() {
                     const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
                     if (!freigabe) {
                       return (
-                        <ButtonWithIcon block text="Kasse freigeben..." icon={"Unlock"} onClick={freigeben} disabled={!darfFreigeben} />
+                        <ButtonWithIcon
+                          block
+                          text="Kasse freigeben..."
+                          icon={"Unlock"}
+                          onClick={freigeben}
+                          disabled={veranstContext?.isDirty || !darfFreigeben}
+                        />
                       );
                     } else {
                       return (
@@ -101,7 +108,7 @@ export function KassenzettelFreigabe() {
                             type="primary"
                             danger
                             onClick={freigabeAufheben}
-                            disabled={!darfFreigabeAufheben}
+                            disabled={veranstContext?.isDirty || !darfFreigabeAufheben}
                           >
                             &nbsp;Kasse ist freigegeben
                           </Button>

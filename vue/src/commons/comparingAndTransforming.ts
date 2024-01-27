@@ -1,5 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import isEqual from "lodash/isEqual";
+import { detailedDiff } from "deep-object-diff";
 
 /**
  * this function will modify data!
@@ -36,4 +37,25 @@ function withoutNullOrUndefinedStrippedBy<T>(data: T & { [p: string]: any }, pro
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function areDifferent(left: any, right: any, propertiesToIgnore?: string[]) {
   return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
+}
+
+export function differenceFor(left = {}, right = {}, propertiesToIgnore?: string[]): string {
+  const a = withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore);
+  const b = withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore);
+  const diff = detailedDiff(a, b);
+  const translated: { hinzugefügt?: object; gelöscht?: object; geändert?: object } = {
+    hinzugefügt: diff.added,
+    gelöscht: diff.deleted,
+    geändert: diff.updated,
+  };
+  if (Object.keys(translated.hinzugefügt || {}).length === 0) {
+    delete translated.hinzugefügt;
+  }
+  if (Object.keys(translated.gelöscht || {}).length === 0) {
+    delete translated.gelöscht;
+  }
+  if (Object.keys(translated.geändert || {}).length === 0) {
+    delete translated.geändert;
+  }
+  return JSON.stringify(translated, null, 2);
 }

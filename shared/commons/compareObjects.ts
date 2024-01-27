@@ -1,16 +1,8 @@
-import { detailedDiff } from "deep-object-diff";
 import isEqual from "lodash/isEqual.js";
 import difference from "lodash/difference.js";
 import differenceWith from "lodash/differenceWith.js";
 import map from "lodash/map.js";
 import uniq from "lodash/uniq.js";
-
-export function differenceFor(a = {}, b = {}): string {
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  const diff = detailedDiff(a, b) as { added: any; deleted: any; updated: any };
-  const translated = { hinzugefügt: diff.added, gelöscht: diff.deleted, geändert: diff.updated };
-  return JSON.stringify(translated, null, 2);
-}
 
 export function calculateChangedAndDeleted<T extends { id: string }>(newItems: T[], oldItems: T[]) {
   const currentIds: string[] = map(newItems, "id");
