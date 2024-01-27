@@ -1,12 +1,7 @@
 import Vermietung from "jc-shared/vermietung/vermietung";
-import { Dayjs } from "dayjs";
 import { FormInstance } from "antd";
 import cloneDeep from "lodash/cloneDeep";
 
-export type StartAndEnd = {
-  start: Dayjs;
-  end: Dayjs;
-};
 export function toFormObject(vermietung: Vermietung): object {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = vermietung.toJSON();

@@ -1,12 +1,8 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { FormInstance } from "antd";
 import cloneDeep from "lodash/cloneDeep";
 
-export type StartAndEnd = {
-  start: Dayjs;
-  end: Dayjs;
-};
 export function toFormObject(veranstaltung: Veranstaltung): object {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result: any = veranstaltung.toJSON();

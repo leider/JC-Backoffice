@@ -4,11 +4,13 @@ import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 
 function InnerSelect({
+  id,
   usersAsOptions,
   disabled,
   onChange,
   value,
 }: {
+  id?: string;
   usersAsOptions: LabelAndValue[];
   disabled?: boolean;
   onChange?: (value: string[]) => void;
@@ -19,6 +21,7 @@ function InnerSelect({
 
   return (
     <Select
+      id={id}
       mode="multiple"
       options={filtered}
       disabled={disabled}

@@ -3,10 +3,14 @@ import { IntRange } from "rc-picker/lib/interface";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { StartAndEnd } from "@/components/veranstaltung/veranstaltungCompUtils";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
-function EmbeddedPickers({ dates, onDates }: { dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
+type StartAndEnd = {
+  start: Dayjs;
+  end: Dayjs;
+};
+
+function EmbeddedPickers({ id, dates, onDates }: { id?: string; dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
@@ -33,6 +37,7 @@ function EmbeddedPickers({ dates, onDates }: { dates?: StartAndEnd; onDates?: (v
 
   return (
     <DatePicker.RangePicker
+      id={id}
       showTime
       minuteStep={30 as IntRange<1, 59>}
       format={["ddd DD.MM.YY HH:mm", "DDMMYY HH:mm"]}

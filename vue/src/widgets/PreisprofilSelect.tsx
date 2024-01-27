@@ -23,6 +23,7 @@ export default function PreisprofilSelect({ optionen, onChange, form }: Preispro
 }
 
 interface InternalPreisprofilSelectParams {
+  id?: string;
   valueAsObject?: Preisprofil;
   optionen: OptionValues;
   onValueAsObject?: (value?: Preisprofil) => void;
@@ -30,7 +31,7 @@ interface InternalPreisprofilSelectParams {
   disabled: boolean;
 }
 
-function InternalPreisprofilSelect({ onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {
+function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {
   function profilToDisplay(profil: Preisprofil) {
     return {
       label: (
@@ -69,5 +70,5 @@ function InternalPreisprofilSelect({ onValueAsObject, optionen, valueAsObject, o
     onChange?.(selectedProfil);
   }
 
-  return <Select options={displayProfile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
+  return <Select id={id} options={displayProfile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
 }
