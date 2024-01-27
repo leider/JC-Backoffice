@@ -11,7 +11,7 @@ export function MarkdownEditor({
 }: {
   label?: string | ReactNode;
   name: string[] | string;
-  options: EasyMDE.Options;
+  options?: EasyMDE.Options;
   onBlur?: React.FocusEventHandler<HTMLDivElement>;
 }) {
   return (

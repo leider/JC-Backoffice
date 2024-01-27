@@ -50,9 +50,10 @@ export default function InfoCard() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <MarkdownEditor label={<b>Zusätzliche Infos (erscheinen NACH SPEICHERN im Angebot):</b>} name={["angebot", "beschreibung"]} />
+          <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]} />
         </Col>
       </Row>
+      {veranstContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={16}>
           <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag", "Rechnung"]} />
@@ -66,7 +67,7 @@ export default function InfoCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={!getFieldValue("id")}
+                    disabled={veranstContext?.isDirty || !getFieldValue("id")}
                     onClick={() => openAngebotRechnung(form.getFieldsValue(true))}
                   >
                     Generieren

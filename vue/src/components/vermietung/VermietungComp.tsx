@@ -13,7 +13,7 @@ import OptionValues from "jc-shared/optionen/optionValues.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues } | null>(null);
+export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues; isDirty: boolean } | null>(null);
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -93,7 +93,7 @@ export default function VermietungComp() {
   }
 
   return (
-    <VermietungContext.Provider value={{ form, optionen }}>
+    <VermietungContext.Provider value={{ form, optionen, isDirty: dirty }}>
       <Form
         form={form}
         onValuesChange={() => {
