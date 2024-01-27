@@ -55,12 +55,6 @@ function Team() {
       <Row gutter={8}>
         <Col>
           <PageHeader
-            footer={
-              <p>
-                <b>Kasse 1</b> und <b>Techniker 1</b> sind am Abend jeweils die <b>Verantwortlichen</b>. Bitte denke daran, rechtzeitig vor
-                der Veranstaltung da zu sein!
-              </p>
-            }
             title={
               <Space>
                 Team
