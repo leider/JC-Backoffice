@@ -77,7 +77,10 @@ async function standardFetch(params: FetchParams) {
     const res = await axios(options);
     return res.data;
   } catch (e) {
-    refreshTokenPost();
+    const token = await refreshTokenPost();
+    if (token) {
+      return standardFetch(params);
+    }
   }
 }
 
