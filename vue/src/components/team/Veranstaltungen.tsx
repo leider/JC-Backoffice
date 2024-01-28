@@ -73,8 +73,8 @@ export default function Veranstaltungen() {
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => veranstaltungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 5 },
-      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 5 },
+      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => veranstaltungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
+      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {

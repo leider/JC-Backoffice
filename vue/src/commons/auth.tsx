@@ -1,24 +1,9 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LoginState } from "./authConsts";
 import { useLocation, useNavigate } from "react-router-dom";
-import { refreshTokenPost } from "@/commons/loader.ts";
-
-class AuthApi {
-  loginPost(name: string, pass: string) {
-    return axios.post("/login", { name, pass });
-  }
-  async refreshTokenPost() {
-    const result = await axios.post("/refreshToken");
-    return result.data.token;
-  }
-  logoutManually() {
-    return axios.post("/logout");
-  }
-}
-
-const authApi = new AuthApi();
+import { loginPost, logoutManually, refreshTokenPost } from "@/commons/loader.ts";
 
 export interface IUseProvideAuth {
   /**
@@ -52,12 +37,21 @@ export function useProvideAuth(): IUseProvideAuth {
   const location = useLocation();
 
   const queryClient = useQueryClient();
+  const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
+  const refetchInterval = 10 * 60 * 1000;
+
+  const { error } = useQuery({
+    enabled: isAuthenticated,
+    queryKey: ["refreshToken"],
+    queryFn: () => refreshTokenPost(),
+    refetchInterval,
+    refetchIntervalInBackground: true,
+  });
 
   async function login(username: string, password: string) {
     setLoginState(LoginState.PENDING);
     try {
-      const token = await authApi.loginPost(username, password);
-      refreshTokenPost(token.data.token);
+      await loginPost(username, password);
       setLoginState(LoginState.LOGGED_IN);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -76,7 +70,7 @@ export function useProvideAuth(): IUseProvideAuth {
     try {
       setLoginState(LoginState.LOGGED_OUT);
       delete axios.defaults.headers.Authorization;
-      await authApi.logoutManually();
+      await logoutManually();
     } catch (_) {
       // so what?
     } finally {
@@ -88,12 +82,18 @@ export function useProvideAuth(): IUseProvideAuth {
   }, [location.pathname, navigate, queryClient]);
 
   useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error, logout]);
+
+  useEffect(() => {
     async function doit() {
       if (loginState === LoginState.UNKNOWN) {
-        const token = await refreshTokenPost();
-        if (token) {
+        try {
+          await refreshTokenPost();
           setLoginState(LoginState.LOGGED_IN);
-        } else {
+        } catch (_: unknown) {
           logout();
         }
       }

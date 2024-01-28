@@ -37,7 +37,7 @@ const refreshTTL = (conf.get("refreshTTL") as number) || 7 * 24 * 60 * 60 * 1000
 const jwtTTL = (conf.get("jwtTTL") as number) || 15 * 60; // 15 minutes
 
 app.get("/", (req, res) => {
-  return res.redirect("/vue/veranstaltungen");
+  return res.redirect("/vue");
 });
 
 async function createToken(req: Request, res: Response, name: string) {

@@ -26,7 +26,10 @@ export async function checkBar(now: DatumUhrzeit) {
   }
   const start = now;
   const end = start.plus({ wochen: 8 }); // Acht Wochen im Voraus
-  const filterFunction = (ver: Veranstaltung | Vermietung) => ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed;
+  const filterFunction = (ver: Veranstaltung | Vermietung) => {
+    const typOk = !ver.isVermietung ? !ver.kopf.eventTyp.startsWith("DryJam") : true;
+    return ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed && typOk;
+  };
   const zuSendende = await byDateRangeInAscendingOrder({
     from: start,
     to: end,

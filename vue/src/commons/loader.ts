@@ -15,7 +15,6 @@ import Veranstaltung, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-sha
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
-import * as jose from "jose";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -26,44 +25,26 @@ type FetchParams = {
   data?: any;
 };
 
-let refreshScheduled = false;
-const scheduleTokenRefresh = async (inMs: number) => {
-  if (refreshScheduled) return;
-  refreshScheduled = true;
-  setTimeout(
-    async () => {
-      try {
-        refreshScheduled = false;
-        const token = await refreshTokenPost();
-        const decoded = jose.decodeJwt<{ exp: number }>(token);
+export async function loginPost(name: string, pass: string) {
+  const token = await axios.post("/login", { name, pass });
+  return refreshTokenPost(token.data.token);
+}
 
-        scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
-      } catch (_) {
-        // nothing to see here
-      }
-    },
-    // request new token one minute before it expires
-    inMs - 60_000,
-  );
-};
+export async function logoutManually() {
+  return axios.post("/logout");
+}
 
 export async function refreshTokenPost(tokenFromLogin?: string) {
-  try {
-    let token = tokenFromLogin;
-    if (!tokenFromLogin) {
-      const result = await axios.post("/refreshToken");
-      token = result.data.token;
-    }
-    if (!token) {
-      return "";
-    }
-    axios.defaults.headers.Authorization = `Bearer ${token}`;
-    const decoded = jose.decodeJwt<{ exp: number }>(token);
-    scheduleTokenRefresh(decoded.exp * 1000 - Date.now());
-    return token;
-  } catch (_: unknown) {
+  let token = tokenFromLogin;
+  if (!tokenFromLogin) {
+    const result = await axios.post("/refreshToken");
+    token = result.data.token;
+  }
+  if (!token) {
     return "";
   }
+  axios.defaults.headers.Authorization = `Bearer ${token}`;
+  return token;
 }
 
 async function standardFetch(params: FetchParams) {
