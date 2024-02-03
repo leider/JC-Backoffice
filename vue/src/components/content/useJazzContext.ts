@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
-import { allUsers, currentUser, optionen as optionenLoader, orte as orteLoader, refreshTokenPost, wikisubdirs } from "@/commons/loader.ts";
+import { allUsers, currentUser, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
 import { LoginState } from "@/commons/authConsts.ts";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
 import { RouterContext } from "@/router/JazzRouter.tsx";
@@ -42,13 +42,6 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       { enabled: isAuthenticated, queryKey: ["currentUser"], queryFn: () => currentUser(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["optionen"], queryFn: () => optionenLoader(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["orte"], queryFn: () => orteLoader(), refetchInterval },
-      {
-        enabled: isAuthenticated,
-        queryKey: ["refreshToken"],
-        queryFn: () => refreshTokenPost(),
-        refetchInterval,
-        refetchIntervalInBackground: true,
-      },
     ],
     combine: ([usersQuery, wikidirsQuery, currentQuery, optionenQuery, orteQuery]) => {
       if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data) {

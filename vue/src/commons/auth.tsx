@@ -75,6 +75,7 @@ export function useProvideAuth(): IUseProvideAuth {
       // so what?
     } finally {
       queryClient.invalidateQueries();
+      queryClient.removeQueries({ queryKey: ["currentUser"] });
       if (location.pathname !== "/login") {
         navigate({ pathname: "/login", search: encodeURIComponent(location.pathname) });
       }

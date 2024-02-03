@@ -48,6 +48,9 @@ export async function refreshTokenPost(tokenFromLogin?: string) {
 }
 
 async function standardFetch(params: FetchParams) {
+  if (!axios.defaults.headers.Authorization) {
+    await refreshTokenPost();
+  }
   try {
     const options: AxiosRequestConfig = {
       url: params.url,

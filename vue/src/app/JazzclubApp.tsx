@@ -11,7 +11,7 @@ import useUpdateApp from "@/app/useUpdateApp.ts";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: "always",
     },
   },
 });
