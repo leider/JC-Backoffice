@@ -6,12 +6,11 @@
     "mongodb": "6.3.0"
   },
   "devDependencies": {
-    "chai": "4.4.1",
-    "codeceptjs": "3.5.11",
+    "codeceptjs": "3.5.12",
     "cross-env": "7.0.3",
     "eslint": "8.56.0",
     "eslint-plugin-codeceptjs": "1.3.0",
-    "playwright": "1.41.0"
+    "playwright": "1.41.2"
   },
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../start",
