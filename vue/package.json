@@ -9,20 +9,20 @@
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
-    "@ant-design/pro-components": "2.6.48",
+    "@ant-design/pro-components": "2.6.49",
     "@fullcalendar/core": "6.1.10",
     "@fullcalendar/daygrid": "6.1.10",
     "@fullcalendar/multimonth": "6.1.10",
     "@fullcalendar/react": "6.1.10",
-    "@tanstack/react-query": "5.17.15",
-    "antd": "5.13.2",
-    "axios": "1.6.5",
+    "@tanstack/react-query": "5.18.1",
+    "antd": "5.13.3",
+    "axios": "1.6.7",
     "codemirror": "6.0.1",
     "easymde": "2.18.0",
     "immutability-helper": "3.1.1",
     "ismobilejs": "1.1.1",
     "jc-shared": "workspace:^",
-    "jose": "5.2.0",
+    "jose": "5.2.1",
     "numeral": "2.0.6",
     "react": "18.2.0",
     "react-bootstrap-icons": "1.10.3",
@@ -30,20 +30,20 @@
     "react-dnd-html5-backend": "16.0.1",
     "react-dnd-touch-backend": "16.0.1",
     "react-dom": "18.2.0",
-    "react-router-dom": "6.21.3",
+    "react-router-dom": "6.22.0",
     "react-simplemde-editor": "5.2.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
     "@types/numeral": "2.0.5",
-    "@types/react": "18.2.48",
+    "@types/react": "18.2.52",
     "@types/react-dom": "18.2.18",
     "@vitejs/plugin-react": "4.2.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.5",
     "numeral": "2.0.6",
     "vite": "5.0.12",
-    "vite-plugin-pwa": "0.17.4"
+    "vite-plugin-pwa": "0.17.5"
   },
   "packageManager": "yarn@4.0.2"
 }
