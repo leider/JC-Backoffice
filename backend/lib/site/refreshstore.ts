@@ -1,4 +1,4 @@
-import pers from "../persistence/persistence.js";
+import pers from "../persistence/sqlitePersistence.js";
 const persistence = pers("refreshstore");
 
 export interface RefreshToken {
@@ -18,6 +18,6 @@ export default {
   },
 
   removeExpired: async function removeExpired() {
-    return persistence.removeWithQuery({ expiresAt: { $lt: new Date() } });
+    return persistence.removeWithQuery(`data->>'$.expiresAt' < '${new Date().toJSON()}';`);
   },
 };

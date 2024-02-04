@@ -11,7 +11,7 @@ const app = express();
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 
-async function veranstaltungenForExport(fetcher: () => Promise<Veranstaltung[]>, req: Request, res: Response) {
+async function veranstaltungenForExport(fetcher: () => Veranstaltung[], req: Request, res: Response) {
   if (!(req.user as User).accessrights.isBookingTeam) {
     return res.redirect("/");
   }

@@ -2,29 +2,29 @@ import OptionValues from "jc-shared/optionen/optionValues.js";
 import Orte from "jc-shared/optionen/orte.js";
 import FerienIcals from "jc-shared/optionen/ferienIcals.js";
 
-import pers from "../persistence/persistence.js";
+import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
 
 const persistence = pers("optionenstore");
 
 export default {
-  get: async function get() {
-    const result = await persistence.getById("instance");
+  get: function get() {
+    const result = persistence.getById("instance");
     return misc.toObject<OptionValues>(OptionValues, result);
   },
 
-  orte: async function orte() {
-    const result = await persistence.getById("orte");
+  orte: function orte() {
+    const result = persistence.getById("orte");
     return misc.toObject<Orte>(Orte, result);
   },
 
-  icals: async function icals() {
-    const result = await persistence.getById("ferienIcals");
+  icals: function icals() {
+    const result = persistence.getById("ferienIcals");
     return misc.toObject<FerienIcals>(FerienIcals, result);
   },
 
-  save: async function save(object: OptionValues | Orte | FerienIcals) {
-    await persistence.save(object.toJSON());
+  save: function save(object: OptionValues | Orte | FerienIcals) {
+    persistence.save(object.toJSON());
     return object;
   },
 };

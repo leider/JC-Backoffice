@@ -10,7 +10,7 @@ const DBSTATE = { OPEN: "OPEN", CLOSED: "CLOSED", OPENING: "OPENING" };
 let ourDB: Db;
 let ourDBConnectionState = DBSTATE.CLOSED;
 
-class Persistence {
+class MongoPersistence {
   private collectionName: string;
 
   constructor(collName: string) {
@@ -141,6 +141,6 @@ async function getOpenDb(): Promise<Db> {
 
 openMongo();
 
-export default function (collectionName: string): Persistence {
-  return new Persistence(collectionName);
+export default function (collectionName: string): MongoPersistence {
+  return new MongoPersistence(collectionName);
 }
