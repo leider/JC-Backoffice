@@ -36,7 +36,7 @@ function createConfiguration(): SimpleConfigure {
   }
 
   // then, add properties from config files:
-  const files = ["mailsender-config.json", "mongo-config.json", "passwordSalt.json", "server-config.json"];
+  const files = ["mailsender-config.json", "passwordSalt.json", "server-config.json"];
 
   addFiles(files.map((file) => configdir + file));
 

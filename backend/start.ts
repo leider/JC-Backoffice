@@ -11,11 +11,9 @@ configureApp(app);
 const appLogger = loggers.get("application");
 
 import conf from "../shared/commons/simpleConfigure.js";
-import { migrateFromMongo } from "./lib/migrateToSqlite/migrateAllFromMongo.js";
 const port = conf.get("port");
 
 process.env.TZ = "Europe/Berlin";
-migrateFromMongo();
 const server = createServer(app);
 
 export function start() {
