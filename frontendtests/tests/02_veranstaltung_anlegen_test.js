@@ -8,7 +8,7 @@ Before(({ I, login }) => {
   I.createData("optionenstore", "orte");
 });
 
-Scenario("Erzeuge Typen und Orte", async ({ I }) => {
+Scenario("Erzeuge neue Veranstaltung", async ({ I }) => {
   I.amOnPage("/vue/veranstaltung/new?page=allgemeines");
   I.see("Typ");
   I.click('//input[@placeholder="Startdatum"]');
@@ -25,7 +25,6 @@ Scenario("Erzeuge Typen und Orte", async ({ I }) => {
     beschreibung: "",
     confirmed: false,
     eventTyp: "Club Konzert",
-    eventTypRich: null,
     flaeche: 100,
     fotografBestellen: false,
     genre: "",
@@ -38,6 +37,6 @@ Scenario("Erzeuge Typen und Orte", async ({ I }) => {
     rechnungAnKooperation: false,
     titel: "Konzert #1",
   });
-  expect(res.startDate.toISOString()).eql("2020-03-20T17:30:00.000Z");
-  expect(res.endDate.toISOString()).eql("2020-03-20T19:00:00.000Z");
+  expect(res.startDate).eql("2020-03-20T17:30:00.000Z");
+  expect(res.endDate).eql("2020-03-20T19:00:00.000Z");
 });

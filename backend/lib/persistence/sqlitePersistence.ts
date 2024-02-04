@@ -1,9 +1,9 @@
 import Database, { SqliteError } from "better-sqlite3";
 import conf from "../../../shared/commons/simpleConfigure.js";
+import { loggers } from "winston";
 
 const sqlitedb = conf.get("sqlitedb") as string;
 const db = new Database(sqlitedb);
-import { loggers } from "winston";
 const scriptLogger = loggers.get("scripts");
 scriptLogger.info(`DB = ${sqlitedb}`);
 
@@ -30,19 +30,15 @@ function execWithTry(command: string) {
 
 class Persistence {
   private collectionName: string;
-  private extraCols?: string[];
+  private extraCols: string[] = [];
 
-  constructor(collName: string, extraCols?: string[]) {
+  constructor(collName: string, extraCols: string[] = []) {
     this.collectionName = collName;
     this.extraCols = extraCols;
-    const columns = ["id TEXT PRIMARY KEY", "data BLOB"];
-    if (extraCols) {
-      const newCols = extraCols.map((col) => `${col} TEXT`);
-      columns.push(...newCols);
-    }
+    const columns = ["id TEXT PRIMARY KEY", "data BLOB"].concat(extraCols.map((col) => `${col} TEXT`));
     db.exec(`CREATE TABLE IF NOT EXISTS ${collName} ( ${columns.join(",")});`);
     execWithTry(`CREATE INDEX idx_${collName}_id ON ${collName}(id);`);
-    if (extraCols) {
+    if (extraCols.length > 0) {
       const suffix = extraCols.join("_");
       const columns = extraCols.join(",");
       execWithTry(`CREATE INDEX idx_${collName}_${suffix} ON ${collName}(${columns});`);
@@ -72,25 +68,23 @@ class Persistence {
     return result ? JSON.parse(result.data) : {};
   }
 
+  get colsForSave() {
+    return ["id", "data"].concat(this.extraCols);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  createValsForSave(object: { [ind: string]: any } & { id?: string }) {
+    return [escape(object.id), asSqliteString(object)].concat(
+      this.extraCols.map((col) => {
+        return object[col]?.toJSON ? escape(object[col].toJSON()) : escape(object[col]);
+      }),
+    );
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   save(object: { [ind: string]: any } & { id?: string }) {
-    const cols = ["id", "data"];
-    if (this.extraCols) {
-      cols.push(...this.extraCols);
-    }
-    const vals: string[] = [escape(object.id), asSqliteString(object)];
-    if (this.extraCols) {
-      vals.push(
-        ...this.extraCols.map((col) => {
-          if (col === "startDate" || col === "endDate") {
-            return escape(object[col].toJSON());
-          }
-          return escape(object[col]);
-        }),
-      );
-    }
-    const query = `REPLACE INTO ${this.collectionName} (${cols.join(",")}) VALUES (${vals.join(",")});`;
-    return db.exec(query);
+    const vals = this.createValsForSave(object);
+    return db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES (${vals.join(",")});`);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -98,24 +92,15 @@ class Persistence {
     if (objects.length < 1) {
       return;
     }
-    const cols = ["id", "data"];
-    if (this.extraCols) {
-      cols.push(...this.extraCols);
-    }
     const rows = objects.map((obj) => {
-      const vals: string[] = [escape(obj.id), asSqliteString(obj)];
-      if (this.extraCols) {
-        vals.push(...this.extraCols.map((col) => escape(obj[col])));
-      }
+      const vals = this.createValsForSave(obj);
       return `(${vals.join(",")})`;
     });
-    const query = `REPLACE INTO ${this.collectionName} (${cols.join(",")}) VALUES ${rows.join("\n,")};`;
-    return db.exec(query);
+    return db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES ${rows.join("\n,")};`);
   }
 
   removeWithQuery(where: string) {
-    const query = `DELETE FROM ${this.collectionName} WHERE ${where};`;
-    return db.exec(query);
+    return db.exec(`DELETE FROM ${this.collectionName} WHERE ${where};`);
   }
 
   removeById(id: string) {

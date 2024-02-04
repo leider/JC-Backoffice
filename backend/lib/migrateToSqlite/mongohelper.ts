@@ -1,6 +1,6 @@
 import { MongoClient, Collection } from "mongodb";
-
-const url = "mongodb://0.0.0.0:27017/jazzclub";
+import conf from "../../../shared/commons/simpleConfigure.js";
+const url = conf.get("mongoURL") as string;
 
 export async function loadAll() {
   const client = await MongoClient.connect(url);

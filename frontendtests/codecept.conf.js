@@ -6,7 +6,7 @@ setHeadlessWhen(process.env.HEADLESS);
 // enable all common plugins https://github.com/codeceptjs/configure#setcommonplugins
 setCommonPlugins();
 
-const mongoHelper = require("./helpers/mongohelpers");
+const sqliteHelper = require("./helpers/sqlitehelpers");
 
 let server;
 /** @type {CodeceptJS.MainConfig} */
@@ -21,8 +21,8 @@ exports.config = {
       show: false,
       keepCookies: true,
     },
-    MongoHelper: {
-      require: "./helpers/mongohelpers",
+    SqliteHelper: {
+      require: "./helpers/sqlitehelpers",
     },
   },
   plugins: {
@@ -51,11 +51,11 @@ exports.config = {
   include: {
     I: "./steps_file.js",
   },
-  async bootstrap() {
-    await new mongoHelper().createData("userstore", "admin");
+  bootstrap() {
+    new sqliteHelper().createData("userstore", "admin");
   },
-  async teardown() {
-    await new mongoHelper().dropAllCollections();
+  teardown() {
+    new sqliteHelper().dropAllCollections();
   },
   name: "frontendtests",
 };
