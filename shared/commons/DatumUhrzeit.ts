@@ -253,6 +253,10 @@ export default class DatumUhrzeit {
     return this.format("DD.MM.YYYY[,] HH:mm:ss");
   }
 
+  get toISOString(): string {
+    return this.value.format();
+  }
+
   get toJSDate(): Date {
     return this.value.toDate();
   }

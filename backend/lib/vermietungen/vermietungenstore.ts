@@ -2,73 +2,70 @@ import winston from "winston";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import pers from "../persistence/persistence.js";
-import { Sort } from "mongodb";
+import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 
-const persistence = pers("vermietungenstore");
+const persistence = pers("vermietungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
 
-async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort) {
-  const result = await persistence.listByField(
-    {
-      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
-    },
-    sortOrder,
+function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: "ASC" | "DESC") {
+  const result = persistence.listByField(
+    `startDate < '${rangeTo.toISOString}' AND endDate > '${rangeFrom.toISOString}'`,
+    `startDate ${sortOrder}`,
   );
   return misc.toObjectList<Vermietung>(Vermietung, result);
 }
 
-async function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
-  return byDateRange(rangeFrom, rangeTo, { startDate: 1 });
+function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+  return byDateRange(rangeFrom, rangeTo, "ASC");
 }
 
-async function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
-  return byDateRange(rangeFrom, rangeTo, { startDate: -1 });
+function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+  return byDateRange(rangeFrom, rangeTo, "DESC");
 }
 
 export default {
-  zukuenftigeMitGestern: async function zukuenftigeMitGestern() {
+  zukuenftigeMitGestern: function zukuenftigeMitGestern() {
     const now = new DatumUhrzeit();
     return byDateRangeInAscendingOrder(now.minus({ tage: 1 }), now.plus({ jahre: 10 }));
   },
 
-  zukuenftige: async function zukuenftige() {
+  zukuenftige: function zukuenftige() {
     const now = new DatumUhrzeit();
     return byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }));
   },
 
-  vergangene: async function vergangene() {
+  vergangene: function vergangene() {
     const now = new DatumUhrzeit();
     return byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now);
   },
 
-  alle: async function alle() {
+  alle: function alle() {
     const now = new DatumUhrzeit();
     return byDateRangeInDescendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }));
   },
 
   byDateRangeInAscendingOrder,
 
-  getVermietung: async function getVermietung(url: string) {
-    const result = await persistence.getByField({ url });
+  getVermietung: function getVermietung(url: string) {
+    const result = persistence.getByField({ key: "url", val: url });
     return misc.toObject(Vermietung, result);
   },
 
-  getVermietungForId: async function getVermietungForId(id: string) {
-    const result = await persistence.getById(id);
+  getVermietungForId: function getVermietungForId(id: string) {
+    const result = persistence.getById(id);
     return misc.toObject(Vermietung, result);
   },
 
-  saveVermietung: async function saveVermietung(vermietung: Vermietung) {
+  saveVermietung: function saveVermietung(vermietung: Vermietung) {
     const object = vermietung.toJSON();
-    await persistence.save(object);
+    persistence.save(object);
     return vermietung;
   },
 
-  deleteVermietungById: async function deleteVermietungById(id: string) {
-    await persistence.removeById(id);
+  deleteVermietungById: function deleteVermietungById(id: string) {
+    persistence.removeById(id);
     logger.info(`Vermietung removed: ${JSON.stringify(id)}`);
     return;
   },

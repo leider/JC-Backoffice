@@ -1,48 +1,45 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Termin from "jc-shared/optionen/termin.js";
 
-import pers from "../persistence/persistence.js";
-import { Sort } from "mongodb";
+import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
 
-const persistence = pers("terminstore");
+const persistence = pers("terminstore", ["startDate", "endDate"]);
 
-async function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: Sort) {
-  // ranges are DatumUhrzeit
-  const result = await persistence.listByField(
-    {
-      $and: [{ endDate: { $gt: rangeFrom.toJSDate } }, { startDate: { $lt: rangeTo.toJSDate } }],
-    },
-    sortOrder,
+function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: "ASC" | "DESC") {
+  const result = persistence.listByField(
+    `startDate < '${rangeTo.toISOString}' AND endDate > '${rangeFrom.toISOString}'`,
+    `startDate ${sortOrder}`,
   );
+
   return misc.toObjectList<Termin>(Termin, result);
 }
 
 export default {
-  alle: async function alle() {
-    const result = await persistence.list({ startDate: -1 });
+  alle: function alle() {
+    const result = persistence.list("startDate DESC");
     return misc.toObjectList(Termin, result);
   },
 
-  save: async function save(termin: Termin) {
-    await persistence.save(termin.toJSON());
+  save: function save(termin: Termin) {
+    persistence.save(termin.toJSON());
     return termin;
   },
 
-  saveAll: async function saveAll(termine: Termin[]) {
-    await persistence.saveAll(termine);
+  saveAll: function saveAll(termine: Termin[]) {
+    persistence.saveAll(termine);
     return termine;
   },
 
-  termineBetween: async function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
-    return byDateRange(rangeFrom, rangeTo, { startDate: 1 });
+  termineBetween: function termineBetween(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
+    return byDateRange(rangeFrom, rangeTo, "DESC");
   },
 
-  remove: async function remove(id: string) {
+  remove: function remove(id: string) {
     return persistence.removeById(id);
   },
 
-  removeAll: async function removeAll(ids: string[]) {
+  removeAll: function removeAll(ids: string[]) {
     return persistence.removeAllByIds(ids);
   },
 };
