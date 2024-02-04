@@ -15,6 +15,7 @@ import Veranstaltung, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-sha
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
+import * as jose from "jose";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -50,6 +51,14 @@ export async function refreshTokenPost(tokenFromLogin?: string) {
 async function standardFetch(params: FetchParams) {
   if (!axios.defaults.headers.Authorization) {
     await refreshTokenPost();
+  } else {
+    const token = (axios.defaults.headers.Authorization as string).replace("Bearer ", "");
+    const decoded = jose.decodeJwt<{ exp: number }>(token);
+    if (decoded.exp * 1000 - Date.now() < 0) {
+      await refreshTokenPost();
+      // eslint-disable-next-line no-console
+      console.log("token veraltet");
+    }
   }
   try {
     const options: AxiosRequestConfig = {

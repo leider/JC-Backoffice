@@ -67,7 +67,7 @@ export default function VeranstaltungComp() {
       return saveVeranstaltung(veranst);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung", url] });
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
       navigate(
         {
           pathname: `/veranstaltung/${data.url}`,

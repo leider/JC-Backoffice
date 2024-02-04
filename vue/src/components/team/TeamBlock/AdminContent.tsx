@@ -56,9 +56,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const mutateVeranstaltung = useMutation({
     mutationFn: saveVeranstaltung,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["veranstaltung"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
       showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
     },
   });
@@ -66,9 +64,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const mutateVermietung = useMutation({
     mutationFn: saveVermietung,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["vermietung"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["vermietung"] });
       showSuccess({ text: "Die VerMietung wurde gespeichert" });
     },
   });
