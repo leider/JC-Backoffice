@@ -96,6 +96,12 @@ export default function VeranstaltungComp() {
   const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();
 
+  const kassenfreigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form });
+
+  useEffect(() => {
+    setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+  }, [kassenfreigabe]);
+
   useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
