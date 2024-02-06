@@ -100,7 +100,7 @@ export default function VeranstaltungComp() {
 
   useEffect(() => {
     setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
-  }, [kassenfreigabe]);
+  }, [form, initialValue, kassenfreigabe]);
 
   useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
