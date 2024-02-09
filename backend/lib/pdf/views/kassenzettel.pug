@@ -1,4 +1,6 @@
 - var kasse = veranstaltung.kasse;
+- var startinhalt = veranstaltung.kasse.startinhalt;
+- var endinhalt = veranstaltung.kasse.endinhalt;
 - var eintrittspreise = veranstaltung.eintrittspreise;
 
 include mixins
@@ -154,3 +156,93 @@ html
               td.text-end: b: +currencyOrEmpty(kasse.ausgabenTotalEUR)
       +signbox(veranstaltung.datumForDisplay, 'Kassierer/-in', kassierer)
       +signbox(kasse.freigabeDisplayDatum, 'Freigegeben', kasse.kassenfreigabe)
+    .container-fluid(style="page-break-before: always;")
+      .row
+        .col-12
+          .float-end
+            img(src=publicUrlPrefix + '/reporting/logo.png', height="80")
+      .row
+        .col-12
+          .float-end
+            address
+              strong Jazzclub Karlsruhe e.V. <br>
+              | Kaiserpassage 6 <br>
+              | 76133 Karlsruhe
+          h1(style="white-space: nowrap") Kasseninhalt
+            br
+            small(style="white-space: nowrap")
+              | #{veranstaltung.datumForDisplay}
+      .row
+        .col-6
+          table.table.table-bordered.table-sm
+            tr: th.text-center(colspan=2) Anfangsbestand
+            tr
+              th.text-end 0,10 €
+              td.text-end #{startinhalt["10"]}
+            tr
+              th.text-end 0,20 €
+              td.text-end #{startinhalt["20"]}
+            tr
+              th.text-end 0,50 €
+              td.text-end #{startinhalt["50"]}
+            tr
+              th.text-end 1,00 €
+              td.text-end #{startinhalt["100"]}
+            tr
+              th.text-end 2,00 €
+              td.text-end #{startinhalt["200"]}
+            tr
+              th.text-end 5,00 €
+              td.text-end #{startinhalt["500"]}
+            tr
+              th.text-end 10,00 €
+              td.text-end #{startinhalt["1000"]}
+            tr
+              th.text-end 20,00 €
+              td.text-end #{startinhalt["2000"]}
+            tr
+              th.text-end 50,00 €
+              td.text-end #{startinhalt["5000"]}
+            tr
+              th.text-end 100,00 €
+              td.text-end #{startinhalt["10000"]}
+            tr
+              th.text-end Summe
+              td.text-end: +currencyOrEmpty(kasse.anfangsbestandEUR)
+        .col-6
+          table.table.table-bordered.table-sm
+            tr: th.text-center(colspan=2) Endbestand
+            tr
+              th.text-end 0,10 €
+              td.text-end #{endinhalt["10"]}
+            tr
+              th.text-end 0,20 €
+              td.text-end #{endinhalt["20"]}
+            tr
+              th.text-end 0,50 €
+              td.text-end #{endinhalt["50"]}
+            tr
+              th.text-end 1,00 €
+              td.text-end #{endinhalt["100"]}
+            tr
+              th.text-end 2,00 €
+              td.text-end #{endinhalt["200"]}
+            tr
+              th.text-end 5,00 €
+              td.text-end #{endinhalt["500"]}
+            tr
+              th.text-end 10,00 €
+              td.text-end #{endinhalt["1000"]}
+            tr
+              th.text-end 20,00 €
+              td.text-end #{endinhalt["2000"]}
+            tr
+              th.text-end 50,00 €
+              td.text-end #{endinhalt["5000"]}
+            tr
+              th.text-end 100,00 €
+              td.text-end #{endinhalt["10000"]}
+            tr
+              th.text-end Summe
+              td.text-end: +currencyOrEmpty(kasse.endbestandGezaehltEUR)
+

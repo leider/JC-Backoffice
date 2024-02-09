@@ -1,17 +1,16 @@
-import { App, Button, Col, Form, Row } from "antd";
+import { App, Col, Flex, Form, Row } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
-import { DynamicItem } from "@/widgets/DynamicItem";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { Dayjs } from "dayjs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useForm } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { MuenzenScheineModal } from "@/components/veranstaltung/kasse/MuenzenScheineModal.tsx";
 
 export function KassenzettelFreigabe() {
   const veranstContext = useContext(VeranstaltungContext);
@@ -24,6 +23,15 @@ export function KassenzettelFreigabe() {
   useEffect(() => {
     setUsersAsOptions(allUsers.map((user) => user.name));
   }, [allUsers]);
+
+  const startAndEnd = Form.useWatch("startAndEnd", { form, preserve: true });
+  const vergangen = useMemo(() => {
+    return new DatumUhrzeit(startAndEnd?.start).istVor(new DatumUhrzeit());
+  }, [startAndEnd]);
+
+  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+  const endbestandEUR = Form.useWatch("endbestandEUR", { form, preserve: true });
+  const endbestandGezaehltEUR = Form.useWatch(["kasse", "endbestandGezaehltEUR"], { form, preserve: true });
 
   const [innerForm] = useForm();
 
@@ -79,50 +87,56 @@ export function KassenzettelFreigabe() {
           />
         </Col>
         <Col span={10} offset={4}>
-          <DynamicItem
-            nameOfDepending={["startDate"]}
-            renderWidget={(getFieldValue) => {
-              const start: Dayjs = getFieldValue("startAndEnd").start;
-              const vergangen = new DatumUhrzeit(start).istVor(new DatumUhrzeit());
-              return vergangen ? (
-                <DynamicItem
-                  nameOfDepending={["kasse", "kassenfreigabe"]}
-                  renderWidget={(getFieldValue) => {
-                    const freigabe = getFieldValue(["kasse", "kassenfreigabe"]);
-                    if (!freigabe) {
-                      return (
-                        <ButtonWithIcon
-                          block
-                          text="Kasse freigeben..."
-                          icon={"Unlock"}
-                          onClick={freigeben}
-                          disabled={veranstContext?.isDirty || !darfFreigeben}
-                        />
-                      );
-                    } else {
-                      return (
-                        <>
-                          <Button
-                            block
-                            icon={<IconForSmallBlock iconName={"Lock"} />}
-                            type="primary"
-                            danger
-                            onClick={freigabeAufheben}
-                            disabled={veranstContext?.isDirty || !darfFreigabeAufheben}
-                          >
-                            &nbsp;Kasse ist freigegeben
-                          </Button>
-                          <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
-                        </>
-                      );
-                    }
-                  }}
+          {vergangen &&
+            (!freigabe ? (
+              <ButtonWithIcon
+                block
+                text="Kasse freigeben..."
+                icon={"Unlock"}
+                onClick={freigeben}
+                disabled={veranstContext?.isDirty || !darfFreigeben || endbestandEUR !== endbestandGezaehltEUR}
+              />
+            ) : (
+              <>
+                <ButtonWithIcon
+                  block
+                  icon="Lock"
+                  text="Kasse ist freigegeben"
+                  type="primary"
+                  color="#c71c2c"
+                  onClick={freigabeAufheben}
+                  disabled={veranstContext?.isDirty || !darfFreigabeAufheben}
                 />
-              ) : (
-                <></>
-              );
-            }}
-          />
+                <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
+              </>
+            ))}
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={24}>
+          {endbestandEUR !== endbestandGezaehltEUR ? (
+            <Flex justify="center">
+              <b
+                style={{
+                  color: "#d50f36",
+                }}
+              >
+                ACHTUNG! Endbestände unplausibel
+              </b>
+              &nbsp;
+              {darfFreigeben && <b>Freigabe nicht möglich.</b>}
+            </Flex>
+          ) : (
+            <>&nbsp;</>
+          )}
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={10}>
+          <MuenzenScheineModal isBeginn={true} />
+        </Col>
+        <Col span={10} offset={4}>
+          <MuenzenScheineModal isBeginn={false} />
         </Col>
       </Row>
     </>

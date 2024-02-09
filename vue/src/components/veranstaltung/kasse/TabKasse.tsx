@@ -14,12 +14,15 @@ export interface KasseCardProps {
 export default function TabKasse() {
   const veranstContext = useContext(VeranstaltungContext);
   const form = veranstContext!.form;
+
+  const anfangsbestandEUR = Form.useWatch(["kasse", "anfangsbestandEUR"], { form, preserve: true });
+
   function anfangsbestandChanged() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
-  useEffect(anfangsbestandChanged, [form]);
+  useEffect(anfangsbestandChanged, [form, anfangsbestandEUR]);
 
   const freigabe = Form.useWatch(["kasse", "kassenfreigabe"]);
 
@@ -35,18 +38,14 @@ export default function TabKasse() {
         </Col>
       </Row>
       <Row gutter={12}>
-        <Col xs={12} lg={6}>
-          <NumberInput
-            name={["kasse", "anfangsbestandEUR"]}
-            label="Anfangsbestand Kasse"
-            decimals={2}
-            suffix={"€"}
-            onChange={anfangsbestandChanged}
-            disabled={freigabe}
-          />
+        <Col xs={8} lg={4}>
+          <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix={"€"} disabled />
         </Col>
-        <Col xs={12} lg={6}>
-          <NumberInput disabled name={"endbestandEUR"} label="Endbestand Kasse" decimals={2} suffix={"€"} />
+        <Col xs={8} lg={4}>
+          <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix={"€"} />
+        </Col>
+        <Col xs={8} lg={4}>
+          <NumberInput disabled name={"endbestandEUR"} label="Endbestand Berechnet" decimals={2} suffix={"€"} />
         </Col>
       </Row>
     </>

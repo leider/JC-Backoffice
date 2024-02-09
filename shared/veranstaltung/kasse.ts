@@ -1,6 +1,19 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 
+type MuenzenScheine = {
+  "10"?: number;
+  "20"?: number;
+  "50"?: number;
+  "100"?: number;
+  "200"?: number;
+  "500"?: number;
+  "1000"?: number;
+  "2000"?: number;
+  "5000"?: number;
+  "10000"?: number;
+};
+
 export default class Kasse {
   anfangsbestandEUR = 0;
   ausgabeBankEUR = 0;
@@ -22,7 +35,9 @@ export default class Kasse {
   kassenfreigabe? = "";
   kassenfreigabeAm?: Date;
   einnahmenReservix = 0; // darf nicht in kassenberechnung
-
+  startinhalt: MuenzenScheine = {};
+  endinhalt: MuenzenScheine = {};
+  endbestandGezaehltEUR = 0;
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
