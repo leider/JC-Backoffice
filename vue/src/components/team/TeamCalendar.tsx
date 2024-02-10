@@ -57,6 +57,8 @@ export default function TeamCalendar() {
       height="auto"
       events={getEvents}
       eventContent={renderEventContent}
+      eventDisplay="block"
+      showNonCurrentDates={false}
     />
   );
 }

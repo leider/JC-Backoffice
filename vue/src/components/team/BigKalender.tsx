@@ -88,6 +88,8 @@ export default function BigKalender() {
             multiMonthMaxColumns={4}
             eventSources={[getEvents]}
             eventContent={renderEventContent}
+            eventDisplay="block"
+            showNonCurrentDates={false}
           />
         </Col>
       </Row>

@@ -54,6 +54,10 @@
   color: #212529;
 }
 
+.fc-daygrid-event {
+  white-space: normal;
+}
+
 .ant-btn-primary {
   box-shadow: none;
 }
