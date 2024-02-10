@@ -58,7 +58,7 @@ export default function VermietungComp() {
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
-  useDirtyBlocker(dirty, true);
+  useDirtyBlocker(dirty);
 
   const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();

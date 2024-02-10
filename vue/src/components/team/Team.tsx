@@ -11,8 +11,11 @@ import { useQuery } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 function Team() {
+  useDirtyBlocker(false);
+
   const veranstQuery = useQuery({
     queryKey: ["veranstaltung", "zukuenftige"],
     queryFn: () => veranstaltungenForTeam("zukuenftige"),

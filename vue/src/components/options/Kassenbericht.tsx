@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function Kassenbericht() {
+  useDirtyBlocker(false);
   const [monate, setMonate] = useState<DatumUhrzeit[]>([]);
 
   document.title = "Kassenbericht";

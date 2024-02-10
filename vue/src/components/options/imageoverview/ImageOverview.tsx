@@ -9,8 +9,10 @@ import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { Section } from "@/components/options/imageoverview/Section.tsx";
 import { useCreateImagenamesSections } from "@/components/options/imageoverview/useCreateImagenamesSections.ts";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function ImageOverview() {
+  useDirtyBlocker(false);
   const { showSuccess } = useJazzContext();
   const [form] = Form.useForm<{
     with: ImageOverviewRow[];

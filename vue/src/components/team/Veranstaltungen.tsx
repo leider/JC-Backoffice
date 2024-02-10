@@ -20,6 +20,7 @@ import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useQueries } from "@tanstack/react-query";
 import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -29,6 +30,7 @@ export const TeamContext = createContext<{
 }>({ veranstaltungenUndVermietungenNachMonat: {}, usersAsOptions: [] });
 
 export default function Veranstaltungen() {
+  useDirtyBlocker(false);
   const [search, setSearch] = useSearchParams();
   const periods = useMemo(() => {
     return [

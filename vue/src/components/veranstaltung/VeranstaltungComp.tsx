@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,7 +28,7 @@ export default function VeranstaltungComp() {
 
   useEffect(
     () => {
-      setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+      updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [agenturauswahl],
   );
@@ -43,7 +43,11 @@ export default function VeranstaltungComp() {
   const [rider, setRider] = useState<Rider>(new Rider());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
-  useDirtyBlocker(dirty, true);
+
+  const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
+    setDirty(areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+  }, []);
+  useDirtyBlocker(dirty);
 
   useEffect(() => {
     if (veranst.data) {
@@ -99,8 +103,8 @@ export default function VeranstaltungComp() {
   const kassenfreigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form });
 
   useEffect(() => {
-    setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
-  }, [form, initialValue, kassenfreigabe]);
+    updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
+  }, [form, initialValue, kassenfreigabe, updateDirtyIfChanged]);
 
   useEffect(() => {
     const deepCopy = toFormObject(veranstaltung);
@@ -111,10 +115,10 @@ export default function VeranstaltungComp() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (initial as any).riderBoxes = rider.boxes;
     setInitialValue(initial);
-    setDirty(areDifferent(initial, deepCopy, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+    updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!veranstaltung.id);
     form.validateFields();
-  }, [form, veranstaltung, rider]);
+  }, [form, veranstaltung, rider, updateDirtyIfChanged]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
@@ -184,7 +188,7 @@ export default function VeranstaltungComp() {
           // console.log({ diff });
           // console.log({ initialValue });
           // console.log({ form: form.getFieldsValue(true) });
-          setDirty(areDifferent(initialValue, form.getFieldsValue(true), ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
+          updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {
           notification.error({

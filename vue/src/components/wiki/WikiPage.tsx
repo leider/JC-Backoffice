@@ -12,8 +12,11 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 export default function WikiPage() {
+  useDirtyBlocker(false);
+
   const { subdir, page } = useParams();
   const realPage = page || "index";
   const { data } = useQuery({

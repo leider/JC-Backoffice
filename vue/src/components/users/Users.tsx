@@ -9,10 +9,13 @@ import UserPanel from "@/components/users/UserPanel";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper";
+import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 
 type accessrightsTypes = "isSuperuser" | "isBookingTeam" | "isOrgaTeam" | "isAbendkasse" | "everybody";
 
 export default function Users() {
+  useDirtyBlocker(false);
+
   const [newUserOpen, setNewUserOpen] = useState<boolean>(false);
   const { currentUser, allUsers } = useJazzContext();
   const [selectedButton, setSelectedButton] = useState<accessrightsTypes>("everybody");
