@@ -14,6 +14,8 @@ export default function ButtonWithIconAndLink({
   text,
   disabled,
   type,
+  ghost,
+  smallIcon,
 }: {
   to: To;
   icon: IconProps["iconName"];
@@ -23,19 +25,22 @@ export default function ButtonWithIconAndLink({
   text?: string;
   disabled?: boolean;
   type?: BaseButtonProps["type"];
+  ghost?: boolean;
+  smallIcon?: boolean;
 }) {
   const { sm } = useBreakpoint();
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip title={tooltipTitle} color={color}>
+      <Tooltip title={tooltipTitle} color={color === "#FFF" ? "#333" : color}>
         <Link to={to}>
           <Button
-            icon={icon && <IconForSmallBlock size={14} iconName={icon} />}
+            icon={icon && <IconForSmallBlock size={smallIcon ? 12 : 14} iconName={icon} />}
             type={type || "primary"}
-            size={text ? undefined : "small"}
+            size={text && !smallIcon ? undefined : "small"}
             disabled={disabled}
             block={block}
+            ghost={ghost}
           >
             {sm && text && text}
           </Button>

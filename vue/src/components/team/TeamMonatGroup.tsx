@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Collapse, Row, Typography } from "antd";
+import { Col, Collapse, Row, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import { useNavigate } from "react-router-dom";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TeamBlockVermietung from "@/components/team/TeamBlock/TeamBlockVermietung.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
 interface MonatGroupProps {
   monat: string;
@@ -28,7 +27,6 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     const jetzt = new DatumUhrzeit();
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungenUndVermietungen]);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -53,32 +51,24 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                       </Typography.Title>
                     </Col>
                     <Col>
-                      <Button
+                      <ButtonWithIconAndLink
+                        text="Pressetexte"
+                        to={{ pathname: `/team/${yymm}`, search: "tab=pressetexte" }}
+                        icon="FileText"
+                        color="#FFF"
                         ghost
-                        icon={<IconForSmallBlock size={12} iconName="FileText" />}
-                        size="small"
-                        onClick={() =>
-                          navigate({
-                            pathname: `/team/${yymm}`,
-                            search: "tab=pressetexte",
-                          })
-                        }
-                      >
-                        Pressetexte
-                      </Button>
-                      <Button
+                        smallIcon
+                        tooltipTitle="Pressetexte"
+                      />
+                      <ButtonWithIconAndLink
+                        text="Übersicht"
+                        to={{ pathname: `/team/${yymm}`, search: "tab=uebersicht" }}
+                        icon="FileSpreadsheet"
+                        color="#FFF"
                         ghost
-                        icon={<IconForSmallBlock size={12} iconName="FileSpreadsheet" />}
-                        size="small"
-                        onClick={() =>
-                          navigate({
-                            pathname: `/team/${yymm}`,
-                            search: "tab=uebersicht",
-                          })
-                        }
-                      >
-                        Übersicht
-                      </Button>
+                        smallIcon
+                        tooltipTitle="Übersicht"
+                      />
                     </Col>
                   </Row>
                 ),
