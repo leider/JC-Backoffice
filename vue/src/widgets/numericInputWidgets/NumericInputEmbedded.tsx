@@ -1,6 +1,6 @@
-import { Input } from "antd";
+import { Input, InputRef } from "antd";
 import numeral from "numeral";
-import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import isEqual from "lodash/isEqual";
@@ -113,19 +113,26 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = ({ target: { value: widgetInput } }) => {
     const result = widgetInput ? numeral(widgetInput).value() || 0 : null;
-
     sanitizeLocalInput(result, widgetInput);
+  };
+
+  const handleFocus: React.FocusEventHandler<HTMLInputElement> = () => {
+    inputRef.current?.focus({ cursor: "all" });
   };
 
   useEffect(() => {
     sanitizeLocalInput(number);
   }, [sanitizeLocalInput, number, disabled]);
 
+  const inputRef = useRef<InputRef>(null);
+
   return (
     <Input
+      ref={inputRef}
       id={id}
-      inputMode="numeric"
+      inputMode={decimals > 0 ? "decimal" : "numeric"}
       onBlur={handleBlur}
+      onFocus={handleFocus}
       disabled={disabled}
       value={value}
       onChange={({ target: { value: val } }) => setValue(val)}
