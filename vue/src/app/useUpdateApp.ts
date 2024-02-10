@@ -10,7 +10,7 @@ export default function useUpdateApp() {
               // IGNORE console.log(oops);
             });
           },
-          60 * 60 * 1000, // one hour
+          60 * 60, // one minute
         );
     },
   });
