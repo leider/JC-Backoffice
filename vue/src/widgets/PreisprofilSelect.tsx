@@ -12,7 +12,7 @@ interface PreisprofilSelectParams {
 export default function PreisprofilSelect({ optionen, onChange, form }: PreisprofilSelectParams) {
   return (
     <Form.Item
-      label={<b>Preisprofil:</b>}
+      label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}
       name={["eintrittspreise", "preisprofil"]}
       valuePropName="valueAsObject"
       trigger="onValueAsObject"

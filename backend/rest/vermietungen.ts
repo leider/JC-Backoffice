@@ -7,6 +7,7 @@ import User from "jc-shared/user/user.js";
 import { resToJson } from "../lib/commons/replies.js";
 import store from "../lib/vermietungen/vermietungenstore.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
+import { vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 
 const app = express();
 
@@ -56,7 +57,27 @@ app.get("/vermietungen/:url", async (req: Request, res: Response) => {
 });
 
 app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
-  return saveAndReply(res, new Vermietung(req.body));
+  const user = req.user as User;
+  const url = req.body.url;
+
+  if (user.accessrights.isOrgaTeam) {
+    const vermietung = await store.getVermietung(url);
+    if (vermietung) {
+      const frischFreigegeben = vermietung.angebot.freigabe !== req.body.angebot.freigabe && !!req.body.angebot.freigabe;
+      if (frischFreigegeben) {
+        try {
+          await vermietungVertragToBuchhaltung(new Vermietung(req.body));
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log("Vermietungsvertrag Versand an Buchhaltung gescheitert");
+          throw e;
+        }
+      }
+    }
+    return saveAndReply(res, new Vermietung(req.body));
+  } else {
+    return res.status(403).send("Vermietungen brauchen Orga Rechte");
+  }
 });
 
 app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {

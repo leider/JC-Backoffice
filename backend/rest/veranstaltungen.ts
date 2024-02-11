@@ -63,7 +63,6 @@ app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
 
 app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Response) => {
   const user = req.user as User;
-  // checkFreigabeChanged
   const url = req.body.url;
 
   async function saveVeranstaltung(veranstaltung: Veranstaltung | null) {

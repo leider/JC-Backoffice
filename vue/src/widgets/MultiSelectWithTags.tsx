@@ -51,7 +51,7 @@ export default function MultiSelectWithTags({
   const realOptions = useMemo(() => options.map((opt) => ({ label: opt, value: opt })), [options]);
 
   return (
-    <Form.Item label={<b>{label}:</b>} name={name} style={style}>
+    <Form.Item label={<b style={{ whiteSpace: "nowrap" }}>{label}:</b>} name={name} style={style}>
       <InnerSelect realOptions={realOptions} noAdd={noAdd} specialTagRender={specialTagRender} />
     </Form.Item>
   );

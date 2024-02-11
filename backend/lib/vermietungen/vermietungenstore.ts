@@ -50,12 +50,12 @@ export default {
 
   getVermietung: function getVermietung(url: string) {
     const result = persistence.getByField({ key: "url", val: url });
-    return misc.toObject(Vermietung, result);
+    return misc.toObject<Vermietung>(Vermietung, result);
   },
 
   getVermietungForId: function getVermietungForId(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject(Vermietung, result);
+    return misc.toObject<Vermietung>(Vermietung, result);
   },
 
   saveVermietung: function saveVermietung(vermietung: Vermietung) {

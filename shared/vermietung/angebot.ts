@@ -1,4 +1,5 @@
 import renderer from "../commons/renderer.js";
+import Misc from "../commons/misc.js";
 
 export type AngebotStatus = "offen" | "verschickt" | "angenommen" | "abgerechnet";
 
@@ -25,6 +26,8 @@ export default class Angebot {
   frei3 = "";
   frei3EUR = 0;
   beschreibung = "";
+  freigabe? = "";
+  freigabeAm?: Date;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
@@ -33,7 +36,11 @@ export default class Angebot {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
-    Object.assign(this, object);
+    if (object && Object.keys(object).length !== 0) {
+      Object.assign(this, object, {
+        freigabeAm: Misc.stringOrDateToDate(object.freigabeAm),
+      });
+    }
   }
   get saalmieteTotal(): number {
     return this.saalmiete + this.saalmieteRabattEUR;

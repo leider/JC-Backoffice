@@ -17,7 +17,7 @@ export default function SingleSelect({ label, name, onChange, options, initialVa
 
   return (
     <Form.Item
-      label={label ? <b>{label}:</b> : ""}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : ""}
       name={name}
       colon={false}
       rules={[{ required: required }]}

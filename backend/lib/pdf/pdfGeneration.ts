@@ -15,6 +15,7 @@ import mailtransport from "../mailsender/mailtransport.js";
 import Message from "jc-shared/mail/message.js";
 import riderstore from "../rider/riderstore.js";
 import { PrintableBox } from "jc-shared/rider/rider.js";
+import Vermietung from "jc-shared/vermietung/vermietung.js";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
@@ -94,6 +95,29 @@ export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung) {
   const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
   const subject = `[Kassenzettel] ${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.fuerPresse}`;
   const filenamepdf = `${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
+  generatePdfLocally(renderedHtml, (pdf: Buffer) => {
+    const message = new Message({ subject, markdown: "" });
+    message.pdfBufferAndName = { pdf, name: filenamepdf };
+    message.to = conf.get("kassenzettel-email") as string;
+    if (!message.to) {
+      return;
+    }
+    return mailtransport.sendDatevMail(message);
+  });
+}
+
+export async function vermietungVertragToBuchhaltung(vermietung: Vermietung) {
+  const file = path.join(__dirname, "views/vertrag-vermietung.pug");
+  const renderedHtml = pug.renderFile(file, {
+    vermietung,
+    datum: new DatumUhrzeit(),
+    art: "Rechnung",
+    publicUrlPrefix,
+    einseitig: true,
+    email: "event",
+  });
+  const subject = `[Vertrag] ${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.fuerPresse}`;
+  const filenamepdf = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
   generatePdfLocally(renderedHtml, (pdf: Buffer) => {
     const message = new Message({ subject, markdown: "" });
     message.pdfBufferAndName = { pdf, name: filenamepdf };

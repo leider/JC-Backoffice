@@ -49,7 +49,13 @@ function EmbeddedPickers({ id, dates, onDates }: { id?: string; dates?: StartAnd
 
 export default function StartEndPickers() {
   return (
-    <Form.Item label={<b>Datum und Uhrzeit:</b>} name="startAndEnd" valuePropName="dates" trigger="onDates" required>
+    <Form.Item
+      label={<b style={{ whiteSpace: "nowrap" }}>Datum und Uhrzeit:</b>}
+      name="startAndEnd"
+      valuePropName="dates"
+      trigger="onDates"
+      required
+    >
       <EmbeddedPickers />
     </Form.Item>
   );

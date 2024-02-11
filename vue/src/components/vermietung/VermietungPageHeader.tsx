@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CSSProperties, useContext, useEffect, useState } from "react";
-import { Form, theme } from "antd";
+import { useContext, useEffect, useState } from "react";
+import { Form, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
 import { PageHeader } from "@ant-design/pro-layout";
@@ -14,8 +14,6 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   const { url } = useParams();
 
-  const { useToken } = theme;
-  const { token } = useToken();
   const [displayDate, setDisplayDate] = useState<string>("");
 
   const confirmed = Form.useWatch(["kopf", "confirmed"], {
@@ -75,19 +73,24 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
-  const titleStyle: CSSProperties = { color: token.colorText, whiteSpace: "normal" };
-
   return (
     <PageHeader
-      title={<span style={titleStyle}>Vermietung - {title}</span>}
-      subTitle={<span style={titleStyle}>{displayDate}</span>}
+      title={title}
       extra={[
         <ExportExcelVermietungButton key="excel" disabled={isNew} />,
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
         <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
         <SaveButton key="save" disabled={!dirty} />,
       ]}
-      tags={tagsForTitle}
+      footer={[
+        <Tag key="verm" color="purple">
+          Vermietung
+        </Tag>,
+        <b key="datum" style={{ marginRight: 8 }}>
+          {displayDate}
+        </b>,
+        ...tagsForTitle,
+      ]}
     >
       {isNew && (
         <b

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -58,19 +58,31 @@ export default function VermietungComp() {
 
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
+
+  const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
+    setDirty(areDifferent(initial, current));
+  }, []);
   useDirtyBlocker(dirty);
 
   const { currentUser, optionen, showSuccess } = useJazzContext();
   const navigate = useNavigate();
+
+  const freigabe = Form.useWatch(["angebot", "freigabe"], { form });
+
+  useEffect(() => {
+    updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
+  }, [freigabe, form, initialValue, updateDirtyIfChanged]);
+
   useEffect(() => {
     const deepCopy = toFormObject(vermietung);
     form.setFieldsValue(deepCopy);
     const initial = toFormObject(vermietung);
     setInitialValue(initial);
-    setDirty(areDifferent(initial, deepCopy));
+    updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!vermietung.id);
     form.validateFields();
-  }, [form, vermietung]);
+  }, [form, updateDirtyIfChanged, vermietung]);
+
   useEffect(() => {
     const accessrights = currentUser.accessrights;
     if (currentUser.id && !accessrights.isOrgaTeam) {
@@ -101,7 +113,7 @@ export default function VermietungComp() {
           // console.log({ diff });
           // console.log({ initialValue });
           // console.log({ form: form.getFieldsValue(true) });
-          setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+          updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {
           notification.error({

@@ -86,16 +86,6 @@ export default class Kasse {
     return !!this.kassenfreigabe;
   }
 
-  freigabeErfolgtDurch(name: string): void {
-    this.kassenfreigabe = name;
-    this.kassenfreigabeAm = new DatumUhrzeit().toJSDate;
-  }
-
-  freigabeRueckgaengig(): void {
-    this.kassenfreigabe = "";
-    this.kassenfreigabeAm = undefined;
-  }
-
   get freigabeDisplayDatum(): string {
     return this.kassenfreigabeAm ? DatumUhrzeit.forJSDate(this.kassenfreigabeAm).tagMonatJahrLang : "";
   }

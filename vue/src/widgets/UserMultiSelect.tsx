@@ -45,7 +45,7 @@ export default function UserMultiSelect({
   label?: string;
 }) {
   return (
-    <Form.Item label={label ? <b>{label}:</b> : undefined} name={name} noStyle={!label}>
+    <Form.Item label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : undefined} name={name} noStyle={!label}>
       <InnerSelect disabled={disabled} usersAsOptions={usersAsOptions} />
     </Form.Item>
   );
