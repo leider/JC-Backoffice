@@ -21,8 +21,8 @@ app.get("/optionen", async (req: Request, res: Response) => {
 });
 
 app.post("/optionen", [checkOrgateam], async (req: Request, res: Response) => {
+  await store.save(req.body, req.user as User);
   const optionen = new OptionValues(req.body);
-  await store.save(optionen, req.user as User);
   resToJson(res, optionen);
 });
 
@@ -32,8 +32,8 @@ app.get("/orte", async (req: Request, res: Response) => {
 });
 
 app.post("/orte", [checkOrgateam], async (req: Request, res: Response) => {
+  await store.save(req.body, req.user as User);
   const orte = new Orte(req.body);
-  await store.save(orte, req.user as User);
   resToJson(res, orte);
 });
 
@@ -43,8 +43,8 @@ app.get("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
 });
 
 app.post("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
+  await store.save(req.body, req.user as User);
   const ical = new FerienIcals(req.body);
-  await store.save(ical, req.user as User);
   resToJson(res, ical);
 });
 
