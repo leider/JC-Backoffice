@@ -14,10 +14,10 @@ const jwtOptions = {
 const appLogger = loggers.get("application");
 
 passport.use(
-  new Strategy(jwtOptions, async (jwtPayload: { id: string }, done: VerifiedCallback) => {
+  new Strategy(jwtOptions, (jwtPayload: { id: string }, done: VerifiedCallback) => {
     const username = jwtPayload.id;
     try {
-      const user = await store.forId(username);
+      const user = store.forId(username);
       if (!user) {
         return done(null);
       }

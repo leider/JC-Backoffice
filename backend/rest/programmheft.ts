@@ -6,6 +6,7 @@ import Kalender from "jc-shared/programmheft/kalender.js";
 import store from "../lib/programmheft/kalenderstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
+import User from "jc-shared/user/user.js";
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.get("/programmheft/:year/:month", [checkOrgateam], async (req: Request, res:
 
 app.post("/programmheft", [checkOrgateam], async (req: Request, res: Response) => {
   const kalender = new Kalender(req.body);
-  await store.saveKalender(kalender);
+  await store.saveKalender(kalender, req.user as User);
   resToJson(res, kalender);
 });
 

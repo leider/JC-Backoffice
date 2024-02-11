@@ -1,9 +1,10 @@
 import Database, { SqliteError } from "better-sqlite3";
 import conf from "../../../shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
+import User from "jc-shared/user/user.js";
 
 const sqlitedb = conf.get("sqlitedb") as string;
-const db = new Database(sqlitedb);
+export const db = new Database(sqlitedb);
 const scriptLogger = loggers.get("scripts");
 scriptLogger.info(`DB = ${sqlitedb}`);
 
@@ -30,19 +31,36 @@ export function execWithTry(command: string) {
 
 class Persistence {
   private collectionName: string;
+  private history: string;
   private extraCols: string[] = [];
 
-  constructor(collName: string, extraCols: string[] = []) {
-    this.collectionName = collName;
-    this.extraCols = extraCols;
-    const columns = ["id TEXT PRIMARY KEY", "data BLOB"].concat(extraCols.map((col) => `${col} TEXT`));
-    db.exec(`CREATE TABLE IF NOT EXISTS ${collName} ( ${columns.join(",")});`);
-    execWithTry(`CREATE INDEX idx_${collName}_id ON ${collName}(id);`);
-    if (extraCols.length > 0) {
-      const suffix = extraCols.join("_");
-      const columns = extraCols.join(",");
-      execWithTry(`CREATE INDEX idx_${collName}_${suffix} ON ${collName}(${columns});`);
+  private initialize() {
+    const columns = ["id TEXT PRIMARY KEY", "data BLOB"].concat(this.extraCols.map((col) => `${col} TEXT`));
+    db.exec(`CREATE TABLE IF NOT EXISTS ${this.collectionName} ( ${columns.join(",")});`);
+    execWithTry(`CREATE INDEX idx_${this.collectionName}_id ON ${this.collectionName}(id);`);
+    if (this.extraCols.length > 0) {
+      const suffix = this.extraCols.join("_");
+      const columns = this.extraCols.join(",");
+      execWithTry(`CREATE INDEX idx_${this.collectionName}_${suffix} ON ${this.collectionName}(${columns});`);
+      this.extraCols.forEach((col) => {
+        execWithTry(`CREATE INDEX idx_${this.collectionName}_${col} ON ${this.collectionName}(${col});`);
+      });
     }
+  }
+
+  private initializeHistory() {
+    db.exec(
+      `CREATE TABLE IF NOT EXISTS ${this.history} ( id TEXT, time TEXT, user TEXT, before BLOB, after BLOB, PRIMARY KEY(id, time) );`,
+    );
+    execWithTry(`CREATE INDEX idx_${this.history}_id ON ${this.history}(id);`);
+  }
+
+  constructor(collection: string, extraCols: string[] = []) {
+    this.collectionName = collection;
+    this.history = `${collection}history`;
+    this.extraCols = extraCols;
+    this.initialize();
+    this.initializeHistory();
   }
 
   list(orderBy?: string) {
@@ -68,12 +86,12 @@ class Persistence {
     return result ? JSON.parse(result.data) : {};
   }
 
-  get colsForSave() {
+  private get colsForSave() {
     return ["id", "data"].concat(this.extraCols);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  createValsForSave(object: { [ind: string]: any } & { id?: string }) {
+  private createValsForSave(object: { [ind: string]: any } & { id: string }) {
     return [escape(object.id), asSqliteString(object)].concat(
       this.extraCols.map((col) => {
         return object[col]?.toJSON ? escape(object[col].toJSON()) : escape(object[col]);
@@ -81,14 +99,26 @@ class Persistence {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  save(object: { [ind: string]: any } & { id?: string }) {
-    const vals = this.createValsForSave(object);
-    return db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES (${vals.join(",")});`);
+  private saveHistoryEntry(object: { id: string }, user: User) {
+    const now = new Date().toJSON();
+    const before = this.getById(object.id);
+    return db.exec(
+      `REPLACE INTO ${this.history} ( id, time, user, before, after ) VALUES ( ${escape(object.id)}, ${escape(now)}, ${escape(user.name)}, ${asSqliteString(before)}, ${asSqliteString(object)});`,
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  saveAll(objects: ({ [ind: string]: any } & { id?: string })[]) {
+  save(object: { [ind: string]: any } & { id: string }, user: User) {
+    const vals = this.createValsForSave(object);
+    const trans = db.transaction(() => {
+      this.saveHistoryEntry(object, user);
+      db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES (${vals.join(",")});`);
+    });
+    trans.immediate();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  saveAll(objects: ({ [ind: string]: any } & { id: string })[], user: User) {
     if (objects.length < 1) {
       return;
     }
@@ -96,19 +126,31 @@ class Persistence {
       const vals = this.createValsForSave(obj);
       return `(${vals.join(",")})`;
     });
-    return db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES ${rows.join("\n,")};`);
+    const trans = db.transaction(() => {
+      objects.forEach((obj) => this.saveHistoryEntry(obj, user));
+      db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES ${rows.join("\n,")};`);
+    });
+    trans.immediate();
   }
 
-  removeWithQuery(where: string) {
+  private removeWithQuery(where: string) {
     return db.exec(`DELETE FROM ${this.collectionName} WHERE ${where};`);
   }
 
-  removeById(id: string) {
-    return this.removeWithQuery(`id = ${escape(id)}`);
+  removeById(id: string, user: User) {
+    const trans = db.transaction(() => {
+      this.saveHistoryEntry({ id }, user);
+      this.removeWithQuery(`id = ${escape(id)}`);
+    });
+    trans.immediate();
   }
 
-  removeAllByIds(ids: string[]) {
-    return this.removeWithQuery(`id IN (${ids.map(escape).join(",")})`);
+  removeAllByIds(ids: string[], user: User) {
+    const trans = db.transaction(() => {
+      ids.forEach((id) => this.saveHistoryEntry({ id }, user));
+      this.removeWithQuery(`id IN (${ids.map(escape).join(",")})`);
+    });
+    trans.immediate();
   }
 }
 

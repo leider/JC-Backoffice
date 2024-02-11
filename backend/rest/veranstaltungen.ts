@@ -26,8 +26,8 @@ async function standardHandler(res: Response, user: User, veranstaltungen: Veran
   );
 }
 
-async function saveAndReply(res: Response, veranstaltung: Veranstaltung) {
-  const result = await store.saveVeranstaltung(veranstaltung);
+async function saveAndReply(req: Request, res: Response, veranstaltung: Veranstaltung) {
+  const result = await store.saveVeranstaltung(veranstaltung, req.user as User);
   resToJson(res, result);
 }
 
@@ -67,12 +67,12 @@ app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Respon
 
   async function saveVeranstaltung(veranstaltung: Veranstaltung | null) {
     if (user.accessrights.isOrgaTeam) {
-      return saveAndReply(res, new Veranstaltung(req.body));
+      return saveAndReply(req, res, new Veranstaltung(req.body));
     } else {
       // Nur Kasse erlaubt
       if (url && veranstaltung) {
         veranstaltung.kasse = new Kasse(req.body.kasse);
-        return saveAndReply(res, veranstaltung);
+        return saveAndReply(req, res, veranstaltung);
       } else {
         return res.status(403).send("Kasse darf nur bestehende speichern");
       }
@@ -96,7 +96,7 @@ app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Respon
 });
 
 app.delete("/veranstaltungen", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.deleteVeranstaltungById(req.body.id);
+  await store.deleteVeranstaltungById(req.body.id, req.user as User);
   resToJson(res);
 });
 
@@ -106,7 +106,7 @@ async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUser
     return res.sendStatus(404);
   }
   veranstaltung.staff[func](req.user as User, req.body.section);
-  return saveAndReply(res, veranstaltung);
+  return saveAndReply(req, res, veranstaltung);
 }
 
 app.post("/veranstaltungen/:url/addUserToSection", async (req: Request, res: Response) => {
@@ -125,7 +125,7 @@ app.post("/veranstaltungen/:url/updateGastInSection", async (req: Request, res: 
   const { item, art }: { item: NameWithNumber; art: GastArt } = req.body;
   const liste: NameWithNumber[] = art === "gast" ? veranstaltung.gaesteliste : veranstaltung.reservierungen;
   (liste.find((entry) => entry.name === item.name) || { alreadyIn: 0 }).alreadyIn = item.alreadyIn;
-  return saveAndReply(res, veranstaltung);
+  return saveAndReply(req, res, veranstaltung);
 });
 
 app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
@@ -190,7 +190,7 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
     try {
       const calls = files.datei.map((datei: { originalFilename: string; path: string }) => copyToDestination(datei, veranstaltung));
       await Promise.all(calls);
-      saveAndReply(res, veranstaltung);
+      saveAndReply(req, res, veranstaltung);
     } catch (e) {
       return res.status(500).send((e as Error).message);
     }

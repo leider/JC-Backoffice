@@ -101,7 +101,7 @@ app.post("/login", async (req, res) => {
       if (all.length === 0) {
         appLogger.info("No Users found, initializing Database.");
         const firstUser = new User({ id: name, password: pass, gruppen: ["superusers"] });
-        await usersService.saveNewUserWithPassword(firstUser);
+        await usersService.saveNewUserWithPassword(firstUser, firstUser);
         return createToken(req, res, name);
       }
       return res.sendStatus(401);

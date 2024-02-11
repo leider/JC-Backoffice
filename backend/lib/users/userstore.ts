@@ -11,17 +11,17 @@ export default {
     return misc.toObjectList<User>(User, result);
   },
 
-  save: function save(user: User) {
-    delete user.password;
-    persistence.save(user);
-    return user;
+  save: function save(userToSave: User, user: User) {
+    delete userToSave.password;
+    persistence.save(userToSave, user);
+    return userToSave;
   },
 
-  saveAll: function saveAll(users: User[]) {
+  saveAll: function saveAll(users: User[], user: User) {
     users.forEach((u) => {
       delete u.password;
     });
-    persistence.saveAll(users);
+    persistence.saveAll(users, user);
     return users;
   },
 
@@ -30,7 +30,7 @@ export default {
     return misc.toObject<User>(User, result);
   },
 
-  deleteUser: function deleteUser(id: string) {
-    return persistence.removeById(id);
+  deleteUser: function deleteUser(id: string, user: User) {
+    return persistence.removeById(id, user);
   },
 };

@@ -4,6 +4,7 @@ import store from "../lib/rider/riderstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import { Rider } from "jc-shared/rider/rider.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
+import User from "jc-shared/user/user.js";
 
 const app = express();
 
@@ -15,7 +16,7 @@ app.get("/riders/:url", async (req: Request, res: Response) => {
 app.post("/riders", [checkOrgateam], async (req: Request, res: Response) => {
   if (req.body) {
     const rider = new Rider(req.body);
-    store.saveRider(rider);
+    store.saveRider(rider, req.user as User);
     return resToJson(res, rider);
   }
 });

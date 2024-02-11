@@ -11,6 +11,7 @@ import { resToJson } from "../lib/commons/replies.js";
 import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
 import misc from "jc-shared/commons/misc.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
+import User from "jc-shared/user/user.js";
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.get("/optionen", async (req: Request, res: Response) => {
 
 app.post("/optionen", [checkOrgateam], async (req: Request, res: Response) => {
   const optionen = new OptionValues(req.body);
-  await store.save(optionen);
+  await store.save(optionen, req.user as User);
   resToJson(res, optionen);
 });
 
@@ -32,7 +33,7 @@ app.get("/orte", async (req: Request, res: Response) => {
 
 app.post("/orte", [checkOrgateam], async (req: Request, res: Response) => {
   const orte = new Orte(req.body);
-  await store.save(orte);
+  await store.save(orte, req.user as User);
   resToJson(res, orte);
 });
 
@@ -43,7 +44,7 @@ app.get("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
 
 app.post("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
   const ical = new FerienIcals(req.body);
-  await store.save(ical);
+  await store.save(ical, req.user as User);
   resToJson(res, ical);
 });
 
@@ -59,8 +60,8 @@ app.post("/termine", [checkOrgateam], async (req: Request, res: Response) => {
     newTermine.map((t) => t.toJSON()),
     oldTermine.map((t) => t.toJSON()),
   );
-  await terminstore.saveAll(changed);
-  await terminstore.removeAll(deletedIds);
+  await terminstore.saveAll(changed, req.user as User);
+  await terminstore.removeAll(deletedIds, req.user as User);
   resToJson(res, await terminstore.alle());
 });
 export default app;

@@ -1,5 +1,4 @@
 import express from "express";
-import { Dictionary } from "lodash";
 import superagent from "superagent";
 import groupBy from "lodash/groupBy.js";
 import flatMap from "lodash/flatMap.js";
@@ -19,12 +18,14 @@ import { resToJson } from "../lib/commons/replies.js";
 import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
-import { TypMitMehr } from "jc-shared/optionen/optionValues.js";
 
 const app = express();
 
 async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
-  function asCalendarEvent(veranstaltung: Veranstaltung, typByName: Dictionary<TypMitMehr[]>): TerminEvent {
+  const optionen = await optionenstore.get();
+  const typByName = groupBy(optionen?.typenPlus || [], "name");
+
+  function asCalendarEvent(veranstaltung: Veranstaltung): TerminEvent {
     const color = typByName[veranstaltung.kopf.eventTyp]?.[0].color || "#6c757d";
     return {
       display: "block",
@@ -39,12 +40,9 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
       className: "no-overflow",
     };
   }
-  const optionen = await optionenstore.get();
-  const typByName = groupBy(optionen?.typenPlus || [], "name");
-
   const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
   const unbest = await veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
-  return unbest.map((ver) => asCalendarEvent(ver, typByName));
+  return unbest.map((ver) => asCalendarEvent(ver));
 }
 
 async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {

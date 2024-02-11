@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import store from "./riderstore.js";
 import { resToJson } from "../commons/replies.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import User from "jc-shared/user/user.js";
 
 const app = express();
 
@@ -21,7 +22,7 @@ app.post("/", async (req: Request, res: Response) => {
       if (DatumUhrzeit.forJSDate(rider?.startDate).istNach(new DatumUhrzeit())) {
         rider.boxes = req.body.boxes;
       }
-      store.saveRider(rider);
+      store.saveRider(rider, req.user as User);
       return resToJson(res, rider);
     }
   }

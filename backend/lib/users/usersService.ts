@@ -4,48 +4,48 @@ import store from "./userstore.js";
 import { genSalt, hashPassword } from "../commons/hashPassword.js";
 
 export default {
-  saveNewUserWithPassword: async function saveNewUserWithPassword(user: User) {
-    const password = user.password;
+  saveNewUserWithPassword: function saveNewUserWithPassword(userToSave: User, user: User) {
+    const password = userToSave.password;
     if (!password) {
       throw new Error("Kein Passwort übermittelt");
     }
-    delete user.password;
-    const existingUser = await store.forId(user.id);
+    delete userToSave.password;
+    const existingUser = store.forId(userToSave.id);
     if (existingUser) {
-      throw new Error(`Benutzer mit Id '${user.id}' existiert schon`);
+      throw new Error(`Benutzer mit Id '${userToSave.id}' existiert schon`);
     }
     const newSalt = genSalt();
-    user.salt = newSalt;
-    user.hashedPassword = hashPassword(password, newSalt);
-    return store.save(user);
+    userToSave.salt = newSalt;
+    userToSave.hashedPassword = hashPassword(password, newSalt);
+    return store.save(userToSave, user);
   },
 
-  changePassword: async function changePassword(user: User) {
-    const password = user.password;
+  changePassword: function changePassword(userToSave: User, user: User) {
+    const password = userToSave.password;
     if (!password) {
       throw new Error("Kein Passwort übermittelt");
     }
-    delete user.password;
-    const existingUser = await store.forId(user.id);
+    delete userToSave.password;
+    const existingUser = store.forId(userToSave.id);
     if (!existingUser) {
       return null;
     }
     const newSalt = genSalt();
     existingUser.salt = newSalt;
     existingUser.hashedPassword = hashPassword(password, newSalt);
-    return store.save(existingUser);
+    return store.save(existingUser, user);
   },
 
-  emailsAllerBookingUser: async function emailsAllerBookingUser() {
-    const users = await store.allUsers();
+  emailsAllerBookingUser: function emailsAllerBookingUser() {
+    const users = store.allUsers();
     return users
       .filter((user) => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
       .filter((user) => !!user.email)
       .map((u) => u.email);
   },
 
-  emailsAllerAdmins: async function emailsAllerAdmins() {
-    const users = await store.allUsers();
+  emailsAllerAdmins: function emailsAllerAdmins() {
+    const users = store.allUsers();
     return users
       .filter((user) => (user.gruppen || []).includes("superusers"))
       .filter((user) => !!user.email)

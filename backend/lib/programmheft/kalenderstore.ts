@@ -3,6 +3,7 @@ import Kalender from "jc-shared/programmheft/kalender.js";
 
 import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
+import User from "jc-shared/user/user.js";
 
 const persistence = pers("kalenderstore");
 
@@ -12,8 +13,8 @@ export default {
     return misc.toObject(Kalender, result);
   },
 
-  saveKalender: function saveKalender(kalender: Kalender) {
-    persistence.save(kalender);
+  saveKalender: function saveKalender(kalender: Kalender, user: User) {
+    persistence.save(kalender, user);
     return kalender;
   },
 

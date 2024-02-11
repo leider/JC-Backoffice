@@ -5,6 +5,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
 import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
+import User from "jc-shared/user/user.js";
 
 const persistence = pers("veranstaltungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
@@ -58,14 +59,14 @@ export default {
     return misc.toObject<Veranstaltung>(Veranstaltung, result);
   },
 
-  saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung) {
+  saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung, user: User) {
     const object = veranstaltung.toJSON();
-    persistence.save(object);
+    persistence.save(object as { id: string }, user);
     return veranstaltung;
   },
 
-  deleteVeranstaltungById: function deleteVeranstaltungById(id: string) {
-    persistence.removeById(id);
+  deleteVeranstaltungById: function deleteVeranstaltungById(id: string, user: User) {
+    persistence.removeById(id, user);
     logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
     return;
   },

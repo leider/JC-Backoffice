@@ -21,7 +21,7 @@ export interface TerminEvent {
 }
 
 export default class Termin {
-  id?: string;
+  id: string;
   beschreibung?: string;
   typ: TerminType = "Sonstiges";
   startDate: Date = new DatumUhrzeit().toJSDate;

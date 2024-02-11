@@ -21,8 +21,8 @@ async function standardHandler(req: Request, res: Response, vermietungen: Vermie
   );
 }
 
-async function saveAndReply(res: Response, vermietung: Vermietung) {
-  const result = await store.saveVermietung(vermietung);
+async function saveAndReply(req: Request, res: Response, vermietung: Vermietung) {
+  const result = await store.saveVermietung(vermietung, req.user as User);
   resToJson(res, result);
 }
 
@@ -57,31 +57,27 @@ app.get("/vermietungen/:url", async (req: Request, res: Response) => {
 });
 
 app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
-  const user = req.user as User;
   const url = req.body.url;
 
-  if (user.accessrights.isOrgaTeam) {
-    const vermietung = await store.getVermietung(url);
-    if (vermietung) {
-      const frischFreigegeben = vermietung.angebot.freigabe !== req.body.angebot.freigabe && !!req.body.angebot.freigabe;
-      if (frischFreigegeben) {
-        try {
-          await vermietungVertragToBuchhaltung(new Vermietung(req.body));
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log("Vermietungsvertrag Versand an Buchhaltung gescheitert");
-          throw e;
-        }
+  const vermietung = await store.getVermietung(url);
+  if (vermietung) {
+    const frischFreigegeben = vermietung.angebot.freigabe !== req.body.angebot.freigabe && !!req.body.angebot.freigabe;
+    if (frischFreigegeben) {
+      try {
+        await vermietungVertragToBuchhaltung(new Vermietung(req.body));
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log("Vermietungsvertrag Versand an Buchhaltung gescheitert");
+        throw e;
       }
     }
-    return saveAndReply(res, new Vermietung(req.body));
-  } else {
-    return res.status(403).send("Vermietungen brauchen Orga Rechte");
+    return saveAndReply(req, res, new Vermietung(req.body));
   }
+  return res.sendStatus(500);
 });
 
 app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.deleteVermietungById(req.body.id);
+  await store.deleteVermietungById(req.body.id, req.user as User);
   resToJson(res);
 });
 

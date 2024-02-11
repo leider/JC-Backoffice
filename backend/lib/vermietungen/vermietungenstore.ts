@@ -5,6 +5,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
+import User from "jc-shared/user/user.js";
 
 const persistence = pers("vermietungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
@@ -58,14 +59,14 @@ export default {
     return misc.toObject<Vermietung>(Vermietung, result);
   },
 
-  saveVermietung: function saveVermietung(vermietung: Vermietung) {
+  saveVermietung: function saveVermietung(vermietung: Vermietung, user: User) {
     const object = vermietung.toJSON();
-    persistence.save(object);
+    persistence.save(object as { id: string }, user);
     return vermietung;
   },
 
-  deleteVermietungById: function deleteVermietungById(id: string) {
-    persistence.removeById(id);
+  deleteVermietungById: function deleteVermietungById(id: string, user: User) {
+    persistence.removeById(id, user);
     logger.info(`Vermietung removed: ${JSON.stringify(id)}`);
     return;
   },

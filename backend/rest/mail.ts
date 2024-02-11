@@ -10,6 +10,7 @@ import userstore from "../lib/users/userstore.js";
 import misc from "jc-shared/commons/misc.js";
 import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
 import { checkSuperuser } from "./checkAccessHandlers.js";
+import User from "jc-shared/user/user.js";
 
 const app = express();
 
@@ -27,19 +28,19 @@ app.post("/mailrules", [checkSuperuser], async (req: Request, res: Response) => 
     oldRules.map((r) => r.toJSON()),
   );
 
-  await mailstore.saveAll(changed);
-  await mailstore.removeAll(deletedIds);
+  await mailstore.saveAll(changed, req.user as User);
+  await mailstore.removeAll(deletedIds, req.user as User);
   resToJson(res, await mailstore.all());
 });
 
 app.post("/mailrule", [checkSuperuser], async (req: Request, res: Response) => {
   const ruleToSave = new MailRule(req.body);
-  await mailstore.save(ruleToSave);
+  await mailstore.save(ruleToSave, req.user as User);
   resToJson(res, ruleToSave);
 });
 
 app.delete("/mailrule", [checkSuperuser], async (req: Request, res: Response) => {
-  await mailstore.removeById(req.body.id);
+  await mailstore.removeById(req.body.id, req.user as User);
   resToJson(res);
 });
 
@@ -62,7 +63,7 @@ app.post("/mailinglisten", [checkSuperuser], async (req: Request, res: Response)
     selectedUsers?.forEach((u) => u.subscribeList(list.name));
   });
 
-  await userstore.saveAll(users || []);
+  await userstore.saveAll(users || [], req.user as User);
   resToJson(res, users);
 });
 

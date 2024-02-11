@@ -43,7 +43,7 @@ app.get("/imagenames", (req, res) => {
 
 app.post("/imagenames", [checkSuperuser], async (req: Request, res: Response) => {
   const rows = req.body as ImageOverviewRow[];
-  await service.renameImages(rows);
+  await service.renameImages(rows, req.user as User);
   allImageNames(res);
 });
 

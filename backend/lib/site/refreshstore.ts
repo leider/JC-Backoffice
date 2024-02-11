@@ -1,19 +1,29 @@
-import Database from "better-sqlite3";
-import conf from "../../../shared/commons/simpleConfigure.js";
-import { loggers } from "winston";
-import { execWithTry } from "../persistence/sqlitePersistence.js";
-
-const sqlitedb = conf.get("sqlitedb") as string;
-const db = new Database(sqlitedb);
-const scriptLogger = loggers.get("scripts");
-scriptLogger.info(`DB = ${sqlitedb}`);
+import { db, execWithTry } from "../persistence/sqlitePersistence.js";
 
 const STORE = "refreshtokens";
+
+function smoothMigrate() {
+  try {
+    const result = (db.prepare("SELECT * FROM refreshstore").all() as { data: string }[]).map((each) => JSON.parse(each.data));
+    const trans = db.transaction((rows: RefreshToken[]) => {
+      rows.forEach((row) => {
+        const query = `REPLACE INTO ${STORE} (id,expiresAt,userId) VALUES ('${row.id}', '${row.expiresAt}', '${row.userId}')`;
+        db.exec(query);
+      });
+      db.exec("DROP TABLE refreshstore");
+    });
+    trans.immediate(result);
+  } catch {
+    // nothing to see here, table already history
+  }
+}
+
 class LocalPersistence {
   constructor() {
     const columns = ["id TEXT PRIMARY KEY", "expiresAt TEXT", "userId TEXT"];
     db.exec(`CREATE TABLE IF NOT EXISTS ${STORE} ( ${columns.join(",")});`);
     execWithTry(`CREATE INDEX idx_${STORE}_id ON ${STORE}(id);`);
+    smoothMigrate();
   }
 
   save(object: RefreshToken) {

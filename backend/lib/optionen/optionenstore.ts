@@ -4,6 +4,7 @@ import FerienIcals from "jc-shared/optionen/ferienIcals.js";
 
 import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
+import User from "jc-shared/user/user.js";
 
 const persistence = pers("optionenstore");
 
@@ -23,8 +24,8 @@ export default {
     return misc.toObject<FerienIcals>(FerienIcals, result);
   },
 
-  save: function save(object: OptionValues | Orte | FerienIcals) {
-    persistence.save(object.toJSON());
+  save: function save(object: OptionValues | Orte | FerienIcals, user: User) {
+    persistence.save(object.toJSON(), user);
     return object;
   },
 };

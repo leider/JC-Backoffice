@@ -23,7 +23,7 @@ app.get("/users", async (req, res) => {
 
 app.post("/user/changePassword", [checkCanEditUser], async (req: Request, res: Response) => {
   const user = new User(req.body);
-  await service.changePassword(user);
+  await service.changePassword(user, req.user as User);
   resToJson(res, user);
 });
 
@@ -35,20 +35,20 @@ app.post("/user", [checkCanEditUser], async (req: Request, res: Response) => {
   }
   user.hashedPassword = existingUser.hashedPassword;
   user.salt = existingUser.salt;
-  await store.save(user);
+  await store.save(user, req.user as User);
   resToJson(res, user);
 });
 
 app.put("/user", [checkSuperuser], async (req: Request, res: Response) => {
   const user = new User(req.body);
-  await service.saveNewUserWithPassword(user);
+  await service.saveNewUserWithPassword(user, req.user as User);
   resToJson(res, user);
 });
 
 app.delete("/user", [checkSuperuser], async (req: Request, res: Response) => {
-  const user = new User(req.body);
-  await store.deleteUser(user.id);
-  resToJson(res, user);
+  const userToDelete = new User(req.body);
+  await store.deleteUser(userToDelete.id, req.user as User);
+  resToJson(res, userToDelete);
 });
 
 export default app;
