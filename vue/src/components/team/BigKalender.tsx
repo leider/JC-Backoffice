@@ -5,10 +5,10 @@ import FullCalendar from "@fullcalendar/react";
 import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/commons/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
-import { PageHeader } from "@ant-design/pro-layout";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
@@ -60,7 +60,7 @@ export default function BigKalender() {
         calRef.current?.getApi().refetchEvents();
       }}
     >
-      <PageHeader title="Kalenderübersicht" extra={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
+      <JazzPageHeader title="Kalenderübersicht" buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
       <Row gutter={8}>
         <Col span={24} style={{ zIndex: 0 }}>
           <FullCalendar

@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveMailinglists } from "@/commons/loader.ts";
 import * as React from "react";
@@ -12,6 +11,7 @@ import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -96,7 +96,7 @@ export default function MailingLists() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Mailinglisten" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
+      <JazzPageHeader title="Mailinglisten" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

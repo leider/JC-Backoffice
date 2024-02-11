@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
@@ -11,6 +10,7 @@ import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCol
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function OrtePage() {
   const [initialValue, setInitialValue] = useState<object>({});
@@ -91,7 +91,7 @@ export default function OrtePage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Orte" extra={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Orte" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

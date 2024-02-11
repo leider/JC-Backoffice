@@ -3,12 +3,12 @@ import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { Form } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
-import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const veranstContext = useContext(VeranstaltungContext);
@@ -100,12 +100,12 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
     setIsOrga(currentUser.accessrights.isOrgaTeam);
   }, [currentUser.accessrights.isOrgaTeam, setIsOrga]);
 
-  const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
+  const titleStyle: CSSProperties = { color: typeColor };
   return (
-    <PageHeader
+    <JazzPageHeader
       title={<span style={titleStyle}>{title}</span>}
-      subTitle={<span style={titleStyle}>{displayDate}</span>}
-      extra={[
+      dateString={displayDate}
+      buttons={[
         isOrga && <ExportButtons key="exports" disabled={isNew} />,
         isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
@@ -122,6 +122,6 @@ export default function VeranstaltungPageHeader({ isNew, dirty }: { isNew: boole
           (Denk daran, alle Felder zu überprüfen und auszufüllen)
         </b>
       )}
-    </PageHeader>
+    </JazzPageHeader>
   );
 }

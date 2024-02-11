@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -13,6 +12,7 @@ import { RowWrapper } from "@/widgets/RowWrapper";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function WikiPage() {
   useDirtyBlocker(false);
@@ -111,13 +111,10 @@ export default function WikiPage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader
-        title="Wiki"
-        subTitle={realPage}
-        breadcrumb={{
-          items: [{ title: <Link to={`/wiki/${subdir}/`}>{subdir}</Link> }],
-        }}
-        extra={[
+      <JazzPageHeader
+        title={"Wiki " + realPage}
+        breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
+        buttons={[
           <Search key="Search" placeholder="Wiki durchsuchen..." onSearch={onSearch} style={{ width: 200 }} />,
           <Button key="edit" icon={<IconForSmallBlock iconName="FileEarmarkText" />} type="primary" onClick={editOrUndo}>
             {isEdit ? "Undo" : "Bearbeiten"}

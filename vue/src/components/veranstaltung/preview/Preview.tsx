@@ -1,7 +1,6 @@
 import { Col, Row } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { PageHeader } from "@ant-design/pro-layout";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +16,7 @@ import GaesteInPreview from "@/components/veranstaltung/preview/GaesteInPreview.
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Preview() {
   const { url } = useParams();
@@ -57,17 +57,17 @@ export default function Preview() {
     );
   }
 
-  const titleStyle: CSSProperties = { color: typeColor, whiteSpace: "normal" };
+  const titleStyle: CSSProperties = { color: typeColor };
   return (
     <div>
-      <PageHeader
+      <JazzPageHeader
         title={
           <span style={titleStyle}>
             {veranstaltung.kopf.titelMitPrefix} {veranstaltung.kopf.presseInEcht}
           </span>
         }
-        subTitle={<span style={titleStyle}>{veranstaltung.datumForDisplayShort}</span>}
-        extra={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        dateString={veranstaltung.datumForDisplayShort}
+        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />
       <Row gutter={12}>
         <Col xs={24} lg={12}>

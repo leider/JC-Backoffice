@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { Col, Form, Row } from "antd";
@@ -10,6 +9,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { Section } from "@/components/options/imageoverview/Section.tsx";
 import { useCreateImagenamesSections } from "@/components/options/imageoverview/useCreateImagenamesSections.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function ImageOverview() {
   useDirtyBlocker(false);
@@ -53,7 +53,7 @@ export default function ImageOverview() {
 
   return (
     <Form form={form} onFinish={saveForm}>
-      <PageHeader title="Bilder bearbeiten" extra={[<SaveButton key="save" />]} />
+      <JazzPageHeader title="Bilder bearbeiten" buttons={[<SaveButton key="save" />]} />
       <Row gutter={12}>
         <Col span={24}>
           <Section prefix="with" title="Bilder ohne Probleme" noOfImages={noPerSection.with} />

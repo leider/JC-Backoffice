@@ -6,10 +6,10 @@ import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
 import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
-import { PageHeader } from "@ant-design/pro-layout";
 import sortBy from "lodash/sortBy";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useQueries } from "@tanstack/react-query";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -75,7 +75,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung 
     return (
       <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
         <Form form={form} layout="vertical" autoComplete="off">
-          <PageHeader title="Excel Export" />
+          <JazzPageHeader title="Excel Export" />
           <Row gutter={8}>
             <Col span={24}>
               <Form.Item label={<b>Zeitraum für den Export:</b>} name="zeitraum">

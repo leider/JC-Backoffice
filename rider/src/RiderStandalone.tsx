@@ -1,12 +1,12 @@
 import type { FC } from "react";
 import React, { useEffect, useState } from "react";
-import { PageHeader } from "@ant-design/pro-layout";
 import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveRider } from "@/loader.ts";
 import { RiderComp } from "jc-vue/src/components/rider/RiderComp.tsx";
 import ButtonWithIcon from "../../vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { theme } from "antd";
+import { JazzPageHeader } from "jc-vue/src/widgets/JazzPageHeader.tsx";
 
 export const RiderStandalone: FC = () => {
   const url = window.location.pathname.replace("/rider/", "");
@@ -39,19 +39,21 @@ export const RiderStandalone: FC = () => {
 
   return (
     <>
-      <PageHeader
+      <JazzPageHeader
         title="Rider"
-        extra={
-          isSuccess && [
-            <ButtonWithIcon
-              key="save"
-              text="Speichern"
-              icon="CheckSquare"
-              disabled={!isSuccess}
-              color={token.colorSuccess}
-              onClick={save}
-            />,
-          ]
+        buttons={
+          isSuccess
+            ? [
+                <ButtonWithIcon
+                  key="save"
+                  text="Speichern"
+                  icon="CheckSquare"
+                  disabled={!isSuccess}
+                  color={token.colorSuccess}
+                  onClick={save}
+                />,
+              ]
+            : []
         }
       />
       {isSuccess ? (

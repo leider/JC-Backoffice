@@ -2,13 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
-import { PageHeader } from "@ant-design/pro-layout";
 import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
 import { useQuery } from "@tanstack/react-query";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Info() {
   const { monatJahr } = useParams(); // als yymm
@@ -140,14 +140,14 @@ export default function Info() {
 
   return (
     <>
-      <PageHeader
+      <JazzPageHeader
         title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
-        extra={
+        buttons={[
           <a href={`/imgzip/${monatJahr!}`}>
             <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Alle Bilder als ZIP</Button>
-          </a>
-        }
-      ></PageHeader>
+          </a>,
+        ]}
+      ></JazzPageHeader>
       <Tabs
         type="card"
         activeKey={activePage}

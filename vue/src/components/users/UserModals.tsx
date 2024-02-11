@@ -2,7 +2,6 @@ import { Col, Divider, Form, FormInstance, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { PageHeader } from "@ant-design/pro-layout";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import CheckItem from "@/widgets/CheckItem";
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
@@ -36,7 +36,7 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
   return (
     <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false}>
       <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
-        <PageHeader title="Passwort ändern" />
+        <JazzPageHeader title="Passwort ändern" />
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
@@ -82,7 +82,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
   return (
     <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false}>
       <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
-        <PageHeader title="Neuer Benutzer" />
+        <JazzPageHeader title="Neuer Benutzer" />
         <Row gutter={8}>
           <Col span={24}>
             <TextField name={"id"} label="User ID" required />
@@ -171,7 +171,7 @@ export function EditUserModal({
         layout="vertical"
         autoComplete="off"
       >
-        <PageHeader title={user.id} />
+        <JazzPageHeader title={user.id} />
         <EditFields form={form} isSuperUser={isSuperUser} />
       </Form>
     </Modal>

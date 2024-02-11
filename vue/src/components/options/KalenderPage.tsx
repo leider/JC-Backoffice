@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { kalender, saveKalender } from "@/commons/loader.ts";
 import * as React from "react";
@@ -12,6 +11,7 @@ import FerienIcals from "jc-shared/optionen/ferienIcals";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -98,7 +98,7 @@ export default function KalenderPage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Kalender" extra={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Kalender" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

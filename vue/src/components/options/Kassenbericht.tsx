@@ -1,10 +1,10 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Kassenbericht() {
   useDirtyBlocker(false);
@@ -24,7 +24,7 @@ export default function Kassenbericht() {
 
   return (
     <>
-      <PageHeader title="Kassenberichte" />
+      <JazzPageHeader title="Kassenberichte" />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

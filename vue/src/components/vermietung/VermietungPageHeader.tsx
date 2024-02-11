@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { Form, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
-import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
@@ -74,23 +74,21 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   return (
-    <PageHeader
+    <JazzPageHeader
       title={title}
-      extra={[
+      buttons={[
         <ExportExcelVermietungButton key="excel" disabled={isNew} />,
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
         <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
         <SaveButton key="save" disabled={!dirty} />,
       ]}
-      footer={[
+      firstTag={
         <Tag key="verm" color="purple">
           Vermietung
-        </Tag>,
-        <b key="datum" style={{ marginRight: 8 }}>
-          {displayDate}
-        </b>,
-        ...tagsForTitle,
-      ]}
+        </Tag>
+      }
+      dateString={displayDate}
+      tags={tagsForTitle}
     >
       {isNew && (
         <b
@@ -102,6 +100,6 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
           (Denk daran, alle Felder zu überprüfen und auszufüllen)
         </b>
       )}
-    </PageHeader>
+    </JazzPageHeader>
   );
 }

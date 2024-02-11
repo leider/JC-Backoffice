@@ -1,10 +1,10 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { searchWiki } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function WikiSearchresults() {
   const { searchtext } = useParams();
@@ -22,7 +22,7 @@ export default function WikiSearchresults() {
 
   return (
     <>
-      <PageHeader title="Wiki Suchergebnisse" subTitle={`für "${searchtext}"`} extra={[]} />
+      <JazzPageHeader title="Wiki Suchergebnisse" dateString={`für "${searchtext}"`} />
       {matches.length === 0 ? (
         <h3>Keine Ergebnisse</h3>
       ) : (

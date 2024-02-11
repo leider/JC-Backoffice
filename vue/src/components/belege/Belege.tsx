@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { uploadBeleg } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import { RcFile } from "antd/es/upload";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Belege() {
   const [dirty, setDirty] = useState<boolean>(false);
@@ -74,20 +74,10 @@ export default function Belege() {
 
   return (
     <Form form={form} onValuesChange={valuesChanged} onFinish={send} layout="vertical">
-      <PageHeader
+      <JazzPageHeader
         title={<span style={{ whiteSpace: "normal" }}>Beleg Hochladen</span>}
-        subTitle={<span style={{ whiteSpace: "normal" }}>Einen Beleg direkt an die Buchhaltung schicken</span>}
-        footer={
-          <div>
-            <p>Denk daran, uns den Beleg noch im Original zukommen zu lassen.</p>
-            <p>Entweder...</p>
-            <ul>
-              <li>... gibst Du ihn direkt an der Abendkasse ab, oder</li>
-              <li>... Du schickst Ihn an die Büroadresse</li>
-            </ul>
-          </div>
-        }
-        extra={[
+        firstTag={<span style={{ whiteSpace: "normal" }}>Einen Beleg direkt an die Buchhaltung schicken</span>}
+        buttons={[
           <ButtonWithIcon
             text={uploading ? "Lädt..." : "Hochladen"}
             key="sendBeleg"
@@ -97,7 +87,16 @@ export default function Belege() {
             loading={uploading}
           />,
         ]}
-      />
+      >
+        <div>
+          <p>Denk daran, uns den Beleg noch im Original zukommen zu lassen.</p>
+          <p>Entweder...</p>
+          <ul>
+            <li>... gibst Du ihn direkt an der Abendkasse ab, oder</li>
+            <li>... Du schickst Ihn an die Büroadresse</li>
+          </ul>
+        </div>
+      </JazzPageHeader>
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

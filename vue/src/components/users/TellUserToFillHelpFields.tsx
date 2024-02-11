@@ -5,7 +5,7 @@ import User from "jc-shared/user/user.ts";
 import { IchKannFields } from "@/components/users/UserModals.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveUser } from "@/commons/loader.ts";
-import { PageHeader } from "@ant-design/pro-layout";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export function TellUserToFillHelpFields() {
   const { currentUser } = useJazzContext();
@@ -49,7 +49,7 @@ export function TellUserToFillHelpFields() {
         maskClosable={false}
       >
         <Form form={form} layout="vertical" autoComplete="off">
-          <PageHeader title="Kleine Bitte" />
+          <JazzPageHeader title="Kleine Bitte" />
           <p>Bitte sag uns kurz, in welchen Bereichen Du helfen kannst und willst...</p>
           <IchKannFields />
           <em>

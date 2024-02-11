@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
@@ -14,6 +13,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -154,7 +154,7 @@ export default function Optionen() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Optionen" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
+      <JazzPageHeader title="Optionen" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
       <Tabs
         type="card"
         activeKey={activePage}

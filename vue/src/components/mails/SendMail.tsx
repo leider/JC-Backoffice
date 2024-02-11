@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useQueries } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, sendMail, veranstaltungenForTeam } from "@/commons/loader.ts";
 import * as React from "react";
@@ -20,6 +19,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useNavigate } from "react-router-dom";
 import MitarbeiterMultiSelect from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -165,7 +165,7 @@ export default function SendMail() {
       onFinish={send}
       layout="vertical"
     >
-      <PageHeader title="Mail Senden" extra={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
+      <JazzPageHeader title="Mail Senden" buttons={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={12}>

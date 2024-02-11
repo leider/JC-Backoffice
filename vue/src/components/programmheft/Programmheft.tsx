@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -16,6 +15,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/ProgrammheftVeranstaltungenRow.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -120,10 +120,9 @@ export default function Programmheft() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader
-        title="Programmheft"
-        subTitle={`${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
-        extra={[
+      <JazzPageHeader
+        title={`Programmheft ${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
+        buttons={[
           <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
           <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
           <SaveButton key="save" disabled={!dirty} />,

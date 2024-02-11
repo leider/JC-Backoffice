@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
@@ -12,6 +11,7 @@ import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCo
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -100,7 +100,7 @@ export default function TerminePage() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Termine" extra={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Termine" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

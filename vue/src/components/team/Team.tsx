@@ -4,7 +4,6 @@ import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 function Team() {
   useDirtyBlocker(false);
@@ -57,7 +57,7 @@ function Team() {
     <>
       <Row gutter={8}>
         <Col>
-          <PageHeader
+          <JazzPageHeader
             title={
               <Space>
                 Team

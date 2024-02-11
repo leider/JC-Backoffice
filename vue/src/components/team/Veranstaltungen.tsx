@@ -6,7 +6,6 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { PageHeader } from "@ant-design/pro-layout";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
@@ -21,6 +20,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useQueries } from "@tanstack/react-query";
 import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
@@ -148,7 +148,7 @@ export default function Veranstaltungen() {
     <>
       <Row gutter={8}>
         <Col>
-          <PageHeader
+          <JazzPageHeader
             title={
               <Space>
                 Veranstaltungen
@@ -157,7 +157,7 @@ export default function Veranstaltungen() {
                 </div>
               </Space>
             }
-            extra={[
+            buttons={[
               <ExcelMultiExportButton key="excel" alle={alle}></ExcelMultiExportButton>,
               <NewButtons key="newButtons" />,
               <Dropdown

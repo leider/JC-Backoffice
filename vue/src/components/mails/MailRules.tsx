@@ -1,4 +1,3 @@
-import { PageHeader } from "@ant-design/pro-layout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
@@ -11,6 +10,7 @@ import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -97,7 +97,7 @@ export default function MailRules() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <PageHeader title="Mailing Regeln" extra={[<SaveButton key="save" disabled={!dirty} />]}></PageHeader>
+      <JazzPageHeader title="Mailing Regeln" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
