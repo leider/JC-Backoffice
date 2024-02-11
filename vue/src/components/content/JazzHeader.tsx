@@ -111,7 +111,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
       >
         <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
       </Link>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
         <Menu
           theme="dark"
           mode="horizontal"
