@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
-import { Col, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
@@ -16,16 +16,19 @@ export default function AngebotCard() {
   const [summe, setSumme] = useState<number>(0);
   const [readonly, setReadonly] = useState<boolean>(false);
 
-  useEffect(() => {
-    setReadonly(false);
-    updateSumme();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const ang = Form.useWatch("angebot", {
+    form,
+    preserve: true,
+  });
 
-  function updateSumme() {
-    const angebot = new Angebot(form.getFieldValue("angebot"));
-    setSumme(angebot.summe);
-  }
+  const updateSumme = useCallback(() => {
+    setReadonly(false);
+    setSumme(new Angebot(ang).summe);
+  }, [ang]);
+
+  useEffect(() => {
+    updateSumme();
+  }, [updateSumme]);
 
   const { lg } = useBreakpoint();
 
