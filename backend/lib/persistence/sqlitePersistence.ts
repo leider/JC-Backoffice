@@ -15,7 +15,7 @@ function escape(str = "") {
   return `'${str.replaceAll("'", "''")}'`;
 }
 
-function execWithTry(command: string) {
+export function execWithTry(command: string) {
   try {
     db.exec(command);
   } catch (e) {
