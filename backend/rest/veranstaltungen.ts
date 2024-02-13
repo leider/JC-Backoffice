@@ -72,6 +72,7 @@ app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Respon
       // Nur Kasse erlaubt
       if (url && veranstaltung) {
         veranstaltung.kasse = new Kasse(req.body.kasse);
+        veranstaltung.changelist = req.body.changelist;
         return saveAndReply(req, res, veranstaltung);
       } else {
         return res.status(403).send("Kasse darf nur bestehende speichern");
