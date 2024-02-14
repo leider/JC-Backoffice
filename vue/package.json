@@ -14,16 +14,16 @@
     "@fullcalendar/daygrid": "6.1.10",
     "@fullcalendar/multimonth": "6.1.10",
     "@fullcalendar/react": "6.1.10",
-    "@tanstack/react-query": "5.18.1",
+    "@tanstack/react-query": "5.20.5",
     "@uiw/react-json-view": "1.12.2",
-    "antd": "5.13.3",
+    "antd": "5.14.1",
     "axios": "1.6.7",
     "codemirror": "6.0.1",
     "easymde": "2.18.0",
     "immutability-helper": "3.1.1",
     "ismobilejs": "1.1.1",
     "jc-shared": "workspace:^",
-    "jose": "5.2.1",
+    "jose": "5.2.2",
     "numeral": "2.0.6",
     "react": "18.2.0",
     "react-bootstrap-icons": "1.10.3",
@@ -37,14 +37,14 @@
   },
   "devDependencies": {
     "@types/numeral": "2.0.5",
-    "@types/react": "18.2.52",
-    "@types/react-dom": "18.2.18",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "18.2.19",
     "@vitejs/plugin-react": "4.2.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.5",
     "numeral": "2.0.6",
-    "vite": "5.0.12",
-    "vite-plugin-pwa": "0.17.5"
+    "vite": "5.1.2",
+    "vite-plugin-pwa": "0.18.1"
   },
   "packageManager": "yarn@4.0.2"
 }
