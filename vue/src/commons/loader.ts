@@ -460,6 +460,17 @@ export async function calendarEventSources(start: Date, end: Date, options?: Ter
   return getForType("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`);
 }
 
+// History
+export async function historyIdsFor(collection: string) {
+  const result = await getForType("json", `/rest/history/${collection}`);
+  return result as string[];
+}
+
+export async function historyRowsFor(collection: string, id: string) {
+  const result = await getForType("json", `/rest/history/${collection}/${encodeURIComponent(id)}`);
+  return result as { id: string; before: string; after: string; user: string; time: string }[];
+}
+
 // Special
 
 export async function exportRiderAsJson(riderJson: any) {

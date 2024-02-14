@@ -4,6 +4,7 @@ import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
 import service from "../lib/veranstaltungen/imageService.js";
 import { resToJson } from "../lib/commons/replies.js";
 import calendarApp from "./calendar.js";
+import historyApp from "./history.js";
 import mailsenderApp from "./mail.js";
 import optionenApp from "./optionen.js";
 import programmheftApp from "./programmheft.js";
@@ -23,6 +24,7 @@ import { checkSuperuser } from "./checkAccessHandlers.js";
 const app = express();
 
 app.use("/", calendarApp);
+app.use("/", historyApp);
 app.use("/", mailsenderApp);
 app.use("/", optionenApp);
 app.use("/", programmheftApp);

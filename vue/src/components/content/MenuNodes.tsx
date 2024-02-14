@@ -24,6 +24,7 @@ export enum menuKeys {
   wiki = "wiki",
   users = "users",
   rider = "rider",
+  history = "history",
 }
 
 export default function useMenuNodes(accessrights: Accessrights, subdirs: string[]) {
@@ -106,10 +107,16 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     },
   ];
   if (accessrights.isSuperuser) {
-    optionenChildren.push({
-      key: menuKeys.imageoverview,
-      label: <Link to="/imageoverview">Bilder verwalten</Link>,
-    });
+    optionenChildren.push(
+      {
+        key: menuKeys.imageoverview,
+        label: <Link to="/imageoverview">Bilder verwalten</Link>,
+      },
+      {
+        key: menuKeys.history,
+        label: <Link to="/history">Änderungsverlauf</Link>,
+      },
+    );
   }
   const optionenMenu = {
     key: menuKeys.option,

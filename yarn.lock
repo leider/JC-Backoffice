@@ -1633,6 +1633,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.22.6":
+  version: 7.23.9
+  resolution: "@babel/runtime@npm:7.23.9"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/e71205fdd7082b2656512cc98e647d9ea7e222e4fe5c36e9e5adc026446fcc3ba7b3cdff8b0b694a0b78bb85db83e7b1e3d4c56ef90726682b74f13249cf952d
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.22.15, @babel/template@npm:^7.22.5":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -3527,6 +3536,19 @@ __metadata:
     "@typescript-eslint/types": "npm:6.20.0"
     eslint-visitor-keys: "npm:^3.4.1"
   checksum: 10c0/852d938f2e5d57200cf62733b42e73a369f797b097d17e8fd3fffd0f7315c3b9e1863eed60bb8d57d6535a3b7f1980f645f96ec6d513950f182bfa8107b33fab
+  languageName: node
+  linkType: hard
+
+"@uiw/react-json-view@npm:1.12.2":
+  version: 1.12.2
+  resolution: "@uiw/react-json-view@npm:1.12.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.22.6"
+  peerDependencies:
+    "@babel/runtime": ">=7.10.0"
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10c0/4ac0e3da2a5bf892d5d3b128b8acfa752da0061446a1e4f8fd1dc42d7d7047f5b2153da5bfdbfada33cb7c509fb2c3edfe96c1ce0149352e6f8ade5a636bbcb6
   languageName: node
   linkType: hard
 
@@ -6903,6 +6925,7 @@ __metadata:
     "@types/numeral": "npm:2.0.5"
     "@types/react": "npm:18.2.52"
     "@types/react-dom": "npm:18.2.18"
+    "@uiw/react-json-view": "npm:1.12.2"
     "@vitejs/plugin-react": "npm:4.2.1"
     antd: "npm:5.13.3"
     axios: "npm:1.6.7"

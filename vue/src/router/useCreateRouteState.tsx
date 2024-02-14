@@ -26,6 +26,7 @@ import Belege from "@/components/belege/Belege.tsx";
 import WikiPage from "@/components/wiki/WikiPage.tsx";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
 import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
+import { History } from "@/components/history/History.tsx";
 
 export type RouteState = {
   routes: RouteObject[];
@@ -141,6 +142,7 @@ const allRoutes: RouteObject[] = [
         path: "/wiki/searchresults/:searchtext",
         element: <WikiSearchresults />,
       },
+      { path: "/history", element: <History /> },
       {
         path: "/*",
         element: <Navigate replace to="/" />,
@@ -168,7 +170,7 @@ const orgaTeamPattern = [
 
 const kassePattern = ["veranstaltung/:url"].join("|");
 
-const superuserPattern = ["/imageoverview"].join("|");
+const superuserPattern = ["/imageoverview", "/history"].join("|");
 export function useCreateRouteState(): RouteState {
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
   const routes = useMemo(() => {

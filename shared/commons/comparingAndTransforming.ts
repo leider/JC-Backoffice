@@ -59,3 +59,21 @@ export function differenceFor(left = {}, right = {}, propertiesToIgnore?: string
   }
   return JSON.stringify(translated, null, 2);
 }
+
+export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): object {
+  const a = withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore);
+  const b = withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore);
+  const diffAtoB = detailedDiff(a, b);
+  const diffBtoA = detailedDiff(b, a);
+  const diff: { geändert?: object; hinzugefügt?: object; gelöscht?: object } = {};
+  if (!(Object.keys(diffAtoB.updated || {}).length === 0 && Object.keys(diffBtoA.updated || {}).length === 0)) {
+    diff.geändert = { neu: diffAtoB.updated, alt: diffBtoA.updated };
+  }
+  if (!(Object.keys(diffAtoB.added || {}).length === 0)) {
+    diff.hinzugefügt = diffAtoB.added;
+  }
+  if (!(Object.keys(diffAtoB.deleted || {}).length === 0)) {
+    diff.gelöscht = diffAtoB.deleted;
+  }
+  return diff;
+}

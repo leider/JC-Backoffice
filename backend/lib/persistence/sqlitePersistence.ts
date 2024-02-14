@@ -13,7 +13,7 @@ function asSqliteString(obj: object) {
   return `${escape(JSON.stringify(obj))}`;
 }
 
-function escape(str = "") {
+export function escape(str = "") {
   return `'${str.replaceAll("'", "''")}'`;
 }
 
