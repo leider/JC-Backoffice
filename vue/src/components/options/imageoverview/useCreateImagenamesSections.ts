@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Veranstaltung, { ImageOverviewVeranstaltung } from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert, { ImageOverviewVeranstaltung } from "../../../../../shared/konzert/konzert.ts";
 import uniq from "lodash/uniq";
 import flatten from "lodash/flatten";
 import intersection from "lodash/intersection";
@@ -7,7 +7,7 @@ import differenceBy from "lodash/differenceBy";
 import { useQueries } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, veranstaltungenForTeam } from "@/commons/loader.ts";
 
-function suitableForImageOverview(veranstaltung: Veranstaltung): ImageOverviewVeranstaltung {
+function suitableForImageOverview(veranstaltung: Konzert): ImageOverviewVeranstaltung {
   return {
     id: veranstaltung.id || "",
     startDate: veranstaltung.startDatumUhrzeit.tagMonatJahrKompakt,

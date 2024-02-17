@@ -1,7 +1,7 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
@@ -26,14 +26,14 @@ export async function checkBar(now: DatumUhrzeit) {
   }
   const start = now;
   const end = start.plus({ wochen: 8 }); // Acht Wochen im Voraus
-  const filterFunction = (ver: Veranstaltung | Vermietung) => {
+  const filterFunction = (ver: Konzert | Vermietung) => {
     const typOk = !ver.isVermietung ? !ver.kopf.eventTyp.startsWith("DryJam") : true;
     return ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed && typOk;
   };
   const zuSendende = await byDateRangeInAscendingOrder({
     from: start,
     to: end,
-    veranstaltungenFilter: filterFunction,
+    konzerteFilter: filterFunction,
     vermietungenFilter: filterFunction,
   });
   if (zuSendende.length === 0) {
@@ -44,7 +44,7 @@ export async function checkBar(now: DatumUhrzeit) {
 
 ---
 ${zuSendende
-  .map((veranst) => `${veranst.datumForDisplayShort} bis ${veranst.endDatumUhrzeit.format("LT")} - ${veranst.kopf.titelMitPrefix}`)
+  .map((konzert) => `${konzert.datumForDisplayShort} bis ${konzert.endDatumUhrzeit.format("LT")} - ${konzert.kopf.titelMitPrefix}`)
   .join("\n\n---\n")}`;
 
   const message = new Message({

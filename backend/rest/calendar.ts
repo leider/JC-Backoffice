@@ -5,17 +5,17 @@ import flatMap from "lodash/flatMap.js";
 import { ComplexDate, Parser } from "ikalendar";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals.js";
 import { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.js";
 import User from "jc-shared/user/user.js";
 
-import store from "../lib/veranstaltungen/veranstaltungenstore.js";
+import store from "../lib/konzerte/konzertestore.js";
 import optionenstore from "../lib/optionen/optionenstore.js";
 import terminstore from "../lib/optionen/terminstore.js";
 import vermietungenstore from "../lib/vermietungen/vermietungenstore.js";
 import { resToJson } from "../lib/commons/replies.js";
-import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
+import konzerteService from "../lib/konzerte/konzerteService.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 
@@ -25,23 +25,23 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
   const optionen = await optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
 
-  function asCalendarEvent(veranstaltung: Veranstaltung): TerminEvent {
-    const color = typByName[veranstaltung.kopf.eventTyp]?.[0].color || "#6c757d";
+  function asCalendarEvent(konzert: Konzert): TerminEvent {
+    const color = typByName[konzert.kopf.eventTyp]?.[0].color || "#6c757d";
     return {
       display: "block",
-      start: veranstaltung.startDate.toISOString(),
-      end: veranstaltung.endDate.toISOString(),
-      url: `/vue/veranstaltung/${user.accessrights.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(veranstaltung.url || "")}`,
-      title: veranstaltung.kopf.titelMitPrefix,
-      tooltip: veranstaltung.tooltipInfos,
+      start: konzert.startDate.toISOString(),
+      end: konzert.endDate.toISOString(),
+      url: `/vue/veranstaltung/${user.accessrights.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(konzert.url || "")}`,
+      title: konzert.kopf.titelMitPrefix,
+      tooltip: konzert.tooltipInfos,
       backgroundColor: color,
       textColor: "#fff",
-      borderColor: !veranstaltung.kopf.confirmed ? "#f8500d" : color,
+      borderColor: !konzert.kopf.confirmed ? "#f8500d" : color,
       className: "no-overflow",
     };
   }
-  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-  const unbest = await veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
+  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  const unbest = await konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
   return unbest.map((ver) => asCalendarEvent(ver));
 }
 
@@ -108,7 +108,7 @@ app.get("/fullcalendarevents.json", async (req, res) => {
     ? (JSON.parse(req.query.options as string) as unknown as TerminFilterOptions)
     : undefined;
 
-  const [cals, termine, veranstaltungen, vermietungen] = await Promise.all([
+  const [cals, termine, konzerte, vermietungen] = await Promise.all([
     optionenstore.icals(),
     termineAsEventsBetween(start, end, options),
     eventsBetween(start, end, req.user as User),
@@ -126,7 +126,7 @@ app.get("/fullcalendarevents.json", async (req, res) => {
   const termineForIcals = await Promise.all(icals.map(termineForIcal));
   const events = flatMap(termineForIcals, (x) => x)
     .concat(termine as TerminEvent[])
-    .concat(veranstaltungen as TerminEvent[])
+    .concat(konzerte as TerminEvent[])
     .concat(vermietungen as TerminEvent[]);
   resToJson(res, events);
 });

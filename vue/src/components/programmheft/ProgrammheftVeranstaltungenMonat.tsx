@@ -4,11 +4,11 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import * as React from "react";
 import { useMemo, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import { Link } from "react-router-dom";
 import headerTags from "@/components/colored/headerTags.tsx";
 
-export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Veranstaltung[] }) {
+export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const bestaetigte = useMemo(() => veranstaltungen.filter((v) => v.kopf.confirmed), [veranstaltungen]);

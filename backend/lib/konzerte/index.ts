@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import User from "jc-shared/user/user.js";
 
-import store from "./veranstaltungenstore.js";
+import store from "./konzertestore.js";
 
 const app = express();
 
@@ -11,12 +11,12 @@ const app = express();
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 
-async function veranstaltungenForExport(fetcher: () => Veranstaltung[], req: Request, res: Response) {
+async function veranstaltungenForExport(fetcher: () => Konzert[], req: Request, res: Response) {
   if (!(req.user as User).accessrights.isBookingTeam) {
     return res.redirect("/");
   }
 
-  const veranstaltungen: Veranstaltung[] = await fetcher();
+  const veranstaltungen: Konzert[] = await fetcher();
   const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
   return res.type("csv").send(lines);
 }

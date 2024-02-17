@@ -1,4 +1,4 @@
-import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert, { GastArt, NameWithNumber } from "../../../../../shared/konzert/konzert.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { List } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -13,18 +13,18 @@ function AddOrRemoveGastButton({
   add,
   onChange,
 }: {
-  veranstaltung: Veranstaltung;
+  veranstaltung: Konzert;
   item: NameWithNumber;
   art: GastArt;
   add: boolean;
-  onChange: (veranst: Veranstaltung) => void;
+  onChange: (veranst: Konzert) => void;
 }) {
   const queryClient = useQueryClient();
   const mutate = useMutation({
     mutationFn: async ({ item, art }: { item: NameWithNumber; art: GastArt }) => updateGastInSection(veranstaltung, item, art),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
-      onChange(new Veranstaltung(data));
+      onChange(new Konzert(data));
     },
   });
 
@@ -40,11 +40,11 @@ function AddOrRemoveGastButton({
   );
 }
 
-export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export default function GaesteInPreview({ veranstaltung }: { veranstaltung: Konzert }) {
   const [gaesteliste, setGaesteliste] = useState<NameWithNumber[]>([]);
   const [reservierungen, setReservierungen] = useState<NameWithNumber[]>([]);
 
-  const listChanged = useCallback((veranst: Veranstaltung) => {
+  const listChanged = useCallback((veranst: Konzert) => {
     setGaesteliste(veranst.gaesteliste);
     setReservierungen(veranst.reservierungen);
   }, []);

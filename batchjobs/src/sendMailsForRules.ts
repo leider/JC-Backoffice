@@ -2,7 +2,7 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
@@ -12,7 +12,7 @@ import VeranstaltungVermietungFormatter from "jc-shared/veranstaltung/Veranstalt
 
 const logger = loggers.get("application");
 
-function isSendable(ver: Veranstaltung | Vermietung): boolean {
+function isSendable(ver: Konzert | Vermietung): boolean {
   const satisfied = ver.presse.checked && ver.kopf.confirmed;
   if (ver.isVermietung) {
     return (ver as Vermietung).brauchtPresse && satisfied;
@@ -31,7 +31,7 @@ Liebe Grüße vom Jazzclub Team.`;
   async function processRule(rule: MailRule) {
     const startAndEndDay = rule.startAndEndDay(now);
 
-    async function sendMail(selected: (Veranstaltung | Vermietung)[]) {
+    async function sendMail(selected: (Konzert | Vermietung)[]) {
       const markdownToSend =
         markdownForRules +
         "\n\n---\n" +
@@ -40,7 +40,7 @@ Liebe Grüße vom Jazzclub Team.`;
             if (veranst.isVermietung) {
               return new VeranstaltungVermietungFormatter(veranst as Vermietung).presseTextForMail(conf.get("publicUrlPrefix") as string);
             }
-            return new VeranstaltungVermietungFormatter(veranst as Veranstaltung).presseTextForMail(conf.get("publicUrlPrefix") as string);
+            return new VeranstaltungVermietungFormatter(veranst as Konzert).presseTextForMail(conf.get("publicUrlPrefix") as string);
           })
           .join("\n\n---\n");
       const message = new Message({
@@ -57,7 +57,7 @@ Liebe Grüße vom Jazzclub Team.`;
     const zuSendende = await byDateRangeInAscendingOrder({
       from: startAndEndDay.start,
       to: startAndEndDay.end,
-      veranstaltungenFilter: isSendable,
+      konzerteFilter: isSendable,
       vermietungenFilter: isSendable,
     });
 

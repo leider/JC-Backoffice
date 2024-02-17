@@ -1,12 +1,12 @@
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { Col, Row } from "antd";
 import React from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
-export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: Veranstaltung; url?: string }) {
+export default function KasseInPreview({ veranstaltung, url }: { veranstaltung: Konzert; url?: string }) {
   function ButtonAbendkasse() {
     const { color, icon } = colorsAndIconsForSections;
     const { currentUser } = useJazzContext();

@@ -8,7 +8,7 @@ import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -76,13 +76,13 @@ export function ExportButtons({ disabled }: ButtonProps) {
   function onMenuClick(e: { key: string }): void {
     const veranstaltung = form.getFieldsValue(true);
     if (e.key === "ExcelKalk") {
-      asExcelKalk([new Veranstaltung(veranstaltung)]);
+      asExcelKalk([new Konzert(veranstaltung)]);
     }
     if (e.key === "Pressefotos") {
-      imgzipForVeranstaltung(new Veranstaltung(veranstaltung));
+      imgzipForVeranstaltung(new Konzert(veranstaltung));
     }
     if (e.key === "Kassenzettel") {
-      openKassenzettel(new Veranstaltung(veranstaltung));
+      openKassenzettel(new Konzert(veranstaltung));
     }
   }
 

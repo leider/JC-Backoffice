@@ -1,12 +1,13 @@
-import Veranstaltung from "../veranstaltung/veranstaltung.js";
+import Konzert from "../konzert/konzert.js";
 import User from "../user/user.js";
 import Vermietung from "../vermietung/vermietung.js";
+import Staff from "../konzert/staff.js";
 
-export type VerMitUser = { veranstaltung: Veranstaltung | Vermietung; user: User };
+export type VerMitUser = { veranstaltung: Konzert | Vermietung; user: User };
 
-export default function mixVeranstaltungenMitUsers(veranstaltungen: (Veranstaltung | Vermietung)[], users: User[]): VerMitUser[] {
+export default function mixVeranstaltungenMitUsers(veranstaltungen: (Konzert | Vermietung)[], users: User[]): VerMitUser[] {
   return veranstaltungen.flatMap((veranstaltung) => {
-    return veranstaltung.staff.allNames
+    return (veranstaltung.staff as Staff).allNames
       .map((id) => users.find((user) => user.id === id))
       .filter((user) => !!user)
       .map((user) => ({

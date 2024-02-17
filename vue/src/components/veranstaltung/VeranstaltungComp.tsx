@@ -4,7 +4,7 @@ import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveOptionen, saveRider, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader.ts";
-import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung";
+import Konzert, { ChangelistItem } from "../../../../shared/konzert/konzert.ts";
 import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming";
 import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/veranstaltung/veranstaltungCompUtils";
 import VeranstaltungTabs from "@/components/veranstaltung/VeranstaltungTabs";
@@ -16,13 +16,13 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 //import { detailedDiff } from "deep-object-diff";
 
 export const VeranstaltungContext = createContext<{
-  form: FormInstance<Veranstaltung>;
+  form: FormInstance<Konzert>;
   isDirty: boolean;
 } | null>(null);
 
 export default function VeranstaltungComp() {
   const { url } = useParams();
-  const [form] = Form.useForm<Veranstaltung>();
+  const [form] = Form.useForm<Konzert>();
 
   const agenturauswahl = Form.useWatch("agenturauswahl", { form });
 
@@ -39,7 +39,7 @@ export default function VeranstaltungComp() {
   });
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
-  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung({ id: "unknown" }));
+  const [veranstaltung, setVeranstaltung] = useState<Konzert>(new Konzert({ id: "unknown" }));
   const [rider, setRider] = useState<Rider>(new Rider());
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -66,7 +66,7 @@ export default function VeranstaltungComp() {
   const { notification } = App.useApp();
 
   const mutateVeranstaltung = useMutation({
-    mutationFn: (veranst: Veranstaltung) => {
+    mutationFn: (veranst: Konzert) => {
       setDirty(false);
       return saveVeranstaltung(veranst);
     },

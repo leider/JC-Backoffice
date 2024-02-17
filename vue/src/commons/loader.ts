@@ -10,8 +10,8 @@ import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
 import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
-import { StaffType } from "jc-shared/veranstaltung/staff";
-import Veranstaltung, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung";
+import { StaffType } from "jc-shared/konzert/staff";
+import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "../../../shared/konzert/konzert.ts";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
@@ -99,8 +99,8 @@ export async function uploadBeleg(data: FormData) {
   });
 }
 
-function handleVeranstaltungen(result?: any[]): Veranstaltung[] {
-  return result?.map((each: any) => new Veranstaltung(each)) || [];
+function handleVeranstaltungen(result?: any[]): Konzert[] {
+  return result?.map((each: any) => new Konzert(each)) || [];
 }
 
 export async function veranstaltungenBetweenYYYYMM(start: string, end: string) {
@@ -113,15 +113,15 @@ export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergange
   return handleVeranstaltungen(result);
 }
 
-export async function veranstaltungForUrl(url: string): Promise<Veranstaltung> {
+export async function veranstaltungForUrl(url: string): Promise<Konzert> {
   if (url === "new") {
-    return new Veranstaltung();
+    return new Konzert();
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
     const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(realUrl)}`);
     if (result) {
-      const veranstaltung = new Veranstaltung(result);
+      const veranstaltung = new Konzert(result);
       veranstaltung.reset();
       veranstaltung.kopf.titel = `Kopie von ${veranstaltung.kopf.titel}`;
       return veranstaltung;
@@ -130,10 +130,10 @@ export async function veranstaltungForUrl(url: string): Promise<Veranstaltung> {
     }
   }
   const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(url)}`);
-  return result ? new Veranstaltung(result) : result;
+  return result ? new Konzert(result) : result;
 }
 
-export async function saveVeranstaltung(veranstaltung: Veranstaltung) {
+export async function saveVeranstaltung(veranstaltung: Konzert) {
   return standardFetch({
     method: "POST",
     url: "/rest/veranstaltungen",
@@ -152,7 +152,7 @@ export async function deleteVeranstaltungWithId(id: string) {
 }
 
 // Staff
-export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
+export async function addOrRemoveUserToSection(veranstaltung: Konzert, section: StaffType, add: boolean) {
   return standardFetch({
     method: "POST",
     url: `/rest/${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
@@ -162,7 +162,7 @@ export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, sec
 }
 
 // Gäste
-export async function updateGastInSection(veranstaltung: Veranstaltung, item: NameWithNumber, art: GastArt) {
+export async function updateGastInSection(veranstaltung: Konzert, item: NameWithNumber, art: GastArt) {
   return standardFetch({
     method: "POST",
     url: `/rest/${veranstaltung.fullyQualifiedUrl}/updateGastInSection`,
@@ -482,14 +482,14 @@ export async function exportRiderAsJson(riderJson: any) {
   return showFile(blob, "rider.json");
 }
 
-export async function openKassenzettel(veranstaltung: Veranstaltung) {
+export async function openKassenzettel(veranstaltung: Konzert) {
   const pdf = await getForType("pdf", `/pdf/kassenzettel/${veranstaltung.url}`);
   if (pdf) {
     showFile(pdf);
   }
 }
 
-export async function openVertrag(veranstaltung: Veranstaltung) {
+export async function openVertrag(veranstaltung: Konzert) {
   const pdf = await getForType("pdf", `/pdf/vertrag/${veranstaltung.url}/${veranstaltung.vertrag.sprache.toLowerCase()}`);
   if (pdf) {
     showFile(pdf);
@@ -510,7 +510,7 @@ export async function imgFullsize(url: any) {
   }
 }
 
-export async function imgzipForVeranstaltung(veranstaltung: Veranstaltung) {
+export async function imgzipForVeranstaltung(veranstaltung: Konzert) {
   const zip = await getForType("zip", `/imgzipForVeranstaltung/${veranstaltung.url}`);
   if (zip) {
     showFile(zip, `JazzClub_Bilder_${veranstaltung.kopf.titel}.zip`);

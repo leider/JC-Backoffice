@@ -5,7 +5,7 @@ import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import Uploader from "@/components/veranstaltung/Uploader";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
@@ -20,12 +20,12 @@ export default function TechnikCard() {
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
-    const veranstaltung = new Veranstaltung(form.getFieldsValue(true));
+    const veranstaltung = new Konzert(form.getFieldsValue(true));
     setSumme(veranstaltung.kosten.backlineUndTechnikEUR);
   }, [form]);
 
   function updateSumme() {
-    const veranstaltung = new Veranstaltung(form.getFieldsValue(true));
+    const veranstaltung = new Konzert(form.getFieldsValue(true));
     setSumme(veranstaltung.kosten.backlineUndTechnikEUR);
   }
 

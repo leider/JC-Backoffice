@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
+import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 
-import service from "../lib/veranstaltungen/imageService.js";
+import service from "../lib/konzerte/imageService.js";
 import { resToJson } from "../lib/commons/replies.js";
 import calendarApp from "./calendar.js";
 import historyApp from "./history.js";
@@ -10,7 +10,7 @@ import optionenApp from "./optionen.js";
 import programmheftApp from "./programmheft.js";
 import ridersApp from "./riders.js";
 import usersApp from "./users.js";
-import veranstaltungenRestApp from "./veranstaltungen.js";
+import konzerteRestApp from "./veranstaltungen.js";
 import vermietungenRestApp from "./vermietungen.js";
 import wikiApp from "./wiki.js";
 import User from "jc-shared/user/user.js";
@@ -30,7 +30,7 @@ app.use("/", optionenApp);
 app.use("/", programmheftApp);
 app.use("/", ridersApp);
 app.use("/", usersApp);
-app.use("/", veranstaltungenRestApp);
+app.use("/", konzerteRestApp);
 app.use("/", vermietungenRestApp);
 app.use("/", wikiApp);
 

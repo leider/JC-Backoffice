@@ -9,8 +9,8 @@ import { Builder, Calendar } from "ikalendar";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
-import store from "../veranstaltungen/veranstaltungenstore.js";
+import konzerteService from "../konzerte/konzerteService.js";
+import store from "../konzerte/konzertestore.js";
 import { resToJson } from "../commons/replies.js";
 import userstore from "../users/userstore.js";
 import { hashPassword } from "../commons/hashPassword.js";
@@ -159,22 +159,22 @@ app.get("/imagepreview/:filename", (req, res, next) => {
 
 app.get("/ical/", async (req, res) => {
   try {
-    const veranstaltungen = await store.alle();
-    if (!veranstaltungen) {
+    const konzerte = await store.alle();
+    if (!konzerte) {
       return res.status(500).send();
     }
     const calendar: Calendar = {
       version: "2.0",
       prodId: "ical by jazzclub",
-      events: veranstaltungen
+      events: konzerte
         .filter((v) => v.kopf.confirmed)
-        .map((veranstaltung) => ({
-          uid: veranstaltung.url || "",
-          start: veranstaltung.startDatumUhrzeit.fuerIcal,
-          end: veranstaltung.endDatumUhrzeit.fuerIcal,
-          summary: veranstaltung.kopf.titelMitPrefix,
-          description: veranstaltung.tooltipInfos,
-          location: veranstaltung.kopf.ort.replace(/\r\n/g, "\n"),
+        .map((konzert) => ({
+          uid: konzert.url || "",
+          start: konzert.startDatumUhrzeit.fuerIcal,
+          end: konzert.endDatumUhrzeit.fuerIcal,
+          summary: konzert.kopf.titelMitPrefix,
+          description: konzert.tooltipInfos,
+          location: konzert.kopf.ort.replace(/\r\n/g, "\n"),
         })),
     };
     const calString = new Builder(calendar).build();
@@ -185,11 +185,11 @@ app.get("/ical/", async (req, res) => {
 });
 
 app.get("/imgzip/:yymm", (req, res, next) => {
-  veranstaltungenService.imgzip(res, next, req.params.yymm);
+  konzerteService.imgzip(res, next, req.params.yymm);
 });
 
 app.get("/imgzipForVeranstaltung/:url", (req, res, next) => {
-  veranstaltungenService.imgzipForVeranstaltung(res, next, req.params.url);
+  konzerteService.imgzipForKonzert(res, next, req.params.url);
 });
 
 app.use("/pdf", pdfEndpoints);

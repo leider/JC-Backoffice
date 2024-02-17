@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
+import KonzertKalkulation from "../../../../../shared/konzert/konzertKalkulation.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import Eintrittspreise from "jc-shared/veranstaltung/eintrittspreise";
+import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -28,8 +28,8 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   );
 
   function updateSumme() {
-    const veranst = new Veranstaltung(form.getFieldsValue(true));
-    const kalk = new VeranstaltungKalkulation(veranst);
+    const veranst = new Konzert(form.getFieldsValue(true));
+    const kalk = new KonzertKalkulation(veranst);
     const sum = veranst.eintrittspreise.zuschuss + kalk.erwarteterOderEchterEintritt;
     setSumme(sum);
     onChange(sum);

@@ -3,7 +3,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
-import Kasse from "jc-shared/veranstaltung/kasse";
+import Kasse from "jc-shared/konzert/kasse";
 import { KasseCardProps } from "@/components/veranstaltung/kasse/TabKasse";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 

@@ -3,14 +3,14 @@ import { Form } from "multiparty";
 import fs from "fs";
 import path, { dirname } from "path";
 
-import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Kasse from "jc-shared/veranstaltung/kasse.js";
+import Kasse from "jc-shared/konzert/kasse.js";
 import User from "jc-shared/user/user.js";
 
 import { resToJson } from "../lib/commons/replies.js";
-import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenService.js";
-import store from "../lib/veranstaltungen/veranstaltungenstore.js";
+import konzerteService from "../lib/konzerte/konzerteService.js";
+import store from "../lib/konzerte/konzertestore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
 import { fileURLToPath } from "url";
@@ -18,74 +18,74 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-async function standardHandler(res: Response, user: User, veranstaltungen: Veranstaltung[]) {
-  const result = await veranstaltungenService.filterUnbestaetigteFuerJedermann(veranstaltungen, user);
+async function standardHandler(res: Response, user: User, konzerte: Konzert[]) {
+  const result = await konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
   resToJson(
     res,
     result.map((v) => v.toJSON()),
   );
 }
 
-async function saveAndReply(req: Request, res: Response, veranstaltung: Veranstaltung) {
-  const result = await store.saveVeranstaltung(veranstaltung, req.user as User);
+async function saveAndReply(req: Request, res: Response, konzert: Konzert) {
+  const result = await store.saveKonzert(konzert, req.user as User);
   resToJson(res, result);
 }
 
 app.get("/veranstaltungen/vergangene", async (req, res) => {
-  const veranstaltungen = await store.vergangene();
-  standardHandler(res, req.user as User, veranstaltungen);
+  const konzerte = await store.vergangene();
+  standardHandler(res, req.user as User, konzerte);
 });
 
 app.get("/veranstaltungen/zukuenftige", async (req, res) => {
-  const veranstaltungen = await store.zukuenftigeMitGestern();
-  standardHandler(res, req.user as User, veranstaltungen);
+  const konzerte = await store.zukuenftigeMitGestern();
+  standardHandler(res, req.user as User, konzerte);
 });
 
 app.get("/veranstaltungen/alle", async (req, res) => {
-  const veranstaltungen = await store.alle();
-  standardHandler(res, req.user as User, veranstaltungen);
+  const konzerte = await store.alle();
+  standardHandler(res, req.user as User, konzerte);
 });
 
 app.get("/veranstaltungen/:startYYYYMM/:endYYYYMM", async (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
-  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-  standardHandler(res, req.user as User, veranstaltungen);
+  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  standardHandler(res, req.user as User, konzerte);
 });
 
 app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
-  const veranstaltung = await store.getVeranstaltung(req.params.url);
-  if (!veranstaltung) {
+  const konzert = await store.getKonzert(req.params.url);
+  if (!konzert) {
     return res.sendStatus(404);
   }
-  resToJson(res, veranstaltung);
+  resToJson(res, konzert);
 });
 
 app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Response) => {
   const user = req.user as User;
   const url = req.body.url;
 
-  async function saveVeranstaltung(veranstaltung: Veranstaltung | null) {
+  async function saveKonzert(konzert: Konzert | null) {
     if (user.accessrights.isOrgaTeam) {
-      return saveAndReply(req, res, new Veranstaltung(req.body));
+      return saveAndReply(req, res, new Konzert(req.body));
     } else {
       // Nur Kasse erlaubt
-      if (url && veranstaltung) {
-        veranstaltung.kasse = new Kasse(req.body.kasse);
-        veranstaltung.changelist = req.body.changelist;
-        return saveAndReply(req, res, veranstaltung);
+      if (url && konzert) {
+        konzert.kasse = new Kasse(req.body.kasse);
+        konzert.changelist = req.body.changelist;
+        return saveAndReply(req, res, konzert);
       } else {
         return res.status(403).send("Kasse darf nur bestehende speichern");
       }
     }
   }
 
-  const veranstaltung = await store.getVeranstaltung(url);
-  if (veranstaltung) {
-    const frischFreigegeben = veranstaltung.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
+  const konzert = await store.getKonzert(url);
+  if (konzert) {
+    const frischFreigegeben = konzert.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
     if (frischFreigegeben) {
       try {
-        await kassenzettelToBuchhaltung(new Veranstaltung(req.body));
+        await kassenzettelToBuchhaltung(new Konzert(req.body));
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log("Kassenzettel Versand an Buchhaltung gescheitert");
@@ -93,21 +93,21 @@ app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Respon
       }
     }
   }
-  return saveVeranstaltung(veranstaltung);
+  return saveKonzert(konzert);
 });
 
 app.delete("/veranstaltungen", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.deleteVeranstaltungById(req.body.id, req.user as User);
+  await store.deleteKonzertById(req.body.id, req.user as User);
   resToJson(res);
 });
 
 async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
-  const veranstaltung = await store.getVeranstaltung(req.params.url);
-  if (!veranstaltung) {
+  const konzert = await store.getKonzert(req.params.url);
+  if (!konzert) {
     return res.sendStatus(404);
   }
-  veranstaltung.staff[func](req.user as User, req.body.section);
-  return saveAndReply(req, res, veranstaltung);
+  konzert.staff[func](req.user as User, req.body.section);
+  return saveAndReply(req, res, konzert);
 }
 
 app.post("/veranstaltungen/:url/addUserToSection", async (req: Request, res: Response) => {
@@ -119,14 +119,14 @@ app.post("/veranstaltungen/:url/removeUserFromSection", async (req: Request, res
 });
 
 app.post("/veranstaltungen/:url/updateGastInSection", async (req: Request, res: Response) => {
-  const veranstaltung = await store.getVeranstaltung(req.params.url);
-  if (!veranstaltung) {
+  const konzert = await store.getKonzert(req.params.url);
+  if (!konzert) {
     return res.sendStatus(404);
   }
   const { item, art }: { item: NameWithNumber; art: GastArt } = req.body;
-  const liste: NameWithNumber[] = art === "gast" ? veranstaltung.gaesteliste : veranstaltung.reservierungen;
+  const liste: NameWithNumber[] = art === "gast" ? konzert.gaesteliste : konzert.reservierungen;
   (liste.find((entry) => entry.name === item.name) || { alreadyIn: 0 }).alreadyIn = item.alreadyIn;
-  return saveAndReply(req, res, veranstaltung);
+  return saveAndReply(req, res, konzert);
 });
 
 app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
@@ -142,22 +142,22 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
     });
   }
 
-  async function copyToDestination(datei: { originalFilename: string; path: string }, veranstaltung?: Veranstaltung) {
+  async function copyToDestination(datei: { originalFilename: string; path: string }, konzert?: Konzert) {
     const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
     const pfad = datei.path;
     await copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname));
     let result = true;
-    if (!veranstaltung) {
+    if (!konzert) {
       throw new Error();
     }
     if (istPressefoto) {
-      result = veranstaltung.presse.updateImage(dateiname);
+      result = konzert.presse.updateImage(dateiname);
     }
     if (typElement === "vertrag") {
-      result = veranstaltung.vertrag.updateDatei(dateiname);
+      result = konzert.vertrag.updateDatei(dateiname);
     }
     if (typElement === "rider") {
-      result = veranstaltung.technik.updateDateirider(dateiname);
+      result = konzert.technik.updateDateirider(dateiname);
     }
     if (!result) {
       throw new Error("Datei schon vorhanden. Bitte Seite neu laden.");
@@ -184,14 +184,14 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
   const istPressefoto = typElement === "pressefoto";
 
   if (files.datei) {
-    const veranstaltung = await store.getVeranstaltungForId(idElement);
-    if (!veranstaltung) {
+    const konzert = await store.getKonzertForId(idElement);
+    if (!konzert) {
       return res.sendStatus(500);
     }
     try {
-      const calls = files.datei.map((datei: { originalFilename: string; path: string }) => copyToDestination(datei, veranstaltung));
+      const calls = files.datei.map((datei: { originalFilename: string; path: string }) => copyToDestination(datei, konzert));
       await Promise.all(calls);
-      saveAndReply(req, res, veranstaltung);
+      saveAndReply(req, res, konzert);
     } catch (e) {
       return res.status(500).send((e as Error).message);
     }

@@ -1,11 +1,11 @@
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { ConfigProvider, Typography } from "antd";
 import React, { useCallback } from "react";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 const { Title } = Typography;
 interface HeaderProps {
-  veranstaltungOderVermietung: Veranstaltung | Vermietung;
+  veranstaltungOderVermietung: Konzert | Vermietung;
   expanded?: boolean;
 }
 

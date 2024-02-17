@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Image, Space } from "antd";
 import Renderer from "jc-shared/commons/renderer";
 import VeranstaltungVermietungFormatter from "../../../../../shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 
-export function PressePreview({ veranstVermiet }: { veranstVermiet: Veranstaltung | Vermietung }) {
-  function updatePreview(veranstVermiet: Veranstaltung | Vermietung) {
+export function PressePreview({ veranstVermiet }: { veranstVermiet: Konzert | Vermietung }) {
+  function updatePreview(veranstVermiet: Konzert | Vermietung) {
     const presse = veranstVermiet.presse;
     const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
     const infoline1 = presse.checked ? "" : "ACHTUNG: Presse ist NICHT OK\n";

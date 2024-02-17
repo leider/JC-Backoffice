@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import Veranstaltung from "../../veranstaltung/veranstaltung.js";
+import Konzert from "../../konzert/konzert.js";
 
 describe("Start und Ende Erweiterungen", () => {
   function expectTage(tage: string[], expected: string[]) {
-    const veranst = new Veranstaltung({
+    const veranst = new Konzert({
       startDate: tage[0],
       endDate: tage[1],
     });

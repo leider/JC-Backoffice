@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
@@ -8,7 +8,7 @@ import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
 import Color from "color";
 
 interface TeamBlockAdminProps {
-  veranstaltung: Veranstaltung;
+  veranstaltung: Konzert;
   initiallyOpen: boolean;
 }
 
@@ -59,7 +59,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
     </ConfigProvider>
   );
 }
-function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+function Extras({ veranstaltung }: { veranstaltung: Konzert }) {
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   useEffect(() => {

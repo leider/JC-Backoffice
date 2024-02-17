@@ -1,9 +1,9 @@
-import Veranstaltung from "./veranstaltung.js";
+import Konzert from "./konzert.js";
 
-export default class VeranstaltungKalkulation {
-  private veranstaltung: Veranstaltung;
+export default class KonzertKalkulation {
+  private veranstaltung: Konzert;
 
-  constructor(veranstaltung: Veranstaltung) {
+  constructor(veranstaltung: Konzert) {
     this.veranstaltung = veranstaltung;
   }
 

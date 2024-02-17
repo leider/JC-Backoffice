@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useMemo, useState } from "react";
 import { veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Drawer, Dropdown, Form, Row, Space, theme } from "antd";
 import groupBy from "lodash/groupBy";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -24,7 +24,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenUndVermietungenNachMonat: {
-    [index: string]: (Veranstaltung | Vermietung)[];
+    [index: string]: (Konzert | Vermietung)[];
   };
   usersAsOptions: UserWithKann[];
 }>({ veranstaltungenUndVermietungenNachMonat: {}, usersAsOptions: [] });
@@ -86,7 +86,7 @@ export default function Veranstaltungen() {
     },
   });
   const alle = useMemo(() => {
-    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Veranstaltung | Vermietung)[]);
+    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
 
     return sortBy(queryResult.concat(additionals), "startDate");
   }, [queryResult]);
@@ -99,7 +99,7 @@ export default function Veranstaltungen() {
   const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
-    [index: string]: (Veranstaltung | Vermietung)[];
+    [index: string]: (Konzert | Vermietung)[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
@@ -139,7 +139,7 @@ export default function Veranstaltungen() {
         }
       });
     }
-    const result = groupBy(filtered, (veranst: Veranstaltung | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(filtered, (veranst: Konzert | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [pressefilter, alle, PRESSEFILTERS]);

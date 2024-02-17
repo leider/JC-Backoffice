@@ -1,4 +1,4 @@
-import Kontakt from "jc-shared/veranstaltung/kontakt";
+import Kontakt from "../../../../../shared/veranstaltung/kontakt.ts";
 import { Col, Form, Row } from "antd";
 import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";

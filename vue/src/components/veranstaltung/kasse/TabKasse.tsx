@@ -4,7 +4,7 @@ import EinnahmenCard from "@/components/veranstaltung/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/veranstaltung/kasse/AusgabenCard";
 import { KassenzettelFreigabe } from "@/components/veranstaltung/kasse/KassenzettelFreigabe";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import Kasse from "jc-shared/veranstaltung/kasse";
+import Kasse from "jc-shared/konzert/kasse";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 export interface KasseCardProps {

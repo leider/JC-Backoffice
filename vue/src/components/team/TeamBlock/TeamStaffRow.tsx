@@ -1,8 +1,8 @@
 import { Tag, theme } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import { StaffType } from "jc-shared/konzert/staff.ts";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
@@ -10,7 +10,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
-  veranstaltung: Veranstaltung;
+  veranstaltung: Konzert;
 }
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
@@ -44,7 +44,7 @@ export function AddRemoveStaffButton({
   sectionName,
   veranstaltung,
   staffUpdated,
-}: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
+}: TeamStaffRowProps & { staffUpdated: (veranst: Konzert) => void }) {
   const { currentUser } = useJazzContext();
 
   const isIn = useMemo(
@@ -57,7 +57,7 @@ export function AddRemoveStaffButton({
     mutationFn: async (add: boolean) => addOrRemoveUserToSection(veranstaltung, sectionName, add),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
-      staffUpdated(new Veranstaltung(data));
+      staffUpdated(new Konzert(data));
     },
   });
 

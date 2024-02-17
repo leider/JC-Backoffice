@@ -7,7 +7,7 @@ import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User from "jc-shared/user/user";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter";
+import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
 import { TextField } from "@/widgets/TextField";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import Message from "jc-shared/mail/message";

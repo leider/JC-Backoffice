@@ -3,7 +3,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, FormInstance, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField";
 import CheckItem from "@/widgets/CheckItem";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import Uploader from "@/components/veranstaltung/Uploader";
 import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -23,7 +23,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
   });
 
   const { color } = colorsAndIconsForSections;
-  const [verForPreview, setVerForPreview] = useState<Veranstaltung | Vermietung>(isVermietung ? new Vermietung() : new Veranstaltung());
+  const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
 
   const presseText = Form.useWatch(["presse", "text"]);
   const presseOriText = Form.useWatch(["presse", "originalText"]);

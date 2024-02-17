@@ -24,6 +24,6 @@
     "compile": "../node_modules/typescript/bin/tsc",
     "deploy": "yarn compile",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f commons/*.js mail/*.js optionen/*.js programmheft/*.js user/*.js veranstaltung/*.js test/*.js"
+    "clean-ts": "rm -fr *.js"
   }
 }

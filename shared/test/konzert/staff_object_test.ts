@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
-import Staff from "../../veranstaltung/staff.js";
+import Staff from "../../konzert/staff.js";
 
 describe("Staff", () => {
   let staff: Staff;

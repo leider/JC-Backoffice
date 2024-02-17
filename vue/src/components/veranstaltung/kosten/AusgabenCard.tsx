@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Form, Row } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kosten from "../../../../../shared/veranstaltung/kosten.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import Kasse from "jc-shared/veranstaltung/kasse";
+import Kasse from "jc-shared/konzert/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
-import Technik from "jc-shared/veranstaltung/technik.ts";
+import Technik from "jc-shared/konzert/technik.ts";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 
 interface AusgabenCardParams {
@@ -56,7 +56,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   );
 
   function updateSumme() {
-    const veranst = new Veranstaltung(form.getFieldsValue(true));
+    const veranst = new Konzert(form.getFieldsValue(true));
     const sum =
       veranst.kasse.ausgabenOhneGage + veranst.kosten.totalEUR + (veranst.artist.brauchtHotel ? veranst.unterkunft.kostenTotalEUR : 0);
     setSumme(sum);
@@ -111,7 +111,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     );
   }
   function hotelZeile() {
-    const veranst = new Veranstaltung(form.getFieldsValue(true));
+    const veranst = new Konzert(form.getFieldsValue(true));
     const unterkunft = veranst?.unterkunft;
     const artist = veranst?.artist;
 

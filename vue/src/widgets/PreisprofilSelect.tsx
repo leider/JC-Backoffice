@@ -1,12 +1,12 @@
 import { Form, FormInstance, Select } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../shared/konzert/konzert.ts";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;
   onChange?: (value?: Preisprofil) => void;
-  form: FormInstance<Veranstaltung>;
+  form: FormInstance<Konzert>;
 }
 
 export default function PreisprofilSelect({ optionen, onChange, form }: PreisprofilSelectParams) {

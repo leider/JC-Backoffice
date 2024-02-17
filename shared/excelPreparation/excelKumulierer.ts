@@ -1,6 +1,6 @@
-import Veranstaltung from "../veranstaltung/veranstaltung.js";
+import Konzert from "../konzert/konzert.js";
 import Vermietung from "../vermietung/vermietung.js";
-import VeranstaltungKalkulation from "../veranstaltung/veranstaltungKalkulation.js";
+import KonzertKalkulation from "../konzert/konzertKalkulation.js";
 
 type KeyNumber = { [index: string]: number };
 type KeyNumberString = { [index: string]: number | string };
@@ -10,9 +10,9 @@ export interface Kennzahlen {
   kennzahlen: KeyNumber;
 }
 
-export function prepareExcel(veranVermiet: (Veranstaltung | Vermietung)[]) {
-  const kumuliert: { [index: string]: KeyNumber } = veranVermiet.reduce((bestehende, ver) => {
-    const kennzahlen = ver.isVermietung ? kennzahlenFuerVermietung(ver as Vermietung) : kennzahlenFuerVeranstaltung(ver as Veranstaltung);
+export function prepareExcel(veranstaltung: (Konzert | Vermietung)[]) {
+  const kumuliert: { [index: string]: KeyNumber } = veranstaltung.reduce((bestehende, ver) => {
+    const kennzahlen = ver.isVermietung ? kennzahlenFuerVermietung(ver as Vermietung) : kennzahlenFuerVeranstaltung(ver as Konzert);
     integrateKennzahlen(kennzahlen, bestehende);
     return bestehende;
   }, {});
@@ -78,9 +78,9 @@ function ausgabe(betrag?: number) {
   return (betrag || -0) * -1;
 }
 
-function kennzahlenFuerVeranstaltung(veranstaltung: Veranstaltung): Kennzahlen {
+function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
   const kasse = veranstaltung.kasse;
-  const kalk = new VeranstaltungKalkulation(veranstaltung);
+  const kalk = new KonzertKalkulation(veranstaltung);
   const kosten = veranstaltung.kosten;
   const result: KeyNumber = {
     "Eintritt Abendkasse Bar": einnahme(kasse.einnahmeTicketsEUR),

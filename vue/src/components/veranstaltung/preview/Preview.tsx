@@ -1,12 +1,12 @@
 import { Col, Row } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { veranstaltungForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
-import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
+import Kontakt from "../../../../../shared/veranstaltung/kontakt.ts";
 import groupBy from "lodash/groupBy";
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
 import KasseInPreview from "@/components/veranstaltung/preview/KasseInPreview.tsx";
@@ -26,7 +26,7 @@ export default function Preview() {
   });
   const { currentUser, optionen } = useJazzContext();
 
-  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Veranstaltung());
+  const [veranstaltung, setVeranstaltung] = useState<Konzert>(new Konzert());
   const [typeColor, setTypeColor] = useState<string | undefined>("");
 
   document.title = veranstaltung.kopf.titelMitPrefix;

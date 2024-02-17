@@ -6,7 +6,7 @@ import userstore from "jc-backend/lib/users/userstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
@@ -43,11 +43,11 @@ export async function checkStaff(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  const bestaetigt = (ver: Veranstaltung | Vermietung) => ver.kopf.confirmed;
+  const bestaetigt = (ver: Konzert | Vermietung) => ver.kopf.confirmed;
   const alle = await byDateRangeInAscendingOrder({
     from: start,
     to: end,
-    veranstaltungenFilter: bestaetigt,
+    konzerteFilter: bestaetigt,
     vermietungenFilter: bestaetigt,
   });
 

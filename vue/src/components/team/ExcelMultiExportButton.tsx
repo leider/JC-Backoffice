@@ -1,4 +1,4 @@
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Col, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
@@ -11,7 +11,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useQueries } from "@tanstack/react-query";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
-export default function ExcelMultiExportButton({ alle }: { alle: (Veranstaltung | Vermietung)[] }) {
+export default function ExcelMultiExportButton({ alle }: { alle: (Konzert | Vermietung)[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
 
   function SelectRangeForExcelModal({

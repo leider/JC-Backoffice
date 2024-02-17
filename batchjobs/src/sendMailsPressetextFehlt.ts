@@ -2,7 +2,7 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
@@ -16,9 +16,9 @@ const logger = loggers.get("application");
 async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
-  async function sendMail(kaputte: (Veranstaltung | Vermietung)[]) {
+  async function sendMail(kaputte: (Konzert | Vermietung)[]) {
     const prefix = config.get("publicUrlPrefix") as string;
-    function presseTemplateInternal(ver: Veranstaltung | Vermietung): string {
+    function presseTemplateInternal(ver: Konzert | Vermietung): string {
       // für interne Mails
       return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
 #### ${ver.startDatumUhrzeit.fuerPresse} ${ver.kopf.presseInEcht}
@@ -43,7 +43,7 @@ ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
   const kaputteZuSendende = await byDateRangeInAscendingOrder({
     from: start,
     to: maxDay,
-    veranstaltungenFilter: (veranstaltung) => !veranstaltung.presse.checked && veranstaltung.kopf.confirmed,
+    konzerteFilter: (konzert) => !konzert.presse.checked && konzert.kopf.confirmed,
     vermietungenFilter: (vermietung) => vermietung.brauchtPresse && !vermietung.presse.checked && vermietung.kopf.confirmed,
   });
   if (kaputteZuSendende.length === 0) {

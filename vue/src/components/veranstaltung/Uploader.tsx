@@ -3,13 +3,13 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import React, { useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 interface UploaderParams {
-  form: FormInstance<Veranstaltung | Vermietung>;
+  form: FormInstance<Konzert | Vermietung>;
   name: string[];
   typ: string;
   onlyImages?: boolean;

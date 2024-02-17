@@ -1,5 +1,5 @@
 import { NamePath } from "rc-field-form/es/interface";
-import { ImageOverviewVeranstaltung } from "jc-shared/veranstaltung/veranstaltung.ts";
+import { ImageOverviewVeranstaltung } from "../../../../../shared/konzert/konzert.ts";
 import { Link } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";

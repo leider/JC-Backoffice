@@ -3,7 +3,7 @@ import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleF
 import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
-import Kosten from "jc-shared/veranstaltung/kosten";
+import Kosten from "../../../../../shared/veranstaltung/kosten.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";

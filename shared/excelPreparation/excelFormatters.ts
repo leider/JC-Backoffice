@@ -1,13 +1,13 @@
-import Veranstaltung from "../veranstaltung/veranstaltung.js";
-import VeranstaltungKalkulation from "../veranstaltung/veranstaltungKalkulation.js";
+import Konzert from "../konzert/konzert.js";
+import KonzertKalkulation from "../konzert/konzertKalkulation.js";
 import Vermietung from "../vermietung/vermietung.js";
 
-export function createExcelData(veranstaltung: Veranstaltung) {
-  const kasse = veranstaltung.kasse;
-  const kalk = new VeranstaltungKalkulation(veranstaltung);
+export function createExcelData(konzert: Konzert) {
+  const kasse = konzert.kasse;
+  const kalk = new KonzertKalkulation(konzert);
 
   const titelZeile = {
-    Art: veranstaltung.kopf.titel + " - " + veranstaltung.startDatumUhrzeit.mitUhrzeitNumerisch,
+    Art: konzert.kopf.titel + " - " + konzert.startDatumUhrzeit.mitUhrzeitNumerisch,
   };
   // Einnahmen
   const eintrittRow = {
@@ -22,12 +22,12 @@ export function createExcelData(veranstaltung: Veranstaltung) {
   };
   const barEinnahmenRow = { Art: "Bar Einnahmen", Einnahme: kasse.einnahmeOhneBankUndTickets || 0, Ausgabe: "" };
   const barEinlageRow = { Art: "Bar Einlage", Einnahme: kasse.einnahmeBankEUR || 0, Ausgabe: "" };
-  const zuschussRow = { Art: "Zuschüsse", Einnahme: veranstaltung.eintrittspreise.zuschuss || 0, Ausgabe: "" };
+  const zuschussRow = { Art: "Zuschüsse", Einnahme: konzert.eintrittspreise.zuschuss || 0, Ausgabe: "" };
   // Ausgaben
   const barAusgabenRow = { Art: "Barausgaben", Einnahme: "", Ausgabe: kasse.ausgabenOhneGage || 0 };
   const barAnBankRow = { Art: "Bar an Bank", Einnahme: "", Ausgabe: kasse.ausgabeBankEUR || 0 };
 
-  const kosten = veranstaltung.kosten;
+  const kosten = konzert.kosten;
   const gagenRow = { Art: "Gagen", Einnahme: "", Ausgabe: kosten.gagenTotalEUR || 0 };
   const dealRow = { Art: "Gagen (Deal)", Einnahme: "", Ausgabe: kalk.dealAbsolutEUR || 0 };
   const provisionRow = { Art: "Provision Agentur", Einnahme: "", Ausgabe: kosten.provisionAgentur || 0 };
@@ -43,8 +43,8 @@ export function createExcelData(veranstaltung: Veranstaltung) {
   const lichttechnikerRow = { Art: "Lichttechniker", Einnahme: "", Ausgabe: kosten.lichttechniker || 0 };
   const cateringMusikerRow = { Art: "Catering (Musiker)", Einnahme: "", Ausgabe: kosten.cateringMusiker || 0 };
   const cateringPersonalRow = { Art: "Catering (Personal)", Einnahme: "", Ausgabe: kosten.cateringPersonal || 0 };
-  const hotelRow = { Art: "Hotel", Einnahme: "", Ausgabe: veranstaltung.unterkunft.roomsTotalEUR || 0 };
-  const hotelTransportRow = { Art: "Hotel (Transport)", Einnahme: "", Ausgabe: veranstaltung.unterkunft.transportEUR || 0 };
+  const hotelRow = { Art: "Hotel", Einnahme: "", Ausgabe: konzert.unterkunft.roomsTotalEUR || 0 };
+  const hotelTransportRow = { Art: "Hotel (Transport)", Einnahme: "", Ausgabe: konzert.unterkunft.transportEUR || 0 };
 
   return [
     titelZeile,

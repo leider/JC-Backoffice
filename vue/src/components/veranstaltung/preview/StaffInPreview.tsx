@@ -1,9 +1,9 @@
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { Col, List, Row } from "antd";
 import React from "react";
-import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import Staff, { StaffType } from "jc-shared/konzert/staff.ts";
 import User from "jc-shared/user/user.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function StaffList({
@@ -47,7 +47,7 @@ function StaffList({
 
   return !notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
 }
-export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export default function StaffInPreview({ veranstaltung }: { veranstaltung: Konzert }) {
   const { allUsers } = useJazzContext();
   return (
     <CollapsibleForVeranstaltung suffix="staff" label="Staff">

@@ -1,6 +1,6 @@
 import winston from "winston";
 
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
 import pers from "../persistence/sqlitePersistence.js";
@@ -15,7 +15,7 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
     `startDate < '${rangeTo.toISOString}' AND endDate > '${rangeFrom.toISOString}'`,
     `startDate ${sortOrder}`,
   );
-  return misc.toObjectList<Veranstaltung>(Veranstaltung, result);
+  return misc.toObjectList<Konzert>(Konzert, result);
 }
 
 function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
@@ -49,25 +49,25 @@ export default {
 
   byDateRangeInAscendingOrder,
 
-  getVeranstaltung: function getVeranstaltung(url: string) {
+  getKonzert(url: string) {
     const result = persistence.getByField({ key: "url", val: url });
-    return misc.toObject<Veranstaltung>(Veranstaltung, result);
+    return misc.toObject<Konzert>(Konzert, result);
   },
 
-  getVeranstaltungForId: function getVeranstaltungForId(id: string) {
+  getKonzertForId(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject<Veranstaltung>(Veranstaltung, result);
+    return misc.toObject<Konzert>(Konzert, result);
   },
 
-  saveVeranstaltung: function saveVeranstaltung(veranstaltung: Veranstaltung, user: User) {
-    const object = veranstaltung.toJSON();
+  saveKonzert(konzert: Konzert, user: User) {
+    const object = konzert.toJSON();
     persistence.save(object as { id: string }, user);
-    return veranstaltung;
+    return konzert;
   },
 
-  deleteVeranstaltungById: function deleteVeranstaltungById(id: string, user: User) {
+  deleteKonzertById(id: string, user: User) {
     persistence.removeById(id, user);
-    logger.info(`Veranstaltung removed: ${JSON.stringify(id)}`);
+    logger.info(`Konzert removed: ${JSON.stringify(id)}`);
     return;
   },
 };

@@ -6,41 +6,38 @@ import flatten from "lodash/flatten.js";
 import fs from "fs";
 import path, { dirname } from "path";
 
-import Veranstaltung from "jc-shared/veranstaltung//veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import User from "jc-shared/user/user.js";
 
-import store from "./veranstaltungenstore.js";
+import store from "./konzertestore.js";
 import groupBy from "lodash/groupBy.js";
 import { fileURLToPath } from "url";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
-async function getVeranstaltung(url: string) {
-  const veranstaltung = await store.getVeranstaltung(url);
-  if (!veranstaltung) {
-    return null;
-  }
-  return veranstaltung;
+async function getKonzert(url: string) {
+  return await store.getKonzert(url);
 }
 
-async function filterUnbestaetigteFuerJedermann(veranstaltungen: Veranstaltung[], user: User): Promise<Veranstaltung[]> {
+async function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User): Promise<Konzert[]> {
   const optionen = await optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
-  const enrichedVeranstaltungen = veranstaltungen.map((v) => {
+  const enrichedKonzerte = konzerte.map((v) => {
     v.kopf.eventTypRich = typByName[v.kopf.eventTyp]?.[0];
     return v;
   });
   if (user.accessrights.isBookingTeam) {
-    return enrichedVeranstaltungen;
+    return enrichedKonzerte;
   }
-  return enrichedVeranstaltungen.filter((v) => v.kopf.confirmed);
+  return enrichedKonzerte.filter((v) => v.kopf.confirmed);
 }
 
-function zipVeranstaltungen(veranstaltungen: Veranstaltung[], name: string, res: Response, next: NextFunction) {
+function zipKonzerte(konzerte: Konzert[], name: string, res: Response, next: NextFunction) {
   try {
-    const images = flatten(veranstaltungen.map((veranst) => veranst.presse.image))
+    const images = flatten(konzerte.map((konzert) => konzert.presse.image))
       // eslint-disable-next-line no-sync
       .filter((filename) => fs.existsSync(uploadDir + "/" + filename))
       .map((filename) => {
@@ -67,23 +64,23 @@ async function imgzip(res: Response, next: NextFunction, yymm: string) {
   const start = DatumUhrzeit.forYYMM(yymm);
   const end = start.plus({ monate: 1 });
   const name = start.monatJahrKompakt;
-  const veranstaltungen = await store.byDateRangeInAscendingOrder(start, end);
-  zipVeranstaltungen(veranstaltungen, name, res, next);
+  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  zipKonzerte(konzerte, name, res, next);
 }
 
-async function imgzipForVeranstaltung(res: Response, next: NextFunction, url: string) {
+async function imgzipForKonzert(res: Response, next: NextFunction, url: string) {
   const name = url;
-  const veranstaltung = await getVeranstaltung(url);
-  if (!veranstaltung) {
+  const konzert = await getKonzert(url);
+  if (!konzert) {
     return;
   }
-  const veranstaltungen: Veranstaltung[] = [veranstaltung];
-  zipVeranstaltungen(veranstaltungen, name, res, next);
+  const konzerte: Konzert[] = [konzert];
+  zipKonzerte(konzerte, name, res, next);
 }
 
 export default {
-  getVeranstaltung,
+  getKonzert: getKonzert,
   filterUnbestaetigteFuerJedermann,
   imgzip,
-  imgzipForVeranstaltung,
+  imgzipForKonzert: imgzipForKonzert,
 };

@@ -1,7 +1,7 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
@@ -13,7 +13,7 @@ const logger = loggers.get("application");
 
 type SendMailVariables = { name: string; email: string; subject: string; firstLine: string };
 
-async function sendMail(stuffToSend: (Veranstaltung | Vermietung)[], variables: SendMailVariables) {
+async function sendMail(stuffToSend: (Konzert | Vermietung)[], variables: SendMailVariables) {
   const markdownToSend = `${variables.firstLine}
 
 ---
@@ -35,7 +35,7 @@ ${stuffToSend
 
 async function checkForFilter(
   // eslint-disable-next-line no-unused-vars
-  filterFunction: (ver: Veranstaltung | Vermietung) => boolean,
+  filterFunction: (ver: Konzert | Vermietung) => boolean,
   variables: SendMailVariables,
   now: DatumUhrzeit,
 ) {
@@ -52,7 +52,7 @@ async function checkForFilter(
   const zuSendende = await byDateRangeInAscendingOrder({
     from: start,
     to: end,
-    veranstaltungenFilter: filterFunction,
+    konzerteFilter: filterFunction,
     vermietungenFilter: filterFunction,
   });
   if (zuSendende.length === 0) {
@@ -75,7 +75,7 @@ export async function checkFotograf(now: DatumUhrzeit) {
     firstLine,
   };
   return checkForFilter(
-    (ver: Veranstaltung | Vermietung) => {
+    (ver: Konzert | Vermietung) => {
       const satisfied = ver.kopf.fotografBestellen && ver.kopf.confirmed;
       if (ver.isVermietung) {
         return (ver as Vermietung).brauchtPresse && satisfied;
@@ -100,7 +100,7 @@ export async function checkFluegel(now: DatumUhrzeit) {
     firstLine,
   };
   return checkForFilter(
-    (ver: Veranstaltung | Vermietung) => {
+    (ver: Konzert | Vermietung) => {
       const satisfied = ver.technik.fluegel && ver.kopf.confirmed;
       if (ver.isVermietung) {
         return (ver as Vermietung).brauchtTechnik && satisfied;

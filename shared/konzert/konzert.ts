@@ -1,13 +1,13 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 
-import Artist from "./artist.js";
+import Artist from "../veranstaltung/artist.js";
 import Eintrittspreise from "./eintrittspreise.js";
 import Kasse from "./kasse.js";
-import Kontakt from "./kontakt.js";
-import Kopf from "./kopf.js";
-import Kosten from "./kosten.js";
-import Presse from "./presse.js";
+import Kontakt from "../veranstaltung/kontakt.js";
+import Kopf from "../veranstaltung/kopf.js";
+import Kosten from "../veranstaltung/kosten.js";
+import Presse from "../veranstaltung/presse.js";
 import Staff from "./staff.js";
 import Technik from "./technik.js";
 import Unterkunft from "./unterkunft.js";
@@ -43,7 +43,7 @@ export interface NameWithNumber {
 }
 
 export type GastArt = "res" | "gast";
-export default class Veranstaltung {
+export default class Konzert {
   id?: string;
   ghost? = undefined; // for displaying multidays
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
@@ -121,7 +121,7 @@ export default class Veranstaltung {
         url: this.url,
         ghost: true,
       });
-      return new Veranstaltung(result);
+      return new Konzert(result);
     });
   }
 
@@ -134,7 +134,7 @@ export default class Veranstaltung {
   }
 
   private get initializedUrl(): string {
-    return Veranstaltung.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
+    return Konzert.createUrlFrom(this.startDate, this.kopf.titel || this.id || "");
   }
 
   initializeIdAndUrl(): void {

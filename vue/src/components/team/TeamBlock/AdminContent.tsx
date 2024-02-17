@@ -1,4 +1,4 @@
-import Veranstaltung, { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert, { ChangelistItem } from "../../../../../shared/konzert/konzert.ts";
 import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface ContentProps {
-  veranstaltungOderVermietung: Veranstaltung | Vermietung;
+  veranstaltungOderVermietung: Konzert | Vermietung;
 }
 
 export default function AdminContent({ veranstaltungOderVermietung: veranVermiet }: ContentProps) {
@@ -23,7 +23,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
-  const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Veranstaltung | Vermietung>(new Veranstaltung());
+  const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Konzert | Vermietung>(new Konzert());
   const { currentUser, showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
@@ -84,7 +84,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
       } else {
         const diff = differenceFor(initialValue, veranst, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
         veranst.changelist.unshift(createLogWithDiff(diff));
-        result = new Veranstaltung(veranst);
+        result = new Konzert(veranst);
         mutateVeranstaltung.mutate(result);
       }
       setVeranstaltungOderVermietung(result);
@@ -150,7 +150,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
                 {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
                   <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={forVermietung} />
                 )}
-                {!forVermietung && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Veranstaltung} />}
+                {!forVermietung && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Konzert} />}
               </>
             )}
           </Row>

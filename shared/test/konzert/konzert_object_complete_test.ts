@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import Veranstaltung from "../../veranstaltung/veranstaltung.js";
-import { Sprache, Vertragsart } from "../../veranstaltung/vertrag.js";
+import Konzert from "../../konzert/konzert.js";
+import { Sprache, Vertragsart } from "../../konzert/vertrag.js";
 
 const demo = {
   id: "Peterchen",
@@ -142,10 +142,10 @@ const demo = {
 };
 const reference = JSON.parse(JSON.stringify(demo));
 describe("Veranstaltung Gesamt", () => {
-  let veranstaltung: Veranstaltung;
+  let veranstaltung: Konzert;
 
   beforeEach(() => {
-    veranstaltung = new Veranstaltung(demo);
+    veranstaltung = new Konzert(demo);
   });
 
   it("hat noch eigene Attribute", () => {
@@ -161,7 +161,7 @@ describe("URL Generierung", () => {
   const titel = "Der Titel, der-auch kömische Ümläßte // enthält";
 
   it("formats the date usefully", () => {
-    const url = Veranstaltung.createUrlFrom(date, titel);
+    const url = Konzert.createUrlFrom(date, titel);
     expect(url).to.eql("2020-05-01-der_titel_der-auch_komische_umlaste____enthalt");
   });
 });

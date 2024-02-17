@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Row } from "antd";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
-import { ChangelistItem } from "jc-shared/veranstaltung/veranstaltung.ts";
+import { ChangelistItem } from "../../../../../shared/konzert/konzert.ts";
 
 export default function BearbeiterCard() {
   const veranstContext = useContext(VeranstaltungContext);

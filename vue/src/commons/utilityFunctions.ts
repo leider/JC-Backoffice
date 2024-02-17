@@ -1,4 +1,4 @@
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../shared/konzert/konzert.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -14,7 +14,7 @@ export function formatToGermanNumberString(amount: number): string {
   return format.format(amount);
 }
 
-export function asExcelKalk(veranVermiet: (Veranstaltung | Vermietung)[]) {
+export function asExcelKalk(veranVermiet: (Konzert | Vermietung)[]) {
   if (veranVermiet.length < 1) {
     return;
   }
@@ -24,9 +24,7 @@ export function asExcelKalk(veranVermiet: (Veranstaltung | Vermietung)[]) {
   utils.book_append_sheet(book, sheet, "Übersicht");
 
   veranVermiet.forEach((ver) => {
-    const sheet = utils.json_to_sheet(
-      ver.isVermietung ? createExcelDataVermietung(ver as Vermietung) : createExcelData(ver as Veranstaltung),
-    );
+    const sheet = utils.json_to_sheet(ver.isVermietung ? createExcelDataVermietung(ver as Vermietung) : createExcelData(ver as Konzert));
     sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];
     utils.book_append_sheet(
       book,

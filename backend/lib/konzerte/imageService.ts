@@ -2,26 +2,26 @@ import User from "jc-shared/user/user.js";
 
 import path, { dirname } from "path";
 import fs from "fs/promises";
-import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
-import store from "./veranstaltungenstore.js";
+import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
+import store from "./konzertestore.js";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 
-async function renameImage(oldname: string, newname: string, veranstIds: string[], user: User) {
-  function updateVeranstaltung(id: string) {
-    const veranstaltung = store.getVeranstaltungForId(id);
-    if (!veranstaltung) {
+async function renameImage(oldname: string, newname: string, konzertIds: string[], user: User) {
+  function updateKonzert(id: string) {
+    const konzert = store.getKonzertForId(id);
+    if (!konzert) {
       return;
     }
-    veranstaltung.updateImageName(oldname, newname);
-    return store.saveVeranstaltung(veranstaltung, user);
+    konzert.updateImageName(oldname, newname);
+    return store.saveKonzert(konzert, user);
   }
 
   await fs.rename(uploadDir + "/" + oldname, uploadDir + "/" + newname);
-  return Promise.all(veranstIds.map(updateVeranstaltung));
+  return Promise.all(konzertIds.map(updateKonzert));
 }
 
 function renameImages(rows: ImageOverviewRow[], user: User) {

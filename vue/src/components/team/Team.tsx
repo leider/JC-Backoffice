@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { veranstaltungenForTeam } from "@/commons/loader.ts";
 import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
 import TeamCalendar from "@/components/team/TeamCalendar";
@@ -22,7 +22,7 @@ function Team() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const [veranstaltungen, setVeranstaltungen] = useState<Veranstaltung[]>([]);
+  const [veranstaltungen, setVeranstaltungen] = useState<Konzert[]>([]);
   useEffect(() => {
     if (veranstQuery.data) {
       setVeranstaltungen(veranstQuery.data);
@@ -39,14 +39,14 @@ function Team() {
   }, [currentUser.accessrights.isSuperuser]);
 
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
-    [index: string]: Veranstaltung[];
+    [index: string]: Konzert[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
   document.title = "Team";
   useEffect(() => {
     const filteredVeranstaltungen = veranstaltungen.filter((v) => v.kopf.confirmed || realadmin);
-    const result = groupBy(filteredVeranstaltungen, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(filteredVeranstaltungen, (veranst: Konzert) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [veranstaltungen, realadmin]);

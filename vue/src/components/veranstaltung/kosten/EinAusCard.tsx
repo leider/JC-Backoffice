@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Col, Form, Row, Table } from "antd";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
-import VeranstaltungKalkulation from "jc-shared/veranstaltung/veranstaltungKalkulation";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
+import KonzertKalkulation from "../../../../../shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
@@ -15,7 +15,7 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
   const veranstContext = useContext(VeranstaltungContext);
   const form = veranstContext!.form;
 
-  const [kalk, setKalk] = useState<VeranstaltungKalkulation>(new VeranstaltungKalkulation(new Veranstaltung()));
+  const [kalk, setKalk] = useState<KonzertKalkulation>(new KonzertKalkulation(new Konzert()));
 
   const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
     form,
@@ -27,8 +27,8 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
   });
 
   useEffect(() => {
-    const veranst = new Veranstaltung(form.getFieldsValue(true));
-    setKalk(new VeranstaltungKalkulation(veranst));
+    const veranst = new Konzert(form.getFieldsValue(true));
+    setKalk(new KonzertKalkulation(veranst));
   }, [einnahmen, ausgaben, form, brauchtHotel, deal]);
 
   function format(amount: number): string {

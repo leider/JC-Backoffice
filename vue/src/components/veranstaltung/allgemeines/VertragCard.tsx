@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
-import Vertrag from "jc-shared/veranstaltung/vertrag";
+import Vertrag from "jc-shared/konzert/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/components/veranstaltung/Uploader";

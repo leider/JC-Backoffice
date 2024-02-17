@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions*/
 import { expect } from "chai";
-import Eintrittspreise from "../../veranstaltung/eintrittspreise.js";
+import Eintrittspreise from "../../konzert/eintrittspreise.js";
 
 describe("Eintrittspreise", () => {
   const freierEintritt = {

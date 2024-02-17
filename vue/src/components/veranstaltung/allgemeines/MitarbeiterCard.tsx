@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import { StaffType } from "jc-shared/konzert/staff.ts";
 import { useWatch } from "antd/es/form/Form";
 import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
 import groupBy from "lodash/groupBy";

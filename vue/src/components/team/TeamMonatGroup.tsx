@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung";
+import Konzert from "../../../../shared/konzert/konzert.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
@@ -83,9 +83,9 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
             return <TeamBlockVermietung key={index} vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />;
           }
           return renderTeam ? (
-            <TeamBlockNormal key={index} veranstaltung={veranstaltung as Veranstaltung} initiallyOpen={expanded} />
+            <TeamBlockNormal key={index} veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
           ) : (
-            <TeamBlockAdmin key={index} veranstaltung={veranstaltung as Veranstaltung} initiallyOpen={expanded} />
+            <TeamBlockAdmin key={index} veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
           );
         })}
       </Row>

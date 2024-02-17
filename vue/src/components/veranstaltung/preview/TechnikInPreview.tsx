@@ -1,12 +1,12 @@
 import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung.tsx";
 import { Col, Divider, Row } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
 import { useQuery } from "@tanstack/react-query";
 import { riderFor } from "@/commons/loader.ts";
 
-export default function TechnikInPreview({ veranstaltung, url }: { veranstaltung: Veranstaltung; url?: string }) {
+export default function TechnikInPreview({ veranstaltung, url }: { veranstaltung: Konzert; url?: string }) {
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
   const [rider, setRider] = useState<Rider>(new Rider());
   useEffect(() => {

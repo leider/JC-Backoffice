@@ -1,12 +1,12 @@
 import { NextFunction, Response } from "express";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
-import store from "../veranstaltungen/veranstaltungenstore.js";
+import store from "../konzerte/konzertestore.js";
 import vermietungenstore from "../vermietungen/vermietungenstore.js";
-import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js";
+import konzerteService from "../konzerte/konzerteService.js";
 import userstore from "../users/userstore.js";
 import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons.js";
 import pug from "pug";
@@ -27,16 +27,16 @@ export function kassenbericht(res: Response, next: NextFunction, datum: DatumUhr
   return res.render("kassenbericht", { datum, now, publicUrlPrefix }, generatePdf(printoptions, res, next));
 }
 
-export async function vertrag(res: Response, next: NextFunction, veranstaltungUrl: string, language: string) {
-  const veranstaltung = await store.getVeranstaltung(veranstaltungUrl);
-  if (!veranstaltung) {
+export async function vertrag(res: Response, next: NextFunction, konzertUrl: string, language: string) {
+  const konzert = await store.getKonzert(konzertUrl);
+  if (!konzert) {
     return res.redirect("/");
   }
   const buyoutInclusive = language !== "regional";
   const sprache = language === "regional" ? "deutsch" : language;
   return res.render(
     `vertrag-${sprache}`,
-    { veranstaltung, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix, email: "vertrag" },
+    { veranstaltung: konzert, datum: new DatumUhrzeit(), buyoutInclusive, publicUrlPrefix, email: "vertrag" },
     generatePdf({ ...printoptions, scale: 1.31, margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" } }, res, next),
   );
 }
@@ -53,19 +53,19 @@ export async function vermietungAngebot(res: Response, next: NextFunction, vermi
   );
 }
 
-export async function kassenzettel(res: Response, next: NextFunction, veranstaltungUrl: string) {
-  const veranstaltung = await veranstaltungenService.getVeranstaltung(veranstaltungUrl);
-  if (!veranstaltung) {
+export async function kassenzettel(res: Response, next: NextFunction, konzertUrl: string) {
+  const konzert = await konzerteService.getKonzert(konzertUrl);
+  if (!konzert) {
     return res.redirect("/");
   }
-  const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
+  const user = await userstore.forId(konzert.staff.kasseV[0]);
   const kassierer = user?.name || "";
-  res.render("kassenzettel", { veranstaltung, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
+  res.render("kassenzettel", { veranstaltung: konzert, kassierer, publicUrlPrefix }, generatePdf(printoptions, res, next));
 }
 
 export async function riderPdf(res: Response, next: NextFunction, url: string) {
   const rider = await riderstore.getRider(url);
-  const veranstaltung = await veranstaltungenService.getVeranstaltung(url);
+  const konzert = await konzerteService.getKonzert(url);
 
   if (!rider) {
     return res.redirect("/");
@@ -75,7 +75,7 @@ export async function riderPdf(res: Response, next: NextFunction, url: string) {
   //return res.render("rider", { boxes, veranstaltung, publicUrlPrefix });
   res.render(
     "rider",
-    { boxes, veranstaltung, publicUrlPrefix },
+    { boxes, veranstaltung: konzert, publicUrlPrefix },
     generatePdf(
       {
         format: "a4",
@@ -89,13 +89,13 @@ export async function riderPdf(res: Response, next: NextFunction, url: string) {
   );
 }
 
-export async function kassenzettelToBuchhaltung(veranstaltung: Veranstaltung) {
+export async function kassenzettelToBuchhaltung(konzert: Konzert) {
   const file = path.join(__dirname, "views/kassenzettel.pug");
-  const user = await userstore.forId(veranstaltung.staff.kasseV[0]);
-  const kassierer = user?.name || veranstaltung.kasse.kassenfreigabe;
-  const renderedHtml = pug.renderFile(file, { veranstaltung, kassierer, publicUrlPrefix });
-  const subject = `[Kassenzettel] ${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.fuerPresse}`;
-  const filenamepdf = `${veranstaltung.kopf.titelMitPrefix} am ${veranstaltung.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
+  const user = await userstore.forId(konzert.staff.kasseV[0]);
+  const kassierer = user?.name || konzert.kasse.kassenfreigabe;
+  const renderedHtml = pug.renderFile(file, { veranstaltung: konzert, kassierer, publicUrlPrefix });
+  const subject = `[Kassenzettel] ${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.fuerPresse}`;
+  const filenamepdf = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
   generatePdfLocally(renderedHtml, (pdf: Buffer) => {
     const message = new Message({ subject, markdown: "" });
     message.pdfBufferAndName = { pdf, name: filenamepdf };

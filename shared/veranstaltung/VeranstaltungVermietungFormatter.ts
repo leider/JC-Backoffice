@@ -1,10 +1,10 @@
-import Veranstaltung from "./veranstaltung.js";
+import Konzert from "../konzert/konzert.js";
 import Vermietung from "../vermietung/vermietung.js";
 
 export default class VeranstaltungVermietungFormatter {
-  private veranstVermiet: Veranstaltung | Vermietung;
+  private veranstVermiet: Konzert | Vermietung;
 
-  constructor(veranstVermiet: Veranstaltung | Vermietung) {
+  constructor(veranstVermiet: Konzert | Vermietung) {
     this.veranstVermiet = veranstVermiet;
   }
 
@@ -15,7 +15,7 @@ export default class VeranstaltungVermietungFormatter {
 
 `;
     }
-    const eintrittspreise = (this.veranstVermiet as Veranstaltung).eintrittspreise;
+    const eintrittspreise = (this.veranstVermiet as Konzert).eintrittspreise;
     const eintrittspreiseText = eintrittspreise.istKooperation
       ? `Gemäß Kooperationspartner (${this.veranstVermiet.kopf.kooperationspartnerText})`
       : eintrittspreise.frei
