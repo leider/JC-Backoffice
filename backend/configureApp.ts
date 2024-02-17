@@ -1,10 +1,9 @@
-const __dirname = new URL(".", import.meta.url).pathname;
 import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
 import compress from "compression";
 import cookieParser from "cookie-parser";
 import history from "connect-history-api-fallback";
-import path from "path";
+import path, { dirname } from "path";
 import passport from "passport";
 
 import "./initWinston.js";
@@ -12,6 +11,8 @@ import restApp from "./rest/index.js";
 import siteApp from "./lib/site/index.js";
 import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
   res.setHeader("X-Frame-Options", "DENY");

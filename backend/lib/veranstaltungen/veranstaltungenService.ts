@@ -1,11 +1,10 @@
 import optionenstore from "../optionen/optionenstore.js";
 
-const __dirname = new URL(".", import.meta.url).pathname;
 import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
 import flatten from "lodash/flatten.js";
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
 
 import Veranstaltung from "jc-shared/veranstaltung//veranstaltung.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -13,6 +12,8 @@ import User from "jc-shared/user/user.js";
 
 import store from "./veranstaltungenstore.js";
 import groupBy from "lodash/groupBy.js";
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 

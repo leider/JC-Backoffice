@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { Form } from "multiparty";
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
 
 import Veranstaltung, { GastArt, NameWithNumber } from "jc-shared/veranstaltung/veranstaltung.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -13,8 +13,8 @@ import veranstaltungenService from "../lib/veranstaltungen/veranstaltungenServic
 import store from "../lib/veranstaltungen/veranstaltungenstore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
-
-const __dirname = new URL(".", import.meta.url).pathname;
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 

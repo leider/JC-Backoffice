@@ -1,12 +1,12 @@
 import User from "jc-shared/user/user.js";
 
-const __dirname = new URL(".", import.meta.url).pathname;
-import path from "path";
+import path, { dirname } from "path";
 import fs from "fs/promises";
-
 import { ImageOverviewRow } from "jc-shared/veranstaltung/veranstaltung.js";
-
 import store from "./veranstaltungenstore.js";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const uploadDir = path.join(__dirname, "../../static/upload");
 

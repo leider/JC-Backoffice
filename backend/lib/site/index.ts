@@ -1,6 +1,6 @@
 import pdfEndpoints from "../pdf/pdfEndpoints.js";
 import express, { Request, Response } from "express";
-import path from "path";
+import path, { dirname } from "path";
 import sharp from "sharp";
 import jwt from "jsonwebtoken";
 import { loggers } from "winston";
@@ -19,8 +19,8 @@ import refreshstore from "./refreshstore.js";
 import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
 import fs from "fs";
-
-const __dirname = new URL(".", import.meta.url).pathname;
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const appLogger = loggers.get("application");
 

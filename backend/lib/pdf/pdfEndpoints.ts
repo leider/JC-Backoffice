@@ -1,9 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
-import path from "path";
+import path, { dirname } from "path";
 import { kassenbericht, kassenzettel, riderPdf, vermietungAngebot, vertrag } from "./pdfGeneration.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
+import { fileURLToPath } from "url";
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 

@@ -10,14 +10,15 @@ import veranstaltungenService from "../veranstaltungen/veranstaltungenService.js
 import userstore from "../users/userstore.js";
 import { generatePdf, generatePdfLocally, printoptions } from "./pdfCommons.js";
 import pug from "pug";
-import path from "path";
+import path, { dirname } from "path";
 import mailtransport from "../mailsender/mailtransport.js";
 import Message from "jc-shared/mail/message.js";
 import riderstore from "../rider/riderstore.js";
 import { PrintableBox } from "jc-shared/rider/rider.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
+import { fileURLToPath } from "url";
 
-const __dirname = new URL(".", import.meta.url).pathname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const publicUrlPrefix = conf.get("publicUrlPrefix");
 
