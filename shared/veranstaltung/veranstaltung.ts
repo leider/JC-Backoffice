@@ -12,6 +12,8 @@ import Staff from "./staff.js";
 import Technik from "./technik.js";
 import Unterkunft from "./unterkunft.js";
 import Vertrag from "./vertrag.js";
+import dayjs from "dayjs";
+import times from "lodash/times.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -43,6 +45,7 @@ export interface NameWithNumber {
 export type GastArt = "res" | "gast";
 export default class Veranstaltung {
   id?: string;
+  ghost? = undefined; // for displaying multidays
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
@@ -106,6 +109,20 @@ export default class Veranstaltung {
     } else {
       this.unterkunft = new Unterkunft(undefined, this.startDatumUhrzeit, this.artist.name);
     }
+  }
+
+  createGhostsForOverview() {
+    return this.tageOhneStart.map((ghostStart) => {
+      const result = {};
+      Object.assign(result, {
+        id: `${this.id}ghost${ghostStart.toISOString}`,
+        startDate: ghostStart.toJSDate,
+        kopf: this.kopf,
+        url: this.url,
+        ghost: true,
+      });
+      return new Veranstaltung(result);
+    });
   }
 
   get isVermietung(): boolean {
@@ -180,6 +197,11 @@ export default class Veranstaltung {
 
   get istVergangen(): boolean {
     return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
+  }
+
+  get tageOhneStart(): DatumUhrzeit[] {
+    const days = dayjs(this.endDate).diff(dayjs(this.startDate), "d");
+    return times(days, (no) => new DatumUhrzeit(dayjs(this.startDate).add(no + 1, "d")));
   }
 
   // iCal

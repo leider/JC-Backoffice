@@ -5,6 +5,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import Color from "color";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
@@ -47,29 +48,35 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} lg={8} xl={6} xxl={4}>
-        <Collapse
-          style={{ borderColor: "#f6eee1" }}
-          size={"small"}
-          activeKey={expanded ? vermietung.id : ""}
-          onChange={() => {
-            setExpanded(!expanded);
-          }}
-          expandIcon={({ isActive }) => (isActive ? <CaretDown /> : <CaretRight />)}
-          items={[
-            {
-              key: vermietung.id || "",
-              style: { backgroundColor: "#f6eee1" },
-              className: "team-block",
-              label: <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={expanded} />,
-              extra: expanded && <Extras vermietung={vermietung} />,
-              children: (
-                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <AdminContent veranstaltungOderVermietung={vermietung} />
-                </ConfigProvider>
-              ),
-            },
-          ]}
-        />
+        {vermietung.ghost ? (
+          <div style={{ backgroundColor: new Color("#f6eee1").lighten(0.05).hex(), padding: "2px 16px" }}>
+            <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={initiallyOpen} />
+          </div>
+        ) : (
+          <Collapse
+            style={{ borderColor: "#f6eee1" }}
+            size={"small"}
+            activeKey={expanded ? vermietung.id : ""}
+            onChange={() => {
+              setExpanded(!expanded);
+            }}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown /> : <CaretRight />)}
+            items={[
+              {
+                key: vermietung.id || "",
+                style: { backgroundColor: "#f6eee1" },
+                className: "team-block",
+                label: <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={expanded} />,
+                extra: expanded && <Extras vermietung={vermietung} />,
+                children: (
+                  <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+                    <AdminContent veranstaltungOderVermietung={vermietung} />
+                  </ConfigProvider>
+                ),
+              },
+            ]}
+          />
+        )}
       </Col>
     </ConfigProvider>
   );

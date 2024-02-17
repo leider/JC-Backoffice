@@ -14,7 +14,8 @@ export default function TeamBlockHeader({ veranstaltungOderVermietung, expanded 
     return veranstaltungOderVermietung.isVermietung;
   }, [veranstaltungOderVermietung]);
 
-  const titleStyle = { margin: 0, color: isVermietung() ? "" : "#FFF" };
+  const color = veranstaltungOderVermietung.ghost ? "#AAA" : isVermietung() ? "" : "#FFF";
+  const titleStyle = { margin: 0, color: color };
   function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
       <Title level={l} style={titleStyle}>

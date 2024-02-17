@@ -5,6 +5,7 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import Color from "color";
 
 interface TeamBlockAdminProps {
   veranstaltung: Veranstaltung;
@@ -12,7 +13,10 @@ interface TeamBlockAdminProps {
 }
 
 function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const color = useMemo(() => veranstaltung.kopf.eventTypRich?.color || "#6c757d", [veranstaltung.kopf.eventTypRich?.color]);
+  const color = useMemo(() => {
+    const result = veranstaltung.kopf.eventTypRich?.color || "#6c757d";
+    return veranstaltung.ghost ? new Color(result).lighten(0.5).hex() : result;
+  }, [veranstaltung.ghost, veranstaltung.kopf.eventTypRich?.color]);
 
   const [expanded, setExpanded] = useState<boolean>();
   useEffect(() => {
@@ -22,29 +26,35 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col xs={24} sm={12} lg={8} xl={6} xxl={4}>
-        <Collapse
-          style={{ borderColor: color }}
-          size={"small"}
-          activeKey={expanded ? veranstaltung.id : undefined}
-          onChange={() => {
-            setExpanded(!expanded);
-          }}
-          expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
-          items={[
-            {
-              key: veranstaltung.id || "",
-              style: { backgroundColor: color },
-              className: "team-block",
-              label: <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={expanded} />,
-              extra: expanded && <Extras veranstaltung={veranstaltung} />,
-              children: (
-                <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                  <AdminContent veranstaltungOderVermietung={veranstaltung}></AdminContent>
-                </ConfigProvider>
-              ),
-            },
-          ]}
-        />
+        {veranstaltung.ghost ? (
+          <div style={{ backgroundColor: color, padding: "2px 16px" }}>
+            <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={initiallyOpen} />
+          </div>
+        ) : (
+          <Collapse
+            style={{ borderColor: color }}
+            size={"small"}
+            activeKey={expanded ? veranstaltung.id : undefined}
+            onChange={() => {
+              setExpanded(!expanded);
+            }}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+            items={[
+              {
+                key: veranstaltung.id || "",
+                style: { backgroundColor: color },
+                className: "team-block",
+                label: <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={expanded} />,
+                extra: expanded && <Extras veranstaltung={veranstaltung} />,
+                children: (
+                  <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+                    <AdminContent veranstaltungOderVermietung={veranstaltung}></AdminContent>
+                  </ConfigProvider>
+                ),
+              },
+            ]}
+          />
+        )}
       </Col>
     </ConfigProvider>
   );

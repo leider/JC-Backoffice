@@ -19,6 +19,7 @@
     "antd": "5.14.1",
     "axios": "1.6.7",
     "codemirror": "6.0.1",
+    "color": "4.2.3",
     "easymde": "2.18.0",
     "immutability-helper": "3.1.1",
     "ismobilejs": "1.1.1",
@@ -36,6 +37,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
   },
   "devDependencies": {
+    "@types/color": "3.0.6",
     "@types/numeral": "2.0.5",
     "@types/react": "18.2.55",
     "@types/react-dom": "18.2.19",

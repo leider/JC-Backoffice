@@ -80,12 +80,16 @@ export default function Veranstaltungen() {
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {
-        return sortBy([...a.data, ...b.data], "startDate");
+        return [...a.data, ...b.data];
       }
       return [];
     },
   });
-  const alle = useMemo(() => queryResult, [queryResult]);
+  const alle = useMemo(() => {
+    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Veranstaltung | Vermietung)[]);
+
+    return sortBy(queryResult.concat(additionals), "startDate");
+  }, [queryResult]);
 
   const { allUsers, currentUser } = useJazzContext();
   const navigate = useNavigate();

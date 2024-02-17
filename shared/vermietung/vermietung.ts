@@ -8,9 +8,12 @@ import Presse from "../veranstaltung/presse.js";
 import Artist from "../veranstaltung/artist.js";
 import Angebot from "./angebot.js";
 import Kontakt from "../veranstaltung/kontakt.js";
+import dayjs from "dayjs";
+import times from "lodash/times.js";
 
 export default class Vermietung {
   id?: string;
+  ghost? = undefined; // for displaying multidays
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
@@ -60,6 +63,20 @@ export default class Vermietung {
         vertragspartner: new Kontakt(object.vertragspartner),
       });
     }
+  }
+
+  createGhostsForOverview() {
+    return this.tageOhneStart.map((ghostStart) => {
+      const result = {};
+      Object.assign(result, {
+        id: `${this.id}ghost${ghostStart.toISOString}`,
+        startDate: ghostStart.toJSDate,
+        kopf: this.kopf,
+        url: this.url,
+        ghost: true,
+      });
+      return new Vermietung(result);
+    });
   }
 
   get isVermietung(): boolean {
@@ -119,5 +136,10 @@ export default class Vermietung {
 
   get istVergangen(): boolean {
     return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
+  }
+
+  get tageOhneStart(): DatumUhrzeit[] {
+    const days = dayjs(this.endDate).diff(dayjs(this.startDate), "d");
+    return times(days, (no) => new DatumUhrzeit(dayjs(this.startDate).add(no + 1, "d")));
   }
 }

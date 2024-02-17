@@ -21,7 +21,7 @@ describe("Staff", () => {
     });
   });
 
-  describe("gibt alle asl Array zurück", () => {
+  describe("gibt alle als Array zurück", () => {
     it("wenn nur Kasse", () => {
       staff.kasse = ["Peter"];
       staff.kasseV = ["Paul"];
