@@ -71,9 +71,8 @@ app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) =
         throw e;
       }
     }
-    return saveAndReply(req, res, new Vermietung(req.body));
   }
-  return res.sendStatus(500);
+  return saveAndReply(req, res, new Vermietung(req.body));
 });
 
 app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
