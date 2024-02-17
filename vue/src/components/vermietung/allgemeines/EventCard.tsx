@@ -1,5 +1,5 @@
 import React from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
 import StartEndPickers from "@/widgets/StartEndPickers";
@@ -9,7 +9,7 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 
 export default function EventCard() {
   return (
-    <CollapsibleForVeranstaltung suffix="allgemeines" label="Event" noTopBorder>
+    <Collapsible suffix="allgemeines" label="Event" noTopBorder>
       <Row gutter={12}>
         <Col span={8}>
           <CheckItem label="Ist bestätigt" name={["kopf", "confirmed"]} />
@@ -58,6 +58,6 @@ export default function EventCard() {
           <StartEndPickers />
         </Col>
       </Row>
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

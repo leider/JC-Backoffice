@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { App, Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
 import "easymde/dist/easymde.min.css";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -16,11 +16,11 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function InfoCard() {
-  const veranstContext = useContext(VermietungContext);
+  const vermietungContext = useContext(VermietungContext);
   const { currentUser } = useJazzContext();
   const { modal } = App.useApp();
 
-  const form = veranstContext!.form;
+  const form = vermietungContext!.form;
   const angFields = Form.useWatch("angebot", { form, preserve: true });
 
   const angebot = useMemo(() => {
@@ -90,7 +90,7 @@ export default function InfoCard() {
   const { useToken } = theme;
   const token = useToken().token;
   return (
-    <CollapsibleForVeranstaltung suffix="angebot" label="Infos" noTopBorder>
+    <Collapsible suffix="angebot" label="Infos" noTopBorder>
       <Row gutter={12}>
         <Col span={24}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
@@ -105,7 +105,7 @@ export default function InfoCard() {
           <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]} />
         </Col>
       </Row>
-      {veranstContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {vermietungContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={6}>
           <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag", "Rechnung"]} />
@@ -119,7 +119,7 @@ export default function InfoCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={veranstContext?.isDirty || !getFieldValue("id")}
+                    disabled={vermietungContext?.isDirty || !getFieldValue("id")}
                     onClick={() => openAngebotRechnung(form.getFieldsValue(true))}
                   >
                     Generieren
@@ -138,7 +138,7 @@ export default function InfoCard() {
                   text="Rechnung freigeben..."
                   icon={"Unlock"}
                   onClick={freigeben}
-                  disabled={angebot.status !== "abgerechnet" || veranstContext?.isDirty || !darfFreigeben}
+                  disabled={angebot.status !== "abgerechnet" || vermietungContext?.isDirty || !darfFreigeben}
                 />
               </Form.Item>
             ) : (
@@ -151,7 +151,7 @@ export default function InfoCard() {
                     type="primary"
                     color="#c71c2c"
                     onClick={freigabeAufheben}
-                    disabled={veranstContext?.isDirty || !darfFreigabeAufheben}
+                    disabled={vermietungContext?.isDirty || !darfFreigabeAufheben}
                   />
                 </Form.Item>
                 <TextField name={["angebot", "freigabe"]} label="Durch" disabled />
@@ -159,6 +159,6 @@ export default function InfoCard() {
             ))}
         </Col>{" "}
       </Row>
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

@@ -5,7 +5,7 @@ import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
 import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";

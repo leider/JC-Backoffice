@@ -1,23 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
+import Kasse from "jc-shared/konzert/kasse";
+import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import Technik from "jc-shared/konzert/technik.ts";
+import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 
-export default function AusgabenCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+interface AusgabenCardParams {
+  onChange: (sum: number) => void;
+}
+export default function AusgabenCard({ onChange }: AusgabenCardParams) {
+  const konzertContext = useContext(KonzertContext);
+  const form = konzertContext!.form;
 
   const [summe, setSumme] = useState<number>(0);
 
-  const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {
+  const unterkunft = Form.useWatch(["unterkunft"], {
+    form,
+    preserve: true,
+  });
+
+  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
     form,
     preserve: true,
   });
@@ -32,7 +43,7 @@ export default function AusgabenCard() {
     preserve: true,
   });
 
-  const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+  const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {
     form,
     preserve: true,
   });
@@ -41,16 +52,15 @@ export default function AusgabenCard() {
     () => {
       updateSumme();
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR, brauchtTechnik],
+    [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR],
   );
 
   function updateSumme() {
-    const verm = new Vermietung(form.getFieldsValue(true));
-    let sum = verm.kosten.totalEUR;
-    if (!verm.brauchtTechnik) {
-      sum = sum - verm.kosten.backlineUndTechnikEUR;
-    }
+    const konzert = new Konzert(form.getFieldsValue(true));
+    const sum =
+      konzert.kasse.ausgabenOhneGage + konzert.kosten.totalEUR + (konzert.artist.brauchtHotel ? konzert.unterkunft.kostenTotalEUR : 0);
     setSumme(sum);
+    onChange(sum);
   }
 
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
@@ -83,24 +93,55 @@ export default function AusgabenCard() {
     );
   }
 
-  function fluegelZeile() {
-    const verm = new Vermietung(form.getFieldsValue(true));
+  function kassenZeile() {
+    const kasse = new Kasse(form.getFieldValue("kasse"));
     return (
-      verm.technik.fluegel && (
+      kasse.istFreigegeben && (
         <Row gutter={12}>
           <Col span={18}>
             <Form.Item>
-              <b>Fluegelstimmer:</b>
+              <b>Abendkasse (ohne Gage):</b>
             </Form.Item>
           </Col>
           <Col span={6}>
-            <NumberInputWithDirectValue value={verm.kosten.fluegelstimmerEUR} suffix="€" decimals={2} />
+            <NumberInputWithDirectValue value={kasse.ausgabenOhneGage} suffix="€" decimals={2} />
           </Col>
         </Row>
       )
     );
   }
+  function hotelZeile() {
+    const konzert = new Konzert(form.getFieldsValue(true));
+    const unterkunft = konzert?.unterkunft;
+    const artist = konzert?.artist;
 
+    return (
+      artist?.brauchtHotel && (
+        <>
+          <Row gutter={12}>
+            <Col span={18}>
+              <Form.Item>
+                <b>Hotel:</b>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <NumberInputWithDirectValue value={unterkunft?.roomsTotalEUR || 0} suffix="€" decimals={2} />
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={18}>
+              <Form.Item>
+                <b>Hotel (Transport):</b>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <NumberInputWithDirectValue value={unterkunft?.transportEUR || 0} suffix="€" decimals={2} />
+            </Col>
+          </Row>
+        </>
+      )
+    );
+  }
   const { lg } = useBreakpoint();
   return (
     <Collapsible suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
@@ -110,6 +151,9 @@ export default function AusgabenCard() {
         </Col>
         <Col span={6}>
           <SingleSelect name={["kosten", "gagenSteuer"]} label={"Steuer"} options={steuerSaetze} onChange={updateSumme} />
+        </Col>
+        <Col span={6}>
+          <SingleSelect name={["kosten", "deal"]} label={"Deal"} options={Kosten.deals} onChange={updateSumme} />
         </Col>
         <Col span={6}>
           <DynamicItem
@@ -128,17 +172,26 @@ export default function AusgabenCard() {
           />
         </Col>
       </Row>
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && (
-        <>
-          <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
-          <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
-          {fluegelZeile()}
-        </>
+      <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />
+      <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
+      <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
+      {new Technik(form.getFieldValue("technik")).fluegel && (
+        <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} />
       )}
+      <LabelCurrencyRow label="Saalmiete" path={["kosten", "saalmiete"]} />
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
       <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} />
+      <LabelCurrencyRow label="Catering Musiker (unbar)" path={["kosten", "cateringMusiker"]} />
+      <LabelCurrencyRow label="Catering Personal (unbar)" path={["kosten", "cateringPersonal"]} />
       <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
+      <LabelCurrencyRow label="Tontechniker (unbar)" path={["kosten", "tontechniker"]} />
+      <LabelCurrencyRow label="Lichttechniker (unbar)" path={["kosten", "lichttechniker"]} />
+      {kassenZeile()}
+      {hotelZeile()}
+      <Row gutter={12}>
+        <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gageBAR"]} />
+      </Row>
     </Collapsible>
   );
 }

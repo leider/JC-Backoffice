@@ -6,7 +6,7 @@ import OptionValues from "jc-shared/optionen/optionValues";
 import { Col, Form, Row, Tabs, TabsProps } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -93,29 +93,29 @@ export default function Optionen() {
         <>
           <Row gutter={12}>
             <Col xs={24} lg={12}>
-              <CollapsibleForVeranstaltung suffix="allgemeines" label="Typen" noTopBorder>
+              <Collapsible suffix="allgemeines" label="Typen" noTopBorder>
                 <InlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
-              </CollapsibleForVeranstaltung>
-              <CollapsibleForVeranstaltung suffix="allgemeines" label="Optionen">
+              </Collapsible>
+              <Collapsible suffix="allgemeines" label="Optionen">
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
                 <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
-              </CollapsibleForVeranstaltung>
+              </Collapsible>
             </Col>
             <Col xs={24} lg={12}>
-              <CollapsibleForVeranstaltung suffix="ausgaben" label="Preisprofile" noTopBorder={lg}>
+              <Collapsible suffix="ausgaben" label="Preisprofile" noTopBorder={lg}>
                 <p>
                   <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
                 </p>
                 <InlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
-              </CollapsibleForVeranstaltung>
+              </Collapsible>
             </Col>
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <CollapsibleForVeranstaltung suffix="technik" label="Backlines">
+              <Collapsible suffix="technik" label="Backlines">
                 <MultiSelectWithTags name="backlineJazzclub" label={"Jazzclub"} options={optionen.backlineJazzclub} />
                 <MultiSelectWithTags name="backlineRockshop" label={"Rockshop"} options={optionen.backlineRockshop} />
-              </CollapsibleForVeranstaltung>
+              </Collapsible>
             </Col>
           </Row>
         </>
@@ -127,9 +127,9 @@ export default function Optionen() {
       children: (
         <Row gutter={12}>
           <Col span={24}>
-            <CollapsibleForVeranstaltung suffix="allgemeines" label="Künstler" noTopBorder>
+            <Collapsible suffix="allgemeines" label="Künstler" noTopBorder>
               <MultiSelectWithTags name="artists" label={"Künstler"} options={optionen.artists} />
-            </CollapsibleForVeranstaltung>
+            </Collapsible>
           </Col>
         </Row>
       ),

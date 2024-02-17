@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -43,7 +43,7 @@ export default function AngebotCard() {
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="angebot" label="Posten" noTopBorder={lg} amount={angebot.summe}>
+    <Collapsible suffix="angebot" label="Posten" noTopBorder={lg} amount={angebot.summe}>
       <Row gutter={12}>
         <Col span={8}>
           <NumberInput name={["angebot", "saalmiete"]} label="Saalmiete" decimals={2} suffix={"€"} disabled={readonly} />
@@ -136,6 +136,6 @@ export default function AngebotCard() {
       <FreiRow nummer={1} />
       <FreiRow nummer={2} />
       <FreiRow nummer={3} />
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

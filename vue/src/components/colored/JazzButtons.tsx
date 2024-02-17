@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
-import { VeranstaltungContext } from "@/components/veranstaltung/VeranstaltungComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "../../../../shared/konzert/konzert.ts";
@@ -42,11 +42,11 @@ export function SendButton({ disabled }: ButtonProps) {
 export function NewButtons() {
   const navigate = useNavigate();
   const items = [
-    { key: "Veranstaltung", label: "Neue Veranstaltung", icon: <IconForSmallBlock iconName="FileEarmarkPlus" /> },
+    { key: "Konzert", label: "Neues Konzert", icon: <IconForSmallBlock iconName="FileEarmarkPlus" /> },
     { key: "Vermietung", label: "Neue Vermietung", icon: <IconForSmallBlock iconName="FileEarmarkEasel" /> },
   ];
   function onMenuClick(e: { key: string }): void {
-    if (e.key === "Veranstaltung") {
+    if (e.key === "Konzert") {
       return navigate("/veranstaltung/new");
     }
     if (e.key === "Vermietung") {
@@ -64,7 +64,7 @@ export function NewButtons() {
   );
 }
 export function ExportButtons({ disabled }: ButtonProps) {
-  const context = useContext(VeranstaltungContext);
+  const context = useContext(KonzertContext);
   const form = context!.form;
 
   const items = [
@@ -74,15 +74,15 @@ export function ExportButtons({ disabled }: ButtonProps) {
   ];
 
   function onMenuClick(e: { key: string }): void {
-    const veranstaltung = form.getFieldsValue(true);
+    const konzert = form.getFieldsValue(true);
     if (e.key === "ExcelKalk") {
-      asExcelKalk([new Konzert(veranstaltung)]);
+      asExcelKalk([new Konzert(konzert)]);
     }
     if (e.key === "Pressefotos") {
-      imgzipForVeranstaltung(new Konzert(veranstaltung));
+      imgzipForVeranstaltung(new Konzert(konzert));
     }
     if (e.key === "Kassenzettel") {
-      openKassenzettel(new Konzert(veranstaltung));
+      openKassenzettel(new Konzert(konzert));
     }
   }
 
@@ -115,7 +115,7 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const deleteVeranstaltung = useMutation({
+  const deleteKonzert = useMutation({
     mutationFn: deleteVeranstaltungWithId,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
@@ -132,10 +132,10 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
   function callback() {
     modal.confirm({
       type: "confirm",
-      title: `${isVermietung ? "Vermietung" : "Veranstaltung"} löschen`,
-      content: `Bist Du sicher, dass Du die ${isVermietung ? "Vermietung" : "Veranstaltung"} "${document.title}" löschen möchtest?`,
+      title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
+      content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Veranstaltung"} "${document.title}" löschen möchtest?`,
       onOk: () => {
-        isVermietung ? deleteVermietung.mutate(id) : deleteVeranstaltung.mutate(id);
+        isVermietung ? deleteVermietung.mutate(id) : deleteKonzert.mutate(id);
       },
     });
   }

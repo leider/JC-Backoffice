@@ -1,12 +1,12 @@
 import React from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { Link } from "react-router-dom";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function KommentarCard({ forVermietung = false }: { forVermietung?: boolean }) {
   return (
-    <CollapsibleForVeranstaltung suffix="allgemeines" label="Kommentar">
+    <Collapsible suffix="allgemeines" label="Kommentar">
       <Row gutter={12}>
         <Col span={24}>
           {!forVermietung && (
@@ -18,6 +18,6 @@ export default function KommentarCard({ forVermietung = false }: { forVermietung
           <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]} />
         </Col>
       </Row>
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

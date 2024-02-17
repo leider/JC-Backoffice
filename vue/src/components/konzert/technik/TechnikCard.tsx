@@ -5,26 +5,28 @@ import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
 import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 
 export default function TechnikCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
-  const { backlineJazzclub, backlineRockshop } = context!.optionen;
+  const konzertContext = useContext(KonzertContext);
+  const { optionen } = useJazzContext();
+  const form = konzertContext!.form;
+  const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
-    const vermietung = new Vermietung(form.getFieldsValue(true));
-    setSumme(vermietung.kosten.backlineUndTechnikEUR);
+    const konzert = new Konzert(form.getFieldsValue(true));
+    setSumme(konzert.kosten.backlineUndTechnikEUR);
   }, [form]);
 
   function updateSumme() {
-    const vermietung = new Vermietung(form.getFieldsValue(true));
-    setSumme(vermietung.kosten.backlineUndTechnikEUR);
+    const konzert = new Konzert(form.getFieldsValue(true));
+    setSumme(konzert.kosten.backlineUndTechnikEUR);
   }
 
   function updateFluegelKosten(e: CheckboxChangeEvent) {
@@ -35,7 +37,7 @@ export default function TechnikCard() {
   }
 
   return (
-    <Collapsible suffix="technik" label="Rider und Backline" noTopBorder amount={summe}>
+    <Collapsible suffix="technik" label="Backline" noTopBorder amount={summe}>
       <Row gutter={12}>
         <Col span={8}>
           <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />

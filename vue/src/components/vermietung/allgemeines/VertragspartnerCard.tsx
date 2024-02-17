@@ -1,12 +1,12 @@
 import { Col, Form, Row } from "antd";
 import React from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 
 export default function VertragspartnerCard() {
   return (
-    <CollapsibleForVeranstaltung suffix="allgemeines" label="Vertragspartner">
+    <Collapsible suffix="allgemeines" label="Vertragspartner">
       <Row gutter={12}>
         <Col span={24}>
           <TextField name={["vertragspartner", "name"]} label="Name" />
@@ -23,6 +23,6 @@ export default function VertragspartnerCard() {
           <TextField name={["vertragspartner", "email"]} label="E-Mail" isEmail />
         </Col>
       </Row>
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

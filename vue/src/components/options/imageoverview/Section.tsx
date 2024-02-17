@@ -1,5 +1,4 @@
 import { NamePath } from "rc-field-form/es/interface";
-import { ImageOverviewVeranstaltung } from "../../../../../shared/konzert/konzert.ts";
 import { Link } from "react-router-dom";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
@@ -9,6 +8,7 @@ import { TextField } from "@/widgets/TextField.tsx";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import { imgFullsize } from "@/commons/loader.ts";
+import { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 
 export type kindOfSection = "with" | "unused" | "notFound";
 export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; title: string; noOfImages: number }) {

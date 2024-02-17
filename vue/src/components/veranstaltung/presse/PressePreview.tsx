@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Image, Space } from "antd";
-import Renderer from "jc-shared/commons/renderer";
-import VeranstaltungVermietungFormatter from "../../../../../shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Renderer from "jc-shared/commons/renderer.ts";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
+import VeranstaltungVermietungFormatter from "jc-shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export function PressePreview({ veranstVermiet }: { veranstVermiet: Konzert | Vermietung }) {
   function updatePreview(veranstVermiet: Konzert | Vermietung) {

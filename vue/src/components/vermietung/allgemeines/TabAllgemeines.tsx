@@ -1,6 +1,6 @@
 import { Col, Row } from "antd";
 import React from "react";
-import KommentarCard from "@/components/veranstaltung/allgemeines/KommentarCard";
+import KommentarCard from "@/components/veranstaltung/allgemeines/KommentarCard.tsx";
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 import EventCard from "@/components/vermietung/allgemeines/EventCard.tsx";
 import ArtistCard from "@/components/vermietung/allgemeines/ArtistCard.tsx";

@@ -1,0 +1,116 @@
+import { Col, Row } from "antd";
+import React, { CSSProperties, useEffect, useState } from "react";
+import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Collapsible from "@/widgets/Collapsible.tsx";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { veranstaltungForUrl } from "@/commons/loader.ts";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
+import groupBy from "lodash/groupBy";
+import StaffInPreview from "@/components/konzert/preview/StaffInPreview.tsx";
+import KasseInPreview from "@/components/konzert/preview/KasseInPreview.tsx";
+import InfoInPreview from "@/components/konzert/preview/InfoInPreview.tsx";
+import TechnikInPreview from "@/components/konzert/preview/TechnikInPreview.tsx";
+import GaesteInPreview from "@/components/konzert/preview/GaesteInPreview.tsx";
+import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
+
+export default function Preview() {
+  const { url } = useParams();
+  const konzertQueryData = useQuery({
+    queryKey: ["veranstaltung", url],
+    queryFn: () => veranstaltungForUrl(url || ""),
+  });
+  const { currentUser, optionen } = useJazzContext();
+
+  const [konzert, setKonzert] = useState<Konzert>(new Konzert());
+  const [typeColor, setTypeColor] = useState<string | undefined>("");
+
+  document.title = konzert.kopf.titelMitPrefix;
+
+  useEffect(() => {
+    if (optionen && konzert) {
+      const typByName = groupBy(optionen.typenPlus || [], "name");
+      setTypeColor(typByName[konzert.kopf.eventTyp]?.[0].color || "#6c757d");
+    }
+  }, [optionen, konzert]);
+
+  useEffect(() => {
+    if (konzertQueryData.data) {
+      setKonzert(konzertQueryData.data);
+    }
+  }, [konzertQueryData.data]);
+
+  function EditButton() {
+    const type: buttonType = "allgemeines";
+    const { color, icon } = colorsAndIconsForSections;
+    return (
+      <ButtonWithIconAndLink
+        icon={icon(type)}
+        to={`/veranstaltung/${encodeURIComponent(url ?? "")}?page=${type}`}
+        color={color(type)}
+        text="Bearbeiten..."
+      />
+    );
+  }
+
+  const titleStyle: CSSProperties = { color: typeColor };
+  return (
+    <div>
+      <JazzPageHeader
+        title={
+          <span style={titleStyle}>
+            {konzert.kopf.titelMitPrefix} {konzert.kopf.presseInEcht}
+          </span>
+        }
+        dateString={konzert.datumForDisplayShort}
+        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+      />
+      <Row gutter={12}>
+        <Col xs={24} lg={12}>
+          <GaesteInPreview konzert={konzert} />
+          <StaffInPreview konzert={konzert} />
+          <KasseInPreview konzert={konzert} url={url} />
+          <InfoInPreview konzert={konzert} />
+          <TechnikInPreview konzert={konzert} />
+        </Col>
+        <Col xs={24} lg={12}>
+          <Collapsible suffix="presse" label="Pressetext">
+            <PressePreview veranstVermiet={konzert} />
+          </Collapsible>
+          {konzert.agentur.name && (
+            <Collapsible suffix="allgemeines" label="Agentur">
+              <AddressBlock kontakt={konzert.agentur} />
+            </Collapsible>
+          )}
+          {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 && (
+            <Collapsible suffix="hotel" label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`}>
+              <AddressBlock kontakt={konzert.hotel} />
+            </Collapsible>
+          )}
+        </Col>
+      </Row>
+    </div>
+  );
+}
+
+function AddressBlock({ kontakt }: { kontakt: Kontakt }) {
+  const lines: string[] = kontakt.adresse.match(/[^\r\n]+/g) || [];
+  return (
+    <address>
+      <strong>{kontakt.name}</strong>
+      <br />
+      {lines.map((line) => (
+        <span key={line}>
+          {line} <br />
+        </span>
+      ))}
+      Tel.: <a href={`tel:${kontakt.telefon}`}> {kontakt.telefon}</a>
+      <br />
+      E-Mail: <a href={`mailto:${kontakt.email}`}> {kontakt.email}</a>
+    </address>
+  );
+}

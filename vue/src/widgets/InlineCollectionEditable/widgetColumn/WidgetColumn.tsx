@@ -6,7 +6,7 @@ import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import StartEndDateOnlyPickers from "@/components/veranstaltung/hotel/StartEndDateOnlyPickers.tsx";
+import StartEndDateOnlyPickers from "@/components/konzert/hotel/StartEndDateOnlyPickers.tsx";
 import UserMultiSelect from "@/widgets/UserMultiSelect.tsx";
 import { ColorField } from "@/widgets/ColorField.tsx";
 import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";

@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
-import CollapsibleForVeranstaltung from "@/components/veranstaltung/CollapsibleForVeranstaltung";
+import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, FormInstance, Row, Tabs } from "antd";
-import { TextField } from "@/widgets/TextField";
-import CheckItem from "@/widgets/CheckItem";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
-import Uploader from "@/components/veranstaltung/Uploader";
+import { TextField } from "@/widgets/TextField.tsx";
+import CheckItem from "@/widgets/CheckItem.tsx";
+import Uploader from "@/widgets/Uploader.tsx";
 import "easymde/dist/easymde.min.css";
-import SingleSelect from "@/widgets/SingleSelect";
+import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
-import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/veranstaltung/veranstaltungCompUtils";
-import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils";
+import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/konzert/konzertCompUtils.ts";
+import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import { PressePreview } from "@/components/veranstaltung/presse/PressePreview";
+import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export default function PresseCard({ form, isVermietung }: { form: FormInstance; isVermietung: boolean }) {
   const allimages = useQuery({
@@ -76,7 +76,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
   }
 
   return (
-    <CollapsibleForVeranstaltung suffix="presse" label="Pressematerial" noTopBorder>
+    <Collapsible suffix="presse" label="Pressematerial" noTopBorder>
       <Row gutter={12}>
         <Col xs={24} lg={12}>
           <CheckItem name={["presse", "checked"]} label="Ist so OK" />
@@ -122,6 +122,6 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
           <PressePreview veranstVermiet={verForPreview} />
         </Col>
       </Row>
-    </CollapsibleForVeranstaltung>
+    </Collapsible>
   );
 }

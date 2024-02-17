@@ -7,8 +7,7 @@ import Login from "@/app/Login.tsx";
 import Team from "@/components/team/Team.tsx";
 import Veranstaltungen from "@/components/team/Veranstaltungen.tsx";
 import BigKalender from "@/components/team/BigKalender.tsx";
-import VeranstaltungComp from "@/components/veranstaltung/VeranstaltungComp.tsx";
-import Preview from "@/components/veranstaltung/preview/Preview.tsx";
+import Preview from "@/components/konzert/preview/Preview.tsx";
 import VermietungComp from "@/components/vermietung/VermietungComp.tsx";
 import Info from "@/components/team/Info.tsx";
 import Users from "@/components/users/Users.tsx";
@@ -27,6 +26,7 @@ import WikiPage from "@/components/wiki/WikiPage.tsx";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
 import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
 import { History } from "@/components/history/History.tsx";
+import KonzertComp from "@/components/konzert/KonzertComp.tsx";
 
 export type RouteState = {
   routes: RouteObject[];
@@ -64,7 +64,7 @@ const allRoutes: RouteObject[] = [
       },
       {
         path: "/veranstaltungen/:url",
-        element: <VeranstaltungComp />,
+        element: <KonzertComp />,
       },
       {
         path: "/veranstaltungen/preview/:url",
@@ -72,7 +72,7 @@ const allRoutes: RouteObject[] = [
       },
       {
         path: "/veranstaltung/:url",
-        element: <VeranstaltungComp />,
+        element: <KonzertComp />,
       },
       {
         path: "/veranstaltung/preview/:url",
