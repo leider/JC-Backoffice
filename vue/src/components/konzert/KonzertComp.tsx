@@ -3,7 +3,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { riderFor, saveOptionen, saveRider, saveVeranstaltung, veranstaltungForUrl } from "@/commons/loader.ts";
+import { riderFor, saveOptionen, saveRider, saveKonzert, konzertForUrl } from "@/commons/loader.ts";
 import Konzert, { ChangelistItem } from "jc-shared/konzert/konzert.ts";
 import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming";
 import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/konzert/konzertCompUtils";
@@ -35,7 +35,7 @@ export default function KonzertComp() {
 
   const konzertQueryData = useQuery({
     queryKey: ["veranstaltung", url],
-    queryFn: () => veranstaltungForUrl(url || ""),
+    queryFn: () => konzertForUrl(url || ""),
   });
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
 
@@ -68,7 +68,7 @@ export default function KonzertComp() {
   const mutateKonzert = useMutation({
     mutationFn: (konzert: Konzert) => {
       setDirty(false);
-      return saveVeranstaltung(konzert);
+      return saveKonzert(konzert);
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });

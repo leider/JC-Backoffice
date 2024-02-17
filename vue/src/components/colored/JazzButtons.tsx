@@ -3,7 +3,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteVeranstaltungWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
+import { deleteKozertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
@@ -116,7 +116,7 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
   const queryClient = useQueryClient();
 
   const deleteKonzert = useMutation({
-    mutationFn: deleteVeranstaltungWithId,
+    mutationFn: deleteKozertWithId,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
       navigate("/");

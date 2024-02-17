@@ -1,7 +1,7 @@
 import Konzert from "../konzert/konzert.js";
 import User from "../user/user.js";
 import Vermietung from "../vermietung/vermietung.js";
-import Staff from "../konzert/staff.js";
+import Staff from "../veranstaltung/staff.js";
 
 export type VerMitUser = { veranstaltung: Konzert | Vermietung; user: User };
 

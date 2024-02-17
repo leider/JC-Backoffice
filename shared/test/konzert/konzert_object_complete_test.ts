@@ -161,7 +161,7 @@ describe("URL Generierung", () => {
   const titel = "Der Titel, der-auch kömische Ümläßte // enthält";
 
   it("formats the date usefully", () => {
-    const url = Konzert.createUrlFrom(date, titel);
+    const url = new Konzert({ startDate: date, kopf: { titel } }).initializedUrl;
     expect(url).to.eql("2020-05-01-der_titel_der-auch_komische_umlaste____enthalt");
   });
 });

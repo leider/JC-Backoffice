@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
-import { veranstaltungenForTeam, vermietungenForTeam } from "@/commons/loader.ts";
+import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Drawer, Dropdown, Form, Row, Space, theme } from "antd";
 import groupBy from "lodash/groupBy";
 import Konzert from "../../../../shared/konzert/konzert.ts";
@@ -75,7 +75,7 @@ export default function Veranstaltungen() {
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => veranstaltungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
+      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
       { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
     ],
     combine: ([a, b]) => {

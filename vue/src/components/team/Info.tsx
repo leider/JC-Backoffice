@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
-import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
@@ -25,7 +25,7 @@ export default function Info() {
 
   const { data } = useQuery({
     queryKey: ["veranstaltung", `${start.yyyyMM}`],
-    queryFn: () => veranstaltungenBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
+    queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 
   const veranstaltungen = useMemo(() => data ?? [], [data]);

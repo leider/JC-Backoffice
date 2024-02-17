@@ -1,12 +1,12 @@
 import { Tag, theme } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { StaffType } from "jc-shared/konzert/staff.ts";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
 import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;

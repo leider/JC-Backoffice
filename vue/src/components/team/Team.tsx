@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { veranstaltungenForTeam } from "@/commons/loader.ts";
+import { konzerteForTeam } from "@/commons/loader.ts";
 import { Col, Drawer, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Konzert from "../../../../shared/konzert/konzert.ts";
@@ -18,7 +18,7 @@ function Team() {
 
   const veranstQuery = useQuery({
     queryKey: ["veranstaltung", "zukuenftige"],
-    queryFn: () => veranstaltungenForTeam("zukuenftige"),
+    queryFn: () => konzerteForTeam("zukuenftige"),
     staleTime: 1000 * 60 * 5,
   });
 

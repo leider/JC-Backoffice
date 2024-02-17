@@ -17,7 +17,6 @@ function stringOrDateToDate(object?: string | Date): Date | undefined {
 function toObject<T>(Constructor: any, jsobject?: object) {
   if (jsobject && Object.keys(jsobject).length > 0) {
     delete (jsobject as any)._csrf;
-    delete (jsobject as any)._id;
     return new Constructor(jsobject) as T;
   }
   return null;

@@ -10,9 +10,9 @@ import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
-import Technik from "jc-shared/konzert/technik.ts";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
+import Technik from "jc-shared/veranstaltung/technik.ts";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;

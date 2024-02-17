@@ -4,7 +4,7 @@ import { Col, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
-import { veranstaltungenBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { konzerteBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import sortBy from "lodash/sortBy";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -56,7 +56,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: (Konzert | Verm
 
     const bestaetigte = useQueries({
       queries: [
-        { enabled: isOpen, queryKey: ["veranstaltung", fromTo], queryFn: () => veranstaltungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
+        { enabled: isOpen, queryKey: ["veranstaltung", fromTo], queryFn: () => konzerteBetweenYYYYMM(fromTo[0], fromTo[1]) },
         { enabled: isOpen, queryKey: ["vermietung", fromTo], queryFn: () => vermietungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
       ],
       combine: ([a, b]) => {

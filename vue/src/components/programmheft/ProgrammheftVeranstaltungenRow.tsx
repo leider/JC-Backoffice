@@ -3,7 +3,7 @@ import { ProgrammheftVeranstaltungenMonat } from "@/components/programmheft/Prog
 import * as React from "react";
 import Konzert from "../../../../shared/konzert/konzert.ts";
 import { useQuery } from "@tanstack/react-query";
-import { veranstaltungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useEffect, useState } from "react";
 import groupBy from "lodash/groupBy";
@@ -11,7 +11,7 @@ import groupBy from "lodash/groupBy";
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
     queryKey: ["veranstaltung", `${start.yyyyMM}`],
-    queryFn: () => veranstaltungenBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
+    queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
   });
 
   const [veranstaltungen, setVeranstaltungen] = useState<Konzert[]>([]);

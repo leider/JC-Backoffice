@@ -2,7 +2,7 @@ import Konzert, { ChangelistItem } from "../../../../../shared/konzert/konzert.t
 import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveVeranstaltung, saveVermietung } from "@/commons/loader.ts";
+import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -54,7 +54,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const brauchtTechnik = useMemo(() => (veranstaltungOderVermietung as Vermietung).brauchtTechnik, [veranstaltungOderVermietung]);
 
   const mutateVeranstaltung = useMutation({
-    mutationFn: saveVeranstaltung,
+    mutationFn: saveKonzert,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
       showSuccess({ text: "Die Veranstaltung wurde gespeichert" });

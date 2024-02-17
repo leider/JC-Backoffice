@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { mailRules as mailRulesRestCall, sendMail, veranstaltungenForTeam } from "@/commons/loader.ts";
+import { mailRules as mailRulesRestCall, sendMail, konzerteForTeam } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Tag } from "antd";
@@ -38,7 +38,7 @@ export default function SendMail() {
 
   const { mailRules, veranstaltungen } = useQueries({
     queries: [
-      { queryKey: ["veranstaltung", "zukuenftige"], queryFn: () => veranstaltungenForTeam("zukuenftige") },
+      { queryKey: ["veranstaltung", "zukuenftige"], queryFn: () => konzerteForTeam("zukuenftige") },
       { queryKey: ["mailRules"], queryFn: mailRulesRestCall },
     ],
     combine: ([a, b]) => {

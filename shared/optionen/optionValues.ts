@@ -111,7 +111,6 @@ export default class OptionValues {
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object) {
-      delete object._id;
       Object.assign(this, object, {
         typen: sortByNameCaseInsensitive(object.typen || []),
         kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),

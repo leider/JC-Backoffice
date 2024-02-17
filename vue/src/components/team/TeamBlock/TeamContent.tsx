@@ -2,7 +2,7 @@ import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { List } from "antd";
 import { AddRemoveStaffButton, ActiveUsers } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
 import React, { useMemo, useState } from "react";
-import { StaffType } from "jc-shared/konzert/staff.ts";
+import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 interface ContentProps {
   veranstaltung: Konzert;

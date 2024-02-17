@@ -4,7 +4,7 @@ import Konzert from "../../../../../shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { veranstaltungForUrl } from "@/commons/loader.ts";
+import { konzertForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import groupBy from "lodash/groupBy";
 import StaffInPreview from "@/components/konzert/preview/StaffInPreview.tsx";
@@ -22,7 +22,7 @@ export default function Preview() {
   const { url } = useParams();
   const konzertQueryData = useQuery({
     queryKey: ["veranstaltung", url],
-    queryFn: () => veranstaltungForUrl(url || ""),
+    queryFn: () => konzertForUrl(url || ""),
   });
   const { currentUser, optionen } = useJazzContext();
 

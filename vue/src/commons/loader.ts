@@ -10,12 +10,12 @@ import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
 import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
-import { StaffType } from "jc-shared/konzert/staff";
 import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "../../../shared/konzert/konzert.ts";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
+import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -103,17 +103,17 @@ function handleVeranstaltungen(result?: any[]): Konzert[] {
   return result?.map((each: any) => new Konzert(each)) || [];
 }
 
-export async function veranstaltungenBetweenYYYYMM(start: string, end: string) {
+export async function konzerteBetweenYYYYMM(start: string, end: string) {
   const result = await getForType("json", `/rest/veranstaltungen/${start}/${end}`);
   return handleVeranstaltungen(result);
 }
 
-export async function veranstaltungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
+export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
   const result = await getForType("json", `/rest/veranstaltungen/${selector}`);
   return handleVeranstaltungen(result);
 }
 
-export async function veranstaltungForUrl(url: string): Promise<Konzert> {
+export async function konzertForUrl(url: string): Promise<Konzert> {
   if (url === "new") {
     return new Konzert();
   }
@@ -121,10 +121,10 @@ export async function veranstaltungForUrl(url: string): Promise<Konzert> {
     const realUrl = url.substring(8);
     const result = await getForType("json", `/rest/veranstaltungen/${encodeURIComponent(realUrl)}`);
     if (result) {
-      const veranstaltung = new Konzert(result);
-      veranstaltung.reset();
-      veranstaltung.kopf.titel = `Kopie von ${veranstaltung.kopf.titel}`;
-      return veranstaltung;
+      const konzert = new Konzert(result);
+      konzert.reset();
+      konzert.kopf.titel = `Kopie von ${konzert.kopf.titel}`;
+      return konzert;
     } else {
       return result;
     }
@@ -133,16 +133,16 @@ export async function veranstaltungForUrl(url: string): Promise<Konzert> {
   return result ? new Konzert(result) : result;
 }
 
-export async function saveVeranstaltung(veranstaltung: Konzert) {
+export async function saveKonzert(konzert: Konzert) {
   return standardFetch({
     method: "POST",
     url: "/rest/veranstaltungen",
-    data: veranstaltung.toJSON(),
+    data: konzert.toJSON(),
     contentType: "json",
   });
 }
 
-export async function deleteVeranstaltungWithId(id: string) {
+export async function deleteKozertWithId(id: string) {
   return standardFetch({
     method: "DELETE",
     url: "/rest/veranstaltungen",
@@ -152,20 +152,20 @@ export async function deleteVeranstaltungWithId(id: string) {
 }
 
 // Staff
-export async function addOrRemoveUserToSection(veranstaltung: Konzert, section: StaffType, add: boolean) {
+export async function addOrRemoveUserToSection(konzert: Konzert, section: StaffType, add: boolean) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
+    url: `/rest/${konzert.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
     data: { section },
     contentType: "json",
   });
 }
 
 // Gäste
-export async function updateGastInSection(veranstaltung: Konzert, item: NameWithNumber, art: GastArt) {
+export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/updateGastInSection`,
+    url: `/rest/${konzert.fullyQualifiedUrl}/updateGastInSection`,
     data: { item, art },
     contentType: "json",
   });
@@ -482,15 +482,15 @@ export async function exportRiderAsJson(riderJson: any) {
   return showFile(blob, "rider.json");
 }
 
-export async function openKassenzettel(veranstaltung: Konzert) {
-  const pdf = await getForType("pdf", `/pdf/kassenzettel/${veranstaltung.url}`);
+export async function openKassenzettel(konzert: Konzert) {
+  const pdf = await getForType("pdf", `/pdf/kassenzettel/${konzert.url}`);
   if (pdf) {
     showFile(pdf);
   }
 }
 
-export async function openVertrag(veranstaltung: Konzert) {
-  const pdf = await getForType("pdf", `/pdf/vertrag/${veranstaltung.url}/${veranstaltung.vertrag.sprache.toLowerCase()}`);
+export async function openVertrag(konzert: Konzert) {
+  const pdf = await getForType("pdf", `/pdf/vertrag/${konzert.url}/${konzert.vertrag.sprache.toLowerCase()}`);
   if (pdf) {
     showFile(pdf);
   }
@@ -510,10 +510,10 @@ export async function imgFullsize(url: any) {
   }
 }
 
-export async function imgzipForVeranstaltung(veranstaltung: Konzert) {
-  const zip = await getForType("zip", `/imgzipForVeranstaltung/${veranstaltung.url}`);
+export async function imgzipForVeranstaltung(konzert: Konzert) {
+  const zip = await getForType("zip", `/imgzipForVeranstaltung/${konzert.url}`);
   if (zip) {
-    showFile(zip, `JazzClub_Bilder_${veranstaltung.kopf.titel}.zip`);
+    showFile(zip, `JazzClub_Bilder_${konzert.kopf.titel}.zip`);
   }
 }
 

@@ -5,7 +5,7 @@ import flatten from "lodash/flatten";
 import intersection from "lodash/intersection";
 import differenceBy from "lodash/differenceBy";
 import { useQueries } from "@tanstack/react-query";
-import { imagenames as imagenamesQuery, veranstaltungenForTeam } from "@/commons/loader.ts";
+import { imagenames as imagenamesQuery, konzerteForTeam } from "@/commons/loader.ts";
 
 function suitableForImageOverview(veranstaltung: Konzert): ImageOverviewVeranstaltung {
   return {
@@ -21,7 +21,7 @@ export function useCreateImagenamesSections() {
   const { imagenames, veranstaltungen } = useQueries({
     queries: [
       { queryKey: ["imagenames"], queryFn: imagenamesQuery },
-      { queryKey: ["veranstaltungenAlle"], queryFn: () => veranstaltungenForTeam("alle") },
+      { queryKey: ["veranstaltungenAlle"], queryFn: () => konzerteForTeam("alle") },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {

@@ -1,10 +1,10 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Row } from "antd";
 import React from "react";
-import Staff, { StaffType } from "jc-shared/konzert/staff.ts";
 import User from "jc-shared/user/user.ts";
 import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 function StaffList({
   header,
