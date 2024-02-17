@@ -56,7 +56,7 @@ export default abstract class Veranstaltung {
       const result: MinimalVeranstaltung = {} as MinimalVeranstaltung;
       Object.assign(result, {
         id: `${this.id}ghost${ghostStart.toISOString}`,
-        startDate: ghostStart.toJSDate,
+        startDate: ghostStart.setUhrzeit(0, 0).toJSDate,
         kopf: this.kopf,
         url: this.url,
         ghost: true,

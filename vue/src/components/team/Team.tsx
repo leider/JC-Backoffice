@@ -67,7 +67,7 @@ function Team() {
               </Space>
             }
           />
-          <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
+          <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
             {monate.map((monat) => {
               return <TeamMonatGroup key={monat} monat={monat} renderTeam />;
             })}

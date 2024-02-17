@@ -27,8 +27,7 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
   const { currentUser, showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
-  const teamContext = useContext(TeamContext);
-  const usersAsOptions = teamContext.usersAsOptions;
+  const { usersAsOptions } = useContext(TeamContext);
 
   const forVermietung = useMemo(() => {
     return veranstaltungOderVermietung.isVermietung;

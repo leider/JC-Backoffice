@@ -21,13 +21,14 @@ import { useQueries } from "@tanstack/react-query";
 import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 export const TeamContext = createContext<{
-  veranstaltungenUndVermietungenNachMonat: {
-    [index: string]: (Konzert | Vermietung)[];
+  veranstaltungenNachMonat: {
+    [index: string]: Veranstaltung[];
   };
   usersAsOptions: UserWithKann[];
-}>({ veranstaltungenUndVermietungenNachMonat: {}, usersAsOptions: [] });
+}>({ veranstaltungenNachMonat: {}, usersAsOptions: [] });
 
 export default function Veranstaltungen() {
   useDirtyBlocker(false);
@@ -88,7 +89,7 @@ export default function Veranstaltungen() {
   const alle = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
 
-    return sortBy(queryResult.concat(additionals), "startDate");
+    return sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
   }, [queryResult]);
 
   const { allUsers, currentUser } = useJazzContext();
@@ -99,7 +100,7 @@ export default function Veranstaltungen() {
   const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
   const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
-    [index: string]: (Konzert | Vermietung)[];
+    [index: string]: Veranstaltung[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
@@ -139,7 +140,7 @@ export default function Veranstaltungen() {
         }
       });
     }
-    const result = groupBy(filtered, (veranst: Konzert | Vermietung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(filtered, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenUndVermietungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [pressefilter, alle, PRESSEFILTERS]);
@@ -186,7 +187,7 @@ export default function Veranstaltungen() {
               </Col>
             </Row>
           </Form>
-          <TeamContext.Provider value={{ veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
+          <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
             {monate.map((monat) => {
               return <TeamMonatGroup key={monat} monat={monat} />;
             })}

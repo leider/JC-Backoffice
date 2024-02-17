@@ -14,8 +14,7 @@ interface TeamStaffRowProps {
 }
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
-  const teamContext = useContext(TeamContext);
-  const usersAsOptions = teamContext.usersAsOptions;
+  const { usersAsOptions } = useContext(TeamContext);
 
   const [names, setNames] = useState<string[]>([]);
 

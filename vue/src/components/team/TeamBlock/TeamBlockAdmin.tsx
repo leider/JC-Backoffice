@@ -25,7 +25,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
-      <Col xs={24} sm={12} lg={8} xl={6} xxl={4}>
+      <Col span={24}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor: color, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={initiallyOpen} />
