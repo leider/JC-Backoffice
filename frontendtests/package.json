@@ -14,7 +14,7 @@
   },
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../start",
-    "stopTestserver": "./stopTestserver.sh",
+    "runcodeceptjs-update-steps": "codeceptjs def",
     "test": "codeceptjs run"
   }
 }
