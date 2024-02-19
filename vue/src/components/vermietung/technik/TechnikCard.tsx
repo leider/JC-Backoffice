@@ -10,11 +10,13 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TechnikCard() {
   const context = useContext(VermietungContext);
   const form = context!.form;
-  const { backlineJazzclub, backlineRockshop } = context!.optionen;
+  const { optionen } = useJazzContext();
+  const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {

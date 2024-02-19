@@ -10,11 +10,12 @@ import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function VermietungTabs() {
   const context = useContext(VermietungContext);
+  const { optionen } = useJazzContext();
   const form = context!.form;
-  const optionen = context!.optionen;
 
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");

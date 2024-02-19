@@ -3,7 +3,7 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { App, Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
 import "easymde/dist/easymde.min.css";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import Angebot, { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
+import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
@@ -18,14 +18,9 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 export default function InfoCard() {
   const vermietungContext = useContext(VermietungContext);
   const { currentUser } = useJazzContext();
-  const { modal } = App.useApp();
 
   const form = vermietungContext!.form;
-  const angFields = Form.useWatch("angebot", { form, preserve: true });
-
-  const angebot = useMemo(() => {
-    return new Angebot(angFields);
-  }, [angFields]);
+  const status = Form.useWatch(["angebot", "status"], { form, preserve: true });
 
   const startAndEnd = Form.useWatch("startAndEnd", { form, preserve: true });
   const vergangen = useMemo(() => {
@@ -36,6 +31,7 @@ export default function InfoCard() {
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 
+  const { modal } = App.useApp();
   function freigeben() {
     modal.confirm({
       type: "confirm",
@@ -138,7 +134,7 @@ export default function InfoCard() {
                   text="Rechnung freigeben..."
                   icon={"Unlock"}
                   onClick={freigeben}
-                  disabled={angebot.status !== "abgerechnet" || vermietungContext?.isDirty || !darfFreigeben}
+                  disabled={status !== "abgerechnet" || vermietungContext?.isDirty || !darfFreigeben}
                 />
               </Form.Item>
             ) : (
@@ -157,7 +153,7 @@ export default function InfoCard() {
                 <TextField name={["angebot", "freigabe"]} label="Durch" disabled />
               </>
             ))}
-        </Col>{" "}
+        </Col>
       </Row>
     </Collapsible>
   );

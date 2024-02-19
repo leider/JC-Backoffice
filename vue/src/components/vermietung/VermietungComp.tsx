@@ -9,11 +9,10 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
 import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
-import OptionValues from "jc-shared/optionen/optionValues.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; optionen: OptionValues; isDirty: boolean } | null>(null);
+export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; isDirty: boolean } | null>(null);
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -64,10 +63,10 @@ export default function VermietungComp() {
   }, []);
   useDirtyBlocker(dirty);
 
-  const { currentUser, optionen, showSuccess } = useJazzContext();
+  const { currentUser, showSuccess } = useJazzContext();
   const navigate = useNavigate();
 
-  const freigabe = Form.useWatch(["angebot", "freigabe"], { form });
+  const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });
 
   useEffect(() => {
     updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
@@ -105,7 +104,7 @@ export default function VermietungComp() {
   }
 
   return (
-    <VermietungContext.Provider value={{ form, optionen, isDirty: dirty }}>
+    <VermietungContext.Provider value={{ form, isDirty: dirty }}>
       <Form
         form={form}
         onValuesChange={() => {

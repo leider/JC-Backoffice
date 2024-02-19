@@ -1,13 +1,12 @@
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import React, { useContext } from "react";
+import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function ArtistCard() {
-  const context = useContext(VermietungContext);
-  const optionen = context!.optionen;
+  const { optionen } = useJazzContext();
 
   return (
     <Collapsible suffix="allgemeines" label="Künstler">
