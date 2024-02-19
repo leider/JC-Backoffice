@@ -45,7 +45,7 @@ export default abstract class Veranstaltung {
   abstract get isVermietung(): boolean;
 
   get fullyQualifiedUrl(): string {
-    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietungen/" : "/veranstaltungen/"}${encodeURIComponent(this.url || "")}`;
   }
 
   // eslint-disable-next-line no-unused-vars
