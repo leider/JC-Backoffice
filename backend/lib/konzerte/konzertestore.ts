@@ -39,7 +39,7 @@ export default {
 
   vergangene: function vergangene() {
     const now = new DatumUhrzeit();
-    return byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now);
+    return byDateRangeInDescendingOrder(now.minus({ monate: 24 }), now);
   },
 
   alle: function alle() {

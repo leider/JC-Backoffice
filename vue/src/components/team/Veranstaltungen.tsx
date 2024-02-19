@@ -91,8 +91,8 @@ export default function Veranstaltungen() {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
 
     const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
-    return period === "zukünftige" ? sortedAscending : reverse(sortedAscending);
-  }, [period, queryResult]);
+    return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
+  }, [queryResult, selectedPeriod]);
 
   const { allUsers, currentUser } = useJazzContext();
   const navigate = useNavigate();
