@@ -10,7 +10,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
   function ButtonAbendkasse() {
     const { color, icon } = colorsAndIconsForSections;
     const { currentUser } = useJazzContext();
-    if (!currentUser.accessrights.isAbendkasse) {
+    if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
       return;
     }
     return (
@@ -21,7 +21,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
         color={color("kasse")}
         icon={icon("kasse")}
         to={{
-          pathname: `/konzert/${url}`,
+          pathname: `/veranstaltung/${url}`,
           search: "page=kasse",
         }}
       />
