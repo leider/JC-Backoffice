@@ -9,7 +9,6 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TextField } from "@/widgets/TextField.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -86,7 +85,7 @@ export default function InfoCard() {
   const { useToken } = theme;
   const token = useToken().token;
   return (
-    <Collapsible suffix="angebot" label="Infos" noTopBorder>
+    <Collapsible suffix="angebot" label="Infos">
       <Row gutter={12}>
         <Col span={24}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
@@ -94,11 +93,6 @@ export default function InfoCard() {
               <Radio.Group optionType="button" buttonStyle="solid" options={statusse} disabled={!!freigabe} />
             </Form.Item>
           </ConfigProvider>
-        </Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={24}>
-          <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]} />
         </Col>
       </Row>
       {vermietungContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
