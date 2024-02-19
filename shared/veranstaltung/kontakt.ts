@@ -17,20 +17,23 @@ export default class Kontakt {
     }
   }
 
+  private line(number: number, alternative = "-") {
+    return this.addressLines[number] || alternative;
+  }
   get strasse(): string {
-    if (this.adresse) {
-      const lines = this.adresse.match(/[^\r\n]+/g);
-      return lines?.[0] || "-";
-    }
-    return "-";
+    return this.line(0);
   }
 
   get ort(): string {
+    return this.line(1);
+  }
+
+  get addressLines(): string[] {
     if (this.adresse) {
       const lines = this.adresse.match(/[^\r\n]+/g);
-      return lines?.[1] || "-";
+      return lines ?? [];
     }
-    return "-";
+    return [];
   }
 
   get einzeiligeAdresse(): string {

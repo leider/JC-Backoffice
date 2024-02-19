@@ -22,6 +22,7 @@ import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import reverse from "lodash/reverse";
 
 export const TeamContext = createContext<{
   veranstaltungenNachMonat: {
@@ -89,8 +90,9 @@ export default function Veranstaltungen() {
   const alle = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
 
-    return sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
-  }, [queryResult]);
+    const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
+    return period === "zukünftige" ? sortedAscending : reverse(sortedAscending);
+  }, [period, queryResult]);
 
   const { allUsers, currentUser } = useJazzContext();
   const navigate = useNavigate();

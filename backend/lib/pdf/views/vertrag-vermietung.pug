@@ -3,10 +3,9 @@ extends vertrag-briefpapier
 include mixins
 
 block adresse
-  p.
-    #{vermietung.vertragspartner.name}<br>
-    #{vermietung.vertragspartner.strasse}<br>
-    #{vermietung.vertragspartner.ort}
+  span #{vermietung.vertragspartner.name}<br>
+  each line in vermietung.vertragspartner.addressLines
+    span #{line}<br>
 
 block content1
   - var start = vermietung.startDatumUhrzeit;

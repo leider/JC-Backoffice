@@ -85,15 +85,15 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         {Object.keys(byDay).map((day, idx) => {
           return (
             <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx}>
-              {sortBy(byDay[day], (v) => v.startDatumUhrzeit.toISOString).map((veranstaltung, index) => {
+              {sortBy(byDay[day], (v) => v.startDatumUhrzeit.toISOString).map((veranstaltung) => {
                 return (
-                  <Row>
+                  <Row key={veranstaltung.id}>
                     {veranstaltung.isVermietung ? (
-                      <TeamBlockVermietung key={index} vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />
+                      <TeamBlockVermietung vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />
                     ) : renderTeam ? (
-                      <TeamBlockNormal key={index} veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
+                      <TeamBlockNormal veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
                     ) : (
-                      <TeamBlockAdmin key={index} veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
+                      <TeamBlockAdmin veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />
                     )}
                   </Row>
                 );
