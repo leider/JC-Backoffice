@@ -28,7 +28,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
       <Col span={24}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor: color, padding: "2px 16px" }}>
-            <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={initiallyOpen} />
+            <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
           </div>
         ) : (
           <Collapse
@@ -44,11 +44,11 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
                 key: veranstaltung.id || "",
                 style: { backgroundColor: color },
                 className: "team-block",
-                label: <TeamBlockHeader veranstaltungOderVermietung={veranstaltung} expanded={expanded} />,
+                label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
                 extra: expanded && <Extras veranstaltung={veranstaltung} />,
                 children: (
                   <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                    <AdminContent veranstaltungOderVermietung={veranstaltung}></AdminContent>
+                    <AdminContent veranstaltung={veranstaltung}></AdminContent>
                   </ConfigProvider>
                 ),
               },

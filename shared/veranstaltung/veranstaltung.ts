@@ -42,10 +42,16 @@ export default abstract class Veranstaltung {
     }
   }
 
+  abstract toJSON(): object;
+
   abstract get isVermietung(): boolean;
 
   get fullyQualifiedUrl(): string {
     return `${this.isVermietung ? "/vermietungen/" : "/veranstaltungen/"}${encodeURIComponent(this.url || "")}`;
+  }
+
+  get fullyQualifiedPreviewUrl(): string {
+    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}preview/${encodeURIComponent(this.url || "")}`;
   }
 
   // eslint-disable-next-line no-unused-vars

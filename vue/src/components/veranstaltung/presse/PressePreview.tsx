@@ -4,14 +4,13 @@ import Renderer from "jc-shared/commons/renderer.ts";
 import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
-import VeranstaltungVermietungFormatter from "jc-shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
-import Konzert from "jc-shared/konzert/konzert.ts";
+import VeranstaltungFormatter from "../../../../../shared/veranstaltung/VeranstaltungFormatter.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
-export function PressePreview({ veranstVermiet }: { veranstVermiet: Konzert | Vermietung }) {
-  function updatePreview(veranstVermiet: Konzert | Vermietung) {
-    const presse = veranstVermiet.presse;
+export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  function updatePreview(veranstaltung: Veranstaltung) {
+    const presse = veranstaltung.presse;
     const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
     const infoline1 = presse.checked ? "" : "ACHTUNG: Presse ist NICHT OK\n";
     const infoline2 = isEmpty(presse.text) ? "ACHTUNG: Text NICHT final" : "";
@@ -20,7 +19,7 @@ export function PressePreview({ veranstVermiet }: { veranstVermiet: Konzert | Ve
       Renderer.render(
         `## ${infoline1}
 ## ${infoline2}
-${new VeranstaltungVermietungFormatter(veranstVermiet).presseTemplate + textToUse}
+${new VeranstaltungFormatter(veranstaltung).presseTemplate + textToUse}
 ${presse.fullyQualifiedJazzclubURL}`,
       ) + `<h4>Bilder:</h4>`,
     );
@@ -28,13 +27,13 @@ ${presse.fullyQualifiedJazzclubURL}`,
 
   const [preview, setPreview] = useState("");
   useEffect(() => {
-    updatePreview(veranstVermiet);
-  }, [veranstVermiet]);
+    updatePreview(veranstaltung);
+  }, [veranstaltung]);
 
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
-      {veranstVermiet.presse.image.map((img) => (
+      {veranstaltung.presse.image.map((img) => (
         <Image
           key={img}
           src={`/imagepreview/${img}`}

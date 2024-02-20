@@ -7,10 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { konzertForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import groupBy from "lodash/groupBy";
-import StaffInPreview from "@/components/konzert/preview/StaffInPreview.tsx";
+import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
 import KasseInPreview from "@/components/konzert/preview/KasseInPreview.tsx";
-import InfoInPreview from "@/components/konzert/preview/InfoInPreview.tsx";
-import TechnikInPreview from "@/components/konzert/preview/TechnikInPreview.tsx";
+import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
+import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
 import GaesteInPreview from "@/components/konzert/preview/GaesteInPreview.tsx";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
@@ -72,14 +72,14 @@ export default function Preview() {
       <Row gutter={12}>
         <Col xs={24} lg={12}>
           <GaesteInPreview konzert={konzert} />
-          <StaffInPreview konzert={konzert} />
+          <StaffInPreview veranstaltung={konzert} />
           <KasseInPreview konzert={konzert} url={url} />
-          <InfoInPreview konzert={konzert} />
-          <TechnikInPreview konzert={konzert} />
+          <InfoInPreview veranstaltung={konzert} />
+          <TechnikInPreview veranstaltung={konzert} />
         </Col>
         <Col xs={24} lg={12}>
           <Collapsible suffix="presse" label="Pressetext">
-            <PressePreview veranstVermiet={konzert} />
+            <PressePreview veranstaltung={konzert} />
           </Collapsible>
           {konzert.agentur.name && (
             <Collapsible suffix="allgemeines" label="Agentur">

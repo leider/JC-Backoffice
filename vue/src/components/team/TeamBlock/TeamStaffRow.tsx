@@ -7,10 +7,12 @@ import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
-  veranstaltung: Konzert;
+  veranstaltung: Veranstaltung;
 }
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
@@ -43,7 +45,7 @@ export function AddRemoveStaffButton({
   sectionName,
   veranstaltung,
   staffUpdated,
-}: TeamStaffRowProps & { staffUpdated: (veranst: Konzert) => void }) {
+}: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
   const { currentUser } = useJazzContext();
 
   const isIn = useMemo(
@@ -55,8 +57,13 @@ export function AddRemoveStaffButton({
   const mutate = useMutation({
     mutationFn: async (add: boolean) => addOrRemoveUserToSection(veranstaltung, sectionName, add),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
-      staffUpdated(new Konzert(data));
+      if (veranstaltung.isVermietung) {
+        queryClient.invalidateQueries({ queryKey: ["vermietung"] });
+        staffUpdated(new Vermietung(data));
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+        staffUpdated(new Konzert(data));
+      }
     },
   });
 

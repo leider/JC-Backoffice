@@ -13,44 +13,45 @@ import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPan
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ContentProps {
-  veranstaltungOderVermietung: Konzert | Vermietung;
+  veranstaltung: Veranstaltung;
 }
 
-export default function AdminContent({ veranstaltungOderVermietung: veranVermiet }: ContentProps) {
+export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
   const [form] = Form.useForm();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
-  const [veranstaltungOderVermietung, setVeranstaltungOderVermietung] = useState<Konzert | Vermietung>(new Konzert());
+  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Konzert());
   const { currentUser, showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const { usersAsOptions } = useContext(TeamContext);
 
   const forVermietung = useMemo(() => {
-    return veranstaltungOderVermietung.isVermietung;
-  }, [veranstaltungOderVermietung]);
+    return veranstaltung.isVermietung;
+  }, [veranstaltung]);
 
   useEffect(
     () => {
-      const deepCopy = veranstaltungOderVermietung.toJSON();
+      const deepCopy = veranstaltung.toJSON();
       form.resetFields();
       form.setFieldsValue(deepCopy);
-      setInitialValue(veranstaltungOderVermietung.toJSON());
+      setInitialValue(veranstaltung.toJSON());
       setDirty(false);
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [veranstaltungOderVermietung],
+    [veranstaltung],
   );
 
   useEffect(() => {
-    setVeranstaltungOderVermietung(veranVermiet);
+    setVeranstaltung(veranVermiet);
   }, [veranVermiet]);
 
   const queryClient = useQueryClient();
 
-  const brauchtTechnik = useMemo(() => (veranstaltungOderVermietung as Vermietung).brauchtTechnik, [veranstaltungOderVermietung]);
+  const brauchtTechnik = useMemo(() => (veranstaltung as Vermietung).brauchtTechnik, [veranstaltung]);
 
   const mutateVeranstaltung = useMutation({
     mutationFn: saveKonzert,
@@ -86,19 +87,16 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
         result = new Konzert(veranst);
         mutateVeranstaltung.mutate(result);
       }
-      setVeranstaltungOderVermietung(result);
+      setVeranstaltung(result);
     });
   }
 
   const color = useMemo(
-    () => (veranstaltungOderVermietung.isVermietung ? "#f6eee1" : veranstaltungOderVermietung.kopf.eventTypRich?.color || "#6c757d"),
-    [veranstaltungOderVermietung],
+    () => (veranstaltung.isVermietung ? "#f6eee1" : veranstaltung.kopf.eventTypRich?.color || "#6c757d"),
+    [veranstaltung],
   );
 
-  const textColor = useMemo(
-    () => (veranstaltungOderVermietung.isVermietung ? "black" : "white"),
-    [veranstaltungOderVermietung.isVermietung],
-  );
+  const textColor = useMemo(() => (veranstaltung.isVermietung ? "black" : "white"), [veranstaltung.isVermietung]);
 
   return (
     <Form
@@ -131,25 +129,19 @@ export default function AdminContent({ veranstaltungOderVermietung: veranVermiet
               <SaveButton disabled={!dirty} />
             ) : (
               <>
-                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="allgemeines" isVermietung={forVermietung} />
-                {!forVermietung && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="gaeste" isVermietung={forVermietung} />
+                <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines" isVermietung={forVermietung} />
+                {!forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="gaeste" isVermietung={forVermietung} />}
+                {forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="angebot" isVermietung={forVermietung} />}
+                {(!forVermietung || (veranstaltung as Vermietung).brauchtTechnik) && (
+                  <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik" isVermietung={forVermietung} />
                 )}
-                {forVermietung && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="angebot" isVermietung={forVermietung} />
+                <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben" isVermietung={forVermietung} />
+                {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel" />}
+                {!forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse" />}
+                {(!forVermietung || (veranstaltung as Vermietung).brauchtPresse) && (
+                  <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse" isVermietung={forVermietung} />
                 )}
-                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtTechnik) && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="technik" isVermietung={forVermietung} />
-                )}
-                <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="ausgaben" isVermietung={forVermietung} />
-                {veranstaltungOderVermietung.artist.brauchtHotel && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="hotel" />
-                )}
-                {!forVermietung && <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="kasse" />}
-                {(!forVermietung || (veranstaltungOderVermietung as Vermietung).brauchtPresse) && (
-                  <ButtonInAdminPanel url={veranstaltungOderVermietung.url ?? ""} type="presse" isVermietung={forVermietung} />
-                )}
-                {!forVermietung && <ButtonPreview veranstaltung={veranstaltungOderVermietung as Konzert} />}
+                <ButtonPreview veranstaltung={veranstaltung} />
               </>
             )}
           </Row>

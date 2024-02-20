@@ -11,13 +11,21 @@ import { vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 
 const app = express();
 
-async function standardHandler(req: Request, res: Response, vermietungen: Vermietung[]) {
-  if (!(req.user as User).accessrights.isOrgaTeam) {
-    return resToJson(res, []);
+/*
+ * Alle unbestätigten und ohne Personal filtern
+ */
+function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user: User): Vermietung[] {
+  if (user.accessrights.isBookingTeam) {
+    return vermietungen;
   }
+  return vermietungen.filter((v) => v.kopf.confirmed && v.brauchtPersonal);
+}
+
+async function standardHandler(req: Request, res: Response, vermietungen: Vermietung[]) {
+  const user: User = req.user as User;
   resToJson(
     res,
-    vermietungen.map((v) => v.toJSON()),
+    filterUnbestaetigteFuerJedermann(vermietungen, user).map((v) => v.toJSON()),
   );
 }
 
@@ -78,6 +86,23 @@ app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) =
 app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
   await store.deleteVermietungById(req.body.id, req.user as User);
   resToJson(res);
+});
+
+async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
+  const vermietung = await store.getVermietung(req.params.url);
+  if (!vermietung) {
+    return res.sendStatus(404);
+  }
+  vermietung.staff[func](req.user as User, req.body.section);
+  return saveAndReply(req, res, vermietung);
+}
+
+app.post("/vermietungen/:url/addUserToSection", async (req: Request, res: Response) => {
+  return addOrRemoveUserFromSection("addUserToSection", req, res);
+});
+
+app.post("/vermietungen/:url/removeUserFromSection", async (req: Request, res: Response) => {
+  return addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
 export default app;

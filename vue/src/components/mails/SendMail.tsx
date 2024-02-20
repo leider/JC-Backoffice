@@ -7,7 +7,7 @@ import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User from "jc-shared/user/user";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import VeranstaltungVermietungFormatter from "../../../../shared/veranstaltung/VeranstaltungVermietungFormatter.ts";
+import VeranstaltungFormatter from "../../../../shared/veranstaltung/VeranstaltungFormatter.ts";
 import { TextField } from "@/widgets/TextField";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import Message from "jc-shared/mail/message";
@@ -60,7 +60,7 @@ export default function SendMail() {
   const rulesDescriptions = useMemo(() => sortBy(uniq(mailRules.map((rule) => rule.name))), [mailRules]);
 
   const veranstaltungenDescriptions = useMemo(
-    () => veranstaltungen.map((v) => new VeranstaltungVermietungFormatter(v).description),
+    () => veranstaltungen.map((v) => new VeranstaltungFormatter(v).description),
     [veranstaltungen],
   );
 
@@ -135,14 +135,14 @@ export default function SendMail() {
     form.validateFields().then(async () => {
       const mail = form.getFieldsValue(true);
       const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
-        mail.selectedVeranstaltungen.includes(new VeranstaltungVermietungFormatter(ver).description),
+        mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
       );
       const addresses = effectiveUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
       const markdownToSend =
         mail.markdown +
         "\n\n---\n" +
         selectedVeranstaltungen
-          .map((veranst) => new VeranstaltungVermietungFormatter(veranst).presseTextForMail(window.location.origin))
+          .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
       const result = new Message({ subject: mail.subject, markdown: markdownToSend }, currentUser.name, currentUser.email);
       result.setBcc(addresses);

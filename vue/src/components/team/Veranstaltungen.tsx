@@ -87,6 +87,7 @@ export default function Veranstaltungen() {
       return [];
     },
   });
+
   const alle = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
 

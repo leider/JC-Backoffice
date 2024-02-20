@@ -69,7 +69,7 @@ export default function Info() {
           {veranstaltungen.map((veranst) => {
             return (
               <Col lg={12} key={veranst.id}>
-                <PressePreview veranstVermiet={veranst} />
+                <PressePreview veranstaltung={veranst} />
                 <Divider />
               </Col>
             );

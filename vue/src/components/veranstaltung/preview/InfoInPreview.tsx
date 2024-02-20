@@ -1,15 +1,15 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import renderer from "jc-shared/commons/renderer.ts";
 import React from "react";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
-export default function InfoInPreview({ konzert }: { konzert: Konzert }) {
+export default function InfoInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   return (
-    konzert.kopf.beschreibung?.trim() && (
+    veranstaltung.kopf.beschreibung?.trim() && (
       <Collapsible suffix="allgemeines" label="Informationen">
         <div
           dangerouslySetInnerHTML={{
-            __html: renderer.render(konzert.kopf.beschreibung),
+            __html: renderer.render(veranstaltung.kopf.beschreibung),
           }}
         />
       </Collapsible>

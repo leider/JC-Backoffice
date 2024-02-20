@@ -50,7 +50,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
       <Col span={24}>
         {vermietung.ghost ? (
           <div style={{ backgroundColor: new Color("#f6eee1").lighten(0.05).hex(), padding: "2px 16px" }}>
-            <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={initiallyOpen} />
+            <TeamBlockHeader veranstaltung={vermietung} expanded={initiallyOpen} />
           </div>
         ) : (
           <Collapse
@@ -66,11 +66,11 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
                 key: vermietung.id || "",
                 style: { backgroundColor: "#f6eee1" },
                 className: "team-block",
-                label: <TeamBlockHeader veranstaltungOderVermietung={vermietung} expanded={expanded} />,
+                label: <TeamBlockHeader veranstaltung={vermietung} expanded={expanded} />,
                 extra: expanded && <Extras vermietung={vermietung} />,
                 children: (
                   <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
-                    <AdminContent veranstaltungOderVermietung={vermietung} />
+                    <AdminContent veranstaltung={vermietung} />
                   </ConfigProvider>
                 ),
               },

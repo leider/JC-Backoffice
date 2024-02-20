@@ -16,6 +16,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -152,17 +153,17 @@ export async function deleteKozertWithId(id: string) {
 }
 
 // Staff
-export async function addOrRemoveUserToSection(konzert: Konzert, section: StaffType, add: boolean) {
+export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${konzert.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
+    url: `/rest/${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
     data: { section },
     contentType: "json",
   });
 }
 
 // Gäste
-export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
+export async function updateGastInSection(konzert: Veranstaltung, item: NameWithNumber, art: GastArt) {
   return standardFetch({
     method: "POST",
     url: `/rest/${konzert.fullyQualifiedUrl}/updateGastInSection`,

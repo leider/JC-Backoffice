@@ -1,19 +1,14 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Divider, Row } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
-import { Rider } from "jc-shared/rider/rider.ts";
+import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { riderFor } from "@/commons/loader.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
-export default function TechnikInPreview({ konzert, url }: { konzert: Konzert; url?: string }) {
-  const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
-  const [rider, setRider] = useState<Rider>(new Rider());
-  useEffect(() => {
-    if (riderQuery.data) {
-      setRider(riderQuery.data);
-    }
-  }, [riderQuery.data]);
+export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  const url = useMemo(() => encodeURIComponent(veranstaltung.url || ""), [veranstaltung.url]);
+  const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url) });
+  const rider = useMemo(() => riderQuery.data, [riderQuery.data]);
 
   const printref = useMemo(() => {
     return window.location.href.replace("vue/veranstaltung/preview", "pdf/rider");
@@ -22,46 +17,46 @@ export default function TechnikInPreview({ konzert, url }: { konzert: Konzert; u
   return (
     <Collapsible suffix="technik" label="Technik">
       <Row gutter={12}>
-        {konzert.technik.fluegel && (
+        {veranstaltung.technik.fluegel && (
           <Col span={24}>
             <b>Flügel stimmen!</b>
             <Divider />
           </Col>
         )}
-        {konzert.technik.backlineJazzclub.length > 0 && (
+        {veranstaltung.technik.backlineJazzclub.length > 0 && (
           <Col span={24}>
             <b>Backline Jazzclub:</b>
             <ul>
-              {konzert.technik.backlineJazzclub.map((item) => (
+              {veranstaltung.technik.backlineJazzclub.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
             <Divider />
           </Col>
         )}
-        {konzert.technik.backlineRockshop.length > 0 && (
+        {veranstaltung.technik.backlineRockshop.length > 0 && (
           <Col span={24}>
             <b>Backline Rockshop:</b>
             <ul>
-              {konzert.technik.backlineRockshop.map((item) => (
+              {veranstaltung.technik.backlineRockshop.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
             <Divider />
           </Col>
         )}
-        {konzert.technik.dateirider.length > 0 ? (
+        {veranstaltung.technik.dateirider.length > 0 ? (
           <Col span={24}>
             <b>Dateien:</b>
             <ul>
-              {konzert.technik.dateirider.map((item) => (
+              {veranstaltung.technik.dateirider.map((item) => (
                 <li key={item}>
                   <a href={`/files/${item}`} target="_blank">
                     {item}
                   </a>
                 </li>
               ))}
-              {rider?.boxes.length > 0 && (
+              {(rider?.boxes.length || 0) > 0 && (
                 <li key="riderurl">
                   <a href={printref} target="_blank">
                     {`Rider-${url}.pdf`}
@@ -71,7 +66,7 @@ export default function TechnikInPreview({ konzert, url }: { konzert: Konzert; u
             </ul>
           </Col>
         ) : (
-          rider?.boxes.length > 0 && (
+          (rider?.boxes.length || 0) > 0 && (
             <Col span={24}>
               <b>Dateien:</b>
               <ul>

@@ -54,4 +54,8 @@ export default class Vermietung extends Veranstaltung {
   reset(): void {
     super.reset();
   }
+
+  get brauchtPersonal() {
+    return !this.staff.noStaffNeeded;
+  }
 }

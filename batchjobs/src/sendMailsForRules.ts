@@ -8,7 +8,7 @@ import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
-import VeranstaltungVermietungFormatter from "jc-shared/veranstaltung/VeranstaltungVermietungFormatter.js";
+import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.js";
 
 const logger = loggers.get("application");
 
@@ -38,9 +38,9 @@ Liebe Grüße vom Jazzclub Team.`;
         selected
           .map((veranst) => {
             if (veranst.isVermietung) {
-              return new VeranstaltungVermietungFormatter(veranst as Vermietung).presseTextForMail(conf.get("publicUrlPrefix") as string);
+              return new VeranstaltungFormatter(veranst as Vermietung).presseTextForMail(conf.get("publicUrlPrefix") as string);
             }
-            return new VeranstaltungVermietungFormatter(veranst as Konzert).presseTextForMail(conf.get("publicUrlPrefix") as string);
+            return new VeranstaltungFormatter(veranst as Konzert).presseTextForMail(conf.get("publicUrlPrefix") as string);
           })
           .join("\n\n---\n");
       const message = new Message({

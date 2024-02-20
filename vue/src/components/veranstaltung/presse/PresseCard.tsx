@@ -119,7 +119,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
           />
         </Col>
         <Col xs={24} lg={12}>
-          <PressePreview veranstVermiet={verForPreview} />
+          <PressePreview veranstaltung={verForPreview} />
         </Col>
       </Row>
     </Collapsible>

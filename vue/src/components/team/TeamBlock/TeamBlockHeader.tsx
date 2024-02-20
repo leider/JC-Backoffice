@@ -1,20 +1,19 @@
-import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { ConfigProvider, Typography } from "antd";
 import React, { useMemo } from "react";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 const { Title } = Typography;
 interface HeaderProps {
-  veranstaltungOderVermietung: Konzert | Vermietung;
+  veranstaltung: Veranstaltung;
   expanded?: boolean;
 }
 
-export default function TeamBlockHeader({ veranstaltungOderVermietung, expanded }: HeaderProps) {
+export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps) {
   const isVermietung = useMemo(() => {
-    return veranstaltungOderVermietung.isVermietung;
-  }, [veranstaltungOderVermietung]);
+    return veranstaltung.isVermietung;
+  }, [veranstaltung]);
 
-  const color = veranstaltungOderVermietung.ghost ? "#AAA" : isVermietung ? "" : "#FFF";
+  const color = veranstaltung.ghost ? "#AAA" : isVermietung ? "" : "#FFF";
   const titleStyle = { margin: 0, color: color };
   function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
@@ -28,19 +27,18 @@ export default function TeamBlockHeader({ veranstaltungOderVermietung, expanded 
     <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
       {expanded ? (
         <>
-          <T l={5} t={veranstaltungOderVermietung.datumForDisplayShort} />
-          {!isVermietung && <T l={5} t={veranstaltungOderVermietung.kopf.presseIn} />}
-          <T l={3} t={veranstaltungOderVermietung.kopf.titelMitPrefix} />
+          <T l={5} t={veranstaltung.datumForDisplayShort} />
+          {!isVermietung && <T l={5} t={veranstaltung.kopf.presseIn} />}
+          <T l={3} t={veranstaltung.kopf.titelMitPrefix} />
         </>
       ) : (
         <>
           <Title level={4} style={titleStyle}>
-            {isVermietung ? `${veranstaltungOderVermietung.kopf.titel} (Vermietung)` : veranstaltungOderVermietung.kopf.titelMitPrefix}
+            {isVermietung ? `${veranstaltung.kopf.titel} (Vermietung)` : veranstaltung.kopf.titelMitPrefix}
             <br />
             <small>
               <small style={{ fontWeight: 400 }}>
-                {veranstaltungOderVermietung.startDatumUhrzeit.wochentagTagMonatShort +
-                  (isVermietung ? "" : `, ${veranstaltungOderVermietung.kopf.ort}`)}
+                {veranstaltung.startDatumUhrzeit.wochentagTagMonatShort + (isVermietung ? "" : `, ${veranstaltung.kopf.ort}`)}
               </small>
             </small>
           </Title>

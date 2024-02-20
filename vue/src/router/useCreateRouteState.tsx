@@ -27,6 +27,7 @@ import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
 import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
 import { History } from "@/components/history/History.tsx";
 import KonzertComp from "@/components/konzert/KonzertComp.tsx";
+import PreviewVermietung from "@/components/vermietung/preview/PreviewVermietung.tsx";
 
 export type RouteState = {
   routes: RouteObject[];
@@ -81,6 +82,10 @@ const allRoutes: RouteObject[] = [
       {
         path: "/vermietung/:url",
         element: <VermietungComp />,
+      },
+      {
+        path: "/vermietung/preview/:url",
+        element: <PreviewVermietung />,
       },
       {
         path: "/team/:monatJahr",
@@ -168,7 +173,7 @@ const orgaTeamPattern = [
   "/sendmail",
 ].join("|");
 
-const kassePattern = ["veranstaltung/:url"].join("|");
+const kassePattern = ["veranstaltung/:url", "vermietung/preview"].join("|");
 
 const superuserPattern = ["/imageoverview", "/history"].join("|");
 export function useCreateRouteState(): RouteState {

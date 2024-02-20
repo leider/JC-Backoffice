@@ -1,16 +1,16 @@
-import Konzert from "../../../../../shared/konzert/konzert.ts";
 import { List } from "antd";
-import { AddRemoveStaffButton, ActiveUsers } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
+import { ActiveUsers, AddRemoveStaffButton } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
 import React, { useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ContentProps {
-  veranstaltung: Konzert;
+  veranstaltung: Veranstaltung;
 }
 
 export default function TeamContent({ veranstaltung }: ContentProps) {
-  const [veranstaltungForStaff, setVeranstaltungForStaff] = useState<Konzert>(veranstaltung);
-  function staffUpdated(veranst: Konzert) {
+  const [veranstaltungForStaff, setVeranstaltungForStaff] = useState<Veranstaltung>(veranstaltung);
+  function staffUpdated(veranst: Veranstaltung) {
     setVeranstaltungForStaff(veranst);
   }
 
