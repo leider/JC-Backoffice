@@ -11,10 +11,11 @@ block content1
   - var start = vermietung.startDatumUhrzeit;
   - var ende = vermietung.endDatumUhrzeit;
   - var istAngebot = art === "Angebot"
+  - var istRechnung = art === "Rechnung"
 
   .row
     .col-7
-      p: b #{art} an #{vermietung.vertragspartner.name}
+      p: b #{art}
     .col-5
       p.text-end Karlsruhe, #{datum.tagMonatJahrLang}
 
@@ -23,7 +24,7 @@ block content1
       p Vermietung unserer Räumlichkeiten am #{start.tagMonatJahrLang} von #{start.uhrzeitKompakt} bis #{ende.uhrzeitKompakt} Uhr.
       p.
         Sehr geehrte Damen und Herren,<br>
-        #{istAngebot ? "wir freuen uns, Ihnen folgendes Angebot unterbreiten zu können." : `anbei finden Sie ${art === "Rechnung" ? "unsere Rechnung" : "den Vertrag"}.`}
+        #{istAngebot ? "wir freuen uns, Ihnen folgendes Angebot unterbreiten zu können." : `anbei finden Sie ${istRechnung ? "unsere Rechnung" : "den Vertrag"}.`}
 
       table.table.table-bordered.table-sm
         - var zeile = 0
@@ -42,7 +43,7 @@ block content1
           th Summe
         tr
           td.text-end #{++zeile}.
-          td Saalmiete Jazzclub (beinhaltet Vor- und Nachbereitung inkl. eine/r Ansprechpartner*in)
+          td Saalmiete Jazzclub
           td.text-end 1
           td.text-end: +currencyOrEmpty(angebot.saalmiete)
           if hatRabatt
@@ -159,7 +160,11 @@ block content1
 
       | !{angebot.renderedBeschreibung}
 
-      p Vielen Dank für die freundliche Anfrage.<br>Wir würden uns über eine Zusammenarbeit sehr freuen!
-      p Mit herzlichen Grüßen,
+      if istRechnung
+        p Zahlbar sofort ohne Abzüge.
+        p Vielen Dank für die Zusammenarbeit!
+      if istAngebot
+        p Vielen Dank für die freundliche Anfrage.<br>Wir würden uns über eine Zusammenarbeit sehr freuen!
+        p Mit freundlichen Grüßen,
 
       p Marcel Millot & das gesamte Team des Jazzclub
