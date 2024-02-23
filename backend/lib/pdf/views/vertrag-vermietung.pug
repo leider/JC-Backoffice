@@ -15,7 +15,7 @@ block content1
 
   .row
     .col-7
-      p: b #{art}
+      p: b #{art} #{istRechnung ? `Re.Nr.: ${vermietung.angebot.rechnungsnummer}` : ""}
     .col-5
       p.text-end Karlsruhe, #{datum.tagMonatJahrLang}
 

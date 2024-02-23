@@ -82,6 +82,10 @@ export default function InfoCard() {
     ];
   }, []);
 
+  const printOptions = useMemo(() => {
+    return status === "abgerechnet" ? ["Angebot", "Vertrag", "Rechnung"] : ["Angebot", "Vertrag"];
+  }, [status]);
+
   const { useToken } = theme;
   const token = useToken().token;
   return (
@@ -95,10 +99,17 @@ export default function InfoCard() {
           </ConfigProvider>
         </Col>
       </Row>
+      <Row gutter={12}>
+        <Col span={12}>
+          {status === "abgerechnet" && (
+            <TextField label="Rechnungsnummer" name={["angebot", "rechnungsnummer"]} required={status === "abgerechnet"} />
+          )}
+        </Col>
+      </Row>
       {vermietungContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={6}>
-          <SingleSelect name={"art"} label="Art" options={["Angebot", "Vertrag", "Rechnung"]} />
+          <SingleSelect name={"art"} label="Art" options={printOptions} />
         </Col>
         <Col span={8}>
           <DynamicItem

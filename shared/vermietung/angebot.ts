@@ -28,6 +28,7 @@ export default class Angebot {
   beschreibung = "";
   freigabe? = "";
   freigabeAm?: Date;
+  rechnungsnummer?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
