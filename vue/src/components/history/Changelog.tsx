@@ -45,6 +45,6 @@ export function Changelog({ id, collection }: { collection: string; id?: string 
   }, [rows]);
 
   return Object.keys(changelog).length === 0 ? undefined : (
-    <JsonView value={changelog} displayDataTypes={false} displayObjectSize={false} enableClipboard={false} collapsed={2} quotes="" />
+    <JsonView value={changelog} displayDataTypes={false} displayObjectSize={false} enableClipboard={false} quotes="" />
   );
 }
