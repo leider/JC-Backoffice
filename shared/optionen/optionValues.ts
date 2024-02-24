@@ -118,9 +118,12 @@ export default class OptionValues {
         backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
         backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
         artists: sortByNameCaseInsensitive(object.artists || []),
-        preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) =>
-          a.regulaer > b.regulaer ? 1 : -1,
-        ),
+        preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) => {
+          if (a.regulaer === b.regulaer) {
+            return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
+          }
+          return a.regulaer > b.regulaer ? 1 : -1;
+        }),
         typenPlus: (object.typenPlus || (object.typen || []).map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))).sort(
           (a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
         ),
