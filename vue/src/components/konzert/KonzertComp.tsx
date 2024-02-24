@@ -3,13 +3,12 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { riderFor, saveOptionen, saveRider, saveKonzert, konzertForUrl } from "@/commons/loader.ts";
-import Konzert, { ChangelistItem } from "jc-shared/konzert/konzert.ts";
-import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming";
-import { fromFormObject, fromFormObjectAsAny, toFormObject } from "@/components/konzert/konzertCompUtils";
+import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
+import { areDifferent } from "@/commons/comparingAndTransforming";
+import { fromFormObject, toFormObject } from "@/components/konzert/konzertCompUtils";
 import KonzertTabs from "@/components/konzert/KonzertTabs";
 import KonzertPageHeader from "@/components/konzert/KonzertPageHeader";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -133,25 +132,12 @@ export default function KonzertComp() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      const createLogWithDiff = (diff: string): ChangelistItem => {
-        return {
-          zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-          bearbeiter: currentUser.id,
-          diff,
-        };
-      };
-
       const konzert = fromFormObject(form);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const untypedKonzert = konzert as any;
-      const originalKonzert = fromFormObjectAsAny(initialValue);
       if (isNew) {
         konzert.initializeIdAndUrl();
-        konzert.changelist = [createLogWithDiff("Angelegt")];
-      } else {
-        const diff = differenceFor(originalKonzert, konzert, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
-        konzert.changelist.unshift(createLogWithDiff(diff));
       }
       if (!currentUser.accessrights.isOrgaTeam && !isNew) {
         // prevent saving of optionen

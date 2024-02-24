@@ -63,9 +63,9 @@ export default function TeamCalendar() {
           duration: { months: 4 },
         },
         weeks: {
-          buttonText: "4 Wochen",
+          buttonText: "36 Wochen",
           type: "dayGrid",
-          duration: { weeks: 4 },
+          duration: { weeks: 36 },
           displayEventTime: true,
         },
       }}

@@ -1,8 +1,11 @@
 import express, { Request, Response } from "express";
 import { resToJson } from "../lib/commons/replies.js";
 import { db, escape } from "../lib/persistence/sqlitePersistence.js";
+import _ from "lodash";
 
 const app = express();
+
+export type HistoryType = { id: string; before: string; after: string; user: string; time: string };
 
 const mappedNames: { [idx: string]: string } = {
   Mailregeln: "mailstorehistory",
@@ -33,14 +36,18 @@ app.get("/history/:collection", async (req: Request, res: Response) => {
     return resToJson(res, []);
   }
   const history = mappedNames[collection];
-  const query = `SELECT DISTINCT id FROM ${history} ORDER BY id ASC;`;
-  const result = db
-    .prepare(query)
-    .all()
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((res: any) => res.id) as string[];
+  const query = `SELECT DISTINCT id, time, after FROM ${history} ORDER BY time DESC;`;
+  const result = db.prepare(query).all();
 
-  resToJson(res, result);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const idWithMore = _.groupBy(result as any, (elem) => elem.id);
+  const resAsObject = Object.keys(idWithMore).map((key) => {
+    const newestRow = idWithMore[key][0];
+    const state = Object.keys(JSON.parse(newestRow.after)).length === 1 ? "gelöscht" : "geändert";
+    return { id: key, time: newestRow.time, state };
+  });
+
+  resToJson(res, resAsObject);
 });
 
 export default app;

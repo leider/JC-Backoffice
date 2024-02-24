@@ -17,6 +17,7 @@ import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import { HistoryType } from "jc-backend/rest/history.ts";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -464,12 +465,12 @@ export async function calendarEventSources(start: Date, end: Date, options?: Ter
 // History
 export async function historyIdsFor(collection: string) {
   const result = await getForType("json", `/rest/history/${collection}`);
-  return result as string[];
+  return result as { id: string; time: string; state: string }[];
 }
 
 export async function historyRowsFor(collection: string, id: string) {
   const result = await getForType("json", `/rest/history/${collection}/${encodeURIComponent(id)}`);
-  return result as { id: string; before: string; after: string; user: string; time: string }[];
+  return result as HistoryType[];
 }
 
 // Special

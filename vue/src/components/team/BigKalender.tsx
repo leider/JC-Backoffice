@@ -87,7 +87,7 @@ export default function BigKalender() {
                 duration: { months: 6 },
               },
             }}
-            //height="auto"
+            height="auto"
             multiMonthMaxColumns={4}
             eventSources={[getEvents]}
             eventContent={renderEventContent}
