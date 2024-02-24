@@ -44,6 +44,10 @@ export default function KonzertComp() {
   const [dirty, setDirty] = useState<boolean>(false);
 
   const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
+    // const diff = detailedDiff(initial, current);
+    // console.log({ diff });
+    // console.log({ initial });
+    // console.log({ current });
     setDirty(areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
   }, []);
   useDirtyBlocker(dirty);
@@ -52,13 +56,19 @@ export default function KonzertComp() {
     if (konzertQueryData.data) {
       setKonzert(konzertQueryData.data);
     }
-  }, [konzertQueryData.data, form]);
+  }, [konzertQueryData.data]);
 
   useEffect(() => {
     if (riderQuery.data) {
       setRider(riderQuery.data);
     }
   }, [riderQuery.data]);
+
+  useEffect(() => {
+    form.setFieldsValue({});
+    setInitialValue({});
+    setKonzert(new Konzert({ id: "unknown" }));
+  }, [form, url]);
 
   const queryClient = useQueryClient();
 
@@ -170,10 +180,6 @@ export default function KonzertComp() {
       <Form
         form={form}
         onValuesChange={() => {
-          // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-          // console.log({ diff });
-          // console.log({ initialValue });
-          // console.log({ form: form.getFieldsValue(true) });
           updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {

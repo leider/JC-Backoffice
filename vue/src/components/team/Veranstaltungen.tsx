@@ -1,21 +1,17 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, Drawer, Dropdown, Form, Row, Space, theme } from "antd";
+import { Button, Col, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
 import Konzert from "../../../../shared/konzert/konzert.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
-import TeamCalendar from "@/components/team/TeamCalendar";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 import sortBy from "lodash/sortBy";
 import isEmpty from "lodash/isEmpty";
-import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
-import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useQueries } from "@tanstack/react-query";
 import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
@@ -23,6 +19,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import reverse from "lodash/reverse";
+import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 
 export const TeamContext = createContext<{
   veranstaltungenNachMonat: {
@@ -148,10 +145,6 @@ export default function Veranstaltungen() {
     setMonate(Object.keys(result));
   }, [pressefilter, alle, PRESSEFILTERS]);
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const { useToken } = theme;
-  const token = useToken().token;
-
   return (
     <>
       <Row gutter={8}>
@@ -161,7 +154,7 @@ export default function Veranstaltungen() {
               <Space>
                 Veranstaltungen
                 <div style={{ marginTop: "-16px" }}>
-                  <ButtonWithIcon key="openCal" icon="Calendar2Month" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                  <TeamCalendar />
                 </div>
               </Space>
             }
@@ -197,29 +190,6 @@ export default function Veranstaltungen() {
           </TeamContext.Provider>
         </Col>
       </Row>
-      <Drawer
-        extra={
-          <>
-            {currentUser.accessrights.isOrgaTeam && (
-              <ButtonWithIconAndLink
-                key="bigcal"
-                icon="Calendar2Range"
-                color={token.colorPrimary}
-                text="Kalenderübersicht"
-                type="default"
-                to="/kalenderuebersicht"
-              />
-            )}
-            <ButtonIcal />
-          </>
-        }
-        placement="right"
-        onClose={() => setDrawerOpen(false)}
-        open={drawerOpen}
-        size="large"
-      >
-        <TeamCalendar />
-      </Drawer>
     </>
   );
 }

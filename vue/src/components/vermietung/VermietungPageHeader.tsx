@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { Form, Tag } from "antd";
+import { Form, Space, Tag } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
@@ -75,7 +76,14 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   return (
     <JazzPageHeader
-      title={title}
+      title={
+        <Space>
+          {title}
+          <div style={{ marginTop: "-16px" }}>
+            <TeamCalendar />
+          </div>
+        </Space>
+      }
       buttons={[
         <ExportExcelVermietungButton key="excel" disabled={isNew} />,
         <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,

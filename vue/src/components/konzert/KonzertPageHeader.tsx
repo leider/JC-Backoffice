@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
-import { Form } from "antd";
+import { Form, Space } from "antd";
 import { useParams } from "react-router-dom";
 import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -9,6 +9,7 @@ import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 
 export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const konzertContext = useContext(KonzertContext);
@@ -103,7 +104,14 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
   const titleStyle: CSSProperties = { color: typeColor };
   return (
     <JazzPageHeader
-      title={<span style={titleStyle}>{title}</span>}
+      title={
+        <Space>
+          <span style={titleStyle}>{title}</span>
+          <div style={{ marginTop: "-16px" }}>
+            <TeamCalendar />
+          </div>
+        </Space>
+      }
       dateString={displayDate}
       buttons={[
         isOrga && <ExportButtons key="exports" disabled={isNew} />,

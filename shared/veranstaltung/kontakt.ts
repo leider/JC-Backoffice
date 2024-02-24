@@ -13,7 +13,11 @@ export default class Kontakt {
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   constructor(object?: any) {
     if (object && Object.keys(object).length !== 0) {
-      Object.assign(this, object);
+      this.adresse = object.adresse;
+      this.ansprechpartner = object.ansprechpartner;
+      this.email = object.email;
+      this.name = object.name;
+      this.telefon = object.telefon;
     }
   }
 

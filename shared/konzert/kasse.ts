@@ -50,6 +50,30 @@ export default class Kasse {
       Object.assign(this, object, {
         kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
         anzahlBesucherAK: typeof ak === "string" ? parseInt(ak) : isNaN(ak) ? 0 : ak,
+        startinhalt: {
+          "10": undefined,
+          "20": undefined,
+          "50": undefined,
+          "100": undefined,
+          "200": undefined,
+          "500": undefined,
+          "1000": undefined,
+          "2000": undefined,
+          "5000": undefined,
+          "10000": undefined,
+        },
+        endinhalt: {
+          "10": undefined,
+          "20": undefined,
+          "50": undefined,
+          "100": undefined,
+          "200": undefined,
+          "500": undefined,
+          "1000": undefined,
+          "2000": undefined,
+          "5000": undefined,
+          "10000": undefined,
+        },
       });
     }
   }

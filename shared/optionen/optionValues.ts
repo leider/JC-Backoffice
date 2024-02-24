@@ -127,6 +127,8 @@ export default class OptionValues {
         typenPlus: (object.typenPlus || (object.typen || []).map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))).sort(
           (a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
         ),
+        agenturen: object.agenturen.map((agentur: Kontakt) => new Kontakt(agentur)),
+        hotels: object.hotels.map((hotel: Kontakt) => new Kontakt(hotel)),
       });
     }
   }

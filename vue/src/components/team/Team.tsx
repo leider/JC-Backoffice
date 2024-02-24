@@ -1,13 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
-import { Button, Col, Drawer, Dropdown, Row, Space } from "antd";
+import { Button, Col, Dropdown, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
-import TeamCalendar from "@/components/team/TeamCalendar";
 import { useQueries } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
-import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
@@ -16,6 +13,7 @@ import sortBy from "lodash/sortBy";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import reverse from "lodash/reverse";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 
 function Team() {
   useDirtyBlocker(false);
@@ -93,8 +91,6 @@ function Team() {
     setMonate(Object.keys(result));
   }, [alle, realadmin]);
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   return (
     <>
       <Row gutter={8}>
@@ -104,7 +100,7 @@ function Team() {
               <Space>
                 Team
                 <div style={{ marginTop: "-16px" }}>
-                  <ButtonWithIcon key="openCal" icon="Calendar2Month" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+                  <TeamCalendar />
                 </div>
               </Space>
             }
@@ -131,9 +127,6 @@ function Team() {
           </TeamContext.Provider>
         </Col>
       </Row>
-      <Drawer extra={<ButtonIcal />} placement="right" onClose={() => setDrawerOpen(false)} open={drawerOpen} size="large">
-        <TeamCalendar />
-      </Drawer>
     </>
   );
 }
