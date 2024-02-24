@@ -37,21 +37,36 @@ export default function TeamCalendar() {
   return (
     <FullCalendar
       plugins={[dayGridPlugin, multiMonthPlugin]}
-      initialView="dayGridMonth"
+      initialView="one"
       locales={[deLocale]}
-      headerToolbar={{ left: "title", center: "dayGridMonth,Vier", right: "prev,today,next" }}
+      headerToolbar={{ left: "title", center: "one,four,weeks", right: "prev,today,next" }}
       titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
       views={{
-        month: {
+        one: {
           weekNumberFormat: { week: "short" },
           fixedWeekCount: false,
           showNonCurrentDates: false,
           weekNumbers: true,
           weekText: "KW",
+          buttonText: "1 Monat",
+          type: "multiMonth",
+          duration: { months: 1 },
         },
-        Vier: {
+        four: {
+          weekNumberFormat: { week: "short" },
+          fixedWeekCount: false,
+          showNonCurrentDates: false,
+          weekNumbers: true,
+          weekText: "KW",
+          buttonText: "4 Monate",
           type: "multiMonth",
           duration: { months: 4 },
+        },
+        weeks: {
+          buttonText: "4 Wochen",
+          type: "dayGrid",
+          duration: { weeks: 4 },
+          displayEventTime: true,
         },
       }}
       height="auto"

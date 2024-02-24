@@ -27,18 +27,7 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
 
   function asCalendarEvent(konzert: Konzert): TerminEvent {
     const color = typByName[konzert.kopf.eventTyp]?.[0].color || "#6c757d";
-    return {
-      display: "block",
-      start: konzert.startDate.toISOString(),
-      end: konzert.endDate.toISOString(),
-      url: `/vue/veranstaltung/${user.accessrights.isOrgaTeam ? "" : "preview/"}${encodeURIComponent(konzert.url || "")}`,
-      title: konzert.kopf.titelMitPrefix,
-      tooltip: konzert.tooltipInfos,
-      backgroundColor: color,
-      textColor: "#fff",
-      borderColor: !konzert.kopf.confirmed ? "#f8500d" : color,
-      className: "no-overflow",
-    };
+    return konzert.asCalendarEvent(user.accessrights.isOrgaTeam, color);
   }
   const konzerte = await store.byDateRangeInAscendingOrder(start, end);
   const unbest = await konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
@@ -47,18 +36,7 @@ async function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
 
 async function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   function asCalendarEvent(vermietung: Vermietung): TerminEvent {
-    return {
-      display: "block",
-      start: vermietung.startDate.toISOString(),
-      end: vermietung.endDate.toISOString(),
-      url: user.accessrights.isOrgaTeam ? `/vue/vermietung/${encodeURIComponent(vermietung.url || "")}` : "",
-      title: vermietung.kopf.titel,
-      tooltip: "",
-      backgroundColor: "#f6eee1",
-      textColor: "#111",
-      borderColor: !vermietung.kopf.confirmed ? "#f8500d" : "#f6eee1",
-      className: "no-overflow",
-    };
+    return vermietung.asCalendarEvent(user.accessrights.isOrgaTeam, "#f6eee1");
   }
 
   const vermietungen = await vermietungenstore.byDateRangeInAscendingOrder(start, end);

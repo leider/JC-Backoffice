@@ -66,25 +66,28 @@ export default function BigKalender() {
           <FullCalendar
             ref={calRef}
             plugins={[multiMonthPlugin]}
-            initialView="Sechs"
+            initialView="six"
             locales={[deLocale]}
-            headerToolbar={{ left: "title", center: "Sechs,Vier,Zwölf", right: "prev,today,next" }}
+            headerToolbar={{ left: "title", center: "four,six,twelve", right: "prev,today,next" }}
             titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
             views={{
-              Zwölf: {
+              twelve: {
+                buttonText: "12 Monate",
                 type: "multiMonth",
                 duration: { months: 12 },
               },
-              Vier: {
+              four: {
+                buttonText: "4 Monate",
                 type: "multiMonth",
                 duration: { months: 4 },
               },
-              Sechs: {
+              six: {
+                buttonText: "6 Monate",
                 type: "multiMonth",
                 duration: { months: 6 },
               },
             }}
-            height="auto"
+            //height="auto"
             multiMonthMaxColumns={4}
             eventSources={[getEvents]}
             eventContent={renderEventContent}

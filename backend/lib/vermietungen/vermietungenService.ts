@@ -10,13 +10,15 @@ async function getVermietung(url: string) {
   return vermietung;
 }
 
+/*
+ * Alle unbestätigten und ohne Personal filtern
+ */
 function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user: User): Vermietung[] {
   if (user.accessrights.isBookingTeam) {
     return vermietungen;
   }
-  return vermietungen.filter((v) => v.kopf.confirmed);
+  return vermietungen.filter((v) => v.kopf.confirmed && v.brauchtPersonal);
 }
-
 export default {
   getVermietung,
   filterUnbestaetigteFuerJedermann,

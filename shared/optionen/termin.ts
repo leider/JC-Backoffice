@@ -18,6 +18,7 @@ export interface TerminEvent {
   display?: string;
   className?: string;
   url?: string;
+  linkTo?: string;
 }
 
 export default class Termin {

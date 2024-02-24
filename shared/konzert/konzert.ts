@@ -122,7 +122,7 @@ export default class Konzert extends Veranstaltung {
 
   // iCal
   get tooltipInfos(): string {
-    return this.kopf.ort + this.staff.tooltipInfos;
+    return (this.kopf.ort !== "Jazzclub" ? this.kopf.ort : "") + this.staff.tooltipInfos;
   }
 
   // CSV Export

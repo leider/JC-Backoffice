@@ -8,6 +8,7 @@ import Staff from "./staff.js";
 import Technik from "./technik.js";
 import dayjs from "dayjs";
 import times from "lodash/times.js";
+import { TerminEvent } from "../optionen/termin.js";
 
 export type MinimalVeranstaltung = { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -47,11 +48,11 @@ export default abstract class Veranstaltung {
   abstract get isVermietung(): boolean;
 
   get fullyQualifiedUrl(): string {
-    return `${this.isVermietung ? "/vermietungen/" : "/veranstaltungen/"}${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}${encodeURIComponent(this.url || "")}`;
   }
 
   get fullyQualifiedPreviewUrl(): string {
-    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}preview/${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietung/" : "/vermietung/"}preview/${encodeURIComponent(this.url || "")}`;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -103,6 +104,22 @@ export default abstract class Veranstaltung {
 
   get datumForDisplay(): string {
     return this.startDatumUhrzeit.tagMonatJahrLang;
+  }
+
+  get tooltipInfos(): string {
+    return "";
+  }
+  asCalendarEvent(isOrgaTeam: boolean, color: string): TerminEvent {
+    return {
+      start: this.startDate.toISOString(),
+      end: this.endDate.toISOString(),
+      title: this.kopf.titelMitPrefix,
+      tooltip: this.tooltipInfos,
+      linkTo: isOrgaTeam ? this.fullyQualifiedUrl : this.fullyQualifiedPreviewUrl,
+      backgroundColor: color,
+      textColor: this.isVermietung ? "#111" : "#fff",
+      borderColor: !this.kopf.confirmed ? "#f8500d" : color,
+    };
   }
 
   reset(): void {

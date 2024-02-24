@@ -8,24 +8,15 @@ import { resToJson } from "../lib/commons/replies.js";
 import store from "../lib/vermietungen/vermietungenstore.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
 import { vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
+import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 
 const app = express();
-
-/*
- * Alle unbestätigten und ohne Personal filtern
- */
-function filterUnbestaetigteFuerJedermann(vermietungen: Vermietung[], user: User): Vermietung[] {
-  if (user.accessrights.isBookingTeam) {
-    return vermietungen;
-  }
-  return vermietungen.filter((v) => v.kopf.confirmed && v.brauchtPersonal);
-}
 
 async function standardHandler(req: Request, res: Response, vermietungen: Vermietung[]) {
   const user: User = req.user as User;
   resToJson(
     res,
-    filterUnbestaetigteFuerJedermann(vermietungen, user).map((v) => v.toJSON()),
+    vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map((v) => v.toJSON()),
   );
 }
 
