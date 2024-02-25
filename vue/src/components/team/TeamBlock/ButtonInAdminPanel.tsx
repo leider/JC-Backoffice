@@ -2,20 +2,20 @@ import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons
 import capitalize from "lodash/capitalize";
 import React from "react";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ButtonInAdminPanelProps {
   type: buttonType;
-  url: string;
-  isVermietung?: boolean;
+  veranstaltung: Veranstaltung;
 }
 
-export function ButtonInAdminPanel({ type, url, isVermietung }: ButtonInAdminPanelProps) {
+export function ButtonInAdminPanel({ type, veranstaltung }: ButtonInAdminPanelProps) {
   const { color, icon } = colorsAndIconsForSections;
   return (
     <ButtonWithIconAndLink
       icon={icon(type)}
       tooltipTitle={capitalize(type)}
-      to={`/${isVermietung ? "vermietung" : "veranstaltung"}/${encodeURIComponent(url)}?page=${type}`}
+      to={`${veranstaltung?.fullyQualifiedUrl}?page=${type}`}
       color={color(type)}
     />
   );

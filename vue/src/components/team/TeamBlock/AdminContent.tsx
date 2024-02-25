@@ -129,17 +129,16 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
               <SaveButton disabled={!dirty} />
             ) : (
               <>
-                <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="allgemeines" isVermietung={forVermietung} />
-                {!forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="gaeste" isVermietung={forVermietung} />}
-                {forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="angebot" isVermietung={forVermietung} />}
+                <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
+                <ButtonInAdminPanel type={forVermietung ? "angebot" : "gaeste"} veranstaltung={veranstaltung} />
                 {(!forVermietung || (veranstaltung as Vermietung).brauchtTechnik) && (
-                  <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="technik" isVermietung={forVermietung} />
+                  <ButtonInAdminPanel type="technik" veranstaltung={veranstaltung} />
                 )}
-                <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="ausgaben" isVermietung={forVermietung} />
-                {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="hotel" />}
-                {!forVermietung && <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="kasse" />}
+                <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
+                {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} />}
+                {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
                 {(!forVermietung || (veranstaltung as Vermietung).brauchtPresse) && (
-                  <ButtonInAdminPanel url={veranstaltung.url ?? ""} type="presse" isVermietung={forVermietung} />
+                  <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />
                 )}
                 <ButtonPreview veranstaltung={veranstaltung} />
               </>

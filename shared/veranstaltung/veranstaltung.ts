@@ -52,7 +52,7 @@ export default abstract class Veranstaltung {
   }
 
   get fullyQualifiedPreviewUrl(): string {
-    return `${this.isVermietung ? "/vermietung/" : "/vermietung/"}preview/${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}preview/${encodeURIComponent(this.url || "")}`;
   }
 
   // eslint-disable-next-line no-unused-vars
