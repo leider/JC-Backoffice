@@ -1,13 +1,12 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
-import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
-import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 const logger = loggers.get("application");
 
@@ -26,7 +25,7 @@ export async function checkBar(now: DatumUhrzeit) {
   }
   const start = now;
   const end = start.plus({ wochen: 8 }); // Acht Wochen im Voraus
-  const filterFunction = (ver: Konzert | Vermietung) => {
+  const filterFunction = (ver: Veranstaltung) => {
     const typOk = !ver.isVermietung ? !ver.kopf.eventTyp.startsWith("DryJam") : true;
     return ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed && typOk;
   };
