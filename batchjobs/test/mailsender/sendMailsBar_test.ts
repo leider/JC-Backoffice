@@ -4,7 +4,6 @@ import "jc-backend/configure.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
-import { remindForProgrammheft } from "../../src/sendMailsForProgrammheft.js";
 import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import konzertestore from "jc-backend/lib/konzerte/konzertestore.js";
