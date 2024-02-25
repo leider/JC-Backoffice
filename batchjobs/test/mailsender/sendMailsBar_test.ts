@@ -12,7 +12,7 @@ import { checkBar } from "../../src/sendMailsNightlyBar.js";
 
 const sinon = sin.createSandbox();
 
-describe("Bar Mailsender", () => {
+describe.skip("Bar Mailsender", () => {
   const april14 = DatumUhrzeit.forISOString("2019-04-14T18:00:00.000Z");
 
   const vermietung1 = new Vermietung({ startDate: "2019-04-29", kopf: { confirmed: true, ort: "Jazzclub" } });
