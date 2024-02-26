@@ -110,15 +110,15 @@ async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUser
   return saveAndReply(req, res, konzert);
 }
 
-app.post("/veranstaltungen/:url/addUserToSection", async (req: Request, res: Response) => {
+app.post("/veranstaltung/:url/addUserToSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
-app.post("/veranstaltungen/:url/removeUserFromSection", async (req: Request, res: Response) => {
+app.post("/veranstaltung/:url/removeUserFromSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
-app.post("/veranstaltungen/:url/updateGastInSection", async (req: Request, res: Response) => {
+app.post("/veranstaltung/:url/updateGastInSection", async (req: Request, res: Response) => {
   const konzert = await store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
