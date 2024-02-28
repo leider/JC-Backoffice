@@ -21,7 +21,7 @@ import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 export default function Preview() {
   const { url } = useParams();
   const konzertQueryData = useQuery({
-    queryKey: ["veranstaltung", url],
+    queryKey: ["konzert", url],
     queryFn: () => konzertForUrl(url || ""),
   });
   const { currentUser, optionen } = useJazzContext();
@@ -50,7 +50,7 @@ export default function Preview() {
     return (
       <ButtonWithIconAndLink
         icon={icon(type)}
-        to={`/veranstaltung/${encodeURIComponent(url ?? "")}?page=${type}`}
+        to={`/konzert/${encodeURIComponent(url ?? "")}?page=${type}`}
         color={color(type)}
         text="Bearbeiten..."
       />

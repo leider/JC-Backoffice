@@ -19,7 +19,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
           <b>
             <Link
               to={{
-                pathname: `/veranstaltung/${v.url}`,
+                pathname: `/konzert/${v.url}`,
                 search: "page=presse",
               }}
             >

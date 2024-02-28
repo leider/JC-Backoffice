@@ -72,11 +72,13 @@ export default function PreviewVermietung() {
           <InfoInPreview veranstaltung={vermietung} />
           <TechnikInPreview veranstaltung={vermietung} />
         </Col>
-        <Col xs={24} lg={12}>
-          <Collapsible suffix="presse" label="Pressetext">
-            <PressePreview veranstaltung={vermietung} />
-          </Collapsible>
-        </Col>
+        {vermietung.brauchtPresse && (
+          <Col xs={24} lg={12}>
+            <Collapsible suffix="presse" label="Pressetext">
+              <PressePreview veranstaltung={vermietung} />
+            </Collapsible>
+          </Col>
+        )}
       </Row>
     </div>
   );

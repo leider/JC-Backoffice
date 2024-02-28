@@ -10,7 +10,7 @@ import groupBy from "lodash/groupBy";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
-    queryKey: ["veranstaltung", `${start.yyyyMM}`],
+    queryKey: ["konzert", `${start.yyyyMM}`],
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
   });
 

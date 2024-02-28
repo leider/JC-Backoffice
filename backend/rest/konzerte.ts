@@ -31,29 +31,29 @@ async function saveAndReply(req: Request, res: Response, konzert: Konzert) {
   resToJson(res, result);
 }
 
-app.get("/veranstaltungen/vergangene", async (req, res) => {
+app.get("/konzerte/vergangene", async (req, res) => {
   const konzerte = await store.vergangene();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/veranstaltungen/zukuenftige", async (req, res) => {
+app.get("/konzerte/zukuenftige", async (req, res) => {
   const konzerte = await store.zukuenftigeMitGestern();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/veranstaltungen/alle", async (req, res) => {
+app.get("/konzerte/alle", async (req, res) => {
   const konzerte = await store.alle();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/veranstaltungen/:startYYYYMM/:endYYYYMM", async (req, res) => {
+app.get("/konzerte/:startYYYYMM/:endYYYYMM", async (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
   const konzerte = await store.byDateRangeInAscendingOrder(start, end);
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
+app.get("/konzert/:url", async (req: Request, res: Response) => {
   const konzert = await store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
@@ -61,7 +61,7 @@ app.get("/veranstaltungen/:url", async (req: Request, res: Response) => {
   resToJson(res, konzert);
 });
 
-app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Response) => {
+app.post("/konzert", [checkAbendkasse], async (req: Request, res: Response) => {
   const user = req.user as User;
   const url = req.body.url;
 
@@ -96,7 +96,7 @@ app.post("/veranstaltungen", [checkAbendkasse], async (req: Request, res: Respon
   return saveKonzert(konzert);
 });
 
-app.delete("/veranstaltungen", [checkOrgateam], async (req: Request, res: Response) => {
+app.delete("/konzert", [checkOrgateam], async (req: Request, res: Response) => {
   await store.deleteKonzertById(req.body.id, req.user as User);
   resToJson(res);
 });
@@ -110,15 +110,15 @@ async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUser
   return saveAndReply(req, res, konzert);
 }
 
-app.post("/veranstaltung/:url/addUserToSection", async (req: Request, res: Response) => {
+app.post("/konzert/:url/addUserToSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
-app.post("/veranstaltung/:url/removeUserFromSection", async (req: Request, res: Response) => {
+app.post("/konzert/:url/removeUserFromSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
-app.post("/veranstaltung/:url/updateGastInSection", async (req: Request, res: Response) => {
+app.post("/konzert/:url/updateGastInSection", async (req: Request, res: Response) => {
   const konzert = await store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);

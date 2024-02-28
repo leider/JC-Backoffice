@@ -24,7 +24,7 @@ export default function Info() {
   }, [monatJahr]);
 
   const { data } = useQuery({
-    queryKey: ["veranstaltung", `${start.yyyyMM}`],
+    queryKey: ["konzert", `${start.yyyyMM}`],
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 

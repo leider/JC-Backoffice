@@ -47,7 +47,7 @@ app.get("/vermietungen/:startYYYYMM/:endYYYYMM", async (req, res) => {
   standardHandler(req, res, vermietungen);
 });
 
-app.get("/vermietungen/:url", async (req: Request, res: Response) => {
+app.get("/vermietung/:url", async (req: Request, res: Response) => {
   const vermietung = await store.getVermietung(req.params.url);
   if (!vermietung) {
     return res.sendStatus(404);
@@ -55,7 +55,7 @@ app.get("/vermietungen/:url", async (req: Request, res: Response) => {
   resToJson(res, vermietung);
 });
 
-app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
+app.post("/vermietung", [checkOrgateam], async (req: Request, res: Response) => {
   const url = req.body.url;
 
   const vermietung = await store.getVermietung(url);
@@ -74,7 +74,7 @@ app.post("/vermietungen", [checkOrgateam], async (req: Request, res: Response) =
   return saveAndReply(req, res, new Vermietung(req.body));
 });
 
-app.delete("/vermietungen", [checkOrgateam], async (req: Request, res: Response) => {
+app.delete("/vermietung", [checkOrgateam], async (req: Request, res: Response) => {
   await store.deleteVermietungById(req.body.id, req.user as User);
   resToJson(res);
 });
@@ -88,11 +88,11 @@ async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUser
   return saveAndReply(req, res, vermietung);
 }
 
-app.post("/vermietungen/:url/addUserToSection", async (req: Request, res: Response) => {
+app.post("/vermietung/:url/addUserToSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
-app.post("/vermietungen/:url/removeUserFromSection", async (req: Request, res: Response) => {
+app.post("/vermietung/:url/removeUserFromSection", async (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 

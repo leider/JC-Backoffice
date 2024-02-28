@@ -11,7 +11,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
   const rider = useMemo(() => riderQuery.data, [riderQuery.data]);
 
   const printref = useMemo(() => {
-    return window.location.href.replace("vue/veranstaltung/preview", "pdf/rider");
+    return window.location.href.replace("vue/konzert/preview", "pdf/rider");
   }, []);
 
   return (

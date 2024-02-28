@@ -48,11 +48,11 @@ export default abstract class Veranstaltung {
   abstract get isVermietung(): boolean;
 
   get fullyQualifiedUrl(): string {
-    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietung/" : "/konzert/"}${encodeURIComponent(this.url || "")}`;
   }
 
   get fullyQualifiedPreviewUrl(): string {
-    return `${this.isVermietung ? "/vermietung/" : "/veranstaltung/"}preview/${encodeURIComponent(this.url || "")}`;
+    return `${this.isVermietung ? "/vermietung/" : "/konzert/"}preview/${encodeURIComponent(this.url || "")}`;
   }
 
   // eslint-disable-next-line no-unused-vars

@@ -34,6 +34,10 @@ export default class Unterkunft {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     }
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    delete (this as any).transportText;
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    delete (this as any).name;
   }
 
   get checked(): boolean {

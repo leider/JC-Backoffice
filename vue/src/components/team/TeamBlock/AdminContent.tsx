@@ -56,7 +56,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   const mutateVeranstaltung = useMutation({
     mutationFn: saveKonzert,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+      queryClient.invalidateQueries({ queryKey: ["konzert"] });
       showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
     },
   });

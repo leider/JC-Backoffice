@@ -53,7 +53,7 @@ function Team() {
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["veranstaltung", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
+      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
       { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
     ],
     combine: ([a, b]) => {

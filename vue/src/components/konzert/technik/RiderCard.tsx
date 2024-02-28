@@ -9,7 +9,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 export default function RiderCard() {
   const { search } = useLocation();
   const href = useMemo(() => {
-    return window.location.href.replace("vue/veranstaltung", "rider").replace(search, "");
+    return window.location.href.replace("vue/konzert", "rider").replace(search, "");
   }, [search]);
 
   const text = useMemo(() => {

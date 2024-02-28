@@ -33,7 +33,7 @@ export default function KonzertComp() {
   );
 
   const konzertQueryData = useQuery({
-    queryKey: ["veranstaltung", url],
+    queryKey: ["konzert", url],
     queryFn: () => konzertForUrl(url || ""),
   });
   const riderQuery = useQuery({ queryKey: ["rider", "url"], queryFn: () => riderFor(url || "") });
@@ -44,8 +44,8 @@ export default function KonzertComp() {
   const [dirty, setDirty] = useState<boolean>(false);
 
   const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
-    // const diff = detailedDiff(initial, current);
-    // console.log({ diff });
+    //const diff = detailedDiff(initial, current);
+    //console.log({ diff });
     // console.log({ initial });
     // console.log({ current });
     setDirty(areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
@@ -80,15 +80,15 @@ export default function KonzertComp() {
       return saveKonzert(konzert);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+      queryClient.invalidateQueries({ queryKey: ["konzert"] });
       navigate(
         {
-          pathname: `/veranstaltung/${data.url}`,
+          pathname: `/konzert/${data.url}`,
           search: `page=${search.get("page")}`,
         },
         { replace: true },
       );
-      showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
+      showSuccess({ text: "Das Konzert wurde gespeichert" });
     },
   });
 
@@ -132,7 +132,7 @@ export default function KonzertComp() {
   useEffect(() => {
     const accessrights = currentUser.accessrights;
     if (currentUser.id && !accessrights.isAbendkasse) {
-      navigate(`/veranstaltung/preview/${url}`);
+      navigate(`/konzert/preview/${url}`);
     }
   }, [currentUser.accessrights, currentUser.id, navigate, url]);
 

@@ -21,7 +21,7 @@ export function useCreateImagenamesSections() {
   const { imagenames, veranstaltungen } = useQueries({
     queries: [
       { queryKey: ["imagenames"], queryFn: imagenamesQuery },
-      { queryKey: ["veranstaltungenAlle"], queryFn: () => konzerteForTeam("alle") },
+      { queryKey: ["konzert", "alle"], queryFn: () => konzerteForTeam("alle") },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {

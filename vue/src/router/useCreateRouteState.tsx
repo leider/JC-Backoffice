@@ -41,7 +41,7 @@ const allRoutes: RouteObject[] = [
     children: [
       {
         path: "/",
-        element: <Navigate to={{ pathname: "/veranstaltungen", search: "zukuenftige" }} />,
+        element: <Navigate to={{ pathname: "/veranstaltungen" }} />,
       },
       {
         path: "/login",
@@ -52,10 +52,6 @@ const allRoutes: RouteObject[] = [
         element: <Team />,
       },
       {
-        path: "/teamseite",
-        element: <Navigate replace to="/team" />,
-      },
-      {
         path: "/veranstaltungen",
         element: <Veranstaltungen />,
       },
@@ -64,20 +60,20 @@ const allRoutes: RouteObject[] = [
         element: <BigKalender />,
       },
       {
-        path: "/veranstaltungen/:url",
+        path: "/konzert/:url",
         element: <KonzertComp />,
-      },
-      {
-        path: "/veranstaltungen/preview/:url",
-        element: <Preview />,
       },
       {
         path: "/veranstaltung/:url",
         element: <KonzertComp />,
       },
       {
-        path: "/veranstaltung/preview/:url",
+        path: "/konzert/preview/:url",
         element: <Preview />,
+      },
+      {
+        path: "/veranstaltung/preview/:url",
+        element: <KonzertComp />,
       },
       {
         path: "/vermietung/:url",
@@ -160,6 +156,7 @@ const orgaTeamPattern = [
   "^/$",
   "vermietung",
   "veranstaltungen/:url",
+  "konzert/:url",
   "veranstaltung/:url",
   "kalenderuebersicht",
   "optionen",
@@ -173,7 +170,7 @@ const orgaTeamPattern = [
   "/sendmail",
 ].join("|");
 
-const kassePattern = ["veranstaltung/:url", "vermietung/preview"].join("|");
+const kassePattern = ["konzert/:url", "vermietung/preview"].join("|");
 
 const superuserPattern = ["/imageoverview", "/history"].join("|");
 export function useCreateRouteState(): RouteState {

@@ -36,7 +36,7 @@ export interface NameWithNumber {
 
 export type GastArt = "res" | "gast";
 export default class Konzert extends Veranstaltung {
-  changelist: ChangelistItem[] = [];
+  changelist?: ChangelistItem[] = undefined;
   gaesteliste: NameWithNumber[] = [];
   reservierungen: NameWithNumber[] = [];
 
@@ -101,6 +101,7 @@ export default class Konzert extends Veranstaltung {
     this.kopf.rechnungAnKooperation = false;
     this.unterkunft = new Unterkunft(undefined, new DatumUhrzeit().setUhrzeit(20, 0), []);
     this.kasse = new Kasse();
+    this.changelist = undefined;
   }
 
   // Image Overview

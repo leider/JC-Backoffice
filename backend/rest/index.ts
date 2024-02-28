@@ -10,7 +10,7 @@ import optionenApp from "./optionen.js";
 import programmheftApp from "./programmheft.js";
 import ridersApp from "./riders.js";
 import usersApp from "./users.js";
-import konzerteRestApp from "./veranstaltungen.js";
+import konzerteRestApp from "./konzerte.js";
 import vermietungenRestApp from "./vermietungen.js";
 import wikiApp from "./wiki.js";
 import User from "jc-shared/user/user.js";

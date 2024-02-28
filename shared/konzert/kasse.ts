@@ -35,8 +35,30 @@ export default class Kasse {
   kassenfreigabe? = "";
   kassenfreigabeAm?: Date;
   einnahmenReservix = 0; // darf nicht in kassenberechnung
-  startinhalt: MuenzenScheine = {};
-  endinhalt: MuenzenScheine = {};
+  startinhalt: MuenzenScheine = {
+    "10": undefined,
+    "20": undefined,
+    "50": undefined,
+    "100": undefined,
+    "200": undefined,
+    "500": undefined,
+    "1000": undefined,
+    "2000": undefined,
+    "5000": undefined,
+    "10000": undefined,
+  };
+  endinhalt: MuenzenScheine = {
+    "10": undefined,
+    "20": undefined,
+    "50": undefined,
+    "100": undefined,
+    "200": undefined,
+    "500": undefined,
+    "1000": undefined,
+    "2000": undefined,
+    "5000": undefined,
+    "10000": undefined,
+  };
   endbestandGezaehltEUR = 0;
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {

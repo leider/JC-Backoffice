@@ -3,7 +3,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteKozertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
+import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
@@ -47,7 +47,7 @@ export function NewButtons() {
   ];
   function onMenuClick(e: { key: string }): void {
     if (e.key === "Konzert") {
-      return navigate("/veranstaltung/new");
+      return navigate("/konzert/new");
     }
     if (e.key === "Vermietung") {
       return navigate("/vermietung/new");
@@ -116,9 +116,9 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
   const queryClient = useQueryClient();
 
   const deleteKonzert = useMutation({
-    mutationFn: deleteKozertWithId,
+    mutationFn: deleteKonzertWithId,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+      queryClient.invalidateQueries({ queryKey: ["konzert"] });
       navigate("/");
     },
   });
@@ -146,7 +146,7 @@ export function CopyButton({ disabled, url, isVermietung }: ButtonProps & { url?
   return (
     <ButtonWithIconAndLink
       icon="Files"
-      to={`/${isVermietung ? "vermietung" : "veranstaltung"}/copy-of-${url}`}
+      to={`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${url}`}
       color="#6c757d"
       text="Kopieren"
       disabled={disabled || !url}

@@ -55,7 +55,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
 
     const bestaetigte = useQueries({
       queries: [
-        { enabled: isOpen, queryKey: ["veranstaltung", fromTo], queryFn: () => konzerteBetweenYYYYMM(fromTo[0], fromTo[1]) },
+        { enabled: isOpen, queryKey: ["konzert", fromTo], queryFn: () => konzerteBetweenYYYYMM(fromTo[0], fromTo[1]) },
         { enabled: isOpen, queryKey: ["vermietung", fromTo], queryFn: () => vermietungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
       ],
       combine: ([a, b]) => {

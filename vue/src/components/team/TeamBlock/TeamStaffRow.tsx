@@ -61,7 +61,7 @@ export function AddRemoveStaffButton({
         queryClient.invalidateQueries({ queryKey: ["vermietung"] });
         staffUpdated(new Vermietung(data));
       } else {
-        queryClient.invalidateQueries({ queryKey: ["veranstaltung"] });
+        queryClient.invalidateQueries({ queryKey: ["konzert"] });
         staffUpdated(new Konzert(data));
       }
     },

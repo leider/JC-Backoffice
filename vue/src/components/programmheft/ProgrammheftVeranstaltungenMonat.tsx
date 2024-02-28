@@ -51,7 +51,7 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
                         <li key={veranst.id}>
                           <Link
                             to={{
-                              pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
+                              pathname: `/konzert/${encodeURIComponent(veranst.url || "")}`,
                               search: "page=allgemeines",
                             }}
                           >
@@ -70,7 +70,7 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
                         <li key={veranst.id}>
                           <Link
                             to={{
-                              pathname: `/veranstaltung/${encodeURIComponent(veranst.url || "")}`,
+                              pathname: `/konzert/${encodeURIComponent(veranst.url || "")}`,
                               search: "page=presse",
                             }}
                           >

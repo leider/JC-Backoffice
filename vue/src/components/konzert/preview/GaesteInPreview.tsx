@@ -23,7 +23,7 @@ function AddOrRemoveGastButton({
   const mutate = useMutation({
     mutationFn: async ({ item, art }: { item: NameWithNumber; art: GastArt }) => updateGastInSection(konzert, item, art),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["veranstaltung", data.url] });
+      queryClient.invalidateQueries({ queryKey: ["konzert", data.url] });
       onChange(new Konzert(data));
     },
   });

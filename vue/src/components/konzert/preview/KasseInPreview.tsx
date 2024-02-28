@@ -21,7 +21,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
         color={color("kasse")}
         icon={icon("kasse")}
         to={{
-          pathname: `/veranstaltung/${url}`,
+          pathname: `/konzert/${url}`,
           search: "page=kasse",
         }}
       />
