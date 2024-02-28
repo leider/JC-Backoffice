@@ -9,7 +9,7 @@ Before(({ I, login }) => {
 });
 
 Scenario("Erzeuge neues Konzert", async ({ I }) => {
-  I.amOnPage("/vue/veranstaltung/new?page=allgemeines");
+  I.amOnPage("/vue/konzert/new?page=allgemeines");
   I.see("Typ");
   I.click('//input[@placeholder="Startdatum"]');
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\n");
