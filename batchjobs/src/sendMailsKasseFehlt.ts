@@ -18,7 +18,7 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return config.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return config.getString("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 function kasseFehlt(konzert: Konzert): boolean {

@@ -3,11 +3,11 @@ import fs from "fs/promises";
 import Fs from "fs/promises";
 import childProcess from "child_process";
 import util from "util";
-import conf from "../../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 
 const exec = util.promisify(childProcess.exec);
 
-let workTree = conf.get("wikipath") as string;
+let workTree = conf.getString("wikipath");
 
 let gitCommands: string[] = [];
 

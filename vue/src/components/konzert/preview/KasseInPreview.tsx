@@ -1,7 +1,7 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import React from "react";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "../../jc-shared/konzert/konzert.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";

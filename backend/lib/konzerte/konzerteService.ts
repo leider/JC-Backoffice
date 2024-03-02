@@ -4,7 +4,7 @@ import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
 import flatten from "lodash/flatten.js";
 import fs from "fs";
-import path, { dirname } from "path";
+import path from "path";
 
 import Konzert from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -12,11 +12,10 @@ import User from "jc-shared/user/user.js";
 
 import store from "./konzertestore.js";
 import groupBy from "lodash/groupBy.js";
-import { fileURLToPath } from "url";
+import conf from "jc-shared/commons/simpleConfigure.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const uploadDir = path.join(__dirname, "../../static/upload");
+const additionalstatic = conf.getString("additionalstatic");
+const uploadDir = path.join(additionalstatic, "upload");
 
 async function getKonzert(url: string) {
   return await store.getKonzert(url);

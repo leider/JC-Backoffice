@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
-import Konzert from "../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";

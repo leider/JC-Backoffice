@@ -40,6 +40,7 @@ export default function ButtonWithIconAndLink({
             size={text && !smallIcon ? undefined : "small"}
             disabled={disabled}
             block={block}
+            title={text}
             ghost={ghost}
           >
             {sm && text && text}

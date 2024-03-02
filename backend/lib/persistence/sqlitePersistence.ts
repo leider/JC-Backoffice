@@ -1,10 +1,10 @@
 import Database, { SqliteError } from "better-sqlite3";
-import conf from "../../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
 import { areDifferent } from "jc-shared/commons/comparingAndTransforming.js";
 
-const sqlitedb = conf.get("sqlitedb") as string;
+const sqlitedb = conf.getString("sqlitedb");
 export const db = new Database(sqlitedb);
 const scriptLogger = loggers.get("scripts");
 scriptLogger.info(`DB = ${sqlitedb}`);

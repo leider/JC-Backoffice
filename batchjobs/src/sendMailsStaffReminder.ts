@@ -6,19 +6,18 @@ import userstore from "jc-backend/lib/users/userstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
-import Konzert from "jc-shared/konzert/konzert.js";
-import Vermietung from "jc-shared/vermietung/vermietung.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return config.get("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return config.getString("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 async function sendMail(verMitUser: VerMitUser) {
-  const prefix = config.get("publicUrlPrefix") as string;
+  const prefix = config.getString("publicUrlPrefix");
   const veranstaltung = verMitUser.veranstaltung;
   const user = verMitUser.user;
 
@@ -43,7 +42,7 @@ export async function checkStaff(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  const bestaetigt = (ver: Konzert | Vermietung) => ver.kopf.confirmed;
+  const bestaetigt = (ver: Veranstaltung) => ver.kopf.confirmed;
   const alle = await byDateRangeInAscendingOrder({
     from: start,
     to: end,

@@ -1,11 +1,11 @@
 import passport from "passport";
 import { ExtractJwt, Strategy, VerifiedCallback } from "passport-jwt";
 
-import conf from "../../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
 import store from "../users/userstore.js";
 
-const jwtSecret = conf.get("salt") as string;
+const jwtSecret = conf.getString("salt");
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: jwtSecret,

@@ -1,7 +1,7 @@
 import { Form, FormInstance, Select } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
-import Konzert from "../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;

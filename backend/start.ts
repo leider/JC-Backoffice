@@ -10,7 +10,7 @@ const app = express();
 configureApp(app);
 const appLogger = loggers.get("application");
 
-import conf from "../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 const port = conf.get("port");
 
 process.env.TZ = "Europe/Berlin";

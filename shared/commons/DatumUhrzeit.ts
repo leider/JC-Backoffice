@@ -46,7 +46,7 @@ export default class DatumUhrzeit {
   private readonly val: Dayjs;
 
   constructor(dateTime?: Dayjs) {
-    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs(conf.get("nowForDevelopment") as string); //dayjs();
+    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs(conf.getString("nowForDevelopment"));
   }
 
   // Konstruktoren

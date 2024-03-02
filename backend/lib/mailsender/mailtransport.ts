@@ -5,8 +5,8 @@ const logger = winston.loggers.get("application");
 
 import Message from "jc-shared/mail/message.js";
 
-import conf from "../../../shared/commons/simpleConfigure.js";
-const doNotSendMails = conf.get("doNotSendMails") || "";
+import conf from "jc-shared/commons/simpleConfigure.js";
+const doNotSendMails = conf.getString("doNotSendMails") || "";
 import MailBodyRenderer from "./mailbodyRenderer.js";
 
 const transport = nodemailer.createTransport(conf.get("transport-options") as object);
@@ -15,8 +15,8 @@ const transport = nodemailer.createTransport(conf.get("transport-options") as ob
 export function toTransportObject(message: Message, isForDatev: boolean): Mail.Options {
   const mbRenderer = new MailBodyRenderer(message.markdown);
 
-  const senderAddress = isForDatev ? (conf.get("sender-address-datev") as string) : (conf.get("sender-address") as string);
-  const senderName = (conf.get("sender-name") as string) + (isForDatev ? " für Datev" : "");
+  const senderAddress = isForDatev ? conf.getString("sender-address-datev") : (conf.get("sender-address") as string);
+  const senderName = conf.getString("sender-name") + (isForDatev ? " für Datev" : "");
   return {
     from: Message.formatEMailAddress(message.senderName(senderName), message.senderAddress(senderAddress)),
     to: message.to || message.senderAddress(senderAddress),
@@ -43,7 +43,7 @@ async function sendMailInternal(message: Message, isForDatev: boolean) {
     delete withoutAttachments.attachments;
     logger.info(JSON.stringify(withoutAttachments, null, 2));
     delete transportObject.to;
-    transportObject.bcc = doNotSendMails as string;
+    transportObject.bcc = doNotSendMails;
   }
   try {
     return transport.sendMail(transportObject);

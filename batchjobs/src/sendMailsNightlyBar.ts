@@ -11,8 +11,8 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 const logger = loggers.get("application");
 
 export async function checkBar(now: DatumUhrzeit) {
-  const name = config.get("bar-name") as string;
-  const email = config.get("bar-email") as string;
+  const name = config.getString("bar-name");
+  const email = config.getString("bar-email");
   const subject = "Jazzclub Bar Termine";
   const firstLine = "## An folgenden Terminen haben wir Veranstaltungen im Jazzclub:";
 

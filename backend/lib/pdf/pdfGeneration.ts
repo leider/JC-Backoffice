@@ -20,7 +20,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const publicUrlPrefix = conf.get("publicUrlPrefix");
+const publicUrlPrefix = conf.getString("publicUrlPrefix");
 
 export function kassenbericht(res: Response, next: NextFunction, datum: DatumUhrzeit): void {
   const now = new DatumUhrzeit();
@@ -99,7 +99,7 @@ export async function kassenzettelToBuchhaltung(konzert: Konzert) {
   generatePdfLocally(renderedHtml, (pdf: Buffer) => {
     const message = new Message({ subject, markdown: "" });
     message.pdfBufferAndName = { pdf, name: filenamepdf };
-    message.to = conf.get("kassenzettel-email") as string;
+    message.to = conf.getString("kassenzettel-email");
     if (!message.to) {
       return;
     }
@@ -122,7 +122,7 @@ export async function vermietungVertragToBuchhaltung(vermietung: Vermietung) {
   generatePdfLocally(renderedHtml, (pdf: Buffer) => {
     const message = new Message({ subject, markdown: "" });
     message.pdfBufferAndName = { pdf, name: filenamepdf };
-    message.to = conf.get("kassenzettel-email") as string;
+    message.to = conf.getString("kassenzettel-email");
     if (!message.to) {
       return;
     }

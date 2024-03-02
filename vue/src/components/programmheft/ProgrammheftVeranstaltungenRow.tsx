@@ -1,7 +1,7 @@
 import { Col, Row } from "antd";
 import { ProgrammheftVeranstaltungenMonat } from "@/components/programmheft/ProgrammheftVeranstaltungenMonat.tsx";
 import * as React from "react";
-import Konzert from "../../../../shared/konzert/konzert.ts";
+import Konzert from "../jc-shared/konzert/konzert.ts";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";

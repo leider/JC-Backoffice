@@ -1,14 +1,13 @@
 import User from "jc-shared/user/user.js";
 
-import path, { dirname } from "path";
+import path from "path";
 import fs from "fs/promises";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 import store from "./konzertestore.js";
-import { fileURLToPath } from "url";
+import conf from "jc-shared/commons/simpleConfigure.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const uploadDir = path.join(__dirname, "../../static/upload");
+const additionalstatic = conf.getString("additionalstatic");
+const uploadDir = path.join(additionalstatic, "upload");
 
 async function renameImage(oldname: string, newname: string, konzertIds: string[], user: User) {
   function updateKonzert(id: string) {

@@ -1,6 +1,6 @@
 import { Col, Row } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";

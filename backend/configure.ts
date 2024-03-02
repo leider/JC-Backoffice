@@ -20,6 +20,7 @@ function createConfiguration(): SimpleConfigure {
   conf.addProperties({
     port: "1969",
     emaildomainname: "localhost",
+    additionalstatic: "./static", // legacy
   });
 
   function addFiles(files: string[]): void {

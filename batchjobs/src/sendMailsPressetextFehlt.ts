@@ -2,23 +2,22 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
-import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
-import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 const logger = loggers.get("application");
 
 async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
-  async function sendMail(kaputte: (Konzert | Vermietung)[]) {
-    const prefix = config.get("publicUrlPrefix") as string;
-    function presseTemplateInternal(ver: Konzert | Vermietung): string {
+  async function sendMail(kaputte: Veranstaltung[]) {
+    const prefix = config.getString("publicUrlPrefix");
+    function presseTemplateInternal(ver: Veranstaltung): string {
       // für interne Mails
       return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
 #### ${ver.startDatumUhrzeit.fuerPresse} ${ver.kopf.presseInEcht}

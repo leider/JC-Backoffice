@@ -10,7 +10,7 @@ import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
 import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
 import FerienIcals from "jc-shared/optionen/ferienIcals";
-import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "../../../shared/konzert/konzert.ts";
+import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";

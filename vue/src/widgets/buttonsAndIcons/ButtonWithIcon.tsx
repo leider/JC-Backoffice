@@ -51,7 +51,7 @@ export default function ButtonWithIcon({
           htmlType={onClick === "submit" ? "submit" : undefined}
           size={size}
           block={block}
-          title={!sm && text ? text : undefined}
+          title={text}
           loading={loading}
           style={style}
           data-testid={testid}

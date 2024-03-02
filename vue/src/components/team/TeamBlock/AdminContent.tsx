@@ -1,4 +1,4 @@
-import Konzert, { ChangelistItem } from "../../../../../shared/konzert/konzert.ts";
+import Konzert, { ChangelistItem } from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

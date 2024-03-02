@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";

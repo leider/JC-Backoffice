@@ -16,7 +16,7 @@ import wikiApp from "./wiki.js";
 import User from "jc-shared/user/user.js";
 import { Form } from "multiparty";
 import Message from "jc-shared/mail/message.js";
-import conf from "../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import fs from "fs/promises";
 import { checkSuperuser } from "./checkAccessHandlers.js";
@@ -78,7 +78,7 @@ app.post("/beleg", async (req: Request, res: Response) => {
 ${kommentar}`;
     const message = new Message({ subject, markdown: markdown });
     message.pdfBufferAndName = { pdf: buffer, name: filename };
-    message.to = conf.get("beleg-email") as string;
+    message.to = conf.getString("beleg-email");
     message.bcc = (req.user as User).email || "";
     if (!message.to) {
       return res.status(500).send("Kein Empfänger");

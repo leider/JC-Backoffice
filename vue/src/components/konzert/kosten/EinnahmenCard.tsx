@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import KonzertKalkulation from "../../../../../shared/konzert/konzertKalkulation.ts";
+import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";

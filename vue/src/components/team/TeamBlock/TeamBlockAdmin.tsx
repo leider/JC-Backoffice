@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "../../jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";

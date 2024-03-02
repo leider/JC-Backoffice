@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Konzert, { ImageOverviewVeranstaltung } from "../../../../../shared/konzert/konzert.ts";
+import Konzert, { ImageOverviewVeranstaltung } from "../../jc-shared/konzert/konzert.ts";
 import uniq from "lodash/uniq";
 import flatten from "lodash/flatten";
 import intersection from "lodash/intersection";

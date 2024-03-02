@@ -1,7 +1,7 @@
 import { Tag, theme } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";

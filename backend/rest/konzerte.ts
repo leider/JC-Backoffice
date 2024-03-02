@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { Form } from "multiparty";
 import fs from "fs";
-import path, { dirname } from "path";
+import path from "path";
 
 import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -13,8 +13,11 @@ import konzerteService from "../lib/konzerte/konzerteService.js";
 import store from "../lib/konzerte/konzertestore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
-import { fileURLToPath } from "url";
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import conf from "jc-shared/commons/simpleConfigure.js";
+
+const additionalstatic = conf.getString("additionalstatic");
+const uploadDir = path.join(additionalstatic, "upload");
+const filesDir = path.join(additionalstatic, "files");
 
 const app = express();
 
@@ -130,9 +133,6 @@ app.post("/konzert/:url/updateGastInSection", async (req: Request, res: Response
 });
 
 app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
-  const uploadDir = path.join(__dirname, "../static/upload");
-  const filesDir = path.join(__dirname, "../static/files");
-
   async function copyFile(src: string, dest: string) {
     return new Promise((resolve, reject) => {
       const readStream = fs.createReadStream(src);

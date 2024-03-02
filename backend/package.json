@@ -27,7 +27,6 @@
     "pug": "3.0.2",
     "puppeteer": "22.2.0",
     "sharp": "0.33.2",
-    "simple-configure": "0.1.6",
     "superagent": "8.1.2",
     "winston": "3.11.0"
   },

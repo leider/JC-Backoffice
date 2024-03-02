@@ -1,4 +1,4 @@
-import Konzert from "../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import { utils, writeFileXLSX } from "xlsx";
 import { createExcelData, createExcelDataVermietung } from "jc-shared/excelPreparation/excelFormatters.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";

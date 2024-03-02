@@ -14,6 +14,10 @@ export class SimpleConfigure {
     return this.storage[property];
   }
 
+  getString(property: string): string {
+    return this.storage[property] as string;
+  }
+
   reset(): void {
     this.storage = {};
   }

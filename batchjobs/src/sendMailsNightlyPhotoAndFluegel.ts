@@ -1,19 +1,19 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
-import Konzert from "jc-shared/konzert/konzert.js";
 
 import config from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 const logger = loggers.get("application");
 
 type SendMailVariables = { name: string; email: string; subject: string; firstLine: string };
 
-async function sendMail(stuffToSend: (Konzert | Vermietung)[], variables: SendMailVariables) {
+async function sendMail(stuffToSend: Veranstaltung[], variables: SendMailVariables) {
   const markdownToSend = `${variables.firstLine}
 
 ---
@@ -35,7 +35,7 @@ ${stuffToSend
 
 async function checkForFilter(
   // eslint-disable-next-line no-unused-vars
-  filterFunction: (ver: Konzert | Vermietung) => boolean,
+  filterFunction: (ver: Veranstaltung) => boolean,
   variables: SendMailVariables,
   now: DatumUhrzeit,
 ) {
@@ -63,8 +63,8 @@ async function checkForFilter(
 }
 
 export async function checkFotograf(now: DatumUhrzeit) {
-  const name = config.get("fotograf-name") as string;
-  const email = config.get("fotograf-email") as string;
+  const name = config.getString("fotograf-name");
+  const email = config.getString("fotograf-email");
   const subject = "Photographing for Jazzclub";
   const firstLine = "## The following concerts may profit from a professional photographer:";
 
@@ -75,7 +75,7 @@ export async function checkFotograf(now: DatumUhrzeit) {
     firstLine,
   };
   return checkForFilter(
-    (ver: Konzert | Vermietung) => {
+    (ver: Veranstaltung) => {
       const satisfied = ver.kopf.fotografBestellen && ver.kopf.confirmed;
       if (ver.isVermietung) {
         return (ver as Vermietung).brauchtPresse && satisfied;
@@ -88,8 +88,8 @@ export async function checkFotograf(now: DatumUhrzeit) {
 }
 
 export async function checkFluegel(now: DatumUhrzeit) {
-  const name = config.get("stimmer-name") as string;
-  const email = config.get("stimmer-email") as string;
+  const name = config.getString("stimmer-name");
+  const email = config.getString("stimmer-email");
   const subject = "Flügelstimmen im Jazzclub";
   const firstLine = "## Bei folgenden Veranstaltungen brauchen wir einen Klavierstimmer:";
 
@@ -100,7 +100,7 @@ export async function checkFluegel(now: DatumUhrzeit) {
     firstLine,
   };
   return checkForFilter(
-    (ver: Konzert | Vermietung) => {
+    (ver: Veranstaltung) => {
       const satisfied = ver.technik.fluegel && ver.kopf.confirmed;
       if (ver.isVermietung) {
         return (ver as Vermietung).brauchtTechnik && satisfied;

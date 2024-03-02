@@ -1,6 +1,6 @@
 import gitExec from "./gitExec.js";
-import conf from "../../../shared/commons/simpleConfigure.js";
-const workTree = conf.get("wikipath");
+import conf from "jc-shared/commons/simpleConfigure.js";
+const workTree = conf.getString("wikipath");
 
 function dataToLines(data?: string): string[] {
   return data ? data.split("\n").filter((v) => v !== "") : [];

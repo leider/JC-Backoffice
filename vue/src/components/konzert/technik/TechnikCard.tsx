@@ -5,7 +5,7 @@ import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";

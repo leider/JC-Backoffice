@@ -14,7 +14,7 @@ import store from "../konzerte/konzertestore.js";
 import { resToJson } from "../commons/replies.js";
 import userstore from "../users/userstore.js";
 import { hashPassword } from "../commons/hashPassword.js";
-import conf from "../../../shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
 import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
@@ -24,7 +24,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const appLogger = loggers.get("application");
 
-const jwtSecret = conf.get("salt") as string;
+const jwtSecret = conf.getString("salt");
 
 const app = express();
 
@@ -129,12 +129,14 @@ app.post("/logout", async (req, res) => {
   return res.clearCookie("refresh-token").send({});
 });
 
-const uploadDir = path.join(__dirname, "../../static/upload");
+const additionalstatic = conf.getString("additionalstatic");
+const uploadDir = path.join(additionalstatic, "upload");
+const placeholder = path.join(__dirname, "../../static/upload/../No-Image-Placeholder.svg");
 
 app.get("/imagepreview/:filename", (req, res, next) => {
   // eslint-disable-next-line no-sync
   if (!fs.existsSync(uploadDir + "/" + req.params.filename)) {
-    return sharp(uploadDir + "/../No-Image-Placeholder.svg").toBuffer((err, buffer) => {
+    return sharp(placeholder).toBuffer((err, buffer) => {
       if (err) {
         if (err.message === "Input file is missing") {
           return next();

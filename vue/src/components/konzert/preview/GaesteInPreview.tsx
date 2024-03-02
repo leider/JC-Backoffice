@@ -1,4 +1,4 @@
-import Konzert, { GastArt, NameWithNumber } from "../../../../../shared/konzert/konzert.ts";
+import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { List } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";

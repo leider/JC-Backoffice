@@ -8,7 +8,7 @@ import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import Konzert from "../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

@@ -4,7 +4,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import * as React from "react";
 import { useMemo, useState } from "react";
-import Konzert from "../../../../shared/konzert/konzert.ts";
+import Konzert from "../jc-shared/konzert/konzert.ts";
 import { Link } from "react-router-dom";
 import headerTags from "@/components/colored/headerTags.tsx";
 

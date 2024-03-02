@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row, Table } from "antd";
-import Konzert from "../../../../../shared/konzert/konzert.ts";
-import KonzertKalkulation from "../../../../../shared/konzert/konzertKalkulation.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
+import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";

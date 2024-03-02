@@ -1,4 +1,4 @@
-import Konzert from "../../../../shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import dayjs from "dayjs";
 import { FormInstance } from "antd";
 import cloneDeep from "lodash/cloneDeep";
