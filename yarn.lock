@@ -6844,7 +6844,6 @@ __metadata:
     pug: "npm:3.0.2"
     puppeteer: "npm:22.2.0"
     sharp: "npm:0.33.2"
-    simple-configure: "npm:0.1.6"
     superagent: "npm:8.1.2"
     winston: "npm:3.11.0"
   languageName: unknown
@@ -9877,13 +9876,6 @@ __metadata:
   version: 1.0.1
   resolution: "simple-concat@npm:1.0.1"
   checksum: 10c0/62f7508e674414008910b5397c1811941d457dfa0db4fd5aa7fa0409eb02c3609608dfcd7508cace75b3a0bf67a2a77990711e32cd213d2c76f4fd12ee86d776
-  languageName: node
-  linkType: hard
-
-"simple-configure@npm:0.1.6":
-  version: 0.1.6
-  resolution: "simple-configure@npm:0.1.6"
-  checksum: 10c0/2e57a936ff36f7fa3090e84f57439f36195e263470bff45aacc2846ec63cd3ebe7af87cd48ca389f3311d1467a32e8ea7026ccaf8680e7cae2417c0b8dfb8050
   languageName: node
   linkType: hard
 
