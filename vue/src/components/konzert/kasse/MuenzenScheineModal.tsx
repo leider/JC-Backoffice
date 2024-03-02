@@ -97,6 +97,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
       </Modal>
       <ButtonWithIcon
         block
+        alwaysText
         text={isBeginn ? "Startinhalt" : "Endinhalt"}
         icon="CurrencyExchange"
         onClick={() => {

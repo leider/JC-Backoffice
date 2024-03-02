@@ -20,6 +20,7 @@ export default function ButtonWithIcon({
   loading,
   style,
   testid,
+  alwaysText = false,
 }: {
   icon?: IconProps["iconName"];
   text?: string;
@@ -34,9 +35,9 @@ export default function ButtonWithIcon({
   loading?: boolean;
   style?: CSSProperties;
   testid?: string;
+  alwaysText?: boolean;
 }) {
-  const { useToken } = theme;
-  const token = useToken().token;
+  const token = theme.useToken().token;
 
   const { sm } = useBreakpoint();
 
@@ -56,7 +57,7 @@ export default function ButtonWithIcon({
           style={style}
           data-testid={testid}
         >
-          {sm && text && text}
+          {(sm || alwaysText) && text && text}
         </Button>
       </Tooltip>
     </ConfigProvider>

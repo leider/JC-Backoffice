@@ -4,7 +4,7 @@ import { Col, Form, Row } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveImagenames } from "@/commons/loader.ts";
-import { ImageOverviewRow } from "../../jc-shared/konzert/konzert.ts";
+import { ImageOverviewRow } from "jc-shared/konzert/konzert.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { Section } from "@/components/options/imageoverview/Section.tsx";
 import { useCreateImagenamesSections } from "@/components/options/imageoverview/useCreateImagenamesSections.ts";

@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useMemo, useState } from "react";
 import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Dropdown, Form, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
-import Konzert from "../jc-shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";

@@ -16,6 +16,7 @@ export default function ButtonWithIconAndLink({
   type,
   ghost,
   smallIcon,
+  alwaysText = false,
 }: {
   to: To;
   icon: IconProps["iconName"];
@@ -27,6 +28,7 @@ export default function ButtonWithIconAndLink({
   type?: BaseButtonProps["type"];
   ghost?: boolean;
   smallIcon?: boolean;
+  alwaysText?: boolean;
 }) {
   const { sm } = useBreakpoint();
 
@@ -43,7 +45,7 @@ export default function ButtonWithIconAndLink({
             title={text}
             ghost={ghost}
           >
-            {sm && text && text}
+            {(sm || alwaysText) && text && text}
           </Button>
         </Link>
       </Tooltip>
