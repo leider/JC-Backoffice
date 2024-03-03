@@ -8,7 +8,6 @@ setCommonPlugins();
 
 const sqliteHelper = require("./helpers/sqlitehelpers");
 
-let server;
 /** @type {CodeceptJS.MainConfig} */
 exports.config = {
   tests: "./tests/*_test.js",
@@ -18,7 +17,7 @@ exports.config = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: false,
+      show: true,
       keepCookies: true,
     },
     SqliteHelper: {
