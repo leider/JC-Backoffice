@@ -58,8 +58,8 @@ app.get("/konzerte/:startYYYYMM/:endYYYYMM", async (req, res) => {
 
 app.get("/konzerte/fortoday", async (req, res) => {
   const today = new DatumUhrzeit();
-  const start = today;
-  const end = today.plus({ tage: 1 });
+  const start = today.setUhrzeit(0, 0);
+  const end = today.plus({ tage: 1 }).setUhrzeit(23, 59);
   const konzerte = await store.byDateRangeInAscendingOrder(start, end);
   standardHandler(res, req.user as User, konzerte);
 });

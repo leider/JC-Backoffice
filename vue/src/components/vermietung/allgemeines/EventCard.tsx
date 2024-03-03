@@ -15,6 +15,7 @@ export default function EventCard() {
           <CheckItem label="Ist bestätigt" name={["kopf", "confirmed"]} />
           <CheckItem label="Braucht Technik" name="brauchtTechnik" />
           <CheckItem label="Braucht Presse" name="brauchtPresse" />
+          <CheckItem label="Braucht Bar" name="brauchtBar" />
         </Col>
         <Col span={8}>
           <DynamicItem

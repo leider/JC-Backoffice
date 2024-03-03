@@ -51,6 +51,11 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     preserve: true,
   });
 
+  const bar = Form.useWatch("brauchtBar", {
+    form,
+    preserve: true,
+  });
+
   const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
@@ -68,9 +73,9 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     if (brauchtPresse) {
       taggies.push({ label: "Presse", color: presseOK });
     }
-    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social }, { label: "Bar einladen", color: bar });
     setTagsForTitle(headerTags(taggies));
-  }, [confirmed, brauchtTechnik, brauchtPresse, technikOK, presseOK, homepage, social]);
+  }, [confirmed, brauchtTechnik, brauchtPresse, technikOK, presseOK, homepage, social, bar]);
 
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 

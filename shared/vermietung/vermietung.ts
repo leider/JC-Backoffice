@@ -7,6 +7,7 @@ export default class Vermietung extends Veranstaltung {
   saalmiete? = undefined;
   brauchtTechnik = false;
   brauchtPresse = false;
+  brauchtBar = false;
   art: "Angebot" | "Vertrag" | "Rechnung" = "Angebot";
 
   angebot = new Angebot();
@@ -38,6 +39,7 @@ export default class Vermietung extends Veranstaltung {
         saalmiete: object.saalmiete,
         brauchtTechnik: object.brauchtTechnik,
         brauchtPresse: object.brauchtPresse,
+        brauchtBar: object.brauchtBar,
         art: object.art,
       });
     }

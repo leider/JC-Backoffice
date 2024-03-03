@@ -16,6 +16,7 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
     const presseOK = vermietung.presse.checked;
     const homepage = vermietung.kopf.kannAufHomePage;
     const social = vermietung.kopf.kannInSocialMedia;
+    const bar = vermietung.brauchtPresse;
 
     const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
     if (vermietung.brauchtTechnik) {
@@ -24,7 +25,7 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
     if (vermietung.brauchtPresse) {
       taggies.push({ label: "Presse", color: presseOK });
     }
-    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social }, { label: "Bar einladen", color: bar });
 
     setTagsForTitle(headerTags(taggies, true));
   }, [vermietung]);
