@@ -1,8 +1,8 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { Form, Space } from "antd";
-import { useParams } from "react-router-dom";
-import { CopyButton, DeleteButton, ExportButtons, SaveButton } from "@/components/colored/JazzButtons";
+import { useParams, useSearchParams } from "react-router-dom";
+import { CopyButton, DeleteButton, ExportButtons, HelpWithKasseButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import headerTags from "@/components/colored/headerTags.tsx";
@@ -16,12 +16,14 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
   const { optionen } = useJazzContext();
   const form = konzertContext!.form;
   const { url } = useParams();
-
+  const [search] = useSearchParams();
   const { currentUser } = useJazzContext();
   const [displayDate, setDisplayDate] = useState<string>("");
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
 
   const [isOrga, setIsOrga] = useState<boolean>(false);
+
+  const isKassenseite = useMemo(() => search.get("page") === "kasse", [search]);
 
   const eventTyp = Form.useWatch(["kopf", "eventTyp"], {
     form,
@@ -118,6 +120,14 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
         isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
         <SaveButton key="save" disabled={!dirty} />,
+        isKassenseite && (
+          <HelpWithKasseButton
+            key="helpKasse"
+            callback={() => {
+              konzertContext ? konzertContext.setKasseHelpOpen(true) : undefined;
+            }}
+          />
+        ),
       ]}
       tags={tagsForTitle}
     >

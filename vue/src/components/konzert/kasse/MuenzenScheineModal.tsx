@@ -1,10 +1,11 @@
-import { Button, Col, Form, Input, Modal, Row } from "antd";
+import { Button, Col, ConfigProvider, Form, Input, Modal, Row, theme } from "antd";
 import React, { useContext, useMemo, useState } from "react";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbedded.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KassenContext } from "@/components/konzert/kasse/TabKasse.tsx";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -20,7 +21,9 @@ const items = [
 ];
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
+  const token = theme.useToken().token;
   const konzertContext = useContext(KonzertContext);
+  const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
   const form = konzertContext!.form;
   const [openModal, setOpenModal] = useState(false);
 
@@ -69,16 +72,19 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
         closable={false}
         maskClosable={false}
         footer={[
-          <Button
-            key="back"
-            type="primary"
-            onClick={() => {
-              isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
-              setOpenModal(false);
-            }}
-          >
-            Schließen
-          </Button>,
+          <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
+            <Button
+              key="back"
+              type="primary"
+              onClick={() => {
+                isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
+                konzertContext?.isDirty ? form.submit() : undefined;
+                setOpenModal(false);
+              }}
+            >
+              Speichern & Schließen
+            </Button>
+          </ConfigProvider>,
         ]}
       >
         {items.map((item) => (
@@ -96,6 +102,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
         ))}
       </Modal>
       <ButtonWithIcon
+        ref={isBeginn ? refStartinhalt : refEndinhalt}
         block
         alwaysText
         text={isBeginn ? "Startinhalt" : "Endinhalt"}

@@ -1,42 +1,45 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, forwardRef, Ref } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 
-export default function ButtonWithIcon({
-  icon,
-  onClick,
-  text,
-  type,
-  disabled,
-  tooltipTitle,
-  tooltipPlacement,
-  color,
-  size,
-  block,
-  loading,
-  style,
-  testid,
-  alwaysText = false,
-}: {
-  icon?: IconProps["iconName"];
-  text?: string;
-  type?: BaseButtonProps["type"];
-  onClick?: (() => void) | "submit";
-  disabled?: boolean;
-  tooltipTitle?: string;
-  tooltipPlacement?: TooltipPlacement;
-  color?: string;
-  size?: SizeType;
-  block?: boolean;
-  loading?: boolean;
-  style?: CSSProperties;
-  testid?: string;
-  alwaysText?: boolean;
-}) {
+const ButtonWithIcon = forwardRef(function (
+  {
+    icon,
+    onClick,
+    text,
+    type,
+    disabled,
+    tooltipTitle,
+    tooltipPlacement,
+    color,
+    size,
+    block,
+    loading,
+    style,
+    testid,
+    alwaysText = false,
+  }: {
+    icon?: IconProps["iconName"];
+    text?: string;
+    type?: BaseButtonProps["type"];
+    onClick?: (() => void) | "submit";
+    disabled?: boolean;
+    tooltipTitle?: string;
+    tooltipPlacement?: TooltipPlacement;
+    color?: string;
+    size?: SizeType;
+    block?: boolean;
+    loading?: boolean;
+    style?: CSSProperties;
+    testid?: string;
+    alwaysText?: boolean;
+  },
+  ref: Ref<HTMLElement>,
+) {
   const token = theme.useToken().token;
 
   const { sm } = useBreakpoint();
@@ -45,6 +48,7 @@ export default function ButtonWithIcon({
     <ConfigProvider theme={{ token: { colorPrimary: color || token.colorPrimary } }}>
       <Tooltip title={tooltipTitle} color={color} placement={tooltipPlacement || "top"}>
         <Button
+          ref={ref}
           icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
           type={type || "primary"}
           onClick={onClick && onClick !== "submit" ? onClick : undefined}
@@ -62,4 +66,5 @@ export default function ButtonWithIcon({
       </Tooltip>
     </ConfigProvider>
   );
-}
+});
+export default ButtonWithIcon;

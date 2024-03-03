@@ -1,15 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { forwardRef, Ref, useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
 import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 
-export default function EinnahmenCard({ disabled }: KasseCardProps) {
+const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
   const konzertContext = useContext(KonzertContext);
   const form = konzertContext!.form;
+  const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
@@ -27,9 +30,23 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
     form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
+  function calculateTickets() {
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const tickets =
+      kasse.endbestandGezaehltEUR -
+      kasse.anfangsbestandEUR -
+      kasse.ausgabenTotalEUR -
+      kasse.einnahmeBankEUR -
+      kasse.einnahmeOhneBankUndTickets +
+      kasse.ausgabeBankEUR;
+
+    form.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
+    updateSumme();
+  }
+
   return (
     <Collapsible suffix="kasse" label="Einnahmen Abendkasse" noTopBorder amount={summe}>
-      <Row gutter={12}>
+      <Row ref={ref} gutter={12}>
         <Col span={8}>
           <NumberInput
             name={["kasse", "einnahmeTicketsEUR"]}
@@ -40,6 +57,13 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             disabled={readonly}
           />
         </Col>
+        <Col span={8}>
+          <Form.Item label="&nbsp;">
+            <ButtonWithIcon block text="Berechnen..." color={color("kasse")} onClick={calculateTickets} alwaysText />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={12}>
         <Col span={8}>
           <NumberInput name={["kasse", "anzahlBesucherAK"]} label="Besucher gesamt" decimals={0} disabled={readonly} />
         </Col>
@@ -86,4 +110,6 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
       </Row>
     </Collapsible>
   );
-}
+});
+
+export default EinnahmenCard;

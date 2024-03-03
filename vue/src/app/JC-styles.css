@@ -17,6 +17,10 @@
   text-align: right;
 }
 
+.ant-tour {
+  max-width: 90%;
+}
+
 .editor-toolbar {
   padding: 0 !important;
 }

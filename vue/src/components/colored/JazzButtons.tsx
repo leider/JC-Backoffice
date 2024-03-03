@@ -17,8 +17,7 @@ type ButtonProps = {
   disabled?: boolean;
 };
 function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean }) {
-  const { useToken } = theme;
-  const token = useToken().token;
+  const token = theme.useToken().token;
 
   return (
     <ButtonWithIcon
@@ -29,6 +28,12 @@ function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean 
       color={token.colorSuccess}
     />
   );
+}
+
+export function HelpWithKasseButton({ callback }: { callback: () => void }) {
+  const token = theme.useToken().token;
+
+  return <ButtonWithIcon alwaysText text="Abendkasse Hilfe" onClick={callback} icon="QuestionCircleFill" color={token.colorSuccess} />;
 }
 
 export function SaveButton({ disabled }: ButtonProps) {

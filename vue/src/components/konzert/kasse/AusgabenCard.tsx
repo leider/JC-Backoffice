@@ -1,16 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { forwardRef, Ref, useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
+import { KasseCardProps, KassenContext } from "@/components/konzert/kasse/TabKasse";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 
-export default function AusgabenCard({ disabled }: KasseCardProps) {
+const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
   const konzertContext = useContext(KonzertContext);
+  const kassenContext = useContext(KassenContext);
   const form = konzertContext!.form;
+  const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
   useEffect(() => {
@@ -28,9 +32,17 @@ export default function AusgabenCard({ disabled }: KasseCardProps) {
     form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
   const { lg } = useBreakpoint();
+
+  function calculateAnBank() {
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const anBank = kasse.einnahmeTotalEUR - kasse.ausgabenOhneGage;
+    form.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
+    updateSumme();
+  }
+
   return (
     <Collapsible suffix="kasse" label="Ausgaben (Bar und mit Beleg)" noTopBorder={lg} amount={summe}>
-      <Row gutter={12}>
+      <Row ref={ref} gutter={12}>
         <Col span={8}>
           <NumberInput
             name={["kasse", "ausgabeCateringEUR"]}
@@ -98,7 +110,20 @@ export default function AusgabenCard({ disabled }: KasseCardProps) {
         </Col>
       </Row>
       <Row gutter={12}>
-        <Col span={8} offset={16}>
+        <Col span={8} offset={8}>
+          <Form.Item label="&nbsp;">
+            <ButtonWithIcon
+              ref={kassenContext.refAnBank}
+              block
+              text="Berechnen..."
+              color={color("kasse")}
+              onClick={calculateAnBank}
+              alwaysText
+            />
+          </Form.Item>
+        </Col>
+
+        <Col span={8}>
           <NumberInput
             name={["kasse", "ausgabeBankEUR"]}
             label="An Bank"
@@ -111,4 +136,6 @@ export default function AusgabenCard({ disabled }: KasseCardProps) {
       </Row>
     </Collapsible>
   );
-}
+});
+
+export default AusgabenCard;

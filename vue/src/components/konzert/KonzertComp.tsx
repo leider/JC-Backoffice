@@ -17,12 +17,14 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 export const KonzertContext = createContext<{
   form: FormInstance<Konzert>;
   isDirty: boolean;
+  isKasseHelpOpen: boolean;
+  setKasseHelpOpen: (open: boolean) => void;
 } | null>(null);
 
 export default function KonzertComp() {
   const { url } = useParams();
   const [form] = Form.useForm<Konzert>();
-
+  const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
   const agenturauswahl = Form.useWatch("agenturauswahl", { form });
 
   useEffect(
@@ -176,7 +178,7 @@ export default function KonzertComp() {
   }
 
   return (
-    <KonzertContext.Provider value={{ form, isDirty: dirty }}>
+    <KonzertContext.Provider value={{ form, isDirty: dirty, isKasseHelpOpen: isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen }}>
       <Form
         form={form}
         onValuesChange={() => {
