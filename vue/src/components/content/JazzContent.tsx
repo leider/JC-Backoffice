@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Layout, theme } from "antd";
-import { useLocation } from "react-router-dom";
+import { Col, Layout, Row, theme } from "antd";
+import { Link, useLocation } from "react-router-dom";
 import { menuKeys } from "@/components/content/MenuNodes.tsx";
 import { JazzContext, useCreateJazzContext } from "@/components/content/useJazzContext.ts";
 import InnerContent from "@/components/content/InnerContent.tsx";
@@ -9,9 +9,42 @@ import { useProvideAuth } from "@/commons/auth.tsx";
 import { AuthContext } from "@/commons/authConsts";
 import { JazzHeader } from "@/components/content/JazzHeader.tsx";
 import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpFields.tsx";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import { useQuery } from "@tanstack/react-query";
+import { konzerteForToday } from "@/commons/loader.ts";
 
 const { Content } = Layout;
 
+function TodaysConcert() {
+  const today = new DatumUhrzeit();
+  const { data } = useQuery({
+    queryKey: ["konzert", `${today.yyyyMM}`],
+    queryFn: () => konzerteForToday(),
+  });
+
+  if (data?.length ?? 0 > 0)
+    return (
+      <Row gutter={6} style={{ marginTop: 8 }}>
+        <Col span={24}>
+          {(data ?? []).map((konzert) => (
+            <Link to={konzert.fullyQualifiedPreviewUrl}>
+              <h2
+                style={{
+                  marginBottom: 0,
+                  marginTop: 0,
+                  textAlign: "center",
+                  backgroundColor: konzert.kopf.eventTypRich?.color,
+                  color: "#FFF",
+                }}
+              >
+                {konzert.startDatumUhrzeit.uhrzeitKompakt}: {konzert.kopf.titel}
+              </h2>
+            </Link>
+          ))}
+        </Col>
+      </Row>
+    );
+}
 const JazzContent: React.FC = () => {
   const {
     token: { colorBgContainer },
@@ -40,6 +73,7 @@ const JazzContent: React.FC = () => {
           <Content style={{ minHeight: "calc(100vh - 65px)" }}>
             <div style={{ background: colorBgContainer }}>
               <TellUserToFillHelpFields />
+              <TodaysConcert />
               <InnerContent />
             </div>
           </Content>

@@ -56,6 +56,14 @@ app.get("/konzerte/:startYYYYMM/:endYYYYMM", async (req, res) => {
   standardHandler(res, req.user as User, konzerte);
 });
 
+app.get("/konzerte/fortoday", async (req, res) => {
+  const today = new DatumUhrzeit();
+  const start = today;
+  const end = today.plus({ tage: 1 });
+  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  standardHandler(res, req.user as User, konzerte);
+});
+
 app.get("/konzert/:url", async (req: Request, res: Response) => {
   const konzert = await store.getKonzert(req.params.url);
   if (!konzert) {

@@ -110,6 +110,11 @@ export async function konzerteBetweenYYYYMM(start: string, end: string) {
   return handleVeranstaltungen(result);
 }
 
+export async function konzerteForToday() {
+  const result = await getForType("json", `/rest/konzerte/fortoday`);
+  return handleVeranstaltungen(result);
+}
+
 export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
   const result = await getForType("json", `/rest/konzerte/${selector}`);
   return handleVeranstaltungen(result);
