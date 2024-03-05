@@ -106,6 +106,10 @@ export default abstract class Veranstaltung {
     return this.startDatumUhrzeit.tagMonatJahrLang;
   }
 
+  get istVergangen(): boolean {
+    return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
+  }
+
   get tooltipInfos(): string {
     return "";
   }
