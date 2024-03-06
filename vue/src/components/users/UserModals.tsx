@@ -1,7 +1,6 @@
-import { Col, Divider, Form, FormInstance, Input, Modal, Row } from "antd";
+import { Col, Divider, Form, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User from "jc-shared/user/user";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import CheckItem from "@/widgets/CheckItem";
@@ -100,7 +99,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             </Form.Item>
           </Col>
         </Row>
-        <EditFields form={form} isSuperUser={true} />
+        <EditFields isSuperUser={true} />
       </Form>
     </Modal>
   );
@@ -172,13 +171,13 @@ export function EditUserModal({
         autoComplete="off"
       >
         <JazzPageHeader title={user.id} />
-        <EditFields form={form} isSuperUser={isSuperUser} />
+        <EditFields isSuperUser={isSuperUser} />
       </Form>
     </Modal>
   );
 }
 
-function EditFields({ form, isSuperUser }: { form: FormInstance; isSuperUser: boolean }) {
+function EditFields({ isSuperUser }: { isSuperUser: boolean }) {
   return (
     <Row gutter={8}>
       <Col span={24}>
@@ -210,15 +209,7 @@ function EditFields({ form, isSuperUser }: { form: FormInstance; isSuperUser: bo
         {isSuperUser && (
           <SingleSelect name="gruppen" label="Rechte" options={["superusers", "bookingTeam", "orgaTeam", "abendkasse", ""]} />
         )}
-        {isSuperUser && (
-          <CheckItem
-            name="kassenfreigabe"
-            label="Kassenfreigabe"
-            onChange={function (event: CheckboxChangeEvent) {
-              form.setFieldValue("rechte", event.target.checked ? ["kassenfreigabe"] : []);
-            }}
-          />
-        )}
+        {isSuperUser && <CheckItem name="kassenfreigabe" label="Kassenfreigabe" />}
       </Col>
     </Row>
   );

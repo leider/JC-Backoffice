@@ -13,6 +13,7 @@ export default class User {
 
   gruppen: string[];
   rechte: string[];
+  kassenfreigabe = false;
   mailinglisten: string[];
   wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
@@ -42,6 +43,7 @@ export default class User {
 
     this.gruppen = object.gruppen || [];
     this.rechte = object.rechte || [];
+    this.kassenfreigabe = object.kassenfreigabe || this.rechte.includes("kassenfreigabe");
 
     this.mailinglisten = object.mailinglisten || [];
     this.accessrightsTransient = undefined;
