@@ -13,6 +13,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TextField } from "@/widgets/TextField.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 export default function InfoCard() {
   const vermietungContext = useContext(VermietungContext);
@@ -121,7 +122,7 @@ export default function InfoCard() {
                     block
                     type="primary"
                     disabled={vermietungContext?.isDirty || !getFieldValue("id")}
-                    onClick={() => openAngebotRechnung(form.getFieldsValue(true))}
+                    onClick={() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>

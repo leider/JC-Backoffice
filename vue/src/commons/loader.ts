@@ -480,34 +480,21 @@ export async function historyRowsFor(collection: string, id: string) {
 
 // Special
 
-export async function exportRiderAsJson(riderJson: any) {
-  const str = JSON.stringify(riderJson);
-  const bytes = new TextEncoder().encode(str);
-  const blob = new Blob([bytes], {
-    type: "application/json;charset=utf-8",
-  });
-  return showFile(blob, "rider.json");
-}
-
 export async function openKassenzettel(konzert: Konzert) {
-  const pdf = await getForType("pdf", `/pdf/kassenzettel/${konzert.url}`);
-  if (pdf) {
-    showFile(pdf);
-  }
+  const filename = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt} (Kassenzettel).pdf`;
+  window.open(`/pdf/kassenzettel/${encodeURIComponent(filename)}x?url=${encodeURIComponent(konzert.url!)}`);
 }
 
 export async function openVertrag(konzert: Konzert) {
-  const pdf = await getForType("pdf", `/pdf/vertrag/${konzert.url}/${konzert.vertrag.sprache.toLowerCase()}`);
-  if (pdf) {
-    showFile(pdf);
-  }
+  const filename = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt} (Vertrag).pdf`;
+  window.open(
+    `/pdf/vertrag/${encodeURIComponent(filename)}?url=${encodeURIComponent(konzert.url!)}&language=${konzert.vertrag.sprache.toLowerCase()}`,
+  );
 }
 
 export async function openAngebotRechnung(vermietung: Vermietung) {
-  const pdf = await getForType("pdf", `/pdf/vermietungAngebot/${vermietung.url}/${vermietung.art}`);
-  if (pdf) {
-    showFile(pdf);
-  }
+  const filename = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${vermietung.art}).pdf`;
+  window.open(`/pdf/vermietungAngebot/${encodeURIComponent(filename)}?url=${encodeURIComponent(vermietung.url!)}&art=${vermietung.art}`);
 }
 
 export async function imgFullsize(url: any) {

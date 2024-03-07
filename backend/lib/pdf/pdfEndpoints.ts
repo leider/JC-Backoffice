@@ -16,16 +16,27 @@ app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextF
   kassenbericht(res, next, datum);
 });
 
-app.get("/kassenzettel/:url", (req, res, next) => {
-  kassenzettel(res, next, req.params.url);
+app.get("/kassenzettel/:filename", (req, res, next) => {
+  const url = req.query["url"] as string;
+  if (url) {
+    kassenzettel(res, next, url);
+  }
 });
 
-app.get("/vertrag/:url/:language", async (req, res, next) => {
-  vertrag(res, next, req.params.url, req.params.language);
+app.get("/vertrag/:filename", async (req, res, next) => {
+  const url = req.query["url"] as string;
+  const language = req.query["language"] as string;
+  if (url && language) {
+    vertrag(res, next, url, language);
+  }
 });
 
-app.get("/vermietungAngebot/:url/:art", async (req, res, next) => {
-  vermietungAngebot(res, next, req.params.url, req.params.art);
+app.get("/vermietungAngebot/:filename", async (req, res, next) => {
+  const url = req.query["url"] as string;
+  const art = req.query["art"] as string;
+  if (url && art) {
+    vermietungAngebot(res, next, url, art);
+  }
 });
 
 app.get("/rider/:url", async (req, res, next) => {

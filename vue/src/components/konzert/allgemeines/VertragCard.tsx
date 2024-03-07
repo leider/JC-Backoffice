@@ -8,6 +8,7 @@ import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/widgets/Uploader.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export default function VertragCard() {
   const konzertContext = useContext(KonzertContext);
@@ -39,7 +40,7 @@ export default function VertragCard() {
                     block
                     type="primary"
                     disabled={konzertContext?.isDirty || !isBookingTeam || !getFieldValue("id")}
-                    onClick={() => openVertrag(form.getFieldsValue(true))}
+                    onClick={() => openVertrag(new Konzert(form.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>

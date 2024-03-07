@@ -116,7 +116,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
       }
       dateString={displayDate}
       buttons={[
-        isOrga && <ExportButtons key="exports" disabled={isNew} />,
+        isOrga && <ExportButtons key="exports" disabled={isNew || dirty} />,
         isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
         isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
         <SaveButton key="save" disabled={!dirty} />,

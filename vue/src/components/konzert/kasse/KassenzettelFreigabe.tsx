@@ -11,6 +11,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineModal.tsx";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export function KassenzettelFreigabe() {
   const konzertContext = useContext(KonzertContext);
@@ -81,7 +82,7 @@ export function KassenzettelFreigabe() {
             text="Kassenzettel"
             icon="PrinterFill"
             disabled={konzertContext?.isDirty}
-            onClick={() => openKassenzettel(form.getFieldsValue(true))}
+            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
             tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
           />
