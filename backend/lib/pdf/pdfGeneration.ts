@@ -78,7 +78,7 @@ export async function riderPdf(res: Response, next: NextFunction, url: string) {
     { boxes, veranstaltung: konzert, publicUrlPrefix },
     generatePdf(
       {
-        format: "a4",
+        format: "a3",
         landscape: true,
         scale: 1,
         margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
