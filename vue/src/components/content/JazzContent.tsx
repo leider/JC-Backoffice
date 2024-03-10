@@ -18,7 +18,7 @@ const { Content } = Layout;
 function TodaysConcert() {
   const today = new DatumUhrzeit();
   const { data } = useQuery({
-    queryKey: ["konzert", `${today.yyyyMM}`],
+    queryKey: ["konzert", `${today.mitUhrzeitNumerisch}`],
     queryFn: () => konzerteForToday(),
   });
 
@@ -27,7 +27,7 @@ function TodaysConcert() {
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
           {(data ?? []).map((konzert) => (
-            <Link to={konzert.fullyQualifiedPreviewUrl}>
+            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl}>
               <h2
                 style={{
                   marginBottom: 0,
