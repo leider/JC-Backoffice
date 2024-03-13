@@ -9,13 +9,37 @@ import { ItemTypes } from "./types.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const style: CSSProperties = {
-  width: "100%",
-  height: 600,
+  width: 800,
+  height: 300,
   border: "1px solid black",
   position: "relative",
-  overflow: "clip",
+  backgroundSize: "200px 100px",
+  backgroundPosition: "-2px -2px",
+  backgroundImage: "-webkit-linear-gradient(#EEE 2px, transparent 2px),-webkit-linear-gradient(0, #EEE 2px, transparent 2px)\n", // +
+  //"-moz-linear-gradient(#EEE 2px, transparent 2px),-moz-linear-gradient(0, #EEE 2px, transparent 2px)\n" +
+  //"linear-gradient(#EEE 2px, transparent 2px),linear-gradient(90deg, #EEE 2px, transparent 2px)",
+  //overflow: "scroll",
 };
+/*
+background-image: -webkit-linear-gradient(white 2px, transparent 2px),
+                  -webkit-linear-gradient(0, white 2px, transparent 2px),
+                  -webkit-linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+                  -webkit-linear-gradient(0, rgba(255,255,255,.3) 1px, transparent 1px);
+background-image: -moz-linear-gradient(white 2px, transparent 2px),
+                  -moz-linear-gradient(0, white 2px, transparent 2px),
+                  -moz-linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+                  -moz-linear-gradient(0, rgba(255,255,255,.3) 1px, transparent 1px);
+background-image: linear-gradient(white 2px, transparent 2px),
+                  linear-gradient(90deg, white 2px, transparent 2px),
+                  linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
 
+body{
+background-color: #FFF;
+background-image: -webkit-linear-gradient(#EEE 2px, transparent 2px),
+                  -webkit-linear-gradient(0, #EEE 2px, transparent 2px);
+}
+ */
 export const TargetContainer: FC<{
   targetBoxes: BoxParams[];
   setTargetBoxes: (boxes: BoxParams[]) => void;
@@ -64,7 +88,7 @@ export const TargetContainer: FC<{
   }
 
   return (
-    <div ref={targetContainer}>
+    <div ref={targetContainer} style={{ width: "100%", overflow: "scroll" }}>
       <div ref={dropTarget} style={style}>
         {targetBoxes.map((each) => {
           return <Box key={each.id} item={each} callback={boxChanged} />;

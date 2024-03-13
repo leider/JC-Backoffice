@@ -86,6 +86,15 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
             <img src={`/riderimg/${inv.photo?.src}`} alt="Popup Photo" />
           </div>
         )}
+        <b>Kommentar:</b>
+        <TextArea
+          style={{ height: 150 }}
+          onChange={(e) => {
+            item.comment = e.target.value;
+            setComment(item.comment);
+          }}
+          value={comment}
+        />
         {RotateAndLevelRow()}
       </>
     );
