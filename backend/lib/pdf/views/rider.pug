@@ -12,16 +12,16 @@ html(style="-webkit-print-color-adjust: exact;")
           small #{veranstaltung.datumForDisplayShort}
     .row
       .col-12: div#container
-        div(style="width: 1400px; height: 500px; border: 1px solid black; position: relative; background-size: 200px 100px; background-position: -2px -2px; background-image: -webkit-linear-gradient(top, rgb(238, 238, 238) 2px, transparent 2px), -webkit-linear-gradient(0deg, rgb(238, 238, 238) 2px, transparent 2px);")
+        div(style="width: 800px; height: 300px; border: 1px solid black; position: relative; background-size: 200px 100px; background-position: -2px -2px; background-image: -webkit-linear-gradient(top, rgb(238, 238, 238) 2px, transparent 2px), -webkit-linear-gradient(0deg, rgb(238, 238, 238) 2px, transparent 2px);")
 
-        each box in boxes
-          if box.img
-            div(id=box.id, style=box.divStyleForImg): img(src=`${publicUrlPrefix}/riderimg/${box.img.src}`, style=box.imgStyle)
-          else
-            div(id=box.id, style=box.divStyleForBox)
-              b(style="background-color: lightsalmon; color: white;") &uarr; Front &uarr;
-              br
-              b #{box.title}
+          each box in boxes
+            if box.img
+              div(id=box.id, style=box.divStyleForImg): img(src=`${publicUrlPrefix}/riderimg/${box.img.src}`, style=box.imgStyle)
+            else
+              div(id=box.id, style=box.divStyleForBox)
+                b(style="background-color: lightsalmon; color: white;") &uarr; Front &uarr;
+                br
+                b #{box.title}
     .row.mt-5
       .col-12
         h3 Infos

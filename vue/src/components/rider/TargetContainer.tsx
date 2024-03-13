@@ -9,8 +9,8 @@ import { ItemTypes } from "./types.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const style: CSSProperties = {
-  width: 1400,
-  height: 500,
+  width: 800,
+  height: 300,
   border: "1px solid black",
   position: "relative",
   backgroundSize: "200px 100px",
