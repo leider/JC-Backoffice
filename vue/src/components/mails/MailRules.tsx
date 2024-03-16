@@ -38,6 +38,7 @@ export default function MailRules() {
     mutationFn: saveMailRules,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mailRules"] });
+      showSuccess({ text: "Die Regeln wurden gespeichert" });
     },
   });
 

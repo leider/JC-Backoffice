@@ -138,7 +138,7 @@ export function DeleteButton({ disabled, id, isVermietung }: ButtonProps & { id:
     modal.confirm({
       type: "confirm",
       title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
-      content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Veranstaltung"} "${document.title}" löschen möchtest?`,
+      content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title}" löschen möchtest?`,
       onOk: () => {
         isVermietung ? deleteVermietung.mutate(id) : deleteKonzert.mutate(id);
       },

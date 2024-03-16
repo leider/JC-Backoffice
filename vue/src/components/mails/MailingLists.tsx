@@ -17,7 +17,7 @@ export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
   const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [initialValue, setInitialValue] = useState<{ allLists: any[] }>({
+  const [initialValue, setInitialValue] = useState<{ allLists: { name: string; users: string[] }[] }>({
     allLists: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);
@@ -36,11 +36,11 @@ export default function MailingLists() {
     mutationFn: saveMailinglists,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      showSuccess({ text: "Die Listen wurden gespeichert" });
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [form] = Form.useForm<{ allLists: any[] }>();
+  const [form] = Form.useForm<{ allLists: { name: string; users: string[] }[] }>();
 
   function initializeForm() {
     function toFormObject(liste: Mailingliste) {

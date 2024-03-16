@@ -41,9 +41,7 @@ export default function WikiPage() {
     }
   }, [data]);
 
-  const mutateContent = useMutation({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+  const mutateContent = useMutation<unknown, Error, string>({
     mutationFn: (content) => saveWikiPage(subdir!, realPage, content),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["wiki"] });

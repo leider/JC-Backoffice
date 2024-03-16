@@ -37,6 +37,7 @@ export default function TerminePage() {
     mutationFn: saveTermine,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["termine"] });
+      showSuccess({});
     },
   });
 
@@ -60,7 +61,6 @@ export default function TerminePage() {
   function saveForm() {
     form.validateFields().then(async () => {
       mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
-      showSuccess({});
     });
   }
 

@@ -57,7 +57,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     mutationFn: saveKonzert,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["konzert"] });
-      showSuccess({ text: "Die Veranstaltung wurde gespeichert" });
+      showSuccess({ text: "Das Konzert wurde gespeichert" });
     },
   });
 
@@ -65,7 +65,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     mutationFn: saveVermietung,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vermietung"] });
-      showSuccess({ text: "Die VerMietung wurde gespeichert" });
+      showSuccess({ text: "Die Vermietung wurde gespeichert" });
     },
   });
 

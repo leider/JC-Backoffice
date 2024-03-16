@@ -1,8 +1,8 @@
 import * as React from "react";
 import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -11,7 +11,7 @@ import { fromFormObject, toFormObject } from "@/components/vermietung/vermietung
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { AxiosError } from "axios";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; isDirty: boolean } | null>(null);
 
@@ -31,53 +31,27 @@ export default function VermietungComp() {
     }
   }, [vermiet.data]);
 
-  const queryClient = useQueryClient();
-
   const { notification } = App.useApp();
+  const [dirty, setDirty] = useState<boolean>(false);
 
-  const mutateVermietung = useMutation({
-    mutationFn: (vermiet: Vermietung) => {
-      return saveVermietung(vermiet);
-    },
-    onSuccess: (data) => {
-      setDirty(false);
-      queryClient.invalidateQueries({ queryKey: ["vermietung"] });
-      navigate(
-        {
-          pathname: `/vermietung/${data.url}`,
-          search: `page=${search.get("page")}`,
-        },
-        { replace: true },
-      );
-      showSuccess({ text: "Die Vermietung wurde gespeichert" });
-    },
-    onError: (error: AxiosError, variables) => {
-      if (variables.url) {
-        navigate(
-          {
-            pathname: `/vermietung/${variables.url}`,
-            search: `page=${search.get("page")}`,
-          },
-          { replace: true },
-        );
-      }
-      if (error?.response?.data) {
-        showError({ text: error?.response?.data as string });
-      }
-    },
+  const mutateVermietung = useJazzMutation<Vermietung>({
+    saveFunction: saveVermietung,
+    queryKey: "vermietung",
+    successMessage: "Die Vermietung wurde gespeichert",
+    setDirty,
+    setResult: setVermietung,
   });
 
   const [form] = Form.useForm<Vermietung>();
 
   const [initialValue, setInitialValue] = useState<object>({});
-  const [dirty, setDirty] = useState<boolean>(false);
 
   const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
     setDirty(areDifferent(initial, current));
   }, []);
   useDirtyBlocker(dirty);
 
-  const { currentUser, showSuccess, showError } = useJazzContext();
+  const { currentUser } = useJazzContext();
   const navigate = useNavigate();
 
   const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });
@@ -105,7 +79,6 @@ export default function VermietungComp() {
 
   const [isNew, setIsNew] = useState<boolean>(false);
 
-  const [search] = useSearchParams();
   function saveForm() {
     form.validateFields().then(async () => {
       const vermiet = fromFormObject(form);

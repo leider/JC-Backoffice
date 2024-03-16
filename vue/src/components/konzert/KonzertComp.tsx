@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createContext, useCallback, useEffect, useState } from "react";
 import { App, Form, FormInstance } from "antd";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -12,6 +12,7 @@ import KonzertPageHeader from "@/components/konzert/KonzertPageHeader";
 import { Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 //import { detailedDiff } from "deep-object-diff";
 
 export const KonzertContext = createContext<{
@@ -76,22 +77,12 @@ export default function KonzertComp() {
 
   const { notification } = App.useApp();
 
-  const mutateKonzert = useMutation({
-    mutationFn: (konzert: Konzert) => {
-      setDirty(false);
-      return saveKonzert(konzert);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["konzert"] });
-      navigate(
-        {
-          pathname: `/konzert/${data.url}`,
-          search: `page=${search.get("page")}`,
-        },
-        { replace: true },
-      );
-      showSuccess({ text: "Das Konzert wurde gespeichert" });
-    },
+  const mutateKonzert = useJazzMutation<Konzert>({
+    saveFunction: saveKonzert,
+    queryKey: "konzert",
+    successMessage: "Das Konzert wurde gespeichert",
+    setDirty,
+    setResult: setKonzert,
   });
 
   const mutateOptionen = useMutation({
@@ -108,7 +99,7 @@ export default function KonzertComp() {
     },
   });
 
-  const { currentUser, optionen, showSuccess } = useJazzContext();
+  const { currentUser, optionen } = useJazzContext();
   const navigate = useNavigate();
 
   const kassenfreigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form });
@@ -139,8 +130,6 @@ export default function KonzertComp() {
   }, [currentUser.accessrights, currentUser.id, navigate, url]);
 
   const [isNew, setIsNew] = useState<boolean>(false);
-
-  const [search] = useSearchParams();
 
   function saveForm() {
     form.validateFields().then(async () => {

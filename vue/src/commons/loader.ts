@@ -134,12 +134,13 @@ export async function konzertForUrl(url: string): Promise<Konzert> {
 }
 
 export async function saveKonzert(konzert: Konzert) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/konzert",
     data: konzert.toJSON(),
     contentType: "json",
   });
+  return new Konzert(result);
 }
 
 export async function deleteKonzertWithId(id: string) {
@@ -207,12 +208,13 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
 }
 
 export async function saveVermietung(vermietung: Vermietung) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/vermietung",
     data: vermietung.toJSON(),
     contentType: "json",
   });
+  return new Vermietung(result);
 }
 
 export async function deleteVermietungWithId(id: string) {
