@@ -89,6 +89,7 @@ export default function BigKalender() {
             }}
             height="auto"
             multiMonthMaxColumns={4}
+            multiMonthMinWidth={500}
             eventSources={[getEvents]}
             eventContent={renderEventContent}
             eventDisplay="block"
