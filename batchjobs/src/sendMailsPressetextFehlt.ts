@@ -3,7 +3,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 
-import config from "jc-shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
@@ -16,7 +16,7 @@ async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUh
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
   async function sendMail(kaputte: Veranstaltung[]) {
-    const prefix = config.getString("publicUrlPrefix");
+    const prefix = conf.publicUrlPrefix;
     function presseTemplateInternal(ver: Veranstaltung): string {
       // für interne Mails
       return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)

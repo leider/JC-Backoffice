@@ -13,7 +13,6 @@ import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
 import { fileURLToPath } from "url";
 import conf from "jc-shared/commons/simpleConfigure.js";
-const additionalstatic = conf.getString("additionalstatic");
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
@@ -41,7 +40,7 @@ export default function (app: express.Express, forDev?: boolean): void {
     app.use("/rider", history());
   }
   app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
-  app.use(express.static(additionalstatic, { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
+  app.use(express.static(conf.additionalstatic, { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(passportInitializer);
   app.use(secureAgainstClickjacking);

@@ -1,4 +1,4 @@
-import conf, { SimpleConfigure } from "../shared/commons/simpleConfigure.js";
+import conf, { SimpleConfigure } from "jc-shared/commons/simpleConfigure.js";
 import path, { dirname } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -15,13 +15,6 @@ function createConfiguration(): SimpleConfigure {
   } catch (e) {
     configdir = path.join(__dirname, "../dummy-config/");
   }
-
-  // first, set the default values
-  conf.addProperties({
-    port: "1969",
-    emaildomainname: "localhost",
-    additionalstatic: "./static", // legacy
-  });
 
   function addFiles(files: string[]): void {
     if (!files) {

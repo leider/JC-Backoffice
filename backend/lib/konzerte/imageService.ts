@@ -1,13 +1,8 @@
 import User from "jc-shared/user/user.js";
-
-import path from "path";
 import fs from "fs/promises";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 import store from "./konzertestore.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
-
-const additionalstatic = conf.getString("additionalstatic");
-const uploadDir = path.join(additionalstatic, "upload");
 
 async function renameImage(oldname: string, newname: string, konzertIds: string[], user: User) {
   function updateKonzert(id: string) {
@@ -19,7 +14,7 @@ async function renameImage(oldname: string, newname: string, konzertIds: string[
     return store.saveKonzert(konzert, user);
   }
 
-  await fs.rename(uploadDir + "/" + oldname, uploadDir + "/" + newname);
+  await fs.rename(conf.uploadDir + "/" + oldname, conf.uploadDir + "/" + newname);
   return Promise.all(konzertIds.map(updateKonzert));
 }
 
@@ -39,7 +34,7 @@ export default {
   renameImages,
 
   alleBildNamen: async function alleBildNamen() {
-    const files = await fs.readdir(uploadDir);
+    const files = await fs.readdir(conf.uploadDir);
     return files.sort();
   },
 };

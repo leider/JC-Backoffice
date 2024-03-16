@@ -7,7 +7,7 @@ import conf from "jc-shared/commons/simpleConfigure.js";
 
 const exec = util.promisify(childProcess.exec);
 
-let workTree = conf.getString("wikipath");
+let workTree = conf.wikipath;
 
 let gitCommands: string[] = [];
 

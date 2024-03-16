@@ -20,11 +20,10 @@ import usersService from "../users/usersService.js";
 import User from "jc-shared/user/user.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const appLogger = loggers.get("application");
-
-const jwtSecret = conf.getString("salt");
 
 const app = express();
 
@@ -33,8 +32,8 @@ app.set("view engine", "pug");
 
 app.locals.pretty = true;
 
-const refreshTTL = (conf.get("refreshTTL") as number) || 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
-const jwtTTL = (conf.get("jwtTTL") as number) || 15 * 60; // 15 minutes
+const refreshTTL = conf.refreshTTL || 7 * 24 * 60 * 60 * 1000; // days*hours*mins*secs*millis
+const jwtTTL = conf.jwtTTL || 15 * 60; // 15 minutes
 
 app.get("/", (req, res) => {
   return res.redirect("/vue/veranstaltungen");
@@ -58,7 +57,7 @@ async function createToken(req: Request, res: Response, name: string) {
     return refreshstore.save({ id: oldId || refreshTokenId, userId: name, expiresAt: expiry });
   }
 
-  const token = jwt.sign({ id: name }, jwtSecret, { expiresIn: jwtTTL });
+  const token = jwt.sign({ id: name }, conf.salt, { expiresIn: jwtTTL });
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
   try {
@@ -129,8 +128,7 @@ app.post("/logout", async (req, res) => {
   return res.clearCookie("refresh-token").send({});
 });
 
-const additionalstatic = conf.getString("additionalstatic");
-const uploadDir = path.join(additionalstatic, "upload");
+const uploadDir = conf.uploadDir;
 const placeholder = path.join(__dirname, "../../static/upload/../No-Image-Placeholder.svg");
 
 app.get("/imagepreview/:filename", (req, res, next) => {

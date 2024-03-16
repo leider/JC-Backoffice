@@ -78,7 +78,7 @@ app.post("/beleg", async (req: Request, res: Response) => {
 ${kommentar}`;
     const message = new Message({ subject, markdown: markdown });
     message.pdfBufferAndName = { pdf: buffer, name: filename };
-    message.to = conf.getString("beleg-email");
+    message.to = conf.belegEmail;
     message.bcc = (req.user as User).email || "";
     if (!message.to) {
       return res.status(500).send("Kein Empfänger");

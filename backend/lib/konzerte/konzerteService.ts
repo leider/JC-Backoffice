@@ -4,7 +4,6 @@ import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
 import flatten from "lodash/flatten.js";
 import fs from "fs";
-import path from "path";
 
 import Konzert from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -13,9 +12,6 @@ import User from "jc-shared/user/user.js";
 import store from "./konzertestore.js";
 import groupBy from "lodash/groupBy.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
-
-const additionalstatic = conf.getString("additionalstatic");
-const uploadDir = path.join(additionalstatic, "upload");
 
 async function getKonzert(url: string) {
   return await store.getKonzert(url);
@@ -38,9 +34,9 @@ function zipKonzerte(konzerte: Konzert[], name: string, res: Response, next: Nex
   try {
     const images = flatten(konzerte.map((konzert) => konzert.presse.image))
       // eslint-disable-next-line no-sync
-      .filter((filename) => fs.existsSync(uploadDir + "/" + filename))
+      .filter((filename) => fs.existsSync(conf.uploadDir + "/" + filename))
       .map((filename) => {
-        return { path: uploadDir + "/" + filename, name: filename };
+        return { path: conf.uploadDir + "/" + filename, name: filename };
       });
     const filename = `Jazzclub Bilder ${name}.zip`;
 

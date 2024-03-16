@@ -1,7 +1,7 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 
-import config from "jc-shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import userstore from "jc-backend/lib/users/userstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";
@@ -13,11 +13,11 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return config.getString("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return conf.publicUrlPrefix + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 async function sendMail(verMitUser: VerMitUser) {
-  const prefix = config.getString("publicUrlPrefix");
+  const prefix = conf.publicUrlPrefix;
   const veranstaltung = verMitUser.veranstaltung;
   const user = verMitUser.user;
 

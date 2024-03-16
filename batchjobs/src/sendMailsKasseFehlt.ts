@@ -3,7 +3,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 
-import config from "jc-shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 
 import store from "jc-backend/lib/konzerte/konzertestore.js";
 import userstore from "jc-backend/lib/users/userstore.js";
@@ -18,7 +18,7 @@ function toFullQualifiedUrl(prefix: string, localUrl: string): string {
     return string.replace(/(^\/)|(\/$)/g, "");
   }
 
-  return config.getString("publicUrlPrefix") + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
+  return conf.publicUrlPrefix + "/vue/" + trimLeadingAndTrailingSlash(prefix) + "/" + trimLeadingAndTrailingSlash(localUrl);
 }
 
 function kasseFehlt(konzert: Konzert): boolean {

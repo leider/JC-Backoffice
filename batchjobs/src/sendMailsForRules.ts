@@ -37,7 +37,7 @@ Liebe Grüße vom Jazzclub Team.`;
         "\n\n---\n" +
         selected
           .map((veranst) => {
-            return new VeranstaltungFormatter(veranst).presseTextForMail(conf.getString("publicUrlPrefix"));
+            return new VeranstaltungFormatter(veranst).presseTextForMail(conf.publicUrlPrefix);
           })
           .join("\n\n---\n");
       const message = new Message({

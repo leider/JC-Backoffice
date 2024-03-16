@@ -10,7 +10,7 @@ export function genSalt(): string {
 }
 
 export function hashPassword(password: string, givenSalt?: string): string {
-  const salt = givenSalt || conf.getString("salt") || "1234567890";
+  const salt = givenSalt || conf.salt || "1234567890";
   /*eslint no-sync: 0 */
-  return crypto.pbkdf2Sync(password, salt as string, 100000, 512, "sha512").toString("hex");
+  return crypto.pbkdf2Sync(password, salt, 100000, 512, "sha512").toString("hex");
 }

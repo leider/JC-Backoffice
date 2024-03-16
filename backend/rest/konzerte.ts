@@ -15,9 +15,8 @@ import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 
-const additionalstatic = conf.getString("additionalstatic");
-const uploadDir = path.join(additionalstatic, "upload");
-const filesDir = path.join(additionalstatic, "files");
+const uploadDir = conf.uploadDir;
+const filesDir = conf.filesDir;
 
 const app = express();
 

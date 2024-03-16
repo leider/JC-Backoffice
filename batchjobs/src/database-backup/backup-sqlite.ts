@@ -6,7 +6,7 @@ import path from "node:path";
 import AdmZip from "adm-zip";
 import * as fs from "fs";
 
-const sqlitedb = conf.getString("sqlitedb");
+const sqlitedb = conf.sqlitedb;
 const db = new Database(sqlitedb);
 
 const myArgs = process.argv.slice(2);

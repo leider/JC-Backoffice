@@ -4,10 +4,9 @@ import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
 import { areDifferent } from "jc-shared/commons/comparingAndTransforming.js";
 
-const sqlitedb = conf.getString("sqlitedb");
-export const db = new Database(sqlitedb);
+export const db = new Database(conf.sqlitedb);
 const scriptLogger = loggers.get("scripts");
-scriptLogger.info(`DB = ${sqlitedb}`);
+scriptLogger.info(`DB = ${conf.sqlitedb}`);
 
 function asSqliteString(obj: object) {
   return `${escape(JSON.stringify(obj))}`;

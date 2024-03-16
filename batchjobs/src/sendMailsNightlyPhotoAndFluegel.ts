@@ -2,7 +2,7 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Message from "jc-shared/mail/message.js";
 
-import config from "jc-shared/commons/simpleConfigure.js";
+import conf from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
@@ -63,8 +63,8 @@ async function checkForFilter(
 }
 
 export async function checkFotograf(now: DatumUhrzeit) {
-  const name = config.getString("fotograf-name");
-  const email = config.getString("fotograf-email");
+  const name = conf.fotografName;
+  const email = conf.fotografEmail;
   const subject = "Photographing for Jazzclub";
   const firstLine = "## The following concerts may profit from a professional photographer:";
 
@@ -88,8 +88,8 @@ export async function checkFotograf(now: DatumUhrzeit) {
 }
 
 export async function checkFluegel(now: DatumUhrzeit) {
-  const name = config.getString("stimmer-name");
-  const email = config.getString("stimmer-email");
+  const name = conf.stimmerName;
+  const email = conf.stimmerEmail;
   const subject = "Flügelstimmen im Jazzclub";
   const firstLine = "## Bei folgenden Veranstaltungen brauchen wir einen Klavierstimmer:";
 
