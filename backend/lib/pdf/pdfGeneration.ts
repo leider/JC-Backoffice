@@ -17,6 +17,8 @@ import riderstore from "../rider/riderstore.js";
 import { PrintableBox } from "jc-shared/rider/rider.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { fileURLToPath } from "url";
+import Fs from "fs/promises";
+import Path from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -46,6 +48,8 @@ export async function vermietungAngebot(res: Response, next: NextFunction, vermi
   if (!vermietung) {
     return res.redirect("/");
   }
+  saveVermietungToShare(vermietung);
+
   return res.render(
     "vertrag-vermietung",
     { vermietung, datum: new DatumUhrzeit(), art, publicUrlPrefix, einseitig: true, email: "event" },
@@ -127,5 +131,27 @@ export async function vermietungVertragToBuchhaltung(vermietung: Vermietung) {
       return;
     }
     return mailtransport.sendDatevMail(message);
+  });
+}
+export async function saveVermietungToShare(vermietung: Vermietung) {
+  if (!conf.pdfuploadpath) {
+    return;
+  }
+  const file = path.join(__dirname, "views/vertrag-vermietung.pug");
+  const now = new DatumUhrzeit();
+  const renderedHtml = pug.renderFile(file, {
+    vermietung,
+    datum: now,
+    art: vermietung.art,
+    publicUrlPrefix,
+    einseitig: true,
+    email: "event",
+  });
+  const filenamepdf = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${now.fuerCalendarWidget}).pdf`;
+  const directory = Path.join(conf.pdfuploadpath, vermietung.startDatumUhrzeit.jahr.toString(10), vermietung.kopf.titel);
+  generatePdfLocally(renderedHtml, async (pdf: Buffer) => {
+    await Fs.mkdir(directory, { recursive: true });
+    const filepath = Path.join(directory, filenamepdf);
+    Fs.writeFile(filepath, pdf);
   });
 }

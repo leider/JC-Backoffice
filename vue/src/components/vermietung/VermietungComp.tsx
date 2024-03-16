@@ -11,6 +11,7 @@ import { fromFormObject, toFormObject } from "@/components/vermietung/vermietung
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { AxiosError } from "axios";
 
 export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; isDirty: boolean } | null>(null);
 
@@ -34,13 +35,12 @@ export default function VermietungComp() {
 
   const { notification } = App.useApp();
 
-  // When this mutation succeeds, invalidate any queries with the `todos` or `reminders` query key
   const mutateVermietung = useMutation({
     mutationFn: (vermiet: Vermietung) => {
-      setDirty(false);
       return saveVermietung(vermiet);
     },
     onSuccess: (data) => {
+      setDirty(false);
       queryClient.invalidateQueries({ queryKey: ["vermietung"] });
       navigate(
         {
@@ -50,6 +50,20 @@ export default function VermietungComp() {
         { replace: true },
       );
       showSuccess({ text: "Die Vermietung wurde gespeichert" });
+    },
+    onError: (error: AxiosError, variables) => {
+      if (variables.url) {
+        navigate(
+          {
+            pathname: `/vermietung/${variables.url}`,
+            search: `page=${search.get("page")}`,
+          },
+          { replace: true },
+        );
+      }
+      if (error?.response?.data) {
+        showError({ text: error?.response?.data as string });
+      }
     },
   });
 
@@ -63,7 +77,7 @@ export default function VermietungComp() {
   }, []);
   useDirtyBlocker(dirty);
 
-  const { currentUser, showSuccess } = useJazzContext();
+  const { currentUser, showSuccess, showError } = useJazzContext();
   const navigate = useNavigate();
 
   const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });

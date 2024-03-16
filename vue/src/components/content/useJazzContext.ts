@@ -16,6 +16,7 @@ const emptyContext = {
   optionen: new OptionValues(),
   orte: new Orte(),
   showSuccess: () => {},
+  showError: () => {},
 };
 
 type SharedGlobals = {
@@ -25,6 +26,7 @@ type SharedGlobals = {
   optionen: OptionValues;
   orte: Orte;
   showSuccess: ({ text, title }: { text?: string; title?: string }) => void;
+  showError: ({ text, title }: { text?: string; title?: string }) => void;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -35,7 +37,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const refetchInterval = 2 * 60 * 1000; // 2 minutes
 
-  const context: Omit<SharedGlobals, "showSuccess"> = useQueries({
+  const context: Omit<SharedGlobals, "showSuccess" | "showError"> = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs(), refetchInterval },
@@ -67,13 +69,22 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     });
   }
 
+  function showError({ text = "Etwas ist schiefgegangen", title = "FEHLER" }) {
+    notification.error({
+      message: title,
+      description: text,
+      placement: "topLeft",
+      duration: 10,
+    });
+  }
+
   const exposedContext = useMemo(() => (isAuthenticated ? context : emptyContext), [context, isAuthenticated]);
 
   useEffect(() => {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess };
+  return { ...exposedContext, showSuccess, showError };
 }
 
 export function useJazzContext() {

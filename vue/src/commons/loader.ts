@@ -62,21 +62,14 @@ async function standardFetch(params: FetchParams) {
       console.log("token veraltet");
     }
   }
-  try {
-    const options: AxiosRequestConfig = {
-      url: params.url,
-      method: params.method,
-      data: params.data,
-      responseType: params.contentType !== "json" ? "blob" : "json",
-    };
-    const res = await axios(options);
-    return res.data;
-  } catch (e) {
-    // const token = await refreshTokenPost();
-    // if (token) {
-    //   return standardFetch(params);
-    // }
-  }
+  const options: AxiosRequestConfig = {
+    url: params.url,
+    method: params.method,
+    data: params.data,
+    responseType: params.contentType !== "json" ? "blob" : "json",
+  };
+  const res = await axios(options);
+  return res.data;
 }
 
 async function getForType(contentType: ContentType, url: string) {

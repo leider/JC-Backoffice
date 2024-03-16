@@ -13,10 +13,10 @@ export function generatePdf(options: PDFOptions, res: Response, next: NextFuncti
         await page.goto(`data:text/html,${html}`, {
           waitUntil: "networkidle0",
         });
-        const pdf1 = await page.pdf(options);
+        const pdf = await page.pdf(options);
         await browser.close();
         res.set("Content-Type", "application/pdf");
-        res.send(pdf1);
+        res.send(pdf);
       })();
     }
   };
@@ -37,8 +37,8 @@ export function generatePdfLocally(html: string, callback: Function): void {
     await page.goto(`data:text/html,${html}`, {
       waitUntil: "networkidle0",
     });
-    const pdf1 = await page.pdf(printoptions);
+    const pdf = await page.pdf(printoptions);
     await browser.close();
-    callback(pdf1);
+    callback(pdf);
   })();
 }

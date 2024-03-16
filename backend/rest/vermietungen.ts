@@ -67,7 +67,7 @@ app.post("/vermietung", [checkOrgateam], async (req: Request, res: Response) => 
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log("Vermietungsvertrag Versand an Buchhaltung gescheitert");
-        throw e;
+        return res.status(500).send("Vermietungsvertrag Versand an Buchhaltung gescheitert");
       }
     }
   }
