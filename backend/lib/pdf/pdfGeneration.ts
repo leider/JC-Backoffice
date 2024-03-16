@@ -147,8 +147,12 @@ export async function saveVermietungToShare(vermietung: Vermietung) {
     einseitig: true,
     email: "event",
   });
-  const filenamepdf = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${now.fuerCalendarWidget}).pdf`;
-  const directory = Path.join(conf.pdfuploadpath, vermietung.startDatumUhrzeit.jahr.toString(10), vermietung.kopf.titel);
+  const filenamepdf = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${vermietung.art} ${now.fuerCalendarWidget}).pdf`;
+  const directory = Path.join(
+    conf.pdfuploadpath,
+    vermietung.startDatumUhrzeit.jahr.toString(10),
+    `${vermietung.startDatumUhrzeit.monatTag} ${vermietung.kopf.titel}`,
+  );
   generatePdfLocally(renderedHtml, async (pdf: Buffer) => {
     await Fs.mkdir(directory, { recursive: true });
     const filepath = Path.join(directory, filenamepdf);

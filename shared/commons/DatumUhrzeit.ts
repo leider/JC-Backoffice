@@ -257,6 +257,10 @@ export default class DatumUhrzeit {
     return this.value.format();
   }
 
+  get monatTag(): string {
+    return this.value.format("MM-DD");
+  }
+
   get toJSDate(): Date {
     return this.value.toDate();
   }
