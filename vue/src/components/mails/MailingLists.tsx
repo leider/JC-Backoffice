@@ -16,7 +16,6 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
   const [mailingLists, setMailingLists] = useState<Mailingliste[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<{ allLists: { name: string; users: string[] }[] }>({
     allLists: [],
   });
