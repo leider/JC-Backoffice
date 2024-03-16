@@ -23,3 +23,10 @@ jazzclubmongo*
 mongoimport_jc.sh
 /backend/static/rider/
 exposedfiles/*
+/pdfs/2024/02-10 Stummfilmfestival-Karlsruhe/Stummfilmfestival-Karlsruhe am 10.02.2024 (Rechnung 2024-03-16).pdf
+/pdfs/2024/Stummfilmfestival-Karlsruhe/Stummfilmfestival-Karlsruhe am 10.02.2024 (2024-03-16).pdf
+/pdfs/2024/Stummfilmfestival-Karlsruhe/Stummfilmfestival-Karlsruhe am 10.02.2024 (Rechnung 2024-03-16).pdf
+/pdfs/Stummfilmfestival-Karlsruhe am 10.02.2024.pdf
+/pdfs/Stummfilmfestival-Karlsruhe am 10.02.2024 (2024-03-16T13:45:54+01:00).pdf
+/pdfs and more/2024/02-10 Stummfilmfestival-Karlsruhe/Stummfilmfestival-Karlsruhe am 10.02.2024 (Rechnung 2024-03-16).pdf
+/*.tgz
