@@ -37,7 +37,7 @@ function TodaysConcert() {
                   color: "#FFF",
                 }}
               >
-                {konzert.startDatumUhrzeit.uhrzeitKompakt}: {konzert.kopf.titel}
+                {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}
               </h2>
             </Link>
           ))}

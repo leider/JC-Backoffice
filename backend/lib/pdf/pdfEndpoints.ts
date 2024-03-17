@@ -11,12 +11,12 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-app.get("/kassenbericht/:year/:month", (req: Request, res: Response, next: NextFunction) => {
+app.get("/kassenbericht/:year/:month", async (req: Request, res: Response, next: NextFunction) => {
   const datum = DatumUhrzeit.forYYYYMM(req.params.year + "" + req.params.month);
   kassenbericht(res, next, datum);
 });
 
-app.get("/kassenzettel/:filename", (req, res, next) => {
+app.get("/kassenzettel/:filename", async (req, res, next) => {
   const url = req.query["url"] as string;
   if (url) {
     kassenzettel(res, next, url);
@@ -33,7 +33,7 @@ app.get("/vertrag/:filename", async (req, res, next) => {
 
 app.get("/vermietungAngebot/:filename", async (req, res, next) => {
   const url = req.query["url"] as string;
-  const art = req.query["art"] as string;
+  const art = req.query["art"] as "Angebot" | "Vertrag" | "Rechnung";
   if (url && art) {
     vermietungAngebot(res, next, url, art);
   }

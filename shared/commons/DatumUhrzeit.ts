@@ -189,6 +189,10 @@ export default class DatumUhrzeit {
     return this.format("LT");
   }
 
+  get wochentagUhrzeitKompakt(): string {
+    return this.format("dd. LT");
+  }
+
   get tagMonatJahrLang(): string {
     return this.format("LL");
   }

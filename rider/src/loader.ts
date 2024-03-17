@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { Rider } from "jc-shared/rider/rider.ts";
 
-type ContentType = "json" | "pdf" | "zip" | "other";
-
 type FetchParams = {
   url: string;
-  contentType: ContentType;
   method: Method;
-  data?: any;
+  data?: object;
 };
 
 async function standardFetch(params: FetchParams) {
@@ -16,19 +12,15 @@ async function standardFetch(params: FetchParams) {
     url: params.url,
     method: params.method,
     data: params.data,
-    responseType: params.contentType !== "json" ? "blob" : "json",
+    responseType: "json",
   };
   const res = await axios(options);
   return res.data;
 }
 
-async function getForType(contentType: ContentType, url: string) {
-  return standardFetch({ contentType, url, method: "GET" });
-}
-
 // Rider
 export async function riderFor(url: string) {
-  const result = await getForType("json", `/ridersrest/${url}`);
+  const result = await standardFetch({ url: `/ridersrest/${url}`, method: "GET" });
   return result ? new Rider(result) : undefined;
 }
 
@@ -37,6 +29,5 @@ export async function saveRider(rider: Rider) {
     method: "POST",
     url: "/ridersrest",
     data: rider,
-    contentType: "json",
   });
 }

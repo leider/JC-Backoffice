@@ -1,26 +1,11 @@
 import puppeteer, { PDFOptions } from "puppeteer";
-import { NextFunction, Response } from "express";
 
-export function generatePdf(options: PDFOptions, res: Response, next: NextFunction) {
-  return (err: Error | null, html?: string): void => {
-    if (err) {
-      next(err);
-    } else {
-      (async (): Promise<void> => {
-        const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-web-security"] });
-        const page = await browser.newPage();
-        await page.emulateMediaType("screen");
-        await page.goto(`data:text/html,${html}`, {
-          waitUntil: "networkidle0",
-        });
-        const pdf = await page.pdf(options);
-        await browser.close();
-        res.set("Content-Type", "application/pdf");
-        res.send(pdf);
-      })();
-    }
-  };
-}
+export const printoptionsRider: PDFOptions = {
+  format: "a4",
+  landscape: true,
+  scale: 1,
+  margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
+};
 
 export const printoptions: PDFOptions = {
   format: "a4",
@@ -29,16 +14,20 @@ export const printoptions: PDFOptions = {
   margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
 };
 
-export function generatePdfLocally(html: string, callback: Function): void {
-  (async (): Promise<void> => {
-    const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-web-security"] });
-    const page = await browser.newPage();
-    await page.emulateMediaType("screen");
-    await page.goto(`data:text/html,${html}`, {
-      waitUntil: "networkidle0",
-    });
-    const pdf = await page.pdf(printoptions);
-    await browser.close();
-    callback(pdf);
-  })();
+export const printoptions131 = {
+  ...printoptions,
+  scale: 1.31,
+  margin: { top: "20mm", bottom: "10mm", left: "17mm", right: "17mm" },
+};
+
+export async function generatePdf(html: string, pdfOptions = printoptions) {
+  const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-web-security"] });
+  const page = await browser.newPage();
+  await page.emulateMediaType("screen");
+  await page.goto(`data:text/html,${html}`, {
+    waitUntil: "networkidle0",
+  });
+  const pdf = await page.pdf(pdfOptions);
+  await browser.close();
+  return pdf;
 }

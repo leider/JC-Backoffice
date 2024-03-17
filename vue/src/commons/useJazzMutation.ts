@@ -46,9 +46,8 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
       showSuccess({ text: successMessage });
     },
     onError: (error) => {
-      location.reload();
       if (error?.response?.data) {
-        showError({ text: error?.response?.data as string });
+        showError({ text: (error?.response?.data as string) + "\nSeite wird neu geladen", closeCallback: () => location.reload() });
       }
     },
   };

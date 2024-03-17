@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
+    link(href=publicUrlPrefix + '/fonts/fonts.css', rel="stylesheet")
+    style(type="text/css").
+        p {margin-bottom: 1em !important}
+    title #{status} - #{error}
+  body
+    .container-fluid
+      .row
+        .col-lg-6
+          h3 Ooops
+          p Da ist wohl was schiefgegangen.
+          h3 #{status}
+          p #{error.message}
+          a(href="/") Hier gehts zurück

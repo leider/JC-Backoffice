@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -7,7 +7,7 @@ import User from "jc-shared/user/user.js";
 import { resToJson } from "../lib/commons/replies.js";
 import store from "../lib/vermietungen/vermietungenstore.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
-import { vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
+import { saveVermietungToShare, vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 
 const app = express();
@@ -55,23 +55,20 @@ app.get("/vermietung/:url", async (req: Request, res: Response) => {
   resToJson(res, vermietung);
 });
 
-app.post("/vermietung", [checkOrgateam], async (req: Request, res: Response) => {
-  const url = req.body.url;
-
-  const vermietung = await store.getVermietung(url);
-  if (vermietung) {
-    const frischFreigegeben = vermietung.angebot.freigabe !== req.body.angebot.freigabe && !!req.body.angebot.freigabe;
+app.post("/vermietung", [checkOrgateam], async (req: Request, res: Response, next: NextFunction) => {
+  const vermSaved = await store.getVermietung(req.body.url);
+  const vermietung = new Vermietung(req.body);
+  if (vermSaved) {
+    const frischFreigegeben = vermSaved.angebot.freigabe !== vermietung.angebot.freigabe && !!vermietung.angebot.freigabe;
     if (frischFreigegeben) {
       try {
-        await vermietungVertragToBuchhaltung(new Vermietung(req.body));
+        await Promise.all([vermietungVertragToBuchhaltung(vermietung), saveVermietungToShare(vermietung)]);
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log("Vermietungsvertrag Versand an Buchhaltung gescheitert");
-        return res.status(500).send("Vermietungsvertrag Versand an Buchhaltung gescheitert");
+        return next(new Error("Vermietungsvertrag Versand an Buchhaltung gescheitert"));
       }
     }
   }
-  return saveAndReply(req, res, new Vermietung(req.body));
+  return saveAndReply(req, res, vermietung);
 });
 
 app.delete("/vermietung", [checkOrgateam], async (req: Request, res: Response) => {

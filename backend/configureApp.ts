@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import "express-async-errors";
 import compress from "compression";
 import cookieParser from "cookie-parser";
@@ -13,6 +13,7 @@ import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
 import { fileURLToPath } from "url";
 import conf from "jc-shared/commons/simpleConfigure.js";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function secureAgainstClickjacking(req: Request, res: Response, next: NextFunction): void {
@@ -26,11 +27,18 @@ function handle404(req: Request, res: Response): void {
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, no-unused-vars
 function handle500(error: any, req: Request, res: Response, next: NextFunction): void {
-  // express needs four arguments!
-  res.redirect("/");
+  const status = error.status || 500;
+  res.status(status);
+  if (req.headers["content-type"] === "application/json") {
+    res.send((error as Error)?.message);
+  } else {
+    res.render("500.pug", { error, status });
+  }
 }
 
 export default function (app: express.Express, forDev?: boolean): void {
+  app.set("views", path.join(__dirname, "views"));
+  app.set("view engine", "pug");
   app.use(cookieParser());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());

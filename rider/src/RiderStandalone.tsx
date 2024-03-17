@@ -34,8 +34,7 @@ export const RiderStandalone: FC = () => {
     rider.boxes = targetBoxes;
     mutateRider.mutate(rider);
   }
-  const { useToken } = theme;
-  const token = useToken().token;
+  const token = theme.useToken().token;
 
   return (
     <>

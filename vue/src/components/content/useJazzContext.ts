@@ -26,7 +26,7 @@ type SharedGlobals = {
   optionen: OptionValues;
   orte: Orte;
   showSuccess: ({ text, title }: { text?: string; title?: string }) => void;
-  showError: ({ text, title }: { text?: string; title?: string }) => void;
+  showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -69,12 +69,22 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     });
   }
 
-  function showError({ text = "Etwas ist schiefgegangen", title = "FEHLER" }) {
+  function showError({
+    text = "Etwas ist schiefgegangen",
+    title = "FEHLER",
+    closeCallback,
+  }: {
+    text?: string;
+    title?: string;
+    closeCallback?: () => void;
+  }) {
     notification.error({
       message: title,
       description: text,
       placement: "topLeft",
       duration: 10,
+
+      onClose: closeCallback,
     });
   }
 
