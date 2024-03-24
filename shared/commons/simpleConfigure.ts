@@ -48,7 +48,11 @@ export class SimpleConfigure {
   }
 
   private inCorrectLocation(prop: string) {
-    return this.createRealPath(this.getString(prop));
+    const thePath = this.getString(prop);
+    if (!thePath) {
+      return;
+    }
+    return this.createRealPath(thePath);
   }
   get sqlitedb() {
     return this.inCorrectLocation("sqlitedb");
@@ -62,7 +66,7 @@ export class SimpleConfigure {
 
   get additionalstatic() {
     if (this.getString("additionalstatic")) {
-      return this.inCorrectLocation("additionalstatic");
+      return this.inCorrectLocation("additionalstatic") ?? "";
     }
     return this.createRealPath("./static");
   }
