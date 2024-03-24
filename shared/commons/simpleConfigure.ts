@@ -1,4 +1,7 @@
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export class SimpleConfigure {
   storage: { [index: string]: string | number } = {};
@@ -39,18 +42,28 @@ export class SimpleConfigure {
     return this.get("jwtTTL") as number;
   }
 
+  private createRealPath(thePath: string) {
+    return path.isAbsolute(thePath) ? thePath : path.join(__dirname, `../../backend/${thePath}/`);
+  }
+
+  private inCorrectLocation(prop: string) {
+    return this.createRealPath(this.getString(prop));
+  }
   get sqlitedb() {
-    return this.getString("sqlitedb");
+    return this.inCorrectLocation("sqlitedb");
   }
   get pdfuploadpath() {
-    return this.getString("pdfuploadpath");
+    return this.inCorrectLocation("pdfuploadpath");
   }
   get wikipath() {
-    return this.getString("wikipath");
+    return this.inCorrectLocation("wikipath");
   }
 
   get additionalstatic() {
-    return this.getString("additionalstatic") || "./static";
+    if (this.getString("additionalstatic")) {
+      return this.inCorrectLocation("additionalstatic");
+    }
+    return this.createRealPath("./static");
   }
   get uploadDir() {
     return path.join(this.additionalstatic, "upload");

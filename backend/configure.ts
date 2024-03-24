@@ -3,7 +3,6 @@ import path, { dirname } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
-process.chdir(__dirname);
 
 function createConfiguration(): SimpleConfigure {
   const confDir = process.env.CONF || "config";
