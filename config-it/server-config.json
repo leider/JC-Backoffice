@@ -2,5 +2,6 @@
   "publicUrlPrefix": "http://localhost:1970",
   "nowForDevelopment": "2020-03-16",
   "port": 1970,
-  "sqlitedb": "../testdb/database.db"
+  "sqlitedb": "../testdb/database.db",
+  "wikipath": ".."
 }
