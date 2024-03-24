@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-expressions*/
-import { expect } from "chai";
+import { beforeEach, describe, expect, it } from "vitest";
 import Staff from "../../veranstaltung/staff.js";
 
 describe("Staff", () => {

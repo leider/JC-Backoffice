@@ -9,24 +9,24 @@
   },
   "license": "MIT",
   "dependencies": {
-    "adm-zip": "0.5.10",
+    "adm-zip": "0.5.12",
     "better-sqlite3": "9.4.3",
     "bootstrap": "5.3.3",
     "compression": "1.7.4",
     "connect-history-api-fallback": "2.0.0",
     "cookie-parser": "1.4.6",
-    "express": "4.18.3",
+    "express": "4.19.1",
     "express-async-errors": "3.1.1",
     "ikalendar": "1.5.0",
     "jc-shared": "workspace:^",
     "morgan": "1.10.0",
     "multiparty": "4.2.3",
-    "nodemailer": "6.9.11",
+    "nodemailer": "6.9.13",
     "passport": "0.7.0",
     "passport-jwt": "4.0.1",
     "pug": "3.0.2",
-    "puppeteer": "22.4.1",
-    "sharp": "0.33.2",
+    "puppeteer": "22.6.0",
+    "sharp": "0.33.3",
     "superagent": "8.1.2",
     "winston": "3.12.0"
   },
@@ -47,7 +47,7 @@
     "@types/pug": "2.0.10",
     "@types/puppeteer": "7.0.4",
     "@types/serve-favicon": "2.5.7",
-    "@types/superagent": "8.1.4"
+    "@types/superagent": "8.1.6"
   },
   "resolutions": {
     "sharp": "0.32.6"

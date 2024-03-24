@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-expressions*/
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 import MailRule, { allMailrules } from "../../mail/mailRule.js";
 import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
 

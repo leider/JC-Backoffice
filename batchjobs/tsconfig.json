@@ -8,8 +8,8 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "lib": ["esnext"],
-    "types": ["node", "mocha"]
+    "types": ["node"]
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

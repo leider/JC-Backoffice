@@ -8,8 +8,7 @@
   "plugins": ["@typescript-eslint"],
   "env": {
     "node": true,
-    "es6": true,
-    "mocha": true
+    "es6": true
   },
   "rules": {
     "quotes": [2, "double", { "avoidEscape": true }],

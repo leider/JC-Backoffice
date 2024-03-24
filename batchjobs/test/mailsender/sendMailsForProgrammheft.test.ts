@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { expect, afterEach, beforeEach, describe, it } from "vitest";
 import sin from "sinon";
 const sinon = sin.createSandbox();
 

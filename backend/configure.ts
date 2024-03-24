@@ -24,6 +24,7 @@ function createConfiguration(): SimpleConfigure {
       if (fs.existsSync(file)) {
         // eslint-disable-next-line no-sync
         const theFile = fs.readFileSync(file, { encoding: "utf-8" });
+        conf.setBaseDirectory(__dirname);
         conf.addProperties(JSON.parse(theFile));
       }
     });

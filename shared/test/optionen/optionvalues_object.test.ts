@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 import OptionValues from "../../optionen/optionValues.js";
 
 describe("OptionValues constructor sorts lists case insensitive", () => {

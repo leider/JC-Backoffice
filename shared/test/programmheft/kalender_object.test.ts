@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-expressions*/
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 
 import Kalender, { EmailEvent } from "../../programmheft/kalender.js";
 import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
@@ -175,7 +174,7 @@ Irgendwas
 Vielen Dank für Deine Arbeit und Unterstützung,
 Damit alles reibungslos klappt, sollte dies bis zum 13. Dezember 2020 erledigt sein.
 
-Danke & keep swingin'`
+Danke & keep swingin'`,
       );
     });
   });

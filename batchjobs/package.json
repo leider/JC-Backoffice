@@ -12,8 +12,12 @@
     "jc-backend": "workspace:^",
     "jc-shared": "workspace:^"
   },
+  "devDependencies": {
+    "vite": "5.2.6",
+    "vitest": "1.4.0"
+  },
   "scripts": {
-    "test": "../node_modules/.bin/mocha --exit test/**/*.js",
+    "test": "../node_modules/.bin/vitest --run",
     "compile": "../node_modules/typescript/bin/tsc",
     "deploy": "yarn compile",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",

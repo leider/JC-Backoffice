@@ -1,10 +1,11 @@
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import path from "node:path";
 
 export class SimpleConfigure {
   storage: { [index: string]: string | number } = {};
+  baseDir = "";
+  setBaseDirectory(baseDirectory: string) {
+    this.baseDir = baseDirectory;
+  }
 
   addProperties(properties: { [index: string]: string | number }): void {
     if (!properties) {
@@ -43,7 +44,7 @@ export class SimpleConfigure {
   }
 
   private createRealPath(thePath: string) {
-    return path.isAbsolute(thePath) ? thePath : path.join(__dirname, `../../backend/${thePath}/`);
+    return path.isAbsolute(thePath) ? thePath : path.join(this.baseDir, thePath);
   }
 
   private inCorrectLocation(prop: string) {

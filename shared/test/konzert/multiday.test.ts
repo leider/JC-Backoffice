@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 import Konzert from "../../konzert/konzert.js";
 
 describe("Start und Ende Erweiterungen", () => {

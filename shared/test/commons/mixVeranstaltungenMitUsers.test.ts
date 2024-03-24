@@ -1,4 +1,5 @@
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
+
 import mixVeranstaltungenMitUsers from "../../commons/mixVeranstaltungenMitUsers.js";
 import Konzert from "../../konzert/konzert.js";
 import User from "../../user/user.js";

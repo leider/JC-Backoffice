@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 import Users, { Mailingliste } from "../../user/users.js";
 import User from "../../user/user.js";
 

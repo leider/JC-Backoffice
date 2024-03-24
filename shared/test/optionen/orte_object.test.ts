@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { describe, expect, it } from "vitest";
 import Orte, { Ort } from "../../optionen/orte.js";
 
 const emptyOrte = { orte: [] };
