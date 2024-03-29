@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
-import { Changelog } from "@/components/history/Changelog.tsx";
+import { Col, Row } from "antd";
 import { ChangelistItem } from "jc-shared/konzert/konzert.ts";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 
@@ -11,13 +10,7 @@ export default function BearbeiterCard() {
 
   return (
     <Collapsible suffix="allgemeines" label="Historie">
-      <Row gutter={12}>
-        <Col span={24}>
-          <Form.Item name="id" valuePropName="id">
-            <Changelog collection="Veranstaltung" />
-          </Form.Item>
-        </Col>
-      </Row>
+      <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
       {form.getFieldValue("changelist")?.map((item: ChangelistItem, idx: number) => (
         <Row gutter={12} key={idx}>
           <Col span={24}>

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { Form, Space } from "antd";
-import { useParams, useSearchParams } from "react-router-dom";
-import { CopyButton, DeleteButton, ExportButtons, HelpWithKasseButton, SaveButton } from "@/components/colored/JazzButtons";
+import { useSearchParams } from "react-router-dom";
+import { HelpWithKasseButton, MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import headerTags from "@/components/colored/headerTags.tsx";
@@ -15,7 +15,6 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
   const konzertContext = useContext(KonzertContext);
   const { optionen } = useJazzContext();
   const form = konzertContext!.form;
-  const { url } = useParams();
   const [search] = useSearchParams();
   const { currentUser } = useJazzContext();
   const [displayDate, setDisplayDate] = useState<string>("");
@@ -106,19 +105,10 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
   const titleStyle: CSSProperties = { color: typeColor };
   return (
     <JazzPageHeader
-      title={
-        <Space>
-          <span style={titleStyle}>{title}</span>
-          <div style={{ marginTop: "-16px" }}>
-            <TeamCalendar />
-          </div>
-        </Space>
-      }
+      title={<span style={titleStyle}>{title}</span>}
       dateString={displayDate}
       buttons={[
-        isOrga && <ExportButtons key="exports" disabled={isNew || dirty} />,
-        isOrga && <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} />,
-        isOrga && <CopyButton key="copy" disabled={isNew} url={url} />,
+        isOrga && <MoreButton key="more" disabled={isNew} />,
         <SaveButton key="save" disabled={!dirty} />,
         isKassenseite && (
           <HelpWithKasseButton
@@ -128,6 +118,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
             }}
           />
         ),
+        <TeamCalendar key="cal" />,
       ]}
       tags={tagsForTitle}
     >

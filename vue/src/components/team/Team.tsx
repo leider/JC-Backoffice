@@ -96,14 +96,7 @@ function Team() {
       <Row gutter={8}>
         <Col>
           <JazzPageHeader
-            title={
-              <Space>
-                Team
-                <div style={{ marginTop: "-16px" }}>
-                  <TeamCalendar />
-                </div>
-              </Space>
-            }
+            title="Team"
             buttons={[
               <Dropdown
                 key="periods"
@@ -118,6 +111,7 @@ function Team() {
                   </Space>
                 </Button>
               </Dropdown>,
+              <TeamCalendar key="cal" />,
             ]}
           />
           <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>

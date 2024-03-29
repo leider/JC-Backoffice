@@ -150,14 +150,7 @@ export default function Veranstaltungen() {
       <Row gutter={8}>
         <Col>
           <JazzPageHeader
-            title={
-              <Space>
-                Veranstaltungen
-                <div style={{ marginTop: "-16px" }}>
-                  <TeamCalendar />
-                </div>
-              </Space>
-            }
+            title="Veranstaltungen"
             buttons={[
               <ExcelMultiExportButton key="excel" alle={alle}></ExcelMultiExportButton>,
               <NewButtons key="newButtons" />,
@@ -174,6 +167,7 @@ export default function Veranstaltungen() {
                   </Space>
                 </Button>
               </Dropdown>,
+              <TeamCalendar key="cal" />,
             ]}
           />
           <Form form={form} autoComplete="off">

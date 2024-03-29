@@ -12,6 +12,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import deLocale from "@fullcalendar/core/locales/de";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 export default function TeamCalendar() {
   const { currentUser } = useJazzContext();
@@ -45,7 +46,7 @@ export default function TeamCalendar() {
   const { lg } = useBreakpoint();
   return (
     <>
-      <ButtonWithIcon key="openCal" icon="Calendar2Month" text="Zeigen" onClick={() => setDrawerOpen(true)} />
+      <ButtonWithIcon alwaysText key="openCal" icon="ChevronLeft" text="Kalender..." onClick={() => setDrawerOpen(true)} />
       <Drawer
         extra={
           <>
@@ -66,6 +67,7 @@ export default function TeamCalendar() {
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         size="large"
+        closeIcon={<IconForSmallBlock iconName="ChevronRight" />}
       >
         <FullCalendar
           plugins={[dayGridPlugin, multiMonthPlugin]}

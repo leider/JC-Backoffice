@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { Form, Space, Tag } from "antd";
-import { useParams } from "react-router-dom";
-import { CopyButton, DeleteButton, ExportExcelVermietungButton, SaveButton } from "@/components/colored/JazzButtons";
+import { Form, Tag } from "antd";
+import { MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
@@ -12,8 +11,6 @@ import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
   const form = context!.form;
-
-  const { url } = useParams();
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
@@ -81,20 +78,8 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   return (
     <JazzPageHeader
-      title={
-        <Space>
-          {title}
-          <div style={{ marginTop: "-16px" }}>
-            <TeamCalendar />
-          </div>
-        </Space>
-      }
-      buttons={[
-        <ExportExcelVermietungButton key="excel" disabled={isNew} />,
-        <DeleteButton key="delete" disabled={isNew || confirmed} id={form.getFieldValue("id")} isVermietung />,
-        <CopyButton key="copy" disabled={isNew} url={url} isVermietung />,
-        <SaveButton key="save" disabled={!dirty} />,
-      ]}
+      title={title}
+      buttons={[<MoreButton key="more" />, <SaveButton key="save" disabled={!dirty} />, <TeamCalendar key="cal" />]}
       firstTag={
         <Tag key="verm" color="purple">
           Vermietung
