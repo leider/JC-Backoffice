@@ -10,14 +10,14 @@
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
-    "@ant-design/pro-components": "2.6.52",
+    "@ant-design/pro-components": "2.7.0",
     "@fullcalendar/core": "6.1.11",
     "@fullcalendar/daygrid": "6.1.11",
     "@fullcalendar/multimonth": "6.1.11",
     "@fullcalendar/react": "6.1.11",
-    "@tanstack/react-query": "5.28.6",
+    "@tanstack/react-query": "5.28.9",
     "@uiw/react-json-view": "1.12.2",
-    "antd": "5.15.3",
+    "antd": "5.15.4",
     "axios": "1.6.8",
     "codemirror": "6.0.1",
     "color": "4.2.3",
@@ -35,18 +35,18 @@
     "react-dom": "18.2.0",
     "react-router-dom": "6.22.3",
     "react-simplemde-editor": "5.2.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
   },
   "devDependencies": {
     "@types/color": "3.0.6",
     "@types/numeral": "2.0.5",
-    "@types/react": "18.2.69",
-    "@types/react-dom": "18.2.22",
+    "@types/react": "18.2.73",
+    "@types/react-dom": "18.2.23",
     "@vitejs/plugin-react": "4.2.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.6",
     "numeral": "2.0.6",
-    "vite": "5.2.6",
+    "vite": "5.2.7",
     "vite-plugin-pwa": "0.19.7",
     "vitest": "1.4.0"
   },

@@ -12,7 +12,7 @@
     "jc-vue": "workspace:^"
   },
   "devDependencies": {
-    "vite": "5.2.6"
+    "vite": "5.2.7"
   },
   "packageManager": "yarn@4.0.2"
 }

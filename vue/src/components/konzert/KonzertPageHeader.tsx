@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
-import { Form, Space } from "antd";
+import { Form } from "antd";
 import { useSearchParams } from "react-router-dom";
 import { HelpWithKasseButton, MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
