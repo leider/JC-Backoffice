@@ -7,6 +7,6 @@ module.exports = {
   rules: {
     "react-refresh/only-export-components": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
-    "no-console": "error"
+    "no-console": "error",
   },
 };

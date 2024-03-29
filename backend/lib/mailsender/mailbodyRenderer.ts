@@ -18,7 +18,7 @@ export default class MailBodyRenderer {
       `doctype html
 html: body !{content}
 `,
-      { pretty: true, content: this.rendered }
+      { pretty: true, content: this.rendered },
     );
   }
 

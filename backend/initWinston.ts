@@ -5,7 +5,7 @@ const consoleformat = format.combine(
   format.colorize(),
   format.timestamp(),
   format.prettyPrint(),
-  format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+  format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 );
 
 function console() {
@@ -15,7 +15,7 @@ function console() {
 const fileformat = format.combine(
   format.timestamp(),
   format.prettyPrint(),
-  format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+  format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 );
 
 function fileNamed(name: string): FileTransportInstance {

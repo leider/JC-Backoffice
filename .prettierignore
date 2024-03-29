@@ -1,0 +1,4 @@
+*.sh
+**/steps*
+*.lock
+fonts.css

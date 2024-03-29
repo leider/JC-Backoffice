@@ -54,7 +54,8 @@
   border-color: #f8f9fa;
 }
 
-.fc-col-header-cell-cushion, .fc-daygrid-day-number {
+.fc-col-header-cell-cushion,
+.fc-daygrid-day-number {
   color: #212529;
 }
 

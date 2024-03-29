@@ -24,7 +24,7 @@ export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit
   }
   const events = [current as Kalender, next as Kalender].reduce(
     (previous: EmailEvent[], current) => previous.concat(current.eventsToSend(now)),
-    []
+    [],
   );
   return sendMail(events);
 }
