@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Col, Layout, Row, theme } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { menuKeys } from "@/components/content/MenuNodes.tsx";
@@ -22,11 +22,15 @@ function TodaysConcert() {
     queryFn: () => konzerteForToday(),
   });
 
-  if (data?.length ?? 0 > 0)
+  const bestaetigte = useMemo(() => {
+    return data?.filter((konz) => konz.kopf.confirmed);
+  }, [data]);
+
+  if (bestaetigte?.length ?? 0 > 0)
     return (
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
-          {(data ?? []).map((konzert) => (
+          {bestaetigte?.map((konzert) => (
             <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl}>
               <h2
                 style={{

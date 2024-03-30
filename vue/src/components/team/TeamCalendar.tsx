@@ -46,7 +46,13 @@ export default function TeamCalendar() {
   const { lg } = useBreakpoint();
   return (
     <>
-      <ButtonWithIcon alwaysText key="openCal" icon="ChevronLeft" text="Kalender..." onClick={() => setDrawerOpen(true)} />
+      <ButtonWithIcon
+        alwaysText
+        key="openCal"
+        icon="ChevronLeft"
+        text={lg ? "Kalender..." : "Kal..."}
+        onClick={() => setDrawerOpen(true)}
+      />
       <Drawer
         extra={
           <>

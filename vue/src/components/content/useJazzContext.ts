@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
@@ -8,8 +8,9 @@ import { RouterContext } from "@/router/JazzRouter.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
+import { TeamFilterObject } from "@/components/team/applyTeamFilter.ts";
 
-const emptyContext = {
+const emptyContext: SharedGlobals = {
   currentUser: new User({}),
   wikisubdirs: [],
   allUsers: [],
@@ -17,6 +18,8 @@ const emptyContext = {
   orte: new Orte(),
   showSuccess: () => {},
   showError: () => {},
+  filter: {},
+  setFilter: () => {},
 };
 
 type SharedGlobals = {
@@ -27,6 +30,8 @@ type SharedGlobals = {
   orte: Orte;
   showSuccess: ({ text, title }: { text?: string; title?: string }) => void;
   showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
+  filter: TeamFilterObject;
+  setFilter: (filter: TeamFilterObject) => void;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -37,7 +42,9 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const refetchInterval = 2 * 60 * 1000; // 2 minutes
 
-  const context: Omit<SharedGlobals, "showSuccess" | "showError"> = useQueries({
+  const [filter, setFilter] = useState<TeamFilterObject>({});
+
+  const context: Omit<SharedGlobals, "showSuccess" | "showError" | "filter" | "setFilter"> = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs(), refetchInterval },
@@ -94,7 +101,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess, showError };
+  return { ...exposedContext, showSuccess, showError, filter, setFilter };
 }
 
 export function useJazzContext() {
