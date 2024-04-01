@@ -12,61 +12,67 @@ function escape(str = "") {
   return `'${str.replaceAll("'", "''")}'`;
 }
 
+function doInSqlite(callback) {
+  const db = new sqlite(url);
+  const result = callback(db);
+  db.close();
+  return result;
+}
+
 class dbHelper extends Helper {
   dropAllCollections() {
-    console.log("DROP");
-    const db = new sqlite(url);
-    const tables = db.pragma("table_list");
-    tables
-      .filter((table) => !table.name.startsWith("sqlite") && table.name !== "refreshstore")
-      .forEach((table) => db.exec(`delete from ${table.name}`));
-    db.close();
+    doInSqlite((db) => {
+      const tables = db.pragma("table_list");
+      tables
+        .filter((table) => !table.name.startsWith("sqlite") && table.name !== "refreshstore")
+        .forEach((table) => db.exec(`delete from ${table.name}`));
+    });
   }
 
   deleteObjectInCollection(collectionName, id) {
-    console.log(`DELETE OBJECT ${id} IN COLLECTION ${collectionName}`);
-    const db = new sqlite(url);
-    db.exec(`delete from ${collectionName} where id = ${escape(id)}`);
-    db.close();
+    doInSqlite((db) => {
+      db.exec(`delete from ${collectionName} where id = ${escape(id)}`);
+    });
   }
 
   loadObjectInCollection(collectionName, id) {
-    const db = new sqlite(url);
-    const result = db.prepare(`select data from ${collectionName} where id = ${escape(id)}`).get();
-    db.close();
+    const result = doInSqlite((db) => {
+      return db.prepare(`select data from ${collectionName} where id = ${escape(id)}`).get();
+    });
     return JSON.parse(result.data);
   }
 
   createData(collectionName, filename) {
-    console.log(`CREATE OBJECT ${filename} IN COLLECTION ${collectionName}`);
-    const json = fs.readFileSync(`${__dirname}/../data/${collectionName}/${filename}.json`, "utf8");
-    const object = JSON.parse(json);
-    const db = new sqlite(url);
+    doInSqlite((db) => {
+      const json = fs.readFileSync(`${__dirname}/../data/${collectionName}/${filename}.json`, "utf8");
+      const object = JSON.parse(json);
 
-    const extraCols = [];
-    if (collectionName === "veranstaltungenstore" || collectionName === "vermietungenstore") {
-      extraCols.push(["startDate", "endDate", "url"]);
-    } else if (collectionName === "terminstore") {
-      extraCols.push(["startDate", "endDate"]);
-    }
+      const extraCols = [];
+      if (collectionName === "veranstaltungenstore" || collectionName === "vermietungenstore") {
+        extraCols.push(["startDate", "endDate", "url"]);
+      } else if (collectionName === "terminstore") {
+        extraCols.push(["startDate", "endDate"]);
+      }
 
-    const cols = ["id", "data"];
-    if (extraCols) {
-      cols.push(...extraCols);
-    }
-    const vals = [escape(object.id), asSqliteString(object)];
-    if (this.extraCols) {
-      vals.push(
-        ...this.extraCols.map((col) => {
-          if (col === "startDate" || col === "endDate") {
-            return escape(object[col].toJSON());
-          }
-          return escape(object[col]);
-        }),
-      );
-    }
-    db.exec(`REPLACE INTO ${collectionName} (${cols.join(",")}) VALUES (${vals.join(",")});`);
-    db.close();
+      const cols = ["id", "data"];
+      if (extraCols) {
+        cols.push(...extraCols);
+      }
+      const vals = [escape(object.id), asSqliteString(object)];
+      if (this.extraCols) {
+        vals.push(
+          ...this.extraCols.map((col) => {
+            if (col === "startDate" || col === "endDate") {
+              return escape(object[col].toJSON());
+            }
+            return escape(object[col]);
+          }),
+        );
+      }
+      db.exec(`REPLACE INTO ${collectionName} (${cols.join(",")}) VALUES (${vals.join(",")});`);
+    });
   }
+
+  storeInCollection(collectionName, data) {}
 }
 module.exports = dbHelper;
