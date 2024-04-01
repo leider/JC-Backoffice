@@ -94,7 +94,7 @@ function Team() {
   return (
     <>
       <Row gutter={8}>
-        <Col>
+        <Col span={24}>
           <JazzPageHeader
             title="Team"
             buttons={[

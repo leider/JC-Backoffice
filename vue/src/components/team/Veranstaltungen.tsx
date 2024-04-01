@@ -137,38 +137,36 @@ export default function Veranstaltungen() {
   const filterTags = useFilterAsTags();
 
   return (
-    <>
-      <Row gutter={8}>
-        <Col>
-          <JazzPageHeader
-            title="Veranstaltungen"
-            tags={filterTags}
-            buttons={[
-              <ExcelMultiExportButton key="excel" alle={veranstaltungen} />,
-              <NewButtons key="newButtons" />,
-              <Dropdown
-                key="periods"
-                menu={{
-                  items: periods,
-                }}
-              >
-                <Button>
-                  <Space>
-                    {period}
-                    <IconForSmallBlock iconName="ChevronDown" />
-                  </Space>
-                </Button>
-              </Dropdown>,
-              <TeamCalendar key="cal" />,
-            ]}
-          />
-          <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
-            {monate.map((monat) => {
-              return <TeamMonatGroup key={monat} monat={monat} />;
-            })}
-          </TeamContext.Provider>
-        </Col>
-      </Row>
-    </>
+    <Row gutter={8}>
+      <Col span={24}>
+        <JazzPageHeader
+          title="Veranstaltungen"
+          tags={filterTags}
+          buttons={[
+            <ExcelMultiExportButton key="excel" alle={veranstaltungen} />,
+            <NewButtons key="newButtons" />,
+            <Dropdown
+              key="periods"
+              menu={{
+                items: periods,
+              }}
+            >
+              <Button>
+                <Space>
+                  {period}
+                  <IconForSmallBlock iconName="ChevronDown" />
+                </Space>
+              </Button>
+            </Dropdown>,
+            <TeamCalendar key="cal" />,
+          ]}
+        />
+        <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
+          {monate.map((monat) => {
+            return <TeamMonatGroup key={monat} monat={monat} />;
+          })}
+        </TeamContext.Provider>
+      </Col>
+    </Row>
   );
 }

@@ -11,13 +11,12 @@ Before(({ I, login }) => {
 Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.amOnPage("/vue/konzert/new?page=allgemeines");
   I.see("Typ");
-  I.click('//input[@placeholder="Startdatum"]');
-  I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\n");
-  I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\n");
+  I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
+  I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
+  I.click("OK");
   I.fillField("Titel", "Konzert #1");
   I.fillField("Typ", "Club Konzert\n");
   I.click("Speichern");
-  I.wait(0.5);
 
   const res = await I.loadObjectInCollection("veranstaltungenstore", "Konzert #1 am 20. März 2020");
   expect(res.kopf).eql({

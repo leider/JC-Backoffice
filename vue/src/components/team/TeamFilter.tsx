@@ -140,6 +140,8 @@ export default function useFilterAsTags() {
               Anhaken bedeutet: "Das muss gesetzt sein".
               <br />
               Nicht anhaken: "Das <em>darf nicht</em> gesetzt sein".
+              <br />
+              Das "Quadrat": Ignoriere diese Eigenschaft.
             </p>
           </Row>
         </Form>

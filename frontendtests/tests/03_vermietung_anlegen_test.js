@@ -11,12 +11,11 @@ Before(({ I, login }) => {
 Scenario("Erzeuge neue Vermietung", async ({ I }) => {
   I.amOnPage("/vue/vermietung/new?page=allgemeines");
   I.fillField("Saalmiete", "100");
-  I.click('//input[@placeholder="Startdatum"]');
-  I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\n");
-  I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\n");
+  I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
+  I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
+  I.click("OK");
   I.fillField("Titel", "Vermietung #1");
   I.click("Speichern");
-  I.wait(0.5);
 
   const res = await I.loadObjectInCollection("vermietungenstore", "Vermietung #1 am 20. März 2020");
   expect(res.kopf).eql({
