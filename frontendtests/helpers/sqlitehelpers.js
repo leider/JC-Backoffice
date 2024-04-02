@@ -2,6 +2,7 @@ const sqlite = require("better-sqlite3");
 const serverConfig = require("../../config-it/server-config.json");
 const Helper = require("@codeceptjs/helper");
 const fs = require("fs");
+const { isEmpty } = require("lodash");
 const url = serverConfig.sqlitedb;
 
 function asSqliteString(obj) {
@@ -46,33 +47,27 @@ class dbHelper extends Helper {
     doInSqlite((db) => {
       const json = fs.readFileSync(`${__dirname}/../data/${collectionName}/${filename}.json`, "utf8");
       const object = JSON.parse(json);
-
-      const extraCols = [];
-      if (collectionName === "veranstaltungenstore" || collectionName === "vermietungenstore") {
-        extraCols.push(["startDate", "endDate", "url"]);
-      } else if (collectionName === "terminstore") {
-        extraCols.push(["startDate", "endDate"]);
-      }
-
-      const cols = ["id", "data"];
-      if (extraCols) {
-        cols.push(...extraCols);
-      }
-      const vals = [escape(object.id), asSqliteString(object)];
-      if (this.extraCols) {
-        vals.push(
-          ...this.extraCols.map((col) => {
-            if (col === "startDate" || col === "endDate") {
-              return escape(object[col].toJSON());
-            }
-            return escape(object[col]);
-          }),
-        );
-      }
-      db.exec(`REPLACE INTO ${collectionName} (${cols.join(",")}) VALUES (${vals.join(",")});`);
+      this.storeInCollection(db, collectionName, object);
     });
   }
 
-  storeInCollection(collectionName, data) {}
+  createObject(collectionName, object) {
+    doInSqlite((db) => {
+      this.storeInCollection(db, collectionName, object);
+    });
+  }
+
+  storeInCollection(db, collectionName, object) {
+    const extraCols = [];
+    if (collectionName === "veranstaltungenstore" || collectionName === "vermietungenstore") {
+      extraCols.push("startDate", "endDate", "url");
+    } else if (collectionName === "terminstore") {
+      extraCols.push("startDate", "endDate");
+    }
+
+    const cols = ["id", "data"].concat(extraCols);
+    const vals = [escape(object.id), asSqliteString(object)].concat(extraCols.map((col) => escape(object[col])));
+    db.exec(`REPLACE INTO ${collectionName} (${cols.join(",")}) VALUES (${vals.join(",")});`);
+  }
 }
 module.exports = dbHelper;

@@ -9,7 +9,7 @@ Before(({ I, login }) => {
 });
 
 Scenario("Erzeuge neue Vermietung", async ({ I }) => {
-  I.amOnPage("/vue/vermietung/new?page=allgemeines");
+  I.amOnPage("/vue/vermietung/new");
   I.fillField("Saalmiete", "100");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
   I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
