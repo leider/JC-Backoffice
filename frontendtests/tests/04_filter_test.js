@@ -3,12 +3,14 @@ const fs = require("fs");
 
 function konzertHaving(object, name) {
   const empty = JSON.parse(fs.readFileSync(`${__dirname}/../data/veranstaltungenstore/Empty.json`, "utf8"));
-  const { kopf, technik, presse, directAtts } = object;
+  const { kopf, technik, presse, artist, unterkunft, directAtts } = object;
   Object.assign(empty.kopf, kopf, {
     titel: name,
   });
   Object.assign(empty.technik, technik);
   Object.assign(empty.presse, presse);
+  Object.assign(empty.artist, artist);
+  Object.assign(empty.unterkunft, unterkunft);
   return Object.assign(empty, directAtts, {
     id: name,
     url: name,
@@ -53,6 +55,14 @@ BeforeSuite(({ I }) => {
   I.createObject("veranstaltungenstore", konzertHaving({ kopf: { fotografBestellen: true } }, "FotografEinladen"));
   I.createObject("veranstaltungenstore", konzertHaving({ technik: { checked: true } }, "TechnikChecked"));
   I.createObject("veranstaltungenstore", konzertHaving({ technik: { fluegel: true } }, "Fluegel"));
+  I.createObject(
+    "veranstaltungenstore",
+    konzertHaving({ artist: { brauchtHotel: true }, unterkunft: { bestaetigt: true } }, "HotelBestatigt"),
+  );
+  I.createObject(
+    "veranstaltungenstore",
+    konzertHaving({ artist: { brauchtHotel: true }, unterkunft: { bestaetigt: false } }, "HotelNichtBestatigt"),
+  );
 });
 
 Before(({ I, login }) => {
@@ -97,4 +107,21 @@ Scenario("Technik 'Technik ist geklärt'", async ({ I }) => {
 
 Scenario("Technik 'Flügel stimmen'", async ({ I }) => {
   setAndCheck(I, "Flügel stimmen", "Fluegel");
+});
+
+Scenario("Allgemein 'Hotel bestätigt'", async ({ I }) => {
+  I.click("Veranstaltungen");
+  I.see("Neutral");
+  I.see("HotelBestatigt");
+  I.see("HotelNichtBestatigt");
+
+  setCheck(I, "Hotel bestätigt", true);
+  I.see("HotelBestatigt");
+  I.dontSee("HotelNichtBestatigt");
+  I.dontSee("Neutral");
+
+  setCheck(I, "Hotel bestätigt", false);
+  I.see("HotelNichtBestatigt");
+  I.dontSee("HotelBestaetigt");
+  I.dontSee("Neutral");
 });

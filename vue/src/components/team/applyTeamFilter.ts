@@ -3,9 +3,11 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import { withoutNullOrUndefinedStrippedBy } from "jc-shared/commons/comparingAndTransforming.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export type TeamFilterObject = {
   istKonzert?: boolean;
+  hotelBestaetigt?: boolean;
   presse?: {
     checked?: boolean;
     text?: boolean;
@@ -43,7 +45,7 @@ function filterKopf(ver: Veranstaltung, filterObj: TeamFilterObject) {
     return true;
   }
   const kopf = ver.kopf;
-  const pred1 = !isNil(filter?.confirmed) ? kopf.confirmed === filter?.confirmed : true;
+  const pred1 = isNil(filter?.confirmed) ? true : kopf.confirmed === filter?.confirmed;
   const pred2 = !isNil(kopf.abgesagt) && !isNil(filter?.abgesagt) ? kopf.abgesagt === filter?.abgesagt : true;
   const pred3 =
     !isNil(kopf.fotografBestellen) && !isNil(filter?.fotografBestellen) ? kopf.fotografBestellen === filter?.fotografBestellen : true;
@@ -59,16 +61,25 @@ function filterTechnik(ver: Veranstaltung, filterObj: TeamFilterObject) {
     return true;
   }
   const technik = ver.technik;
-  const pred1 = !isNil(filter?.checked) ? technik.checked === filter?.checked : true;
-  const pred2 = !isNil(filter?.fluegel) ? technik.fluegel === filter?.fluegel : true;
+  const pred1 = isNil(filter?.checked) ? true : technik.checked === filter?.checked;
+  const pred2 = isNil(filter?.fluegel) ? true : technik.fluegel === filter?.fluegel;
   return pred1 && pred2;
 }
 
+function filterUnterkunft(ver: Veranstaltung, filter: TeamFilterObject) {
+  if (isEmpty(filter) || isNil(filter.hotelBestaetigt)) {
+    return true;
+  }
+  if (ver.isVermietung || !ver.artist.brauchtHotel) {
+    return false;
+  }
+  return (ver as Konzert).unterkunft.bestaetigt === filter.hotelBestaetigt;
+}
 export default function applyTeamFilter(filterOri: TeamFilterObject) {
   const filter = withoutNullOrUndefinedStrippedBy(filterOri);
   return (ver: Veranstaltung) => {
     if (!ver || !filter) return true;
-    const artFilter = !isNil(filter.istKonzert) ? ver.isVermietung === !filter.istKonzert : true;
-    return artFilter && filterPresse(ver, filter) && filterKopf(ver, filter) && filterTechnik(ver, filter);
+    const artFilter = isNil(filter.istKonzert) ? true : ver.isVermietung === !filter.istKonzert;
+    return artFilter && filterPresse(ver, filter) && filterKopf(ver, filter) && filterTechnik(ver, filter) && filterUnterkunft(ver, filter);
   };
 }

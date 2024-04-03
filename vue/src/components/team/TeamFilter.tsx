@@ -50,6 +50,7 @@ export default function useFilterAsTags() {
   function reset() {
     form.setFieldsValue({
       istKonzert: undefined,
+      hotelBestaetigt: undefined,
       presse: { text: undefined, originalText: undefined, checked: undefined },
       kopf: {
         confirmed: undefined,
@@ -94,6 +95,9 @@ export default function useFilterAsTags() {
             </Col>
             <Col span={8}>
               <ThreewayCheckbox name={["kopf", "abgesagt"]} label="Ist abgesagt" />
+            </Col>
+            <Col span={8}>
+              <ThreewayCheckbox name="hotelBestaetigt" label="Hotel bestätigt" />
             </Col>
           </Row>
           <Divider orientation="left">
@@ -165,6 +169,7 @@ export default function useFilterAsTags() {
           : { label: "nur Vermietungen", color: true, prop: "istKonzert" },
       );
     }
+    pushIfSet(filter.hotelBestaetigt, "Hotel bestätigt", "hotelBestaetigt");
     pushIfSet(filter.kopf?.confirmed, "Ist bestätigt", ["kopf", "confirmed"]);
     pushIfSet(filter.kopf?.abgesagt, "Ist abgesagt", ["kopf", "abgesagt"]);
     pushIfSet(filter.presse?.checked, "Presse OK", ["presse", "checked"]);
