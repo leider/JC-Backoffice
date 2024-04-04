@@ -12,6 +12,7 @@ import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpF
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteForToday } from "@/commons/loader.ts";
+import HelpContent from "@/components/content/HelpContent.tsx";
 
 const { Content } = Layout;
 
@@ -81,6 +82,7 @@ const JazzContent: React.FC = () => {
               <InnerContent />
             </div>
           </Content>
+          <HelpContent />
         </Layout>
       </JazzContext.Provider>
     </AuthContext.Provider>
