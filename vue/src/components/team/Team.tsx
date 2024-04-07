@@ -14,8 +14,10 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import reverse from "lodash/reverse";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
+import useFilterAsTags from "@/components/team/TeamFilter.tsx";
+import applyTeamFilter from "@/components/team/applyTeamFilter.ts";
 
-function Team() {
+export default function Team() {
   useDirtyBlocker(false);
 
   const [search, setSearch] = useSearchParams();
@@ -69,7 +71,7 @@ function Team() {
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
   }, [queryResult, selectedPeriod]);
 
-  const { allUsers, currentUser } = useJazzContext();
+  const { allUsers, currentUser, filter } = useJazzContext();
 
   const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
@@ -85,11 +87,15 @@ function Team() {
 
   document.title = "Team";
   useEffect(() => {
-    const filtered = alle.filter((v) => v.kopf.confirmed || realadmin);
+    const filtered = alle.filter((v) => {
+      return (v.kopf.confirmed || realadmin) && applyTeamFilter(filter)(v);
+    });
     const result = groupBy(filtered, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [alle, realadmin]);
+  }, [alle, realadmin, filter]);
+
+  const filterTags = useFilterAsTags();
 
   return (
     <>
@@ -97,6 +103,7 @@ function Team() {
         <Col span={24}>
           <JazzPageHeader
             title="Team"
+            tags={filterTags}
             buttons={[
               <Dropdown
                 key="periods"
@@ -124,5 +131,3 @@ function Team() {
     </>
   );
 }
-
-export default Team;

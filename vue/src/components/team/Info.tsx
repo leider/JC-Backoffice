@@ -150,11 +150,11 @@ export default function Info() {
         title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
         tags={filterTags}
         buttons={[
-          <a href={`/imgzip/${monatJahr!}`}>
+          <a href={`/imgzip/${monatJahr!}`} key="imgzip">
             <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Alle Bilder als ZIP</Button>
           </a>,
         ]}
-      ></JazzPageHeader>
+      />
       <Tabs
         type="card"
         activeKey={activePage}
