@@ -2,11 +2,13 @@ import { Collapse, ConfigProvider, List } from "antd";
 import { ReactNode } from "react";
 
 export default function HelpSection({
+  initiallyOpen,
   label,
   items,
 }: {
+  initiallyOpen?: boolean;
   label: ReactNode;
-  items: { title: string; content: string; description?: string }[];
+  items: { title: ReactNode; content: ReactNode; description?: string }[];
 }) {
   return (
     <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0, headerPadding: 0 } } }}>
@@ -15,7 +17,7 @@ export default function HelpSection({
         ghost
         items={[
           {
-            key: "stuff",
+            key: initiallyOpen ? "stuff" : "",
             label: label,
             children: (
               <List

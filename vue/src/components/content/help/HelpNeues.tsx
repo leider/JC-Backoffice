@@ -10,5 +10,5 @@ export default function HelpNeues() {
     },
   ];
 
-  return <HelpSection label={<b>Neues</b>} items={items} />;
+  return <HelpSection initiallyOpen={true} label={<b>Neues</b>} items={items} />;
 }

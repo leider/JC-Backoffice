@@ -9,8 +9,12 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.t
 import { useQuery } from "@tanstack/react-query";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import applyTeamFilter from "@/components/team/applyTeamFilter.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import useFilterAsTags from "@/components/team/TeamFilter.tsx";
 
 export default function Info() {
+  const { filter } = useJazzContext();
   const { monatJahr } = useParams(); // als yymm
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("pressetexte");
@@ -28,7 +32,7 @@ export default function Info() {
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 
-  const veranstaltungen = useMemo(() => data ?? [], [data]);
+  const veranstaltungen = useMemo(() => (data ?? []).filter(applyTeamFilter(filter)), [data, filter]);
 
   useEffect(
     () => {
@@ -138,10 +142,13 @@ export default function Info() {
     },
   ];
 
+  const filterTags = useFilterAsTags();
+
   return (
     <>
       <JazzPageHeader
         title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
+        tags={filterTags}
         buttons={[
           <a href={`/imgzip/${monatJahr!}`}>
             <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Alle Bilder als ZIP</Button>
