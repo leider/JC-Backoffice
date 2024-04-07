@@ -1,4 +1,3 @@
-const { expect } = require("chai");
 const fs = require("fs");
 
 function konzertHaving(object, name) {
@@ -27,8 +26,8 @@ function setCheck(I, name, jaNein) {
   I.click("Anwenden");
 }
 
-function setAndCheck(I, name, title) {
-  I.click("Veranstaltungen");
+function setAndCheck(I, name, title, menu) {
+  I.click(menu);
   I.see("Neutral");
   I.see(title);
 
@@ -41,7 +40,7 @@ function setAndCheck(I, name, title) {
   I.see("Neutral");
 }
 
-Feature("Filter in der Übersicht funktioniert für");
+Feature("Filter in der Übersicht (Veranstaltungen( funktioniert für");
 
 BeforeSuite(({ I }) => {
   I.createObject("veranstaltungenstore", konzertHaving({}, "Neutral"));
@@ -69,48 +68,52 @@ Before(({ I, login }) => {
   login("admin");
 });
 
-Scenario("Allgemein 'bestätigt'", async ({ I }) => {
-  setAndCheck(I, "Ist bestätigt", "Bestätigt");
+const menuToClick = new DataTable(["menu"]);
+menuToClick.add(["Veranstaltungen"]);
+menuToClick.add(["Team"]);
+
+Data(menuToClick).Scenario("Allgemein 'bestätigt'", async ({ I, current }) => {
+  setAndCheck(I, "Ist bestätigt", "Bestätigt", current.menu);
 });
 
-Scenario("Allgemein 'abgesagt'", async ({ I }) => {
-  setAndCheck(I, "Ist abgesagt", "Cancelled");
+Data(menuToClick).Scenario("Allgemein 'abgesagt'", async ({ I, current }) => {
+  setAndCheck(I, "Ist abgesagt", "Cancelled", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Presse OK'", async ({ I }) => {
-  setAndCheck(I, "Presse OK", "PresseOK");
+Data(menuToClick).Scenario("Öffentlichkeit 'Presse OK'", async ({ I, current }) => {
+  setAndCheck(I, "Presse OK", "PresseOK", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Kann Homepage'", async ({ I }) => {
-  setAndCheck(I, "Kann Homepage", "KannAufHomepage");
+Data(menuToClick).Scenario("Öffentlichkeit 'Kann Homepage'", async ({ I, current }) => {
+  setAndCheck(I, "Kann Homepage", "KannAufHomepage", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Kann Social Media'", async ({ I }) => {
-  setAndCheck(I, "Kann Social Media", "KannAufSocialMedia");
+Data(menuToClick).Scenario("Öffentlichkeit 'Kann Social Media'", async ({ I, current }) => {
+  setAndCheck(I, "Kann Social Media", "KannAufSocialMedia", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Text vorhanden'", async ({ I }) => {
-  setAndCheck(I, "Text vorhanden", "TextVorhanden");
+Data(menuToClick).Scenario("Öffentlichkeit 'Text vorhanden'", async ({ I, current }) => {
+  setAndCheck(I, "Text vorhanden", "TextVorhanden", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Originaltext vorhanden'", async ({ I }) => {
-  setAndCheck(I, "Originaltext vorhanden", "OriginaltextVorhanden");
+Data(menuToClick).Scenario("Öffentlichkeit 'Originaltext vorhanden'", async ({ I, current }) => {
+  setAndCheck(I, "Originaltext vorhanden", "OriginaltextVorhanden", current.menu);
 });
 
-Scenario("Öffentlichkeit 'Fotograf einladen'", async ({ I }) => {
-  setAndCheck(I, "Fotograf einladen", "FotografEinladen");
+Data(menuToClick).Scenario("Öffentlichkeit 'Fotograf einladen'", async ({ I, current }) => {
+  setAndCheck(I, "Fotograf einladen", "FotografEinladen", current.menu);
 });
 
-Scenario("Technik 'Technik ist geklärt'", async ({ I }) => {
-  setAndCheck(I, "Technik ist geklärt", "TechnikChecked");
+Data(menuToClick).Scenario("Technik 'Technik ist geklärt'", async ({ I, current }) => {
+  setAndCheck(I, "Technik ist geklärt", "TechnikChecked", current.menu);
 });
 
-Scenario("Technik 'Flügel stimmen'", async ({ I }) => {
-  setAndCheck(I, "Flügel stimmen", "Fluegel");
+Data(menuToClick).Scenario("Technik 'Flügel stimmen'", async ({ I, current }) => {
+  setAndCheck(I, "Flügel stimmen", "Fluegel", current.menu);
 });
 
-Scenario("Allgemein 'Hotel bestätigt'", async ({ I }) => {
-  I.click("Veranstaltungen");
+Data(menuToClick).Scenario("Allgemein 'Hotel bestätigt'", async ({ I, current }) => {
+  I.click(current.menu);
   I.see("Neutral");
   I.see("HotelBestatigt");
   I.see("HotelNichtBestatigt");
