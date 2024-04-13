@@ -1,4 +1,4 @@
-import User, { SUPERUSERS } from "./user.js";
+import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS } from "./user.js";
 import misc from "../commons/misc.js";
 import flatten from "lodash/flatten.js";
 import uniq from "lodash/uniq.js";
@@ -49,6 +49,25 @@ class Users {
 
   getUsersInListe(listenname: string) {
     return this.users.filter((u) => u.mailinglisten.includes(listenname));
+  }
+
+  getUsersInGruppeExact(gruppenname: typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE) {
+    return this.users.filter((u) => u.gruppen.includes(gruppenname));
+  }
+
+  getUsersKann(kann: KannSection) {
+    return this.users.filter((u) => {
+      switch (kann) {
+        case "Kasse":
+          return u.kannKasse;
+        case "Licht":
+          return u.kannLicht;
+        case "Ton":
+          return u.kannTon;
+        case "Master":
+          return u.kannMaster;
+      }
+    });
   }
 
   get mailinglisten(): Mailingliste[] {

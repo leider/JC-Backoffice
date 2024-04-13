@@ -52,7 +52,7 @@ ${zuSendende
     markdown: markdownToSend,
   });
 
-  const adminAddresses = await usersService.emailsAllerAdmins();
+  const adminAddresses = usersService.emailsAllerAdmins();
   logger.info(`Email Adressen für ${subject}: ${adminAddresses}`);
   message.setTo([Message.formatEMailAddress(name, email)]);
   message.setBcc(adminAddresses);

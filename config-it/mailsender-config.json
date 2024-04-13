@@ -11,5 +11,7 @@
   "kassenzettel-email": "leider@me.com",
   "beleg-email": "leider@me.com",
   "sender-address-datev": "bo@jazzclub.de",
-  "doNotSendMails": "derleider@web.de"
+  "doNotSendMails": "derleider@web.de",
+  "bar-name": "Bar Name",
+  "bar-email": "bar.email@gmx.net"
 }

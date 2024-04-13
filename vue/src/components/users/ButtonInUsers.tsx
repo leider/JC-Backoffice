@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
@@ -8,7 +8,10 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
   const { useToken } = theme;
   const token = useToken().token;
 
-  const colors = { edit: token.colorText, changepass: token.colorSuccess, delete: token.colorError };
+  const colors = useMemo(
+    () => ({ edit: token.colorText, changepass: token.colorSuccess, delete: token.colorError }),
+    [token.colorError, token.colorSuccess, token.colorText],
+  );
   const text = { edit: "Bearbeiten", changepass: "Passwort ändern", delete: "löschen" };
   const iconName = { edit: "PencilSquare", changepass: "KeyFill", delete: "Trash" };
 

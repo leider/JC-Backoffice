@@ -45,9 +45,9 @@ ${konzerte
     markdown: markdownToSend,
   });
 
-  const users = await userstore.allUsers();
-  const validUsers = new Users(users).getUsersInListe("Abendkasse").filter((user) => !!user.email);
-  const adminAddresses = await usersService.emailsAllerAdmins();
+  const users = userstore.allUsers();
+  const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email);
+  const adminAddresses = usersService.emailsAllerAdmins();
   const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
   message.setBcc(emails);
@@ -58,7 +58,7 @@ export async function checkKasse(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
 
-  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  const konzerte = store.byDateRangeInAscendingOrder(start, end);
   const zuSendende = konzerte.filter((konzert) => kasseFehlt(konzert));
   if (zuSendende.length === 0) {
     return;

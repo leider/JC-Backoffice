@@ -9,5 +9,7 @@
   "kassenzettel-email": "changethis@me.com",
   "beleg-email": "changethis@me.com",
   "sender-address-datev": "changethis@me.com",
-  "doNotSendMails": "some email address to send to when testing"
+  "doNotSendMails": "some email address to send to when testing",
+  "bar-name": "Bar Name",
+  "bar-email": "bar.email@gmx.net"
 }

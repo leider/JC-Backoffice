@@ -57,7 +57,7 @@
     "deploy": "yarn compile",
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc lib/**/*.ts rest/**/*.ts *.ts",
-    "clean-ts": "rm -rf lib/**/*.js rest/*.js configure.js configureApp.js initWinston.js start.js",
+    "clean-ts": "rm -rf lib/**/*.js rest/*.js configure.js configureApp.js initWinston.js start.js || :",
     "sass": "../node_modules/.bin/sass sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
   }
 }
