@@ -46,7 +46,7 @@ ${konzerte
   });
 
   const users = userstore.allUsers();
-  const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email);
+  const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email && user.wantsEmailReminders);
   const adminAddresses = usersService.emailsAllerAdmins();
   const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${emails}`);

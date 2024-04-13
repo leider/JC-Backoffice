@@ -183,7 +183,7 @@ function EditFields({ isSuperUser }: { isSuperUser: boolean }) {
       <Col span={24}>
         <TextField name={"name"} label="Vollständiger Name" required />
         <TextField name={"email"} label="E-Mail" isEmail required />
-        <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff" />
+        <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff oder Kasse gesucht" />
         <IchKannFields />
         <TextField name={"tel"} label="Telefon" />
         <SingleSelect

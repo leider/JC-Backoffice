@@ -21,6 +21,6 @@
     "compile": "../node_modules/typescript/bin/tsc",
     "deploy": "yarn compile",
     "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
-    "clean-ts": "rm -f src/*.js test/**/*.js || :"
+    "clean-ts": "rm -f src/*.js ||  rm -f test/**/*.js || :"
   }
 }

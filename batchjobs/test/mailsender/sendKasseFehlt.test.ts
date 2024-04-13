@@ -20,6 +20,7 @@ const user1 = new User({
   email: "user1@jazzclub.de",
   gruppen: [ORGA],
   kannKasse: true,
+  wantsEmailReminders: true,
 });
 const user2 = new User({
   id: "user2",
@@ -32,6 +33,7 @@ const user3 = new User({
   name: "Name of User3",
   email: "user3@jazzclub.de",
   gruppen: [BOOKING],
+  kannKasse: true,
 });
 const user4 = new User({
   id: "user4",
@@ -111,12 +113,12 @@ describe("Check Kasse Mailsender", () => {
     expect(message.markdown).to.equal(`## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:
 
 ---
-<a href="http://localhost:1969/vue/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>
+<a href="http://localhost:1970/vue/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>
 
 ---
-<a href="http://localhost:1969/vue/veranstaltung/konzert2">Konzert 2 am Mi., 29. Mai 2019 22:00 im Jazzclub Karlsruhe</a>
+<a href="http://localhost:1970/vue/veranstaltung/konzert2">Konzert 2 am Mi., 29. Mai 2019 22:00 im Jazzclub Karlsruhe</a>
 
 --- 
-<a href="http://localhost:1969/vue/team/">Zur Teamseite</a>`);
+<a href="http://localhost:1970/vue/team/">Zur Teamseite</a>`);
   });
 });
