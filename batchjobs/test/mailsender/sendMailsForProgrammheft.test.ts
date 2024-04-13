@@ -1,7 +1,5 @@
-import { expect, afterEach, beforeEach, describe, it } from "vitest";
-import sin from "sinon";
-const sinon = sin.createSandbox();
-
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import * as sin from "sinon";
 import "jc-backend/configure.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -9,6 +7,8 @@ import kalenderstore from "jc-backend/lib/programmheft/kalenderstore.js";
 import Kalender from "jc-shared/programmheft/kalender.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import { remindForProgrammheft } from "../../src/sendMailsForProgrammheft.js";
+
+const sinon = sin.createSandbox();
 
 describe("Programmheft Mailsender", () => {
   const april12 = DatumUhrzeit.forGermanString("12.04.2019");

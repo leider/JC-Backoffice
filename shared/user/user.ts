@@ -2,6 +2,14 @@ import Accessrights from "./accessrights.js";
 import isNil from "lodash/isNil.js";
 
 export type KannSection = "Kasse" | "Ton" | "Licht" | "Master";
+
+export const SUPERUSERS = "superusers";
+export const BOOKING = "bookingTeam";
+export const ORGA = "orgaTeam";
+export const ABENDKASSE = "abendkasse";
+
+export const userGruppen = [SUPERUSERS, BOOKING, ORGA, ABENDKASSE];
+
 export default class User {
   id: string;
   name!: string;

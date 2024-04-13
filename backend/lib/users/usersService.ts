@@ -1,4 +1,4 @@
-import User from "jc-shared/user/user.js";
+import User, { BOOKING, SUPERUSERS } from "jc-shared/user/user.js";
 
 import store from "./userstore.js";
 import { genSalt, hashPassword } from "../commons/hashPassword.js";
@@ -39,7 +39,7 @@ export default {
   emailsAllerBookingUser: function emailsAllerBookingUser() {
     const users = store.allUsers();
     return users
-      .filter((user) => (user.gruppen || []).includes("bookingTeam") || (user.gruppen || []).includes("superusers"))
+      .filter((user) => (user.gruppen || []).includes(BOOKING) || (user.gruppen || []).includes(SUPERUSERS))
       .filter((user) => !!user.email)
       .map((u) => u.email);
   },
@@ -47,7 +47,7 @@ export default {
   emailsAllerAdmins: function emailsAllerAdmins() {
     const users = store.allUsers();
     return users
-      .filter((user) => (user.gruppen || []).includes("superusers"))
+      .filter((user) => (user.gruppen || []).includes(SUPERUSERS))
       .filter((user) => !!user.email)
       .map((u) => u.email);
   },

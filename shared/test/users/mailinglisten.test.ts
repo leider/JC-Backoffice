@@ -1,42 +1,42 @@
 import { describe, expect, it } from "vitest";
 import Users, { Mailingliste } from "../../user/users.js";
-import User from "../../user/user.js";
+import User, { BOOKING, ORGA, SUPERUSERS } from "../../user/user.js";
 
 const user1 = new User({
   id: "user1",
   name: "Name of User1",
   email: "user1@jazzclub.de",
-  gruppen: ["orgaTeam"],
+  gruppen: [ORGA],
 });
 const user2 = new User({
   id: "user2",
   name: "Name of User2",
   email: "user2@jazzclub.de",
-  gruppen: ["orgaTeam"],
+  gruppen: [ORGA],
 });
 const user3 = new User({
   id: "user3",
   name: "Name of User3",
   email: "user3@jazzclub.de",
-  gruppen: ["bookingTeam"],
+  gruppen: [BOOKING],
 });
 const user4 = new User({
   id: "user4",
   name: "Name of User4",
   email: "user4@jazzclub.de",
-  gruppen: ["bookingTeam", "orgaTeam"],
+  gruppen: [BOOKING, ORGA],
 });
 const user5 = new User({
   id: "user5",
   name: "Name of User5",
   email: "user5@jazzclub.de",
-  gruppen: ["bookingTeam", "orgaTeam", "superusers"],
+  gruppen: [BOOKING, ORGA, SUPERUSERS],
 });
 const user6 = new User({
   id: "user6",
   name: "Name of User6",
   email: "user6@jazzclub.de",
-  gruppen: ["superusers"],
+  gruppen: [SUPERUSERS],
 });
 const user7 = new User({
   id: "user7",

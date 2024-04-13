@@ -1,4 +1,4 @@
-import User from "./user.js";
+import User, { SUPERUSERS } from "./user.js";
 import misc from "../commons/misc.js";
 import flatten from "lodash/flatten.js";
 import uniq from "lodash/uniq.js";
@@ -31,7 +31,7 @@ class Users {
           flatten(
             misc
               .toArray(groupsFromBody)
-              .concat("superusers")
+              .concat(SUPERUSERS)
               .map((group) => this.users.filter((user) => user.gruppen.includes(group))),
           ),
         ),

@@ -1,5 +1,5 @@
-import { expect, afterEach, beforeEach, describe, it } from "vitest";
-import sin from "sinon";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import * as sin from "sinon";
 import "jc-backend/configure.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";

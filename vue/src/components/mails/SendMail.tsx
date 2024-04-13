@@ -107,6 +107,8 @@ export default function SendMail() {
     setSelectedRules(mailRules.filter((rule) => (selectedRulesInForm || []).includes(rule.name)));
     if (selectedVeranstaltungenInForm?.length || (0 > 0 && subject === "")) {
       form.setFieldValue("subject", "[Jazzclub manuell] Veranstaltungen für ...");
+    } else {
+      form.setFieldValue("subject", "[Jazzclub manuell]");
     }
   }, [
     allUsers,

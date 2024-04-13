@@ -41,6 +41,7 @@ export default function Users() {
       <JazzPageHeader
         tags={[
           <Radio.Group
+            key="usertags"
             options={[
               radioOption("EmojiSunglasses", "Admin", "isSuperuser"),
               radioOption("PersonCheck", "Booking", "isBookingTeam"),

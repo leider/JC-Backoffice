@@ -6,28 +6,15 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
   const [color, setColor] = useState<string>("");
 
   const { useToken } = theme;
-  const colors = {
-    edit: useToken().token.colorText,
-    changepass: useToken().token.colorSuccess,
-    delete: useToken().token.colorError,
-  };
-  const text = {
-    edit: "Bearbeiten",
-    changepass: "Passwort ändern",
-    delete: "löschen",
-  };
-  const iconName = {
-    edit: "PencilSquare",
-    changepass: "KeyFill",
-    delete: "Trash",
-  };
+  const token = useToken().token;
 
-  useEffect(
-    () => {
-      setColor(colors[type]);
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [type],
-  );
+  const colors = { edit: token.colorText, changepass: token.colorSuccess, delete: token.colorError };
+  const text = { edit: "Bearbeiten", changepass: "Passwort ändern", delete: "löschen" };
+  const iconName = { edit: "PencilSquare", changepass: "KeyFill", delete: "Trash" };
+
+  useEffect(() => {
+    setColor(colors[type]);
+  }, [colors, type]);
 
   return (
     <Tooltip title={text[type]} color={color}>

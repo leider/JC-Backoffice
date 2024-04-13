@@ -17,7 +17,7 @@ import { hashPassword } from "../commons/hashPassword.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
 import usersService from "../users/usersService.js";
-import User from "jc-shared/user/user.js";
+import User, { SUPERUSERS } from "jc-shared/user/user.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
 
@@ -99,7 +99,7 @@ app.post("/login", async (req, res) => {
       const all = await userstore.allUsers();
       if (all.length === 0) {
         appLogger.info("No Users found, initializing Database.");
-        const firstUser = new User({ id: name, password: pass, gruppen: ["superusers"] });
+        const firstUser = new User({ id: name, password: pass, gruppen: [SUPERUSERS] });
         await usersService.saveNewUserWithPassword(firstUser, firstUser);
         return createToken(req, res, name);
       }

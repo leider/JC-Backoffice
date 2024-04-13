@@ -1,6 +1,6 @@
 import { Col, Divider, Form, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
-import User from "jc-shared/user/user";
+import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import CheckItem from "@/widgets/CheckItem";
@@ -206,9 +206,7 @@ function EditFields({ isSuperUser }: { isSuperUser: boolean }) {
             "Ladies' XXL",
           ]}
         />
-        {isSuperUser && (
-          <SingleSelect name="gruppen" label="Rechte" options={["superusers", "bookingTeam", "orgaTeam", "abendkasse", ""]} />
-        )}
+        {isSuperUser && <SingleSelect name="gruppen" label="Rechte" options={userGruppen.concat("")} />}
         {isSuperUser && <CheckItem name="kassenfreigabe" label="Kassenfreigabe" />}
       </Col>
     </Row>

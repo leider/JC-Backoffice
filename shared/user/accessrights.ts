@@ -1,4 +1,4 @@
-import User from "./user.js";
+import User, { ABENDKASSE, BOOKING, ORGA, SUPERUSERS } from "./user.js";
 
 export default class Accessrights {
   private user?: User;
@@ -24,19 +24,19 @@ export default class Accessrights {
   }
 
   get isSuperuser(): boolean {
-    return this.gruppen.includes("superusers");
+    return this.gruppen.includes(SUPERUSERS);
   }
 
   get isBookingTeam(): boolean {
-    return this.isSuperuser || this.gruppen.includes("bookingTeam");
+    return this.isSuperuser || this.gruppen.includes(BOOKING);
   }
 
   get isOrgaTeam(): boolean {
-    return this.isBookingTeam || this.gruppen.includes("orgaTeam");
+    return this.isBookingTeam || this.gruppen.includes(ORGA);
   }
 
   get isAbendkasse(): boolean {
-    return this.isOrgaTeam || this.gruppen.includes("abendkasse");
+    return this.isOrgaTeam || this.gruppen.includes(ABENDKASSE);
   }
 
   get darfKasseFreigeben(): boolean {
