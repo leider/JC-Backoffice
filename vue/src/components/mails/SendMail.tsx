@@ -1,11 +1,11 @@
 import { useQueries } from "@tanstack/react-query";
-import { mailRules as mailRulesRestCall, sendMail, konzerteForTeam } from "@/commons/loader.ts";
+import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Tag } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
-import User from "jc-shared/user/user";
+import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS, userGruppen } from "jc-shared/user/user";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import { TextField } from "@/widgets/TextField";
@@ -59,6 +59,8 @@ export default function SendMail() {
 
   const rulesDescriptions = useMemo(() => sortBy(uniq(mailRules.map((rule) => rule.name))), [mailRules]);
 
+  const kannFilter = useMemo(() => ["Kasse", "Ton", "Licht", "Master"], []);
+
   const veranstaltungenDescriptions = useMemo(
     () => veranstaltungen.map((v) => new VeranstaltungFormatter(v).description),
     [veranstaltungen],
@@ -67,6 +69,7 @@ export default function SendMail() {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [selectedLists, setSelectedLists] = useState<Mailingliste[]>([]);
   const [selectedRules, setSelectedRules] = useState<MailRule[]>([]);
+
   const [effectiveUsers, setEffectiveUsers] = useState<{ name: string; email: string }[]>([]);
 
   const [dirty, setDirty] = useState<boolean>(false);
@@ -79,6 +82,8 @@ export default function SendMail() {
     selectedVeranstaltungen: string[];
     selectedLists: string[];
     selectedUsers: string[];
+    selectedUserGruppen: string[];
+    selectedKann: string[];
   }>();
 
   function initializeForm() {
@@ -90,6 +95,8 @@ export default function SendMail() {
       selectedVeranstaltungen: [],
       selectedLists: [],
       selectedUsers: [],
+      selectedUserGruppen: [],
+      selectedKann: [],
     });
     form.validateFields();
   }
@@ -99,6 +106,13 @@ export default function SendMail() {
   const selectedRulesInForm = Form.useWatch("selectedRules", { form });
   const selectedListsInForm = Form.useWatch("selectedLists", { form });
   const selectedUsersInForm = Form.useWatch("selectedUsers", { form });
+  const selectedUserGruppenInForm = Form.useWatch("selectedUserGruppen", { form }) as (
+    | typeof SUPERUSERS
+    | typeof ORGA
+    | typeof BOOKING
+    | typeof ABENDKASSE
+  )[];
+  const selectedKannInForm = Form.useWatch("selectedKann", { form }) as KannSection[];
   const subject = Form.useWatch("subject", { form });
 
   useEffect(() => {
@@ -130,8 +144,12 @@ export default function SendMail() {
       name: rule.name,
       email: rule.email,
     }));
-    setEffectiveUsers(sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers), "email"), "name"));
-  }, [selectedUsers, selectedLists, selectedRules, allUsers]);
+    const usersFromKann = new Users(allUsers).getUsersKannOneOf(selectedKannInForm);
+    const usersFromUserGruppen = new Users(allUsers).getUsersInGruppenExact(selectedUserGruppenInForm);
+    setEffectiveUsers(
+      sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers).concat(usersFromKann).concat(usersFromUserGruppen), "email"), "name"),
+    );
+  }, [selectedUsers, selectedLists, selectedRules, allUsers, selectedKannInForm, selectedUserGruppenInForm]);
 
   function send() {
     form.validateFields().then(async () => {
@@ -179,10 +197,18 @@ export default function SendMail() {
         </Row>
         <Row gutter={12}>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedLists" label="Gruppen / Mailinglisten" options={mailingListsDescriptions} noAdd />
+            <MultiSelectWithTags name="selectedLists" label="Mailinglisten" options={mailingListsDescriptions} noAdd />
           </Col>
           <Col span={12}>
             <MitarbeiterMultiSelect name="selectedUsers" usersAsOptions={usersAsOptions} label="Users" />
+          </Col>
+        </Row>
+        <Row gutter={12}>
+          <Col span={12}>
+            <MultiSelectWithTags name="selectedUserGruppen" label="Benutzer mit Typ" options={userGruppen} noAdd />
+          </Col>
+          <Col span={12}>
+            <MultiSelectWithTags name="selectedKann" label="User kann..." options={kannFilter} noAdd />
           </Col>
         </Row>
         <Row gutter={12} style={{ marginBottom: 24 }}>

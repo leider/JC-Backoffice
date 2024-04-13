@@ -14,7 +14,7 @@ export class Mailingliste {
 }
 
 class Users {
-  users: User[];
+  users: User[] = [];
 
   constructor(users: User[]) {
     this.users = users;
@@ -51,8 +51,13 @@ class Users {
     return this.users.filter((u) => u.mailinglisten.includes(listenname));
   }
 
-  getUsersInGruppeExact(gruppenname: typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE) {
-    return this.users.filter((u) => u.gruppen.includes(gruppenname));
+  getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
+    return this.users.filter((u) => {
+      const bools = gruppennamen?.map((name) => {
+        return u.gruppen.includes(name);
+      });
+      return bools?.reduce((curr, next) => curr || next, false);
+    });
   }
 
   getUsersKann(kann: KannSection) {
@@ -67,6 +72,24 @@ class Users {
         case "Master":
           return u.kannMaster;
       }
+    });
+  }
+
+  getUsersKannOneOf(kannMultiple: KannSection[]) {
+    return this.users.filter((u) => {
+      const bools = kannMultiple?.map((kann) => {
+        switch (kann) {
+          case "Kasse":
+            return u.kannKasse;
+          case "Licht":
+            return u.kannLicht;
+          case "Ton":
+            return u.kannTon;
+          case "Master":
+            return u.kannMaster;
+        }
+      });
+      return bools?.reduce((curr, next) => curr || next, false);
     });
   }
 

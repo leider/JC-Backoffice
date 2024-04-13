@@ -33,17 +33,6 @@ app.post("/mailrules", [checkSuperuser], async (req: Request, res: Response) => 
   resToJson(res, await mailstore.all());
 });
 
-app.post("/mailrule", [checkSuperuser], async (req: Request, res: Response) => {
-  const ruleToSave = new MailRule(req.body);
-  await mailstore.save(ruleToSave, req.user as User);
-  resToJson(res, ruleToSave);
-});
-
-app.delete("/mailrule", [checkSuperuser], async (req: Request, res: Response) => {
-  await mailstore.removeById(req.body.id, req.user as User);
-  resToJson(res);
-});
-
 // Mailinglisten und Senden
 
 app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
