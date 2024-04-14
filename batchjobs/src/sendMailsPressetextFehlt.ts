@@ -39,7 +39,7 @@ ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
     return mailtransport.sendMail(message);
   }
 
-  const kaputteZuSendende = await byDateRangeInAscendingOrder({
+  const kaputteZuSendende = byDateRangeInAscendingOrder({
     from: start,
     to: maxDay,
     konzerteFilter: (konzert) => !konzert.presse.checked && konzert.kopf.confirmed,

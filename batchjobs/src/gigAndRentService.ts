@@ -5,7 +5,7 @@ import sortBy from "lodash/sortBy.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 
-export async function byDateRangeInAscendingOrder({
+export function byDateRangeInAscendingOrder({
   from,
   to,
   konzerteFilter,
@@ -20,9 +20,9 @@ export async function byDateRangeInAscendingOrder({
 }) {
   const alwaysTrue = () => true;
 
-  const konzerte = await konzertestore.byDateRangeInAscendingOrder(from, to);
+  const konzerte = konzertestore.byDateRangeInAscendingOrder(from, to);
   const filteredKonzerte = konzerte.filter(konzerteFilter || alwaysTrue);
-  const vermietungen = await vermietungenstore.byDateRangeInAscendingOrder(from, to);
+  const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(from, to);
   const filteredVermietungen = vermietungen.filter(vermietungenFilter || alwaysTrue);
   return sortBy([...filteredKonzerte, ...filteredVermietungen], "startDate");
 }

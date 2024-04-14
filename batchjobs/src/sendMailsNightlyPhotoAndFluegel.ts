@@ -49,7 +49,7 @@ async function checkForFilter(
   const start = now;
   const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
 
-  const zuSendende = await byDateRangeInAscendingOrder({
+  const zuSendende = byDateRangeInAscendingOrder({
     from: start,
     to: end,
     konzerteFilter: filterFunction,

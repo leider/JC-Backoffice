@@ -8,6 +8,7 @@ export default mergeConfig(
     test: {
       globals: true,
       globalSetup: "./test-globals.ts",
+      include: ["**/*.test.ts"],
     },
   }),
 );

@@ -12,61 +12,56 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 const logger = loggers.get("application");
 
+let counter = 0;
+
 function isSendable(ver: Veranstaltung): boolean {
-  const satisfied = ver.presse.checked && ver.kopf.confirmed;
-  if (ver.isVermietung) {
-    return (ver as Vermietung).brauchtPresse && satisfied;
-  }
-  return satisfied;
+  return ver.presse.checked && ver.kopf.confirmed && (ver.isVermietung ? (ver as Vermietung).brauchtPresse : true);
 }
 
-export async function loadRulesAndProcess(now: DatumUhrzeit) {
-  const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
+const markdownForRules = `### Automatischer Mailversand des Jazzclub Karlruhe e.V.
 Diese Mail ist automatisch generiert. Bitte informieren Sie uns über Verbesserungen oder Änderungswünsche, speziell bzgl. des Sendedatums, der Sendeperiode und des Anfangs- und Endezeitraums.
 
 Liebe Grüße vom Jazzclub Team.`;
 
-  let counter = 0;
+async function sendMail(selected: Veranstaltung[], rule: MailRule, now: DatumUhrzeit) {
+  const markdownToSend = `${markdownForRules}
 
+---
+${selected
+  .map((veranst) => {
+    return new VeranstaltungFormatter(veranst).presseTextForMail(conf.publicUrlPrefix);
+  })
+  .join("\n\n---\n")}`;
+
+  const message = new Message({
+    subject: rule.subject(now),
+    markdown: markdownToSend,
+  });
+  const mailAddress = Message.formatEMailAddress(rule.name, rule.email);
+  logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
+  message.setTo(mailAddress);
+  counter++;
+  return mailtransport.sendMail(message);
+}
+
+export async function loadRulesAndProcess(now: DatumUhrzeit) {
   async function processRule(rule: MailRule) {
     const startAndEndDay = rule.startAndEndDay(now);
 
-    async function sendMail(selected: Veranstaltung[]) {
-      const markdownToSend =
-        markdownForRules +
-        "\n\n---\n" +
-        selected
-          .map((veranst) => {
-            return new VeranstaltungFormatter(veranst).presseTextForMail(conf.publicUrlPrefix);
-          })
-          .join("\n\n---\n");
-      const message = new Message({
-        subject: rule.subject(now),
-        markdown: markdownToSend,
-      });
-      const mailAddress = Message.formatEMailAddress(rule.name, rule.email);
-      logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
-      message.setTo(mailAddress);
-      counter++;
-      return mailtransport.sendMail(message);
-    }
-
-    const zuSendende = await byDateRangeInAscendingOrder({
+    const zuSendende = byDateRangeInAscendingOrder({
       from: startAndEndDay.start,
       to: startAndEndDay.end,
       konzerteFilter: isSendable,
       vermietungenFilter: isSendable,
     });
 
-    if (zuSendende.length === 0) {
-      return;
-    } else {
-      return sendMail(zuSendende);
+    if (zuSendende.length !== 0) {
+      return sendMail(zuSendende, rule, now);
     }
   }
 
-  const rules = await mailstore.all();
+  const rules = mailstore.all();
   const relevantRules = rules.filter((rule) => rule.shouldSend(now));
-  await Promise.all(relevantRules.map(processRule));
+  await relevantRules.map(processRule);
   return counter;
 }

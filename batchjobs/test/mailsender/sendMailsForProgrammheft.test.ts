@@ -27,8 +27,8 @@ describe("Programmheft Mailsender", () => {
   let mailcheck: any;
 
   beforeEach(() => {
-    sinon.stub(kalenderstore, "getCurrentKalender").resolves(currentKalender);
-    sinon.stub(kalenderstore, "getNextKalender").resolves(nextKalender);
+    sinon.stub(kalenderstore, "getCurrentKalender").returns(currentKalender);
+    sinon.stub(kalenderstore, "getNextKalender").returns(nextKalender);
     mailcheck = sinon.stub(mailtransport, "sendMail").resolves(undefined);
   });
 
@@ -40,7 +40,14 @@ describe("Programmheft Mailsender", () => {
     await remindForProgrammheft(april12 as DatumUhrzeit);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
-    expect(message.senderAddress("bo@jazzclub.de")).to.equal("bo@jazzclub.de");
+    expect(message.to).to.equal("x@y.z");
+    expect(message.markdown).to.include(`Jeder,
+
+hier eine automatische Erinnerungsmail:
+Putzen`);
+
+    expect(message.markdown).to.include("bis zum 15. April 2019 erledigt");
+
     expect(message.subject).to.equal("Programmheft Action Reminder");
   });
 

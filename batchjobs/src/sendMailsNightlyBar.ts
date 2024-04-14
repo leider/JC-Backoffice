@@ -30,7 +30,7 @@ export async function checkBar(now: DatumUhrzeit) {
     const typOk = !ver.isVermietung ? !ver.kopf.eventTyp.startsWith("DryJam") : (ver as Vermietung).brauchtBar;
     return ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed && typOk;
   };
-  const zuSendende = await byDateRangeInAscendingOrder({
+  const zuSendende = byDateRangeInAscendingOrder({
     from: start,
     to: end,
     konzerteFilter: filterFunction,

@@ -43,7 +43,7 @@ export async function checkStaff(now: DatumUhrzeit) {
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
   const bestaetigt = (ver: Veranstaltung) => ver.kopf.confirmed;
-  const alle = await byDateRangeInAscendingOrder({
+  const alle = byDateRangeInAscendingOrder({
     from: start,
     to: end,
     konzerteFilter: bestaetigt,
