@@ -1,6 +1,6 @@
 import Message from "jc-shared/mail/message.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Kalender, { EmailEvent } from "jc-shared/programmheft/kalender.js";
+import { EmailEvent } from "jc-shared/programmheft/kalender.js";
 
 import store from "jc-backend/lib/programmheft/kalenderstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
@@ -18,13 +18,11 @@ async function sendMail(eventsForToday: EmailEvent[]) {
 }
 
 export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit()) {
-  const [current, next] = await Promise.all([store.getCurrentKalender(now), store.getNextKalender(now)]);
+  const current = store.getCurrentKalender(now);
+  const next = store.getNextKalender(now);
   if (!current || !next) {
     return;
   }
-  const events = [current as Kalender, next as Kalender].reduce(
-    (previous: EmailEvent[], current) => previous.concat(current.eventsToSend(now)),
-    [],
-  );
+  const events = [current, next].reduce((previous: EmailEvent[], current) => previous.concat(current.eventsToSend(now)), []);
   return sendMail(events);
 }

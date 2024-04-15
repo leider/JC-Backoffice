@@ -2,12 +2,8 @@ import store from "./vermietungenstore.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import User from "jc-shared/user/user.js";
 
-async function getVermietung(url: string) {
-  const vermietung = await store.getVermietung(url);
-  if (!vermietung) {
-    return null;
-  }
-  return vermietung;
+function getVermietung(url: string) {
+  return store.getVermietung(url) ?? null;
 }
 
 /*

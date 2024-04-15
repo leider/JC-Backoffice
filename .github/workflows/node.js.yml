@@ -5,31 +5,30 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js v18
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.x'
-        cache: 'yarn'
-    - uses: szenius/set-timezone@v1.2
-      with:
-        timezoneLinux: "Europe/Berlin"
-    - run: yarn install --immutable
-    - run: yarn lint
-    - run: yarn test
-    - run: yarn deploy
-    - run: |
-        cd frontendtests
-        yarn install --immutable
-        yarn playwright install chromium
-        ./startRunStop.sh
+      - uses: actions/checkout@v4
+      - name: Use Node.js v18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "yarn"
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Europe/Berlin"
+      - run: yarn install --immutable
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn deploy
+      - run: |
+          cd frontendtests
+          yarn install --immutable
+          yarn playwright install chromium
+          ./startRunStop.sh

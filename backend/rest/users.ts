@@ -16,38 +16,38 @@ app.get("/users/current", (req, res) => {
   res.sendStatus(401);
 });
 
-app.get("/users", async (req, res) => {
-  const users = await store.allUsers();
+app.get("/users", (req, res) => {
+  const users = store.allUsers();
   resToJson(res, { users: users.map((u) => u.toJSONWithoutPass()) });
 });
 
-app.post("/user/changePassword", [checkCanEditUser], async (req: Request, res: Response) => {
+app.post("/user/changePassword", [checkCanEditUser], (req: Request, res: Response) => {
   const user = new User(req.body);
-  await service.changePassword(user, req.user as User);
+  service.changePassword(user, req.user as User);
   resToJson(res, user);
 });
 
-app.post("/user", [checkCanEditUser], async (req: Request, res: Response) => {
+app.post("/user", [checkCanEditUser], (req: Request, res: Response) => {
   const user = new User(req.body);
-  const existingUser = await store.forId(user.id);
+  const existingUser = store.forId(user.id);
   if (!existingUser) {
     throw new Error("user not found");
   }
   user.hashedPassword = existingUser.hashedPassword;
   user.salt = existingUser.salt;
-  await store.save(user, req.user as User);
+  store.save(user, req.user as User);
   resToJson(res, user);
 });
 
-app.put("/user", [checkSuperuser], async (req: Request, res: Response) => {
+app.put("/user", [checkSuperuser], (req: Request, res: Response) => {
   const user = new User(req.body);
-  await service.saveNewUserWithPassword(user, req.user as User);
+  service.saveNewUserWithPassword(user, req.user as User);
   resToJson(res, user);
 });
 
-app.delete("/user", [checkSuperuser], async (req: Request, res: Response) => {
+app.delete("/user", [checkSuperuser], (req: Request, res: Response) => {
   const userToDelete = new User(req.body);
-  await store.deleteUser(userToDelete.id, req.user as User);
+  store.deleteUser(userToDelete.id, req.user as User);
   resToJson(res, userToDelete);
 });
 

@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
   return res.redirect("/vue/veranstaltungen");
 });
 
-async function createToken(req: Request, res: Response, name: string) {
+function createToken(req: Request, res: Response, name: string) {
   const ttl = refreshTTL;
 
   function addRefreshToken(res: Response, refreshTokenId: string) {
@@ -51,8 +51,8 @@ async function createToken(req: Request, res: Response, name: string) {
     });
   }
 
-  async function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
-    await refreshstore.removeExpired();
+  function persistRefreshToken(refreshTokenId: string, oldId: string, name: string, ttl: number) {
+    refreshstore.removeExpired();
     const expiry = new Date(Date.now() + ttl);
     return refreshstore.save({ id: oldId || refreshTokenId, userId: name, expiresAt: expiry });
   }
@@ -61,7 +61,7 @@ async function createToken(req: Request, res: Response, name: string) {
   const refreshTokenId = uuidv4();
   const oldId = (req.cookies["refresh-token"] as string) || "";
   try {
-    await persistRefreshToken(refreshTokenId, oldId, name, ttl);
+    persistRefreshToken(refreshTokenId, oldId, name, ttl);
     addRefreshToken(res, oldId || refreshTokenId);
     resToJson(res, { token });
   } catch (e) {
@@ -69,14 +69,14 @@ async function createToken(req: Request, res: Response, name: string) {
   }
 }
 
-app.post("/refreshtoken", async (req, res) => {
+app.post("/refreshtoken", (req, res) => {
   const oldId = req.cookies["refresh-token"] as string;
   if (!oldId) {
     appLogger.warn("refreshToken without cookie called");
     return res.sendStatus(401);
   }
   try {
-    const refreshToken = await refreshstore.forId(oldId);
+    const refreshToken = refreshstore.forId(oldId);
     if (!refreshToken || DatumUhrzeit.forJSDate(refreshToken.expiresAt).istVor(new DatumUhrzeit())) {
       return res.sendStatus(401);
     }
@@ -86,21 +86,21 @@ app.post("/refreshtoken", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", (req, res) => {
   const name = req.body.name;
   const pass = req.body.pass;
 
   try {
-    const user = await userstore.forId(name);
+    const user = userstore.forId(name);
     appLogger.info("Try Login for: " + name);
     if (!user) {
       appLogger.error("Login error for: " + name);
       appLogger.error("user not found");
-      const all = await userstore.allUsers();
+      const all = userstore.allUsers();
       if (all.length === 0) {
         appLogger.info("No Users found, initializing Database.");
         const firstUser = new User({ id: name, password: pass, gruppen: [SUPERUSERS] });
-        await usersService.saveNewUserWithPassword(firstUser, firstUser);
+        usersService.saveNewUserWithPassword(firstUser, firstUser);
         return createToken(req, res, name);
       }
       return res.sendStatus(401);
@@ -118,8 +118,8 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/logout", async (req, res) => {
-  await refreshstore.removeExpired();
+app.post("/logout", (req, res) => {
+  refreshstore.removeExpired();
   res.cookie("refresh-token", "", {
     maxAge: 0,
     httpOnly: true,
@@ -157,9 +157,9 @@ app.get("/imagepreview/:filename", (req, res, next) => {
     });
 });
 
-app.get("/ical/", async (req, res) => {
+app.get("/ical/", (req, res) => {
   try {
-    const konzerte = await store.alle();
+    const konzerte = store.alle();
     if (!konzerte) {
       return res.status(500).send();
     }

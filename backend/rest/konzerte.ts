@@ -20,58 +20,58 @@ const filesDir = conf.filesDir;
 
 const app = express();
 
-async function standardHandler(res: Response, user: User, konzerte: Konzert[]) {
-  const result = await konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
+function standardHandler(res: Response, user: User, konzerte: Konzert[]) {
+  const result = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
   resToJson(
     res,
     result.map((v) => v.toJSON()),
   );
 }
 
-async function saveAndReply(req: Request, res: Response, konzert: Konzert) {
-  const result = await store.saveKonzert(konzert, req.user as User);
+function saveAndReply(req: Request, res: Response, konzert: Konzert) {
+  const result = store.saveKonzert(konzert, req.user as User);
   resToJson(res, result);
 }
 
-app.get("/konzerte/vergangene", async (req, res) => {
-  const konzerte = await store.vergangene();
+app.get("/konzerte/vergangene", (req, res) => {
+  const konzerte = store.vergangene();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzerte/zukuenftige", async (req, res) => {
-  const konzerte = await store.zukuenftigeMitGestern();
+app.get("/konzerte/zukuenftige", (req, res) => {
+  const konzerte = store.zukuenftigeMitGestern();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzerte/alle", async (req, res) => {
-  const konzerte = await store.alle();
+app.get("/konzerte/alle", (req, res) => {
+  const konzerte = store.alle();
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzerte/:startYYYYMM/:endYYYYMM", async (req, res) => {
+app.get("/konzerte/:startYYYYMM/:endYYYYMM", (req, res) => {
   const start = DatumUhrzeit.forYYYYMM(req.params.startYYYYMM);
   const end = DatumUhrzeit.forYYYYMM(req.params.endYYYYMM);
-  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  const konzerte = store.byDateRangeInAscendingOrder(start, end);
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzerte/fortoday", async (req, res) => {
+app.get("/konzerte/fortoday", (req, res) => {
   const today = new DatumUhrzeit();
   const start = today.setUhrzeit(0, 0);
   const end = today.plus({ tage: 1 }).setUhrzeit(23, 59);
-  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  const konzerte = store.byDateRangeInAscendingOrder(start, end);
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzert/:url", async (req: Request, res: Response) => {
-  const konzert = await store.getKonzert(req.params.url);
+app.get("/konzert/:url", (req: Request, res: Response) => {
+  const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
   }
   resToJson(res, konzert);
 });
 
-app.post("/konzert", [checkAbendkasse], async (req: Request, res: Response) => {
+app.post("/konzert", [checkAbendkasse], (req: Request, res: Response) => {
   const user = req.user as User;
   const url = req.body.url;
 
@@ -90,12 +90,12 @@ app.post("/konzert", [checkAbendkasse], async (req: Request, res: Response) => {
     }
   }
 
-  const konzert = await store.getKonzert(url);
+  const konzert = store.getKonzert(url);
   if (konzert) {
     const frischFreigegeben = konzert.kasse.kassenfreigabe !== req.body.kasse.kassenfreigabe && !!req.body.kasse.kassenfreigabe;
     if (frischFreigegeben) {
       try {
-        await kassenzettelToBuchhaltung(new Konzert(req.body));
+        kassenzettelToBuchhaltung(new Konzert(req.body));
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log("Kassenzettel Versand an Buchhaltung gescheitert");
@@ -106,13 +106,13 @@ app.post("/konzert", [checkAbendkasse], async (req: Request, res: Response) => {
   return saveKonzert(konzert);
 });
 
-app.delete("/konzert", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.deleteKonzertById(req.body.id, req.user as User);
+app.delete("/konzert", [checkOrgateam], (req: Request, res: Response) => {
+  store.deleteKonzertById(req.body.id, req.user as User);
   resToJson(res);
 });
 
-async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
-  const konzert = await store.getKonzert(req.params.url);
+function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
+  const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
   }
@@ -120,16 +120,16 @@ async function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUser
   return saveAndReply(req, res, konzert);
 }
 
-app.post("/konzert/:url/addUserToSection", async (req: Request, res: Response) => {
+app.post("/konzert/:url/addUserToSection", (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
-app.post("/konzert/:url/removeUserFromSection", async (req: Request, res: Response) => {
+app.post("/konzert/:url/removeUserFromSection", (req: Request, res: Response) => {
   return addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
-app.post("/konzert/:url/updateGastInSection", async (req: Request, res: Response) => {
-  const konzert = await store.getKonzert(req.params.url);
+app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
+  const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
   }
@@ -191,7 +191,7 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
   const istPressefoto = typElement === "pressefoto";
 
   if (files.datei) {
-    const konzert = await store.getKonzertForId(idElement);
+    const konzert = store.getKonzertForId(idElement);
     if (!konzert) {
       return res.sendStatus(500);
     }

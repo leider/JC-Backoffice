@@ -29,7 +29,7 @@ async function informAdmin(err?: Error, counter?: number) {
     return closeAndExit(err);
   }
   try {
-    const user = await userstore.forId(receiver);
+    const user = userstore.forId(receiver);
     const message = new Message({
       subject: "[B-O Jazzclub] Mails sent",
       markdown: `${counter} nightly Mails for Presse have been sent.

@@ -10,20 +10,19 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
-app.get("/programmheft/:year/:month", [checkOrgateam], async (req: Request, res: Response) => {
+app.get("/programmheft/:year/:month", [checkOrgateam], (req: Request, res: Response) => {
   let yearMonthString = `${req.params.year}/${req.params.month}`;
   if (parseInt(req.params.month) % 2 === 0) {
     const correctedDatum = DatumUhrzeit.forYYYYslashMM(yearMonthString).naechsterUngeraderMonat;
     yearMonthString = correctedDatum.fuerKalenderViews;
   }
 
-  const kalender = await store.getKalender(yearMonthString);
-  resToJson(res, kalender);
+  resToJson(res, store.getKalender(yearMonthString));
 });
 
-app.post("/programmheft", [checkOrgateam], async (req: Request, res: Response) => {
+app.post("/programmheft", [checkOrgateam], (req: Request, res: Response) => {
   const kalender = new Kalender(req.body);
-  await store.saveKalender(kalender, req.user as User);
+  store.saveKalender(kalender, req.user as User);
   resToJson(res, kalender);
 });
 

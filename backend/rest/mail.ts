@@ -14,23 +14,23 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
-app.get("/mailrule", [checkSuperuser], async (req: Request, res: Response) => {
-  const rules = await mailstore.all();
+app.get("/mailrule", [checkSuperuser], (req: Request, res: Response) => {
+  const rules = mailstore.all();
   const result = rules?.map((r) => r.toJSON());
   resToJson(res, result);
 });
 
-app.post("/mailrules", [checkSuperuser], async (req: Request, res: Response) => {
-  const oldRules = await mailstore.all();
+app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
+  const oldRules = mailstore.all();
   const newRules = misc.toObjectList<MailRule>(MailRule, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newRules.map((r) => r.toJSON()),
     oldRules.map((r) => r.toJSON()),
   );
 
-  await mailstore.saveAll(changed, req.user as User);
-  await mailstore.removeAll(deletedIds, req.user as User);
-  resToJson(res, await mailstore.all());
+  mailstore.saveAll(changed, req.user as User);
+  mailstore.removeAll(deletedIds, req.user as User);
+  resToJson(res, mailstore.all());
 });
 
 // Mailinglisten und Senden
@@ -41,8 +41,8 @@ app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
   resToJson(res);
 });
 
-app.post("/mailinglisten", [checkSuperuser], async (req: Request, res: Response) => {
-  const users = await userstore.allUsers();
+app.post("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
+  const users = userstore.allUsers();
   const newLists = req.body as Mailingliste[];
 
   users?.forEach((u) => (u.mailinglisten = []));
@@ -52,7 +52,7 @@ app.post("/mailinglisten", [checkSuperuser], async (req: Request, res: Response)
     selectedUsers?.forEach((u) => u.subscribeList(list.name));
   });
 
-  await userstore.saveAll(users || [], req.user as User);
+  userstore.saveAll(users || [], req.user as User);
   resToJson(res, users);
 });
 

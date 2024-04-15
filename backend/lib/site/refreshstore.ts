@@ -59,7 +59,7 @@ export default {
     return persistence.getById(id);
   },
 
-  removeExpired: async function removeExpired() {
+  removeExpired: function removeExpired() {
     return persistence.removeOldTokens();
   },
 };

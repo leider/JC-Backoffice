@@ -13,12 +13,12 @@ import store from "./konzertestore.js";
 import groupBy from "lodash/groupBy.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 
-async function getKonzert(url: string) {
-  return await store.getKonzert(url);
+function getKonzert(url: string) {
+  return store.getKonzert(url);
 }
 
-async function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User): Promise<Konzert[]> {
-  const optionen = await optionenstore.get();
+function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User) {
+  const optionen = optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
   const enrichedKonzerte = konzerte.map((v) => {
     v.kopf.eventTypRich = typByName[v.kopf.eventTyp]?.[0];
@@ -55,17 +55,17 @@ function zipKonzerte(konzerte: Konzert[], name: string, res: Response, next: Nex
   }
 }
 
-async function imgzip(res: Response, next: NextFunction, yymm: string) {
+function imgzip(res: Response, next: NextFunction, yymm: string) {
   const start = DatumUhrzeit.forYYMM(yymm);
   const end = start.plus({ monate: 1 });
   const name = start.monatJahrKompakt;
-  const konzerte = await store.byDateRangeInAscendingOrder(start, end);
+  const konzerte = store.byDateRangeInAscendingOrder(start, end);
   zipKonzerte(konzerte, name, res, next);
 }
 
-async function imgzipForKonzert(res: Response, next: NextFunction, url: string) {
+function imgzipForKonzert(res: Response, next: NextFunction, url: string) {
   const name = url;
-  const konzert = await getKonzert(url);
+  const konzert = getKonzert(url);
   if (!konzert) {
     return;
   }

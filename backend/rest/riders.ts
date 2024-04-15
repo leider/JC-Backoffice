@@ -8,12 +8,11 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
-app.get("/riders/:url", async (req: Request, res: Response) => {
-  const rider = await store.getRider(req.params.url);
-  resToJson(res, rider);
+app.get("/riders/:url", (req: Request, res: Response) => {
+  resToJson(res, store.getRider(req.params.url));
 });
 
-app.post("/riders", [checkOrgateam], async (req: Request, res: Response) => {
+app.post("/riders", [checkOrgateam], (req: Request, res: Response) => {
   if (req.body) {
     const rider = new Rider(req.body);
     store.saveRider(rider, req.user as User);

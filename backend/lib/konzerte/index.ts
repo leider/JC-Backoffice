@@ -11,12 +11,12 @@ const app = express();
 
 // const fileexportStadtKarlsruhe = beans.get('fileexportStadtKarlsruhe');
 
-async function veranstaltungenForExport(fetcher: () => Konzert[], req: Request, res: Response) {
+function veranstaltungenForExport(fetcher: () => Konzert[], req: Request, res: Response) {
   if (!(req.user as User).accessrights.isBookingTeam) {
     return res.redirect("/");
   }
 
-  const veranstaltungen: Konzert[] = await fetcher();
+  const veranstaltungen: Konzert[] = fetcher();
   const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
   return res.type("csv").send(lines);
 }

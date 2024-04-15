@@ -50,7 +50,7 @@ export async function checkStaff(now: DatumUhrzeit) {
     vermietungenFilter: bestaetigt,
   });
 
-  const users = await userstore.allUsers();
+  const users = userstore.allUsers();
   const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
   const zuSendende = alle;
   if (zuSendende.length === 0) {

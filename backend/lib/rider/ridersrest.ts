@@ -7,17 +7,17 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
-app.get("/:url", async (req: Request, res: Response) => {
-  const rider = await store.getRider(req.params.url);
+app.get("/:url", (req: Request, res: Response) => {
+  const rider = store.getRider(req.params.url);
   if (!rider || DatumUhrzeit.forJSDate(rider?.startDate).istVorOderAn(new DatumUhrzeit())) {
     return res.sendStatus(403);
   }
   resToJson(res, rider);
 });
 
-app.post("/", async (req: Request, res: Response) => {
+app.post("/", (req: Request, res: Response) => {
   if (req.body) {
-    const rider = await store.getRider(req.body.id);
+    const rider = store.getRider(req.body.id);
     if (rider) {
       if (DatumUhrzeit.forJSDate(rider?.startDate).istNach(new DatumUhrzeit())) {
         rider.boxes = req.body.boxes;

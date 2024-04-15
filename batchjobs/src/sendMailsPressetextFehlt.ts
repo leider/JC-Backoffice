@@ -12,32 +12,32 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 
 const logger = loggers.get("application");
 
-async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
-  const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
-
-  async function sendMail(kaputte: Veranstaltung[]) {
-    const prefix = conf.publicUrlPrefix;
-    function presseTemplateInternal(ver: Veranstaltung): string {
-      // für interne Mails
-      return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
+async function sendMail(kaputte: Veranstaltung[]) {
+  const prefix = conf.publicUrlPrefix;
+  function presseTemplateInternal(ver: Veranstaltung): string {
+    // für interne Mails
+    return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
 #### ${ver.startDatumUhrzeit.fuerPresse} ${ver.kopf.presseInEcht}
 
 `;
-    }
+  }
 
-    const markdownToSend = `## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
+  const markdownToSend = `## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
 ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
-    const message = new Message({
-      subject: "Veranstaltungen ohne Pressetext",
-      markdown: markdownToSend,
-    });
-    const bookingAddresses = await usersService.emailsAllerBookingUser();
-    logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
-    message.setBcc(bookingAddresses);
-    return mailtransport.sendMail(message);
-  }
+  const message = new Message({
+    subject: "Veranstaltungen ohne Pressetext",
+    markdown: markdownToSend,
+  });
+  const bookingAddresses = usersService.emailsAllerBookingUser();
+  logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
+  message.setBcc(bookingAddresses);
+  return mailtransport.sendMail(message);
+}
+
+async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
+  const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
   const kaputteZuSendende = byDateRangeInAscendingOrder({
     from: start,
@@ -56,7 +56,7 @@ export async function checkPressetexte(now: DatumUhrzeit) {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
-  const rules = await mailstore.all();
+  const rules = mailstore.all();
   const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
   return processRules(relevantRules, start, end);
 }

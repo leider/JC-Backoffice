@@ -68,6 +68,5 @@ export default {
   deleteVermietungById: function deleteVermietungById(id: string, user: User) {
     persistence.removeById(id, user);
     logger.info(`Vermietung removed: ${JSON.stringify(id)}`);
-    return;
   },
 };

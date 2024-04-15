@@ -15,53 +15,47 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
-app.get("/optionen", async (req: Request, res: Response) => {
-  const optionen = await store.get();
-  resToJson(res, optionen);
+app.get("/optionen", (req: Request, res: Response) => {
+  resToJson(res, store.get());
 });
 
-app.post("/optionen", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.save(req.body, req.user as User);
-  const optionen = new OptionValues(req.body);
-  resToJson(res, optionen);
+app.post("/optionen", [checkOrgateam], (req: Request, res: Response) => {
+  store.save(req.body, req.user as User);
+  resToJson(res, new OptionValues(req.body));
 });
 
-app.get("/orte", async (req: Request, res: Response) => {
-  const orte = await store.orte();
-  resToJson(res, orte);
+app.get("/orte", (req: Request, res: Response) => {
+  resToJson(res, store.orte());
 });
 
-app.post("/orte", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.save(req.body, req.user as User);
-  const orte = new Orte(req.body);
-  resToJson(res, orte);
+app.post("/orte", [checkOrgateam], (req: Request, res: Response) => {
+  store.save(req.body, req.user as User);
+  resToJson(res, new Orte(req.body));
 });
 
-app.get("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
-  const icals = await store.icals();
+app.get("/kalender", [checkOrgateam], (req: Request, res: Response) => {
+  const icals = store.icals();
   resToJson(res, icals);
 });
 
-app.post("/kalender", [checkOrgateam], async (req: Request, res: Response) => {
-  await store.save(req.body, req.user as User);
-  const ical = new FerienIcals(req.body);
-  resToJson(res, ical);
+app.post("/kalender", [checkOrgateam], (req: Request, res: Response) => {
+  store.save(req.body, req.user as User);
+  resToJson(res, new FerienIcals(req.body));
 });
 
-app.get("/termine", async (req, res) => {
-  const termine = await terminstore.alle();
-  resToJson(res, termine);
+app.get("/termine", (req, res) => {
+  resToJson(res, terminstore.alle());
 });
 
-app.post("/termine", [checkOrgateam], async (req: Request, res: Response) => {
-  const oldTermine = (await terminstore.alle()) as (Termin & { id: string })[];
-  const newTermine = misc.toObjectList(Termin, req.body) as (Termin & { id: string })[];
+app.post("/termine", [checkOrgateam], (req: Request, res: Response) => {
+  const oldTermine = terminstore.alle();
+  const newTermine = misc.toObjectList<Termin>(Termin, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newTermine.map((t) => t.toJSON()),
     oldTermine.map((t) => t.toJSON()),
   );
-  await terminstore.saveAll(changed, req.user as User);
-  await terminstore.removeAll(deletedIds, req.user as User);
-  resToJson(res, await terminstore.alle());
+  terminstore.saveAll(changed, req.user as User);
+  terminstore.removeAll(deletedIds, req.user as User);
+  resToJson(res, terminstore.alle());
 });
 export default app;

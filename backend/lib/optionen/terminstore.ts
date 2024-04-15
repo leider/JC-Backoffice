@@ -19,7 +19,7 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
 export default {
   alle: function alle() {
     const result = persistence.list("startDate DESC");
-    return misc.toObjectList(Termin, result);
+    return misc.toObjectList<Termin>(Termin, result);
   },
 
   save: function save(termin: Termin, user: User) {
