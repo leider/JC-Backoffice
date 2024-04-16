@@ -36,9 +36,10 @@ Error: "keiner"`);
     expect(res.from).to.equal('"Der Sender" <sender@jazz.club>');
   });
 
-  it("uses the given sender", () => {
+  it("uses the given sender in Name, but not in Address", () => {
     const message = new Message({ subject: "", markdown: "" }, "Andreas von Jazzclub", "andreas@jazz.club");
     const res = toTransportObject(message, false);
-    expect(res.from).to.equal('"Andreas von Jazzclub via backoffice.jazzclub.de" <andreas@jazz.club>');
+    expect(res.from).to.equal('"Andreas von Jazzclub via backoffice.jazzclub.de" <sender@jazz.club>');
+    expect(res.replyTo).to.equal("andreas@jazz.club");
   });
 });
