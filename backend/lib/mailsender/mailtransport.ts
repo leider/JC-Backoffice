@@ -21,6 +21,7 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
     to: message.to || message.senderAddress(senderAddress),
     bcc: message.bcc || message.senderAddress(senderAddress),
     subject: message.subject,
+    replyTo: message.replyTo,
     text: mbRenderer.text,
     html: mbRenderer.html,
     attachments: message.pdfBufferAndName && [{ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf as Buffer }],

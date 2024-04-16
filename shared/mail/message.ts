@@ -3,6 +3,7 @@ export default class Message {
   markdown!: string;
   senderNameField?: string;
   senderAddressField?: string;
+  replyTo?: string;
   to!: string;
   bcc!: string;
   pdfBufferAndName?: { pdf: Buffer; name: string };
@@ -13,6 +14,7 @@ export default class Message {
     message.bcc = json.bcc;
     message.senderNameField = json.senderNameField;
     message.senderAddressField = json.senderAddressField;
+    message.replyTo = json.replyTo;
     return message;
   }
 
@@ -21,7 +23,7 @@ export default class Message {
       this.subject = subjectWithText.subject;
       this.markdown = subjectWithText.markdown;
       this.senderNameField = optionalSenderName;
-      this.senderAddressField = optionalSenderAddress;
+      this.replyTo = optionalSenderAddress;
     }
     return this;
   }

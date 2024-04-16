@@ -121,8 +121,6 @@ export default function SendMail() {
     setSelectedRules(mailRules.filter((rule) => (selectedRulesInForm || []).includes(rule.name)));
     if (selectedVeranstaltungenInForm?.length || (0 > 0 && subject === "")) {
       form.setFieldValue("subject", "[Jazzclub manuell] Veranstaltungen für ...");
-    } else {
-      form.setFieldValue("subject", "[Jazzclub manuell]");
     }
   }, [
     allUsers,
@@ -164,7 +162,11 @@ export default function SendMail() {
         selectedVeranstaltungen
           .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
-      const result = new Message({ subject: mail.subject, markdown: markdownToSend }, currentUser.name, currentUser.email);
+      const result = new Message(
+        { subject: `[Jazzclub manuell] ${mail.subject}`, markdown: markdownToSend },
+        currentUser.name,
+        currentUser.email,
+      );
       result.setBcc(addresses);
       await sendMail(result);
       initializeForm();
