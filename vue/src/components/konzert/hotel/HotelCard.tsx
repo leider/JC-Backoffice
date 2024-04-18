@@ -47,7 +47,8 @@ export default function HotelCard() {
       if (optionen?.hotels.find((h) => h.name === hotelName)) {
         const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
         if (preise) {
-          form.setFieldsValue({ unterkunft: { ...preise } });
+          const { einzelEUR, suiteEUR, doppelEUR } = preise;
+          form.setFieldsValue({ unterkunft: { einzelEUR, suiteEUR, doppelEUR } });
         }
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps

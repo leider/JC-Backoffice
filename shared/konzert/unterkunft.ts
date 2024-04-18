@@ -27,6 +27,13 @@ export default class Unterkunft {
       Object.assign(this, object, {
         kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
         sonstiges: Misc.toArray(object.sonstiges),
+        einzelNum: object.einzelNum ?? 0,
+        doppelNum: object.doppelNum ?? 0,
+        suiteNum: object.suiteNum ?? 0,
+        einzelEUR: object.einzelEUR ?? 0,
+        doppelEUR: object.doppelEUR ?? 0,
+        suiteEUR: object.suiteEUR ?? 0,
+        transportEUR: object.transportEUR ?? 0,
       });
       this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) || veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;

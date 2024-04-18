@@ -18,16 +18,33 @@ function stripNullOrUndefined<T>(data: T & { [index: string]: unknown }): T {
     }
     if (typeof data[key] === "object") {
       // Array is typeof "object"
-      stripNullOrUndefined(data[key] as object & { [index: string]: unknown });
+      stripNullOrUndefined(data[key] as { [index: string]: unknown });
     }
   });
   return data;
 }
 
 export function withoutNullOrUndefinedStrippedBy<T>(data: T & { [p: string]: unknown }, propertiesToIgnore?: string[]): T {
+  function deleteProp(clone: typeof data, nameWithDots: string) {
+    const nameArray = nameWithDots.split(".");
+    if (nameArray.length === 0) {
+      return;
+    }
+    const last = nameArray.pop() as string;
+    let target: { [p: string]: unknown } = clone;
+    nameArray.forEach((part) => {
+      target = target[part] as { [p: string]: unknown };
+      if (!target) {
+        return;
+      }
+    });
+    if (target) {
+      delete target[last];
+    }
+  }
   const clone = cloneDeep(data);
   propertiesToIgnore?.forEach((key) => {
-    delete clone[key];
+    deleteProp(clone, key);
   });
   return stripNullOrUndefined(clone);
 }
