@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "adm-zip": "0.5.12",
-    "better-sqlite3": "9.4.3",
+    "better-sqlite3": "9.5.0",
     "bootstrap": "5.3.3",
     "compression": "1.7.4",
     "connect-history-api-fallback": "2.0.0",
@@ -25,7 +25,7 @@
     "passport": "0.7.0",
     "passport-jwt": "4.0.1",
     "pug": "3.0.2",
-    "puppeteer": "22.6.1",
+    "puppeteer": "22.6.5",
     "sharp": "0.33.3",
     "superagent": "8.1.2",
     "winston": "3.13.0"

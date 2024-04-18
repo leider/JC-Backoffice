@@ -40,7 +40,7 @@ function setAndCheck(I, name, title, menu) {
   I.see("Neutral");
 }
 
-Feature("Filter in der Übersicht (Veranstaltungen( funktioniert für");
+Feature("Filter in der Übersicht (Veranstaltungen) funktioniert für");
 
 BeforeSuite(({ I }) => {
   I.createObject("veranstaltungenstore", konzertHaving({}, "Neutral"));
