@@ -2,12 +2,14 @@ import cloneDeep from "lodash/cloneDeep.js";
 import isEqual from "lodash/isEqual.js";
 import { detailedDiff } from "deep-object-diff";
 
+type SomeObject = { [index: string]: SomeObject };
+
 /**
  * this function will modify data!
  *
  * @param data an object
  */
-function stripNullOrUndefined<T>(data: T & { [index: string]: unknown }): T {
+function stripNullOrUndefined<T>(data: T & SomeObject): T {
   if (!data) {
     return data;
   }
@@ -18,22 +20,22 @@ function stripNullOrUndefined<T>(data: T & { [index: string]: unknown }): T {
     }
     if (typeof data[key] === "object") {
       // Array is typeof "object"
-      stripNullOrUndefined(data[key] as { [index: string]: unknown });
+      stripNullOrUndefined(data[key]);
     }
   });
   return data;
 }
 
-export function withoutNullOrUndefinedStrippedBy<T>(data: T & { [p: string]: unknown }, propertiesToIgnore?: string[]): T {
+export function withoutNullOrUndefinedStrippedBy<T>(data: T & SomeObject, propertiesToIgnore?: string[]): T {
   function deleteProp(clone: typeof data, nameWithDots: string) {
     const nameArray = nameWithDots.split(".");
     if (nameArray.length === 0) {
       return;
     }
     const last = nameArray.pop() as string;
-    let target: { [p: string]: unknown } = clone;
+    let target: SomeObject = clone;
     nameArray.forEach((part) => {
-      target = target[part] as { [p: string]: unknown };
+      target = target[part];
       if (!target) {
         return;
       }
@@ -49,8 +51,7 @@ export function withoutNullOrUndefinedStrippedBy<T>(data: T & { [p: string]: unk
   return stripNullOrUndefined(clone);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function areDifferent(left: any, right: any, propertiesToIgnore?: string[]) {
+export function areDifferent(left: SomeObject, right: SomeObject, propertiesToIgnore?: string[]) {
   return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
 }
 
