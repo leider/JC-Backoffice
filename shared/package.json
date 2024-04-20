@@ -11,18 +11,13 @@
   "dependencies": {
     "dayjs": "1.11.10",
     "deep-object-diff": "1.1.9",
-    "marked": "12.0.1"
-  },
-  "devDependencies": {
-    "eslint": "8.57.0",
-    "eslint-plugin-prettier": "5.1.3",
-    "prettier": "3.2.5"
+    "marked": "12.0.2"
   },
   "scripts": {
     "test": "../node_modules/.bin/vitest --run",
     "compile": "../node_modules/typescript/bin/tsc",
     "deploy": "yarn compile",
-    "eslint": "../node_modules/.bin/eslint --config .eslintrc **/*.ts",
+    "eslint": "../node_modules/.bin/eslint **/*.ts",
     "clean-ts": "rm -f **/*.js || :"
   }
 }

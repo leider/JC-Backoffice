@@ -2,3 +2,4 @@
 **/steps*
 *.lock
 fonts.css
+.yarn

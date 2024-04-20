@@ -10,7 +10,7 @@
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
-    "@ant-design/pro-components": "2.7.2",
+    "@ant-design/pro-components": "2.7.4",
     "@fullcalendar/core": "6.1.11",
     "@fullcalendar/daygrid": "6.1.11",
     "@fullcalendar/multimonth": "6.1.11",
@@ -43,10 +43,8 @@
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
     "@vitejs/plugin-react": "4.2.1",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-react-refresh": "0.4.6",
     "numeral": "2.0.6",
-    "vite": "5.2.9",
+    "vite": "5.2.10",
     "vite-plugin-pwa": "0.19.8",
     "vitest": "1.5.0"
   },
