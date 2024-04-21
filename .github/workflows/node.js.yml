@@ -26,11 +26,17 @@ jobs:
       - run: |
           cd application
           yarn install --immutable
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn deploy
       - run: |
-          cd ../frontendtests
+          cd application
+          yarn lint
+      - run: |
+          cd application
+          yarn test
+      - run: |
+          cd application
+          yarn deploy
+      - run: |
+          cd frontendtests
           yarn install --immutable
           yarn playwright install chromium
           ./startRunStop.sh
