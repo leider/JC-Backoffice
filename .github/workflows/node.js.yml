@@ -23,10 +23,18 @@ jobs:
       - uses: szenius/set-timezone@v1.2
         with:
           timezoneLinux: "Europe/Berlin"
-      - run: yarn install --immutable
-      - run: yarn lint
-      - run: yarn test
-      - run: yarn deploy
+      - run: |
+          cd application
+          yarn install --immutable
+      - run: |
+          cd application
+          yarn lint
+      - run: |
+          cd application
+          yarn test
+      - run: |
+          cd application
+          yarn deploy
       - run: |
           cd frontendtests
           yarn install --immutable

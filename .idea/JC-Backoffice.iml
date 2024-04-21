@@ -2,15 +2,15 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/shared/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/application/shared/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
-      <excludeFolder url="file://$MODULE_DIR$/backend/static/rider" />
-      <excludeFolder url="file://$MODULE_DIR$/backend/static/stylesheets" />
-      <excludeFolder url="file://$MODULE_DIR$/backend/static/vue" />
       <excludeFolder url="file://$MODULE_DIR$/config" />
       <excludeFolder url="file://$MODULE_DIR$/frontendtests/output" />
+      <excludeFolder url="file://$MODULE_DIR$/application/backend/static/rider" />
+      <excludeFolder url="file://$MODULE_DIR$/application/backend/static/stylesheets" />
+      <excludeFolder url="file://$MODULE_DIR$/application/backend/static/vue" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
