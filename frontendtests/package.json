@@ -9,8 +9,9 @@
     "playwright": "1.42.1"
   },
   "scripts": {
-    "startTestserver": "cross-env CONF=config-it node ../start",
+    "startTestserver": "cross-env CONF=config-it node ../application/start",
     "runcodeceptjs-update-steps": "codeceptjs def",
     "test": "codeceptjs run"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }

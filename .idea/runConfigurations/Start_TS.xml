@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start TS" type="NodeJSConfigurationType" path-to-node="$PROJECT_DIR$/node_modules/.bin/ts-node" node-parameters="--respawn --icu-data-dir=../node_modules/full-icu" path-to-js-file="start.ts" working-dir="$PROJECT_DIR$/backend">
+  <configuration default="false" name="Start TS" type="NodeJSConfigurationType" path-to-node="$PROJECT_DIR$/node_modules/.bin/ts-node" node-parameters="--respawn --icu-data-dir=../node_modules/full-icu" path-to-js-file="$PROJECT_DIR$/application/backend/start.ts" working-dir="$PROJECT_DIR$/application/backend">
     <method v="2" />
   </configuration>
 </component>

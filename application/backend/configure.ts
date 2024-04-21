@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 function createConfiguration(): SimpleConfigure {
   const confDir = process.env.CONF || "config";
 
-  let configdir = path.join(__dirname, `../${confDir}/`);
+  let configdir = path.join(__dirname, `../../${confDir}/`);
   try {
     // eslint-disable-next-line no-sync
     fs.statSync(configdir);
