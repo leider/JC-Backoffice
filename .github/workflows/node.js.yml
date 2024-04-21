@@ -23,12 +23,13 @@ jobs:
       - uses: szenius/set-timezone@v1.2
         with:
           timezoneLinux: "Europe/Berlin"
+      - run: cd application
       - run: yarn install --immutable
       - run: yarn lint
       - run: yarn test
       - run: yarn deploy
       - run: |
-          cd frontendtests
+          cd ../frontendtests
           yarn install --immutable
           yarn playwright install chromium
           ./startRunStop.sh
