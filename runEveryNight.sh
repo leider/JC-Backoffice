@@ -7,4 +7,4 @@ export HOME=/home/andreas
 export NODE_ENV=production
 # Include the user-specific profile
 . $HOME/.profile
-exec /home/andreas/.nvm/versions/node/v18.18.0/bin/node JC-Backoffice/batchjobs/src/index.js
+exec /home/andreas/.nvm/versions/node/v18.18.0/bin/node JC-Backoffice/application/batchjobs/src/index.js

@@ -7,4 +7,4 @@ export HOME=/home/andreas
 export NODE_ENV=production
 # Include the user-specific profile
 . $HOME/.profile
-exec /home/andreas/.nvm/versions/node/v18.18.0/bin/node JC-Backoffice/batchjobs/src/database-backup/backup-sqlite.js /home/andreas/database-backups
+exec /home/andreas/.nvm/versions/node/v18.18.0/bin/node JC-Backoffice/application/batchjobs/src/database-backup/backup-sqlite.js /home/andreas/database-backups
