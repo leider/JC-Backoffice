@@ -1,2 +1,2 @@
 #!/bin/sh
-kill -9 `pgrep -f 'node ../start'`
+kill -9 `pgrep -f 'node ../application/start'`

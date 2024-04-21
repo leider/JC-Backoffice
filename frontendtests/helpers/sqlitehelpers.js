@@ -15,7 +15,6 @@ function escape(str = "") {
 }
 
 function doInSqlite(callback) {
-  console.log({ dirname: __dirname, url: path.join(__dirname, url) });
   const db = new Sqlite(path.join(__dirname, url));
   const result = callback(db);
   db.close();
