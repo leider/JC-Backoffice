@@ -10,6 +10,7 @@ export const config: CodeceptJS.MainConfig = {
       locale: "de",
       show: false,
       keepCookies: true,
+      waitForNavigation: "domcontentloaded",
     },
     SqliteHelper: {
       require: "./helpers/SqliteHelper",
