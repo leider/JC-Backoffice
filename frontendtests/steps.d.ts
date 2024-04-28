@@ -1,6 +1,6 @@
 /// <reference types='codeceptjs' />
 type steps_file = typeof import('./steps_file');
-type SqliteHelper = import('./helpers/SqliteHelper.js');
+type SqliteHelper = import('./helpers/SqliteHelper');
 type ChaiWrapper = import('codeceptjs-chai');
 
 declare namespace CodeceptJS {

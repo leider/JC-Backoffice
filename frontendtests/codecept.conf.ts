@@ -12,7 +12,7 @@ export const config: CodeceptJS.MainConfig = {
       keepCookies: true,
     },
     SqliteHelper: {
-      require: "./helpers/SqliteHelper.js",
+      require: "./helpers/SqliteHelper",
     },
     ChaiWrapper: {
       require: "codeceptjs-chai",
