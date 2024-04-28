@@ -1,0 +1,16 @@
+{
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "target": "es2018",
+    "lib": ["ES2021", "DOM"],
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "strictNullChecks": false,
+    "types": ["codeceptjs", "node"],
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "exclude": [ "../frontendteststs/node_modules" ]
+}

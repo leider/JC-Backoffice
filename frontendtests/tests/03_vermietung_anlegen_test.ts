@@ -1,6 +1,4 @@
-const { expect } = require("chai");
-
-Feature("Konzert anlegen");
+Feature("Vermietung anlegen");
 
 Before(({ I, login }) => {
   login("admin");
@@ -8,22 +6,24 @@ Before(({ I, login }) => {
   I.createData("optionenstore", "orte");
 });
 
-Scenario("Erzeuge neues Konzert", async ({ I }) => {
-  I.amOnPage("/vue/konzert/new");
-  I.see("Typ");
+Scenario("Erzeuge neue Vermietung", async ({ I }) => {
+  I.amOnPage("/vue/vermietung/new");
+  I.fillField("Saalmiete", "100");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
   I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
   I.click("OK");
-  I.fillField("Titel", "Konzert #1");
-  I.fillField("Typ", "Club Konzert\n");
+  I.fillField("Titel", "Vermietung #1");
   I.click("Speichern");
 
-  const res = await I.loadObjectInCollection("veranstaltungenstore", "Konzert #1 am 20. März 2020");
-  expect(res.kopf).eql({
+  const res = await I.loadObjectInCollection(
+    "vermietungenstore",
+    "Vermietung #1 am 20. März 2020"
+  );
+  I.assertDeepEqual(res.kopf, {
     abgesagt: false,
     beschreibung: "",
     confirmed: false,
-    eventTyp: "Club Konzert",
+    eventTyp: "",
     flaeche: 100,
     fotografBestellen: false,
     genre: "",
@@ -34,11 +34,11 @@ Scenario("Erzeuge neues Konzert", async ({ I }) => {
     presseIn: "im Jazzclub Karlsruhe",
     pressename: "Jazzclub Karlsruhe",
     rechnungAnKooperation: false,
-    titel: "Konzert #1",
+    titel: "Vermietung #1",
   });
-  expect(res.startDate).eql("2020-03-20T17:30:00.000Z");
-  expect(res.endDate).eql("2020-03-20T19:00:00.000Z");
+  I.assertEqual(res.startDate, "2020-03-20T17:30:00.000Z");
+  I.assertEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
   I.amOnPage("/vue/veranstaltungen");
-  I.see("Konzert #1");
+  I.see("Vermietung #1");
 });
