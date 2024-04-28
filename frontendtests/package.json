@@ -18,7 +18,7 @@
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../application/start",
     "runcodeceptjs-update-steps": "codeceptjs def",
-    "test": "codeceptjs run",
+    "test": "codeceptjs run --steps",
     "tsc": "./node_modules/.bin/tsc"
   },
   "packageManager": "yarn@4.1.1"
