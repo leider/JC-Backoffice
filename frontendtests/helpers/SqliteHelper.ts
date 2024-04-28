@@ -1,10 +1,9 @@
-const Sqlite = require("better-sqlite3");
-const serverConfig = require("../../config-it/server-config.json");
-const Helper = require("@codeceptjs/helper");
-const fs = require("fs");
-const path = require("path");
-const { isEmpty } = require("lodash");
+import Sqlite = require("better-sqlite3");
+import serverConfig = require("../../config-it/server-config.json");
+import fs = require("fs");
+import path = require("path");
 const url = serverConfig.sqlitedb;
+import Helper = require("@codeceptjs/helper");
 
 function asSqliteString(obj) {
   return `${escape(JSON.stringify(obj))}`;
@@ -21,7 +20,7 @@ function doInSqlite(callback) {
   return result;
 }
 
-class dbHelper extends Helper {
+class SqliteHelper extends Helper {
   dropAllCollections() {
     doInSqlite((db) => {
       const tables = db.pragma("table_list");
@@ -88,4 +87,5 @@ class dbHelper extends Helper {
     );
   }
 }
-module.exports = dbHelper;
+
+export = SqliteHelper;

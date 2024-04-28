@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
+    "@types/node": "20.12.7",
     "better-sqlite3": "9.4.3",
     "codeceptjs": "3.5.12",
+    "codeceptjs-chai": "2.3.5",
     "cross-env": "7.0.3",
-    "playwright": "1.42.1"
+    "eslint": "8.57.0",
+    "eslint-plugin-codeceptjs": "1.3.0",
+    "playwright": "1.42.1",
+    "prettier": "3.2.5",
+    "ts-node": "10.9.2",
+    "typescript": "5.4.5"
   },
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../application/start",
     "runcodeceptjs-update-steps": "codeceptjs def",
-    "test": "codeceptjs run"
+    "test": "codeceptjs run",
+    "tsc": "./node_modules/.bin/tsc"
   },
   "packageManager": "yarn@4.1.1"
 }

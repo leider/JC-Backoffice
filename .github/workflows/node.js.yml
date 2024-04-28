@@ -20,23 +20,30 @@ jobs:
         with:
           node-version: "18.x"
           cache: "yarn"
-      - uses: szenius/set-timezone@v1.2
+      - name: set timezone Berlin
+        uses: szenius/set-timezone@v1.2
         with:
           timezoneLinux: "Europe/Berlin"
-      - run: |
+      - name: install
+        run: |
           cd application
           yarn install --immutable
-      - run: |
+      - name: lint
+        run: |
           cd application
           yarn lint
-      - run: |
+      - name: test
+        run: |
           cd application
           yarn test
-      - run: |
+      - name: deploy
+        run: |
           cd application
           yarn deploy
-      - run: |
+      - name: UI Tests
+        run: |
           cd frontendtests
           yarn install --immutable
           yarn playwright install chromium
+          yarn tsc
           ./startRunStop.sh
