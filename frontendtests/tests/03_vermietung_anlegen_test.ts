@@ -17,7 +17,7 @@ Scenario("Erzeuge neue Vermietung", async ({ I }) => {
 
   const res = await I.loadObjectInCollection(
     "vermietungenstore",
-    "Vermietung #1 am 20. März 2020"
+    "Vermietung #1 am 20. März 2020",
   );
   I.assertDeepEqual(res.kopf, {
     abgesagt: false,
@@ -40,5 +40,6 @@ Scenario("Erzeuge neue Vermietung", async ({ I }) => {
   I.assertEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
   I.amOnPage("/vue/veranstaltungen");
+  I.wait(0.5);
   I.see("Vermietung #1");
 });

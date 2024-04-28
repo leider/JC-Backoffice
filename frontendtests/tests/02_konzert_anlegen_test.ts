@@ -8,6 +8,7 @@ Before(({ I, login }) => {
 
 Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.amOnPage("/vue/konzert/new");
+  I.wait(0.5);
   I.see("Typ");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
   I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
@@ -18,7 +19,7 @@ Scenario("Erzeuge neues Konzert", async ({ I }) => {
 
   const res = await I.loadObjectInCollection(
     "veranstaltungenstore",
-    "Konzert #1 am 20. März 2020"
+    "Konzert #1 am 20. März 2020",
   );
   I.assertDeepEqual(res.kopf, {
     abgesagt: false,
