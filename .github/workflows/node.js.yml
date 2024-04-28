@@ -48,19 +48,18 @@ jobs:
       - name: lint
         run: |
           cd application
-          yarn lint
+          sudo yarn lint
       - name: test
         run: |
           cd application
-          yarn test
+          sudo yarn test
       - name: deploy
         run: |
           cd application
-          yarn deploy
+          sudo yarn deploy
       - name: UI Tests
         run: |
           cd frontendtests
           yarn install --immutable
           yarn playwright install chromium
-          yarn tsc
           ./startRunStop.sh
