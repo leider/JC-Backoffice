@@ -34,7 +34,8 @@ export const config: CodeceptJS.MainConfig = {
           },
           check: (I) => {
             I.amOnPage("/");
-            I.see("Team");
+            I.wait(0.2);
+            I.see("admin");
           },
           fetch: () => "yes",
           restore: () => {},
