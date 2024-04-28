@@ -3,6 +3,6 @@
   <component name="TypeScriptCompiler">
     <option name="enableServiceForProjectsWithoutConfig" value="false" />
     <option name="recompileOnChanges" value="true" />
-    <option name="scopeName" value="Module 'JC-Backoffice'" />
+    <option name="scopeName" value="application" />
   </component>
 </project>
