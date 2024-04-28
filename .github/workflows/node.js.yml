@@ -23,6 +23,7 @@ jobs:
         run: |
           cd application
           yarn install --immutable
+          ls -l node_modules/.bin/
       - name: Upload all
         uses: actions/upload-artifact@v4
         with:
