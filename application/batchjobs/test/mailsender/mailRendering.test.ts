@@ -1,5 +1,6 @@
 import { expect, describe, it } from "vitest";
 
+import "../initWinstonForTest";
 import "jc-backend/configure.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 conf.addProperties({
