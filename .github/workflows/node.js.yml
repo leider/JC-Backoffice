@@ -48,7 +48,8 @@ jobs:
       - name: lint
         run: |
           cd application
-          sudo yarn lint
+          ls -l node_modules/.bin/
+          yarn lint
       - name: test
         run: |
           cd application
