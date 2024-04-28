@@ -33,6 +33,10 @@ jobs:
     needs: install
     runs-on: ubuntu-latest
     steps:
+      - name: Use Node.js v18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
       - name: Download a single artifact
         uses: actions/download-artifact@v4
         with:
