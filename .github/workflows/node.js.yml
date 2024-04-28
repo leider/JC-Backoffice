@@ -10,8 +10,9 @@ on:
     branches: [master]
 
 jobs:
-  checkout:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js v18
@@ -19,55 +20,26 @@ jobs:
         with:
           node-version: "18.x"
           cache: "yarn"
-
-  install:
-    needs: checkout
-    runs-on: ubuntu-latest
-    steps:
+      - name: set timezone Berlin
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Europe/Berlin"
       - name: install
         run: |
           cd application
           yarn install --immutable
-
-  lint:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: set timezone Berlin
-        uses: szenius/set-timezone@v1.2
-        with:
-          timezoneLinux: "Europe/Berlin"
       - name: lint
         run: |
           cd application
           yarn lint
-
-  test:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-      - name: lint
+      - name: test
         run: |
           cd application
           yarn test
-
-  build:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
       - name: deploy
         run: |
           cd application
           yarn deploy
-
-  uitests:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: set timezone Berlin
-        uses: szenius/set-timezone@v1.2
-        with:
-          timezoneLinux: "Europe/Berlin"
       - name: UI Tests
         run: |
           cd frontendtests
