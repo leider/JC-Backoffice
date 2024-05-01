@@ -24,7 +24,7 @@ export async function generatePdf(html: string, pdfOptions = printoptions) {
   const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-web-security"] });
   const page = await browser.newPage();
   await page.emulateMediaType("screen");
-  await page.goto(`data:text/html,${html}`, {
+  await page.setContent(html, {
     waitUntil: "networkidle0",
   });
   const pdf = await page.pdf(pdfOptions);
