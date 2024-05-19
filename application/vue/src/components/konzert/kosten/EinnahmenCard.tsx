@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col, Flex, Form, Row, Typography } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -35,8 +35,10 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
     onChange(sum);
   }
 
+  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+
   return (
-    <Collapsible suffix="ausgaben" label="Einnahmen / Eintritt / Zuschuss" noTopBorder amount={summe}>
+    <Collapsible suffix="ausgaben" label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder amount={summe}>
       <Row gutter={12}>
         <Col span={12}>
           <PreisprofilSelect form={form} optionen={optionen} onChange={updateSumme} />
@@ -68,16 +70,45 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
           <NumberInput name={["kasse", "einnahmenReservix"]} label={"Reservix"} decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
       </Row>
+      <Flex justify="center">
+        {freigabe ? (
+          <Typography.Text strong type={"success"}>
+            Kasse ist freigegeben, verwende "Abendkasse"
+          </Typography.Text>
+        ) : (
+          <Typography.Text strong type={"danger"}>
+            Schätzung, da Kasse noch nicht freigegeben, verwende "Gäste (erw.)"
+          </Typography.Text>
+        )}
+      </Flex>
       <Row gutter={12}>
-        <Col span={12}>
-          <NumberInput name={["eintrittspreise", "zuschuss"]} label={"Zuschüsse"} decimals={2} suffix={"€"} onChange={updateSumme} />
+        <Col span={8}>
+          <NumberInput
+            name={["eintrittspreise", "zuschuss"]}
+            label={"Zuschüsse (für alte Konzerte)"}
+            decimals={2}
+            suffix={"€"}
+            onChange={updateSumme}
+            disabled
+          />
         </Col>
-        <Col span={12}>
-          {form.getFieldValue(["kasse", "kassenfreigabe"]) ? (
-            <NumberInput name={["kasse", "einnahmeTicketsEUR"]} label={"Abendkasse (Tickets)"} decimals={2} disabled suffix="€" />
-          ) : (
-            <NumberInput name={["eintrittspreise", "erwarteteBesucher"]} label={"Gäste (erw.)"} decimals={0} onChange={updateSumme} />
-          )}
+        <Col span={8}>
+          <NumberInput
+            name={["kasse", freigabe ? "einnahmeTicketsEUR" : "nix"]}
+            label={"Abendkasse (Tickets)"}
+            decimals={2}
+            disabled
+            suffix="€"
+          />
+        </Col>
+        <Col span={8}>
+          <NumberInput
+            name={["eintrittspreise", "erwarteteBesucher"]}
+            label={"Gäste (erw.)"}
+            decimals={0}
+            onChange={updateSumme}
+            disabled={!!freigabe}
+          />
         </Col>
       </Row>
     </Collapsible>

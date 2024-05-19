@@ -1,4 +1,4 @@
-import { App, Col, Flex, Form, Row } from "antd";
+import { App, Col, Flex, Form, Row, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -117,13 +117,9 @@ export function KassenzettelFreigabe() {
         <Col span={24}>
           {endbestandEUR !== endbestandGezaehltEUR ? (
             <Flex justify="center">
-              <b
-                style={{
-                  color: "#d50f36",
-                }}
-              >
+              <Typography.Text strong type={"danger"}>
                 ACHTUNG! Endbestände unplausibel
-              </b>
+              </Typography.Text>
               &nbsp;
               {darfFreigeben && <b>Freigabe nicht möglich.</b>}
             </Flex>
