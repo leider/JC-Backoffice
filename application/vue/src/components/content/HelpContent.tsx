@@ -6,6 +6,7 @@ import { FloatButton, Modal } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useLocation } from "react-router-dom";
 import HelpTeam from "@/components/content/help/HelpTeam.tsx";
+import HelpKonzert from "@/components/content/help/HelpKonzert.tsx";
 
 export default function HelpContent() {
   const { pathname } = useLocation();
@@ -14,7 +15,7 @@ export default function HelpContent() {
   const [infoOpen, setInfoOpen] = useState(false);
 
   const hasHelp = useMemo(() => {
-    return pathname === "/veranstaltungen" || pathname === "/team";
+    return pathname === "/veranstaltungen" || pathname === "/team" || pathname.startsWith("/konzert");
   }, [pathname]);
 
   return (
@@ -24,6 +25,7 @@ export default function HelpContent() {
         <p>Abhängig von Deinen Benutzerrechten sind einige Dinge für Dich nicht sichtbar oder aktiv.</p>
         <HelpVeranstaltungen />
         <HelpTeam />
+        <HelpKonzert />
       </Modal>
       <Modal width={600} title="Neuigkeiten" open={infoOpen} onCancel={() => setInfoOpen(false)} footer={null}>
         <p>Dieser Dialog wird nach und nach mit Inhalten gefüllt...</p>
