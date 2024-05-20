@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "dayjs": "1.11.10",
+    "dayjs": "1.11.11",
     "deep-object-diff": "1.1.9",
     "marked": "12.0.2"
   },

@@ -12,6 +12,6 @@
     "jc-vue": "workspace:^"
   },
   "devDependencies": {
-    "vite": "5.2.10"
+    "vite": "5.2.11"
   }
 }
