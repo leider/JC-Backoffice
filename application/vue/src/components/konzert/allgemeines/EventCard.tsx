@@ -100,7 +100,7 @@ export default function EventCard() {
           <NumberInput name={["kopf", "flaeche"]} label="Fläche" decimals={0} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kosten", "saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
+          <NumberInput name={["kosten", "saalmiete"]} label="Saalmiete (alt)" decimals={2} suffix="€" disabled />
         </Col>
       </Row>
       <Row gutter={12}>
