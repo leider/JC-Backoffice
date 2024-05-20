@@ -21,7 +21,7 @@ jobs:
           node-version: "18.x"
           cache: "yarn"
       - name: set timezone Berlin
-        uses: szenius/set-timezone@v1.2
+        uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: "Europe/Berlin"
       - name: install
