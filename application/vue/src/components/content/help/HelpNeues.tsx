@@ -6,7 +6,8 @@ export default function HelpNeues() {
     {
       title: "Verbesserungen in Kalkulation",
       description: "Mai '24",
-      content: "Darstellung Konzert-Kalkulation ist verbessert.",
+      content:
+        "Darstellung Konzert-Kalkulation ist verbessert. KSK, GEMA Berechnung, Klavierstimmer mit 125,- vorbelegt. Technik Ausgaben und Saalmiete nicht mehr editierbar.",
     },
     {
       title: "Filter in Veranstaltungsübersicht",

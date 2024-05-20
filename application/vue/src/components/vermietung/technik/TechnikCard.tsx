@@ -32,6 +32,8 @@ export default function TechnikCard() {
   function updateFluegelKosten(e: CheckboxChangeEvent) {
     if (!e.target.checked) {
       form.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
+    } else {
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
     }
     updateSumme();
   }
@@ -79,7 +81,14 @@ export default function TechnikCard() {
           <MultiSelectWithTags name={["technik", "backlineRockshop"]} label="Backline Rockshop" options={backlineRockshop} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kosten", "backlineEUR"]} label="Betrag" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput
+            name={["kosten", "backlineEUR"]}
+            label="Betrag (alt, jetzt in Werbung eintragen)"
+            decimals={2}
+            suffix="€"
+            onChange={updateSumme}
+            disabled
+          />
         </Col>
       </Row>
       <Row gutter={12}>
@@ -87,7 +96,14 @@ export default function TechnikCard() {
           <TextField name={["technik", "technikAngebot1"]} label="Technik Zumietung" />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kosten", "technikAngebot1EUR"]} label="Betrag" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput
+            name={["kosten", "technikAngebot1EUR"]}
+            label="Betrag (alt, jetzt in Werbung eintragen)"
+            decimals={2}
+            suffix="€"
+            onChange={updateSumme}
+            disabled
+          />
         </Col>
       </Row>
     </Collapsible>

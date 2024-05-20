@@ -71,11 +71,11 @@ function integrateKennzahlen(kennzahlen: Kennzahlen, bestehende: { [index: strin
   });
 }
 function einnahme(betrag?: number) {
-  return betrag || 0;
+  return betrag ?? 0;
 }
 
 function ausgabe(betrag?: number) {
-  return (betrag || -0) * -1;
+  return (betrag ?? -0) * -1;
 }
 
 function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
@@ -104,6 +104,8 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
     "Catering Personal": ausgabe(kosten.cateringPersonal),
     Hotel: ausgabe(veranstaltung.unterkunft.roomsTotalEUR),
     "Hotel (Transport)": ausgabe(veranstaltung.unterkunft.transportEUR),
+    KSK: ausgabe(kosten.ksk),
+    GEMA: ausgabe(kalk.gema),
   };
   if (kasse.einnahmeSonstiges1EUR && kasse.einnahmeSonstiges1EUR !== 0) {
     result[kasse.einnahmeSonstiges1Text || "Einnahme Sonstiges 1"] = einnahme(kasse.einnahmeSonstiges1EUR);
@@ -111,14 +113,11 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
   if (kasse.einnahmeSonstiges2EUR && kasse.einnahmeSonstiges2EUR !== 0) {
     result[kasse.einnahmeSonstiges2Text || "Einnahme Sonstiges 2"] = einnahme(kasse.einnahmeSonstiges2EUR);
   }
-  if (kosten.werbung1 && kosten.werbung1 !== 0) {
-    result[kosten.werbung1Label] = ausgabe(kosten.werbung1);
-  }
-  if (kosten.werbung2 && kosten.werbung2 !== 0) {
-    result[kosten.werbung2Label] = ausgabe(kosten.werbung2);
-  }
-  if (kosten.werbung3 && kosten.werbung3 !== 0) {
-    result[kosten.werbung3Label] = ausgabe(kosten.werbung3);
+  for (let i = 1; i < 7; i++) {
+    const kostenAny: any = kosten;
+    if (kostenAny[`werbung${i}`] && kostenAny[`werbung${i}`] !== 0) {
+      result[kostenAny[`werbung${i}Label`]] = ausgabe(kostenAny[`werbung${i}`]);
+    }
   }
   return { kennzahlen: result, name: `${veranstaltung.startDatumUhrzeit.mitUhrzeitNumerisch}/${veranstaltung.kopf.titel}` };
 }
@@ -133,14 +132,11 @@ function kennzahlenFuerVermietung(vermietung: Vermietung): Kennzahlen {
     Saalmiete: einnahme(vermietung.saalmiete),
     Personal: ausgabe(kosten.personal),
   };
-  if (kosten.werbung1 && kosten.werbung1 !== 0) {
-    result[kosten.werbung1Label] = ausgabe(kosten.werbung1);
-  }
-  if (kosten.werbung2 && kosten.werbung2 !== 0) {
-    result[kosten.werbung2Label] = ausgabe(kosten.werbung2);
-  }
-  if (kosten.werbung3 && kosten.werbung3 !== 0) {
-    result[kosten.werbung3Label] = ausgabe(kosten.werbung3);
+  for (let i = 1; i < 7; i++) {
+    const kostenAny: any = kosten;
+    if (kostenAny[`werbung${i}`] && kostenAny[`werbung${i}`] !== 0) {
+      result[kostenAny[`werbung${i}Label`]] = ausgabe(kostenAny[`werbung${i}`]);
+    }
   }
   return { kennzahlen: result, name: `${vermietung.startDatumUhrzeit.mitUhrzeitNumerisch}/${vermietung.kopf.titel}` };
 }

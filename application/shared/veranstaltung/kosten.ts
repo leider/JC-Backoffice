@@ -28,9 +28,15 @@ export default class Kosten {
   werbung1 = 0;
   werbung2 = 0;
   werbung3 = 0;
+  werbung4 = 0;
+  werbung5 = 0;
+  werbung6 = 0;
   werbung1Label = "Werbung 1";
   werbung2Label = "Werbung 2";
   werbung3Label = "Werbung 3";
+  werbung4Label = "Werbung 4";
+  werbung5Label = "Werbung 5";
+  werbung6Label = "Werbung 6";
   personal = 0;
   gagenSteuer: string | null = null;
   deal: string | null = null;

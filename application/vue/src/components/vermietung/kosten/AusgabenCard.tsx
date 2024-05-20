@@ -6,10 +6,11 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { TextField } from "@/widgets/TextField.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
+import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
+import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 
 export default function AusgabenCard() {
   const context = useContext(VermietungContext);
@@ -55,50 +56,9 @@ export default function AusgabenCard() {
 
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 
-  function LabelCurrencyRow({ label, path }: { label: string; path: string[] }) {
-    return (
-      <Row gutter={12}>
-        <Col span={18}>
-          <Form.Item>
-            <b>{label}:</b>
-          </Form.Item>
-        </Col>
-        <Col span={6}>
-          <NumberInput name={path} decimals={2} suffix="€" onChange={updateSumme} />
-        </Col>
-      </Row>
-    );
-  }
-
-  function LabelCurrencyChangeableRow({ label, path }: { label: string; path: string[] }) {
-    return (
-      <Row gutter={12}>
-        <Col span={18}>
-          <TextField label={label} name={[path[0], path[1] + "Label"]} initialValue={label} />
-        </Col>
-        <Col span={6}>
-          <NumberInput label="Betrag" name={path} decimals={2} suffix="€" onChange={updateSumme} />
-        </Col>
-      </Row>
-    );
-  }
-
   function fluegelZeile() {
     const verm = new Vermietung(form.getFieldsValue(true));
-    return (
-      verm.technik.fluegel && (
-        <Row gutter={12}>
-          <Col span={18}>
-            <Form.Item>
-              <b>Fluegelstimmer:</b>
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <NumberInputWithDirectValue value={verm.kosten.fluegelstimmerEUR} suffix="€" decimals={2} />
-          </Col>
-        </Row>
-      )
-    );
+    return verm.technik.fluegel && <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />;
   }
 
   const { lg } = useBreakpoint();
@@ -128,17 +88,20 @@ export default function AusgabenCard() {
           />
         </Col>
       </Row>
+      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
+      <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />
+      <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} onChange={updateSumme} />
+      <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} onChange={updateSumme} />
+      <LabelCurrencyChangeableRow label="Werbung 4" path={["kosten", "werbung4"]} onChange={updateSumme} />
+      <LabelCurrencyChangeableRow label="Werbung 5" path={["kosten", "werbung5"]} onChange={updateSumme} />
+      <LabelCurrencyChangeableRow label="Werbung 6" path={["kosten", "werbung6"]} onChange={updateSumme} />
+      <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} onChange={updateSumme} />
       {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && (
         <>
-          <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
-          <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
-          {fluegelZeile()}
+          <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} onChange={updateSumme} disabled />
+          <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} onChange={updateSumme} disabled />
         </>
       )}
-      <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
-      <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
-      <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} />
-      <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
     </Collapsible>
   );
 }
