@@ -73,6 +73,10 @@ export default class Kosten {
     return this.backlineEUR + this.technikAngebot1EUR + this.fluegelstimmerEUR;
   }
 
+  get ksk() {
+    return (this.gagenEUR ?? 0) * 0.05;
+  }
+
   get totalEUR(): number {
     return (
       this.gagenTotalEUR +
@@ -86,7 +90,8 @@ export default class Kosten {
       this.cateringPersonal +
       this.cateringMusiker +
       this.tontechniker +
-      this.lichttechniker
+      this.lichttechniker +
+      this.ksk
     );
   }
 }

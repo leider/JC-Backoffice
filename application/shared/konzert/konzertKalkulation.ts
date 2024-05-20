@@ -23,10 +23,15 @@ export default class KonzertKalkulation {
     return this.veranstaltung.eintrittspreise;
   }
 
+  get gema() {
+    return this.erwarteterOderEchterEintritt * 0.05;
+  }
+
   get kostenGesamtEUR(): number {
     const hotelkosten = this.veranstaltung.artist.brauchtHotel ? this.unterkunft.kostenTotalEUR : 0;
-    return this.kosten.totalEUR + hotelkosten + this.kasse.ausgabenOhneGage;
+    return this.kosten.totalEUR + hotelkosten + this.kasse.ausgabenOhneGage + this.gema;
   }
+
   get erwarteterOderEchterEintritt(): number {
     return (
       (this.kasse.istFreigegeben ? this.kasse.einnahmeTicketsEUR : this.eintrittspreise.erwarteterEintritt) + this.kasse.einnahmenReservix

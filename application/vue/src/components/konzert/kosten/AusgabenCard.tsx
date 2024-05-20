@@ -13,6 +13,7 @@ import { TextField } from "@/widgets/TextField.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import Technik from "jc-shared/veranstaltung/technik.ts";
+import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;
@@ -169,6 +170,32 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
                 />
               );
             }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col xs={24} sm={12}>
+          <DynamicItem
+            nameOfDepending={["kosten", "gagenEUR"]}
+            renderWidget={(getFieldValue) => {
+              const gagen = getFieldValue(["kosten", "gagenEUR"]);
+              const kskAnteil = gagen * 0.05;
+              return <NumberInputWithDirectValue label="KSK (auf Gagen netto ohne Deal)" value={kskAnteil} decimals={2} suffix="€" />;
+            }}
+          />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DynamicItem
+            nameOfDepending={["kasse", "einnahmenReservix"]}
+            renderWidget={() => (
+              <DynamicItem
+                nameOfDepending={["kasse", "einnahmeTicketsEUR"]}
+                renderWidget={() => {
+                  const kalk = new KonzertKalkulation(new Konzert(form.getFieldsValue(true)));
+                  return <NumberInputWithDirectValue label="GEMA (auf Eintritt und Reservix)" value={kalk.gema} decimals={2} suffix="€" />;
+                }}
+              />
+            )}
           />
         </Col>
       </Row>
