@@ -114,6 +114,7 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
     result[kasse.einnahmeSonstiges2Text || "Einnahme Sonstiges 2"] = einnahme(kasse.einnahmeSonstiges2EUR);
   }
   for (let i = 1; i < 7; i++) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const kostenAny: any = kosten;
     if (kostenAny[`werbung${i}`] && kostenAny[`werbung${i}`] !== 0) {
       result[kostenAny[`werbung${i}Label`]] = ausgabe(kostenAny[`werbung${i}`]);
@@ -133,6 +134,7 @@ function kennzahlenFuerVermietung(vermietung: Vermietung): Kennzahlen {
     Personal: ausgabe(kosten.personal),
   };
   for (let i = 1; i < 7; i++) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const kostenAny: any = kosten;
     if (kostenAny[`werbung${i}`] && kostenAny[`werbung${i}`] !== 0) {
       result[kostenAny[`werbung${i}Label`]] = ausgabe(kostenAny[`werbung${i}`]);

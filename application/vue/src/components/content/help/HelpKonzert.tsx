@@ -1,15 +1,9 @@
 import * as React from "react";
 import { useLocation } from "react-router-dom";
 import HelpSection from "@/components/content/help/HelpSection.tsx";
-import { Tag, theme } from "antd";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 
 export default function HelpKonzert() {
   const { pathname } = useLocation();
-  const { color, icon } = colorsAndIconsForSections;
-  const { token } = theme.useToken();
 
   const konzertAktionen = [
     {
