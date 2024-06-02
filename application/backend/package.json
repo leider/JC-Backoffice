@@ -48,9 +48,6 @@
     "@types/serve-favicon": "2.5.7",
     "@types/superagent": "8.1.7"
   },
-  "resolutions": {
-    "sharp": "0.32.6"
-  },
   "scripts": {
     "compile": "yarn sass && yarn tsc",
     "deploy": "yarn compile",
