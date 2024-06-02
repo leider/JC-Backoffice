@@ -13,7 +13,7 @@
     "jc-shared": "workspace:^"
   },
   "devDependencies": {
-    "vite": "5.2.11",
+    "vite": "5.2.12",
     "vitest": "1.6.0"
   },
   "scripts": {
