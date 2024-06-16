@@ -58,7 +58,7 @@ app.post("/vermietung", [checkOrgateam], async (req: Request, res: Response, nex
     if (frischFreigegeben) {
       try {
         await Promise.all([vermietungVertragToBuchhaltung(vermietung), saveVermietungToShare(vermietung)]);
-      } catch (e) {
+      } catch {
         return next(new Error("Vermietungsvertrag Versand an Buchhaltung gescheitert"));
       }
     }

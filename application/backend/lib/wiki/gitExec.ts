@@ -15,13 +15,13 @@ async function init() {
   if (workTree) {
     try {
       workTree = await Fs.realpath(workTree);
-    } catch (e) {
+    } catch {
       throw new Error(`Repository path does not exist: ${workTree}`);
     }
     const gitDir = Path.join(workTree, ".git");
     try {
       await fs.stat(gitDir);
-    } catch (e) {
+    } catch {
       throw new Error(`Repository path is not initialized: ${workTree}`);
     }
     gitCommands = [`--git-dir=${gitDir}`, `--work-tree=${workTree}`];

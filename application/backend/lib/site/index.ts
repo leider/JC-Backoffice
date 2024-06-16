@@ -64,7 +64,7 @@ function createToken(req: Request, res: Response, name: string) {
     persistRefreshToken(refreshTokenId, oldId, name, ttl);
     addRefreshToken(res, oldId || refreshTokenId);
     resToJson(res, { token });
-  } catch (e) {
+  } catch {
     return res.sendStatus(401);
   }
 }
@@ -81,7 +81,7 @@ app.post("/refreshtoken", (req, res) => {
       return res.sendStatus(401);
     }
     return createToken(req, res, refreshToken.userId);
-  } catch (e) {
+  } catch {
     return res.sendStatus(401);
   }
 });
@@ -179,7 +179,7 @@ app.get("/ical/", (req, res) => {
     };
     const calString = new Builder(calendar).build();
     return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
-  } catch (e) {
+  } catch {
     return res.status(500).send();
   }
 });

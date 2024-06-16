@@ -11,7 +11,7 @@ function createConfiguration(): SimpleConfigure {
   try {
     // eslint-disable-next-line no-sync
     fs.statSync(configdir);
-  } catch (e) {
+  } catch {
     configdir = path.join(__dirname, "../dummy-config/");
   }
 

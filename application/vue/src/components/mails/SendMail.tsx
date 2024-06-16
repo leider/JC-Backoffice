@@ -119,8 +119,8 @@ export default function SendMail() {
     setSelectedUsers(allUsers.filter((user) => (selectedUsersInForm || []).includes(user.id)));
     setSelectedLists(mailingLists.filter((list) => (selectedListsInForm || []).includes(list.name)));
     setSelectedRules(mailRules.filter((rule) => (selectedRulesInForm || []).includes(rule.name)));
-    if (selectedVeranstaltungenInForm?.length || (0 > 0 && subject === "")) {
-      form.setFieldValue("subject", "[Jazzclub manuell] Veranstaltungen für ...");
+    if ((selectedVeranstaltungenInForm?.length || 0) > 0 && subject === "") {
+      form.setFieldValue("subject", "Veranstaltungen für ...");
     }
   }, [
     allUsers,
