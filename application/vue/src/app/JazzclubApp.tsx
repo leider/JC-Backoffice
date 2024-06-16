@@ -7,6 +7,7 @@ import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
+import React from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: {

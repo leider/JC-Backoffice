@@ -57,7 +57,6 @@ function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
         return sum + element[key];
       }, 0)
     : 0;
-  // eslint-disable-next-line no-delete-var
   delete kumuliert[art];
   return row;
 }

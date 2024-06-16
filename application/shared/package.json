@@ -11,7 +11,7 @@
   "dependencies": {
     "dayjs": "1.11.11",
     "deep-object-diff": "1.1.9",
-    "marked": "12.0.2"
+    "marked": "13.0.0"
   },
   "scripts": {
     "test": "../node_modules/.bin/vitest --run",

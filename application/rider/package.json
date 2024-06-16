@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "vite --port 1969",
     "deploy": "vite build",
-    "eslint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "eslint": "../node_modules/.bin/eslint src/**/*.ts*",
     "serve": "rm -rf  ../backend/static/rider && vite preview --port 1969"
   },
   "dependencies": {
     "jc-vue": "workspace:^"
   },
   "devDependencies": {
-    "vite": "5.2.12"
+    "vite": "5.3.1"
   }
 }

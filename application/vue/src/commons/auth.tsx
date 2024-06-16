@@ -71,7 +71,7 @@ export function useProvideAuth(): IUseProvideAuth {
       setLoginState(LoginState.LOGGED_OUT);
       delete axios.defaults.headers.Authorization;
       await logoutManually();
-    } catch (_) {
+    } catch {
       // so what?
     } finally {
       queryClient.invalidateQueries();
@@ -94,7 +94,7 @@ export function useProvideAuth(): IUseProvideAuth {
         try {
           await refreshTokenPost();
           setLoginState(LoginState.LOGGED_IN);
-        } catch (_: unknown) {
+        } catch {
           logout();
         }
       }

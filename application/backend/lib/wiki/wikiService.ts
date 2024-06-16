@@ -15,7 +15,7 @@ export default {
       if (stats && !stats.isDirectory()) {
         await Fs.mkdir(Git.absPath(subdir));
       }
-    } catch (e) {
+    } catch {
       await Fs.mkdir(Git.absPath(subdir));
     }
     const completePageName = `${subdir}/${pageName}.md`;
