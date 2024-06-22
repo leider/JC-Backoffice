@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.8",
     "better-sqlite3": "11.0.0",
-    "codeceptjs": "3.6.3",
+    "codeceptjs": "3.6.4",
     "codeceptjs-chai": "2.3.5",
     "cross-env": "7.0.3",
     "playwright": "1.44.1",
     "prettier": "3.3.2",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   },
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../application/start",
@@ -19,5 +19,5 @@
     "test": "codeceptjs run",
     "tsc": "./node_modules/.bin/tsc"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.3.1"
 }

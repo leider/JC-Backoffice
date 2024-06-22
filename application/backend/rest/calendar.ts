@@ -2,7 +2,6 @@ import express from "express";
 import superagent from "superagent";
 import groupBy from "lodash/groupBy.js";
 import flatMap from "lodash/flatMap.js";
-import { ComplexDate, Parser } from "ikalendar";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Konzert from "jc-shared/konzert/konzert.js";
@@ -18,6 +17,7 @@ import { resToJson } from "../lib/commons/replies.js";
 import konzerteService from "../lib/konzerte/konzerteService.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
+import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.js";
 
 const app = express();
 
@@ -44,30 +44,8 @@ function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
 }
 
 async function termineForIcal(ical: Ical) {
-  function toIsoString(event?: string | ComplexDate): string {
-    if (!event) {
-      return "";
-    }
-    if (typeof event === "string") {
-      return event;
-    }
-    return toIsoString((event as ComplexDate).value);
-  }
-
   const resp = await superagent.get(ical.url);
-  const parsed = new Parser().parse(resp?.text || "");
-  const eventArray: TerminEvent[] =
-    parsed.events?.map((event) => ({
-      backgroundColor: ical.color,
-      borderColor: ical.color,
-      display: "block",
-      start: toIsoString(event.start),
-      end: toIsoString(event.end || event.start),
-      title: event.summary || "",
-      tooltip: event.summary || "",
-      className: "no-overflow",
-    })) || [];
-  return eventArray;
+  return icalToTerminEvents(parseIcal(resp.text));
 }
 
 function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?: TerminFilterOptions) {

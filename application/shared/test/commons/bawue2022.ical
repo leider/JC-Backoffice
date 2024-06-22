@@ -1,0 +1,87 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:icalendar-ruby
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+NAME:Ferien in Baden-Württemberg 2022
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:f375769c-cad7-4384-9bea-c64a6665b7fa
+DTSTART;VALUE=DATE:20220414
+DTEND;VALUE=DATE:20220415
+DESCRIPTION:Osterferien 2022 in Baden-Württemberg - Importiert von Ferienw
+ iki
+SUMMARY:Osterferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/osterferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:40dde342-9908-43cd-966f-be7dbae0ebb8
+DTSTART;VALUE=DATE:20220419
+DTEND;VALUE=DATE:20220424
+DESCRIPTION:Osterferien 2022 in Baden-Württemberg - Importiert von Ferienw
+ iki
+SUMMARY:Osterferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/osterferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:93bf74b5-49fc-4072-89a2-651a4d0e3713
+DTSTART;VALUE=DATE:20220607
+DTEND;VALUE=DATE:20220619
+DESCRIPTION:Pfingstferien 2022 in Baden-Württemberg - Importiert von Ferie
+ nwiki
+SUMMARY:Pfingstferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/pfingstferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:e6e8ad9e-05ca-4af9-b394-5b1f57ae0b1f
+DTSTART;VALUE=DATE:20220728
+DTEND;VALUE=DATE:20220911
+DESCRIPTION:Sommerferien 2022 in Baden-Württemberg - Importiert von Ferien
+ wiki
+SUMMARY:Sommerferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/sommerferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:b223be00-027c-4abf-a720-690f8f1beb6c
+DTSTART;VALUE=DATE:20221031
+DTEND;VALUE=DATE:20221101
+DESCRIPTION:Herbstferien 2022 in Baden-Württemberg - Importiert von Ferien
+ wiki
+SUMMARY:Herbstferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/herbstferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:ff4af606-83b9-4331-b44e-80428f105549
+DTSTART;VALUE=DATE:20221102
+DTEND;VALUE=DATE:20221105
+DESCRIPTION:Herbstferien 2022 in Baden-Württemberg - Importiert von Ferien
+ wiki
+SUMMARY:Herbstferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/herbstferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:6d187fb9-b5cd-4ff5-b518-bab30f44ed77
+DTSTART;VALUE=DATE:20221221
+DTEND;VALUE=DATE:20230108
+DESCRIPTION:Weihnachtsferien 2022 in Baden-Württemberg - Importiert von Fe
+ rienwiki
+SUMMARY:Weihnachtsferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/weihnachtsferien
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20240621T121629Z
+UID:7ad20fed-7f8d-4d4c-94f7-0c434e062ba3
+DTSTART;VALUE=DATE:20220124
+DTEND;VALUE=DATE:20220207
+DESCRIPTION:Winterferien 2022 in Baden-Württemberg - Importiert von Ferien
+ wiki
+SUMMARY:Winterferien
+URL:https://www.ferienwiki.de/ferientermine/2022/de/winterferien
+END:VEVENT
+END:VCALENDAR
