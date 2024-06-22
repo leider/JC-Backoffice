@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { parseIcal } from "../../commons/iCalendarUtils.js";
-import fs from "fs";
+import * as fs from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import path from "node:path";
-import superagent from "superagent";
+import * as path from "node:path";
+import * as superagent from "superagent";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 describe("iCalendarUtils.parseIcal", () => {
