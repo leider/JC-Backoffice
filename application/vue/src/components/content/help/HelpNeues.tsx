@@ -4,6 +4,16 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const items = [
     {
+      title: "Gästeliste aus Preview editierbar",
+      description: "Juli '24",
+      content: 'Jeder Anwender mit Recht "Kasse" darf auch die Gästeliste bearbeiten.',
+    },
+    {
+      title: "Belege entfernt",
+      description: "Juli '24",
+      content: "Die Funktionalität wurde entfernt.",
+    },
+    {
       title: "Verbesserungen in Kalkulation",
       description: "Mai '24",
       content:
