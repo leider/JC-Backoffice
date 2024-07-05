@@ -21,7 +21,6 @@ import ImageOverview from "@/components/options/imageoverview/ImageOverview.tsx"
 import MailRules from "@/components/mails/MailRules.tsx";
 import MailingLists from "@/components/mails/MailingLists.tsx";
 import SendMail from "@/components/mails/SendMail.tsx";
-import Belege from "@/components/belege/Belege.tsx";
 import WikiPage from "@/components/wiki/WikiPage.tsx";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
 import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
@@ -130,10 +129,6 @@ const allRoutes: RouteObject[] = [
       {
         path: "/sendmail",
         element: <SendMail />,
-      },
-      {
-        path: "/belege",
-        element: <Belege />,
       },
       {
         path: "/wiki/:subdir/:page?",

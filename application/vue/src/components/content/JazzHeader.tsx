@@ -4,12 +4,12 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
 import useMenuNodes, { menuKeys } from "@/components/content/MenuNodes.tsx";
-import { ItemType } from "antd/es/menu/hooks/useItems";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { ItemType } from "antd/es/menu/interface";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
@@ -29,14 +29,13 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
   const submenus = useMenuNodes(accessrights, subdirs);
 
   const items = useMemo(() => {
-    const { belegeMenu, mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu } = submenus;
+    const { mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu } = submenus;
     const { isOrgaTeam, isSuperuser } = accessrights;
     const localItems: ItemType[] = [];
     if (isOrgaTeam) {
       localItems.push(veranstaltungMenu);
     }
     localItems.push(teamMenu);
-    localItems.push(belegeMenu);
     if (isOrgaTeam) {
       if (isSuperuser) {
         localItems.push(mailMenu);

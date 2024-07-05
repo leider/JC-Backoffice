@@ -2,8 +2,8 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { Link } from "react-router-dom";
 import * as React from "react";
 import { useMemo } from "react";
-import { ItemType } from "antd/es/menu/hooks/useItems";
 import Accessrights from "jc-shared/user/accessrights.ts";
+import { ItemType } from "antd/es/menu/interface";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -20,7 +20,6 @@ export enum menuKeys {
   sendmail = "sendmail",
   mail = "mail",
   team = "team",
-  belege = "belege",
   wiki = "wiki",
   users = "users",
   rider = "rider",
@@ -131,12 +130,6 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     label: <Link to="/team">Team</Link>,
   };
 
-  const belegeMenu = {
-    key: menuKeys.belege,
-    icon: <IconForSmallBlock iconName="Camera" />,
-    label: <Link to="/belege">Belege</Link>,
-  };
-
   const programmheftMenu = {
     key: menuKeys.programmheft,
     icon: <IconForSmallBlock iconName="Calendar2Check" />,
@@ -150,5 +143,5 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     children: wikisubdirEntries,
   };
 
-  return { belegeMenu, mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu };
+  return { mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu };
 }
