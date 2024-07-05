@@ -82,6 +82,8 @@ app.post("/konzert", [checkAbendkasse], (req: Request, res: Response) => {
       // Nur Kasse erlaubt
       if (url && konzert) {
         konzert.kasse = new Kasse(req.body.kasse);
+        konzert.gaesteliste = req.body.gaesteliste;
+        konzert.reservierungen = req.body.reservierungen;
         konzert.changelist = req.body.changelist;
         return saveAndReply(req, res, konzert);
       } else {

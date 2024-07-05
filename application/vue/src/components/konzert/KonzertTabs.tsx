@@ -33,8 +33,9 @@ export default function KonzertTabs() {
   useEffect(() => {
     const page = search.get("page") ?? "";
     if (currentUser.id && onlyKasse) {
-      setActivePage("kasse");
-      setSearch({ page: "kasse" }, { replace: true });
+      const pageWanted = ["kasse", "gaeste"].includes(page) ? page : "kasse";
+      setActivePage(pageWanted);
+      setSearch({ page: pageWanted }, { replace: true });
       return;
     }
     if (["allgemeines", "gaeste", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
@@ -73,17 +74,18 @@ export default function KonzertTabs() {
       label: <TabLabel type="kasse" title="Abendkasse" />,
       children: <TabKasse />,
     };
+    const gaesteTab = {
+      key: "gaeste",
+      label: <TabLabel type="gaeste" title="Gäste am Abend" />,
+      children: <TabGaeste />,
+    };
     const allTabs: TabsProps["items"] = [
       {
         key: "allgemeines",
         label: <TabLabel type="allgemeines" title="Allgemeines" />,
         children: <TabAllgemeines />,
       },
-      {
-        key: "gaeste",
-        label: <TabLabel type="gaeste" title="Gäste am Abend" />,
-        children: <TabGaeste />,
-      },
+      gaesteTab,
       {
         key: "technik",
         label: <TabLabel type="technik" title="Technik" />,
@@ -107,7 +109,7 @@ export default function KonzertTabs() {
       },
     ];
     if (onlyKasse) {
-      return setTabs([kasseTab]);
+      return setTabs([gaesteTab, kasseTab]);
     }
     if (brauchtHotel) {
       setTabs(allTabs);

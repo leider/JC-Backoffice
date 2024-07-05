@@ -71,7 +71,7 @@ export default function Preview() {
       />
       <Row gutter={12}>
         <Col xs={24} lg={12}>
-          <GaesteInPreview konzert={konzert} />
+          <GaesteInPreview konzert={konzert} url={url} />
           <StaffInPreview veranstaltung={konzert} />
           <KasseInPreview konzert={konzert} url={url} />
           <InfoInPreview veranstaltung={konzert} />

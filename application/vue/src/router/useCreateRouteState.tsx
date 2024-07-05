@@ -166,6 +166,7 @@ const orgaTeamPattern = [
 ].join("|");
 
 const kassePattern = ["konzert/:url", "vermietung/preview"].join("|");
+const gaestePattern = ["konzert/:url"].join("|");
 
 const superuserPattern = ["/imageoverview", "/history"].join("|");
 export function useCreateRouteState(): RouteState {
@@ -178,6 +179,9 @@ export function useCreateRouteState(): RouteState {
       allRoutes[0].children?.filter((route) => {
         const currentPath = route.path;
         if (new RegExp(kassePattern).test(currentPath || "")) {
+          return isKasse;
+        }
+        if (new RegExp(gaestePattern).test(currentPath || "")) {
           return isKasse;
         }
         if (new RegExp(orgaTeamPattern).test(currentPath || "")) {

@@ -9,31 +9,32 @@ type SomeObject = { [index: string]: SomeObject };
  *
  * @param data an object
  */
-function stripNullOrUndefined<T>(data: T & SomeObject): T {
+function stripNullOrUndefined<T>(data: T): T {
   if (!data) {
     return data;
   }
   const keys = Object.keys(data);
   keys.forEach((key) => {
-    if (data[key] === null || data[key] === undefined) {
-      delete data[key];
+    const dataCasted = data as T & SomeObject;
+    if (dataCasted[key] === null || dataCasted[key] === undefined) {
+      delete dataCasted[key];
     }
-    if (typeof data[key] === "object") {
+    if (typeof dataCasted[key] === "object") {
       // Array is typeof "object"
-      stripNullOrUndefined(data[key]);
+      stripNullOrUndefined(dataCasted[key]);
     }
   });
   return data;
 }
 
-export function withoutNullOrUndefinedStrippedBy<T>(data: T & SomeObject, propertiesToIgnore?: string[]): T {
+export function withoutNullOrUndefinedStrippedBy<T>(data: T, propertiesToIgnore?: string[]): T {
   function deleteProp(clone: typeof data, nameWithDots: string) {
     const nameArray = nameWithDots.split(".");
     if (nameArray.length === 0) {
       return;
     }
     const last = nameArray.pop() as string;
-    let target: SomeObject = clone;
+    let target: SomeObject = clone as SomeObject;
     nameArray.forEach((part) => {
       target = target[part];
       if (!target) {
@@ -51,7 +52,7 @@ export function withoutNullOrUndefinedStrippedBy<T>(data: T & SomeObject, proper
   return stripNullOrUndefined(clone);
 }
 
-export function areDifferent(left: SomeObject, right: SomeObject, propertiesToIgnore?: string[]) {
+export function areDifferent<T>(left: T, right: T, propertiesToIgnore?: string[]) {
   return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
 }
 
