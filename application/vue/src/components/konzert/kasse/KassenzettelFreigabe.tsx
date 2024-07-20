@@ -12,6 +12,7 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineModal.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import numeral from "numeral";
 
 export function KassenzettelFreigabe() {
   const konzertContext = useContext(KonzertContext);
@@ -95,7 +96,11 @@ export function KassenzettelFreigabe() {
                 text="Kasse freigeben..."
                 icon={"Unlock"}
                 onClick={freigeben}
-                disabled={konzertContext?.isDirty || !darfFreigeben || endbestandEUR !== endbestandGezaehltEUR}
+                disabled={
+                  konzertContext?.isDirty ||
+                  !darfFreigeben ||
+                  numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
+                }
               />
             ) : (
               <>
@@ -115,7 +120,7 @@ export function KassenzettelFreigabe() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          {endbestandEUR !== endbestandGezaehltEUR ? (
+          {numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00") ? (
             <Flex justify="center">
               <Typography.Text strong type={"danger"}>
                 ACHTUNG! Endbestände unplausibel
