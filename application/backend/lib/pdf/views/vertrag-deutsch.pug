@@ -13,6 +13,9 @@ block content1
   - var getin = veranstaltung.getinDatumUhrzeit;
   - var hotel = veranstaltung.hotel;
   - var bandname = veranstaltung.artist.bandname || 'Band ohne Namen';
+  - var kosten = veranstaltung.kosten;
+  - var isDeal = !!kosten.deal;
+  - var dealVeranstalter = isDeal ? 'Jazzclub' : 'Veranstalter'
 
   .row
     .col-7
@@ -46,7 +49,7 @@ block content1
           | Kaiserpassage 6, 76133 Karlsruhe<br>
   .row
     .col-12
-      p: i (nachfolgend Veranstalter genannt)
+      p: i (nachfolgend "#{dealVeranstalter}" genannt)
 
   .row
     .col-12
@@ -54,52 +57,57 @@ block content1
         §1 Das Konzert findet statt am <b>#{start.tagMonatJahrLang}</b> um <b>#{start.uhrzeitKompakt} Uhr</b>.</br>
         Spielstätte: <b>#{veranstaltung.kopf.ort}</b>
       p.
-        §1.1 Get in ist <b>#{getin.uhrzeitKompakt} Uhr</b>, zu diesem Zeitpunkt muss der Veranstalter oder ein Vertreter anwesend sein.
+        §1.1 Get in ist <b>#{getin.uhrzeitKompakt} Uhr</b>, zu diesem Zeitpunkt muss der #{dealVeranstalter} oder ein Vertreter anwesend sein.
         Seine Anwesenheit ist auch während der gesamten Veranstaltung sicher gestellt.
       p.
         §1.2 Gebietsschutz: Die Künstler verpflichten sich hiermit 14 Tage vor und nach dem Konzerttermin keine Konzerte im Umkreis von 50km zu geben.
+      if (isDeal)
+        p.
+          §2 Die Gagen-Vereinbarung unterliegt einem Deal in Höhe von <b>#{kosten.deal}</b>.<br>
+          D.h., nach Abzug der VVK Gebühren, sowie der GEMA Gebühr erhält der Künstler #{kosten.deal} der Einnahmen.
+          Den verbleibenden Anteil der Einnahmen erhält der Jazzclub.
+      else
+        p.
+          §2 Die vereinbarte Gage beträgt <b>#{kosten.gagenTotalEURformatted} &euro;</b>.<br>
+          Der vereinbarte Betrag ist eine Bruttovergütung und schließt die MwSt. sowie sonstige Steuern ein. Nachforderungen sind ausgeschlossen.
       p.
-        §2 Die vereinbarte Gage beträgt <b>#{veranstaltung.kosten.gagenTotalEURformatted} &euro;</b>.<br>
-        Der vereinbarte Betrag ist eine Bruttovergütung und schließt die MwSt. sowie sonstige Steuern ein. Nachforderungen sind ausgeschlossen.
-      p.
-        §2.1 Die Gage unterliegt nicht der Lohnsteuerpflicht, sondern wird vom Künstler selbst versteuert. Der Künstler verpflichtet sich zur Ausstellung einer ordnungsgemäßen Rechnung über die Gage in Papier- oder elektronischer Form.
+        §2.1 Die Gage unterliegt nicht der Lohnsteuerpflicht, sondern wird vom Künstler selbst versteuert.
+        Der Künstler verpflichtet sich zur Ausstellung einer ordnungsgemäßen Rechnung über die Gage in Papier- oder elektronischer Form.
       if (veranstaltung.unterkunft.anzahlZimmer === 0)
         p.
-          §2.2 Der Veranstalter stellt <b>keine Unterkunft</b>.
+          §2.2 Der #{dealVeranstalter} stellt <b>keine Unterkunft</b>.
       else
         p.
-          §2.2 Weiterhin stellt der Veranstalter <b>#{veranstaltung.unterkunft.anzahlZimmer} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse}</b>.
-      if (buyoutInclusive)
-        p.
-          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet. Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
-      else
-        p.
-          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person, die in der Gage bereits enthalten sind. <b>Für Getränke und Speisen hat der Künstler somit selbst aufzukommen</b>.
-
+          §2.2 Weiterhin stellt der #{dealVeranstalter} <b>#{veranstaltung.unterkunft.anzahlZimmer} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse}</b>.
+      p.
+        §2.3 Die Künstler dürfen sich an den Softdrinks frei bedienen.
+        Die Verpflegung des Künstlers, dessen TechnikerInnen und MusikerInnen übernimmt der Künstler.
+        Der Jazzclub übernimmt die Verpflegung seines Personals.
       p.
         §2.4 Zusätzlich angefallene Backline-Kosten, die nicht vor Vertragsschluss abgeklärt sind, werden dem Künstler in Rechnung gestellt und mit der zu zahlenden Gage verrechnet.
       p.
         §3 Die vereinbarte Gage wird innerhalb von höchstens 14 Tagen nach dem Konzerttermin und Ausstellung einer ordnungsgemäßen Rechnung überwiesen.
-      p.
-        §3.1 Die Zahlung ist nicht abhängig vom Erfolg der Veranstaltung.
+      if (!isDeal)
+        p.
+          §3.1 Die Zahlung ist nicht abhängig vom Erfolg der Veranstaltung.
 
 block content2
   .row
     .col-12
       p.
-        §4 Die Gesamtleitung der Veranstaltung übernimmt der Veranstalter, dem insoweit ein Weisungsrecht zusteht.
+        §4 Die Gesamtleitung der Veranstaltung übernimmt der #{dealVeranstalter}, dem insoweit ein Weisungsrecht zusteht.
         Die Art der Darbietung sowie die künstlerische Gestaltung liegen ausschließlich beim Künstler.
       p.
-        §5 Der Veranstalter gewährleistet, dass der Veranstaltung keine behördlichen oder sonstigen Vorschriften entgegenstehen.
+        §5 Der #{dealVeranstalter} gewährleistet, dass der Veranstaltung keine behördlichen oder sonstigen Vorschriften entgegenstehen.
         Er verpflichtet sich, die Veranstaltung mit der notwendigen Sorgfalt vorzubereiten.
       p.
         §6 Für die persönliche Sicherheit des Künstlers am Veranstaltungsort sowie Schäden am Equipment des Künstlers,
-        die durch Dritte im Verantwortungsbereich des Veranstalters entstehen, haftet dieser nach Maßgabe des BGB.
+        die durch Dritte im Verantwortungsbereich des #{dealVeranstalter}s entstehen, haftet dieser nach Maßgabe des BGB.
       p.
         §7 Das Konzert darf ohne vorherige Genehmigung des Künstlers nicht audiovisuell aufgezeichnet werden.
         Der Künstler wird seine Genehmigung nicht ohne wichtigen Grund verweigern.
       p.
-        §8 Die GEMA-Lizenzvergütungen und den Verwerter-Anteil der Künstlersozialabgabe trägt der Veranstalter.
+        §8 Die GEMA-Lizenzvergütungen und den Verwerter-Anteil der Künstlersozialabgabe trägt der #{dealVeranstalter}.
       p.
         §9 Fälle höherer Gewalt, welche einem Vertragspartner die Durchführung seiner vertraglichen Pflichten unzumutbar werden lassen,
         entbinden beide Seiten ohne weitere Konsequenzen von ihren Pflichten aus dem Vertrag. Der von höherer Gewalt betroffene Vertragspartner ist jedoch verpflichtet,
@@ -108,11 +116,11 @@ block content2
         Jeder Vertragspartner trägt die ihm entstandenen Aufwendungen selbst. Jedoch werden sich die Künstler um einen Ersatztermin bemühen.
       p.
         §9.1 Im Falle einer Erkrankung des Künstlers, ist dieser von allen Vertragspflichten befreit. Er ist jedoch verpflichtet,
-        den Veranstalter unverzüglich über die Erkrankung zu informieren. Die Krankheit ist innerhalb der folgenden zehn Tage per ärztlichem Attest nachzuweisen.
+        den #{dealVeranstalter} unverzüglich über die Erkrankung zu informieren. Die Krankheit ist innerhalb der folgenden zehn Tage per ärztlichem Attest nachzuweisen.
         Im Falle einer Erkrankung entfällt der Anspruch auf die vereinbarte Gage.
       p.
         §10 Die Künstler verpflichten sich, ein unterschriebenes Exemplar des Vertrages innerhalb von 10 Tagen ab Zugang zurückzusenden.
-        Andernfalls behält sich der Veranstalter vor, das Zustandekommen des Vertrages innerhalb von 10 Tagen ab Rückerhalt des unterschriebenen Vertrages abzulehnen.
+        Andernfalls behält sich der #{dealVeranstalter} vor, das Zustandekommen des Vertrages innerhalb von 10 Tagen ab Rückerhalt des unterschriebenen Vertrages abzulehnen.
         Eine digitale Unterschrift ist möglich.
       p.
         §11 Bei schuldhafter Vertragsverletzung wird eine gegenseitige Konventionalstrafe in Höhe der vereinbarten Gage festgelegt.
