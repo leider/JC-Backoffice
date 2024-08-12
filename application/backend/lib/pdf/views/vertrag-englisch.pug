@@ -102,8 +102,12 @@ block content2
         caused by third parties in the area of responsible of the #{dealVeranstalter}, as stipulated by BGB.
       p.
         §7 Audio-visual recordings of the concert require the authorization of the artist. The artist won’t decline the authorization without good cause.
-      p.
-        §8 GEMA-royalties and the #{dealVeranstalter}’s share of the artist’s social security fund shall be borne by the #{dealVeranstalter}.
+      if (isDeal)
+        p.
+          §8 The organizers’s share of the artist’s social security fund shall be borne by the #{dealVeranstalter}.
+      else
+        p.
+          §8 GEMA-royalties and the #{dealVeranstalter}’s share of the artist’s social security fund shall be borne by the #{dealVeranstalter}.
       p.
         §9 In the event of force majeure, both parties shall be released from their respective duties of fulfilling the contract,
         provided that the party affected by the event of force majeure notifies the other party thereof immediately after its
