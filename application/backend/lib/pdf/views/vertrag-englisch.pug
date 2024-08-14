@@ -14,13 +14,13 @@ block content1
   - var hotel = veranstaltung.hotel;
   - var bandname = veranstaltung.artist.bandname || "Band ohne Namen";
   - var kosten = veranstaltung.kosten;
-  - var isDeal = !!kosten.deal;
+  - var isDeal = !!kosten.deal && kosten.deal !== 'ohne';
   - var dealVeranstalter = isDeal ? 'Jazzclub' : 'organizer'
 
   .row
     .col-7
       p
-        b Concert/Performance Agreement
+        b Concert/Performance Agreement #{kosten.deal}
       p This agreement is concluded
     .col-5
       p.text-end Karlsruhe, #{ datum.tagMonatJahrLang }
@@ -64,7 +64,7 @@ block content1
       if (isDeal)
         p.
           §2 The agreed salary is defined by a deal of  <b>#{kosten.deal}</b>.<br>
-          This means, after accounting pre-sales and GEMA #{kosten.deal} of the profit.
+          This means, after accounting pre-sales #{kosten.deal} of the profit.
           The balance of the profit belongs to the Jazzclub.
       else
         p.
@@ -79,9 +79,14 @@ block content1
       else
         p.
           §2.2 The #{dealVeranstalter} provides <b>#{ veranstaltung.unterkunft.anzahlZimmer } beds</b> at <b>#{ hotel.name }, #{ hotel.einzeiligeAdresse }</b> at his cost.
-      p.
-        §2.3 The Artists are entitled to a catering flat rate of 20 &euro; per person in cash.
-        German quality tab water shall be provided free of charge by the #{dealVeranstalter}.
+      if (isDeal)
+        p.
+          §2.3 The Artist takes care of the food for his crew. The Jazzclub provides free soft drinks for the Artist.
+          The Jazzclub takes care of the food for his crew #{dealVeranstalter}.
+      else
+        p.
+          §2.3 The Artists are entitled to a catering flat rate of 20 &euro; per person in cash.
+          German quality tab water shall be provided free of charge by the Organizer.
       p.
         §2.4 Additional backline costs that are not negotiated at the date of the agreement will be invoiced to the artist and balanced with the agreed wage.
       p.
@@ -134,8 +139,13 @@ block content2
         .col-6
           +signbox('Artist', 'Place/Date')
           .mt-3
-          +signbox('Organizer', 'Place/Date', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          +signbox('Jazzclub', 'Place/Date', 'Karlsruhe, ' + datum.tagMonatJahrLang)
         .col-6
           +signbox('Signature', 'Name of Artist')
           .mt-3
           +signbox('Signature', 'Name of Organizer', 'DUMMY', true)
+
+
+
+
+

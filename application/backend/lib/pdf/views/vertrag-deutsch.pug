@@ -64,7 +64,7 @@ block content1
       if (isDeal)
         p.
           §2 Die Gagen-Vereinbarung unterliegt einem Deal in Höhe von <b>#{kosten.deal}</b>.<br>
-          D.h., nach Abzug der VVK Gebühren, sowie der GEMA Gebühr erhält der Künstler #{kosten.deal} der Einnahmen.
+          D.h., nach Abzug der VVK Gebühren erhält der Künstler #{kosten.deal} der Einnahmen.
           Den verbleibenden Anteil der Einnahmen erhält der Jazzclub.
       else
         p.
@@ -79,10 +79,19 @@ block content1
       else
         p.
           §2.2 Weiterhin stellt der #{dealVeranstalter} <b>#{veranstaltung.unterkunft.anzahlZimmer} Betten</b> in <b>#{hotel.name}, #{hotel.einzeiligeAdresse}</b>.
-      p.
-        §2.3 Die Künstler dürfen sich an den Softdrinks frei bedienen.
-        Die Verpflegung des Künstlers, dessen TechnikerInnen und MusikerInnen übernimmt der Künstler.
-        Der Jazzclub übernimmt die Verpflegung seines Personals.
+      if (isDeal)
+        p.
+          §2.3 Der Künstler und seine Crew dürfen sich an den Softdrinks frei bedienen.
+          Die Verpflegung des Künstlers und seiner Crew übernimmt der Künstler.
+          Der Jazzclub sorgt für die Verpflegung seines Personals.
+      else if (buyoutInclusive)
+        p.
+          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person erstattet.
+          Hochprozentige Alkoholika werden vom Jazzclub Karlsruhe <em>NICHT</em> übernommen.
+      else
+        p.
+          §2.3 Die Künstler bekommen eine Cateringpauschale (Buyout) in Höhe von 20,- &euro; pro Person, die in der Gage bereits enthalten sind.
+          <b>Für Getränke und Speisen hat der Künstler somit selbst aufzukommen</b>.
       p.
         §2.4 Zusätzlich angefallene Backline-Kosten, die nicht vor Vertragsschluss abgeklärt sind, werden dem Künstler in Rechnung gestellt und mit der zu zahlenden Gage verrechnet.
       p.
@@ -139,8 +148,8 @@ block content2
         .col-6
           +signbox('Künstler', 'Ort/Datum')
           .mt-3
-          +signbox('Veranstalter', 'Ort/Datum', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          +signbox('Jazzclub', 'Ort/Datum', 'Karlsruhe, ' + datum.tagMonatJahrLang)
         .col-6
           +signbox('Unterschrift', 'Name Künstler')
           .mt-3
-          +signbox('Unterschrift', 'Name Veranstalter', 'DUMMY', true)
+          +signbox('Unterschrift', 'Name Jazzclub', 'DUMMY', true)
