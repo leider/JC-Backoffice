@@ -1,4 +1,5 @@
 import misc from "../commons/misc.js";
+import renderer from "../commons/renderer.js";
 
 export type Sprache = "Deutsch" | "Englisch" | "Regional";
 export type Vertragsart = "Jazzclub" | "Agentur/Künstler" | "JazzClassix";
@@ -7,6 +8,7 @@ export default class Vertrag {
   art: Vertragsart = "Jazzclub";
   sprache: Sprache = "Deutsch";
   datei: string[] = [];
+  zusatzvereinbarungen?: string;
 
   static arten(): Vertragsart[] {
     return ["Jazzclub", "Agentur/Künstler", "JazzClassix"];
@@ -28,6 +30,10 @@ export default class Vertrag {
         datei: misc.toArray(object.datei),
       });
     }
+  }
+
+  get zusatzvereinbarungenHtml(): string {
+    return renderer.render(this.zusatzvereinbarungen ?? "");
   }
 
   updateDatei(datei: string): boolean {

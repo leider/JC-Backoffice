@@ -9,6 +9,7 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function VertragCard() {
   const konzertContext = useContext(KonzertContext);
@@ -53,6 +54,11 @@ export default function VertragCard() {
       <Row gutter={12}>
         <Col span={24}>
           <Uploader form={form} name={["vertrag", "datei"]} typ={"vertrag"} />
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={24}>
+          <MarkdownEditor label={<b>Zusatzvereinbarungen:</b>} name={["vertrag", "zusatzvereinbarungen"]} />
         </Col>
       </Row>
     </Collapsible>

@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, Typography } from "antd";
 import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import React, { ReactNode } from "react";
@@ -17,6 +17,9 @@ export function MarkdownEditor({
   return (
     <Form.Item label={label} name={name}>
       <SimpleMdeReact autoFocus options={options} onBlur={onBlur} />
+      <Typography.Text strong type="success">
+        Denk daran, den Text zu formatieren und die Vorschau zu checken! (Auge, Fragezeichen für Hilfe)
+      </Typography.Text>
     </Form.Item>
   );
 }

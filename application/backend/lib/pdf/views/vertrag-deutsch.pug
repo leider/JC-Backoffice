@@ -144,6 +144,22 @@ block content2
       p.
         §15 Die Vertragspartner versichern durch ihre Unterschrift, dass sie den Vertrag verstanden haben, in vollem Umfang geschäftsfähig und zur Unterschrift bevollmächtigt sind
 
+      if (!veranstaltung.vertrag.zusatzvereinbarungen)
+        .row.mt-4
+          .col-6
+            +signbox('Künstler', 'Ort/Datum')
+            .mt-3
+            +signbox('Jazzclub', 'Ort/Datum', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          .col-6
+            +signbox('Unterschrift', 'Name Künstler')
+            .mt-3
+            +signbox('Unterschrift', 'Name Jazzclub', 'DUMMY', true)
+
+block content3
+  .row
+    .col-12
+      p: b Zusatzvereinbarungen
+      | !{veranstaltung.vertrag.zusatzvereinbarungenHtml}
       .row.mt-4
         .col-6
           +signbox('Künstler', 'Ort/Datum')

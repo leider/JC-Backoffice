@@ -49,13 +49,15 @@ mixin sidebar
   +bild('city')
   +bild('meka')
 
+- var zusatz = veranstaltung.vertrag.zusatzvereinbarungen;
+- var noOfPages = einseitig ? 1 : zusatz ? 3 : 2;
 doctype html
 html
   head
     meta(charset="utf-8")
     link(href=publicUrlPrefix + '/stylesheets/screen.css', rel="stylesheet")
     link(href=publicUrlPrefix + '/fonts/fonts.css', rel="stylesheet")
-    style(type="text/css").
+    style.
       p {margin-bottom: 1em !important}
 
   body(style="font-size:8px;")
@@ -79,7 +81,7 @@ html
           +sidebar
         unless einseitig
           .col-12
-            p.text-center(style="margin-top:15px") Seite 1 von 2
+            p.text-center(style="margin-top:15px") Seite 1 von #{noOfPages}
 
       unless einseitig
         #Seite2.row(style="page-break-inside: avoid;")
@@ -89,4 +91,15 @@ html
           .col-3
             +sidebar
           .col-12
-            p.text-center(style="margin-top:15px") Seite 2 von 2
+            p.text-center(style="margin-top:15px") Seite 2 von #{noOfPages}
+
+      if zusatz
+        #Seite3.row(style="page-break-inside: avoid;")
+          .col-9
+            #content3(style="margin-top:10px")
+            block content3
+          .col-3
+            +sidebar
+          .col-12
+            p.text-center(style="margin-top:15px") Seite 3 von #{noOfPages}
+

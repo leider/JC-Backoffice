@@ -135,6 +135,22 @@ block content2
       p.
         §15 The contractual parties assure by their signature, that they comprehend the agreement, that they are in full legal capacity and authorized to sign.
 
+      if (!veranstaltung.vertrag.zusatzvereinbarungen)
+        .row.mt-4
+          .col-6
+            +signbox('Artist', 'Place/Date')
+            .mt-3
+            +signbox('Jazzclub', 'Place/Date', 'Karlsruhe, ' + datum.tagMonatJahrLang)
+          .col-6
+            +signbox('Signature', 'Name of Artist')
+            .mt-3
+            +signbox('Signature', 'Name of Organizer', 'DUMMY', true)
+
+block content3
+  .row
+    .col-12
+      p: b Supplementary Agreements
+      | !{veranstaltung.vertrag.zusatzvereinbarungenHtml}
       .row.mt-4
         .col-6
           +signbox('Artist', 'Place/Date')
@@ -144,8 +160,3 @@ block content2
           +signbox('Signature', 'Name of Artist')
           .mt-3
           +signbox('Signature', 'Name of Organizer', 'DUMMY', true)
-
-
-
-
-
