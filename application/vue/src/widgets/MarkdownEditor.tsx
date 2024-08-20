@@ -16,10 +16,28 @@ export function MarkdownEditor({
 }) {
   return (
     <Form.Item label={label} name={name}>
-      <SimpleMdeReact autoFocus options={options} onBlur={onBlur} />
+      <InnerEditor options={options} onBlur={onBlur} />
+    </Form.Item>
+  );
+}
+
+function InnerEditor({
+  options = { status: false, spellChecker: false },
+  onBlur,
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange?: (value: string) => void;
+  options?: EasyMDE.Options;
+  onBlur?: React.FocusEventHandler<HTMLDivElement>;
+}) {
+  return (
+    <>
+      <SimpleMdeReact autoFocus options={options} onBlur={onBlur} value={value} onChange={onChange} />
       <Typography.Text strong type="success">
         Denk daran, den Text zu formatieren und die Vorschau zu checken! (Auge, Fragezeichen für Hilfe)
       </Typography.Text>
-    </Form.Item>
+    </>
   );
 }
