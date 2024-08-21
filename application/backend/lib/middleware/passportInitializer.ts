@@ -7,7 +7,7 @@ import store from "../users/userstore.js";
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: conf.salt,
+  secretOrKey: conf.salt ?? "123",
 };
 
 const appLogger = loggers.get("application");

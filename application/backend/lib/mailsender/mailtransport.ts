@@ -8,7 +8,11 @@ import Message from "jc-shared/mail/message.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import MailBodyRenderer from "./mailbodyRenderer.js";
 
-const transport = nodemailer.createTransport(conf.transportOptions);
+const transport = nodemailer.createTransport(
+  conf.transportOptions ?? {
+    streamTransport: true,
+  },
+);
 
 // exported for testing
 export function toTransportObject(message: Message, isForDatev: boolean): Mail.Options {
