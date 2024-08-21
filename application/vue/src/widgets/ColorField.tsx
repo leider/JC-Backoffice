@@ -65,5 +65,5 @@ type TColorInputEmbedded = {
 };
 
 const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ colorVal, onColor }: TColorInputEmbedded) => {
-  return <ColorPicker format="hex" value={colorVal} onChange={(value, hex) => onColor?.(hex)} />;
+  return <ColorPicker format="hex" value={colorVal} onChange={(_, hex) => onColor?.(hex)} />;
 };
