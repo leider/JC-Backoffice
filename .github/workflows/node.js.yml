@@ -32,14 +32,14 @@ jobs:
         run: |
           cd application
           yarn eslint
-      - name: test
-        run: |
-          cd application
-          yarn test
       - name: deploy
         run: |
           cd application
           yarn deploy
+      - name: test
+        run: |
+          cd application
+          yarn test
       - name: UI Tests
         run: |
           cd frontendtests
