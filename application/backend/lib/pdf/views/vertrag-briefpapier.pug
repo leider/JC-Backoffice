@@ -49,8 +49,8 @@ mixin sidebar
   +bild('city')
   +bild('meka')
 
-- var zusatz = einseitig ? undefined : veranstaltung.vertrag.zusatzvereinbarungen;
-- var noOfPages = einseitig ? 1 : zusatz ? 3 : 2;
+- var noOfPages = einseitig ? 1 : veranstaltung.vertrag.zusatzvereinbarungen ? 3 : 2;
+
 doctype html
 html
   head
@@ -79,11 +79,11 @@ html
           block content1
         .col-3
           +sidebar
-        unless einseitig
+        if noOfPages > 1
           .col-12
             p.text-center(style="margin-top:15px") Seite 1 von #{noOfPages}
 
-      unless einseitig
+      if noOfPages > 1
         #Seite2.row(style="page-break-inside: avoid;")
           .col-9
             #content2(style="margin-top:10px")
@@ -93,7 +93,7 @@ html
           .col-12
             p.text-center(style="margin-top:15px") Seite 2 von #{noOfPages}
 
-      if zusatz
+      if noOfPages > 2
         #Seite3.row(style="page-break-inside: avoid;")
           .col-9
             #content3(style="margin-top:10px")
