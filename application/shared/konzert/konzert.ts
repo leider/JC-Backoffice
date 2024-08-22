@@ -118,7 +118,7 @@ export default class Konzert extends Veranstaltung {
   // Dates and Times
 
   get getinDatumUhrzeit(): DatumUhrzeit {
-    return this.startDatumUhrzeit.minus({ stunden: 2 });
+    return this.startDatumUhrzeit.minus({ stunden: 4 });
   }
 
   // iCal

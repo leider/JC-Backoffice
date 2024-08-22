@@ -49,7 +49,7 @@ mixin sidebar
   +bild('city')
   +bild('meka')
 
-- var zusatz = veranstaltung.vertrag.zusatzvereinbarungen;
+- var zusatz = einseitig ? undefined : veranstaltung.vertrag.zusatzvereinbarungen;
 - var noOfPages = einseitig ? 1 : zusatz ? 3 : 2;
 doctype html
 html
