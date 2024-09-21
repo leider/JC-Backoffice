@@ -18,6 +18,10 @@ unter folgendem Link kannst Du einen Rider erstellen oder bearbeiten:
     
 ${href}
 
+Hier kannst Du einfach alles, was du brauchst, mit der Maus aus dem Kasten links auf die Bühne ziehen, drehen, positionieren und bei eigenen Sachen beschriften.
+Wenn Du was doch nicht brauchst, wieder von der Bühne in den Kasten ziehen.
+Die gezeichnete Bühne entspricht unserer Bühnengröße und die Elemente Flügel, Drumset auch ungefähr der realen Größe.
+
 Liebe Grüße,
 Dein Jazzclub Team
     `);
