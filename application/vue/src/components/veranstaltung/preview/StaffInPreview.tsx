@@ -1,10 +1,11 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Row } from "antd";
-import React from "react";
+import React, { useMemo } from "react";
 import User from "jc-shared/user/user.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 function StaffList({
   header,
@@ -49,8 +50,20 @@ function StaffList({
 }
 export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const { allUsers } = useJazzContext();
+  const getIn = useMemo(() => {
+    const getIn = veranstaltung.artist.getInForMasterDate;
+    return getIn ? DatumUhrzeit.forJSDate(getIn).uhrzeitKompakt : "nicht angegeben";
+  }, [veranstaltung]);
+
+  const transport = useMemo(() => veranstaltung.artist.bandTransport ?? "nicht angegeben", [veranstaltung]);
+
   return (
     <Collapsible suffix="staff" label="Staff">
+      <Row gutter={12}>
+        <Col span={24}>
+          <b>Get In:</b> {getIn}, <b>Transport:</b> {transport}
+        </Col>
+      </Row>
       <Row gutter={12}>
         <Col span={24}>
           <StaffList

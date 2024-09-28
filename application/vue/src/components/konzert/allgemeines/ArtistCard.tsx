@@ -7,6 +7,8 @@ import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { TimeField } from "@/widgets/TimeField.tsx";
+import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 
 export default function ArtistCard() {
   const { optionen } = useJazzContext();
@@ -33,6 +35,26 @@ export default function ArtistCard() {
         </Col>
         <Col span={6}>
           <SingleSelect name={["kosten", "deal"]} label="Deal" options={Kosten.deals} />
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={12}>
+          <DynamicItem
+            nameOfDepending={"startAndEnd"}
+            renderWidget={(getFieldValue) => {
+              const startDate = getFieldValue("startAndEnd");
+              return (
+                <TimeField name={["artist", "getInForMasterDate"]} label="Band Get-In (informativ)" baseValue={startDate.start.toDate()} />
+              );
+            }}
+          />
+        </Col>
+        <Col span={12}>
+          <SingleSelect
+            name={["artist", "bandTransport"]}
+            label="Transport"
+            options={["Band kommt selbst", "Band abholen (Auto)", "Band abholen (Transporter)"]}
+          />
         </Col>
       </Row>
     </Collapsible>

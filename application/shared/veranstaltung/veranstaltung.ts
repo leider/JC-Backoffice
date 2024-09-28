@@ -17,7 +17,7 @@ export default abstract class Veranstaltung {
   startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
   endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
   url? = "";
-  artist = new Artist();
+  artist = new Artist(undefined);
   kopf = new Kopf();
   kosten = new Kosten();
   presse = new Presse();
@@ -131,6 +131,8 @@ export default abstract class Veranstaltung {
     this.url = undefined;
     this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
     this.endDate = DatumUhrzeit.forJSDate(this.startDate).plus({ stunden: 3 }).toJSDate;
+    this.artist.getInForMasterDate = undefined;
+    this.artist.bandTransport = undefined;
     this.staff = new Staff();
     this.kopf.confirmed = false;
     this.kopf.fotografBestellen = false;
