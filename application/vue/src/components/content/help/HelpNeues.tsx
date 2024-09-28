@@ -4,6 +4,11 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const items = [
     {
+      title: 'Infos "getIn" und "transport" für den master eingebbar.',
+      description: "September '24",
+      content: 'In der Veranstaltung kann man die FElder bei "Artist" pflegen und in der Preview werden sie angezeigt.',
+    },
+    {
       title: "Gästeliste aus Preview editierbar",
       description: "Juli '24",
       content: 'Jeder Anwender mit Recht "Kasse" darf auch die Gästeliste bearbeiten.',
