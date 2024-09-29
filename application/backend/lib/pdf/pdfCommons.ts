@@ -29,5 +29,5 @@ export async function generatePdf(html: string, pdfOptions = printoptions) {
   });
   const pdf = await page.pdf(pdfOptions);
   await browser.close();
-  return pdf;
+  return Buffer.from(pdf);
 }

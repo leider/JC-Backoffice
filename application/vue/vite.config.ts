@@ -36,6 +36,9 @@ export default defineConfig(() => {
         registerType: "autoUpdate",
         injectRegister: "auto",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
+        workbox: {
+          maximumFileSizeToCacheInBytes: 3000000,
+        },
         manifest: {
           name: "Jazzclub Backoffice",
           short_name: "BO Jazz",

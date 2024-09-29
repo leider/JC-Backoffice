@@ -9,10 +9,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "dayjs": "1.11.11",
+    "dayjs": "1.11.13",
     "deep-object-diff": "1.1.9",
     "ikalendar": "1.5.0",
-    "marked": "13.0.0"
+    "marked": "14.1.2"
   },
   "scripts": {
     "test": "../node_modules/.bin/vitest --run",
