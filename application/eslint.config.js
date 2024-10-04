@@ -11,6 +11,7 @@ export default tseslint.config(
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-expressions": "off",
       "no-console": "error",
       "no-sync": "error",
       "no-process-exit": "error",

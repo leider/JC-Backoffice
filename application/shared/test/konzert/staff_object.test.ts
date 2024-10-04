@@ -48,39 +48,39 @@ describe("Staff", () => {
 
   describe("kann sagen, ob jemand für die Kasse fehlt", () => {
     it("initial", () => {
-      expect(staff.kasseFehlt).to.be.true;
+      expect(staff.kasseFehlt).toBeTruthy();
     });
 
     it("wenn nur einer gebraucht wird", () => {
       staff.kasseVNotNeeded = true;
-      expect(staff.kasseFehlt).to.be.true;
+      expect(staff.kasseFehlt).toBeTruthy();
 
       staff.kasseNotNeeded = true;
       staff.kasseVNotNeeded = false;
-      expect(staff.kasseFehlt).to.be.true;
+      expect(staff.kasseFehlt).toBeTruthy();
     });
 
     it("wenn nur einer fehlt", () => {
       staff.kasse.push("Peter");
-      expect(staff.kasseFehlt).to.be.true;
+      expect(staff.kasseFehlt).toBeTruthy();
     });
 
     it("wenn beide da sind", () => {
       staff.kasse.push("Peter");
       staff.kasseV.push("Peter");
-      expect(staff.kasseFehlt).to.be.false;
+      expect(staff.kasseFehlt).toBeFalsy();
     });
 
     it("normal gebraucht, einer da", () => {
       staff.kasse.push("Peter");
       staff.kasseVNotNeeded = true;
-      expect(staff.kasseFehlt).to.be.false;
+      expect(staff.kasseFehlt).toBeFalsy();
     });
 
     it("verantwortlich gebraucht, einer da", () => {
       staff.kasseV.push("Peter");
       staff.kasseNotNeeded = true;
-      expect(staff.kasseFehlt).to.be.false;
+      expect(staff.kasseFehlt).toBeFalsy();
     });
   });
 });

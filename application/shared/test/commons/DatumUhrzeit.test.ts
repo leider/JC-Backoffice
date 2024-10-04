@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import dayjs from "dayjs";
 
 process.env.TZ = "Europe/Berlin";
@@ -39,7 +41,7 @@ describe("DatumUhrzeit", () => {
 
       expect(DatumUhrzeit.forGermanString("01.03.2019")?.toLocalDateTimeString).to.eql("01.03.2019, 00:00:00");
 
-      expect(DatumUhrzeit.forGermanString()).to.be.null;
+      expect(DatumUhrzeit.forGermanString()).toBeNull();
     });
 
     it("handles bullshit strings gracefully", () => {
@@ -198,11 +200,11 @@ describe("DatumUhrzeit", () => {
     const februar01 = DatumUhrzeit.forISOString("2019-02-01");
 
     it("kleiner", () => {
-      expect(januar01.istVor(februar01)).to.be.true;
+      expect(januar01.istVor(februar01)).toBeTruthy();
     });
 
     it("grösser", () => {
-      expect(februar01.istNach(januar01)).to.be.true;
+      expect(februar01.istNach(januar01)).toBeTruthy();
     });
 
     it("formatiert Monat Jahr kompakt", () => {
@@ -242,8 +244,8 @@ describe("DatumUhrzeit", () => {
     });
 
     it("findet gerade Monate", () => {
-      expect(DatumUhrzeit.forISOString("2020-04-30").istGeraderMonat).to.be.true;
-      expect(DatumUhrzeit.forISOString("2020-11-30").istGeraderMonat).to.be.false;
+      expect(DatumUhrzeit.forISOString("2020-04-30").istGeraderMonat).toBeTruthy();
+      expect(DatumUhrzeit.forISOString("2020-11-30").istGeraderMonat).toBeFalsy();
     });
   });
 

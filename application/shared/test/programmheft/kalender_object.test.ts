@@ -9,7 +9,7 @@ describe("Kalender", () => {
       const kalender = new Kalender();
       expect(kalender.id).to.eql("2018/01");
       expect(kalender.year()).to.eql("2018");
-      expect(kalender.text).is.not.undefined;
+      expect(kalender.text).toBeDefined();
       expect(kalender.asEvents()).to.eql([]);
     });
 
@@ -135,7 +135,7 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
         },
       ]);
       const nov29 = DatumUhrzeit.forGermanStringOrNow("29.11.20", "01:13");
-      expect(new EmailEvent(events[0]).shouldSendOn(nov29)).to.be.true;
+      expect(new EmailEvent(events[0]).shouldSendOn(nov29)).toBeTruthy();
     });
   });
 

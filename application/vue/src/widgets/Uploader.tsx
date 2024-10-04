@@ -20,7 +20,8 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
 
   useEffect(
     () => {
-      setOptions(form.getFieldValue(name) || []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setOptions(form.getFieldValue(name as any) || []);
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [form],
   );
@@ -37,8 +38,9 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
       const newVeranstaltung = await uploadFile(formData);
       setFileList([]);
       const strings = name.reduce((prev, curr) => prev[curr], newVeranstaltung);
-      form.setFieldValue(name, strings);
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      form.setFieldValue(name as any, strings);
+    } catch {
       // eslint-disable-next-line no-console
       console.error("Oops");
     } finally {

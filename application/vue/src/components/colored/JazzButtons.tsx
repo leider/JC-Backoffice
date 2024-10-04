@@ -11,9 +11,9 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ItemType } from "antd/es/menu/hooks/useItems";
 import isNil from "lodash/isNil";
 import { Changelog } from "@/components/history/Changelog.tsx";
+import { ItemType } from "antd/es/menu/interface";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -146,8 +146,6 @@ export function MoreButton({ disabled }: ButtonProps) {
     disabled: isDirty(),
   };
 
-  const exportItem = isVermietung ? vermietungExport : konzertExport;
-
   const items: ItemType[] = [
     {
       key: "delete",
@@ -157,7 +155,7 @@ export function MoreButton({ disabled }: ButtonProps) {
       disabled: getKonzert().kopf.confirmed,
     },
     { key: "copy", label: "Kopieren", icon: <IconForSmallBlock iconName="Files" /> },
-    exportItem,
+    (isVermietung ? vermietungExport : konzertExport) as ItemType,
     { key: "history", label: "Änderungsverlauf", icon: <IconForSmallBlock iconName="GraphUp" /> },
   ];
 

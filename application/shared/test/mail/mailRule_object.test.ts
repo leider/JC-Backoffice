@@ -20,8 +20,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur Mittowchs", () => {
-      expect(rule.shouldSend(mittwochFeb14)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(mittwochFeb14)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende korrekt", () => {
@@ -46,8 +46,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur am 5.", () => {
-      expect(rule.shouldSend(montagFeb5)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(montagFeb5)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende für Februar korrekt", () => {
@@ -78,8 +78,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur am 5.", () => {
-      expect(rule.shouldSend(montagFeb5)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(montagFeb5)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende für Februar korrekt", () => {
@@ -110,8 +110,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur am 16.", () => {
-      expect(rule.shouldSend(feb16)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(feb16)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende für Februar korrekt", () => {
@@ -142,8 +142,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur Montags", () => {
-      expect(rule.shouldSend(montagFeb5)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(montagFeb5)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende im Februar korrekt", () => {
@@ -174,8 +174,8 @@ describe("MailRule", () => {
     });
 
     it("sendet nur Montags", () => {
-      expect(rule.shouldSend(montagFeb5)).to.be.true;
-      expect(rule.shouldSend(dienstagFeb13)).to.be.false;
+      expect(rule.shouldSend(montagFeb5)).toBeTruthy();
+      expect(rule.shouldSend(dienstagFeb13)).toBeFalsy();
     });
 
     it("errechnet Beginn und Ende im Februar korrekt", () => {
