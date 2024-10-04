@@ -1781,7 +1781,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20":
+"@types/node@npm:20.16.10":
   version: 20.16.10
   resolution: "@types/node@npm:20.16.10"
   dependencies:
