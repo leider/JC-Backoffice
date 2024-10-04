@@ -53,6 +53,6 @@
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint lib/**/*.ts rest/**/*.ts *.ts",
     "clean-ts": "rm -rf lib/**/*.js || rm -rf rest/*.js || rm -rf configure.js || rm -rf configureApp.js || rm -rf initWinston.js || rm -rf start.js || :",
-    "sass": "../node_modules/.bin/sass sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
+    "sass": "../node_modules/.bin/sass --silence-deprecation=color-functions,mixed-decls sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
   }
 }
