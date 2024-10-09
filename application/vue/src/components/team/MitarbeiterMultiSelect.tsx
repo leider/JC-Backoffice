@@ -27,7 +27,7 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
       {user.kann.map((kann) => {
         return (
           <Tag key={kann} color={colorFor(kann)}>
-            {kann}
+            {kann === "Master" ? "Abendverantwortlicher" : kann}
           </Tag>
         );
       })}
@@ -52,7 +52,11 @@ function InnerSelect({
   const filterOption = (searchString: string, row?: UserWithKann) =>
     row?.value.toLowerCase().includes(searchString.toLowerCase()) ||
     row?.label.toLowerCase().includes(searchString.toLowerCase()) ||
-    row?.kann.join(",").toLowerCase().includes(searchString.toLowerCase()) ||
+    row?.kann
+      .map((k) => (k === "Master" ? "Abendverantwortlicher" : k))
+      .join(",")
+      .toLowerCase()
+      .includes(searchString.toLowerCase()) ||
     false;
 
   const filtered = usersAsOptions.filter((u) => !value?.includes(u.value));

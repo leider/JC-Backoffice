@@ -19,7 +19,7 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
     const rows: { title: string; sectionName: StaffType }[] = [];
     if (!staff.modNotNeeded) {
       rows.push({
-        title: "Master",
+        title: "Abendverantwortlicher",
         sectionName: "mod",
       });
     }

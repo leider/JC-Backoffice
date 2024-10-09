@@ -35,7 +35,7 @@ export default function EditableStaffRows({
 }) {
   return (
     <>
-      <StaffRow label="Master" usersAsOptions={usersAsOptions} sectionName="mod" />
+      <StaffRow label="Abendverantwortlicher" usersAsOptions={usersAsOptions} sectionName="mod" />
       {!forVermietung && (
         <>
           <StaffRow usersAsOptions={usersAsOptions} label="Kasse (Verantwortlich)" sectionName="kasseV" />

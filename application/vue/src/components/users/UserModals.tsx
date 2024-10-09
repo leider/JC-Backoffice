@@ -220,17 +220,17 @@ export function IchKannFields() {
         Ich kann helfen bei...
       </Divider>
       <Row gutter={8}>
-        <Col span={6}>
+        <Col span={5}>
           <CheckItem name="kannKasse" label="Kasse" />
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <CheckItem name="kannTon" label="Ton" />
         </Col>
-        <Col span={6}>
+        <Col span={5}>
           <CheckItem name="kannLicht" label="Licht" />
         </Col>
-        <Col span={6}>
-          <CheckItem name="kannMaster" label="Master" />
+        <Col span={9}>
+          <CheckItem name="kannMaster" label="Abendverantwortlicher" />
         </Col>
       </Row>
     </>

@@ -67,7 +67,7 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
       <Row gutter={12}>
         <Col span={24}>
           <StaffList
-            header="Master"
+            header="Abendverantwortlicher"
             staff={veranstaltung.staff}
             parts={{ verant: "mod" }}
             notNeeded={veranstaltung.staff.modNotNeeded}
