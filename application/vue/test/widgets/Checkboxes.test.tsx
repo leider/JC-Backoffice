@@ -10,6 +10,10 @@ import { Form } from "antd";
 const { widget, updateWidget, form } = formWidgetHelper;
 
 describe("Checkbox Widgets", () => {
+  async function click() {
+    return widget().clickByText("testme");
+  }
+
   describe("Threeway renders", () => {
     beforeEach(async () => {
       await waitFor(() => {
@@ -22,22 +26,22 @@ describe("Checkbox Widgets", () => {
     });
 
     it("toggles 'true', 'false', 'undefined'", async () => {
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(true);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(false);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(undefined);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(true);
       });
@@ -56,17 +60,17 @@ describe("Checkbox Widgets", () => {
     });
 
     it("toggles 'true', 'false'", async () => {
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(true);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(false);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(true);
       });
@@ -89,17 +93,17 @@ describe("Checkbox Widgets", () => {
     });
 
     it("toggles 'true', 'false'", async () => {
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(false);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(true);
       });
 
-      widget().clickByText("testme");
+      click();
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(false);
       });

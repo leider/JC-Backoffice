@@ -5,15 +5,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 const { widget, updateWidget, form } = formWidgetHelper;
 
-// jest.mock("../../FormContext", () => ({
-//   useFormContext: () => ({
-//     canEdit: true,
-//     tFunction: t,
-//     // eslint-disable-next-line @typescript-eslint/no-empty-function
-//     form: { validateFields: () => {} },
-//   }),
-// }));
-//
 describe("Simple (Text) Input Widget", () => {
   describe("renders values when only standard properties are set as", () => {
     beforeEach(async () => {

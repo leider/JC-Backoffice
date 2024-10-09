@@ -102,7 +102,7 @@ describe("Number Input Widget", () => {
   });
 
   describe("executes callback on value change", () => {
-    let tunnelVal: any;
+    let tunnelVal: number;
     beforeEach(async () => {
       await waitFor(() => {
         updateWidget(<NumberInput name={"test"} label={"testme"} decimals={0} onChange={(val) => (tunnelVal = val)} />);
@@ -268,10 +268,10 @@ describe("Number Input Widget", () => {
 
       // @ts-expect-error false positive
       expect(inputField).toBeInTheDocument();
-      await fireEvent.change(inputField, { target: { value: "1" } });
+      fireEvent.change(inputField, { target: { value: "1" } });
       expect(inputField.value).toEqual("1");
 
-      await fireEvent.change(inputField, { target: { value: "9" } });
+      fireEvent.change(inputField, { target: { value: "9" } });
       expect(inputField.value).toEqual("9");
     });
 
@@ -282,20 +282,20 @@ describe("Number Input Widget", () => {
 
       // @ts-expect-error false positive
       expect(inputField).toBeInTheDocument();
-      await fireEvent.change(inputField, { target: { value: "1" } });
+      fireEvent.change(inputField, { target: { value: "1" } });
       expect(inputField.value).toEqual("1");
 
-      await fireEvent.blur(inputField);
+      fireEvent.blur(inputField);
       expect(Number(inputField.value.replace(",", "."))).toEqual(2);
 
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(2);
       });
 
-      await fireEvent.change(inputField, { target: { value: "9" } });
+      fireEvent.change(inputField, { target: { value: "9" } });
       expect(inputField.value).toEqual("9");
 
-      await fireEvent.blur(inputField);
+      fireEvent.blur(inputField);
       expect(Number(inputField.value.replace(",", "."))).toEqual(7);
 
       await waitFor(() => {
