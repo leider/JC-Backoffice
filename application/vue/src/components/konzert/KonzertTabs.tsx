@@ -29,6 +29,10 @@ export default function KonzertTabs() {
     form,
     preserve: true,
   });
+  const brauchtPresse = Form.useWatch("brauchtPresse", {
+    form,
+    preserve: true,
+  });
 
   useEffect(() => {
     const page = search.get("page") ?? "";
@@ -102,14 +106,16 @@ export default function KonzertTabs() {
         children: <TabHotel />,
       },
       kasseTab,
-      {
-        key: "presse",
-        label: <TabLabel type="presse" title="Presse" />,
-        children: <TabPresse />,
-      },
     ];
     if (onlyKasse) {
       return setTabs([gaesteTab, kasseTab]);
+    }
+    if (brauchtPresse) {
+      allTabs.push({
+        key: "presse",
+        label: <TabLabel type="presse" title="Presse" />,
+        children: <TabPresse />,
+      });
     }
     if (brauchtHotel) {
       setTabs(allTabs);
@@ -118,7 +124,7 @@ export default function KonzertTabs() {
       result.splice(4, 1);
       setTabs(result);
     }
-  }, [brauchtHotel, optionen, activePage, onlyKasse, TabLabel]);
+  }, [brauchtHotel, optionen, activePage, onlyKasse, TabLabel, brauchtPresse]);
 
   return (
     <Tabs

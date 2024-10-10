@@ -1,5 +1,4 @@
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import { withoutNullOrUndefinedStrippedBy } from "jc-shared/commons/comparingAndTransforming.ts";
@@ -24,7 +23,7 @@ export type TeamFilterObject = {
 };
 
 function filterPresse(ver: Veranstaltung, filterObj: TeamFilterObject) {
-  if (ver.isVermietung && !(ver as Vermietung).brauchtPresse) {
+  if (!ver.brauchtPresse) {
     return true;
   }
   const filter = filterObj.presse;
@@ -75,6 +74,7 @@ function filterUnterkunft(ver: Veranstaltung, filter: TeamFilterObject) {
   }
   return (ver as Konzert).unterkunft.bestaetigt === filter.hotelBestaetigt;
 }
+
 export default function applyTeamFilter(filterOri: TeamFilterObject) {
   const filter = withoutNullOrUndefinedStrippedBy(filterOri);
   return (ver: Veranstaltung) => {

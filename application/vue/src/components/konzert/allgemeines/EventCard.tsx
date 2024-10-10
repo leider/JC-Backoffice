@@ -56,7 +56,7 @@ export default function EventCard() {
     [orte],
   );
 
-  function Checker({ name, label, disabled }: { label: string; name: string[]; disabled?: boolean }) {
+  function Checker({ name, label, disabled }: { label: string; name: string | string[]; disabled?: boolean }) {
     return (
       <Col span={6}>
         <CheckItem name={name} label={label} disabled={disabled} />
@@ -69,6 +69,7 @@ export default function EventCard() {
       <Row gutter={12}>
         <Checker label="Ist bestätigt" name={["kopf", "confirmed"]} disabled={!isBookingTeam} />
         <Checker label="Technik ist geklärt" name={["technik", "checked"]} />
+        <Checker label="Braucht Presse" name="brauchtPresse" />
         <Checker label="Presse OK" name={["presse", "checked"]} />
         <Checker label="Ist abgesagt" name={["kopf", "abgesagt"]} />
         <Checker label="Braucht Hotel" name={["artist", "brauchtHotel"]} />

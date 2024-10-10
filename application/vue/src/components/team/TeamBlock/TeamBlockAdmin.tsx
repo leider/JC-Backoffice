@@ -75,10 +75,12 @@ function Extras({ veranstaltung }: { veranstaltung: Konzert }) {
     const taggies: { label: string; color: boolean }[] = [
       { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
       { label: "Technik", color: technikOK },
-      { label: "Presse", color: presseOK },
-      { label: "Homepage", color: homepage },
-      { label: "Social Media", color: social },
     ];
+    if (veranstaltung.brauchtPresse) {
+      taggies.push({ label: "Presse", color: presseOK });
+    }
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
+
     if (abgesagt) {
       taggies.unshift({ label: "ABGESAGT", color: false });
     }

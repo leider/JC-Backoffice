@@ -47,6 +47,14 @@ const vermietung1 = new Vermietung({
   kopf: { confirmed: true, ort: "Jazzclub", titel: "Vermietung 1" },
   presse: { checked: true },
 });
+const vermietung2 = new Vermietung({
+  startDate: "2019-05-28T20:00:00.000Z",
+  endDate: "2019-05-28T23:00:00.000Z",
+  brauchtBar: true,
+  brauchtPresse: true,
+  kopf: { confirmed: true, ort: "Jazzclub", titel: "Vermietung 2" },
+  presse: { checked: false },
+});
 
 // Konzerte
 const konzert1 = new Konzert({
@@ -75,8 +83,9 @@ const konzert4 = new Konzert({
   endDate: "2019-07-29T23:00:00.000Z",
   kopf: { titel: "Konzert 4", ort: "Jazzclub", confirmed: true },
   staff: { kasseVNotNeeded: false, kasseV: ["user1"] },
+  brauchtPresse: false,
 });
 
 export const testUsers = [user1, user2, user3, user4, user5];
-export const testVermietungen = [vermietung1];
+export const testVermietungen = [vermietung1, vermietung2];
 export const testKonzerte = [konzert1, konzert2, konzert3, konzert4];

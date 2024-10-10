@@ -6,7 +6,6 @@ import Veranstaltung, { MinimalVeranstaltung } from "../veranstaltung/veranstalt
 export default class Vermietung extends Veranstaltung {
   saalmiete? = undefined;
   brauchtTechnik = false;
-  brauchtPresse = false;
   brauchtBar = false;
   art: "Angebot" | "Vertrag" | "Rechnung" = "Angebot";
 
@@ -30,7 +29,7 @@ export default class Vermietung extends Veranstaltung {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
-    super(object);
+    super(object ?? { brauchtPresse: false });
     if (object) {
       Object.assign(this, {
         angebot: new Angebot(object.angebot),
@@ -38,7 +37,6 @@ export default class Vermietung extends Veranstaltung {
         vertragspartner: new Kontakt(object.vertragspartner),
         saalmiete: object.saalmiete,
         brauchtTechnik: object.brauchtTechnik,
-        brauchtPresse: object.brauchtPresse,
         brauchtBar: object.brauchtBar,
         art: object.art,
       });

@@ -16,7 +16,7 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
     const presseOK = vermietung.presse.checked;
     const homepage = vermietung.kopf.kannAufHomePage;
     const social = vermietung.kopf.kannInSocialMedia;
-    const bar = vermietung.brauchtPresse;
+    const bar = vermietung.brauchtBar;
 
     const taggies: { label: string; color: boolean }[] = [{ label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed || false }];
     if (vermietung.brauchtTechnik) {

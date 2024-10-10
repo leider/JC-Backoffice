@@ -21,8 +21,8 @@ export function byDateRangeInAscendingOrder({
   const alwaysTrue = () => true;
 
   const konzerte = konzertestore.byDateRangeInAscendingOrder(from, to);
-  const filteredKonzerte = konzerte.filter(konzerteFilter || alwaysTrue);
+  const filteredKonzerte = konzerte.filter(konzerteFilter ?? alwaysTrue);
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(from, to);
-  const filteredVermietungen = vermietungen.filter(vermietungenFilter || alwaysTrue);
+  const filteredVermietungen = vermietungen.filter(vermietungenFilter ?? alwaysTrue);
   return sortBy([...filteredKonzerte, ...filteredVermietungen], "startDate");
 }

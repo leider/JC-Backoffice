@@ -39,11 +39,15 @@ ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
 async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
   const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
+  function filterFunc(ver: Veranstaltung) {
+    return !ver.presse.checked && ver.kopf.confirmed && ver.brauchtPresse;
+  }
+
   const kaputteZuSendende = byDateRangeInAscendingOrder({
     from: start,
     to: maxDay,
-    konzerteFilter: (konzert) => !konzert.presse.checked && konzert.kopf.confirmed,
-    vermietungenFilter: (vermietung) => vermietung.brauchtPresse && !vermietung.presse.checked && vermietung.kopf.confirmed,
+    konzerteFilter: filterFunc,
+    vermietungenFilter: filterFunc,
   });
   if (kaputteZuSendende.length === 0) {
     return;

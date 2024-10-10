@@ -23,6 +23,7 @@ export default abstract class Veranstaltung {
   presse = new Presse();
   staff = new Staff();
   technik = new Technik();
+  brauchtPresse = true;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(object?: any) {
@@ -30,6 +31,7 @@ export default abstract class Veranstaltung {
       Object.assign(this, {
         id: object.id,
         ghost: object.ghost,
+        brauchtPresse: object.brauchtPresse ?? true,
         startDate: Misc.stringOrDateToDate(object.startDate),
         endDate: Misc.stringOrDateToDate(object.endDate),
         url: object.url,

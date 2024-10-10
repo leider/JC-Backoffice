@@ -137,9 +137,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
                 <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
                 {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} />}
                 {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
-                {(!forVermietung || (veranstaltung as Vermietung).brauchtPresse) && (
-                  <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />
-                )}
+                {veranstaltung.brauchtPresse && <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />}
                 <ButtonPreview veranstaltung={veranstaltung} />
               </>
             )}

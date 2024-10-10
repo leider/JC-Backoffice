@@ -51,13 +51,15 @@ describe("Rules Mailsender", () => {
       "## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:",
     );
 
+    expect(message.markdown).to.include(`### [Vermietung 2](http://localhost:1970/vue/vermietung/?page=presse)
+#### Dienstag, 28. Mai 2019 um 22:00 im Jazzclub Karlsruhe`);
+
     expect(message.markdown).to.include(`### [Konzert 2](http://localhost:1970/vue/konzert/konzert2?page=presse)
 #### Mittwoch, 29. Mai 2019 um 22:00 im Jazzclub Karlsruhe`);
 
     expect(message.markdown).to.include(`### [Konzert 3](http://localhost:1970/vue/konzert/?page=presse)
 #### Samstag, 29. Juni 2019 um 22:00 im Jazzclub Karlsruhe`);
 
-    expect(message.markdown).to.include(`### [Konzert 4](http://localhost:1970/vue/konzert/?page=presse)
-#### Montag, 29. Juli 2019 um 22:00 im Jazzclub Karlsruhe`);
+    expect(message.markdown, "Konzert 4 braucht keine Presse").to.not.include(`### [Konzert 4]`);
   });
 });

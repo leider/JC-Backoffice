@@ -51,6 +51,10 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
     form,
     preserve: true,
   });
+  const brauchtPresse = Form.useWatch("brauchtPresse", {
+    form,
+    preserve: true,
+  });
   const presseOK = Form.useWatch(["presse", "checked"], {
     form,
     preserve: true,
@@ -85,10 +89,11 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
     const taggies: { label: string; color: boolean }[] = [
       { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
       { label: "Technik", color: technikOK },
-      { label: "Presse", color: presseOK },
-      { label: "Homepage", color: homepage },
-      { label: "Social Media", color: social },
     ];
+    if (brauchtPresse) {
+      taggies.push({ label: "Presse", color: presseOK });
+    }
+    taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
     if (abgesagt) {
       taggies.unshift({ label: "ABGESAGT", color: false });
     }
@@ -96,7 +101,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
       taggies.push({ label: "Hotel", color: hotel });
     }
     setTagsForTitle(headerTags(taggies));
-  }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel]);
+  }, [confirmed, abgesagt, technikOK, presseOK, homepage, social, brauchtHotel, hotel, brauchtPresse]);
 
   useEffect(() => {
     setIsOrga(currentUser.accessrights.isOrgaTeam);
