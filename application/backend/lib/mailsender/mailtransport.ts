@@ -20,6 +20,10 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
 
   const senderAddress = isForDatev ? conf.senderAddressDatev : conf.senderAddress;
   const senderName = conf.senderName + (isForDatev ? " für Datev" : "");
+  const attachments = message.attachments ?? [];
+  if (message.pdfBufferAndName) {
+    attachments.push({ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf as Buffer });
+  }
   return {
     from: Message.formatEMailAddress(message.senderName(senderName), message.senderAddress(senderAddress)),
     to: message.to || message.senderAddress(senderAddress),
@@ -28,7 +32,7 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
     replyTo: message.replyTo,
     text: mbRenderer.text,
     html: mbRenderer.html,
-    attachments: message.pdfBufferAndName && [{ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf as Buffer }],
+    attachments,
   };
 }
 

@@ -37,7 +37,7 @@ export default defineConfig(() => {
         injectRegister: "auto",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
         workbox: {
-          maximumFileSizeToCacheInBytes: 3000000,
+          maximumFileSizeToCacheInBytes: 4000000,
         },
         manifest: {
           name: "Jazzclub Backoffice",

@@ -7,9 +7,10 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface UploaderParams {
-  form: FormInstance<Konzert | Vermietung>;
+  form: FormInstance<Konzert> | FormInstance<Vermietung>;
   name: string[];
   typ: string;
   onlyImages?: boolean;
@@ -17,11 +18,12 @@ interface UploaderParams {
 
 export default function Uploader({ form, name, typ, onlyImages = false }: UploaderParams) {
   const [options, setOptions] = useState<string[]>([]);
+  const genericForm = form as unknown as FormInstance<Veranstaltung>;
 
   useEffect(
     () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setOptions(form.getFieldValue(name as any) || []);
+      setOptions(genericForm.getFieldValue(name as any) || []);
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [form],
   );
@@ -29,7 +31,7 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
   async function saveFiles() {
     setUploading(true);
     const formData = new FormData();
-    formData.append("id", form.getFieldValue("id") || "");
+    formData.append("id", genericForm.getFieldValue("id") || "");
     formData.append("typ", typ);
     fileList.forEach((file) => {
       formData.append("datei", file as RcFile, file.name);
@@ -39,7 +41,7 @@ export default function Uploader({ form, name, typ, onlyImages = false }: Upload
       setFileList([]);
       const strings = name.reduce((prev, curr) => prev[curr], newVeranstaltung);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      form.setFieldValue(name as any, strings);
+      genericForm.setFieldValue(name as any, strings);
     } catch {
       // eslint-disable-next-line no-console
       console.error("Oops");

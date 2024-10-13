@@ -4,6 +4,11 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const items = [
     {
+      title: "Attachments beim Mailsenden.",
+      description: "Oktober '24",
+      content: "Du kannst jetzt Attachments an eine Mail hängen.",
+    },
+    {
       title: "Möglichkeit, ein Konzert ohne Presse zu definieren.",
       description: "Oktober '24",
       content:

@@ -11,6 +11,8 @@ import misc from "jc-shared/commons/misc.js";
 import { calculateChangedAndDeleted } from "jc-shared/commons/compareObjects.js";
 import { checkSuperuser } from "./checkAccessHandlers.js";
 import User from "jc-shared/user/user.js";
+import fs from "fs/promises";
+import parseFormData from "../lib/commons/parseFormData.js";
 
 const app = express();
 
@@ -36,7 +38,19 @@ app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
 // Mailinglisten und Senden
 
 app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
-  const message = Message.fromJSON(req.body);
+  const [fields, files] = await parseFormData(req);
+
+  const message = Message.fromJSON(JSON.parse(fields.message[0]));
+  if (files.dateien) {
+    message.attachments = await Promise.all(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      files.dateien.map(async (datei: any) => {
+        const content = await fs.readFile(datei.path);
+        const filename = datei.originalFilename.replace(/[()/]/g, "_");
+        return { filename, content };
+      }),
+    );
+  }
   await mailtransport.sendMail(message);
   resToJson(res);
 });

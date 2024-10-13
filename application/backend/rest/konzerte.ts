@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { Form } from "multiparty";
 import fs from "fs";
 import path from "path";
 
@@ -14,6 +13,7 @@ import store from "../lib/konzerte/konzertestore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
+import parseFormData from "../lib/commons/parseFormData.js";
 
 const uploadDir = conf.uploadDir;
 const filesDir = conf.filesDir;
@@ -174,19 +174,7 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
     return;
   }
 
-  const upload = (req1: Request) =>
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    new Promise<any[]>((resolve, reject) => {
-      new Form().parse(req1, function (err, fields, files) {
-        if (err) {
-          return reject(err);
-        }
-
-        return resolve([fields, files]);
-      });
-    });
-
-  const [fields, files] = await upload(req);
+  const [fields, files] = await parseFormData(req);
 
   const typElement = fields.typ[0];
   const idElement = fields.id[0];

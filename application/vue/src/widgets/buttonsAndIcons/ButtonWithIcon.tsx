@@ -1,5 +1,5 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
-import React, { CSSProperties, forwardRef, Ref } from "react";
+import React, { CSSProperties, forwardRef } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
@@ -38,7 +38,7 @@ const ButtonWithIcon = forwardRef(function (
     testid?: string;
     alwaysText?: boolean;
   },
-  ref: Ref<HTMLElement>,
+  ref: any, // eslint-disable-line @typescript-eslint/no-explicit-any
 ) {
   const token = theme.useToken().token;
 

@@ -5,7 +5,6 @@ import User from "jc-shared/user/user";
 import Kalender from "jc-shared/programmheft/kalender";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Orte from "jc-shared/optionen/orte";
-import Message from "jc-shared/mail/message";
 import { Mailingliste } from "jc-shared/user/users";
 import MailRule from "jc-shared/mail/mailRule";
 import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
@@ -380,11 +379,11 @@ export async function saveImagenames(rows: ImageOverviewRow[]) {
 }
 
 //Mails intern
-export async function sendMail(message: Message) {
+export async function sendMail(formData: FormData) {
   return standardFetch({
     method: "POST",
     url: "/rest/rundmail",
-    data: message,
+    data: formData,
     contentType: "json",
   });
 }

@@ -14,12 +14,12 @@ import konzerteRestApp from "./konzerte.js";
 import vermietungenRestApp from "./vermietungen.js";
 import wikiApp from "./wiki.js";
 import User from "jc-shared/user/user.js";
-import { Form } from "multiparty";
 import Message from "jc-shared/mail/message.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import fs from "fs/promises";
 import { checkSuperuser } from "./checkAccessHandlers.js";
+import parseFormData from "../lib/commons/parseFormData.js";
 
 const app = express();
 
@@ -50,19 +50,7 @@ app.post("/imagenames", [checkSuperuser], async (req: Request, res: Response) =>
 });
 
 app.post("/beleg", async (req: Request, res: Response) => {
-  const upload = (req1: Request) =>
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-    new Promise<any[]>((resolve, reject) => {
-      new Form().parse(req1, function (err, fields, files) {
-        if (err) {
-          return reject(err);
-        }
-
-        return resolve([fields, files]);
-      });
-    });
-
-  const [fields, files] = await upload(req);
+  const [fields, files] = await parseFormData(req);
 
   const datum = fields.datum[0];
   const kommentar = fields.kommentar[0];

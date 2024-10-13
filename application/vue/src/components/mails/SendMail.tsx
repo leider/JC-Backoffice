@@ -2,7 +2,7 @@ import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Form, Row, Tag } from "antd";
+import { Col, Form, Row, Tag, UploadFile } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS, userGruppen } from "jc-shared/user/user";
@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import MitarbeiterMultiSelect from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import UploaderForMail from "@/widgets/UploaderForMail.tsx";
+import { RcFile } from "antd/es/upload";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -167,13 +169,21 @@ export default function SendMail() {
         currentUser.name,
         currentUser.email,
       );
+      const formData = new FormData();
+      formData.append("message", JSON.stringify(result));
       result.setBcc(addresses);
-      await sendMail(result);
+      if (fileList.length > 0) {
+        fileList.forEach((file) => {
+          formData.append("dateien", file as RcFile, file.name);
+        });
+      }
+      await sendMail(formData);
       initializeForm();
       showSuccess({ title: "Erfolgreich", text: "Deine Mail wurde gesendet." });
       navigate("/");
     });
   }
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   return (
     <Form
@@ -226,6 +236,9 @@ export default function SendMail() {
         <Row gutter={12}>
           <Col span={24}>
             <TextField name="subject" label="Subject" required />
+          </Col>
+          <Col span={24}>
+            <UploaderForMail fileList={fileList} setFileList={setFileList} />
           </Col>
           <Col span={24}>
             <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" options={editorOptions} />

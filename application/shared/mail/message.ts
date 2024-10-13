@@ -7,6 +7,7 @@ export default class Message {
   to!: string;
   bcc!: string;
   pdfBufferAndName?: { pdf: Buffer; name: string };
+  attachments?: { filename: string; content: Buffer }[];
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   static fromJSON(json: any) {
