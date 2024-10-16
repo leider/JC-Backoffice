@@ -166,6 +166,10 @@ export async function saveVermietungToShare(vermietung: Vermietung) {
     vermietung.startDatumUhrzeit.jahr.toString(10),
     `${vermietung.startDatumUhrzeit.monatTag} ${vermietung.kopf.titel}`,
   );
-  await Fs.mkdir(directory, { recursive: true });
-  return Fs.writeFile(Path.join(directory, filenamepdf), pdf);
+  try {
+    await Fs.mkdir(directory, { recursive: true });
+    return Fs.writeFile(Path.join(directory, filenamepdf), pdf);
+  } catch {
+    // we can do nothing here...
+  }
 }
