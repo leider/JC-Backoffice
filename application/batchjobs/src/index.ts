@@ -34,7 +34,7 @@ async function informAdmin(err?: Error, counter?: number) {
       subject: "[B-O Jazzclub] Mails sent",
       markdown: `${counter} nightly Mails for Presse have been sent.
             
-${err ? "Es gibt Fehler! " + err.message : ""}`,
+${err ? "Es gibt Fehler! " + err.message + "\n\n" + err : ""}`,
     });
     message.setTo(user!.email);
     await mailtransport.sendMail(message);
