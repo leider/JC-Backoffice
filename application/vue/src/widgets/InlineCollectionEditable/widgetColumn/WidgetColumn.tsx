@@ -48,6 +48,7 @@ interface IWidgetColumn {
    */
   uniqueValuesValidator?: Rule;
   usersAsAoptions?: { label: string; value: string }[];
+  embeddedArrayPath?: string[];
 }
 
 /**
@@ -61,6 +62,7 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
   colSpans,
   disabled,
   uniqueValuesValidator,
+  embeddedArrayPath,
 }: IWidgetColumn): React.ReactElement => {
   const commonProps = {
     name: [name.toString(10)].concat(desc.fieldName),
@@ -108,9 +110,18 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
     case "boolean":
       Widget = <CheckItem {...commonProps} onChange={desc.onChange} />;
       break;
-    case "date":
-      Widget = <StartEndDateOnlyPickers {...commonProps} />;
+    case "date": {
+      const startEndProps = {
+        names: (desc.fieldName as string[]).map((fName) => embeddedArrayPath?.concat([name.toString(10)]).concat(fName)),
+        label: "",
+        required: desc.required,
+        initialValue: desc.initialValue,
+        pattern: desc.pattern,
+        disabled: disabled || false,
+      };
+      Widget = <StartEndDateOnlyPickers {...startEndProps} />;
       break;
+    }
   }
   return desc.idx === 0 ? (
     <Col flex={"auto"}>{Widget}</Col>

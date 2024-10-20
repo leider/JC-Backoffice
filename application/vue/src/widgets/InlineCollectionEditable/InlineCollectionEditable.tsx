@@ -109,7 +109,7 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
                       uniqueValuesValidator = {
                         validator: (_: any, value: any) => {
                           const fieldsValue = form.getFieldsValue(embeddedArrayPath);
-                          const dupes = isDuplicate(embeddedArrayPath, desc.fieldName, fieldsValue, value);
+                          const dupes = isDuplicate(embeddedArrayPath, desc.fieldName as string, fieldsValue, value);
                           return !dupes ? Promise.resolve() : Promise.reject(new Error("Doppelter Wert"));
                         },
                       };
@@ -118,6 +118,7 @@ const InlineCollectionEditable: FC<IInlineCollectionEditable> = ({
                       <WidgetColumn
                         desc={desc}
                         name={name}
+                        embeddedArrayPath={embeddedArrayPath}
                         key={createKey(desc, name)}
                         colSpans={colSpans}
                         disabled={desc.disabled}

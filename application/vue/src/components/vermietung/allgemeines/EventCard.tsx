@@ -2,10 +2,10 @@ import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
-import StartEndPickers from "@/widgets/StartEndPickers";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
+import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 
 export default function EventCard() {
   return (

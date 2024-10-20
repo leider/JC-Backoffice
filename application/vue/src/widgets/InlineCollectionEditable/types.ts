@@ -9,9 +9,8 @@ export type ColDescWithIdx = CollectionColDesc & {
 
 export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl";
 
-export type CollectionColDesc = Omit<ColDesc, "width" | "fieldName"> & {
+export type CollectionColDesc = Omit<ColDesc, "width"> & {
   width: CollectionColumnWidth;
-  fieldName: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only

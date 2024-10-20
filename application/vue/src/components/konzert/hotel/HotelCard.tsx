@@ -4,12 +4,12 @@ import { Col, Form, Row } from "antd";
 import StartEndDateOnlyPickers from "@/components/konzert/hotel/StartEndDateOnlyPickers.tsx";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { fromFormObject } from "@/components/konzert/konzertCompUtils";
 import CheckItem from "@/widgets/CheckItem";
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export default function HotelCard() {
   const konzertContext = useContext(KonzertContext);
@@ -22,24 +22,24 @@ export default function HotelCard() {
 
   const hotelName = Form.useWatch(["hotel", "name"]);
 
-  const startAndEnd = Form.useWatch(["startAndEnd"], {
+  const eventStartDate = Form.useWatch(["startDate"], {
     form,
     preserve: true,
   });
 
   useEffect(
     () => {
-      const start = startAndEnd?.start as Dayjs;
+      const start = dayjs(eventStartDate);
       if (start) {
-        const hotelDatum: Dayjs[] = form.getFieldValue(["unterkunft", "anAbreise"]);
-        if (!hotelDatum[0].isAfter(start.subtract(7, "day"))) {
-          const startCopy = cloneDeep(start);
-          const end = startCopy.add(1, "day");
-          form.setFieldValue(["unterkunft", "anAbreise"], [startCopy, end]);
+        const hotelDatum: Date = form.getFieldValue(["unterkunft", "anreiseDate"]);
+        if (!dayjs(hotelDatum).isAfter(start.subtract(7, "day"))) {
+          const end = start.add(1, "day");
+          form.setFieldValue(["unterkunft", "anreiseDate"], start);
+          form.setFieldValue(["unterkunft", "abreiseDate"], end);
         }
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [startAndEnd],
+    [eventStartDate],
   );
 
   useEffect(
@@ -63,7 +63,7 @@ export default function HotelCard() {
   );
 
   function updateSumme() {
-    const konzert = fromFormObject(form);
+    const konzert = new Konzert(cloneDeep(form.getFieldsValue(true)));
     setSumme(konzert.unterkunft.roomsTotalEUR);
     setAnzahlNacht(konzert.unterkunft.anzNacht);
   }
@@ -73,9 +73,12 @@ export default function HotelCard() {
       <Row gutter={12}>
         <Col span={12}>
           <StartEndDateOnlyPickers
-            name={["unterkunft", "anAbreise"]}
+            names={[
+              ["unterkunft", "anreiseDate"],
+              ["unterkunft", "abreiseDate"],
+            ]}
             label="An- und Abreise"
-            dependency={"startAndEnd"}
+            dependency={"startDate"}
             onChange={updateSumme}
           />
           {anzahlNacht}

@@ -40,12 +40,10 @@ export default function ArtistCard() {
       <Row gutter={12}>
         <Col span={12}>
           <DynamicItem
-            nameOfDepending={"startAndEnd"}
+            nameOfDepending={"startDate"}
             renderWidget={(getFieldValue) => {
-              const startDate = getFieldValue("startAndEnd");
-              return (
-                <TimeField name={["artist", "getInForMasterDate"]} label="Band Get-In (informativ)" baseValue={startDate.start.toDate()} />
-              );
+              const startDate = getFieldValue("startDate");
+              return <TimeField name={["artist", "getInForMasterDate"]} label="Band Get-In (informativ)" baseValue={startDate} />;
             }}
           />
         </Col>

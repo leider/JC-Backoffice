@@ -22,10 +22,10 @@ export default function InfoCard() {
   const form = vermietungContext!.form;
   const status = Form.useWatch(["angebot", "status"], { form, preserve: true });
 
-  const startAndEnd = Form.useWatch("startAndEnd", { form, preserve: true });
+  const startDate = Form.useWatch("startDate", { form, preserve: true });
   const vergangen = useMemo(() => {
-    return new DatumUhrzeit(startAndEnd?.start).istVor(new DatumUhrzeit());
-  }, [startAndEnd]);
+    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
+  }, [startDate]);
 
   const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);

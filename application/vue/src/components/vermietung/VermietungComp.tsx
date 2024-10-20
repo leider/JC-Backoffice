@@ -7,7 +7,6 @@ import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungPageHeader from "@/components/vermietung/VermietungPageHeader.tsx";
-import { fromFormObject, toFormObject } from "@/components/vermietung/vermietungCompUtils.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -61,9 +60,9 @@ export default function VermietungComp() {
   }, [freigabe, form, initialValue, updateDirtyIfChanged]);
 
   useEffect(() => {
-    const deepCopy = toFormObject(vermietung);
+    const deepCopy = vermietung.toJSON();
     form.setFieldsValue(deepCopy);
-    const initial = toFormObject(vermietung);
+    const initial = vermietung.toJSON();
     setInitialValue(initial);
     updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!vermietung.id);
@@ -81,7 +80,7 @@ export default function VermietungComp() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      const vermiet = fromFormObject(form);
+      const vermiet = new Vermietung(form.getFieldsValue(true));
 
       if (isNew) {
         vermiet.initializeIdAndUrl();

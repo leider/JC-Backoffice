@@ -3,13 +3,13 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Button, Col, ConfigProvider, Form, Row, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { fromFormObject } from "@/components/konzert/konzertCompUtils";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export default function TransportCard() {
   const konzertContext = useContext(KonzertContext);
@@ -24,12 +24,12 @@ export default function TransportCard() {
     [form],
   );
   function updateSumme() {
-    const konzert = fromFormObject(form);
+    const konzert = new Konzert(form.getFieldsValue(true));
     setSumme(konzert.unterkunft.transportEUR);
   }
   const { currentUser } = useJazzContext();
   const sendMail = () => {
-    const konzert = fromFormObject(form);
+    const konzert = new Konzert(form.getFieldsValue(true));
     const unterkunft = konzert.unterkunft;
     const email = encodeURIComponent(`${konzert.hotel.name}<${konzert.hotel.email}>`);
     const subject = encodeURIComponent(`Jazzclub Reservierungsanfrage für ${unterkunft.anreiseDisplayDate}`);

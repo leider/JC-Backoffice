@@ -1,20 +1,68 @@
 import { DatePicker, Form } from "antd";
 import * as React from "react";
-import { Dayjs } from "dayjs";
+import { useEffect, useMemo, useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
+import Aggregate from "@/widgets/Aggregate.tsx";
 
 interface StartEndDateOnlyPickersProps {
-  name: NamePath;
+  names: NamePath[];
   label?: string;
   dependency?: NamePath;
   onChange?: () => void;
 }
 
-export default function StartEndDateOnlyPickers({ name, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
+function EmbeddedPickers({
+  id,
+  onChange,
+  value,
+  fireChange,
+  dependency,
+}: {
+  id?: string;
+  onChange?: (val: (Date | undefined)[]) => void;
+  value?: Date[];
+  fireChange?: () => void;
+  dependency?: NamePath;
+}) {
+  const [start, setStart] = useState<Dayjs>(dayjs());
+  const [end, setEnd] = useState<Dayjs>(dayjs());
+
+  useEffect(() => {
+    if (value) {
+      setStart(dayjs(value[0]));
+      setEnd(dayjs(value[1]));
+    }
+  }, [value]);
+
+  const eventStart: Date = Form.useWatch([dependency]);
+  const eventStartDayjs: Dayjs = useMemo(() => dayjs(eventStart), [eventStart]);
+
+  function onCalendarChange(dates: (Dayjs | null)[] | null) {
+    const startNew = dates?.[0];
+    const endNew = dates?.[1];
+    onChange?.([startNew?.toDate(), endNew?.toDate()]);
+    fireChange?.();
+  }
+
   return (
-    <Form.Item
+    <DatePicker.RangePicker
+      id={id}
+      allowClear={false}
+      format={"ddd DD.MM.YY"}
+      value={[start, end]}
+      onCalendarChange={onCalendarChange}
+      style={{ width: "100%" }}
+      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
+    />
+  );
+}
+
+export default function StartEndDateOnlyPickers({ names, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
+  return (
+    <Aggregate
       label={label ? <b>{label}:</b> : ""}
-      name={name}
+      names={names}
       style={label ? {} : { marginBottom: 0 }}
       dependencies={dependency ? [dependency] : undefined}
       hasFeedback
@@ -22,16 +70,17 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
         dependency
           ? [
               ({ getFieldValue }) => ({
-                validator: (_, value: Dayjs[]) => {
-                  const start: Dayjs = getFieldValue(dependency).start;
-                  return value[0].isAfter(start.subtract(7, "days"))
+                validator: (_, value: Date) => {
+                  const eventStart = getFieldValue(dependency);
+                  return dayjs(value).isAfter(dayjs(eventStart).subtract(7, "days"))
                     ? Promise.resolve()
                     : Promise.reject(new Error("Darf frühestens 1 Woche vor der Veranstaltung liegen"));
                 },
               }),
-              () => ({
-                validator: (_, value: Dayjs[]) => {
-                  const difference = value[1].diff(value[0]);
+              ({ getFieldValue }) => ({
+                validator: (_, value) => {
+                  const end = getFieldValue(names[1]);
+                  const difference = dayjs(end).diff(dayjs(value));
                   return difference ? Promise.resolve() : Promise.reject(new Error("Muss mindestens 1 Nacht sein"));
                 },
               }),
@@ -39,7 +88,7 @@ export default function StartEndDateOnlyPickers({ name, label, dependency, onCha
           : []
       }
     >
-      <DatePicker.RangePicker allowClear={false} format={"ddd DD.MM.YY"} onChange={onChange} style={{ width: "100%" }} />
-    </Form.Item>
+      <EmbeddedPickers fireChange={onChange} dependency={dependency} />
+    </Aggregate>
   );
 }

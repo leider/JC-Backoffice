@@ -3,14 +3,14 @@ import React, { useContext, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
 import { TextField } from "@/widgets/TextField";
-import StartEndPickers from "@/widgets/StartEndPickers";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
-import { fromFormObject } from "@/components/konzert/konzertCompUtils";
 import { KonzertContext } from "@/components/konzert/KonzertComp";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import StartEndPickers from "@/widgets/StartEndPickers.tsx";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
   const eventTypes = useMemo(() => {
@@ -36,7 +36,7 @@ export default function EventCard() {
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   function ortChanged() {
-    const konzert = fromFormObject(form);
+    const konzert = new Konzert(form.getFieldsValue(true));
     const selectedOrt = orte.orte.find((o) => o.name === konzert.kopf.ort);
     if (selectedOrt) {
       form.setFieldsValue({

@@ -1,37 +1,33 @@
-import { DatePicker, Form } from "antd";
+import { DatePicker } from "antd";
 import { IntRange } from "rc-picker/lib/interface";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import Aggregate from "@/widgets/Aggregate.tsx";
 
-type StartAndEnd = {
-  start: Dayjs;
-  end: Dayjs;
-};
-
-function EmbeddedPickers({ id, dates, onDates }: { id?: string; dates?: StartAndEnd; onDates?: (val: StartAndEnd) => void }) {
+function EmbeddedPickers({ id, onChange, value }: { id?: string; onChange?: (val: (Date | undefined)[]) => void; value?: Date[] }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
   useEffect(() => {
-    if (dates) {
-      setStart(dates.start);
-      setEnd(dates.end);
+    if (value) {
+      setStart(dayjs(value[0]));
+      setEnd(dayjs(value[1]));
     }
-  }, [dates]);
+  }, [value]);
 
   function onCalendarChange(dates: (Dayjs | null)[] | null) {
     const startNew = dates?.[0];
     const endNew = dates?.[1];
     if (!startNew && endNew) {
-      return onDates?.({ start: new DatumUhrzeit(start).moveByDifferenceDays(endNew), end: endNew });
+      return onChange?.([new DatumUhrzeit(start).moveByDifferenceDays(endNew).toDate(), endNew.toDate()]);
     }
     if (!endNew && startNew) {
-      return onDates?.({ start: startNew, end: new DatumUhrzeit(end).moveByDifferenceDays(startNew) });
+      return onChange?.([startNew.toDate(), new DatumUhrzeit(end).moveByDifferenceDays(startNew).toDate()]);
     }
     if (startNew && endNew) {
-      onDates?.({ start: startNew, end: endNew.add(startNew.diff(start)) });
+      onChange?.([startNew.toDate(), endNew.add(startNew.diff(start)).toDate()]);
     }
   }
 
@@ -49,14 +45,8 @@ function EmbeddedPickers({ id, dates, onDates }: { id?: string; dates?: StartAnd
 
 export default function StartEndPickers() {
   return (
-    <Form.Item
-      label={<b style={{ whiteSpace: "nowrap" }}>Datum und Uhrzeit:</b>}
-      name="startAndEnd"
-      valuePropName="dates"
-      trigger="onDates"
-      required
-    >
+    <Aggregate label={<b style={{ whiteSpace: "nowrap" }}>Datum und Uhrzeit:</b>} names={["startDate", "endDate"]} required>
       <EmbeddedPickers />
-    </Form.Item>
+    </Aggregate>
   );
 }

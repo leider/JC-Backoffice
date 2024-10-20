@@ -19,7 +19,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     preserve: true,
   });
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = Form.useWatch(["startAndEnd", "start"], {
+  const startDate = Form.useWatch("startDate", {
     form,
     preserve: true,
   });
@@ -59,7 +59,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     const tempTitle = isNew ? "Neue oder kopierte Vermietung" : titel || "";
     setTitle(tempTitle);
     document.title = tempTitle;
-    setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
+    setDisplayDate(DatumUhrzeit.forJSDate(startDate).lesbareKurzform);
   }, [titel, startDate, isNew]);
 
   useEffect(() => {
