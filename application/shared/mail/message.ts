@@ -38,7 +38,12 @@ export default class Message {
   }
 
   static formatEMailAddress(name: string, email: string): string {
-    return `"${name}" <${email}>`;
+    const names = name.split(",");
+    const emails = email.split(",");
+    const result = names.map((name, index) => {
+      return `"${name}" <${emails[index]}>`;
+    });
+    return result.join(",");
   }
 
   setTo(toAddresses?: string | string[]): void {
