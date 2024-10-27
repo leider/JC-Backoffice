@@ -6,17 +6,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";
-import { fromFormObject, toFormObject } from "@/components/konzert/konzertCompUtils";
 import KonzertTabs from "@/components/konzert/KonzertTabs";
 import KonzertPageHeader from "@/components/konzert/KonzertPageHeader";
-import { Rider } from "jc-shared/rider/rider.ts";
+import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 //import { detailedDiff } from "deep-object-diff";
 
 export const KonzertContext = createContext<{
-  form: FormInstance<Konzert>;
+  form: FormInstance<Konzert & { riderBoxes?: BoxParams[]; endbestandEUR?: number }>;
   isDirty: boolean;
   isKasseHelpOpen: boolean;
   setKasseHelpOpen: (open: boolean) => void;
@@ -24,7 +23,7 @@ export const KonzertContext = createContext<{
 
 export default function KonzertComp() {
   const { url } = useParams();
-  const [form] = Form.useForm<Konzert>();
+  const [form] = Form.useForm<Konzert & { riderBoxes?: BoxParams[] }>();
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
   const agenturauswahl = Form.useWatch("agenturauswahl", { form });
 
@@ -109,11 +108,11 @@ export default function KonzertComp() {
   }, [form, initialValue, kassenfreigabe, updateDirtyIfChanged]);
 
   useEffect(() => {
-    const deepCopy = toFormObject(konzert);
+    const deepCopy = konzert.toJSON();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (deepCopy as any).riderBoxes = rider.boxes;
     form.setFieldsValue(deepCopy);
-    const initial = toFormObject(konzert);
+    const initial = konzert.toJSON();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (initial as any).riderBoxes = rider.boxes;
     setInitialValue(initial);
@@ -133,7 +132,7 @@ export default function KonzertComp() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      const konzert = fromFormObject(form);
+      const konzert = new Konzert(form.getFieldsValue(true));
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const untypedKonzert = konzert as any;

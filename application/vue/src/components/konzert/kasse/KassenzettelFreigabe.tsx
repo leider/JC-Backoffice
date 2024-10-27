@@ -26,10 +26,10 @@ export function KassenzettelFreigabe() {
     setUsersAsOptions(allUsers.map((user) => user.name));
   }, [allUsers]);
 
-  const startAndEnd = Form.useWatch("startAndEnd", { form, preserve: true });
+  const startDate = Form.useWatch("startDate", { form, preserve: true });
   const vergangen = useMemo(() => {
-    return new DatumUhrzeit(startAndEnd?.start).istVor(new DatumUhrzeit());
-  }, [startAndEnd]);
+    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
+  }, [startDate]);
 
   const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
   const endbestandEUR = Form.useWatch("endbestandEUR", { form, preserve: true });

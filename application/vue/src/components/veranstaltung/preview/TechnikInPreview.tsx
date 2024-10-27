@@ -51,14 +51,14 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             <ul>
               {veranstaltung.technik.dateirider.map((item) => (
                 <li key={item}>
-                  <a href={`/files/${item}`} target="_blank">
+                  <a href={`/files/${item}`} target="_blank" rel="noreferrer">
                     {item}
                   </a>
                 </li>
               ))}
               {(rider?.boxes.length || 0) > 0 && (
                 <li key="riderurl">
-                  <a href={printref} target="_blank">
+                  <a href={printref} target="_blank" rel="noreferrer">
                     {`Rider-${url}.pdf`}
                   </a>
                 </li>
@@ -71,7 +71,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
               <b>Dateien:</b>
               <ul>
                 <li key="riderurl">
-                  <a href={printref} target="_blank">
+                  <a href={printref} target="_blank" rel="noreferrer">
                     {`Rider-${url}.pdf`}
                   </a>
                 </li>

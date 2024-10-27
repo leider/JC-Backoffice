@@ -2,7 +2,7 @@ import Database, { SqliteError } from "better-sqlite3";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
-import { areDifferent } from "jc-shared/commons/comparingAndTransforming.js";
+import { areDifferentForHistoryEntries } from "jc-shared/commons/comparingAndTransforming.js";
 
 export const db = new Database(conf.sqlitedb);
 const scriptLogger = loggers.get("scripts");
@@ -103,7 +103,7 @@ class Persistence {
     const now = new Date().toJSON();
     const before = JSON.parse(JSON.stringify(this.getById(object.id)));
     const after = JSON.parse(JSON.stringify(object));
-    if (!areDifferent(before, after)) {
+    if (!areDifferentForHistoryEntries(before, after)) {
       return; // no need to save unchanged objects
     }
     db.exec(

@@ -7,7 +7,6 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
-import { fromFormObjectAsAny, toFormObject } from "@/components/options/terminCompUtils";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -41,16 +40,15 @@ export default function TerminePage() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [form] = Form.useForm<{ allTermine: any[] }>();
+  const [form] = Form.useForm<{ allTermine: Termin[] }>();
 
   function initializeForm() {
     const deepCopy = {
-      allTermine: termine.map((termin) => toFormObject(termin)),
+      allTermine: termine.map((termin) => termin.toJSON()),
     };
     form.setFieldsValue(deepCopy);
     const initial = {
-      allTermine: termine.map((termin) => toFormObject(termin)),
+      allTermine: termine.map((termin) => termin.toJSON()),
     };
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
@@ -60,13 +58,13 @@ export default function TerminePage() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateTermine.mutate(form.getFieldsValue(true).allTermine.map(fromFormObjectAsAny));
+      mutateTermine.mutate(form.getFieldsValue(true).allTermine.map((each: Termin) => new Termin(each)));
     });
   }
 
   const columnDescriptions: CollectionColDesc[] = [
     {
-      fieldName: "period",
+      fieldName: ["startDate", "endDate"],
       label: "Start und Ende",
       type: "date",
       width: "s",

@@ -35,7 +35,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
   }, [optionen, eventTyp]);
 
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = Form.useWatch(["startAndEnd", "start"], {
+  const startDate = Form.useWatch("startDate", {
     form,
     preserve: true,
   });
@@ -82,7 +82,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
     const tempTitle = isNew ? "Neue oder kopierte Veranstaltung" : titel || "";
     setTitle(tempTitle);
     document.title = tempTitle;
-    setDisplayDate(DatumUhrzeit.forJSDate(startDate?.toDate()).lesbareKurzform);
+    setDisplayDate(DatumUhrzeit.forJSDate(startDate).lesbareKurzform);
   }, [isNew, eventTyp, titel, startDate]);
 
   useEffect(() => {

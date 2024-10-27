@@ -5,7 +5,12 @@ import { App } from "antd";
 
 export function useDirtyBlocker(dirty: boolean) {
   const shouldBlock = useCallback<BlockerFunction>(
-    ({ currentLocation, nextLocation }) => dirty && currentLocation.pathname !== nextLocation.pathname,
+    ({ currentLocation, nextLocation }) => {
+      if (currentLocation.pathname.includes("copy-of")) {
+        return false;
+      }
+      return dirty && currentLocation.pathname !== nextLocation.pathname;
+    },
     [dirty],
   );
   const blocker: Blocker = useBlocker(shouldBlock);

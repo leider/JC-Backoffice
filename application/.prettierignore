@@ -3,6 +3,5 @@
 *.lock
 fonts.css
 .yarn
-**/*.js
 assets
 backend/static/**

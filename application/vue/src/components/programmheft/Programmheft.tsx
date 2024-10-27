@@ -141,7 +141,7 @@ export default function Programmheft() {
             <h4>Farben Hilfe</h4>
             <p>
               Du kannst entweder eine{" "}
-              <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank">
+              <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank" rel="noreferrer">
                 Farbe mit Namen eintragen
               </a>{" "}
               oder einen HEX-Code als "#RGB" oder "#RRGGBB".

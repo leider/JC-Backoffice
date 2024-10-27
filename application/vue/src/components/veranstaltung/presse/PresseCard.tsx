@@ -8,8 +8,6 @@ import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { imagenames } from "@/commons/loader.ts";
-import { fromFormObject as fromFormObjectVeranstaltung } from "@/components/konzert/konzertCompUtils.ts";
-import { fromFormObject as fromFormObjectVermietung } from "@/components/vermietung/vermietungCompUtils.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -43,9 +41,9 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
 
   useEffect(() => {
     if (isVermietung) {
-      setVerForPreview(fromFormObjectVermietung(form));
+      setVerForPreview(new Vermietung(form.getFieldsValue(true)));
     } else {
-      setVerForPreview(fromFormObjectVeranstaltung(form));
+      setVerForPreview(new Konzert(form.getFieldsValue(true)));
     }
   }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
 

@@ -9,7 +9,7 @@ type SomeObject = { [index: string]: SomeObject };
  *
  * @param data an object
  */
-function stripNullOrUndefined<T>(data: T): T {
+function stripNullOrUndefined<T extends object>(data: T): T {
   if (!data) {
     return data;
   }
@@ -27,7 +27,7 @@ function stripNullOrUndefined<T>(data: T): T {
   return data;
 }
 
-export function withoutNullOrUndefinedStrippedBy<T>(data: T, propertiesToIgnore?: string[]): T {
+export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, propertiesToIgnore?: string[]): T {
   function deleteProp(clone: typeof data, nameWithDots: string) {
     const nameArray = nameWithDots.split(".");
     if (nameArray.length === 0) {
@@ -52,8 +52,14 @@ export function withoutNullOrUndefinedStrippedBy<T>(data: T, propertiesToIgnore?
   return stripNullOrUndefined(clone);
 }
 
-export function areDifferent<T>(left: T, right: T, propertiesToIgnore?: string[]) {
+export function areDifferentForHistoryEntries<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
   return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
+}
+export function areDifferent<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
+  if (Object.keys(left).length === 0) {
+    return false;
+  }
+  return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
 }
 
 export function differenceFor(left = {}, right = {}, propertiesToIgnore?: string[]): string {
