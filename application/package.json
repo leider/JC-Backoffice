@@ -56,5 +56,5 @@
     "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules",
     "check-formatting": "prettier -c ."
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.5.0"
 }
