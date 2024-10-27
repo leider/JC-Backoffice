@@ -15,7 +15,7 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 //import { detailedDiff } from "deep-object-diff";
 
 export const KonzertContext = createContext<{
-  form: FormInstance<Konzert & { riderBoxes?: BoxParams[] }>;
+  form: FormInstance<Konzert & { riderBoxes?: BoxParams[]; endbestandEUR?: number }>;
   isDirty: boolean;
   isKasseHelpOpen: boolean;
   setKasseHelpOpen: (open: boolean) => void;
