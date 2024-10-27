@@ -67,9 +67,9 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
           <List.Item
             style={{ paddingLeft: 0, paddingRight: 0 }}
             actions={[
-              <AddOrRemoveGastButton item={item} art={art} add={true} konzert={konzert} onChange={listChanged} />,
-              <b>{item.alreadyIn}</b>,
-              <AddOrRemoveGastButton item={item} art={art} add={false} konzert={konzert} onChange={listChanged} />,
+              <AddOrRemoveGastButton key="addGast" item={item} art={art} add={true} konzert={konzert} onChange={listChanged} />,
+              <b key="alreadyin">{item.alreadyIn}</b>,
+              <AddOrRemoveGastButton key="removeGast" item={item} art={art} add={false} konzert={konzert} onChange={listChanged} />,
             ]}
           >
             <List.Item.Meta title={`${item.name} (${item.number} Karten)`} description={item.comment} />

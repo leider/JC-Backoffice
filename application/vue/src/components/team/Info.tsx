@@ -93,6 +93,7 @@ export default function Info() {
                 <b>{veranst.kopf.titelMitPrefix}</b>
                 <br />
                 <b>
+                  {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
                   <i>{veranst.startDatumUhrzeit.wochentagTagMonat}</i> // {veranst.startDatumUhrzeit.uhrzeitKompakt} Uhr
                   <br />
                 </b>

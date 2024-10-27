@@ -30,7 +30,7 @@ export default function Kassenbericht() {
           <Col span={24}>
             {monate.map((monat) => (
               <p key={monat.monatJahrKompakt}>
-                <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank">
+                <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank" rel="noreferrer">
                   Kassenbericht {monat.monatJahrKompakt}
                 </a>
               </p>
