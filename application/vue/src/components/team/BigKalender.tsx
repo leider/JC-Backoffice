@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, { createRef, useCallback } from "react";
 import { Checkbox, Col, Form, Row } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
@@ -12,28 +12,30 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
-
-  function getEvents(
-    info: {
-      start: Date;
-      end: Date;
-    },
-    successCallback: (events: EventInput[]) => void,
-    failureCallback: (error: Error) => void,
-  ): void {
-    async function doit() {
-      try {
-        const options = form.getFieldsValue(true);
-        const res = await calendarEventSources(info.start, info.end, options);
-        successCallback(res as EventInput[]);
-      } catch (e) {
-        return failureCallback(e as Error);
-      }
-    }
-    doit();
-  }
-
   const [form] = Form.useForm<TerminFilterOptions>();
+
+  const getEvents = useCallback(
+    (
+      info: {
+        start: Date;
+        end: Date;
+      },
+      successCallback: (events: EventInput[]) => void,
+      failureCallback: (error: Error) => void,
+    ): void => {
+      async function doit() {
+        try {
+          const options = form.getFieldsValue(true);
+          const res = await calendarEventSources(info.start, info.end, options);
+          successCallback(res);
+        } catch (e) {
+          return failureCallback(e as Error);
+        }
+      }
+      doit();
+    },
+    [form],
+  );
 
   function IcalCheck() {
     return (
@@ -54,13 +56,16 @@ export default function BigKalender() {
   const calRef = createRef<FullCalendar>();
   const { lg } = useBreakpoint();
   return (
-    <Form
-      form={form}
-      onChange={() => {
-        calRef.current?.getApi().refetchEvents();
-      }}
-    >
-      <JazzPageHeader title="Kalenderübersicht" buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
+    <>
+      {" "}
+      <Form
+        form={form}
+        onChange={() => {
+          calRef.current?.getApi().refetchEvents();
+        }}
+      >
+        <JazzPageHeader title="Kalenderübersicht" buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
+      </Form>
       <Row gutter={8}>
         <Col span={24} style={{ zIndex: 0 }}>
           <FullCalendar
@@ -97,6 +102,6 @@ export default function BigKalender() {
           />
         </Col>
       </Row>
-    </Form>
+    </>
   );
 }

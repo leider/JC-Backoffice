@@ -1,5 +1,4 @@
 import express from "express";
-import superagent from "superagent";
 import groupBy from "lodash/groupBy.js";
 import flatMap from "lodash/flatMap.js";
 
@@ -18,6 +17,7 @@ import konzerteService from "../lib/konzerte/konzerteService.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.js";
+import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 
 const app = express();
 
@@ -44,8 +44,8 @@ function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
 }
 
 async function termineForIcal(ical: Ical) {
-  const resp = await superagent.get(ical.url);
-  return icalToTerminEvents(parseIcal(resp.text));
+  const result = await kalenderEventsService.retrieveEvents(ical);
+  return icalToTerminEvents(parseIcal(result));
 }
 
 function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?: TerminFilterOptions) {
@@ -78,8 +78,8 @@ app.get("/fullcalendarevents.json", async (req, res) => {
     }) || [];
 
   const termineForIcals = await Promise.all(icals.map(termineForIcal));
-  const events = flatMap(termineForIcals, (x) => x)
-    .concat(termine)
+  const events = termine
+    .concat(flatMap(termineForIcals, (x) => x))
     .concat(konzerte)
     .concat(vermietungen);
   resToJson(res, events);

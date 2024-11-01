@@ -43,6 +43,7 @@ export default function TeamCalendar() {
     },
     [],
   );
+
   const { lg } = useBreakpoint();
   return (
     <>

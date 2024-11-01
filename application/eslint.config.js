@@ -42,5 +42,5 @@ export default tseslint.config(
       "react/display-name": 0,
     },
   },
-  eslintPluginPrettierRecommended,
+  { ignores: ["**/*.js"], ...eslintPluginPrettierRecommended },
 );
