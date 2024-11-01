@@ -13,8 +13,8 @@
     "jc-shared": "workspace:^"
   },
   "devDependencies": {
-    "vite": "5.4.8",
-    "vitest": "2.1.2"
+    "vite": "5.4.10",
+    "vitest": "2.1.4"
   },
   "scripts": {
     "test": "../node_modules/.bin/vitest --run",

@@ -10,27 +10,26 @@
   "license": "MIT",
   "dependencies": {
     "adm-zip": "0.5.16",
-    "better-sqlite3": "11.3.0",
+    "better-sqlite3": "11.5.0",
     "bootstrap": "5.3.3",
-    "compression": "1.7.4",
+    "compression": "1.7.5",
     "connect-history-api-fallback": "2.0.0",
-    "cookie-parser": "1.4.6",
-    "express": "4.21.0",
-    "express-async-errors": "3.1.1",
+    "cookie-parser": "1.4.7",
+    "express": "5.0.1",
     "jc-shared": "workspace:^",
     "morgan": "1.10.0",
     "multiparty": "4.2.3",
-    "nodemailer": "6.9.15",
+    "nodemailer": "6.9.16",
     "passport": "0.7.0",
     "passport-jwt": "4.0.1",
     "pug": "3.0.3",
-    "puppeteer": "23.5.0",
+    "puppeteer": "23.6.1",
     "sharp": "0.33.5",
-    "superagent": "10.1.0",
-    "winston": "3.14.2"
+    "superagent": "10.1.1",
+    "winston": "3.15.0"
   },
   "devDependencies": {
-    "@types/adm-zip": "0.5.5",
+    "@types/adm-zip": "0.5.6",
     "@types/better-sqlite3": "7.6.11",
     "@types/body-parser": "1.19.5",
     "@types/compression": "1.7.5",
@@ -40,7 +39,7 @@
     "@types/morgan": "1.9.9",
     "@types/multiparty": "4.2.1",
     "@types/nodemailer": "6.4.16",
-    "@types/passport": "1.0.16",
+    "@types/passport": "1.0.17",
     "@types/passport-jwt": "4.0.1",
     "@types/pug": "2.0.10",
     "@types/puppeteer": "7.0.4",
@@ -53,6 +52,6 @@
     "tsc": "../node_modules/typescript/bin/tsc",
     "eslint": "../node_modules/.bin/eslint lib/**/*.ts rest/**/*.ts *.ts",
     "clean-ts": "rm -rf lib/**/*.js || rm -rf rest/*.js || rm -rf configure.js || rm -rf configureApp.js || rm -rf initWinston.js || rm -rf start.js || :",
-    "sass": "../node_modules/.bin/sass --silence-deprecation=color-functions,mixed-decls sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
+    "sass": "../node_modules/.bin/sass --silence-deprecation=color-functions,mixed-decls,import,global-builtin sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
   }
 }

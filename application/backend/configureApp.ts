@@ -1,5 +1,4 @@
 import express, { NextFunction, Request, Response } from "express";
-import "express-async-errors";
 import compress from "compression";
 import cookieParser from "cookie-parser";
 import history from "connect-history-api-fallback";

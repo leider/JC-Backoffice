@@ -63,7 +63,7 @@ app.get("/konzerte/fortoday", (req, res) => {
   standardHandler(res, req.user as User, konzerte);
 });
 
-app.get("/konzert/:url", (req: Request, res: Response) => {
+app.get("/konzert/:url", (req, res) => {
   const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
     return res.sendStatus(404);
