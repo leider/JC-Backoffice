@@ -4315,7 +4315,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontendtests@workspace:."
   dependencies:
-    "@types/node": "npm:20.17.5"
+    "@types/node": "npm:20.16.10"
     better-sqlite3: "npm:11.5.0"
     codeceptjs: "npm:3.6.7"
     codeceptjs-chai: "npm:2.3.5"
