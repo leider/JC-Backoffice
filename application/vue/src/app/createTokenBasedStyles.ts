@@ -15,7 +15,6 @@ export const customColors: { [index: string]: string | number } = {
 };
 
 export function createTokenBasedStyles(document: Document, token: GlobalToken) {
-  token.motion = false;
   const errorBgColor = token.colorErrorBg;
   const bgContainerDisabledColor = token.colorBgContainerDisabled;
   const colorPrimary = customColors.colorPrimary;
