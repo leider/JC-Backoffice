@@ -40,7 +40,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { setCurrentUser } = useContext(RouterContext);
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
-  const refetchInterval = 2 * 60 * 1000; // 2 minutes
+  const refetchInterval = 30 * 60 * 1000; // 30 minutes
 
   const [filter, setFilter] = useState<TeamFilterObject>({});
 

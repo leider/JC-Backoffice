@@ -155,7 +155,7 @@ export async function deleteKonzertWithId(id: string) {
 export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
+    url: `/rest${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
     data: { section },
     contentType: "json",
   });
@@ -165,7 +165,7 @@ export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, sec
 export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
   return standardFetch({
     method: "POST",
-    url: `/rest/${konzert.fullyQualifiedUrl}/updateGastInSection`,
+    url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`,
     data: { item, art },
     contentType: "json",
   });

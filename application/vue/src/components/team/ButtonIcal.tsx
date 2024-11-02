@@ -8,7 +8,7 @@ export default function ButtonIcal() {
   return (
     <Button
       key="cal"
-      icon={<IconForSmallBlock size={16} iconName="CalendarWeek" />}
+      icon={<IconForSmallBlock size={14} iconName="CalendarWeek" />}
       type="default"
       href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
     >

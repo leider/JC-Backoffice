@@ -12,7 +12,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import deLocale from "@fullcalendar/core/locales/de";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 export default function TeamCalendar() {
   const { currentUser } = useJazzContext();
@@ -74,7 +73,7 @@ export default function TeamCalendar() {
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         size="large"
-        closeIcon={<IconForSmallBlock iconName="ChevronRight" />}
+        closeIcon={"Schließen"}
       >
         <FullCalendar
           plugins={[dayGridPlugin, multiMonthPlugin]}
