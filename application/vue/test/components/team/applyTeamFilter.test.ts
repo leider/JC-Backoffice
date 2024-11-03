@@ -80,12 +80,12 @@ describe("applyTeamFilter", () => {
 
   it("should return for PresseOK", () => {
     const filter = applyTeamFilter({ presse: { checked: true } });
-    expect(checkResult(filter)).to.eql(["PresseOK", "KeinePresse"]);
+    expect(checkResult(filter)).to.eql(["PresseOK"]);
   });
 
   it("should return for not PresseOK", () => {
     const filter = applyTeamFilter({ presse: { checked: false } });
-    expect(checkInverseResult(filter)).to.eql(["PresseOK"]);
+    expect(checkInverseResult(filter)).to.eql(["PresseOK", "KeinePresse"]);
   });
 
   it("should return for Kann Homepage", () => {
@@ -110,22 +110,22 @@ describe("applyTeamFilter", () => {
 
   it("should return for Text vorhanden", () => {
     const filter = applyTeamFilter({ presse: { text: true } });
-    expect(checkResult(filter)).to.eql(["KeinePresse", "TextVorhanden"]);
+    expect(checkResult(filter)).to.eql(["TextVorhanden"]);
   });
 
   it("should return for not Text vorhanden", () => {
     const filter = applyTeamFilter({ presse: { text: false } });
-    expect(checkInverseResult(filter)).to.eql(["TextVorhanden"]);
+    expect(checkInverseResult(filter)).to.eql(["KeinePresse", "TextVorhanden"]);
   });
 
   it("should return for Originaltext vorhanden", () => {
     const filter = applyTeamFilter({ presse: { originalText: true } });
-    expect(checkResult(filter)).to.eql(["KeinePresse", "OriginaltextVorhanden"]);
+    expect(checkResult(filter)).to.eql(["OriginaltextVorhanden"]);
   });
 
   it("should return for not Originaltext vorhanden", () => {
     const filter = applyTeamFilter({ presse: { originalText: false } });
-    expect(checkInverseResult(filter)).to.eql(["OriginaltextVorhanden"]);
+    expect(checkInverseResult(filter)).to.eql(["KeinePresse", "OriginaltextVorhanden"]);
   });
 
   it("should return for Fotograf", () => {

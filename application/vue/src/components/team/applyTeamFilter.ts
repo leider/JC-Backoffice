@@ -23,12 +23,13 @@ export type TeamFilterObject = {
 };
 
 function filterPresse(ver: Veranstaltung, filterObj: TeamFilterObject) {
-  if (!ver.brauchtPresse) {
-    return true;
-  }
   const filter = filterObj.presse;
+
   if (isEmpty(filter)) {
     return true;
+  }
+  if (!ver.brauchtPresse) {
+    return false;
   }
 
   const presse = ver.presse;
