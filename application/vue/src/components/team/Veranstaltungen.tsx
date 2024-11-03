@@ -69,16 +69,8 @@ export default function Veranstaltungen() {
 
   const queryResult = useQueries({
     queries: [
-      {
-        queryKey: ["konzert", selectedPeriod],
-        queryFn: () => konzerteForTeam(selectedPeriod),
-        staleTime: 1000 * 60 * 2,
-      },
-      {
-        queryKey: ["vermietung", selectedPeriod],
-        queryFn: () => vermietungenForTeam(selectedPeriod),
-        staleTime: 1000 * 60 * 2,
-      },
+      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
+      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {
@@ -90,37 +82,18 @@ export default function Veranstaltungen() {
 
   const veranstaltungen = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as Veranstaltung[]);
-
     const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
   }, [queryResult, selectedPeriod]);
 
   const { allUsers, currentUser, filter } = useJazzContext();
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  const usersAsOptions = useMemo(
-    () =>
-      allUsers.map((user) => ({
-        label: user.name,
-        value: user.id,
-        kann: user.kannSections,
-      })),
-    [allUsers],
-  );
+  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
-  const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenNachMonat] = useState<{
+  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
     [index: string]: Veranstaltung[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
-
-  document.title = "Veranstaltungen";
-  useEffect(() => {
-    const accessrights = currentUser.accessrights;
-    if (currentUser.id && location.pathname !== "/team" && !accessrights.isOrgaTeam) {
-      navigate("/team");
-    }
-  }, [currentUser.accessrights, currentUser.id, location.pathname, navigate]);
 
   useEffect(() => {
     if (veranstaltungen.length === 0) {
@@ -133,6 +106,16 @@ export default function Veranstaltungen() {
   }, [filter, veranstaltungen]);
 
   const filterTags = useFilterAsTags();
+
+  document.title = "Veranstaltungen";
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    const accessrights = currentUser.accessrights;
+    if (currentUser.id && location.pathname !== "/team" && !accessrights.isOrgaTeam) {
+      navigate("/team");
+    }
+  }, [currentUser.accessrights, currentUser.id, location.pathname, navigate]);
 
   return (
     <Row gutter={8}>
@@ -159,7 +142,7 @@ export default function Veranstaltungen() {
             <TeamCalendar key="cal" />,
           ]}
         />
-        <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenUndVermietungenNachMonat, usersAsOptions }}>
+        <TeamContext.Provider value={{ veranstaltungenNachMonat: veranstaltungenNachMonat, usersAsOptions }}>
           {monate.map((monat) => {
             return <TeamMonatGroup key={monat} monat={monat} />;
           })}

@@ -66,38 +66,34 @@ export default function Team() {
     },
   });
 
-  const alle = useMemo(() => {
+  const veranstaltungen = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as Veranstaltung[]);
     const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
   }, [queryResult, selectedPeriod]);
 
-  const { allUsers, currentUser, filter } = useJazzContext();
+  const { allUsers, filter } = useJazzContext();
 
   const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
-
-  const [realadmin, setRealadmin] = useState<boolean>(false);
-  useEffect(() => {
-    setRealadmin(currentUser.accessrights.isSuperuser);
-  }, [currentUser.accessrights.isSuperuser]);
 
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
     [index: string]: Veranstaltung[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
 
-  document.title = "Team";
   useEffect(() => {
-    const filtered = alle.filter((v) => {
-      return (v.kopf.confirmed || realadmin) && applyTeamFilter(filter)(v);
-    });
-    const result = groupBy(filtered, (veranst: Veranstaltung) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    if (veranstaltungen.length === 0) {
+      return;
+    }
+    const filtered = veranstaltungen.filter(applyTeamFilter(filter));
+    const result = groupBy(filtered, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [alle, realadmin, filter]);
+  }, [filter, veranstaltungen]);
 
   const filterTags = useFilterAsTags();
 
+  document.title = "Team";
   return (
     <>
       <Row gutter={8}>
