@@ -26,21 +26,9 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
 
   const periods = useMemo(() => {
     return [
-      {
-        label: "Zukünftige",
-        key: "zukuenftige",
-        onClick: () => setSearch({ period: "zukuenftige" }),
-      },
-      {
-        label: "Vergangene",
-        key: "vergangene",
-        onClick: () => setSearch({ period: "vergangene" }),
-      },
-      {
-        label: "Alle",
-        key: "alle",
-        onClick: () => setSearch({ period: "alle" }),
-      },
+      { label: "Zukünftige", key: "zukuenftige", onClick: () => setSearch({ period: "zukuenftige" }) },
+      { label: "Vergangene", key: "vergangene", onClick: () => setSearch({ period: "vergangene" }) },
+      { label: "Alle", key: "alle", onClick: () => setSearch({ period: "alle" }) },
     ].filter((each) => periodsToShow.includes(each.key));
   }, [periodsToShow, setSearch]);
 
@@ -99,3 +87,42 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
 
   return { period, usersAsOptions, veranstaltungenNachMonat, filterTags, monate, periods, veranstaltungen };
 };
+
+export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
+  const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);
+  const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, filterTags, usersAsOptions } =
+    useTeamVeranstaltungenCommons(periodsToShow);
+  return (
+    <Row gutter={8}>
+      <Col span={24}>
+        <JazzPageHeader
+          title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
+          tags={filterTags}
+          buttons={[
+            forVeranstaltungen && <ExcelMultiExportButton key="excel" alle={veranstaltungen} />,
+            forVeranstaltungen && <NewButtons key="newButtons" />,
+            <Dropdown
+              key="periods"
+              menu={{
+                items: periods,
+              }}
+            >
+              <Button>
+                <Space>
+                  {period}
+                  <IconForSmallBlock iconName="ChevronDown" />
+                </Space>
+              </Button>
+            </Dropdown>,
+            <TeamCalendar key="cal" />,
+          ]}
+        />
+        <TeamContext.Provider value={{ veranstaltungenNachMonat, usersAsOptions }}>
+          {monate.map((monat) => {
+            return <TeamMonatGroup key={monat} monat={monat} renderTeam={!forVeranstaltungen} />;
+          })}
+        </TeamContext.Provider>
+      </Col>
+    </Row>
+  );
+}

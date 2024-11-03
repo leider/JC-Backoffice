@@ -24,7 +24,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
-  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(new Konzert());
+  const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
   const { currentUser, showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
