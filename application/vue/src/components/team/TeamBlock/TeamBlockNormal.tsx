@@ -22,24 +22,30 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col span={24}>
-        <Collapse
-          style={{ borderColor: veranstaltung.color }}
-          size={"small"}
-          activeKey={expanded ? veranstaltung.id : ""}
-          onChange={() => {
-            setExpanded(!expanded);
-          }}
-          expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
-          items={[
-            {
-              key: veranstaltung.id || "",
-              style: { backgroundColor: veranstaltung.color },
-              label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
-              extra: <ButtonPreview veranstaltung={veranstaltung} />,
-              children: <TeamContent veranstaltung={veranstaltung} />,
-            },
-          ]}
-        />
+        {veranstaltung.ghost ? (
+          <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
+            <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
+          </div>
+        ) : (
+          <Collapse
+            style={{ borderColor: veranstaltung.color }}
+            size={"small"}
+            activeKey={expanded ? veranstaltung.id : ""}
+            onChange={() => {
+              setExpanded(!expanded);
+            }}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
+            items={[
+              {
+                key: veranstaltung.id || "",
+                style: { backgroundColor: veranstaltung.color },
+                label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
+                extra: <ButtonPreview veranstaltung={veranstaltung} />,
+                children: <TeamContent veranstaltung={veranstaltung} />,
+              },
+            ]}
+          />
+        )}
       </Col>
     </ConfigProvider>
   );
