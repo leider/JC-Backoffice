@@ -11,7 +11,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import applyTeamFilter from "@/components/team/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import useFilterAsTags from "@/components/team/TeamFilter.tsx";
+import TeamFilter from "@/components/team/TeamFilter.tsx";
 
 export default function Info() {
   const { filter } = useJazzContext();
@@ -143,7 +143,7 @@ export default function Info() {
     },
   ];
 
-  const filterTags = useFilterAsTags();
+  const filterTags = TeamFilter();
 
   return (
     <>

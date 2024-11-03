@@ -151,6 +151,7 @@ const orgaTeamPattern = [
   "^/$",
   "vermietung",
   "veranstaltungen/:url",
+  "veranstaltungen",
   "konzert/:url",
   "veranstaltung/:url",
   "kalenderuebersicht",

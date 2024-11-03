@@ -15,7 +15,7 @@ type LabelColorProperty = {
   prop?: NamePath;
 };
 
-export default function useFilterAsTags() {
+export default function TeamFilter() {
   const [open, setOpen] = useState(false);
 
   const [form] = Form.useForm<TeamFilterObject>();

@@ -13,6 +13,7 @@ function RouterWrapper() {
   }, [routes]);
   return <RouterProvider router={router} />;
 }
+
 export function JazzRouter() {
   const loginState = useCreateRouteState();
   return (
