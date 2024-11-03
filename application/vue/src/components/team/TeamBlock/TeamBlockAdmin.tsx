@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
-import Color from "color";
 
 interface TeamBlockAdminProps {
   veranstaltung: Konzert;
@@ -13,12 +12,7 @@ interface TeamBlockAdminProps {
 }
 
 function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const color = useMemo(() => {
-    const result = veranstaltung.kopf.eventTypRich?.color || "#6c757d";
-    return veranstaltung.ghost ? new Color(result).lighten(0.5).hex() : result;
-  }, [veranstaltung.ghost, veranstaltung.kopf.eventTypRich?.color]);
-
-  const [expanded, setExpanded] = useState<boolean>();
+  const [expanded, setExpanded] = useState<boolean>(initiallyOpen);
   useEffect(() => {
     setExpanded(initiallyOpen);
   }, [initiallyOpen]);
@@ -27,12 +21,12 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col span={24}>
         {veranstaltung.ghost ? (
-          <div style={{ backgroundColor: color, padding: "2px 16px" }}>
+          <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
           </div>
         ) : (
           <Collapse
-            style={{ borderColor: color }}
+            style={{ borderColor: veranstaltung.color }}
             size={"small"}
             activeKey={expanded ? veranstaltung.id : undefined}
             onChange={() => {
@@ -42,7 +36,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
             items={[
               {
                 key: veranstaltung.id || "",
-                style: { backgroundColor: color },
+                style: { backgroundColor: veranstaltung.color },
                 className: "team-block",
                 label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
                 extra: expanded && <Extras veranstaltung={veranstaltung} />,

@@ -17,6 +17,7 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
+import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 
 export default function Preview() {
   const { url } = useParams();
@@ -33,8 +34,8 @@ export default function Preview() {
 
   useEffect(() => {
     if (optionen && konzert) {
-      const typByName = groupBy(optionen.typenPlus || [], "name");
-      setTypeColor(typByName[konzert.kopf.eventTyp]?.[0].color || "#6c757d");
+      const typByName = groupBy(optionen.typenPlus ?? [], "name");
+      setTypeColor(typByName[konzert.kopf.eventTyp]?.[0].color ?? colorDefault);
     }
   }, [optionen, konzert]);
 

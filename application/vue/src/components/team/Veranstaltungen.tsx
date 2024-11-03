@@ -2,11 +2,9 @@ import React, { createContext, useEffect, useMemo, useState } from "react";
 import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import { Button, Col, Dropdown, Row, Space } from "antd";
 import groupBy from "lodash/groupBy";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 import sortBy from "lodash/sortBy";
@@ -86,12 +84,12 @@ export default function Veranstaltungen() {
       if (a?.data && b?.data) {
         return [...a.data, ...b.data];
       }
-      return [];
+      return [] as Veranstaltung[];
     },
   });
 
   const veranstaltungen = useMemo(() => {
-    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as (Konzert | Vermietung)[]);
+    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as Veranstaltung[]);
 
     const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
@@ -111,7 +109,7 @@ export default function Veranstaltungen() {
     [allUsers],
   );
 
-  const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenUndVermietungenNachMonat] = useState<{
+  const [veranstaltungenUndVermietungenNachMonat, setVeranstaltungenNachMonat] = useState<{
     [index: string]: Veranstaltung[];
   }>({});
   const [monate, setMonate] = useState<string[]>([]);
@@ -130,7 +128,7 @@ export default function Veranstaltungen() {
     }
     const filtered = veranstaltungen.filter(applyTeamFilter(filter));
     const result = groupBy(filtered, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
-    setVeranstaltungenUndVermietungenNachMonat(result);
+    setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [filter, veranstaltungen]);
 

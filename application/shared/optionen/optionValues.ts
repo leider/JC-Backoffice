@@ -26,22 +26,8 @@ export type TypMitMehr = {
   color: string;
 };
 
-function colorForTyp(typ: string): string {
-  const colormap: { [index: string]: string } = {
-    "Club Konzert": "#4faee3",
-    Homegrown: "#24719d",
-    JamSession: "#dea71f",
-    "Jazz und Literatur": "#9185be",
-    JazzClassix: "#4faee3",
-    JazzFestival: "#9fc442",
-    "JC im Kunstverein": "#9185be",
-    Kino: "#9185be",
-    Kooperation: "#9185be",
-    Livestream: "#ff29ac",
-    Soulcafé: "#f07f31",
-  };
-  return colormap[typ] || "#6c757d";
-}
+export const colorDefault = "#6c757d";
+export const colorVermietung = "#f6eee1";
 
 export type Preisprofil = {
   name: string;
@@ -89,7 +75,6 @@ export default class OptionValues {
   id = "instance";
   hotelpreise: Hotelpreise[] = [];
   genres: string[] = [];
-  typen: string[] = [];
   typenPlus: TypMitMehr[] = [];
   kooperationen: string[] = [];
   backlineJazzclub: string[] = [];
@@ -112,7 +97,6 @@ export default class OptionValues {
   constructor(object?: any) {
     if (object) {
       Object.assign(this, object, {
-        typen: sortByNameCaseInsensitive(object.typen || []),
         kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
         genres: sortByNameCaseInsensitive(object.genres || []),
         backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
@@ -124,9 +108,9 @@ export default class OptionValues {
           }
           return a.regulaer > b.regulaer ? 1 : -1;
         }),
-        typenPlus: (object.typenPlus || (object.typen || []).map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))).sort(
-          (a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
-        ),
+        typenPlus: (object.typenPlus ?? [])
+          //.map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))
+          .sort((a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase())),
         agenturen: (object.agenturen || []).map((agentur: Kontakt) => new Kontakt(agentur)),
         hotels: (object.hotels || []).map((hotel: Kontakt) => new Kontakt(hotel)),
       });

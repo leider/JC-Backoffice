@@ -10,6 +10,7 @@ import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
+import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 
 export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const konzertContext = useContext(KonzertContext);
@@ -31,7 +32,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
 
   const typeColor = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
-    return typByName[eventTyp]?.[0].color || "#6c757d";
+    return typByName[eventTyp]?.[0].color ?? colorDefault;
   }, [optionen, eventTyp]);
 
   const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });

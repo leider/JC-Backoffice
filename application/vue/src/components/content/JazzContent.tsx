@@ -32,14 +32,13 @@ function TodaysConcert() {
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
           {bestaetigte?.map((konzert) => (
-            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl}>
+            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl} style={{ color: "#FFF" }}>
               <h2
                 style={{
                   marginBottom: 0,
                   marginTop: 0,
                   textAlign: "center",
-                  backgroundColor: konzert.kopf.eventTypRich?.color,
-                  color: "#FFF",
+                  backgroundColor: konzert.color,
                 }}
               >
                 {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}

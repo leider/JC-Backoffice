@@ -1,4 +1,4 @@
-import { TypMitMehr } from "../optionen/optionValues.js";
+import { colorDefault, TypMitMehr } from "../optionen/optionValues.js";
 
 export default class Kopf {
   beschreibung = "";
@@ -48,5 +48,9 @@ export default class Kopf {
 
   get kooperationspartnerText(): string {
     return this.isKooperation ? this.kooperation : "";
+  }
+
+  get color(): string {
+    return this.eventTypRich?.color ?? colorDefault;
   }
 }

@@ -1,11 +1,10 @@
 import { Col, Row } from "antd";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { vermietungForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
-import groupBy from "lodash/groupBy";
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
@@ -21,19 +20,11 @@ export default function PreviewVermietung() {
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser } = useJazzContext();
 
   const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung());
-  const [typeColor, setTypeColor] = useState<string | undefined>("");
 
   document.title = vermietung.kopf.titelMitPrefix;
-
-  useEffect(() => {
-    if (optionen && vermietung) {
-      const typByName = groupBy(optionen.typenPlus || [], "name");
-      setTypeColor(typByName[vermietung.kopf.eventTyp]?.[0].color || "#6c757d");
-    }
-  }, [optionen, vermietung]);
 
   useEffect(() => {
     if (vermietungQueryData.data) {
@@ -54,15 +45,10 @@ export default function PreviewVermietung() {
     );
   }
 
-  const titleStyle: CSSProperties = { color: typeColor };
   return (
     <div>
       <JazzPageHeader
-        title={
-          <span style={titleStyle}>
-            {vermietung.kopf.titelMitPrefix} {vermietung.kopf.presseInEcht}
-          </span>
-        }
+        title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
         dateString={vermietung.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />

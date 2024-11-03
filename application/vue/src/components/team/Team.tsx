@@ -62,12 +62,13 @@ export default function Team() {
       if (a?.data && b?.data) {
         return [...a.data, ...b.data];
       }
-      return [];
+      return [] as Veranstaltung[];
     },
   });
 
   const alle = useMemo(() => {
-    const sortedAscending = sortBy(queryResult, "startDate") as Veranstaltung[];
+    const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as Veranstaltung[]);
+    const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
   }, [queryResult, selectedPeriod]);
 

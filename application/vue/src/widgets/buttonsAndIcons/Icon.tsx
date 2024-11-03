@@ -10,5 +10,5 @@ export interface IconProps extends IP {
 
 export const IconForSmallBlock = ({ iconName, size, ...props }: IconProps) => {
   const BootstrapIcon = icons[iconName];
-  return <BootstrapIcon size={size || 16} style={{ marginBottom: "-3px" }} {...props} />;
+  return <BootstrapIcon size={size ?? 16} {...props} />;
 };

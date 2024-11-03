@@ -3,9 +3,8 @@ import groupBy from "lodash/groupBy.js";
 import flatMap from "lodash/flatMap.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Konzert from "jc-shared/konzert/konzert.js";
 import { Ical } from "jc-shared/optionen/ferienIcals.js";
-import { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.js";
+import { TerminFilterOptions } from "jc-shared/optionen/termin.js";
 import User from "jc-shared/user/user.js";
 
 import store from "../lib/konzerte/konzertestore.js";
@@ -15,32 +14,30 @@ import vermietungenstore from "../lib/vermietungen/vermietungenstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import konzerteService from "../lib/konzerte/konzerteService.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
-import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.js";
 import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import { colorDefault, colorVermietung, TypMitMehr } from "jc-shared/optionen/optionValues.js";
 
 const app = express();
+
+function asCalendarEvent(veranstaltung: Veranstaltung, user: User, typByName: { [key: string]: TypMitMehr[] }) {
+  const color = veranstaltung.isVermietung ? colorVermietung : (typByName[veranstaltung.kopf.eventTyp]?.[0].color ?? colorDefault);
+  return veranstaltung.asCalendarEvent(user.accessrights.isOrgaTeam, color);
+}
 
 function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   const optionen = optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
 
-  function asCalendarEvent(konzert: Konzert): TerminEvent {
-    const color = typByName[konzert.kopf.eventTyp]?.[0].color || "#6c757d";
-    return konzert.asCalendarEvent(user.accessrights.isOrgaTeam, color);
-  }
   const konzerte = store.byDateRangeInAscendingOrder(start, end);
   const unbest = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
-  return unbest.map((ver) => asCalendarEvent(ver));
+  return unbest.map((ver) => asCalendarEvent(ver, user, typByName));
 }
 
 function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
-  function asCalendarEvent(vermietung: Vermietung): TerminEvent {
-    return vermietung.asCalendarEvent(user.accessrights.isOrgaTeam, "#f6eee1");
-  }
-
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(start, end);
-  return vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map(asCalendarEvent);
+  return vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map((ver) => asCalendarEvent(ver, user, {}));
 }
 
 async function termineForIcal(ical: Ical) {

@@ -62,6 +62,10 @@ export default class DatumUhrzeit {
     return new DatumUhrzeit(dayjs(YYYYMM, "YYYY/MM"));
   }
 
+  static forMonatLangJahrKompakt(MMM_apostrophYY: string): DatumUhrzeit {
+    return new DatumUhrzeit(dayjs(MMM_apostrophYY, "MMMM 'YY"));
+  }
+
   static forISOString(ISO: string): DatumUhrzeit {
     return new DatumUhrzeit(dayjs(ISO));
   }

@@ -91,11 +91,6 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     });
   }
 
-  const color = useMemo(
-    () => (veranstaltung.isVermietung ? "#f6eee1" : veranstaltung.kopf.eventTypRich?.color || "#6c757d"),
-    [veranstaltung],
-  );
-
   const textColor = useMemo(() => (veranstaltung.isVermietung ? "black" : "white"), [veranstaltung.isVermietung]);
 
   return (
@@ -107,7 +102,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
       onFinish={saveForm}
       layout="vertical"
       size="small"
-      style={{ margin: -12, backgroundColor: color, borderColor: color }}
+      style={{ margin: -12, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
     >
       <Row>
         <Col span={6}>

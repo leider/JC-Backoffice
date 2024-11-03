@@ -5,7 +5,6 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
-import Color from "color";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
   const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
@@ -42,20 +41,21 @@ interface TeamBlockVermietungProps {
 }
 
 export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamBlockVermietungProps) {
-  const [expanded, setExpanded] = useState<boolean>();
+  const [expanded, setExpanded] = useState<boolean>(initiallyOpen);
   useEffect(() => {
     setExpanded(initiallyOpen);
   }, [initiallyOpen]);
+
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col span={24}>
         {vermietung.ghost ? (
-          <div style={{ backgroundColor: new Color("#f6eee1").lighten(0.05).hex(), padding: "2px 16px" }}>
+          <div style={{ backgroundColor: vermietung.color, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={vermietung} expanded={initiallyOpen} />
           </div>
         ) : (
           <Collapse
-            style={{ borderColor: "#f6eee1" }}
+            style={{ borderColor: vermietung.color }}
             size={"small"}
             activeKey={expanded ? vermietung.id : ""}
             onChange={() => {
@@ -65,7 +65,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
             items={[
               {
                 key: vermietung.id || "",
-                style: { backgroundColor: "#f6eee1" },
+                style: { backgroundColor: vermietung.color },
                 className: "team-block",
                 label: <TeamBlockHeader veranstaltung={vermietung} expanded={expanded} />,
                 extra: expanded && <Extras vermietung={vermietung} />,

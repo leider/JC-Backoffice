@@ -23,7 +23,14 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
 
   const byDay = useMemo(() => groupBy(veranstaltungen, (veranst) => veranst.startDatumUhrzeit.tagMonatJahrKompakt), [veranstaltungen]);
 
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const initiallyExpanded = useMemo(() => {
+    const jetzt = new DatumUhrzeit();
+    const ersterDesMonats = DatumUhrzeit.forMonatLangJahrKompakt(monat);
+    return ersterDesMonats.istVor(jetzt.plus({ monate: 1 })) && ersterDesMonats.istNach(jetzt.minus({ monate: 1 }));
+  }, [monat]);
+
+  const [expanded, setExpanded] = useState<boolean>(initiallyExpanded);
+
   const [yymm, setYymm] = useState<string>("");
   useEffect(() => {
     const minDatum = veranstaltungen[0].startDatumUhrzeit;

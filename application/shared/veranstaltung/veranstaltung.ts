@@ -9,6 +9,8 @@ import Technik from "./technik.js";
 import dayjs from "dayjs";
 import times from "lodash/times.js";
 import { TerminEvent } from "../optionen/termin.js";
+import { colorVermietung } from "../optionen/optionValues.js";
+import Color from "color";
 
 export type MinimalVeranstaltung = { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -75,6 +77,11 @@ export default abstract class Veranstaltung {
   }
   createGhostsForOverview() {
     return this.ghostResults().map((each) => this.asNew(each));
+  }
+
+  get color(): string {
+    const color = this.isVermietung ? colorVermietung : this.kopf.color;
+    return this.ghost ? new Color(color).lighten(this.isVermietung ? 0.05 : 0.5).hex() : color;
   }
 
   get initializedUrl(): string {
