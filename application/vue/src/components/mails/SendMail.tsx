@@ -17,12 +17,12 @@ import sortBy from "lodash/sortBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useNavigate } from "react-router-dom";
-import MitarbeiterMultiSelect from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import UploaderForMail from "@/widgets/UploaderForMail.tsx";
 import { RcFile } from "antd/es/upload";
 import { useWatch } from "antd/es/form/Form";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 export default function SendMail() {
   const editorOptions = useMemo(

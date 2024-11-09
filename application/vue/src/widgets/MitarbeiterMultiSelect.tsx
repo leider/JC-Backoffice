@@ -19,7 +19,7 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
       case "Master":
         return "orange";
       case "Ersthelfer":
-        return "pink";
+        return "darkgreen";
     }
   }
 

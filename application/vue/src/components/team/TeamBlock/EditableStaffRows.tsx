@@ -3,7 +3,7 @@ import React from "react";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { MitarbeiterRowProps } from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
-import MitarbeiterMultiSelect, { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
+import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }) => {
   return (

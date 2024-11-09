@@ -6,6 +6,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
 
 function StaffList({
   header,
@@ -39,7 +40,10 @@ function StaffList({
     function renderUser(user: User) {
       return (
         <>
-          {user.name} <a href={`tel:${user.tel}`}>{user.tel}</a> <a href={`mailto:${user.email}`}>{user.email}</a>
+          {user.name}
+          {user.kannErsthelfer && <ErsthelferSymbol />}
+          &nbsp;
+          <a href={`tel:${user.tel}`}>{user.tel}</a> <a href={`mailto:${user.email}`}>{user.email}</a>
         </>
       );
     }

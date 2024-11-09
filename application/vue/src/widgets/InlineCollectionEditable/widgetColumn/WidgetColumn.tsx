@@ -7,10 +7,10 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import StartEndDateOnlyPickers from "@/components/konzert/hotel/StartEndDateOnlyPickers.tsx";
-import UserMultiSelect from "@/widgets/UserMultiSelect.tsx";
 import { ColorField } from "@/widgets/ColorField.tsx";
 import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
 import { Rule } from "antd/es/form";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 interface IWidgetColumn {
   /**
@@ -81,7 +81,7 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
       Widget = <ColorField {...commonProps} />;
       break;
     case "user":
-      Widget = <UserMultiSelect usersAsOptions={desc.labelsAndValues!} {...commonProps} />;
+      Widget = <MitarbeiterMultiSelect usersAsOptions={desc.usersWithKann!} {...commonProps} />;
       break;
     case "text":
       Widget = desc.filters ? (

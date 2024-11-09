@@ -1,10 +1,10 @@
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 export type ColDescWithIdx = CollectionColDesc & {
   idx: number;
   alignValueWithMin?: boolean;
   disabled?: boolean;
-  labelsAndValues?: LabelAndValue[];
+  usersWithKann?: UserWithKann[];
 };
 
 export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl";
@@ -14,7 +14,7 @@ export type CollectionColDesc = Omit<ColDesc, "width"> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only
-  labelsAndValues?: LabelAndValue[];
+  usersWithKann?: UserWithKann[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

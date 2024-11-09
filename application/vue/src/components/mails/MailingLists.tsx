@@ -7,11 +7,11 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -20,7 +20,7 @@ export default function MailingLists() {
     allLists: [],
   });
   const [dirty, setDirty] = useState<boolean>(false);
-  const [usersAsOptions, setUsersAsOptions] = useState<LabelAndValue[]>([]);
+  const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
   const queryClient = useQueryClient();
 
   useDirtyBlocker(dirty);
@@ -28,7 +28,7 @@ export default function MailingLists() {
 
   useEffect(() => {
     setMailingLists(new Users(allUsers).mailinglisten);
-    setUsersAsOptions(allUsers.map((user) => ({ label: user.name, value: user.id })));
+    setUsersAsOptions(allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })));
   }, [allUsers]);
 
   const mutateLists = useMutation({
@@ -78,7 +78,7 @@ export default function MailingLists() {
       label: "Users",
       type: "user",
       width: "xl",
-      labelsAndValues: usersAsOptions,
+      usersWithKann: usersAsOptions,
       required: true,
     },
   ];
