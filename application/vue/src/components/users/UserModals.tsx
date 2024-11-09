@@ -1,14 +1,17 @@
-import { Col, Divider, Form, Input, Modal, Row } from "antd";
+import { Alert, Col, Divider, Form, FormInstance, Input, Modal, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import CheckItem from "@/widgets/CheckItem";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
+import { useWatch } from "antd/es/form/Form";
+import isNil from "lodash/isNil";
 
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
@@ -99,7 +102,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             </Form.Item>
           </Col>
         </Row>
-        <EditFields isSuperUser={true} />
+        <EditFields isSuperUser={true} form={form} />
       </Form>
     </Modal>
   );
@@ -171,20 +174,20 @@ export function EditUserModal({
         autoComplete="off"
       >
         <JazzPageHeader title={user.id} />
-        <EditFields isSuperUser={isSuperUser} />
+        <EditFields isSuperUser={isSuperUser} form={form} />
       </Form>
     </Modal>
   );
 }
 
-function EditFields({ isSuperUser }: { isSuperUser: boolean }) {
+function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormInstance<User> }) {
   return (
     <Row gutter={8}>
       <Col span={24}>
         <TextField name={"name"} label="Vollständiger Name" required />
         <TextField name={"email"} label="E-Mail" isEmail required />
         <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff oder Kasse gesucht" />
-        <IchKannFields />
+        <IchKannFields form={form} />
         <TextField name={"tel"} label="Telefon" />
         <SingleSelect
           name="tshirt"
@@ -213,12 +216,28 @@ function EditFields({ isSuperUser }: { isSuperUser: boolean }) {
   );
 }
 
-export function IchKannFields() {
+export function IchKannFields({ form }: { form: FormInstance<User> }) {
+  const kannErsthelfer = useWatch("kannErsthelfer", { form, preserve: true });
+  const keinErsthelferGesetzt = useMemo(() => isNil(kannErsthelfer), [kannErsthelfer]);
   return (
     <>
       <Divider orientation="left" orientationMargin="0">
         Ich kann helfen bei...
       </Divider>
+      <Row gutter={8}>
+        <Col span={24}>
+          {keinErsthelferGesetzt ? (
+            <Alert
+              message="Bitte sag uns, ob Du als Ersthelfer eingesetzt werden kannst."
+              description={<ThreewayCheckbox name="kannErsthelfer" label="Ersthelfer" />}
+              type="warning"
+              showIcon
+            />
+          ) : (
+            <CheckItem name="kannErsthelfer" label="Ersthelfer" />
+          )}
+        </Col>
+      </Row>
       <Row gutter={8}>
         <Col span={5}>
           <CheckItem name="kannKasse" label="Kasse" />

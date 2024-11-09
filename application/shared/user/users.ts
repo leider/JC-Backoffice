@@ -61,34 +61,12 @@ class Users {
   }
 
   getUsersKann(kann: KannSection) {
-    return this.users.filter((u) => {
-      switch (kann) {
-        case "Kasse":
-          return u.kannKasse;
-        case "Licht":
-          return u.kannLicht;
-        case "Ton":
-          return u.kannTon;
-        case "Master":
-          return u.kannMaster;
-      }
-    });
+    return this.users.filter((u) => u.kann(kann));
   }
 
   getUsersKannOneOf(kannMultiple: KannSection[]) {
     return this.users.filter((u) => {
-      const bools = kannMultiple?.map((kann) => {
-        switch (kann) {
-          case "Kasse":
-            return u.kannKasse;
-          case "Licht":
-            return u.kannLicht;
-          case "Ton":
-            return u.kannTon;
-          case "Master":
-            return u.kannMaster;
-        }
-      });
+      const bools = kannMultiple?.map((kann) => u.kann(kann));
       return bools?.reduce((curr, next) => curr || next, false);
     });
   }

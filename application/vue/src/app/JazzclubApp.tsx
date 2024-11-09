@@ -34,6 +34,7 @@ function JazzclubApp() {
           components: {
             Checkbox: {
               colorPrimary: customColors.colorSuccess as string,
+              colorPrimaryHover: customColors.colorSuccess as string,
             },
           },
         }}

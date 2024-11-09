@@ -6,6 +6,7 @@ import { IchKannFields } from "@/components/users/UserModals.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveUser } from "@/commons/loader.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import isNil from "lodash/isNil";
 
 export function TellUserToFillHelpFields() {
   const { currentUser } = useJazzContext();
@@ -23,7 +24,7 @@ export function TellUserToFillHelpFields() {
 
   useEffect(() => {
     if (currentUser.id) {
-      if (currentUser.hatKeineKannsGefuellt) {
+      if (currentUser.hatKeineKannsGefuellt || isNil(currentUser.kannErsthelfer)) {
         const deepCopy = currentUser.toJSONWithoutPass();
         form.setFieldsValue(deepCopy);
         setIsOpen(true);
@@ -49,8 +50,14 @@ export function TellUserToFillHelpFields() {
     >
       <Form form={form} layout="vertical" autoComplete="off">
         <JazzPageHeader title="Kleine Bitte" />
+        {isNil(currentUser.kannErsthelfer) && (
+          <p>
+            <b>Ersthelfer gesucht!</b>
+          </p>
+        )}
+
         <p>Bitte sag uns kurz, in welchen Bereichen Du helfen kannst und willst...</p>
-        <IchKannFields />
+        <IchKannFields form={form} />
         <em>
           Damit wir erkennen, dass Du nichts ankreuzen willst, musst Du einmal etwas an- und wieder abwählen; sonst kommt der Dialog beim
           nächsten Mal wieder.

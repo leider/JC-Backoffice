@@ -62,7 +62,7 @@ export default function SendMail() {
 
   const rulesDescriptions = useMemo(() => sortBy(uniq(mailRules.map((rule) => rule.name))), [mailRules]);
 
-  const kannFilter = useMemo(() => ["Kasse", "Ton", "Licht", "Master"], []);
+  const kannFilter = useMemo(() => ["Kasse", "Ton", "Licht", "Master", "Ersthelfer"], []);
 
   const veranstaltungenDescriptions = useMemo(
     () => veranstaltungen.map((v) => new VeranstaltungFormatter(v).description),

@@ -1,7 +1,7 @@
 import Accessrights from "./accessrights.js";
 import isNil from "lodash/isNil.js";
 
-export type KannSection = "Kasse" | "Ton" | "Licht" | "Master";
+export type KannSection = "Kasse" | "Ton" | "Licht" | "Master" | "Ersthelfer";
 
 export const SUPERUSERS = "superusers";
 export const BOOKING = "bookingTeam";
@@ -31,6 +31,7 @@ export default class User {
   kannTon?: boolean;
   kannLicht?: boolean;
   kannMaster?: boolean;
+  kannErsthelfer?: boolean;
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   constructor(object: any) {
@@ -44,6 +45,7 @@ export default class User {
     this.password = object.password;
     this.wantsEmailReminders = object.wantsEmailReminders;
 
+    this.kannErsthelfer = object.kannErsthelfer;
     this.kannKasse = object.kannKasse;
     this.kannTon = object.kannTon;
     this.kannLicht = object.kannLicht;
@@ -76,12 +78,6 @@ export default class User {
     return `${this.name} <${this.email}>`;
   }
 
-  unsubscribeFromList(oldlistname: string | undefined): void {
-    if (oldlistname) {
-      this.mailinglisten = this.mailinglisten.filter((name) => name !== oldlistname);
-    }
-  }
-
   subscribeList(listname: string): void {
     this.mailinglisten.push(listname);
   }
@@ -104,7 +100,25 @@ export default class User {
     if (this.kannMaster) {
       result.push("Master");
     }
+    if (this.kannErsthelfer) {
+      result.push("Ersthelfer");
+    }
     return result;
+  }
+
+  kann(kann: KannSection) {
+    switch (kann) {
+      case "Kasse":
+        return !!this.kannKasse;
+      case "Licht":
+        return !!this.kannLicht;
+      case "Ton":
+        return !!this.kannTon;
+      case "Master":
+        return !!this.kannMaster;
+      case "Ersthelfer":
+        return !!this.kannErsthelfer;
+    }
   }
 
   get accessrights(): Accessrights {
