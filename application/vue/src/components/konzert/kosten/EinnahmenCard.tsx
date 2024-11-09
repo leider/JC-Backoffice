@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Flex, Form, Row, Typography } from "antd";
+import { Col, Flex, Row, Typography } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -10,6 +10,7 @@ import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 interface EinnahmenCardParams {
   onChange: (sum: number) => void;
@@ -35,7 +36,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
     onChange(sum);
   }
 
-  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
   return (
     <Collapsible suffix="ausgaben" label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder amount={summe}>

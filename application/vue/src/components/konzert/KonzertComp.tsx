@@ -12,6 +12,7 @@ import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { useWatch } from "antd/es/form/Form";
 //import { detailedDiff } from "deep-object-diff";
 
 export const KonzertContext = createContext<{
@@ -25,7 +26,7 @@ export default function KonzertComp() {
   const { url } = useParams();
   const [form] = Form.useForm<Konzert & { riderBoxes?: BoxParams[] }>();
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
-  const agenturauswahl = Form.useWatch("agenturauswahl", { form });
+  const agenturauswahl = useWatch("agenturauswahl", { form });
 
   useEffect(
     () => {
@@ -101,7 +102,7 @@ export default function KonzertComp() {
   const { currentUser, optionen } = useJazzContext();
   const navigate = useNavigate();
 
-  const kassenfreigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form });
+  const kassenfreigabe = useWatch(["kasse", "kassenfreigabe"], { form });
 
   useEffect(() => {
     updateDirtyIfChanged(initialValue, form.getFieldsValue(true));

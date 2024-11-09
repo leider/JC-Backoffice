@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row, Table } from "antd";
+import { Col, Row, Table } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 interface AusgabenCardParams {
   einnahmen: number;
@@ -17,11 +18,11 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
 
   const [kalk, setKalk] = useState<KonzertKalkulation>(new KonzertKalkulation(new Konzert()));
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
     form,
     preserve: true,
   });
-  const deal = Form.useWatch(["kosten", "deal"], {
+  const deal = useWatch(["kosten", "deal"], {
     form,
     preserve: true,
   });

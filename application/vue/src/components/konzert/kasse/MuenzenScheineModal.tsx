@@ -6,6 +6,7 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbedded.tsx";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { KassenContext } from "@/components/konzert/kasse/TabKasse.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -27,7 +28,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const form = konzertContext!.form;
   const [openModal, setOpenModal] = useState(false);
 
-  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
   function updateAnfangsbestandEUR() {
     const startinhalt = form.getFieldValue(["kasse", "startinhalt"]);
     const sum = items

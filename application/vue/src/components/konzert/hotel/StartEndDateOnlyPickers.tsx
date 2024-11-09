@@ -1,9 +1,10 @@
-import { DatePicker, Form } from "antd";
+import { DatePicker } from "antd";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
 import Aggregate from "@/widgets/Aggregate.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 interface StartEndDateOnlyPickersProps {
   names: NamePath[];
@@ -35,7 +36,7 @@ function EmbeddedPickers({
     }
   }, [value]);
 
-  const eventStart: Date = Form.useWatch([dependency]);
+  const eventStart: Date = useWatch([dependency]);
   const eventStartDayjs: Dayjs = useMemo(() => dayjs(eventStart), [eventStart]);
 
   function onCalendarChange(dates: (Dayjs | null)[] | null) {

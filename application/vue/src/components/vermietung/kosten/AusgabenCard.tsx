@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
@@ -11,6 +11,7 @@ import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function AusgabenCard() {
   const context = useContext(VermietungContext);
@@ -18,22 +19,22 @@ export default function AusgabenCard() {
 
   const [summe, setSumme] = useState<number>(0);
 
-  const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], {
     form,
     preserve: true,
   });
 
-  const backlineEUR = Form.useWatch(["kosten", "backlineEUR"], {
+  const backlineEUR = useWatch(["kosten", "backlineEUR"], {
     form,
     preserve: true,
   });
 
-  const technikAngebot1EUR = Form.useWatch(["kosten", "technikAngebot1EUR"], {
+  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], {
     form,
     preserve: true,
   });
 
-  const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+  const brauchtTechnik = useWatch("brauchtTechnik", {
     form,
     preserve: true,
   });

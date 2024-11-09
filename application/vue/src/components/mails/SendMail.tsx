@@ -22,6 +22,7 @@ import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import UploaderForMail from "@/widgets/UploaderForMail.tsx";
 import { RcFile } from "antd/es/upload";
+import { useWatch } from "antd/es/form/Form";
 
 export default function SendMail() {
   const editorOptions = useMemo(
@@ -104,18 +105,18 @@ export default function SendMail() {
   }
   useEffect(initializeForm, [form]);
 
-  const selectedVeranstaltungenInForm = Form.useWatch("selectedVeranstaltungen", { form });
-  const selectedRulesInForm = Form.useWatch("selectedRules", { form });
-  const selectedListsInForm = Form.useWatch("selectedLists", { form });
-  const selectedUsersInForm = Form.useWatch("selectedUsers", { form });
-  const selectedUserGruppenInForm = Form.useWatch("selectedUserGruppen", { form }) as (
+  const selectedVeranstaltungenInForm = useWatch("selectedVeranstaltungen", { form });
+  const selectedRulesInForm = useWatch("selectedRules", { form });
+  const selectedListsInForm = useWatch("selectedLists", { form });
+  const selectedUsersInForm = useWatch("selectedUsers", { form });
+  const selectedUserGruppenInForm = useWatch("selectedUserGruppen", { form }) as (
     | typeof SUPERUSERS
     | typeof ORGA
     | typeof BOOKING
     | typeof ABENDKASSE
   )[];
-  const selectedKannInForm = Form.useWatch("selectedKann", { form }) as KannSection[];
-  const subject = Form.useWatch("subject", { form });
+  const selectedKannInForm = useWatch("selectedKann", { form }) as KannSection[];
+  const subject = useWatch("subject", { form });
 
   useEffect(() => {
     setSelectedUsers(allUsers.filter((user) => (selectedUsersInForm || []).includes(user.id)));

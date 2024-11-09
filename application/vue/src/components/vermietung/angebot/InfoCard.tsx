@@ -14,20 +14,21 @@ import { TextField } from "@/widgets/TextField.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function InfoCard() {
   const vermietungContext = useContext(VermietungContext);
   const { currentUser } = useJazzContext();
 
   const form = vermietungContext!.form;
-  const status = Form.useWatch(["angebot", "status"], { form, preserve: true });
+  const status = useWatch(["angebot", "status"], { form, preserve: true });
 
-  const startDate = Form.useWatch("startDate", { form, preserve: true });
+  const startDate = useWatch("startDate", { form, preserve: true });
   const vergangen = useMemo(() => {
     return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
   }, [startDate]);
 
-  const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });
+  const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 

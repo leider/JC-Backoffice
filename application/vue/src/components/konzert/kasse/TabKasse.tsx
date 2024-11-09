@@ -1,4 +1,4 @@
-import { Col, Form, Row, Tour, TourProps } from "antd";
+import { Col, Row, Tour, TourProps } from "antd";
 import React, { createContext, Ref, useContext, useEffect, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/konzert/kasse/AusgabenCard";
@@ -6,6 +6,7 @@ import { KassenzettelFreigabe } from "@/components/konzert/kasse/KassenzettelFre
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Kasse from "jc-shared/konzert/kasse";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export interface KasseCardProps {
   disabled: boolean;
@@ -25,7 +26,7 @@ export default function TabKasse() {
   const konzertContext = useContext(KonzertContext);
   const form = konzertContext!.form;
 
-  const anfangsbestandEUR = Form.useWatch(["kasse", "anfangsbestandEUR"], { form, preserve: true });
+  const anfangsbestandEUR = useWatch(["kasse", "anfangsbestandEUR"], { form, preserve: true });
 
   const refStartinhalt: Ref<HTMLElement> = useRef(null);
   const refEndinhalt: Ref<HTMLElement> = useRef(null);
@@ -40,7 +41,7 @@ export default function TabKasse() {
 
   useEffect(anfangsbestandChanged, [form, anfangsbestandEUR]);
 
-  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"]);
+  const freigabe = useWatch(["kasse", "kassenfreigabe"]);
 
   const toursteps: TourProps["steps"] = [
     {

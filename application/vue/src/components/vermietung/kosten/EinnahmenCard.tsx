@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function EinnahmenCard() {
   const context = useContext(VermietungContext);
@@ -11,7 +12,7 @@ export default function EinnahmenCard() {
 
   const [summe, setSumme] = useState<number>(0);
 
-  const saalmiete = Form.useWatch("saalmiete", {
+  const saalmiete = useWatch("saalmiete", {
     form,
     preserve: true,
   });

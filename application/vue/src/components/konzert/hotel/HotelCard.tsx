@@ -10,6 +10,7 @@ import { KonzertContext } from "@/components/konzert/KonzertComp";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function HotelCard() {
   const konzertContext = useContext(KonzertContext);
@@ -20,9 +21,9 @@ export default function HotelCard() {
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");
 
-  const hotelName = Form.useWatch(["hotel", "name"]);
+  const hotelName = useWatch(["hotel", "name"]);
 
-  const eventStartDate = Form.useWatch(["startDate"], {
+  const eventStartDate = useWatch(["startDate"], {
     form,
     preserve: true,
   });

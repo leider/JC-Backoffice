@@ -11,6 +11,7 @@ import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; isDirty: boolean } | null>(null);
 
@@ -53,7 +54,7 @@ export default function VermietungComp() {
   const { currentUser } = useJazzContext();
   const navigate = useNavigate();
 
-  const freigabe = Form.useWatch(["angebot", "freigabe"], { form, preserve: true });
+  const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
 
   useEffect(() => {
     updateDirtyIfChanged(initialValue, form.getFieldsValue(true));

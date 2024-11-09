@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Row } from "antd";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
@@ -8,12 +8,13 @@ import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/Numeri
 import Angebot from "jc-shared/vermietung/angebot.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function AngebotCard() {
   const context = useContext(VermietungContext);
   const form = context!.form;
 
-  const angFields = Form.useWatch("angebot", { form, preserve: true });
+  const angFields = useWatch("angebot", { form, preserve: true });
 
   const angebot = useMemo(() => new Angebot(angFields), [angFields]);
 

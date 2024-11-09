@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { Form, Tabs, TabsProps } from "antd";
+import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useSearchParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function VermietungTabs() {
   const context = useContext(VermietungContext);
@@ -54,11 +55,11 @@ export default function VermietungTabs() {
     );
   }
 
-  const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+  const brauchtTechnik = useWatch("brauchtTechnik", {
     form,
     preserve: true,
   });
-  const brauchtPresse = Form.useWatch("brauchtPresse", {
+  const brauchtPresse = useWatch("brauchtPresse", {
     form,
     preserve: true,
   });

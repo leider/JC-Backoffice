@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Form, Tabs, TabsProps } from "antd";
+import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TabAllgemeines from "@/components/konzert/allgemeines/TabAllgemeines";
@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function KonzertTabs() {
   const konzertContext = useContext(KonzertContext);
@@ -25,11 +26,11 @@ export default function KonzertTabs() {
   const { currentUser } = useJazzContext();
   const onlyKasse = useMemo(() => !currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
     form,
     preserve: true,
   });
-  const brauchtPresse = Form.useWatch("brauchtPresse", {
+  const brauchtPresse = useWatch("brauchtPresse", {
     form,
     preserve: true,
   });

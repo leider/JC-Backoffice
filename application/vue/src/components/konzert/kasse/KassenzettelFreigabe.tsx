@@ -6,7 +6,7 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
-import { useForm } from "antd/es/form/Form";
+import { useForm, useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -26,14 +26,14 @@ export function KassenzettelFreigabe() {
     setUsersAsOptions(allUsers.map((user) => user.name));
   }, [allUsers]);
 
-  const startDate = Form.useWatch("startDate", { form, preserve: true });
+  const startDate = useWatch("startDate", { form, preserve: true });
   const vergangen = useMemo(() => {
     return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
   }, [startDate]);
 
-  const freigabe = Form.useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
-  const endbestandEUR = Form.useWatch("endbestandEUR", { form, preserve: true });
-  const endbestandGezaehltEUR = Form.useWatch(["kasse", "endbestandGezaehltEUR"], { form, preserve: true });
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+  const endbestandEUR = useWatch("endbestandEUR", { form, preserve: true });
+  const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { form, preserve: true });
 
   const [innerForm] = useForm();
 

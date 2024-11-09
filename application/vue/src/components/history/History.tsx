@@ -7,16 +7,17 @@ import { historyIdsFor } from "@/commons/loader.ts";
 import React, { useEffect, useMemo } from "react";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export function History() {
   const [form] = Form.useForm();
 
-  const collection = Form.useWatch(["collection"], {
+  const collection = useWatch(["collection"], {
     form,
     preserve: true,
   });
 
-  const id: string = Form.useWatch(["id"], {
+  const id: string = useWatch(["id"], {
     form,
     preserve: true,
   });

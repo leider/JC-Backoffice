@@ -15,6 +15,7 @@ import Technik from "jc-shared/veranstaltung/technik.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;
@@ -25,27 +26,27 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
 
   const [summe, setSumme] = useState<number>(0);
 
-  const unterkunft = Form.useWatch(["unterkunft"], {
+  const unterkunft = useWatch(["unterkunft"], {
     form,
     preserve: true,
   });
 
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
     form,
     preserve: true,
   });
 
-  const backlineEUR = Form.useWatch(["kosten", "backlineEUR"], {
+  const backlineEUR = useWatch(["kosten", "backlineEUR"], {
     form,
     preserve: true,
   });
 
-  const technikAngebot1EUR = Form.useWatch(["kosten", "technikAngebot1EUR"], {
+  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], {
     form,
     preserve: true,
   });
 
-  const fluegelstimmerEUR = Form.useWatch(["kosten", "fluegelstimmerEUR"], {
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], {
     form,
     preserve: true,
   });

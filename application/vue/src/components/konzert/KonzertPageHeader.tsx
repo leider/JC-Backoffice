@@ -1,6 +1,5 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
-import { Form } from "antd";
 import { useSearchParams } from "react-router-dom";
 import { HelpWithKasseButton, MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -11,6 +10,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const konzertContext = useContext(KonzertContext);
@@ -25,7 +25,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
 
   const isKassenseite = useMemo(() => search.get("page") === "kasse", [search]);
 
-  const eventTyp = Form.useWatch(["kopf", "eventTyp"], {
+  const eventTyp = useWatch(["kopf", "eventTyp"], {
     form,
     preserve: true,
   });
@@ -35,44 +35,44 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
     return typByName[eventTyp]?.[0].color ?? colorDefault;
   }, [optionen, eventTyp]);
 
-  const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = Form.useWatch("startDate", {
+  const titel = useWatch(["kopf", "titel"], { form, preserve: true });
+  const startDate = useWatch("startDate", {
     form,
     preserve: true,
   });
-  const confirmed = Form.useWatch(["kopf", "confirmed"], {
+  const confirmed = useWatch(["kopf", "confirmed"], {
     form,
     preserve: true,
   });
-  const abgesagt = Form.useWatch(["kopf", "abgesagt"], {
+  const abgesagt = useWatch(["kopf", "abgesagt"], {
     form,
     preserve: true,
   });
-  const technikOK = Form.useWatch(["technik", "checked"], {
+  const technikOK = useWatch(["technik", "checked"], {
     form,
     preserve: true,
   });
-  const brauchtPresse = Form.useWatch("brauchtPresse", {
+  const brauchtPresse = useWatch("brauchtPresse", {
     form,
     preserve: true,
   });
-  const presseOK = Form.useWatch(["presse", "checked"], {
+  const presseOK = useWatch(["presse", "checked"], {
     form,
     preserve: true,
   });
-  const homepage = Form.useWatch(["kopf", "kannAufHomePage"], {
+  const homepage = useWatch(["kopf", "kannAufHomePage"], {
     form,
     preserve: true,
   });
-  const social = Form.useWatch(["kopf", "kannInSocialMedia"], {
+  const social = useWatch(["kopf", "kannInSocialMedia"], {
     form,
     preserve: true,
   });
-  const brauchtHotel = Form.useWatch(["artist", "brauchtHotel"], {
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
     form,
     preserve: true,
   });
-  const hotel = Form.useWatch(["unterkunft", "bestaetigt"], {
+  const hotel = useWatch(["unterkunft", "bestaetigt"], {
     form,
     preserve: true,
   });
@@ -108,7 +108,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
     setIsOrga(currentUser.accessrights.isOrgaTeam);
   }, [currentUser.accessrights.isOrgaTeam, setIsOrga]);
 
-  const titleStyle: CSSProperties = { color: typeColor };
+  const titleStyle: CSSProperties = { color: typeColor, textDecoration: abgesagt ? "line-through" : "" };
   return (
     <JazzPageHeader
       title={<span style={titleStyle}>{title}</span>}

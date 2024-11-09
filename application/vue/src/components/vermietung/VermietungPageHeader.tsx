@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { Form, Tag } from "antd";
+import { Tag } from "antd";
 import { MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const context = useContext(VermietungContext);
@@ -14,41 +15,41 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
-  const confirmed = Form.useWatch(["kopf", "confirmed"], {
+  const confirmed = useWatch(["kopf", "confirmed"], {
     form,
     preserve: true,
   });
-  const titel = Form.useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = Form.useWatch("startDate", {
+  const titel = useWatch(["kopf", "titel"], { form, preserve: true });
+  const startDate = useWatch("startDate", {
     form,
     preserve: true,
   });
-  const brauchtTechnik = Form.useWatch("brauchtTechnik", {
+  const brauchtTechnik = useWatch("brauchtTechnik", {
     form,
     preserve: true,
   });
-  const brauchtPresse = Form.useWatch("brauchtPresse", {
+  const brauchtPresse = useWatch("brauchtPresse", {
     form,
     preserve: true,
   });
-  const technikOK = Form.useWatch(["technik", "checked"], {
+  const technikOK = useWatch(["technik", "checked"], {
     form,
     preserve: true,
   });
-  const presseOK = Form.useWatch(["presse", "checked"], {
+  const presseOK = useWatch(["presse", "checked"], {
     form,
     preserve: true,
   });
-  const homepage = Form.useWatch(["kopf", "kannAufHomePage"], {
+  const homepage = useWatch(["kopf", "kannAufHomePage"], {
     form,
     preserve: true,
   });
-  const social = Form.useWatch(["kopf", "kannInSocialMedia"], {
+  const social = useWatch(["kopf", "kannInSocialMedia"], {
     form,
     preserve: true,
   });
 
-  const bar = Form.useWatch("brauchtBar", {
+  const bar = useWatch("brauchtBar", {
     form,
     preserve: true,
   });

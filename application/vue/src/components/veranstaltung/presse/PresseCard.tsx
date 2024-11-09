@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, FormInstance, Row, Tabs } from "antd";
+import { Col, FormInstance, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import Uploader from "@/widgets/Uploader.tsx";
@@ -13,6 +13,7 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.t
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export default function PresseCard({ form, isVermietung }: { form: FormInstance; isVermietung: boolean }) {
   const allimages = useQuery({
@@ -23,11 +24,11 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
   const { color } = colorsAndIconsForSections;
   const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
 
-  const presseText = Form.useWatch(["presse", "text"]);
-  const presseOriText = Form.useWatch(["presse", "originalText"]);
-  const url = Form.useWatch(["presse", "jazzclubURL"]);
-  const image = Form.useWatch(["presse", "image"]);
-  const ok = Form.useWatch(["presse", "checked"]);
+  const presseText = useWatch(["presse", "text"]);
+  const presseOriText = useWatch(["presse", "originalText"]);
+  const url = useWatch(["presse", "jazzclubURL"]);
+  const image = useWatch(["presse", "image"]);
+  const ok = useWatch(["presse", "checked"]);
 
   const editorOptions = useMemo(
     () => ({
