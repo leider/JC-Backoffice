@@ -14,7 +14,9 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
   }, [veranstaltung]);
 
   const color = veranstaltung.ghost ? "#AAA" : isVermietung ? "" : "#FFF";
-  const titleStyle = { margin: 0, color: color };
+
+  const titleStyle = { margin: 0, color: color, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" };
+
   function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
       <Title level={l} style={titleStyle}>
@@ -29,12 +31,12 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
         <>
           <T l={5} t={veranstaltung.datumForDisplayShort} />
           {!isVermietung && <T l={5} t={veranstaltung.kopf.presseIn} />}
-          <T l={3} t={veranstaltung.kopf.titelMitPrefix} />
+          <T l={3} t={veranstaltung.kopf.titel} />
         </>
       ) : (
         <>
           <Title level={4} style={titleStyle}>
-            {isVermietung ? `${veranstaltung.kopf.titel} (Vermietung)` : veranstaltung.kopf.titelMitPrefix}
+            {isVermietung ? `${veranstaltung.kopf.titel} (Vermietung)` : veranstaltung.kopf.titel}
             <br />
             <small>
               <small style={{ fontWeight: 400 }}>

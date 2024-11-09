@@ -39,6 +39,7 @@ function TodaysConcert() {
                   marginTop: 0,
                   textAlign: "center",
                   backgroundColor: konzert.color,
+                  textDecoration: konzert.kopf.abgesagt ? "line-through" : "",
                 }}
               >
                 {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}

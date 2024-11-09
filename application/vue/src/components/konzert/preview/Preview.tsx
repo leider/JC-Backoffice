@@ -58,13 +58,13 @@ export default function Preview() {
     );
   }
 
-  const titleStyle: CSSProperties = { color: typeColor };
+  const titleStyle: CSSProperties = { color: typeColor, textDecoration: konzert.kopf.abgesagt ? "line-through" : "" };
   return (
     <div>
       <JazzPageHeader
         title={
           <span style={titleStyle}>
-            {konzert.kopf.titelMitPrefix} {konzert.kopf.presseInEcht}
+            {konzert.kopf.titel} {konzert.kopf.presseInEcht}
           </span>
         }
         dateString={konzert.datumForDisplayShort}
