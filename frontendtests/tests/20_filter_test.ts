@@ -24,6 +24,10 @@ function konzertHaving(object, name) {
 async function setCheck(I, name, jaNein) {
   I.click("Filter...");
   I.click(locate("button").withText("Zurücksetzen").inside(".ant-space-item"));
+  if (jaNein) {
+    I.click(locate("#Filter-Öffentlichkeit"));
+    I.click(locate("#Filter-Technik"));
+  }
   I.click(name);
   if (!jaNein) {
     I.click(name);

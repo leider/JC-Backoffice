@@ -9,9 +9,9 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.t
 import { useQuery } from "@tanstack/react-query";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
-import applyTeamFilter from "@/components/team/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import TeamFilter from "@/components/team/TeamFilter.tsx";
+import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
+import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 
 export default function Info() {
   const { filter } = useJazzContext();

@@ -4,9 +4,7 @@ import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import sortBy from "lodash/sortBy";
 import reverse from "lodash/reverse";
-import applyTeamFilter from "@/components/team/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
-import TeamFilter from "@/components/team/TeamFilter.tsx";
 import { useSearchParams } from "react-router-dom";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { Button, Col, Dropdown, Row, Space } from "antd";
@@ -17,6 +15,8 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup.tsx";
 import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
+import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
