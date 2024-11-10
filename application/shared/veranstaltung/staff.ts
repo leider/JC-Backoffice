@@ -1,6 +1,6 @@
 import User from "../user/user.js";
 
-export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod";
+export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod" | "ersthelfer";
 
 export default class Staff {
   techniker: string[] = [];
@@ -9,12 +9,14 @@ export default class Staff {
   kasse: string[] = [];
   kasseV: string[] = [];
   mod: string[] = [];
+  ersthelfer: string[] = [];
   technikerNotNeeded = true;
   technikerVNotNeeded = true;
   kasseNotNeeded = true;
   kasseVNotNeeded = true;
   modNotNeeded = true;
   merchandiseNotNeeded = true;
+  ersthelferNotNeeded = false;
 
   toJSON(): object {
     return Object.assign({}, this);
@@ -30,6 +32,7 @@ export default class Staff {
         kasseV: object.kasseV || [],
         merchandise: object.merchandise || [],
         mod: object.mod || [],
+        ersthelfer: object.ersthelfer || [],
       });
     }
   }

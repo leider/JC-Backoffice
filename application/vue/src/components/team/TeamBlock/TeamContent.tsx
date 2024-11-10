@@ -53,6 +53,9 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
         sectionName: "merchandise",
       });
     }
+    if (!staff.ersthelferNotNeeded) {
+      rows.push({ title: "Ersthelfer (als Gast)", sectionName: "ersthelfer" });
+    }
     return rows;
   }, [veranstaltung.staff]);
 

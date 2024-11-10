@@ -49,6 +49,7 @@ export default function EditableStaffRows({
         </>
       )}
       {!forVermietung && <StaffRow label="Merchandise" usersAsOptions={usersAsOptions} sectionName="merchandise" />}
+      <StaffRow usersAsOptions={usersAsOptions} label="Ersthelfer (als Gast)" sectionName="ersthelfer" />
     </>
   );
 }

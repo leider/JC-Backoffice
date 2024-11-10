@@ -48,7 +48,7 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
       );
     })
   ) : (
-    <span>Hier könnten wir Dich brauchen...</span>
+    <span>{sectionName === "ersthelfer" ? "Du kannst als Ersthelfer beitragen?" : "Hier könnten wir Dich brauchen..."}</span>
   );
 }
 
