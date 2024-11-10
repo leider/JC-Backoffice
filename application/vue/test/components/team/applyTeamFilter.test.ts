@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import applyTeamFilter from "../../../src/components/team/applyTeamFilter";
 import Konzert from "jc-shared/konzert/konzert";
+import applyTeamFilter from "../../../src/components/team/TeamFilter/applyTeamFilter";
 
 const neutral = new Konzert({ kopf: { titel: "Neutral" } });
 const bestaetigt = new Konzert({ kopf: { titel: "Bestätigt", confirmed: true } });
@@ -27,6 +27,14 @@ const hotelNichtBestatigt = new Konzert({
   unterkunft: { bestaetigt: false },
 });
 
+const mitEventTyp1 = new Konzert({
+  kopf: { titel: "mitEventTyp1", eventTyp: "eventTyp1" },
+});
+
+const mitEventTyp2 = new Konzert({
+  kopf: { titel: "mitEventTyp2", eventTyp: "eventTyp2" },
+});
+
 const alleKonzerte = [
   neutral,
   bestaetigt,
@@ -42,6 +50,8 @@ const alleKonzerte = [
   fluegel,
   hotelBestatigt,
   hotelNichtBestatigt,
+  mitEventTyp1,
+  mitEventTyp2,
 ];
 
 function checkResult(filter) {
@@ -166,5 +176,10 @@ describe("applyTeamFilter", () => {
   it("should return for not Hotel Bestaetigt", () => {
     const filter = applyTeamFilter({ hotelBestaetigt: false });
     expect(checkResult(filter)).to.eql(["HotelNichtBestatigt"]);
+  });
+
+  it("should return for eventTyp", () => {
+    const filter = applyTeamFilter({ kopf: { eventTyp: ["eventTyp1", "eventTyp2"] } });
+    expect(checkResult(filter)).to.eql(["mitEventTyp1", "mitEventTyp2"]);
   });
 });

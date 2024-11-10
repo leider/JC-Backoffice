@@ -4,6 +4,7 @@ import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import React from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { EventTypeMultiSelect } from "@/widgets/EventTypeMultiSelect.tsx";
 
 export function reset(form: FormInstance<TeamFilterObject>) {
   form.setFieldsValue({
@@ -16,6 +17,7 @@ export function reset(form: FormInstance<TeamFilterObject>) {
       kannAufHomePage: undefined,
       kannInSocialMedia: undefined,
       fotografBestellen: undefined,
+      eventTyp: undefined,
     },
     technik: { checked: undefined, fluegel: undefined },
   });
@@ -38,20 +40,27 @@ export function TeamFilterEdit({
       key: "Allgemein",
       label: <b>Allgemein</b>,
       children: (
-        <Row gutter={8}>
-          <Col span={8}>
-            <ThreewayCheckbox name="istKonzert" label="Ist Konzert" />
-          </Col>
-          <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "confirmed"]} label="Ist bestätigt" />
-          </Col>
-          <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "abgesagt"]} label="Ist abgesagt" />
-          </Col>
-          <Col span={8}>
-            <ThreewayCheckbox name="hotelBestaetigt" label="Hotel bestätigt" />
-          </Col>
-        </Row>
+        <>
+          <Row gutter={8}>
+            <Col span={24}>
+              <EventTypeMultiSelect />
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col span={8}>
+              <ThreewayCheckbox name="istKonzert" label="Ist Konzert" />
+            </Col>
+            <Col span={8}>
+              <ThreewayCheckbox name={["kopf", "confirmed"]} label="Ist bestätigt" />
+            </Col>
+            <Col span={8}>
+              <ThreewayCheckbox name={["kopf", "abgesagt"]} label="Ist abgesagt" />
+            </Col>
+            <Col span={8}>
+              <ThreewayCheckbox name="hotelBestaetigt" label="Hotel bestätigt" />
+            </Col>
+          </Row>
+        </>
       ),
     },
     {

@@ -2,9 +2,19 @@ import * as React from "react";
 import HelpSection from "@/components/content/help/HelpSection.tsx";
 
 export default function HelpNeues() {
-  const items = [
+  const brandNew = [
     {
-      title: "Attachments beim Mailsenden.",
+      title: "Bessere Teamfilter",
+      description: "November '24",
+      content: "Du kannst jetzt nach Eventtyp filtern.",
+    },
+    {
+      title: "Ersthelfer",
+      description: "November '24",
+      content: "Jede(r) Mitarbeiter(in) soll sich eintragen, ob sie als Ersthelfer in Frage kommt.",
+    },
+    {
+      title: "Attachments beim Mailsenden",
       description: "Oktober '24",
       content: "Du kannst jetzt Attachments an eine Mail hängen.",
     },
@@ -19,6 +29,8 @@ export default function HelpNeues() {
       description: "September '24",
       content: 'In der Veranstaltung kann man die Felder bei "Artist" pflegen und in der Preview werden sie angezeigt.',
     },
+  ];
+  const items = [
     {
       title: "Gästeliste aus Preview editierbar",
       description: "Juli '24",
@@ -42,5 +54,10 @@ export default function HelpNeues() {
     },
   ];
 
-  return <HelpSection initiallyOpen={true} label={<b>Neues</b>} items={items} />;
+  return (
+    <>
+      <HelpSection initiallyOpen label={<b>Neues</b>} items={brandNew} />
+      <HelpSection label={<b>Nicht ganz so Neues</b>} items={items} />
+    </>
+  );
 }

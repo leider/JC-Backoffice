@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import applyTeamFilter from "../../../src/components/team/applyTeamFilter";
+import applyTeamFilter from "../../../src/components/team/TeamFilter/applyTeamFilter";
 import Vermietung from "jc-shared/vermietung/vermietung";
 
 const neutral = new Vermietung({ kopf: { titel: "Neutral" } });

@@ -1,7 +1,6 @@
-import OptionValues, { TypMitMehr } from "jc-shared/optionen/optionValues";
 import React, { useContext, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Checkbox, Col, Form, Row, Select, SelectProps } from "antd";
+import { Checkbox, Col, Form, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -11,20 +10,7 @@ import { KonzertContext } from "@/components/konzert/KonzertComp";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
-
-function EventTypeSelect(props: SelectProps & { optionen: OptionValues }) {
-  const eventTypes = useMemo(() => {
-    function typToDisplay(typ: TypMitMehr) {
-      return {
-        label: <span style={{ color: typ.color }}>{typ.name}</span>,
-        value: typ.name,
-      };
-    }
-    return props.optionen.typenPlus.map(typToDisplay);
-  }, [props.optionen.typenPlus]);
-
-  return <Select options={eventTypes} {...props} showSearch />;
-}
+import { EventTypeSelect } from "@/widgets/EventTypeSelect.tsx";
 
 export default function EventCard() {
   const konzertContext = useContext(KonzertContext);
@@ -83,9 +69,7 @@ export default function EventCard() {
           <TextField name={["kopf", "titel"]} label="Titel" required />
         </Col>
         <Col span={12}>
-          <Form.Item label={<b>Typ:</b>} name={["kopf", "eventTyp"]} required rules={[{ required: true }]}>
-            <EventTypeSelect optionen={optionen} />
-          </Form.Item>
+          <EventTypeSelect />
         </Col>
       </Row>
       <Row gutter={12}>

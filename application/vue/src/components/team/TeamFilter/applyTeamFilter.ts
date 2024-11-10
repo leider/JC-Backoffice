@@ -18,6 +18,7 @@ export type TeamFilterObject = {
     fotografBestellen?: boolean;
     kannAufHomePage?: boolean;
     kannInSocialMedia?: boolean;
+    eventTyp?: string[];
   };
   technik?: { checked?: boolean; fluegel?: boolean };
 };
@@ -52,7 +53,9 @@ function filterKopf(ver: Veranstaltung, filterObj: TeamFilterObject) {
   const pred4 = !isNil(kopf.kannAufHomePage) && !isNil(filter?.kannAufHomePage) ? kopf.kannAufHomePage === filter?.kannAufHomePage : true;
   const pred5 =
     !isNil(kopf.kannInSocialMedia) && !isNil(filter?.kannInSocialMedia) ? kopf.kannInSocialMedia === filter?.kannInSocialMedia : true;
-  return pred1 && pred2 && pred3 && pred4 && pred5;
+  const pred6 =
+    ver.isVermietung || isNil(filter?.eventTyp) || filter?.eventTyp.length === 0 || (filter?.eventTyp || []).includes(kopf.eventTyp);
+  return pred1 && pred2 && pred3 && pred4 && pred5 && pred6;
 }
 
 function filterTechnik(ver: Veranstaltung, filterObj: TeamFilterObject) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Form, Tag } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TeamFilterObject } from "./applyTeamFilter.ts";
@@ -11,7 +11,7 @@ import { reset, TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEd
 
 type LabelColorProperty = {
   label: string;
-  color: boolean;
+  color: boolean | string;
   prop?: NamePath;
 };
 
@@ -20,29 +20,57 @@ export default function TeamFilter() {
 
   const [form] = Form.useForm<TeamFilterObject>();
 
-  const { filter: filterObj, setFilter } = useJazzContext();
+  const { filter: filterObj, setFilter, optionen } = useJazzContext();
 
   useEffect(() => {
     form.setFieldsValue(filterObj);
   }, [filterObj, form]);
 
+  const eventTypTag = useCallback(
+    (typ: string) => {
+      const result = optionen.typenPlus.find((plus) => plus.name === typ);
+      if (result) {
+        return { label: result.name, color: result.color };
+      }
+      return undefined;
+    },
+    [optionen.typenPlus],
+  );
+
   function headerTagsForFilters(labelsColors: LabelColorProperty[]) {
     function HeaderTag({ label, color, prop }: LabelColorProperty) {
-      return (
-        <Tag
-          key={label}
-          color={color ? "success" : "error"}
-          closeIcon={!!prop}
-          onClose={() => {
-            if (prop) {
-              form.setFieldValue(prop, undefined);
+      if (typeof color === "boolean") {
+        return (
+          <Tag
+            key={label}
+            color={color ? "success" : "error"}
+            closeIcon={!!prop}
+            onClose={() => {
+              if (prop) {
+                form.setFieldValue(prop, undefined);
+                setFilter(form.getFieldsValue(true));
+              }
+            }}
+          >
+            {label}
+          </Tag>
+        );
+      } else {
+        return (
+          <Tag
+            key={label}
+            color={color}
+            closeIcon
+            onClose={() => {
+              const typen = form.getFieldValue(["kopf", "eventTyp"]).filter((typ: string) => typ !== label);
+              form.setFieldValue(["kopf", "eventTyp"], typen);
               setFilter(form.getFieldsValue(true));
-            }
-          }}
-        >
-          {label}
-        </Tag>
-      );
+            }}
+          >
+            {label}
+          </Tag>
+        );
+      }
     }
     return labelsColors.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} prop={tag.prop} />);
   }
@@ -74,8 +102,11 @@ export default function TeamFilter() {
     pushIfSet(filter.kopf?.fotografBestellen, "Fotograf einladen", ["kopf", "fotografBestellen"]);
     pushIfSet(filter.technik?.checked, "Technik ist geklärt", ["technik", "checked"]);
     pushIfSet(filter.technik?.fluegel, "Flügel stimmen", ["technik", "fluegel"]);
+    (filter.kopf?.eventTyp ?? []).forEach((typ: string) => {
+      tags.push(eventTypTag(typ)!);
+    });
     return tags;
-  }, [filter]);
+  }, [eventTypTag, filter]);
 
   const result = [
     <span key="aktiveFilter">
