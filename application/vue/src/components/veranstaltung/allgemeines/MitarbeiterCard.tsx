@@ -5,11 +5,11 @@ import { useWatch } from "antd/es/form/Form";
 import groupBy from "lodash/groupBy";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { FormInstance } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
