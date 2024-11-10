@@ -75,8 +75,6 @@ export default function KonzertComp() {
 
   const queryClient = useQueryClient();
 
-  const { notification } = App.useApp();
-
   const mutateKonzert = useJazzMutation<Konzert>({
     saveFunction: saveKonzert,
     queryKey: "konzert",
@@ -99,7 +97,7 @@ export default function KonzertComp() {
     },
   });
 
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser, optionen, showError } = useJazzContext();
   const navigate = useNavigate();
 
   const kassenfreigabe = useWatch(["kasse", "kassenfreigabe"], { form });
@@ -174,12 +172,7 @@ export default function KonzertComp() {
           updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {
-          notification.error({
-            message: "Fehler",
-            description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
-            placement: "topLeft",
-            duration: 5,
-          });
+          showError({ text: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs" });
         }}
         onFinish={saveForm}
         layout="vertical"

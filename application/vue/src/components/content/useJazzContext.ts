@@ -72,13 +72,14 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       message: title,
       description: text,
       placement: "topLeft",
+      showProgress: true,
       duration: 3,
     });
   }
 
   function showError({
     text = "Etwas ist schiefgegangen",
-    title = "FEHLER",
+    title = "Problem",
     closeCallback,
   }: {
     text?: string;
@@ -90,6 +91,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       description: text,
       placement: "topLeft",
       duration: 10,
+      showProgress: true,
 
       onClose: closeCallback,
     });

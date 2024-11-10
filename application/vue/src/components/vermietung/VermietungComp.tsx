@@ -31,7 +31,6 @@ export default function VermietungComp() {
     }
   }, [vermiet.data]);
 
-  const { notification } = App.useApp();
   const [dirty, setDirty] = useState<boolean>(false);
 
   const mutateVermietung = useJazzMutation<Vermietung>({
@@ -51,7 +50,7 @@ export default function VermietungComp() {
   }, []);
   useDirtyBlocker(dirty);
 
-  const { currentUser } = useJazzContext();
+  const { currentUser, showError } = useJazzContext();
   const navigate = useNavigate();
 
   const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
@@ -102,12 +101,7 @@ export default function VermietungComp() {
           updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {
-          notification.error({
-            type: "error",
-            message: "Fehler",
-            description: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs",
-            duration: 5,
-          });
+          showError({ text: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs" });
         }}
         onFinish={saveForm}
         layout="vertical"
