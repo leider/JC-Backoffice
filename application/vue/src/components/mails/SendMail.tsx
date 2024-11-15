@@ -171,8 +171,8 @@ export default function SendMail() {
         currentUser.email,
       );
       const formData = new FormData();
-      formData.append("message", JSON.stringify(result));
       result.setBcc(addresses);
+      formData.append("message", JSON.stringify(result));
       if (fileList.length > 0) {
         fileList.forEach((file) => {
           formData.append("dateien", file as RcFile, file.name);
