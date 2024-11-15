@@ -24,6 +24,13 @@ import { RcFile } from "antd/es/upload";
 import { useWatch } from "antd/es/form/Form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 
+function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
+  if (typeof addressOrString === "string") {
+    return addressOrString;
+  }
+  return addressOrString.name ?? addressOrString.address;
+}
+
 export default function SendMail() {
   const editorOptions = useMemo(
     () => ({
@@ -178,9 +185,25 @@ export default function SendMail() {
           formData.append("dateien", file as RcFile, file.name);
         });
       }
-      await sendMail(formData);
+      const response = await sendMail(formData);
+
+      const successMessage = (
+        <>
+          <p>Deine Mail wurde gesendet an:</p>
+          <ul>
+            {response.accepted.map((each) => (
+              <li key={mailAddressOrStringAsText(each)}>{mailAddressOrStringAsText(each)}</li>
+            ))}
+          </ul>
+        </>
+      );
+
       initializeForm();
-      showSuccess({ title: "Erfolgreich", text: "Deine Mail wurde gesendet." });
+      showSuccess({
+        duration: 10,
+        title: "Erfolgreich",
+        text: successMessage,
+      });
       navigate("/");
     });
   }

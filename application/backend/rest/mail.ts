@@ -51,8 +51,8 @@ app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
       }),
     );
   }
-  await mailtransport.sendMail(message);
-  resToJson(res);
+  const result = await mailtransport.sendMail(message);
+  resToJson(res, result);
 });
 
 app.post("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {

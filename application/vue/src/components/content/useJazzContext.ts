@@ -8,7 +8,7 @@ import { RouterContext } from "@/router/JazzRouter.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
-import { TeamFilterObject } from "@/components/team/applyTeamFilter.ts";
+import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -28,7 +28,7 @@ type SharedGlobals = {
   allUsers: User[];
   optionen: OptionValues;
   orte: Orte;
-  showSuccess: ({ text, title }: { text?: string; title?: string }) => void;
+  showSuccess: ({ text, title, duration }: { duration?: number; text?: React.ReactNode; title?: string }) => void;
   showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
   filter: TeamFilterObject;
   setFilter: (filter: TeamFilterObject) => void;
@@ -67,13 +67,21 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   });
   const { notification } = App.useApp();
 
-  function showSuccess({ text = "Die Änderungen wurden gespeichert", title = "Speichern erfolgreich" }) {
+  function showSuccess({
+    text = "Die Änderungen wurden gespeichert",
+    title = "Speichern erfolgreich",
+    duration = 3,
+  }: {
+    duration?: number;
+    text?: React.ReactNode;
+    title?: string;
+  }) {
     notification.success({
       message: title,
       description: text,
       placement: "topLeft",
       showProgress: true,
-      duration: 3,
+      duration: duration,
     });
   }
 

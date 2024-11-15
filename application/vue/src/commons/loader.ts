@@ -17,6 +17,7 @@ import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { HistoryType } from "jc-backend/rest/history.ts";
+import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -385,7 +386,7 @@ export async function sendMail(formData: FormData) {
     url: "/rest/rundmail",
     data: formData,
     contentType: "json",
-  });
+  }) as Promise<SentMessageInfo>;
 }
 
 export async function saveMailinglists(lists: Mailingliste[]) {
