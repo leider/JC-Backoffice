@@ -53,7 +53,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
       return null;
     }
 
-    const elements = line.split("|");
+    const elements = line.replace(/^[|.]/, "").split("|");
     if (elements.length < 4) {
       return;
     }
@@ -84,8 +84,7 @@ function eventsToObject(contents?: string, jahrMonat?: string): Event[] {
       };
     }
   }
-
-  const lines = contents.split(/[\n\r]/);
+  const lines = contents.replaceAll("\\", "").split(/[\n\r]/);
   return misc.compact(lines.map(lineToObject)) as Event[];
 }
 
@@ -125,11 +124,24 @@ Danke & keep swingin'`;
   }
 }
 
+function cleanTextAsCorrectTable(text: string) {
+  return text.replace(/\n\n/g, "\n");
+}
+
+function eventsToText(events: Event[]): string {
+  const strings = events.map((event) => {
+    return `${event.was ?? ""}|${event.wer ?? ""}|${event.farbe}|${event.start}|${event.email ?? ""}|${event.emailOffset ?? 7}`;
+  });
+  return [
+    `Was | Wer | Farbe | Wann | Email | Tage vorher
+--- | --- | --- | --- | --- | ---`,
+    ...strings,
+  ].join("\n");
+}
+
 export default class Kalender {
   id: string;
-  text = `Was | Wer | Farbe | Wann | Email | Tage vorher
---- | --- | --- | --- | --- | ---
-`;
+  text = "";
 
   constructor(object?: { id: string; text: string }) {
     if (object && object.id && object.id.split("/").length === 2) {
@@ -137,7 +149,7 @@ export default class Kalender {
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
         this.id = object.id;
         if (object.text !== "") {
-          this.text = object.text;
+          this.text = cleanTextAsCorrectTable(object.text);
         }
         return;
       }
@@ -147,6 +159,14 @@ export default class Kalender {
 
   year(): string {
     return this.id && this.id.split("/")[0];
+  }
+
+  textMovedTwoMonths() {
+    const oldEvents = eventsToObject(this.text, this.id);
+    const newEvents = oldEvents.map((each) => {
+      return { ...each, start: DatumUhrzeit.forISOString(each.start).plus({ monate: 2 }).tagMonatJahrKompakt };
+    });
+    return eventsToText(newEvents);
   }
 
   asEvents(): Event[] {

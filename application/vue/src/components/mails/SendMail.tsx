@@ -32,16 +32,6 @@ function mailAddressOrStringAsText(addressOrString: string | { name: string; add
 }
 
 export default function SendMail() {
-  const editorOptions = useMemo(
-    () => ({
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      minHeight: "500px",
-    }),
-    [],
-  );
-
   const { showSuccess } = useJazzContext();
 
   const navigate = useNavigate();
@@ -265,7 +255,7 @@ export default function SendMail() {
             <UploaderForMail fileList={fileList} setFileList={setFileList} />
           </Col>
           <Col span={24}>
-            <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" options={editorOptions} />
+            <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />
           </Col>
         </Row>
       </RowWrapper>

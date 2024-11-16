@@ -1,6 +1,6 @@
 import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -64,15 +64,6 @@ export default function WikiPage() {
   useEffect(initializeForm, [form, wikipage]);
 
   const { Search } = Input;
-  const editorOptions = useMemo(
-    () => ({
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      minHeight: "500px",
-    }),
-    [],
-  );
   function onSearch(value: string) {
     if (value.length < 2) {
       return;
@@ -122,9 +113,7 @@ export default function WikiPage() {
       />
       <RowWrapper>
         <Row gutter={12}>
-          <Col span={24}>
-            {isEdit ? <MarkdownEditor name="content" options={editorOptions} /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
-          </Col>
+          <Col span={24}>{isEdit ? <MarkdownEditor name="content" /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}</Col>
         </Row>
       </RowWrapper>
     </Form>

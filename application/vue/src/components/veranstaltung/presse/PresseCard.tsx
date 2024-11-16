@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, FormInstance, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -29,16 +29,6 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
   const url = useWatch(["presse", "jazzclubURL"]);
   const image = useWatch(["presse", "image"]);
   const ok = useWatch(["presse", "checked"]);
-
-  const editorOptions = useMemo(
-    () => ({
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      minHeight: "500px",
-    }),
-    [],
-  );
 
   useEffect(() => {
     if (isVermietung) {
@@ -88,24 +78,12 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
               {
                 key: "final",
                 label: <TabLabel kind="final" title="Finaler Text" />,
-                children: (
-                  <MarkdownEditor
-                    label={<b>Formatierter Text für die Pressemitteilung:</b>}
-                    name={["presse", "text"]}
-                    options={editorOptions}
-                  />
-                ),
+                children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "text"]} />,
               },
               {
                 key: "original",
                 label: <TabLabel kind="original" title="Originaler Text" />,
-                children: (
-                  <MarkdownEditor
-                    label={<b>Formatierter Text für die Pressemitteilung:</b>}
-                    name={["presse", "originalText"]}
-                    options={editorOptions}
-                  />
-                ),
+                children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]} />,
               },
             ]}
           />

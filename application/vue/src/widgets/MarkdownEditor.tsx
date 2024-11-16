@@ -1,43 +1,16 @@
-import { Form, Typography } from "antd";
-import SimpleMdeReact from "react-simplemde-editor";
-import "easymde/dist/easymde.min.css";
+import { Form } from "antd";
 import React, { ReactNode } from "react";
+import { Editable, useEditor } from "@wysimark/react";
 
-export function MarkdownEditor({
-  label,
-  name,
-  options = { status: false, spellChecker: false },
-  onBlur,
-}: {
-  label?: string | ReactNode;
-  name: string[] | string;
-  options?: EasyMDE.Options;
-  onBlur?: React.FocusEventHandler<HTMLDivElement>;
-}) {
+export function MarkdownEditor({ label, name }: { label?: string | ReactNode; name: string[] | string }) {
   return (
     <Form.Item label={label} name={name}>
-      <InnerEditor options={options} onBlur={onBlur} />
+      <InnerEditor />
     </Form.Item>
   );
 }
 
-function InnerEditor({
-  options = { status: false, spellChecker: false },
-  onBlur,
-  value,
-  onChange,
-}: {
-  value?: string;
-  onChange?: (value: string) => void;
-  options?: EasyMDE.Options;
-  onBlur?: React.FocusEventHandler<HTMLDivElement>;
-}) {
-  return (
-    <>
-      <SimpleMdeReact autoFocus options={options} onBlur={onBlur} value={value} onChange={onChange} />
-      <Typography.Text strong type="success">
-        Denk daran, den Text zu formatieren und die Vorschau zu checken! (Auge, Fragezeichen für Hilfe)
-      </Typography.Text>
-    </>
-  );
+function InnerEditor({ value, onChange }: { value?: string; onChange?: (value: string) => void }) {
+  const editor = useEditor({ authToken: "" });
+  return <Editable editor={editor} value={value ?? ""} onChange={onChange!} />;
 }

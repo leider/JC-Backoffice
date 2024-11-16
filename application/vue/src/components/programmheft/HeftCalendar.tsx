@@ -43,7 +43,7 @@ export default function HeftCalendar({ events, initialDate }: { initialDate: str
       initialView="dayGridMonth"
       buttonText={{ next: ">", prev: "<" }}
       locales={[deLocale]}
-      headerToolbar={{ left: "title", center: "", right: "" }}
+      headerToolbar={{ left: "title", center: "", right: "prev,next" }}
       views={{
         month: {
           titleFormat: { month: "long", year: "2-digit" },

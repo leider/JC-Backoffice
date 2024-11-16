@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape*/
 import { describe, expect, it } from "vitest";
 
 import Kalender, { EmailEvent } from "../../programmheft/kalender.js";
@@ -176,6 +177,43 @@ Damit alles reibungslos klappt, sollte dies bis zum 13. Dezember 2020 erledigt s
 
 Danke & keep swingin'`,
       );
+    });
+  });
+
+  describe("cleans backslashes", () => {
+    const kalender = new Kalender({
+      id: "2020/12",
+      text: `|Was|Wer|Farbe|Wann|Email|Tage vorher|
+|---|---|---|---|---|---|
+|Booking fertig \+ Pressematerial liegt vor|Torsten\, Andreas\, Gernot\, Amelie\, Niklas|DodgerBlue|01\.11\.2024|[booking\@jazzclub\.de](mailto:booking@jazzclub.de) [andreas\.jonczyk\@jazzclub\.de](mailto:andreas.jonczyk@jazzclub.de) [torsten\.antoni\@jazzclub\.de](mailto:torsten.antoni@jazzclub.de) [gernot\.ziegler\@jazzclub\.de](mailto:gernot.ziegler@jazzclub.de) [niklas\.braun\@jazzclub\.de](mailto:niklas.braun@jazzclub.de) [amelie\.stapf\@jazzclub\.de](mailto:amelie.stapf@jazzclub.de)|7|
+|Editorial fertig|Teddy|Coral|08\.11\.2024|[christoph\.bohning\@jazzclub\.de](mailto:christoph.bohning@jazzclub.de)|9|
+|Editorial fertig|Teddy|Coral|08\.11\.2024|[christoph\.bohning\@jazzclub\.de](mailto:christoph.bohning@jazzclub.de)|3|
+|Pressetexte fertig|Johannes|FireBrick|08\.11\.2024|[jotfrisch\@gmx\.de](mailto:jotfrisch@gmx.de)|7|
+|Layout starten|Christina|FireBrick|09\.11\.2024|[grafik\@jazzclub\.de](mailto:grafik@jazzclub.de)|6|
+|Ticketing|Kai|FireBrick|09\.11\.2024|[kai\.hanneken\@jazzclub\.de](mailto:kai.hanneken@jazzclub.de)|6|
+|Korrekturschleife \- Rückgabe in 1 Woche|Alle|blue|14\.11\.2024|[booking\@jazzclub\.de](mailto:booking@jazzclub.de) [andreas\.jonczyk\@jazzclub\.de](mailto:andreas.jonczyk@jazzclub.de) [torsten\.antoni\@jazzclub\.de](mailto:torsten.antoni@jazzclub.de) [gernot\.ziegler\@jazzclub\.de](mailto:gernot.ziegler@jazzclub.de) [niklas\.braun\@jazzclub\.de](mailto:niklas.braun@jazzclub.de) [amelie\.stapf\@jazzclub\.de](mailto:amelie.stapf@jazzclub.de) [Kai\.hanneken\@jazzclub\.de](mailto:Kai.hanneken@jazzclub.de)|3|
+|Bitte Mitgliederliste checken|Enrik|YellowGreen|18\.11\.2024|[enrik\.berkhan\@jazzclub\.de](mailto:enrik.berkhan@jazzclub.de)|3|
+|Heft u\. Plakate in Druck geben|Christina|Green|25\.11\.2024|[grafik\@jazzclub\.de](mailto:grafik@jazzclub.de)|3|
+
+&nbsp;`,
+    });
+
+    it("und berücksichtigt den Offset", () => {
+      const emailEvents = kalender.asEvents();
+      expect(emailEvents).to.have.length(9);
+
+      const emailEvent = emailEvents[0];
+      expect(emailEvent).to.eql({
+        email:
+          "[booking@jazzclub.de](mailto:booking@jazzclub.de) [andreas.jonczyk@jazzclub.de](mailto:andreas.jonczyk@jazzclub.de) [torsten.antoni@jazzclub.de](mailto:torsten.antoni@jazzclub.de) [gernot.ziegler@jazzclub.de](mailto:gernot.ziegler@jazzclub.de) [niklas.braun@jazzclub.de](mailto:niklas.braun@jazzclub.de) [amelie.stapf@jazzclub.de](mailto:amelie.stapf@jazzclub.de)",
+        emailOffset: 7,
+        end: "2020-11-01T21:00:00.000Z",
+        farbe: "DodgerBlue",
+        start: "2020-10-31T23:00:00.000Z",
+        title: "Booking fertig + Pressematerial liegt vor (Torsten, Andreas, Gernot, Amelie, Niklas)",
+        was: "Booking fertig + Pressematerial liegt vor",
+        wer: "Torsten, Andreas, Gernot, Amelie, Niklas",
+      });
     });
   });
 });

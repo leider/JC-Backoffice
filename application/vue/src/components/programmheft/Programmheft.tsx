@@ -16,6 +16,7 @@ import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/Progra
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -24,10 +25,10 @@ export default function Programmheft() {
   }, [search]);
   const { showSuccess } = useJazzContext();
 
-  const naechsterUngeraderMonat = new DatumUhrzeit().naechsterUngeraderMonat;
+  const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
 
-  const defaultYear = naechsterUngeraderMonat.format("YYYY");
-  const defaultMonth = naechsterUngeraderMonat.format("MM");
+  const defaultYear = useMemo(() => naechsterUngeraderMonat.format("YYYY"), [naechsterUngeraderMonat]);
+  const defaultMonth = useMemo(() => naechsterUngeraderMonat.format("MM"), [naechsterUngeraderMonat]);
   const realYear = useMemo(() => year ?? defaultYear, [defaultYear, year]);
   const realMonth = useMemo(() => month ?? defaultMonth, [defaultMonth, month]);
 
@@ -65,6 +66,15 @@ export default function Programmheft() {
 
   const [form] = Form.useForm<Kalender>();
 
+  const textChanged = useCallback(() => {
+    setEvents(new Kalender(form.getFieldsValue(true)).asEvents());
+  }, [form]);
+
+  const text = useWatch("text", { form, preserve: true });
+  useEffect(() => {
+    textChanged();
+  }, [text, textChanged]);
+
   useEffect(() => {
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
@@ -75,16 +85,6 @@ export default function Programmheft() {
     setEvents(kalender.asEvents());
   }, [form, kalender]);
 
-  const editorOptions = useMemo(
-    () => ({
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      minHeight: "500px",
-    }),
-    [],
-  );
-
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
@@ -93,19 +93,22 @@ export default function Programmheft() {
     });
   }
 
-  function textChanged() {
-    setEvents(new Kalender(form.getFieldsValue(true)).asEvents());
-  }
   const [events, setEvents] = useState<Event[]>([]);
   const previous = useCallback(() => {
-    const nextDate = start.minus({ monate: 2 });
-    setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
+    const prevDate = start.minus({ monate: 2 });
+    setSearch({ year: prevDate.format("YYYY"), month: prevDate.format("MM") }, { replace: true });
   }, [start, setSearch]);
 
   const next = useCallback(() => {
     const nextDate = start.plus({ monate: 2 });
     setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
   }, [start, setSearch]);
+
+  const copyFromPrevious = useCallback(async () => {
+    const prevDate = start.minus({ monate: 2 });
+    const prevKal = await kalenderFor(`${prevDate.format("YYYY")}/${prevDate.format("MM")}`);
+    form.setFieldValue("text", prevKal.textMovedTwoMonths());
+  }, [form, start]);
 
   return (
     <Form
@@ -125,6 +128,7 @@ export default function Programmheft() {
         buttons={[
           <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
           <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
+          <ButtonWithIcon text="Kopieren aus Vormonat" key="copy" icon="FileEarmarkPlus" onClick={copyFromPrevious} type="default" />,
           <SaveButton key="save" disabled={!dirty} />,
         ]}
       />
@@ -133,11 +137,11 @@ export default function Programmheft() {
           <Col xs={24} lg={8} style={{ zIndex: 0 }}>
             <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} />
           </Col>
-          <Col xs={24} lg={8} style={{ zIndex: 0 }}>
-            <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={events} />
-          </Col>
-          <Col xs={24} lg={8}>
-            <MarkdownEditor name="text" options={editorOptions} onBlur={textChanged} />
+          {/*<Col xs={24} lg={8} style={{ zIndex: 0 }}>*/}
+          {/*  <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={events} />*/}
+          {/*</Col>*/}
+          <Col xs={24} lg={16}>
+            <MarkdownEditor name="text" />
             <h4>Farben Hilfe</h4>
             <p>
               Du kannst entweder eine{" "}
