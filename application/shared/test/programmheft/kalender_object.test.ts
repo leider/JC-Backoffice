@@ -31,7 +31,7 @@ describe("Kalender", () => {
         id: "2020/12",
         text: "",
       });
-      expect(kalender.text).to.not.eql("");
+      expect(kalender.text).to.eql("");
       expect(kalender.asEvents()).to.eql([]);
     });
 
@@ -58,28 +58,20 @@ Irgendwas | Irgendwer | Green   | 13.12.2020
       expect(kalender.asEvents()).to.eql([
         {
           start: "2020-12-12T23:00:00.000Z",
-          end: "2020-12-13T21:00:00.000Z",
           title: "Irgendwas (Irgendwer)",
           farbe: "Green",
         },
       ]);
     });
 
-    it("ohne Jahr - parses old style filled text correctly", () => {
+    it("ohne Jahr - parses old style filled as not existing", () => {
       const kalender = new Kalender({
         id: "2020/12",
         text: `Was | Wer | Farbe | Wann
 Irgendwas | Irgendwer | Green   | 13.12.
 `,
       });
-      expect(kalender.asEvents()).to.eql([
-        {
-          start: "2020-12-12T23:00:00.000Z",
-          end: "2020-12-13T21:00:00.000Z",
-          title: "Irgendwas (Irgendwer)",
-          farbe: "Green",
-        },
-      ]);
+      expect(kalender.asEvents()).to.eql([]);
     });
 
     it("parses broken date text correctly (e.g. empty)", () => {
@@ -104,7 +96,6 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
       expect(kalender.asEvents()).to.eql([
         {
           start: "2020-12-12T23:00:00.000Z",
-          end: "2020-12-13T21:00:00.000Z",
           title: "Irgendwas (Irgendwer)",
           farbe: "Green",
           email: "andreas@andreas.as",
@@ -126,7 +117,6 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
       expect(events).to.eql([
         {
           start: "2020-12-12T23:00:00.000Z",
-          end: "2020-12-13T21:00:00.000Z",
           title: "Irgendwas (Irgendwer)",
           farbe: "Green",
           email: "andreas@andreas.as",
@@ -157,7 +147,6 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
       const emailEvent = emailEvents[0];
       expect(emailEvent.event).to.eql({
         start: "2020-12-12T23:00:00.000Z",
-        end: "2020-12-13T21:00:00.000Z",
         title: "Irgendwas (Irgendwer)",
         farbe: "Green",
         email: "andreas@andreas.as",
@@ -207,9 +196,8 @@ Danke & keep swingin'`,
         email:
           "[booking@jazzclub.de](mailto:booking@jazzclub.de) [andreas.jonczyk@jazzclub.de](mailto:andreas.jonczyk@jazzclub.de) [torsten.antoni@jazzclub.de](mailto:torsten.antoni@jazzclub.de) [gernot.ziegler@jazzclub.de](mailto:gernot.ziegler@jazzclub.de) [niklas.braun@jazzclub.de](mailto:niklas.braun@jazzclub.de) [amelie.stapf@jazzclub.de](mailto:amelie.stapf@jazzclub.de)",
         emailOffset: 7,
-        end: "2020-11-01T21:00:00.000Z",
         farbe: "DodgerBlue",
-        start: "2020-10-31T23:00:00.000Z",
+        start: "2024-10-31T23:00:00.000Z",
         title: "Booking fertig + Pressematerial liegt vor (Torsten, Andreas, Gernot, Amelie, Niklas)",
         was: "Booking fertig + Pressematerial liegt vor",
         wer: "Torsten, Andreas, Gernot, Amelie, Niklas",

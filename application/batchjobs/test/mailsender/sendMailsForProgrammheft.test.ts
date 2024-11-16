@@ -17,7 +17,7 @@ describe("Programmheft Mailsender", () => {
 
   const currentKalender = new Kalender({
     id: "2019/05",
-    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.04.19 | x@y.z | 3",
+    text: "Was | Wer | Farbe | Wann | Email | Tage vorher\n" + "Putzen | Jeder | green | 15.04.19 | x@y.z a@b.c , l@m.n| 3",
   });
   const nextKalender = new Kalender({
     id: "2019/07",
@@ -41,7 +41,7 @@ describe("Programmheft Mailsender", () => {
     await remindForProgrammheft(april12 as DatumUhrzeit);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
-    expect(message.to).to.equal("x@y.z");
+    expect(message.to).to.equal("x@y.z,a@b.c,l@m.n");
     expect(message.markdown).to.include(`Jeder,
 
 hier eine automatische Erinnerungsmail:

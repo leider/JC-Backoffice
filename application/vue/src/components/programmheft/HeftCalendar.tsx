@@ -2,7 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import deLocale from "@fullcalendar/core/locales/de";
 import React, { useEffect, useRef } from "react";
-import { Event } from "jc-shared/programmheft/kalender";
+import { Event } from "jc-shared/programmheft/Event";
 import { Property } from "csstype";
 
 export default function HeftCalendar({ events, initialDate }: { initialDate: string; events: Event[] }) {

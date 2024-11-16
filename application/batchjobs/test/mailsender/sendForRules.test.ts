@@ -41,7 +41,7 @@ describe("Rules Mailsender", () => {
     sinon.restore();
   });
 
-  it("runs correctly on a day where notificatons lie", async () => {
+  it("runs correctly on a day where notifications lie", async () => {
     await loadRulesAndProcess(april17);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];

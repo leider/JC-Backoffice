@@ -33,7 +33,7 @@ dayjs.extend(timezone);
 
 dayjs.tz.setDefault("Europe/Berlin");
 
-type AdditionOptions = {
+export type AdditionOptions = {
   jahre?: number;
   monate?: number;
   wochen?: number;
