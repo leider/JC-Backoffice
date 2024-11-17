@@ -8,6 +8,11 @@ import User from "jc-shared/user/user.js";
 const persistence = pers("kalenderstore");
 
 export default {
+  alleKalender: function alleKalender() {
+    const result = persistence.list("id DESC");
+    return misc.toObjectList<Kalender>(Kalender, result);
+  },
+
   getKalender: function getKalender(id: string) {
     return misc.toObject<Kalender>(Kalender, persistence.getById(id));
   },

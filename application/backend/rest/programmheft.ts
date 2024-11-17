@@ -10,6 +10,10 @@ import User from "jc-shared/user/user.js";
 
 const app = express();
 
+app.get("/programmheft/alle", [checkOrgateam], (req: Request, res: Response) => {
+  resToJson(res, store.alleKalender());
+});
+
 app.get("/programmheft/:year/:month", [checkOrgateam], (req: Request, res: Response) => {
   let yearMonthString = `${req.params.year}/${req.params.month}`;
   if (parseInt(req.params.month) % 2 === 0) {

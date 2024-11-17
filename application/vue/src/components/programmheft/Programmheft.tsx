@@ -18,6 +18,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
+import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -105,12 +106,6 @@ export default function Programmheft() {
     setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
   }, [start, setSearch]);
 
-  const copyFromPrevious = useCallback(async () => {
-    const prevDate = start.minus({ monate: 2 });
-    const prevKal = await kalenderFor(`${prevDate.format("YYYY")}/${prevDate.format("MM")}`);
-    form.setFieldValue("text", prevKal.textMovedTwoMonths());
-  }, [form, start]);
-
   return (
     <Form
       form={form}
@@ -129,7 +124,7 @@ export default function Programmheft() {
         buttons={[
           <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
           <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
-          <ButtonWithIcon text="Kopieren aus Vormonat" key="copy" icon="FileEarmarkPlus" onClick={copyFromPrevious} type="default" />,
+          <ProgrammheftKopierenButton key="copy" form={form} />,
           <SaveButton key="save" disabled={!dirty} />,
         ]}
       />
@@ -138,9 +133,6 @@ export default function Programmheft() {
           <Col xs={24} lg={8} style={{ zIndex: 0 }}>
             <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} />
           </Col>
-          {/*<Col xs={24} lg={8} style={{ zIndex: 0 }}>*/}
-          {/*  <HeftCalendar initialDate={start.minus({ monate: 1 }).fuerCalendarWidget} events={events} />*/}
-          {/*</Col>*/}
           <Col xs={24} lg={16}>
             <MarkdownEditor name="text" />
             <h4>Farben Hilfe</h4>

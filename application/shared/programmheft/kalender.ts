@@ -90,6 +90,16 @@ export default class Kalender {
     return eventsToText(newEvents);
   }
 
+  textMovedWithBase(otherKalId: string): string {
+    const thisDatum = DatumUhrzeit.forYYYYslashMM(this.id);
+    const otherDatum = DatumUhrzeit.forYYYYslashMM(otherKalId);
+    const differenz = otherDatum.differenzInTagen(thisDatum);
+    const newEvents = eventsToObject(this.text).map((each) => {
+      return each.moveBy({ tage: differenz });
+    });
+    return eventsToText(newEvents);
+  }
+
   asEvents(): Event[] {
     return eventsToObject(this.text);
   }

@@ -274,6 +274,11 @@ export async function kalenderFor(jahrMonat: string) {
   return result?.id ? new Kalender(result) : new Kalender({ id: jahrMonat, text: "" });
 }
 
+export async function alleKalender(): Promise<Kalender[]> {
+  const result = await getForType("json", "/rest/programmheft/alle");
+  return result.length > 0 ? result.map((r: any) => new Kalender(r)) : [];
+}
+
 export async function saveProgrammheft(kalender: Kalender) {
   return standardFetch({
     method: "POST",
