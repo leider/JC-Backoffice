@@ -4,8 +4,7 @@ import * as React from "react";
 import { useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -14,6 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import isNil from "lodash/isNil";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import { ItemType } from "antd/es/menu/interface";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 type ButtonProps = {
   disabled?: boolean;

@@ -10,7 +10,7 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export default function TechnikCard() {
   const konzertContext = useContext(KonzertContext);

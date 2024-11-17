@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useForm, useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";

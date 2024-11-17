@@ -1,6 +1,6 @@
 import * as React from "react";
-import { createContext, useCallback, useEffect, useState } from "react";
-import { Form, FormInstance } from "antd";
+import { useCallback, useEffect, useState } from "react";
+import { Form } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
@@ -13,14 +13,8 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
+import { KonzertContext } from "./KonzertContext";
 //import { detailedDiff } from "deep-object-diff";
-
-export const KonzertContext = createContext<{
-  form: FormInstance<Konzert & { riderBoxes?: BoxParams[]; endbestandEUR?: number }>;
-  isDirty: boolean;
-  isKasseHelpOpen: boolean;
-  setKasseHelpOpen: (open: boolean) => void;
-} | null>(null);
 
 export default function KonzertComp() {
   const { url } = useParams();

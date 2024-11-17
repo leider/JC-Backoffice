@@ -5,7 +5,7 @@ import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterC
 import EventCard from "@/components/vermietung/allgemeines/EventCard.tsx";
 import ArtistCard from "@/components/vermietung/allgemeines/ArtistCard.tsx";
 import VertragspartnerCard from "@/components/vermietung/allgemeines/VertragspartnerCard.tsx";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 
 export default function TabAllgemeines() {
   const { form } = useContext(VermietungContext)!;

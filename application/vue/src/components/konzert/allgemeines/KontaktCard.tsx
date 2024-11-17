@@ -5,7 +5,7 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import SingleSelect from "@/widgets/SingleSelect";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import uniq from "lodash/uniq";
 
 type KontaktCardProps = {

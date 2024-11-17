@@ -1,26 +1,17 @@
 import { Col, Row, Tour, TourProps } from "antd";
-import React, { createContext, Ref, useContext, useEffect, useRef } from "react";
+import React, { Ref, useContext, useEffect, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/konzert/kasse/AusgabenCard";
 import { KassenzettelFreigabe } from "@/components/konzert/kasse/KassenzettelFreigabe";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Kasse from "jc-shared/konzert/kasse";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
 import { useWatch } from "antd/es/form/Form";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { KassenContext } from "./KassenContext";
 
 export interface KasseCardProps {
   disabled: boolean;
 }
-
-export const KassenContext = createContext<{
-  refStartinhalt: Ref<HTMLElement>;
-  refEndinhalt: Ref<HTMLElement>;
-  refAnBank: Ref<HTMLElement>;
-}>({
-  refStartinhalt: null,
-  refEndinhalt: null,
-  refAnBank: null,
-});
 
 export default function TabKasse() {
   const konzertContext = useContext(KonzertContext);

@@ -11,7 +11,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPanel.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
-import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import { TeamContext } from "@/components/team/TeamContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 

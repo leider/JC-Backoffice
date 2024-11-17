@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Tag } from "antd";
 import { MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";

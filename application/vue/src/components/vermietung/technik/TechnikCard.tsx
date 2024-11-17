@@ -9,7 +9,7 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function TechnikCard() {

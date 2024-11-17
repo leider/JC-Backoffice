@@ -4,9 +4,9 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbedded.tsx";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
-import { KassenContext } from "@/components/konzert/kasse/TabKasse.tsx";
 import { useWatch } from "antd/es/form/Form";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 
 const items = [
   { name: "10", val: "0,10" },

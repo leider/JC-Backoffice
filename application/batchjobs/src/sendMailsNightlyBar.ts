@@ -8,6 +8,7 @@ import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 
 const logger = loggers.get("application");
 
@@ -53,7 +54,7 @@ ${zuSendende
   message.body = markdownToSend;
 
   const adminAddresses = usersService.emailsAllerAdmins();
-  logger.info(`Email Adressen für ${subject}: ${adminAddresses}`);
+  logger.info(`Email Adressen für ${subject}: ${formatMailAddresses(adminAddresses)}`);
   message.to = MailMessage.formatEMailAddressCommaSeparated(name, email);
   message.bcc = adminAddresses;
   return mailtransport.sendMail(message);

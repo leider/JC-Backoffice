@@ -5,7 +5,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useWatch } from "antd/es/form/Form";
 
 interface AusgabenCardParams {

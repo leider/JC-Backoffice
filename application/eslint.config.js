@@ -4,6 +4,7 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import prettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -22,8 +23,9 @@ export default tseslint.config(
       "no-process-exit": "error",
       "no-unused-vars": "error",
       eqeqeq: "error",
+      "react-refresh/only-export-components": "error",
     },
-    plugins: { prettier },
+    plugins: { prettier, "react-refresh": reactRefresh },
     files: ["**/*.ts", "**/*.tsx"],
     ignores: ["node_modules"],
   },

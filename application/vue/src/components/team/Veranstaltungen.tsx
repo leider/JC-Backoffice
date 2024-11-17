@@ -1,17 +1,8 @@
-import React, { createContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { TeamUndVeranstaltungen } from "@/components/team/TeamUndVeranstaltungen.tsx";
-
-export const TeamContext = createContext<{
-  veranstaltungenNachMonat: {
-    [index: string]: Veranstaltung[];
-  };
-  usersAsOptions: UserWithKann[];
-}>({ veranstaltungenNachMonat: {}, usersAsOptions: [] });
 
 export default function Veranstaltungen() {
   useDirtyBlocker(false);

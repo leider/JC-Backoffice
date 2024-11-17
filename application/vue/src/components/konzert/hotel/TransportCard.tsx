@@ -7,7 +7,7 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 

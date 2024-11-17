@@ -7,7 +7,8 @@ import isNil from "lodash/isNil";
 import { withoutNullOrUndefinedStrippedBy } from "jc-shared/commons/comparingAndTransforming.ts";
 import isEmpty from "lodash/isEmpty";
 import { NamePath } from "rc-field-form/es/interface";
-import { reset, TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
+import { TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
+import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 
 type LabelColorProperty = {
   label: string;

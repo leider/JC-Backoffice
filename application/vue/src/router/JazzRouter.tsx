@@ -1,9 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import * as React from "react";
-import { createContext, useContext, useMemo } from "react";
-import { RouteState, useCreateRouteState } from "@/router/useCreateRouteState.tsx";
-
-export const RouterContext = createContext<RouteState>({ routes: [], setCurrentUser: () => {} });
+import { useContext, useMemo } from "react";
+import { useCreateRouteState } from "@/router/useCreateRouteState.tsx";
+import { RouterContext } from "@/router/RouterContext.ts";
 
 function RouterWrapper() {
   const { routes } = useContext(RouterContext);

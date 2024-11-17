@@ -6,7 +6,7 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";

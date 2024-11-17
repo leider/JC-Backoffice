@@ -7,7 +7,7 @@ import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import TeamBlockVermietung from "@/components/team/TeamBlock/TeamBlockVermietung.tsx";
-import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";

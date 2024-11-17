@@ -1,7 +1,7 @@
 import { Col, Row } from "antd";
 import React, { useContext } from "react";
 import PresseCard from "@/components/veranstaltung/presse/PresseCard.tsx";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 
 export default function TabPresse() {
   const mietContext = useContext(VermietungContext);

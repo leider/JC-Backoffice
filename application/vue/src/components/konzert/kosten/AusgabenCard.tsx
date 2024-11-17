@@ -9,7 +9,7 @@ import Kasse from "jc-shared/konzert/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import Technik from "jc-shared/veranstaltung/technik.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";

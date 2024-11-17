@@ -5,10 +5,11 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KasseCardProps, KassenContext } from "@/components/konzert/kasse/TabKasse";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
   const konzertContext = useContext(KonzertContext);

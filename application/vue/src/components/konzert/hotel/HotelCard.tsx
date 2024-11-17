@@ -6,7 +6,7 @@ import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import dayjs from "dayjs";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";

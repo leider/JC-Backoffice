@@ -3,7 +3,7 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { useWatch } from "antd/es/form/Form";
 
 export default function EinnahmenCard() {

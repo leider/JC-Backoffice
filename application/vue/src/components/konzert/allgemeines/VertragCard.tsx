@@ -6,7 +6,7 @@ import Vertrag from "jc-shared/konzert/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/widgets/Uploader.tsx";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";

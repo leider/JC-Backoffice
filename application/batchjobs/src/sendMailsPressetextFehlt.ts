@@ -9,6 +9,7 @@ import usersService from "jc-backend/lib/users/usersService.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 
 const logger = loggers.get("application");
 
@@ -31,7 +32,7 @@ ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
   });
   message.body = markdownToSend;
   const bookingAddresses = usersService.emailsAllerBookingUser();
-  logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
+  logger.info(`Email Adressen für fehlende Pressetexte: ${formatMailAddresses(bookingAddresses)}`);
   message.bcc = bookingAddresses;
   return mailtransport.sendMail(message);
 }

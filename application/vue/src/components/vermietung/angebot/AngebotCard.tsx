@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";

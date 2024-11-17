@@ -1,6 +1,6 @@
 import { Col, Row } from "antd";
 import React, { useContext } from "react";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Collapsible from "@/widgets/Collapsible.tsx";

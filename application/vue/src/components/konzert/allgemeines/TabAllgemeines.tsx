@@ -9,7 +9,7 @@ import BearbeiterCard from "@/components/konzert/allgemeines/BearbeiterCard";
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export default function TabAllgemeines() {
   const { form } = useContext(KonzertContext)!;

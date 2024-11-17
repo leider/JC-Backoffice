@@ -3,7 +3,6 @@ import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { HelpWithKasseButton, MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { KonzertContext } from "@/components/konzert/KonzertComp";
 import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -11,6 +10,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import { useWatch } from "antd/es/form/Form";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
   const konzertContext = useContext(KonzertContext);

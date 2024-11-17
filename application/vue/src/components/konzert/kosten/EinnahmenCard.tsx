@@ -9,7 +9,7 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertComp.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useWatch } from "antd/es/form/Form";
 
 interface EinnahmenCardParams {

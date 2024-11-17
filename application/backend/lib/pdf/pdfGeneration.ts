@@ -106,12 +106,12 @@ export async function kassenzettelToBuchhaltung(konzert: Konzert) {
   }
   const user = await userstore.forId(konzert.staff.kasseV[0]);
   const kassierer = user?.name ?? konzert.kasse.kassenfreigabe;
-  const pdf = await generatePdf(renderPug("kassenzettel", { veranstaltung: konzert, kassierer, publicUrlPrefix }));
-  const filenamepdf = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
+  const content = await generatePdf(renderPug("kassenzettel", { veranstaltung: konzert, kassierer, publicUrlPrefix }));
+  const filename = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
 
   const subject = `[Kassenzettel] ${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.fuerPresse}`;
   const mailmessage = new MailMessage({ subject });
-  mailmessage.attach({ content: pdf, filename: filenamepdf });
+  mailmessage.attach({ content, filename });
   mailmessage.to = [{ name: "", address: conf.kassenzettelEmail }];
   return mailtransport.sendDatevMail(mailmessage);
 }
@@ -135,10 +135,10 @@ export async function vermietungVertragToBuchhaltung(vermietung: Vermietung) {
   if (!conf.kassenzettelEmail) {
     return;
   }
-  const { content, filename } = await vermietungToPdf(vermietung);
+  const attachment = await vermietungToPdf(vermietung);
   const subject = `[Vertrag] ${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.fuerPresse}`;
   const mailmessage = new MailMessage({ subject });
-  mailmessage.attach({ content, filename });
+  mailmessage.attach(attachment);
   mailmessage.to = [{ name: "", address: conf.kassenzettelEmail }];
   return mailtransport.sendDatevMail(mailmessage);
 }

@@ -5,23 +5,7 @@ import React from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { EventTypeMultiSelect } from "@/widgets/EventTypeMultiSelect.tsx";
-
-export function reset(form: FormInstance<TeamFilterObject>) {
-  form.setFieldsValue({
-    istKonzert: undefined,
-    hotelBestaetigt: undefined,
-    presse: { text: undefined, originalText: undefined, checked: undefined },
-    kopf: {
-      confirmed: undefined,
-      abgesagt: undefined,
-      kannAufHomePage: undefined,
-      kannInSocialMedia: undefined,
-      fotografBestellen: undefined,
-      eventTyp: undefined,
-    },
-    technik: { checked: undefined, fluegel: undefined },
-  });
-}
+import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 
 export function TeamFilterEdit({
   form,

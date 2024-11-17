@@ -9,6 +9,7 @@ import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 
 const logger = loggers.get("application");
 
@@ -36,7 +37,7 @@ ${selected
   const mailmessage = new MailMessage({ subject: rule.subject(now) });
   mailmessage.body = markdownToSend;
   const mailAddress = MailMessage.formatEMailAddress(rule.name, rule.email);
-  logger.info(`Email Adresse für Presseregeln: ${mailAddress}`);
+  logger.info(`Email Adresse für Presseregeln: ${formatMailAddresses([mailAddress])}`);
   mailmessage.to = [mailAddress];
   counter++;
   return mailtransport.sendMail(mailmessage);

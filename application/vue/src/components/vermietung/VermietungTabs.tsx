@@ -7,7 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
 import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";

@@ -7,7 +7,7 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungComp.tsx";
+import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";

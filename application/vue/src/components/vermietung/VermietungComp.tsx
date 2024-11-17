@@ -1,6 +1,6 @@
 import * as React from "react";
-import { createContext, useCallback, useEffect, useState } from "react";
-import { Form, FormInstance } from "antd";
+import { useCallback, useEffect, useState } from "react";
+import { Form } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
@@ -12,8 +12,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
-
-export const VermietungContext = createContext<{ form: FormInstance<Vermietung>; isDirty: boolean } | null>(null);
+import { VermietungContext } from "./VermietungContext";
 
 export default function VermietungComp() {
   const { url } = useParams();

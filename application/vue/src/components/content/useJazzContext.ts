@@ -4,7 +4,7 @@ import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
 import { LoginState } from "@/commons/authConsts.ts";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
-import { RouterContext } from "@/router/JazzRouter.tsx";
+import { RouterContext } from "@/router/RouterContext.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";

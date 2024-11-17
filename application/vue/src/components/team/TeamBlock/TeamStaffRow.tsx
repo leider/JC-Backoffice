@@ -3,7 +3,7 @@ import React, { useContext, useMemo } from "react";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TeamContext } from "@/components/team/Veranstaltungen.tsx";
+import { TeamContext } from "@/components/team/TeamContext.ts";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";

@@ -1,7 +1,6 @@
 import * as nodemailer from "nodemailer";
 import * as Mail from "nodemailer/lib/mailer";
 import * as winston from "winston";
-import Message from "jc-shared/mail/message.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
 import MailBodyRenderer from "./mailbodyRenderer.js";
@@ -16,26 +15,6 @@ const transport = nodemailer.createTransport(
 );
 
 // exported for testing
-export function toTransportObjectLegacy(message: Message, isForDatev: boolean): Mail.Options {
-  const mbRenderer = new MailBodyRenderer(message.markdown);
-
-  const senderAddress = isForDatev ? conf.senderAddress : conf.senderAddress;
-  const senderName = conf.senderName + (isForDatev ? " für Datev" : "");
-  const attachments = message.attachments ?? [];
-  if (message.pdfBufferAndName) {
-    attachments.push({ filename: message.pdfBufferAndName.name, content: message.pdfBufferAndName.pdf as Buffer });
-  }
-  return {
-    from: Message.formatEMailAddress(message.senderName(senderName), message.senderAddress(senderAddress)),
-    to: message.to || message.senderAddress(senderAddress),
-    bcc: message.bcc || message.senderAddress(senderAddress),
-    subject: message.subject,
-    replyTo: message.replyTo,
-    text: mbRenderer.text,
-    html: mbRenderer.html,
-    attachments,
-  };
-}
 export function toTransportObject(mailMessage: MailMessage, isForDatev: boolean): Mail.Options {
   const mbRenderer = new MailBodyRenderer(mailMessage.body);
 
