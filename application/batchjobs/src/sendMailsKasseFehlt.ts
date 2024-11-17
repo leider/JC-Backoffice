@@ -1,6 +1,5 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
@@ -10,6 +9,7 @@ import userstore from "jc-backend/lib/users/userstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import Users from "jc-shared/user/users.js";
 import usersService from "jc-backend/lib/users/usersService.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const logger = loggers.get("application");
 
@@ -40,17 +40,17 @@ ${konzerte
 --- 
 <a href="${toFullQualifiedUrl("team", "")}">Zur Teamseite</a>`;
 
-  const message = new Message({
+  const message = new MailMessage({
     subject: "Kassenpersonal für Veranstaltungen gesucht",
-    markdown: markdownToSend,
   });
+  message.body = markdownToSend;
 
   const users = userstore.allUsers();
   const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email && user.wantsEmailReminders);
   const adminAddresses = usersService.emailsAllerAdmins();
-  const emails = validUsers.map((user) => Message.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
+  const emails = validUsers.map((user) => MailMessage.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${emails}`);
-  message.setBcc(emails);
+  message.bcc = emails;
   return mailtransport.sendMail(message);
 }
 

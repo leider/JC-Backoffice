@@ -46,16 +46,16 @@ describe("Rules Mailsender", () => {
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
     expect(message.subject).to.equal("[Jazzclub Karlsruhe] KW 17 bis 17");
-    expect(message.to).to.equal('"Regel 1" <regel@gmail.com>');
-    expect(message.markdown).to.include(`### Automatischer Mailversand des Jazzclub Karlruhe e.V.
+    expect(message.to).to.eql([{ address: "regel@gmail.com", name: "Regel 1" }]);
+    expect(message.body).to.include(`### Automatischer Mailversand des Jazzclub Karlruhe e.V.
 Diese Mail ist automatisch generiert. Bitte informieren Sie uns über Verbesserungen oder Änderungswünsche, speziell bzgl. des Sendedatums, der Sendeperiode und des Anfangs- und Endezeitraums.
 
 Liebe Grüße vom Jazzclub Team.`);
 
-    expect(message.markdown).to.include(`### Vermietung 1
+    expect(message.body).to.include(`### Vermietung 1
 #### Sonntag, 28. April 2019 um 22:00 im Jazzclub Karlsruhe`);
 
-    expect(message.markdown).to.include(`### Konzert 1
+    expect(message.body).to.include(`### Konzert 1
 #### Montag, 29. April 2019 um 22:00 im Jazzclub Karlsruhe
 **Eintritt:** freier Eintritt`);
   });

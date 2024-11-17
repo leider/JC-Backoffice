@@ -1,6 +1,5 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 import mailstore from "jc-backend/lib/mailsender/mailstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
@@ -9,6 +8,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const logger = loggers.get("application");
 
@@ -33,15 +33,13 @@ ${selected
   })
   .join("\n\n---\n")}`;
 
-  const message = new Message({
-    subject: rule.subject(now),
-    markdown: markdownToSend,
-  });
-  const mailAddress = Message.formatEMailAddress(rule.name, rule.email);
-  logger.info(`Email Adressen für Presseregeln: ${mailAddress}`);
-  message.setTo(mailAddress);
+  const mailmessage = new MailMessage({ subject: rule.subject(now) });
+  mailmessage.body = markdownToSend;
+  const mailAddress = MailMessage.formatEMailAddress(rule.name, rule.email);
+  logger.info(`Email Adresse für Presseregeln: ${mailAddress}`);
+  mailmessage.to = [mailAddress];
   counter++;
-  return mailtransport.sendMail(message);
+  return mailtransport.sendMail(mailmessage);
 }
 
 export async function loadRulesAndProcess(now: DatumUhrzeit) {

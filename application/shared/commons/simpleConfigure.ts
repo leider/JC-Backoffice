@@ -1,4 +1,5 @@
 import path from "node:path";
+import { MailAddress } from "../mail/mailMessage.js";
 
 export class SimpleConfigure {
   storage: { [index: string]: string | number } = {};
@@ -87,8 +88,9 @@ export class SimpleConfigure {
   get senderAddress() {
     return this.getString("sender-address");
   }
-  get senderAddressDatev() {
-    return this.getString("sender-address-datev");
+
+  get sender(): MailAddress {
+    return { name: this.senderName, address: this.senderAddress };
   }
 
   get kassenzettelEmail() {

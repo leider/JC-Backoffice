@@ -10,7 +10,6 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import { TextField } from "@/widgets/TextField";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import Message from "jc-shared/mail/message";
 import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
@@ -23,6 +22,7 @@ import UploaderForMail from "@/widgets/UploaderForMail.tsx";
 import { RcFile } from "antd/es/upload";
 import { useWatch } from "antd/es/form/Form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
+import MailMessage from "jc-shared/mail/mailMessage.ts";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (typeof addressOrString === "string") {
@@ -49,7 +49,7 @@ export default function SendMail() {
     },
   });
 
-  const { allUsers, currentUser } = useJazzContext();
+  const { allUsers } = useJazzContext();
 
   const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
 
@@ -155,20 +155,17 @@ export default function SendMail() {
       const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
         mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
       );
-      const addresses = effectiveUsers.map((user) => Message.formatEMailAddress(user.name, user.email));
+      const addresses = effectiveUsers.map((user) => MailMessage.formatEMailAddress(user.name, user.email));
       const markdownToSend =
         mail.markdown +
         "\n\n---\n" +
         selectedVeranstaltungen
           .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin))
           .join("\n\n---\n");
-      const result = new Message(
-        { subject: `[Jazzclub manuell] ${mail.subject}`, markdown: markdownToSend },
-        currentUser.name,
-        currentUser.email,
-      );
+      const result = new MailMessage({ subject: `[Jazzclub manuell] ${mail.subject}` });
+      result.body = markdownToSend;
+      result.bcc = addresses;
       const formData = new FormData();
-      result.setBcc(addresses);
       formData.append("message", JSON.stringify(result));
       if (fileList.length > 0) {
         fileList.forEach((file) => {

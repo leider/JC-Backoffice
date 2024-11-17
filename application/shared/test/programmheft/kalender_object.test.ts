@@ -154,7 +154,7 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
         was: "Irgendwas",
         wer: "Irgendwer",
       });
-      expect(emailEvent.email()).to.eql("andreas@andreas.as");
+      expect(emailEvent.email()).to.eql(["andreas@andreas.as"]);
       expect(emailEvent.body()).to.eql(
         `Irgendwer,
 

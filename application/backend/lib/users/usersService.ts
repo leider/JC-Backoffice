@@ -2,6 +2,7 @@ import User, { BOOKING, SUPERUSERS } from "jc-shared/user/user.js";
 
 import store from "./userstore.js";
 import { genSalt, hashPassword } from "../commons/hashPassword.js";
+import { MailAddress } from "jc-shared/mail/mailMessage.js";
 
 export default {
   saveNewUserWithPassword: function saveNewUserWithPassword(userToSave: User, user: User) {
@@ -36,19 +37,25 @@ export default {
     return store.save(existingUser, user);
   },
 
-  emailsAllerBookingUser: function emailsAllerBookingUser() {
+  emailsAllerBookingUser: function emailsAllerBookingUser(): MailAddress[] {
     const users = store.allUsers();
     return users
       .filter((user) => (user.gruppen || []).includes(BOOKING) || (user.gruppen || []).includes(SUPERUSERS))
       .filter((user) => !!user.email)
-      .map((u) => u.email);
+      .map((u) => ({
+        name: u.name,
+        address: u.email,
+      }));
   },
 
-  emailsAllerAdmins: function emailsAllerAdmins() {
+  emailsAllerAdmins: function emailsAllerAdmins(): MailAddress[] {
     const users = store.allUsers();
     return users
       .filter((user) => (user.gruppen || []).includes(SUPERUSERS))
       .filter((user) => !!user.email)
-      .map((u) => u.email);
+      .map((u) => ({
+        name: u.name,
+        address: u.email,
+      }));
   },
 };

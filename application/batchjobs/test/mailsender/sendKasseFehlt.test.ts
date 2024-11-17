@@ -35,12 +35,15 @@ describe("Check Kasse Mailsender", () => {
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
     expect(message.subject).to.equal("Kassenpersonal für Veranstaltungen gesucht");
-    expect(message.bcc).to.equal('"Name of User1" <user1@jazzclub.de>,user5@jazzclub.de');
-    expect(message.markdown).to.include("## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:");
-    expect(message.markdown).to.include(
+    expect(message.bcc).to.eql([
+      { address: "user1@jazzclub.de", name: "Name of User1" },
+      { address: "user5@jazzclub.de", name: "Name of User5" },
+    ]);
+    expect(message.body).to.include("## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:");
+    expect(message.body).to.include(
       '<a href="http://localhost:1970/vue/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>',
     );
-    expect(message.markdown).to.include(
+    expect(message.body).to.include(
       '<a href="http://localhost:1970/vue/veranstaltung/konzert2">Konzert 2 am Mi., 29. Mai 2019 22:00 im Jazzclub Karlsruhe</a>',
     );
   });

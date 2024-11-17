@@ -46,20 +46,24 @@ describe("Rules Mailsender", () => {
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
     expect(message.subject).to.equal("Veranstaltungen ohne Pressetext");
-    expect(message.bcc).to.equal("user3@jazzclub.de,user4@jazzclub.de,user5@jazzclub.de");
-    expect(message.markdown).to.include(
+    expect(message.bcc).to.eql([
+      { address: "user3@jazzclub.de", name: "Name of User3" },
+      { address: "user4@jazzclub.de", name: "Name of User4" },
+      { address: "user5@jazzclub.de", name: "Name of User5" },
+    ]);
+    expect(message.body).to.include(
       "## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:",
     );
 
-    expect(message.markdown).to.include(`### [Vermietung 2](http://localhost:1970/vue/vermietung/?page=presse)
+    expect(message.body).to.include(`### [Vermietung 2](http://localhost:1970/vue/vermietung/?page=presse)
 #### Dienstag, 28. Mai 2019 um 22:00 im Jazzclub Karlsruhe`);
 
-    expect(message.markdown).to.include(`### [Konzert 2](http://localhost:1970/vue/konzert/konzert2?page=presse)
+    expect(message.body).to.include(`### [Konzert 2](http://localhost:1970/vue/konzert/konzert2?page=presse)
 #### Mittwoch, 29. Mai 2019 um 22:00 im Jazzclub Karlsruhe`);
 
-    expect(message.markdown).to.include(`### [Konzert 3](http://localhost:1970/vue/konzert/?page=presse)
+    expect(message.body).to.include(`### [Konzert 3](http://localhost:1970/vue/konzert/?page=presse)
 #### Samstag, 29. Juni 2019 um 22:00 im Jazzclub Karlsruhe`);
 
-    expect(message.markdown, "Konzert 4 braucht keine Presse").to.not.include(`### [Konzert 4]`);
+    expect(message.body, "Konzert 4 braucht keine Presse").to.not.include(`### [Konzert 4]`);
   });
 });

@@ -2,11 +2,12 @@ import "jc-backend/configure.js";
 import "jc-backend/initWinston.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 
 import userstore from "jc-backend/lib/users/userstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import sendMailsNightly from "./sendMailsNightly.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
+import User from "jc-shared/user/user.js";
 
 const receiver = "leider";
 
@@ -29,14 +30,14 @@ async function informAdmin(err?: Error, counter?: number) {
     return closeAndExit(err);
   }
   try {
-    const user = userstore.forId(receiver);
-    const message = new Message({
+    const user = userstore.forId(receiver) as User;
+    const message = new MailMessage({
       subject: "[B-O Jazzclub] Mails sent",
-      markdown: `${counter} nightly Mails for Presse have been sent.
-            
-${err ? "Es gibt Fehler! " + err.message + "\n\n" + err : ""}`,
     });
-    message.setTo(user!.email);
+    message.body = `${counter} nightly Mails for Presse have been sent.
+            
+${err ? "Es gibt Fehler! " + err.message + "\n\n" + err : ""}`;
+    message.to = [{ name: user.name, address: user.email }];
     await mailtransport.sendMail(message);
     closeAndExit();
   } catch (e) {

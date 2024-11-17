@@ -1,5 +1,4 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
 import userstore from "jc-backend/lib/users/userstore.js";
@@ -7,6 +6,7 @@ import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {
@@ -30,11 +30,11 @@ async function sendMail(verMitUser: VerMitUser) {
 --- 
 <a href="${toFullQualifiedUrl("team", "")}">Zur Teamseite</a>`;
 
-  const message = new Message({
+  const message = new MailMessage({
     subject: "[JAZZCLUB REMINDER] Du hast Dich zum Arbeiten eingetragen!",
-    markdown: markdownToSend,
   });
-  message.setTo(user.email);
+  message.body = markdownToSend;
+  message.to = [MailMessage.formatEMailAddress(user.name, user.email)];
   return mailtransport.sendMail(message);
 }
 

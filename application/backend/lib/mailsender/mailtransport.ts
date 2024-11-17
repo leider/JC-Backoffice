@@ -1,12 +1,13 @@
-import nodemailer from "nodemailer";
-import Mail from "nodemailer/lib/mailer";
-import winston from "winston";
-const logger = winston.loggers.get("application");
-
+import * as nodemailer from "nodemailer";
+import * as Mail from "nodemailer/lib/mailer";
+import * as winston from "winston";
 import Message from "jc-shared/mail/message.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
 import MailBodyRenderer from "./mailbodyRenderer.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
+
+const logger = winston.loggers.get("application");
 
 const transport = nodemailer.createTransport(
   conf.transportOptions ?? {
@@ -15,10 +16,10 @@ const transport = nodemailer.createTransport(
 );
 
 // exported for testing
-export function toTransportObject(message: Message, isForDatev: boolean): Mail.Options {
+export function toTransportObjectLegacy(message: Message, isForDatev: boolean): Mail.Options {
   const mbRenderer = new MailBodyRenderer(message.markdown);
 
-  const senderAddress = isForDatev ? conf.senderAddressDatev : conf.senderAddress;
+  const senderAddress = isForDatev ? conf.senderAddress : conf.senderAddress;
   const senderName = conf.senderName + (isForDatev ? " für Datev" : "");
   const attachments = message.attachments ?? [];
   if (message.pdfBufferAndName) {
@@ -35,17 +36,34 @@ export function toTransportObject(message: Message, isForDatev: boolean): Mail.O
     attachments,
   };
 }
+export function toTransportObject(mailMessage: MailMessage, isForDatev: boolean): Mail.Options {
+  const mbRenderer = new MailBodyRenderer(mailMessage.body);
 
-async function sendMail(message: Message) {
+  const senderAddress = conf.senderAddress;
+  const senderName = `${conf.senderName}${isForDatev ? " für Datev" : ""}`;
+  const attachments = mailMessage.attachments ?? [];
+  return {
+    from: mailMessage.from ? mailMessage.from : { name: senderName, address: senderAddress },
+    to: mailMessage.to ?? [conf.sender],
+    bcc: mailMessage.bcc ?? [conf.sender],
+    subject: mailMessage.subject,
+    replyTo: mailMessage.replyTo,
+    text: mbRenderer.text,
+    html: mbRenderer.html,
+    attachments,
+  };
+}
+
+async function sendMail(message: MailMessage) {
   return sendMailInternal(message, false);
 }
 
-async function sendDatevMail(message: Message) {
+async function sendDatevMail(message: MailMessage) {
   return sendMailInternal(message, true);
 }
 
-async function sendMailInternal(message: Message, isForDatev: boolean) {
-  const transportObject = toTransportObject(message, isForDatev);
+async function sendMailInternal(mailMessage: MailMessage, isForDatev: boolean) {
+  const transportObject = toTransportObject(mailMessage, isForDatev);
   if (conf.doNotSendMails) {
     const withoutAttachments = JSON.parse(JSON.stringify(transportObject));
     delete withoutAttachments.attachments;

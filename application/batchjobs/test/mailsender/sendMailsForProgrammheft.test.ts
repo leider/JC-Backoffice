@@ -37,17 +37,21 @@ describe("Programmheft Mailsender", () => {
     sinon.restore();
   });
 
-  it("runs correctly on a day where notificatons lie", async () => {
+  it("runs correctly on a day where notifications lie", async () => {
     await remindForProgrammheft(april12 as DatumUhrzeit);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
-    expect(message.to).to.equal("x@y.z,a@b.c,l@m.n");
-    expect(message.markdown).to.include(`Jeder,
+    expect(message.to).to.eql([
+      { address: "x@y.z", name: "" },
+      { address: "a@b.c", name: "" },
+      { address: "l@m.n", name: "" },
+    ]);
+    expect(message.body).to.include(`Jeder,
 
 hier eine automatische Erinnerungsmail:
 Putzen`);
 
-    expect(message.markdown).to.include("bis zum 15. April 2019 erledigt");
+    expect(message.body).to.include("bis zum 15. April 2019 erledigt");
 
     expect(message.subject).to.equal("Programmheft Action Reminder");
   });

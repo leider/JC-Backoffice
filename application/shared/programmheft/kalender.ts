@@ -30,11 +30,8 @@ export class EmailEvent {
     return DatumUhrzeit.forISOString(this.event.start);
   }
 
-  email(): string | undefined {
-    return this.event.email
-      ?.split(/[, ]+/)
-      .map((each) => each.trim())
-      .join(",");
+  email() {
+    return (this.event.email ?? "").split(/[, ]+/).map((each) => each.trim());
   }
 
   body(): string {

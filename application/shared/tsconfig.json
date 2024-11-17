@@ -6,7 +6,7 @@
     "jsx": "preserve",
     "moduleResolution": "nodenext",
     "experimentalDecorators": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "lib": ["esnext"],
     "allowSyntheticDefaultImports": true,
     "types": ["node"]

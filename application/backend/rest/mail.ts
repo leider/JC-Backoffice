@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { Mailingliste } from "jc-shared/user/users.js";
-import Message from "jc-shared/mail/message.js";
 
 import mailstore from "../lib/mailsender/mailstore.js";
 import MailRule from "jc-shared/mail/mailRule.js";
@@ -13,6 +12,7 @@ import { checkSuperuser } from "./checkAccessHandlers.js";
 import User from "jc-shared/user/user.js";
 import fs from "fs/promises";
 import parseFormData from "../lib/commons/parseFormData.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const app = express();
 
@@ -39,8 +39,9 @@ app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
 
 app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
   const [fields, files] = await parseFormData(req);
+  const user = req.user as User;
 
-  const message = Message.fromJSON(JSON.parse(fields.message[0]));
+  const message = MailMessage.forJsonAndUser(JSON.parse(fields.message[0]), user);
   if (files.dateien) {
     message.attachments = await Promise.all(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

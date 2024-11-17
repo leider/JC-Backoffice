@@ -85,15 +85,6 @@ export async function uploadFile(data: FormData) {
   });
 }
 
-export async function uploadBeleg(data: FormData) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/beleg",
-    data,
-    contentType: "json",
-  });
-}
-
 function handleVeranstaltungen(result?: any[]): Konzert[] {
   return result?.map((each: any) => new Konzert(each)) || [];
 }

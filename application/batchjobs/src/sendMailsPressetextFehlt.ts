@@ -1,6 +1,5 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
@@ -9,6 +8,7 @@ import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import usersService from "jc-backend/lib/users/usersService.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const logger = loggers.get("application");
 
@@ -26,13 +26,13 @@ async function sendMail(kaputte: Veranstaltung[]) {
 
 ---
 ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
-  const message = new Message({
+  const message = new MailMessage({
     subject: "Veranstaltungen ohne Pressetext",
-    markdown: markdownToSend,
   });
+  message.body = markdownToSend;
   const bookingAddresses = usersService.emailsAllerBookingUser();
   logger.info(`Email Adressen für fehlende Pressetexte: ${bookingAddresses}`);
-  message.setBcc(bookingAddresses);
+  message.bcc = bookingAddresses;
   return mailtransport.sendMail(message);
 }
 

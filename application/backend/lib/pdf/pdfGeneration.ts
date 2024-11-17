@@ -13,13 +13,13 @@ import pug from "pug";
 import path from "path";
 import Path, { dirname } from "path";
 import mailtransport from "../mailsender/mailtransport.js";
-import Message from "jc-shared/mail/message.js";
 import riderstore from "../rider/riderstore.js";
 import { PrintableBox } from "jc-shared/rider/rider.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { fileURLToPath } from "url";
 import Fs from "fs/promises";
 import { PDFOptions } from "puppeteer";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -76,18 +76,7 @@ export async function vermietungAngebot(res: Response, next: NextFunction, vermi
   } catch (e) {
     next(e);
   }
-  generatePdfAndSend(
-    res,
-    next,
-    renderPug("vertrag-vermietung", {
-      vermietung,
-      datum: new DatumUhrzeit(),
-      art,
-      einseitig: true,
-      email: "event",
-    }),
-    printoptions131,
-  );
+  generatePdfAndSend(res, next, renderVermietung(vermietung, new DatumUhrzeit()), printoptions131);
 }
 
 export async function kassenzettel(res: Response, next: NextFunction, konzertUrl: string) {
@@ -112,55 +101,53 @@ export async function riderPdf(res: Response, next: NextFunction, url: string) {
 }
 
 export async function kassenzettelToBuchhaltung(konzert: Konzert) {
-  const file = path.join(__dirname, "views/kassenzettel.pug");
-  const user = await userstore.forId(konzert.staff.kasseV[0]);
-  const kassierer = user?.name || konzert.kasse.kassenfreigabe;
-  const renderedHtml = pug.renderFile(file, { veranstaltung: konzert, kassierer, publicUrlPrefix });
-  const pdf = await generatePdf(renderedHtml);
-
-  const subject = `[Kassenzettel] ${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.fuerPresse}`;
-  const message = new Message({ subject, markdown: "" });
-  const filenamepdf = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
-  message.pdfBufferAndName = { pdf, name: filenamepdf };
-  message.to = conf.kassenzettelEmail;
-  if (!message.to) {
+  if (!conf.kassenzettelEmail) {
     return;
   }
-  return mailtransport.sendDatevMail(message);
+  const user = await userstore.forId(konzert.staff.kasseV[0]);
+  const kassierer = user?.name ?? konzert.kasse.kassenfreigabe;
+  const pdf = await generatePdf(renderPug("kassenzettel", { veranstaltung: konzert, kassierer, publicUrlPrefix }));
+  const filenamepdf = `${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.tagMonatJahrKompakt}.pdf`;
+
+  const subject = `[Kassenzettel] ${konzert.kopf.titelMitPrefix} am ${konzert.startDatumUhrzeit.fuerPresse}`;
+  const mailmessage = new MailMessage({ subject });
+  mailmessage.attach({ content: pdf, filename: filenamepdf });
+  mailmessage.to = [{ name: "", address: conf.kassenzettelEmail }];
+  return mailtransport.sendDatevMail(mailmessage);
 }
 
+function renderVermietung(vermietung: Vermietung, now: DatumUhrzeit) {
+  return renderPug("vertrag-vermietung", {
+    vermietung,
+    datum: now,
+    einseitig: true,
+    email: "event",
+  });
+}
 async function vermietungToPdf(vermietung: Vermietung) {
   const now = new DatumUhrzeit();
-  const pdf = await generatePdf(
-    renderPug("vertrag-vermietung", {
-      vermietung,
-      datum: now,
-      einseitig: true,
-      email: "event",
-    }),
-    printoptions131,
-  );
-  const filenamepdf = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${vermietung.art} ${now.fuerCalendarWidget}).pdf`;
-  return { pdf, filenamepdf };
+  const content = await generatePdf(renderVermietung(vermietung, now), printoptions131);
+  const filename = `${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.tagMonatJahrKompakt} (${vermietung.art} ${now.fuerCalendarWidget}).pdf`;
+  return { content, filename };
 }
 
 export async function vermietungVertragToBuchhaltung(vermietung: Vermietung) {
   if (!conf.kassenzettelEmail) {
     return;
   }
-  const { pdf, filenamepdf } = await vermietungToPdf(vermietung);
+  const { content, filename } = await vermietungToPdf(vermietung);
   const subject = `[Vertrag] ${vermietung.kopf.titelMitPrefix} am ${vermietung.startDatumUhrzeit.fuerPresse}`;
-  const message = new Message({ subject, markdown: "" });
-  message.pdfBufferAndName = { pdf, name: filenamepdf };
-  message.to = conf.kassenzettelEmail;
-  return mailtransport.sendDatevMail(message);
+  const mailmessage = new MailMessage({ subject });
+  mailmessage.attach({ content, filename });
+  mailmessage.to = [{ name: "", address: conf.kassenzettelEmail }];
+  return mailtransport.sendDatevMail(mailmessage);
 }
 
 export async function saveVermietungToShare(vermietung: Vermietung) {
   if (!conf.pdfuploadpath) {
     return;
   }
-  const { pdf, filenamepdf } = await vermietungToPdf(vermietung);
+  const { content, filename } = await vermietungToPdf(vermietung);
   const directory = Path.join(
     conf.pdfuploadpath,
     vermietung.startDatumUhrzeit.jahr.toString(10),
@@ -168,7 +155,7 @@ export async function saveVermietungToShare(vermietung: Vermietung) {
   );
   try {
     await Fs.mkdir(directory, { recursive: true });
-    return Fs.writeFile(Path.join(directory, filenamepdf), pdf);
+    return Fs.writeFile(Path.join(directory, filename), content);
   } catch {
     // we can do nothing here...
   }

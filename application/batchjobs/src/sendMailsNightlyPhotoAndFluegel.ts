@@ -1,6 +1,5 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import Message from "jc-shared/mail/message.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
@@ -8,6 +7,7 @@ import usersService from "jc-backend/lib/users/usersService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
+import MailMessage from "jc-shared/mail/mailMessage.js";
 
 const logger = loggers.get("application");
 
@@ -21,15 +21,15 @@ ${stuffToSend
   .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht)
   .join("\n\n---\n")}`;
 
-  const message = new Message({
+  const message = new MailMessage({
     subject: variables.subject,
-    markdown: markdownToSend,
   });
+  message.body = markdownToSend;
 
   const adminAddresses = usersService.emailsAllerAdmins();
   logger.info(`Email Adressen für ${variables.subject}: ${adminAddresses}`);
-  message.setTo([Message.formatEMailAddress(variables.name, variables.email)]);
-  message.setBcc(adminAddresses);
+  message.to = [MailMessage.formatEMailAddress(variables.name, variables.email)];
+  message.bcc = adminAddresses;
   return mailtransport.sendMail(message);
 }
 
