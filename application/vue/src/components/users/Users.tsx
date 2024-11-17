@@ -26,7 +26,7 @@ export default function Users() {
     return {
       label: (
         <b>
-          <IconForSmallBlock iconName={icon} /> {label}
+          <IconForSmallBlock iconName={icon} size={12} /> {label}
         </b>
       ),
       value: value,

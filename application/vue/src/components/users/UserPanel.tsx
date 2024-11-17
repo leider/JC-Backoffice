@@ -8,6 +8,7 @@ import { deleteUser } from "@/commons/loader.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import { ButtonInUsers } from "@/components/users/ButtonInUsers.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
 
 export default function UserPanel({ user, currentUser }: { user: User; currentUser: User }) {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -85,7 +86,7 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
             ),
             label: (
               <span>
-                <IconForSmallBlock iconName={icon} /> {user.name}
+                <IconForSmallBlock iconName={icon} style={{ paddingTop: "4" }} /> {user.name} {user.kannErsthelfer && <ErsthelferSymbol />}
               </span>
             ),
             children: (
