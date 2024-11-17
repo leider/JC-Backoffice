@@ -52,3 +52,5 @@ jobs:
         with:
           name: ui-build-results
           path: frontendtests/output
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
