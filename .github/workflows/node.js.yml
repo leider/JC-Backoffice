@@ -47,3 +47,8 @@ jobs:
           yarn playwright install chromium
           yarn tsc
           ./startRunStop.sh
+      - name: Archive UI test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui build results
+          path: frontendtests/output
