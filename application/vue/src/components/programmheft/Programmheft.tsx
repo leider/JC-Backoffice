@@ -19,6 +19,7 @@ import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
+// import { detailedDiff } from "deep-object-diff";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();

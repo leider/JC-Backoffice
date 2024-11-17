@@ -12,5 +12,15 @@ export function MarkdownEditor({ label, name }: { label?: string | ReactNode; na
 
 function InnerEditor({ value, onChange }: { value?: string; onChange?: (value: string) => void }) {
   const editor = useEditor({ authToken: "" });
-  return <Editable editor={editor} value={value ?? ""} onChange={onChange!} />;
+  return (
+    <Editable
+      editor={editor}
+      value={value ?? ""}
+      onChange={(val) => {
+        const cleanedVal = val.replace("&nbsp;", "").replace(/\n$/, "");
+        onChange!(cleanedVal);
+      }}
+      throttleInMs={5000}
+    />
+  );
 }

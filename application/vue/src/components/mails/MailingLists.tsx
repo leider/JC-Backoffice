@@ -11,7 +11,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
-import { UserWithKann } from "@/components/team/MitarbeiterMultiSelect.tsx";
+import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
