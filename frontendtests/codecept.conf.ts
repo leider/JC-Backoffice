@@ -4,6 +4,7 @@ export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
   retry: 4,
+  timeout: 10,
   helpers: {
     Playwright: {
       browser: "chromium",

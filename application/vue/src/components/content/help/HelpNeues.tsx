@@ -4,6 +4,17 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const brandNew = [
     {
+      title: "Erheblich verbesserte UI für Programmheft.",
+      description: "November '24",
+      content: "Die Tabelle wird jetzt viel besser dargestellt. Du kannst ein Programmheft aus einem anderen Monat kopieren.",
+    },
+    {
+      title: "Echtes Wysiwyg in Texteditoren",
+      description: "November '24",
+      content:
+        'Die formatierbaren Textfelder sind jetzt wysiwyg. Du brauchst keine Vorschau mehr. Es kann dazu kommen, dass eine Veranstaltung dann nochmal "dirty" wird und du sie erneut speichern musst, ob wohl keine Änderung erkenntlich ist.',
+    },
+    {
       title: "Bessere Teamfilter",
       description: "November '24",
       content: "Du kannst jetzt nach Eventtyp filtern.",
