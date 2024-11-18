@@ -112,7 +112,8 @@ export default function KonzertComp() {
     updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!konzert.id);
     form.validateFields();
-  }, [form, konzert, rider, updateDirtyIfChanged]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, konzert, updateDirtyIfChanged]); // rider must not be part of the dependencies
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;

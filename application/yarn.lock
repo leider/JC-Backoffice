@@ -3510,6 +3510,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/codemirror@npm:~5.60.5":
+  version: 5.60.15
+  resolution: "@types/codemirror@npm:5.60.15"
+  dependencies:
+    "@types/tern": "npm:*"
+  checksum: 10c0/4d32ee8d335650956fc59b26f29909de0656ce9c68f7527caf2aa68e6a6a2e8be6ec7a6b80c02bfab7ac6b17040d6c2d83d394b9d00fdbf4b5588691f2efbba6
+  languageName: node
+  linkType: hard
+
 "@types/color-convert@npm:*":
   version: 2.0.3
   resolution: "@types/color-convert@npm:2.0.3"
@@ -7921,6 +7930,7 @@ __metadata:
     react-dnd-touch-backend: "npm:16.0.1"
     react-dom: "npm:18.3.1"
     react-router-dom: "npm:6.27.0"
+    react-simplemde-editor: "npm:5.2.0"
     vite: "npm:5.4.10"
     vite-plugin-pwa: "npm:0.20.5"
     vitest: "npm:2.1.4"
@@ -10794,6 +10804,19 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/440d6ee00890cec92a0c2183164149fbb96363efccf52bb132a964f44e51aec2f4b5a0520c67f6f17faddaa4097090fd76f7efe58263947532fceeb11dd4cdf3
+  languageName: node
+  linkType: hard
+
+"react-simplemde-editor@npm:5.2.0":
+  version: 5.2.0
+  resolution: "react-simplemde-editor@npm:5.2.0"
+  dependencies:
+    "@types/codemirror": "npm:~5.60.5"
+  peerDependencies:
+    easymde: ">= 2.0.0 < 3.0.0"
+    react: ">=16.8.2"
+    react-dom: ">=16.8.2"
+  checksum: 10c0/6b352fe0634cc45277502b83eeb70030d50a0726943b8e343e4afccb0dd152a395a533c151795a9724ec61413a3567fd23ed209d60f0ec283006add12b0c120e
   languageName: node
   linkType: hard
 

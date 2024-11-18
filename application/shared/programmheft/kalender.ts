@@ -47,10 +47,6 @@ Danke & keep swingin'`;
   }
 }
 
-function cleanTextAsCorrectTable(text: string) {
-  return text.replace(/\n\n/g, "\n");
-}
-
 function eventsToText(events: Event[]): string {
   const strings = events.map((event) => event.asTextLine);
   return [
@@ -70,7 +66,7 @@ export default class Kalender {
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
         this.id = object.id;
         if (object.text !== "") {
-          this.text = cleanTextAsCorrectTable(object.text);
+          this.text = object.text;
         }
         return;
       }

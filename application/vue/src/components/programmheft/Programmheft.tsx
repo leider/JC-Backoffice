@@ -15,10 +15,10 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/ProgrammheftVeranstaltungenRow.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
+import { MarkdownEditorOld } from "@/widgets/MarkdownEditorOld.tsx";
 // import { detailedDiff } from "deep-object-diff";
 
 export default function Programmheft() {
@@ -107,6 +107,16 @@ export default function Programmheft() {
     setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
   }, [start, setSearch]);
 
+  const editorOptions = useMemo(
+    () => ({
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      minHeight: "500px",
+    }),
+    [],
+  );
+
   return (
     <Form
       form={form}
@@ -135,7 +145,7 @@ export default function Programmheft() {
             <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} />
           </Col>
           <Col xs={24} lg={16}>
-            <MarkdownEditor name="text" />
+            <MarkdownEditorOld name="text" options={editorOptions} />
             <h4>Farben Hilfe</h4>
             <p>
               Du kannst entweder eine{" "}
