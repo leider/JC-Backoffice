@@ -66,7 +66,7 @@ export default function TerminePage() {
     {
       fieldName: ["startDate", "endDate"],
       label: "Start und Ende",
-      type: "date",
+      type: "startEnd",
       width: "s",
       required: true,
     },

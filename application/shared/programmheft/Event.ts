@@ -1,26 +1,39 @@
 import DatumUhrzeit, { AdditionOptions } from "../commons/DatumUhrzeit.js";
 import misc from "../commons/misc.js";
 
-type MinFields = { start: string; title: string; farbe: string };
-type AdditionalFields = { email?: string; emailOffset?: number; was?: string; wer?: string };
-
 export class Event {
   start: string;
-  title: string;
   farbe: string;
   email?: string;
   emailOffset?: number;
   was?: string;
   wer?: string;
 
-  constructor({ start, title, farbe }: MinFields) {
+  constructor({
+    start,
+    farbe,
+    email,
+    emailOffset,
+    was,
+    wer,
+  }: {
+    start: string;
+    farbe: string;
+    email?: string;
+    emailOffset?: number;
+    was?: string;
+    wer?: string;
+  }) {
     this.start = start;
-    this.title = title;
     this.farbe = farbe;
+    this.email = email;
+    this.emailOffset = emailOffset;
+    this.was = was;
+    this.wer = wer;
   }
 
-  static minimal(event: MinFields): Event {
-    return new Event(event);
+  get title(): string {
+    return `${(this.was ?? "").trim()} (${(this.wer ?? "").trim()})`;
   }
 
   static fromLine(line: string): Event | undefined {
@@ -51,33 +64,20 @@ export class Event {
     const farbe = elements[2];
     const start = dates(elements[3]);
     if (was && start) {
-      const event = Event.minimal({
-        start,
-        title: `${was.trim()} (${wer.trim()})`,
-        farbe: farbe.trim(),
-      });
       const email = elements[4] || "";
-      if (email) {
-        const emailOffset = misc.isNumber(elements[5]) ? Number.parseInt(elements[5]) : 7;
-        event.addMore({ email: email.trim(), emailOffset: emailOffset, was: was.trim(), wer: wer.trim() });
-      }
-      return event;
+      return new Event({
+        start,
+        farbe: farbe.trim(),
+        email: email.trim(),
+        emailOffset: misc.isNumber(elements[5]) ? Number.parseInt(elements[5]) : 7,
+        was: was.trim(),
+        wer: wer.trim(),
+      });
     }
   }
 
-  addMore({ email, emailOffset, was, wer }: AdditionalFields) {
-    this.email = email;
-    this.emailOffset = emailOffset;
-    this.was = was;
-    this.wer = wer;
-  }
-
-  get asTextLine(): string {
-    return `${this.was ?? ""}|${this.wer ?? ""}|${this.farbe}|${this.start}|${this.email ?? ""}|${this.emailOffset ?? 7}`;
-  }
-
   moveBy(options: AdditionOptions) {
-    this.start = DatumUhrzeit.forISOString(this.start).plus(options).tagMonatJahrKompakt;
+    this.start = DatumUhrzeit.forISOString(this.start).plus(options).toISOString;
     return this;
   }
 }

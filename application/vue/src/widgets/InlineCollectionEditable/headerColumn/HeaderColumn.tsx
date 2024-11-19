@@ -27,11 +27,11 @@ interface IHeaderColumn {
  */
 export const HeaderColumn: FC<IHeaderColumn> = (props: IHeaderColumn) => {
   const { desc, colSpans } = props;
-  const labelText = desc.label || desc.fieldName;
+  const labelText = desc.label;
 
   const theLabel = (
     <label title={labelText} className={"ant-form" + (desc.required ? "-item-required" : "")}>
-      {labelText}
+      <b>{labelText}:</b>
     </label>
   );
   return desc.idx === 0 ? (
