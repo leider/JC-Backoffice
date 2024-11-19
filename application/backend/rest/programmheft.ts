@@ -21,7 +21,9 @@ app.get("/programmheft/:year/:month", [checkOrgateam], (req: Request, res: Respo
     yearMonthString = correctedDatum.fuerKalenderViews;
   }
 
-  resToJson(res, store.getKalender(yearMonthString));
+  const kalender = store.getKalender(yearMonthString);
+  kalender?.sortEvents();
+  resToJson(res, kalender);
 });
 
 app.post("/programmheft", [checkOrgateam], (req: Request, res: Response) => {

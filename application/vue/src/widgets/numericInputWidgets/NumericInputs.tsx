@@ -102,7 +102,7 @@ export const NumberInput: FC<NumberInputProps> = ({
       rules={rules}
       valuePropName="number"
       trigger="onNumber"
-      style={label ? {} : { marginBottom: 12 }}
+      style={label ? {} : { marginBottom: 0 }}
       initialValue={initialValue}
     >
       <NumericInputEmbedded

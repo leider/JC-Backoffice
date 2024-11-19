@@ -95,7 +95,7 @@ export default function MailingLists() {
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Mailinglisten" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
+      <JazzPageHeader title="Mailinglisten" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

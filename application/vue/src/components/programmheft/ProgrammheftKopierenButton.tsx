@@ -17,7 +17,7 @@ export default function ProgrammheftKopierenButton({ form }: { form: FormInstanc
   const id = useWatch("id", { form, preserve: true });
 
   const options = useMemo(() => {
-    return (data ?? []).filter((kalender) => kalender.id !== id && kalender.text.split(/\r\n|\r|\n/).length > 3);
+    return (data ?? []).filter((kalender) => kalender.id !== id && kalender.events.length);
   }, [data, id]);
 
   const items = useMemo(() => {
@@ -31,7 +31,7 @@ export default function ProgrammheftKopierenButton({ form }: { form: FormInstanc
     async (key: string) => {
       const prevKal = options.find((kalender) => kalender.id === key);
       if (prevKal) {
-        form.setFieldValue("text", prevKal.textMovedWithBase(id));
+        form.setFieldValue("events", prevKal.eventsMovedWithBase(id));
       }
     },
     [form, id, options],

@@ -38,6 +38,7 @@ export type ColType =
   | "id"
   | "idArray"
   | "date"
+  | "startEnd"
   | "timestamp"
   | "text"
   | "textArray"

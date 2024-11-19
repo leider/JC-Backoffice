@@ -11,6 +11,7 @@ import { ColorField } from "@/widgets/ColorField.tsx";
 import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
 import { Rule } from "antd/es/form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
+import DateInput from "@/widgets/DateAndTimeInputs.tsx";
 
 interface IWidgetColumn {
   /**
@@ -111,6 +112,10 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
       Widget = <CheckItem {...commonProps} onChange={desc.onChange} />;
       break;
     case "date": {
+      Widget = <DateInput {...commonProps} />;
+      break;
+    }
+    case "startEnd": {
       const startEndProps = {
         names: (desc.fieldName as string[]).map((fName) => embeddedArrayPath?.concat([name.toString(10)]).concat(fName)),
         label: "",

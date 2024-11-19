@@ -2,12 +2,8 @@ import misc from "../commons/misc.js";
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import { Event } from "./Event.js";
 
-function eventsToObject(contents?: string): Event[] {
-  if (!contents) {
-    return [];
-  }
-
-  const lines = contents.replaceAll("\\", "").split(/[\n\r]/);
+function eventsToObject(contents: string): Event[] {
+  const lines = contents.split(/[\n\r]/);
   return misc.compact(lines.map(Event.fromLine)) as Event[];
 }
 
@@ -47,26 +43,23 @@ Danke & keep swingin'`;
   }
 }
 
-function eventsToText(events: Event[]): string {
-  const strings = events.map((event) => event.asTextLine);
-  return [
-    `Was | Wer | Farbe | Wann | Email | Tage vorher
---- | --- | --- | --- | --- | ---`,
-    ...strings,
-  ].join("\n");
-}
-
 export default class Kalender {
   id: string;
   text = "";
+  events: Event[] = [];
 
-  constructor(object?: { id: string; text: string }) {
+  constructor(object?: { id: string; text: string; events?: Event[] }) {
     if (object && object.id && object.id.split("/").length === 2) {
       const splits = object.id.split("/");
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
         this.id = object.id;
         if (object.text !== "") {
           this.text = object.text;
+        }
+        if (!object.events) {
+          this.events = eventsToObject(this.text);
+        } else {
+          this.events = object.events.map((each) => new Event(each));
         }
         return;
       }
@@ -78,32 +71,23 @@ export default class Kalender {
     return this.id && this.id.split("/")[0];
   }
 
-  textMovedTwoMonths() {
-    const oldEvents = eventsToObject(this.text);
-    const newEvents = oldEvents.map((each) => {
-      return each.moveBy({ monate: 2 });
-    });
-    return eventsToText(newEvents);
-  }
-
-  textMovedWithBase(otherKalId: string): string {
+  eventsMovedWithBase(otherKalId: string) {
     const thisDatum = DatumUhrzeit.forYYYYslashMM(this.id);
     const otherDatum = DatumUhrzeit.forYYYYslashMM(otherKalId);
     const differenz = otherDatum.differenzInTagen(thisDatum);
-    const newEvents = eventsToObject(this.text).map((each) => {
-      return each.moveBy({ tage: differenz });
+    const result = this.events.map((each) => {
+      return new Event(each).moveBy({ tage: differenz });
     });
-    return eventsToText(newEvents);
+    result.sort((a, b) => a.start.localeCompare(b.start));
+    return result;
   }
 
-  asEvents(): Event[] {
-    return eventsToObject(this.text);
+  sortEvents() {
+    this.events.sort((a, b) => a.start.localeCompare(b.start));
   }
 
   eventsToSend(aDatumUhrzeit: DatumUhrzeit): EmailEvent[] {
-    const events = this.asEvents()
-      .filter((e) => !!e.email)
-      .map((e) => new EmailEvent(e));
+    const events = this.events.filter((e) => !!e.email).map((e) => new EmailEvent(e));
     return events.filter((e) => e.shouldSendOn(aDatumUhrzeit));
   }
 }

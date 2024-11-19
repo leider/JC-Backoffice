@@ -8,7 +8,7 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
-import { Event } from "jc-shared/programmheft/Event";
+import { Event } from "jc-shared/programmheft/Event.ts";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -18,7 +18,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
-import { MarkdownEditorOld } from "@/widgets/MarkdownEditorOld.tsx";
+import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 // import { detailedDiff } from "deep-object-diff";
 
 export default function Programmheft() {
@@ -39,7 +39,7 @@ export default function Programmheft() {
     return (DatumUhrzeit.forYYYYMM(`${realYear}${realMonth}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
   }, [realMonth, realYear]);
 
-  const { data: dataKalender } = useQuery({
+  const { data } = useQuery({
     queryKey: ["kalender", `${realYear}-${realMonth}`],
     queryFn: () => kalenderFor(`${realYear}/${realMonth}`),
   });
@@ -54,10 +54,10 @@ export default function Programmheft() {
   document.title = "Programmheft";
 
   useEffect(() => {
-    if (dataKalender) {
-      setKalender(dataKalender);
+    if (data) {
+      setKalender(data);
     }
-  }, [dataKalender]);
+  }, [data]);
 
   const mutateContent = useMutation({
     mutationFn: saveProgrammheft,
@@ -69,15 +69,6 @@ export default function Programmheft() {
 
   const [form] = Form.useForm<Kalender>();
 
-  const textChanged = useCallback(() => {
-    setEvents(new Kalender(form.getFieldsValue(true)).asEvents());
-  }, [form]);
-
-  const text = useWatch("text", { form, preserve: true });
-  useEffect(() => {
-    textChanged();
-  }, [text, textChanged]);
-
   useEffect(() => {
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
@@ -85,18 +76,24 @@ export default function Programmheft() {
     form.setFieldsValue(deepCopy);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
-    setEvents(kalender.asEvents());
   }, [form, kalender]);
 
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
+      kalenderNew.text = "";
       mutateContent.mutate(kalenderNew);
       setKalender(kalenderNew);
     });
   }
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const events = useWatch("events", { form, preserve: true });
+
+  const [calEvents, setCalEvents] = useState<Event[]>([]);
+  useEffect(() => {
+    setCalEvents((events ?? []).map((each) => new Event(each)));
+  }, [events]);
+
   const previous = useCallback(() => {
     const prevDate = start.minus({ monate: 2 });
     setSearch({ year: prevDate.format("YYYY"), month: prevDate.format("MM") }, { replace: true });
@@ -107,16 +104,14 @@ export default function Programmheft() {
     setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
   }, [start, setSearch]);
 
-  const editorOptions = useMemo(
-    () => ({
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      minHeight: "500px",
-    }),
-    [],
-  );
-
+  const columnDescriptions: CollectionColDesc[] = [
+    { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
+    { fieldName: ["wer"], label: "Wer", type: "text", width: "s", required: true },
+    { fieldName: ["start"], label: "Wann", type: "date", width: "s", required: true },
+    { fieldName: ["farbe"], label: "Farbe", type: "color", width: "xs", required: true },
+    { fieldName: ["email"], label: "Email", type: "text", width: "xl" },
+    { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
+  ];
   return (
     <Form
       form={form}
@@ -142,18 +137,10 @@ export default function Programmheft() {
       <RowWrapper>
         <Row gutter={12}>
           <Col xs={24} lg={8} style={{ zIndex: 0 }}>
-            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} />
+            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={calEvents} />
           </Col>
           <Col xs={24} lg={16}>
-            <MarkdownEditorOld name="text" options={editorOptions} />
-            <h4>Farben Hilfe</h4>
-            <p>
-              Du kannst entweder eine{" "}
-              <a href="https://www.w3schools.com/colors/colors_names.asp" target="_blank" rel="noreferrer">
-                Farbe mit Namen eintragen
-              </a>{" "}
-              oder einen HEX-Code als "#RGB" oder "#RRGGBB".
-            </p>
+            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["events"]} />
           </Col>
         </Row>
         <ProgrammheftVeranstaltungenRow start={start} />
