@@ -14,6 +14,7 @@ import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCol
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -145,11 +146,9 @@ export default function Optionen() {
     <Form
       form={form}
       onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+        const current = form.getFieldsValue(true);
+        logDiffForDirty(initialValue, current, false);
+        setDirty(areDifferent(initialValue, current));
       }}
       onFinish={saveForm}
       layout="vertical"
