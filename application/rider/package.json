@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vite --port 1969",
     "deploy": "vite build",
-    "eslint": "../node_modules/.bin/eslint src/**/*.ts*",
     "serve": "rm -rf  ../backend/static/rider && vite preview --port 1969"
   },
   "dependencies": {
