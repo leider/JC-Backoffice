@@ -10,6 +10,7 @@ import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 const logger = loggers.get("application");
 
@@ -50,18 +51,20 @@ async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUh
     konzerteFilter: filterFunc,
     vermietungenFilter: filterFunc,
   });
-  if (kaputteZuSendende.length === 0) {
-    return;
-  } else {
+  if (kaputteZuSendende.length) {
     return sendMail(kaputteZuSendende);
   }
 }
 
-export async function checkPressetexte(now: DatumUhrzeit) {
+export async function checkPressetexte(now: DatumUhrzeit): Promise<JobResult> {
   const start = now;
   const end = start.plus({ tage: 1 }); // Eine Woche im Voraus
 
-  const rules = mailstore.all();
-  const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
-  return processRules(relevantRules, start, end);
+  try {
+    const rules = mailstore.all();
+    const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
+    return { result: await processRules(relevantRules, start, end) };
+  } catch (error) {
+    return { error: error as Error };
+  }
 }

@@ -5,6 +5,7 @@ import store from "jc-backend/lib/programmheft/kalenderstore.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import User from "jc-shared/user/user.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 export class EmailEvent {
   event: Event;
@@ -74,16 +75,23 @@ async function sendMail(eventsForToday: EmailEvent[]) {
   return Promise.all(messages.map(mailtransport.sendMail));
 }
 
+/**
+ * exported for testing
+ */
 export function eventsToSend(aDatumUhrzeit: DatumUhrzeit, events?: Event[]): EmailEvent[] {
   const result = (events ?? []).filter((e) => !!e.email).map((e) => new EmailEvent(e));
   return result.filter((e) => e.shouldSendOn(aDatumUhrzeit));
 }
 
-export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit()) {
+export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit()): Promise<JobResult> {
   const current = store.getCurrentKalender(now);
   const next = store.getNextKalender(now);
-  if (!current && !next) {
-    return;
+  try {
+    if (!current && !next) {
+      return {};
+    }
+    return { result: await sendMail(eventsToSend(now, current?.events).concat(eventsToSend(now, next?.events))) };
+  } catch (e) {
+    return { error: e as Error };
   }
-  return sendMail(eventsToSend(now, current?.events).concat(eventsToSend(now, next?.events)));
 }

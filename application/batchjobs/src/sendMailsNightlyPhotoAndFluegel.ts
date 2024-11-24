@@ -9,6 +9,7 @@ import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 const logger = loggers.get("application");
 
@@ -34,13 +35,17 @@ ${stuffToSend
   return mailtransport.sendMail(message);
 }
 
-async function checkForFilter(filterFunction: (ver: Veranstaltung) => boolean, variables: SendMailVariables, now: DatumUhrzeit) {
+async function checkForFilter(
+  filterFunction: (ver: Veranstaltung) => boolean,
+  variables: SendMailVariables,
+  now: DatumUhrzeit,
+): Promise<JobResult> {
   if (now.wochentag !== 0) {
     // Sonntag
-    return;
+    return {};
   }
   if (!variables.name || !variables.email) {
-    return;
+    return {};
   }
   const start = now;
   const end = start.plus({ wochen: 6 }); // Sechs Wochen im Voraus
@@ -52,23 +57,21 @@ async function checkForFilter(filterFunction: (ver: Veranstaltung) => boolean, v
     vermietungenFilter: filterFunction,
   });
   if (zuSendende.length === 0) {
-    return;
-  } else {
-    return sendMail(zuSendende, variables);
+    return {};
+  }
+  try {
+    return { result: await sendMail(zuSendende, variables) };
+  } catch (error) {
+    return { error: error as Error };
   }
 }
 
 export async function checkFotograf(now: DatumUhrzeit) {
-  const name = conf.fotografName;
-  const email = conf.fotografEmail;
-  const subject = "Photographing for Jazzclub";
-  const firstLine = "## The following concerts may profit from a professional photographer:";
-
   const variables = {
-    name,
-    email,
-    subject,
-    firstLine,
+    name: conf.fotografName,
+    email: conf.fotografEmail,
+    subject: "Photographing for Jazzclub",
+    firstLine: "## The following concerts may profit from a professional photographer:",
   };
   return checkForFilter(
     (ver: Veranstaltung) => {
@@ -84,16 +87,11 @@ export async function checkFotograf(now: DatumUhrzeit) {
 }
 
 export async function checkFluegel(now: DatumUhrzeit) {
-  const name = conf.stimmerName;
-  const email = conf.stimmerEmail;
-  const subject = "Flügelstimmen im Jazzclub";
-  const firstLine = "## Bei folgenden Veranstaltungen brauchen wir einen Klavierstimmer:";
-
   const variables = {
-    name,
-    email,
-    subject,
-    firstLine,
+    name: conf.stimmerName,
+    email: conf.stimmerEmail,
+    subject: "Flügelstimmen im Jazzclub",
+    firstLine: "## Bei folgenden Veranstaltungen brauchen wir einen Klavierstimmer:",
   };
   return checkForFilter(
     (ver: Veranstaltung) => {

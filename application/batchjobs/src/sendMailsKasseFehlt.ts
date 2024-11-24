@@ -11,6 +11,7 @@ import Users from "jc-shared/user/users.js";
 import usersService from "jc-backend/lib/users/usersService.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 const logger = loggers.get("application");
 
@@ -55,15 +56,18 @@ ${konzerte
   return mailtransport.sendMail(message);
 }
 
-export async function checkKasse(now: DatumUhrzeit) {
+export async function checkKasse(now: DatumUhrzeit): Promise<JobResult> {
   const start = now;
   const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
 
-  const konzerte = store.byDateRangeInAscendingOrder(start, end);
-  const zuSendende = konzerte.filter((konzert) => kasseFehlt(konzert));
-  if (zuSendende.length === 0) {
-    return;
-  } else {
-    return sendMail(zuSendende);
+  try {
+    const konzerte = store.byDateRangeInAscendingOrder(start, end);
+    const zuSendende = konzerte.filter((konzert) => kasseFehlt(konzert));
+    if (zuSendende.length) {
+      return { result: await sendMail(zuSendende) };
+    }
+    return {};
+  } catch (error) {
+    return { error: error as Error };
   }
 }
