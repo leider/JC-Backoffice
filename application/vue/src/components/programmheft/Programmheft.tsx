@@ -84,7 +84,6 @@ export default function Programmheft() {
   const [form] = Form.useForm<Kalender>();
 
   useEffect(() => {
-    kalender.events.forEach((event) => event.enhance(usersWithBooking));
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
     setInitialValue(initial);
@@ -96,7 +95,6 @@ export default function Programmheft() {
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
-      kalenderNew.text = "";
       kalenderNew.migrated = true;
       mutateContent.mutate(kalenderNew);
       setKalender(kalenderNew);
@@ -137,7 +135,7 @@ export default function Programmheft() {
   const moveEvents = useCallback(
     (offset: number) => {
       function moveEventsBy(events: Event[], options: AdditionOptions) {
-        const result = events.map((each) => new Event(each).moveBy(options));
+        const result = events.map((each) => each.cloneAndMoveBy(options));
         result.sort((a, b) => a.start.localeCompare(b.start));
         return result;
       }
