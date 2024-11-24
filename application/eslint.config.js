@@ -21,13 +21,11 @@ export default tseslint.config(
       "no-console": "error",
       "no-sync": "error",
       "no-process-exit": "error",
-      "no-unused-vars": "error",
       eqeqeq: "error",
       "react-refresh/only-export-components": "error",
     },
     plugins: { prettier, "react-refresh": reactRefresh },
     files: ["**/*.ts", "**/*.tsx"],
-    ignores: ["node_modules"],
   },
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],

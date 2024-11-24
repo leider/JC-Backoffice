@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { fireEvent, getAllByRole, screen, waitFor } from "@testing-library/react";
 import { ConfigProvider } from "antd";
 import localeDe from "antd/lib/locale/de_DE";
@@ -26,7 +27,7 @@ export async function selectOption(selectInputEl: HTMLElement, optionText: strin
  * @param input The <input> element
  * @param value The value to set
  */
-export function setValueOnInput(input: HTMLElement, value: any) {
+export function setValueOnInput(input: HTMLElement, value: unknown) {
   fireEvent.focus(input);
   fireEvent.change(input, {
     target: { value },
@@ -130,6 +131,6 @@ export function inlineCollectionEditable(rootEl: HTMLElement): InlineCollectionE
  * Convenience wrapper component to create a test context which sets locales
  * for dayjs/numeral/antd to german.
  */
-export function AntdAndLocaleTestContext(props: PropsWithChildren<any>) {
+export function AntdAndLocaleTestContext(props: PropsWithChildren<unknown>) {
   return <ConfigProvider locale={localeDe}>{props.children}</ConfigProvider>;
 }
