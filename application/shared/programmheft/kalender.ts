@@ -74,9 +74,9 @@ export default class Kalender {
   eventsMovedWithBase(otherKalId: string) {
     const thisDatum = DatumUhrzeit.forYYYYslashMM(this.id);
     const otherDatum = DatumUhrzeit.forYYYYslashMM(otherKalId);
-    const differenz = otherDatum.differenzInTagen(thisDatum);
+    const differenz = otherDatum.differenzInMonaten(thisDatum);
     const result = this.events.map((each) => {
-      return new Event(each).moveBy({ tage: differenz });
+      return new Event(each).moveBy({ monate: differenz });
     });
     result.sort((a, b) => a.start.localeCompare(b.start));
     return result;
