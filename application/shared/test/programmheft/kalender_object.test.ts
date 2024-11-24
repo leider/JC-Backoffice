@@ -1,8 +1,9 @@
 /* eslint-disable no-useless-escape*/
 import { describe, expect, it } from "vitest";
 
-import Kalender from "../../programmheft/kalender.js";
+import Kalender, { EmailEvent } from "../../programmheft/kalender.js";
 import { Event } from "../../programmheft/Event.js";
+import DatumUhrzeit from "../../commons/DatumUhrzeit.js";
 
 describe("Kalender", () => {
   describe("geht korrekt mit id und text um", () => {
@@ -97,6 +98,63 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
       expect(event.email).to.eql("andreas@andreas.as");
       expect(event.emailOffset).to.eql(7);
     });
+
+    it("parses new style filled text correctly (email und offset)", () => {
+      const kalender = new Kalender({
+        id: "2020/12",
+        text: `Was | Wer | Farbe | Wann | Email | Tage vorher
+Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
+`,
+      });
+      const events = kalender.events;
+      const event = kalender.events[0];
+      expect(event.start).to.eql("2020-12-12T23:00:00.000Z");
+      expect(event.title).to.eql("Irgendwas (Irgendwer)");
+      expect(event.farbe).to.eql("Green");
+      expect(event.email).to.eql("andreas@andreas.as");
+      expect(event.emailOffset).to.eql(14);
+
+      const nov29 = DatumUhrzeit.forGermanStringOrNow("29.11.20", "01:13");
+      expect(new EmailEvent(events[0]).shouldSendOn(nov29)).toBeTruthy();
+    });
+  });
+
+  describe("findet Events mit E-Mail Adresse", () => {
+    const kalender = new Kalender({
+      id: "2020/12",
+      text: `Was | Anrede | Farbe | Wann | Email | Tage vorher
+Irgendwas | Irgendwer | Green   | 11.12.2020 | 
+Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as | 14
+`,
+    });
+    const sendeDatum = DatumUhrzeit.forISOString("2020-11-29");
+
+    it("und berücksichtigt den Offset", () => {
+      const emailEvents = kalender.eventsToSend(sendeDatum);
+      expect(emailEvents).to.have.length(1);
+
+      const emailEvent = emailEvents[0];
+      expect(emailEvent.event).to.eql({
+        start: "2020-12-12T23:00:00.000Z",
+        farbe: "Green",
+        email: "andreas@andreas.as",
+        emailOffset: 14,
+        was: "Irgendwas",
+        wer: "Irgendwer",
+      });
+      expect(emailEvent.email()).to.eql(["andreas@andreas.as"]);
+      expect(emailEvent.body()).to.eql(
+        `Irgendwer,
+
+hier eine automatische Erinnerungsmail:
+Irgendwas
+
+Vielen Dank für Deine Arbeit und Unterstützung,
+Damit alles reibungslos klappt, sollte dies bis zum 13. Dezember 2020 erledigt sein.
+
+Danke & keep swingin'`,
+      );
+    });
   });
 
   describe("cleans backslashes", () => {
@@ -130,7 +188,6 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
         start: "2024-10-31T23:00:00.000Z",
         was: "Booking fertig + Pressematerial liegt vor",
         wer: "Torsten, Andreas, Gernot, Amelie, Niklas",
-        users: [],
       });
     });
   });

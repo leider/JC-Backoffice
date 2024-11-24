@@ -7,15 +7,12 @@ import { alleKalender } from "@/commons/loader.ts";
 import Kalender from "jc-shared/programmheft/kalender.ts";
 import { useWatch } from "antd/es/form/Form";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function ProgrammheftKopierenButton({ form }: { form: FormInstance<Kalender> }) {
   const { data } = useQuery({
     queryKey: ["kalender", "alle"],
     queryFn: () => alleKalender(),
   });
-
-  const { allUsers } = useJazzContext();
 
   const id = useWatch("id", { form, preserve: true });
 
@@ -34,12 +31,10 @@ export default function ProgrammheftKopierenButton({ form }: { form: FormInstanc
     async (key: string) => {
       const prevKal = options.find((kalender) => kalender.id === key);
       if (prevKal) {
-        const events = prevKal.eventsMovedWithBase(id);
-        events.forEach((event) => event.enhance(allUsers));
-        form.setFieldValue("events", events);
+        form.setFieldValue("events", prevKal.eventsMovedWithBase(id));
       }
     },
-    [allUsers, form, id, options],
+    [form, id, options],
   );
 
   function onMenuClick({ key }: { key: string }): void {

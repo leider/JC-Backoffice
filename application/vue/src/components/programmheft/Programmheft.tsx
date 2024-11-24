@@ -20,26 +20,13 @@ import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
-import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
-import cloneDeep from "lodash/cloneDeep";
-import User from "jc-shared/user/user.ts";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
   const [year, month] = useMemo(() => {
     return [search.get("year"), search.get("month")];
   }, [search]);
-  const { showSuccess, allUsers } = useJazzContext();
-
-  const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
-  const usersWithBooking = useMemo(() => {
-    const result = cloneDeep(allUsers);
-    result.push(new User({ id: "booking", name: "Booking", email: "booking@jazzclub.de" }));
-    return result;
-  }, [allUsers]);
-  useEffect(() => {
-    setUsersAsOptions(usersWithBooking.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })));
-  }, [usersWithBooking]);
+  const { showSuccess } = useJazzContext();
 
   const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
 
@@ -83,14 +70,13 @@ export default function Programmheft() {
   const [form] = Form.useForm<Kalender>();
 
   useEffect(() => {
-    kalender.events.forEach((event) => event.enhance(usersWithBooking));
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
     setInitialValue(initial);
     form.setFieldsValue(deepCopy);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
-  }, [form, kalender, usersWithBooking]);
+  }, [form, kalender]);
 
   function saveForm() {
     form.validateFields().then(async () => {
@@ -101,16 +87,14 @@ export default function Programmheft() {
     });
   }
 
+  const events = useWatch("events", { form, preserve: true });
+
+  const [calEvents, setCalEvents] = useState<Event[]>([]);
   useEffect(() => {
     const current = form.getFieldsValue(true);
     setDirty(areDifferent(initialValue, current));
-  }, [form, initialValue]);
-
-  const events = useWatch("events", { form, preserve: true });
-  const [calEvents, setCalEvents] = useState<Event[]>([]);
-  useEffect(() => {
-    setCalEvents(events ?? []);
-  }, [events]);
+    setCalEvents((events ?? []).map((each) => new Event(each)));
+  }, [events, form, initialValue]);
 
   const previous = useCallback(() => {
     const prevDate = start.minus({ monate: 2 });
@@ -124,9 +108,10 @@ export default function Programmheft() {
 
   const columnDescriptions: CollectionColDesc[] = [
     { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
+    { fieldName: ["wer"], label: "Wer", type: "text", width: "s", required: true },
     { fieldName: ["start"], label: "Wann", type: "date", width: "s", required: true },
     { fieldName: ["farbe"], label: "Farbe", type: "color", width: "xs", required: true },
-    { fieldName: "users", label: "Users", type: "user", width: "xl", usersWithKann: usersAsOptions, required: true },
+    { fieldName: ["email"], label: "Email", type: "text", width: "xl" },
     { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
   ];
   return (
