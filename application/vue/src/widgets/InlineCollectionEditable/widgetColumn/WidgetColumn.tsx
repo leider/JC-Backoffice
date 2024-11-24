@@ -72,7 +72,6 @@ export const WidgetColumn: FC<IWidgetColumn> = ({
     initialValue: desc.initialValue,
     pattern: desc.pattern,
     disabled: disabled || false,
-    presets: desc.presets,
   };
 
   // Important to not make this a JSX-Element invoked like <Widget />

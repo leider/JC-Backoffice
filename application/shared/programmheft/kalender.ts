@@ -11,9 +11,8 @@ export default class Kalender {
   id: string;
   text = "";
   events: Event[] = [];
-  migrated = false;
 
-  constructor(object?: { id: string; text: string; events?: Omit<Event, "enhance" | "moveBy" | "title">[]; migrated?: boolean }) {
+  constructor(object?: { id: string; text: string; events?: Omit<Event, "enhance" | "moveBy" | "title">[] }) {
     if (object && object.id && object.id.split("/").length === 2) {
       const splits = object.id.split("/");
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {
@@ -26,7 +25,6 @@ export default class Kalender {
         } else {
           this.events = object.events.map((each) => new Event(each));
         }
-        this.migrated = object.migrated === true;
         return;
       }
     }
@@ -41,7 +39,9 @@ export default class Kalender {
     const thisDatum = DatumUhrzeit.forYYYYslashMM(this.id);
     const otherDatum = DatumUhrzeit.forYYYYslashMM(otherKalId);
     const differenz = otherDatum.differenzInMonaten(thisDatum);
-    const result = this.events.map((each) => new Event(each).moveBy({ monate: differenz }));
+    const result = this.events.map((each) => {
+      return new Event(each).moveBy({ monate: differenz });
+    });
     result.sort((a, b) => a.start.localeCompare(b.start));
     return result;
   }

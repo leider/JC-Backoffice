@@ -40,18 +40,19 @@ export default function HeftCalendar({ events, initialDate }: { initialDate: str
     <FullCalendar
       ref={calRef}
       plugins={[dayGridPlugin]}
-      initialView="weeks"
+      initialView="dayGridMonth"
       buttonText={{ next: ">", prev: "<" }}
       locales={[deLocale]}
       headerToolbar={{ left: "title", center: "", right: "prev,next" }}
       views={{
-        weeks: {
-          buttonText: "36 Wochen",
-          type: "dayGrid",
-          duration: { weeks: 9 },
+        month: {
+          titleFormat: { month: "long", year: "2-digit" },
+          weekNumberFormat: { week: "short" },
+          fixedWeekCount: false,
+          showNonCurrentDates: false,
         },
       }}
-      contentHeight={900}
+      contentHeight={600}
       initialDate={initialDate}
       events={events}
       eventContent={renderEventContent}

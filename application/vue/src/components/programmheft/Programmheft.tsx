@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
 import { Event } from "jc-shared/programmheft/Event.ts";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
@@ -35,7 +35,7 @@ export default function Programmheft() {
   const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
   const usersWithBooking = useMemo(() => {
     const result = cloneDeep(allUsers);
-    result.push(new User({ id: "booking", name: "Booking Team", email: "booking@jazzclub.de" }));
+    result.push(new User({ id: "booking", name: "Booking", email: "booking@jazzclub.de" }));
     return result;
   }, [allUsers]);
   useEffect(() => {
@@ -97,20 +97,21 @@ export default function Programmheft() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
       kalenderNew.text = "";
-      kalenderNew.migrated = true;
       mutateContent.mutate(kalenderNew);
       setKalender(kalenderNew);
     });
   }
 
+  useEffect(() => {
+    const current = form.getFieldsValue(true);
+    setDirty(areDifferent(initialValue, current));
+  }, [form, initialValue]);
   const events = useWatch("events", { form, preserve: true });
 
   const [calEvents, setCalEvents] = useState<Event[]>([]);
   useEffect(() => {
-    const current = form.getFieldsValue(true);
-    setDirty(areDifferent(initialValue, current));
-    setCalEvents((events ?? []).map((event) => new Event(event)));
-  }, [events, form, initialValue]);
+    setCalEvents(events ?? []);
+  }, [events]);
 
   const nextOrPrevious = useCallback(
     (next: boolean) => {
@@ -134,31 +135,10 @@ export default function Programmheft() {
     [dirty, modal, start, setSearch],
   );
 
-  const moveEvents = useCallback(
-    (offset: number) => {
-      function moveEventsBy(events: Event[], options: AdditionOptions) {
-        const result = events.map((each) => new Event(each).moveBy(options));
-        result.sort((a, b) => a.start.localeCompare(b.start));
-        return result;
-      }
-
-      const newEvents = moveEventsBy(events, { tage: offset });
-      form.setFieldValue("events", newEvents);
-    },
-    [events, form],
-  );
-
   const columnDescriptions: CollectionColDesc[] = [
     { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
     { fieldName: ["start"], label: "Wann", type: "date", width: "s", required: true },
-    {
-      fieldName: ["farbe"],
-      label: "Farbe",
-      type: "color",
-      width: "xs",
-      required: true,
-      presets: ["firebrick", "coral", "blue", "dodgerblue", "green", "yellowgreen"],
-    },
+    { fieldName: ["farbe"], label: "Farbe", type: "color", width: "xs", required: true },
     { fieldName: "users", label: "Users", type: "user", width: "xl", usersWithKann: usersAsOptions, required: true },
     { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
   ];
@@ -189,14 +169,6 @@ export default function Programmheft() {
           </Col>
           <Col xs={24} lg={16}>
             <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["events"]} />
-            <Row>
-              <Col span={12}>
-                <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} type="default" text="Tag zurück" />
-              </Col>
-              <Col span={12}>
-                <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} type="default" text="Tag vor" />
-              </Col>
-            </Row>
           </Col>
         </Row>
         <ProgrammheftVeranstaltungenRow start={start} />

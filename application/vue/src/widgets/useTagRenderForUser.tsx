@@ -6,8 +6,8 @@ import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
 
 export function useTagRenderForUser(usersAsOptions: UserWithKann[]) {
   function TagForUser({ value }: { value: string }) {
-    const userWithKann = useMemo(() => usersAsOptions.find((item) => item.value === value), [value]);
-    const label = userWithKann?.label;
+    const userWithKann = useMemo(() => usersAsOptions.filter((item) => item.value === value)?.[0], [value]);
+    const label = userWithKann.label;
 
     const ersthelfer = useMemo(() => {
       return userWithKann?.kann.includes("Ersthelfer");
