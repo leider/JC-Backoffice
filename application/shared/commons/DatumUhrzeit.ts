@@ -115,10 +115,6 @@ export default class DatumUhrzeit {
     return Math.trunc(this.value.diff(other.value, "day"));
   }
 
-  differenzInMonaten(other: DatumUhrzeit): number {
-    return Math.trunc(this.value.diff(other.value, "month"));
-  }
-
   moveByDifferenceDays(newDate: Dayjs) {
     const diff = new DatumUhrzeit(newDate).setUhrzeit(8, 0).differenzInTagen(this.setUhrzeit(8, 0));
     return this.plus({ tage: diff }).value;

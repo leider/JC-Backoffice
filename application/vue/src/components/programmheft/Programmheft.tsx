@@ -20,6 +20,7 @@ import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+// import { detailedDiff } from "deep-object-diff";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -91,10 +92,8 @@ export default function Programmheft() {
 
   const [calEvents, setCalEvents] = useState<Event[]>([]);
   useEffect(() => {
-    const current = form.getFieldsValue(true);
-    setDirty(areDifferent(initialValue, current));
     setCalEvents((events ?? []).map((each) => new Event(each)));
-  }, [events, form, initialValue]);
+  }, [events]);
 
   const previous = useCallback(() => {
     const prevDate = start.minus({ monate: 2 });

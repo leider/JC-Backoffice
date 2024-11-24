@@ -195,16 +195,13 @@ Danke & keep swingin'`,
   describe("verschiebt und sortiert events", () => {
     it("korrekt", () => {
       const kalender = new Kalender({
-        id: "2021/01",
+        id: "2020/12",
         text: "",
-        events: [
-          new Event({ start: "2020-12-12T23:00:00+01:00", farbe: "" }),
-          new Event({ start: "2020-12-01T23:00:00+01:00", farbe: "" }),
-        ],
+        events: [new Event({ start: "2020-12-12T23:00:00.000Z", farbe: "" }), new Event({ start: "2020-12-01T23:00:00.000Z", farbe: "" })],
       });
       const movedEvents = kalender.eventsMovedWithBase("2022/03");
-      expect(movedEvents[0].start).to.eql("2022-02-01T23:00:00+01:00");
-      expect(movedEvents[1].start).to.eql("2022-02-12T23:00:00+01:00");
+      expect(movedEvents[0].start).to.eql("2022-03-02T00:00:00+01:00");
+      expect(movedEvents[1].start).to.eql("2022-03-13T00:00:00+01:00");
     });
   });
 });
