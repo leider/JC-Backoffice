@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite --port 1969",
     "deploy": "vite build",
+    "eslint": "../node_modules/.bin/eslint src/**/*.ts*",
     "test": "../node_modules/.bin/vitest --run",
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },

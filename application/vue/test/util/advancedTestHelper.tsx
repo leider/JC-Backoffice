@@ -1,19 +1,15 @@
 import { ByRoleMatcher, ByRoleOptions, fireEvent, render } from "@testing-library/react";
 import { AntdAndLocaleTestContext, InlineCollectionEditableResult, selectOption, setDate, setValueOnInput } from "./testHelper";
 import { BrowserRouter } from "react-router-dom";
-import { JSX } from "react";
 
 export interface TestHelper {
   getByRole: (role: ByRoleMatcher, options?: ByRoleOptions | undefined) => HTMLElement;
-  setValueOnInputLabeled: (name: string, value: string | boolean) => void;
-  selectOptionLabeled: (name: string, value: string) => Promise<void>;
-  setDateLabeled: (name: string, value: string) => Promise<void>;
-  saveForm: () => void;
-  addItemTo: (
-    inlineCollectionEditable: InlineCollectionEditableResult,
-    values: { type: "text" | "date" | "option"; value: unknown }[],
-  ) => Promise<void>;
-  clickByText: (text: string) => boolean;
+  setValueOnInputLabeled: any;
+  selectOptionLabeled: any;
+  setDateLabeled: any;
+  saveForm: any;
+  addItemTo: any;
+  clickByText: any;
   rerenderComponent: (page: JSX.Element) => void;
   container: HTMLElement;
 }
@@ -47,7 +43,7 @@ export function createTestHelperFor(page: JSX.Element): TestHelper {
 
   async function addItemTo(
     inlineCollectionEditable: InlineCollectionEditableResult,
-    values: { type: "text" | "date" | "option"; value: unknown }[],
+    values: { type: "text" | "date" | "option"; value: any }[],
   ) {
     const row = await inlineCollectionEditable.addItem();
     const inputs = row.querySelectorAll("input");
@@ -57,13 +53,13 @@ export function createTestHelperFor(page: JSX.Element): TestHelper {
       const value = field.value;
       switch (field.type) {
         case "date":
-          await setDate(input, value as string);
+          await setDate(input, value);
           break;
         case "text":
           setValueOnInput(input, value);
           break;
         case "option":
-          await selectOption(input, value as string);
+          await selectOption(input, value);
           break;
       }
     }

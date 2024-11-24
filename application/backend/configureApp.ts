@@ -24,7 +24,7 @@ function handle404(req: Request, res: Response): void {
   res.redirect("/");
 }
 
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars, no-unused-vars
 function handle500(error: any, req: Request, res: Response, next: NextFunction): void {
   const status = error.status || 500;
   res.status(status);

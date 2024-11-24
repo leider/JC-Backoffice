@@ -34,7 +34,12 @@ ${stuffToSend
   return mailtransport.sendMail(message);
 }
 
-async function checkForFilter(filterFunction: (ver: Veranstaltung) => boolean, variables: SendMailVariables, now: DatumUhrzeit) {
+async function checkForFilter(
+  // eslint-disable-next-line no-unused-vars
+  filterFunction: (ver: Veranstaltung) => boolean,
+  variables: SendMailVariables,
+  now: DatumUhrzeit,
+) {
   if (now.wochentag !== 0) {
     // Sonntag
     return;
