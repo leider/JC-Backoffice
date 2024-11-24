@@ -12,6 +12,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import { useWatch } from "antd/es/form/Form";
 import isNil from "lodash/isNil";
+import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
@@ -164,11 +165,9 @@ export function EditUserModal({
       <Form
         form={form}
         onValuesChange={() => {
-          // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-          // console.log({ diff });
-          // console.log({ initialValue });
-          // console.log({ form: form.getFieldsValue(true) });
-          setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+          const current = form.getFieldsValue(true);
+          logDiffForDirty(initialValue, current, false);
+          setDirty(areDifferent(initialValue, current));
         }}
         layout="vertical"
         autoComplete="off"
