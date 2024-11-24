@@ -64,7 +64,8 @@ function createToken(req: Request, res: Response, name: string) {
     persistRefreshToken(refreshTokenId, oldId, name, ttl);
     addRefreshToken(res, oldId || refreshTokenId);
     resToJson(res, { token });
-  } catch {
+  } catch (e) {
+    appLogger.error("(createToken)", e);
     return res.sendStatus(401);
   }
 }
@@ -81,7 +82,8 @@ app.post("/refreshtoken", (req, res) => {
       return res.sendStatus(401);
     }
     return createToken(req, res, refreshToken.userId);
-  } catch {
+  } catch (e) {
+    appLogger.error("(/refreshtoken)", e);
     return res.sendStatus(401);
   }
 });
@@ -112,7 +114,7 @@ app.post("/login", (req, res) => {
     return res.sendStatus(401);
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    appLogger.error("Login error for: " + name);
+    appLogger.error("(/login) Login error for: " + name);
     appLogger.error(e?.message || "");
     return res.sendStatus(401);
   }
