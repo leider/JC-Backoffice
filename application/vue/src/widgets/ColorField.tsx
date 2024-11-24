@@ -1,5 +1,5 @@
 import { ColorPicker, Form as AntdForm } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useState } from "react";
 import { Rule } from "antd/es/form";
 
 type TColorField = {
@@ -176,7 +176,13 @@ const colors: { [name: string]: string } = {
  * @param {TColorField} props
  * @return {*}  {React.ReactElement}
  */
-export const ColorField: FunctionComponent<TColorField> = ({ name, label, required, initialValue }: TColorField): React.ReactElement => {
+export const ColorField: FunctionComponent<TColorField> = ({
+  name,
+  label,
+  required,
+  initialValue,
+  presets,
+}: TColorField & { presets?: string[] }): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
@@ -198,7 +204,7 @@ export const ColorField: FunctionComponent<TColorField> = ({ name, label, requir
       valuePropName={"colorVal"}
       trigger={"onColor"}
     >
-      <ColorInputEmbedded />
+      <ColorInputEmbedded presets={presets} />
     </AntdForm.Item>
   );
 };
@@ -206,13 +212,25 @@ export const ColorField: FunctionComponent<TColorField> = ({ name, label, requir
 type TColorInputEmbedded = {
   colorVal?: string;
   onColor?: (value: string) => void;
+  presets?: string[];
 };
 
-const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ colorVal, onColor }: TColorInputEmbedded) => {
+const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ colorVal, onColor, presets }: TColorInputEmbedded) => {
+  const appliedPresets = useMemo(() => {
+    return presets ? [{ label: "Schnellauswahl", colors: presets.map((col) => colors[col]) }] : undefined;
+  }, [presets]);
   useEffect(() => {
     if (colorVal && !colorVal?.startsWith("#") && !colorVal?.startsWith("rgb")) {
       onColor?.(colors[colorVal.toLowerCase()] as string);
     }
   }, [colorVal, onColor]);
-  return <ColorPicker format="hex" value={colorVal} onChange={(_, hex) => onColor?.(hex)} />;
+  return (
+    <ColorPicker
+      presets={appliedPresets}
+      defaultFormat="hex"
+      format="hex"
+      value={colorVal}
+      onChange={(val) => onColor?.(val.toHexString())}
+    />
+  );
 };
