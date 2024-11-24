@@ -13,9 +13,7 @@ export function byDateRangeInAscendingOrder({
 }: {
   from: DatumUhrzeit;
   to: DatumUhrzeit;
-  // eslint-disable-next-line no-unused-vars
   konzerteFilter?: (ver: Konzert) => boolean;
-  // eslint-disable-next-line no-unused-vars
   vermietungenFilter?: (ver: Vermietung) => boolean;
 }) {
   const alwaysTrue = () => true;

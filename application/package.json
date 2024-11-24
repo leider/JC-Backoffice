@@ -50,7 +50,7 @@
     "deploy": "yarn workspaces foreach --all -p run deploy",
     "develop": "yarn compile && cd vue && yarn dev",
     "dev": "cd vue && yarn dev",
-    "eslint": "yarn workspaces foreach --all -p run eslint",
+    "eslint": "./node_modules/.bin/eslint **/*.ts* --no-warn-ignored",
     "start": "node start",
     "test": "yarn workspaces foreach --all -p run test",
     "clean-all-modules": "rm -rf node_modules backend/node_modules batchjobs/node_modules shared/node_modules vue/node_modules"

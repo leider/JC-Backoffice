@@ -59,7 +59,6 @@ export default abstract class Veranstaltung {
     return `${this.isVermietung ? "/vermietung/" : "/konzert/"}preview/${encodeURIComponent(this.url || "")}`;
   }
 
-  // eslint-disable-next-line no-unused-vars
   abstract asNew(object: MinimalVeranstaltung): Veranstaltung;
 
   protected ghostResults() {

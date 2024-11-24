@@ -100,3 +100,11 @@ export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?
   }
   return diff;
 }
+
+export function logDiffForDirty<T extends object>(initial: T, current: T, enable = false) {
+  if (!enable) {
+    return;
+  }
+  const diff = detailedDiff(initial, current);
+  console.log({ initial, current, diff }); // eslint-disable-line no-console
+}

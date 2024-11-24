@@ -14,7 +14,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "./KonzertContext";
-//import { detailedDiff } from "deep-object-diff";
+import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export default function KonzertComp() {
   const { url } = useParams();
@@ -41,10 +41,7 @@ export default function KonzertComp() {
   const [dirty, setDirty] = useState<boolean>(false);
 
   const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
-    //const diff = detailedDiff(initial, current);
-    //console.log({ diff });
-    // console.log({ initial });
-    // console.log({ current });
+    logDiffForDirty(initial, current, false);
     setDirty(areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
   }, []);
   useDirtyBlocker(dirty);

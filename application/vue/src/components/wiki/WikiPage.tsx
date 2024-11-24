@@ -13,6 +13,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export default function WikiPage() {
   useDirtyBlocker(false);
@@ -91,10 +92,9 @@ export default function WikiPage() {
     <Form
       form={form}
       onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
+        const current = form.getFieldsValue(true);
+        logDiffForDirty(initialValue, current, false);
+        setDirty(areDifferent(initialValue, current));
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}

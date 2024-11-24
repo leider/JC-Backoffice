@@ -1,5 +1,7 @@
 import DatumUhrzeit, { AdditionOptions } from "../commons/DatumUhrzeit.js";
 import misc from "../commons/misc.js";
+import User from "../user/user.js";
+import capitalize from "lodash/capitalize.js";
 
 export class Event {
   start: string;
@@ -8,6 +10,7 @@ export class Event {
   emailOffset?: number;
   was?: string;
   wer?: string;
+  users: string[] = [];
 
   constructor({
     start,
@@ -16,6 +19,7 @@ export class Event {
     emailOffset,
     was,
     wer,
+    users,
   }: {
     start: string;
     farbe: string;
@@ -23,6 +27,7 @@ export class Event {
     emailOffset?: number;
     was?: string;
     wer?: string;
+    users?: string[];
   }) {
     this.start = start;
     this.farbe = farbe;
@@ -30,10 +35,15 @@ export class Event {
     this.emailOffset = emailOffset;
     this.was = was;
     this.wer = wer;
+    this.users = users ?? [];
+  }
+
+  private get names() {
+    return (this.users.length ? this.users.map((user) => capitalize(user)).join(", ") : this.wer) ?? "";
   }
 
   get title(): string {
-    return `${(this.was ?? "").trim()} (${(this.wer ?? "").trim()})`;
+    return `${(this.was ?? "").trim()} (${this.names.trim()})`;
   }
 
   static fromLine(line: string): Event | undefined {
@@ -79,5 +89,20 @@ export class Event {
   moveBy(options: AdditionOptions) {
     this.start = DatumUhrzeit.forISOString(this.start).plus(options).toISOString;
     return this;
+  }
+
+  enhance(allUsers: User[]) {
+    if (this.users.length) {
+      return;
+    }
+    if (!this.email) {
+      return;
+    }
+    const emails = (this.email ?? "").split(/[, ]+/).map((each) => each.trim().toLowerCase());
+    const users = (this.wer ?? "").split(/[, ]+/).map((each) => each.trim().toLowerCase());
+    const filtered = allUsers.filter((user) => {
+      return emails.includes(user.email.toLowerCase()) || users.includes(user.id.toLowerCase());
+    });
+    this.users = filtered.map((user) => user.id);
   }
 }

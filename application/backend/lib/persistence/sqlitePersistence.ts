@@ -29,6 +29,11 @@ export function execWithTry(command: string) {
   }
 }
 
+process.on("SIGINT", () => {
+  console.log("SHUTDOWN ON SIGINT (db)"); // eslint-disable-line no-console
+  db.close();
+});
+
 class Persistence {
   private collectionName: string;
   private history: string;

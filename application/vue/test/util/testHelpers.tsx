@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { fireEvent } from "@testing-library/react";
 import { Form, FormInstance } from "antd";
 

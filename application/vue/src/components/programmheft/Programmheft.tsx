@@ -1,12 +1,12 @@
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Col, Form, Row } from "antd";
+import { App, Col, Form, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
 import { Event } from "jc-shared/programmheft/Event.ts";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
@@ -19,14 +19,28 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
-// import { detailedDiff } from "deep-object-diff";
+import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
+import cloneDeep from "lodash/cloneDeep";
+import User from "jc-shared/user/user.ts";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
   const [year, month] = useMemo(() => {
     return [search.get("year"), search.get("month")];
   }, [search]);
-  const { showSuccess } = useJazzContext();
+  const { showSuccess, allUsers } = useJazzContext();
+  const { modal } = App.useApp();
+
+  const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
+  const usersWithBooking = useMemo(() => {
+    const result = cloneDeep(allUsers);
+    result.push(new User({ id: "booking", name: "Booking Team", email: "booking@jazzclub.de" }));
+    return result;
+  }, [allUsers]);
+  useEffect(() => {
+    setUsersAsOptions(usersWithBooking.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })));
+  }, [usersWithBooking]);
 
   const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
 
@@ -70,18 +84,20 @@ export default function Programmheft() {
   const [form] = Form.useForm<Kalender>();
 
   useEffect(() => {
+    kalender.events.forEach((event) => event.enhance(usersWithBooking));
     const deepCopy = { ...kalender };
     const initial = { ...kalender };
     setInitialValue(initial);
     form.setFieldsValue(deepCopy);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();
-  }, [form, kalender]);
+  }, [form, kalender, usersWithBooking]);
 
   function saveForm() {
     form.validateFields().then(async () => {
       const kalenderNew = new Kalender(form.getFieldsValue(true));
       kalenderNew.text = "";
+      kalenderNew.migrated = true;
       mutateContent.mutate(kalenderNew);
       setKalender(kalenderNew);
     });
@@ -91,36 +107,68 @@ export default function Programmheft() {
 
   const [calEvents, setCalEvents] = useState<Event[]>([]);
   useEffect(() => {
-    setCalEvents((events ?? []).map((each) => new Event(each)));
-  }, [events]);
+    const current = form.getFieldsValue(true);
+    setDirty(areDifferent(initialValue, current));
+    setCalEvents((events ?? []).map((event) => new Event(event)));
+  }, [events, form, initialValue]);
 
-  const previous = useCallback(() => {
-    const prevDate = start.minus({ monate: 2 });
-    setSearch({ year: prevDate.format("YYYY"), month: prevDate.format("MM") }, { replace: true });
-  }, [start, setSearch]);
+  const nextOrPrevious = useCallback(
+    (next: boolean) => {
+      function proceed() {
+        const date = next ? start.plus({ monate: 2 }) : start.minus({ monate: 2 });
+        setSearch({ year: date.format("YYYY"), month: date.format("MM") }, { replace: true });
+      }
 
-  const next = useCallback(() => {
-    const nextDate = start.plus({ monate: 2 });
-    setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
-  }, [start, setSearch]);
+      if (dirty) {
+        modal.confirm({
+          title: "Änderungen gefunden",
+          content: "Willst Du Deine Änderungen verwerfen?",
+          onCancel: proceed,
+          cancelText: "Ja, verwerfen",
+          okText: "Nein, ich will zurück",
+        });
+      } else {
+        proceed();
+      }
+    },
+    [dirty, modal, start, setSearch],
+  );
+
+  const moveEvents = useCallback(
+    (offset: number) => {
+      function moveEventsBy(events: Event[], options: AdditionOptions) {
+        const result = events.map((each) => new Event(each).moveBy(options));
+        result.sort((a, b) => a.start.localeCompare(b.start));
+        return result;
+      }
+
+      const newEvents = moveEventsBy(events, { tage: offset });
+      form.setFieldValue("events", newEvents);
+    },
+    [events, form],
+  );
 
   const columnDescriptions: CollectionColDesc[] = [
     { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
-    { fieldName: ["wer"], label: "Wer", type: "text", width: "s", required: true },
     { fieldName: ["start"], label: "Wann", type: "date", width: "s", required: true },
-    { fieldName: ["farbe"], label: "Farbe", type: "color", width: "xs", required: true },
-    { fieldName: ["email"], label: "Email", type: "text", width: "xl" },
+    {
+      fieldName: ["farbe"],
+      label: "Farbe",
+      type: "color",
+      width: "xs",
+      required: true,
+      presets: ["firebrick", "coral", "blue", "dodgerblue", "green", "yellowgreen"],
+    },
+    { fieldName: "users", label: "Users", type: "user", width: "xl", usersWithKann: usersAsOptions, required: true },
     { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
   ];
   return (
     <Form
       form={form}
       onValuesChange={() => {
-        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
-        // console.log({ diff });
-        // console.log({ initialValue });
-        // console.log({ form: form.getFieldsValue(true) });
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+        const current = form.getFieldsValue(true);
+        logDiffForDirty(initialValue, current, false);
+        setDirty(areDifferent(initialValue, current));
       }}
       onFinish={saveForm}
       layout="vertical"
@@ -128,8 +176,8 @@ export default function Programmheft() {
       <JazzPageHeader
         title={`Programmheft ${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
         buttons={[
-          <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
-          <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
+          <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={() => nextOrPrevious(false)} type="default" />,
+          <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={() => nextOrPrevious(true)} type="default" />,
           <ProgrammheftKopierenButton key="copy" form={form} />,
           <SaveButton key="save" disabled={!dirty} />,
         ]}
@@ -141,6 +189,14 @@ export default function Programmheft() {
           </Col>
           <Col xs={24} lg={16}>
             <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["events"]} />
+            <Row>
+              <Col span={12}>
+                <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} type="default" text="Tag zurück" />
+              </Col>
+              <Col span={12}>
+                <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} type="default" text="Tag vor" />
+              </Col>
+            </Row>
           </Col>
         </Row>
         <ProgrammheftVeranstaltungenRow start={start} />
