@@ -11,7 +11,6 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
-import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -90,9 +89,11 @@ export default function MailRules() {
     <Form
       form={form}
       onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
+        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        // console.log({ diff });
+        // console.log({ initialValue });
+        // console.log({ form: form.getFieldsValue(true) });
+        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}
       layout="vertical"

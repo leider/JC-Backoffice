@@ -13,7 +13,6 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
 import { VermietungContext } from "./VermietungContext";
-import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -94,9 +93,11 @@ export default function VermietungComp() {
       <Form
         form={form}
         onValuesChange={() => {
-          const current = form.getFieldsValue(true);
-          logDiffForDirty(initialValue, current, false);
-          updateDirtyIfChanged(initialValue, current);
+          // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+          // console.log({ diff });
+          // console.log({ initialValue });
+          // console.log({ form: form.getFieldsValue(true) });
+          updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         }}
         onFinishFailed={() => {
           showError({ text: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs" });

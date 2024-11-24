@@ -19,7 +19,6 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
 import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
-import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 // import { detailedDiff } from "deep-object-diff";
 
 export default function Programmheft() {
@@ -117,9 +116,11 @@ export default function Programmheft() {
     <Form
       form={form}
       onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
+        // const diff = detailedDiff(initialValue, form.getFieldsValue(true));
+        // console.log({ diff });
+        // console.log({ initialValue });
+        // console.log({ form: form.getFieldsValue(true) });
+        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
       onFinish={saveForm}
       layout="vertical"
