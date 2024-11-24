@@ -1,7 +1,7 @@
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -30,7 +30,6 @@ export default function Programmheft() {
     return [search.get("year"), search.get("month")];
   }, [search]);
   const { showSuccess, allUsers } = useJazzContext();
-  const { modal } = App.useApp();
 
   const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
   const usersWithBooking = useMemo(() => {
@@ -106,34 +105,22 @@ export default function Programmheft() {
     const current = form.getFieldsValue(true);
     setDirty(areDifferent(initialValue, current));
   }, [form, initialValue]);
-  const events = useWatch("events", { form, preserve: true });
 
+  const events = useWatch("events", { form, preserve: true });
   const [calEvents, setCalEvents] = useState<Event[]>([]);
   useEffect(() => {
     setCalEvents(events ?? []);
   }, [events]);
 
-  const nextOrPrevious = useCallback(
-    (next: boolean) => {
-      function proceed() {
-        const date = next ? start.plus({ monate: 2 }) : start.minus({ monate: 2 });
-        setSearch({ year: date.format("YYYY"), month: date.format("MM") }, { replace: true });
-      }
+  const previous = useCallback(() => {
+    const prevDate = start.minus({ monate: 2 });
+    setSearch({ year: prevDate.format("YYYY"), month: prevDate.format("MM") }, { replace: true });
+  }, [start, setSearch]);
 
-      if (dirty) {
-        modal.confirm({
-          title: "Änderungen gefunden",
-          content: "Willst Du Deine Änderungen verwerfen?",
-          onCancel: proceed,
-          cancelText: "Ja, verwerfen",
-          okText: "Nein, ich will zurück",
-        });
-      } else {
-        proceed();
-      }
-    },
-    [dirty, modal, start, setSearch],
-  );
+  const next = useCallback(() => {
+    const nextDate = start.plus({ monate: 2 });
+    setSearch({ year: nextDate.format("YYYY"), month: nextDate.format("MM") }, { replace: true });
+  }, [start, setSearch]);
 
   const columnDescriptions: CollectionColDesc[] = [
     { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
@@ -156,8 +143,8 @@ export default function Programmheft() {
       <JazzPageHeader
         title={`Programmheft ${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
         buttons={[
-          <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={() => nextOrPrevious(false)} type="default" />,
-          <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={() => nextOrPrevious(true)} type="default" />,
+          <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={previous} type="default" />,
+          <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={next} type="default" />,
           <ProgrammheftKopierenButton key="copy" form={form} />,
           <SaveButton key="save" disabled={!dirty} />,
         ]}
