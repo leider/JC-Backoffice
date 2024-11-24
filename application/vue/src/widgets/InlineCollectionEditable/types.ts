@@ -15,6 +15,7 @@ export type CollectionColDesc = Omit<ColDesc, "width"> & {
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only
   usersWithKann?: UserWithKann[];
+  presets?: string[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

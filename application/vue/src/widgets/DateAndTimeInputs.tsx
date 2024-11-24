@@ -28,7 +28,7 @@ function InternalPicker(props: { required?: boolean; value?: string; onChange?: 
   return (
     <DatePicker
       value={val}
-      onChange={(date) => props.onChange!(date.toISOString())}
+      onChange={(date) => props.onChange!(date?.toISOString())}
       format={["ll", "L", "l", "DDMMYY"]}
       required={props.required}
     />
