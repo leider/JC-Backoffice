@@ -31,7 +31,7 @@ export async function checkBar(now: DatumUhrzeit): Promise<JobResult> {
     const end = start.plus({ wochen: 8 }); // Acht Wochen im Voraus
     const filterFunction = (ver: Veranstaltung) => {
       const typOk = !ver.isVermietung ? !ver.kopf.eventTyp.startsWith("DryJam") : (ver as Vermietung).brauchtBar;
-      return ver.kopf.ort === "Jazzclub" && ver.kopf.confirmed && typOk;
+      return ver.kopf.ort.includes("Jazzclub") && ver.kopf.confirmed && typOk;
     };
     const zuSendende = byDateRangeInAscendingOrder({
       from: start,

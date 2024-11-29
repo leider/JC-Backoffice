@@ -77,10 +77,7 @@ async function sendMail(eventsForToday: EmailEvent[]) {
   return Promise.all(messages.map(mailtransport.sendMail));
 }
 
-/**
- * exported for testing
- */
-export function eventsToSend(aDatumUhrzeit: DatumUhrzeit, events?: Event[]): EmailEvent[] {
+function eventsToSend(aDatumUhrzeit: DatumUhrzeit, events?: Event[]): EmailEvent[] {
   const result = (events ?? []).filter((e) => e.users.length).map((e) => new EmailEvent(e));
   return result.filter((e) => e.shouldSendOn(aDatumUhrzeit));
 }
@@ -96,5 +93,4 @@ export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit
   } catch (e) {
     return { error: e as Error };
   }
-  return sendMail(eventsToSend(now, current?.events).concat(eventsToSend(now, next?.events)));
 }

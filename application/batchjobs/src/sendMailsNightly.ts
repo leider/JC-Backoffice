@@ -5,7 +5,7 @@ import { loadRulesAndProcess } from "./sendMailsForRules.js";
 import { remindForProgrammheft } from "./sendMailsForProgrammheft.js";
 import { checkStaff } from "./sendMailsStaffReminder.js";
 import { checkBar } from "./sendMailsNightlyBar.js";
-import SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
+import * as SMTPTransport from "nodemailer/lib/smtp-transport/index.js";
 
 export type JobResult = { result?: (SMTPTransport.SentMessageInfo | undefined)[] | SMTPTransport.SentMessageInfo; error?: Error };
 
