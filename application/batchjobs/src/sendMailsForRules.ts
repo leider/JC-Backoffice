@@ -10,10 +10,9 @@ import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatt
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 const logger = loggers.get("application");
-
-let counter = 0;
 
 function isSendable(ver: Veranstaltung): boolean {
   return ver.presse.checked && ver.kopf.confirmed && (ver.isVermietung ? (ver as Vermietung).brauchtPresse : true);
@@ -39,11 +38,10 @@ ${selected
   const mailAddress = MailMessage.formatEMailAddress(rule.name, rule.email);
   logger.info(`Email Adresse für Presseregeln: ${formatMailAddresses([mailAddress])}`);
   mailmessage.to = [mailAddress];
-  counter++;
   return mailtransport.sendMail(mailmessage);
 }
 
-export async function loadRulesAndProcess(now: DatumUhrzeit) {
+export async function loadRulesAndProcess(now: DatumUhrzeit): Promise<JobResult> {
   async function processRule(rule: MailRule) {
     const startAndEndDay = rule.startAndEndDay(now);
 
@@ -54,13 +52,17 @@ export async function loadRulesAndProcess(now: DatumUhrzeit) {
       vermietungenFilter: isSendable,
     });
 
-    if (zuSendende.length !== 0) {
+    if (zuSendende.length) {
       return sendMail(zuSendende, rule, now);
     }
   }
 
-  const rules = mailstore.all();
-  const relevantRules = rules.filter((rule) => rule.shouldSend(now));
-  await relevantRules.map(processRule);
-  return counter;
+  try {
+    const rules = mailstore.all();
+    const relevantRules = rules.filter((rule) => rule.shouldSend(now));
+    const infos = await Promise.all(relevantRules.map(processRule));
+    return { result: infos };
+  } catch (error) {
+    return { error: error as Error };
+  }
 }

@@ -7,6 +7,7 @@ import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVer
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import { JobResult } from "./sendMailsNightly.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {
@@ -38,25 +39,28 @@ async function sendMail(verMitUser: VerMitUser) {
   return mailtransport.sendMail(message);
 }
 
-export async function checkStaff(now: DatumUhrzeit) {
+export async function checkStaff(now: DatumUhrzeit): Promise<JobResult> {
   const start = now;
   const end = start.plus({ tage: 1 }); // Ein Tag im Voraus
 
-  const bestaetigt = (ver: Veranstaltung) => ver.kopf.confirmed;
-  const alle = byDateRangeInAscendingOrder({
-    from: start,
-    to: end,
-    konzerteFilter: bestaetigt,
-    vermietungenFilter: bestaetigt,
-  });
+  try {
+    const bestaetigt = (ver: Veranstaltung) => ver.kopf.confirmed;
+    const alle = byDateRangeInAscendingOrder({
+      from: start,
+      to: end,
+      konzerteFilter: bestaetigt,
+      vermietungenFilter: bestaetigt,
+    });
 
-  const users = userstore.allUsers();
-  const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
-  const zuSendende = alle;
-  if (zuSendende.length === 0) {
-    return;
-  } else {
-    const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
-    return Promise.all(verMitUsers.map(sendMail));
+    const users = userstore.allUsers();
+    const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
+    const zuSendende = alle;
+    if (zuSendende.length) {
+      const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);
+      return { result: await Promise.all(verMitUsers.map(sendMail)) };
+    }
+    return {};
+  } catch (error) {
+    return { error: error as Error };
   }
 }

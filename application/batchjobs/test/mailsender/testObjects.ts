@@ -69,7 +69,7 @@ const konzert2 = new Konzert({
   startDate: "2019-05-29T20:00:00.000Z",
   endDate: "2019-05-29T23:00:00.000Z",
   url: "konzert2",
-  kopf: { titel: "Konzert 2", ort: "Jazzclub", confirmed: true },
+  kopf: { titel: "Konzert 2", ort: "ZÄTT im Jazzclub", confirmed: true },
   staff: { kasseVNotNeeded: false },
 });
 const konzert3 = new Konzert({
