@@ -35,7 +35,6 @@ export default function ProgrammheftKopierenButton({ form }: { form: FormInstanc
       const prevKal = options.find((kalender) => kalender.id === key);
       if (prevKal) {
         const events = prevKal.eventsMovedWithBase(id);
-        events.forEach((event) => event.enhance(allUsers));
         form.setFieldValue("events", events);
       }
     },

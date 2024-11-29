@@ -1,145 +1,45 @@
-/* eslint-disable no-useless-escape*/
 import { describe, expect, it } from "vitest";
 
 import Kalender from "../../programmheft/kalender.js";
 import { Event } from "../../programmheft/Event.js";
 
 describe("Kalender", () => {
-  describe("geht korrekt mit id und text um", () => {
+  describe("geht korrekt mit id um", () => {
     it("initial", () => {
       const kalender = new Kalender();
       expect(kalender.id).to.eql("2018/01");
       expect(kalender.year()).to.eql("2018");
-      expect(kalender.text).toBeDefined();
       expect(kalender.events).to.eql([]);
     });
 
     it("parses date correctly", () => {
-      const kalender = new Kalender({ id: "2020/12", text: "" });
+      const kalender = new Kalender({ id: "2020/12" });
       expect(kalender.id).to.eql("2020/12");
       expect(kalender.year()).to.eql("2020");
     });
 
     it("parses broken date correctly", () => {
-      const kalender = new Kalender({ id: "Peter/", text: "" });
+      const kalender = new Kalender({ id: "Peter/" });
       expect(kalender.id).to.eql("2018/01");
       expect(kalender.year()).to.eql("2018");
     });
-
-    it("parses empty text correctly", () => {
-      const kalender = new Kalender({
-        id: "2020/12",
-        text: "",
-      });
-      expect(kalender.text).to.eql("");
-      expect(kalender.events).to.eql([]);
-    });
-
-    it("parses old style default text correctly", () => {
-      const kalender = new Kalender({
-        id: "2020/12",
-        text: "Was | Wer | Farbe | Wann\n" + "--- | --- | ---   | ---\n",
-      });
-      expect(kalender.text).to.eql(`Was | Wer | Farbe | Wann
---- | --- | ---   | ---
-`);
-      expect(kalender.events).to.eql([]);
-    });
   });
 
-  describe("geht korrekt mit datums um", () => {
-    it("parses old style filled text correctly", () => {
+  describe("Events", () => {
+    it("displays title correctly", () => {
       const kalender = new Kalender({
         id: "2020/12",
-        text: `Was | Wer | Farbe | Wann
-Irgendwas | Irgendwer | Green   | 13.12.2020
-`,
+        events: [{ start: "2020-12-12T23:00:00.000Z", users: ["irgendwer"], was: "Irgendwas", farbe: "#9ACD32" }],
       });
       const event = kalender.events[0];
       expect(event.start).to.eql("2020-12-12T23:00:00.000Z");
       expect(event.title).to.eql("Irgendwas (Irgendwer)");
-      expect(event.farbe).to.eql("Green");
+      expect(event.farbe).to.eql("#9ACD32");
     });
 
-    it("ohne Jahr - parses old style filled as not existing", () => {
-      const kalender = new Kalender({
-        id: "2020/12",
-        text: `Was | Wer | Farbe | Wann
-Irgendwas | Irgendwer | Green   | 13.12.
-`,
-      });
-      expect(kalender.events).to.eql([]);
-    });
-
-    it("parses broken date text correctly (e.g. empty)", () => {
-      const kalender = new Kalender({
-        id: "2020/12",
-        text: `Was | Wer | Farbe | Wann
-Irgendwas | Irgendwer | Green   | 33.
-`,
-      });
-      expect(kalender.events).to.eql([]);
-    });
-  });
-
-  describe("geht korrekt mit Erweiterungen um  (email and mail offset)", () => {
-    it("parses new style filled text correctly (email)", () => {
-      const kalender = new Kalender({
-        id: "2020/12",
-        text: `Was | Wer | Farbe | Wann | Email
-Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
-`,
-      });
-      const event = kalender.events[0];
-      expect(event.start).to.eql("2020-12-12T23:00:00.000Z");
-      expect(event.title).to.eql("Irgendwas (Irgendwer)");
-      expect(event.farbe).to.eql("Green");
-      expect(event.email).to.eql("andreas@andreas.as");
-      expect(event.emailOffset).to.eql(7);
-    });
-  });
-
-  describe("cleans backslashes", () => {
-    const kalender = new Kalender({
-      id: "2020/12",
-      text: `|Was|Wer|Farbe|Wann|Email|Tage vorher|
-|---|---|---|---|---|---|
-|Booking fertig \+ Pressematerial liegt vor|Torsten\, Andreas\, Gernot\, Amelie\, Niklas|DodgerBlue|01\.11\.2024|[booking\@jazzclub\.de](mailto:booking@jazzclub.de) [andreas\.jonczyk\@jazzclub\.de](mailto:andreas.jonczyk@jazzclub.de) [torsten\.antoni\@jazzclub\.de](mailto:torsten.antoni@jazzclub.de) [gernot\.ziegler\@jazzclub\.de](mailto:gernot.ziegler@jazzclub.de) [niklas\.braun\@jazzclub\.de](mailto:niklas.braun@jazzclub.de) [amelie\.stapf\@jazzclub\.de](mailto:amelie.stapf@jazzclub.de)|7|
-|Editorial fertig|Teddy|Coral|08\.11\.2024|[christoph\.bohning\@jazzclub\.de](mailto:christoph.bohning@jazzclub.de)|9|
-|Editorial fertig|Teddy|Coral|08\.11\.2024|[christoph\.bohning\@jazzclub\.de](mailto:christoph.bohning@jazzclub.de)|3|
-|Pressetexte fertig|Johannes|FireBrick|08\.11\.2024|[jotfrisch\@gmx\.de](mailto:jotfrisch@gmx.de)|7|
-|Layout starten|Christina|FireBrick|09\.11\.2024|[grafik\@jazzclub\.de](mailto:grafik@jazzclub.de)|6|
-|Ticketing|Kai|FireBrick|09\.11\.2024|[kai\.hanneken\@jazzclub\.de](mailto:kai.hanneken@jazzclub.de)|6|
-|Korrekturschleife \- Rückgabe in 1 Woche|Alle|blue|14\.11\.2024|[booking\@jazzclub\.de](mailto:booking@jazzclub.de) [andreas\.jonczyk\@jazzclub\.de](mailto:andreas.jonczyk@jazzclub.de) [torsten\.antoni\@jazzclub\.de](mailto:torsten.antoni@jazzclub.de) [gernot\.ziegler\@jazzclub\.de](mailto:gernot.ziegler@jazzclub.de) [niklas\.braun\@jazzclub\.de](mailto:niklas.braun@jazzclub.de) [amelie\.stapf\@jazzclub\.de](mailto:amelie.stapf@jazzclub.de) [Kai\.hanneken\@jazzclub\.de](mailto:Kai.hanneken@jazzclub.de)|3|
-|Bitte Mitgliederliste checken|Enrik|YellowGreen|18\.11\.2024|[enrik\.berkhan\@jazzclub\.de](mailto:enrik.berkhan@jazzclub.de)|3|
-|Heft u\. Plakate in Druck geben|Christina|Green|25\.11\.2024|[grafik\@jazzclub\.de](mailto:grafik@jazzclub.de)|3|
-
-&nbsp;`,
-    });
-
-    it("und berücksichtigt den Offset", () => {
-      const emailEvents = kalender.events;
-      expect(emailEvents).to.have.length(9);
-
-      const emailEvent = emailEvents[0];
-      expect(emailEvent).to.eql({
-        email:
-          "[booking@jazzclub.de](mailto:booking@jazzclub.de) [andreas.jonczyk@jazzclub.de](mailto:andreas.jonczyk@jazzclub.de) [torsten.antoni@jazzclub.de](mailto:torsten.antoni@jazzclub.de) [gernot.ziegler@jazzclub.de](mailto:gernot.ziegler@jazzclub.de) [niklas.braun@jazzclub.de](mailto:niklas.braun@jazzclub.de) [amelie.stapf@jazzclub.de](mailto:amelie.stapf@jazzclub.de)",
-        emailOffset: 7,
-        farbe: "DodgerBlue",
-        start: "2024-10-31T23:00:00.000Z",
-        was: "Booking fertig + Pressematerial liegt vor",
-        wer: "Torsten, Andreas, Gernot, Amelie, Niklas",
-        users: [],
-      });
-    });
-  });
-
-  describe("verschiebt und sortiert events", () => {
-    it("korrekt", () => {
+    it("verschiebt und sortiert events korrekt zur Basis ID", () => {
       const kalender = new Kalender({
         id: "2021/01",
-        text: "",
         events: [
           new Event({ start: "2020-12-12T23:00:00+01:00", farbe: "" }),
           new Event({ start: "2020-12-01T23:00:00+01:00", farbe: "" }),
@@ -148,6 +48,11 @@ Irgendwas | Irgendwer | Green   | 13.12.2020 | andreas@andreas.as
       const movedEvents = kalender.eventsMovedWithBase("2022/03");
       expect(movedEvents[0].start).to.eql("2022-02-01T23:00:00+01:00");
       expect(movedEvents[1].start).to.eql("2022-02-12T23:00:00+01:00");
+    });
+
+    it("verschiebt und sortiert events korrekt tagesweise", () => {
+      const event = new Event({ start: "2020-12-12T23:00:00+01:00", farbe: "" }).cloneAndMoveBy({ tage: 1 });
+      expect(event.start).to.eql("2020-12-13T23:00:00+01:00");
     });
   });
 });
