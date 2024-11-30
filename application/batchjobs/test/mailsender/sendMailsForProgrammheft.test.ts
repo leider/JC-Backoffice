@@ -10,15 +10,15 @@ import Kalender from "jc-shared/programmheft/kalender.js";
 import { Event } from "jc-shared/programmheft/Event.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import { EmailEvent, remindForProgrammheft } from "../../src/sendMailsForProgrammheft.js";
-import User from "jc-shared/user/user";
+import User from "jc-shared/user/user.js";
 
 const sinon = sin.createSandbox();
 
 describe("Programmheft Mailsender", () => {
   const april12 = DatumUhrzeit.forGermanString("12.04.2019");
   const april13 = DatumUhrzeit.forGermanString("13.04.2019");
-  const april15Text = DatumUhrzeit.forGermanString("15.04.2019").toISOString;
-  const june15Text = DatumUhrzeit.forGermanString("15.06.2019").toISOString;
+  const april15Text = DatumUhrzeit.forGermanString("15.04.2019")!.toISOString;
+  const june15Text = DatumUhrzeit.forGermanString("15.06.2019")!.toISOString;
 
   const allUsers = [
     new User({ id: "xyz", name: "X Y Z", email: "x@y.z" }),
@@ -35,8 +35,7 @@ describe("Programmheft Mailsender", () => {
     events: [new Event({ start: june15Text, was: "Putzen", users: ["xyz"], farbe: "#9ACD32", emailOffset: 3 })],
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let mailcheck: any;
+  let mailcheck: sin.SinonStub;
 
   beforeEach(() => {
     sinon.stub(kalenderstore, "getCurrentKalender").returns(currentKalender);

@@ -18,7 +18,8 @@ function closeAndExit(err?: Error): void {
 
 console.log("Starting nightjob...");
 
-const now = new DatumUhrzeit();
+//const now = new DatumUhrzeit();
+const now = DatumUhrzeit.forGermanString("01.12.2024")!;
 
 async function run() {
   try {
@@ -35,9 +36,9 @@ async function run() {
 
     const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar"];
 
-    const typedResults = results.map((each, index) => ({ type: jobtypes[index], each }));
+    const typedResults = results.map((jobResult, index) => ({ type: jobtypes[index], jobResult }));
 
-    await Promise.all(typedResults.map(informAdmin));
+    await Promise.all(typedResults.map((res) => informAdmin([res])));
     closeAndExit();
   } catch (e) {
     closeAndExit(e as Error);
