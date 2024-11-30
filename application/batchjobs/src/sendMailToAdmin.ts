@@ -49,10 +49,13 @@ ${error}`
 }`;
   } // end function createBodyFragment
 
-  const bodyFragments = compact(allResults).map(createBodyFragment);
+  const bodyFragments = compact(allResults.map(createBodyFragment));
+  if (!bodyFragments.length) {
+    return;
+  }
 
   const message = new MailMessage({
-    subject: `[${errorHappened ? "ERROR" : "INFO"} B-O Jazzclub] Mails sent"`,
+    subject: `[${errorHappened ? "ERROR" : "INFO"} B-O Jazzclub] Mails sent`,
   });
   message.to = [{ name: user.name, address: user.email }];
   message.body = bodyFragments.join("\n");
