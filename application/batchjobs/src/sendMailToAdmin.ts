@@ -11,45 +11,50 @@ const receiver = "leider";
 export type JobType = "Programmheft" | "Presse" | "Kasse" | "Bar" | "Photo" | "Fluegel" | "TextFehlt" | "Staff";
 
 export async function informAdmin(allResults: { type: JobType; jobResult: JobResult }[]) {
-  allResults.forEach(({ type, jobResult }) => {
+  const user = userstore.forId(receiver);
+  if (!user) {
+    console.error("User not found");
+    return;
+  }
+
+  let errorHappened = false;
+
+  function createBodyFragment({ type, jobResult }: { type: JobType; jobResult: JobResult }) {
+    const error = jobResult.error;
     const infosCompacted = Array.isArray(jobResult.result) ? compact(jobResult.result) : compact([jobResult.result]);
 
-    if (!infosCompacted.length && !jobResult.error) {
+    if (!infosCompacted.length && !error) {
       console.log(`nothing happened for JobType "${type}"`);
       return;
     }
-    const user = userstore.forId(receiver);
-    if (!user) {
-      console.error("User not found");
-      return;
+    if (error) {
+      errorHappened = true;
+      console.error(`error occurred while informing for type: ${type}. ERROR: ${error}`);
     }
 
-    if (jobResult.error) {
-      console.error(`error occurred while informing ${jobResult.error}`);
-    }
-
-    const infos = infosCompacted.map(({ accepted, rejected, response, envelope }) => ({
+    const infos = infosCompacted.map(({ accepted, rejected, response }) => ({
       accepted,
       rejected,
       response,
-      envelope,
     }));
     const count = infos.length;
 
-    const message = new MailMessage({
-      subject: `[${jobResult.error ? "ERROR" : "INFO"} B-O Jazzclub] Mails sent for jobtype "${type}"`,
-    });
-    message.to = [{ name: user.name, address: user.email }];
-    message.body = `${count} nightly Mails for jobtype "${type}" have been sent.
+    return `**${type}** ${count} Mail(s)
             
 ${
-  jobResult.error
-    ? `Es gibt Fehler! ${jobResult.error.message}
-
-${jobResult.error}`
-    : `Informationen zu den gesendeten E-Mails: 
-    ${"\n```\n" + JSON.stringify(infos, null, 2) + "\n```"}`
+  error
+    ? `### Es gibt Fehler!
+${error}`
+    : `${"\n```\n" + JSON.stringify(infos, null, 2) + "\n```"}`
 }`;
-    return mailtransport.sendMail(message);
+  } // end function createBodyFragment
+
+  const bodyFragments = compact(allResults).map(createBodyFragment);
+
+  const message = new MailMessage({
+    subject: `[${errorHappened ? "ERROR" : "INFO"} B-O Jazzclub] Mails sent"`,
   });
+  message.to = [{ name: user.name, address: user.email }];
+  message.body = bodyFragments.join("\n");
+  return mailtransport.sendMail(message);
 }

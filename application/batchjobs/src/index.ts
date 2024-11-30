@@ -18,8 +18,7 @@ function closeAndExit(err?: Error): void {
 
 console.log("Starting nightjob...");
 
-//const now = new DatumUhrzeit();
-const now = DatumUhrzeit.forGermanString("01.12.2024")!;
+const now = new DatumUhrzeit();
 
 async function run() {
   try {
@@ -38,7 +37,7 @@ async function run() {
 
     const typedResults = results.map((jobResult, index) => ({ type: jobtypes[index], jobResult }));
 
-    await Promise.all(typedResults.map((res) => informAdmin([res])));
+    await informAdmin(typedResults);
     closeAndExit();
   } catch (e) {
     closeAndExit(e as Error);

@@ -24,17 +24,29 @@ describe("Admin Report Mail", () => {
   });
 
   it("no jobResult information, not mail", async () => {
-    await informAdmin([{ type: "Bar", jobResult: {} }]);
+    await informAdmin([
+      { type: "Bar", jobResult: {} },
+      { type: "Fluegel", jobResult: {} },
+    ]);
+    sinon.assert.notCalled(mailcheck);
+  });
+
+  it("result information, no mail", async () => {
+    await informAdmin([]);
     sinon.assert.notCalled(mailcheck);
   });
 
   it("successful will send info mail", async () => {
-    await informAdmin([{ type: "Bar", jobResult: { result: sentMessageInfo } }]);
+    await informAdmin([
+      { type: "Bar", jobResult: { result: sentMessageInfo } },
+      { type: "Fluegel", jobResult: { result: sentMessageInfo } },
+    ]);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
     expect(message.subject).to.equal("[INFO B-O Jazzclub] Mails sent");
     expect(message.to).to.eql([{ address: "admin@mail.check", name: "Admin" }]);
     expect(message.body).to.include("**Bar** 1 Mail(s)");
+    expect(message.body).to.include("**Fluegel** 1 Mail(s)");
     expect(message.body).to.include(`[
   {
     "accepted": [
@@ -46,12 +58,10 @@ describe("Admin Report Mail", () => {
 ]`);
   });
 
-  it("error will send error mail", async () => {
+  it("error will send error mail if one of the results has error", async () => {
     await informAdmin([
-      {
-        type: "Bar",
-        jobResult: { error: new Error("alles kaputt") },
-      },
+      { type: "Bar", jobResult: { error: new Error("alles kaputt") } },
+      { type: "Fluegel", jobResult: { result: sentMessageInfo } },
     ]);
     sinon.assert.calledOnce(mailcheck);
     const message = mailcheck.args[0][0];
@@ -60,5 +70,15 @@ describe("Admin Report Mail", () => {
     expect(message.body).to.include("**Bar** 0 Mail(s)");
     expect(message.body).to.include(`### Es gibt Fehler!
 Error: alles kaputt`);
+    expect(message.body).to.include("**Fluegel** 1 Mail(s)");
+    expect(message.body).to.include(`[
+  {
+    "accepted": [
+      "success@mail"
+    ],
+    "rejected": [],
+    "response": "some response information"
+  }
+]`);
   });
 });
