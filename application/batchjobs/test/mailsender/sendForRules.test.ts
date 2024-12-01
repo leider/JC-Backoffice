@@ -7,19 +7,18 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js";
 import konzertestore from "jc-backend/lib/konzerte/konzertestore.js";
-import userstore from "jc-backend/lib/users/userstore";
-import { testKonzerte, testUsers, testVermietungen } from "./testObjects";
-import { loadRulesAndProcess } from "../../src/sendMailsForRules";
-import mailstore from "jc-backend/lib/mailsender/mailstore";
-import MailRule from "jc-shared/mail/mailRule";
+import userstore from "jc-backend/lib/users/userstore.js";
+import { testKonzerte, testUsers, testVermietungen } from "./testObjects.js";
+import { loadRulesAndProcess } from "../../src/sendMailsForRules.js";
+import mailstore from "jc-backend/lib/mailsender/mailstore.js";
+import MailRule from "jc-shared/mail/mailRule.js";
 
 const sinon = sin.createSandbox();
 
 describe("Rules Mailsender", () => {
   const april17 = DatumUhrzeit.forISOString("2019-04-17T18:00:00.000Z");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let mailcheck: any;
+  let mailcheck: sin.SinonStub;
 
   const rule1 = new MailRule({
     name: "Regel 1",

@@ -8,16 +8,15 @@ import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js";
 import konzertestore from "jc-backend/lib/konzerte/konzertestore.js";
 import { checkBar } from "../../src/sendMailsNightlyBar.js";
-import userstore from "jc-backend/lib/users/userstore";
-import { testKonzerte, testUsers, testVermietungen } from "./testObjects";
+import userstore from "jc-backend/lib/users/userstore.js";
+import { testKonzerte, testUsers, testVermietungen } from "./testObjects.js";
 
 const sinon = sin.createSandbox();
 
 describe("Bar Mailsender", () => {
   const april14 = DatumUhrzeit.forISOString("2019-04-14T18:00:00.000Z");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let mailcheck: any;
+  let mailcheck: sin.SinonStub;
 
   beforeEach(() => {
     sinon.stub(vermietungenstore, "byDateRangeInAscendingOrder").returns(testVermietungen);

@@ -86,6 +86,15 @@ const konzert4 = new Konzert({
   brauchtPresse: false,
 });
 
+export const sentMessageInfo = {
+  accepted: ["success@mail"],
+  rejected: [],
+  response: "some response information",
+  envelope: { from: "sender@mail", to: ["succes@mail"] },
+  messageId: "ignored",
+  pending: ["ignored"],
+};
+
 export const testUsers = [user1, user2, user3, user4, user5];
 export const testVermietungen = [vermietung1, vermietung2];
 export const testKonzerte = [konzert1, konzert2, konzert3, konzert4];

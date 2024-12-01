@@ -35,9 +35,9 @@ async function run() {
 
     const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar"];
 
-    const typedResults = results.map((each, index) => ({ type: jobtypes[index], each }));
+    const typedResults = results.map((jobResult, index) => ({ type: jobtypes[index], jobResult }));
 
-    await Promise.all(typedResults.map(informAdmin));
+    await informAdmin(typedResults);
     closeAndExit();
   } catch (e) {
     closeAndExit(e as Error);
