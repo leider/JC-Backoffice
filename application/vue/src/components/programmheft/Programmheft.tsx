@@ -1,7 +1,7 @@
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { App, Col, Form, Row } from "antd";
+import { App, Col, Form, Row, Splitter } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { areDifferent } from "@/commons/comparingAndTransforming";
@@ -23,6 +23,7 @@ import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import cloneDeep from "lodash/cloneDeep";
 import User from "jc-shared/user/user.ts";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -31,6 +32,7 @@ export default function Programmheft() {
   }, [search]);
   const { showSuccess, allUsers } = useJazzContext();
   const { modal } = App.useApp();
+  const { lg } = useBreakpoint();
 
   const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
   const usersWithBooking = useMemo(() => {
@@ -160,6 +162,9 @@ export default function Programmheft() {
     { fieldName: "users", label: "Users", type: "user", width: "xl", usersWithKann: usersAsOptions, required: true },
     { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
   ];
+
+  const [triggerRender, setTriggerRender] = useState(true);
+
   return (
     <Form
       form={form}
@@ -181,11 +186,16 @@ export default function Programmheft() {
         ]}
       />
       <RowWrapper>
-        <Row gutter={12}>
-          <Col xs={24} lg={8} style={{ zIndex: 0 }}>
-            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={calEvents} />
-          </Col>
-          <Col xs={24} lg={16}>
+        <Splitter
+          onResize={() => {
+            setTriggerRender(!triggerRender);
+          }}
+          layout={lg ? "horizontal" : "vertical"}
+        >
+          <Splitter.Panel defaultSize="40%" min="20%" max="70%">
+            <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={calEvents} triggerRender={triggerRender} />
+          </Splitter.Panel>
+          <Splitter.Panel>
             <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["events"]} />
             <Row>
               <Col span={12}>
@@ -195,8 +205,8 @@ export default function Programmheft() {
                 <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} type="default" text="Tag vor" />
               </Col>
             </Row>
-          </Col>
-        </Row>
+          </Splitter.Panel>
+        </Splitter>
         <ProgrammheftVeranstaltungenRow start={start} />
       </RowWrapper>
     </Form>

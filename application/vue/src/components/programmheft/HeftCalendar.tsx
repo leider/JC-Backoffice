@@ -5,7 +5,15 @@ import React, { useEffect, useRef } from "react";
 import { Event } from "jc-shared/programmheft/Event";
 import { Property } from "csstype";
 
-export default function HeftCalendar({ events, initialDate }: { initialDate: string; events: Event[] }) {
+export default function HeftCalendar({
+  events,
+  initialDate,
+  triggerRender,
+}: {
+  initialDate: string;
+  events: Event[];
+  triggerRender: boolean;
+}) {
   interface LocalUsedEvent {
     title: string;
     _def: { extendedProps: { farbe: string } };
@@ -34,7 +42,7 @@ export default function HeftCalendar({ events, initialDate }: { initialDate: str
   const calRef = useRef<FullCalendar>(null);
   useEffect(() => {
     calRef.current?.getApi().gotoDate(initialDate);
-  }, [initialDate]);
+  }, [initialDate, triggerRender]);
 
   return (
     <FullCalendar
