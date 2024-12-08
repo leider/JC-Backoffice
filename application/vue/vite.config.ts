@@ -31,6 +31,9 @@ export default defineConfig(() => {
           const app = express();
           configureApp.default(app, true);
           server.middlewares.use(app);
+          process.on("SIGINT", () => {
+            process.exit(0); // eslint-disable-line no-process-exit
+          });
         },
       },
       VitePWA({

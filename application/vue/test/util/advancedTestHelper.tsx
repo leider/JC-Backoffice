@@ -1,6 +1,6 @@
 import { ByRoleMatcher, ByRoleOptions, fireEvent, render } from "@testing-library/react";
 import { AntdAndLocaleTestContext, InlineCollectionEditableResult, selectOption, setDate, setValueOnInput } from "./testHelper";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { JSX } from "react";
 
 export interface TestHelper {

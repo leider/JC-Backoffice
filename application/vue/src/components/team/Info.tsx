@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
 import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";

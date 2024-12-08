@@ -15,7 +15,7 @@ import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import UploaderForMail from "@/widgets/UploaderForMail.tsx";

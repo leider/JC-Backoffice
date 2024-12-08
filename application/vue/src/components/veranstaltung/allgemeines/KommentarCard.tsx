@@ -1,7 +1,7 @@
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 
 export default function KommentarCard({ forVermietung = false }: { forVermietung?: boolean }) {

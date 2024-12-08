@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { konzertForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";

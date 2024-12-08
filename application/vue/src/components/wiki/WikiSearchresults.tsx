@@ -3,7 +3,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
 export default function WikiSearchresults() {

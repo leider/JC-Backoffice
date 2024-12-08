@@ -8,7 +8,7 @@ import { Alert, Button, Space } from "antd";
  * through `window.addEventListener('error', () => ..)`
  *
  */
-import { isRouteErrorResponse } from "react-router-dom";
+import { isRouteErrorResponse } from "react-router";
 import { useRouteError } from "react-router";
 
 export function ErrorBoundary() {

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import * as React from "react";
 import { useContext, useMemo } from "react";
 import { useCreateRouteState } from "@/router/useCreateRouteState.tsx";

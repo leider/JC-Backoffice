@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export function useJazzMutation<InstanceType extends { url?: string }>({

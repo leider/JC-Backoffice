@@ -1,7 +1,7 @@
 import { Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { vermietungForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";

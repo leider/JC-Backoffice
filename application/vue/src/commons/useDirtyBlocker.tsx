@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { Blocker, BlockerFunction } from "react-router";
-import { useBlocker } from "react-router-dom";
+import { useBlocker } from "react-router";
 import { App } from "antd";
 
 export function useDirtyBlocker(dirty: boolean) {

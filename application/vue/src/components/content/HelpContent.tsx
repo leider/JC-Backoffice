@@ -4,7 +4,7 @@ import HelpVeranstaltungen from "@/components/content/help/HelpVeranstaltungen.t
 import HelpNeues from "@/components/content/help/HelpNeues.tsx";
 import { FloatButton, Modal } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import HelpTeam from "@/components/content/help/HelpTeam.tsx";
 import HelpKonzert from "@/components/content/help/HelpKonzert.tsx";
 

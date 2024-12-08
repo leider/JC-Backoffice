@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import { RiderComp } from "@/components/rider/RiderComp.tsx";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import ButtonForRider from "@/components/konzert/technik/ButtonForRider.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 
