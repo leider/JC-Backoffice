@@ -28,7 +28,7 @@
   "devDependencies": {
     "@prettier/plugin-pug": "3.2.0",
     "@types/lodash": "4.17.13",
-    "@types/node": "22.8.6",
+    "@types/node": "22.10.1",
     "@types/sinon": "17.0.3",
     "@types/uuid": "10.0.0",
     "eslint": "9.16.0",
