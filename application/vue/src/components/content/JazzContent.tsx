@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Layout, Row, theme } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import { menuKeys } from "@/components/content/MenuNodes.tsx";
 import { JazzContext, useCreateJazzContext } from "@/components/content/useJazzContext.ts";
 import InnerContent from "@/components/content/InnerContent.tsx";

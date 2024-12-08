@@ -5,7 +5,7 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.t
 import * as React from "react";
 import { useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import headerTags from "@/components/colored/headerTags.tsx";
 
 export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {

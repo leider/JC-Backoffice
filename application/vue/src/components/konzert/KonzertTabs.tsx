@@ -9,7 +9,7 @@ import TabKosten from "@/components/konzert/kosten/TabKosten";
 import TabKasse from "@/components/konzert/kasse/TabKasse";
 import TabHotel from "@/components/konzert/hotel/TabHotel";
 import TabPresse from "@/components/konzert/presse/TabPresse.tsx";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";

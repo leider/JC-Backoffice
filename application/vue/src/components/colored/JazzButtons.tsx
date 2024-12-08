@@ -2,7 +2,7 @@ import { App, Button, Dropdown, Form, Modal, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useContext, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
