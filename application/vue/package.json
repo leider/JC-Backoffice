@@ -9,7 +9,7 @@
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "dependencies": {
-    "@ant-design/pro-components": "2.8.1",
+    "@ant-design/pro-components": "2.8.2",
     "@fullcalendar/core": "6.1.15",
     "@fullcalendar/daygrid": "6.1.15",
     "@fullcalendar/multimonth": "6.1.15",
@@ -17,7 +17,7 @@
     "@tanstack/react-query": "5.59.16",
     "@uiw/react-json-view": "1.12.2",
     "@wysimark/react": "3.0.20",
-    "antd": "5.21.6",
+    "antd": "5.22.3",
     "axios": "1.7.7",
     "codemirror": "6.0.1",
     "color": "4.2.3",
