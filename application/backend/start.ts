@@ -25,4 +25,5 @@ export function stop() {
 process.on("SIGINT", () => {
   console.log("SHUTDOWN ON SIGINT (express)"); // eslint-disable-line no-console
   server.close();
+  process.exit(0); // eslint-disable-line no-process-exit
 });
