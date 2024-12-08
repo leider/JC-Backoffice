@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "lodash": "4.17.21",
-    "uuid": "11.0.2"
+    "uuid": "11.0.3"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "3.2.0",
@@ -37,12 +37,12 @@
     "eslint-plugin-react": "7.37.2",
     "eslint-plugin-react-hooks": "5.1.0",
     "eslint-plugin-react-refresh": "0.4.16",
-    "prettier": "3.3.3",
-    "sass": "1.80.6",
+    "prettier": "3.4.2",
+    "sass": "1.82.0",
     "sinon": "19.0.2",
     "tslib": "2.8.1",
-    "typescript": "5.6.3",
-    "typescript-eslint": "8.12.2"
+    "typescript": "5.7.2",
+    "typescript-eslint": "8.17.0"
   },
   "scripts": {
     "compile": "yarn workspaces foreach --all -p run compile",
