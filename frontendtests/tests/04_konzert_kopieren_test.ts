@@ -13,5 +13,6 @@ Scenario("Kopiere Konzert", async ({ I }) => {
   I.fillField("Titel", "Kopiertes Konzert");
   I.click("Speichern");
   I.click("Veranstaltungen");
+  I.wait(0.5);
   I.see("Kopiertes Konzert");
 });
