@@ -271,7 +271,7 @@ export async function changePassword(user: User) {
 // Programmheft
 export async function kalenderFor(jahrMonat: string) {
   const result = await getForType("json", `/rest/programmheft/${jahrMonat}`);
-  return result?.id ? new Kalender(result) : new Kalender({ id: jahrMonat, text: "" });
+  return result?.id ? new Kalender(result) : new Kalender({ id: jahrMonat });
 }
 
 export async function alleKalender(): Promise<Kalender[]> {

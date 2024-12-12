@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { Form } from "antd";
+import { Form, Modal } from "antd";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
@@ -14,6 +14,8 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
 import { VermietungContext } from "./VermietungContext";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import { TextField } from "@/widgets/TextField.tsx";
+import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -57,6 +59,8 @@ export default function VermietungComp() {
 
   const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
 
+  const [openCopyModal, setOpenCopyModal] = useState(false);
+
   useEffect(() => {
     updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
   }, [freigabe, form, initialValue, updateDirtyIfChanged]);
@@ -67,9 +71,12 @@ export default function VermietungComp() {
     const initial = vermietung.toJSON();
     setInitialValue(initial);
     updateDirtyIfChanged(initial, deepCopy);
+    if (!vermietung.id && url?.includes("copy-of") && vermietung.startDate) {
+      setOpenCopyModal(true);
+    }
     setIsNew(!vermietung.id);
     form.validateFields();
-  }, [form, updateDirtyIfChanged, vermietung]);
+  }, [form, updateDirtyIfChanged, url, vermietung]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
@@ -108,7 +115,22 @@ export default function VermietungComp() {
         }}
         onFinish={saveForm}
         layout="vertical"
+        colon={false}
       >
+        <Modal
+          title="Kopierte Vermietung"
+          open={openCopyModal}
+          onOk={() => {
+            setOpenCopyModal(false);
+          }}
+          okText="Weiter"
+          closable={false}
+          footer={(_, { OkBtn }) => <OkBtn />}
+        >
+          <p>Du möchtest sicher Titel und Datum anpassen.</p>
+          <TextField name={["kopf", "titel"]} label="Titel" required />
+          <StartEndPickers />
+        </Modal>
         <VermietungPageHeader isNew={isNew} dirty={dirty} />
         <VermietungTabs />
       </Form>
