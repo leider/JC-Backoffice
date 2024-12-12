@@ -52,7 +52,7 @@ export function NewButtons() {
     { key: "Konzert", label: "Neues Konzert", icon: <IconForSmallBlock iconName="FileEarmarkPlus" /> },
     { key: "Vermietung", label: "Neue Vermietung", icon: <IconForSmallBlock iconName="FileEarmarkEasel" /> },
   ];
-  function onMenuClick(e: { key: string }): void {
+  function onClick(e: { key: string }) {
     if (e.key === "Konzert") {
       return navigate("/konzert/new");
     }
@@ -61,7 +61,7 @@ export function NewButtons() {
     }
   }
   return (
-    <Dropdown menu={{ items, onClick: onMenuClick }}>
+    <Dropdown menu={{ items, onClick }}>
       <Button type="default">
         <Space>
           Neu <IconForSmallBlock iconName="ChevronDown" />
@@ -74,8 +74,7 @@ export function NewButtons() {
 export function MoreButton({ disabled }: ButtonProps) {
   const konzertContext = useContext(KonzertContext);
   const vermietungKontext = useContext(VermietungContext);
-  const context = useMemo(() => konzertContext ?? vermietungKontext, [konzertContext, vermietungKontext]);
-  const form = context!.form;
+  const { form, isDirty } = useMemo(() => konzertContext ?? vermietungKontext, [konzertContext, vermietungKontext]);
   const isVermietung = useMemo(() => isNil(konzertContext), [konzertContext]);
   function getKonzert() {
     return new Konzert(form.getFieldsValue(true));
@@ -83,10 +82,6 @@ export function MoreButton({ disabled }: ButtonProps) {
 
   function getVermietung() {
     return new Vermietung(form.getFieldsValue(true));
-  }
-
-  function isDirty() {
-    return context!.isDirty;
   }
 
   const { modal } = App.useApp();
@@ -110,7 +105,7 @@ export function MoreButton({ disabled }: ButtonProps) {
   });
 
   function colorExport() {
-    return isDirty() ? "rgba(89,0,185,0.43)" : "#5900b9";
+    return isDirty ? "rgba(89,0,185,0.43)" : "#5900b9";
   }
 
   const konzertExport = {
@@ -122,19 +117,19 @@ export function MoreButton({ disabled }: ButtonProps) {
         key: "ExcelKalk",
         label: <span style={{ color: colorExport() }}>Kalkulation (Excel)</span>,
         icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkSpreadsheet" />,
-        disabled: isDirty(),
+        disabled: isDirty,
       },
       {
         key: "Pressefotos",
         label: <span style={{ color: colorExport() }}>Pressefotos (Zip)</span>,
         icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkImage" />,
-        disabled: isDirty(),
+        disabled: isDirty,
       },
       {
         key: "Kassenzettel",
         label: <span style={{ color: colorExport() }}>Kassenzettel (Pdf)</span>,
         icon: <IconForSmallBlock color={colorExport()} iconName="Printer" />,
-        disabled: isDirty(),
+        disabled: isDirty,
       },
     ],
   };
@@ -143,7 +138,7 @@ export function MoreButton({ disabled }: ButtonProps) {
     key: "ExcelKalk",
     label: <span style={{ color: colorExport() }}>Kalkulation (Excel)</span>,
     icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkSpreadsheet" />,
-    disabled: isDirty(),
+    disabled: isDirty,
   };
 
   const items: ItemType[] = [

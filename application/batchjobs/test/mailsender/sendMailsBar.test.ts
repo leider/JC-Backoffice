@@ -37,7 +37,7 @@ describe("Bar Mailsender", () => {
     expect(message.to).to.eql([{ address: "bar.email@gmx.net", name: "Bar Name" }]);
     expect(message.body).to.include("## An folgenden Terminen haben wir Veranstaltungen im Jazzclub:");
     expect(message.body).to.include("So., 28. Apr. 2019 22:00 bis 01:00 - Vermietung 1");
-    expect(message.body).to.include("Mo., 29. Apr. 2019 22:00 bis 01:00 - Konzert 1");
+    expect(message.body).to.include("Mo., 29. Apr. 2019 22:00 bis 01:00 - Konzert 1 (Wir erwarten 10 Besucher)");
     expect(message.body).to.include("Mi., 29. Mai 2019 22:00 bis 01:00 - Konzert 2");
     expect(message.body).to.include("Sa., 29. Juni 2019 22:00 bis 01:00 - Konzert 3");
     expect(message.body).to.include("Mo., 29. Juli 2019 22:00 bis 01:00 - Konzert 4");

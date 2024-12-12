@@ -44,6 +44,7 @@ export default function KonzertComp() {
     logDiffForDirty(initial, current, false);
     setDirty(areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]));
   }, []);
+
   useDirtyBlocker(dirty);
 
   useEffect(() => {
@@ -156,8 +157,12 @@ export default function KonzertComp() {
     });
   }
 
+  function resetChanges() {
+    konzertQueryData.refetch();
+  }
+
   return (
-    <KonzertContext.Provider value={{ form, isDirty: dirty, isKasseHelpOpen: isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen }}>
+    <KonzertContext.Provider value={{ form, isDirty: dirty, isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}>
       <Form
         form={form}
         onValuesChange={() => {

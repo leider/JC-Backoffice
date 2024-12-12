@@ -8,4 +8,11 @@ export const KonzertContext = createContext<{
   isDirty: boolean;
   isKasseHelpOpen: boolean;
   setKasseHelpOpen: (open: boolean) => void;
-} | null>(null);
+  resetChanges: () => void;
+}>({
+  form: {} as FormInstance<Konzert & { riderBoxes?: BoxParams[]; endbestandEUR?: number }>,
+  isDirty: false,
+  isKasseHelpOpen: false,
+  resetChanges: () => {},
+  setKasseHelpOpen: () => {},
+});

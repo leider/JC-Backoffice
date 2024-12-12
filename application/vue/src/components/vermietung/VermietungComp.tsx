@@ -18,7 +18,7 @@ import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 export default function VermietungComp() {
   const { url } = useParams();
 
-  const vermiet = useQuery({
+  const vermietungQueryData = useQuery({
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
@@ -26,10 +26,10 @@ export default function VermietungComp() {
   const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung({ id: "unknown" }));
 
   useEffect(() => {
-    if (vermiet.data) {
-      setVermietung(vermiet.data);
+    if (vermietungQueryData.data) {
+      setVermietung(vermietungQueryData.data);
     }
-  }, [vermiet.data]);
+  }, [vermietungQueryData.data]);
 
   const [dirty, setDirty] = useState<boolean>(false);
 
@@ -89,8 +89,12 @@ export default function VermietungComp() {
     });
   }
 
+  function resetChanges() {
+    vermietungQueryData.refetch();
+  }
+
   return (
-    <VermietungContext.Provider value={{ form, isDirty: dirty }}>
+    <VermietungContext.Provider value={{ form, isDirty: dirty, resetChanges }}>
       <Form
         form={form}
         onValuesChange={() => {

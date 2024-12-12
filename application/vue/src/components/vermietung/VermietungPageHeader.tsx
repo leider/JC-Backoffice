@@ -8,10 +8,10 @@ import headerTags from "@/components/colored/headerTags.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { useWatch } from "antd/es/form/Form";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+  const { form, resetChanges } = useContext(VermietungContext);
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
@@ -80,7 +80,19 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
   return (
     <JazzPageHeader
       title={title}
-      buttons={[<MoreButton key="more" />, <SaveButton key="save" disabled={!dirty} />, <TeamCalendar key="cal" />]}
+      buttons={[
+        <MoreButton key="more" />,
+        <ButtonWithIcon
+          key="cancel"
+          text={"Reset"}
+          onClick={resetChanges}
+          icon={"ArrowCounterclockwise"}
+          disabled={!dirty}
+          type="default"
+        />,
+        <SaveButton key="save" disabled={!dirty} />,
+        <TeamCalendar key="cal" />,
+      ]}
       firstTag={
         <Tag key="verm" color="purple">
           Vermietung

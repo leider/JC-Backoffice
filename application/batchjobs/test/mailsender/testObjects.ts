@@ -64,6 +64,7 @@ const konzert1 = new Konzert({
   kopf: { titel: "Konzert 1", ort: "Jazzclub", confirmed: true },
   staff: { kasseNotNeeded: false },
   presse: { checked: true },
+  eintrittspreise: { erwarteteBesucher: 10 },
 });
 const konzert2 = new Konzert({
   startDate: "2019-05-29T20:00:00.000Z",

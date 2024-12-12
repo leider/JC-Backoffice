@@ -10,10 +10,19 @@ import Vermietung from "jc-shared/vermietung/vermietung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
+import Konzert from "jc-shared/konzert/konzert.js";
 
 const logger = loggers.get("application");
 
 export async function checkBar(now: DatumUhrzeit): Promise<JobResult> {
+  function formatVeranstaltung(veranstaltung: Veranstaltung) {
+    function textFuerBesucher() {
+      const erwartete = !veranstaltung.isVermietung && (veranstaltung as Konzert).eintrittspreise.erwarteteBesucher;
+      return erwartete ? "(Wir erwarten " + erwartete + " Besucher)" : "";
+    }
+    return `${veranstaltung.datumForDisplayShort} bis ${veranstaltung.endDatumUhrzeit.format("LT")} - ${veranstaltung.kopf.titelMitPrefix} ${textFuerBesucher()}`;
+  }
+
   try {
     const name = conf.barName;
     const email = conf.barEmail;
@@ -46,9 +55,7 @@ export async function checkBar(now: DatumUhrzeit): Promise<JobResult> {
     const markdownToSend = `${firstLine}
 
 ---
-${zuSendende
-  .map((konzert) => `${konzert.datumForDisplayShort} bis ${konzert.endDatumUhrzeit.format("LT")} - ${konzert.kopf.titelMitPrefix}`)
-  .join("\n\n---\n")}`;
+${zuSendende.map(formatVeranstaltung).join("\n\n---\n")}`;
 
     const message = new MailMessage({
       subject: subject,

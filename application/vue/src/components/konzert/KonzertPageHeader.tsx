@@ -11,11 +11,11 @@ import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
-  const konzertContext = useContext(KonzertContext);
+  const { form, resetChanges, setKasseHelpOpen } = useContext(KonzertContext);
   const { optionen } = useJazzContext();
-  const form = konzertContext!.form;
   const [search] = useSearchParams();
   const { currentUser } = useJazzContext();
   const [displayDate, setDisplayDate] = useState<string>("");
@@ -115,12 +115,20 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
       dateString={displayDate}
       buttons={[
         isOrga && <MoreButton key="more" disabled={isNew} />,
+        <ButtonWithIcon
+          key="cancel"
+          text={"Reset"}
+          onClick={resetChanges}
+          icon={"ArrowCounterclockwise"}
+          disabled={!dirty}
+          type="default"
+        />,
         <SaveButton key="save" disabled={!dirty} />,
         isKassenseite && (
           <HelpWithKasseButton
             key="helpKasse"
             callback={() => {
-              konzertContext ? konzertContext.setKasseHelpOpen(true) : undefined;
+              setKasseHelpOpen(true);
             }}
           />
         ),

@@ -1,6 +1,7 @@
 import {
   ArrowBarLeft,
   ArrowBarRight,
+  ArrowCounterclockwise,
   Basket,
   Building,
   Calendar2Check,
@@ -58,8 +59,8 @@ import {
   Prescription2,
   Printer,
   PrinterFill,
-  QuestionLg,
   QuestionCircleFill,
+  QuestionLg,
   Send,
   Speaker,
   Toggles,
@@ -75,6 +76,7 @@ import {
 export const icons = {
   ArrowBarLeft,
   ArrowBarRight,
+  ArrowCounterclockwise,
   Basket,
   Building,
   Calendar2Check,
