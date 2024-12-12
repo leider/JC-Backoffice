@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
 import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";

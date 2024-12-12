@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { HelpWithKasseButton, MoreButton, SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import headerTags from "@/components/colored/headerTags.tsx";

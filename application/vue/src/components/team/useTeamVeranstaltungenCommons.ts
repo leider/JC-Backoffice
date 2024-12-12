@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useEffect, useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";

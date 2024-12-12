@@ -1,5 +1,5 @@
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import * as React from "react";
 import { useMemo } from "react";
 import Accessrights from "jc-shared/user/accessrights.ts";

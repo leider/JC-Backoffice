@@ -2,7 +2,7 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LoginState } from "./authConsts";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { loginPost, logoutManually, refreshTokenPost } from "@/commons/loader.ts";
 
 export interface IUseProvideAuth {

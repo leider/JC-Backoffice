@@ -3,7 +3,7 @@ import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Col, Form, Row, Splitter } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";

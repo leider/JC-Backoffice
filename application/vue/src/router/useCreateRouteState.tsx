@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
-import { Navigate, RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router";
 import JazzclubApp from "@/app/JazzclubApp.tsx";
 import Login from "@/app/Login.tsx";
 import Team from "@/components/team/Team.tsx";

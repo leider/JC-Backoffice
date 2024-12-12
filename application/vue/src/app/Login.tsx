@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row, Input } from "antd";
 import { LoginState, useAuth } from "@/commons/authConsts.ts";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router";
 import React from "react";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 

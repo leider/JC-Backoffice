@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Form } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming";

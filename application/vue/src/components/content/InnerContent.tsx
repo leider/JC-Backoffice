@@ -1,5 +1,5 @@
 import { LoginState, useAuth } from "@/commons/authConsts.ts";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router";
 import * as React from "react";
 import { Spin } from "antd";
 
