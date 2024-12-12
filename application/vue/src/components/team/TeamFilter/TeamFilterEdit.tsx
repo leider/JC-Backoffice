@@ -108,7 +108,7 @@ export function TeamFilterEdit({
 
   return (
     <Modal
-      closeIcon={null}
+      closable={false}
       footer={
         <Space>
           <ButtonWithIcon alwaysText type="default" text="Zurücksetzen" onClick={() => reset(form)} />

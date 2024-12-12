@@ -22,6 +22,7 @@ export default function InlineEditableActions(props: { actions: ActionCallbacks 
       <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
         <Modal
           title="Löschen"
+          closable={false}
           open={open}
           onOk={() => {
             props.actions.delete();

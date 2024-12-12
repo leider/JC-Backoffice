@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
-import { Form, Modal } from "antd";
+import { Form } from "antd";
 import { useNavigate, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
@@ -15,8 +15,7 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "./KonzertContext";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
-import { TextField } from "@/widgets/TextField.tsx";
-import StartEndPickers from "@/widgets/StartEndPickers.tsx";
+import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
 
 export default function KonzertComp() {
   const { url } = useParams();
@@ -96,8 +95,6 @@ export default function KonzertComp() {
 
   const kassenfreigabe = useWatch(["kasse", "kassenfreigabe"], { form });
 
-  const [openCopyModal, setOpenCopyModal] = useState(false);
-
   useEffect(() => {
     updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
   }, [form, initialValue, kassenfreigabe, updateDirtyIfChanged]);
@@ -112,9 +109,6 @@ export default function KonzertComp() {
     (initial as any).riderBoxes = rider.boxes;
     setInitialValue(initial);
     updateDirtyIfChanged(initial, deepCopy);
-    if (!konzert.id && url?.includes("copy-of") && konzert.startDate) {
-      setOpenCopyModal(true);
-    }
     setIsNew(!konzert.id);
     form.validateFields();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,20 +176,7 @@ export default function KonzertComp() {
         layout="vertical"
         colon={false}
       >
-        <Modal
-          title="Kopiertes Konzert"
-          open={openCopyModal}
-          onOk={() => {
-            setOpenCopyModal(false);
-          }}
-          okText="Weiter"
-          closable={false}
-          footer={(_, { OkBtn }) => <OkBtn />}
-        >
-          <p>Du möchtest sicher Titel und Datum anpassen.</p>
-          <TextField name={["kopf", "titel"]} label="Titel" required />
-          <StartEndPickers />
-        </Modal>
+        <ShowOnCopy title={"Kopiertes Konzert"} isNew={isNew} startDate={konzert.startDate} />
         <KonzertPageHeader isNew={isNew} dirty={dirty} />
         <KonzertTabs />
       </Form>
