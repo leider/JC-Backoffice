@@ -1,19 +1,16 @@
-import { App, Button, Dropdown, Form, Modal, Space, theme } from "antd";
+import { App, Button, Dropdown, Form, FormInstance, Modal, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
-import { useContext, useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import isNil from "lodash/isNil";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import { ItemType } from "antd/es/menu/interface";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -71,11 +68,12 @@ export function NewButtons() {
   );
 }
 
-export function MoreButton({ disabled }: ButtonProps) {
-  const konzertContext = useContext(KonzertContext);
-  const vermietungKontext = useContext(VermietungContext);
-  const { form, isDirty } = useMemo(() => konzertContext ?? vermietungKontext, [konzertContext, vermietungKontext]);
-  const isVermietung = useMemo(() => isNil(konzertContext), [konzertContext]);
+export function MoreButton({
+  disabled,
+  form,
+  isDirty,
+  isVermietung,
+}: ButtonProps & { form: FormInstance; isDirty: boolean; isVermietung?: boolean }) {
   function getKonzert() {
     return new Konzert(form.getFieldsValue(true));
   }

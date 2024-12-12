@@ -81,7 +81,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     <JazzPageHeader
       title={title}
       buttons={[
-        <MoreButton key="more" />,
+        <MoreButton key="more" disabled={isNew} form={form} isDirty={dirty} isVermietung />,
         <ButtonWithIcon
           key="cancel"
           text={"Reset"}

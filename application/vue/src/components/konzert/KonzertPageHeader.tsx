@@ -114,7 +114,7 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
       title={<span style={titleStyle}>{title}</span>}
       dateString={displayDate}
       buttons={[
-        isOrga && <MoreButton key="more" disabled={isNew} />,
+        isOrga && <MoreButton key="more" disabled={isNew} form={form} isDirty={dirty} />,
         <ButtonWithIcon
           key="cancel"
           text={"Reset"}

@@ -46,8 +46,10 @@ export default function VermietungComp() {
   const [initialValue, setInitialValue] = useState<object>({});
 
   const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
+    logDiffForDirty(initial, current, false);
     setDirty(areDifferent(initial, current));
   }, []);
+
   useDirtyBlocker(dirty);
 
   const { currentUser, showError } = useJazzContext();
@@ -99,7 +101,6 @@ export default function VermietungComp() {
         form={form}
         onValuesChange={() => {
           const current = form.getFieldsValue(true);
-          logDiffForDirty(initialValue, current, false);
           updateDirtyIfChanged(initialValue, current);
         }}
         onFinishFailed={() => {
