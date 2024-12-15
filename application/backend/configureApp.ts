@@ -8,8 +8,10 @@ import passport from "passport";
 import "./initWinston.js";
 import restApp from "./rest/index.js";
 import siteApp from "./lib/site/index.js";
+import apicalls from "./apikey/apicalls.js";
 import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
+import passportApiKeyInitializer from "./lib/middleware/passportApiKeyInitializer.js";
 import { fileURLToPath } from "url";
 import conf from "jc-shared/commons/simpleConfigure.js";
 
@@ -50,11 +52,14 @@ export default function (app: express.Express, forDev?: boolean): void {
   app.use(express.static(conf.additionalstatic, { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
 
   app.use(passportInitializer);
+  app.use(passportApiKeyInitializer);
   app.use(secureAgainstClickjacking);
   app.use("/", siteApp);
 
-  const authenticator = passport.authenticate("jwt", { session: false });
-  app.use("/rest/", authenticator, restApp);
+  const authenticatorJwt = passport.authenticate("jwt", { session: false });
+  app.use("/rest/", authenticatorJwt, restApp);
+  const authenticatorBearer = passport.authenticate("bearer", { session: false });
+  app.use("/api/", authenticatorBearer, apicalls);
   app.use("/ridersrest/", ridersrest);
   if (!forDev) {
     app.use(handle404);

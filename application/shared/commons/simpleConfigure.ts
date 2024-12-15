@@ -30,6 +30,9 @@ export class SimpleConfigure {
     return this.getString("publicUrlPrefix");
   }
 
+  get bearer() {
+    return this.getString("bearer");
+  }
   get salt() {
     return this.getString("salt");
   }
