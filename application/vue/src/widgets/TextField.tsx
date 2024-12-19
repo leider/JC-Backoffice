@@ -1,6 +1,7 @@
-import { Form as AntdForm, Input } from "antd";
-import { FunctionComponent, useCallback, useEffect, useState } from "react";
+import { Form as AntdForm, Input, InputRef } from "antd";
+import { FunctionComponent, RefObject, useCallback, useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
+import log from "eslint-plugin-react/lib/util/log";
 
 type TTextField = {
   /**
@@ -55,6 +56,9 @@ type TTextField = {
    * @type {Rule}
    */
   uniqueValuesValidator?: Rule;
+  optionalRef?: RefObject<InputRef>;
+  style?: any;
+  inlineSave?: any;
 };
 
 /**
@@ -70,6 +74,9 @@ export const TextField: FunctionComponent<TTextField> = ({
   name,
   disabled,
   onChange,
+  optionalRef,
+  style,
+  inlineSave,
 }: TTextField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
@@ -96,12 +103,12 @@ export const TextField: FunctionComponent<TTextField> = ({
       name={name}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : ""}
       rules={rules}
-      style={label ? {} : { marginBottom: 0 }}
+      style={label ? { ...style } : { ...style, marginBottom: 0 }}
       initialValue={initialValue}
       valuePropName={"textVal"}
       trigger={"onText"}
     >
-      <TextInputEmbedded disabled={disabled} onChange={onChange} />
+      <TextInputEmbedded disabled={disabled} onChange={onChange} optionalRef={optionalRef} inlineSave={inlineSave} />
     </AntdForm.Item>
   );
 };
@@ -112,9 +119,19 @@ type TTextInputEmbedded = {
   textVal?: string;
   onText?: (value: string | null) => void;
   onChange?: (value: string | null) => void;
+  optionalRef?: RefObject<InputRef>;
+  inlineSave?: any;
 };
 
-const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, textVal, disabled, onChange, id }: TTextInputEmbedded) => {
+const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
+  onText,
+  textVal,
+  disabled,
+  onChange,
+  id,
+  optionalRef,
+  inlineSave,
+}: TTextInputEmbedded) => {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -135,7 +152,10 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({ onText, text
       }}
       onBlur={({ target: { value: nextValue } }) => {
         changed(nextValue, true);
+        inlineSave?.(nextValue);
       }}
+      ref={optionalRef}
+      onPressEnter={inlineSave}
     />
   );
 };

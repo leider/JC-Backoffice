@@ -1,26 +1,10 @@
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
-import React, { useMemo } from "react";
+import React from "react";
 import { Tag } from "antd";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
-import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
+import { TagForUser } from "@/widgets/TagForUser.tsx";
 
 export function useTagRenderForUser(usersAsOptions: UserWithKann[]) {
-  function TagForUser({ value }: { value: string }) {
-    const userWithKann = useMemo(() => usersAsOptions.find((item) => item.value === value), [value]);
-    const label = userWithKann?.label;
-
-    const ersthelfer = useMemo(() => {
-      return userWithKann?.kann.includes("Ersthelfer");
-    }, [userWithKann?.kann]);
-
-    return (
-      <>
-        {label}
-        {ersthelfer && <ErsthelferSymbol />}
-      </>
-    );
-  }
-
   function tagRender({ value, closable, onClose }: CustomTagProps) {
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
       event.preventDefault();
@@ -29,7 +13,7 @@ export function useTagRenderForUser(usersAsOptions: UserWithKann[]) {
 
     return (
       <Tag onMouseDown={onPreventMouseDown} closable={closable} onClose={onClose} style={{ marginRight: 3, paddingInline: 3 }}>
-        <TagForUser value={value} />
+        <TagForUser value={value} usersAsOptions={usersAsOptions} />
       </Tag>
     );
   }

@@ -134,7 +134,7 @@ export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = 
 }: NumberInputWithDirectValueParams): React.ReactElement => {
   return (
     <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label}:</b>} noStyle={!label}>
-      <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} onNumber={() => {}} disabled />
+      <NumericInputEmbedded decimals={decimals} suffix={suffix} value={value} onNumber={() => {}} disabled />
     </Form.Item>
   );
 };

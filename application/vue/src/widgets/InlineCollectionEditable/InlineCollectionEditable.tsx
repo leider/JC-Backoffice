@@ -10,13 +10,15 @@ import { ColDescWithIdx, CollectionColDesc } from "./types";
 import { WidgetColumn } from "./widgetColumn/WidgetColumn";
 import { Rule } from "antd/es/form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { NamePath } from "rc-field-form/es/interface";
+import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
-interface IInlineCollectionEditable {
+export interface IInlineCollectionEditable {
   /**
    * Array that describes the path in the form object
    * leading to this field.
    */
-  embeddedArrayPath: string[];
+  embeddedArrayPath: NamePath;
 
   /**
    * Antd's form
@@ -27,6 +29,7 @@ interface IInlineCollectionEditable {
    * What the columns look like
    */
   columnDescriptions: CollectionColDesc[];
+  usersWithKann?: UserWithKann[];
 }
 
 /**

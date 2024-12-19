@@ -1,5 +1,5 @@
 import { Form, Select, Tag } from "antd";
-import React from "react";
+import React, { ForwardedRef, forwardRef, useEffect } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType } from "antd/es/select";
@@ -37,17 +37,22 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
   );
 }
 
-function InnerSelect({
-  usersAsOptions,
-  disabled,
-  onChange,
-  value,
-}: {
-  usersAsOptions: UserWithKann[];
-  disabled?: boolean;
-  onChange?: (value: string[]) => void;
-  value?: string[];
-}) {
+export const InnerSelect = forwardRef(function (
+  {
+    usersAsOptions,
+    disabled,
+    onChange,
+    value,
+    save,
+  }: {
+    usersAsOptions: UserWithKann[];
+    disabled?: boolean;
+    onChange?: (value: string[]) => void;
+    value?: string[];
+    save?: () => void;
+  },
+  ref: ForwardedRef<any>,
+) {
   const renderInList = (row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />;
 
   const tagRender = useTagRenderForUser(usersAsOptions);
@@ -65,6 +70,7 @@ function InnerSelect({
 
   return (
     <Select
+      ref={ref}
       mode="multiple"
       options={filtered}
       tagRender={tagRender}
@@ -76,9 +82,10 @@ function InnerSelect({
       placeholder="Tippen zum Suchen nach irgendwas"
       onChange={onChange}
       value={value}
+      onBlur={save}
     />
   );
-}
+});
 
 export default function MitarbeiterMultiSelect({
   name,

@@ -2,7 +2,6 @@ import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
 export type ColDescWithIdx = CollectionColDesc & {
   idx: number;
-  alignValueWithMin?: boolean;
   disabled?: boolean;
   usersWithKann?: UserWithKann[];
 };

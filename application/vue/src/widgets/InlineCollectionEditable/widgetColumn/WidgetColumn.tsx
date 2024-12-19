@@ -48,7 +48,6 @@ interface IWidgetColumn {
    * @memberof IWidgetColumn
    */
   uniqueValuesValidator?: Rule;
-  usersAsAoptions?: { label: string; value: string }[];
   embeddedArrayPath?: string[];
 }
 

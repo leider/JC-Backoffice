@@ -24,6 +24,7 @@ import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import cloneDeep from "lodash/cloneDeep";
 import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -149,29 +150,34 @@ export default function Programmheft() {
   );
 
   const columnDescriptions: CollectionColDesc[] = [
-    { fieldName: ["was"], label: "Was", type: "text", width: "m", required: true },
-    { fieldName: ["start"], label: "Wann", type: "date", width: "s", required: true },
-    {
-      fieldName: ["farbe"],
-      label: "Farbe",
-      type: "color",
-      width: "xs",
-      required: true,
-      presets: ["firebrick", "coral", "blue", "dodgerblue", "green", "yellowgreen"],
-    },
-    { fieldName: "users", label: "Users", type: "user", width: "xl", usersWithKann: usersAsOptions, required: true },
-    { fieldName: ["emailOffset"], label: "Tage vorher", type: "integer", width: "xs" },
+    { fieldName: "was", label: "Was", type: "text", width: "l", required: true },
+    { fieldName: "start", label: "Wann", type: "date", width: "s", required: true },
+    { fieldName: "farbe", label: "Farbe", type: "color", width: "xs", required: true },
+    { fieldName: "users", label: "Users", type: "user", width: "l", required: true },
+    { fieldName: "emailOffset", label: "Tage vorher", type: "integer", width: "xs" },
   ];
 
   const [triggerRender, setTriggerRender] = useState(true);
 
+  const [hasErrors, setHasErrors] = useState(false);
+
   return (
     <Form
       form={form}
-      onValuesChange={() => {
+      onValuesChange={async () => {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        form
+          .validateFields()
+          .then((value) => {
+            console.log({ value });
+            setHasErrors(false);
+          })
+          .catch((reason) => {
+            console.log({ reason });
+            setHasErrors(!!reason.errorFields?.length);
+          });
       }}
       onFinish={saveForm}
       layout="vertical"
@@ -182,7 +188,7 @@ export default function Programmheft() {
           <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={() => nextOrPrevious(false)} type="default" />,
           <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={() => nextOrPrevious(true)} type="default" />,
           <ProgrammheftKopierenButton key="copy" form={form} />,
-          <SaveButton key="save" disabled={!dirty} />,
+          <SaveButton key="save" disabled={!dirty || hasErrors} />,
         ]}
       />
       <RowWrapper>
@@ -196,7 +202,7 @@ export default function Programmheft() {
             <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={calEvents} triggerRender={triggerRender} />
           </Splitter.Panel>
           <Splitter.Panel>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["events"]} />
+            <EditableTable<Event> name={"events"} columnDescriptions={columnDescriptions} usersWithKann={usersAsOptions} />
             <Row>
               <Col span={12}>
                 <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} type="default" text="Tag zurück" />
