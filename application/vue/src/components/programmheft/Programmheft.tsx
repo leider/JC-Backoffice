@@ -18,7 +18,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
+import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import cloneDeep from "lodash/cloneDeep";
@@ -170,12 +170,10 @@ export default function Programmheft() {
         setDirty(areDifferent(initialValue, current));
         form
           .validateFields()
-          .then((value) => {
-            console.log({ value });
+          .then(() => {
             setHasErrors(false);
           })
           .catch((reason) => {
-            console.log({ reason });
             setHasErrors(!!reason.errorFields?.length);
           });
       }}
@@ -202,7 +200,12 @@ export default function Programmheft() {
             <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={calEvents} triggerRender={triggerRender} />
           </Splitter.Panel>
           <Splitter.Panel>
-            <EditableTable<Event> name={"events"} columnDescriptions={columnDescriptions} usersWithKann={usersAsOptions} />
+            <EditableTable<Event>
+              name={"events"}
+              columnDescriptions={columnDescriptions}
+              usersWithKann={usersAsOptions}
+              newRowFactory={(vals) => new Event(vals)}
+            />
             <Row>
               <Col span={12}>
                 <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} type="default" text="Tag zurück" />

@@ -1,20 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Form } from "antd";
-import TextInTable from "@/widgets/EditableTable/widgets/TextInTable.tsx";
-import NumericInTable from "@/widgets/EditableTable/widgets/NumericInTable.tsx";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
 import { ColType } from "@/widgets/InlineCollectionEditable/types.ts";
-import ColorInTable from "@/widgets/EditableTable/widgets/ColorInTable.tsx";
-import DateInTable from "@/widgets/EditableTable/widgets/DateInTable.tsx";
-import { InnerSelect, UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
+import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { useTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { NamePath } from "rc-field-form/es/interface";
+import { ColorField } from "@/widgets/ColorField.tsx";
+import { NumberInput } from "@/widgets/numericInputWidgets";
+import DateInput from "@/widgets/DateAndTimeInputs.tsx";
+import { TextField } from "@/widgets/TextField.tsx";
 
 interface EditableCellProps<T> extends ExtraColumnProps {
   title: React.ReactNode;
   record: T;
-  handleSave: (record: T) => void;
+  handleSave: (record: T, field: any) => void;
 }
 
 export type ExtraColumnProps = {
@@ -54,7 +53,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     try {
       const values = await form.validateFields();
       toggleEdit();
-      handleSave({ ...record, ...values });
+      handleSave(record, values);
     } catch {
       /* empty */
     }
@@ -76,25 +75,6 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   };
 
-  let Widget;
-  switch (type) {
-    case "integer":
-      Widget = <NumericInTable ref={ref} decimals={0} save={save} />;
-      break;
-    case "color":
-      Widget = <ColorInTable save={save} />;
-      break;
-    case "date":
-      Widget = <DateInTable ref={ref} save={save} />;
-      break;
-    case "user":
-      Widget = <InnerSelect usersAsOptions={usersWithKann ?? []} save={save} />;
-      break;
-    default:
-      Widget = <TextInTable ref={ref} save={save} />;
-      break;
-  }
-
   const childNode = !editing ? (
     <div
       tabIndex={0}
@@ -104,12 +84,20 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     >
       {children}
     </div>
+  ) : type === "user" ? (
+    <MitarbeiterMultiSelect name={dataIndex} usersAsOptions={usersWithKann ?? []} save={save} focus />
+  ) : type === "color" ? (
+    <ColorField name={dataIndex} save={save} required={required} />
+  ) : type === "integer" ? (
+    <NumberInput decimals={0} name={dataIndex} required={required} save={save} focus />
+  ) : type === "date" ? (
+    <DateInput name={dataIndex} required={required} save={save} focus />
   ) : (
-    <Form.Item style={{ margin: 0 }} name={dataIndex as string} rules={[{ required }]}>
-      {Widget}
-    </Form.Item>
+    <TextField name={dataIndex} required={required} save={save} focus />
+    // <Form.Item style={{ margin: 0 }} name={dataIndex} rules={[{ required }]}>
+    //   {Widget}
+    // </Form.Item>
   );
-
   return <td {...restProps}>{childNode}</td>;
 };
 

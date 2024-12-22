@@ -14,10 +14,13 @@ import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import isNil from "lodash/isNil";
 
-interface EditableTableProps {
+type WithKey<T> = T & { key: string };
+
+interface EditableTableProps<T> {
   name: NamePath;
   columnDescriptions: CollectionColDesc[];
   usersWithKann?: UserWithKann[];
+  newRowFactory: (vals: T) => T;
 }
 
 interface EditableRowProps {
@@ -41,45 +44,64 @@ function InnerTable<T>({
   onChange,
   columnDescriptions,
   usersWithKann,
+  newRowFactory,
 }: {
   value?: T[];
   onChange?: (val?: T[]) => void;
   columnDescriptions?: CollectionColDesc[];
   usersWithKann?: UserWithKann[];
+  newRowFactory: (val: T) => T;
 }) {
-  type ColumnTypes = Exclude<TableProps<T & { key: React.Key }>["columns"], undefined>;
+  type TWithKey = WithKey<T>;
+  type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
 
-  const [valueWithKey, setValueWithKey] = useState<(T & { key: React.Key })[] | undefined>();
+  const [rows, setRows] = useState<TWithKey[]>([]);
 
   useEffect(() => {
-    const withKey: (T & { key: React.Key })[] = (value ?? []).map((row, index) => {
-      (row as T & { key: React.Key }).key = "" + index;
-      return row as T & { key: React.Key };
+    const withKey: TWithKey[] = (value ?? []).map((row, index) => {
+      (row as TWithKey).key = "" + index;
+      return row as TWithKey;
     });
-    setValueWithKey(withKey);
+    setRows(withKey);
   }, [value]);
 
+  function newKey() {
+    const numbers = rows.map((row) => Number.parseInt(row.key, 10));
+    return Math.max(...numbers) + 1;
+  }
+
   const handleDelete = (key: React.Key) => {
-    const newData = valueWithKey?.filter((item) => item.key !== key);
+    const newData = rows?.filter((item) => item.key !== key);
     onChange?.(newData);
   };
 
   const handleCopy = (key: React.Key) => {
-    if (!valueWithKey) {
+    if (!rows) {
       return;
     }
-    const current = valueWithKey.find((item) => item.key === key);
+    const current = rows.find((item) => item.key === key);
     if (!current) {
       return;
     }
     const copied = cloneDeep(current);
-    valueWithKey.splice(valueWithKey.indexOf(current), 0, copied);
-    onChange?.(valueWithKey);
+    copied.key = "" + newKey();
+    rows.splice(rows.indexOf(current), 0, copied);
+    onChange?.(rows);
   };
 
   const handleAdd = () => {
-    const newData: T = {} as unknown as T;
-    onChange?.([newData, ...(valueWithKey ?? [])]);
+    const newData = newRowFactory({} as T);
+    (newData as TWithKey).key = "" + newKey();
+    onChange?.([newData, ...rows]);
+  };
+
+  const handleSave = (row: TWithKey, field: any) => {
+    const newData = [...(rows ?? [])];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const newRow = newRowFactory({ ...row, ...field });
+    (newRow as TWithKey).key = row.key;
+    newData.splice(index, 1, newRow as TWithKey);
+    onChange?.(newData);
   };
 
   const renderByType = useCallback(
@@ -174,21 +196,10 @@ function InnerTable<T>({
     dataIndex: "operation",
     width: 70,
     align: "end",
-    render: (_: unknown, record: T & { key: React.Key }) => (
+    render: (_: unknown, record: TWithKey) => (
       <InlineEditableActions actions={{ delete: () => handleDelete(record.key), copy: () => handleCopy(record.key) }} />
     ),
   });
-
-  const handleSave = (row: T & { key: React.Key }) => {
-    const newData = [...(valueWithKey ?? [])];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
-    onChange?.(newData);
-  };
 
   const components = {
     body: {
@@ -219,10 +230,10 @@ function InnerTable<T>({
   const tableContext = useCreateTableContext();
   return (
     <TableContext.Provider value={tableContext}>
-      <Table<T & { key: React.Key }>
+      <Table<TWithKey>
         components={components}
         bordered
-        dataSource={valueWithKey}
+        dataSource={rows}
         columns={columns as ColumnTypes}
         size="small"
         pagination={false}
@@ -231,14 +242,13 @@ function InnerTable<T>({
   );
 }
 
-export default function EditableTable<T>({ name, columnDescriptions, usersWithKann }: EditableTableProps) {
+export default function EditableTable<T>({ name, columnDescriptions, usersWithKann, newRowFactory }: EditableTableProps<T>) {
   const requiredFields = useMemo(() => columnDescriptions.filter((desc) => desc.required), [columnDescriptions]);
   return (
     <Form.Item
       name={name}
       valuePropName="value"
       trigger="onChange"
-      hasFeedback
       rules={[
         () => ({
           validator(_, value) {
@@ -256,7 +266,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
         }),
       ]}
     >
-      <InnerTable<T> columnDescriptions={columnDescriptions} usersWithKann={usersWithKann} />
+      <InnerTable<T> columnDescriptions={columnDescriptions} usersWithKann={usersWithKann} newRowFactory={newRowFactory} />
     </Form.Item>
   );
 }

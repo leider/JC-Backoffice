@@ -1,8 +1,8 @@
 import { Form, Select, Tag } from "antd";
-import React, { ForwardedRef, forwardRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
-import { BaseOptionType } from "antd/es/select";
+import { BaseOptionType, RefSelectProps } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
@@ -37,22 +37,28 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
   );
 }
 
-export const InnerSelect = forwardRef(function (
-  {
-    usersAsOptions,
-    disabled,
-    onChange,
-    value,
-    save,
-  }: {
-    usersAsOptions: UserWithKann[];
-    disabled?: boolean;
-    onChange?: (value: string[]) => void;
-    value?: string[];
-    save?: () => void;
-  },
-  ref: ForwardedRef<any>,
-) {
+function InnerSelect({
+  usersAsOptions,
+  disabled,
+  onChange,
+  value,
+  save,
+  focus,
+}: {
+  usersAsOptions: UserWithKann[];
+  disabled?: boolean;
+  onChange?: (value: string[]) => void;
+  value?: string[];
+  save?: () => void;
+  focus?: boolean;
+}) {
+  const ref = useRef<RefSelectProps>(null);
+  useEffect(() => {
+    if (focus && usersAsOptions) {
+      ref.current?.focus();
+    }
+  }, [focus, usersAsOptions]);
+
   const renderInList = (row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />;
 
   const tagRender = useTagRenderForUser(usersAsOptions);
@@ -85,22 +91,26 @@ export const InnerSelect = forwardRef(function (
       onBlur={save}
     />
   );
-});
+}
 
 export default function MitarbeiterMultiSelect({
   name,
   usersAsOptions,
   disabled,
   label,
+  save,
+  focus,
 }: {
   name: string | string[];
   usersAsOptions: UserWithKann[];
   disabled?: boolean;
   label?: string;
+  save?: () => void;
+  focus?: boolean;
 }) {
   return (
     <Form.Item label={label ? <b>{label}:</b> : undefined} name={name} noStyle={!label}>
-      <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} />
+      <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} save={save} focus={focus} />
     </Form.Item>
   );
 }

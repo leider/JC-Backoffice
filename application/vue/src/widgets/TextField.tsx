@@ -1,7 +1,6 @@
 import { Form as AntdForm, Input, InputRef } from "antd";
-import { FunctionComponent, RefObject, useCallback, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useRef, useState } from "react";
 import { Rule } from "antd/es/form";
-import log from "eslint-plugin-react/lib/util/log";
 
 type TTextField = {
   /**
@@ -56,9 +55,9 @@ type TTextField = {
    * @type {Rule}
    */
   uniqueValuesValidator?: Rule;
-  optionalRef?: RefObject<InputRef>;
   style?: any;
-  inlineSave?: any;
+  save?: () => void;
+  focus?: boolean;
 };
 
 /**
@@ -74,9 +73,9 @@ export const TextField: FunctionComponent<TTextField> = ({
   name,
   disabled,
   onChange,
-  optionalRef,
   style,
-  inlineSave,
+  save,
+  focus,
 }: TTextField): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
@@ -108,7 +107,7 @@ export const TextField: FunctionComponent<TTextField> = ({
       valuePropName={"textVal"}
       trigger={"onText"}
     >
-      <TextInputEmbedded disabled={disabled} onChange={onChange} optionalRef={optionalRef} inlineSave={inlineSave} />
+      <TextInputEmbedded disabled={disabled} onChange={onChange} save={save} focus={focus} />
     </AntdForm.Item>
   );
 };
@@ -119,8 +118,8 @@ type TTextInputEmbedded = {
   textVal?: string;
   onText?: (value: string | null) => void;
   onChange?: (value: string | null) => void;
-  optionalRef?: RefObject<InputRef>;
-  inlineSave?: any;
+  save?: () => void;
+  focus?: boolean;
 };
 
 const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
@@ -129,8 +128,8 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
   disabled,
   onChange,
   id,
-  optionalRef,
-  inlineSave,
+  save,
+  focus,
 }: TTextInputEmbedded) => {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
@@ -140,9 +139,16 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
     },
     [onChange, onText],
   );
+  const inputRef = useRef<InputRef>(null);
+  useEffect(() => {
+    if (focus) {
+      inputRef.current?.focus();
+    }
+  }, [focus]);
 
   return (
     <Input
+      ref={inputRef}
       id={id}
       autoComplete="off"
       disabled={disabled}
@@ -152,10 +158,9 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
       }}
       onBlur={({ target: { value: nextValue } }) => {
         changed(nextValue, true);
-        inlineSave?.(nextValue);
+        save?.();
       }}
-      ref={optionalRef}
-      onPressEnter={inlineSave}
+      onPressEnter={save}
     />
   );
 };
