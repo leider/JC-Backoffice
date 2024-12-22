@@ -1,4 +1,4 @@
-import { Form, Table, type TableProps, Tag, Typography } from "antd";
+import { Form, Table, type TableProps, Tag, theme, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
@@ -8,11 +8,13 @@ import { TagForUser } from "@/widgets/TagForUser.tsx";
 import EditableCell, { ExtraColumnProps } from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath, ValidatorRule } from "rc-field-form/es/interface";
 import InlineEditableActions from "@/widgets/InlineCollectionEditable/InlineEditableActions.tsx";
 import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import isNil from "lodash/isNil";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import "./editableTable.css";
 
 type WithKey<T> = T & { key: string };
 
@@ -54,7 +56,7 @@ function InnerTable<T>({
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
-
+  const token = theme.useToken().token;
   const [rows, setRows] = useState<TWithKey[]>([]);
 
   useEffect(() => {
@@ -107,6 +109,13 @@ function InnerTable<T>({
   const renderByType = useCallback(
     function ({ type, required }: CollectionColDesc) {
       switch (type) {
+        case "boolean":
+          return (val: boolean) =>
+            val ? (
+              <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} />
+            ) : (
+              <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} />
+            );
         case "integer":
           return (val: number | null) => {
             if (!isNil(val)) {
@@ -128,6 +137,16 @@ function InnerTable<T>({
           return (val: string | null) => {
             if (!isNil(val)) {
               return dayjs(val).format("ll");
+            }
+            if (required) {
+              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
+            }
+            return "<Klick ...>";
+          };
+        case "startEnd":
+          return (val: string[] | null) => {
+            if (!isNil(val)) {
+              return dayjs(val[0]).format("ll") + " - " + dayjs(val[1]).format("ll");
             }
             if (required) {
               return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
@@ -164,10 +183,10 @@ function InnerTable<T>({
           };
       }
     },
-    [usersWithKann],
+    [token.colorFillSecondary, token.colorSuccess, usersWithKann],
   );
 
-  const defaultColumns: (ColumnTypes[number] & ExtraColumnProps)[] = (columnDescriptions ?? []).map((item, index) => {
+  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & ExtraColumnProps)[] = (columnDescriptions ?? []).map((item, index) => {
     return {
       editable: !item.disabled,
       dataIndex: item.fieldName,
@@ -175,9 +194,11 @@ function InnerTable<T>({
       type: item.type,
       index: index,
       required: item.required,
+      filters: item.filters,
+      presets: item.presets,
       usersWithKann: usersWithKann,
       render: renderByType(item),
-      align: item.type === "integer" ? "end" : "start",
+      align: item.type === "integer" ? "end" : item.type === "boolean" ? "center" : "start",
       onCell: undefined,
     };
   });
@@ -223,6 +244,8 @@ function InnerTable<T>({
         handleSave,
         type: col.type,
         required: col.required,
+        presets: col.presets,
+        filters: col.filters,
         usersWithKann: col.usersWithKann,
       }),
     };
@@ -245,27 +268,52 @@ function InnerTable<T>({
 
 export default function EditableTable<T>({ name, columnDescriptions, usersWithKann, newRowFactory }: EditableTableProps<T>) {
   const requiredFields = useMemo(() => columnDescriptions.filter((desc) => desc.required), [columnDescriptions]);
+
+  const requiredValidator = useMemo(() => {
+    return {
+      validator: (_, value: T[]) => {
+        let broken = false;
+        value.forEach((row) => {
+          requiredFields.forEach((field) => {
+            if (isNil(row[field.fieldName as keyof T])) {
+              broken = true;
+            }
+          });
+        });
+        return broken ? Promise.reject(new Error()) : Promise.resolve();
+      },
+      message: "Du musst alle Pflichtfelder füllen",
+    } as ValidatorRule;
+  }, [requiredFields]);
+
+  function duplicates(values: any[]) {
+    return values.filter((item, index) => index !== values.indexOf(item));
+  }
+
+  const uniqueFields = useMemo(() => columnDescriptions.filter((desc) => desc.uniqueValues), [columnDescriptions]);
+
+  const uniqueValidator = useMemo(() => {
+    return {
+      validator: (_, value: T[]) => {
+        let broken = false;
+        uniqueFields.forEach((field) => {
+          const valsToCheck = value.map((row) => row[field.fieldName as keyof T]);
+          if (duplicates(valsToCheck).length) {
+            broken = true;
+          }
+        });
+        return broken ? Promise.reject(new Error()) : Promise.resolve();
+      },
+      message: "Prüfe alle Felder auf Duplikate",
+    } as ValidatorRule;
+  }, [uniqueFields]);
+
   return (
     <Form.Item
       name={name}
       valuePropName="value"
       trigger="onChange"
-      rules={[
-        () => ({
-          validator(_, value) {
-            let broken = false;
-            // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-            value.forEach((row: any) => {
-              requiredFields.forEach((field) => {
-                if (isNil(row[field.fieldName as string])) {
-                  broken = true;
-                }
-              });
-            });
-            return broken ? Promise.reject(new Error("Du musst alle Pflichtfelder füllen")) : Promise.resolve();
-          },
-        }),
-      ]}
+      rules={[requiredFields && requiredValidator, uniqueValidator && uniqueValidator]}
     >
       <InnerTable<T> columnDescriptions={columnDescriptions} usersWithKann={usersWithKann} newRowFactory={newRowFactory} />
     </Form.Item>

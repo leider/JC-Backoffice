@@ -135,6 +135,7 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
         <TeamCalendar key="cal" />,
       ]}
       tags={tagsForTitle}
+      hasErrors={hasErrors}
     >
       {isNew && (
         <b

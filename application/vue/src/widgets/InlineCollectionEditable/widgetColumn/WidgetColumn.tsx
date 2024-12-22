@@ -6,12 +6,12 @@ import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import StartEndDateOnlyPickers from "@/components/konzert/hotel/StartEndDateOnlyPickers.tsx";
 import { ColorField } from "@/widgets/ColorField.tsx";
 import { ColDescWithIdx } from "@/widgets/InlineCollectionEditable/types.ts";
 import { Rule } from "antd/es/form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import DateInput from "@/widgets/DateAndTimeInputs.tsx";
+import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
 
 interface IWidgetColumn {
   /**

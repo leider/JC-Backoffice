@@ -23,13 +23,14 @@ const colors: { [name: string]: string } = {
  * @param {TColorField} props
  * @return {*}  {React.ReactElement}
  */
-export const ColorField: FunctionComponent<TColorField> = ({
+export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> = ({
   name,
   label,
   required,
   initialValue,
   save,
-}: TColorField & { presets?: string[] }): React.ReactElement => {
+  presets,
+}: TColorField & { presets?: boolean }): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
@@ -51,7 +52,7 @@ export const ColorField: FunctionComponent<TColorField> = ({
       valuePropName={"value"}
       trigger={"onChange"}
     >
-      <ColorInputEmbedded save={save} />
+      <ColorInputEmbedded presets={presets} save={save} />
     </AntdForm.Item>
   );
 };
@@ -60,19 +61,23 @@ type TColorInputEmbedded = {
   value?: string;
   onChange?: (value: string) => void;
   save?: () => void;
+  presets?: boolean;
 };
 
-const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onChange, save }: TColorInputEmbedded) => {
+const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onChange, save, presets }: TColorInputEmbedded) => {
   useEffect(() => {
     if (value && !value?.startsWith("#") && !value?.startsWith("rgb")) {
       onChange?.(colors[value.toLowerCase()] as string);
     }
   }, [value, onChange]);
+
   return (
     <ColorPicker
       open={true}
       size="small"
-      presets={[{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }]}
+      presets={
+        presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
+      }
       defaultFormat="hex"
       format="hex"
       value={value}

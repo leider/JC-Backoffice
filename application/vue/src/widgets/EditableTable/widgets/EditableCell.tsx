@@ -9,6 +9,9 @@ import { ColorField } from "@/widgets/ColorField.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import DateInput from "@/widgets/DateAndTimeInputs.tsx";
 import { TextField } from "@/widgets/TextField.tsx";
+import SingleSelect from "@/widgets/SingleSelect.tsx";
+import CheckItem from "@/widgets/CheckItem.tsx";
+import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
 
 interface EditableCellProps<T> extends ExtraColumnProps {
   title: React.ReactNode;
@@ -21,6 +24,8 @@ export type ExtraColumnProps = {
   dataIndex: NamePath;
   type?: ColType;
   required?: boolean;
+  filters?: string[];
+  presets?: boolean;
   usersWithKann?: UserWithKann[];
 };
 
@@ -34,7 +39,9 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   handleSave,
   type,
   required,
+  presets,
   usersWithKann,
+  filters,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) => {
   const [editing, setEditing] = useState(false);
@@ -75,6 +82,35 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   };
 
+  let Widget;
+  switch (type) {
+    case "user":
+      Widget = <MitarbeiterMultiSelect name={dataIndex} usersAsOptions={usersWithKann ?? []} save={save} focus />;
+      break;
+    case "color":
+      Widget = <ColorField name={dataIndex} save={save} required={required} presets={presets} />;
+      break;
+    case "integer":
+      Widget = <NumberInput decimals={0} name={dataIndex} required={required} save={save} focus />;
+      break;
+    case "date":
+      Widget = <DateInput name={dataIndex} required={required} save={save} focus />;
+      break;
+    case "startEnd":
+      Widget = <StartEndDateOnlyPickersInTable name={dataIndex} save={save} focus />;
+      break;
+    case "boolean":
+      Widget = <CheckItem name={dataIndex} required={required} save={save} focus />;
+      break;
+    default:
+      Widget = filters ? (
+        <SingleSelect name={dataIndex} required={required} options={filters} save={save} focus />
+      ) : (
+        <TextField name={dataIndex} required={required} save={save} focus />
+      );
+      break;
+  }
+
   const childNode = !editing ? (
     <div
       tabIndex={0}
@@ -84,19 +120,8 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     >
       {children}
     </div>
-  ) : type === "user" ? (
-    <MitarbeiterMultiSelect name={dataIndex} usersAsOptions={usersWithKann ?? []} save={save} focus />
-  ) : type === "color" ? (
-    <ColorField name={dataIndex} save={save} required={required} />
-  ) : type === "integer" ? (
-    <NumberInput decimals={0} name={dataIndex} required={required} save={save} focus />
-  ) : type === "date" ? (
-    <DateInput name={dataIndex} required={required} save={save} focus />
   ) : (
-    <TextField name={dataIndex} required={required} save={save} focus />
-    // <Form.Item style={{ margin: 0 }} name={dataIndex} rules={[{ required }]}>
-    //   {Widget}
-    // </Form.Item>
+    Widget
   );
   return <td {...restProps}>{childNode}</td>;
 };

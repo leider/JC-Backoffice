@@ -10,11 +10,13 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
+import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -95,7 +97,22 @@ export default function Optionen() {
           <Row gutter={12}>
             <Col xs={24} lg={12}>
               <Collapsible suffix="allgemeines" label="Typen" noTopBorder>
-                <InlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
+                <EditableTable<{
+                  name: string;
+                  mod: boolean;
+                  kasseV: boolean;
+                  kasse: boolean;
+                  technikerV: boolean;
+                  techniker: boolean;
+                  merchandise: boolean;
+                  color: string;
+                }>
+                  columnDescriptions={columnsTypen}
+                  name="typenPlus"
+                  newRowFactory={(val) => {
+                    return Object.assign({}, val);
+                  }}
+                />
               </Collapsible>
               <Collapsible suffix="allgemeines" label="Optionen">
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
@@ -107,7 +124,13 @@ export default function Optionen() {
                 <p>
                   <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
                 </p>
-                <InlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
+                <EditableTable<{ name: string; regulaer: number; rabattErmaessigt: number; rabattMitglied: number }>
+                  columnDescriptions={columnsPreisprofile}
+                  name="preisprofile"
+                  newRowFactory={(val) => {
+                    return Object.assign({}, val);
+                  }}
+                />
               </Collapsible>
             </Col>
           </Row>
@@ -142,6 +165,8 @@ export default function Optionen() {
       mutateOptionen.mutate(new OptionValues(form.getFieldsValue(true)));
     });
   }
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -149,11 +174,12 @@ export default function Optionen() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Optionen" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
+      <JazzPageHeader title="Optionen" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <Tabs
         type="card"
         activeKey={activePage}

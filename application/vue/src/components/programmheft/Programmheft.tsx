@@ -153,7 +153,7 @@ export default function Programmheft() {
   const columnDescriptions: CollectionColDesc[] = [
     { fieldName: "was", label: "Was", type: "text", width: "l", required: true },
     { fieldName: "start", label: "Wann", type: "date", width: "s", required: true },
-    { fieldName: "farbe", label: "Farbe", type: "color", width: "xs", required: true },
+    { fieldName: "farbe", label: "Farbe", type: "color", width: "xs", required: true, presets: true },
     { fieldName: "users", label: "Users", type: "user", width: "l", required: true },
     { fieldName: "emailOffset", label: "Tage vorher", type: "integer", width: "xs" },
   ];
@@ -182,6 +182,7 @@ export default function Programmheft() {
           <ProgrammheftKopierenButton key="copy" form={form} />,
           <SaveButton key="save" disabled={!dirty || hasErrors} />,
         ]}
+        hasErrors={hasErrors}
       />
       <RowWrapper>
         <Splitter

@@ -62,7 +62,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
     const value = useMemo(() => {
       return parseInt(name) * (number ?? 0) * 0.01;
     }, [name, number]);
-    return <NumericInputEmbedded decimals={2} disabled={true} suffix="€" value={value} />;
+    return <NumericInputEmbedded decimals={2} disabled={true} suffix="€" number={value} />;
   }
 
   return (

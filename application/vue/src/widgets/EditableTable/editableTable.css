@@ -1,0 +1,9 @@
+.ant-form-item-control-input {
+  min-height: 0 !important;
+}
+.ant-input {
+  padding: 0;
+}
+.ant-select-single {
+  height: 24px !important;
+}

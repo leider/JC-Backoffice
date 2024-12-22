@@ -6,14 +6,25 @@ export default function CheckItem({
   label,
   disabled,
   onChange,
+  save,
+  focus,
 }: Omit<CheckboxProps, "name"> & {
   name: string[] | string;
-  label: string;
+  label?: string;
+  save?: () => void;
+  focus?: boolean;
 }) {
   return (
     <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} valuePropName="checked">
-      <Checkbox onChange={onChange} disabled={disabled}>
-        <b>{label}</b>
+      <Checkbox
+        autoFocus={focus}
+        onChange={(val) => {
+          onChange?.(val);
+        }}
+        disabled={disabled}
+        onBlur={save}
+      >
+        {label && <b>{label}</b>}
       </Checkbox>
     </Form.Item>
   );
