@@ -1,26 +1,39 @@
 import { Col, Row } from "antd";
-import React, { useContext } from "react";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import React from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
+import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import Collapsible from "@/widgets/Collapsible.tsx";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { NameWithNumber } from "jc-shared/konzert/konzert.ts";
 
 const columns: CollectionColDesc[] = [
   { type: "text", label: "Name", required: true, fieldName: "name", width: "l" },
   { type: "text", label: "Kommentar", fieldName: "comment", width: "l" },
-  { type: "integer", label: "Anzahl", required: true, fieldName: "number", width: "xs", initialValue: 1 },
-  { type: "integer", label: "Erledigt", required: true, fieldName: "alreadyIn", width: "xs", initialValue: 0 },
+  { type: "integer", label: "Anzahl", required: true, fieldName: "number", width: "xs" },
+  { type: "integer", label: "Erledigt", required: true, fieldName: "alreadyIn", width: "xs" },
 ];
 
 function GaesteCard({ label, path }: { label: string; path: string }) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
   const { lg } = useBreakpoint();
   return (
     <Collapsible suffix="gaeste" label={label} noTopBorder={label === "gaesteliste" || lg}>
       <Row gutter={12}>
         <Col span={24}>
-          <InlineCollectionEditable embeddedArrayPath={[path]} form={form} columnDescriptions={columns} />
+          <EditableTable<NameWithNumber>
+            name={path}
+            columnDescriptions={columns}
+            newRowFactory={(vals) => {
+              return Object.assign(
+                {
+                  name: null,
+                  comment: null,
+                  number: 1,
+                  alreadyIn: 0,
+                },
+                vals,
+              );
+            }}
+          />
         </Col>
       </Row>
     </Collapsible>

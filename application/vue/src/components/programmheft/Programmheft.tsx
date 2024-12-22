@@ -25,6 +25,7 @@ import cloneDeep from "lodash/cloneDeep";
 import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -159,23 +160,16 @@ export default function Programmheft() {
 
   const [triggerRender, setTriggerRender] = useState(true);
 
-  const [hasErrors, setHasErrors] = useState(false);
+  const { hasErrors, checkErrors } = useCheckErrors(form);
 
   return (
     <Form
       form={form}
-      onValuesChange={async () => {
+      onValuesChange={() => {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
-        form
-          .validateFields()
-          .then(() => {
-            setHasErrors(false);
-          })
-          .catch((reason) => {
-            setHasErrors(!!reason.errorFields?.length);
-          });
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"

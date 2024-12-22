@@ -13,8 +13,8 @@ import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
-  const { form, resetChanges, setKasseHelpOpen } = useContext(KonzertContext);
+export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
+  const { form, resetChanges, setKasseHelpOpen, isDirty, hasErrors } = useContext(KonzertContext);
   const { optionen } = useJazzContext();
   const [search] = useSearchParams();
   const { currentUser } = useJazzContext();
@@ -114,16 +114,16 @@ export default function KonzertPageHeader({ isNew, dirty }: { isNew: boolean; di
       title={<span style={titleStyle}>{title}</span>}
       dateString={displayDate}
       buttons={[
-        isOrga && <MoreButton key="more" disabled={isNew} form={form} isDirty={dirty} />,
+        isOrga && <MoreButton key="more" disabled={isNew} form={form} isDirty={isDirty} />,
         <ButtonWithIcon
           key="cancel"
           text={"Reset"}
           onClick={resetChanges}
           icon={"ArrowCounterclockwise"}
-          disabled={!dirty}
+          disabled={!isDirty}
           type="default"
         />,
-        <SaveButton key="save" disabled={!dirty} />,
+        <SaveButton key="save" disabled={!isDirty || hasErrors} />,
         isKassenseite && (
           <HelpWithKasseButton
             key="helpKasse"

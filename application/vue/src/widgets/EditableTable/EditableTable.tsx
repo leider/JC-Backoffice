@@ -109,7 +109,7 @@ function InnerTable<T>({
       switch (type) {
         case "integer":
           return (val: number | null) => {
-            if (val) {
+            if (!isNil(val)) {
               return numeral(val).format("0");
             }
             if (required) {
@@ -119,14 +119,14 @@ function InnerTable<T>({
           };
         case "color":
           return (val: string | null) => {
-            if (!val && required) {
+            if (isNil(val) && required) {
               return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
             }
             return <div style={{ backgroundColor: val ?? "#333333", width: 20, height: 20 }} />;
           };
         case "date":
           return (val: string | null) => {
-            if (val) {
+            if (!isNil(val)) {
               return dayjs(val).format("ll");
             }
             if (required) {
@@ -136,7 +136,7 @@ function InnerTable<T>({
           };
         case "user":
           return (val: string[] | null) => {
-            if (!val || val.length === 0) {
+            if (isNil(val) || val.length === 0) {
               if (required) {
                 return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
               }
@@ -178,6 +178,7 @@ function InnerTable<T>({
       usersWithKann: usersWithKann,
       render: renderByType(item),
       align: item.type === "integer" ? "end" : "start",
+      onCell: undefined,
     };
   });
 
