@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
-import { ColType } from "@/widgets/InlineCollectionEditable/types.ts";
+import { ColType } from "@/widgets/EditableTable/types.ts";
 import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { useTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { NamePath } from "rc-field-form/es/interface";

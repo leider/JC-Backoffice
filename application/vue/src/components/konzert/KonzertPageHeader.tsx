@@ -136,16 +136,6 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
       ]}
       tags={tagsForTitle}
       hasErrors={hasErrors}
-    >
-      {isNew && (
-        <b
-          style={{
-            color: "#d50f36",
-          }}
-        >
-          (Denk daran, alle Felder zu überprüfen und auszufüllen)
-        </b>
-      )}
-    </JazzPageHeader>
+    />
   );
 }

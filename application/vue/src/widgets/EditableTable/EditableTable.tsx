@@ -1,7 +1,6 @@
 import { Form, Table, type TableProps, Tag, theme, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import numeral from "numeral";
 import dayjs from "dayjs";
 import { TagForUser } from "@/widgets/TagForUser.tsx";
@@ -9,12 +8,13 @@ import EditableCell, { ExtraColumnProps } from "@/widgets/EditableTable/widgets/
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { NamePath, ValidatorRule } from "rc-field-form/es/interface";
-import InlineEditableActions from "@/widgets/InlineCollectionEditable/InlineEditableActions.tsx";
+import InlineEditableActions from "@/widgets/EditableTable/InlineEditableActions.tsx";
 import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import isNil from "lodash/isNil";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import "./editableTable.css";
+import { CollectionColDesc } from "./types";
 
 type WithKey<T> = T & { key: string };
 
@@ -129,9 +129,13 @@ function InnerTable<T>({
         case "color":
           return (val: string | null) => {
             if (isNil(val) && required) {
-              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
+              return <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorError} />;
             }
-            return <div style={{ backgroundColor: val ?? "#333333", width: 20, height: 20 }} />;
+            return val ? (
+              <div style={{ backgroundColor: val, width: 20, height: 20 }} />
+            ) : (
+              <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorPrimary} />
+            );
           };
         case "date":
           return (val: string | null) => {

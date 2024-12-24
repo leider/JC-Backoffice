@@ -111,7 +111,7 @@ export default function KonzertComp() {
     setInitialValue(initial);
     updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!konzert.id);
-    form.validateFields();
+    checkErrors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, konzert, updateDirtyIfChanged, url]); // rider must not be part of the dependencies
 
