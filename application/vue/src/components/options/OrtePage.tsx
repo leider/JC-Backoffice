@@ -6,7 +6,6 @@ import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -14,6 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 export default function OrtePage() {
   const [initialValue, setInitialValue] = useState<object>({});

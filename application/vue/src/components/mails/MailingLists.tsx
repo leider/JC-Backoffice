@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -14,6 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -71,7 +71,7 @@ export default function MailingLists() {
       fieldName: "name",
       label: "Name",
       type: "text",
-      width: "xs",
+      width: "150px",
       required: true,
       uniqueValues: true,
     },
@@ -79,7 +79,6 @@ export default function MailingLists() {
       fieldName: "users",
       label: "Users",
       type: "user",
-      width: "xl",
       usersWithKann: usersAsOptions,
       required: true,
     },

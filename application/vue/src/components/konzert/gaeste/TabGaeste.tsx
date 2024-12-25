@@ -1,16 +1,16 @@
 import { Col, Row } from "antd";
 import React from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { NameWithNumber } from "jc-shared/konzert/konzert.ts";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 const columns: CollectionColDesc[] = [
-  { type: "text", label: "Name", required: true, fieldName: "name", width: "l" },
-  { type: "text", label: "Kommentar", fieldName: "comment", width: "l" },
-  { type: "integer", label: "Anzahl", required: true, fieldName: "number", width: "xs" },
-  { type: "integer", label: "Erledigt", required: true, fieldName: "alreadyIn", width: "xs" },
+  { type: "text", label: "Name", required: true, fieldName: "name", width: "40%" },
+  { type: "text", label: "Kommentar", fieldName: "comment" },
+  { type: "integer", label: "Anzahl", required: true, fieldName: "number" },
+  { type: "integer", label: "Erledigt", required: true, fieldName: "alreadyIn" },
 ];
 
 function GaesteCard({ label, path }: { label: string; path: string }) {

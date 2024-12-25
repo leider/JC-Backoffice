@@ -1,9 +1,3 @@
-.ant-form-item-control-input {
-  min-height: 0 !important;
-}
-.ant-input {
-  padding: 0;
-}
-.ant-select-single {
-  height: 24px !important;
+.editable-table .ant-table.ant-table-small .ant-table-tbody > tr > td {
+  padding: 0 !important;
 }

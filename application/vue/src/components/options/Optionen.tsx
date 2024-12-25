@@ -10,13 +10,13 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -71,21 +71,21 @@ export default function Optionen() {
   }
 
   const columnsTypen: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name", width: "xl" },
-    { type: "boolean", label: "Master", fieldName: "mod", width: "m" },
-    { type: "boolean", label: "Kasse1", fieldName: "kasseV", width: "m" },
-    { type: "boolean", label: "Kasse2", fieldName: "kasse", width: "m" },
-    { type: "boolean", label: "Tech1", fieldName: "technikerV", width: "m" },
-    { type: "boolean", label: "Tech2", fieldName: "techniker", width: "m" },
-    { type: "boolean", label: "Merch", fieldName: "merchandise", width: "m" },
-    { type: "color", label: "Farbe", fieldName: "color", width: "m" },
+    { type: "text", label: "Name", required: true, fieldName: "name", width: "150px" },
+    { type: "boolean", label: "Master", fieldName: "mod" },
+    { type: "boolean", label: "Kasse1", fieldName: "kasseV" },
+    { type: "boolean", label: "Kasse2", fieldName: "kasse" },
+    { type: "boolean", label: "Tech1", fieldName: "technikerV" },
+    { type: "boolean", label: "Tech2", fieldName: "techniker" },
+    { type: "boolean", label: "Merch", fieldName: "merchandise" },
+    { type: "color", label: "Farbe", fieldName: "color" },
   ];
 
   const columnsPreisprofile: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name", width: "m" },
-    { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", width: "m", min: 0 },
-    { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "m", min: 0, initialValue: 0 },
-    { type: "integer", label: "Rabatt Mitglied", required: true, fieldName: "rabattMitglied", width: "m", min: 0, initialValue: 0 },
+    { type: "text", label: "Name", required: true, fieldName: "name" },
+    { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", min: 0 },
+    { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
+    { type: "integer", label: "Rabatt Mitglied", required: true, fieldName: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
   ];
   const { lg } = useBreakpoint();
   const tabs: TabsProps["items"] = [
@@ -128,7 +128,7 @@ export default function Optionen() {
                   columnDescriptions={columnsPreisprofile}
                   name="preisprofile"
                   newRowFactory={(val) => {
-                    return Object.assign({}, val);
+                    return Object.assign({ regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 }, val);
                   }}
                 />
               </Collapsible>

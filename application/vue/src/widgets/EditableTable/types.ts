@@ -1,15 +1,9 @@
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 
-export type ColDescWithIdx = CollectionColDesc & {
-  idx: number;
-  disabled?: boolean;
-  usersWithKann?: UserWithKann[];
-};
-
 export type CollectionColumnWidth = "xs" | "s" | "m" | "l" | "xl";
 
 export type CollectionColDesc = Omit<ColDesc, "width"> & {
-  width: CollectionColumnWidth;
+  width?: CollectionColumnWidth | string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: () => any;
   waitForOptionsToLoad?: boolean; // Selects only

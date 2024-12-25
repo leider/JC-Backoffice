@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
 import { ColType } from "@/widgets/EditableTable/types.ts";
@@ -27,6 +27,9 @@ export type ExtraColumnProps = {
   filters?: string[];
   presets?: boolean;
   usersWithKann?: UserWithKann[];
+  width?: string;
+  min?: number | string;
+  initialValue?: number | string;
 };
 
 const EditableCell = <RecordType extends AnyObject = AnyObject>({
@@ -42,9 +45,12 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   presets,
   usersWithKann,
   filters,
+  min,
+  initialValue,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) => {
   const [editing, setEditing] = useState(false);
+  const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
 
   const ref = useRef<any>(null);
@@ -65,11 +71,31 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       /* empty */
     }
   };
+
+  const readonlyStyle = useMemo(() => {
+    switch (type) {
+      case "color":
+        return { padding: "6px", paddingLeft: "4px" };
+      case "user":
+        return { padding: "6px", paddingLeft: "0px" };
+      case "integer":
+        return { padding: "6px", marginRight: "6px" };
+      case "boolean":
+        return { padding: "6px", paddingTop: "8px", paddingBottom: "2px" };
+      case "date":
+        return { padding: "6px", marginLeft: "6px" };
+      case "text":
+        return { padding: "6px", marginLeft: "6px" };
+      default:
+        return { padding: "6px", marginLeft: "6px" };
+    }
+  }, [type]);
+
   if (!editable) {
     return <td {...restProps}>{children}</td>;
   }
 
-  const toggleEdit = () => {
+  function toggleEdit() {
     const willNowEdit = !editing;
     if (willNowEdit) {
       endEdit({
@@ -80,7 +106,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     }
     setEditing(willNowEdit);
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  };
+  }
 
   let Widget;
   switch (type) {
@@ -91,7 +117,17 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       Widget = <ColorField name={dataIndex} save={save} required={required} presets={presets} />;
       break;
     case "integer":
-      Widget = <NumberInput decimals={0} name={dataIndex} required={required} save={save} focus />;
+      Widget = (
+        <NumberInput
+          decimals={0}
+          name={dataIndex}
+          required={required}
+          min={min as number}
+          initialValue={initialValue as number}
+          save={save}
+          focus
+        />
+      );
       break;
     case "date":
       Widget = <DateInput name={dataIndex} required={required} save={save} focus />;
@@ -100,7 +136,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       Widget = <StartEndDateOnlyPickersInTable name={dataIndex} save={save} focus />;
       break;
     case "boolean":
-      Widget = <CheckItem name={dataIndex} required={required} save={save} focus />;
+      Widget = <CheckItem name={dataIndex} required={required} save={save} focus focusByMouseClick={editByMouse && editing} />;
       break;
     default:
       Widget = filters ? (
@@ -116,7 +152,8 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       tabIndex={0}
       onFocus={type !== "color" ? toggleEdit : undefined}
       onClick={toggleEdit}
-      style={{ width: type === "color" ? 20 : undefined }}
+      onMouseDown={() => setEditByMouse(true)}
+      style={readonlyStyle}
     >
       {children}
     </div>

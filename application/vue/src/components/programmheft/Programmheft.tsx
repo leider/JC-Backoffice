@@ -18,7 +18,6 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ProgrammheftKopierenButton from "@/components/programmheft/ProgrammheftKopierenButton.tsx";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import cloneDeep from "lodash/cloneDeep";
@@ -26,6 +25,7 @@ import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -151,11 +151,11 @@ export default function Programmheft() {
   );
 
   const columnDescriptions: CollectionColDesc[] = [
-    { fieldName: "was", label: "Was", type: "text", width: "l", required: true },
-    { fieldName: "start", label: "Wann", type: "date", width: "s", required: true },
-    { fieldName: "farbe", label: "Farbe", type: "color", width: "xs", required: true, presets: true },
-    { fieldName: "users", label: "Users", type: "user", width: "l", required: true },
-    { fieldName: "emailOffset", label: "Tage vorher", type: "integer", width: "xs" },
+    { fieldName: "was", label: "Was", type: "text", width: "20%", required: true },
+    { fieldName: "start", label: "Wann", type: "date", required: true },
+    { fieldName: "farbe", label: "Farbe", type: "color", required: true, presets: true },
+    { fieldName: "users", label: "Users", type: "user", required: true },
+    { fieldName: "emailOffset", label: "Tage vorher", type: "integer" },
   ];
 
   const [triggerRender, setTriggerRender] = useState(true);

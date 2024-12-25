@@ -121,14 +121,14 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
     save?.();
   };
   useEffect(() => {
-    if (focus) {
-      inputRef.current?.focus({ cursor: "all" });
+    if (focus && value) {
+      handleFocus();
     }
-  }, [focus]);
+  }, [focus, value]);
 
-  const handleFocus: React.FocusEventHandler<HTMLInputElement> = () => {
+  function handleFocus() {
     inputRef.current?.focus({ cursor: "all" });
-  };
+  }
 
   useEffect(() => {
     sanitizeLocalInput(number);

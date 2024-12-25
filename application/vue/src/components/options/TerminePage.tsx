@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -13,6 +12,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: string };
 
@@ -89,21 +89,19 @@ export default function TerminePage() {
       fieldName: ["dates"],
       label: "Start und Ende",
       type: "startEnd",
-      width: "s",
       required: true,
     },
     {
       fieldName: "beschreibung",
       label: "Beschreibung",
       type: "text",
-      width: "l",
       required: true,
     },
     {
       fieldName: "typ",
       label: "Typ",
       type: "text",
-      width: "s",
+      width: "120px",
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];

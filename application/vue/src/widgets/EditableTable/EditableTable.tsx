@@ -61,14 +61,14 @@ function InnerTable<T>({
 
   useEffect(() => {
     const withKey: TWithKey[] = (value ?? []).map((row, index) => {
-      (row as TWithKey).key = "" + index;
+      (row as TWithKey).key = "row" + index;
       return row as TWithKey;
     });
     setRows(withKey);
   }, [value]);
 
   function newKey() {
-    const numbers = rows.map((row) => Number.parseInt(row.key, 10));
+    const numbers = rows.map((row) => Number.parseInt(row.key.replace("key", ""), 10));
     return Math.max(...numbers) + 1;
   }
 
@@ -187,8 +187,24 @@ function InnerTable<T>({
           };
       }
     },
-    [token.colorFillSecondary, token.colorSuccess, usersWithKann],
+    [token, usersWithKann],
   );
+
+  function widthForType({ width, type }: CollectionColDesc) {
+    if (width) {
+      return width;
+    }
+    switch (type) {
+      case "integer":
+        return "60px";
+      case "color":
+        return "45px";
+      case "date":
+        return "100px";
+      case "startEnd":
+        return "200px";
+    }
+  }
 
   const defaultColumns: (Omit<ColumnTypes[number], "filters"> & ExtraColumnProps)[] = (columnDescriptions ?? []).map((item, index) => {
     return {
@@ -204,6 +220,9 @@ function InnerTable<T>({
       render: renderByType(item),
       align: item.type === "integer" ? "end" : item.type === "boolean" ? "center" : "start",
       onCell: undefined,
+      width: widthForType(item),
+      min: item.min,
+      initialValue: item.initialValue,
     };
   });
 
@@ -220,7 +239,7 @@ function InnerTable<T>({
   defaultColumns.push({
     title: addButton,
     dataIndex: "operation",
-    width: 70,
+    width: "70px",
     align: "end",
     render: (_: unknown, record: TWithKey) => (
       <InlineEditableActions actions={{ delete: () => handleDelete(record.key), copy: () => handleCopy(record.key) }} />
@@ -251,6 +270,9 @@ function InnerTable<T>({
         presets: col.presets,
         filters: col.filters,
         usersWithKann: col.usersWithKann,
+        width: col.width,
+        min: col.min,
+        initialValue: col.initialValue,
       }),
     };
   });
@@ -259,6 +281,7 @@ function InnerTable<T>({
   return (
     <TableContext.Provider value={tableContext}>
       <Table<TWithKey>
+        className={"editable-table"}
         components={components}
         bordered
         dataSource={rows}

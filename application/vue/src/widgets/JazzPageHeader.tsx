@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode, useEffect } from "react";
+import { PropsWithChildren, ReactElement, ReactNode } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
 import { Typography } from "antd";
 

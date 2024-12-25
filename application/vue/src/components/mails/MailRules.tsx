@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc } from "@/widgets/InlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -14,6 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -69,7 +69,6 @@ export default function MailRules() {
       fieldName: "name",
       label: "Name",
       type: "text",
-      width: "s",
       required: true,
       uniqueValues: true,
     },
@@ -77,14 +76,13 @@ export default function MailRules() {
       fieldName: "email",
       label: "E-Mail",
       type: "text",
-      width: "m",
       required: true,
     },
     {
       fieldName: "rule",
       label: "Regel",
       type: "text",
-      width: "s",
+      width: "250px",
       filters: allMailrules,
     },
   ];
