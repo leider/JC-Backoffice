@@ -122,7 +122,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   };
   useEffect(() => {
     if (focus && value) {
-      handleFocus();
+      inputRef.current?.focus();
     }
   }, [focus, value]);
 

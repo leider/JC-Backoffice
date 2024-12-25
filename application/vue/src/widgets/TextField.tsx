@@ -55,7 +55,7 @@ type TTextField = {
    * @type {Rule}
    */
   uniqueValuesValidator?: Rule;
-  style?: any;
+  style?: React.CSSProperties;
   save?: () => void;
   focus?: boolean;
 };

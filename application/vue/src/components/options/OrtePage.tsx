@@ -51,10 +51,10 @@ export default function OrtePage() {
   }
 
   const columnDescriptions: Columns[] = [
-    { dataIndex: "name", title: "Name", type: "text", width: "m", required: true, uniqueValues: true },
-    { dataIndex: "flaeche", title: "Fläche", type: "integer", width: "s", required: true },
-    { dataIndex: "pressename", title: "Für Presse", type: "text", width: "l", required: true },
-    { dataIndex: "presseIn", title: 'Für Presse mit "in"', type: "text", width: "l", required: true },
+    { dataIndex: "name", title: "Name", type: "text", width: "20%", required: true, uniqueValues: true },
+    { dataIndex: "flaeche", title: "Fläche", type: "integer", required: true },
+    { dataIndex: "pressename", title: "Für Presse", type: "text", width: "30%", required: true },
+    { dataIndex: "presseIn", title: 'Für Presse mit "in"', type: "text", width: "30%", required: true },
   ];
 
   const { hasErrors, checkErrors } = useCheckErrors(form);

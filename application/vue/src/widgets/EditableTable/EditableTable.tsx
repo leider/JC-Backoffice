@@ -97,6 +97,7 @@ function InnerTable<T>({
     onChange?.([newData, ...rows]);
   };
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSave = (row: TWithKey, field: any) => {
     const newData = [...(rows ?? [])];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -228,6 +229,7 @@ function InnerTable<T>({
 
   const addButton = (
     <ButtonWithIcon
+      testid="add-in-table"
       type="text"
       icon="PlusLg"
       tooltipTitle="Neue Zeile"
@@ -259,7 +261,8 @@ function InnerTable<T>({
     return {
       ...col,
       filters: undefined, // disable filter dropdown
-      onCell: (record: T) => ({
+      onCell: (record: TWithKey) => ({
+        index: rows.indexOf(record),
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,
@@ -313,6 +316,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
     } as ValidatorRule;
   }, [requiredFields]);
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   function duplicates(values: any[]) {
     return values.filter((item, index) => index !== values.indexOf(item));
   }

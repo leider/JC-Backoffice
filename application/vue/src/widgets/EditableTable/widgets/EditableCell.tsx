@@ -14,7 +14,8 @@ import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/Star
 
 interface EditableCellProps<T> extends Columns {
   record: T;
-  handleSave: (record: T, field: any) => void;
+  handleSave: (record: T, field: unknown) => void;
+  index?: number;
 }
 
 const EditableCell = <RecordType extends AnyObject = AnyObject>({
@@ -31,6 +32,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   usersWithKann,
   filters,
   min,
+  index,
   initialValue,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) => {
@@ -38,7 +40,8 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
 
-  const ref = useRef<any>(null);
+  const ref = useRef<any>(null); // eslint-disable-line  @typescript-eslint/no-explicit-any
+
   const form = useContext(EditableContext)!;
 
   useEffect(() => {
@@ -134,6 +137,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
 
   const childNode = !editing ? (
     <div
+      data-testid={dataIndex + index}
       tabIndex={0}
       onFocus={type !== "color" ? toggleEdit : undefined}
       onClick={toggleEdit}
