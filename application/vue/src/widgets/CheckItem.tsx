@@ -48,7 +48,14 @@ export default function CheckItem({
 }) {
   return (
     <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} valuePropName="checked">
-      <InternalCheckbox focus={focus} focusByMouseClick={focusByMouseClick} onChange={onChange} disabled={disabled} save={save} />
+      <InternalCheckbox
+        label={label}
+        focus={focus}
+        focusByMouseClick={focusByMouseClick}
+        onChange={onChange}
+        disabled={disabled}
+        save={save}
+      />
     </Form.Item>
   );
 }
