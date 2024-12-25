@@ -36,23 +36,14 @@ export default function InlineEditableActions({ actions }: { actions: ActionCall
           <p>Bist Du sicher?.</p>
         </Modal>
       </ConfigProvider>
+      <ButtonWithIcon key="copy" type="text" icon="Files" onClick={actions.copy} tooltipTitle="Zeile Kopieren" tooltipPlacement="leftTop" />
       <ButtonWithIcon
-        size="small"
-        key="copy"
-        type="text"
-        icon="Files"
-        onClick={actions.copy}
-        tooltipTitle="Zeile Kopieren"
-        tooltipPlacement="leftTop"
-      />
-      <ButtonWithIcon
-        size="small"
         key="delete"
         type="text"
         icon="Trash"
+        onClick={() => setOpen(true)}
         tooltipTitle="Zeile Löschen"
         tooltipPlacement="leftTop"
-        onClick={() => setOpen(true)}
       />
     </>
   );

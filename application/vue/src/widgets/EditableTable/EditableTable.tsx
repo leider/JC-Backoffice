@@ -228,7 +228,6 @@ function InnerTable<T>({
 
   const addButton = (
     <ButtonWithIcon
-      size="small"
       type="text"
       icon="PlusLg"
       tooltipTitle="Neue Zeile"

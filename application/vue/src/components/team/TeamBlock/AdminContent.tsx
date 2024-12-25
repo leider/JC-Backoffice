@@ -1,10 +1,9 @@
-import Konzert, { ChangelistItem } from "jc-shared/konzert/konzert.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { areDifferent, differenceFor } from "@/commons/comparingAndTransforming.ts";
+import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -25,7 +24,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
-  const { currentUser, showSuccess } = useJazzContext();
+  const { showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const { usersAsOptions } = useContext(TeamContext);
@@ -70,11 +69,6 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   });
 
   function saveForm() {
-    const createLogWithDiff = (diff: string): ChangelistItem => ({
-      zeitpunkt: new DatumUhrzeit().mitUhrzeitNumerisch,
-      bearbeiter: currentUser.id || "",
-      diff,
-    });
     form.validateFields().then(async () => {
       const veranst = form.getFieldsValue(true);
       let result;
@@ -82,8 +76,6 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
         result = new Vermietung(veranst);
         mutateVermietung.mutate(result);
       } else {
-        const diff = differenceFor(initialValue, veranst, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
-        veranst.changelist.unshift(createLogWithDiff(diff));
         result = new Konzert(veranst);
         mutateVeranstaltung.mutate(result);
       }
