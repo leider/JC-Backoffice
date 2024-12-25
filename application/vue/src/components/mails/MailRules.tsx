@@ -13,7 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -64,23 +64,23 @@ export default function MailRules() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "email",
-      label: "E-Mail",
+      dataIndex: "email",
+      title: "E-Mail",
       type: "text",
       required: true,
     },
     {
-      fieldName: "rule",
-      label: "Regel",
+      dataIndex: "rule",
+      title: "Regel",
       type: "text",
       width: "250px",
       filters: allMailrules,

@@ -13,7 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -66,18 +66,18 @@ export default function MailingLists() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
       width: "150px",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "users",
-      label: "Users",
+      dataIndex: "users",
+      title: "Users",
       type: "user",
       usersWithKann: usersAsOptions,
       required: true,

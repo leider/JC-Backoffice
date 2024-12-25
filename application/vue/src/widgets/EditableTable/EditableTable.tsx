@@ -4,7 +4,7 @@ import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import numeral from "numeral";
 import dayjs from "dayjs";
 import { TagForUser } from "@/widgets/TagForUser.tsx";
-import EditableCell, { ExtraColumnProps } from "@/widgets/EditableTable/widgets/EditableCell.tsx";
+import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { NamePath, ValidatorRule } from "rc-field-form/es/interface";
@@ -14,13 +14,13 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import isNil from "lodash/isNil";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import "./editableTable.css";
-import { CollectionColDesc } from "./types";
+import { Columns } from "./types";
 
 type WithKey<T> = T & { key: string };
 
 interface EditableTableProps<T> {
   name: NamePath;
-  columnDescriptions: CollectionColDesc[];
+  columnDescriptions: Columns[];
   usersWithKann?: UserWithKann[];
   newRowFactory: (vals: T) => T;
 }
@@ -50,7 +50,7 @@ function InnerTable<T>({
 }: {
   value?: T[];
   onChange?: (val?: T[]) => void;
-  columnDescriptions?: CollectionColDesc[];
+  columnDescriptions?: Columns[];
   usersWithKann?: UserWithKann[];
   newRowFactory: (val: T) => T;
 }) {
@@ -107,7 +107,7 @@ function InnerTable<T>({
   };
 
   const renderByType = useCallback(
-    function ({ type, required }: CollectionColDesc) {
+    function ({ type, required }: Columns) {
       switch (type) {
         case "boolean":
           return (val: boolean) =>
@@ -190,7 +190,7 @@ function InnerTable<T>({
     [token, usersWithKann],
   );
 
-  function widthForType({ width, type }: CollectionColDesc) {
+  function widthForType({ width, type }: Columns) {
     if (width) {
       return width;
     }
@@ -206,11 +206,11 @@ function InnerTable<T>({
     }
   }
 
-  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & ExtraColumnProps)[] = (columnDescriptions ?? []).map((item, index) => {
+  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & Columns)[] = (columnDescriptions ?? []).map((item, index) => {
     return {
-      editable: !item.disabled,
-      dataIndex: item.fieldName,
-      title: item.label,
+      editable: item.editable ?? true,
+      dataIndex: item.dataIndex,
+      title: item.title,
       type: item.type,
       index: index,
       required: item.required,
@@ -301,7 +301,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
         let broken = false;
         value.forEach((row) => {
           requiredFields.forEach((field) => {
-            if (isNil(row[field.fieldName as keyof T])) {
+            if (isNil(row[field.dataIndex as keyof T])) {
               broken = true;
             }
           });
@@ -323,7 +323,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       validator: (_, value: T[]) => {
         let broken = false;
         uniqueFields.forEach((field) => {
-          const valsToCheck = value.map((row) => row[field.fieldName as keyof T]);
+          const valsToCheck = value.map((row) => row[field.dataIndex as keyof T]);
           if (duplicates(valsToCheck).length) {
             broken = true;
           }

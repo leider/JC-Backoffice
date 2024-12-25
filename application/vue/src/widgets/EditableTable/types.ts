@@ -2,10 +2,10 @@ import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import React from "react";
 import { NamePath } from "rc-field-form/es/interface";
 
-export type CollectionColDesc = {
-  disabled?: boolean;
-  fieldName: NamePath;
-  label: React.ReactNode;
+export type Columns = {
+  editable?: boolean;
+  dataIndex: NamePath;
+  title: React.ReactNode;
   type?: ColType;
   required?: boolean;
   filters?: string[];

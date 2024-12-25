@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
-import { ColType } from "@/widgets/EditableTable/types.ts";
-import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
+import { Columns } from "@/widgets/EditableTable/types.ts";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { useTableContext } from "@/widgets/EditableTable/useTableContext.ts";
-import { NamePath } from "rc-field-form/es/interface";
 import { ColorField } from "@/widgets/ColorField.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import DateInput from "@/widgets/DateAndTimeInputs.tsx";
@@ -13,24 +12,10 @@ import SingleSelect from "@/widgets/SingleSelect.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
 
-interface EditableCellProps<T> extends ExtraColumnProps {
-  title: React.ReactNode;
+interface EditableCellProps<T> extends Columns {
   record: T;
   handleSave: (record: T, field: any) => void;
 }
-
-export type ExtraColumnProps = {
-  editable?: boolean;
-  dataIndex: NamePath;
-  type?: ColType;
-  required?: boolean;
-  filters?: string[];
-  presets?: boolean;
-  usersWithKann?: UserWithKann[];
-  width?: string;
-  min?: number | string;
-  initialValue?: number | string;
-};
 
 const EditableCell = <RecordType extends AnyObject = AnyObject>({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -4,13 +4,13 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { NameWithNumber } from "jc-shared/konzert/konzert.ts";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
-const columns: CollectionColDesc[] = [
-  { type: "text", label: "Name", required: true, fieldName: "name", width: "40%" },
-  { type: "text", label: "Kommentar", fieldName: "comment" },
-  { type: "integer", label: "Anzahl", required: true, fieldName: "number" },
-  { type: "integer", label: "Erledigt", required: true, fieldName: "alreadyIn" },
+const columns: Columns[] = [
+  { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
+  { type: "text", title: "Kommentar", dataIndex: "comment" },
+  { type: "integer", title: "Anzahl", required: true, dataIndex: "number" },
+  { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
 ];
 
 function GaesteCard({ label, path }: { label: string; path: string }) {

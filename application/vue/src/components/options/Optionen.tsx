@@ -16,7 +16,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -70,22 +70,22 @@ export default function Optionen() {
     );
   }
 
-  const columnsTypen: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name", width: "150px" },
-    { type: "boolean", label: "Master", fieldName: "mod" },
-    { type: "boolean", label: "Kasse1", fieldName: "kasseV" },
-    { type: "boolean", label: "Kasse2", fieldName: "kasse" },
-    { type: "boolean", label: "Tech1", fieldName: "technikerV" },
-    { type: "boolean", label: "Tech2", fieldName: "techniker" },
-    { type: "boolean", label: "Merch", fieldName: "merchandise" },
-    { type: "color", label: "Farbe", fieldName: "color" },
+  const columnsTypen: Columns[] = [
+    { type: "text", title: "Name", required: true, dataIndex: "name", width: "150px" },
+    { type: "boolean", title: "Master", dataIndex: "mod" },
+    { type: "boolean", title: "Kasse1", dataIndex: "kasseV" },
+    { type: "boolean", title: "Kasse2", dataIndex: "kasse" },
+    { type: "boolean", title: "Tech1", dataIndex: "technikerV" },
+    { type: "boolean", title: "Tech2", dataIndex: "techniker" },
+    { type: "boolean", title: "Merch", dataIndex: "merchandise" },
+    { type: "color", title: "Farbe", dataIndex: "color" },
   ];
 
-  const columnsPreisprofile: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name" },
-    { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", min: 0 },
-    { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
-    { type: "integer", label: "Rabatt Mitglied", required: true, fieldName: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
+  const columnsPreisprofile: Columns[] = [
+    { type: "text", title: "Name", required: true, dataIndex: "name" },
+    { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
+    { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
+    { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
   ];
   const { lg } = useBreakpoint();
   const tabs: TabsProps["items"] = [

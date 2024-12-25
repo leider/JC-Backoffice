@@ -25,7 +25,7 @@ import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function Programmheft() {
   const [search, setSearch] = useSearchParams();
@@ -150,12 +150,12 @@ export default function Programmheft() {
     [events, form],
   );
 
-  const columnDescriptions: CollectionColDesc[] = [
-    { fieldName: "was", label: "Was", type: "text", width: "20%", required: true },
-    { fieldName: "start", label: "Wann", type: "date", required: true },
-    { fieldName: "farbe", label: "Farbe", type: "color", required: true, presets: true },
-    { fieldName: "users", label: "Users", type: "user", required: true },
-    { fieldName: "emailOffset", label: "Tage vorher", type: "integer" },
+  const columnDescriptions: Columns[] = [
+    { dataIndex: "was", title: "Was", type: "text", width: "20%", required: true },
+    { dataIndex: "start", title: "Wann", type: "date", required: true },
+    { dataIndex: "farbe", title: "Farbe", type: "color", required: true, presets: true },
+    { dataIndex: "users", title: "Users", type: "user", required: true },
+    { dataIndex: "emailOffset", title: "Tage vorher", type: "integer" },
   ];
 
   const [triggerRender, setTriggerRender] = useState(true);

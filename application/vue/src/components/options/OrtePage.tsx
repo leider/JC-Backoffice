@@ -13,7 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function OrtePage() {
   const [initialValue, setInitialValue] = useState<object>({});
@@ -50,11 +50,11 @@ export default function OrtePage() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
-    { fieldName: "name", label: "Name", type: "text", width: "m", required: true, uniqueValues: true },
-    { fieldName: "flaeche", label: "Fläche", type: "integer", width: "s", required: true },
-    { fieldName: "pressename", label: "Für Presse", type: "text", width: "l", required: true },
-    { fieldName: "presseIn", label: 'Für Presse mit "in"', type: "text", width: "l", required: true },
+  const columnDescriptions: Columns[] = [
+    { dataIndex: "name", title: "Name", type: "text", width: "m", required: true, uniqueValues: true },
+    { dataIndex: "flaeche", title: "Fläche", type: "integer", width: "s", required: true },
+    { dataIndex: "pressename", title: "Für Presse", type: "text", width: "l", required: true },
+    { dataIndex: "presseIn", title: 'Für Presse mit "in"', type: "text", width: "l", required: true },
   ];
 
   const { hasErrors, checkErrors } = useCheckErrors(form);

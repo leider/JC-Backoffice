@@ -12,7 +12,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: string };
 
@@ -84,22 +84,22 @@ export default function TerminePage() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: ["dates"],
-      label: "Start und Ende",
+      dataIndex: ["dates"],
+      title: "Start und Ende",
       type: "startEnd",
       required: true,
     },
     {
-      fieldName: "beschreibung",
-      label: "Beschreibung",
+      dataIndex: "beschreibung",
+      title: "Beschreibung",
       type: "text",
       required: true,
     },
     {
-      fieldName: "typ",
-      label: "Typ",
+      dataIndex: "typ",
+      title: "Typ",
       type: "text",
       width: "120px",
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],

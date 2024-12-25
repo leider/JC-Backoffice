@@ -13,7 +13,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { CollectionColDesc } from "@/widgets/EditableTable/types.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -61,25 +61,25 @@ export default function KalenderPage() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
       width: "20%",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "url",
-      label: "URL",
+      dataIndex: "url",
+      title: "URL",
       type: "text",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "typ",
-      label: "Typ",
+      dataIndex: "typ",
+      title: "Typ",
       type: "text",
       width: "120px",
       required: true,
