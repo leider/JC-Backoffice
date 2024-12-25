@@ -13,6 +13,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: string };
 
@@ -105,6 +106,9 @@ export default function TerminePage() {
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];
+
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -112,11 +116,12 @@ export default function TerminePage() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Termine" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Termine" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

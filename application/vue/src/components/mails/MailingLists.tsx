@@ -14,6 +14,7 @@ import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -83,6 +84,9 @@ export default function MailingLists() {
       required: true,
     },
   ];
+
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -90,11 +94,12 @@ export default function MailingLists() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Mailinglisten" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Mailinglisten" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>

@@ -11,7 +11,7 @@ import { useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
-  const { form, resetChanges } = useContext(VermietungContext);
+  const { form, resetChanges, hasErrors } = useContext(VermietungContext);
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
@@ -90,7 +90,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
           disabled={!dirty}
           type="default"
         />,
-        <SaveButton key="save" disabled={!dirty} />,
+        <SaveButton key="save" disabled={!dirty || hasErrors} />,
         <TeamCalendar key="cal" />,
       ]}
       firstTag={
@@ -100,17 +100,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
       }
       dateString={displayDate}
       tags={tagsForTitle}
-    >
-      {isNew && (
-        <b
-          style={{
-            color: "#d50f36",
-          }}
-        >
-          {" "}
-          (Denk daran, alle Felder zu überprüfen und auszufüllen)
-        </b>
-      )}
-    </JazzPageHeader>
+      hasErrors={hasErrors}
+    />
   );
 }

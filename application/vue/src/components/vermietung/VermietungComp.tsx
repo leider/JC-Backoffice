@@ -15,6 +15,7 @@ import { useWatch } from "antd/es/form/Form";
 import { VermietungContext } from "./VermietungContext";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function VermietungComp() {
   const { url } = useParams();
@@ -96,13 +97,15 @@ export default function VermietungComp() {
     vermietungQueryData.refetch();
   }
 
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
-    <VermietungContext.Provider value={{ form, isDirty: dirty, resetChanges }}>
+    <VermietungContext.Provider value={{ form, isDirty: dirty, hasErrors, resetChanges }}>
       <Form
         form={form}
         onValuesChange={() => {
-          const current = form.getFieldsValue(true);
-          updateDirtyIfChanged(initialValue, current);
+          updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
+          checkErrors();
         }}
         onFinishFailed={() => {
           showError({ text: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs" });

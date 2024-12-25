@@ -14,6 +14,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -86,6 +87,9 @@ export default function KalenderPage() {
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];
+
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -93,11 +97,12 @@ export default function KalenderPage() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Kalender" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Kalender" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
