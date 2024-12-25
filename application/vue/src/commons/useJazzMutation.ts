@@ -7,13 +7,11 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
   saveFunction,
   queryKey,
   successMessage,
-  setDirty,
   setResult,
 }: {
   saveFunction: (obj: InstanceType) => Promise<InstanceType>;
   queryKey: string;
   successMessage: string;
-  setDirty: (b: boolean) => void;
   setResult: (ob: InstanceType) => void;
 }) {
   const queryClient = useQueryClient();
@@ -37,7 +35,6 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
 
   const result: UseMutationOptions<InstanceType, AxiosError<unknown, InstanceType>, InstanceType, unknown> = {
     mutationFn: (obj) => {
-      //setDirty(false);
       return saveFunction(obj);
     },
     onSuccess: (data) => {

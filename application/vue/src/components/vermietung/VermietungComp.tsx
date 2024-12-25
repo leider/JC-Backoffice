@@ -39,7 +39,6 @@ export default function VermietungComp() {
     saveFunction: saveVermietung,
     queryKey: "vermietung",
     successMessage: "Die Vermietung wurde gespeichert",
-    setDirty,
     setResult: setVermietung,
   });
 

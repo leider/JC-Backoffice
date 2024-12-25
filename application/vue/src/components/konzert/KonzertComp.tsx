@@ -73,7 +73,6 @@ export default function KonzertComp() {
     saveFunction: saveKonzert,
     queryKey: "konzert",
     successMessage: "Das Konzert wurde gespeichert",
-    setDirty,
     setResult: setKonzert,
   });
 
