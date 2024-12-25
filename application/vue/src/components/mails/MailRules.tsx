@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function MailRules() {
   const mailRuleQuery = useQuery({
@@ -62,30 +64,30 @@ export default function MailRules() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
-      width: "s",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "email",
-      label: "E-Mail",
+      dataIndex: "email",
+      title: "E-Mail",
       type: "text",
-      width: "m",
       required: true,
     },
     {
-      fieldName: "rule",
-      label: "Regel",
+      dataIndex: "rule",
+      title: "Regel",
       type: "text",
-      width: "s",
+      width: "250px",
       filters: allMailrules,
     },
   ];
+
+  const { hasErrors, checkErrors } = useCheckErrors(form);
   return (
     <Form
       form={form}
@@ -93,15 +95,20 @@ export default function MailRules() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Mailing Regeln" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
+      <JazzPageHeader title="Mailing Regeln" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allRules"]} />
+            <EditableTable<MailRule>
+              columnDescriptions={columnDescriptions}
+              name="allRules"
+              newRowFactory={(vals) => Object.assign({}, vals)}
+            />
           </Col>
         </Row>
       </RowWrapper>

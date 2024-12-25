@@ -66,6 +66,8 @@ type NumberInputProps = {
    */
   exclusiveMax?: boolean;
   suffix?: ReactNode;
+  save?: () => void;
+  focus?: boolean;
 };
 
 /**
@@ -88,6 +90,8 @@ export const NumberInput: FC<NumberInputProps> = ({
   onChange,
   initialValue,
   disabled,
+  save,
+  focus,
 }: NumberInputProps): React.ReactElement => {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
@@ -114,6 +118,8 @@ export const NumberInput: FC<NumberInputProps> = ({
         max={max}
         onChange={onChange}
         suffix={suffix}
+        save={save}
+        focus={focus}
       />
     </Form.Item>
   );

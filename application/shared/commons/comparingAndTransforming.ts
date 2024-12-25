@@ -23,6 +23,9 @@ function stripNullOrUndefined<T extends object>(data: T): T {
       // Array is typeof "object"
       stripNullOrUndefined(dataCasted[key]);
     }
+    if (key === "key") {
+      delete dataCasted[key];
+    }
   });
   return data;
 }
@@ -60,27 +63,6 @@ export function areDifferent<T extends object>(left: T, right: T, propertiesToIg
     return false;
   }
   return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
-}
-
-export function differenceFor(left = {}, right = {}, propertiesToIgnore?: string[]): string {
-  const a = withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore);
-  const b = withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore);
-  const diff = detailedDiff(a, b);
-  const translated: { hinzugefügt?: object; gelöscht?: object; geändert?: object } = {
-    hinzugefügt: diff.added,
-    gelöscht: diff.deleted,
-    geändert: diff.updated,
-  };
-  if (Object.keys(translated.hinzugefügt || {}).length === 0) {
-    delete translated.hinzugefügt;
-  }
-  if (Object.keys(translated.gelöscht || {}).length === 0) {
-    delete translated.gelöscht;
-  }
-  if (Object.keys(translated.geändert || {}).length === 0) {
-    delete translated.geändert;
-  }
-  return JSON.stringify(translated, null, 2);
 }
 
 export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): object {

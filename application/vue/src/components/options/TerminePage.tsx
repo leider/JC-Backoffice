@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Termin from "jc-shared/optionen/termin";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { Columns } from "@/widgets/EditableTable/types.ts";
+
+type TerminFlat = { dates: Date[]; beschreibung: string; typ?: string };
 
 export default function TerminePage() {
   const termineQuery = useQuery({ queryKey: ["termine"], queryFn: allTermine });
@@ -41,15 +44,23 @@ export default function TerminePage() {
     },
   });
 
-  const [form] = Form.useForm<{ allTermine: Termin[] }>();
+  const [form] = Form.useForm<{ allTermine: TerminFlat[] }>();
 
   function initializeForm() {
     const deepCopy = {
-      allTermine: termine.map((termin) => termin.toJSON()),
+      allTermine: termine.map((termin) => ({
+        dates: [termin.startDate, termin.endDate],
+        beschreibung: termin.beschreibung,
+        typ: termin.typ,
+      })),
     };
     form.setFieldsValue(deepCopy);
     const initial = {
-      allTermine: termine.map((termin) => termin.toJSON()),
+      allTermine: termine.map((termin) => ({
+        dates: [termin.startDate, termin.endDate],
+        beschreibung: termin.beschreibung,
+        typ: termin.typ,
+      })),
     };
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
@@ -59,30 +70,38 @@ export default function TerminePage() {
 
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateTermine.mutate(form.getFieldsValue(true).allTermine.map((each: Termin) => new Termin(each)));
+      mutateTermine.mutate(
+        form.getFieldsValue(true).allTermine.map(
+          (each: TerminFlat) =>
+            new Termin({
+              startDate: each.dates[0],
+              endDate: each.dates[1],
+              beschreibung: each.beschreibung,
+              typ: each.typ,
+            }),
+        ),
+      );
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: ["startDate", "endDate"],
-      label: "Start und Ende",
+      dataIndex: ["dates"],
+      title: "Start und Ende",
       type: "startEnd",
-      width: "s",
       required: true,
     },
     {
-      fieldName: "beschreibung",
-      label: "Beschreibung",
+      dataIndex: "beschreibung",
+      title: "Beschreibung",
       type: "text",
-      width: "l",
       required: true,
     },
     {
-      fieldName: "typ",
-      label: "Typ",
+      dataIndex: "typ",
+      title: "Typ",
       type: "text",
-      width: "s",
+      width: "120px",
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];
@@ -101,7 +120,11 @@ export default function TerminePage() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allTermine"]} />
+            <EditableTable<Termin>
+              columnDescriptions={columnDescriptions}
+              name="allTermine"
+              newRowFactory={(vals) => Object.assign({}, vals)}
+            />
           </Col>
         </Row>
       </RowWrapper>

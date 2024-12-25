@@ -68,6 +68,8 @@ interface INumericInputEmbedded {
    */
   onChange?: (value: number | null) => void;
   suffix?: ReactNode;
+  save?: () => void;
+  focus?: boolean;
 }
 
 /**
@@ -87,6 +89,8 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   onNumber,
   suffix,
   id,
+  save,
+  focus,
 }: INumericInputEmbedded): React.ReactElement => {
   const [value, setValue] = useState<string | undefined>("");
 
@@ -114,11 +118,17 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = ({ target: { value: widgetInput } }) => {
     const result = widgetInput ? numeral(widgetInput).value() || 0 : null;
     sanitizeLocalInput(result, widgetInput);
+    save?.();
   };
+  useEffect(() => {
+    if (focus && value) {
+      handleFocus();
+    }
+  }, [focus, value]);
 
-  const handleFocus: React.FocusEventHandler<HTMLInputElement> = () => {
+  function handleFocus() {
     inputRef.current?.focus({ cursor: "all" });
-  };
+  }
 
   useEffect(() => {
     sanitizeLocalInput(number);
@@ -137,6 +147,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
       value={value}
       onChange={({ target: { value: val } }) => setValue(val)}
       suffix={suffix}
+      onPressEnter={save}
     />
   );
 };

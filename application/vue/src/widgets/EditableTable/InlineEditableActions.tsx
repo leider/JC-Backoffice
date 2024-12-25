@@ -15,7 +15,7 @@ export interface ActionCallbacks {
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function InlineEditableActions(props: { actions: ActionCallbacks }): React.ReactElement {
+export default function InlineEditableActions({ actions }: { actions: ActionCallbacks }): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -25,7 +25,7 @@ export default function InlineEditableActions(props: { actions: ActionCallbacks 
           closable={false}
           open={open}
           onOk={() => {
-            props.actions.delete();
+            actions.delete();
             setOpen(false);
           }}
           onCancel={() => setOpen(false)}
@@ -36,15 +36,15 @@ export default function InlineEditableActions(props: { actions: ActionCallbacks 
           <p>Bist Du sicher?.</p>
         </Modal>
       </ConfigProvider>
+      <ButtonWithIcon key="copy" type="text" icon="Files" onClick={actions.copy} tooltipTitle="Zeile Kopieren" tooltipPlacement="leftTop" />
       <ButtonWithIcon
-        key="copy"
+        key="delete"
         type="text"
-        icon="Files"
-        onClick={props.actions.copy}
-        tooltipTitle="Zeile Kopieren"
+        icon="Trash"
+        onClick={() => setOpen(true)}
+        tooltipTitle="Zeile Löschen"
         tooltipPlacement="leftTop"
       />
-      <ButtonWithIcon type="text" icon="Trash" tooltipTitle="Zeile Löschen" tooltipPlacement="leftTop" onClick={() => setOpen(true)} />
     </>
   );
 }

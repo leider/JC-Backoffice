@@ -2,35 +2,64 @@ import { DatePicker, Form } from "antd";
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 
-export default function DateInput(props: { name: string[]; label: string; required?: boolean }) {
-  const { name, label, required } = props;
-
+export default function DateInput({
+  name,
+  label,
+  required,
+  save,
+  focus,
+}: {
+  name: string[];
+  label?: string;
+  required?: boolean;
+  save?: () => void;
+  focus?: boolean;
+}) {
   return (
     <Form.Item
       name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : ""}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : undefined}
       colon={false}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
     >
-      <InternalPicker required={required} />
+      <InternalPicker required={required} save={save} focus={focus} />
     </Form.Item>
   );
 }
 
-function InternalPicker(props: { required?: boolean; value?: string; onChange?: (value: string | undefined) => void }) {
+function InternalPicker({
+  required,
+  focus,
+  save,
+  value,
+  onChange,
+}: {
+  required?: boolean;
+  value?: string;
+  onChange?: (value: string | undefined) => void;
+  save?: () => void;
+  focus?: boolean;
+}) {
   const [val, setVal] = useState<Dayjs | undefined>();
   useEffect(() => {
-    if (props.value) {
-      setVal(dayjs(props.value));
+    if (value) {
+      setVal(dayjs(value));
     }
-  }, [props.value]);
+  }, [value]);
   return (
     <DatePicker
       value={val}
-      onChange={(date) => props.onChange!(date?.toISOString())}
+      onChange={(date) => onChange!(date?.toISOString())}
       format={["ll", "L", "l", "DDMMYY"]}
-      required={props.required}
+      required={required}
+      onOpenChange={(open) => {
+        if (!open) {
+          save?.();
+        }
+      }}
+      needConfirm={focus}
+      autoFocus={focus}
     />
   );
 }

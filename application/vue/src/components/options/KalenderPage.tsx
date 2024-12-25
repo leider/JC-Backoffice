@@ -6,13 +6,14 @@ import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
-import FerienIcals from "jc-shared/optionen/ferienIcals";
+import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function KalenderPage() {
   const ferienIcalsQuery = useQuery({
@@ -60,28 +61,27 @@ export default function KalenderPage() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
-      width: "m",
+      width: "20%",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "url",
-      label: "URL",
+      dataIndex: "url",
+      title: "URL",
       type: "text",
-      width: "xl",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "typ",
-      label: "Typ",
+      dataIndex: "typ",
+      title: "Typ",
       type: "text",
-      width: "s",
+      width: "120px",
       required: true,
       filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
@@ -101,7 +101,7 @@ export default function KalenderPage() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["icals"]} />
+            <EditableTable<Ical> columnDescriptions={columnDescriptions} name="icals" newRowFactory={(vals) => Object.assign({}, vals)} />
           </Col>
         </Row>
       </RowWrapper>

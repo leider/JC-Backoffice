@@ -1,8 +1,8 @@
 import { Form, Select, Tag } from "antd";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
-import { BaseOptionType } from "antd/es/select";
+import { BaseOptionType, RefSelectProps } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
@@ -42,12 +42,23 @@ function InnerSelect({
   disabled,
   onChange,
   value,
+  save,
+  focus,
 }: {
   usersAsOptions: UserWithKann[];
   disabled?: boolean;
   onChange?: (value: string[]) => void;
   value?: string[];
+  save?: () => void;
+  focus?: boolean;
 }) {
+  const ref = useRef<RefSelectProps>(null);
+  useEffect(() => {
+    if (focus && usersAsOptions) {
+      ref.current?.focus();
+    }
+  }, [focus, usersAsOptions]);
+
   const renderInList = (row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />;
 
   const tagRender = useTagRenderForUser(usersAsOptions);
@@ -65,6 +76,7 @@ function InnerSelect({
 
   return (
     <Select
+      ref={ref}
       mode="multiple"
       options={filtered}
       tagRender={tagRender}
@@ -76,6 +88,7 @@ function InnerSelect({
       placeholder="Tippen zum Suchen nach irgendwas"
       onChange={onChange}
       value={value}
+      onBlur={save}
     />
   );
 }
@@ -85,15 +98,19 @@ export default function MitarbeiterMultiSelect({
   usersAsOptions,
   disabled,
   label,
+  save,
+  focus,
 }: {
   name: string | string[];
   usersAsOptions: UserWithKann[];
   disabled?: boolean;
   label?: string;
+  save?: () => void;
+  focus?: boolean;
 }) {
   return (
     <Form.Item label={label ? <b>{label}:</b> : undefined} name={name} noStyle={!label}>
-      <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} />
+      <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} save={save} focus={focus} />
     </Form.Item>
   );
 }

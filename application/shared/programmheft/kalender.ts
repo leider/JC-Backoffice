@@ -34,6 +34,6 @@ export default class Kalender {
   }
 
   sortEvents() {
-    this.events.sort((a, b) => a.start.localeCompare(b.start));
+    this.events.sort((a, b) => a.start?.localeCompare(b.start));
   }
 }

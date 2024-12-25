@@ -332,7 +332,7 @@ export async function saveOrte(orte: Orte) {
   });
 }
 
-export async function termine() {
+export async function termine(): Promise<Termin[]> {
   const result = await getForType("json", "/rest/termine");
   return result?.map((r: any) => new Termin(r)) || [];
 }

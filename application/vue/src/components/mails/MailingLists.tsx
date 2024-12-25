@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -13,6 +12,8 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
@@ -65,20 +66,19 @@ export default function MailingLists() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
+  const columnDescriptions: Columns[] = [
     {
-      fieldName: "name",
-      label: "Name",
+      dataIndex: "name",
+      title: "Name",
       type: "text",
-      width: "xs",
+      width: "150px",
       required: true,
       uniqueValues: true,
     },
     {
-      fieldName: "users",
-      label: "Users",
+      dataIndex: "users",
+      title: "Users",
       type: "user",
-      width: "xl",
       usersWithKann: usersAsOptions,
       required: true,
     },
@@ -98,7 +98,14 @@ export default function MailingLists() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["allLists"]} />
+            <EditableTable<{ name?: string; users: string[] }>
+              columnDescriptions={columnDescriptions}
+              name="allLists"
+              newRowFactory={(val) => {
+                return Object.assign({ users: [] }, val);
+              }}
+              usersWithKann={usersAsOptions}
+            />
           </Col>
         </Row>
       </RowWrapper>

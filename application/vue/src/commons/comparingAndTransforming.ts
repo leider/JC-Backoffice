@@ -1,3 +1,1 @@
-import { areDifferent, differenceFor } from "jc-shared/commons/comparingAndTransforming.js";
-
-export { differenceFor, areDifferent };
+export * from "jc-shared/commons/comparingAndTransforming.js";

@@ -6,12 +6,14 @@ import { Col, Form, Row } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import Orte from "jc-shared/optionen/orte";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function OrtePage() {
   const [initialValue, setInitialValue] = useState<object>({});
@@ -48,37 +50,15 @@ export default function OrtePage() {
     });
   }
 
-  const columnDescriptions: CollectionColDesc[] = [
-    {
-      fieldName: "name",
-      label: "Name",
-      type: "text",
-      width: "m",
-      required: true,
-      uniqueValues: true,
-    },
-    {
-      fieldName: "flaeche",
-      label: "Fläche",
-      type: "integer",
-      width: "s",
-      required: true,
-    },
-    {
-      fieldName: "pressename",
-      label: "Für Presse",
-      type: "text",
-      width: "l",
-      required: true,
-    },
-    {
-      fieldName: "presseIn",
-      label: 'Für Presse mit "in"',
-      type: "text",
-      width: "l",
-      required: true,
-    },
+  const columnDescriptions: Columns[] = [
+    { dataIndex: "name", title: "Name", type: "text", width: "m", required: true, uniqueValues: true },
+    { dataIndex: "flaeche", title: "Fläche", type: "integer", width: "s", required: true },
+    { dataIndex: "pressename", title: "Für Presse", type: "text", width: "l", required: true },
+    { dataIndex: "presseIn", title: 'Für Presse mit "in"', type: "text", width: "l", required: true },
   ];
+
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -86,15 +66,20 @@ export default function OrtePage() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Orte" buttons={[<SaveButton key="save" disabled={!dirty} />]} />
+      <JazzPageHeader title="Orte" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            <InlineCollectionEditable form={form} columnDescriptions={columnDescriptions} embeddedArrayPath={["orte"]} />
+            <EditableTable<{ name: string; flaeche: number; pressename: string; presseIn: string }>
+              columnDescriptions={columnDescriptions}
+              name="orte"
+              newRowFactory={(val) => Object.assign({ flaeche: 0 }, val)}
+            />
           </Col>
         </Row>
       </RowWrapper>

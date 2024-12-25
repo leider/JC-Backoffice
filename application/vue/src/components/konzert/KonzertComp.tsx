@@ -16,6 +16,7 @@ import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "./KonzertContext";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
 
 export default function KonzertComp() {
   const { url } = useParams();
@@ -110,7 +111,7 @@ export default function KonzertComp() {
     setInitialValue(initial);
     updateDirtyIfChanged(initial, deepCopy);
     setIsNew(!konzert.id);
-    form.validateFields();
+    checkErrors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, konzert, updateDirtyIfChanged, url]); // rider must not be part of the dependencies
 
@@ -162,12 +163,17 @@ export default function KonzertComp() {
     konzertQueryData.refetch();
   }
 
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
-    <KonzertContext.Provider value={{ form, isDirty: dirty, isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}>
+    <KonzertContext.Provider
+      value={{ form, isDirty: dirty, hasErrors, isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}
+    >
       <Form
         form={form}
         onValuesChange={() => {
           updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
+          checkErrors();
         }}
         onFinishFailed={() => {
           showError({ text: "Es gibt noch fehlerhafte Felder. Bitte prüfe alle Tabs" });
@@ -177,7 +183,7 @@ export default function KonzertComp() {
         colon={false}
       >
         <ShowOnCopy title={"Kopiertes Konzert"} isNew={isNew} startDate={konzert.startDate} />
-        <KonzertPageHeader isNew={isNew} dirty={dirty} />
+        <KonzertPageHeader isNew={isNew} />
         <KonzertTabs />
       </Form>
     </KonzertContext.Provider>

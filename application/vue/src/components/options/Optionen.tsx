@@ -10,11 +10,13 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { CollectionColDesc, InlineCollectionEditable } from "@/widgets/InlineCollectionEditable";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import useCheckErrors from "@/commons/useCheckErrors.ts";
+import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function Optionen() {
   const { optionen, showSuccess } = useJazzContext();
@@ -68,22 +70,22 @@ export default function Optionen() {
     );
   }
 
-  const columnsTypen: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name", width: "xl" },
-    { type: "boolean", label: "Master", fieldName: "mod", width: "m" },
-    { type: "boolean", label: "Kasse1", fieldName: "kasseV", width: "m" },
-    { type: "boolean", label: "Kasse2", fieldName: "kasse", width: "m" },
-    { type: "boolean", label: "Tech1", fieldName: "technikerV", width: "m" },
-    { type: "boolean", label: "Tech2", fieldName: "techniker", width: "m" },
-    { type: "boolean", label: "Merch", fieldName: "merchandise", width: "m" },
-    { type: "color", label: "Farbe", fieldName: "color", width: "m" },
+  const columnsTypen: Columns[] = [
+    { type: "text", title: "Name", required: true, dataIndex: "name", width: "150px" },
+    { type: "boolean", title: "Master", dataIndex: "mod" },
+    { type: "boolean", title: "Kasse1", dataIndex: "kasseV" },
+    { type: "boolean", title: "Kasse2", dataIndex: "kasse" },
+    { type: "boolean", title: "Tech1", dataIndex: "technikerV" },
+    { type: "boolean", title: "Tech2", dataIndex: "techniker" },
+    { type: "boolean", title: "Merch", dataIndex: "merchandise" },
+    { type: "color", title: "Farbe", dataIndex: "color" },
   ];
 
-  const columnsPreisprofile: CollectionColDesc[] = [
-    { type: "text", label: "Name", required: true, fieldName: "name", width: "m" },
-    { type: "integer", label: "Regulär", required: true, fieldName: "regulaer", width: "m", min: 0 },
-    { type: "integer", label: "Rabatt ermäßigt", required: true, fieldName: "rabattErmaessigt", width: "m", min: 0, initialValue: 0 },
-    { type: "integer", label: "Rabatt Mitglied", required: true, fieldName: "rabattMitglied", width: "m", min: 0, initialValue: 0 },
+  const columnsPreisprofile: Columns[] = [
+    { type: "text", title: "Name", required: true, dataIndex: "name" },
+    { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
+    { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
+    { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
   ];
   const { lg } = useBreakpoint();
   const tabs: TabsProps["items"] = [
@@ -95,7 +97,22 @@ export default function Optionen() {
           <Row gutter={12}>
             <Col xs={24} lg={12}>
               <Collapsible suffix="allgemeines" label="Typen" noTopBorder>
-                <InlineCollectionEditable columnDescriptions={columnsTypen} embeddedArrayPath={["typenPlus"]} form={form} />
+                <EditableTable<{
+                  name: string;
+                  mod: boolean;
+                  kasseV: boolean;
+                  kasse: boolean;
+                  technikerV: boolean;
+                  techniker: boolean;
+                  merchandise: boolean;
+                  color: string;
+                }>
+                  columnDescriptions={columnsTypen}
+                  name="typenPlus"
+                  newRowFactory={(val) => {
+                    return Object.assign({}, val);
+                  }}
+                />
               </Collapsible>
               <Collapsible suffix="allgemeines" label="Optionen">
                 <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
@@ -107,7 +124,13 @@ export default function Optionen() {
                 <p>
                   <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
                 </p>
-                <InlineCollectionEditable columnDescriptions={columnsPreisprofile} embeddedArrayPath={["preisprofile"]} form={form} />
+                <EditableTable<{ name: string; regulaer: number; rabattErmaessigt: number; rabattMitglied: number }>
+                  columnDescriptions={columnsPreisprofile}
+                  name="preisprofile"
+                  newRowFactory={(val) => {
+                    return Object.assign({ regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 }, val);
+                  }}
+                />
               </Collapsible>
             </Col>
           </Row>
@@ -142,6 +165,8 @@ export default function Optionen() {
       mutateOptionen.mutate(new OptionValues(form.getFieldsValue(true)));
     });
   }
+  const { hasErrors, checkErrors } = useCheckErrors(form);
+
   return (
     <Form
       form={form}
@@ -149,11 +174,12 @@ export default function Optionen() {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
+        checkErrors();
       }}
       onFinish={saveForm}
       layout="vertical"
     >
-      <JazzPageHeader title="Optionen" buttons={[<SaveButton key="save" disabled={!dirty} />]}></JazzPageHeader>
+      <JazzPageHeader title="Optionen" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
       <Tabs
         type="card"
         activeKey={activePage}
