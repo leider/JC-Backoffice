@@ -258,6 +258,7 @@ function InnerTable<T>({
     }
     return {
       ...col,
+      filters: undefined, // disable filter dropdown
       onCell: (record: T) => ({
         record,
         editable: col.editable,
@@ -286,7 +287,7 @@ function InnerTable<T>({
         dataSource={rows}
         columns={columns as ColumnTypes}
         size="small"
-        pagination={false}
+        pagination={rows.length < 50 ? false : {}}
       />
     </TableContext.Provider>
   );
