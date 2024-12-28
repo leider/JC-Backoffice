@@ -14,7 +14,7 @@ function stringOrDateToDate(object?: string | Date): Date | undefined {
   return typeof object === "string" ? DatumUhrzeit.forISOString(object).toJSDate : object;
 }
 
-function toObject<T>(Constructor: any, jsobject?: object) {
+function toObject<T>(Constructor: new (something: any) => T, jsobject?: object) {
   if (jsobject && Object.keys(jsobject).length > 0) {
     delete (jsobject as any)._csrf;
     return new Constructor(jsobject) as T;
@@ -22,7 +22,7 @@ function toObject<T>(Constructor: any, jsobject?: object) {
   return null;
 }
 
-function toObjectList<T>(Constructor: any, jsobjects?: object[]) {
+function toObjectList<T>(Constructor: new (something: any) => T, jsobjects?: object[]) {
   return (jsobjects || []).map((each) => toObject<T>(Constructor, each)).filter((each): each is T => each !== null);
 }
 

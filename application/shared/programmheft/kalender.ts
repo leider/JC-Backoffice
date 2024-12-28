@@ -7,7 +7,7 @@ export default class Kalender {
   events: Event[] = [];
   migrated = false;
 
-  constructor(object?: { id: string; events?: Omit<Event, "cloneAndMoveBy" | "title">[]; migrated?: boolean }) {
+  constructor(object?: Partial<Kalender>) {
     if (object && object.id && object.id.split("/").length === 2) {
       const splits = object.id.split("/");
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {

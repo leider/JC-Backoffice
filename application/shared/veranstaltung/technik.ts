@@ -1,4 +1,5 @@
 import misc from "../commons/misc.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Technik {
   dateirider: string[] = [];
@@ -13,9 +14,8 @@ export default class Technik {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: RecursivePartial<Technik>) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object, {
         dateirider: object.dateirider || [],
       });

@@ -1,4 +1,5 @@
 import misc from "../commons/misc.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Presse {
   originalText = "";
@@ -12,9 +13,8 @@ export default class Presse {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: RecursivePartial<Presse>) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object, {
         image: misc.toArray(object.image),
       });

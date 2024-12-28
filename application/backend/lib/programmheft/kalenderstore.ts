@@ -10,11 +10,11 @@ const persistence = pers("kalenderstore");
 export default {
   alleKalender: function alleKalender() {
     const result = persistence.list("id DESC");
-    return misc.toObjectList<Kalender>(Kalender, result);
+    return misc.toObjectList(Kalender, result);
   },
 
   getKalender: function getKalender(id: string) {
-    return misc.toObject<Kalender>(Kalender, persistence.getById(id));
+    return misc.toObject(Kalender, persistence.getById(id));
   },
 
   saveKalender: function saveKalender(kalender: Kalender, user: User) {

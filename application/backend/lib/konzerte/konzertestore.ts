@@ -15,7 +15,7 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
     `startDate < '${rangeTo.toISOString}' AND endDate > '${rangeFrom.toISOString}'`,
     `startDate ${sortOrder}`,
   );
-  return misc.toObjectList<Konzert>(Konzert, result);
+  return misc.toObjectList(Konzert, result);
 }
 
 function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
@@ -51,12 +51,12 @@ export default {
 
   getKonzert(url: string) {
     const result = persistence.getByField({ key: "url", val: url });
-    return misc.toObject<Konzert>(Konzert, result);
+    return misc.toObject(Konzert, result);
   },
 
   getKonzertForId(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject<Konzert>(Konzert, result);
+    return misc.toObject(Konzert, result);
   },
 
   saveKonzert(konzert: Konzert, user: User) {

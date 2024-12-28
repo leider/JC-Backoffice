@@ -1,5 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 type MuenzenScheine = {
   "10"?: number;
@@ -65,10 +66,9 @@ export default class Kasse {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: RecursivePartial<Omit<Kasse, "kassenfreigabeAm"> & { kassenfreigabeAm?: Date | string }>) {
     if (object && Object.keys(object).length !== 0) {
-      const ak = object.anzahlBesucherAK;
+      const ak = object.anzahlBesucherAK ?? 0;
       Object.assign(this, object, {
         kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
         anzahlBesucherAK: typeof ak === "string" ? parseInt(ak) : isNaN(ak) ? 0 : ak,

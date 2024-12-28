@@ -11,17 +11,17 @@ const persistence = pers("optionenstore");
 export default {
   get: function get() {
     const result = persistence.getById("instance");
-    return misc.toObject<OptionValues>(OptionValues, result);
+    return misc.toObject(OptionValues, result);
   },
 
   orte: function orte() {
     const result = persistence.getById("orte");
-    return misc.toObject<Orte>(Orte, result);
+    return misc.toObject(Orte, result);
   },
 
   icals: function icals() {
     const result = persistence.getById("ferienIcals");
-    return misc.toObject<FerienIcals>(FerienIcals, result);
+    return misc.toObject(FerienIcals, result);
   },
 
   save: function save(object: OptionValues | Orte | FerienIcals, user: User) {

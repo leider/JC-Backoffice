@@ -93,8 +93,7 @@ export default class OptionValues {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: Partial<OptionValues>) {
     if (object) {
       Object.assign(this, object, {
         kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),

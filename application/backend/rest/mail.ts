@@ -24,7 +24,7 @@ app.get("/mailrule", [checkSuperuser], (req: Request, res: Response) => {
 
 app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
   const oldRules = mailstore.all();
-  const newRules = misc.toObjectList<MailRule>(MailRule, req.body);
+  const newRules = misc.toObjectList(MailRule, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newRules.map((r) => r.toJSON()),
     oldRules.map((r) => r.toJSON()),

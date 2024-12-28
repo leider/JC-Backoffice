@@ -35,9 +35,8 @@ export default class Angebot {
     return Object.assign({}, this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: Omit<Angebot, "freigabeAm"> & { freigabeAm?: Date | string }) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object, {
         freigabeAm: Misc.stringOrDateToDate(object.freigabeAm),
       });

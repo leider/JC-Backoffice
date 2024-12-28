@@ -1,5 +1,6 @@
 import misc from "../commons/misc.js";
 import renderer from "../commons/renderer.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export type Sprache = "Deutsch" | "Englisch" | "Regional";
 export type Vertragsart = "Jazzclub" | "Agentur/Künstler" | "JazzClassix";
@@ -23,8 +24,7 @@ export default class Vertrag {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: RecursivePartial<Vertrag>) {
     if (object && Object.keys(object).length !== 0) {
       Object.assign(this, object, {
         datei: misc.toArray(object.datei),

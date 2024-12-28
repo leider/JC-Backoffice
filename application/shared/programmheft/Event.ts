@@ -8,21 +8,9 @@ export class Event {
   was?: string;
   users: string[] = [];
 
-  constructor({
-    start,
-    farbe,
-    emailOffset,
-    was,
-    users,
-  }: {
-    start: string;
-    farbe: string;
-    emailOffset?: number;
-    was?: string;
-    users?: string[];
-  }) {
-    this.start = start;
-    this.farbe = farbe;
+  constructor({ start, farbe, emailOffset, was, users }: Partial<Event>) {
+    this.start = start!;
+    this.farbe = farbe!;
     this.emailOffset = emailOffset;
     this.was = was;
     this.users = users ?? [];

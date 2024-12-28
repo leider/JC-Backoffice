@@ -9,7 +9,7 @@ const persistence = pers("mailstore");
 export default {
   all: function all() {
     const result = persistence.list();
-    return misc.toObjectList<MailRule>(MailRule, result);
+    return misc.toObjectList(MailRule, result);
   },
 
   removeById: function removeById(id: string, user: User) {

@@ -145,8 +145,7 @@ export default class MailRule {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: Partial<MailRule>) {
     if (object) {
       Object.assign(this, object);
     }

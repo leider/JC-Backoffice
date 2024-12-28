@@ -1,3 +1,5 @@
+import { RecursivePartial } from "../commons/advancedTypes.js";
+
 export default class Kontakt {
   adresse = "";
   ansprechpartner = "";
@@ -10,14 +12,9 @@ export default class Kontakt {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
-      this.adresse = object.adresse;
-      this.ansprechpartner = object.ansprechpartner;
-      this.email = object.email;
-      this.name = object.name;
-      this.telefon = object.telefon;
+  constructor(object?: RecursivePartial<Kontakt>) {
+    if (object && Object.keys(object).length) {
+      Object.assign(this, object);
     }
   }
 

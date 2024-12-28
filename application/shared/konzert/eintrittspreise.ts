@@ -1,5 +1,6 @@
 import { Preisprofil } from "../optionen/optionValues.js";
 import isNil from "lodash/isNil.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 const standardRabattErmaessigt = 2;
 const standardRabattMitglied = 5;
@@ -9,8 +10,7 @@ export default class Eintrittspreise {
   erwarteteBesucher = 0;
   zuschuss = 0;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  static preisprofilAlt(object: any): any {
+  static preisprofilAlt(object: Partial<Preisprofil> & { frei?: boolean }): Preisprofil {
     if (object.frei) {
       return { name: "Freier Eintritt", regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 };
     }
@@ -27,13 +27,12 @@ export default class Eintrittspreise {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: RecursivePartial<Eintrittspreise>) {
     if (object && Object.keys(object).length !== 0) {
       if (!object.preisprofil) {
         this.preisprofil = Eintrittspreise.preisprofilAlt(object);
       } else {
-        this.preisprofil = Object.assign({}, object.preisprofil);
+        this.preisprofil = Object.assign({}, object.preisprofil) as Preisprofil;
       }
       this.erwarteteBesucher = object.erwarteteBesucher || 0;
       this.zuschuss = object.zuschuss || 0;
