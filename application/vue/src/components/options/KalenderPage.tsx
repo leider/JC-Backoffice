@@ -11,21 +11,8 @@ import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 
 function KalenderPageInternal() {
   const columnDescriptions: Columns[] = [
-    {
-      dataIndex: "name",
-      title: "Name",
-      type: "text",
-      width: "20%",
-      required: true,
-      uniqueValues: true,
-    },
-    {
-      dataIndex: "url",
-      title: "URL",
-      type: "text",
-      required: true,
-      uniqueValues: true,
-    },
+    { dataIndex: "name", title: "Name", type: "text", width: "20%", required: true, uniqueValues: true },
+    { dataIndex: "url", title: "URL", type: "text", required: true, uniqueValues: true },
     {
       dataIndex: "typ",
       title: "Typ",

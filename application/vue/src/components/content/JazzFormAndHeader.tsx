@@ -29,7 +29,7 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
 
   const [form] = Form.useForm<FerienIcals>();
 
-  function initializeForm() {
+  useEffect(() => {
     if (data) {
       const deepCopy = data.toJSON();
       form.setFieldsValue(deepCopy);
@@ -38,8 +38,7 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
       setDirty(areDifferent(initial, deepCopy));
       form.validateFields();
     }
-  }
-  useEffect(initializeForm, [form, data]);
+  }, [form, data]);
 
   const { hasErrors, checkErrors } = useCheckErrors(form);
 

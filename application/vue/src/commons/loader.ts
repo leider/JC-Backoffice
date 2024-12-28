@@ -223,7 +223,7 @@ export async function currentUser() {
     const result = await getForType("json", "/rest/users/current");
     return new User(result);
   } catch {
-    return new User("invalidUser");
+    return new User({ id: "invalidUser" });
   }
 }
 
