@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { useWatch } from "antd/es/form/Form";
@@ -6,10 +6,8 @@ import groupBy from "lodash/groupBy";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
-import { FormInstance } from "antd";
-import Konzert from "jc-shared/konzert/konzert.ts";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
+import { FormContext } from "antd/es/form/context";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -17,38 +15,15 @@ export interface MitarbeiterRowProps {
   usersAsOptions: UserWithKann[];
 }
 
-export default function MitarbeiterCard({
-  forVermietung = false,
-  form,
-}: {
-  forVermietung?: boolean;
-  form: FormInstance<Vermietung> | FormInstance<Konzert>;
-}) {
+export default function MitarbeiterCard({ forVermietung = false }: { forVermietung?: boolean }) {
   const { lg } = useBreakpoint();
+  const { form } = useContext(FormContext);
+  const { allUsers, optionen } = useJazzContext();
 
-  const { optionen } = useJazzContext();
-
-  const { allUsers } = useJazzContext();
-
-  const eventTyp = useWatch(["kopf", "eventTyp"], {
-    form,
-    preserve: true,
-  });
-
-  const id = useWatch("id", {
-    form,
-    preserve: true,
-  });
-
-  const brauchtTechnik = useWatch("brauchtTechnik", {
-    form,
-    preserve: true,
-  });
-
-  const abgesagt: boolean = useWatch(["kopf", "abgesagt"], {
-    form,
-    preserve: true,
-  });
+  const eventTyp = useWatch(["kopf", "eventTyp"], { form, preserve: true });
+  const id = useWatch("id", { form, preserve: true });
+  const brauchtTechnik = useWatch("brauchtTechnik", { form, preserve: true });
+  const abgesagt: boolean = useWatch(["kopf", "abgesagt"], { form, preserve: true });
 
   const preselection = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
@@ -60,9 +35,7 @@ export default function MitarbeiterCard({
       ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
         const fieldName = ["staff", `${key}NotNeeded`];
         const value = preselection[key];
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        form.setFieldValue(fieldName, value);
+        form?.setFieldValue(fieldName, value);
       });
     }
   }, [form, id, preselection]);
@@ -71,7 +44,7 @@ export default function MitarbeiterCard({
     if (abgesagt) {
       ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
         const fieldName = ["staff", `${key}NotNeeded`];
-        form.setFieldValue(fieldName, true);
+        form?.setFieldValue(fieldName, true);
       });
     }
   }, [abgesagt, form]);

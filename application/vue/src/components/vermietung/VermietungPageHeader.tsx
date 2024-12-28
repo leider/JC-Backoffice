@@ -9,50 +9,24 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { FormContext } from "antd/es/form/context";
 
 export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean; dirty: boolean }) {
-  const { form, resetChanges, hasErrors } = useContext(VermietungContext);
+  const { form } = useContext(FormContext);
+  const { resetChanges, hasErrors } = useContext(VermietungContext);
 
   const [displayDate, setDisplayDate] = useState<string>("");
 
-  const confirmed = useWatch(["kopf", "confirmed"], {
-    form,
-    preserve: true,
-  });
+  const confirmed = useWatch(["kopf", "confirmed"], { form, preserve: true });
   const titel = useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = useWatch("startDate", {
-    form,
-    preserve: true,
-  });
-  const brauchtTechnik = useWatch("brauchtTechnik", {
-    form,
-    preserve: true,
-  });
-  const brauchtPresse = useWatch("brauchtPresse", {
-    form,
-    preserve: true,
-  });
-  const technikOK = useWatch(["technik", "checked"], {
-    form,
-    preserve: true,
-  });
-  const presseOK = useWatch(["presse", "checked"], {
-    form,
-    preserve: true,
-  });
-  const homepage = useWatch(["kopf", "kannAufHomePage"], {
-    form,
-    preserve: true,
-  });
-  const social = useWatch(["kopf", "kannInSocialMedia"], {
-    form,
-    preserve: true,
-  });
-
-  const bar = useWatch("brauchtBar", {
-    form,
-    preserve: true,
-  });
+  const startDate = useWatch("startDate", { form, preserve: true });
+  const brauchtTechnik = useWatch("brauchtTechnik", { form, preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
+  const technikOK = useWatch(["technik", "checked"], { form, preserve: true });
+  const presseOK = useWatch(["presse", "checked"], { form, preserve: true });
+  const homepage = useWatch(["kopf", "kannAufHomePage"], { form, preserve: true });
+  const social = useWatch(["kopf", "kannInSocialMedia"], { form, preserve: true });
+  const bar = useWatch("brauchtBar", { form, preserve: true });
 
   const [title, setTitle] = useState<string>("");
 
@@ -81,7 +55,7 @@ export default function VermietungPageHeader({ isNew, dirty }: { isNew: boolean;
     <JazzPageHeader
       title={title}
       buttons={[
-        <MoreButton key="more" disabled={isNew} form={form} isDirty={dirty} isVermietung />,
+        <MoreButton key="more" disabled={isNew} isDirty={dirty} isVermietung />,
         <ButtonWithIcon
           key="cancel"
           text={"Reset"}

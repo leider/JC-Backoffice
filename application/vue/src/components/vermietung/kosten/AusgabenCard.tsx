@@ -7,15 +7,14 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 export default function AusgabenCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+  const { form } = useContext(FormContext);
 
   const [summe, setSumme] = useState<number>(0);
 
@@ -47,7 +46,7 @@ export default function AusgabenCard() {
   );
 
   function updateSumme() {
-    const verm = new Vermietung(form.getFieldsValue(true));
+    const verm = new Vermietung(form?.getFieldsValue(true));
     let sum = verm.kosten.totalEUR;
     if (!verm.brauchtTechnik) {
       sum = sum - verm.kosten.backlineUndTechnikEUR;
@@ -58,7 +57,7 @@ export default function AusgabenCard() {
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 
   function fluegelZeile() {
-    const verm = new Vermietung(form.getFieldsValue(true));
+    const verm = new Vermietung(form?.getFieldsValue(true));
     return verm.technik.fluegel && <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />;
   }
 
@@ -89,7 +88,7 @@ export default function AusgabenCard() {
           />
         </Col>
       </Row>
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
+      {new Vermietung(form?.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} onChange={updateSumme} />
       <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} onChange={updateSumme} />
@@ -97,7 +96,7 @@ export default function AusgabenCard() {
       <LabelCurrencyChangeableRow label="Werbung 5" path={["kosten", "werbung5"]} onChange={updateSumme} />
       <LabelCurrencyChangeableRow label="Werbung 6" path={["kosten", "werbung6"]} onChange={updateSumme} />
       <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} onChange={updateSumme} />
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && (
+      {new Vermietung(form?.getFieldsValue(true)).brauchtTechnik && (
         <>
           <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} onChange={updateSumme} disabled />
           <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} onChange={updateSumme} disabled />

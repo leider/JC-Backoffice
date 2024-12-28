@@ -179,7 +179,7 @@ export default function Programmheft() {
         buttons={[
           <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={() => nextOrPrevious(false)} type="default" />,
           <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={() => nextOrPrevious(true)} type="default" />,
-          <ProgrammheftKopierenButton key="copy" form={form} />,
+          <ProgrammheftKopierenButton key="copy" />,
           <SaveButton key="save" disabled={!dirty || hasErrors} />,
         ]}
         hasErrors={hasErrors}

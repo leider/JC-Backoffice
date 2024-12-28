@@ -12,9 +12,11 @@ import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { FormContext } from "antd/es/form/context";
 
 export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
-  const { form, resetChanges, setKasseHelpOpen, isDirty, hasErrors } = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
+  const { resetChanges, setKasseHelpOpen, isDirty, hasErrors } = useContext(KonzertContext);
   const { optionen } = useJazzContext();
   const [search] = useSearchParams();
   const { currentUser } = useJazzContext();
@@ -25,10 +27,7 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
 
   const isKassenseite = useMemo(() => search.get("page") === "kasse", [search]);
 
-  const eventTyp = useWatch(["kopf", "eventTyp"], {
-    form,
-    preserve: true,
-  });
+  const eventTyp = useWatch(["kopf", "eventTyp"], { form, preserve: true });
 
   const typeColor = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
@@ -36,46 +35,16 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
   }, [optionen, eventTyp]);
 
   const titel = useWatch(["kopf", "titel"], { form, preserve: true });
-  const startDate = useWatch("startDate", {
-    form,
-    preserve: true,
-  });
-  const confirmed = useWatch(["kopf", "confirmed"], {
-    form,
-    preserve: true,
-  });
-  const abgesagt = useWatch(["kopf", "abgesagt"], {
-    form,
-    preserve: true,
-  });
-  const technikOK = useWatch(["technik", "checked"], {
-    form,
-    preserve: true,
-  });
-  const brauchtPresse = useWatch("brauchtPresse", {
-    form,
-    preserve: true,
-  });
-  const presseOK = useWatch(["presse", "checked"], {
-    form,
-    preserve: true,
-  });
-  const homepage = useWatch(["kopf", "kannAufHomePage"], {
-    form,
-    preserve: true,
-  });
-  const social = useWatch(["kopf", "kannInSocialMedia"], {
-    form,
-    preserve: true,
-  });
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
-    form,
-    preserve: true,
-  });
-  const hotel = useWatch(["unterkunft", "bestaetigt"], {
-    form,
-    preserve: true,
-  });
+  const startDate = useWatch("startDate", { form, preserve: true });
+  const confirmed = useWatch(["kopf", "confirmed"], { form, preserve: true });
+  const abgesagt = useWatch(["kopf", "abgesagt"], { form, preserve: true });
+  const technikOK = useWatch(["technik", "checked"], { form, preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
+  const presseOK = useWatch(["presse", "checked"], { form, preserve: true });
+  const homepage = useWatch(["kopf", "kannAufHomePage"], { form, preserve: true });
+  const social = useWatch(["kopf", "kannInSocialMedia"], { form, preserve: true });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const hotel = useWatch(["unterkunft", "bestaetigt"], { form, preserve: true });
 
   const [title, setTitle] = useState<string>("");
 
@@ -114,7 +83,7 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
       title={<span style={titleStyle}>{title}</span>}
       dateString={displayDate}
       buttons={[
-        isOrga && <MoreButton key="more" disabled={isNew} form={form} isDirty={isDirty} />,
+        isOrga && <MoreButton key="more" disabled={isNew} isDirty={isDirty} />,
         <ButtonWithIcon
           key="cancel"
           text={"Reset"}
@@ -124,14 +93,7 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
           type="default"
         />,
         <SaveButton key="save" disabled={!isDirty || hasErrors} />,
-        isKassenseite && (
-          <HelpWithKasseButton
-            key="helpKasse"
-            callback={() => {
-              setKasseHelpOpen(true);
-            }}
-          />
-        ),
+        isKassenseite && <HelpWithKasseButton key="helpKasse" callback={() => setKasseHelpOpen(true)} />,
         <TeamCalendar key="cal" />,
       ]}
       tags={tagsForTitle}

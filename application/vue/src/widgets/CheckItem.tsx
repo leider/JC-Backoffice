@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxProps, Form } from "antd";
 import React, { useEffect, useState } from "react";
+import { NamePath } from "rc-field-form/es/interface";
 
 function InternalCheckbox({
   focus,
@@ -40,7 +41,8 @@ export default function CheckItem({
   save,
   focus,
   focusByMouseClick,
-}: CheckboxProps & {
+}: Omit<CheckboxProps, "name"> & {
+  name: NamePath;
   label?: string;
   save?: () => void;
   focus?: boolean;

@@ -9,12 +9,11 @@ import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { FormContext } from "antd/es/form/context";
 
 const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
-  const konzertContext = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
   const kassenContext = useContext(KassenContext);
-  const form = konzertContext!.form;
   const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
@@ -23,21 +22,19 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
   }, [disabled]);
 
   const [summe, setSumme] = useState<number>(0);
-  useEffect(() => {
-    updateSumme();
-  });
+  useEffect(updateSumme);
 
   function updateSumme() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
     setSumme(kasse.ausgabenTotalEUR);
-    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
+    form?.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
   const { lg } = useBreakpoint();
 
   function calculateAnBank() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
     const anBank = kasse.einnahmeTotalEUR - kasse.ausgabenOhneGage;
-    form.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
+    form?.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
     updateSumme();
   }
 

@@ -5,8 +5,8 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import SingleSelect from "@/widgets/SingleSelect";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import uniq from "lodash/uniq";
+import { FormContext } from "antd/es/form/context";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -14,8 +14,7 @@ type KontaktCardProps = {
   noTopBorder?: boolean;
 };
 export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
 
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
@@ -42,7 +41,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
       name: result.name,
       telefon: result.telefon,
     };
-    form.setFieldsValue(values);
+    form?.setFieldsValue(values);
   }
   return (
     <Collapsible

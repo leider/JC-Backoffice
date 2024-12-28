@@ -1,7 +1,7 @@
-import { App, Button, Dropdown, Form, FormInstance, Modal, Space, theme } from "antd";
+import { App, Button, Dropdown, Form, Modal, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
@@ -11,6 +11,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import { ItemType } from "antd/es/menu/interface";
+import { FormContext } from "antd/es/form/context";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -68,18 +69,14 @@ export function NewButtons() {
   );
 }
 
-export function MoreButton({
-  disabled,
-  form,
-  isDirty,
-  isVermietung,
-}: ButtonProps & { form: FormInstance; isDirty: boolean; isVermietung?: boolean }) {
+export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
+  const { form } = useContext(FormContext);
   function getKonzert() {
-    return new Konzert(form.getFieldsValue(true));
+    return new Konzert(form?.getFieldsValue(true));
   }
 
   function getVermietung() {
-    return new Vermietung(form.getFieldsValue(true));
+    return new Vermietung(form?.getFieldsValue(true));
   }
 
   const { modal } = App.useApp();

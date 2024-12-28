@@ -10,30 +10,29 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { FormContext } from "antd/es/form/context";
 
 export default function TechnikCard() {
-  const konzertContext = useContext(KonzertContext);
   const { optionen } = useJazzContext();
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
   const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     setSumme(konzert.kosten.backlineUndTechnikEUR);
   }, [form]);
 
   function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     setSumme(konzert.kosten.backlineUndTechnikEUR);
   }
 
   function updateFluegelKosten(e: CheckboxChangeEvent) {
     if (!e.target.checked) {
-      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
+      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
     } else {
-      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
+      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
     }
     updateSumme();
   }
@@ -68,7 +67,7 @@ export default function TechnikCard() {
       </Row>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader form={form} name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
       <Row gutter={12}>

@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useForm, useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -13,10 +12,12 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineModal.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
+import { FormContext } from "antd/es/form/context";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export function KassenzettelFreigabe() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { isDirty } = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
 
   const { modal } = App.useApp();
   const { currentUser, allUsers } = useJazzContext();
@@ -51,21 +52,21 @@ export function KassenzettelFreigabe() {
         </Form>
       ),
       onOk: () => {
-        form.setFieldValue(["kasse", "kassenfreigabe"], innerForm.getFieldValue("freigeber"));
-        form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
+        form?.setFieldValue(["kasse", "kassenfreigabe"], innerForm.getFieldValue("freigeber"));
+        form?.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
       },
     });
   }
 
   function freigabeAufheben() {
-    form.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
+    form?.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
     modal.confirm({
       type: "confirm",
       title: "Kassenfreigabe rückgängig",
       content: "Bist Du sicher?",
       onOk: () => {
-        form.setFieldValue(["kasse", "kassenfreigabe"], "");
-        form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
+        form?.setFieldValue(["kasse", "kassenfreigabe"], "");
+        form?.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
       },
     });
   }
@@ -82,8 +83,8 @@ export function KassenzettelFreigabe() {
             block
             text="Kassenzettel"
             icon="PrinterFill"
-            disabled={konzertContext?.isDirty}
-            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
+            disabled={isDirty}
+            onClick={() => openKassenzettel(new Konzert(form?.getFieldsValue(true)))}
             tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
           />
@@ -97,9 +98,7 @@ export function KassenzettelFreigabe() {
                 icon={"Unlock"}
                 onClick={freigeben}
                 disabled={
-                  konzertContext?.isDirty ||
-                  !darfFreigeben ||
-                  numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
+                  isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
                 }
               />
             ) : (
@@ -111,7 +110,7 @@ export function KassenzettelFreigabe() {
                   type="primary"
                   color="#c71c2c"
                   onClick={freigabeAufheben}
-                  disabled={konzertContext?.isDirty || !darfFreigabeAufheben}
+                  disabled={isDirty || !darfFreigabeAufheben}
                 />
                 <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
               </>

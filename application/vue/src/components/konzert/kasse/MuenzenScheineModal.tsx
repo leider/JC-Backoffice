@@ -7,6 +7,7 @@ import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbe
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
+import { FormContext } from "antd/es/form/context";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -23,30 +24,30 @@ const items = [
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
   const token = theme.useToken().token;
-  const konzertContext = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
+  const { isDirty } = useContext(KonzertContext);
   const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
-  const form = konzertContext!.form;
   const [openModal, setOpenModal] = useState(false);
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
   function updateAnfangsbestandEUR() {
-    const startinhalt = form.getFieldValue(["kasse", "startinhalt"]);
+    const startinhalt = form?.getFieldValue(["kasse", "startinhalt"]);
     const sum = items
       .map((item) => item.name)
       .reduce((prev, curr) => {
         return prev + (parseInt(curr, 10) * (startinhalt[curr] ?? 0)) / 100;
       }, 0);
-    form.setFieldValue(["kasse", "anfangsbestandEUR"], sum);
+    form?.setFieldValue(["kasse", "anfangsbestandEUR"], sum);
   }
 
   function updateEndbestandGezaehltEUR() {
-    const endinhalt = form.getFieldValue(["kasse", "endinhalt"]);
+    const endinhalt = form?.getFieldValue(["kasse", "endinhalt"]);
     const sum = items
       .map((item) => item.name)
       .reduce((prev, curr) => {
         return prev + (parseInt(curr, 10) * (endinhalt[curr] ?? 0)) / 100;
       }, 0);
-    form.setFieldValue(["kasse", "endbestandGezaehltEUR"], sum);
+    form?.setFieldValue(["kasse", "endbestandGezaehltEUR"], sum);
   }
 
   function ImmediateEuro({ name }: { name: string }) {
@@ -79,7 +80,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
               type="primary"
               onClick={() => {
                 isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
-                konzertContext?.isDirty ? form.submit() : undefined;
+                isDirty ? form?.submit() : undefined;
                 setOpenModal(false);
               }}
             >

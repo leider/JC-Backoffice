@@ -10,15 +10,14 @@ import TabKasse from "@/components/konzert/kasse/TabKasse";
 import TabHotel from "@/components/konzert/hotel/TabHotel";
 import TabPresse from "@/components/konzert/presse/TabPresse.tsx";
 import { useSearchParams } from "react-router";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 export default function KonzertTabs() {
-  const konzertContext = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
   const { optionen } = useJazzContext();
-  const form = konzertContext!.form;
 
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
@@ -26,14 +25,8 @@ export default function KonzertTabs() {
   const { currentUser } = useJazzContext();
   const onlyKasse = useMemo(() => !currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
-    form,
-    preserve: true,
-  });
-  const brauchtPresse = useWatch("brauchtPresse", {
-    form,
-    preserve: true,
-  });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
 
   useEffect(() => {
     const page = search.get("page") ?? "";
@@ -59,14 +52,7 @@ export default function KonzertTabs() {
       const farbe = color(type);
 
       return (
-        <b
-          style={{
-            margin: -16,
-            padding: 16,
-            backgroundColor: active ? farbe : "inherit",
-            color: active ? "#FFF" : farbe,
-          }}
-        >
+        <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
           <IconForSmallBlock iconName={icon(type)} /> {title}
         </b>
       );
@@ -74,49 +60,21 @@ export default function KonzertTabs() {
     [activePage],
   );
   useEffect(() => {
-    const kasseTab = {
-      key: "kasse",
-      label: <TabLabel type="kasse" title="Abendkasse" />,
-      children: <TabKasse />,
-    };
-    const gaesteTab = {
-      key: "gaeste",
-      label: <TabLabel type="gaeste" title="Gäste am Abend" />,
-      children: <TabGaeste />,
-    };
+    const kasseTab = { key: "kasse", label: <TabLabel type="kasse" title="Abendkasse" />, children: <TabKasse /> };
+    const gaesteTab = { key: "gaeste", label: <TabLabel type="gaeste" title="Gäste am Abend" />, children: <TabGaeste /> };
     const allTabs: TabsProps["items"] = [
-      {
-        key: "allgemeines",
-        label: <TabLabel type="allgemeines" title="Allgemeines" />,
-        children: <TabAllgemeines />,
-      },
+      { key: "allgemeines", label: <TabLabel type="allgemeines" title="Allgemeines" />, children: <TabAllgemeines /> },
       gaesteTab,
-      {
-        key: "technik",
-        label: <TabLabel type="technik" title="Technik" />,
-        children: <TabTechnik />,
-      },
-      {
-        key: "ausgaben",
-        label: <TabLabel type="ausgaben" title="Kalkulation" />,
-        children: <TabKosten />,
-      },
-      {
-        key: "hotel",
-        label: <TabLabel type="hotel" title="Hotel" />,
-        children: <TabHotel />,
-      },
+      { key: "technik", label: <TabLabel type="technik" title="Technik" />, children: <TabTechnik /> },
+      { key: "ausgaben", label: <TabLabel type="ausgaben" title="Kalkulation" />, children: <TabKosten /> },
+      { key: "hotel", label: <TabLabel type="hotel" title="Hotel" />, children: <TabHotel /> },
       kasseTab,
     ];
     if (onlyKasse) {
       return setTabs([gaesteTab, kasseTab]);
     }
     if (brauchtPresse) {
-      allTabs.push({
-        key: "presse",
-        label: <TabLabel type="presse" title="Presse" />,
-        children: <TabPresse />,
-      });
+      allTabs.push({ key: "presse", label: <TabLabel type="presse" title="Presse" />, children: <TabPresse /> });
     }
     if (brauchtHotel) {
       setTabs(allTabs);

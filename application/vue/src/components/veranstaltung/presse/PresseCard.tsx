@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, FormInstance, Row, Tabs } from "antd";
+import { Col, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import Uploader from "@/widgets/Uploader.tsx";
@@ -14,12 +14,11 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
-export default function PresseCard({ form, isVermietung }: { form: FormInstance; isVermietung: boolean }) {
-  const allimages = useQuery({
-    queryKey: ["imagenames"],
-    queryFn: () => imagenames(),
-  });
+export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
+  const { form } = useContext(FormContext);
+  const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
   const { color } = colorsAndIconsForSections;
   const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
@@ -32,17 +31,17 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
 
   useEffect(() => {
     if (isVermietung) {
-      setVerForPreview(new Vermietung(form.getFieldsValue(true)));
+      setVerForPreview(new Vermietung(form?.getFieldsValue(true)));
     } else {
-      setVerForPreview(new Konzert(form.getFieldsValue(true)));
+      setVerForPreview(new Konzert(form?.getFieldsValue(true)));
     }
   }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];
-    const imagelist = form.getFieldValue(name);
-    form.setFieldValue(name, [...imagelist, val]);
-    form.setFieldValue(["tempimage"], null);
+    const imagelist = form?.getFieldValue(name);
+    form?.setFieldValue(name, [...imagelist, val]);
+    form?.setFieldValue(["tempimage"], null);
   }
 
   const [activePage, setActivePage] = useState<string>("final");
@@ -87,7 +86,7 @@ export default function PresseCard({ form, isVermietung }: { form: FormInstance;
               },
             ]}
           />
-          <Uploader form={form} name={["presse", "image"]} typ={"pressefoto"} />
+          <Uploader name={["presse", "image"]} typ={"pressefoto"} />
           <SingleSelect
             name={["tempimage"]}
             label={"Vorhandene Bilder übernehmen"}

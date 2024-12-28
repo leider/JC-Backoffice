@@ -7,29 +7,24 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { FormContext } from "antd/es/form/context";
 
 export default function TransportCard() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
 
   const [summe, setSumme] = useState<number>(0);
 
-  useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form],
-  );
+  useEffect(updateSumme, [form]);
+
   function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     setSumme(konzert.unterkunft.transportEUR);
   }
   const { currentUser } = useJazzContext();
   const sendMail = () => {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     const unterkunft = konzert.unterkunft;
     const email = encodeURIComponent(`${konzert.hotel.name}<${konzert.hotel.email}>`);
     const subject = encodeURIComponent(`Jazzclub Reservierungsanfrage für ${unterkunft.anreiseDisplayDate}`);

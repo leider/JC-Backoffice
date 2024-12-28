@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { Form } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -15,11 +15,7 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
   data,
   saveForm,
   children,
-}: PropsWithChildren<{
-  title: string;
-  data?: T;
-  saveForm: (vals: T) => void;
-}>) {
+}: PropsWithChildren<{ title: string; data?: T; saveForm: (vals: T) => void }>) {
   document.title = `JC-${title}`;
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -27,16 +23,21 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
 
   const [form] = Form.useForm<FerienIcals>();
 
+  const updateDirtyIfChanged = useCallback((initial: object, current: object) => {
+    logDiffForDirty(initial, current, false);
+    setDirty(areDifferent(initial, current));
+  }, []);
+
   useEffect(() => {
     if (data) {
       const deepCopy = data.toJSON();
       form.setFieldsValue(deepCopy);
       const initial = data.toJSON();
       setInitialValue(initial);
-      setDirty(areDifferent(initial, deepCopy));
+      updateDirtyIfChanged(initial, deepCopy);
       form.validateFields();
     }
-  }, [form, data]);
+  }, [form, data, updateDirtyIfChanged]);
 
   const { hasErrors, checkErrors } = useCheckErrors(form);
 
@@ -44,12 +45,14 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
     <Form
       form={form}
       onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
+        updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
         checkErrors();
       }}
-      onFinish={() => saveForm(form.getFieldsValue(true))}
+      onFinish={() =>
+        form.validateFields().then(async () => {
+          saveForm(form.getFieldsValue(true));
+        })
+      }
       layout="vertical"
     >
       <JazzPageHeader title={title} buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />

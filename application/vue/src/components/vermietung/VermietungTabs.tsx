@@ -7,16 +7,15 @@ import { useSearchParams } from "react-router";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
 import TabTechnik from "@/components/vermietung/technik/TabTechnik.tsx";
 import TabKosten from "@/components/vermietung/kosten/TabKosten.tsx";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 export default function VermietungTabs() {
-  const context = useContext(VermietungContext);
+  const { form } = useContext(FormContext);
   const { optionen } = useJazzContext();
-  const form = context!.form;
 
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("allgemeines");
@@ -55,14 +54,8 @@ export default function VermietungTabs() {
     );
   }
 
-  const brauchtTechnik = useWatch("brauchtTechnik", {
-    form,
-    preserve: true,
-  });
-  const brauchtPresse = useWatch("brauchtPresse", {
-    form,
-    preserve: true,
-  });
+  const brauchtTechnik = useWatch("brauchtTechnik", { form, preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
 
   useEffect(
     () => {

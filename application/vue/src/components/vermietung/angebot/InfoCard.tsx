@@ -7,7 +7,6 @@ import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/commons/loader.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -15,12 +14,14 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
+import { VermietungContext } from "../VermietungContext";
 
 export default function InfoCard() {
-  const vermietungContext = useContext(VermietungContext);
+  const { form } = useContext(FormContext);
+  const { isDirty } = useContext(VermietungContext);
   const { currentUser } = useJazzContext();
 
-  const form = vermietungContext!.form;
   const status = useWatch(["angebot", "status"], { form, preserve: true });
 
   const startDate = useWatch("startDate", { form, preserve: true });
@@ -46,8 +47,8 @@ export default function InfoCard() {
         </>
       ),
       onOk: () => {
-        form.setFieldValue(["angebot", "freigabe"], currentUser.name);
-        form.setFieldValue(["angebot", "freigabeAm"], new Date());
+        form?.setFieldValue(["angebot", "freigabe"], currentUser.name);
+        form?.setFieldValue(["angebot", "freigabeAm"], new Date());
       },
     });
   }
@@ -58,8 +59,8 @@ export default function InfoCard() {
       title: "Freigabe rückgängig",
       content: "Bist Du sicher?",
       onOk: () => {
-        form.setFieldValue(["angebot", "freigabe"], "");
-        form.setFieldValue(["angebot", "freigabeAm"], undefined);
+        form?.setFieldValue(["angebot", "freigabe"], "");
+        form?.setFieldValue(["angebot", "freigabeAm"], undefined);
       },
     });
   }
@@ -108,7 +109,7 @@ export default function InfoCard() {
           )}
         </Col>
       </Row>
-      {vermietungContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={6}>
           <SingleSelect name={"art"} label="Art" options={printOptions} />
@@ -122,8 +123,8 @@ export default function InfoCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={vermietungContext?.isDirty || !getFieldValue("id")}
-                    onClick={() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true)))}
+                    disabled={isDirty || !getFieldValue("id")}
+                    onClick={() => openAngebotRechnung(new Vermietung(form?.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>
@@ -141,7 +142,7 @@ export default function InfoCard() {
                   text="Rechnung freigeben..."
                   icon={"Unlock"}
                   onClick={freigeben}
-                  disabled={status !== "abgerechnet" || vermietungContext?.isDirty || !darfFreigeben}
+                  disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
                 />
               </Form.Item>
             ) : (
@@ -154,7 +155,7 @@ export default function InfoCard() {
                     type="primary"
                     color="#c71c2c"
                     onClick={freigabeAufheben}
-                    disabled={vermietungContext?.isDirty || !darfFreigabeAufheben}
+                    disabled={isDirty || !darfFreigabeAufheben}
                   />
                 </Form.Item>
                 <TextField name={["angebot", "freigabe"]} label="Durch" disabled />

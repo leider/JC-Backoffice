@@ -1,14 +1,16 @@
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { Button, Dropdown, FormInstance, Space } from "antd";
+import { Button, Dropdown, Space } from "antd";
 import * as React from "react";
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { alleKalender } from "@/commons/loader.ts";
-import Kalender from "jc-shared/programmheft/kalender.ts";
 import { useWatch } from "antd/es/form/Form";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import { FormContext } from "antd/es/form/context";
 
-export default function ProgrammheftKopierenButton({ form }: { form: FormInstance<Kalender> }) {
+export default function ProgrammheftKopierenButton() {
+  const { form } = useContext(FormContext);
+
   const { data } = useQuery({
     queryKey: ["kalender", "alle"],
     queryFn: () => alleKalender(),
@@ -32,7 +34,7 @@ export default function ProgrammheftKopierenButton({ form }: { form: FormInstanc
       const prevKal = options.find((kalender) => kalender.id === key);
       if (prevKal) {
         const events = prevKal.eventsMovedWithBase(id);
-        form.setFieldValue("events", events);
+        form?.setFieldValue("events", events);
       }
     },
     [form, id, options],

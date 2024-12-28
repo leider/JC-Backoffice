@@ -5,13 +5,12 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
 import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { FormContext } from "antd/es/form/context";
 
 const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
   const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
@@ -25,13 +24,13 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
   });
 
   function updateSumme() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
     setSumme(kasse.einnahmeTotalEUR);
-    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
+    form?.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
   function calculateTickets() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
     const tickets =
       kasse.endbestandGezaehltEUR -
       kasse.anfangsbestandEUR -
@@ -40,7 +39,7 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
       kasse.einnahmeOhneBankUndTickets +
       kasse.ausgabeBankEUR;
 
-    form.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
+    form?.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
     updateSumme();
   }
 

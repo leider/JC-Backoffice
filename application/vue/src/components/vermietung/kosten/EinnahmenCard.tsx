@@ -3,12 +3,11 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 export default function EinnahmenCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+  const { form } = useContext(FormContext);
 
   const [summe, setSumme] = useState<number>(0);
 
@@ -18,14 +17,12 @@ export default function EinnahmenCard() {
   });
 
   useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => updateSumme(), // eslint-disable-next-line react-hooks/exhaustive-deps
     [form, saalmiete],
   );
 
   function updateSumme() {
-    const verm = new Vermietung(form.getFieldsValue(true));
+    const verm = new Vermietung(form?.getFieldsValue(true));
     const miete = verm.saalmiete || 0;
     setSumme(miete);
   }

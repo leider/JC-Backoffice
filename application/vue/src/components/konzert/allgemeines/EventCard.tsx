@@ -6,26 +6,25 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { EventTypeSelect } from "@/widgets/EventTypeSelect.tsx";
+import { FormContext } from "antd/es/form/context";
 
 export default function EventCard() {
-  const konzertContext = useContext(KonzertContext);
+  const { form } = useContext(FormContext);
   const { optionen, orte } = useJazzContext();
-  const form = konzertContext!.form;
 
   const { currentUser } = useJazzContext();
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   function ortChanged() {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     const selectedOrt = orte.orte.find((o) => o.name === konzert.kopf.ort);
     if (selectedOrt) {
-      form.setFieldsValue({
+      form?.setFieldsValue({
         kopf: {
           pressename: selectedOrt.pressename || konzert.kopf.ort,
           presseIn: selectedOrt.presseIn || selectedOrt.pressename,
@@ -34,7 +33,7 @@ export default function EventCard() {
       });
     }
 
-    form.validateFields();
+    form?.validateFields();
   }
 
   useEffect(
@@ -98,7 +97,7 @@ export default function EventCard() {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <PreisprofilSelect form={form} optionen={optionen} />
+          <PreisprofilSelect optionen={optionen} />
         </Col>
         <Col span={8}>
           <SingleSelect name={["kopf", "genre"]} label="Genre" options={optionen.genres} />

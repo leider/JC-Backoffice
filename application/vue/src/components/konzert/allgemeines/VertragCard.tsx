@@ -10,10 +10,11 @@ import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { FormContext } from "antd/es/form/context";
 
 export default function VertragCard() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
+  const { isDirty } = useContext(KonzertContext);
 
   const { currentUser } = useJazzContext();
 
@@ -21,7 +22,7 @@ export default function VertragCard() {
 
   return (
     <Collapsible suffix="allgemeines" label="Vertrag">
-      {konzertContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={9}>
           <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten()} />
@@ -40,8 +41,8 @@ export default function VertragCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={konzertContext?.isDirty || !isBookingTeam || !getFieldValue("id")}
-                    onClick={() => openVertrag(new Konzert(form.getFieldsValue(true)))}
+                    disabled={isDirty || !isBookingTeam || !getFieldValue("id")}
+                    onClick={() => openVertrag(new Konzert(form?.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>
@@ -53,7 +54,7 @@ export default function VertragCard() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Uploader form={form} name={["vertrag", "datei"]} typ={"vertrag"} />
+          <Uploader name={["vertrag", "datei"]} typ={"vertrag"} />
         </Col>
       </Row>
       <Row gutter={12}>

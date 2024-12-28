@@ -5,30 +5,23 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 interface AusgabenCardParams {
   einnahmen: number;
   ausgaben: number;
 }
 export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
 
   const [kalk, setKalk] = useState<KonzertKalkulation>(new KonzertKalkulation(new Konzert()));
 
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
-    form,
-    preserve: true,
-  });
-  const deal = useWatch(["kosten", "deal"], {
-    form,
-    preserve: true,
-  });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const deal = useWatch(["kosten", "deal"], { form, preserve: true });
 
   useEffect(() => {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     setKalk(new KonzertKalkulation(konzert));
   }, [einnahmen, ausgaben, form, brauchtHotel, deal]);
 
@@ -38,13 +31,7 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns: ColumnType<any>[] = [
-    {
-      title: "",
-      dataIndex: "first",
-      key: "first",
-      render: (text) => <b>{text}</b>,
-      align: "right",
-    },
+    { title: "", dataIndex: "first", key: "first", render: (text) => <b>{text}</b>, align: "right" },
     { title: "Eintritt", dataIndex: "second", key: "second", align: "right" },
     { title: "Ausgaben", dataIndex: "third", key: "third", align: "right" },
     { title: "Überschuss", dataIndex: "fourth", key: "fourth", align: "right" },
@@ -54,16 +41,16 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
     {
       key: 1,
       first: "",
-      second: format(kalk?.einnahmenGesamtEUR || 0),
-      third: format(kalk?.kostenGesamtEUR || 0),
-      fourth: format(kalk?.bruttoUeberschussEUR || 0),
+      second: format(kalk?.einnahmenGesamtEUR ?? 0),
+      third: format(kalk?.kostenGesamtEUR ?? 0),
+      fourth: format(kalk?.bruttoUeberschussEUR ?? 0),
     },
     {
       key: 2,
       first: "Anteilig an Band:",
       second: "",
       third: "",
-      fourth: format(kalk?.dealAbsolutEUR || 0),
+      fourth: format(kalk?.dealAbsolutEUR ?? 0),
     },
   ];
 

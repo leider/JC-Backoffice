@@ -1,15 +1,15 @@
-import { Form, FormInstance, Select } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import { Form, Select } from "antd";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
-import Konzert from "jc-shared/konzert/konzert.ts";
+import { FormContext } from "antd/es/form/context";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;
   onChange?: (value?: Preisprofil) => void;
-  form: FormInstance<Konzert>;
 }
 
-export default function PreisprofilSelect({ optionen, onChange, form }: PreisprofilSelectParams) {
+export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSelectParams) {
+  const { form } = useContext(FormContext);
   return (
     <Form.Item
       label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}
@@ -17,7 +17,7 @@ export default function PreisprofilSelect({ optionen, onChange, form }: Preispro
       valuePropName="valueAsObject"
       trigger="onValueAsObject"
     >
-      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} />
+      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form?.getFieldValue(["kasse", "kassenfreigabe"])} />
     </Form.Item>
   );
 }

@@ -9,57 +9,35 @@ import Kasse from "jc-shared/konzert/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import Technik from "jc-shared/veranstaltung/technik.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import { FormContext } from "antd/es/form/context";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;
 }
 export default function AusgabenCard({ onChange }: AusgabenCardParams) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const { form } = useContext(FormContext);
 
   const [summe, setSumme] = useState<number>(0);
 
-  const unterkunft = useWatch(["unterkunft"], {
-    form,
-    preserve: true,
-  });
-
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
-    form,
-    preserve: true,
-  });
-
-  const backlineEUR = useWatch(["kosten", "backlineEUR"], {
-    form,
-    preserve: true,
-  });
-
-  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], {
-    form,
-    preserve: true,
-  });
-
-  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], {
-    form,
-    preserve: true,
-  });
+  const unterkunft = useWatch(["unterkunft"], { form, preserve: true });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const backlineEUR = useWatch(["kosten", "backlineEUR"], { form, preserve: true });
+  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], { form, preserve: true });
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
 
   useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateSumme, // eslint-disable-next-line react-hooks/exhaustive-deps
     [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR],
   );
 
   function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     const sum =
       konzert.kasse.ausgabenOhneGage + konzert.kosten.totalEUR + (konzert.artist.brauchtHotel ? konzert.unterkunft.kostenTotalEUR : 0);
     setSumme(sum);
@@ -69,7 +47,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 
   function kassenZeile() {
-    const kasse = new Kasse(form.getFieldValue("kasse"));
+    const kasse = new Kasse(form?.getFieldValue("kasse"));
     return (
       kasse.istFreigegeben && (
         <Row gutter={12}>
@@ -86,7 +64,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     );
   }
   function hotelZeile() {
-    const konzert = new Konzert(form.getFieldsValue(true));
+    const konzert = new Konzert(form?.getFieldsValue(true));
     const unterkunft = konzert?.unterkunft;
     const artist = konzert?.artist;
 
@@ -166,7 +144,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
               <DynamicItem
                 nameOfDepending={["kasse", "einnahmeTicketsEUR"]}
                 renderWidget={() => {
-                  const kalk = new KonzertKalkulation(new Konzert(form.getFieldsValue(true)));
+                  const kalk = new KonzertKalkulation(new Konzert(form?.getFieldsValue(true)));
                   return <NumberInputWithDirectValue label="GEMA (auf Eintritt und Reservix)" value={kalk.gema} decimals={2} suffix="€" />;
                 }}
               />
@@ -175,7 +153,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
         </Col>
       </Row>
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} onChange={updateSumme} />
-      {new Technik(form.getFieldValue("technik")).fluegel && (
+      {new Technik(form?.getFieldValue("technik")).fluegel && (
         <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />
       )}
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />
