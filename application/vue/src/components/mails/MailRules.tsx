@@ -1,42 +1,58 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Col, Form, Row } from "antd";
-import { areDifferent } from "@/commons/comparingAndTransforming";
-import { SaveButton } from "@/components/colored/JazzButtons";
+import { useMemo } from "react";
+import { Col, Row } from "antd";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
-import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
-import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import useCheckErrors from "@/commons/useCheckErrors.ts";
 import { Columns } from "@/widgets/EditableTable/types.ts";
+import cloneDeep from "lodash/cloneDeep";
+import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
+
+class MailRulesWrapper {
+  allRules: MailRule[] = [];
+
+  constructor(rules?: MailRule[]) {
+    this.allRules = (rules ?? []).map((rule) => rule.toJSON());
+  }
+  toJSON(): object {
+    return cloneDeep(this);
+  }
+}
+
+function MailRulesInternal() {
+  const columnDescriptions: Columns[] = [
+    { dataIndex: "name", title: "Name", type: "text", required: true, uniqueValues: true },
+    { dataIndex: "email", title: "E-Mail", type: "text", required: true },
+    { dataIndex: "rule", title: "Regel", type: "text", width: "250px", filters: allMailrules },
+  ];
+
+  return (
+    <RowWrapper>
+      <Row gutter={12}>
+        <Col span={24}>
+          <EditableTable<MailRule>
+            columnDescriptions={columnDescriptions}
+            name="allRules"
+            newRowFactory={(vals) => Object.assign({}, vals)}
+          />
+        </Col>
+      </Row>
+    </RowWrapper>
+  );
+}
 
 export default function MailRules() {
-  const mailRuleQuery = useQuery({
+  const { data } = useQuery({
     queryKey: ["mailRules"],
     queryFn: mailRulesRestCall,
   });
-  const [mailRules, setMailRules] = useState<MailRule[]>([]);
-  const [initialValue, setInitialValue] = useState<{ allRules: MailRule[] }>({
-    allRules: [],
-  });
-  const [dirty, setDirty] = useState<boolean>(false);
-  useDirtyBlocker(dirty);
+  const mailRules = useMemo(() => new MailRulesWrapper(data), [data]);
   const { showSuccess } = useJazzContext();
+
   const queryClient = useQueryClient();
-
-  document.title = "Mailregeln";
-
-  useEffect(() => {
-    if (mailRuleQuery.data) {
-      setMailRules(mailRuleQuery.data);
-    }
-  }, [mailRuleQuery.data]);
-
   const mutateRules = useMutation({
     mutationFn: saveMailRules,
     onSuccess: () => {
@@ -45,73 +61,13 @@ export default function MailRules() {
     },
   });
 
-  const [form] = Form.useForm<{ allRules: MailRule[] }>();
-
-  function initializeForm() {
-    const deepCopy = { allRules: mailRules.map((rule) => rule.toJSON()) };
-    form.setFieldsValue(deepCopy);
-    const initial = { allRules: mailRules.map((rule) => rule.toJSON()) };
-    setInitialValue(initial);
-    setDirty(areDifferent(initial, deepCopy));
-    form.validateFields();
-  }
-  useEffect(initializeForm, [form, mailRules]);
-
-  function saveForm() {
-    form.validateFields().then(async () => {
-      mutateRules.mutate(form.getFieldsValue(true).allRules);
-      showSuccess({});
-    });
+  function saveForm(vals: MailRulesWrapper) {
+    mutateRules.mutate(vals.allRules);
   }
 
-  const columnDescriptions: Columns[] = [
-    {
-      dataIndex: "name",
-      title: "Name",
-      type: "text",
-      required: true,
-      uniqueValues: true,
-    },
-    {
-      dataIndex: "email",
-      title: "E-Mail",
-      type: "text",
-      required: true,
-    },
-    {
-      dataIndex: "rule",
-      title: "Regel",
-      type: "text",
-      width: "250px",
-      filters: allMailrules,
-    },
-  ];
-
-  const { hasErrors, checkErrors } = useCheckErrors(form);
   return (
-    <Form
-      form={form}
-      onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
-        checkErrors();
-      }}
-      onFinish={saveForm}
-      layout="vertical"
-    >
-      <JazzPageHeader title="Mailing Regeln" buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
-      <RowWrapper>
-        <Row gutter={12}>
-          <Col span={24}>
-            <EditableTable<MailRule>
-              columnDescriptions={columnDescriptions}
-              name="allRules"
-              newRowFactory={(vals) => Object.assign({}, vals)}
-            />
-          </Col>
-        </Row>
-      </RowWrapper>
-    </Form>
+    <JazzFormAndHeader title="Mailing Regeln" data={mailRules} saveForm={saveForm}>
+      <MailRulesInternal />
+    </JazzFormAndHeader>
   );
 }

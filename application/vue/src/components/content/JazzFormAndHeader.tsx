@@ -25,8 +25,6 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
   const [dirty, setDirty] = useState<boolean>(false);
   useDirtyBlocker(dirty);
 
-  document.title = "Kalender";
-
   const [form] = Form.useForm<FerienIcals>();
 
   useEffect(() => {
