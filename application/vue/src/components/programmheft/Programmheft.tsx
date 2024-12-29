@@ -1,9 +1,9 @@
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { App, Col, Form, Row, Splitter } from "antd";
+import { Col, Form, Row, Splitter } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";
@@ -28,12 +28,8 @@ import useCheckErrors from "@/commons/useCheckErrors.ts";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 
 export default function Programmheft() {
-  const [search, setSearch] = useSearchParams();
-  const [year, month] = useMemo(() => {
-    return [search.get("year"), search.get("month")];
-  }, [search]);
+  const { year, month } = useParams();
   const { showSuccess, allUsers } = useJazzContext();
-  const { modal } = App.useApp();
   const { lg } = useBreakpoint();
 
   const [usersAsOptions, setUsersAsOptions] = useState<UserWithKann[]>([]);
@@ -46,20 +42,13 @@ export default function Programmheft() {
     setUsersAsOptions(usersWithBooking.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })));
   }, [usersWithBooking]);
 
-  const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
-
-  const defaultYear = useMemo(() => naechsterUngeraderMonat.format("YYYY"), [naechsterUngeraderMonat]);
-  const defaultMonth = useMemo(() => naechsterUngeraderMonat.format("MM"), [naechsterUngeraderMonat]);
-  const realYear = useMemo(() => year ?? defaultYear, [defaultYear, year]);
-  const realMonth = useMemo(() => month ?? defaultMonth, [defaultMonth, month]);
-
   const start = useMemo(() => {
-    return (DatumUhrzeit.forYYYYMM(`${realYear}${realMonth}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
-  }, [realMonth, realYear]);
+    return (DatumUhrzeit.forYYYYMM(`${year}${month}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
+  }, [month, year]);
 
   const { data } = useQuery({
-    queryKey: ["kalender", `${realYear}-${realMonth}`],
-    queryFn: () => kalenderFor(`${realYear}/${realMonth}`),
+    queryKey: ["kalender", `${year}-${month}`],
+    queryFn: () => kalenderFor(`${year}/${month}`),
   });
   const [kalender, setKalender] = useState<Kalender>(new Kalender());
 
@@ -114,26 +103,13 @@ export default function Programmheft() {
     setCalEvents((events ?? []).map((event) => new Event(event)));
   }, [events, form, initialValue]);
 
+  const navigate = useNavigate();
   const nextOrPrevious = useCallback(
     (next: boolean) => {
-      function proceed() {
-        const date = next ? start.plus({ monate: 2 }) : start.minus({ monate: 2 });
-        setSearch({ year: date.format("YYYY"), month: date.format("MM") }, { replace: true });
-      }
-
-      if (dirty) {
-        modal.confirm({
-          title: "Änderungen gefunden",
-          content: "Willst Du Deine Änderungen verwerfen?",
-          onCancel: proceed,
-          cancelText: "Ja, verwerfen",
-          okText: "Nein, ich will zurück",
-        });
-      } else {
-        proceed();
-      }
+      const date = next ? start.plus({ monate: 2 }) : start.minus({ monate: 2 });
+      navigate(`/programmheft/${date.format("YYYY/MM")}`, { replace: true });
     },
-    [dirty, modal, start, setSearch],
+    [navigate, start],
   );
 
   const moveEvents = useCallback(

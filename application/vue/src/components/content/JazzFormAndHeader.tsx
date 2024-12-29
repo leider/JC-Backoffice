@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, useCallback, useEffect, useState } from "react";
+import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from "react";
 import { Form } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -14,8 +14,9 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
   title,
   data,
   saveForm,
+  additionalButtons,
   children,
-}: PropsWithChildren<{ title: string; data?: T; saveForm: (vals: T) => void }>) {
+}: PropsWithChildren<{ title: string; data?: T; saveForm: (vals: T) => void; additionalButtons?: ReactNode[] }>) {
   document.title = `JC-${title}`;
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -41,6 +42,8 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
 
   const { hasErrors, checkErrors } = useCheckErrors(form);
 
+  const buttons: ReactNode[] = (additionalButtons ?? []).concat(<SaveButton key="save" disabled={!dirty || hasErrors} />);
+
   return (
     <Form
       form={form}
@@ -55,7 +58,7 @@ export default function JazzFormAndHeader<T extends { toJSON: () => object }>({
       }
       layout="vertical"
     >
-      <JazzPageHeader title={title} buttons={[<SaveButton key="save" disabled={!dirty || hasErrors} />]} hasErrors={hasErrors} />
+      <JazzPageHeader title={title} buttons={buttons} hasErrors={hasErrors} />
       <RowWrapper>{children}</RowWrapper>
     </Form>
   );

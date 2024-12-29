@@ -99,7 +99,7 @@ export default function VermietungComp() {
   const { hasErrors, checkErrors } = useCheckErrors(form);
 
   return (
-    <VermietungContext.Provider value={{ form, isDirty: dirty, hasErrors, resetChanges }}>
+    <VermietungContext.Provider value={{ isDirty: dirty, hasErrors, resetChanges }}>
       <Form
         form={form}
         onValuesChange={() => {

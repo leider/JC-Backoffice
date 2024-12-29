@@ -99,7 +99,7 @@ const allRoutes: RouteObject[] = [
         element: <OrtePage />,
       },
       {
-        path: "/programmheft",
+        path: "/programmheft/:year/:month",
         element: <Programmheft />,
       },
       {

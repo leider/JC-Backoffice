@@ -165,9 +165,7 @@ export default function KonzertComp() {
   const { hasErrors, checkErrors } = useCheckErrors(form);
 
   return (
-    <KonzertContext.Provider
-      value={{ form, isDirty: dirty, hasErrors, isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}
-    >
+    <KonzertContext.Provider value={{ isDirty: dirty, hasErrors, isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}>
       <Form
         form={form}
         onValuesChange={() => {
