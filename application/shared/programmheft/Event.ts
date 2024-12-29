@@ -9,7 +9,7 @@ export class Event {
   users: string[] = [];
 
   constructor({ start, farbe, emailOffset, was, users }: Partial<Event>) {
-    this.start = start!;
+    this.start = DatumUhrzeit.forISOString(start!).toISOString;
     this.farbe = farbe!;
     this.emailOffset = emailOffset;
     this.was = was;

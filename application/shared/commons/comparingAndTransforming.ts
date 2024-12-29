@@ -1,5 +1,3 @@
-import cloneDeep from "lodash/cloneDeep.js";
-import isEqual from "lodash/isEqual.js";
 import { detailedDiff } from "deep-object-diff";
 
 type SomeObject = { [index: string]: SomeObject };
@@ -48,7 +46,7 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
       delete target[last];
     }
   }
-  const clone = cloneDeep(data);
+  const clone = JSON.parse(JSON.stringify(data));
   propertiesToIgnore?.forEach((key) => {
     deleteProp(clone, key);
   });
@@ -56,7 +54,7 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
 }
 
 export function areDifferentForHistoryEntries<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
-  return !isEqual(withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore), withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore));
+  return !!Object.keys(differenceForAsObject(left, right, propertiesToIgnore)).length;
 }
 export function areDifferent<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
   if (Object.keys(left).length === 0) {
@@ -87,6 +85,6 @@ export function logDiffForDirty<T extends object>(initial: T, current: T, enable
   if (!enable) {
     return;
   }
-  const diff = detailedDiff(initial, current);
+  const diff = differenceForAsObject(initial, current);
   console.log({ initial, current, diff }); // eslint-disable-line no-console
 }
