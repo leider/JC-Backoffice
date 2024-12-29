@@ -44,6 +44,10 @@ export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton isSend={true} disabled={disabled} />;
 }
 
+export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => void }) {
+  return <ButtonWithIcon text={"Reset"} onClick={resetChanges} icon={"ArrowCounterclockwise"} disabled={disabled} type="default" />;
+}
+
 export function NewButtons() {
   const navigate = useNavigate();
   const items = [

@@ -114,7 +114,7 @@ export default function VermietungComp() {
         colon={false}
       >
         <ShowOnCopy title={"Kopierte Vermietung"} isNew={isNew} startDate={vermietung.startDate} />
-        <VermietungPageHeader isNew={isNew} dirty={dirty} />
+        <VermietungPageHeader isNew={isNew} isDirty={dirty} />
         <VermietungTabs />
       </Form>
     </VermietungContext.Provider>
