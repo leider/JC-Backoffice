@@ -8,6 +8,8 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
+import { useState } from "react";
+import cloneDeep from "lodash/cloneDeep";
 
 function OrtePageInternal() {
   const columnDescriptions: Columns[] = [
@@ -33,7 +35,8 @@ function OrtePageInternal() {
 }
 
 export default function OrtePage() {
-  const { orte, showSuccess } = useJazzContext();
+  const { orte: originalOrte, showSuccess } = useJazzContext();
+  const [orte, setOrte] = useState(originalOrte);
   const queryClient = useQueryClient();
 
   const mutateOrte = useMutation({
@@ -48,8 +51,12 @@ export default function OrtePage() {
     mutateOrte.mutate(new Orte(vals));
   }
 
+  function reload() {
+    setOrte(cloneDeep(originalOrte));
+  }
+
   return (
-    <JazzFormAndHeader<Orte> title="Orte" data={orte} saveForm={saveForm}>
+    <JazzFormAndHeader<Orte> title="Orte" data={orte} saveForm={saveForm} resetChanges={reload}>
       <OrtePageInternal />
     </JazzFormAndHeader>
   );

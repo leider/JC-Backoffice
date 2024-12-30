@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { Col, Row, Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -12,6 +12,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
+import cloneDeep from "lodash/cloneDeep";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -89,7 +90,9 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
 }
 
 export default function Optionen() {
-  const { optionen, showSuccess } = useJazzContext();
+  const { optionen: originalOptionen, showSuccess } = useJazzContext();
+  const [optionen, setOptionen] = useState(originalOptionen);
+
   const queryClient = useQueryClient();
   const mutateOptionen = useMutation({
     mutationFn: saveOptionen,
@@ -132,8 +135,11 @@ export default function Optionen() {
   function saveForm(vals: OptionValues) {
     mutateOptionen.mutate(new OptionValues(vals));
   }
+  function reload() {
+    setOptionen(cloneDeep(originalOptionen));
+  }
   return (
-    <JazzFormAndHeader<OptionValues> title="Optionen" data={optionen} saveForm={saveForm}>
+    <JazzFormAndHeader<OptionValues> title="Optionen" data={optionen} saveForm={saveForm} resetChanges={reload}>
       <Tabs type="card" activeKey={activePage} items={tabs} onChange={setActivePage} />
     </JazzFormAndHeader>
   );

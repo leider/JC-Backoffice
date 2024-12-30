@@ -99,7 +99,7 @@ export default function Programmheft() {
     return (DatumUhrzeit.forYYYYMM(`${year}${month}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
   }, [month, year]);
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["kalender", `${year}-${month}`],
     queryFn: () => kalenderFor(`${year}/${month}`),
   });
@@ -141,6 +141,7 @@ export default function Programmheft() {
         <ProgrammheftKopierenButton key="copy" />,
       ]}
       changedPropsToWatch={["events"]}
+      resetChanges={refetch}
     >
       <ProgrammheftInternal start={start} />
     </JazzFormAndHeader>

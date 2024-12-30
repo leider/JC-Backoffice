@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveMailinglists } from "@/commons/loader.ts";
 import * as React from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "antd";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -49,7 +49,11 @@ function MailingListsInternal() {
 
 export default function MailingLists() {
   const { allUsers, showSuccess } = useJazzContext();
-  const mailingLists = useMemo(() => new MailingListsWrapper(new Users(allUsers).mailinglisten), [allUsers]);
+  const [mailingLists, setMailingLists] = useState<MailingListsWrapper>(new MailingListsWrapper([]));
+  useEffect(() => {
+    setMailingLists(new MailingListsWrapper(new Users(allUsers).mailinglisten));
+  }, [allUsers]);
+
   const queryClient = useQueryClient();
 
   const mutateLists = useMutation({
@@ -64,8 +68,12 @@ export default function MailingLists() {
     mutateLists.mutate(vals.allLists);
   }
 
+  function resetLists() {
+    setMailingLists(new MailingListsWrapper(new Users(allUsers).mailinglisten));
+  }
+
   return (
-    <JazzFormAndHeader title="Mailinglisten" data={mailingLists} saveForm={saveForm}>
+    <JazzFormAndHeader title="Mailinglisten" data={mailingLists} saveForm={saveForm} resetChanges={resetLists}>
       <MailingListsInternal />
     </JazzFormAndHeader>
   );

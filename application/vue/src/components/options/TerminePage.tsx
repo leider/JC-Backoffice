@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Col, Row } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
@@ -50,7 +50,7 @@ function TerminePageInternal() {
 }
 
 export default function TerminePage() {
-  const { data } = useQuery({ queryKey: ["termine"], queryFn: allTermine });
+  const { data, refetch } = useQuery({ queryKey: ["termine"], queryFn: allTermine });
 
   const termine = useMemo(() => {
     return new TermineWrapper(data);
@@ -76,7 +76,7 @@ export default function TerminePage() {
   }
 
   return (
-    <JazzFormAndHeader title="Termine" data={termine} saveForm={saveForm}>
+    <JazzFormAndHeader title="Termine" data={termine} saveForm={saveForm} resetChanges={refetch}>
       <TerminePageInternal />
     </JazzFormAndHeader>
   );

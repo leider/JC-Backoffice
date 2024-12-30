@@ -10,12 +10,14 @@ export default function JazzFormAndHeader<T>({
   additionalButtons,
   changedPropsToWatch,
   children,
+  resetChanges,
 }: PropsWithChildren<{
   title: string;
   data?: Partial<T>;
   saveForm: (vals: T) => void;
   additionalButtons?: ReactNode[];
   changedPropsToWatch?: string[];
+  resetChanges?: () => void;
 }>) {
   const [form] = Form.useForm<T>();
 
@@ -27,6 +29,7 @@ export default function JazzFormAndHeader<T>({
       form={form}
       additionalButtons={additionalButtons}
       changedPropsToWatch={changedPropsToWatch}
+      resetChanges={resetChanges}
     >
       {children}
     </JazzFormAndHeaderExtended>

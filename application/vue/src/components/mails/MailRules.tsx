@@ -25,7 +25,7 @@ class MailRulesWrapper {
 function MailRulesInternal() {
   const columnDescriptions: Columns[] = [
     { dataIndex: "name", title: "Name", type: "text", required: true, uniqueValues: true },
-    { dataIndex: "email", title: "E-Mail", type: "text", required: true },
+    { dataIndex: "email", title: "E-Mail", type: "text", width: "30%", required: true },
     { dataIndex: "rule", title: "Regel", type: "text", width: "250px", filters: allMailrules },
   ];
 
@@ -45,7 +45,7 @@ function MailRulesInternal() {
 }
 
 export default function MailRules() {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["mailRules"],
     queryFn: mailRulesRestCall,
   });
@@ -66,7 +66,7 @@ export default function MailRules() {
   }
 
   return (
-    <JazzFormAndHeader title="Mailing Regeln" data={mailRules} saveForm={saveForm}>
+    <JazzFormAndHeader title="Mailing Regeln" data={mailRules} saveForm={saveForm} resetChanges={refetch}>
       <MailRulesInternal />
     </JazzFormAndHeader>
   );

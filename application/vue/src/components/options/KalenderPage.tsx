@@ -35,7 +35,7 @@ function KalenderPageInternal() {
 }
 
 export default function KalenderPage() {
-  const { data } = useQuery<FerienIcals>({ queryKey: ["ferienIcals"], queryFn: kalender });
+  const { data, refetch } = useQuery<FerienIcals>({ queryKey: ["ferienIcals"], queryFn: kalender });
   const { showSuccess } = useJazzContext();
   const queryClient = useQueryClient();
 
@@ -52,7 +52,7 @@ export default function KalenderPage() {
   }
 
   return (
-    <JazzFormAndHeader<FerienIcals> title="Kalender" data={data} saveForm={saveForm}>
+    <JazzFormAndHeader<FerienIcals> title="Kalender" data={data} saveForm={saveForm} resetChanges={refetch}>
       <KalenderPageInternal />
     </JazzFormAndHeader>
   );
