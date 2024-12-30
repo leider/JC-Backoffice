@@ -64,7 +64,12 @@ export default function JazzFormAndHeaderExtended<T>({
       form.setFieldsValue(deepCopy as object);
       const initial = cloneDeep(form.getFieldsValue(true));
       setInitialValue(initial);
-      form.validateFields().then(() => updateDirtyIfChanged(initial, deepCopy));
+      form
+        .validateFields()
+        .then(() => updateDirtyIfChanged(initial, deepCopy))
+        .catch(() => {
+          // ignore
+        });
     }
   }, [form, data, updateDirtyIfChanged]);
 
@@ -86,9 +91,14 @@ export default function JazzFormAndHeaderExtended<T>({
         checkErrors();
       }}
       onFinish={() =>
-        form.validateFields().then(async () => {
-          saveForm(form.getFieldsValue(true));
-        })
+        form
+          .validateFields()
+          .then(async () => {
+            saveForm(form.getFieldsValue(true));
+          })
+          .catch(() => {
+            // ignore
+          })
       }
       layout="vertical"
     >
