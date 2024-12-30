@@ -56,7 +56,7 @@ type TTextField = {
    */
   uniqueValuesValidator?: Rule;
   style?: React.CSSProperties;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 };
 
@@ -118,7 +118,7 @@ type TTextInputEmbedded = {
   textVal?: string;
   onText?: (value: string | null) => void;
   onChange?: (value: string | null) => void;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 };
 
@@ -155,12 +155,13 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
       value={textVal}
       onChange={({ target: { value: nextValue } }) => {
         changed(nextValue);
+        save?.(true);
       }}
       onBlur={({ target: { value: nextValue } }) => {
         changed(nextValue, true);
         save?.();
       }}
-      onPressEnter={save}
+      onPressEnter={() => save?.()}
     />
   );
 };

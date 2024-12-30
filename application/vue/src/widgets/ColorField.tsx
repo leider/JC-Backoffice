@@ -7,7 +7,7 @@ type TColorField = {
   label?: string;
   required?: boolean;
   initialValue?: string;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
 };
 
 const colors: { [name: string]: string } = {
@@ -60,7 +60,7 @@ export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> 
 type TColorInputEmbedded = {
   value?: string;
   onChange?: (value: string) => void;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   presets?: boolean;
 };
 
@@ -81,7 +81,10 @@ const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onC
       defaultFormat="hex"
       format="hex"
       value={value}
-      onChange={(val) => onChange?.(val.toHexString())}
+      onChange={(val) => {
+        onChange?.(val.toHexString());
+        save?.(true);
+      }}
       onOpenChange={(open) => {
         if (!open) {
           save?.();

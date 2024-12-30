@@ -49,7 +49,7 @@ function InnerSelect({
   disabled?: boolean;
   onChange?: (value: string[]) => void;
   value?: string[];
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 }) {
   const ref = useRef<RefSelectProps>(null);
@@ -86,9 +86,12 @@ function InnerSelect({
       showSearch
       filterOption={filterOption}
       placeholder="Tippen zum Suchen nach irgendwas"
-      onChange={onChange}
+      onChange={(val) => {
+        onChange?.(val);
+        save?.(true);
+      }}
       value={value}
-      onBlur={save}
+      onBlur={() => save?.()}
     />
   );
 }
@@ -105,7 +108,7 @@ export default function MitarbeiterMultiSelect({
   usersAsOptions: UserWithKann[];
   disabled?: boolean;
   label?: string;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 }) {
   return (

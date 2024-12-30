@@ -1,9 +1,6 @@
-import { Form, Table, type TableProps, Tag, theme, Typography } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Form, Table, type TableProps } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
-import numeral from "numeral";
-import dayjs from "dayjs";
-import { TagForUser } from "@/widgets/TagForUser.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
@@ -12,9 +9,9 @@ import InlineEditableActions from "@/widgets/EditableTable/InlineEditableActions
 import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import isNil from "lodash/isNil";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import "./editableTable.css";
 import { Columns } from "./types";
+import useColumnRenderer from "@/widgets/EditableTable/widgets/useColumnRenderer.tsx";
 
 type WithKey<T> = T & { key: string };
 
@@ -56,7 +53,6 @@ function InnerTable<T>({
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
-  const token = theme.useToken().token;
   const [rows, setRows] = useState<TWithKey[]>([]);
 
   useEffect(() => {
@@ -107,89 +103,7 @@ function InnerTable<T>({
     onChange?.(newData);
   };
 
-  const renderByType = useCallback(
-    function ({ type, required }: Columns) {
-      switch (type) {
-        case "boolean":
-          return (val: boolean) =>
-            val ? (
-              <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} />
-            ) : (
-              <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} />
-            );
-        case "integer":
-          return (val: number | null) => {
-            if (!isNil(val)) {
-              return numeral(val).format("0");
-            }
-            if (required) {
-              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
-            }
-            return "0";
-          };
-        case "color":
-          return (val: string | null) => {
-            if (isNil(val) && required) {
-              return <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorError} />;
-            }
-            return val ? (
-              <div style={{ backgroundColor: val, width: 20, height: 20 }} />
-            ) : (
-              <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorPrimary} />
-            );
-          };
-        case "date":
-          return (val: string | null) => {
-            if (!isNil(val)) {
-              return dayjs(val).format("ll");
-            }
-            if (required) {
-              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
-            }
-            return "<Klick ...>";
-          };
-        case "startEnd":
-          return (val: string[] | null) => {
-            if (!isNil(val)) {
-              return dayjs(val[0]).format("ll") + " - " + dayjs(val[1]).format("ll");
-            }
-            if (required) {
-              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
-            }
-            return "<Klick ...>";
-          };
-        case "user":
-          return (val: string[] | null) => {
-            if (isNil(val) || val.length === 0) {
-              if (required) {
-                return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
-              }
-              return "Noch niemand gewählt...";
-            }
-            return (
-              <>
-                {val.map((each) => (
-                  <Tag key={each}>
-                    <TagForUser value={each} usersAsOptions={usersWithKann ?? []} hideErsthelfer />
-                  </Tag>
-                ))}
-              </>
-            );
-          };
-        default:
-          return (val: string | null) => {
-            if (val) {
-              return val;
-            }
-            if (required) {
-              return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
-            }
-            return "<Klick ...>";
-          };
-      }
-    },
-    [token, usersWithKann],
-  );
+  const renderByType = useColumnRenderer(usersWithKann);
 
   function widthForType({ width, type }: Columns) {
     if (width) {
