@@ -1,13 +1,14 @@
 import misc from "../commons/misc.js";
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import { Event } from "./Event.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Kalender {
   id: string;
   events: Event[] = [];
   migrated = false;
 
-  constructor(object?: Partial<Kalender>) {
+  constructor(object?: RecursivePartial<Kalender>) {
     if (object && object.id && object.id.split("/").length === 2) {
       const splits = object.id.split("/");
       if (misc.isNumber(splits[0]) && misc.isNumber(splits[1])) {

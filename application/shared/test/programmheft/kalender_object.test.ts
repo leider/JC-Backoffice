@@ -46,13 +46,13 @@ describe("Kalender", () => {
         ],
       });
       const movedEvents = kalender.eventsMovedWithBase("2022/03");
-      expect(movedEvents[0].start).to.eql("2022-02-01T23:00:00+01:00");
-      expect(movedEvents[1].start).to.eql("2022-02-12T23:00:00+01:00");
+      expect(movedEvents[0].start).to.eql("2022-02-01T22:00:00.000Z");
+      expect(movedEvents[1].start).to.eql("2022-02-12T22:00:00.000Z");
     });
 
     it("verschiebt und sortiert events korrekt tagesweise", () => {
       const event = new Event({ start: "2020-12-12T23:00:00+01:00", farbe: "" }).cloneAndMoveBy({ tage: 1 });
-      expect(event.start).to.eql("2020-12-13T23:00:00+01:00");
+      expect(event.start).to.eql("2020-12-13T22:00:00.000Z");
     });
   });
 });

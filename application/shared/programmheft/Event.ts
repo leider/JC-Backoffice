@@ -1,5 +1,6 @@
 import DatumUhrzeit, { AdditionOptions } from "../commons/DatumUhrzeit.js";
 import capitalize from "lodash/capitalize.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export class Event {
   start: string;
@@ -8,7 +9,7 @@ export class Event {
   was?: string;
   users: string[] = [];
 
-  constructor({ start, farbe, emailOffset, was, users }: Partial<Event>) {
+  constructor({ start, farbe, emailOffset, was, users }: RecursivePartial<Event>) {
     this.start = DatumUhrzeit.forISOString(start!).toISOString;
     this.farbe = farbe!;
     this.emailOffset = emailOffset;
