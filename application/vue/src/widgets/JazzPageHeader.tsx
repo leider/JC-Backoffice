@@ -21,16 +21,17 @@ export function JazzPageHeader({
   breadcrumb?: ReactElement;
   hasErrors?: boolean;
 } & PropsWithChildren) {
+  const errorTitle = (
+    <Typography.Title key="errors" type="danger">
+      Du hast noch Fehler!
+    </Typography.Title>
+  );
+
   return (
     <PageHeader
-      title={title}
+      title={hasErrors ? errorTitle : title}
       extra={buttons}
       footer={[
-        hasErrors && (
-          <Typography.Title key="errors" level={4} type="danger">
-            Du hast noch Fehler!
-          </Typography.Title>
-        ),
         firstTag && firstTag,
         dateString && (
           <b key="datum" style={{ marginRight: 8 }}>
