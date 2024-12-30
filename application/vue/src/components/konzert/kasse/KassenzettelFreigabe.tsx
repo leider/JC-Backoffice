@@ -13,14 +13,12 @@ import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineMo
 import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
 import { FormContext } from "antd/es/form/context";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export function KassenzettelFreigabe() {
-  const { isDirty } = useContext(KonzertContext);
   const { form } = useContext(FormContext);
+  const { currentUser, allUsers, isDirty } = useJazzContext();
 
   const { modal } = App.useApp();
-  const { currentUser, allUsers } = useJazzContext();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
 
   useEffect(() => {

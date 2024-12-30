@@ -63,7 +63,7 @@ export default abstract class Veranstaltung {
 
   abstract asNew(object: MinimalVeranstaltung): Veranstaltung;
 
-  protected ghostResults() {
+  ghostResults() {
     return this.tageOhneStart.map((ghostStart) => {
       const result: MinimalVeranstaltung = {} as MinimalVeranstaltung;
       Object.assign(result, {

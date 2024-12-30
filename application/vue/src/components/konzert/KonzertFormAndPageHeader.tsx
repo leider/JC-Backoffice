@@ -1,17 +1,19 @@
 import * as React from "react";
-import { CSSProperties, useContext, useMemo } from "react";
+import { CSSProperties, PropsWithChildren, ReactNode, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router";
-import { HelpWithKasseButton, MoreButton, ResetButton, SaveButton } from "@/components/colored/JazzButtons";
+import { HelpWithKasseButton, MoreButton, ResetButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
-import { useWatch } from "antd/es/form/Form";
+import { useForm, useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { FormContext } from "antd/es/form/context";
+import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
+import { Tag } from "antd";
+import { NamePath } from "rc-field-form/es/interface";
 
 function useTags() {
   const { form } = useContext(FormContext);
@@ -42,11 +44,20 @@ function useTags() {
   return headerTags(taggies);
 }
 
-export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
+export default function KonzertFormAndPageHeader<T>({
+  data,
+  saveForm,
+  children,
+}: PropsWithChildren<{
+  data?: Partial<T>;
+  saveForm: (vals: T) => void;
+  additionalButtons?: ReactNode[];
+  changedPropsToWatch?: NamePath[];
+}>) {
   document.title = "Konzert";
-  const { form } = useContext(FormContext);
+  const [form] = useForm();
   const { resetChanges, setKasseHelpOpen } = useContext(KonzertContext);
-  const { optionen, currentUser, isDirty, hasErrors } = useJazzContext();
+  const { optionen, currentUser, isDirty } = useJazzContext();
   const [search] = useSearchParams();
 
   const isKassenseite = useMemo(() => search.get("page") === "kasse", [search]);
@@ -55,34 +66,47 @@ export default function KonzertPageHeader({ isNew }: { isNew: boolean }) {
   const titel = useWatch(["kopf", "titel"], { form, preserve: true });
   const eventTyp = useWatch(["kopf", "eventTyp"], { form, preserve: true });
   const abgesagt = useWatch(["kopf", "abgesagt"], { form, preserve: true });
+  const id = useWatch(["id"], { form, preserve: true });
 
   const displayDate = useMemo(() => DatumUhrzeit.forJSDate(startDate).lesbareKurzform, [startDate]);
   const title = useMemo(() => {
-    return `${titel ?? ""}${isNew ? " (NEU)" : ""}`;
-  }, [isNew, titel]);
+    return `${titel ?? ""}${!id ? " (NEU)" : ""}`;
+  }, [id, titel]);
 
-  const typeColor = useMemo(() => {
+  const titleStyle: CSSProperties = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
-    return typByName[eventTyp]?.[0].color ?? colorDefault;
-  }, [optionen, eventTyp]);
-  const titleStyle: CSSProperties = { color: typeColor, textDecoration: abgesagt ? "line-through" : "" };
+    const typeColor = typByName[eventTyp]?.[0].color ?? colorDefault;
+    return { color: typeColor, textDecoration: abgesagt ? "line-through" : "" };
+  }, [abgesagt, eventTyp, optionen?.typenPlus]);
 
   const isOrga = useMemo(() => currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
   const tagsForTitle = useTags();
   return (
-    <JazzPageHeader
-      title={<span style={titleStyle}>{title}</span>}
+    <JazzFormAndHeaderExtended
+      title={title}
+      styledTitle={<span style={titleStyle}>{title}</span>}
+      saveForm={saveForm}
+      data={data}
       dateString={displayDate}
-      buttons={[
-        isOrga && <MoreButton key="more" disabled={isNew} isDirty={isDirty} />,
+      additionalButtons={[
+        isOrga && <MoreButton key="more" disabled={!id} isDirty={isDirty} />,
         <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} />,
-        <SaveButton key="save" disabled={!isDirty || hasErrors} />,
+      ]}
+      additionalButtonsLast={[
         isKassenseite && <HelpWithKasseButton key="helpKasse" callback={() => setKasseHelpOpen(true)} />,
         <TeamCalendar key="cal" />,
       ]}
+      firstTag={
+        <Tag key="verm" color="purple">
+          Vermietung
+        </Tag>
+      }
       tags={tagsForTitle}
-      hasErrors={hasErrors}
-    />
+      changedPropsToWatch={[["angebot", "freigabe"]]}
+      form={form}
+    >
+      {children}
+    </JazzFormAndHeaderExtended>
   );
 }

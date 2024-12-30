@@ -7,12 +7,10 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
   saveFunction,
   queryKey,
   successMessage,
-  setResult,
 }: {
   saveFunction: (obj: InstanceType) => Promise<InstanceType>;
   queryKey: string;
   successMessage: string;
-  setResult: (ob: InstanceType) => void;
 }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -22,15 +20,8 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
 
   function reloadAndSetResult(data: InstanceType) {
     if (url !== data.url) {
-      navigate(
-        {
-          pathname: `/${queryKey}/${data.url}`,
-          search: `page=${search.get("page")}`,
-        },
-        { replace: true },
-      );
+      navigate({ pathname: `/${queryKey}/${data.url}`, search: `page=${search.get("page")}` }, { replace: true });
     }
-    setResult(data);
   }
 
   const result: UseMutationOptions<InstanceType, AxiosError<unknown, InstanceType>, InstanceType, unknown> = {
