@@ -96,13 +96,9 @@ export default function KonzertComp() {
     mutateKonzert.mutate(konzert);
   }
 
-  function resetChanges() {
-    refetch();
-  }
-
   return (
-    <KonzertContext.Provider value={{ isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen, resetChanges }}>
-      <KonzertFormAndPageHeader data={konzert} saveForm={saveForm} changedPropsToWatch={[["kasse", "kassenfreigabe"], "agenturauswahl"]}>
+    <KonzertContext.Provider value={{ isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen }}>
+      <KonzertFormAndPageHeader data={konzert} saveForm={saveForm} resetChanges={refetch}>
         <ShowOnCopy title={"Kopiertes Konzert"} />
         <KonzertTabs />
       </KonzertFormAndPageHeader>

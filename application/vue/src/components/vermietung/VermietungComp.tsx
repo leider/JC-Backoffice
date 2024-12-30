@@ -7,7 +7,6 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
-import { VermietungContext } from "./VermietungContext";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
 import VermietungFormAndPageHeader from "@/components/vermietung/VermietungFormAndPageHeader.tsx";
 
@@ -43,16 +42,10 @@ export default function VermietungComp() {
     mutateVermietung.mutate(vermiet);
   }
 
-  function resetChanges() {
-    refetch();
-  }
-
   return (
-    <VermietungContext.Provider value={{ resetChanges }}>
-      <VermietungFormAndPageHeader data={data} saveForm={saveForm}>
-        <ShowOnCopy title={"Kopierte Vermietung"} />
-        <VermietungTabs />
-      </VermietungFormAndPageHeader>
-    </VermietungContext.Provider>
+    <VermietungFormAndPageHeader data={data} saveForm={saveForm} resetChanges={refetch}>
+      <ShowOnCopy title={"Kopierte Vermietung"} />
+      <VermietungTabs />
+    </VermietungFormAndPageHeader>
   );
 }

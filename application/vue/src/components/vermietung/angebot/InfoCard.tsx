@@ -15,12 +15,10 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useWatch } from "antd/es/form/Form";
 import { FormContext } from "antd/es/form/context";
-import { VermietungContext } from "../VermietungContext";
 
 export default function InfoCard() {
   const { form } = useContext(FormContext);
-  const { isDirty } = useContext(VermietungContext);
-  const { currentUser } = useJazzContext();
+  const { currentUser, isDirty } = useJazzContext();
 
   const status = useWatch(["angebot", "status"], { form, preserve: true });
 

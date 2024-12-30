@@ -2,7 +2,7 @@ import * as React from "react";
 import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from "react";
 import { Form, FormInstance } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
-import { SaveButton } from "@/components/colored/JazzButtons.tsx";
+import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
@@ -25,6 +25,7 @@ export default function JazzFormAndHeaderExtended<T>({
   tags,
   form,
   styledTitle,
+  resetChanges,
 }: PropsWithChildren<{
   title: string;
   data?: Partial<T>;
@@ -37,6 +38,7 @@ export default function JazzFormAndHeaderExtended<T>({
   tags?: ReactNode[];
   form: FormInstance<T>;
   styledTitle?: React.JSX.Element;
+  resetChanges?: () => void;
 }>) {
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty, setHasErrors } = useJazzContext();
@@ -72,6 +74,7 @@ export default function JazzFormAndHeaderExtended<T>({
   }, [hasErrors, setHasErrors]);
 
   const buttons: ReactNode[] = (additionalButtons ?? [])
+    .concat(resetChanges ? <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} /> : [])
     .concat(<SaveButton key="save" disabled={!isDirty || hasErrors} />)
     .concat(additionalButtonsLast ?? []);
 

@@ -1,9 +1,8 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode, useContext, useMemo } from "react";
+import { PropsWithChildren, useContext, useMemo } from "react";
 import { Tag } from "antd";
-import { MoreButton, ResetButton } from "@/components/colored/JazzButtons";
+import { MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { useForm, useWatch } from "antd/es/form/Form";
@@ -36,17 +35,16 @@ function useTags() {
 export default function VermietungFormAndPageHeader<T>({
   data,
   saveForm,
+  resetChanges,
   children,
 }: PropsWithChildren<{
   data?: Partial<T>;
   saveForm: (vals: T) => void;
-  additionalButtons?: ReactNode[];
-  changedPropsToWatch?: string[];
+  resetChanges?: () => void;
 }>) {
   document.title = "Vermietung";
   const [form] = useForm();
   const { isDirty } = useJazzContext();
-  const { resetChanges } = useContext(VermietungContext);
 
   const id = useWatch("id", { form, preserve: true });
   const startDate = useWatch("startDate", { form, preserve: true });
@@ -64,10 +62,8 @@ export default function VermietungFormAndPageHeader<T>({
       saveForm={saveForm}
       data={data}
       dateString={displayDate}
-      additionalButtons={[
-        <MoreButton key="more" disabled={!id} isDirty={isDirty} isVermietung />,
-        <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} />,
-      ]}
+      resetChanges={resetChanges}
+      additionalButtons={[<MoreButton key="more" disabled={!id} isDirty={isDirty} isVermietung />]}
       additionalButtonsLast={[<TeamCalendar key="cal" />]}
       firstTag={
         <Tag key="verm" color="purple">

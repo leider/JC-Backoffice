@@ -1,7 +1,7 @@
 import * as React from "react";
-import { CSSProperties, PropsWithChildren, ReactNode, useContext, useMemo } from "react";
+import { CSSProperties, PropsWithChildren, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router";
-import { HelpWithKasseButton, MoreButton, ResetButton } from "@/components/colored/JazzButtons";
+import { HelpWithKasseButton, MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
@@ -13,7 +13,6 @@ import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { FormContext } from "antd/es/form/context";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import { Tag } from "antd";
-import { NamePath } from "rc-field-form/es/interface";
 
 function useTags() {
   const { form } = useContext(FormContext);
@@ -47,16 +46,16 @@ function useTags() {
 export default function KonzertFormAndPageHeader<T>({
   data,
   saveForm,
+  resetChanges,
   children,
 }: PropsWithChildren<{
   data?: Partial<T>;
   saveForm: (vals: T) => void;
-  additionalButtons?: ReactNode[];
-  changedPropsToWatch?: NamePath[];
+  resetChanges?: () => void;
 }>) {
   document.title = "Konzert";
   const [form] = useForm();
-  const { resetChanges, setKasseHelpOpen } = useContext(KonzertContext);
+  const { setKasseHelpOpen } = useContext(KonzertContext);
   const { optionen, currentUser, isDirty } = useJazzContext();
   const [search] = useSearchParams();
 
@@ -89,10 +88,8 @@ export default function KonzertFormAndPageHeader<T>({
       saveForm={saveForm}
       data={data}
       dateString={displayDate}
-      additionalButtons={[
-        isOrga && <MoreButton key="more" disabled={!id} isDirty={isDirty} />,
-        <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} />,
-      ]}
+      resetChanges={resetChanges}
+      additionalButtons={[isOrga && <MoreButton key="more" disabled={!id} isDirty={isDirty} />]}
       additionalButtonsLast={[
         isKassenseite && <HelpWithKasseButton key="helpKasse" callback={() => setKasseHelpOpen(true)} />,
         <TeamCalendar key="cal" />,
@@ -103,7 +100,7 @@ export default function KonzertFormAndPageHeader<T>({
         </Tag>
       }
       tags={tagsForTitle}
-      changedPropsToWatch={[["angebot", "freigabe"]]}
+      changedPropsToWatch={[["kasse", "kassenfreigabe"], "agenturauswahl"]}
       form={form}
     >
       {children}
