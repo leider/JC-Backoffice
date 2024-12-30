@@ -1,7 +1,7 @@
 import { App, Col, Flex, Form, Row, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -12,10 +12,10 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineModal.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export function KassenzettelFreigabe() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { currentUser, allUsers, isDirty } = useJazzContext();
 
   const { modal } = App.useApp();

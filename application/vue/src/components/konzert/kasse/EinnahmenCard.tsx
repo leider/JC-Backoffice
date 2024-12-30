@@ -1,4 +1,4 @@
-import React, { forwardRef, Ref, useContext, useEffect, useState } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -7,10 +7,10 @@ import Kasse from "jc-shared/konzert/kasse";
 import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);

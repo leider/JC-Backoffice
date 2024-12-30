@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -11,10 +11,10 @@ import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function AusgabenCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
 

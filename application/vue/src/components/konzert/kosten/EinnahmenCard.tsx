@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Flex, Row, Typography } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -10,14 +10,14 @@ import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface EinnahmenCardParams {
   onChange: (sum: number) => void;
 }
 export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   const { optionen } = useJazzContext();
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(

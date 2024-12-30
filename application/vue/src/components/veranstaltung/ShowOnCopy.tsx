@@ -2,14 +2,14 @@ import { Modal } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { FormContext } from "antd/es/form/context";
 import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export function ShowOnCopy({ title }: { title: string }) {
   const { url } = useParams();
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const [openCopyModal, setOpenCopyModal] = useState(false);
   const [done, setDone] = useState(false);
 

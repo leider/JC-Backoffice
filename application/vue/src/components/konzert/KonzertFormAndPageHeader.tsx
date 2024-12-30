@@ -10,12 +10,12 @@ import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import { useForm, useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
-import { FormContext } from "antd/es/form/context";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import { Tag } from "antd";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 function useTags() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const confirmed = useWatch(["kopf", "confirmed"], { form, preserve: true });
   const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
   const technikOK = useWatch(["technik", "checked"], { form, preserve: true });

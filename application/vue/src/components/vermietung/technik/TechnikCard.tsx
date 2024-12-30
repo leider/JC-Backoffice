@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -10,10 +10,10 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function TechnikCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { optionen } = useJazzContext();
   const { backlineJazzclub, backlineRockshop } = optionen;
 

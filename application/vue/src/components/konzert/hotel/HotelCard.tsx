@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -10,10 +10,10 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function HotelCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { optionen } = useJazzContext();
 
   const [summe, setSumme] = useState<number>(0);

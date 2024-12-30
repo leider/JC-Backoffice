@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { ChangelistItem } from "jc-shared/konzert/konzert.ts";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function BearbeiterCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
 
   return (
     <Collapsible suffix="allgemeines" label="Historie">

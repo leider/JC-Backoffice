@@ -1,6 +1,6 @@
 import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Col, Row, Splitter } from "antd";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
@@ -20,10 +20,10 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const events = useWatch("events", { form, preserve: true });
 
   const { allUsers } = useJazzContext();

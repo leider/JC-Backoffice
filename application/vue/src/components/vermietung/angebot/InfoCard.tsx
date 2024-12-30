@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { App, Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
 import "easymde/dist/easymde.min.css";
@@ -14,10 +14,10 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function InfoCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { currentUser, isDirty } = useJazzContext();
 
   const status = useWatch(["angebot", "status"], { form, preserve: true });

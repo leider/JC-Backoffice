@@ -295,12 +295,13 @@ export async function riderFor(url: string) {
 }
 
 export async function saveRider(rider: Rider) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/riders",
     data: rider,
     contentType: "json",
   });
+  return new Rider(result);
 }
 
 // Optionen & Termine

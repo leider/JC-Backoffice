@@ -9,10 +9,10 @@ import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const kassenContext = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
 

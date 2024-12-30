@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row, Table } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -6,14 +6,14 @@ import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface AusgabenCardParams {
   einnahmen: number;
   ausgaben: number;
 }
 export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
 
   const [kalk, setKalk] = useState<KonzertKalkulation>(new KonzertKalkulation(new Konzert()));
 

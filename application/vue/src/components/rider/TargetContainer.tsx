@@ -90,7 +90,7 @@ export const TargetContainer: FC<{
   return (
     <div ref={targetContainer} style={{ width: "100%", overflow: "scroll" }}>
       <div ref={dropTarget} style={style}>
-        {targetBoxes.map((each) => {
+        {targetBoxes?.map((each) => {
           return <Box key={each.id} item={each} callback={boxChanged} />;
         })}
       </div>

@@ -1,7 +1,7 @@
 import { Form, Select } from "antd";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;
@@ -9,7 +9,7 @@ interface PreisprofilSelectParams {
 }
 
 export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSelectParams) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   return (
     <Form.Item
       label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}

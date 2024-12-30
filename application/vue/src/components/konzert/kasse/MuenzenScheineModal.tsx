@@ -6,8 +6,8 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbedded.tsx";
 import { useWatch } from "antd/es/form/Form";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
-import { FormContext } from "antd/es/form/context";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -24,7 +24,7 @@ const items = [
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
   const token = theme.useToken().token;
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { isDirty } = useJazzContext();
   const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
   const [openModal, setOpenModal] = useState(false);

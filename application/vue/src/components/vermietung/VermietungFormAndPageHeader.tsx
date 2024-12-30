@@ -1,17 +1,17 @@
 import * as React from "react";
-import { PropsWithChildren, useContext, useMemo } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import { Tag } from "antd";
 import { MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import { useForm, useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 function useTags() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const confirmed = useWatch(["kopf", "confirmed"], { form, preserve: true });
   const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
   const technikOK = useWatch(["technik", "checked"], { form, preserve: true });

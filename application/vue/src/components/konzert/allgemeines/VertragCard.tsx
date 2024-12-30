@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -9,10 +9,10 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function VertragCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { currentUser, isDirty } = useJazzContext();
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);

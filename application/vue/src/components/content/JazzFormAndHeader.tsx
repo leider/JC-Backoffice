@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactElement, ReactNode } from "react";
 import { Form } from "antd";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 
@@ -11,6 +11,7 @@ export default function JazzFormAndHeader<T>({
   changedPropsToWatch,
   children,
   resetChanges,
+  breadcrumb,
 }: PropsWithChildren<{
   title: string;
   data?: Partial<T>;
@@ -18,6 +19,7 @@ export default function JazzFormAndHeader<T>({
   additionalButtons?: ReactNode[];
   changedPropsToWatch?: string[];
   resetChanges?: () => void;
+  breadcrumb?: ReactElement;
 }>) {
   const [form] = Form.useForm<T>();
 
@@ -30,6 +32,7 @@ export default function JazzFormAndHeader<T>({
       additionalButtons={additionalButtons}
       changedPropsToWatch={changedPropsToWatch}
       resetChanges={resetChanges}
+      breadcrumb={breadcrumb}
     >
       {children}
     </JazzFormAndHeaderExtended>

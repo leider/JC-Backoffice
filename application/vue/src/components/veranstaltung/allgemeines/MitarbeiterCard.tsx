@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { useWatch } from "antd/es/form/Form";
@@ -7,7 +7,7 @@ import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -17,7 +17,7 @@ export interface MitarbeiterRowProps {
 
 export default function MitarbeiterCard({ forVermietung = false }: { forVermietung?: boolean }) {
   const { lg } = useBreakpoint();
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { allUsers, optionen } = useJazzContext();
 
   const eventTyp = useWatch(["kopf", "eventTyp"], { form, preserve: true });

@@ -1,12 +1,12 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { Col, Form, Row } from "antd";
-import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import SingleSelect from "@/widgets/SingleSelect";
 import uniq from "lodash/uniq";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -14,7 +14,7 @@ type KontaktCardProps = {
   noTopBorder?: boolean;
 };
 export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
 
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {

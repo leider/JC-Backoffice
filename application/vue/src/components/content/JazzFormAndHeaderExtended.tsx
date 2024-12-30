@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from "react";
+import { PropsWithChildren, ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
 import { Form, FormInstance } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -26,6 +26,7 @@ export default function JazzFormAndHeaderExtended<T>({
   form,
   styledTitle,
   resetChanges,
+  breadcrumb,
 }: PropsWithChildren<{
   title: string;
   data?: Partial<T>;
@@ -39,6 +40,7 @@ export default function JazzFormAndHeaderExtended<T>({
   form: FormInstance<T>;
   styledTitle?: React.JSX.Element;
   resetChanges?: () => void;
+  breadcrumb?: ReactElement;
 }>) {
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty, setHasErrors } = useJazzContext();
@@ -109,6 +111,7 @@ export default function JazzFormAndHeaderExtended<T>({
         dateString={dateString}
         firstTag={firstTag}
         tags={tags}
+        breadcrumb={breadcrumb}
       />
       <RowWrapper>{children}</RowWrapper>
       {changedPropsToWatch && (

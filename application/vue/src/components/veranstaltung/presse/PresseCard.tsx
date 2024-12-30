@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -14,10 +14,10 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
   const { color } = colorsAndIconsForSections;

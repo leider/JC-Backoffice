@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Checkbox, Col, Form, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -10,10 +10,10 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { EventTypeSelect } from "@/widgets/EventTypeSelect.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function EventCard() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { optionen, orte } = useJazzContext();
 
   const { currentUser } = useJazzContext();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -11,10 +11,10 @@ import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function VermietungTabs() {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const { optionen } = useJazzContext();
 
   const [search, setSearch] = useSearchParams();

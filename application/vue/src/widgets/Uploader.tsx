@@ -1,11 +1,11 @@
 import { Col, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "antd";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags.tsx";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/commons/loader.ts";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { FormContext } from "antd/es/form/context";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface UploaderParams {
   name: string[];
@@ -14,7 +14,7 @@ interface UploaderParams {
 }
 
 export default function Uploader({ name, typ, onlyImages = false }: UploaderParams) {
-  const { form } = useContext(FormContext);
+  const form = useFormInstance();
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(
