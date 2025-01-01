@@ -34,8 +34,8 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     if (preselection && !id) {
       ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
         const fieldName = ["staff", `${key}NotNeeded`];
-        const value = preselection[key];
-        form?.setFieldValue(fieldName, value);
+        const value = !preselection[key];
+        form.setFieldValue(fieldName, value);
       });
     }
   }, [form, id, preselection]);
@@ -44,7 +44,7 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     if (abgesagt) {
       ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
         const fieldName = ["staff", `${key}NotNeeded`];
-        form?.setFieldValue(fieldName, true);
+        form.setFieldValue(fieldName, true);
       });
     }
   }, [abgesagt, form]);

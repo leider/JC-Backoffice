@@ -13,7 +13,6 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteForToday } from "@/commons/loader.ts";
 import HelpContent from "@/components/content/HelpContent.tsx";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const { Content } = Layout;
 
@@ -85,7 +84,6 @@ const JazzContent: React.FC = () => {
           </Content>
           <HelpContent />
         </Layout>
-        <ReactQueryDevtools initialIsOpen={false} />
       </JazzContext.Provider>
     </AuthContext.Provider>
   );

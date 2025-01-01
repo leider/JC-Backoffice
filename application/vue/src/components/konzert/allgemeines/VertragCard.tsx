@@ -39,7 +39,7 @@ export default function VertragCard() {
                     block
                     type="primary"
                     disabled={isDirty || !isBookingTeam || !getFieldValue("id")}
-                    onClick={() => openVertrag(new Konzert(form?.getFieldsValue(true)))}
+                    onClick={() => openVertrag(new Konzert(form.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>

@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveOptionen } from "@/commons/loader.ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { Col, Row, Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -12,7 +12,6 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
-import cloneDeep from "lodash/cloneDeep";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -90,8 +89,11 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
 }
 
 export default function Optionen() {
-  const { optionen: originalOptionen, showSuccess } = useJazzContext();
-  const [optionen, setOptionen] = useState(originalOptionen);
+  const { showSuccess } = useJazzContext();
+  const { data, refetch } = useQuery({
+    queryKey: ["optionen"],
+    queryFn: optionenLoader,
+  });
 
   const queryClient = useQueryClient();
   const mutateOptionen = useMutation({
@@ -115,7 +117,7 @@ export default function Optionen() {
     {
       key: "optionen",
       label: <TabLabel type="optionen" title="Optionen" />,
-      children: <TabOptionen optionen={optionen} />,
+      children: <TabOptionen optionen={data ?? new OptionValues()} />,
     },
     {
       key: "artists",
@@ -124,7 +126,7 @@ export default function Optionen() {
         <Row gutter={12}>
           <Col span={24}>
             <Collapsible suffix="allgemeines" label="Künstler" noTopBorder>
-              <MultiSelectWithTags name="artists" label={"Künstler"} options={optionen.artists} />
+              <MultiSelectWithTags name="artists" label={"Künstler"} options={data?.artists ?? []} />
             </Collapsible>
           </Col>
         </Row>
@@ -135,11 +137,9 @@ export default function Optionen() {
   function saveForm(vals: OptionValues) {
     mutateOptionen.mutate(new OptionValues(vals));
   }
-  function reload() {
-    setOptionen(cloneDeep(originalOptionen));
-  }
+
   return (
-    <JazzFormAndHeader<OptionValues> title="Optionen" data={optionen} saveForm={saveForm} resetChanges={reload}>
+    <JazzFormAndHeader<OptionValues> title="Optionen" data={data} saveForm={saveForm} resetChanges={refetch}>
       <Tabs type="card" activeKey={activePage} items={tabs} onChange={setActivePage} />
     </JazzFormAndHeader>
   );

@@ -19,7 +19,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
 
   useEffect(
     () => {
-      setOptions(form?.getFieldValue(name) || []);
+      setOptions(form.getFieldValue(name) || []);
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [form],
   );
@@ -27,7 +27,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
   async function saveFiles() {
     setUploading(true);
     const formData = new FormData();
-    formData.append("id", form?.getFieldValue("id") || "");
+    formData.append("id", form.getFieldValue("id") || "");
     formData.append("typ", typ);
     fileList.forEach((file) => {
       formData.append("datei", file as RcFile, file.name);
@@ -36,7 +36,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
       const newVeranstaltung = await uploadFile(formData);
       setFileList([]);
       const strings = name.reduce((prev, curr) => prev[curr], newVeranstaltung);
-      form?.setFieldValue(name, strings);
+      form.setFieldValue(name, strings);
     } catch {
       // eslint-disable-next-line no-console
       console.error("Oops");

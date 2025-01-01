@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Col, Row } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";

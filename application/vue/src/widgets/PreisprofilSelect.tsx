@@ -17,7 +17,7 @@ export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSel
       valuePropName="valueAsObject"
       trigger="onValueAsObject"
     >
-      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form?.getFieldValue(["kasse", "kassenfreigabe"])} />
+      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} />
     </Form.Item>
   );
 }

@@ -311,12 +311,13 @@ export async function optionen(): Promise<OptionValues> {
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/optionen",
     data: optionen.toJSON(),
     contentType: "json",
   });
+  return new OptionValues(result);
 }
 
 export async function orte() {

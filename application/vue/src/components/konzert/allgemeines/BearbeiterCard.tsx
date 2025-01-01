@@ -10,7 +10,7 @@ export default function BearbeiterCard() {
   return (
     <Collapsible suffix="allgemeines" label="Historie">
       <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
-      {form?.getFieldValue("changelist")?.map((item: ChangelistItem, idx: number) => (
+      {form.getFieldValue("changelist")?.map((item: ChangelistItem, idx: number) => (
         <Row gutter={12} key={idx}>
           <Col span={24}>
             <details>

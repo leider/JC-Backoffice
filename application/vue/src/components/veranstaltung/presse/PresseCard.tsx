@@ -31,17 +31,17 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
 
   useEffect(() => {
     if (isVermietung) {
-      setVerForPreview(new Vermietung(form?.getFieldsValue(true)));
+      setVerForPreview(new Vermietung(form.getFieldsValue(true)));
     } else {
-      setVerForPreview(new Konzert(form?.getFieldsValue(true)));
+      setVerForPreview(new Konzert(form.getFieldsValue(true)));
     }
   }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
 
   function imageUebernehmen(val: string) {
     const name = ["presse", "image"];
-    const imagelist = form?.getFieldValue(name);
-    form?.setFieldValue(name, [...imagelist, val]);
-    form?.setFieldValue(["tempimage"], null);
+    const imagelist = form.getFieldValue(name);
+    form.setFieldValue(name, [...imagelist, val]);
+    form.setFieldValue(["tempimage"], null);
   }
 
   const [activePage, setActivePage] = useState<string>("final");

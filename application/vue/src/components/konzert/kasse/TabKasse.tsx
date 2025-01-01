@@ -27,8 +27,8 @@ export default function TabKasse() {
   const refAnBank: Ref<HTMLElement> = useRef(null);
 
   function anfangsbestandChanged() {
-    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
-    form?.setFieldValue("endbestandEUR", kasse.endbestandEUR);
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
   useEffect(anfangsbestandChanged, [form, anfangsbestandEUR]);

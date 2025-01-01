@@ -25,16 +25,16 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
   useEffect(updateSumme);
 
   function updateSumme() {
-    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     setSumme(kasse.ausgabenTotalEUR);
-    form?.setFieldValue("endbestandEUR", kasse.endbestandEUR);
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
   const { lg } = useBreakpoint();
 
   function calculateAnBank() {
-    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     const anBank = kasse.einnahmeTotalEUR - kasse.ausgabenOhneGage;
-    form?.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
+    form.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
     updateSumme();
   }
 

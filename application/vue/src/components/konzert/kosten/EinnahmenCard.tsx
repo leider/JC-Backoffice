@@ -28,7 +28,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   );
 
   function updateSumme() {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     const kalk = new KonzertKalkulation(konzert);
     const sum = konzert.eintrittspreise.zuschuss + kalk.erwarteterOderEchterEintritt;
     setSumme(sum);

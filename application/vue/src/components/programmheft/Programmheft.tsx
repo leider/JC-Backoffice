@@ -42,7 +42,7 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
       }
 
       const newEvents = moveEventsBy(events, { tage: offset });
-      form?.setFieldValue("events", newEvents);
+      form.setFieldValue("events", newEvents);
     },
     [events, form],
   );

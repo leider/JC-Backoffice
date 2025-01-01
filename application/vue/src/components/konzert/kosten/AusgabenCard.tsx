@@ -37,7 +37,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   );
 
   function updateSumme() {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     const sum =
       konzert.kasse.ausgabenOhneGage + konzert.kosten.totalEUR + (konzert.artist.brauchtHotel ? konzert.unterkunft.kostenTotalEUR : 0);
     setSumme(sum);
@@ -47,7 +47,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
 
   function kassenZeile() {
-    const kasse = new Kasse(form?.getFieldValue("kasse"));
+    const kasse = new Kasse(form.getFieldValue("kasse"));
     return (
       kasse.istFreigegeben && (
         <Row gutter={12}>
@@ -64,7 +64,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     );
   }
   function hotelZeile() {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     const unterkunft = konzert?.unterkunft;
     const artist = konzert?.artist;
 
@@ -144,7 +144,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
               <DynamicItem
                 nameOfDepending={["kasse", "einnahmeTicketsEUR"]}
                 renderWidget={() => {
-                  const kalk = new KonzertKalkulation(new Konzert(form?.getFieldsValue(true)));
+                  const kalk = new KonzertKalkulation(new Konzert(form.getFieldsValue(true)));
                   return <NumberInputWithDirectValue label="GEMA (auf Eintritt und Reservix)" value={kalk.gema} decimals={2} suffix="€" />;
                 }}
               />
@@ -153,7 +153,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
         </Col>
       </Row>
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} onChange={updateSumme} />
-      {new Technik(form?.getFieldValue("technik")).fluegel && (
+      {new Technik(form.getFieldValue("technik")).fluegel && (
         <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />
       )}
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />

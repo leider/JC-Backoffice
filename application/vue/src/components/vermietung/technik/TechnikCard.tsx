@@ -21,15 +21,15 @@ export default function TechnikCard() {
   useEffect(updateSumme, [form]);
 
   function updateSumme() {
-    const vermietung = new Vermietung(form?.getFieldsValue(true));
+    const vermietung = new Vermietung(form.getFieldsValue(true));
     setSumme(vermietung.kosten.backlineUndTechnikEUR);
   }
 
   function updateFluegelKosten(e: CheckboxChangeEvent) {
     if (!e.target.checked) {
-      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
     } else {
-      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
     }
     updateSumme();
   }

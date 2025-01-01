@@ -41,7 +41,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
       name: result.name,
       telefon: result.telefon,
     };
-    form?.setFieldsValue(values);
+    form.setFieldsValue(values);
   }
   return (
     <Collapsible

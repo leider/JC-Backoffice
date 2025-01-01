@@ -76,11 +76,11 @@ export function NewButtons() {
 export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
   const form = useFormInstance();
   function getKonzert() {
-    return new Konzert(form?.getFieldsValue(true));
+    return new Konzert(form.getFieldsValue(true));
   }
 
   function getVermietung() {
-    return new Vermietung(form?.getFieldsValue(true));
+    return new Vermietung(form.getFieldsValue(true));
   }
 
   const { modal } = App.useApp();

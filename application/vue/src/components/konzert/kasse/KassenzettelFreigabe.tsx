@@ -50,21 +50,21 @@ export function KassenzettelFreigabe() {
         </Form>
       ),
       onOk: () => {
-        form?.setFieldValue(["kasse", "kassenfreigabe"], innerForm.getFieldValue("freigeber"));
-        form?.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
+        form.setFieldValue(["kasse", "kassenfreigabe"], innerForm.getFieldValue("freigeber"));
+        form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
       },
     });
   }
 
   function freigabeAufheben() {
-    form?.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
+    form.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
     modal.confirm({
       type: "confirm",
       title: "Kassenfreigabe rückgängig",
       content: "Bist Du sicher?",
       onOk: () => {
-        form?.setFieldValue(["kasse", "kassenfreigabe"], "");
-        form?.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
+        form.setFieldValue(["kasse", "kassenfreigabe"], "");
+        form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
       },
     });
   }
@@ -82,7 +82,7 @@ export function KassenzettelFreigabe() {
             text="Kassenzettel"
             icon="PrinterFill"
             disabled={isDirty}
-            onClick={() => openKassenzettel(new Konzert(form?.getFieldsValue(true)))}
+            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
             tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
           />

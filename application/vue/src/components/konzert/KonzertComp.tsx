@@ -64,7 +64,7 @@ export default function KonzertComp() {
     }
   }, [currentUser.accessrights, currentUser.id, navigate, url]);
 
-  function saveForm(vals: Konzert & { riderBoxes: BoxParams[] }) {
+  function saveForm(vals: Konzert & { riderBoxes?: BoxParams[] }) {
     const konz = new Konzert(vals);
     if (!id) {
       konz.initializeIdAndUrl();

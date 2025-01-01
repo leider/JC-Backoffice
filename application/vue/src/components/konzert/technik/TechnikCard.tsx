@@ -19,20 +19,20 @@ export default function TechnikCard() {
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     setSumme(konzert.kosten.backlineUndTechnikEUR);
   }, [form]);
 
   function updateSumme() {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     setSumme(konzert.kosten.backlineUndTechnikEUR);
   }
 
   function updateFluegelKosten(e: CheckboxChangeEvent) {
     if (!e.target.checked) {
-      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
     } else {
-      form?.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
     }
     updateSumme();
   }

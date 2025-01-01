@@ -24,13 +24,13 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
   });
 
   function updateSumme() {
-    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     setSumme(kasse.einnahmeTotalEUR);
-    form?.setFieldValue("endbestandEUR", kasse.endbestandEUR);
+    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
   }
 
   function calculateTickets() {
-    const kasse: Kasse = new Kasse(form?.getFieldValue("kasse"));
+    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     const tickets =
       kasse.endbestandGezaehltEUR -
       kasse.anfangsbestandEUR -
@@ -39,7 +39,7 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
       kasse.einnahmeOhneBankUndTickets +
       kasse.ausgabeBankEUR;
 
-    form?.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
+    form.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
     updateSumme();
   }
 

@@ -45,8 +45,8 @@ export default function InfoCard() {
         </>
       ),
       onOk: () => {
-        form?.setFieldValue(["angebot", "freigabe"], currentUser.name);
-        form?.setFieldValue(["angebot", "freigabeAm"], new Date());
+        form.setFieldValue(["angebot", "freigabe"], currentUser.name);
+        form.setFieldValue(["angebot", "freigabeAm"], new Date());
       },
     });
   }
@@ -57,8 +57,8 @@ export default function InfoCard() {
       title: "Freigabe rückgängig",
       content: "Bist Du sicher?",
       onOk: () => {
-        form?.setFieldValue(["angebot", "freigabe"], "");
-        form?.setFieldValue(["angebot", "freigabeAm"], undefined);
+        form.setFieldValue(["angebot", "freigabe"], "");
+        form.setFieldValue(["angebot", "freigabeAm"], undefined);
       },
     });
   }
@@ -122,7 +122,7 @@ export default function InfoCard() {
                     block
                     type="primary"
                     disabled={isDirty || !getFieldValue("id")}
-                    onClick={() => openAngebotRechnung(new Vermietung(form?.getFieldsValue(true)))}
+                    onClick={() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true)))}
                   >
                     Generieren
                   </Button>

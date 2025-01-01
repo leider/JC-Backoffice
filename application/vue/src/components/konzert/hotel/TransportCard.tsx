@@ -19,12 +19,12 @@ export default function TransportCard() {
   useEffect(updateSumme, [form]);
 
   function updateSumme() {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     setSumme(konzert.unterkunft.transportEUR);
   }
   const { currentUser } = useJazzContext();
   const sendMail = () => {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     const unterkunft = konzert.unterkunft;
     const email = encodeURIComponent(`${konzert.hotel.name}<${konzert.hotel.email}>`);
     const subject = encodeURIComponent(`Jazzclub Reservierungsanfrage für ${unterkunft.anreiseDisplayDate}`);

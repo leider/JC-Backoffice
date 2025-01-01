@@ -31,23 +31,23 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
   function updateAnfangsbestandEUR() {
-    const startinhalt = form?.getFieldValue(["kasse", "startinhalt"]);
+    const startinhalt = form.getFieldValue(["kasse", "startinhalt"]);
     const sum = items
       .map((item) => item.name)
       .reduce((prev, curr) => {
         return prev + (parseInt(curr, 10) * (startinhalt[curr] ?? 0)) / 100;
       }, 0);
-    form?.setFieldValue(["kasse", "anfangsbestandEUR"], sum);
+    form.setFieldValue(["kasse", "anfangsbestandEUR"], sum);
   }
 
   function updateEndbestandGezaehltEUR() {
-    const endinhalt = form?.getFieldValue(["kasse", "endinhalt"]);
+    const endinhalt = form.getFieldValue(["kasse", "endinhalt"]);
     const sum = items
       .map((item) => item.name)
       .reduce((prev, curr) => {
         return prev + (parseInt(curr, 10) * (endinhalt[curr] ?? 0)) / 100;
       }, 0);
-    form?.setFieldValue(["kasse", "endbestandGezaehltEUR"], sum);
+    form.setFieldValue(["kasse", "endbestandGezaehltEUR"], sum);
   }
 
   function ImmediateEuro({ name }: { name: string }) {
@@ -80,7 +80,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
               type="primary"
               onClick={() => {
                 isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
-                isDirty ? form?.submit() : undefined;
+                isDirty ? form.submit() : undefined;
                 setOpenModal(false);
               }}
             >

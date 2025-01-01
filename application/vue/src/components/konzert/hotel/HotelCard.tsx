@@ -30,11 +30,11 @@ export default function HotelCard() {
     () => {
       const start = dayjs(eventStartDate);
       if (start) {
-        const hotelDatum: Date = form?.getFieldValue(["unterkunft", "anreiseDate"]);
+        const hotelDatum: Date = form.getFieldValue(["unterkunft", "anreiseDate"]);
         if (!dayjs(hotelDatum).isAfter(start.subtract(7, "day"))) {
           const end = start.add(1, "day");
-          form?.setFieldValue(["unterkunft", "anreiseDate"], start);
-          form?.setFieldValue(["unterkunft", "abreiseDate"], end);
+          form.setFieldValue(["unterkunft", "anreiseDate"], start);
+          form.setFieldValue(["unterkunft", "abreiseDate"], end);
         }
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,7 +47,7 @@ export default function HotelCard() {
         const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
         if (preise) {
           const { einzelEUR, suiteEUR, doppelEUR } = preise;
-          form?.setFieldsValue({ unterkunft: { einzelEUR, suiteEUR, doppelEUR } });
+          form.setFieldsValue({ unterkunft: { einzelEUR, suiteEUR, doppelEUR } });
         }
       }
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,7 +57,7 @@ export default function HotelCard() {
   useEffect(updateSumme, [form]);
 
   function updateSumme() {
-    const konzert = new Konzert(cloneDeep(form?.getFieldsValue(true)));
+    const konzert = new Konzert(cloneDeep(form.getFieldsValue(true)));
     setSumme(konzert.unterkunft.roomsTotalEUR);
     setAnzahlNacht(konzert.unterkunft.anzNacht);
   }

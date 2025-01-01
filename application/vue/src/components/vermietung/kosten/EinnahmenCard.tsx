@@ -22,7 +22,7 @@ export default function EinnahmenCard() {
   );
 
   function updateSumme() {
-    const verm = new Vermietung(form?.getFieldsValue(true));
+    const verm = new Vermietung(form.getFieldsValue(true));
     const miete = verm.saalmiete || 0;
     setSumme(miete);
   }

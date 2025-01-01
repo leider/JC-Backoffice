@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveOrte } from "@/commons/loader.ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { orte as orteLoader, saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
 import { Col, Row } from "antd";
 import Orte from "jc-shared/optionen/orte";
@@ -35,8 +35,12 @@ function OrtePageInternal() {
 }
 
 export default function OrtePage() {
-  const { orte: originalOrte, showSuccess } = useJazzContext();
-  const [orte, setOrte] = useState(originalOrte);
+  const { showSuccess } = useJazzContext();
+  const { data, refetch } = useQuery({
+    queryKey: ["orte"],
+    queryFn: orteLoader,
+  });
+
   const queryClient = useQueryClient();
 
   const mutateOrte = useMutation({
@@ -51,12 +55,8 @@ export default function OrtePage() {
     mutateOrte.mutate(new Orte(vals));
   }
 
-  function reload() {
-    setOrte(cloneDeep(originalOrte));
-  }
-
   return (
-    <JazzFormAndHeader<Orte> title="Orte" data={orte} saveForm={saveForm} resetChanges={reload}>
+    <JazzFormAndHeader<Orte> title="Orte" data={data} saveForm={saveForm} resetChanges={refetch}>
       <OrtePageInternal />
     </JazzFormAndHeader>
   );

@@ -21,7 +21,7 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
   const deal = useWatch(["kosten", "deal"], { form, preserve: true });
 
   useEffect(() => {
-    const konzert = new Konzert(form?.getFieldsValue(true));
+    const konzert = new Konzert(form.getFieldsValue(true));
     setKalk(new KonzertKalkulation(konzert));
   }, [einnahmen, ausgaben, form, brauchtHotel, deal]);
 
