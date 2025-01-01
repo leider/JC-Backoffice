@@ -1,15 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { orte as orteLoader, saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
 import { Col, Row } from "antd";
 import Orte from "jc-shared/optionen/orte";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
-import { useState } from "react";
-import cloneDeep from "lodash/cloneDeep";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 function OrtePageInternal() {
   const columnDescriptions: Columns[] = [
@@ -35,20 +33,15 @@ function OrtePageInternal() {
 }
 
 export default function OrtePage() {
-  const { showSuccess } = useJazzContext();
   const { data, refetch } = useQuery({
     queryKey: ["orte"],
     queryFn: orteLoader,
   });
 
-  const queryClient = useQueryClient();
-
-  const mutateOrte = useMutation({
-    mutationFn: saveOrte,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orte"] });
-      showSuccess({ text: "Die Orte wurden gespeichert" });
-    },
+  const mutateOrte = useJazzMutation({
+    saveFunction: saveOrte,
+    queryKey: "orte",
+    successMessage: "Die Orte wurden gespeichert",
   });
 
   function saveForm(vals: Orte) {

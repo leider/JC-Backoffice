@@ -39,43 +39,46 @@ export default function JazzFormAndHeaderExtended<T>({
   tags?: ReactNode[];
   form: FormInstance<T>;
   styledTitle?: React.JSX.Element;
-  resetChanges?: () => void;
+  resetChanges?: () => Promise<unknown>;
   breadcrumb?: ReactElement;
 }>) {
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty, setHasErrors } = useJazzContext();
   const [initialValue, setInitialValue] = useState<Partial<T>>({});
   useDirtyBlocker(isDirty);
+  const { hasErrors, checkErrors } = useCheckErrors(form);
 
-  const updateDirtyIfChanged = useCallback(
-    (initial: object & { id?: string }, current: object & { id?: string }) => {
-      if (initial.id !== current.id) {
-        return false;
-      }
-      logDiffForDirty(initial, current, false);
-      const different = areDifferent(initial, current, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
-      setIsDirty(different);
-      return different;
-    },
-    [setIsDirty],
-  );
+  const updateDirtyIfChanged = useCallback(() => {
+    const curr = form.getFieldsValue(true);
+    logDiffForDirty(initialValue, curr, false);
+    const different = areDifferent(initialValue, curr, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
+    setIsDirty(different);
+    return different;
+  }, [form, initialValue, setIsDirty]);
 
   useEffect(() => {
     if (data) {
-      const deepCopy = cloneDeep(data);
-      form.setFieldsValue(deepCopy as object);
-      const initial = cloneDeep(form.getFieldsValue(true));
+      const initial = cloneDeep(data);
       setInitialValue(initial);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (initialValue) {
+      const deepCopy = cloneDeep(initialValue);
+      form.setFieldsValue(deepCopy as object);
       form
         .validateFields()
-        .then(() => updateDirtyIfChanged(initial, deepCopy))
+        .then(() => {
+          updateDirtyIfChanged();
+          return checkErrors();
+        })
         .catch(() => {
           // ignore
         });
     }
-  }, [form, data, updateDirtyIfChanged]);
+  }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
-  const { hasErrors, checkErrors } = useCheckErrors(form);
   useEffect(() => {
     setHasErrors(hasErrors);
   }, [hasErrors, setHasErrors]);
@@ -89,13 +92,14 @@ export default function JazzFormAndHeaderExtended<T>({
     <Form
       form={form}
       onValuesChange={() => {
-        updateDirtyIfChanged(initialValue, form.getFieldsValue(true));
+        updateDirtyIfChanged();
         checkErrors();
       }}
       onFinish={() =>
         form
           .validateFields()
           .then(async () => {
+            setIsDirty(false);
             saveForm(form.getFieldsValue(true));
           })
           .catch(() => {
@@ -114,13 +118,7 @@ export default function JazzFormAndHeaderExtended<T>({
         breadcrumb={breadcrumb}
       />
       <RowWrapper>{children}</RowWrapper>
-      {changedPropsToWatch && (
-        <Form.Item
-          dependencies={changedPropsToWatch}
-          noStyle
-          shouldUpdate={() => updateDirtyIfChanged(initialValue, form.getFieldsValue(true))}
-        />
-      )}
+      {changedPropsToWatch && <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} />}
     </Form>
   );
 }

@@ -17,8 +17,7 @@ type ButtonProps = {
   disabled?: boolean;
 };
 function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean }) {
-  const token = theme.useToken().token;
-
+  const { token } = theme.useToken();
   return (
     <ButtonWithIcon
       text={isSend ? "Senden" : "Speichern"}
@@ -44,8 +43,18 @@ export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton isSend={true} disabled={disabled} />;
 }
 
-export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => void }) {
-  return <ButtonWithIcon text={"Reset"} onClick={resetChanges} icon={"ArrowCounterclockwise"} disabled={disabled} type="default" />;
+export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> }) {
+  const { token } = theme.useToken();
+  return (
+    <ButtonWithIcon
+      text={"Reset"}
+      onClick={resetChanges}
+      icon={"ArrowCounterclockwise"}
+      disabled={disabled}
+      type="default"
+      color={token.colorSuccess}
+    />
+  );
 }
 
 export function NewButtons() {
@@ -169,7 +178,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
       modal.confirm({
         type: "confirm",
         title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
-        content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title}" löschen möchtest?`,
+        content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title.replace("JC-", "")}" löschen möchtest?`,
         onOk: () => {
           isVermietung ? deleteVermietung.mutate(konzert.id!) : deleteKonzert.mutate(vermietung.id!);
         },

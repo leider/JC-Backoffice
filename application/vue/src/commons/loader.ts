@@ -336,16 +336,17 @@ export async function saveOrte(orte: Orte) {
 
 export async function termine(): Promise<Termin[]> {
   const result = await getForType("json", "/rest/termine");
-  return result?.map((r: any) => new Termin(r)) || [];
+  return result?.map((r: any) => new Termin(r)) ?? [];
 }
 
 export async function saveTermine(termine: Termin[]) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/termine",
     data: termine,
     contentType: "json",
   });
+  return result?.map((r: any) => new Termin(r)) ?? [];
 }
 
 export async function kalender() {
@@ -354,12 +355,13 @@ export async function kalender() {
 }
 
 export async function saveKalender(kalender: FerienIcals) {
-  standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/kalender",
     data: kalender,
     contentType: "json",
   });
+  return result ? new FerienIcals(result) : result;
 }
 
 // Image

@@ -18,7 +18,7 @@ export default function JazzFormAndHeader<T>({
   saveForm: (vals: T) => void;
   additionalButtons?: ReactNode[];
   changedPropsToWatch?: string[];
-  resetChanges?: () => void;
+  resetChanges?: () => Promise<unknown>;
   breadcrumb?: ReactElement;
 }>) {
   const [form] = Form.useForm<T>();

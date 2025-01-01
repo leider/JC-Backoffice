@@ -1,15 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
 import { useMemo } from "react";
 import { Col, Row } from "antd";
 import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 class MailRulesWrapper {
   allRules: MailRule[] = [];
@@ -50,15 +50,11 @@ export default function MailRules() {
     queryFn: mailRulesRestCall,
   });
   const mailRules = useMemo(() => new MailRulesWrapper(data), [data]);
-  const { showSuccess } = useJazzContext();
 
-  const queryClient = useQueryClient();
-  const mutateRules = useMutation({
-    mutationFn: saveMailRules,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["mailRules"] });
-      showSuccess({ text: "Die Regeln wurden gespeichert" });
-    },
+  const mutateRules = useJazzMutation({
+    saveFunction: saveMailRules,
+    queryKey: "mailRules",
+    successMessage: "Die Regeln wurden gespeichert",
   });
 
   function saveForm(vals: MailRulesWrapper) {

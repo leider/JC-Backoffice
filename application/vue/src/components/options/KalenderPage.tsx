@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { kalender, saveKalender } from "@/commons/loader.ts";
 import * as React from "react";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { Col, Row } from "antd";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 function KalenderPageInternal() {
   const columnDescriptions: Columns[] = [
@@ -36,15 +36,11 @@ function KalenderPageInternal() {
 
 export default function KalenderPage() {
   const { data, refetch } = useQuery<FerienIcals>({ queryKey: ["ferienIcals"], queryFn: kalender });
-  const { showSuccess } = useJazzContext();
-  const queryClient = useQueryClient();
 
-  const mutateKalender = useMutation({
-    mutationFn: saveKalender,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ferienIcals"] });
-      showSuccess({ text: "Die Kalender wurden gespeichert" });
-    },
+  const mutateKalender = useJazzMutation({
+    saveFunction: saveKalender,
+    queryKey: "ferienIcals",
+    successMessage: "Die Kalender wurden gespeichert",
   });
 
   function saveForm(vals: FerienIcals) {

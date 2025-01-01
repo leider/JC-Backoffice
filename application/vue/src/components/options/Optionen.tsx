@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useState } from "react";
@@ -8,10 +8,10 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -89,19 +89,15 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
 }
 
 export default function Optionen() {
-  const { showSuccess } = useJazzContext();
   const { data, refetch } = useQuery({
     queryKey: ["optionen"],
     queryFn: optionenLoader,
   });
 
-  const queryClient = useQueryClient();
-  const mutateOptionen = useMutation({
-    mutationFn: saveOptionen,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["optionen"] });
-      showSuccess({ text: "Die Optionen wurden gespeichert" });
-    },
+  const mutateOptionen = useJazzMutation({
+    saveFunction: saveOptionen,
+    queryKey: "optionen",
+    successMessage: "Die Optionen wurden gespeichert",
   });
 
   const [activePage, setActivePage] = useState<string>("optionen");

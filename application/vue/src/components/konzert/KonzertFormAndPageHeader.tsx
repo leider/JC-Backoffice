@@ -51,7 +51,7 @@ export default function KonzertFormAndPageHeader<T>({
 }: PropsWithChildren<{
   data?: Partial<T>;
   saveForm: (vals: T) => void;
-  resetChanges?: () => void;
+  resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Konzert";
   const [form] = useForm();

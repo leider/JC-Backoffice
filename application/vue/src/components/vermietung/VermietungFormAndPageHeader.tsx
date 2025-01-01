@@ -40,7 +40,7 @@ export default function VermietungFormAndPageHeader<T>({
 }: PropsWithChildren<{
   data?: Partial<T>;
   saveForm: (vals: T) => void;
-  resetChanges?: () => void;
+  resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Vermietung";
   const [form] = useForm();

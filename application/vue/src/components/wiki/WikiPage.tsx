@@ -2,18 +2,18 @@ import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Input, Row } from "antd";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import Renderer from "jc-shared/commons/renderer";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 export default function WikiPage() {
   useDirtyBlocker(false);
@@ -29,8 +29,6 @@ export default function WikiPage() {
   const [initialValue, setInitialValue] = useState<object>({});
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [dirty, setDirty] = useState<boolean>(false);
-  const queryClient = useQueryClient();
-  const { showSuccess } = useJazzContext();
 
   const navigate = useNavigate();
 
@@ -42,12 +40,10 @@ export default function WikiPage() {
     }
   }, [data]);
 
-  const mutateContent = useMutation<unknown, Error, string>({
-    mutationFn: (content) => saveWikiPage(subdir!, realPage, content),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["wiki"] });
-      showSuccess({ text: "Die Seite wurde gespeichert" });
-    },
+  const mutateContent = useJazzMutation({
+    saveFunction: (content: string) => saveWikiPage(subdir!, realPage, content),
+    queryKey: "wiki",
+    successMessage: "Die Seite wurde gespeichert",
   });
 
   const [form] = Form.useForm<{ content: string }>();

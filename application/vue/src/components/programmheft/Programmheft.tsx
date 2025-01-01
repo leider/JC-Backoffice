@@ -2,7 +2,7 @@ import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
 import * as React from "react";
 import { useCallback, useMemo, useState } from "react";
 import { Col, Row, Splitter } from "antd";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
@@ -21,6 +21,7 @@ import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
   const form = useFormInstance();
@@ -93,7 +94,6 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
 
 export default function Programmheft() {
   const { year, month } = useParams();
-  const { showSuccess } = useJazzContext();
 
   const start = useMemo(() => {
     return (DatumUhrzeit.forYYYYMM(`${year}${month}`) || new DatumUhrzeit()).vorigerOderAktuellerUngeraderMonat;
@@ -106,13 +106,10 @@ export default function Programmheft() {
 
   const kalender = useMemo(() => (data ? { ...data } : undefined), [data]);
 
-  const queryClient = useQueryClient();
-  const mutateContent = useMutation({
-    mutationFn: saveProgrammheft,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["kalender"] });
-      showSuccess({ text: "Das Programmheft wurde gespeichert" });
-    },
+  const mutateContent = useJazzMutation({
+    saveFunction: saveProgrammheft,
+    queryKey: "kalender",
+    successMessage: "Das Programmheft wurde gespeichert",
   });
 
   function saveForm(vals: Kalender) {

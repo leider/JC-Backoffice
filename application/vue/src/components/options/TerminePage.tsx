@@ -1,15 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
 import { useMemo } from "react";
 import { Col, Row } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: TerminType };
 class TermineWrapper {
@@ -55,15 +55,11 @@ export default function TerminePage() {
   const termine = useMemo(() => {
     return new TermineWrapper(data);
   }, [data]);
-  const { showSuccess } = useJazzContext();
-  const queryClient = useQueryClient();
 
-  const mutateTermine = useMutation({
-    mutationFn: saveTermine,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["termine"] });
-      showSuccess({});
-    },
+  const mutateTermine = useJazzMutation<Termin[]>({
+    saveFunction: saveTermine,
+    queryKey: "termine",
+    successMessage: "Die Termine wurden gespeichert",
   });
 
   function saveForm(vals: TermineWrapper) {

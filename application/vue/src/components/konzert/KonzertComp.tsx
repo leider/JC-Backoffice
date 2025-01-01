@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Form } from "antd";
 import { useNavigate, useParams } from "react-router";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertTabs from "@/components/konzert/KonzertTabs";
@@ -13,6 +13,7 @@ import { KonzertContext } from "./KonzertContext";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
 import KonzertFormAndPageHeader from "@/components/konzert/KonzertFormAndPageHeader.tsx";
 import { useWatch } from "antd/es/form/Form";
+import OptionValues from "jc-shared/optionen/optionValues.ts";
 
 export default function KonzertComp() {
   const { url } = useParams();
@@ -35,23 +36,15 @@ export default function KonzertComp() {
     },
   });
 
-  const queryClient = useQueryClient();
-
   const mutateKonzert = useJazzMutation<Konzert>({
     saveFunction: saveKonzert,
     queryKey: "konzert",
     successMessage: "Das Konzert wurde gespeichert",
+    forwardForNew: true,
   });
+  const mutateOptionen = useJazzMutation<OptionValues>({ saveFunction: saveOptionen, queryKey: "optionen" });
+  const mutateRider = useJazzMutation<Rider>({ saveFunction: saveRider, queryKey: "rider" });
 
-  const mutateOptionen = useMutation({
-    mutationFn: saveOptionen,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["optionen"] }),
-  });
-
-  const mutateRider = useMutation({
-    mutationFn: saveRider,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["rider", url] }),
-  });
   const id = useWatch("id", { form, preserve: true });
 
   const { currentUser, optionen } = useJazzContext();
@@ -66,7 +59,7 @@ export default function KonzertComp() {
 
   function saveForm(vals: Konzert & { riderBoxes?: BoxParams[] }) {
     const konz = new Konzert(vals);
-    if (!id) {
+    if (!konz.id) {
       konz.initializeIdAndUrl();
     }
     if (!currentUser.accessrights.isOrgaTeam && id) {

@@ -2,31 +2,26 @@ import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { Col, Form, Row } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveImagenames } from "@/commons/loader.ts";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.ts";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { Section } from "@/components/options/imageoverview/Section.tsx";
 import { useCreateImagenamesSections } from "@/components/options/imageoverview/useCreateImagenamesSections.ts";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 export default function ImageOverview() {
   useDirtyBlocker(false);
-  const { showSuccess } = useJazzContext();
   const [form] = Form.useForm<{
     with: ImageOverviewRow[];
     notFound: ImageOverviewRow[];
     unused: ImageOverviewRow[];
   }>();
-  const queryClient = useQueryClient();
 
-  const mutateImages = useMutation({
-    mutationFn: saveImagenames,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["imagenames"] });
-      showSuccess({});
-    },
+  const mutateImages = useJazzMutation({
+    saveFunction: saveImagenames,
+    queryKey: "imagenames",
+    successMessage: "Gespeichert",
   });
 
   document.title = "Bilder bearbeiten";
