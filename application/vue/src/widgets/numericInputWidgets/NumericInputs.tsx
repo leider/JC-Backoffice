@@ -66,7 +66,7 @@ type NumberInputProps = {
    */
   exclusiveMax?: boolean;
   suffix?: ReactNode;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 };
 

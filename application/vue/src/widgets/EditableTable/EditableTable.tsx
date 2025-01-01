@@ -204,7 +204,7 @@ function InnerTable<T>({
         dataSource={rows}
         columns={columns as ColumnTypes}
         size="small"
-        pagination={rows.length < 50 ? false : {}}
+        pagination={{ position: ["topRight"], defaultPageSize: 50, hideOnSinglePage: true }}
       />
     </TableContext.Provider>
   );
@@ -217,8 +217,8 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
     return {
       validator: (_, value: T[]) => {
         let broken = false;
-        value.forEach((row) => {
-          requiredFields.forEach((field) => {
+        value?.forEach((row) => {
+          requiredFields?.forEach((field) => {
             if (isNil(row[field.dataIndex as keyof T])) {
               broken = true;
             }
@@ -232,7 +232,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   function duplicates(values: any[]) {
-    return values.filter((item, index) => index !== values.indexOf(item));
+    return (values ?? []).filter((item, index) => index !== values.indexOf(item));
   }
 
   const uniqueFields = useMemo(() => columnDescriptions.filter((desc) => desc.uniqueValues), [columnDescriptions]);
@@ -242,7 +242,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       validator: (_, value: T[]) => {
         let broken = false;
         uniqueFields.forEach((field) => {
-          const valsToCheck = value.map((row) => row[field.dataIndex as keyof T]);
+          const valsToCheck = value?.map((row) => row[field.dataIndex as keyof T]);
           if (duplicates(valsToCheck).length) {
             broken = true;
           }

@@ -68,7 +68,7 @@ interface INumericInputEmbedded {
    */
   onChange?: (value: number | null) => void;
   suffix?: ReactNode;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 }
 
@@ -147,7 +147,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
       value={value}
       onChange={({ target: { value: val } }) => setValue(val)}
       suffix={suffix}
-      onPressEnter={save}
+      onPressEnter={() => save?.()}
     />
   );
 };

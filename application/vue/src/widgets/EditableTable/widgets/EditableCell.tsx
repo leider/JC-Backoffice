@@ -111,7 +111,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
           name={dataIndex}
           required={required}
           min={min as number}
-          initialValue={initialValue as number}
+          initialValue={(initialValue as number) ?? 0}
           save={save}
           focus
         />

@@ -28,7 +28,7 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
   ];
 
   const columnsPreisprofile: Columns[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name" },
+    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
     { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
     { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
     { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
