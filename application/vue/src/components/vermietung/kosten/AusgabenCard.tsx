@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -7,15 +7,14 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function AusgabenCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
 

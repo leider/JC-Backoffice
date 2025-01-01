@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Button, Col, Form, Row, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -6,22 +6,20 @@ import Vertrag from "jc-shared/konzert/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/widgets/Uploader.tsx";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function VertragCard() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
-
-  const { currentUser } = useJazzContext();
+  const form = useFormInstance();
+  const { currentUser, isDirty } = useJazzContext();
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   return (
     <Collapsible suffix="allgemeines" label="Vertrag">
-      {konzertContext?.isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={9}>
           <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten()} />
@@ -40,7 +38,7 @@ export default function VertragCard() {
                   <Button
                     block
                     type="primary"
-                    disabled={konzertContext?.isDirty || !isBookingTeam || !getFieldValue("id")}
+                    disabled={isDirty || !isBookingTeam || !getFieldValue("id")}
                     onClick={() => openVertrag(new Konzert(form.getFieldsValue(true)))}
                   >
                     Generieren
@@ -53,7 +51,7 @@ export default function VertragCard() {
       </Row>
       <Row gutter={12}>
         <Col span={24}>
-          <Uploader form={form} name={["vertrag", "datei"]} typ={"vertrag"} />
+          <Uploader name={["vertrag", "datei"]} typ={"vertrag"} />
         </Col>
       </Row>
       <Row gutter={12}>

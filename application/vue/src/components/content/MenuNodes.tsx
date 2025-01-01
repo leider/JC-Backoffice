@@ -4,6 +4,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { ItemType } from "antd/es/menu/interface";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -27,6 +28,9 @@ export enum menuKeys {
 }
 
 export default function useMenuNodes(accessrights: Accessrights, subdirs: string[]) {
+  const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
+  const programmheftJahrMonat = useMemo(() => naechsterUngeraderMonat.format("YYYY/MM"), [naechsterUngeraderMonat]);
+
   const wikisubdirEntries = useMemo(
     () =>
       subdirs.map((dir) => {
@@ -133,7 +137,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
   const programmheftMenu = {
     key: menuKeys.programmheft,
     icon: <IconForSmallBlock iconName="Calendar2Check" />,
-    label: <Link to="/programmheft">Programmheft</Link>,
+    label: <Link to={`/programmheft/${programmheftJahrMonat}`}>Programmheft</Link>,
   };
 
   const wikiMenu = {

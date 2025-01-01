@@ -8,14 +8,15 @@ import Kasse from "jc-shared/konzert/kasse";
 import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { KassenContext } from "./KassenContext";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export interface KasseCardProps {
   disabled: boolean;
 }
 
 export default function TabKasse() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const form = useFormInstance();
+  const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
 
   const anfangsbestandEUR = useWatch(["kasse", "anfangsbestandEUR"], { form, preserve: true });
 
@@ -90,7 +91,7 @@ export default function TabKasse() {
           <AusgabenCard ref={refAusgaben} disabled={freigabe} />
         </Col>
       </Row>
-      <Tour steps={toursteps} open={konzertContext?.isKasseHelpOpen} onClose={() => konzertContext?.setKasseHelpOpen(false)}></Tour>
+      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)}></Tour>
     </KassenContext.Provider>
   );
 }

@@ -8,7 +8,7 @@ const persistence = pers("kalendereventstore");
 export default {
   getKalenderEvents: function getKalenderEvents(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject<KalenderEvents>(KalenderEvents, result);
+    return misc.toObject(KalenderEvents, result);
   },
 
   save: function save(event: KalenderEvents) {

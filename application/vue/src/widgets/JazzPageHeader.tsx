@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PropsWithChildren, ReactElement, ReactNode } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { Typography } from "antd";
+import { theme } from "antd";
 
 export function JazzPageHeader({
   title,
@@ -21,16 +21,14 @@ export function JazzPageHeader({
   breadcrumb?: ReactElement;
   hasErrors?: boolean;
 } & PropsWithChildren) {
+  const { token } = theme.useToken();
+  const errorTitle = <span style={{ color: token.colorError }}>Du hast noch Fehler!</span>;
+
   return (
     <PageHeader
-      title={title}
+      title={hasErrors ? errorTitle : title}
       extra={buttons}
       footer={[
-        hasErrors && (
-          <Typography.Title key="errors" level={4} type="danger">
-            Du hast noch Fehler!
-          </Typography.Title>
-        ),
         firstTag && firstTag,
         dateString && (
           <b key="datum" style={{ marginRight: 8 }}>

@@ -3,16 +3,16 @@ import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export function useJazzMutation<InstanceType extends { url?: string }>({
+export function useJazzMutation<InstanceType>({
   saveFunction,
   queryKey,
   successMessage,
-  setResult,
+  forwardForNew,
 }: {
   saveFunction: (obj: InstanceType) => Promise<InstanceType>;
   queryKey: string;
-  successMessage: string;
-  setResult: (ob: InstanceType) => void;
+  successMessage?: string;
+  forwardForNew?: boolean;
 }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -21,16 +21,14 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
   const [search] = useSearchParams();
 
   function reloadAndSetResult(data: InstanceType) {
-    if (url !== data.url) {
-      navigate(
-        {
-          pathname: `/${queryKey}/${data.url}`,
-          search: `page=${search.get("page")}`,
-        },
-        { replace: true },
-      );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (forwardForNew && (data as any).url) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dataUrl = (data as any).url;
+      if (dataUrl && url !== dataUrl) {
+        navigate({ pathname: `/${queryKey}/${dataUrl}`, search: `page=${search.get("page")}` }, { replace: true });
+      }
     }
-    setResult(data);
   }
 
   const result: UseMutationOptions<InstanceType, AxiosError<unknown, InstanceType>, InstanceType, unknown> = {
@@ -40,7 +38,7 @@ export function useJazzMutation<InstanceType extends { url?: string }>({
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
       reloadAndSetResult(data);
-      showSuccess({ text: successMessage });
+      successMessage && showSuccess({ text: successMessage });
     },
     onError: (error) => {
       if (error?.response?.data) {

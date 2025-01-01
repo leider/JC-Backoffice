@@ -1,5 +1,6 @@
 import { Checkbox, CheckboxProps, Form } from "antd";
 import React, { useEffect, useState } from "react";
+import { NamePath } from "rc-field-form/es/interface";
 
 function InternalCheckbox({
   focus,
@@ -11,7 +12,7 @@ function InternalCheckbox({
   checked,
 }: CheckboxProps & {
   label?: string;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
   focusByMouseClick?: boolean;
 }) {
@@ -23,10 +24,25 @@ function InternalCheckbox({
       onChange?.(!checked);
       setConsumed(true);
     }
-  }, [checked, consumed, focusByMouseClick, onChange]);
+  }, [checked, consumed, focusByMouseClick, onChange, save]);
+
+  useEffect(() => {
+    if (consumed) {
+      save?.(true);
+    }
+  }, [consumed]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Checkbox autoFocus={focus} checked={checked} onChange={onChange} disabled={disabled} onBlur={save}>
+    <Checkbox
+      autoFocus={focus}
+      checked={checked}
+      onChange={(e) => {
+        onChange?.(e);
+        save?.(true);
+      }}
+      disabled={disabled}
+      onBlur={() => save?.()}
+    >
       {label && <b>{label}</b>}
     </Checkbox>
   );
@@ -40,9 +56,10 @@ export default function CheckItem({
   save,
   focus,
   focusByMouseClick,
-}: CheckboxProps & {
+}: Omit<CheckboxProps, "name"> & {
+  name: NamePath;
   label?: string;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
   focusByMouseClick?: boolean;
 }) {

@@ -266,7 +266,7 @@ export default class DatumUhrzeit {
   }
 
   get toISOString(): string {
-    return this.value.format();
+    return this.value.toISOString();
   }
 
   get monatTag(): string {

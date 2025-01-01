@@ -1,15 +1,15 @@
-import { Form, FormInstance, Select } from "antd";
+import { Form, Select } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
-import Konzert from "jc-shared/konzert/konzert.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;
   onChange?: (value?: Preisprofil) => void;
-  form: FormInstance<Konzert>;
 }
 
-export default function PreisprofilSelect({ optionen, onChange, form }: PreisprofilSelectParams) {
+export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSelectParams) {
+  const form = useFormInstance();
   return (
     <Form.Item
       label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}

@@ -20,6 +20,8 @@ const emptyContext: SharedGlobals = {
   showError: () => {},
   filter: {},
   setFilter: () => {},
+  isDirty: false,
+  setIsDirty: () => {},
 };
 
 type SharedGlobals = {
@@ -32,6 +34,8 @@ type SharedGlobals = {
   showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
   filter: TeamFilterObject;
   setFilter: (filter: TeamFilterObject) => void;
+  isDirty: boolean;
+  setIsDirty: (a: boolean) => void;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -43,8 +47,9 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
 
   const [filter, setFilter] = useState<TeamFilterObject>({});
+  const [isDirty, setIsDirty] = useState(false);
 
-  const context: Omit<SharedGlobals, "showSuccess" | "showError" | "filter" | "setFilter"> = useQueries({
+  const context: Omit<SharedGlobals, "showSuccess" | "showError" | "filter" | "setFilter" | "isDirty" | "setIsDirty"> = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs(), refetchInterval },
@@ -111,7 +116,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess, showError, filter, setFilter };
+  return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty };
 }
 
 export function useJazzContext() {

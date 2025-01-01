@@ -5,8 +5,9 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import NumericInputEmbedded from "@/widgets/numericInputWidgets/NumericInputEmbedded.tsx";
 import { useWatch } from "antd/es/form/Form";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -22,10 +23,10 @@ const items = [
 ];
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
-  const token = theme.useToken().token;
-  const konzertContext = useContext(KonzertContext);
+  const { token } = theme.useToken();
+  const form = useFormInstance();
+  const { isDirty } = useJazzContext();
   const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
-  const form = konzertContext!.form;
   const [openModal, setOpenModal] = useState(false);
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
@@ -79,7 +80,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
               type="primary"
               onClick={() => {
                 isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
-                konzertContext?.isDirty ? form.submit() : undefined;
+                isDirty ? form.submit() : undefined;
                 setOpenModal(false);
               }}
             >

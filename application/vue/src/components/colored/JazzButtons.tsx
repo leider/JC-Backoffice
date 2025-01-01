@@ -1,4 +1,4 @@
-import { App, Button, Dropdown, Form, FormInstance, Modal, Space, theme } from "antd";
+import { App, Button, Dropdown, Form, Modal, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useState } from "react";
@@ -11,13 +11,13 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import { ItemType } from "antd/es/menu/interface";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 type ButtonProps = {
   disabled?: boolean;
 };
 function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean }) {
-  const token = theme.useToken().token;
-
+  const { token } = theme.useToken();
   return (
     <ButtonWithIcon
       text={isSend ? "Senden" : "Speichern"}
@@ -41,6 +41,20 @@ export function SaveButton({ disabled }: ButtonProps) {
 
 export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton isSend={true} disabled={disabled} />;
+}
+
+export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> }) {
+  const { token } = theme.useToken();
+  return (
+    <ButtonWithIcon
+      text={"Reset"}
+      onClick={resetChanges}
+      icon={"ArrowCounterclockwise"}
+      disabled={disabled}
+      type="default"
+      color={token.colorSuccess}
+    />
+  );
 }
 
 export function NewButtons() {
@@ -68,12 +82,8 @@ export function NewButtons() {
   );
 }
 
-export function MoreButton({
-  disabled,
-  form,
-  isDirty,
-  isVermietung,
-}: ButtonProps & { form: FormInstance; isDirty: boolean; isVermietung?: boolean }) {
+export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
+  const form = useFormInstance();
   function getKonzert() {
     return new Konzert(form.getFieldsValue(true));
   }
@@ -168,7 +178,7 @@ export function MoreButton({
       modal.confirm({
         type: "confirm",
         title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
-        content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title}" löschen möchtest?`,
+        content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title.replace("JC-", "")}" löschen möchtest?`,
         onOk: () => {
           isVermietung ? deleteVermietung.mutate(konzert.id!) : deleteKonzert.mutate(vermietung.id!);
         },

@@ -6,6 +6,7 @@ import Kontakt from "../veranstaltung/kontakt.js";
 import Unterkunft from "./unterkunft.js";
 import Vertrag from "./vertrag.js";
 import Veranstaltung, { MinimalVeranstaltung } from "../veranstaltung/veranstaltung.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -67,8 +68,7 @@ export default class Konzert extends Veranstaltung {
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(object?: RecursivePartial<Omit<Konzert, "startDate" | "endDate"> & { startDate: string | Date; endDate: string | Date }>) {
     super(object);
     if (object) {
       Object.assign(this, {

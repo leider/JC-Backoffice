@@ -28,17 +28,13 @@ export default class Termin {
   startDate: Date = new DatumUhrzeit().toJSDate;
   endDate: Date = this.startDate;
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
+  constructor(object?: Partial<Termin>) {
     if (object) {
-      this.id = object.id;
       this.beschreibung = object.beschreibung;
-      this.typ = object.typ;
+      this.typ = object.typ ?? "Sonstiges";
       this.startDate = Misc.stringOrDateToDate(object.startDate) || new DatumUhrzeit().toJSDate;
       this.endDate = Misc.stringOrDateToDate(object.endDate) || this.startDate;
-      if (!this.id) {
-        this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
-      }
+      this.id = object.id ?? DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
     } else {
       this.startDate = new DatumUhrzeit().toJSDate;
       this.endDate = this.startDate;

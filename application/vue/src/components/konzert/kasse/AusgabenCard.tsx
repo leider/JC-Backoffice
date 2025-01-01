@@ -9,12 +9,11 @@ import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
-  const konzertContext = useContext(KonzertContext);
+  const form = useFormInstance();
   const kassenContext = useContext(KassenContext);
-  const form = konzertContext!.form;
   const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
@@ -23,9 +22,7 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
   }, [disabled]);
 
   const [summe, setSumme] = useState<number>(0);
-  useEffect(() => {
-    updateSumme();
-  });
+  useEffect(updateSumme);
 
   function updateSumme() {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));

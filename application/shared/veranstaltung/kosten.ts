@@ -1,3 +1,5 @@
+import { RecursivePartial } from "../commons/advancedTypes.js";
+
 function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
 }
@@ -51,9 +53,8 @@ export default class Kosten {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: RecursivePartial<Kosten>) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object);
       if (!this.gagenSteuer) {
         this.gagenSteuer = "ohne";

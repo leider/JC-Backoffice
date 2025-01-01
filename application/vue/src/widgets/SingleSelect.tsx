@@ -10,7 +10,7 @@ interface SingleSelectParams {
   onChange?: (val: string) => void;
   initialValue?: string;
   required?: boolean;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 }
 
@@ -30,7 +30,7 @@ function InnerSelect({
   onChange?: (val: string) => void;
   onSelect?: (val: string) => void;
   allowClear?: boolean;
-  save?: () => void;
+  save?: (keepEditing?: boolean) => void;
   focus?: boolean;
 }) {
   const realOptions = useMemo(() => (options || []).map((opt) => ({ label: opt, value: opt })), [options]);
@@ -47,11 +47,12 @@ function InnerSelect({
       onChange={(val) => {
         onChange?.(val);
         onSelect?.(val);
+        save?.(true);
       }}
       value={value}
       showSearch
       allowClear={allowClear}
-      onBlur={save}
+      onBlur={() => save?.()}
     />
   );
 }

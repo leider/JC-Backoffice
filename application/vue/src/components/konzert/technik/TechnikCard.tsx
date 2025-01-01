@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -10,12 +10,11 @@ import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function TechnikCard() {
-  const konzertContext = useContext(KonzertContext);
   const { optionen } = useJazzContext();
-  const form = konzertContext!.form;
+  const form = useFormInstance();
   const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
@@ -68,7 +67,7 @@ export default function TechnikCard() {
       </Row>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader form={form} name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
       <Row gutter={12}>

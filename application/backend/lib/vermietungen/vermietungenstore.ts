@@ -15,7 +15,7 @@ function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: 
     `startDate < '${rangeTo.toISOString}' AND endDate > '${rangeFrom.toISOString}'`,
     `startDate ${sortOrder}`,
   );
-  return misc.toObjectList<Vermietung>(Vermietung, result);
+  return misc.toObjectList(Vermietung, result);
 }
 
 function byDateRangeInAscendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit) {
@@ -51,12 +51,12 @@ export default {
 
   getVermietung: function getVermietung(url: string) {
     const result = persistence.getByField({ key: "url", val: url });
-    return misc.toObject<Vermietung>(Vermietung, result);
+    return misc.toObject(Vermietung, result);
   },
 
   getVermietungForId: function getVermietungForId(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject<Vermietung>(Vermietung, result);
+    return misc.toObject(Vermietung, result);
   },
 
   saveVermietung: function saveVermietung(vermietung: Vermietung, user: User) {

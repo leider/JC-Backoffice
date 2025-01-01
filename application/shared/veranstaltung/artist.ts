@@ -18,8 +18,7 @@ export default class Artist {
     return Object.assign({}, this);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(object?: Omit<Artist, "getInForMasterDate"> & { getInForMasterDate: string | Date }) {
     if (object && Object.keys(object).length !== 0) {
       const getIn = Misc.stringOrDateToDate(object.getInForMasterDate);
       Object.assign(this, object, {

@@ -9,25 +9,12 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 
-function AddOrRemoveGastButton({
-  konzert,
-  item,
-  art,
-  add,
-  onChange,
-}: {
-  konzert: Konzert;
-  item: NameWithNumber;
-  art: GastArt;
-  add: boolean;
-  onChange: (konzert: Konzert) => void;
-}) {
+function AddOrRemoveGastButton({ konzert, item, art, add }: { konzert: Konzert; item: NameWithNumber; art: GastArt; add: boolean }) {
   const queryClient = useQueryClient();
   const mutate = useMutation({
     mutationFn: async ({ item, art }: { item: NameWithNumber; art: GastArt }) => updateGastInSection(konzert, item, art),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["konzert", data.url] });
-      onChange(new Konzert(data));
     },
   });
 
@@ -67,9 +54,9 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
           <List.Item
             style={{ paddingLeft: 0, paddingRight: 0 }}
             actions={[
-              <AddOrRemoveGastButton key="addGast" item={item} art={art} add={true} konzert={konzert} onChange={listChanged} />,
+              <AddOrRemoveGastButton key="addGast" item={item} art={art} add={true} konzert={konzert} />,
               <b key="alreadyin">{item.alreadyIn}</b>,
-              <AddOrRemoveGastButton key="removeGast" item={item} art={art} add={false} konzert={konzert} onChange={listChanged} />,
+              <AddOrRemoveGastButton key="removeGast" item={item} art={art} add={false} konzert={konzert} />,
             ]}
           >
             <List.Item.Meta title={`${item.name} (${item.number} Karten)`} description={item.comment} />

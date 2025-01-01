@@ -19,10 +19,10 @@ export default class User {
   salt?: string;
   tshirt!: string;
 
-  gruppen: string[];
-  rechte: string[];
+  gruppen: string[] = [];
+  rechte: string[] = [];
   kassenfreigabe = false;
-  mailinglisten: string[];
+  mailinglisten: string[] = [];
   wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
   accessrightsTransient?: Accessrights; // transient
@@ -33,30 +33,12 @@ export default class User {
   kannMaster?: boolean;
   kannErsthelfer?: boolean;
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  constructor(object: any) {
-    this.id = object.id;
-    this.name = object.name;
-    this.email = object.email;
-    this.tel = object.tel;
-    this.hashedPassword = object.hashedPassword;
-    this.salt = object.salt;
-    this.tshirt = object.tshirt;
-    this.password = object.password;
-    this.wantsEmailReminders = object.wantsEmailReminders;
-
-    this.kannErsthelfer = object.kannErsthelfer;
-    this.kannKasse = object.kannKasse;
-    this.kannTon = object.kannTon;
-    this.kannLicht = object.kannLicht;
-    this.kannMaster = object.kannMaster;
-
-    this.gruppen = object.gruppen || [];
-    this.rechte = object.rechte || [];
-    this.kassenfreigabe = object.kassenfreigabe || this.rechte.includes("kassenfreigabe");
-
-    this.mailinglisten = object.mailinglisten || [];
-    this.accessrightsTransient = undefined;
+  constructor(object: Partial<User>) {
+    delete this.accessrightsTransient;
+    this.id = object.id!;
+    Object.assign(this, object, {
+      kassenfreigabe: object.kassenfreigabe || object.rechte?.includes("kassenfreigabe"),
+    });
   }
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/

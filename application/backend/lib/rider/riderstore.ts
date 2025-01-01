@@ -8,7 +8,7 @@ const persistence = pers("riderstore");
 export default {
   getRider: function getRider(url: string) {
     const result = persistence.getById(url);
-    return misc.toObject<Rider>(Rider, result);
+    return misc.toObject(Rider, result);
   },
 
   saveRider: function saveRider(object: Rider, user: User) {

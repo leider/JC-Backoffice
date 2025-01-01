@@ -1,4 +1,5 @@
 import User from "../user/user.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod" | "ersthelfer";
 
@@ -22,9 +23,8 @@ export default class Staff {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: RecursivePartial<Staff>) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object, {
         techniker: object.techniker || [],
         technikerV: object.technikerV || [],

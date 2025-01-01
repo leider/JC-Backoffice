@@ -1,5 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Unterkunft {
   einzelNum = 0;
@@ -21,9 +22,23 @@ export default class Unterkunft {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object: any | undefined, veranstaltungstagAsDatumUhrzeit: DatumUhrzeit, kuenstlerListe: string[]) {
+  constructor(
+    object:
+      | RecursivePartial<
+          Omit<Unterkunft, "anreiseDate" | "abreiseDate"> & {
+            transportText?: string;
+            name?: string;
+            anreiseDate?: Date | string;
+            abreiseDate?: Date | string;
+          }
+        >
+      | undefined,
+    veranstaltungstagAsDatumUhrzeit: DatumUhrzeit,
+    kuenstlerListe: string[],
+  ) {
     if (object && Object.keys(object).length !== 0) {
+      delete object.transportText;
+      delete object.name;
       Object.assign(this, object, {
         kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
         sonstiges: Misc.toArray(object.sonstiges),
@@ -41,10 +56,6 @@ export default class Unterkunft {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     }
-    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    delete (this as any).transportText;
-    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-    delete (this as any).name;
   }
 
   get checked(): boolean {

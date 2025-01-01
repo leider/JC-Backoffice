@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -9,52 +9,30 @@ import Kasse from "jc-shared/konzert/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import Kosten from "jc-shared/veranstaltung/kosten.ts";
 import Technik from "jc-shared/veranstaltung/technik.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;
 }
 export default function AusgabenCard({ onChange }: AusgabenCardParams) {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
 
-  const unterkunft = useWatch(["unterkunft"], {
-    form,
-    preserve: true,
-  });
-
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], {
-    form,
-    preserve: true,
-  });
-
-  const backlineEUR = useWatch(["kosten", "backlineEUR"], {
-    form,
-    preserve: true,
-  });
-
-  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], {
-    form,
-    preserve: true,
-  });
-
-  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], {
-    form,
-    preserve: true,
-  });
+  const unterkunft = useWatch(["unterkunft"], { form, preserve: true });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
+  const backlineEUR = useWatch(["kosten", "backlineEUR"], { form, preserve: true });
+  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], { form, preserve: true });
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
 
   useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateSumme, // eslint-disable-next-line react-hooks/exhaustive-deps
     [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR],
   );
 

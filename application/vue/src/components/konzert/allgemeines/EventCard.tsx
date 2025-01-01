@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Checkbox, Col, Form, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -6,16 +6,15 @@ import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { EventTypeSelect } from "@/widgets/EventTypeSelect.tsx";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function EventCard() {
-  const konzertContext = useContext(KonzertContext);
+  const form = useFormInstance();
   const { optionen, orte } = useJazzContext();
-  const form = konzertContext!.form;
 
   const { currentUser } = useJazzContext();
 
@@ -98,7 +97,7 @@ export default function EventCard() {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <PreisprofilSelect form={form} optionen={optionen} />
+          <PreisprofilSelect optionen={optionen} />
         </Col>
         <Col span={8}>
           <SingleSelect name={["kopf", "genre"]} label="Genre" options={optionen.genres} />

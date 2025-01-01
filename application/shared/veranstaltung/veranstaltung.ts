@@ -11,8 +11,9 @@ import times from "lodash/times.js";
 import { TerminEvent } from "../optionen/termin.js";
 import { colorVermietung } from "../optionen/optionValues.js";
 import Color from "color";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
-export type MinimalVeranstaltung = { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
+export type MinimalVeranstaltung = Partial<Veranstaltung> & { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
   id?: string;
   ghost? = undefined; // for displaying multidays
@@ -27,8 +28,9 @@ export default abstract class Veranstaltung {
   technik = new Technik();
   brauchtPresse = true;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(
+    object?: RecursivePartial<Omit<Veranstaltung, "startDate" | "endDate"> & { startDate: string | Date; endDate: string | Date }>,
+  ) {
     if (object) {
       Object.assign(this, {
         id: object.id,
@@ -37,7 +39,7 @@ export default abstract class Veranstaltung {
         startDate: Misc.stringOrDateToDate(object.startDate),
         endDate: Misc.stringOrDateToDate(object.endDate),
         url: object.url,
-        artist: new Artist(object.artist),
+        artist: new Artist(object.artist as Omit<Artist, "getInForMasterDate"> & { getInForMasterDate: string | Date }),
         kopf: new Kopf(object.kopf),
         kosten: new Kosten(object.kosten),
         presse: new Presse(object.presse),
@@ -61,7 +63,7 @@ export default abstract class Veranstaltung {
 
   abstract asNew(object: MinimalVeranstaltung): Veranstaltung;
 
-  protected ghostResults() {
+  ghostResults() {
     return this.tageOhneStart.map((ghostStart) => {
       const result: MinimalVeranstaltung = {} as MinimalVeranstaltung;
       Object.assign(result, {

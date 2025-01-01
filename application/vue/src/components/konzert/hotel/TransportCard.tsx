@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Button, Col, ConfigProvider, Form, Row, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -7,22 +7,17 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import CheckItem from "@/widgets/CheckItem";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function TransportCard() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
 
-  useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form],
-  );
+  useEffect(updateSumme, [form]);
+
   function updateSumme() {
     const konzert = new Konzert(form.getFieldsValue(true));
     setSumme(konzert.unterkunft.transportEUR);

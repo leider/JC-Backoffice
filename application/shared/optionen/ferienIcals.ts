@@ -6,8 +6,7 @@ export class Ical {
   url = "";
   typ: TerminType = "Sonstiges";
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(object?: Partial<Ical>) {
     if (object) {
       Object.assign(this, object);
     }
@@ -28,11 +27,10 @@ export class KalenderEvents {
   content = "";
   updatedAt?: Date = new Date();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(object?: Partial<KalenderEvents>) {
     if (object) {
-      this.id = object.id;
-      this.content = object.content;
+      this.id = object.id ?? "";
+      this.content = object.content ?? "";
       this.updatedAt = Misc.stringOrDateToDate(object.updatedAt);
     }
   }
@@ -47,8 +45,7 @@ export default class FerienIcals {
   id = "ferienIcals";
   icals: Ical[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(object?: any) {
+  constructor(object?: Partial<FerienIcals>) {
     if (object && object.icals) {
       this.icals = ((object.icals || []) as Ical[]).map((each) => new Ical(each));
     }

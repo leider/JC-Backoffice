@@ -8,7 +8,7 @@ const persistence = pers("userstore");
 export default {
   allUsers: function allUsers() {
     const result = persistence.list("data->>'$.name' ASC");
-    return misc.toObjectList<User>(User, result);
+    return misc.toObjectList(User, result);
   },
 
   save: function save(userToSave: User, user: User) {
@@ -27,7 +27,7 @@ export default {
 
   forId: function forId(id: string) {
     const result = persistence.getById(id);
-    return misc.toObject<User>(User, result);
+    return misc.toObject(User, result);
   },
 
   deleteUser: function deleteUser(id: string, user: User) {

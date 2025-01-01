@@ -50,10 +50,10 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     }
   }, [editing]);
 
-  const save = async () => {
+  const save = async (keepEditing?: boolean) => {
     try {
       const values = await form.validateFields();
-      toggleEdit();
+      !keepEditing && toggleEdit();
       handleSave(record, values);
     } catch {
       /* empty */
@@ -111,7 +111,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
           name={dataIndex}
           required={required}
           min={min as number}
-          initialValue={initialValue as number}
+          initialValue={(initialValue as number) ?? 0}
           save={save}
           focus
         />

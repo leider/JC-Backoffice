@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any*/
 import { Category, InventoryElement } from "./inventory.js";
 import Misc from "../commons/misc.js";
 
@@ -14,7 +13,7 @@ export class Rider {
   startDate: Date = new Date();
   boxes: BoxParams[] = [];
 
-  constructor(object?: any) {
+  constructor(object?: Partial<Rider>) {
     Object.assign(this, object, {
       startDate: Misc.stringOrDateToDate(object?.startDate || ""),
       boxes: object?.boxes || [],

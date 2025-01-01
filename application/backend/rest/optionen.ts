@@ -49,7 +49,7 @@ app.get("/termine", (req, res) => {
 
 app.post("/termine", [checkOrgateam], (req: Request, res: Response) => {
   const oldTermine = terminstore.alle();
-  const newTermine = misc.toObjectList<Termin>(Termin, req.body);
+  const newTermine = misc.toObjectList(Termin, req.body);
   const { changed, deletedIds } = calculateChangedAndDeleted(
     newTermine.map((t) => t.toJSON()),
     oldTermine.map((t) => t.toJSON()),

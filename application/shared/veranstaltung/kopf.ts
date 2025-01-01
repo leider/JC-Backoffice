@@ -1,4 +1,5 @@
 import { colorDefault, TypMitMehr } from "../optionen/optionValues.js";
+import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Kopf {
   beschreibung = "";
@@ -23,9 +24,8 @@ export default class Kopf {
     return Object.assign({}, this);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  constructor(object?: any) {
-    if (object && Object.keys(object).length !== 0) {
+  constructor(object?: RecursivePartial<Kopf>) {
+    if (object && Object.keys(object).length) {
       Object.assign(this, object);
     }
   }

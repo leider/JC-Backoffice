@@ -4,15 +4,21 @@ import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
-export function ShowOnCopy({ title, isNew, startDate }: { title: string; isNew: boolean; startDate?: Date }) {
+export function ShowOnCopy({ title }: { title: string }) {
   const { url } = useParams();
+  const form = useFormInstance();
   const [openCopyModal, setOpenCopyModal] = useState(false);
   const [done, setDone] = useState(false);
 
+  const id = useWatch("id", { form, preserve: true });
+  const startDate = useWatch("startDate", { form, preserve: true });
+
   useEffect(() => {
-    setOpenCopyModal(!done && isNew && !!startDate && !!url?.includes("copy-of"));
-  }, [isNew, url, startDate, done]);
+    setOpenCopyModal(!done && !id && !!startDate && !!url?.includes("copy-of"));
+  }, [id, url, startDate, done]);
 
   return (
     <Modal

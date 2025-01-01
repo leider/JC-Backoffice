@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 import { VitePWA } from "vite-plugin-pwa";
+import checker from "vite-plugin-checker";
 import path, { resolve } from "path";
 import express from "express";
 // https://vitejs.dev/config/
@@ -22,6 +23,12 @@ export default defineConfig(() => {
     test: { environment: "jsdom", setupFiles: resolve(__dirname, "test/setup.ts") },
     plugins: [
       react(),
+
+      checker({
+        // e.g. use TypeScript check
+        typescript: true,
+      }),
+
       //splitVendorChunkPlugin(),
       {
         name: "vite-plugin-cache-control",

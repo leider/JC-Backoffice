@@ -223,7 +223,7 @@ export async function currentUser() {
     const result = await getForType("json", "/rest/users/current");
     return new User(result);
   } catch {
-    return new User("invalidUser");
+    return new User({ id: "invalidUser" });
   }
 }
 
@@ -295,12 +295,13 @@ export async function riderFor(url: string) {
 }
 
 export async function saveRider(rider: Rider) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/riders",
     data: rider,
     contentType: "json",
   });
+  return new Rider(result);
 }
 
 // Optionen & Termine
@@ -310,12 +311,13 @@ export async function optionen(): Promise<OptionValues> {
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/optionen",
     data: optionen.toJSON(),
     contentType: "json",
   });
+  return new OptionValues(result);
 }
 
 export async function orte() {
@@ -334,16 +336,17 @@ export async function saveOrte(orte: Orte) {
 
 export async function termine(): Promise<Termin[]> {
   const result = await getForType("json", "/rest/termine");
-  return result?.map((r: any) => new Termin(r)) || [];
+  return result?.map((r: any) => new Termin(r)) ?? [];
 }
 
 export async function saveTermine(termine: Termin[]) {
-  return standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/termine",
     data: termine,
     contentType: "json",
   });
+  return result?.map((r: any) => new Termin(r)) ?? [];
 }
 
 export async function kalender() {
@@ -352,12 +355,13 @@ export async function kalender() {
 }
 
 export async function saveKalender(kalender: FerienIcals) {
-  standardFetch({
+  const result = await standardFetch({
     method: "POST",
     url: "/rest/kalender",
     data: kalender,
     contentType: "json",
   });
+  return result ? new FerienIcals(result) : result;
 }
 
 // Image

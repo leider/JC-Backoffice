@@ -1,7 +1,6 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, Form, Row } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -11,8 +10,8 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ButtonInAdminPanel } from "@/components/team/TeamBlock/ButtonInAdminPanel.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 
 interface ContentProps {
   veranstaltung: Veranstaltung;
@@ -24,7 +23,6 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
-  const { showSuccess } = useJazzContext();
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
 
   const { usersAsOptions } = useContext(TeamContext);
@@ -48,24 +46,18 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     setVeranstaltung(veranVermiet);
   }, [veranVermiet]);
 
-  const queryClient = useQueryClient();
-
   const brauchtTechnik = useMemo(() => (veranstaltung as Vermietung).brauchtTechnik, [veranstaltung]);
 
-  const mutateVeranstaltung = useMutation({
-    mutationFn: saveKonzert,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["konzert"] });
-      showSuccess({ text: "Das Konzert wurde gespeichert" });
-    },
+  const mutateVeranstaltung = useJazzMutation({
+    saveFunction: saveKonzert,
+    queryKey: "konzert",
+    successMessage: "Das Konzert wurde gespeichert",
   });
 
-  const mutateVermietung = useMutation({
-    mutationFn: saveVermietung,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["vermietung"] });
-      showSuccess({ text: "Die Vermietung wurde gespeichert" });
-    },
+  const mutateVermietung = useJazzMutation({
+    saveFunction: saveVermietung,
+    queryKey: "vermietung",
+    successMessage: "Die Vermietung wurde gespeichert",
   });
 
   function saveForm() {

@@ -42,7 +42,7 @@ function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User)
 
 async function termineForIcal(ical: Ical) {
   const result = await kalenderEventsService.retrieveEvents(ical);
-  return icalToTerminEvents(parseIcal(result));
+  return result ? icalToTerminEvents(parseIcal(result)) : [];
 }
 
 function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?: TerminFilterOptions) {

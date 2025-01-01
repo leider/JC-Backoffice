@@ -13,7 +13,7 @@ export class Ort {
   presseIn?: string;
   pressename?: string;
 
-  constructor(object?: any) {
+  constructor(object?: Partial<Ort & { _csrf: string }>) {
     if (object) {
       delete object._csrf; // Altlast
       Object.assign(this, object);
@@ -35,7 +35,7 @@ export default class Orte {
     });
   }
 
-  constructor(object?: any) {
+  constructor(object?: Partial<Orte>) {
     if (object && object.orte) {
       this.orte = sortByNameCaseInsensitive((object.orte || []).map((o: any) => new Ort(o)));
     }

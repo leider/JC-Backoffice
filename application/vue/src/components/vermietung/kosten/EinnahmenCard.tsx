@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { VermietungContext } from "@/components/vermietung/VermietungContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function EinnahmenCard() {
-  const context = useContext(VermietungContext);
-  const form = context!.form;
+  const form = useFormInstance();
 
   const [summe, setSumme] = useState<number>(0);
 
@@ -18,9 +17,7 @@ export default function EinnahmenCard() {
   });
 
   useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => updateSumme(), // eslint-disable-next-line react-hooks/exhaustive-deps
     [form, saalmiete],
   );
 

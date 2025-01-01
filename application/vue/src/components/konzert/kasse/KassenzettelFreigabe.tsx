@@ -1,11 +1,10 @@
 import { App, Col, Flex, Form, Row, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { useForm, useWatch } from "antd/es/form/Form";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -13,13 +12,13 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineModal.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export function KassenzettelFreigabe() {
-  const konzertContext = useContext(KonzertContext);
-  const form = konzertContext!.form;
+  const form = useFormInstance();
+  const { currentUser, allUsers, isDirty } = useJazzContext();
 
   const { modal } = App.useApp();
-  const { currentUser, allUsers } = useJazzContext();
   const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
 
   useEffect(() => {
@@ -82,7 +81,7 @@ export function KassenzettelFreigabe() {
             block
             text="Kassenzettel"
             icon="PrinterFill"
-            disabled={konzertContext?.isDirty}
+            disabled={isDirty}
             onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
             tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
@@ -97,9 +96,7 @@ export function KassenzettelFreigabe() {
                 icon={"Unlock"}
                 onClick={freigeben}
                 disabled={
-                  konzertContext?.isDirty ||
-                  !darfFreigeben ||
-                  numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
+                  isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
                 }
               />
             ) : (
@@ -111,7 +108,7 @@ export function KassenzettelFreigabe() {
                   type="primary"
                   color="#c71c2c"
                   onClick={freigabeAufheben}
-                  disabled={konzertContext?.isDirty || !darfFreigabeAufheben}
+                  disabled={isDirty || !darfFreigabeAufheben}
                 />
                 <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
               </>

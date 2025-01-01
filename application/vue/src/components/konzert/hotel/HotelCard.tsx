@@ -1,22 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import dayjs from "dayjs";
-import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export default function HotelCard() {
-  const konzertContext = useContext(KonzertContext);
+  const form = useFormInstance();
   const { optionen } = useJazzContext();
-
-  const form = konzertContext!.form;
 
   const [summe, setSumme] = useState<number>(0);
   const [anzahlNacht, setAnzahlNacht] = useState<string>("");
@@ -56,12 +54,7 @@ export default function HotelCard() {
     [hotelName],
   );
 
-  useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form],
-  );
+  useEffect(updateSumme, [form]);
 
   function updateSumme() {
     const konzert = new Konzert(cloneDeep(form.getFieldsValue(true)));
