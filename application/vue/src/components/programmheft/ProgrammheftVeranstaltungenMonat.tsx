@@ -35,15 +35,15 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
           extra: (
             <ConfigProvider theme={{ token: { fontSize: 11 } }}>
               {headerTags([
-                { label: "Unbestätigte", color: unbestaetigte.length === 0 },
-                { label: "Presse", color: ohnePresse.length === 0 },
+                { label: "Unbestätigte", color: !unbestaetigte.length },
+                { label: "Presse", color: !ohnePresse.length },
               ])}
             </ConfigProvider>
           ),
           children: (
             <RowWrapper>
               <Row>
-                {unbestaetigte.length > 0 && (
+                {!!unbestaetigte.length && (
                   <Col span={12}>
                     <h2>Es gibt noch unbestätigte Veranstaltungen</h2>
                     <ul>
@@ -61,8 +61,8 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
                       ))}
                     </ul>
                   </Col>
-                )}{" "}
-                {ohnePresse.length > 0 && (
+                )}
+                {!!ohnePresse.length && (
                   <Col span={12}>
                     <h2>Hier fehlt der Pressetext</h2>
                     <ul>
