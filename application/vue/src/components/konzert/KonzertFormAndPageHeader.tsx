@@ -3,7 +3,6 @@ import { CSSProperties, PropsWithChildren, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { HelpWithKasseButton, MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import headerTags from "@/components/colored/headerTags.tsx";
 import groupBy from "lodash/groupBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
@@ -12,35 +11,18 @@ import { useForm, useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import { Tag } from "antd";
-import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import dynamicHeaderTags from "@/components/colored/dynamicHeaderTags.tsx";
 
 function useTags() {
-  const form = useFormInstance();
-  const confirmed = useWatch(["kopf", "confirmed"], { form, preserve: true });
-  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
-  const technikOK = useWatch(["technik", "checked"], { form, preserve: true });
-  const presseOK = useWatch(["presse", "checked"], { form, preserve: true });
-  const homepage = useWatch(["kopf", "kannAufHomePage"], { form, preserve: true });
-  const social = useWatch(["kopf", "kannInSocialMedia"], { form, preserve: true });
-  const abgesagt = useWatch(["kopf", "abgesagt"], { form, preserve: true });
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
-  const hotel = useWatch(["unterkunft", "bestaetigt"], { form, preserve: true });
-
-  const taggies: { label: string; color: boolean }[] = [
-    { label: confirmed ? "Bestätigt" : "Unbestätigt", color: confirmed },
-    { label: "Technik", color: technikOK },
-  ];
-  if (brauchtPresse) {
-    taggies.push({ label: "Presse", color: presseOK });
-  }
-  taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social });
-  if (abgesagt) {
-    taggies.unshift({ label: "ABGESAGT", color: false });
-  }
-  if (brauchtHotel) {
-    taggies.push({ label: "Hotel", color: hotel });
-  }
-  return headerTags(taggies);
+  return dynamicHeaderTags([
+    { label: "ABGESAGT", dependsOn: ["kopf", "abgesagt"], path: ["kopf", "abgesagt"], invertColor: true },
+    { label: "Bestätigt", labelNotOk: "Unbestätigt", path: ["kopf", "confirmed"] },
+    { label: "Technik", path: ["technik", "checked"] },
+    { label: "Presse", dependsOn: "brauchtPresse", path: ["presse", "checked"] },
+    { label: "Homepage", path: ["kopf", "kannAufHomePage"] },
+    { label: "Social Media", path: ["kopf", "kannInSocialMedia"] },
+    { label: "Hotel", dependsOn: ["artist", "brauchtHotel"], path: ["unterkunft", "bestaetigt"] },
+  ]);
 }
 
 export default function KonzertFormAndPageHeader<T>({
