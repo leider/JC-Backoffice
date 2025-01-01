@@ -43,7 +43,7 @@ export default function JazzFormAndHeaderExtended<T>({
   breadcrumb?: ReactElement;
 }>) {
   document.title = `JC-${title}`;
-  const { isDirty, setIsDirty, setHasErrors } = useJazzContext();
+  const { isDirty, setIsDirty } = useJazzContext();
   const [initialValue, setInitialValue] = useState<Partial<T>>({});
   useDirtyBlocker(isDirty);
   const { hasErrors, checkErrors } = useCheckErrors(form);
@@ -78,10 +78,6 @@ export default function JazzFormAndHeaderExtended<T>({
         });
     }
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
-
-  useEffect(() => {
-    setHasErrors(hasErrors);
-  }, [hasErrors, setHasErrors]);
 
   const buttons: ReactNode[] = (additionalButtons ?? [])
     .concat(resetChanges ? <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} /> : [])

@@ -23,7 +23,7 @@ const items = [
 ];
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
-  const token = theme.useToken().token;
+  const { token } = theme.useToken();
   const form = useFormInstance();
   const { isDirty } = useJazzContext();
   const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
