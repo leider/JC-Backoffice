@@ -27,5 +27,6 @@ export default function dynamicHeaderTags(labelsColors: LabelPathDependsOn[]) {
       </Tag>
     );
   }
+
   return labelsColors.map((tag) => <HeaderTag key={tag.label ?? tag.label} tag={tag} />);
 }

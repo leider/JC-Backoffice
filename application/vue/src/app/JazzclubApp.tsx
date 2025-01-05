@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/components/content/JazzContent.tsx";
-import { App, ConfigProvider, theme } from "antd";
-import { createTokenBasedStyles, customColors } from "@/app/createTokenBasedStyles.ts";
+import { App, ConfigProvider } from "antd";
 import "./JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
 import React from "react";
+import { customColors } from "@/app/customColors.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,10 +20,6 @@ const queryClient = new QueryClient({
 function JazzclubApp() {
   useUpdateApp();
 
-  const { useToken } = theme;
-  const { token } = useToken();
-
-  createTokenBasedStyles(document, token);
   numeral.localeData("de").delimiters.thousands = ".";
   numeral.locale("de");
   return (

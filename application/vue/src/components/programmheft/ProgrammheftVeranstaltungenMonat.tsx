@@ -1,4 +1,4 @@
-import { Col, Collapse, ConfigProvider, Row, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Row, theme, Typography } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
@@ -15,10 +15,12 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
   const unbestaetigte = useMemo(() => veranstaltungen.filter((v) => !v.kopf.confirmed), [veranstaltungen]);
   const ohnePresse = useMemo(() => veranstaltungen.filter((v) => !v.presse.checked), [veranstaltungen]);
 
+  const { token } = theme.useToken();
   return (
     <Collapse
       size={"small"}
       className="monat-header"
+      style={{ backgroundColor: token.colorPrimary }}
       activeKey={expanded ? monat : undefined}
       onChange={() => {
         setExpanded(!expanded);

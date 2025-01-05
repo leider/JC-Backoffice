@@ -9,17 +9,6 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import dynamicHeaderTags from "../colored/dynamicHeaderTags.tsx";
 
-function useTags() {
-  return dynamicHeaderTags([
-    { label: "Bestätigt", labelNotOk: "Unbestätigt", path: ["kopf", "confirmed"] },
-    { label: "Technik", dependsOn: "brauchtTechnik", path: ["technik", "checked"] },
-    { label: "Presse", dependsOn: "brauchtPresse", path: ["presse", "checked"] },
-    { label: "Homepage", path: ["kopf", "kannAufHomePage"] },
-    { label: "Social Media", path: ["kopf", "kannInSocialMedia"] },
-    { label: "Bar einladen", path: "brauchtBar" },
-  ]);
-}
-
 export default function VermietungFormAndPageHeader<T>({
   data,
   saveForm,
@@ -42,7 +31,18 @@ export default function VermietungFormAndPageHeader<T>({
     return `${titel ?? ""}${!id ? " (NEU)" : ""}`;
   }, [id, titel]);
 
-  const tagsForTitle = useTags();
+  const tagsForTitle = useMemo(
+    () =>
+      dynamicHeaderTags([
+        { label: "Bestätigt", labelNotOk: "Unbestätigt", path: ["kopf", "confirmed"] },
+        { label: "Technik", dependsOn: "brauchtTechnik", path: ["technik", "checked"] },
+        { label: "Presse", dependsOn: "brauchtPresse", path: ["presse", "checked"] },
+        { label: "Homepage", path: ["kopf", "kannAufHomePage"] },
+        { label: "Social Media", path: ["kopf", "kannInSocialMedia"] },
+        { label: "Bar einladen", path: "brauchtBar" },
+      ]),
+    [],
+  );
 
   return (
     <JazzFormAndHeaderExtended

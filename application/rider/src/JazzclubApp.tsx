@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import JazzContent from "@/JazzContent.tsx";
-import { App, ConfigProvider, theme } from "antd";
-import { createTokenBasedStyles, customColors } from "../../vue/src/app/createTokenBasedStyles.ts";
+import { App, ConfigProvider } from "antd";
 import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
+import { customColors } from "jc-vue/src/app/customColors.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,9 +14,6 @@ const queryClient = new QueryClient({
 });
 
 function JazzclubApp() {
-  const { useToken } = theme;
-  const { token } = useToken();
-  createTokenBasedStyles(document, token);
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider

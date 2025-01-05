@@ -26,6 +26,5 @@ export function icalToTerminEvents(ical: Calendar) {
     end: toIsoString(event.end || event.start),
     title: event.summary || "",
     tooltip: event.summary || "",
-    className: "no-overflow",
   })) as TerminEvent[];
 }

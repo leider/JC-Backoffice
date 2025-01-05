@@ -13,18 +13,6 @@ import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExt
 import { Tag } from "antd";
 import dynamicHeaderTags from "@/components/colored/dynamicHeaderTags.tsx";
 
-function useTags() {
-  return dynamicHeaderTags([
-    { label: "ABGESAGT", dependsOn: ["kopf", "abgesagt"], path: ["kopf", "abgesagt"], invertColor: true },
-    { label: "Bestätigt", labelNotOk: "Unbestätigt", path: ["kopf", "confirmed"] },
-    { label: "Technik", path: ["technik", "checked"] },
-    { label: "Presse", dependsOn: "brauchtPresse", path: ["presse", "checked"] },
-    { label: "Homepage", path: ["kopf", "kannAufHomePage"] },
-    { label: "Social Media", path: ["kopf", "kannInSocialMedia"] },
-    { label: "Hotel", dependsOn: ["artist", "brauchtHotel"], path: ["unterkunft", "bestaetigt"] },
-  ]);
-}
-
 export default function KonzertFormAndPageHeader<T>({
   data,
   saveForm,
@@ -62,7 +50,20 @@ export default function KonzertFormAndPageHeader<T>({
 
   const isOrga = useMemo(() => currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
-  const tagsForTitle = useTags();
+  const tagsForTitle = useMemo(
+    () =>
+      dynamicHeaderTags([
+        { label: "ABGESAGT", dependsOn: ["kopf", "abgesagt"], path: ["kopf", "abgesagt"], invertColor: true },
+        { label: "Bestätigt", labelNotOk: "Unbestätigt", path: ["kopf", "confirmed"] },
+        { label: "Technik", path: ["technik", "checked"] },
+        { label: "Presse", dependsOn: "brauchtPresse", path: ["presse", "checked"] },
+        { label: "Homepage", path: ["kopf", "kannAufHomePage"] },
+        { label: "Social Media", path: ["kopf", "kannInSocialMedia"] },
+        { label: "Hotel", dependsOn: ["artist", "brauchtHotel"], path: ["unterkunft", "bestaetigt"] },
+      ]),
+    [],
+  );
+
   return (
     <JazzFormAndHeaderExtended
       title={title}

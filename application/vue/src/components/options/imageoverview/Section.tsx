@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
 import { useState } from "react";
-import { Button, Col, Collapse, Form, Image, Popover, Row, Space, Typography } from "antd";
+import { Button, Col, Collapse, Form, Image, Popover, Row, Space, theme, Typography } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
@@ -66,10 +66,13 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
     );
   }
 
+  const { token } = theme.useToken();
+
   const [expanded, setExpanded] = useState<boolean>(false);
   return (
     <Collapse
       className="monat-header"
+      style={{ backgroundColor: token.colorPrimary }}
       activeKey={expanded ? prefix : undefined}
       onChange={() => {
         setExpanded(!expanded);

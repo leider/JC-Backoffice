@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Col, Collapse, Row, Typography } from "antd";
+import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -20,6 +20,7 @@ interface MonatGroupProps {
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
   const { veranstaltungenNachMonat } = useContext(TeamContext);
   const veranstaltungen = veranstaltungenNachMonat[monat];
+  const { token } = theme.useToken();
 
   const byDay = useMemo(() => groupBy(veranstaltungen, (veranst) => veranst.startDatumUhrzeit.tagMonatJahrKompakt), [veranstaltungen]);
 
@@ -54,6 +55,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
               {
                 key: monat,
                 className: "monat-header",
+                style: { backgroundColor: token.colorPrimary },
                 label: (
                   <Row justify="space-between" align="bottom">
                     <Col>
