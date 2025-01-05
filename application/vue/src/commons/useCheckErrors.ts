@@ -1,18 +1,21 @@
 import { useCallback, useState } from "react";
 import { FormInstance } from "antd";
 
-export default function useCheckErrors(form: FormInstance) {
+export default function useCheckErrors(form: FormInstance, loaded: boolean) {
   const [hasErrors, setHasErrors] = useState(false);
   const checkErrors = useCallback(() => {
+    if (!loaded) {
+      return;
+    }
     form
       .validateFields()
       .then(() => {
         setHasErrors(false);
       })
       .catch((reason: { errorFields: unknown[] }) => {
-        setHasErrors(!!reason.errorFields?.length);
+        setHasErrors(loaded && !!reason.errorFields?.length);
       });
-  }, [form]);
+  }, [form, loaded]);
 
   return { hasErrors, checkErrors };
 }

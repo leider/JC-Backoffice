@@ -45,8 +45,9 @@ export default function JazzFormAndHeaderExtended<T>({
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty } = useJazzContext();
   const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
+  const [loaded, setLoaded] = useState(false);
   useDirtyBlocker(isDirty);
-  const { hasErrors, checkErrors } = useCheckErrors(form);
+  const { hasErrors, checkErrors } = useCheckErrors(form, loaded);
 
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
@@ -71,6 +72,7 @@ export default function JazzFormAndHeaderExtended<T>({
         .validateFields()
         .then(() => {
           updateDirtyIfChanged();
+          setLoaded(true);
           return checkErrors();
         })
         .catch(() => {
