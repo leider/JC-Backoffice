@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
@@ -21,13 +21,23 @@ import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 
 export default function Preview() {
   const { url } = useParams();
-  const konzertQueryData = useQuery({
+  const { data } = useQuery({
     queryKey: ["konzert", url],
     queryFn: () => konzertForUrl(url || ""),
   });
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser, optionen, setMemoizedId } = useJazzContext();
 
-  const [konzert, setKonzert] = useState<Konzert>(new Konzert());
+  const konzert = useMemo(() => {
+    if (data) {
+      return data;
+    }
+    return new Konzert();
+  }, [data]);
+
+  useEffect(() => {
+    setMemoizedId(konzert.id);
+  }, [konzert.id, setMemoizedId]);
+
   const [typeColor, setTypeColor] = useState<string | undefined>("");
 
   document.title = konzert.kopf.titelMitPrefix;
@@ -38,12 +48,6 @@ export default function Preview() {
       setTypeColor(typByName[konzert.kopf.eventTyp]?.[0].color ?? colorDefault);
     }
   }, [optionen, konzert]);
-
-  useEffect(() => {
-    if (konzertQueryData.data) {
-      setKonzert(konzertQueryData.data);
-    }
-  }, [konzertQueryData.data]);
 
   function EditButton() {
     const type: buttonType = "allgemeines";

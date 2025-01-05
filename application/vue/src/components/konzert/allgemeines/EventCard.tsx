@@ -93,7 +93,7 @@ export default function EventCard() {
         </Col>
         <Col span={1}>
           <Form.Item name={["kopf", "rechnungAnKooperation"]} label="&nbsp;" valuePropName="checked">
-            <Checkbox></Checkbox>
+            <Checkbox />
           </Form.Item>
         </Col>
         <Col span={8}>

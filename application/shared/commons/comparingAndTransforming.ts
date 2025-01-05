@@ -53,11 +53,11 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
   return stripNullOrUndefined(clone);
 }
 
-export function areDifferentForHistoryEntries<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
+export function areDifferentForHistoryEntries<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
   return !!Object.keys(differenceForAsObject(left, right, propertiesToIgnore)).length;
 }
-export function areDifferent<T extends object>(left: T, right: T, propertiesToIgnore?: string[]) {
-  if (Object.keys(left).length === 0) {
+export function areDifferent<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
+  if (!left || !Object.keys(left).length) {
     return false;
   }
   return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
@@ -81,7 +81,7 @@ export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?
   return diff;
 }
 
-export function logDiffForDirty<T extends object>(initial: T, current: T, enable = false) {
+export function logDiffForDirty<T extends object>(initial?: T, current?: T, enable = false) {
   if (!enable) {
     return;
   }

@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import headerTags from "@/components/colored/headerTags.tsx";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function Extras({ vermietung }: { vermietung: Vermietung }) {
-  const [tagsForTitle, setTagsForTitle] = useState<React.ReactElement[]>([]);
-
-  useEffect(() => {
+  const tagsForTitle = useMemo(() => {
     const confirmed = vermietung.kopf.confirmed;
     const technikOK = vermietung.technik.checked;
     const presseOK = vermietung.presse.checked;
@@ -26,7 +25,7 @@ function Extras({ vermietung }: { vermietung: Vermietung }) {
     }
     taggies.push({ label: "Homepage", color: homepage }, { label: "Social Media", color: social }, { label: "Bar einladen", color: bar });
 
-    setTagsForTitle(headerTags(taggies, true));
+    return headerTags(taggies, true);
   }, [vermietung]);
 
   return (
@@ -41,14 +40,16 @@ interface TeamBlockVermietungProps {
 }
 
 export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamBlockVermietungProps) {
-  const [expanded, setExpanded] = useState<boolean>(initiallyOpen);
+  const { memoizedId } = useJazzContext();
+  const highlight = useMemo(() => vermietung.id === memoizedId, [memoizedId, vermietung.id]);
+  const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
-    setExpanded(initiallyOpen);
-  }, [initiallyOpen]);
+    setExpanded(initiallyOpen || highlight);
+  }, [highlight, initiallyOpen]);
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
-      <Col span={24}>
+      <Col span={24} id={vermietung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {vermietung.ghost ? (
           <div style={{ backgroundColor: vermietung.color, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={vermietung} expanded={initiallyOpen} />

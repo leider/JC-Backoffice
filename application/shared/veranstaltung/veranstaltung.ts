@@ -46,6 +46,9 @@ export default abstract class Veranstaltung {
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
       });
+    } else {
+      this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;
+      this.endDate = new DatumUhrzeit().setUhrzeit(23, 0).toJSDate;
     }
   }
 

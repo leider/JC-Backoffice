@@ -8,6 +8,7 @@ import { useForm, useWatch } from "antd/es/form/Form";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import dynamicHeaderTags from "../colored/dynamicHeaderTags.tsx";
+import { useLocation } from "react-router";
 
 export default function VermietungFormAndPageHeader<T>({
   data,
@@ -22,14 +23,21 @@ export default function VermietungFormAndPageHeader<T>({
   document.title = "Vermietung";
   const [form] = useForm();
   const { isDirty } = useJazzContext();
+  const { pathname } = useLocation();
+  const isCopy = useMemo(() => {
+    return pathname.includes("/copy-of-");
+  }, [pathname]);
+  const isNew = useMemo(() => {
+    return pathname.includes("/new");
+  }, [pathname]);
 
   const id = useWatch("id", { form, preserve: true });
   const startDate = useWatch("startDate", { form, preserve: true });
   const titel = useWatch(["kopf", "titel"], { form, preserve: true });
   const displayDate = useMemo(() => DatumUhrzeit.forJSDate(startDate).lesbareKurzform, [startDate]);
   const title = useMemo(() => {
-    return `${titel ?? ""}${!id ? " (NEU)" : ""}`;
-  }, [id, titel]);
+    return `${titel ?? ""}${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`;
+  }, [isCopy, isNew, titel]);
 
   const tagsForTitle = useMemo(
     () =>

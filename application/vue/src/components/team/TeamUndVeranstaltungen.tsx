@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Button, Col, Dropdown, Row, Space } from "antd";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
@@ -8,8 +8,30 @@ import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import { useTeamVeranstaltungenCommons } from "@/components/team/useTeamVeranstaltungenCommons.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
+  const { memoizedId } = useJazzContext();
+  useEffect(() => {
+    let tries = 0;
+    function tryToScroll() {
+      setTimeout(() => {
+        const element = document.getElementById(memoizedId ?? "");
+        if (element) {
+          element?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          tries = 5;
+        }
+      }, 200);
+    }
+    if (tries < 5) {
+      tryToScroll();
+      tries++;
+    }
+  }, [memoizedId]);
+
   const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, filterTags, usersAsOptions } =
     useTeamVeranstaltungenCommons(periodsToShow);

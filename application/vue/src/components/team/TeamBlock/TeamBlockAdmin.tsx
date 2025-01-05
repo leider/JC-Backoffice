@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface TeamBlockAdminProps {
   veranstaltung: Konzert;
@@ -12,14 +13,16 @@ interface TeamBlockAdminProps {
 }
 
 function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const [expanded, setExpanded] = useState<boolean>(initiallyOpen);
+  const { memoizedId } = useJazzContext();
+  const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
+  const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
-    setExpanded(initiallyOpen);
-  }, [initiallyOpen]);
+    setExpanded(initiallyOpen || highlight);
+  }, [highlight, initiallyOpen]);
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
-      <Col span={24}>
+      <Col span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />

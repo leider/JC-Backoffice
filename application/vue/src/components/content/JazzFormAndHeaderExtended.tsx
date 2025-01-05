@@ -44,7 +44,7 @@ export default function JazzFormAndHeaderExtended<T>({
 }>) {
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty } = useJazzContext();
-  const [initialValue, setInitialValue] = useState<Partial<T>>({});
+  const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
   useDirtyBlocker(isDirty);
   const { hasErrors, checkErrors } = useCheckErrors(form);
 

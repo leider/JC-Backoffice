@@ -25,8 +25,12 @@ export default function VermietungComp() {
     forwardForNew: true,
   });
 
-  const { currentUser } = useJazzContext();
+  const { currentUser, setMemoizedId } = useJazzContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setMemoizedId(data?.id);
+  }, [data?.id, setMemoizedId]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;

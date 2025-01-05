@@ -114,7 +114,6 @@ export async function konzertForUrl(url: string): Promise<Konzert> {
     if (result) {
       const konzert = new Konzert(result);
       konzert.reset();
-      konzert.kopf.titel = `Kopie von ${konzert.kopf.titel}`;
       return konzert;
     } else {
       return result;
@@ -188,7 +187,6 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
     if (result) {
       const vermietung = new Vermietung(result);
       vermietung.reset();
-      vermietung.kopf.titel = `Kopie von ${vermietung.kopf.titel}`;
       return vermietung;
     } else {
       return result;

@@ -31,7 +31,7 @@ export default function KonzertComp() {
         konz.riderBoxes = riderQuery.data.boxes;
         return { konzert: konz, refetch: konzertQuery.refetch };
       } else {
-        return { konzert: new Konzert(), refetch: konzertQuery.refetch };
+        return { konzert: undefined, refetch: undefined };
       }
     },
   });
@@ -47,8 +47,12 @@ export default function KonzertComp() {
 
   const id = useWatch("id", { form, preserve: true });
 
-  const { currentUser, optionen } = useJazzContext();
+  const { currentUser, optionen, setMemoizedId } = useJazzContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setMemoizedId(konzert?.id);
+  }, [konzert?.id, setMemoizedId]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
