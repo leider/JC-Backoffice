@@ -13,23 +13,15 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
   const { memoizedId } = useJazzContext();
   useEffect(() => {
-    let tries = 0;
-    function tryToScroll() {
-      setTimeout(() => {
-        const element = document.getElementById(memoizedId ?? "");
-        if (element) {
-          element?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-          tries = 5;
-        }
-      }, 200);
-    }
-    if (tries < 5) {
-      tryToScroll();
-      tries++;
-    }
+    setTimeout(() => {
+      const element = document.getElementById(memoizedId ?? "");
+      if (element) {
+        element?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }, 10);
   }, [memoizedId]);
 
   const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);
