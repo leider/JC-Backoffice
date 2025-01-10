@@ -1,5 +1,6 @@
 import { marked } from "marked";
 import misc from "./misc.js";
+import isNil from "lodash/isNil.js";
 
 function normalize(str: string): string {
   if (str.trim() === "") {
@@ -55,7 +56,7 @@ function enhanceTableTag(rendered: string): string {
 
 export default {
   render: function render(content?: string, subdir?: string): string {
-    if (content === undefined || content === null) {
+    if (isNil(content)) {
       return "";
     }
     const rendered = marked(evalTags(content, subdir)) as string;

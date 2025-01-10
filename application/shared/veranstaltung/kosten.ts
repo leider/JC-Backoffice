@@ -1,3 +1,4 @@
+import isString from "lodash/fp/isString.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
@@ -5,7 +6,7 @@ function floatAmount(textWithNumberOrNull?: string | null): number {
 }
 
 function formatNumberTwoDigits(number: string | number): string {
-  if (typeof number === "string") {
+  if (isString(number)) {
     return number;
   }
   if (number !== 0 && !number) {

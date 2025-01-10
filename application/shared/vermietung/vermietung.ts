@@ -47,6 +47,7 @@ export default class Vermietung extends Veranstaltung {
     return new Vermietung(object);
   }
 
+  // eslint-disable-next-line lodash/prefer-constant
   get isVermietung(): boolean {
     return true;
   }

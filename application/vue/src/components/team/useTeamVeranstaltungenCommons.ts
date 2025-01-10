@@ -9,6 +9,7 @@ import reverse from "lodash/reverse";
 import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
+import property from "lodash/fp/property";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
@@ -70,7 +71,7 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
       return;
     }
     const filtered = veranstaltungen.filter(applyTeamFilter(filter));
-    const result = groupBy(filtered, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(filtered, property("startDatumUhrzeit.monatLangJahrKompakt"));
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [filter, veranstaltungen]);

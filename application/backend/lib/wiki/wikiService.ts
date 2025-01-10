@@ -27,7 +27,7 @@ export default {
       }
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      if (err && err.message.indexOf("does not exist") === -1) {
+      if (err && err.message.includes("does not exist")) {
         throw err;
       }
     }

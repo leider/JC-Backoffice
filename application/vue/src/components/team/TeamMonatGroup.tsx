@@ -11,6 +11,7 @@ import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";
+import property from "lodash/fp/property";
 
 interface MonatGroupProps {
   monat: string;
@@ -22,7 +23,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
 
-  const byDay = useMemo(() => groupBy(veranstaltungen, (veranst) => veranst.startDatumUhrzeit.tagMonatJahrKompakt), [veranstaltungen]);
+  const byDay = useMemo(() => groupBy(veranstaltungen, property("startDatumUhrzeit.tagMonatJahrKompakt")), [veranstaltungen]);
 
   const initiallyExpanded = useMemo(() => {
     const jetzt = new DatumUhrzeit();
@@ -94,7 +95,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         {Object.keys(byDay).map((day, idx) => {
           return (
             <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
-              {sortBy(byDay[day], (v) => v.startDatumUhrzeit.toISOString).map((veranstaltung) => {
+              {sortBy(byDay[day], property("startDatumUhrzeit.toISOString")).map((veranstaltung) => {
                 return renderTeam ? (
                   <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
                 ) : veranstaltung.isVermietung ? (

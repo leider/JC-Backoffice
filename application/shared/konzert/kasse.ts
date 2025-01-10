@@ -1,6 +1,7 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import isString from "lodash/fp/isString.js";
 
 type MuenzenScheine = {
   "10"?: number;
@@ -71,7 +72,7 @@ export default class Kasse {
       const ak = object.anzahlBesucherAK ?? 0;
       Object.assign(this, object, {
         kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
-        anzahlBesucherAK: typeof ak === "string" ? parseInt(ak) : isNaN(ak) ? 0 : ak,
+        anzahlBesucherAK: isString(ak) ? parseInt(ak) : isNaN(ak) ? 0 : ak,
         startinhalt: {
           "10": object.startinhalt?.["10"],
           "20": object.startinhalt?.["20"],

@@ -23,9 +23,10 @@ import { RcFile } from "antd/es/upload";
 import { useWatch } from "antd/es/form/Form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import MailMessage from "jc-shared/mail/mailMessage.ts";
+import isString from "lodash/fp/isString";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
-  if (typeof addressOrString === "string") {
+  if (isString(addressOrString)) {
     return addressOrString;
   }
   return addressOrString.name ?? addressOrString.address;

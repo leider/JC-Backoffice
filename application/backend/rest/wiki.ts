@@ -21,7 +21,7 @@ app.get("/wikipage/:subdir/:page", async (req, res) => {
     resToJson(res, { content });
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if ((e.message || "").indexOf("does not exist") > -1) {
+    if ((e.message || "").includes("does not exist")) {
       return resToJson(res, { content: "" });
     }
     throw e;

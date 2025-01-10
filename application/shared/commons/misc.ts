@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import compact from "lodash/compact.js";
 import DatumUhrzeit from "./DatumUhrzeit.js";
+import isArray from "lodash/fp/isArray.js";
+import isString from "lodash/fp/isString.js";
 
 function isNumber(aString: string): boolean {
   const number = Number.parseInt(aString);
@@ -11,7 +13,7 @@ function stringOrDateToDate(object?: string | Date): Date | undefined {
   if (!object) {
     return undefined;
   }
-  return typeof object === "string" ? DatumUhrzeit.forISOString(object).toJSDate : object;
+  return isString(object) ? DatumUhrzeit.forISOString(object).toJSDate : object;
 }
 
 function toObject<T>(Constructor: new (something: any) => T, jsobject?: object) {
@@ -30,10 +32,10 @@ function toArray(elem?: string | string[]): Array<string> {
   if (!elem) {
     return [];
   }
-  if (elem instanceof Array) {
+  if (isArray(elem)) {
     return elem;
   }
-  if (typeof elem === "string") {
+  if (isString(elem)) {
     return elem.split(",");
   }
   return [elem];
@@ -41,12 +43,12 @@ function toArray(elem?: string | string[]): Array<string> {
 
 function pushImage(images: string | Array<string>, image: string): string[] {
   let result: string[];
-  if (typeof images === "string") {
+  if (isString(images)) {
     result = [images];
   } else {
     result = images;
   }
-  if (result.indexOf(image) === -1) {
+  if (result.includes(image)) {
     result.push(image);
     return result;
   }
@@ -54,7 +56,7 @@ function pushImage(images: string | Array<string>, image: string): string[] {
 }
 
 function dropImage(images: string | Array<string>, image: string): string[] {
-  if (typeof images === "string") {
+  if (isString(images)) {
     return [];
   } else {
     return images.filter((each) => each !== image);

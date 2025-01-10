@@ -123,6 +123,7 @@ export default abstract class Veranstaltung {
     return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
   }
 
+  // eslint-disable-next-line lodash/prefer-constant
   get tooltipInfos(): string {
     return "";
   }

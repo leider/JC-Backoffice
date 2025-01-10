@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
+import noop from "lodash/fp/noop";
 
 type TableContextType = { endEdit: (value: EndEditingCallback) => void };
 
-export const TableContext = createContext<TableContextType>({ endEdit: () => {} });
+export const TableContext = createContext<TableContextType>({ endEdit: noop });
 
 type EndEditingCallback = { endEditing: () => void };
 

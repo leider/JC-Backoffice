@@ -43,6 +43,7 @@ export default class Accessrights {
     return this.isSuperuser || this.rechte.includes("kassenfreigabe");
   }
 
+  // eslint-disable-next-line lodash/prefer-constant
   get everybody(): boolean {
     return true;
   }

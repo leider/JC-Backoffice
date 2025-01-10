@@ -5,6 +5,7 @@ import prettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import lodash from "eslint-plugin-lodash";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -31,15 +32,17 @@ export default tseslint.config(
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
       react,
-      "react-hooks": eslintPluginReactHooks,
+      "react-hooks": eslintPluginReactHooks, lodash
     },
     rules: {
       ...eslintPluginReactHooks.configs.recommended.rules,
       ...react.configs.recommended.rules,
+      ...lodash.configs.recommended.rules,
       "react/react-in-jsx-scope": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
       "react/display-name": 0,
+      "lodash/prefer-lodash-method": "off"
     },
   },
   { ignores: ["**/*.js"], ...eslintPluginPrettierRecommended },

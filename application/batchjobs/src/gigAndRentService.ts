@@ -4,6 +4,7 @@ import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js"
 import sortBy from "lodash/sortBy.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
+import constant from "lodash/fp/constant.js";
 
 export function byDateRangeInAscendingOrder({
   from,
@@ -16,7 +17,7 @@ export function byDateRangeInAscendingOrder({
   konzerteFilter?: (ver: Konzert) => boolean;
   vermietungenFilter?: (ver: Vermietung) => boolean;
 }) {
-  const alwaysTrue = () => true;
+  const alwaysTrue = constant(true);
 
   const konzerte = konzertestore.byDateRangeInAscendingOrder(from, to);
   const filteredKonzerte = konzerte.filter(konzerteFilter ?? alwaysTrue);

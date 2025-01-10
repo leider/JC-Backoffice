@@ -11,6 +11,7 @@ import useCheckErrors from "@/commons/useCheckErrors.ts";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { NamePath } from "rc-field-form/es/interface";
+import noop from "lodash/fp/noop";
 
 export default function JazzFormAndHeaderExtended<T>({
   title,
@@ -75,9 +76,7 @@ export default function JazzFormAndHeaderExtended<T>({
           setLoaded(true);
           return checkErrors();
         })
-        .catch(() => {
-          // ignore
-        });
+        .catch(noop);
     }
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
@@ -100,11 +99,15 @@ export default function JazzFormAndHeaderExtended<T>({
             setIsDirty(false);
             saveForm(form.getFieldsValue(true));
           })
-          .catch(() => {
-            // ignore
-          })
+          .catch(noop)
       }
       layout="vertical"
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          return false;
+        }
+      }}
     >
       <JazzPageHeader
         title={styledTitle ?? title}

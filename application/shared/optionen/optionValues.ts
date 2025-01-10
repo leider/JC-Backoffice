@@ -159,7 +159,7 @@ export default class OptionValues {
         break;
     }
     misc.toArray(updatedCollection).forEach((item) => {
-      if (ourCollection.indexOf(item) < 0) {
+      if (ourCollection.includes(item)) {
         ourCollection.push(item);
       }
     });

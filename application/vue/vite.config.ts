@@ -13,7 +13,7 @@ export default defineConfig(() => {
     build: {
       outDir: "../backend/static/vue",
       emptyOutDir: false,
-      sourcemap: true,
+      sourcemap: false,
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),

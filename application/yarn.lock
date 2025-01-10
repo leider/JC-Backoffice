@@ -6631,6 +6631,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-lodash@npm:8.0.0":
+  version: 8.0.0
+  resolution: "eslint-plugin-lodash@npm:8.0.0"
+  dependencies:
+    lodash: "npm:^4.17.21"
+  peerDependencies:
+    eslint: ">=9.0.0"
+  checksum: 10c0/7850aa39e44db6bf3590460b6b7fcdbb41dfbfcfda8f20d04d12e09127154e86811c8c9c291151d214422daa5aa50812525569ff58837c53c0e93c1ebb8cbc54
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:5.2.1":
   version: 5.2.1
   resolution: "eslint-plugin-prettier@npm:5.2.1"
@@ -8217,6 +8228,7 @@ __metadata:
     "@types/uuid": "npm:10.0.0"
     eslint: "npm:9.17.0"
     eslint-config-prettier: "npm:9.1.0"
+    eslint-plugin-lodash: "npm:8.0.0"
     eslint-plugin-prettier: "npm:5.2.1"
     eslint-plugin-react: "npm:7.37.3"
     eslint-plugin-react-hooks: "npm:5.1.0"

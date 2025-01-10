@@ -1,4 +1,5 @@
 import { Form, FormItemProps } from "antd";
+import isObject from "lodash/fp/isObject";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface AggregateProps<V = any> extends FormItemProps<V> {
@@ -30,7 +31,7 @@ export default function Aggregate(props: AggregateProps) {
           return values?.[0];
         }}
         rules={rules.map((rule) => {
-          if (typeof rule === "object" && rule) {
+          if (isObject(rule) && rule) {
             return {
               ...rule,
               transform: () => names.map((name) => form.getFieldValue(name)),

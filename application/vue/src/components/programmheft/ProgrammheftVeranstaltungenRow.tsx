@@ -7,6 +7,7 @@ import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useEffect, useState } from "react";
 import groupBy from "lodash/groupBy";
+import property from "lodash/fp/property";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
@@ -27,7 +28,7 @@ export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit 
   }, [dataveranstaltungen]);
 
   useEffect(() => {
-    const result = groupBy(veranstaltungen, (veranst) => veranst.startDatumUhrzeit.monatLangJahrKompakt);
+    const result = groupBy(veranstaltungen, property("startDatumUhrzeit.monatLangJahrKompakt"));
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [veranstaltungen]);

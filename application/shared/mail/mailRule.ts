@@ -1,3 +1,4 @@
+import constant from "lodash/fp/constant.js";
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 
 type MailRuleUI = {
@@ -13,9 +14,7 @@ interface RuleLogic {
 }
 
 class RuleLogicEmpty implements RuleLogic {
-  shouldSend(): boolean {
-    return false;
-  }
+  shouldSend = constant(false);
 
   startAndEndDay(datumUhrzeit: DatumUhrzeit): { start: DatumUhrzeit; end: DatumUhrzeit } {
     return { start: datumUhrzeit, end: datumUhrzeit };

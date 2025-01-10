@@ -3,6 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
 import { Rule } from "antd/es/form";
+import noop from "lodash/fp/noop";
 
 type NumberInputProps = {
   /**
@@ -140,7 +141,7 @@ export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = 
 }: NumberInputWithDirectValueParams): React.ReactElement => {
   return (
     <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label}:</b>} noStyle={!label}>
-      <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} onNumber={() => {}} disabled />
+      <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} onNumber={noop} disabled />
     </Form.Item>
   );
 };

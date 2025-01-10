@@ -9,6 +9,7 @@ import isEmpty from "lodash/isEmpty";
 import { NamePath } from "rc-field-form/es/interface";
 import { TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
+import isBoolean from "lodash/fp/isBoolean";
 
 type LabelColorProperty = {
   label: string;
@@ -40,7 +41,7 @@ export default function TeamFilter() {
 
   function headerTagsForFilters(labelsColors: LabelColorProperty[]) {
     function HeaderTag({ label, color, prop }: LabelColorProperty) {
-      if (typeof color === "boolean") {
+      if (isBoolean(color)) {
         return (
           <Tag
             key={label}

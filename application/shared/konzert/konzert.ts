@@ -91,6 +91,7 @@ export default class Konzert extends Veranstaltung {
     return new Konzert(object);
   }
 
+  // eslint-disable-next-line lodash/prefer-constant
   get isVermietung(): boolean {
     return false;
   }

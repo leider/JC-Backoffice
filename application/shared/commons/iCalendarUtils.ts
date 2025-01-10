@@ -1,5 +1,6 @@
 import { Calendar, ComplexDate, Parser } from "ikalendar";
 import { TerminEvent } from "../optionen/termin.js";
+import isString from "lodash/fp/isString.js";
 
 export function parseIcal(text: string) {
   // workaround for cals having a field named TEXT like https://www.ferienwiki.de/exports/ferien/2020/de/baden-wuerttemberg
@@ -12,7 +13,7 @@ export function icalToTerminEvents(ical: Calendar) {
     if (!event) {
       return "";
     }
-    if (typeof event === "string") {
+    if (isString(event)) {
       return event;
     }
     return toIsoString((event as ComplexDate).value);

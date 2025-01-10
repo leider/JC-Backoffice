@@ -1,4 +1,5 @@
 import { detailedDiff } from "deep-object-diff";
+import isObject from "lodash/fp/isObject.js";
 
 type SomeObject = { [index: string]: SomeObject };
 
@@ -17,7 +18,7 @@ function stripNullOrUndefined<T extends object>(data: T): T {
     if (dataCasted[key] === null || dataCasted[key] === undefined) {
       delete dataCasted[key];
     }
-    if (typeof dataCasted[key] === "object") {
+    if (isObject(dataCasted[key])) {
       // Array is typeof "object"
       stripNullOrUndefined(dataCasted[key]);
     }

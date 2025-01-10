@@ -9,6 +9,7 @@ import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
+import noop from "lodash/fp/noop";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -16,13 +17,13 @@ const emptyContext: SharedGlobals = {
   allUsers: [],
   optionen: new OptionValues(),
   orte: new Orte(),
-  showSuccess: () => {},
-  showError: () => {},
+  showSuccess: noop,
+  showError: noop,
   filter: {},
-  setFilter: () => {},
+  setFilter: noop,
   isDirty: false,
-  setIsDirty: () => {},
-  setMemoizedId: () => {},
+  setIsDirty: noop,
+  setMemoizedId: noop,
 };
 
 type SharedGlobals = {

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { resToJson } from "../lib/commons/replies.js";
 import { db, escape } from "../lib/persistence/sqlitePersistence.js";
-import _ from "lodash";
+import groupBy from "lodash/groupBy.js";
 
 const app = express();
 
@@ -40,7 +40,7 @@ app.get("/history/:collection", async (req: Request, res: Response) => {
   const result = db.prepare(query).all();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const idWithMore = _.groupBy(result as any, (elem) => elem.id);
+  const idWithMore = groupBy(result as any, (elem) => elem.id);
   const resAsObject = Object.keys(idWithMore).map((key) => {
     const newestRow = idWithMore[key][0];
     const state = Object.keys(JSON.parse(newestRow.after)).length === 1 ? "gelöscht" : "geändert";
