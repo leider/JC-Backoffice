@@ -9,6 +9,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import { JobResult } from "./sendMailsNightly.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 function toFullQualifiedUrl(prefix: string, localUrl: string): string {
   function trimLeadingAndTrailingSlash(string: string): string {
@@ -54,7 +55,7 @@ export async function checkStaff(now: DatumUhrzeit): Promise<JobResult> {
     });
 
     const users = userstore.allUsers();
-    const validUsers = users.filter((user) => !!user.email && !!user.wantsEmailReminders);
+    const validUsers = filter(users, (user) => !!user.email && !!user.wantsEmailReminders);
     const zuSendende = alle;
     if (zuSendende.length) {
       const verMitUsers = mixVeranstaltungenMitUsers(zuSendende, validUsers);

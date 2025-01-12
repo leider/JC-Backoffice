@@ -9,6 +9,7 @@ import { useCreateImagenamesSections } from "@/components/options/imageoverview/
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import filter from "lodash/filter";
 
 export default function ImageOverview() {
   useDirtyBlocker(false);
@@ -37,10 +38,9 @@ export default function ImageOverview() {
 
   function saveForm() {
     const formValues = form.getFieldsValue(true);
-    const changedRows = formValues.with
-      .filter((v: ImageOverviewRow) => v.newname !== v.image)
-      .concat(formValues.notFound.filter((v: ImageOverviewRow) => v.newname !== v.image))
-      .concat(formValues.unused.filter((v: ImageOverviewRow) => v.newname !== v.image));
+    const changedRows = filter(formValues.with, (v: ImageOverviewRow) => v.newname !== v.image)
+      .concat(filter(formValues.notFound, (v: ImageOverviewRow) => v.newname !== v.image))
+      .concat(filter(formValues.unused, (v: ImageOverviewRow) => v.newname !== v.image));
     form.validateFields().then(async () => {
       mutateImages.mutate(changedRows);
     });

@@ -1,6 +1,7 @@
 import { marked } from "marked";
 import misc from "./misc.js";
 import isNil from "lodash/isNil.js";
+import forEach from "lodash/forEach.js";
 
 function normalize(str: string): string {
   if (str.trim() === "") {
@@ -22,26 +23,23 @@ function evalTags(text: string, subdir?: string): string {
   // Yields the content with the rendered [[bracket tags]]
   // The rules are the same for Gollum https://github.com/github/gollum
   const matches = result.match(/(.?)\[\[(.+?)]]([^[]?)/g);
-  if (matches) {
-    matches.forEach((match) => {
-      const tag = /(.?)\[\[(.+?)]](.?)/.exec(match.trim());
-      if (!tag) {
-        return;
-      }
-      if (tag[1] === "'") {
-        return;
-      }
-      const id = encodeURIComponent(tag[2]);
-      tagmap[id] = tag[2] || "";
-      result = result.replace(tag[0] || "", id);
-    });
-  }
-  Object.keys(tagmap).forEach((key) => {
+  forEach(matches, (match) => {
+    const tag = /(.?)\[\[(.+?)]](.?)/.exec(match.trim());
+    if (!tag) {
+      return;
+    }
+    if (tag[1] === "'") {
+      return;
+    }
+    const id = encodeURIComponent(tag[2]);
+    tagmap[id] = tag[2] || "";
+    result = result.replace(tag[0] ?? "", id);
+  });
+  forEach(Object.keys(tagmap), (key) => {
     const parts = tagmap[key].split("|");
-    const name = parts[0];
-    const pageName = parts[1] || name;
+    const pageName = parts[1] ?? parts[0];
 
-    tagmap[key] = `<a class="internal" href="/wiki/${subdir || "alle"}/${normalize(pageName.toLowerCase())}">${name}</a>`;
+    tagmap[key] = `<a class="internal" href="/wiki/${subdir ?? "alle"}/${normalize(pageName.toLowerCase())}">${parts[0]}</a>`;
     result = result.replace(new RegExp(key, "g"), tagmap[key]);
   });
 

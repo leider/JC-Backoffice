@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import Orte, { Ort } from "../../optionen/orte.js";
+import Orte from "../../optionen/orte.js";
 
 const emptyOrte = { orte: [] };
 
@@ -16,20 +16,6 @@ describe("Orte", () => {
     const orte = new Orte({
       orte: [peter, zappa, anna],
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const orteJson = (orte.toJSON() as any).orte as Ort[];
-    orteJson.forEach((ort) => {
-      const keys = Object.keys(ort);
-      keys.forEach((key) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (ort[key] === undefined) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          delete ort[key];
-        }
-      });
-    });
-    expect(orteJson).to.eql([anna, peter, zappa]);
+    expect(orte.orte).to.eql([anna, peter, zappa]);
   });
 });

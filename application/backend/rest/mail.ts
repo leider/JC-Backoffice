@@ -15,6 +15,8 @@ import parseFormData from "../lib/commons/parseFormData.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import invokeMap from "lodash/invokeMap.js";
 import map from "lodash/map.js";
+import forEach from "lodash/forEach.js";
+import filter from "lodash/filter.js";
 
 const app = express();
 
@@ -57,16 +59,16 @@ app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
 
 app.post("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
   const users = userstore.allUsers();
-  const newLists = req.body as Mailingliste[];
+  const updatedLists = req.body as Mailingliste[];
 
-  users?.forEach((u) => (u.mailinglisten = []));
+  forEach(users, (u) => (u.mailinglisten = []));
 
-  newLists.forEach((list) => {
-    const selectedUsers = users?.filter((u) => list.users.includes(u.id));
-    selectedUsers?.forEach((u) => u.subscribeList(list.name));
+  forEach(updatedLists, (list) => {
+    const selectedUsers = filter(users, (u) => list.users.includes(u.id));
+    forEach(selectedUsers, (u) => u.subscribeList(list.name));
   });
 
-  userstore.saveAll(users || [], req.user as User);
+  userstore.saveAll(users ?? [], req.user as User);
   resToJson(res, users);
 });
 

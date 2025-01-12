@@ -6,6 +6,7 @@ import find from "lodash/find.js";
 
 import Kontakt from "../veranstaltung/kontakt.js";
 import map from "lodash/map.js";
+import forEach from "lodash/forEach.js";
 
 const sortByNameCaseInsensitive = sortBy(toLower);
 
@@ -140,29 +141,9 @@ export default class OptionValues {
   }
 
   updateCollection(key: "backlineJazzclub" | "backlineRockshop" | "artists", updatedCollection: string | string[]): void {
-    let ourCollection: string[];
-    switch (key) {
-      case "artists":
-        if (!this.artists) {
-          this.artists = [];
-        }
-        ourCollection = this.artists;
-        break;
-      case "backlineJazzclub":
-        if (!this.backlineJazzclub) {
-          this.backlineJazzclub = [];
-        }
-        ourCollection = this.backlineJazzclub;
-        break;
-      case "backlineRockshop":
-        if (!this.backlineRockshop) {
-          this.backlineRockshop = [];
-        }
-        ourCollection = this.backlineRockshop;
-        break;
-    }
-    misc.toArray(updatedCollection).forEach((item) => {
-      if (ourCollection.includes(item)) {
+    const ourCollection = this[key];
+    forEach(misc.toArray(updatedCollection), (item) => {
+      if (!ourCollection.includes(item)) {
         ourCollection.push(item);
       }
     });

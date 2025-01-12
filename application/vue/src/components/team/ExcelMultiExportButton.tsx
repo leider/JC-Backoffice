@@ -9,6 +9,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useQueries } from "@tanstack/react-query";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import filter from "lodash/filter";
 
 export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -60,7 +61,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
       ],
       combine: ([a, b]) => {
         if (a?.data && b?.data) {
-          return sortBy([...a.data, ...b.data], "startDate").filter((ver) => ver.kopf.confirmed);
+          return filter(sortBy([...a.data, ...b.data], "startDate"), "kopf.confirmed");
         }
         return [];
       },

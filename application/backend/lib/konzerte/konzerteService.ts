@@ -13,6 +13,8 @@ import groupBy from "lodash/groupBy.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import map from "lodash/map.js";
 import flatMap from "lodash/flatMap.js";
+import forEach from "lodash/forEach.js";
+import filter from "lodash/filter.js";
 
 function getKonzert(url: string) {
   return store.getKonzert(url);
@@ -28,30 +30,24 @@ function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User) {
   if (user.accessrights.isBookingTeam) {
     return enrichedKonzerte;
   }
-  return enrichedKonzerte.filter((v) => v.kopf.confirmed);
+  return filter(enrichedKonzerte, "kopf.confirmed");
 }
 
 function zipKonzerte(konzerte: Konzert[], name: string, res: Response, next: NextFunction) {
+  function pathFor(name: string) {
+    return conf.uploadDir + "/" + name;
+  }
   try {
-    const images = map(
-      flatMap(konzerte, (konzert) => konzert.presse.image)
-        // eslint-disable-next-line no-sync
-        .filter((filename) => fs.existsSync(conf.uploadDir + "/" + filename)),
-      (filename) => {
-        return { path: conf.uploadDir + "/" + filename, name: filename };
-      },
+    const zip = new AdmZip();
+
+    forEach(
+      filter(flatMap(konzerte, "presse.image"), (filename) => fs.existsSync(pathFor(filename))),
+      (filename) => zip.addLocalFile(pathFor(filename), undefined, filename),
     );
-    const filename = `Jazzclub Bilder ${name}.zip`;
+    const buffer = zip.toBuffer();
 
     res.type("zip");
-    res.header("Content-Disposition", 'attachment; filename="' + filename + '"');
-
-    const zip = new AdmZip();
-    images.forEach((file) => {
-      zip.addLocalFile(file.path, undefined, file.name);
-    });
-
-    const buffer = zip.toBuffer();
+    res.header("Content-Disposition", `attachment; filename="Jazzclub Bilder ${name}.zip"`);
     res.end(buffer);
   } catch (e) {
     next(e);

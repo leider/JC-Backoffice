@@ -15,6 +15,9 @@ import useColumnRenderer from "@/widgets/EditableTable/widgets/useColumnRenderer
 import findIndex from "lodash/findIndex";
 import find from "lodash/find";
 import map from "lodash/map";
+import forEach from "lodash/forEach";
+import reject from "lodash/reject";
+import filter from "lodash/filter";
 
 type WithKey<T> = T & { key: string };
 
@@ -72,8 +75,7 @@ function InnerTable<T>({
   }
 
   const handleDelete = (key: React.Key) => {
-    const newData = rows?.filter((item) => item.key !== key);
-    onChange?.(newData);
+    onChange?.(reject(rows, ["key", key]));
   };
 
   const handleCopy = (key: React.Key) => {
@@ -214,14 +216,14 @@ function InnerTable<T>({
 }
 
 export default function EditableTable<T>({ name, columnDescriptions, usersWithKann, newRowFactory }: EditableTableProps<T>) {
-  const requiredFields = useMemo(() => columnDescriptions.filter((desc) => desc.required), [columnDescriptions]);
+  const requiredFields = useMemo(() => filter(columnDescriptions, "required"), [columnDescriptions]);
 
   const requiredValidator = useMemo(() => {
     return {
       validator: (_, value: T[]) => {
         let broken = false;
-        value?.forEach((row) => {
-          requiredFields?.forEach((field) => {
+        forEach(value, (row) => {
+          forEach(requiredFields, (field) => {
             if (isNil(row[field.dataIndex as keyof T])) {
               broken = true;
             }
@@ -235,16 +237,16 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   function duplicates(values: any[]) {
-    return (values ?? []).filter((item, index) => index !== values.indexOf(item));
+    return filter(values, (item, index) => index !== values.indexOf(item));
   }
 
-  const uniqueFields = useMemo(() => columnDescriptions.filter((desc) => desc.uniqueValues), [columnDescriptions]);
+  const uniqueFields = useMemo(() => filter(columnDescriptions, "uniqueValues"), [columnDescriptions]);
 
   const uniqueValidator = useMemo(() => {
     return {
       validator: (_, value: T[]) => {
         let broken = false;
-        uniqueFields.forEach((field) => {
+        forEach(uniqueFields, (field) => {
           const valsToCheck = map(value, (row) => row[field.dataIndex as keyof T]);
           if (duplicates(valsToCheck).length) {
             broken = true;

@@ -1,6 +1,9 @@
 import Konzert from "../konzert/konzert.js";
 import Vermietung from "../vermietung/vermietung.js";
 import KonzertKalkulation from "../konzert/konzertKalkulation.js";
+import map from "lodash/map.js";
+import forEach from "lodash/forEach.js";
+import Veranstaltung from "../veranstaltung/veranstaltung.js";
 
 type KeyNumber = { [index: string]: number };
 type KeyNumberString = { [index: string]: number | string };
@@ -10,7 +13,7 @@ export interface Kennzahlen {
   kennzahlen: KeyNumber;
 }
 
-export function prepareExcel(veranstaltung: (Konzert | Vermietung)[]) {
+export function prepareExcel(veranstaltung: Veranstaltung[]) {
   const kumuliert: { [index: string]: KeyNumber } = veranstaltung.reduce((bestehende, ver) => {
     const kennzahlen = ver.isVermietung ? kennzahlenFuerVermietung(ver as Vermietung) : kennzahlenFuerVeranstaltung(ver as Konzert);
     integrateKennzahlen(kennzahlen, bestehende);
@@ -42,10 +45,8 @@ export function prepareExcel(veranstaltung: (Konzert | Vermietung)[]) {
     createRow("Hotel (Transport)", kumuliert),
   ];
 
-  Object.keys(kumuliert).forEach((key) => {
-    rows.push(createRow(key, kumuliert));
-  });
-  return rows;
+  const kumulierte = map(Object.keys(kumuliert), (key) => createRow(key, kumuliert));
+  return rows.concat(kumulierte);
 }
 
 function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
@@ -62,13 +63,14 @@ function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
 }
 
 function integrateKennzahlen(kennzahlen: Kennzahlen, bestehende: { [index: string]: KeyNumber }) {
-  Object.keys(kennzahlen.kennzahlen).forEach((key) => {
+  forEach(Object.keys(kennzahlen.kennzahlen), (key) => {
     if (!bestehende[key]) {
       bestehende[key] = {};
     }
     bestehende[key][kennzahlen.name] = kennzahlen.kennzahlen[key];
   });
 }
+
 function einnahme(betrag?: number) {
   return betrag ?? 0;
 }

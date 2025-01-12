@@ -13,6 +13,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 const logger = loggers.get("application");
 
@@ -48,7 +49,7 @@ ${map(
   message.body = markdownToSend;
 
   const users = userstore.allUsers();
-  const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email && user.wantsEmailReminders);
+  const validUsers = filter(new Users(users).getUsersKann("Kasse"), (user) => !!user.email && !!user.wantsEmailReminders);
   const adminAddresses = usersService.emailsAllerAdmins();
   const emails = map(validUsers, (user) => MailMessage.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${formatMailAddresses(emails)}`);
@@ -61,8 +62,7 @@ export async function checkKasse(now: DatumUhrzeit): Promise<JobResult> {
   const end = start.plus({ tage: 7 }); // Eine Woche im Voraus
 
   try {
-    const konzerte = store.byDateRangeInAscendingOrder(start, end);
-    const zuSendende = konzerte.filter((konzert) => kasseFehlt(konzert));
+    const zuSendende = filter(store.byDateRangeInAscendingOrder(start, end), kasseFehlt);
     if (zuSendende.length) {
       return { result: await sendMail(zuSendende) };
     }

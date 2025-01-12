@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import map from "lodash/map";
+import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 export default function WikiSearchresults() {
   const { searchtext } = useParams();
@@ -27,7 +28,7 @@ export default function WikiSearchresults() {
       {matches.length === 0 ? (
         <h3>Keine Ergebnisse</h3>
       ) : (
-        <>
+        <RowWrapper>
           {map(matches, (match) => (
             <Row key={JSON.stringify(match)} gutter={12}>
               <Col span={8}>
@@ -37,7 +38,7 @@ export default function WikiSearchresults() {
               <Col span={16}>{match.text ? <em>{match.text}</em> : "(im Dateinamen)"}</Col>
             </Row>
           ))}
-        </>
+        </RowWrapper>
       )}
     </>
   );

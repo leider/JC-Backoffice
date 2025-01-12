@@ -13,12 +13,13 @@ import terminstore from "../lib/optionen/terminstore.js";
 import vermietungenstore from "../lib/vermietungen/vermietungenstore.js";
 import { resToJson } from "../lib/commons/replies.js";
 import konzerteService from "../lib/konzerte/konzerteService.js";
-import vermietungenService from "../lib/vermietungen/vermietungenService.js";
+import { filterUnbestaetigteFuerJedermann } from "../lib/vermietungen/vermietungenService.js";
 import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.js";
 import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import { colorDefault, colorVermietung, TypMitMehr } from "jc-shared/optionen/optionValues.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 const app = express();
 
@@ -38,7 +39,7 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
 
 function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(start, end);
-  return map(vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, {}));
+  return map(filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, {}));
 }
 
 async function termineForIcal(ical: Ical) {
@@ -50,7 +51,7 @@ function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?
   const termine = terminstore.termineBetween(start, end);
   let filteredTermine = termine;
   if (options) {
-    filteredTermine = termine.filter((termin) => options.termine?.includes(termin.typ));
+    filteredTermine = filter(termine, (termin) => options.termine?.includes(termin.typ));
   }
   return map(filteredTermine, "asEvent");
 }
@@ -67,13 +68,7 @@ app.get("/fullcalendarevents.json", async (req, res) => {
   const konzerte = eventsBetween(start, end, req.user as User);
   const vermietungen = vermietungenBetween(start, end, req.user as User);
 
-  const icals =
-    cals?.icals.filter((ical) => {
-      if (!options) {
-        return true;
-      }
-      return options.icals?.includes(ical.typ);
-    }) || [];
+  const icals = filter(cals?.icals, (ical) => (options ? options.icals?.includes(ical.typ) : true));
 
   const termineForIcals = await Promise.all(map(icals, termineForIcal));
   const events = termine

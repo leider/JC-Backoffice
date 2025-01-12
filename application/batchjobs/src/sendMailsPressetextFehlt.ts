@@ -12,6 +12,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 const logger = loggers.get("application");
 
@@ -63,7 +64,7 @@ export async function checkPressetexte(now: DatumUhrzeit): Promise<JobResult> {
 
   try {
     const rules = mailstore.all();
-    const relevantRules = rules.filter((rule) => rule.shouldSendUntil(start, end));
+    const relevantRules = filter(rules, (rule) => rule.shouldSendUntil(start, end));
     return { result: await processRules(relevantRules, start, end) };
   } catch (error) {
     return { error: error as Error };

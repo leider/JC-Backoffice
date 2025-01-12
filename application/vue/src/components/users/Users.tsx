@@ -11,6 +11,7 @@ import { RowWrapper } from "@/widgets/RowWrapper";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 type accessrightsTypes = "isSuperuser" | "isBookingTeam" | "isOrgaTeam" | "isAbendkasse" | "everybody";
 
@@ -34,7 +35,7 @@ export default function Users() {
     };
   }
 
-  const selectedUsers = useMemo(() => allUsers.filter((u) => u.accessrights[selectedButton]), [selectedButton, allUsers]);
+  const selectedUsers = useMemo(() => filter(allUsers, (u) => u.accessrights[selectedButton]), [selectedButton, allUsers]);
 
   return (
     <>

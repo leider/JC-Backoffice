@@ -4,6 +4,7 @@ import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
 import { areDifferentForHistoryEntries } from "jc-shared/commons/comparingAndTransforming.js";
 import map from "lodash/map.js";
+import forEach from "lodash/forEach.js";
 
 export const db = new Database(conf.sqlitedb);
 const scriptLogger = loggers.get("scripts");
@@ -48,7 +49,7 @@ class Persistence {
       const suffix = this.extraCols.join("_");
       const columns = this.extraCols.join(",");
       execWithTry(`CREATE INDEX idx_${this.collectionName}_${suffix} ON ${this.collectionName}(${columns});`);
-      this.extraCols.forEach((col) => {
+      forEach(this.extraCols, (col) => {
         execWithTry(`CREATE INDEX idx_${this.collectionName}_${col} ON ${this.collectionName}(${col});`);
       });
     }
@@ -137,7 +138,7 @@ class Persistence {
       return `(${vals.join(",")})`;
     });
     const trans = db.transaction(() => {
-      objects.forEach((obj) => this.saveHistoryEntry(obj, user));
+      forEach(objects, (obj) => this.saveHistoryEntry(obj, user));
       db.exec(`REPLACE INTO ${this.collectionName} (${this.colsForSave.join(",")}) VALUES ${rows.join("\n,")};`);
     });
     trans.immediate();
@@ -157,7 +158,7 @@ class Persistence {
 
   removeAllByIds(ids: string[], user: User) {
     const trans = db.transaction(() => {
-      ids.forEach((id) => this.saveHistoryEntry({ id }, user));
+      forEach(ids, (id) => this.saveHistoryEntry({ id }, user));
       this.removeWithQuery(`id IN (${map(ids, escape).join(",")})`);
     });
     trans.immediate();

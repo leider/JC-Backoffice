@@ -4,6 +4,7 @@ import DatumUhrzeit from "./DatumUhrzeit.js";
 import isArray from "lodash/isArray.js";
 import isString from "lodash/isString.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 function isNumber(aString: string): boolean {
   const number = Number.parseInt(aString);
@@ -26,7 +27,10 @@ function toObject<T>(Constructor: new (something: any) => T, jsobject?: object) 
 }
 
 function toObjectList<T>(Constructor: new (something: any) => T, jsobjects?: object[]) {
-  return map(jsobjects, (each) => toObject<T>(Constructor, each)).filter((each): each is T => each !== null);
+  return filter(
+    map(jsobjects, (each) => toObject<T>(Constructor, each)),
+    (each): each is T => each !== null,
+  );
 }
 
 function toArray(elem?: string | string[]): Array<string> {
@@ -57,11 +61,7 @@ function pushImage(images: string | Array<string>, image: string): string[] {
 }
 
 function dropImage(images: string | Array<string>, image: string): string[] {
-  if (isString(images)) {
-    return [];
-  } else {
-    return images.filter((each) => each !== image);
-  }
+  return isString(images) ? [] : filter(images, (each) => each !== image);
 }
 
 function normalizeString(input: string): string {

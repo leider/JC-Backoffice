@@ -35,7 +35,7 @@ export default function Info() {
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 
-  const veranstaltungen = useMemo(() => (data ?? []).filter(applyTeamFilter(contextFilter)), [data, contextFilter]);
+  const veranstaltungen = useMemo(() => filter(data, applyTeamFilter(contextFilter)), [data, contextFilter]);
 
   useEffect(
     () => {

@@ -12,6 +12,7 @@ import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 import isBoolean from "lodash/isBoolean";
 import find from "lodash/find";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 type LabelColorProperty = {
   label: string;
@@ -66,7 +67,7 @@ export default function TeamFilter() {
             color={color}
             closeIcon
             onClose={() => {
-              const typen = form.getFieldValue(["kopf", "eventTyp"]).filter((typ: string) => typ !== label);
+              const typen = filter(form.getFieldValue(["kopf", "eventTyp"]), (typ: string) => typ !== label);
               form.setFieldValue(["kopf", "eventTyp"], typen);
               setFilter(form.getFieldsValue(true));
             }}
@@ -79,7 +80,7 @@ export default function TeamFilter() {
     return map(labelsColors, (tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} prop={tag.prop} />);
   }
 
-  const filter = withoutNullOrUndefinedStrippedBy(filterObj);
+  const teamFilter = withoutNullOrUndefinedStrippedBy(filterObj);
 
   const taggies = useMemo(() => {
     function pushIfSet(att: boolean | undefined, label: string, prop?: NamePath) {
@@ -88,29 +89,27 @@ export default function TeamFilter() {
       }
     }
     const tags: LabelColorProperty[] = [];
-    if (!isNil(filter.istKonzert)) {
+    if (!isNil(teamFilter.istKonzert)) {
       tags.push(
-        filter.istKonzert
+        teamFilter.istKonzert
           ? { label: "nur Konzerte", color: true, prop: "istKonzert" }
           : { label: "nur Vermietungen", color: true, prop: "istKonzert" },
       );
     }
-    pushIfSet(filter.hotelBestaetigt, "Hotel bestätigt", "hotelBestaetigt");
-    pushIfSet(filter.kopf?.confirmed, "Ist bestätigt", ["kopf", "confirmed"]);
-    pushIfSet(filter.kopf?.abgesagt, "Ist abgesagt", ["kopf", "abgesagt"]);
-    pushIfSet(filter.presse?.checked, "Presse OK", ["presse", "checked"]);
-    pushIfSet(filter.kopf?.kannAufHomePage, "Kann Homepage", ["kopf", "kannAufHomePage"]);
-    pushIfSet(filter.kopf?.kannInSocialMedia, "Kann Social Media", ["kopf", "kannInSocialMedia"]);
-    pushIfSet(filter.presse?.text, "Text vorhanden", ["presse", "text"]);
-    pushIfSet(filter.presse?.originalText, "Originaltext vorhanden", ["presse", "originalText"]);
-    pushIfSet(filter.kopf?.fotografBestellen, "Fotograf einladen", ["kopf", "fotografBestellen"]);
-    pushIfSet(filter.technik?.checked, "Technik ist geklärt", ["technik", "checked"]);
-    pushIfSet(filter.technik?.fluegel, "Flügel stimmen", ["technik", "fluegel"]);
-    (filter.kopf?.eventTyp ?? []).forEach((typ: string) => {
-      tags.push(eventTypTag(typ)!);
-    });
-    return tags;
-  }, [eventTypTag, filter]);
+    pushIfSet(teamFilter.hotelBestaetigt, "Hotel bestätigt", "hotelBestaetigt");
+    pushIfSet(teamFilter.kopf?.confirmed, "Ist bestätigt", ["kopf", "confirmed"]);
+    pushIfSet(teamFilter.kopf?.abgesagt, "Ist abgesagt", ["kopf", "abgesagt"]);
+    pushIfSet(teamFilter.presse?.checked, "Presse OK", ["presse", "checked"]);
+    pushIfSet(teamFilter.kopf?.kannAufHomePage, "Kann Homepage", ["kopf", "kannAufHomePage"]);
+    pushIfSet(teamFilter.kopf?.kannInSocialMedia, "Kann Social Media", ["kopf", "kannInSocialMedia"]);
+    pushIfSet(teamFilter.presse?.text, "Text vorhanden", ["presse", "text"]);
+    pushIfSet(teamFilter.presse?.originalText, "Originaltext vorhanden", ["presse", "originalText"]);
+    pushIfSet(teamFilter.kopf?.fotografBestellen, "Fotograf einladen", ["kopf", "fotografBestellen"]);
+    pushIfSet(teamFilter.technik?.checked, "Technik ist geklärt", ["technik", "checked"]);
+    pushIfSet(teamFilter.technik?.fluegel, "Flügel stimmen", ["technik", "fluegel"]);
+    const eventTypTags = map(teamFilter.kopf?.eventTyp, (typ: string) => eventTypTag(typ)!);
+    return tags.concat(eventTypTags);
+  }, [eventTypTag, teamFilter]);
 
   const result = [
     <span key="aktiveFilter">

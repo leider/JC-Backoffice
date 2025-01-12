@@ -27,6 +27,7 @@ import { ErrorBoundary } from "@/router/ErrorBoundary.tsx";
 import { History } from "@/components/history/History.tsx";
 import KonzertComp from "@/components/konzert/KonzertComp.tsx";
 import PreviewVermietung from "@/components/vermietung/preview/PreviewVermietung.tsx";
+import filter from "lodash/filter";
 
 export type RouteState = {
   routes: RouteObject[];
@@ -176,23 +177,22 @@ export function useCreateRouteState(): RouteState {
     const isOrgaTeam = currentUser.id ? currentUser.accessrights.isOrgaTeam : true;
     const isSuperuser = currentUser.id ? currentUser.accessrights.isSuperuser : true;
     const isKasse = currentUser.id ? currentUser.accessrights.isAbendkasse : true;
-    const newChildren =
-      allRoutes[0].children?.filter((route) => {
-        const currentPath = route.path;
-        if (new RegExp(kassePattern).test(currentPath || "")) {
-          return isKasse;
-        }
-        if (new RegExp(gaestePattern).test(currentPath || "")) {
-          return isKasse;
-        }
-        if (new RegExp(orgaTeamPattern).test(currentPath || "")) {
-          return isOrgaTeam;
-        }
-        if (new RegExp(superuserPattern).test(currentPath || "")) {
-          return isSuperuser;
-        }
-        return true;
-      }) || [];
+    const newChildren = filter(allRoutes[0].children, (route) => {
+      const currentPath = route.path;
+      if (new RegExp(kassePattern).test(currentPath ?? "")) {
+        return isKasse;
+      }
+      if (new RegExp(gaestePattern).test(currentPath ?? "")) {
+        return isKasse;
+      }
+      if (new RegExp(orgaTeamPattern).test(currentPath ?? "")) {
+        return isOrgaTeam;
+      }
+      if (new RegExp(superuserPattern).test(currentPath ?? "")) {
+        return isSuperuser;
+      }
+      return true;
+    });
     if (!isOrgaTeam) {
       newChildren.push({
         path: "/",

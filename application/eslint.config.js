@@ -43,6 +43,7 @@ export default tseslint.config(
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
       "react/display-name": 0,
+      "no-sync": "off",
       "lodash/prefer-lodash-method": [
         "error",
         {
@@ -50,8 +51,6 @@ export default tseslint.config(
             "assign",
             "endsWith",
             "every",
-            "filter",
-            "forEach",
             "includes",
             "isArray",
             "keys",

@@ -5,6 +5,7 @@ import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType, RefSelectProps } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
@@ -72,7 +73,7 @@ function InnerSelect({
       .includes(searchString.toLowerCase()) ||
     false;
 
-  const filtered = usersAsOptions.filter((u) => !value?.includes(u.value));
+  const filtered = filter(usersAsOptions, (u) => !value?.includes(u.value));
 
   return (
     <Select

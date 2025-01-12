@@ -9,6 +9,8 @@ import { SourceContainer } from "./SourceContainer.tsx";
 import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
+import filter from "lodash/filter";
+import reject from "lodash/reject";
 
 export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }> = ({
   targetBoxes,
@@ -28,12 +30,12 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
 
   useEffect(() => {
     const boxIds = map(targetBoxes, "id");
-    setSourceBoxes(Inventory.filter((inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
+    setSourceBoxes(filter(Inventory, (inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
   }, [targetBoxes]);
 
   const itemDroppedOntoSource = useCallback(
     (id: string) => {
-      setTargetBoxes!(targetBoxes!.filter((b) => b.id !== id));
+      setTargetBoxes?.(reject(targetBoxes, { id }));
     },
     [setTargetBoxes, targetBoxes],
   );

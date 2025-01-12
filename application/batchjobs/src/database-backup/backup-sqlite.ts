@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-sync, no-process-exit */
+/* eslint-disable no-console, no-process-exit */
 import "jc-backend/configure.js";
 import Database from "better-sqlite3";
 import conf from "jc-shared/commons/simpleConfigure.js";

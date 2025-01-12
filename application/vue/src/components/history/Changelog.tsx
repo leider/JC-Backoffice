@@ -5,6 +5,7 @@ import { differenceForAsObject } from "jc-shared/commons/comparingAndTransformin
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import JsonView from "@uiw/react-json-view";
 import { HistoryType } from "jc-backend/rest/history.ts";
+import forEach from "lodash/forEach";
 
 export function Changelog({ id, collection }: { collection: string; id?: string }) {
   const { data: rows } = useQuery({
@@ -15,7 +16,7 @@ export function Changelog({ id, collection }: { collection: string; id?: string 
 
   const changelog = useMemo(() => {
     const changelogObject: { [idx: string]: object } = {};
-    (rows || []).forEach((row) => {
+    forEach(rows, (row) => {
       const result: Omit<HistoryType, "id" | "before" | "after"> & {
         before: { id?: string; changelist?: string };
         after: { id?: string; changelist?: string };

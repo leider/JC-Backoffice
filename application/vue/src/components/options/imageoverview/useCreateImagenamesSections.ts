@@ -6,8 +6,8 @@ import intersection from "lodash/intersection";
 import differenceBy from "lodash/differenceBy";
 import { useQueries } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, konzerteForTeam } from "@/commons/loader.ts";
-import find from "lodash/find";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 function suitableForImageOverview(veranstaltung: Konzert): ImageOverviewVeranstaltung {
   return {
@@ -34,8 +34,7 @@ export function useCreateImagenamesSections() {
   });
 
   const elementsWithImage = useCallback(
-    (imageName: string): ImageOverviewVeranstaltung[] =>
-      veranstaltungen.filter((each) => find(each.images, (i) => i.localeCompare(imageName) === 0)),
+    (imageName: string): ImageOverviewVeranstaltung[] => filter(veranstaltungen, (veran) => veran.images.includes(imageName)),
     [veranstaltungen],
   );
 

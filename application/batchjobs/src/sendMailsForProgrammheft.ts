@@ -69,7 +69,7 @@ async function sendMail(eventsForToday: EmailEvent[]) {
 
 function eventsToSend(aDatumUhrzeit: DatumUhrzeit, events?: Event[]): EmailEvent[] {
   const result = map(filter(events, "users.length"), (e) => new EmailEvent(e));
-  return result.filter((e) => e.shouldSendOn(aDatumUhrzeit));
+  return filter(result, (emailEvent) => emailEvent.shouldSendOn(aDatumUhrzeit));
 }
 
 export async function remindForProgrammheft(now: DatumUhrzeit = new DatumUhrzeit()): Promise<JobResult> {

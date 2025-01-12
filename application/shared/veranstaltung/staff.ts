@@ -1,5 +1,7 @@
 import User from "../user/user.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import compact from "lodash/compact.js";
+import flatten from "lodash/flatten.js";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod" | "ersthelfer";
 
@@ -72,11 +74,6 @@ export default class Staff {
   }
 
   get allNames() {
-    return this.kasseV
-      .concat(this.kasse)
-      .concat(this.technikerV)
-      .concat(this.techniker)
-      .concat(this.mod)
-      .filter((s) => !!s);
+    return compact(flatten([this.kasseV, this.kasse, this.technikerV, this.techniker, this.mod]));
   }
 }

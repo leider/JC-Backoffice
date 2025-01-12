@@ -9,6 +9,8 @@ import { Link } from "react-router";
 import headerTags from "@/components/colored/headerTags.tsx";
 import map from "lodash/map";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import filter from "lodash/filter";
+import reject from "lodash/reject";
 
 function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstaltung[] }) {
   return (
@@ -27,9 +29,9 @@ function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstalt
 export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const bestaetigte = useMemo(() => veranstaltungen.filter((v) => v.kopf.confirmed), [veranstaltungen]);
-  const unbestaetigte = useMemo(() => veranstaltungen.filter((v) => !v.kopf.confirmed), [veranstaltungen]);
-  const ohnePresse = useMemo(() => veranstaltungen.filter((v) => !v.presse.checked), [veranstaltungen]);
+  const bestaetigte = useMemo(() => filter(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
+  const unbestaetigte = useMemo(() => reject(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
+  const ohnePresse = useMemo(() => reject(veranstaltungen, "presse.checked"), [veranstaltungen]);
 
   const { token } = theme.useToken();
   return (

@@ -37,7 +37,7 @@ class Users {
     if (listenFromBody && listenFromBody.length) {
       result = result.concat(uniq(flatMap(misc.toArray(listenFromBody), (liste) => this.getUsersInListe(liste))));
     }
-    return uniq(result.concat(this.users.filter((user) => (userFromBody || []).includes(user.id))));
+    return uniq(result.concat(filter(this.users, (user) => (userFromBody || []).includes(user.id))));
   }
 
   extractListen() {
@@ -45,26 +45,24 @@ class Users {
   }
 
   getUsersInListe(listenname: string) {
-    return this.users.filter((u) => u.mailinglisten.includes(listenname));
+    return filter(this.users, (u) => u.mailinglisten.includes(listenname));
   }
 
   getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
-    return this.users.filter((u) => {
-      const bools = map(gruppennamen, (name) => {
-        return u.gruppen.includes(name);
-      });
-      return bools?.reduce((curr, next) => curr || next, false);
+    return filter(this.users, (u) => {
+      const bools = map(gruppennamen, (name) => u.gruppen.includes(name));
+      return bools.reduce((curr, next) => curr || next, false);
     });
   }
 
   getUsersKann(kann: KannSection) {
-    return this.users.filter((u) => u.kann(kann));
+    return filter(this.users, (u) => u.kann(kann));
   }
 
   getUsersKannOneOf(kannMultiple: KannSection[]) {
-    return this.users.filter((u) => {
+    return filter(this.users, (u) => {
       const bools = map(kannMultiple, (kann) => u.kann(kann));
-      return bools?.reduce((curr, next) => curr || next, false);
+      return bools.reduce((curr, next) => curr || next, false);
     });
   }
 

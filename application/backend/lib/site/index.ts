@@ -136,29 +136,19 @@ const uploadDir = conf.uploadDir;
 const placeholder = path.join(__dirname, "../../static/upload/../No-Image-Placeholder.svg");
 
 app.get("/imagepreview/:filename", (req, res, next) => {
-  // eslint-disable-next-line no-sync
+  function sendOrHandleError(err: Error, buffer: Buffer) {
+    if (err) {
+      return err.message === "Input file is missing" ? next() : next(err);
+    }
+    res.send(buffer);
+  }
+
   if (!fs.existsSync(uploadDir + "/" + req.params.filename)) {
-    return sharp(placeholder).toBuffer((err, buffer) => {
-      if (err) {
-        if (err.message === "Input file is missing") {
-          return next();
-        }
-        return next(err);
-      }
-      res.send(buffer);
-    });
+    return sharp(placeholder).toBuffer(sendOrHandleError);
   }
   sharp(uploadDir + "/" + req.params.filename)
     .resize({ width: 800 })
-    .toBuffer((err, buffer) => {
-      if (err) {
-        if (err.message === "Input file is missing") {
-          return next();
-        }
-        return next(err);
-      }
-      res.send(buffer);
-    });
+    .toBuffer(sendOrHandleError);
 });
 
 app.get("/ical/", (req, res) => {

@@ -9,6 +9,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 export default function ProgrammheftKopierenButton() {
   const form = useFormInstance();
@@ -21,7 +22,7 @@ export default function ProgrammheftKopierenButton() {
   const id = useWatch("id", { form, preserve: true });
 
   const options = useMemo(() => {
-    return (data ?? []).filter((kalender) => kalender.id !== id && kalender.events.length);
+    return filter(data, (kalender) => kalender.id !== id && !!kalender.events.length);
   }, [data, id]);
 
   const items = useMemo(() => {

@@ -12,6 +12,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -25,7 +26,7 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const staffCollection = useMemo(() => veranstaltung.staff.getStaffCollection(sectionName), [sectionName, veranstaltung.staff]);
 
   const usersWithKann = useMemo(
-    () => usersAsOptions.filter((user) => staffCollection.includes(user.value)),
+    () => filter(usersAsOptions, (user) => staffCollection.includes(user.value)),
     [staffCollection, usersAsOptions],
   );
 

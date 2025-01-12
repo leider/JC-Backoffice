@@ -1,5 +1,6 @@
 import { db, execWithTry } from "../persistence/sqlitePersistence.js";
 import map from "lodash/map.js";
+import forEach from "lodash/forEach.js";
 
 const STORE = "refreshtokens";
 
@@ -7,7 +8,7 @@ function smoothMigrate() {
   try {
     const result = map(db.prepare("SELECT * FROM refreshstore").all() as { data: string }[], (each) => JSON.parse(each.data));
     const trans = db.transaction((rows: RefreshToken[]) => {
-      rows.forEach((row) => {
+      forEach(rows, (row) => {
         const query = `REPLACE INTO ${STORE} (id,expiresAt,userId) VALUES ('${row.id}', '${row.expiresAt}', '${row.userId}')`;
         db.exec(query);
       });

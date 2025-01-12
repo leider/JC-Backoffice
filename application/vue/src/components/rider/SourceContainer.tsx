@@ -6,6 +6,7 @@ import { ItemTypes } from "./types.ts";
 import { List } from "antd";
 import { SourceElement } from "./SourceElement.tsx";
 import { Category, InventoryElement } from "jc-shared/rider/inventory.ts";
+import filter from "lodash/filter";
 
 export const SourceContainer: FC<{
   cat: Category;
@@ -13,7 +14,7 @@ export const SourceContainer: FC<{
   dropCallback: (id: string) => void;
 }> = ({ cat, sourceBoxes, dropCallback }) => {
   const boxes = useMemo(() => {
-    return sourceBoxes.filter((box) => box.category === cat);
+    return filter(sourceBoxes, { category: cat });
   }, [sourceBoxes, cat]);
 
   const [, drop] = useDrop(

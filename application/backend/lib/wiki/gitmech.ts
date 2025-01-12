@@ -1,9 +1,11 @@
 import gitExec from "./gitExec.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
+import filter from "lodash/filter.js";
+
 const workTree = conf.wikipath;
 
 function dataToLines(data?: string): string[] {
-  return data ? data.split("\n").filter((v) => v !== "") : [];
+  return data ? filter(data.split("\n"), (v) => v !== "") : [];
 }
 
 function esc(arg: string): string {
@@ -37,13 +39,11 @@ export default {
   grep: async function grep(pattern: string) {
     try {
       const data = await gitExec.command(["grep", "--no-color", "-F", "-n", "-i", "-I", esc(pattern)]);
-      const result = data ? data.split("\n") : [];
       // Search in the file names
       const data1 = await gitExec.command(["ls-files", `*${esc(pattern)}*.md`]);
-      if (data1) {
-        data1.split("\n").forEach((name) => result.push(name));
-      }
-      return result;
+
+      const result = data ? data.split("\n") : [];
+      return data1 ? result.concat(data1.split("\n")) : result;
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (e: any) {
       if (e.message && e.message.split("\n").length < 3) {

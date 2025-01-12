@@ -3,6 +3,7 @@ import React, { CSSProperties, useMemo } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 function InnerSelect({
   id,
@@ -19,7 +20,10 @@ function InnerSelect({
   value?: string[];
   specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
-  const filtered = useMemo(() => (noAdd ? realOptions.filter((u) => !value?.includes(u.value)) : realOptions), [noAdd, realOptions, value]);
+  const filtered = useMemo(
+    () => (noAdd ? filter(realOptions, (u) => !value?.includes(u.value)) : realOptions),
+    [noAdd, realOptions, value],
+  );
 
   return (
     <Select

@@ -15,6 +15,7 @@ import { konzerteForToday } from "@/commons/loader.ts";
 import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 const { Content } = Layout;
 
@@ -25,9 +26,7 @@ function TodaysConcert() {
     queryFn: () => konzerteForToday(),
   });
 
-  const bestaetigte = useMemo(() => {
-    return data?.filter((konz) => konz.kopf.confirmed);
-  }, [data]);
+  const bestaetigte = useMemo(() => filter(data, "kopf.confirmed"), [data]);
 
   if (bestaetigte?.length ?? 0 > 0)
     return (

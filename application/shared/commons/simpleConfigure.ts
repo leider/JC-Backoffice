@@ -1,5 +1,6 @@
 import path from "node:path";
 import { MailAddress } from "../mail/mailMessage.js";
+import assign from "lodash/assign.js";
 
 export class SimpleConfigure {
   storage: { [index: string]: string | number } = {};
@@ -9,12 +10,7 @@ export class SimpleConfigure {
   }
 
   addProperties(properties: { [index: string]: string | number }): void {
-    if (!properties) {
-      return;
-    }
-    Object.keys(properties).forEach((property) => {
-      this.storage[property] = properties[property];
-    });
+    this.storage = assign(this.storage, properties);
   }
 
   private get(property: string): string | number | object {

@@ -6,6 +6,7 @@ import { uploadFile } from "@/commons/loader.ts";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import forEach from "lodash/forEach";
 
 interface UploaderParams {
   name: string[];
@@ -29,7 +30,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
     const formData = new FormData();
     formData.append("id", form.getFieldValue("id") || "");
     formData.append("typ", typ);
-    fileList.forEach((file) => {
+    forEach(fileList, (file) => {
       formData.append("datei", file as RcFile, file.name);
     });
     try {

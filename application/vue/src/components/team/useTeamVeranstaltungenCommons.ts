@@ -11,19 +11,19 @@ import groupBy from "lodash/groupBy";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import find from "lodash/find";
 import map from "lodash/map";
+import filter from "lodash/filter";
+import capitalize from "lodash/capitalize";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
-  const { allUsers, filter } = useJazzContext();
+  const { allUsers, filter: teamFilter } = useJazzContext();
 
   const [period, setPeriod] = useState<string>("Zukünftige");
 
   const periods = useMemo(() => {
-    return [
-      { label: "Zukünftige", key: "zukuenftige", onClick: () => setSearch({ period: "zukuenftige" }) },
-      { label: "Vergangene", key: "vergangene", onClick: () => setSearch({ period: "vergangene" }) },
-      { label: "Alle", key: "alle", onClick: () => setSearch({ period: "alle" }) },
-    ].filter((each) => periodsToShow.includes(each.key));
+    return map(periodsToShow, (period) => {
+      return { label: period === "zukuenftige" ? "Zukünftige" : capitalize(period), key: period, onClick: () => setSearch({ period }) };
+    });
   }, [periodsToShow, setSearch]);
 
   const selectedPeriod: "zukuenftige" | "vergangene" | "alle" = useMemo(() => {
@@ -70,11 +70,11 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
     if (veranstaltungen.length === 0) {
       return;
     }
-    const filtered = veranstaltungen.filter(applyTeamFilter(filter));
+    const filtered = filter(veranstaltungen, applyTeamFilter(teamFilter));
     const result = groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
-  }, [filter, veranstaltungen]);
+  }, [teamFilter, veranstaltungen]);
 
   const filterTags = TeamFilter();
 

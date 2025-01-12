@@ -25,6 +25,9 @@ import MailMessage from "jc-shared/mail/mailMessage.ts";
 import isString from "lodash/isString";
 import map from "lodash/map";
 import sortedUniq from "lodash/sortedUniq";
+import forEach from "lodash/forEach";
+import filter from "lodash/filter";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (isString(addressOrString)) {
@@ -118,9 +121,9 @@ export default function SendMail() {
   const subject = useWatch("subject", { form });
 
   useEffect(() => {
-    setSelectedUsers(allUsers.filter((user) => (selectedUsersInForm || []).includes(user.id)));
-    setSelectedLists(mailingLists.filter((list) => (selectedListsInForm || []).includes(list.name)));
-    setSelectedRules(mailRules.filter((rule) => (selectedRulesInForm || []).includes(rule.name)));
+    setSelectedUsers(filter(allUsers, (user) => selectedUsersInForm?.includes(user.id)));
+    setSelectedLists(filter(mailingLists, (list) => selectedListsInForm?.includes(list.name)));
+    setSelectedRules(filter(mailRules, (rule) => selectedRulesInForm?.includes(rule.name)));
     if ((selectedVeranstaltungenInForm?.length || 0) > 0 && subject === "") {
       form.setFieldValue("subject", "Veranstaltungen für ...");
     }
@@ -138,7 +141,7 @@ export default function SendMail() {
 
   useEffect(() => {
     const userIdsFromLists = selectedLists.flatMap((list) => list.users);
-    const usersFromLists = allUsers.filter((user) => userIdsFromLists.includes(user.id));
+    const usersFromLists = filter(allUsers, (user) => userIdsFromLists.includes(user.id));
     const allUsersFromListsAndUsers = map(selectedUsers.concat(usersFromLists), (user) => ({ name: user.name, email: user.email }));
     const allRuleUsers = map(selectedRules, (rule) => ({
       name: rule.name,
@@ -154,9 +157,9 @@ export default function SendMail() {
   function send() {
     form.validateFields().then(async () => {
       const mail = form.getFieldsValue(true);
-      const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
+      const selectedVeranstaltungen = filter(veranstaltungen, (ver) =>
         mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
-      );
+      ) as Konzert[];
       const addresses = map(effectiveUsers, (user) => MailMessage.formatEMailAddress(user.name, user.email));
       const markdownToSend =
         mail.markdown +
@@ -169,11 +172,9 @@ export default function SendMail() {
       result.bcc = addresses;
       const formData = new FormData();
       formData.append("message", JSON.stringify(result));
-      if (fileList.length > 0) {
-        fileList.forEach((file) => {
-          formData.append("dateien", file as RcFile, file.name);
-        });
-      }
+      forEach(fileList, (file) => {
+        formData.append("dateien", file as RcFile, file.name);
+      });
       const response = await sendMail(formData);
 
       const successMessage = (

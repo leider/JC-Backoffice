@@ -7,6 +7,7 @@ import Unterkunft from "./unterkunft.js";
 import Vertrag from "./vertrag.js";
 import Veranstaltung, { MinimalVeranstaltung } from "../veranstaltung/veranstaltung.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import filter from "lodash/filter.js";
 
 export interface ImageOverviewVeranstaltung {
   id: string;
@@ -133,7 +134,7 @@ export default class Konzert extends Veranstaltung {
   }
 
   updateImageName(oldname: string, newname: string): void {
-    this.presse.image = this.presse.image.filter((each) => each !== oldname);
+    this.presse.image = filter(this.presse.image, (each) => each !== oldname);
     this.presse.image.push(newname);
   }
 }

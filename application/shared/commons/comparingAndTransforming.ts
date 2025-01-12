@@ -1,5 +1,7 @@
 import { detailedDiff } from "deep-object-diff";
 import isObject from "lodash/isObject.js";
+import cloneDeep from "lodash/cloneDeep.js";
+import forEach from "lodash/forEach.js";
 
 type SomeObject = { [index: string]: SomeObject };
 
@@ -12,8 +14,7 @@ function stripNullOrUndefined<T extends object>(data: T): T {
   if (!data) {
     return data;
   }
-  const keys = Object.keys(data);
-  keys.forEach((key) => {
+  forEach(Object.keys(data), (key) => {
     const dataCasted = data as T & SomeObject;
     if (dataCasted[key] === null || dataCasted[key] === undefined) {
       delete dataCasted[key];
@@ -37,7 +38,7 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
     }
     const last = nameArray.pop() as string;
     let target: SomeObject = clone as SomeObject;
-    nameArray.forEach((part) => {
+    forEach(nameArray, (part) => {
       target = target[part];
       if (!target) {
         return;
@@ -47,8 +48,8 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
       delete target[last];
     }
   }
-  const clone = JSON.parse(JSON.stringify(data));
-  propertiesToIgnore?.forEach((key) => {
+  const clone = cloneDeep(data);
+  forEach(propertiesToIgnore, (key) => {
     deleteProp(clone, key);
   });
   return stripNullOrUndefined(clone);

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { useWatch } from "antd/es/form/Form";
@@ -9,6 +9,8 @@ import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
+import forEach from "lodash/forEach";
+import { TypMitMehr } from "jc-shared/optionen/optionValues.ts";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -31,24 +33,28 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     return typByName[eventTyp]?.[0];
   }, [optionen, eventTyp]);
 
-  useEffect(() => {
-    if (preselection && !id) {
-      ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
+  const updateStaff = useCallback(
+    (preselection?: TypMitMehr) => {
+      forEach(["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"], (key) => {
         const fieldName = ["staff", `${key}NotNeeded`];
-        const value = !preselection[key];
+        const value = preselection ? !preselection[key] : true;
         form.setFieldValue(fieldName, value);
       });
+    },
+    [form],
+  );
+
+  useEffect(() => {
+    if (preselection && !id) {
+      updateStaff(preselection);
     }
-  }, [form, id, preselection]);
+  }, [form, id, preselection, updateStaff]);
 
   useEffect(() => {
     if (abgesagt) {
-      ["kasse", "kasseV", "techniker", "technikerV", "merchandise", "mod"].forEach((key) => {
-        const fieldName = ["staff", `${key}NotNeeded`];
-        form.setFieldValue(fieldName, true);
-      });
+      updateStaff();
     }
-  }, [abgesagt, form]);
+  }, [abgesagt, form, updateStaff]);
 
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 

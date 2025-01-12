@@ -2,6 +2,8 @@ import User from "jc-shared/user/user.js";
 
 import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
+import map from "lodash/map.js";
+import omit from "lodash/omit.js";
 
 const persistence = pers("userstore");
 
@@ -12,17 +14,15 @@ export default {
   },
 
   save: function save(userToSave: User, user: User) {
-    delete userToSave.password;
-    persistence.save(userToSave, user);
-    return userToSave;
+    const withoutPass = omit(userToSave, "password");
+    persistence.save(withoutPass, user);
+    return withoutPass;
   },
 
   saveAll: function saveAll(users: User[], user: User) {
-    users.forEach((u) => {
-      delete u.password;
-    });
-    persistence.saveAll(users, user);
-    return users;
+    const allWithoutPass = map(users, (each) => omit(each, "password"));
+    persistence.saveAll(allWithoutPass, user);
+    return allWithoutPass;
   },
 
   forId: function forId(id: string) {

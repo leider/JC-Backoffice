@@ -12,6 +12,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
 import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 const logger = loggers.get("application");
 
@@ -58,7 +59,7 @@ export async function loadRulesAndProcess(now: DatumUhrzeit): Promise<JobResult>
 
   try {
     const rules = mailstore.all();
-    const relevantRules = rules.filter((rule) => rule.shouldSend(now));
+    const relevantRules = filter(rules, (rule) => rule.shouldSend(now));
     const infos = await Promise.all(map(relevantRules, processRule));
     return { result: infos };
   } catch (error) {
