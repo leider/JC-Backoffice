@@ -8,6 +8,7 @@ import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
+import keys from "lodash/keys";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
@@ -30,7 +31,7 @@ export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit 
   useEffect(() => {
     const result = groupBy(veranstaltungen, "startDatumUhrzeit.monatLangJahrKompakt");
     setVeranstaltungenNachMonat(result);
-    setMonate(Object.keys(result));
+    setMonate(keys(result));
   }, [veranstaltungen]);
 
   return map(monate, (monat) => (

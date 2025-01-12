@@ -1,6 +1,7 @@
 import { Preisprofil } from "../optionen/optionValues.js";
 import isNil from "lodash/isNil.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 const standardRabattErmaessigt = 2;
 const standardRabattMitglied = 5;
@@ -28,7 +29,7 @@ export default class Eintrittspreise {
   }
 
   constructor(object?: RecursivePartial<Eintrittspreise>) {
-    if (object && Object.keys(object).length !== 0) {
+    if (object && keys(object).length !== 0) {
       if (!object.preisprofil) {
         this.preisprofil = Eintrittspreise.preisprofilAlt(object);
       } else {

@@ -2,6 +2,7 @@ import User from "../user/user.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import compact from "lodash/compact.js";
 import flatten from "lodash/flatten.js";
+import keys from "lodash/keys.js";
 
 export type StaffType = "techniker" | "technikerV" | "merchandise" | "kasse" | "kasseV" | "mod" | "ersthelfer";
 
@@ -26,7 +27,7 @@ export default class Staff {
   }
 
   constructor(object?: RecursivePartial<Staff>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object, {
         techniker: object.techniker || [],
         technikerV: object.technikerV || [],

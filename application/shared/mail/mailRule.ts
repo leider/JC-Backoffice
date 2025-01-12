@@ -1,5 +1,6 @@
 import constant from "lodash/constant.js";
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
+import keys from "lodash/keys.js";
 
 export type MailRuleUI = {
   id?: string;
@@ -127,7 +128,7 @@ const logicArray: { [index: string]: RuleLogic } = {
   "Montags die übernächste Folgewoche": new RuleLogic6(),
 };
 
-export const allMailrules: string[] = Object.keys(logicArray);
+export const allMailrules: string[] = keys(logicArray);
 
 export default class MailRule {
   id = "";

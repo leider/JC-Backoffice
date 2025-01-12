@@ -2,6 +2,7 @@ import { Form, FormItemProps } from "antd";
 import isObject from "lodash/isObject";
 import isNil from "lodash/isNil";
 import map from "lodash/map";
+import every from "lodash/every";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface AggregateProps<V = any> extends FormItemProps<V> {
@@ -20,7 +21,7 @@ export default function Aggregate(props: AggregateProps) {
         // Convert the values of names into an array passed to children
         getValueProps={() => {
           const value = map(names, (name) => form.getFieldValue(name));
-          if (value.every(isNil)) {
+          if (every(value, isNil)) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return undefined as unknown as { value: any[] };
           }

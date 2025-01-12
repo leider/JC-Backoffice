@@ -1,5 +1,6 @@
 import isString from "lodash/isString.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {
   return parseFloat(textWithNumberOrNull || "") || 0;
@@ -55,7 +56,7 @@ export default class Kosten {
   }
 
   constructor(object?: RecursivePartial<Kosten>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object);
       if (!this.gagenSteuer) {
         this.gagenSteuer = "ohne";

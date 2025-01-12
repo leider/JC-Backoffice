@@ -16,6 +16,7 @@ import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
 import map from "lodash/map";
 import filter from "lodash/filter";
+import keys from "lodash/keys";
 
 const { Content } = Layout;
 
@@ -61,7 +62,7 @@ const JazzContent: React.FC = () => {
   const context = useCreateJazzContext(auth);
 
   useEffect(() => {
-    const result = find(Object.keys(menuKeys), (key) => pathname.search(key) > 0);
+    const result = find(keys(menuKeys), (key) => pathname.search(key) > 0);
     if (pathname.search("preview") > 0) {
       return setActiveElement("team");
     }

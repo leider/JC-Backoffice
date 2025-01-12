@@ -1,5 +1,6 @@
 import misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 export default class Technik {
   dateirider: string[] = [];
@@ -15,7 +16,7 @@ export default class Technik {
   }
 
   constructor(object?: RecursivePartial<Technik>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object, {
         dateirider: object.dateirider || [],
       });

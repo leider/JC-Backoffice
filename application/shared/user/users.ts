@@ -4,6 +4,7 @@ import uniq from "lodash/uniq.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 import flatMap from "lodash/flatMap.js";
+import intersection from "lodash/intersection.js";
 
 export class Mailingliste {
   name: string;
@@ -49,10 +50,7 @@ class Users {
   }
 
   getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
-    return filter(this.users, (u) => {
-      const bools = map(gruppennamen, (name) => u.gruppen.includes(name));
-      return bools.reduce((curr, next) => curr || next, false);
-    });
+    return filter(this.users, (user) => !!intersection(gruppennamen, user.gruppen).length);
   }
 
   getUsersKann(kann: KannSection) {
@@ -60,10 +58,7 @@ class Users {
   }
 
   getUsersKannOneOf(kannMultiple: KannSection[]) {
-    return filter(this.users, (u) => {
-      const bools = map(kannMultiple, (kann) => u.kann(kann));
-      return bools.reduce((curr, next) => curr || next, false);
-    });
+    return filter(this.users, (user) => filter(kannMultiple, (kann) => user.kann(kann)).length > 0);
   }
 
   get mailinglisten(): Mailingliste[] {

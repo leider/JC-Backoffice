@@ -6,6 +6,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import JsonView from "@uiw/react-json-view";
 import { HistoryType } from "jc-backend/rest/history.ts";
 import forEach from "lodash/forEach";
+import keys from "lodash/keys";
 
 export function Changelog({ id, collection }: { collection: string; id?: string }) {
   const { data: rows } = useQuery({
@@ -36,7 +37,7 @@ export function Changelog({ id, collection }: { collection: string; id?: string 
       const header = result.user + " " + result.time;
       if (!result.before.id && result.after.id) {
         changelogObject[`NEUANLAGE - ${header}`] = differenceForAsObject(result.before, result.after);
-      } else if (result.before.id && Object.keys(result.after).length === 1) {
+      } else if (result.before.id && keys(result.after).length === 1) {
         changelogObject[`GELÖSCHT - ${header}`] = {};
       } else {
         changelogObject[header] = differenceForAsObject(result.before, result.after);
@@ -45,7 +46,7 @@ export function Changelog({ id, collection }: { collection: string; id?: string 
     return changelogObject;
   }, [rows]);
 
-  return Object.keys(changelog).length === 0 ? undefined : (
+  return keys(changelog).length === 0 ? undefined : (
     <JsonView value={changelog} displayDataTypes={false} displayObjectSize={false} enableClipboard={false} quotes="" />
   );
 }

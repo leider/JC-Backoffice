@@ -13,6 +13,7 @@ import find from "lodash/find";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import capitalize from "lodash/capitalize";
+import keys from "lodash/keys";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
@@ -73,7 +74,7 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
     const filtered = filter(veranstaltungen, applyTeamFilter(teamFilter));
     const result = groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
     setVeranstaltungenNachMonat(result);
-    setMonate(Object.keys(result));
+    setMonate(keys(result));
   }, [teamFilter, veranstaltungen]);
 
   const filterTags = TeamFilter();

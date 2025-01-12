@@ -1,3 +1,4 @@
+import keys from "lodash/keys.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 
 export default class Kontakt {
@@ -13,7 +14,7 @@ export default class Kontakt {
   }
 
   constructor(object?: RecursivePartial<Kontakt>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object);
     }
   }

@@ -1,5 +1,6 @@
 import renderer from "../commons/renderer.js";
 import Misc from "../commons/misc.js";
+import keys from "lodash/keys.js";
 
 export type AngebotStatus = "offen" | "verschickt" | "angenommen" | "abgerechnet";
 
@@ -36,7 +37,7 @@ export default class Angebot {
   }
 
   constructor(object?: Omit<Angebot, "freigabeAm"> & { freigabeAm?: Date | string }) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object, {
         freigabeAm: Misc.stringOrDateToDate(object.freigabeAm),
       });

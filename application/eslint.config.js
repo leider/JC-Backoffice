@@ -50,10 +50,8 @@ export default tseslint.config(
           ignoreMethods: [
             "assign",
             "endsWith",
-            "every",
             "includes",
             "isArray",
-            "keys",
             "reduce",
             "repeat",
             "replace",

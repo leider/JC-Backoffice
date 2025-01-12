@@ -3,6 +3,7 @@ import { resToJson } from "../lib/commons/replies.js";
 import { db, escape } from "../lib/persistence/sqlitePersistence.js";
 import groupBy from "lodash/groupBy.js";
 import map from "lodash/map.js";
+import keys from "lodash/keys.js";
 
 const app = express();
 
@@ -42,9 +43,9 @@ app.get("/history/:collection", async (req: Request, res: Response) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const idWithMore = groupBy(result as any, (elem) => elem.id);
-  const resAsObject = map(Object.keys(idWithMore), (key) => {
+  const resAsObject = map(keys(idWithMore), (key) => {
     const newestRow = idWithMore[key][0];
-    const state = Object.keys(JSON.parse(newestRow.after)).length === 1 ? "gelöscht" : "geändert";
+    const state = keys(JSON.parse(newestRow.after)).length === 1 ? "gelöscht" : "geändert";
     return { id: key, time: newestRow.time, state };
   });
 

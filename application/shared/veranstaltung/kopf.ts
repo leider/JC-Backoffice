@@ -1,5 +1,6 @@
 import { colorDefault, TypMitMehr } from "../optionen/optionValues.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 export default class Kopf {
   beschreibung = "";
@@ -25,7 +26,7 @@ export default class Kopf {
   }
 
   constructor(object?: RecursivePartial<Kopf>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object);
     }
   }

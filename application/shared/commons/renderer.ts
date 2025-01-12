@@ -2,6 +2,7 @@ import { marked } from "marked";
 import misc from "./misc.js";
 import isNil from "lodash/isNil.js";
 import forEach from "lodash/forEach.js";
+import keys from "lodash/keys.js";
 
 function normalize(str: string): string {
   if (str.trim() === "") {
@@ -35,7 +36,7 @@ function evalTags(text: string, subdir?: string): string {
     tagmap[id] = tag[2] || "";
     result = result.replace(tag[0] ?? "", id);
   });
-  forEach(Object.keys(tagmap), (key) => {
+  forEach(keys(tagmap), (key) => {
     const parts = tagmap[key].split("|");
     const pageName = parts[1] ?? parts[0];
 

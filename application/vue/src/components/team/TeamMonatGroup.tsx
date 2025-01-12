@@ -12,6 +12,7 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";
 import map from "lodash/map";
+import keys from "lodash/keys";
 
 interface MonatGroupProps {
   monat: string;
@@ -92,7 +93,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         </Col>
       </Row>
       <Row gutter={[4, 4]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3", marginLeft: 0, marginRight: 0 }}>
-        {map(Object.keys(byDay), (day, idx) => (
+        {map(keys(byDay), (day, idx) => (
           <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
               return renderTeam ? (

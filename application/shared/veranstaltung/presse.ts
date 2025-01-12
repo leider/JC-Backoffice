@@ -1,5 +1,6 @@
 import misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 export default class Presse {
   originalText = "";
@@ -14,7 +15,7 @@ export default class Presse {
   }
 
   constructor(object?: RecursivePartial<Presse>) {
-    if (object && Object.keys(object).length) {
+    if (object && keys(object).length) {
       Object.assign(this, object, {
         image: misc.toArray(object.image),
       });

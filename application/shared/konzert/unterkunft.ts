@@ -1,6 +1,7 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import keys from "lodash/keys.js";
 
 export default class Unterkunft {
   einzelNum = 0;
@@ -36,7 +37,7 @@ export default class Unterkunft {
     veranstaltungstagAsDatumUhrzeit: DatumUhrzeit,
     kuenstlerListe: string[],
   ) {
-    if (object && Object.keys(object).length !== 0) {
+    if (object && keys(object).length !== 0) {
       delete object.transportText;
       delete object.name;
       Object.assign(this, object, {

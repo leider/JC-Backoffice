@@ -4,6 +4,7 @@ import KonzertKalkulation from "../konzert/konzertKalkulation.js";
 import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
+import keys from "lodash/keys.js";
 
 type KeyNumber = { [index: string]: number };
 type KeyNumberString = { [index: string]: number | string };
@@ -45,7 +46,7 @@ export function prepareExcel(veranstaltung: Veranstaltung[]) {
     createRow("Hotel (Transport)", kumuliert),
   ];
 
-  const kumulierte = map(Object.keys(kumuliert), (key) => createRow(key, kumuliert));
+  const kumulierte = map(keys(kumuliert), (key) => createRow(key, kumuliert));
   return rows.concat(kumulierte);
 }
 
@@ -53,7 +54,7 @@ function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
   const row: KeyNumberString = { Art: art, Summe: 0 };
   const element = kumuliert[art];
   row.Summe = element
-    ? Object.keys(element).reduce((sum, key) => {
+    ? keys(element).reduce((sum, key) => {
         row[key] = element[key];
         return sum + element[key];
       }, 0)
@@ -63,7 +64,7 @@ function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
 }
 
 function integrateKennzahlen(kennzahlen: Kennzahlen, bestehende: { [index: string]: KeyNumber }) {
-  forEach(Object.keys(kennzahlen.kennzahlen), (key) => {
+  forEach(keys(kennzahlen.kennzahlen), (key) => {
     if (!bestehende[key]) {
       bestehende[key] = {};
     }

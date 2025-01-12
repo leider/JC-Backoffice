@@ -56,9 +56,11 @@ export default function SendMail() {
 
   const { allUsers } = useJazzContext();
 
+  const users = useMemo(() => new Users(allUsers), [allUsers]);
+
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
-  const mailingLists = useMemo(() => new Users(allUsers).mailinglisten, [allUsers]);
+  const mailingLists = useMemo(() => users.mailinglisten, [users]);
 
   const mailingListsDescriptions = useMemo(() => sortBy(map(mailingLists, "name")), [mailingLists]);
 
@@ -147,12 +149,12 @@ export default function SendMail() {
       name: rule.name,
       email: rule.email,
     }));
-    const usersFromKann = new Users(allUsers).getUsersKannOneOf(selectedKannInForm);
-    const usersFromUserGruppen = new Users(allUsers).getUsersInGruppenExact(selectedUserGruppenInForm);
+    const usersFromKann = users.getUsersKannOneOf(selectedKannInForm);
+    const usersFromUserGruppen = users.getUsersInGruppenExact(selectedUserGruppenInForm);
     setEffectiveUsers(
       sortBy(uniqBy(allRuleUsers.concat(allUsersFromListsAndUsers).concat(usersFromKann).concat(usersFromUserGruppen), "email"), "name"),
     );
-  }, [selectedUsers, selectedLists, selectedRules, allUsers, selectedKannInForm, selectedUserGruppenInForm]);
+  }, [selectedUsers, selectedLists, selectedRules, allUsers, selectedKannInForm, selectedUserGruppenInForm, users]);
 
   function send() {
     form.validateFields().then(async () => {

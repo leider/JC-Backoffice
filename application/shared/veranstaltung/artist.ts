@@ -1,5 +1,6 @@
 import misc from "../commons/misc.js";
 import Misc from "../commons/misc.js";
+import keys from "lodash/keys.js";
 
 export type BandTransport = "Band kommt selbst" | "Band abholen (Auto)" | "Band abholen (Transporter)";
 
@@ -19,7 +20,7 @@ export default class Artist {
   }
 
   constructor(object?: Omit<Artist, "getInForMasterDate"> & { getInForMasterDate: string | Date }) {
-    if (object && Object.keys(object).length !== 0) {
+    if (object && keys(object).length !== 0) {
       const getIn = Misc.stringOrDateToDate(object.getInForMasterDate);
       Object.assign(this, object, {
         name: misc.toArray(object.name), // legacy, was text before

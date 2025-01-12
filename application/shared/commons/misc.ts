@@ -5,6 +5,7 @@ import isArray from "lodash/isArray.js";
 import isString from "lodash/isString.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
+import keys from "lodash/keys.js";
 
 function isNumber(aString: string): boolean {
   const number = Number.parseInt(aString);
@@ -19,7 +20,7 @@ function stringOrDateToDate(object?: string | Date): Date | undefined {
 }
 
 function toObject<T>(Constructor: new (something: any) => T, jsobject?: object) {
-  if (jsobject && Object.keys(jsobject).length > 0) {
+  if (jsobject && keys(jsobject).length > 0) {
     delete (jsobject as any)._csrf;
     return new Constructor(jsobject) as T;
   }

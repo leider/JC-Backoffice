@@ -2,6 +2,7 @@ import { detailedDiff } from "deep-object-diff";
 import isObject from "lodash/isObject.js";
 import cloneDeep from "lodash/cloneDeep.js";
 import forEach from "lodash/forEach.js";
+import keys from "lodash/keys.js";
 
 type SomeObject = { [index: string]: SomeObject };
 
@@ -14,7 +15,7 @@ function stripNullOrUndefined<T extends object>(data: T): T {
   if (!data) {
     return data;
   }
-  forEach(Object.keys(data), (key) => {
+  forEach(keys(data), (key) => {
     const dataCasted = data as T & SomeObject;
     if (dataCasted[key] === null || dataCasted[key] === undefined) {
       delete dataCasted[key];
@@ -56,10 +57,10 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
 }
 
 export function areDifferentForHistoryEntries<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
-  return !!Object.keys(differenceForAsObject(left, right, propertiesToIgnore)).length;
+  return !!keys(differenceForAsObject(left, right, propertiesToIgnore)).length;
 }
 export function areDifferent<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
-  if (!left || !Object.keys(left).length) {
+  if (!left || !keys(left).length) {
     return false;
   }
   return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
@@ -71,13 +72,13 @@ export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?
   const diffAtoB = detailedDiff(a, b);
   const diffBtoA = detailedDiff(b, a);
   const diff: { geändert?: object; hinzugefügt?: object; gelöscht?: object } = {};
-  if (!(Object.keys(diffAtoB.updated || {}).length === 0 && Object.keys(diffBtoA.updated || {}).length === 0)) {
+  if (!(keys(diffAtoB.updated || {}).length === 0 && keys(diffBtoA.updated || {}).length === 0)) {
     diff.geändert = { neu: diffAtoB.updated, alt: diffBtoA.updated };
   }
-  if (!(Object.keys(diffAtoB.added || {}).length === 0)) {
+  if (!(keys(diffAtoB.added || {}).length === 0)) {
     diff.hinzugefügt = diffAtoB.added;
   }
-  if (!(Object.keys(diffAtoB.deleted || {}).length === 0)) {
+  if (!(keys(diffAtoB.deleted || {}).length === 0)) {
     diff.gelöscht = diffAtoB.deleted;
   }
   return diff;
