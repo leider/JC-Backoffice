@@ -2,6 +2,7 @@ import { Form, Select } from "antd";
 import React, { CSSProperties, useMemo } from "react";
 import type { CustomTagProps } from "rc-select/lib/BaseSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
+import map from "lodash/map";
 
 function InnerSelect({
   id,
@@ -48,7 +49,7 @@ export default function MultiSelectWithTags({
   noAdd?: boolean;
   specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
-  const realOptions = useMemo(() => options.map((opt) => ({ label: opt, value: opt })), [options]);
+  const realOptions = useMemo(() => map(options, (opt) => ({ label: opt, value: opt })), [options]);
 
   return (
     <Form.Item label={<b style={{ whiteSpace: "nowrap" }}>{label}:</b>} name={name} style={style}>

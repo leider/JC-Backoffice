@@ -2,6 +2,7 @@ import conf, { SimpleConfigure } from "jc-shared/commons/simpleConfigure.js";
 import path, { dirname } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import map from "lodash/map.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function createConfiguration(): SimpleConfigure {
@@ -33,7 +34,7 @@ function createConfiguration(): SimpleConfigure {
   // then, add properties from config files:
   const files = ["mailsender-config.json", "passwordSalt.json", "server-config.json"];
 
-  addFiles(files.map((file) => configdir + file));
+  addFiles(map(files, (file) => configdir + file));
 
   return conf;
 }

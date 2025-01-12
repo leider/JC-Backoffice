@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import Konzert from "../../konzert/konzert.js";
+import map from "lodash/map.js";
 
 describe("Start und Ende Erweiterungen", () => {
   function expectTage(tage: string[], expected: string[]) {
@@ -7,7 +8,7 @@ describe("Start und Ende Erweiterungen", () => {
       startDate: tage[0],
       endDate: tage[1],
     });
-    expect(veranst.tageOhneStart.map((day) => day.tagMonatJahrKompakt)).to.deep.equal(expected);
+    expect(map(veranst.tageOhneStart, (day) => day.tagMonatJahrKompakt)).to.deep.equal(expected);
   }
 
   it("Ist einen Tag lang", () => {

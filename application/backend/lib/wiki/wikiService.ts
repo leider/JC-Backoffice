@@ -1,6 +1,8 @@
 import Fs from "fs/promises";
 
 import Git from "./gitmech.js";
+import filter from "lodash/filter.js";
+import map from "lodash/map.js";
 
 export default {
   BLOG_ENTRY_FILE_PATTERN: "blog_*",
@@ -45,15 +47,16 @@ export default {
 
   search: async function search(searchtext: string) {
     const items = await Git.grep(searchtext);
-    return items
-      .filter((item) => item.trim() !== "")
-      .map((item) => {
+    return map(
+      filter(items, (item) => item.trim() !== ""),
+      (item) => {
         const record = item.split(":");
         return {
           pageName: record[0].split(".")[0],
           line: record[1],
           text: record.slice(2).join(""),
         };
-      });
+      },
+    );
   },
 };

@@ -5,6 +5,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import map from "lodash/map";
 
 export default function Kassenbericht() {
   useDirtyBlocker(false);
@@ -28,7 +29,7 @@ export default function Kassenbericht() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            {monate.map((monat) => (
+            {map(monate, (monat) => (
               <p key={monat.monatJahrKompakt}>
                 <a href={"/pdf/kassenbericht/" + monat.fuerKalenderViews} target="_blank" rel="noreferrer">
                   Kassenbericht {monat.monatJahrKompakt}

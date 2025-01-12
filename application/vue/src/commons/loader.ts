@@ -18,6 +18,7 @@ import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { HistoryType } from "jc-backend/rest/history.ts";
 import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
+import map from "lodash/map";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -86,7 +87,7 @@ export async function uploadFile(data: FormData) {
 }
 
 function handleVeranstaltungen(result?: any[]): Konzert[] {
-  return result?.map((each: any) => new Konzert(each)) || [];
+  return map(result, (each: any) => new Konzert(each)) || [];
 }
 
 export async function konzerteBetweenYYYYMM(start: string, end: string) {
@@ -164,7 +165,7 @@ export async function updateGastInSection(konzert: Konzert, item: NameWithNumber
 
 // Vermietungen
 function handleVermietungen(result?: any[]): Vermietung[] {
-  return result?.map((each: any) => new Vermietung(each)) || [];
+  return map(result, (each: any) => new Vermietung(each)) || [];
 }
 
 export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
@@ -227,7 +228,7 @@ export async function currentUser() {
 
 export async function allUsers(): Promise<User[]> {
   const result = await getForType("json", "/rest/users");
-  return result?.users.map((r: any) => new User(r)) || [];
+  return map(result?.users, (user: any) => new User(user)) || [];
 }
 
 export async function saveUser(user: User) {
@@ -274,7 +275,7 @@ export async function kalenderFor(jahrMonat: string) {
 
 export async function alleKalender(): Promise<Kalender[]> {
   const result = await getForType("json", "/rest/programmheft/alle");
-  return result.length > 0 ? result.map((r: any) => new Kalender(r)) : [];
+  return result.length > 0 ? map(result, (r: any) => new Kalender(r)) : [];
 }
 
 export async function saveProgrammheft(kalender: Kalender) {
@@ -334,7 +335,7 @@ export async function saveOrte(orte: Orte) {
 
 export async function termine(): Promise<Termin[]> {
   const result = await getForType("json", "/rest/termine");
-  return result?.map((r: any) => new Termin(r)) ?? [];
+  return map(result, (r: any) => new Termin(r)) ?? [];
 }
 
 export async function saveTermine(termine: Termin[]) {
@@ -344,7 +345,7 @@ export async function saveTermine(termine: Termin[]) {
     data: termine,
     contentType: "json",
   });
-  return result?.map((r: any) => new Termin(r)) ?? [];
+  return map(result, (r: any) => new Termin(r)) ?? [];
 }
 
 export async function kalender() {
@@ -399,7 +400,7 @@ export async function saveMailinglists(lists: Mailingliste[]) {
 // Mails für Veranstaltungen
 export async function mailRules(): Promise<MailRule[]> {
   const result = await getForType("json", "/rest/mailrule");
-  return result?.map((each: any) => new MailRule(each)) || [];
+  return map(result, (each: any) => new MailRule(each)) || [];
 }
 
 export async function saveMailRules(rules: MailRule[]) {

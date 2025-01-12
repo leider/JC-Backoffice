@@ -68,7 +68,7 @@ const demo = {
   kopf: {
     beschreibung: "",
     eventTyp: "",
-    flaeche: "",
+    flaeche: 0,
     kooperation: "_",
     ort: "Jubez",
     titel: "",

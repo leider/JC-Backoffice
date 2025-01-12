@@ -11,6 +11,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import find from "lodash/find";
 
 export default function HotelCard() {
   const form = useFormInstance();
@@ -43,8 +44,8 @@ export default function HotelCard() {
 
   useEffect(
     () => {
-      if (optionen?.hotels.find((h) => h.name === hotelName)) {
-        const preise = optionen.hotelpreise.find((pr) => pr.name === hotelName);
+      if (find(optionen?.hotels, { name: hotelName })) {
+        const preise = find(optionen.hotelpreise, ["name", hotelName]);
         if (preise) {
           const { einzelEUR, suiteEUR, doppelEUR } = preise;
           form.setFieldsValue({ unterkunft: { einzelEUR, suiteEUR, doppelEUR } });

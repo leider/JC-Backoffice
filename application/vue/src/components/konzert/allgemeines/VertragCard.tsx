@@ -10,6 +10,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import map from "lodash/map";
 
 export default function VertragCard() {
   const form = useFormInstance();
@@ -22,11 +23,11 @@ export default function VertragCard() {
       {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <Row gutter={12}>
         <Col span={9}>
-          <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten()} />
+          <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten} />
         </Col>
         <Col span={9}>
           <Form.Item label={<b>Sprache:</b>} name={["vertrag", "sprache"]}>
-            <Select options={Vertrag.sprachen().map((s) => ({ label: s, value: s }))} />
+            <Select options={map(Vertrag.sprachen, (s) => ({ label: s, value: s }))} />
           </Form.Item>
         </Col>
         <Col span={6}>

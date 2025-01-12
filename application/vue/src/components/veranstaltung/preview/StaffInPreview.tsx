@@ -1,12 +1,14 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Row } from "antd";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import User from "jc-shared/user/user.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Staff, { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
+import filter from "lodash/filter";
+import map from "lodash/map";
 
 function StaffList({
   header,
@@ -21,17 +23,21 @@ function StaffList({
   parts: { verant?: StaffType; normal?: StaffType };
   theUsers: User[];
 }) {
-  function usersForNames(names: string[]) {
-    return (theUsers || []).filter((user) => names.includes(user.id));
-  }
+  const usersForPart = useCallback(
+    (partType: "verant" | "normal") => {
+      const part = parts[partType];
+      if (!part) {
+        return [];
+      }
+      return map(
+        filter(theUsers, (user) => staff[part].includes(user.id)),
+        (user) => ({ user, bold: partType === "verant" }),
+      );
+    },
+    [parts, staff, theUsers],
+  );
 
-  let names: { user: User; bold: boolean }[] = [];
-  if (parts.verant) {
-    names = names.concat(usersForNames(staff[parts.verant]).map((user) => ({ user, bold: true })));
-  }
-  if (parts.normal) {
-    names = names.concat(usersForNames(staff[parts.normal]).map((user) => ({ user, bold: false })));
-  }
+  const names: { user: User; bold: boolean }[] = usersForPart("verant").concat(usersForPart("normal"));
   if (names.length === 0) {
     names.push({ user: new User({ name: "n.a." }), bold: false });
   }

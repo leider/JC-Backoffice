@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
 import { Rule } from "antd/es/form";
-import noop from "lodash/fp/noop";
+import noop from "lodash/noop";
 
 type NumberInputProps = {
   /**

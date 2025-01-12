@@ -2,7 +2,10 @@ import remove from "lodash/remove.js";
 import sortBy from "lodash/fp/sortBy.js";
 import toLower from "lodash/fp/toLower.js";
 import misc from "../commons/misc.js";
+import find from "lodash/find.js";
+
 import Kontakt from "../veranstaltung/kontakt.js";
+import map from "lodash/map.js";
 
 const sortByNameCaseInsensitive = sortBy(toLower);
 
@@ -110,8 +113,8 @@ export default class OptionValues {
         typenPlus: (object.typenPlus ?? [])
           //.map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))
           .sort((a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase())),
-        agenturen: (object.agenturen || []).map((agentur: Kontakt) => new Kontakt(agentur)),
-        hotels: (object.hotels || []).map((hotel: Kontakt) => new Kontakt(hotel)),
+        agenturen: map(object.agenturen, (agentur: Kontakt) => new Kontakt(agentur)),
+        hotels: map(object.hotels, (hotel: Kontakt) => new Kontakt(hotel)),
       });
     }
   }
@@ -125,7 +128,7 @@ export default class OptionValues {
   }
 
   updateHotelpreise(hotel: Kontakt, zimmerPreise: { einzelEUR: number; doppelEUR: number; suiteEUR: number }): void {
-    if (this.hotels.find((h) => h.name === hotel.name)) {
+    if (find(this.hotels, { name: hotel.name })) {
       remove(this.hotelpreise, (p: Hotelpreise) => p.name === hotel.name);
       this.hotelpreise.push({ name: hotel.name, ...zimmerPreise });
     }

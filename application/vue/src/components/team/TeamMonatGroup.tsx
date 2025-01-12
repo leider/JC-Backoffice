@@ -11,7 +11,7 @@ import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";
-import property from "lodash/fp/property";
+import map from "lodash/map";
 
 interface MonatGroupProps {
   monat: string;
@@ -23,7 +23,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
 
-  const byDay = useMemo(() => groupBy(veranstaltungen, property("startDatumUhrzeit.tagMonatJahrKompakt")), [veranstaltungen]);
+  const byDay = useMemo(() => groupBy(veranstaltungen, "startDatumUhrzeit.tagMonatJahrKompakt"), [veranstaltungen]);
 
   const initiallyExpanded = useMemo(() => {
     const jetzt = new DatumUhrzeit();
@@ -92,23 +92,21 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         </Col>
       </Row>
       <Row gutter={[4, 4]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3", marginLeft: 0, marginRight: 0 }}>
-        {Object.keys(byDay).map((day, idx) => {
-          return (
-            <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
-              {sortBy(byDay[day], property("startDatumUhrzeit.toISOString")).map((veranstaltung) => {
-                return renderTeam ? (
-                  <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
-                ) : veranstaltung.isVermietung ? (
-                  <Row key={veranstaltung.id}>
-                    {<TeamBlockVermietung vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />}
-                  </Row>
-                ) : (
-                  <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
-                );
-              })}
-            </Col>
-          );
-        })}
+        {map(Object.keys(byDay), (day, idx) => (
+          <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
+            {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
+              return renderTeam ? (
+                <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
+              ) : veranstaltung.isVermietung ? (
+                <Row key={veranstaltung.id}>
+                  {<TeamBlockVermietung vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />}
+                </Row>
+              ) : (
+                <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
+              );
+            })}
+          </Col>
+        ))}
       </Row>
     </>
   );

@@ -11,6 +11,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
 import Konzert from "jc-shared/konzert/konzert.js";
+import map from "lodash/map.js";
 
 const logger = loggers.get("application");
 
@@ -55,7 +56,7 @@ export async function checkBar(now: DatumUhrzeit): Promise<JobResult> {
     const markdownToSend = `${firstLine}
 
 ---
-${zuSendende.map(formatVeranstaltung).join("\n\n---\n")}`;
+${map(zuSendende, formatVeranstaltung).join("\n\n---\n")}`;
 
     const message = new MailMessage({
       subject: subject,

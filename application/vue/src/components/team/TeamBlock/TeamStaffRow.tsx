@@ -11,6 +11,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
+import map from "lodash/map";
 
 interface TeamStaffRowProps {
   sectionName: StaffType;
@@ -19,9 +20,8 @@ interface TeamStaffRowProps {
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { usersAsOptions } = useContext(TeamContext);
+  const { token } = theme.useToken();
 
-  const { useToken } = theme;
-  const token = useToken().token;
   const staffCollection = useMemo(() => veranstaltung.staff.getStaffCollection(sectionName), [sectionName, veranstaltung.staff]);
 
   const usersWithKann = useMemo(
@@ -32,11 +32,11 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { currentUser } = useJazzContext();
 
   function ersthelfer(userWithKann: UserWithKann) {
-    return userWithKann?.kann.includes("Ersthelfer");
+    return userWithKann.kann.includes("Ersthelfer");
   }
 
-  return usersWithKann.length > 0 ? (
-    usersWithKann.map((user) => {
+  return usersWithKann.length ? (
+    map(usersWithKann, (user) => {
       const isCurrentUser = user.label === currentUser.name;
       return (
         <Tag color={isCurrentUser ? token.colorSuccess : undefined} key={user.value}>

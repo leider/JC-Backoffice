@@ -5,8 +5,6 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import * as path from "node:path";
 import * as superagent from "superagent";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 describe("iCalendarUtils.parseIcal", () => {

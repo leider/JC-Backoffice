@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { riderFor } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import map from "lodash/map";
 
 export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const url = useMemo(() => encodeURIComponent(veranstaltung.url || ""), [veranstaltung.url]);
@@ -27,7 +28,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
           <Col span={24}>
             <b>Backline Jazzclub:</b>
             <ul>
-              {veranstaltung.technik.backlineJazzclub.map((item) => (
+              {map(veranstaltung.technik.backlineJazzclub, (item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
@@ -38,7 +39,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
           <Col span={24}>
             <b>Backline Rockshop:</b>
             <ul>
-              {veranstaltung.technik.backlineRockshop.map((item) => (
+              {map(veranstaltung.technik.backlineRockshop, (item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
@@ -49,7 +50,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
           <Col span={24}>
             <b>Dateien:</b>
             <ul>
-              {veranstaltung.technik.dateirider.map((item) => (
+              {map(veranstaltung.technik.dateirider, (item) => (
                 <li key={item}>
                   <a href={`/files/${item}`} target="_blank" rel="noreferrer">
                     {item}

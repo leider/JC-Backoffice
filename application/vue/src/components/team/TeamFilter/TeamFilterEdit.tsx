@@ -4,7 +4,7 @@ import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import React from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { EventTypeMultiSelect } from "@/widgets/EventTypeMultiSelect.tsx";
+import { EventTypeMultiSelect } from "@/widgets/EventTypeSelects/EventTypeMultiSelect.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 
 export function TeamFilterEdit({

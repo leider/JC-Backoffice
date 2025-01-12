@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Checkbox, Col, Form, Row } from "antd";
 import { TextField } from "@/widgets/TextField";
@@ -9,8 +9,9 @@ import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { EventTypeSelect } from "@/widgets/EventTypeSelect.tsx";
+import { EventTypeSelect } from "@/widgets/EventTypeSelects/EventTypeSelect.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import find from "lodash/find";
 
 export default function EventCard() {
   const form = useFormInstance();
@@ -20,9 +21,9 @@ export default function EventCard() {
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
-  function ortChanged() {
+  const ortChanged = useCallback(() => {
     const konzert = new Konzert(form.getFieldsValue(true));
-    const selectedOrt = orte.orte.find((o) => o.name === konzert.kopf.ort);
+    const selectedOrt = find(orte.orte, ["name", konzert.kopf.ort]);
     if (selectedOrt) {
       form.setFieldsValue({
         kopf: {
@@ -34,12 +35,9 @@ export default function EventCard() {
     }
 
     form.validateFields();
-  }
+  }, [form, orte.orte]);
 
-  useEffect(
-    ortChanged, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [orte],
-  );
+  useEffect(ortChanged, [ortChanged]);
 
   function Checker({ name, label, disabled }: { label: string; name: string | string[]; disabled?: boolean }) {
     return (

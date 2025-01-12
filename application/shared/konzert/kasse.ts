@@ -1,7 +1,7 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
-import isString from "lodash/fp/isString.js";
+import isString from "lodash/isString.js";
 
 type MuenzenScheine = {
   "10"?: number;

@@ -1,6 +1,7 @@
 import DatumUhrzeit, { AdditionOptions } from "../commons/DatumUhrzeit.js";
-import capitalize from "lodash/capitalize.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import map from "lodash/map.js";
+import capitalize from "lodash/capitalize.js";
 
 export class Event {
   start: string;
@@ -18,7 +19,7 @@ export class Event {
   }
 
   private get names() {
-    return this.users.map((user) => capitalize(user)).join(", ");
+    return map(this.users, capitalize).join(", ");
   }
 
   get title(): string {

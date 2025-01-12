@@ -1,5 +1,6 @@
 import User from "../user/user.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
+import map from "lodash/map.js";
 
 export type MailAddress = { name: string; address: string };
 
@@ -34,7 +35,7 @@ export default class MailMessage {
   static formatEMailAddressCommaSeparated(nameWithCommas: string, emailWithCommas: string): MailAddress[] {
     const names = nameWithCommas.split(",");
     const emails = emailWithCommas.split(",");
-    return names.map((name, index) => ({ name: name, address: emails[index] }));
+    return map(names, (name, index) => ({ name: name, address: emails[index] }));
   }
 
   attach(attachment: { filename: string; content: Buffer }) {

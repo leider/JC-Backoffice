@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 import store from "./konzertestore.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
+import map from "lodash/map.js";
 
 async function renameImage(oldname: string, newname: string, konzertIds: string[], user: User) {
   function updateKonzert(id: string) {
@@ -15,19 +16,14 @@ async function renameImage(oldname: string, newname: string, konzertIds: string[
   }
 
   await fs.rename(conf.uploadDir + "/" + oldname, conf.uploadDir + "/" + newname);
-  return Promise.all(konzertIds.map(updateKonzert));
+  return Promise.all(map(konzertIds, updateKonzert));
 }
 
 function renameImages(rows: ImageOverviewRow[], user: User) {
   function renameRow(row: ImageOverviewRow) {
-    return renameImage(
-      row.image,
-      row.newname,
-      row.veranstaltungen.map((v) => v.id),
-      user,
-    );
+    return renameImage(row.image, row.newname, map(row.veranstaltungen, "id"), user);
   }
-  return Promise.all(rows.map(renameRow));
+  return Promise.all(map(rows, renameRow));
 }
 
 export default {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import MailMessage from "../../mail/mailMessage";
+import MailMessage from "../../mail/mailMessage.js";
 
 describe("Message 'formatEMailAddress'", () => {
   it("formats addresses correctly for simple name email combination", () => {

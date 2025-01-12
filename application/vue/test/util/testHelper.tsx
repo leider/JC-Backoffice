@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { fireEvent, getAllByRole, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { ConfigProvider } from "antd";
 import localeDe from "antd/lib/locale/de_DE";
 import { PropsWithChildren } from "react";
@@ -85,47 +85,6 @@ export type InlineCollectionEditableResult = {
   copyItem: (idx: number) => void;
   deleteItem: (idx: number) => void;
 };
-/**
- * Instantiates helper methods on a element that is the root of a inlineCollectionEditable
- *
- * @param rootEl The root element of the inlineCollectionEditable
- */
-export function inlineCollectionEditable(rootEl: HTMLElement): InlineCollectionEditableResult {
-  const getRows = () => {
-    return rootEl.querySelectorAll('[data-testid="orp-inline-collection-editable-row"]');
-  };
-  const getRow = (idx: number) => {
-    const row = getRows()[idx] as HTMLElement;
-    if (!row) {
-      throw new Error("No row at idx " + idx);
-    }
-
-    return {
-      row,
-      getById: (id: string) => row.querySelector(`#${id}`),
-    };
-  };
-
-  return {
-    getRow,
-    addItem: async () => {
-      const currentRowLength = getRows().length;
-      fireEvent.click(getAllByRole(rootEl, "button")[0]);
-      await waitFor(() => getRow(currentRowLength));
-      return getRow(currentRowLength).row;
-    },
-    copyItem: (idx: number) => {
-      const { row } = getRow(idx);
-      const btn = getAllByRole(row, "button").find((b) => !!b.querySelector('[aria-label="copy"]'))!;
-      fireEvent.click(btn);
-    },
-    deleteItem: (idx: number) => {
-      const { row } = getRow(idx);
-      const btn = getAllByRole(row, "button").find((b) => !!b.querySelector('[aria-label="delete"]'))!;
-      fireEvent.click(btn);
-    },
-  };
-}
 
 /**
  * Convenience wrapper component to create a test context which sets locales

@@ -4,6 +4,7 @@ import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType, RefSelectProps } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
+import map from "lodash/map";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
@@ -26,7 +27,7 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
   return (
     <span key={user.value}>
       {user.label}{" "}
-      {user.kann.map((kann) => {
+      {map(user.kann, (kann) => {
         return (
           <Tag key={kann} color={colorFor(kann)}>
             {kann === "Master" ? "Abendverantwortlicher" : kann}
@@ -65,8 +66,7 @@ function InnerSelect({
   const filterOption = (searchString: string, row?: UserWithKann) =>
     row?.value.toLowerCase().includes(searchString.toLowerCase()) ||
     row?.label.toLowerCase().includes(searchString.toLowerCase()) ||
-    row?.kann
-      .map((k) => (k === "Master" ? "Abendverantwortlicher" : k))
+    map(row?.kann, (k) => (k === "Master" ? "Abendverantwortlicher" : k))
       .join(",")
       .toLowerCase()
       .includes(searchString.toLowerCase()) ||

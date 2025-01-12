@@ -11,7 +11,7 @@ import useCheckErrors from "@/commons/useCheckErrors.ts";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { NamePath } from "rc-field-form/es/interface";
-import noop from "lodash/fp/noop";
+import noop from "lodash/noop";
 
 export default function JazzFormAndHeaderExtended<T>({
   title,

@@ -9,7 +9,8 @@ import reverse from "lodash/reverse";
 import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
-import property from "lodash/fp/property";
+import find from "lodash/find";
+import map from "lodash/map";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
@@ -30,8 +31,7 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   }, [periods, search]);
 
   useEffect(() => {
-    const periodOfSearch = search.get("period");
-    const result = periods.find((each) => each.key === periodOfSearch);
+    const result = find(periods, ["key", search.get("period")]);
     if (!result) {
       setSearch({ period: periods[0].key });
       setPeriod("Zukünftige");
@@ -59,7 +59,7 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
     return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
   }, [queryResult, selectedPeriod]);
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
+  const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
   const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
     [index: string]: Veranstaltung[];
@@ -71,7 +71,7 @@ export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
       return;
     }
     const filtered = veranstaltungen.filter(applyTeamFilter(filter));
-    const result = groupBy(filtered, property("startDatumUhrzeit.monatLangJahrKompakt"));
+    const result = groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [filter, veranstaltungen]);

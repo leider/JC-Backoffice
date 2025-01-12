@@ -22,6 +22,8 @@ import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import map from "lodash/map";
+import invokeMap from "lodash/invokeMap";
 
 function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
   const form = useFormInstance();
@@ -31,13 +33,13 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
   const usersAsOptions = useMemo(() => {
     const result = cloneDeep(allUsers);
     result.push(new User({ id: "booking", name: "Booking Team", email: "booking@jazzclub.de" }));
-    return result.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections }));
+    return map(result, "asUserAsOption");
   }, [allUsers]);
 
   const moveEvents = useCallback(
     (offset: number) => {
       function moveEventsBy(events: Event[], options: AdditionOptions) {
-        const result = events.map((each) => each.cloneAndMoveBy(options));
+        const result = invokeMap(events, "cloneAndMoveBy", options);
         result.sort((a, b) => a.start.localeCompare(b.start));
         return result;
       }

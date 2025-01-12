@@ -9,6 +9,7 @@ import TeamMonatGroup from "@/components/team/TeamMonatGroup.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import { useTeamVeranstaltungenCommons } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import map from "lodash/map";
 
 export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
   const { memoizedId } = useJazzContext();
@@ -53,9 +54,9 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
           ]}
         />
         <TeamContext.Provider value={{ veranstaltungenNachMonat, usersAsOptions }}>
-          {monate.map((monat) => {
-            return <TeamMonatGroup key={monat} monat={monat} renderTeam={!forVeranstaltungen} />;
-          })}
+          {map(monate, (monat) => (
+            <TeamMonatGroup key={monat} monat={monat} renderTeam={!forVeranstaltungen} />
+          ))}
         </TeamContext.Provider>
       </Col>
     </Row>

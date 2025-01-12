@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import compact from "lodash/compact.js";
 import DatumUhrzeit from "./DatumUhrzeit.js";
-import isArray from "lodash/fp/isArray.js";
-import isString from "lodash/fp/isString.js";
+import isArray from "lodash/isArray.js";
+import isString from "lodash/isString.js";
+import map from "lodash/map.js";
 
 function isNumber(aString: string): boolean {
   const number = Number.parseInt(aString);
@@ -25,7 +26,7 @@ function toObject<T>(Constructor: new (something: any) => T, jsobject?: object) 
 }
 
 function toObjectList<T>(Constructor: new (something: any) => T, jsobjects?: object[]) {
-  return (jsobjects || []).map((each) => toObject<T>(Constructor, each)).filter((each): each is T => each !== null);
+  return map(jsobjects, (each) => toObject<T>(Constructor, each)).filter((each): each is T => each !== null);
 }
 
 function toArray(elem?: string | string[]): Array<string> {

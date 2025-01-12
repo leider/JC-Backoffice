@@ -1,5 +1,5 @@
 import { detailedDiff } from "deep-object-diff";
-import isObject from "lodash/fp/isObject.js";
+import isObject from "lodash/isObject.js";
 
 type SomeObject = { [index: string]: SomeObject };
 

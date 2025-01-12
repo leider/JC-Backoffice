@@ -3,6 +3,8 @@ import User, { BOOKING, SUPERUSERS } from "jc-shared/user/user.js";
 import store from "./userstore.js";
 import { genSalt, hashPassword } from "../commons/hashPassword.js";
 import { MailAddress } from "jc-shared/mail/mailMessage.js";
+import filter from "lodash/filter.js";
+import map from "lodash/map.js";
 
 export default {
   saveNewUserWithPassword: function saveNewUserWithPassword(userToSave: User, user: User) {
@@ -39,23 +41,17 @@ export default {
 
   emailsAllerBookingUser: function emailsAllerBookingUser(): MailAddress[] {
     const users = store.allUsers();
-    return users
-      .filter((user) => (user.gruppen || []).includes(BOOKING) || (user.gruppen || []).includes(SUPERUSERS))
-      .filter((user) => !!user.email)
-      .map((u) => ({
-        name: u.name,
-        address: u.email,
-      }));
+    return map(
+      filter(users, (user) => user.email && (user.gruppen?.includes(BOOKING) || user.gruppen?.includes(SUPERUSERS))) as User[],
+      (u) => ({ name: u.name, address: u.email }),
+    );
   },
 
   emailsAllerAdmins: function emailsAllerAdmins(): MailAddress[] {
     const users = store.allUsers();
-    return users
-      .filter((user) => (user.gruppen || []).includes(SUPERUSERS))
-      .filter((user) => !!user.email)
-      .map((u) => ({
-        name: u.name,
-        address: u.email,
-      }));
+    return map(filter(users, (user) => user.email && user.gruppen?.includes(SUPERUSERS)) as User[], (u) => ({
+      name: u.name,
+      address: u.email,
+    }));
   },
 };

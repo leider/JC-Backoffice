@@ -1,18 +1,13 @@
-import Konzert from "../konzert/konzert.js";
 import User from "../user/user.js";
-import Vermietung from "../vermietung/vermietung.js";
-import Staff from "../veranstaltung/staff.js";
+import Veranstaltung from "../veranstaltung/veranstaltung.js";
+import find from "lodash/find.js";
+import map from "lodash/map.js";
 
-export type VerMitUser = { veranstaltung: Konzert | Vermietung; user: User };
+export type VerMitUser = { veranstaltung: Veranstaltung; user: User };
 
-export default function mixVeranstaltungenMitUsers(veranstaltungen: (Konzert | Vermietung)[], users: User[]): VerMitUser[] {
+export default function mixVeranstaltungenMitUsers(veranstaltungen: Veranstaltung[], users: User[]): VerMitUser[] {
   return veranstaltungen.flatMap((veranstaltung) => {
-    return (veranstaltung.staff as Staff).allNames
-      .map((id) => users.find((user) => user.id === id))
-      .filter((user) => !!user)
-      .map((user) => ({
-        veranstaltung,
-        user: user || new User({}),
-      }));
+    const existingUsers = map(veranstaltung.staff.allNames, (id) => find(users, { id: id })).filter((user) => user);
+    return map(existingUsers, (user) => ({ veranstaltung, user: user || new User({}) }));
   });
 }

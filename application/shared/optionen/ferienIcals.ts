@@ -1,5 +1,7 @@
 import Termin, { TerminType } from "./termin.js";
 import Misc from "../commons/misc.js";
+import map from "lodash/map.js";
+import invokeMap from "lodash/invokeMap.js";
 
 export class Ical {
   name = "";
@@ -47,14 +49,14 @@ export default class FerienIcals {
 
   constructor(object?: Partial<FerienIcals>) {
     if (object && object.icals) {
-      this.icals = ((object.icals || []) as Ical[]).map((each) => new Ical(each));
+      this.icals = map(object.icals, (each) => new Ical(each));
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toJSON(): any {
     return Object.assign({}, this, {
-      icals: this.icals.map((i) => i.toJSON()),
+      icals: invokeMap(this.icals, "toJSON"),
     });
   }
 }

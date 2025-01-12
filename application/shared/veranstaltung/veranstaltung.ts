@@ -12,6 +12,7 @@ import { TerminEvent } from "../optionen/termin.js";
 import { colorVermietung } from "../optionen/optionValues.js";
 import Color from "color";
 import { RecursivePartial } from "../commons/advancedTypes.js";
+import map from "lodash/map.js";
 
 export type MinimalVeranstaltung = Partial<Veranstaltung> & { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -66,21 +67,17 @@ export default abstract class Veranstaltung {
 
   abstract asNew(object: MinimalVeranstaltung): Veranstaltung;
 
-  ghostResults() {
-    return this.tageOhneStart.map((ghostStart) => {
-      const result: MinimalVeranstaltung = {} as MinimalVeranstaltung;
-      Object.assign(result, {
+  createGhostsForOverview() {
+    const ghostResults = map(this.tageOhneStart, (ghostStart) => {
+      return {
         id: `${this.id}ghost${ghostStart.toISOString}`,
         startDate: ghostStart.setUhrzeit(0, 0).toJSDate,
         kopf: this.kopf,
         url: this.url,
         ghost: true,
-      });
-      return result;
+      };
     });
-  }
-  createGhostsForOverview() {
-    return this.ghostResults().map((each) => this.asNew(each));
+    return map(ghostResults, (each) => this.asNew(each as MinimalVeranstaltung));
   }
 
   get color(): string {

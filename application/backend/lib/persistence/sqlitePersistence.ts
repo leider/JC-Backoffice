@@ -3,6 +3,7 @@ import conf from "jc-shared/commons/simpleConfigure.js";
 import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
 import { areDifferentForHistoryEntries } from "jc-shared/commons/comparingAndTransforming.js";
+import map from "lodash/map.js";
 
 export const db = new Database(conf.sqlitedb);
 const scriptLogger = loggers.get("scripts");
@@ -40,7 +41,7 @@ class Persistence {
   private extraCols: string[] = [];
 
   private initialize() {
-    const columns = ["id TEXT PRIMARY KEY", "data BLOB"].concat(this.extraCols.map((col) => `${col} TEXT`));
+    const columns = ["id TEXT PRIMARY KEY", "data BLOB"].concat(map(this.extraCols, (col) => `${col} TEXT`));
     db.exec(`CREATE TABLE IF NOT EXISTS ${this.collectionName} ( ${columns.join(",")});`);
     execWithTry(`CREATE INDEX idx_${this.collectionName}_id ON ${this.collectionName}(id);`);
     if (this.extraCols.length > 0) {
@@ -73,12 +74,12 @@ class Persistence {
   }
 
   listByIds(list: string[], orderBy?: string) {
-    return this.listByField(`id IN (${list.map((each) => `${escape(each)}`).join(",")})`, orderBy);
+    return this.listByField(`id IN (${map(list, (each) => `${escape(each)}`).join(",")})`, orderBy);
   }
 
   listByField(where: string, orderBy = "id ASC") {
     const query = `SELECT data FROM ${this.collectionName} WHERE ${where} ORDER BY ${orderBy};`;
-    return (db.prepare(query).all() as { data: string }[]).map((each) => each && JSON.parse(each.data));
+    return map(db.prepare(query).all() as { data: string }[], (each) => each && JSON.parse(each.data));
   }
 
   getById(id: string) {
@@ -98,7 +99,7 @@ class Persistence {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private createValsForSave(object: { [ind: string]: any } & { id: string }) {
     return [escape(object.id), asSqliteString(object)].concat(
-      this.extraCols.map((col) => {
+      map(this.extraCols, (col) => {
         return object[col]?.toJSON ? escape(object[col].toJSON()) : escape(object[col]);
       }),
     );
@@ -131,7 +132,7 @@ class Persistence {
     if (objects.length < 1) {
       return;
     }
-    const rows = objects.map((obj) => {
+    const rows = map(objects, (obj) => {
       const vals = this.createValsForSave(obj);
       return `(${vals.join(",")})`;
     });
@@ -157,7 +158,7 @@ class Persistence {
   removeAllByIds(ids: string[], user: User) {
     const trans = db.transaction(() => {
       ids.forEach((id) => this.saveHistoryEntry({ id }, user));
-      this.removeWithQuery(`id IN (${ids.map(escape).join(",")})`);
+      this.removeWithQuery(`id IN (${map(ids, escape).join(",")})`);
     });
     trans.immediate();
   }

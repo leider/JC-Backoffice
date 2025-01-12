@@ -13,6 +13,8 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteForToday } from "@/commons/loader.ts";
 import HelpContent from "@/components/content/HelpContent.tsx";
+import find from "lodash/find";
+import map from "lodash/map";
 
 const { Content } = Layout;
 
@@ -31,7 +33,7 @@ function TodaysConcert() {
     return (
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
-          {bestaetigte?.map((konzert) => (
+          {map(bestaetigte, (konzert) => (
             <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl} style={{ color: "#FFF" }}>
               <h2
                 style={{
@@ -60,7 +62,7 @@ const JazzContent: React.FC = () => {
   const context = useCreateJazzContext(auth);
 
   useEffect(() => {
-    const result = Object.keys(menuKeys).find((key) => pathname.search(key) > 0);
+    const result = find(Object.keys(menuKeys), (key) => pathname.search(key) > 0);
     if (pathname.search("preview") > 0) {
       return setActiveElement("team");
     }

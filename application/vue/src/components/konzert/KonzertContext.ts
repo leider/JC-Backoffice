@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import noop from "lodash/fp/noop";
+import noop from "lodash/noop";
 
 export const KonzertContext = createContext<{
   isKasseHelpOpen: boolean;

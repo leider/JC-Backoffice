@@ -34,21 +34,16 @@ export default class Termin {
       this.typ = object.typ ?? "Sonstiges";
       this.startDate = Misc.stringOrDateToDate(object.startDate) || new DatumUhrzeit().toJSDate;
       this.endDate = Misc.stringOrDateToDate(object.endDate) || this.startDate;
-      this.id = object.id ?? DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
     } else {
       this.startDate = new DatumUhrzeit().toJSDate;
       this.endDate = this.startDate;
-      this.id = DatumUhrzeit.forJSDate(this.startDate).toLocalDateTimeString;
     }
+    this.id = object?.id ? object.id : encodeURIComponent(DatumUhrzeit.forJSDate(this.startDate).fuerCalendarWidget + this.beschreibung);
   }
 
   /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
   toJSON(): any {
     return Object.assign({}, this);
-  }
-
-  static typen(): string[] {
-    return ["Sonstiges", "Feiertag", "Ferien"];
   }
 
   static colorForType(typ: TerminType): string {

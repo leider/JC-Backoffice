@@ -18,6 +18,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
+import map from "lodash/map";
 
 export default function Preview() {
   const { url } = useParams();
@@ -108,7 +109,7 @@ function AddressBlock({ kontakt }: { kontakt: Kontakt }) {
     <address>
       <strong>{kontakt.name}</strong>
       <br />
-      {lines.map((line) => (
+      {map(lines, (line) => (
         <span key={line}>
           {line} <br />
         </span>

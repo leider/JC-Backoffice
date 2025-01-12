@@ -10,6 +10,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import map from "lodash/map";
 
 type accessrightsTypes = "isSuperuser" | "isBookingTeam" | "isOrgaTeam" | "isAbendkasse" | "everybody";
 
@@ -64,7 +65,7 @@ export default function Users() {
       />
       <RowWrapper>
         <Row gutter={12}>
-          {selectedUsers.map((user) => (
+          {map(selectedUsers, (user) => (
             <Col key={user.id} xs={24} sm={12} md={8} xxl={6}>
               <UserPanel user={user} currentUser={currentUser || new User({})} />
             </Col>

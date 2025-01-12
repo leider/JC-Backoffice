@@ -1,8 +1,8 @@
-import constant from "lodash/fp/constant.js";
+import constant from "lodash/constant.js";
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 
-type MailRuleUI = {
-  id: string;
+export type MailRuleUI = {
+  id?: string;
   name: string;
   email: string;
   rule: string;

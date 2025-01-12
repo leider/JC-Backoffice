@@ -8,6 +8,7 @@ import { useWatch } from "antd/es/form/Form";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import map from "lodash/map";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -30,24 +31,20 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const [openModal, setOpenModal] = useState(false);
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+
+  function sumForInhalt(startEnd: "startinhalt" | "endinhalt") {
+    const inhalt = form.getFieldValue(["kasse", startEnd]);
+    return map(items, "name").reduce((prev, curr) => {
+      return prev + (parseInt(curr, 10) * (inhalt[curr] ?? 0)) / 100;
+    }, 0);
+  }
+
   function updateAnfangsbestandEUR() {
-    const startinhalt = form.getFieldValue(["kasse", "startinhalt"]);
-    const sum = items
-      .map((item) => item.name)
-      .reduce((prev, curr) => {
-        return prev + (parseInt(curr, 10) * (startinhalt[curr] ?? 0)) / 100;
-      }, 0);
-    form.setFieldValue(["kasse", "anfangsbestandEUR"], sum);
+    form.setFieldValue(["kasse", "anfangsbestandEUR"], sumForInhalt("startinhalt"));
   }
 
   function updateEndbestandGezaehltEUR() {
-    const endinhalt = form.getFieldValue(["kasse", "endinhalt"]);
-    const sum = items
-      .map((item) => item.name)
-      .reduce((prev, curr) => {
-        return prev + (parseInt(curr, 10) * (endinhalt[curr] ?? 0)) / 100;
-      }, 0);
-    form.setFieldValue(["kasse", "endbestandGezaehltEUR"], sum);
+    form.setFieldValue(["kasse", "endbestandGezaehltEUR"], sumForInhalt("endinhalt"));
   }
 
   function ImmediateEuro({ name }: { name: string }) {
@@ -89,7 +86,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
           </ConfigProvider>,
         ]}
       >
-        {items.map((item) => (
+        {map(items, (item) => (
           <Row key={item.name} gutter={0}>
             <Col span={8}>
               <Input disabled value={`${item.val} €`} variant="borderless" />

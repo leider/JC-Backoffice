@@ -20,6 +20,8 @@ import usersService from "../users/usersService.js";
 import User, { SUPERUSERS } from "jc-shared/user/user.js";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import filter from "lodash/filter.js";
+import map from "lodash/map.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -168,16 +170,14 @@ app.get("/ical/", (req, res) => {
     const calendar: Calendar = {
       version: "2.0",
       prodId: "ical by jazzclub",
-      events: konzerte
-        .filter((v) => v.kopf.confirmed)
-        .map((konzert) => ({
-          uid: konzert.url || "",
-          start: konzert.startDatumUhrzeit.fuerIcal,
-          end: konzert.endDatumUhrzeit.fuerIcal,
-          summary: konzert.kopf.titelMitPrefix,
-          description: konzert.tooltipInfos,
-          location: konzert.kopf.ort.replace(/\r\n/g, "\n"),
-        })),
+      events: map(filter(konzerte, "kopf.confirmed"), (konzert) => ({
+        uid: konzert.url || "",
+        start: konzert.startDatumUhrzeit.fuerIcal,
+        end: konzert.endDatumUhrzeit.fuerIcal,
+        summary: konzert.kopf.titelMitPrefix,
+        description: konzert.tooltipInfos,
+        location: konzert.kopf.ort.replace(/\r\n/g, "\n"),
+      })),
     };
     const calString = new Builder(calendar).build();
     return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);

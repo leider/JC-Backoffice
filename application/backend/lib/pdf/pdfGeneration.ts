@@ -20,6 +20,7 @@ import { fileURLToPath } from "url";
 import Fs from "fs/promises";
 import { PDFOptions } from "puppeteer";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import map from "lodash/map.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -96,7 +97,7 @@ export async function riderPdf(res: Response, next: NextFunction, url: string) {
     return res.redirect("/");
   }
 
-  const boxes = rider.boxes.map((box) => new PrintableBox(box));
+  const boxes = map(rider.boxes, (box) => new PrintableBox(box));
   generatePdfAndSend(res, next, renderPug("rider", { veranstaltung: konzert, boxes }), printoptionsRider);
 }
 

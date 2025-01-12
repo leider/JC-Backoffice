@@ -13,22 +13,21 @@ import User from "jc-shared/user/user.js";
 import fs from "fs/promises";
 import parseFormData from "../lib/commons/parseFormData.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import invokeMap from "lodash/invokeMap.js";
+import map from "lodash/map.js";
 
 const app = express();
 
 app.get("/mailrule", [checkSuperuser], (req: Request, res: Response) => {
   const rules = mailstore.all();
-  const result = rules?.map((r) => r.toJSON());
+  const result = invokeMap(rules, "toJSON");
   resToJson(res, result);
 });
 
 app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
   const oldRules = mailstore.all();
   const newRules = misc.toObjectList(MailRule, req.body);
-  const { changed, deletedIds } = calculateChangedAndDeleted(
-    newRules.map((r) => r.toJSON()),
-    oldRules.map((r) => r.toJSON()),
-  );
+  const { changed, deletedIds } = calculateChangedAndDeleted(invokeMap(newRules, "toJSON"), invokeMap(oldRules, "toJSON"));
 
   mailstore.saveAll(changed, req.user as User);
   mailstore.removeAll(deletedIds, req.user as User);
@@ -45,7 +44,7 @@ app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
   if (files.dateien) {
     message.attachments = await Promise.all(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      files.dateien.map(async (datei: any) => {
+      map(files.dateien, async (datei: any) => {
         const content = await fs.readFile(datei.path);
         const filename = datei.originalFilename.replace(/[()/]/g, "_");
         return { filename, content };

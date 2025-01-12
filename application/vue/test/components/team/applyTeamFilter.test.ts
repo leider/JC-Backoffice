@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import Konzert from "jc-shared/konzert/konzert";
 import applyTeamFilter from "../../../src/components/team/TeamFilter/applyTeamFilter";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import map from "lodash/map";
 
 const neutral = new Konzert({ kopf: { titel: "Neutral" } });
 const bestaetigt = new Konzert({ kopf: { titel: "Bestätigt", confirmed: true } });
@@ -54,12 +56,15 @@ const alleKonzerte = [
   mitEventTyp2,
 ];
 
-function checkResult(filter) {
-  return alleKonzerte.filter(filter).map((kon) => kon.kopf.titel);
+function checkResult(filter: (ver: Veranstaltung) => boolean) {
+  return map(alleKonzerte.filter(filter), "kopf.titel");
 }
 
-function checkInverseResult(filter) {
-  return alleKonzerte.filter((k) => !filter(k)).map((kon) => kon.kopf.titel);
+function checkInverseResult(filter: (ver: Veranstaltung) => boolean) {
+  return map(
+    alleKonzerte.filter((k) => !filter(k)),
+    "kopf.titel",
+  );
 }
 
 describe("applyTeamFilter", () => {

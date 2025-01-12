@@ -20,7 +20,7 @@ describe("Eintrittspreise", () => {
 
   describe("kommt mit altem Datenformat klar, setzt immer Zuschuss und Besucher", () => {
     it("fuer freien Eintritt", () => {
-      const alterDatensatz = { frei: true, zuschuss: null, erwarteteBesucher: NaN };
+      const alterDatensatz = { frei: true, erwarteteBesucher: NaN };
       const preise = new Eintrittspreise(alterDatensatz);
       expect(preise.toJSON()).to.eql(freierEintritt);
       expect(preise.toJSON().zuschuss).to.eql(0);

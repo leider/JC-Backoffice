@@ -12,6 +12,9 @@ import isNil from "lodash/isNil";
 import "./editableTable.css";
 import { Columns } from "./types";
 import useColumnRenderer from "@/widgets/EditableTable/widgets/useColumnRenderer.tsx";
+import findIndex from "lodash/findIndex";
+import find from "lodash/find";
+import map from "lodash/map";
 
 type WithKey<T> = T & { key: string };
 
@@ -56,7 +59,7 @@ function InnerTable<T>({
   const [rows, setRows] = useState<TWithKey[]>([]);
 
   useEffect(() => {
-    const withKey: TWithKey[] = (value ?? []).map((row, index) => {
+    const withKey: TWithKey[] = map(value, (row, index) => {
       (row as TWithKey).key = "row" + index;
       return row as TWithKey;
     });
@@ -64,7 +67,7 @@ function InnerTable<T>({
   }, [value]);
 
   function newKey() {
-    const numbers = rows.map((row) => Number.parseInt(row.key.replace("key", ""), 10));
+    const numbers = map(rows, (row) => Number.parseInt(row.key.replace("key", ""), 10));
     return Math.max(...numbers) + 1;
   }
 
@@ -77,7 +80,7 @@ function InnerTable<T>({
     if (!rows) {
       return;
     }
-    const current = rows.find((item) => item.key === key);
+    const current = find(rows, { key: key }) as WithKey<T>;
     if (!current) {
       return;
     }
@@ -96,7 +99,7 @@ function InnerTable<T>({
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSave = (row: TWithKey, field: any) => {
     const newData = [...(rows ?? [])];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const index = findIndex(newData, ["key", row.key]);
     const newRow = newRowFactory({ ...row, ...field });
     (newRow as TWithKey).key = row.key;
     newData.splice(index, 1, newRow as TWithKey);
@@ -121,7 +124,7 @@ function InnerTable<T>({
     }
   }
 
-  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & Columns)[] = (columnDescriptions ?? []).map((item, index) => {
+  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & Columns)[] = map(columnDescriptions, (item, index) => {
     return {
       editable: item.editable ?? true,
       dataIndex: item.dataIndex,
@@ -168,7 +171,7 @@ function InnerTable<T>({
     },
   };
 
-  const columns = defaultColumns.map((col) => {
+  const columns = map(defaultColumns, (col) => {
     if (!col.editable) {
       return col;
     }
@@ -242,7 +245,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       validator: (_, value: T[]) => {
         let broken = false;
         uniqueFields.forEach((field) => {
-          const valsToCheck = value?.map((row) => row[field.dataIndex as keyof T]);
+          const valsToCheck = map(value, (row) => row[field.dataIndex as keyof T]);
           if (duplicates(valsToCheck).length) {
             broken = true;
           }

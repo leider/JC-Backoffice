@@ -11,11 +11,11 @@ export default class Vertrag {
   datei: string[] = [];
   zusatzvereinbarungen?: string;
 
-  static arten(): Vertragsart[] {
+  static get arten(): Vertragsart[] {
     return ["Jazzclub", "Agentur/Künstler", "JazzClassix"];
   }
 
-  static sprachen(): Sprache[] {
+  static get sprachen(): Sprache[] {
     return ["Deutsch", "Englisch", "Regional"];
   }
 

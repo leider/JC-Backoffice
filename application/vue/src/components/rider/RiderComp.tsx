@@ -8,6 +8,7 @@ import { Col, Collapse, ConfigProvider, Row } from "antd";
 import { SourceContainer } from "./SourceContainer.tsx";
 import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
+import map from "lodash/map";
 
 export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }> = ({
   targetBoxes,
@@ -26,7 +27,7 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
   const [isTouch, setIsTouch] = useState<boolean>(false);
 
   useEffect(() => {
-    const boxIds = targetBoxes!.map((box) => box.id);
+    const boxIds = map(targetBoxes, "id");
     setSourceBoxes(Inventory.filter((inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
   }, [targetBoxes]);
 
@@ -39,13 +40,11 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
 
   const sourceComponents = useMemo(
     () =>
-      (["Keys", "Drums", "Bass", "Guitar", "Extra"] as Category[]).map((key) => {
-        return {
-          key,
-          label: key as string,
-          children: <SourceContainer cat={key} sourceBoxes={sourceBoxes} dropCallback={itemDroppedOntoSource} />,
-        };
-      }),
+      map(["Keys", "Drums", "Bass", "Guitar", "Extra"] as Category[], (key) => ({
+        key,
+        label: key as string,
+        children: <SourceContainer cat={key} sourceBoxes={sourceBoxes} dropCallback={itemDroppedOntoSource} />,
+      })),
     [sourceBoxes, itemDroppedOntoSource],
   );
 

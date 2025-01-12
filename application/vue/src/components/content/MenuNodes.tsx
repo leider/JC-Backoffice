@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { ItemType } from "antd/es/menu/interface";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import map from "lodash/map";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -32,13 +33,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
   const programmheftJahrMonat = useMemo(() => naechsterUngeraderMonat.format("YYYY/MM"), [naechsterUngeraderMonat]);
 
   const wikisubdirEntries = useMemo(
-    () =>
-      subdirs.map((dir) => {
-        return {
-          key: `wiki-${dir}`,
-          label: <Link to={`/wiki/${dir}/`}>{dir}</Link>,
-        };
-      }),
+    () => map(subdirs, (dir) => ({ key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}/`}>{dir}</Link> })),
     [subdirs],
   );
 

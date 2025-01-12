@@ -1,13 +1,13 @@
 import { Col, Row } from "antd";
 import { ProgrammheftVeranstaltungenMonat } from "@/components/programmheft/ProgrammheftVeranstaltungenMonat.tsx";
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { useEffect, useState } from "react";
 import groupBy from "lodash/groupBy";
-import property from "lodash/fp/property";
+import map from "lodash/map";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
@@ -28,12 +28,12 @@ export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit 
   }, [dataveranstaltungen]);
 
   useEffect(() => {
-    const result = groupBy(veranstaltungen, property("startDatumUhrzeit.monatLangJahrKompakt"));
+    const result = groupBy(veranstaltungen, "startDatumUhrzeit.monatLangJahrKompakt");
     setVeranstaltungenNachMonat(result);
     setMonate(Object.keys(result));
   }, [veranstaltungen]);
 
-  return monate.map((monat) => (
+  return map(monate, (monat) => (
     <Row gutter={12} key={monat}>
       <Col span={24}>
         <ProgrammheftVeranstaltungenMonat monat={monat} veranstaltungen={veranstaltungenNachMonat[monat]} />

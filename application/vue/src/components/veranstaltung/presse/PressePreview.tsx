@@ -7,6 +7,7 @@ import isEmpty from "lodash/isEmpty";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import map from "lodash/map";
 
 export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   function updatePreview(veranstaltung: Veranstaltung) {
@@ -33,7 +34,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
   return (
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
-      {veranstaltung.presse.image.map((img) => (
+      {map(veranstaltung.presse.image, (img) => (
         <Image
           key={img}
           src={`/imagepreview/${img}`}

@@ -1,7 +1,7 @@
 import { App, Col, Flex, Form, Row, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -13,17 +13,14 @@ import { MuenzenScheineModal } from "@/components/konzert/kasse/MuenzenScheineMo
 import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import map from "lodash/map";
 
 export function KassenzettelFreigabe() {
   const form = useFormInstance();
   const { currentUser, allUsers, isDirty } = useJazzContext();
 
   const { modal } = App.useApp();
-  const [usersAsOptions, setUsersAsOptions] = useState<string[]>([]);
-
-  useEffect(() => {
-    setUsersAsOptions(allUsers.map((user) => user.name));
-  }, [allUsers]);
+  const usersAsOptions = useMemo(() => map(allUsers, "name"), [allUsers]);
 
   const startDate = useWatch("startDate", { form, preserve: true });
   const vergangen = useMemo(() => {

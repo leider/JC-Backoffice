@@ -9,7 +9,7 @@ import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
-import noop from "lodash/fp/noop";
+import noop from "lodash/noop";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),

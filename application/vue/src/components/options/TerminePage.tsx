@@ -10,13 +10,14 @@ import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import map from "lodash/map";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: TerminType };
 class TermineWrapper {
   allTermine: TerminFlat[];
 
   constructor(termine?: Termin[]) {
-    this.allTermine = (termine ?? []).map((termin) => ({
+    this.allTermine = map(termine, (termin) => ({
       dates: [termin.startDate, termin.endDate],
       beschreibung: termin.beschreibung ?? "",
       typ: termin.typ,
@@ -64,7 +65,8 @@ export default function TerminePage() {
 
   function saveForm(vals: TermineWrapper) {
     mutateTermine.mutate(
-      vals.allTermine.map(
+      map(
+        vals.allTermine,
         (each: TerminFlat) =>
           new Termin({ startDate: each.dates[0], endDate: each.dates[1], beschreibung: each.beschreibung, typ: each.typ }),
       ),

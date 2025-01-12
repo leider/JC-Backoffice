@@ -8,6 +8,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import map from "lodash/map";
 
 export interface MitarbeiterRowProps {
   sectionName: StaffType;
@@ -49,7 +50,7 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
     }
   }, [abgesagt, form]);
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
+  const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
   return (
     <Collapsible suffix="allgemeines" label="Mitarbeiter" noTopBorder={lg}>

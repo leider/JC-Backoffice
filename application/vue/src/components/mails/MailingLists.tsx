@@ -11,12 +11,13 @@ import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import User from "jc-shared/user/user.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import map from "lodash/map";
 
 class MailingListsWrapper {
   allLists: Mailingliste[] = [];
 
   constructor(lists?: Mailingliste[]) {
-    this.allLists = (lists ?? []).map((list) => ({ ...list })).sort((a, b) => a.name.localeCompare(b.name));
+    this.allLists = map(lists, (list) => ({ ...list })).sort((a, b) => a.name.localeCompare(b.name));
   }
   toJSON(): object {
     return cloneDeep(this);
@@ -24,7 +25,7 @@ class MailingListsWrapper {
 }
 
 function MailingListsInternal({ users }: { users: User[] }) {
-  const usersAsOptions = useMemo(() => users.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [users]);
+  const usersAsOptions = useMemo(() => map(users, "asUserAsOption"), [users]);
 
   const columnDescriptions: Columns[] = [
     { dataIndex: "name", title: "Name", type: "text", width: "150px", required: true, uniqueValues: true },

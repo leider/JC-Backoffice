@@ -3,6 +3,7 @@ import * as React from "react";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { NamePath } from "rc-field-form/es/interface";
 import { useWatch } from "antd/es/form/Form";
+import map from "lodash/map";
 
 export type LabelPathDependsOn = {
   label: string;
@@ -28,5 +29,5 @@ export default function dynamicHeaderTags(labelsColors: LabelPathDependsOn[]) {
     );
   }
 
-  return labelsColors.map((tag) => <HeaderTag key={tag.label ?? tag.label} tag={tag} />);
+  return map(labelsColors, (tag) => <HeaderTag key={tag.label ?? tag.label} tag={tag} />);
 }

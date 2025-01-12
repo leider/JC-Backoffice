@@ -5,8 +5,11 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
 import SingleSelect from "@/widgets/SingleSelect";
-import uniq from "lodash/uniq";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import find from "lodash/find";
+import map from "lodash/map";
+import sortedUniq from "lodash/sortedUniq";
+import compact from "lodash/compact";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -18,9 +21,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
 
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
-    const names = uniq(kontakte.map((k) => k.name))
-      .filter((name) => !!name)
-      .sort();
+    const names = sortedUniq(compact(map(kontakte, "name")));
     setAuswahlen(["[temporär]", "[neu]"].concat(names));
   }, [kontakte]);
 
@@ -28,8 +29,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
     if (name === "[temporär]") {
       return;
     }
-    const kontakt = kontakte.find((k) => k.name === name);
-    const result = new Kontakt(kontakt);
+    const result = new Kontakt(find(kontakte, { name: name }));
     const values: {
       agentur?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
       hotel?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };

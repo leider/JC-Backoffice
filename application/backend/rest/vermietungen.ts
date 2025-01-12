@@ -9,15 +9,13 @@ import store from "../lib/vermietungen/vermietungenstore.js";
 import { checkOrgateam } from "./checkAccessHandlers.js";
 import { saveVermietungToShare, vermietungVertragToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import vermietungenService from "../lib/vermietungen/vermietungenService.js";
+import invokeMap from "lodash/invokeMap.js";
 
 const app = express();
 
 async function standardHandler(req: Request, res: Response, vermietungen: Vermietung[]) {
   const user: User = req.user as User;
-  resToJson(
-    res,
-    vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map((v) => v.toJSON()),
-  );
+  resToJson(res, invokeMap(vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user), "toJSON"));
 }
 
 function saveAndReply(req: Request, res: Response, vermietung: Vermietung) {

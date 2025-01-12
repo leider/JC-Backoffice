@@ -10,9 +10,9 @@ describe("Orte", () => {
   });
 
   it("sorts by name in constructor", () => {
-    const peter = { name: "peter", flaeche: "20" };
-    const zappa = { name: "Zappa", flaeche: "20" };
-    const anna = { name: "anna", flaeche: "20" };
+    const peter = { name: "peter", flaeche: 20 };
+    const zappa = { name: "Zappa", flaeche: 20 };
+    const anna = { name: "anna", flaeche: 20 };
     const orte = new Orte({
       orte: [peter, zappa, anna],
     });

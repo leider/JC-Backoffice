@@ -60,7 +60,7 @@ describe("Simple (Text) Input Widget", () => {
   });
 
   describe("executes callback on value change", () => {
-    let tunnelVal: string;
+    let tunnelVal: string | null;
     beforeEach(() => {
       updateWidget(<TextField name={"test"} label={"testme"} onChange={(val) => (tunnelVal = val)} />);
     });

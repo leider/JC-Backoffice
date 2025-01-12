@@ -4,6 +4,7 @@ import Konzert from "jc-shared/konzert/konzert.js";
 import User from "jc-shared/user/user.js";
 
 import store from "./konzertestore.js";
+import invokeMap from "lodash/invokeMap.js";
 
 const app = express();
 
@@ -17,7 +18,7 @@ function veranstaltungenForExport(fetcher: () => Konzert[], req: Request, res: R
   }
 
   const veranstaltungen: Konzert[] = fetcher();
-  const lines = veranstaltungen.map((veranstaltung) => veranstaltung.toCSV());
+  const lines = invokeMap(veranstaltungen, "toCSV");
   return res.type("csv").send(lines);
 }
 

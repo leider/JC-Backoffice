@@ -3,19 +3,20 @@ import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.
 import * as React from "react";
 import { useMemo } from "react";
 import { Col, Row } from "antd";
-import MailRule, { allMailrules } from "jc-shared/mail/mailRule";
+import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import invokeMap from "lodash/invokeMap";
 
 class MailRulesWrapper {
   allRules: MailRule[] = [];
 
   constructor(rules?: MailRule[]) {
-    this.allRules = (rules ?? []).map((rule) => rule.toJSON());
+    this.allRules = invokeMap(rules, "toJSON");
   }
   toJSON(): object {
     return cloneDeep(this);
@@ -33,10 +34,10 @@ function MailRulesInternal() {
     <RowWrapper>
       <Row gutter={12}>
         <Col span={24}>
-          <EditableTable<MailRule>
+          <EditableTable<MailRuleUI>
             columnDescriptions={columnDescriptions}
             name="allRules"
-            newRowFactory={(vals) => Object.assign({}, vals)}
+            newRowFactory={(vals) => ({ ...vals, id: undefined })}
           />
         </Col>
       </Row>

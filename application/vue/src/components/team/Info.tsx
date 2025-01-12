@@ -12,9 +12,12 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
+import map from "lodash/map";
+import filter from "lodash/filter";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 export default function Info() {
-  const { filter } = useJazzContext();
+  const { filter: contextFilter } = useJazzContext();
   const { monatJahr } = useParams(); // als yymm
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("pressetexte");
@@ -32,7 +35,7 @@ export default function Info() {
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 
-  const veranstaltungen = useMemo(() => (data ?? []).filter(applyTeamFilter(filter)), [data, filter]);
+  const veranstaltungen = useMemo(() => (data ?? []).filter(applyTeamFilter(contextFilter)), [data, contextFilter]);
 
   useEffect(
     () => {
@@ -70,14 +73,12 @@ export default function Info() {
     return (
       <RowWrapper>
         <Row gutter={12}>
-          {veranstaltungen.map((veranst) => {
-            return (
-              <Col lg={12} key={veranst.id}>
-                <PressePreview veranstaltung={veranst} />
-                <Divider />
-              </Col>
-            );
-          })}
+          {map(veranstaltungen, (veranst) => (
+            <Col lg={12} key={veranst.id}>
+              <PressePreview veranstaltung={veranst} />
+              <Divider />
+            </Col>
+          ))}
         </Row>
       </RowWrapper>
     );
@@ -88,7 +89,7 @@ export default function Info() {
       <RowWrapper>
         <Row gutter={12}>
           <Col span={24}>
-            {veranstaltungen.map((veranst) => (
+            {map(veranstaltungen, (veranst) => (
               <p key={veranst.id}>
                 <b>{veranst.kopf.titelMitPrefix}</b>
                 <br />
@@ -109,22 +110,19 @@ export default function Info() {
           </Col>
         </Row>
         <Row gutter={12}>
-          {veranstaltungen
-            .filter((v) => v.presse.image.length > 0)
-            .map((veranst) => (
-              <Col lg={12} key={veranst.id}>
-                <p>&nbsp;</p>
-                <p>
-                  <b>{veranst.kopf.titelMitPrefix}</b>
-                </p>
-                {veranst.presse.image.map((img) => (
-                  <span key={img}>
-                    <img src={`/upload/${encodeURIComponent(img)}`} width="100%" />
-                    <br />
-                  </span>
-                ))}
-              </Col>
-            ))}
+          {map(filter(veranstaltungen, "presse.image.length"), (veranst: Konzert) => (
+            <Col lg={12} key={veranst.id}>
+              <p>
+                <b>{veranst.kopf.titelMitPrefix}</b>
+              </p>
+              {map(veranst.presse.image, (img) => (
+                <span key={img}>
+                  <img src={`/upload/${encodeURIComponent(img)}`} width="100%" />
+                  <br />
+                </span>
+              ))}
+            </Col>
+          ))}
         </Row>
       </RowWrapper>
     );

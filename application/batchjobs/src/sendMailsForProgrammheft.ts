@@ -7,6 +7,8 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import User from "jc-shared/user/user.js";
 import { JobResult } from "./sendMailsNightly.js";
 import userstore from "jc-backend/lib/users/userstore.js";
+import map from "lodash/map.js";
+import filter from "lodash/filter.js";
 
 export class EmailEvent {
   event: Event;
@@ -28,27 +30,15 @@ export class EmailEvent {
   }
 
   private selectedUsers(allUsers: User[]) {
-    return allUsers.filter((user) => {
-      return this.event.users.includes(user.id);
-    });
+    return filter(allUsers, (user) => this.event?.users?.includes(user.id));
   }
 
   email(allUsers: User[]): string[] {
-    if (allUsers && this.event.users.length) {
-      return this.selectedUsers(allUsers).map((user) => user.email);
-    } else {
-      return [];
-    }
+    return map(this.selectedUsers(allUsers), "email");
   }
 
   names(allUsers: User[]): string {
-    if (!allUsers || !this.event.users.length) {
-      return "";
-    } else {
-      return this.selectedUsers(allUsers)
-        .map((user) => user.name)
-        .join(", ");
-    }
+    return map(this.selectedUsers(allUsers), "name").join(", ");
   }
 
   body(allUsers: User[]): string {
@@ -66,19 +56,19 @@ Danke & keep swingin'`;
 
 async function sendMail(eventsForToday: EmailEvent[]) {
   const allUsers = userstore.allUsers();
-  const messages = eventsForToday.map((e) => {
+  const messages = map(eventsForToday, (e) => {
     const message = new MailMessage({
       subject: "Programmheft Action Reminder",
     });
     message.body = e.body(allUsers);
-    message.to = e.email(allUsers).map((email) => ({ name: "", address: email ?? "" }));
+    message.to = map(e.email(allUsers), (email) => ({ name: "", address: email ?? "" }));
     return message;
   });
-  return Promise.all(messages.map(mailtransport.sendMail));
+  return Promise.all(map(messages, mailtransport.sendMail));
 }
 
 function eventsToSend(aDatumUhrzeit: DatumUhrzeit, events?: Event[]): EmailEvent[] {
-  const result = (events ?? []).filter((e) => e.users.length).map((e) => new EmailEvent(e));
+  const result = map(filter(events, "users.length"), (e) => new EmailEvent(e));
   return result.filter((e) => e.shouldSendOn(aDatumUhrzeit));
 }
 

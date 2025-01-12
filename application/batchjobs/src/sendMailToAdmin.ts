@@ -5,6 +5,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
 import { JobResult } from "./sendMailsNightly.js";
 import compact from "lodash/compact.js";
+import map from "lodash/map.js";
 
 const receiver = "leider";
 
@@ -32,7 +33,7 @@ export async function informAdmin(allResults: { type: JobType; jobResult: JobRes
       console.error(`error occurred while informing for type: ${type}. ERROR: ${error}`);
     }
 
-    const infos = infosCompacted.map(({ accepted, rejected, response }) => ({
+    const infos = map(infosCompacted, ({ accepted, rejected, response }) => ({
       accepted,
       rejected,
       response,
@@ -49,7 +50,7 @@ ${error}`
 }`;
   } // end function createBodyFragment
 
-  const bodyFragments = compact(allResults.map(createBodyFragment));
+  const bodyFragments = compact(map(allResults, createBodyFragment));
   if (!bodyFragments.length) {
     return;
   }

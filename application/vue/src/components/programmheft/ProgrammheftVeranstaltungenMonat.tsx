@@ -7,6 +7,22 @@ import { useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Link } from "react-router";
 import headerTags from "@/components/colored/headerTags.tsx";
+import map from "lodash/map";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+
+function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstaltung[] }) {
+  return (
+    <ul>
+      {map(veranstaltungen, (veranst) => (
+        <li key={veranst.id}>
+          <Link to={{ pathname: `/konzert/${encodeURIComponent(veranst.url || "")}`, search: "page=allgemeines" }}>
+            {veranst.kopf.titelMitPrefix}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -48,44 +64,18 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
                 {!!unbestaetigte.length && (
                   <Col span={12}>
                     <h2>Es gibt noch unbestätigte Veranstaltungen</h2>
-                    <ul>
-                      {unbestaetigte.map((veranst) => (
-                        <li key={veranst.id}>
-                          <Link
-                            to={{
-                              pathname: `/konzert/${encodeURIComponent(veranst.url || "")}`,
-                              search: "page=allgemeines",
-                            }}
-                          >
-                            {veranst.kopf.titelMitPrefix}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <VeranstaltungenListe veranstaltungen={unbestaetigte} />
                   </Col>
                 )}
                 {!!ohnePresse.length && (
                   <Col span={12}>
                     <h2>Hier fehlt der Pressetext</h2>
-                    <ul>
-                      {ohnePresse.map((veranst) => (
-                        <li key={veranst.id}>
-                          <Link
-                            to={{
-                              pathname: `/konzert/${encodeURIComponent(veranst.url || "")}`,
-                              search: "page=presse",
-                            }}
-                          >
-                            {veranst.kopf.titelMitPrefix}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <VeranstaltungenListe veranstaltungen={ohnePresse} />
                   </Col>
                 )}
               </Row>
               <Row gutter={[8, 8]}>
-                {bestaetigte.map((veranst) => (
+                {map(bestaetigte, (veranst) => (
                   <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
                     <PressePreview veranstaltung={veranst} />
                   </Col>

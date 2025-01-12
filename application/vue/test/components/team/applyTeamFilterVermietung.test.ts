@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import applyTeamFilter from "../../../src/components/team/TeamFilter/applyTeamFilter";
 import Vermietung from "jc-shared/vermietung/vermietung";
+import filter from "lodash/filter";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import map from "lodash/map";
 
 const neutral = new Vermietung({ kopf: { titel: "Neutral" } });
 const bestaetigt = new Vermietung({ kopf: { titel: "Bestätigt", confirmed: true } });
@@ -19,12 +22,10 @@ const fluegel = new Vermietung({ kopf: { titel: "Fluegel" }, technik: { fluegel:
 const hotelBestatigt = new Vermietung({
   kopf: { titel: "HotelBestatigt" },
   artist: { brauchtHotel: true },
-  unterkunft: { bestaetigt: true },
 });
 const hotelNichtBestatigt = new Vermietung({
   kopf: { titel: "HotelNichtBestatigt" },
   artist: { brauchtHotel: true },
-  unterkunft: { bestaetigt: false },
 });
 
 const alleVermietungen = [
@@ -44,12 +45,15 @@ const alleVermietungen = [
   hotelNichtBestatigt,
 ];
 
-function checkResult(filter) {
-  return alleVermietungen.filter(filter).map((kon) => kon.kopf.titel);
+function checkResult(filt: (ver: Veranstaltung) => boolean) {
+  return map(filter(alleVermietungen, filt), "kopf.titel");
 }
 
-function checkInverseResult(filter) {
-  return alleVermietungen.filter((k) => !filter(k)).map((kon) => kon.kopf.titel);
+function checkInverseResult(filt: (ver: Veranstaltung) => boolean) {
+  return map(
+    filter(alleVermietungen, (k) => !filt(k)),
+    "kopf.titel",
+  );
 }
 
 describe("applyTeamFilter", () => {

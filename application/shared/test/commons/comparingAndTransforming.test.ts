@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { logDiffForDirty, withoutNullOrUndefinedStrippedBy } from "../../commons/comparingAndTransforming";
+import { logDiffForDirty, withoutNullOrUndefinedStrippedBy } from "../../commons/comparingAndTransforming.js";
 
 describe("comparingAndTransforming", () => {
   describe("withoutNullOrUndefinedStrippedBy", () => {

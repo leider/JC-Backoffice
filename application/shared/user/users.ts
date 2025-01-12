@@ -1,7 +1,9 @@
 import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS } from "./user.js";
 import misc from "../commons/misc.js";
-import flatten from "lodash/flatten.js";
 import uniq from "lodash/uniq.js";
+import map from "lodash/map.js";
+import filter from "lodash/filter.js";
+import flatMap from "lodash/flatMap.js";
 
 export class Mailingliste {
   name: string;
@@ -9,7 +11,7 @@ export class Mailingliste {
 
   constructor(name: string, usersInListe: User[]) {
     this.name = name;
-    this.users = usersInListe.map((u) => u.id);
+    this.users = map(usersInListe, "id");
   }
 }
 
@@ -22,29 +24,24 @@ class Users {
 
   filterReceivers(groupsFromBody?: string[], userFromBody?: string[], listenFromBody?: string[]): User[] {
     let result: User[] = [];
-    if (groupsFromBody && groupsFromBody.length > 0) {
+    if (groupsFromBody && groupsFromBody.length) {
       if (misc.toArray(groupsFromBody).includes("alle")) {
         return this.users;
       }
       result = result.concat(
         uniq(
-          flatten(
-            misc
-              .toArray(groupsFromBody)
-              .concat(SUPERUSERS)
-              .map((group) => this.users.filter((user) => user.gruppen.includes(group))),
-          ),
+          flatMap(misc.toArray(groupsFromBody).concat(SUPERUSERS), (group) => filter(this.users, (user) => user.gruppen.includes(group))),
         ),
       );
     }
-    if (listenFromBody && listenFromBody.length > 0) {
-      result = result.concat(uniq(flatten(misc.toArray(listenFromBody).map((liste) => this.getUsersInListe(liste)))));
+    if (listenFromBody && listenFromBody.length) {
+      result = result.concat(uniq(flatMap(misc.toArray(listenFromBody), (liste) => this.getUsersInListe(liste))));
     }
     return uniq(result.concat(this.users.filter((user) => (userFromBody || []).includes(user.id))));
   }
 
   extractListen() {
-    return uniq(flatten(this.users.map((u) => u.mailinglisten)));
+    return uniq(flatMap(this.users, (u) => u.mailinglisten));
   }
 
   getUsersInListe(listenname: string) {
@@ -53,7 +50,7 @@ class Users {
 
   getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
     return this.users.filter((u) => {
-      const bools = gruppennamen?.map((name) => {
+      const bools = map(gruppennamen, (name) => {
         return u.gruppen.includes(name);
       });
       return bools?.reduce((curr, next) => curr || next, false);
@@ -66,13 +63,13 @@ class Users {
 
   getUsersKannOneOf(kannMultiple: KannSection[]) {
     return this.users.filter((u) => {
-      const bools = kannMultiple?.map((kann) => u.kann(kann));
+      const bools = map(kannMultiple, (kann) => u.kann(kann));
       return bools?.reduce((curr, next) => curr || next, false);
     });
   }
 
   get mailinglisten(): Mailingliste[] {
-    return this.extractListen().map((name) => new Mailingliste(name, this.getUsersInListe(name)));
+    return map(this.extractListen(), (name) => new Mailingliste(name, this.getUsersInListe(name)));
   }
 }
 export default Users;

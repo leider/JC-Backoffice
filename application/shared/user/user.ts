@@ -109,4 +109,8 @@ export default class User {
     }
     return this.accessrightsTransient;
   }
+
+  get asUserAsOption() {
+    return { label: this.name, value: this.id, kann: this.kannSections };
+  }
 }

@@ -2,7 +2,6 @@ import optionenstore from "../optionen/optionenstore.js";
 
 import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
-import flatten from "lodash/flatten.js";
 import fs from "fs";
 
 import Konzert from "jc-shared/konzert/konzert.js";
@@ -12,6 +11,8 @@ import User from "jc-shared/user/user.js";
 import store from "./konzertestore.js";
 import groupBy from "lodash/groupBy.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
+import map from "lodash/map.js";
+import flatMap from "lodash/flatMap.js";
 
 function getKonzert(url: string) {
   return store.getKonzert(url);
@@ -20,9 +21,9 @@ function getKonzert(url: string) {
 function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User) {
   const optionen = optionenstore.get();
   const typByName = groupBy(optionen?.typenPlus || [], "name");
-  const enrichedKonzerte = konzerte.map((v) => {
-    v.kopf.eventTypRich = typByName[v.kopf.eventTyp]?.[0];
-    return v;
+  const enrichedKonzerte = map(konzerte, (konz) => {
+    konz.kopf.eventTypRich = typByName[konz.kopf.eventTyp]?.[0];
+    return konz;
   });
   if (user.accessrights.isBookingTeam) {
     return enrichedKonzerte;
@@ -32,12 +33,14 @@ function filterUnbestaetigteFuerJedermann(konzerte: Konzert[], user: User) {
 
 function zipKonzerte(konzerte: Konzert[], name: string, res: Response, next: NextFunction) {
   try {
-    const images = flatten(konzerte.map((konzert) => konzert.presse.image))
-      // eslint-disable-next-line no-sync
-      .filter((filename) => fs.existsSync(conf.uploadDir + "/" + filename))
-      .map((filename) => {
+    const images = map(
+      flatMap(konzerte, (konzert) => konzert.presse.image)
+        // eslint-disable-next-line no-sync
+        .filter((filename) => fs.existsSync(conf.uploadDir + "/" + filename)),
+      (filename) => {
         return { path: conf.uploadDir + "/" + filename, name: filename };
-      });
+      },
+    );
     const filename = `Jazzclub Bilder ${name}.zip`;
 
     res.type("zip");

@@ -11,6 +11,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
+import map from "lodash/map.js";
 
 const logger = loggers.get("application");
 
@@ -27,7 +28,7 @@ async function sendMail(kaputte: Veranstaltung[]) {
   const markdownToSend = `## Folgende Veranstaltungen oder Vermietungen haben noch keinen Pressetext und werden im Laufe der nächsten Woche der Presse angekündigt:
 
 ---
-${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
+${map(kaputte, (veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
   const message = new MailMessage({
     subject: "Veranstaltungen ohne Pressetext",
   });
@@ -39,7 +40,7 @@ ${kaputte.map((veranst) => presseTemplateInternal(veranst)).join("\n\n---\n")}`;
 }
 
 async function processRules(rules: MailRule[], start: DatumUhrzeit, end: DatumUhrzeit) {
-  const maxDay = rules.map((rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
+  const maxDay = map(rules, (rule) => rule.startAndEndDay(end).end).reduce((day1, day2) => (day1.istNach(day2) ? day1 : day2), end);
 
   function filterFunc(ver: Veranstaltung) {
     return !ver.presse.checked && ver.kopf.confirmed && ver.brauchtPresse;

@@ -1,4 +1,4 @@
-import isString from "lodash/fp/isString.js";
+import isString from "lodash/isString.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 
 function floatAmount(textWithNumberOrNull?: string | null): number {

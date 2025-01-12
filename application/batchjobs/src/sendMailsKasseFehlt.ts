@@ -12,6 +12,7 @@ import usersService from "jc-backend/lib/users/usersService.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
+import map from "lodash/map.js";
 
 const logger = loggers.get("application");
 
@@ -31,13 +32,12 @@ async function sendMail(konzerte: Konzert[]) {
   const markdownToSend = `## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:
 
 ---
-${konzerte
-  .map(
-    (konzert) =>
-      `<a href="${toFullQualifiedUrl("veranstaltung", encodeURIComponent(konzert.url || ""))}">` +
-      `${konzert.kopf.titelMitPrefix} am ${konzert.datumForDisplayShort} ${konzert.kopf.presseInEcht}</a>`,
-  )
-  .join("\n\n---\n")}
+${map(
+  konzerte,
+  (konzert) =>
+    `<a href="${toFullQualifiedUrl("veranstaltung", encodeURIComponent(konzert.url || ""))}">` +
+    `${konzert.kopf.titelMitPrefix} am ${konzert.datumForDisplayShort} ${konzert.kopf.presseInEcht}</a>`,
+).join("\n\n---\n")}
 
 --- 
 <a href="${toFullQualifiedUrl("team", "")}">Zur Teamseite</a>`;
@@ -50,7 +50,7 @@ ${konzerte
   const users = userstore.allUsers();
   const validUsers = new Users(users).getUsersKann("Kasse").filter((user) => !!user.email && user.wantsEmailReminders);
   const adminAddresses = usersService.emailsAllerAdmins();
-  const emails = validUsers.map((user) => MailMessage.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
+  const emails = map(validUsers, (user) => MailMessage.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
   logger.info(`Email Adressen für fehlende Kasse: ${formatMailAddresses(emails)}`);
   message.bcc = emails;
   return mailtransport.sendMail(message);

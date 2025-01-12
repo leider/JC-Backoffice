@@ -7,6 +7,8 @@ import { Box } from "./Box.js";
 import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
+import find from "lodash/find";
+import map from "lodash/map";
 
 const style: CSSProperties = {
   width: 800,
@@ -51,11 +53,11 @@ export const TargetContainer: FC<{
       accept: [ItemTypes.SourceElement, ItemTypes.BOX],
       drop: (item: DragItem, monitor: DropTargetMonitor<DragItem, undefined>) => {
         const result = [...targetBoxes]; // copy existing items
-
-        if (result.map((b) => b.id).includes(item.id)) {
+        const id = item.id;
+        if (find(result, { id })) {
           // box has been moved
           const delta = monitor.getDifferenceFromInitialOffset() || { x: 0, y: 0 };
-          const box = result.find((b) => b.id === item.id);
+          const box = find(result, { id });
           if (box) {
             result.splice(result.indexOf(box), 1);
             const newBox = { ...box, left: item.left + delta.x, top: item.top + delta.y };
@@ -78,7 +80,7 @@ export const TargetContainer: FC<{
 
   function boxChanged(id: string) {
     const result = [...targetBoxes]; // copy existing items
-    const box = result.find((b) => b.id === id);
+    const box = find(result, { id });
     if (box) {
       result.splice(result.indexOf(box), 1);
       const newBox = { ...box };
@@ -90,9 +92,9 @@ export const TargetContainer: FC<{
   return (
     <div ref={targetContainer} style={{ width: "100%", overflow: "scroll" }}>
       <div ref={dropTarget} style={style}>
-        {targetBoxes?.map((each) => {
-          return <Box key={each.id} item={each} callback={boxChanged} />;
-        })}
+        {map(targetBoxes, (each) => (
+          <Box key={each.id} item={each} callback={boxChanged} />
+        ))}
       </div>
     </div>
   );

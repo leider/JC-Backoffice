@@ -4,7 +4,7 @@ import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js"
 import sortBy from "lodash/sortBy.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
-import constant from "lodash/fp/constant.js";
+import constant from "lodash/constant.js";
 
 export function byDateRangeInAscendingOrder({
   from,

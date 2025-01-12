@@ -32,7 +32,8 @@ export default tseslint.config(
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
       react,
-      "react-hooks": eslintPluginReactHooks, lodash
+      "react-hooks": eslintPluginReactHooks,
+      lodash,
     },
     rules: {
       ...eslintPluginReactHooks.configs.recommended.rules,
@@ -42,7 +43,28 @@ export default tseslint.config(
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
       "react/display-name": 0,
-      "lodash/prefer-lodash-method": "off"
+      "lodash/prefer-lodash-method": [
+        "error",
+        {
+          ignoreMethods: [
+            "assign",
+            "endsWith",
+            "every",
+            "filter",
+            "forEach",
+            "includes",
+            "isArray",
+            "keys",
+            "reduce",
+            "repeat",
+            "replace",
+            "split",
+            "startsWith",
+            "toLower",
+            "trim",
+          ],
+        },
+      ],
     },
   },
   { ignores: ["**/*.js"], ...eslintPluginPrettierRecommended },

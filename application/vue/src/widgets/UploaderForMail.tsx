@@ -2,6 +2,7 @@ import { Space, UploadFile, UploadProps } from "antd";
 import React from "react";
 import Dragger from "antd/lib/upload/Dragger";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import find from "lodash/find";
 
 interface UploaderParams {
   fileList: UploadFile[];
@@ -17,7 +18,7 @@ export default function UploaderForMail({ fileList, setFileList }: UploaderParam
       setFileList(newFileList);
     },
     beforeUpload: (file) => {
-      if (!fileList.map((f) => f.name).find((each) => each === file.name)) {
+      if (!find(fileList, { name: file.name })) {
         setFileList((prev) => [...prev, file]);
       }
       return false;

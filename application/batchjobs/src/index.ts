@@ -5,6 +5,7 @@ import "jc-backend/initWinston.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import sendMailsNightly from "./sendMailsNightly.js";
 import { informAdmin, JobType } from "./sendMailToAdmin.js";
+import map from "lodash/map.js";
 
 function closeAndExit(err?: Error): void {
   if (err) {
@@ -35,7 +36,7 @@ async function run() {
 
     const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar"];
 
-    const typedResults = results.map((jobResult, index) => ({ type: jobtypes[index], jobResult }));
+    const typedResults = map(results, (jobResult, index) => ({ type: jobtypes[index], jobResult }));
 
     await informAdmin(typedResults);
     closeAndExit();

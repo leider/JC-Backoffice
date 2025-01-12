@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
+import find from "lodash/find";
 
 export function TagForUser({
   value,
@@ -11,7 +12,7 @@ export function TagForUser({
   usersAsOptions: UserWithKann[];
   hideErsthelfer?: boolean;
 }) {
-  const userWithKann = useMemo(() => usersAsOptions.find((item) => item.value === value), [usersAsOptions, value]);
+  const userWithKann = useMemo(() => find(usersAsOptions, { value: value }), [usersAsOptions, value]);
   const label = userWithKann?.label;
 
   const ersthelfer = useMemo(() => {

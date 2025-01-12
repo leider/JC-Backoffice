@@ -7,6 +7,7 @@ import { TagForUser } from "@/widgets/TagForUser.tsx";
 import React from "react";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
+import map from "lodash/map";
 
 export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   const token = theme.useToken().token;
@@ -71,7 +72,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           }
           return (
             <>
-              {val.map((each) => (
+              {map(val, (each) => (
                 <Tag key={each}>
                   <TagForUser value={each} usersAsOptions={usersWithKann ?? []} hideErsthelfer />
                 </Tag>

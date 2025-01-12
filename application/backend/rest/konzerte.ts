@@ -14,6 +14,9 @@ import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import parseFormData from "../lib/commons/parseFormData.js";
+import find from "lodash/find.js";
+import invokeMap from "lodash/invokeMap.js";
+import map from "lodash/map.js";
 
 const uploadDir = conf.uploadDir;
 const filesDir = conf.filesDir;
@@ -22,10 +25,7 @@ const app = express();
 
 function standardHandler(res: Response, user: User, konzerte: Konzert[]) {
   const result = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
-  resToJson(
-    res,
-    result.map((v) => v.toJSON()),
-  );
+  resToJson(res, invokeMap(result, "toJSON"));
 }
 
 function saveAndReply(req: Request, res: Response, konzert: Konzert) {
@@ -137,7 +137,7 @@ app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
   }
   const { item, art }: { item: NameWithNumber; art: GastArt } = req.body;
   const liste: NameWithNumber[] = art === "gast" ? konzert.gaesteliste : konzert.reservierungen;
-  (liste.find((entry) => entry.name === item.name) || { alreadyIn: 0 }).alreadyIn = item.alreadyIn;
+  (find(liste, { name: item.name }) || { alreadyIn: 0 }).alreadyIn = item.alreadyIn;
   return saveAndReply(req, res, konzert);
 });
 
@@ -186,7 +186,7 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
       return res.sendStatus(500);
     }
     try {
-      const calls = files.datei.map((datei: { originalFilename: string; path: string }) => copyToDestination(datei, konzert));
+      const calls = map(files.datei, (datei: { originalFilename: string; path: string }) => copyToDestination(datei, konzert));
       await Promise.all(calls);
       saveAndReply(req, res, konzert);
     } catch (e) {

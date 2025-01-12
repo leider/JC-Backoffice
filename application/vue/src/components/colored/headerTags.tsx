@@ -1,5 +1,6 @@
 import { Tag } from "antd";
 import * as React from "react";
+import map from "lodash/map";
 
 type LabelColor = {
   label: string;
@@ -14,5 +15,5 @@ export default function headerTags(labelsColors: LabelColor[], withStyle = false
       </Tag>
     );
   }
-  return labelsColors.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} />);
+  return map(labelsColors, (tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} />);
 }

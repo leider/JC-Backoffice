@@ -1,5 +1,5 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
-import noop from "lodash/fp/noop";
+import noop from "lodash/noop";
 
 export default function useUpdateApp() {
   useRegisterSW({

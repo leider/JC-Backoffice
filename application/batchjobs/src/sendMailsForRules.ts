@@ -11,6 +11,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
+import map from "lodash/map.js";
 
 const logger = loggers.get("application");
 
@@ -27,11 +28,9 @@ async function sendMail(selected: Veranstaltung[], rule: MailRule, now: DatumUhr
   const markdownToSend = `${markdownForRules}
 
 ---
-${selected
-  .map((veranst) => {
-    return new VeranstaltungFormatter(veranst).presseTextForMail(conf.publicUrlPrefix);
-  })
-  .join("\n\n---\n")}`;
+${map(selected, (veranst) => {
+  return new VeranstaltungFormatter(veranst).presseTextForMail(conf.publicUrlPrefix);
+}).join("\n\n---\n")}`;
 
   const mailmessage = new MailMessage({ subject: rule.subject(now) });
   mailmessage.body = markdownToSend;
@@ -60,7 +59,7 @@ export async function loadRulesAndProcess(now: DatumUhrzeit): Promise<JobResult>
   try {
     const rules = mailstore.all();
     const relevantRules = rules.filter((rule) => rule.shouldSend(now));
-    const infos = await Promise.all(relevantRules.map(processRule));
+    const infos = await Promise.all(map(relevantRules, processRule));
     return { result: infos };
   } catch (error) {
     return { error: error as Error };

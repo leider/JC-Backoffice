@@ -18,6 +18,7 @@ import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.
 import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import { colorDefault, colorVermietung, TypMitMehr } from "jc-shared/optionen/optionValues.js";
+import map from "lodash/map.js";
 
 const app = express();
 
@@ -32,12 +33,12 @@ function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
 
   const konzerte = store.byDateRangeInAscendingOrder(start, end);
   const unbest = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
-  return unbest.map((ver) => asCalendarEvent(ver, user, typByName));
+  return map(unbest, (ver) => asCalendarEvent(ver, user, typByName));
 }
 
 function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(start, end);
-  return vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user).map((ver) => asCalendarEvent(ver, user, {}));
+  return map(vermietungenService.filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, {}));
 }
 
 async function termineForIcal(ical: Ical) {
@@ -51,7 +52,7 @@ function termineAsEventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, options?
   if (options) {
     filteredTermine = termine.filter((termin) => options.termine?.includes(termin.typ));
   }
-  return filteredTermine?.map((termin) => termin.asEvent);
+  return map(filteredTermine, "asEvent");
 }
 
 app.get("/fullcalendarevents.json", async (req, res) => {
@@ -74,7 +75,7 @@ app.get("/fullcalendarevents.json", async (req, res) => {
       return options.icals?.includes(ical.typ);
     }) || [];
 
-  const termineForIcals = await Promise.all(icals.map(termineForIcal));
+  const termineForIcals = await Promise.all(map(icals, termineForIcal));
   const events = termine
     .concat(flatMap(termineForIcals, (x) => x))
     .concat(konzerte)

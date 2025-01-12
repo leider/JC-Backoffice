@@ -6,6 +6,7 @@ import service from "../lib/users/usersService.js";
 import store from "../lib/users/userstore.js";
 import { reply, resToJson } from "../lib/commons/replies.js";
 import { checkCanEditUser, checkSuperuser } from "./checkAccessHandlers.js";
+import invokeMap from "lodash/invokeMap.js";
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.get("/users/current", (req, res) => {
 
 app.get("/users", (req, res) => {
   const users = store.allUsers();
-  resToJson(res, { users: users.map((u) => u.toJSONWithoutPass()) });
+  resToJson(res, { users: invokeMap(users, "toJSONWithoutPass") });
 });
 
 app.post("/user/changePassword", [checkCanEditUser], (req: Request, res: Response) => {

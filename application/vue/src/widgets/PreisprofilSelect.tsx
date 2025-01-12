@@ -2,6 +2,8 @@ import { Form, Select } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import find from "lodash/find";
+import map from "lodash/map";
 
 interface PreisprofilSelectParams {
   optionen: OptionValues;
@@ -49,14 +51,14 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
 
   const alleProfile = useMemo<Preisprofil[]>(() => {
     const result = [...optionen.preisprofile];
-    if (valueAsObject && !optionen.preisprofile.find((each) => each.name === valueAsObject.name)) {
+    if (valueAsObject && find(optionen.preisprofile, { name: valueAsObject.name })) {
       result.push({ ...valueAsObject, veraltet: true });
     }
     return result.sort((a, b) => (a.regulaer > b.regulaer ? 1 : -1));
   }, [optionen, valueAsObject]);
 
   const displayProfile = useMemo(() => {
-    return alleProfile.map(profilToDisplay);
+    return map(alleProfile, profilToDisplay);
   }, [alleProfile]);
 
   const [valueAsString, setValueAsString] = useState<string | undefined>();
@@ -65,7 +67,7 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
   }, [valueAsObject]);
 
   function selectedToPreisprofil(profilName: string) {
-    const selectedProfil = alleProfile.find((profil) => profil.name === profilName);
+    const selectedProfil = find(alleProfile, { name: profilName });
     onValueAsObject?.(selectedProfil);
     onChange?.(selectedProfil);
   }

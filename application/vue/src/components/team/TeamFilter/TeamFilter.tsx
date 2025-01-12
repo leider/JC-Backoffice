@@ -9,7 +9,9 @@ import isEmpty from "lodash/isEmpty";
 import { NamePath } from "rc-field-form/es/interface";
 import { TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
-import isBoolean from "lodash/fp/isBoolean";
+import isBoolean from "lodash/isBoolean";
+import find from "lodash/find";
+import map from "lodash/map";
 
 type LabelColorProperty = {
   label: string;
@@ -30,7 +32,7 @@ export default function TeamFilter() {
 
   const eventTypTag = useCallback(
     (typ: string) => {
-      const result = optionen.typenPlus.find((plus) => plus.name === typ);
+      const result = find(optionen.typenPlus, ["name", typ]);
       if (result) {
         return { label: result.name, color: result.color };
       }
@@ -74,7 +76,7 @@ export default function TeamFilter() {
         );
       }
     }
-    return labelsColors.map((tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} prop={tag.prop} />);
+    return map(labelsColors, (tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} prop={tag.prop} />);
   }
 
   const filter = withoutNullOrUndefinedStrippedBy(filterObj);

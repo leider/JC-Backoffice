@@ -5,6 +5,7 @@ import { Col, Row } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import map from "lodash/map";
 
 export default function WikiSearchresults() {
   const { searchtext } = useParams();
@@ -27,7 +28,7 @@ export default function WikiSearchresults() {
         <h3>Keine Ergebnisse</h3>
       ) : (
         <>
-          {matches.map((match) => (
+          {map(matches, (match) => (
             <Row key={JSON.stringify(match)} gutter={12}>
               <Col span={8}>
                 <Link to={`/wiki/${match.pageName}`}>{match.pageName}</Link>

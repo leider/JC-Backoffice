@@ -1,7 +1,6 @@
 import { MailAddress } from "./mailMessage.js";
+import map from "lodash/map.js";
 
 export default function formatMailAddresses(addresses: MailAddress[]) {
-  return addresses.map(({ name, address }) => {
-    return `"${name}" <${address}>`;
-  });
+  return map(addresses, ({ name, address }) => `"${name}" <${address}>`);
 }

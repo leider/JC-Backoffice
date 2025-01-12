@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from "react";
 import Konzert, { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 import uniq from "lodash/uniq";
-import flatten from "lodash/flatten";
+import flatMap from "lodash/flatMap";
 import intersection from "lodash/intersection";
 import differenceBy from "lodash/differenceBy";
 import { useQueries } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, konzerteForTeam } from "@/commons/loader.ts";
+import find from "lodash/find";
+import map from "lodash/map";
 
 function suitableForImageOverview(veranstaltung: Konzert): ImageOverviewVeranstaltung {
   return {
@@ -25,7 +27,7 @@ export function useCreateImagenamesSections() {
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {
-        return { imagenames: a.data, veranstaltungen: b.data.map(suitableForImageOverview) };
+        return { imagenames: a.data, veranstaltungen: map(b.data, suitableForImageOverview) };
       }
       return { imagenames: [], veranstaltungen: [] };
     },
@@ -33,7 +35,7 @@ export function useCreateImagenamesSections() {
 
   const elementsWithImage = useCallback(
     (imageName: string): ImageOverviewVeranstaltung[] =>
-      veranstaltungen.filter((each) => each.images.find((i) => i.localeCompare(imageName) === 0)),
+      veranstaltungen.filter((each) => find(each.images, (i) => i.localeCompare(imageName) === 0)),
     [veranstaltungen],
   );
 
@@ -42,22 +44,15 @@ export function useCreateImagenamesSections() {
     [elementsWithImage],
   );
 
-  const result = useMemo(() => {
-    function convertString(a: string): string {
-      return a.replace(/\s/g, "_");
-    }
+  return useMemo(() => {
+    const convertString = (a: string): string => a.replace(/\s/g, "_");
 
-    const imagenamesOfVeranstaltungen = uniq(flatten(veranstaltungen.map((each) => each.images))).sort();
+    const imagenamesOfVeranstaltungen = uniq(flatMap(veranstaltungen, "images")).sort() as string[];
 
-    const imagesWithVeranstaltungen = intersection(imagenames, imagenamesOfVeranstaltungen).map(toImageOverviewRow);
-    const imagesWithVeranstaltungenUnused = differenceBy(imagenames, imagenamesOfVeranstaltungen, convertString).map(toImageOverviewRow);
-    const imagesWithVeranstaltungenNotFound = differenceBy(imagenamesOfVeranstaltungen, imagenames, convertString).map(toImageOverviewRow);
     return {
-      with: imagesWithVeranstaltungen,
-      notFound: imagesWithVeranstaltungenNotFound,
-      unused: imagesWithVeranstaltungenUnused,
+      with: map(intersection(imagenames, imagenamesOfVeranstaltungen), toImageOverviewRow),
+      notFound: map(differenceBy(imagenamesOfVeranstaltungen, imagenames, convertString), toImageOverviewRow),
+      unused: map(differenceBy(imagenames, imagenamesOfVeranstaltungen, convertString), toImageOverviewRow),
     };
   }, [imagenames, toImageOverviewRow, veranstaltungen]);
-
-  return { ...result };
 }

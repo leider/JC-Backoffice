@@ -10,7 +10,6 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import { TextField } from "@/widgets/TextField";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import uniq from "lodash/uniq";
 import uniqBy from "lodash/uniqBy";
 import sortBy from "lodash/sortBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -23,7 +22,9 @@ import { RcFile } from "antd/es/upload";
 import { useWatch } from "antd/es/form/Form";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import MailMessage from "jc-shared/mail/mailMessage.ts";
-import isString from "lodash/fp/isString";
+import isString from "lodash/isString";
+import map from "lodash/map";
+import sortedUniq from "lodash/sortedUniq";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (isString(addressOrString)) {
@@ -52,18 +53,18 @@ export default function SendMail() {
 
   const { allUsers } = useJazzContext();
 
-  const usersAsOptions = useMemo(() => allUsers.map((user) => ({ label: user.name, value: user.id, kann: user.kannSections })), [allUsers]);
+  const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
   const mailingLists = useMemo(() => new Users(allUsers).mailinglisten, [allUsers]);
 
-  const mailingListsDescriptions = useMemo(() => sortBy(mailingLists.map((liste) => liste.name)), [mailingLists]);
+  const mailingListsDescriptions = useMemo(() => sortBy(map(mailingLists, "name")), [mailingLists]);
 
-  const rulesDescriptions = useMemo(() => sortBy(uniq(mailRules.map((rule) => rule.name))), [mailRules]);
+  const rulesDescriptions = useMemo(() => sortedUniq(map(mailRules, "name")), [mailRules]);
 
   const kannFilter = useMemo(() => ["Kasse", "Ton", "Licht", "Master", "Ersthelfer"], []);
 
   const veranstaltungenDescriptions = useMemo(
-    () => veranstaltungen.map((v) => new VeranstaltungFormatter(v).description),
+    () => map(veranstaltungen, (v) => new VeranstaltungFormatter(v).description),
     [veranstaltungen],
   );
 
@@ -138,8 +139,8 @@ export default function SendMail() {
   useEffect(() => {
     const userIdsFromLists = selectedLists.flatMap((list) => list.users);
     const usersFromLists = allUsers.filter((user) => userIdsFromLists.includes(user.id));
-    const allUsersFromListsAndUsers = selectedUsers.concat(usersFromLists).map((user) => ({ name: user.name, email: user.email }));
-    const allRuleUsers = selectedRules.map((rule) => ({
+    const allUsersFromListsAndUsers = map(selectedUsers.concat(usersFromLists), (user) => ({ name: user.name, email: user.email }));
+    const allRuleUsers = map(selectedRules, (rule) => ({
       name: rule.name,
       email: rule.email,
     }));
@@ -156,13 +157,13 @@ export default function SendMail() {
       const selectedVeranstaltungen = veranstaltungen.filter((ver) =>
         mail.selectedVeranstaltungen.includes(new VeranstaltungFormatter(ver).description),
       );
-      const addresses = effectiveUsers.map((user) => MailMessage.formatEMailAddress(user.name, user.email));
+      const addresses = map(effectiveUsers, (user) => MailMessage.formatEMailAddress(user.name, user.email));
       const markdownToSend =
         mail.markdown +
         "\n\n---\n" +
-        selectedVeranstaltungen
-          .map((veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin))
-          .join("\n\n---\n");
+        map(selectedVeranstaltungen, (veranst) => new VeranstaltungFormatter(veranst).presseTextForMail(window.location.origin)).join(
+          "\n\n---\n",
+        );
       const result = new MailMessage({ subject: `[Jazzclub manuell] ${mail.subject}` });
       result.body = markdownToSend;
       result.bcc = addresses;
@@ -179,7 +180,7 @@ export default function SendMail() {
         <>
           <p>Deine Mail wurde gesendet an:</p>
           <ul>
-            {response.accepted.map((each) => (
+            {map(response.accepted, (each) => (
               <li key={mailAddressOrStringAsText(each)}>{mailAddressOrStringAsText(each)}</li>
             ))}
           </ul>
@@ -238,7 +239,7 @@ export default function SendMail() {
         <Row gutter={12} style={{ marginBottom: 24 }}>
           <Col span={24}>
             <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
-            {effectiveUsers.map((u) => (
+            {map(effectiveUsers, (u) => (
               <Tag key={u.email} color={"purple"}>
                 <b>{u.name}</b> ({u.email})
               </Tag>

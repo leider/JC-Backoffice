@@ -7,6 +7,8 @@ import { alleKalender } from "@/commons/loader.ts";
 import { useWatch } from "antd/es/form/Form";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import find from "lodash/find";
+import map from "lodash/map";
 
 export default function ProgrammheftKopierenButton() {
   const form = useFormInstance();
@@ -23,15 +25,12 @@ export default function ProgrammheftKopierenButton() {
   }, [data, id]);
 
   const items = useMemo(() => {
-    return options.map((kal) => {
-      const label = DatumUhrzeit.forYYYYslashMM(kal.id).monatJahrKompakt;
-      return { key: kal.id, label };
-    });
+    return map(options, (kal) => ({ key: kal.id, label: DatumUhrzeit.forYYYYslashMM(kal.id).monatJahrKompakt }));
   }, [options]);
 
   const copyFromPrevious = useCallback(
     async (key: string) => {
-      const prevKal = options.find((kalender) => kalender.id === key);
+      const prevKal = find(options, { id: key });
       if (prevKal) {
         const events = prevKal.eventsMovedWithBase(id);
         form.setFieldValue("events", events);

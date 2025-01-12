@@ -62,7 +62,7 @@ describe("Number Input Widget", () => {
 
     it("NOT prohibiting programmatic value changes", async () => {
       await waitFor(() => form().setFieldsValue({ test: 1 }));
-      widget().setValueOnInputLabeled("testme", 3);
+      widget().setValueOnInputLabeled("testme", "3");
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(3);
       });
@@ -77,7 +77,7 @@ describe("Number Input Widget", () => {
     });
 
     it("should keep the value set on it after being disabled", async () => {
-      widget().setValueOnInputLabeled("testme", 3);
+      widget().setValueOnInputLabeled("testme", "3");
 
       await waitFor(() => {
         updateWidget(<NumberInput name={"test"} label={"testme"} decimals={0} disabled />, true);
@@ -89,7 +89,7 @@ describe("Number Input Widget", () => {
     });
 
     it("should not reflect the initial value after the first modification", async () => {
-      widget().setValueOnInputLabeled("testme", 4);
+      widget().setValueOnInputLabeled("testme", "4");
 
       await waitFor(() => {
         updateWidget(<NumberInput name={"test"} label={"testme"} decimals={0} initialValue={3} />, true);
@@ -102,7 +102,7 @@ describe("Number Input Widget", () => {
   });
 
   describe("executes callback on value change", () => {
-    let tunnelVal: number;
+    let tunnelVal: number | null;
     beforeEach(async () => {
       await waitFor(() => {
         updateWidget(<NumberInput name={"test"} label={"testme"} decimals={0} onChange={(val) => (tunnelVal = val)} />);
@@ -115,11 +115,11 @@ describe("Number Input Widget", () => {
     });
 
     it("when changed", async () => {
-      widget().setValueOnInputLabeled("testme", 3);
+      widget().setValueOnInputLabeled("testme", "3");
       await waitFor(() => {
         expect(tunnelVal).toBe(3);
       });
-      widget().setValueOnInputLabeled("testme", 555);
+      widget().setValueOnInputLabeled("testme", "555");
       await waitFor(() => {
         expect(tunnelVal).toBe(555);
       });
@@ -215,7 +215,7 @@ describe("Number Input Widget", () => {
     });
 
     it("rounds down to upper limit on setting value", async () => {
-      widget().setValueOnInputLabeled("testme", 9);
+      widget().setValueOnInputLabeled("testme", "9");
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(6);
       });
@@ -266,7 +266,6 @@ describe("Number Input Widget", () => {
         selector: "input",
       }) as HTMLInputElement;
 
-      // @ts-expect-error false positive
       expect(inputField).toBeInTheDocument();
       fireEvent.change(inputField, { target: { value: "1" } });
       expect(inputField.value).toEqual("1");
@@ -280,7 +279,6 @@ describe("Number Input Widget", () => {
         selector: "input",
       }) as HTMLInputElement;
 
-      // @ts-expect-error false positive
       expect(inputField).toBeInTheDocument();
       fireEvent.change(inputField, { target: { value: "1" } });
       expect(inputField.value).toEqual("1");

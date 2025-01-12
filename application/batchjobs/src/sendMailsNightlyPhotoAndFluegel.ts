@@ -10,6 +10,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
 import { JobResult } from "./sendMailsNightly.js";
+import map from "lodash/map.js";
 
 const logger = loggers.get("application");
 
@@ -19,9 +20,9 @@ async function sendMail(stuffToSend: Veranstaltung[], variables: SendMailVariabl
   const markdownToSend = `${variables.firstLine}
 
 ---
-${stuffToSend
-  .map((veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht)
-  .join("\n\n---\n")}`;
+${map(stuffToSend, (veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.datumForDisplayShort + " " + veranst.kopf.presseInEcht).join(
+  "\n\n---\n",
+)}`;
 
   const message = new MailMessage({
     subject: variables.subject,
