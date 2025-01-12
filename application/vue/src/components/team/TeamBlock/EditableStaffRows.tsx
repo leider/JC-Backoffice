@@ -18,7 +18,7 @@ const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, 
         />
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
           <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
-        </Form.Item>{" "}
+        </Form.Item>
       </Space.Compact>
     </Form.Item>
   );

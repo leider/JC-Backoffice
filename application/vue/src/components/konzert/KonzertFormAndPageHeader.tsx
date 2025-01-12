@@ -75,7 +75,7 @@ export default function KonzertFormAndPageHeader<T>({
   return (
     <JazzFormAndHeaderExtended
       title={title}
-      styledTitle={<span style={titleStyle}>{title}</span>}
+      style={titleStyle}
       saveForm={saveForm}
       data={data}
       dateString={displayDate}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode } from "react";
+import { PropsWithChildren, ReactElement, ReactNode, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
 import { theme } from "antd";
 
@@ -12,6 +12,7 @@ export function JazzPageHeader({
   tags,
   breadcrumb,
   hasErrors,
+  style,
 }: {
   title: string | ReactNode;
   buttons?: ReactNode[];
@@ -20,13 +21,17 @@ export function JazzPageHeader({
   tags?: ReactNode[];
   breadcrumb?: ReactElement;
   hasErrors?: boolean;
+  style?: React.CSSProperties;
 } & PropsWithChildren) {
   const { token } = theme.useToken();
-  const errorTitle = <span style={{ color: token.colorError }}>Du hast noch Fehler!</span>;
+
+  const theHeader = useMemo(() => {
+    return hasErrors ? <span style={{ color: token.colorError }}>Du hast noch Fehler!</span> : <span style={style}>{title}</span>;
+  }, [hasErrors, style, title, token.colorError]);
 
   return (
     <PageHeader
-      title={hasErrors ? errorTitle : title}
+      title={theHeader}
       extra={buttons}
       footer={[
         firstTag && firstTag,
@@ -38,6 +43,7 @@ export function JazzPageHeader({
         tags && tags,
       ]}
       breadcrumb={breadcrumb ? breadcrumb : undefined}
+      style={style}
     >
       {children}
     </PageHeader>

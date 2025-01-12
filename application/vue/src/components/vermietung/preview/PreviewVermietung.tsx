@@ -1,5 +1,5 @@
 import { Col, Row } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -16,21 +16,19 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
 export default function PreviewVermietung() {
   const { url } = useParams();
-  const vermietungQueryData = useQuery({
+  const { data } = useQuery({
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
-  const { currentUser } = useJazzContext();
+  const { currentUser, setMemoizedId } = useJazzContext();
 
-  const [vermietung, setVermietung] = useState<Vermietung>(new Vermietung());
+  const vermietung = useMemo(() => (data ? data : new Vermietung()), [data]);
 
   document.title = vermietung.kopf.titelMitPrefix;
 
   useEffect(() => {
-    if (vermietungQueryData.data) {
-      setVermietung(vermietungQueryData.data);
-    }
-  }, [vermietungQueryData.data]);
+    setMemoizedId(vermietung.id);
+  }, [vermietung.id, setMemoizedId]);
 
   function EditButton() {
     const type: buttonType = "allgemeines";

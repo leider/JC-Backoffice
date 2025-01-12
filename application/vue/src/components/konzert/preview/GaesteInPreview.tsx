@@ -99,7 +99,7 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
       <Row gutter={12}>
         <Col span={10} offset={14}>
           <ButtonGaesteliste />
-        </Col>{" "}
+        </Col>
       </Row>
     </Collapsible>
   );

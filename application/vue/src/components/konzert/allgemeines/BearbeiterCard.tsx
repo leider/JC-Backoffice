@@ -11,20 +11,22 @@ export default function BearbeiterCard() {
 
   const changelist = useWatch("changelist", { form, preserve: true });
   return (
-    <Collapsible suffix="allgemeines" label="Historie">
-      <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
-      {map(changelist, (item: ChangelistItem, idx: number) => (
-        <Row gutter={12} key={idx}>
-          <Col span={24}>
-            <details>
-              <summary>
-                {item.zeitpunkt} {item.bearbeiter}
-              </summary>
-              <pre>{item.diff}</pre>
-            </details>
-          </Col>
-        </Row>
-      ))}
-    </Collapsible>
+    !!changelist?.length && (
+      <Collapsible suffix="allgemeines" label="Historie" uncollapsed>
+        <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
+        {map(changelist, (item: ChangelistItem, idx: number) => (
+          <Row gutter={12} key={idx}>
+            <Col span={24}>
+              <details>
+                <summary>
+                  {item.zeitpunkt} {item.bearbeiter}
+                </summary>
+                <pre>{item.diff}</pre>
+              </details>
+            </Col>
+          </Row>
+        ))}
+      </Collapsible>
+    )
   );
 }

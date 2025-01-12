@@ -28,12 +28,7 @@ export default function Preview() {
   });
   const { currentUser, optionen, setMemoizedId } = useJazzContext();
 
-  const konzert = useMemo(() => {
-    if (data) {
-      return data;
-    }
-    return new Konzert();
-  }, [data]);
+  const konzert = useMemo(() => (data ? data : new Konzert()), [data]);
 
   useEffect(() => {
     setMemoizedId(konzert.id);

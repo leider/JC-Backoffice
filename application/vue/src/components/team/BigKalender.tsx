@@ -57,7 +57,6 @@ export default function BigKalender() {
   const { lg } = useBreakpoint();
   return (
     <>
-      {" "}
       <Form
         form={form}
         onChange={() => {

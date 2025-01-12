@@ -25,7 +25,7 @@ export default function JazzFormAndHeaderExtended<T>({
   firstTag,
   tags,
   form,
-  styledTitle,
+  style,
   resetChanges,
   breadcrumb,
 }: PropsWithChildren<{
@@ -39,7 +39,7 @@ export default function JazzFormAndHeaderExtended<T>({
   firstTag?: ReactNode;
   tags?: ReactNode[];
   form: FormInstance<T>;
-  styledTitle?: React.JSX.Element;
+  style?: React.CSSProperties;
   resetChanges?: () => Promise<unknown>;
   breadcrumb?: ReactElement;
 }>) {
@@ -110,13 +110,14 @@ export default function JazzFormAndHeaderExtended<T>({
       }}
     >
       <JazzPageHeader
-        title={styledTitle ?? title}
+        title={title}
         buttons={buttons}
         hasErrors={hasErrors}
         dateString={dateString}
         firstTag={firstTag}
         tags={tags}
         breadcrumb={breadcrumb}
+        style={style}
       />
       <RowWrapper>{children}</RowWrapper>
       {changedPropsToWatch && <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} />}

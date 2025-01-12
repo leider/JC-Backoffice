@@ -11,21 +11,23 @@ export default function Collapsible({
   label,
   noTopBorder,
   suffix,
+  uncollapsed = false,
 }: {
   suffix: string;
   label: string;
   children: ReactNode;
   noTopBorder?: boolean;
   amount?: number;
+  uncollapsed?: boolean;
 }) {
-  const [expanded, setExpanded] = useState<string>("content");
+  const [expanded, setExpanded] = useState<string>(uncollapsed ? "" : "content");
 
   const { color } = colorsAndIconsForSections;
   const farbe = color(suffix as buttonType);
   return (
     <Collapse
       activeKey={expanded}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+      expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff" />)}
       onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
       style={{
         marginTop: noTopBorder ? "" : "16px",

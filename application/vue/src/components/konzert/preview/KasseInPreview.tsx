@@ -51,7 +51,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
           <Row gutter={12}>
             <Col span={10} offset={14}>
               <ButtonAbendkasse />
-            </Col>{" "}
+            </Col>
           </Row>
         </Col>
       </Row>
