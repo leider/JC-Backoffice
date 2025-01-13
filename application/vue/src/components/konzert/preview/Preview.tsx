@@ -62,11 +62,8 @@ export default function Preview() {
   return (
     <div>
       <JazzPageHeader
-        title={
-          <span style={titleStyle}>
-            {konzert.kopf.titel} {konzert.kopf.presseInEcht}
-          </span>
-        }
+        title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
+        style={titleStyle}
         dateString={konzert.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />

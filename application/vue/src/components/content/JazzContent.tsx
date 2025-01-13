@@ -3,15 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Col, Layout, Row, theme } from "antd";
 import { Link, useLocation } from "react-router";
 import { menuKeys } from "@/components/content/MenuNodes.tsx";
-import { JazzContext, useCreateJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzContext, useCreateJazzContext, useJazzContext } from "@/components/content/useJazzContext.ts";
 import InnerContent from "@/components/content/InnerContent.tsx";
 import { useProvideAuth } from "@/commons/auth.tsx";
 import { AuthContext } from "@/commons/authConsts";
 import { JazzHeader } from "@/components/content/JazzHeader.tsx";
 import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpFields.tsx";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
-import { useQuery } from "@tanstack/react-query";
-import { konzerteForToday } from "@/commons/loader.ts";
 import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
 import map from "lodash/map";
@@ -21,13 +18,8 @@ import keys from "lodash/keys";
 const { Content } = Layout;
 
 function TodaysConcert() {
-  const today = new DatumUhrzeit();
-  const { data } = useQuery({
-    queryKey: ["konzert", `${today.mitUhrzeitNumerisch}`],
-    queryFn: () => konzerteForToday(),
-  });
-
-  const bestaetigte = useMemo(() => filter(data, "kopf.confirmed"), [data]);
+  const { todayKonzerte } = useJazzContext();
+  const bestaetigte = useMemo(() => filter(todayKonzerte, "kopf.confirmed"), [todayKonzerte]);
 
   if (bestaetigte?.length ?? 0 > 0)
     return (

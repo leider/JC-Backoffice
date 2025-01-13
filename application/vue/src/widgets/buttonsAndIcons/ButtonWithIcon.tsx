@@ -45,7 +45,15 @@ const ButtonWithIcon = forwardRef(function (
   const { sm } = useBreakpoint();
 
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: color ?? token.colorPrimary, colorText: color ?? token.colorText } }}>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: color ?? token.colorPrimary,
+          colorText: color ?? token.colorText,
+          colorTextDisabled: color ?? token.colorTextDisabled,
+        },
+      }}
+    >
       <Tooltip title={tooltipTitle} color={color} placement={tooltipPlacement || "top"}>
         <Button
           ref={ref}

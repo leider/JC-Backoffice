@@ -4,6 +4,11 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const brandNew = [
     {
+      title: "Dark Mode and more",
+      description: "Januar '25",
+      content: "Für junge Kollegen... Außerdem kleine Detailverbesserungen.",
+    },
+    {
       title: "Erheblich verbesserte UI für Programmheft.",
       description: "November '24",
       content: "Die Tabelle wird jetzt viel besser dargestellt. Du kannst ein Programmheft aus einem anderen Monat kopieren.",
@@ -24,6 +29,8 @@ export default function HelpNeues() {
       description: "November '24",
       content: "Jede(r) Mitarbeiter(in) soll sich eintragen, ob sie als Ersthelfer in Frage kommt.",
     },
+  ];
+  const items = [
     {
       title: "Attachments beim Mailsenden",
       description: "Oktober '24",
@@ -40,8 +47,6 @@ export default function HelpNeues() {
       description: "September '24",
       content: 'In der Veranstaltung kann man die Felder bei "Artist" pflegen und in der Preview werden sie angezeigt.',
     },
-  ];
-  const items = [
     {
       title: "Gästeliste aus Preview editierbar",
       description: "Juli '24",

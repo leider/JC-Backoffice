@@ -53,7 +53,8 @@ export default function KonzertTabs() {
 
       return (
         <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
-          <IconForSmallBlock iconName={icon(type)} /> {title}
+          <IconForSmallBlock style={{ marginBottom: -3 }} iconName={icon(type)} />
+          &nbsp; {title}
         </b>
       );
     },

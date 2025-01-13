@@ -10,7 +10,6 @@ import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import { useForm, useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
-import { Tag } from "antd";
 import dynamicHeaderTags from "@/components/colored/dynamicHeaderTags.tsx";
 
 export default function KonzertFormAndPageHeader<T>({
@@ -85,11 +84,6 @@ export default function KonzertFormAndPageHeader<T>({
         isKassenseite && <HelpWithKasseButton key="helpKasse" callback={() => setKasseHelpOpen(true)} />,
         <TeamCalendar key="cal" />,
       ]}
-      firstTag={
-        <Tag key="verm" color="purple">
-          Vermietung
-        </Tag>
-      }
       tags={tagsForTitle}
       changedPropsToWatch={[["kasse", "kassenfreigabe"], "agenturauswahl"]}
       form={form}

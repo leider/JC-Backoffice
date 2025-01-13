@@ -1,4 +1,4 @@
-import { Space, UploadFile, UploadProps } from "antd";
+import { Space, theme, UploadFile, UploadProps } from "antd";
 import React from "react";
 import Dragger from "antd/lib/upload/Dragger";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -10,6 +10,8 @@ interface UploaderParams {
 }
 
 export default function UploaderForMail({ fileList, setFileList }: UploaderParams) {
+  const { token } = theme.useToken();
+
   const uploadprops: UploadProps = {
     onRemove: (file) => {
       const index = fileList.indexOf(file);
@@ -30,11 +32,15 @@ export default function UploaderForMail({ fileList, setFileList }: UploaderParam
   return (
     <Space>
       <Dragger {...uploadprops}>
-        <p className="ant-upload-drag-icon">
+        <p className="ant-upload-drag-icon" style={{ color: token.colorText }}>
           <IconForSmallBlock iconName="Upload" />
         </p>
-        <p className="ant-upload-text">Hier klicken oder ziehen für einen Anhang</p>
-        <p className="ant-upload-hint">Eine oder mehrere Dateien möglich.</p>
+        <p className="ant-upload-text" style={{ color: token.colorText }}>
+          Hier klicken oder ziehen für einen Anhang
+        </p>
+        <p className="ant-upload-hint" style={{ color: token.colorText }}>
+          Eine oder mehrere Dateien möglich.
+        </p>
       </Dragger>
     </Space>
   );

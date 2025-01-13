@@ -42,9 +42,13 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
 
+  const isDarkMode = useMemo(() => {
+    return token.colorBgBase === "#101010";
+  }, [token.colorBgBase]);
+
   return (
     <>
-      <Row gutter={0} style={{ backgroundColor: "#d3d3d3" }}>
+      <Row gutter={0}>
         <Col span={24}>
           <Collapse
             size={"small"}
@@ -92,7 +96,10 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
           />
         </Col>
       </Row>
-      <Row gutter={[4, 4]} style={{ marginBottom: "18px", backgroundColor: "#d3d3d3", marginLeft: 0, marginRight: 0 }}>
+      <Row
+        gutter={[4, 4]}
+        style={{ marginBottom: "18px", backgroundColor: isDarkMode ? "#333" : "#d3d3d3", marginLeft: 0, marginRight: 0 }}
+      >
         {map(keys(byDay), (day, idx) => (
           <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {

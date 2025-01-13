@@ -103,7 +103,8 @@ export default function JazzFormAndHeaderExtended<T>({
       }
       layout="vertical"
       onKeyDown={(event) => {
-        if (event.key === "Enter") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (event.key === "Enter" && (event.target as any).role !== "textbox") {
           event.preventDefault();
           return false;
         }

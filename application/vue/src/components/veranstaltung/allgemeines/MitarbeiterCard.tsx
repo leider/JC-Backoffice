@@ -5,18 +5,10 @@ import { useWatch } from "antd/es/form/Form";
 import groupBy from "lodash/groupBy";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { StaffType } from "jc-shared/veranstaltung/staff.ts";
-import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
 import forEach from "lodash/forEach";
 import { TypMitMehr } from "jc-shared/optionen/optionValues.ts";
-
-export interface MitarbeiterRowProps {
-  sectionName: StaffType;
-  label?: string;
-  usersAsOptions: UserWithKann[];
-}
 
 export default function MitarbeiterCard({ forVermietung = false }: { forVermietung?: boolean }) {
   const { lg } = useBreakpoint();

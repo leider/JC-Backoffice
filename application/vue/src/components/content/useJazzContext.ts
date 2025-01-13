@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
-import { allUsers, currentUser, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
+import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
 import { LoginState } from "@/commons/authConsts.ts";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
 import { RouterContext } from "@/router/RouterContext.ts";
@@ -10,6 +10,7 @@ import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -17,6 +18,7 @@ const emptyContext: SharedGlobals = {
   allUsers: [],
   optionen: new OptionValues(),
   orte: new Orte(),
+  todayKonzerte: [],
   showSuccess: noop,
   showError: noop,
   filter: {},
@@ -32,6 +34,7 @@ type SharedGlobals = {
   allUsers: User[];
   optionen: OptionValues;
   orte: Orte;
+  todayKonzerte: Konzert[];
   showSuccess: ({ text, title, duration }: { duration?: number; text?: React.ReactNode; title?: string }) => void;
   showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
   filter: TeamFilterObject;
@@ -64,15 +67,17 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       { enabled: isAuthenticated, queryKey: ["currentUser"], queryFn: () => currentUser(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["optionen"], queryFn: () => optionenLoader(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["orte"], queryFn: () => orteLoader(), refetchInterval },
+      { enabled: isAuthenticated, queryKey: ["konzert", "today"], queryFn: () => konzerteForToday() },
     ],
-    combine: ([usersQuery, wikidirsQuery, currentQuery, optionenQuery, orteQuery]) => {
-      if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data) {
+    combine: ([usersQuery, wikidirsQuery, currentQuery, optionenQuery, orteQuery, todayQuery]) => {
+      if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data && todayQuery?.data) {
         return {
           allUsers: usersQuery.data,
           wikisubdirs: wikidirsQuery.data.dirs,
           currentUser: currentQuery.data,
           optionen: optionenQuery.data,
           orte: orteQuery.data,
+          todayKonzerte: todayQuery.data,
         };
       }
       return emptyContext;
