@@ -50,7 +50,9 @@ class Users {
   }
 
   getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
-    return filter(this.users, (user) => !!intersection(gruppennamen, user.gruppen).length);
+    return filter(this.users, (user) => {
+      return !!intersection(gruppennamen, misc.toArray(user.gruppen)).length;
+    });
   }
 
   getUsersKann(kann: KannSection) {
