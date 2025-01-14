@@ -4,7 +4,6 @@ import uniq from "lodash/uniq.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 import flatMap from "lodash/flatMap.js";
-import intersection from "lodash/intersection.js";
 
 export class Mailingliste {
   name: string;
@@ -49,9 +48,9 @@ class Users {
     return filter(this.users, (u) => u.mailinglisten.includes(listenname));
   }
 
-  getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE)[]) {
+  getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE | "")[]) {
     return filter(this.users, (user) => {
-      return !!intersection(gruppennamen, misc.toArray(user.gruppen)).length;
+      return gruppennamen.includes(user.gruppen);
     });
   }
 

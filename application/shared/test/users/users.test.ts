@@ -9,14 +9,14 @@ const user1 = new User({
   name: "Name of User1",
   email: "user1@jazzclub.de",
   kannLicht: true,
-  gruppen: [ORGA],
+  gruppen: ORGA,
 });
 const user2 = new User({
   id: "user2",
   name: "Name of User2",
   email: "user2@jazzclub.de",
   kannKasse: true,
-  gruppen: [ORGA, ABENDKASSE],
+  gruppen: ORGA,
 });
 const user3 = new User({
   id: "user3",
@@ -24,20 +24,20 @@ const user3 = new User({
   email: "user3@jazzclub.de",
   kannErsthelfer: true,
   kannTon: true,
-  gruppen: [BOOKING],
+  gruppen: BOOKING,
 });
 const user4 = new User({
   id: "user4",
   name: "Name of User4",
   email: "user4@jazzclub.de",
-  gruppen: [BOOKING, ORGA],
+  gruppen: ABENDKASSE,
 });
 const user5 = new User({
   id: "user5",
   name: "Name of User5",
   email: "user5@jazzclub.de",
   kannErsthelfer: true,
-  gruppen: [BOOKING, ORGA, SUPERUSERS],
+  gruppen: ORGA,
   mailinglisten: ["liste1"],
 });
 const superuser = new User({
@@ -46,13 +46,13 @@ const superuser = new User({
   email: "superuser@jazzclub.de",
   kannMaster: true,
   kannErsthelfer: true,
-  gruppen: [SUPERUSERS],
+  gruppen: SUPERUSERS,
 });
 const user7 = new User({
   id: "user7",
   name: "Name of User7",
   email: "user7@jazzclub.de",
-  gruppen: [],
+  gruppen: "",
 });
 
 const userCollection = [user1, user2, user3, user4, user5, superuser, user7];
@@ -61,27 +61,27 @@ describe("Users", () => {
   describe("getUsersInGruppenExact", () => {
     it('gives users being "superuser"', () => {
       const superusers = new Users(userCollection).getUsersInGruppenExact(["superusers"]);
-      expect(map(superusers, "id")).to.eql(["user5", "superuser"]);
+      expect(map(superusers, "id")).to.eql(["superuser"]);
     });
 
     it('gives users being "abendkasse"', () => {
       const abendkasse = new Users(userCollection).getUsersInGruppenExact(["abendkasse"]);
-      expect(map(abendkasse, "id")).to.eql(["user2"]);
+      expect(map(abendkasse, "id")).to.eql(["user4"]);
     });
 
     it('gives users being "orgaTeam"', () => {
       const orgaTeam = new Users(userCollection).getUsersInGruppenExact(["orgaTeam"]);
-      expect(map(orgaTeam, "id")).to.eql(["user1", "user2", "user4", "user5"]);
+      expect(map(orgaTeam, "id")).to.eql(["user1", "user2", "user5"]);
     });
 
     it('gives users being "bookingTeam"', () => {
       const bookingTeam = new Users(userCollection).getUsersInGruppenExact(["bookingTeam"]);
-      expect(map(bookingTeam, "id")).to.eql(["user3", "user4", "user5"]);
+      expect(map(bookingTeam, "id")).to.eql(["user3"]);
     });
 
     it('gives users being "bookingTeam" and "orgaTeam"', () => {
       const bookingTeam = new Users(userCollection).getUsersInGruppenExact(["bookingTeam", "orgaTeam"]);
-      expect(map(bookingTeam, "id")).to.eql(["user1", "user2", "user3", "user4", "user5"]);
+      expect(map(bookingTeam, "id")).to.eql(["user1", "user2", "user3", "user5"]);
     });
   });
 
@@ -131,7 +131,6 @@ describe("Users", () => {
       const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
       expect(result).to.contain(user1);
       expect(result).to.contain(user2);
-      expect(result).to.contain(user4);
       expect(result).to.contain(user5);
       expect(result).to.contain(superuser);
     });
@@ -141,8 +140,6 @@ describe("Users", () => {
       const userFromBody: string[] = [];
       const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
       expect(result).to.contain(user3);
-      expect(result).to.contain(user4);
-      expect(result).to.contain(user5);
       expect(result).to.contain(superuser);
     });
 
@@ -150,11 +147,10 @@ describe("Users", () => {
       const groupsFromBody = [BOOKING, ORGA];
       const userFromBody: string[] = [];
       const result = new Users(userCollection).filterReceivers(groupsFromBody, userFromBody, []);
-      expect(result).to.have.length(6);
+      expect(result).to.have.length(5);
       expect(result).to.contain(user1);
       expect(result).to.contain(user2);
       expect(result).to.contain(user3);
-      expect(result).to.contain(user4);
       expect(result).to.contain(user5);
       expect(result).to.contain(superuser);
     });

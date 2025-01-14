@@ -7,7 +7,7 @@ const user1 = new User({
   id: "user1",
   name: "Name of User1",
   email: "user1@jazzclub.de",
-  gruppen: [ORGA],
+  gruppen: ORGA,
   kannKasse: true,
   wantsEmailReminders: true,
 });
@@ -15,26 +15,26 @@ const user2 = new User({
   id: "user2",
   name: "Name of User2",
   email: "user2@jazzclub.de",
-  gruppen: [ABENDKASSE],
+  gruppen: ABENDKASSE,
 });
 const user3 = new User({
   id: "user3",
   name: "Name of User3",
   email: "user3@jazzclub.de",
-  gruppen: [BOOKING],
+  gruppen: BOOKING,
   kannKasse: true,
 });
 const user4 = new User({
   id: "user4",
   name: "Name of User4",
   email: "user4@jazzclub.de",
-  gruppen: [BOOKING, ORGA],
+  gruppen: BOOKING,
 });
 const user5 = new User({
   id: "user5",
   name: "Name of User5",
   email: "user5@jazzclub.de",
-  gruppen: [BOOKING, ORGA, SUPERUSERS],
+  gruppen: SUPERUSERS,
   mailinglisten: ["liste1"],
 });
 

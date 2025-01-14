@@ -19,7 +19,7 @@ export default class User {
   salt?: string;
   tshirt!: string;
 
-  gruppen: string[] = [];
+  gruppen: typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE | "" = "";
   rechte: string[] = [];
   kassenfreigabe = false;
   mailinglisten: string[] = [];
@@ -38,6 +38,7 @@ export default class User {
     this.id = object.id!;
     Object.assign(this, object, {
       kassenfreigabe: object.kassenfreigabe || object.rechte?.includes("kassenfreigabe"),
+      gruppen: Array.isArray(object.gruppen) ? object.gruppen[0] : object.gruppen,
     });
   }
 

@@ -16,7 +16,7 @@ export default class Accessrights {
   }
 
   get gruppen(): string[] {
-    return this.member?.gruppen || [];
+    return [this.member?.gruppen ?? ""];
   }
 
   get rechte(): string[] {
