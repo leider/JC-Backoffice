@@ -1,4 +1,6 @@
-export const customColors: { [index: string]: string | number } = {
+import { AliasToken, MapToken, SeedToken } from "antd/es/theme/interface";
+
+export const customColors: Partial<SeedToken & MapToken & AliasToken> = {
   colorPrimary: "#337ab7",
   colorLink: "#337ab7",
   colorTextDisabled: "#333333",

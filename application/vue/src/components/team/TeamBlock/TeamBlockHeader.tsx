@@ -13,7 +13,7 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
     return veranstaltung.isVermietung;
   }, [veranstaltung]);
 
-  const color = veranstaltung.ghost ? "#AAA" : isVermietung ? "" : "#FFF";
+  const color = veranstaltung.ghost ? "#AAA" : isVermietung ? "#3d3d3d" : "#FFF";
 
   const titleStyle = { margin: 0, color: color, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" };
 

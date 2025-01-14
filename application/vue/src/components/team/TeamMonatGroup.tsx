@@ -98,7 +98,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
       </Row>
       <Row
         gutter={[4, 4]}
-        style={{ marginBottom: "18px", backgroundColor: isDarkMode ? "#333" : "#d3d3d3", marginLeft: 0, marginRight: 0 }}
+        style={{ marginBottom: "18px", backgroundColor: isDarkMode ? "#3d3d3d" : "#d3d3d3", marginLeft: 0, marginRight: 0 }}
       >
         {map(keys(byDay), (day, idx) => (
           <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>

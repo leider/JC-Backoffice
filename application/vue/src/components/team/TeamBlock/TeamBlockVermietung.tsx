@@ -48,7 +48,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
   }, [highlight, initiallyOpen]);
 
   return (
-    <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
+    <ConfigProvider theme={{ token: { colorText: "#3d3d3d", fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col span={24} id={vermietung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {vermietung.ghost ? (
           <div style={{ backgroundColor: vermietung.color, padding: "2px 16px" }}>
