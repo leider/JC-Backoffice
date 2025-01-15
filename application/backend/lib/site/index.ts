@@ -103,7 +103,7 @@ app.post("/login", (req, res) => {
       const all = userstore.allUsers();
       if (all.length === 0) {
         appLogger.info("No Users found, initializing Database.");
-        const firstUser = new User({ id: name, password: pass, gruppen: [SUPERUSERS] });
+        const firstUser = new User({ id: name, password: pass, gruppen: SUPERUSERS });
         usersService.saveNewUserWithPassword(firstUser, firstUser);
         return createToken(req, res, name);
       }
