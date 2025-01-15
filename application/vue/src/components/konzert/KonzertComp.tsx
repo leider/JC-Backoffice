@@ -72,7 +72,7 @@ export default function KonzertComp() {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const untypedKonzert = konz as any;
+    const untypedKonzert = vals as any;
     optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl);
     delete untypedKonzert.agenturauswahl;
     if (konz.artist.brauchtHotel) {
