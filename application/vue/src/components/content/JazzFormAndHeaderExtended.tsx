@@ -104,7 +104,7 @@ export default function JazzFormAndHeaderExtended<T>({
       layout="vertical"
       onKeyDown={(event) => {
         const target = event.target as HTMLInputElement;
-        if (event.key === "Enter" && target?.role !== "textbox" && event?.type !== "textarea") {
+        if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
           event.preventDefault();
           return false;
         }
