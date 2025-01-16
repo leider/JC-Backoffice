@@ -42,7 +42,7 @@ export default function EventCard() {
           />
         </Col>
         <Col span={8}>
-          <CheckItem label="Kann Homepage" name={["kopf", "kannAufHomePage"]} />
+          <CheckItem label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
           <CheckItem label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
         </Col>
       </Row>

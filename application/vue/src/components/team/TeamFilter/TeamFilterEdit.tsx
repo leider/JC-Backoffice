@@ -57,7 +57,7 @@ export function TeamFilterEdit({
             <ThreewayCheckbox name={["presse", "checked"]} label="Presse OK" />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "kannAufHomePage"]} label="Kann Homepage" />
+            <ThreewayCheckbox name={["kopf", "kannAufHomePage"]} label="Ist auf Homepage" />
           </Col>
           <Col span={8}>
             <ThreewayCheckbox name={["kopf", "kannInSocialMedia"]} label="Kann Social Media" />

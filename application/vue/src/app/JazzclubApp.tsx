@@ -23,20 +23,30 @@ function JazzclubApp() {
   useUpdateApp();
   const [darkMode, setDarkMode] = useState(darkModePreference.matches);
   darkModePreference.addEventListener("change", (e) => setDarkMode(e.matches));
-
+  const success = "#28a745";
   numeral.localeData("de").delimiters.thousands = ".";
   numeral.locale("de");
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
-          token: { ...customColors, colorBgBase: darkMode ? "#101010" : "#fafafa" },
+          token: {
+            colorPrimary: "#337ab7",
+            colorLink: "#337ab7",
+            colorTextDisabled: darkMode ? undefined : "#333333",
+            borderRadius: 0,
+            fontSize: 12,
+            fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
+            colorError: "#c71c2c",
+            colorSuccess: success,
+            colorLinkActive: "#2c4862",
+            colorLinkHover: "#2c4862",
+            linkHoverDecoration: "underline",
+            colorBgBase: darkMode ? "#101010" : "#fafafa",
+          },
           algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
           components: {
-            Checkbox: {
-              colorPrimary: customColors.colorSuccess as string,
-              colorPrimaryHover: customColors.colorSuccess as string,
-            },
+            Checkbox: { colorPrimary: success, colorPrimaryHover: success },
             Tag: { algorithm: theme.defaultAlgorithm },
           },
         }}

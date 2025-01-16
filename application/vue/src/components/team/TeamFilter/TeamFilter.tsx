@@ -100,7 +100,7 @@ export default function TeamFilter() {
     pushIfSet(teamFilter.kopf?.confirmed, "Ist bestätigt", ["kopf", "confirmed"]);
     pushIfSet(teamFilter.kopf?.abgesagt, "Ist abgesagt", ["kopf", "abgesagt"]);
     pushIfSet(teamFilter.presse?.checked, "Presse OK", ["presse", "checked"]);
-    pushIfSet(teamFilter.kopf?.kannAufHomePage, "Kann Homepage", ["kopf", "kannAufHomePage"]);
+    pushIfSet(teamFilter.kopf?.kannAufHomePage, "Ist auf Homepage", ["kopf", "kannAufHomePage"]);
     pushIfSet(teamFilter.kopf?.kannInSocialMedia, "Kann Social Media", ["kopf", "kannInSocialMedia"]);
     pushIfSet(teamFilter.presse?.text, "Text vorhanden", ["presse", "text"]);
     pushIfSet(teamFilter.presse?.originalText, "Originaltext vorhanden", ["presse", "originalText"]);

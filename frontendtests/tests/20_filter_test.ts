@@ -136,9 +136,9 @@ Data(menuToClick).Scenario(
 );
 
 Data(menuToClick).Scenario(
-  "Öffentlichkeit 'Kann Homepage'",
+  "Öffentlichkeit 'Ist auf Homepage'",
   async ({ I, current }) => {
-    setAndCheck(I, "Kann Homepage", "KannAufHomepage", current.menu);
+    setAndCheck(I, "Ist auf Homepage", "KannAufHomepage", current.menu);
   },
 );
 

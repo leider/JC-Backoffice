@@ -100,7 +100,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   const updateValue = useCallback(
     (newValue: number | null, originalStringFromWidget?: string | null) => {
       const oldValue = numeral(number ?? null).value();
-      number !== newValue && onNumber!(newValue);
+      number !== newValue && onNumber?.(newValue);
       if (!isEqual(oldValue, newValue)) {
         onChange?.(newValue);
       }

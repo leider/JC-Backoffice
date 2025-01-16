@@ -104,12 +104,12 @@ describe("applyTeamFilter", () => {
     expect(checkInverseResult(filter)).to.eql(["PresseOK", "KeinePresse"]);
   });
 
-  it("should return for Kann Homepage", () => {
+  it("should return for Ist auf Homepage", () => {
     const filter = applyTeamFilter({ kopf: { kannAufHomePage: true } });
     expect(checkResult(filter)).to.eql(["KannAufHomepage"]);
   });
 
-  it("should return for not Kann Homepage", () => {
+  it("should return for not Ist auf Homepage", () => {
     const filter = applyTeamFilter({ kopf: { kannAufHomePage: false } });
     expect(checkInverseResult(filter)).to.eql(["KannAufHomepage"]);
   });

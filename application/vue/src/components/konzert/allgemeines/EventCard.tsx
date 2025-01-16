@@ -58,7 +58,7 @@ export default function EventCard() {
         <Checker label="Braucht Hotel" name={["artist", "brauchtHotel"]} />
         <Checker label="Flügel stimmen" name={["technik", "fluegel"]} />
         <Checker label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
-        <Checker label="Kann Homepage" name={["kopf", "kannAufHomePage"]} />
+        <Checker label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
         <Checker label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
       </Row>
       <Row gutter={12}>
