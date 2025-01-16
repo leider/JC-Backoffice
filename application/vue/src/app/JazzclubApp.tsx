@@ -7,7 +7,6 @@ import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
 import React, { useState } from "react";
-import { customColors } from "@/app/customColors.ts";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
