@@ -50,7 +50,7 @@ class Users {
 
   getUsersInGruppenExact(gruppennamen: (typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE | "")[]) {
     return filter(this.users, (user) => {
-      return gruppennamen.includes(user.gruppen);
+      return gruppennamen?.includes(user.gruppen);
     });
   }
 
