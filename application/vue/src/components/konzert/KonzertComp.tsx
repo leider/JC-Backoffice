@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Form } from "antd";
 import { useNavigate, useParams } from "react-router";
 import { useQueries } from "@tanstack/react-query";
 import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
@@ -12,12 +11,10 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { KonzertContext } from "./KonzertContext";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
 import KonzertFormAndPageHeader from "@/components/konzert/KonzertFormAndPageHeader.tsx";
-import { useWatch } from "antd/es/form/Form";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 
 export default function KonzertComp() {
   const { url } = useParams();
-  const [form] = Form.useForm<Konzert & { riderBoxes?: BoxParams[] }>();
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
 
   const { konzert, refetch } = useQueries({
@@ -45,8 +42,6 @@ export default function KonzertComp() {
   const mutateOptionen = useJazzMutation<OptionValues>({ saveFunction: saveOptionen, queryKey: "optionen" });
   const mutateRider = useJazzMutation<Rider>({ saveFunction: saveRider, queryKey: "rider" });
 
-  const id = useWatch("id", { form, preserve: true });
-
   const { currentUser, optionen, setMemoizedId } = useJazzContext();
   const navigate = useNavigate();
 
@@ -63,6 +58,7 @@ export default function KonzertComp() {
 
   function saveForm(vals: Konzert & { riderBoxes?: BoxParams[] }) {
     const konz = new Konzert(vals);
+    const id = konz?.id;
     if (!konz.id) {
       konz.initializeIdAndUrl();
     }
