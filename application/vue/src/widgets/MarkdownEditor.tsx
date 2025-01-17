@@ -1,5 +1,5 @@
-import { Form } from "antd";
-import React, { ReactNode, useEffect } from "react";
+import { ConfigProvider, Form, theme } from "antd";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import "@mdxeditor/editor/style.css";
 import {
   BlockTypeSelect,
@@ -27,6 +27,9 @@ export function MarkdownEditor({ label, name }: { label?: string | ReactNode; na
   );
 }
 function InnerEditor({ value, onChange }: { value?: string; onChange?: (value: string) => void }) {
+  const { token } = theme.useToken();
+  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
+
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
 
   useEffect(() => {
@@ -36,31 +39,33 @@ function InnerEditor({ value, onChange }: { value?: string; onChange?: (value: s
   }, [value]);
 
   return (
-    <MDXEditor
-      ref={mdxEditorRef}
-      markdown={""}
-      onChange={onChange}
-      plugins={[
-        toolbarPlugin({
-          toolbarClassName: "my-classname",
-          toolbarContents: () => (
-            <DiffSourceToggleWrapper>
-              <UndoRedo />
-              <BlockTypeSelect />
-              <BoldItalicUnderlineToggles />
-              <ListsToggle />
-              <InsertThematicBreak />
-            </DiffSourceToggleWrapper>
-          ),
-        }),
-        listsPlugin(),
-        quotePlugin(),
-        linkPlugin(),
-        diffSourcePlugin({ viewMode: "rich-text" }),
-        headingsPlugin(),
-        listsPlugin(),
-        thematicBreakPlugin(),
-      ]}
-    />
+    <ConfigProvider theme={{ token: { colorText: "white" } }}>
+      <MDXEditor
+        className={isDarkMode ? "dark-theme" : undefined}
+        ref={mdxEditorRef}
+        markdown={""}
+        onChange={onChange}
+        plugins={[
+          toolbarPlugin({
+            toolbarContents: () => (
+              <DiffSourceToggleWrapper>
+                <UndoRedo />
+                <BlockTypeSelect />
+                <BoldItalicUnderlineToggles />
+                <ListsToggle />
+                <InsertThematicBreak />
+              </DiffSourceToggleWrapper>
+            ),
+          }),
+          listsPlugin(),
+          quotePlugin(),
+          linkPlugin(),
+          diffSourcePlugin({ viewMode: "rich-text" }),
+          headingsPlugin({ allowedHeadingLevels: [1, 2, 3] }),
+          listsPlugin(),
+          thematicBreakPlugin(),
+        ]}
+      />
+    </ConfigProvider>
   );
 }

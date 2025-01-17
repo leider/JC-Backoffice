@@ -42,9 +42,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
 
-  const isDarkMode = useMemo(() => {
-    return token.colorBgBase === "#101010";
-  }, [token.colorBgBase]);
+  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
 
   return (
     <>
