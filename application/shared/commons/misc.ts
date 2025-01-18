@@ -54,7 +54,7 @@ function pushImage(images: string | Array<string>, image: string): string[] {
   } else {
     result = images;
   }
-  if (result.includes(image)) {
+  if (!result.includes(image)) {
     result.push(image);
     return result;
   }

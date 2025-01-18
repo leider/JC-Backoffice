@@ -7,10 +7,11 @@ import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import forEach from "lodash/forEach";
+import { KonzertFileUploadType } from "jc-shared/konzert/konzert.ts";
 
 interface UploaderParams {
   name: string[];
-  typ: string;
+  typ: KonzertFileUploadType;
   onlyImages?: boolean;
 }
 

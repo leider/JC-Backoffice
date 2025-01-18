@@ -1,6 +1,4 @@
 import express, { Request, Response } from "express";
-import fs from "fs";
-import path from "path";
 
 import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -12,14 +10,9 @@ import konzerteService from "../lib/konzerte/konzerteService.js";
 import store from "../lib/konzerte/konzertestore.js";
 import { kassenzettelToBuchhaltung } from "../lib/pdf/pdfGeneration.js";
 import { checkAbendkasse, checkOrgateam } from "./checkAccessHandlers.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
 import parseFormData from "../lib/commons/parseFormData.js";
 import find from "lodash/find.js";
 import invokeMap from "lodash/invokeMap.js";
-import map from "lodash/map.js";
-
-const uploadDir = conf.uploadDir;
-const filesDir = conf.filesDir;
 
 const app = express();
 
@@ -142,58 +135,20 @@ app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
 });
 
 app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
-  async function copyFile(src: string, dest: string) {
-    return new Promise((resolve, reject) => {
-      const readStream = fs.createReadStream(src);
-      readStream.once("error", reject);
-      readStream.once("end", resolve);
-      readStream.pipe(fs.createWriteStream(dest));
-    });
-  }
-
-  async function copyToDestination(datei: { originalFilename: string; path: string }, konzert?: Konzert) {
-    const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
-    const pfad = datei.path;
-    await copyFile(pfad, path.join(istPressefoto ? uploadDir : filesDir, dateiname));
-    let result = true;
-    if (!konzert) {
-      throw new Error();
-    }
-    if (istPressefoto) {
-      result = konzert.presse.updateImage(dateiname);
-    }
-    if (typElement === "vertrag") {
-      result = konzert.vertrag.updateDatei(dateiname);
-    }
-    if (typElement === "rider") {
-      result = konzert.technik.updateDateirider(dateiname);
-    }
-    if (!result) {
-      throw new Error("Datei schon vorhanden. Bitte Seite neu laden.");
-    }
-    return;
-  }
-
   const [fields, files] = await parseFormData(req);
 
-  const typElement = fields.typ[0];
-  const idElement = fields.id[0];
-  const istPressefoto = typElement === "pressefoto";
-
-  if (files.datei) {
-    const konzert = store.getKonzertForId(idElement);
-    if (!konzert) {
-      return res.sendStatus(500);
-    }
-    try {
-      const calls = map(files.datei, (datei: { originalFilename: string; path: string }) => copyToDestination(datei, konzert));
-      await Promise.all(calls);
-      saveAndReply(req, res, konzert);
-    } catch (e) {
-      return res.status(500).send((e as Error).message);
-    }
-  } else {
-    res.status(500).send("keine Datei");
+  if (!files.datei) {
+    return res.status(500).send("keine Datei");
+  }
+  const konzert = store.getKonzertForId(fields.id[0]);
+  if (!konzert) {
+    return res.sendStatus(500);
+  }
+  try {
+    await konzerteService.addAndSaveImages({ konzert, dateien: files.datei, typ: fields.typ[0] });
+    saveAndReply(req, res, konzert);
+  } catch (e) {
+    return res.status(500).send((e as Error).message);
   }
 });
 
