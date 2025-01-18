@@ -17,12 +17,19 @@ export const translations = {
     deleteImage: "Löschen",
     editImage: "Bearbeiten",
   },
+  createLink: {
+    url: "URL",
+    urlPlaceholder: "URL wählen oder einfügen",
+    title: "Titel",
+    saveTooltip: "URL setzen",
+    cancelTooltip: "Abbruch",
+  },
   linkPreview: {
     open: "URL {{url}} in neuem Fenster öffnen",
     edit: "URL bearbeiten",
     copyToClipboard: "In die Zwischenablage",
     copied: "Kopiert!",
-    remove: "Linke löschen",
+    remove: "Link löschen",
   },
   table: {
     deleteTable: "Tabelle löschen",

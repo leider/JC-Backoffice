@@ -5,6 +5,7 @@ import "./markdwon-editor.css";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
+  CreateLink,
   diffSourcePlugin,
   DiffSourceToggleWrapper,
   headingsPlugin,
@@ -12,6 +13,7 @@ import {
   InsertImage,
   InsertTable,
   InsertThematicBreak,
+  linkDialogPlugin,
   linkPlugin,
   listsPlugin,
   ListsToggle,
@@ -92,6 +94,7 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
                 <BlockTypeSelect />
                 <BoldItalicUnderlineToggles options={["Bold", "Italic"]} />
                 <ListsToggle options={["bullet", "number"]} />
+                <CreateLink />
                 <InsertTable />
                 <InsertThematicBreak />
                 {canImages ? <InsertImage /> : undefined}
@@ -106,6 +109,7 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
           listsPlugin(),
           thematicBreakPlugin(),
           tablePlugin(),
+          linkDialogPlugin(),
           imagePlugin({ imageUploadHandler }),
           markdownShortcutPlugin(),
         ]}
