@@ -109,7 +109,9 @@ export default function WikiPage() {
       />
       <RowWrapper>
         <Row gutter={12}>
-          <Col span={24}>{isEdit ? <MarkdownEditor name="content" /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}</Col>
+          <Col span={24}>
+            {isEdit ? <MarkdownEditor name="content" canImages /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
+          </Col>
         </Row>
       </RowWrapper>
     </Form>

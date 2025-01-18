@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 
-import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.js";
+import Konzert, { GastArt, KonzertFileUploadType, NameWithNumber } from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Kasse from "jc-shared/konzert/kasse.js";
 import User from "jc-shared/user/user.js";
@@ -135,17 +135,17 @@ app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
 });
 
 app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
-  const [fields, files] = await parseFormData(req);
+  const { fields, files } = await parseFormData(req);
 
-  if (!files.datei) {
-    return res.status(500).send("keine Datei");
+  if (!files.datei || !fields.typ || !fields.id) {
+    return res.status(500).send("keine Datei, Typ oder ID");
   }
-  const konzert = store.getKonzertForId(fields.id[0]);
+  const konzert = store.getKonzertForId((fields.id ?? [])[0]);
   if (!konzert) {
     return res.sendStatus(500);
   }
   try {
-    await konzerteService.addAndSaveImages({ konzert, dateien: files.datei, typ: fields.typ[0] });
+    await konzerteService.addAndSaveImages({ konzert, dateien: files.datei, typ: fields.typ[0] as KonzertFileUploadType });
     saveAndReply(req, res, konzert);
   } catch (e) {
     return res.status(500).send((e as Error).message);
