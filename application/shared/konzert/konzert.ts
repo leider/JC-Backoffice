@@ -9,6 +9,9 @@ import Veranstaltung, { MinimalVeranstaltung } from "../veranstaltung/veranstalt
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import filter from "lodash/filter.js";
 
+export type UploadedFile = { originalFilename: string; path: string };
+export type KonzertFileUploadType = "pressefoto" | "vertrag" | "rider";
+
 export interface ImageOverviewVeranstaltung {
   id: string;
   startDate: string;

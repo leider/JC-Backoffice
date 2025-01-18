@@ -3,8 +3,9 @@ import optionenstore from "../optionen/optionenstore.js";
 import AdmZip from "adm-zip";
 import { NextFunction, Response } from "express";
 import fs from "fs";
+import path from "path";
 
-import Konzert from "jc-shared/konzert/konzert.js";
+import Konzert, { KonzertFileUploadType, UploadedFile } from "jc-shared/konzert/konzert.js";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import User from "jc-shared/user/user.js";
 
@@ -15,6 +16,9 @@ import map from "lodash/map.js";
 import flatMap from "lodash/flatMap.js";
 import forEach from "lodash/forEach.js";
 import filter from "lodash/filter.js";
+
+const uploadDir = conf.uploadDir;
+const filesDir = conf.filesDir;
 
 function getKonzert(url: string) {
   return store.getKonzert(url);
@@ -72,7 +76,46 @@ function imgzipForKonzert(res: Response, next: NextFunction, url: string) {
   zipKonzerte(konzerte, name, res, next);
 }
 
+async function addAndSaveImages({ konzert, dateien, typ }: { konzert: Konzert; dateien: UploadedFile[]; typ: KonzertFileUploadType }) {
+  async function copyFile(src: string, dest: string) {
+    return new Promise((resolve, reject) => {
+      const readStream = fs.createReadStream(src);
+      readStream.once("error", reject);
+      readStream.once("end", resolve);
+      readStream.pipe(fs.createWriteStream(dest));
+    });
+  }
+
+  async function copyToDestination(datei: UploadedFile) {
+    const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
+    const destDir = typ === "pressefoto" ? uploadDir : filesDir;
+    await copyFile(datei.path, path.join(destDir, dateiname));
+    let result = true;
+    if (!konzert) {
+      throw new Error();
+    }
+    switch (typ) {
+      case "pressefoto":
+        result = konzert.presse.updateImage(dateiname);
+        break;
+      case "vertrag":
+        result = konzert.vertrag.updateDatei(dateiname);
+        break;
+      case "rider":
+        result = konzert.technik.updateDateirider(dateiname);
+        break;
+    }
+    if (!result) {
+      throw new Error("Datei schon vorhanden. Bitte Seite neu laden.");
+    }
+    return;
+  }
+
+  return Promise.all(map(dateien, copyToDestination));
+}
+
 export default {
+  addAndSaveImages,
   getKonzert: getKonzert,
   filterUnbestaetigteFuerJedermann,
   imgzip,

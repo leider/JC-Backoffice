@@ -86,7 +86,7 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
               },
             ]}
           />
-          <Uploader name={["presse", "image"]} typ={"pressefoto"} />
+          <Uploader name={["presse", "image"]} typ={"pressefoto"} onlyImages />
           <SingleSelect
             name={["tempimage"]}
             label={"Vorhandene Bilder übernehmen"}
