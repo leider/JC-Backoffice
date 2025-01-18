@@ -67,13 +67,11 @@ function imgzip(res: Response, next: NextFunction, yymm: string) {
 }
 
 function imgzipForKonzert(res: Response, next: NextFunction, url: string) {
-  const name = url;
   const konzert = getKonzert(url);
   if (!konzert) {
     return;
   }
-  const konzerte: Konzert[] = [konzert];
-  zipKonzerte(konzerte, name, res, next);
+  zipKonzerte([konzert], url, res, next);
 }
 
 async function addAndSaveImages({ konzert, dateien, typ }: { konzert: Konzert; dateien: UploadedFile[]; typ: KonzertFileUploadType }) {

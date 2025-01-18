@@ -15,7 +15,7 @@ import sortBy from "lodash/sortBy";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useNavigate } from "react-router";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import UploaderForMail from "@/widgets/UploaderForMail.tsx";
 import { RcFile } from "antd/es/upload";

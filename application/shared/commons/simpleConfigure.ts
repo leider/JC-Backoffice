@@ -73,6 +73,9 @@ export class SimpleConfigure {
   get filesDir() {
     return path.join(this.additionalstatic, "files");
   }
+  get wikiUploadDir() {
+    return path.join(this.additionalstatic, "wiki");
+  }
 
   // E-Mail
   get transportOptions() {

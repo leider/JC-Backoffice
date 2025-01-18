@@ -1,6 +1,7 @@
 config/
 node_modules/
-/exposedfiles/files
+exposedfiles/
+!/exposedfiles/**/.gitkeep
 /application/backend/static/stylesheets
 /application/backend/static/upload
 /application/backend/static/vue/
@@ -22,7 +23,6 @@ jazzclubmongo*
 /mongocollections
 mongoimport_jc.sh
 /application/backend/static/rider/
-exposedfiles/*
 /pdfs/*
 /*.tgz
 /application/test-globals.js

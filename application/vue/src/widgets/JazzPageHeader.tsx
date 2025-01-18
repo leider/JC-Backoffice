@@ -43,7 +43,7 @@ export function JazzPageHeader({
         tags && tags,
       ]}
       breadcrumb={breadcrumb ? breadcrumb : undefined}
-      style={style}
+      style={{ ...style, paddingInline: 4 }}
     >
       {children}
     </PageHeader>

@@ -3,6 +3,12 @@ import Fs from "fs/promises";
 import Git from "./gitmech.js";
 import filter from "lodash/filter.js";
 import map from "lodash/map.js";
+import { UploadedFile } from "jc-shared/konzert/konzert.js";
+import fs from "fs";
+import path from "path";
+import conf from "jc-shared/commons/simpleConfigure.js";
+
+const wikiUploadDir = conf.wikiUploadDir;
 
 export default {
   BLOG_ENTRY_FILE_PATTERN: "blog_*",
@@ -58,5 +64,24 @@ export default {
         };
       },
     );
+  },
+
+  saveWikiImage: async function saveWikiImage({ datei }: { datei: UploadedFile }) {
+    async function copyFile(src: string, dest: string) {
+      return new Promise((resolve, reject) => {
+        const readStream = fs.createReadStream(src);
+        readStream.once("error", reject);
+        readStream.once("end", resolve);
+        readStream.pipe(fs.createWriteStream(dest));
+      });
+    }
+
+    async function copyToDestination(datei: UploadedFile) {
+      const dateiname = datei.originalFilename.replace(/[()/]/g, "_");
+      await copyFile(datei.path, path.join(wikiUploadDir, dateiname));
+      return dateiname;
+    }
+
+    return copyToDestination(datei);
   },
 };

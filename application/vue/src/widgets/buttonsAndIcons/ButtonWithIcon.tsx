@@ -5,6 +5,7 @@ import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
+import tinycolor from "tinycolor2";
 
 const ButtonWithIcon = forwardRef(function (
   {
@@ -50,7 +51,7 @@ const ButtonWithIcon = forwardRef(function (
         token: {
           colorPrimary: color ?? token.colorPrimary,
           colorText: color ?? token.colorText,
-          colorTextDisabled: color ?? token.colorTextDisabled,
+          colorTextDisabled: color ? tinycolor(color).brighten(20).desaturate(30).toHexString() : token.colorTextDisabled,
         },
       }}
     >

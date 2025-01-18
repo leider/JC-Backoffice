@@ -4,7 +4,6 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "antd";
 import Users, { Mailingliste } from "jc-shared/user/users";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
@@ -33,18 +32,16 @@ function MailingListsInternal({ users }: { users: User[] }) {
   ];
 
   return (
-    <RowWrapper>
-      <Row gutter={12}>
-        <Col span={24}>
-          <EditableTable<{ name?: string; users: string[] }>
-            columnDescriptions={columnDescriptions}
-            name="allLists"
-            newRowFactory={(val) => Object.assign({ users: [] }, val)}
-            usersWithKann={usersAsOptions}
-          />
-        </Col>
-      </Row>
-    </RowWrapper>
+    <Row gutter={12}>
+      <Col span={24}>
+        <EditableTable<{ name?: string; users: string[] }>
+          columnDescriptions={columnDescriptions}
+          name="allLists"
+          newRowFactory={(val) => Object.assign({ users: [] }, val)}
+          usersWithKann={usersAsOptions}
+        />
+      </Col>
+    </Row>
   );
 }
 

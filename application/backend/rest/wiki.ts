@@ -6,6 +6,7 @@ import misc from "jc-shared/commons/misc.js";
 import wikiService from "../lib/wiki/wikiService.js";
 import { resToJson } from "../lib/commons/replies.js";
 import Git from "../lib/wiki/gitmech.js";
+import parseFormData from "../lib/commons/parseFormData.js";
 
 const app = express();
 
@@ -45,6 +46,21 @@ app.post("/wikipage/:subdir/:page", async (req, res) => {
   const subdir = req.params.subdir;
   const content = await wikiService.pageSave(subdir, pageName, req.body.content, (req.user as User).asGitAuthor);
   resToJson(res, { content });
+});
+
+app.post("/wiki/upload", async (req, res) => {
+  const { files } = await parseFormData(req);
+  if (!files.datei || !files.datei.length) {
+    return res.status(500).send("keine Datei");
+  }
+  const datei = files.datei[0];
+  try {
+    const savedName = await wikiService.saveWikiImage({ datei });
+    const url = encodeURI(`/wiki/${savedName}`);
+    resToJson(res, { url });
+  } catch (e) {
+    return res.status(500).send((e as Error).message);
+  }
 });
 
 export default app;

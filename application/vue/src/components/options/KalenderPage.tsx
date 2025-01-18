@@ -4,7 +4,6 @@ import * as React from "react";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { Col, Row } from "antd";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
@@ -24,13 +23,11 @@ function KalenderPageInternal() {
   ];
 
   return (
-    <RowWrapper>
-      <Row gutter={12}>
-        <Col span={24}>
-          <EditableTable<Ical> columnDescriptions={columnDescriptions} name="icals" newRowFactory={(vals) => Object.assign({}, vals)} />
-        </Col>
-      </Row>
-    </RowWrapper>
+    <Row gutter={12}>
+      <Col span={24}>
+        <EditableTable<Ical> columnDescriptions={columnDescriptions} name="icals" newRowFactory={(vals) => Object.assign({}, vals)} />
+      </Col>
+    </Row>
   );
 }
 

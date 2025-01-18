@@ -86,6 +86,16 @@ export async function uploadFile(data: FormData) {
   });
 }
 
+export async function uploadWikiImage(data: FormData) {
+  const res = await standardFetch({
+    method: "POST",
+    url: "/rest/wiki/upload",
+    data,
+    contentType: "json",
+  });
+  return res as { url: string };
+}
+
 function handleVeranstaltungen(result?: any[]): Konzert[] {
   return map(result, (each: any) => new Konzert(each)) || [];
 }

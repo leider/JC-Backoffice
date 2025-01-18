@@ -9,14 +9,17 @@ import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function WikiPage() {
   useDirtyBlocker(false);
+  const { currentUser } = useJazzContext();
+  const isSuperUser = currentUser.accessrights.isSuperuser;
 
   const { subdir, page } = useParams();
   const realPage = page || "index";
@@ -101,7 +104,13 @@ export default function WikiPage() {
         breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
         buttons={[
           <Search key="Search" placeholder="Wiki durchsuchen..." onSearch={onSearch} style={{ width: 200 }} />,
-          <Button key="edit" icon={<IconForSmallBlock iconName="FileEarmarkText" />} type="primary" onClick={editOrUndo}>
+          <Button
+            key="edit"
+            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
+            type="primary"
+            onClick={editOrUndo}
+            disabled={!isSuperUser}
+          >
             {isEdit ? "Undo" : "Bearbeiten"}
           </Button>,
           <SaveButton key="save" disabled={!dirty} />,
@@ -109,7 +118,9 @@ export default function WikiPage() {
       />
       <RowWrapper>
         <Row gutter={12}>
-          <Col span={24}>{isEdit ? <MarkdownEditor name="content" /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}</Col>
+          <Col span={24}>
+            {isEdit ? <MarkdownEditor name="content" canImages /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
+          </Col>
         </Row>
       </RowWrapper>
     </Form>

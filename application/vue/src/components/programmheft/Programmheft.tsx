@@ -8,7 +8,6 @@ import DatumUhrzeit, { AdditionOptions } from "jc-shared/commons/DatumUhrzeit";
 import Kalender from "jc-shared/programmheft/kalender";
 import { Event } from "jc-shared/programmheft/Event.ts";
 import HeftCalendar from "@/components/programmheft/HeftCalendar";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { ProgrammheftVeranstaltungenRow } from "@/components/programmheft/ProgrammheftVeranstaltungenRow.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -62,7 +61,7 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
 
   const { lg } = useBreakpoint();
   return (
-    <RowWrapper>
+    <>
       <Splitter
         onResize={() => {
           setTriggerRender(!triggerRender);
@@ -90,7 +89,7 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
         </Splitter.Panel>
       </Splitter>
       <ProgrammheftVeranstaltungenRow start={start} />
-    </RowWrapper>
+    </>
   );
 }
 
