@@ -34,7 +34,6 @@ function JazzclubApp() {
           token: {
             colorPrimary: "#337ab7",
             colorLink: "#337ab7",
-            colorTextDisabled: darkMode ? undefined : "#333333",
             borderRadius: 0,
             fontSize: 12,
             fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
@@ -47,7 +46,7 @@ function JazzclubApp() {
           },
           algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
           components: {
-            Checkbox: { colorPrimary: success, colorPrimaryHover: success },
+            Checkbox: { colorPrimary: success, colorPrimaryHover: success, colorPrimaryBorder: success },
             Tag: { algorithm: theme.defaultAlgorithm },
             Collapse: { contentPadding: !xl ? 4 : 12 },
           },
