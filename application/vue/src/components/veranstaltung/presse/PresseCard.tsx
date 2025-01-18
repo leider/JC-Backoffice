@@ -11,7 +11,7 @@ import { imagenames } from "@/commons/loader.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";

@@ -1,7 +1,7 @@
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 
 export default function ZusaetzlicheInfosCard() {
   return (

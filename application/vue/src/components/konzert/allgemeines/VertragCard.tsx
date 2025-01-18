@@ -8,7 +8,7 @@ import { openVertrag } from "@/commons/loader.ts";
 import Uploader from "@/widgets/Uploader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { MarkdownEditor } from "@/widgets/MarkdownEditor.tsx";
+import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
 
