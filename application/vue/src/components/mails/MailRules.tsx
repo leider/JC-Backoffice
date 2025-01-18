@@ -4,7 +4,6 @@ import * as React from "react";
 import { useMemo } from "react";
 import { Col, Row } from "antd";
 import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
@@ -31,17 +30,15 @@ function MailRulesInternal() {
   ];
 
   return (
-    <RowWrapper>
-      <Row gutter={12}>
-        <Col span={24}>
-          <EditableTable<MailRuleUI>
-            columnDescriptions={columnDescriptions}
-            name="allRules"
-            newRowFactory={(vals) => ({ ...vals, id: undefined })}
-          />
-        </Col>
-      </Row>
-    </RowWrapper>
+    <Row gutter={12}>
+      <Col span={24}>
+        <EditableTable<MailRuleUI>
+          columnDescriptions={columnDescriptions}
+          name="allRules"
+          newRowFactory={(vals) => ({ ...vals, id: undefined })}
+        />
+      </Col>
+    </Row>
   );
 }
 

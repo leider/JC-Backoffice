@@ -3,7 +3,6 @@ import { orte as orteLoader, saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
 import { Col, Row } from "antd";
 import Orte from "jc-shared/optionen/orte";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
@@ -18,17 +17,15 @@ function OrtePageInternal() {
   ];
 
   return (
-    <RowWrapper>
-      <Row gutter={12}>
-        <Col span={24}>
-          <EditableTable<{ name: string; flaeche: number; pressename: string; presseIn: string }>
-            columnDescriptions={columnDescriptions}
-            name="orte"
-            newRowFactory={(val) => Object.assign({ flaeche: 0 }, val)}
-          />
-        </Col>
-      </Row>
-    </RowWrapper>
+    <Row gutter={12}>
+      <Col span={24}>
+        <EditableTable<{ name: string; flaeche: number; pressename: string; presseIn: string }>
+          columnDescriptions={columnDescriptions}
+          name="orte"
+          newRowFactory={(val) => Object.assign({ flaeche: 0 }, val)}
+        />
+      </Col>
+    </Row>
   );
 }
 

@@ -7,6 +7,7 @@ import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
 import React, { useState } from "react";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -20,6 +21,7 @@ const queryClient = new QueryClient({
 
 function JazzclubApp() {
   useUpdateApp();
+  const { xl } = useBreakpoint();
   const [darkMode, setDarkMode] = useState(darkModePreference.matches);
   darkModePreference.addEventListener("change", (e) => setDarkMode(e.matches));
   const success = "#28a745";
@@ -47,6 +49,7 @@ function JazzclubApp() {
           components: {
             Checkbox: { colorPrimary: success, colorPrimaryHover: success },
             Tag: { algorithm: theme.defaultAlgorithm },
+            Collapse: { contentPadding: !xl ? 4 : 12 },
           },
         }}
         locale={locale_de}

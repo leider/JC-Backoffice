@@ -7,6 +7,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useLocation } from "react-router";
 import HelpTeam from "@/components/content/help/HelpTeam.tsx";
 import HelpKonzert from "@/components/content/help/HelpKonzert.tsx";
+import HelpWiki from "@/components/content/help/HelpWiki.tsx";
 
 export default function HelpContent() {
   const { pathname } = useLocation();
@@ -15,7 +16,7 @@ export default function HelpContent() {
   const [infoOpen, setInfoOpen] = useState(false);
 
   const hasHelp = useMemo(() => {
-    return pathname === "/veranstaltungen" || pathname === "/team" || pathname.startsWith("/konzert");
+    return pathname === "/veranstaltungen" || pathname === "/team" || pathname.startsWith("/konzert") || pathname.startsWith("/wiki");
   }, [pathname]);
 
   return (
@@ -26,6 +27,7 @@ export default function HelpContent() {
         <HelpVeranstaltungen />
         <HelpTeam />
         <HelpKonzert />
+        <HelpWiki />
       </Modal>
       <Modal width={600} title="Neuigkeiten" open={infoOpen} onCancel={() => setInfoOpen(false)} footer={null}>
         <p>Dieser Dialog wird nach und nach mit Inhalten gefüllt...</p>

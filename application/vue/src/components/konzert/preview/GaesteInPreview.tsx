@@ -76,7 +76,7 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
       <ButtonWithIconAndLink
         alwaysText
         block
-        text="Gästeliste Bearbeiten..."
+        text="Liste Bearbeiten..."
         tooltipTitle="Gästeliste"
         color={color("gaeste")}
         icon={icon("gaeste")}

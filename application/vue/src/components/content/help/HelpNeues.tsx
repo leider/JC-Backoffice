@@ -4,6 +4,11 @@ import HelpSection from "@/components/content/help/HelpSection.tsx";
 export default function HelpNeues() {
   const brandNew = [
     {
+      title: "Neuer Wysiwyg Editor",
+      description: "Januar '25",
+      content: "Im Wiki kann er auch Bilder, der alte war Mist. Zusätzlich kleine Verbesserungen speziell für mobile Geräte.",
+    },
+    {
       title: "Dark Mode and more",
       description: "Januar '25",
       content: "Für junge Kollegen... Außerdem kleine Detailverbesserungen.",
@@ -16,8 +21,7 @@ export default function HelpNeues() {
     {
       title: "Echtes Wysiwyg in Texteditoren",
       description: "November '24",
-      content:
-        'Die formatierbaren Textfelder sind jetzt wysiwyg. Du brauchst keine Vorschau mehr. Es kann dazu kommen, dass eine Veranstaltung dann nochmal "dirty" wird und du sie erneut speichern musst, ob wohl keine Änderung erkenntlich ist.',
+      content: "Die formatierbaren Textfelder sind jetzt wysiwyg. Du brauchst keine Vorschau mehr.",
     },
     {
       title: "Bessere Teamfilter",

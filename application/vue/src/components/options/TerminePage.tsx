@@ -4,7 +4,6 @@ import * as React from "react";
 import { useMemo } from "react";
 import { Col, Row } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
-import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import cloneDeep from "lodash/cloneDeep";
@@ -36,17 +35,15 @@ function TerminePageInternal() {
   ];
 
   return (
-    <RowWrapper>
-      <Row gutter={12}>
-        <Col span={24}>
-          <EditableTable<Termin>
-            columnDescriptions={columnDescriptions}
-            name="allTermine"
-            newRowFactory={(vals) => Object.assign({}, vals)}
-          />
-        </Col>
-      </Row>
-    </RowWrapper>
+    <Row gutter={12}>
+      <Col span={24}>
+        <EditableTable<Termin>
+          columnDescriptions={columnDescriptions}
+          name="allTermine"
+          newRowFactory={(vals) => Object.assign({}, vals)}
+        />
+      </Col>
+    </Row>
   );
 }
 
