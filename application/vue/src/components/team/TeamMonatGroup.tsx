@@ -13,6 +13,7 @@ import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";
 import map from "lodash/map";
 import keys from "lodash/keys";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface MonatGroupProps {
   monat: string;
@@ -21,6 +22,7 @@ interface MonatGroupProps {
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
   const { veranstaltungenNachMonat } = useContext(TeamContext);
+  const { isDarkMode } = useJazzContext();
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
 
@@ -41,8 +43,6 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     const jetzt = new DatumUhrzeit();
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
-
-  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
 
   return (
     <>

@@ -1,4 +1,3 @@
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { Link } from "react-router";
 import * as React from "react";
 import { useMemo } from "react";
@@ -6,6 +5,7 @@ import Accessrights from "jc-shared/user/accessrights.ts";
 import { ItemType } from "antd/es/menu/interface";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import map from "lodash/map";
+import { MenuIcon } from "@/components/content/menu/MenuIcon.tsx";
 
 export enum menuKeys {
   veranstaltung = "veranstaltung",
@@ -39,28 +39,28 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
 
   const veranstaltungMenu = {
     key: menuKeys.veranstaltung,
-    icon: <IconForSmallBlock iconName="Speaker" />,
+    icon: <MenuIcon name="Speaker" />,
     label: <Link to="/veranstaltungen">Veranstaltungen</Link>,
   };
 
   const mailMenu = {
     key: menuKeys.mail,
-    icon: <IconForSmallBlock iconName="EnvelopeFill" />,
+    icon: <MenuIcon name="EnvelopeFill" />,
     label: "Mails...",
     children: [
       {
         key: menuKeys.mailrules,
-        icon: <IconForSmallBlock iconName="ListStars" />,
+        icon: <MenuIcon name="ListStars" />,
         label: <Link to="/mailrules">Regeln</Link>,
       },
       {
         key: menuKeys.mailinglists,
-        icon: <IconForSmallBlock iconName="ListCheck" />,
+        icon: <MenuIcon name="ListCheck" />,
         label: <Link to="/mailinglists">Listen</Link>,
       },
       {
         key: menuKeys.sendmail,
-        icon: <IconForSmallBlock iconName="Send" />,
+        icon: <MenuIcon name="Send" />,
         label: <Link to="/sendmail">Mail senden...</Link>,
       },
     ],
@@ -73,12 +73,12 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
       children: [
         {
           key: menuKeys.optionen,
-          icon: <IconForSmallBlock iconName="FuelPump" />,
+          icon: <MenuIcon name="FuelPump" />,
           label: <Link to="/optionen">Optionen</Link>,
         },
         {
           key: menuKeys.orte,
-          icon: <IconForSmallBlock iconName="Houses" />,
+          icon: <MenuIcon name="Houses" />,
           label: <Link to="/orte">Orte</Link>,
         },
       ],
@@ -89,12 +89,12 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
       children: [
         {
           key: menuKeys.kalender,
-          icon: <IconForSmallBlock iconName="Calendar2Range" />,
+          icon: <MenuIcon name="Calendar2Range" />,
           label: <Link to="/kalender">Kalender</Link>,
         },
         {
           key: menuKeys.termine,
-          icon: <IconForSmallBlock iconName="Calendar2Month" />,
+          icon: <MenuIcon name="Calendar2Month" />,
           label: <Link to="/termine">Termine</Link>,
         },
       ],
@@ -118,26 +118,26 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
   }
   const optionenMenu = {
     key: menuKeys.option,
-    icon: <IconForSmallBlock iconName="Toggles" />,
+    icon: <MenuIcon name="Toggles" />,
     label: "Optionen...",
     children: optionenChildren,
   };
 
   const teamMenu = {
     key: menuKeys.team,
-    icon: <IconForSmallBlock iconName="People" />,
+    icon: <MenuIcon name="People" />,
     label: <Link to="/team">Team</Link>,
   };
 
   const programmheftMenu = {
     key: menuKeys.programmheft,
-    icon: <IconForSmallBlock iconName="Calendar2Check" />,
+    icon: <MenuIcon name="Calendar2Check" />,
     label: <Link to={`/programmheft/${programmheftJahrMonat}`}>Programmheft</Link>,
   };
 
   const wikiMenu = {
     key: menuKeys.wiki,
-    icon: <IconForSmallBlock iconName="Journals" />,
+    icon: <MenuIcon name="Journals" />,
     label: "Wiki...",
     children: wikisubdirEntries,
   };

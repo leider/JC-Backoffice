@@ -1,4 +1,4 @@
-import { Col, Collapse, ConfigProvider, Row, theme, Typography } from "antd";
+import { Col, Collapse, Row, theme, Typography } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
@@ -52,14 +52,10 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
               {monat}
             </Typography.Title>
           ),
-          extra: (
-            <ConfigProvider theme={{ token: { fontSize: 11 } }}>
-              {headerTags([
-                { label: "Unbestätigte", color: !unbestaetigte.length },
-                { label: "Presse", color: !ohnePresse.length },
-              ])}
-            </ConfigProvider>
-          ),
+          extra: headerTags([
+            { label: "Unbestätigte", color: !unbestaetigte.length },
+            { label: "Presse", color: !ohnePresse.length },
+          ]),
           children: (
             <RowWrapper>
               <Row>

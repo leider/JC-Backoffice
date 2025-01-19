@@ -1,5 +1,5 @@
-import { ConfigProvider, Form, theme } from "antd";
-import React, { ReactNode, useEffect, useMemo } from "react";
+import { ConfigProvider, Form } from "antd";
+import React, { ReactNode, useEffect } from "react";
 import "@mdxeditor/editor/style.css";
 import "./markdwon-editor.css";
 import {
@@ -31,6 +31,7 @@ import { translations } from "@/widgets/markdown/markdown-translations.ts";
 import { uploadWikiImage } from "@/commons/loader.ts";
 import { NamePath } from "rc-field-form/es/interface";
 import reduce from "lodash/reduce";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function translationFunc(key: string, defaultValue: string, more?: { [idx: string]: string }) {
   const parts = key.split(".");
@@ -68,8 +69,7 @@ export function MarkdownEditor({ label, name, canImages = false }: { label?: str
 }
 
 function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?: (value: string) => void; canImages: boolean }) {
-  const { token } = theme.useToken();
-  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
+  const { isDarkMode } = useJazzContext();
 
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
 

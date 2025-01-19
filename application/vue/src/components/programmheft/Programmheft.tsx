@@ -68,10 +68,10 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
         }}
         layout={lg ? "horizontal" : "vertical"}
       >
-        <Splitter.Panel defaultSize="40%" min="20%" max="70%">
+        <Splitter.Panel defaultSize="40%" min="20%" max="70%" style={{ zIndex: 0 }} collapsible>
           <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} triggerRender={triggerRender} />
         </Splitter.Panel>
-        <Splitter.Panel>
+        <Splitter.Panel collapsible>
           <EditableTable<Event>
             name={"events"}
             columnDescriptions={columnDescriptions}

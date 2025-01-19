@@ -10,7 +10,7 @@ type LabelColor = {
 export default function headerTags(labelsColors: LabelColor[], withStyle = false) {
   function HeaderTag({ label, color }: LabelColor) {
     return (
-      <Tag key={label} color={color ? "success" : "error"} style={withStyle ? { border: 0, paddingLeft: 3, paddingRight: 3 } : {}}>
+      <Tag key={label} color={color ? "success" : "error"} style={withStyle ? { border: 0 } : undefined}>
         {label}
       </Tag>
     );

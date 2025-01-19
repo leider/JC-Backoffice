@@ -7,7 +7,7 @@ import { IUseProvideAuth } from "@/commons/auth.tsx";
 import { RouterContext } from "@/router/RouterContext.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
-import { App } from "antd";
+import { App, theme } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -26,6 +26,7 @@ const emptyContext: SharedGlobals = {
   isDirty: false,
   setIsDirty: noop,
   setMemoizedId: noop,
+  isDarkMode: false,
 };
 
 type SharedGlobals = {
@@ -43,6 +44,7 @@ type SharedGlobals = {
   setIsDirty: (a: boolean) => void;
   memoizedId?: string;
   setMemoizedId: (id?: string) => void;
+  isDarkMode: boolean;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
@@ -59,7 +61,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const context: Omit<
     SharedGlobals,
-    "showSuccess" | "showError" | "filter" | "setFilter" | "isDirty" | "setIsDirty" | "memoizedId" | "setMemoizedId"
+    "showSuccess" | "showError" | "filter" | "setFilter" | "isDirty" | "setIsDirty" | "memoizedId" | "setMemoizedId" | "isDarkMode"
   > = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
@@ -129,7 +131,10 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty, memoizedId, setMemoizedId };
+  const { token } = theme.useToken();
+  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
+
+  return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty, memoizedId, setMemoizedId, isDarkMode };
 }
 
 export function useJazzContext() {

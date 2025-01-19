@@ -3,13 +3,13 @@ import { Menu } from "antd";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
-import useMenuNodes, { menuKeys } from "@/components/content/MenuNodes.tsx";
+import useMenuNodes, { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Accessrights from "jc-shared/user/accessrights.ts";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { ItemType } from "antd/es/menu/interface";
+import { MenuIcon } from "./MenuIcon";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
@@ -54,16 +54,16 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
   useEffect(() => {
     const userMenuStatic = {
       key: menuKeys.users,
-      icon: <IconForSmallBlock iconName="PeopleFill" />,
+      icon: <MenuIcon name="PeopleFill" />,
       children: [
         {
           key: "allUsers",
-          icon: <IconForSmallBlock iconName="PersonLinesFill" />,
+          icon: <MenuIcon name="PersonLinesFill" />,
           label: <Link to={"/users"}>Übersicht</Link>,
         },
         {
           key: "logout",
-          icon: <IconForSmallBlock iconName="PersonFillX" />,
+          icon: <MenuIcon name="PersonFillX" />,
           label: (
             <a
               onClick={() => {
