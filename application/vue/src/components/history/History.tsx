@@ -1,7 +1,7 @@
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { historyIdsFor } from "@/commons/loader.ts";
 import React, { useEffect, useMemo } from "react";
@@ -9,6 +9,7 @@ import { Changelog } from "@/components/history/Changelog.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useWatch } from "antd/es/form/Form";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export function History() {
   const [form] = Form.useForm();
@@ -51,7 +52,7 @@ export function History() {
     <Form form={form} autoComplete="off">
       <JazzPageHeader title="Änderungsverlauf" />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col xs={24} lg={8}>
             <SingleSelect
               name="collection"
@@ -62,12 +63,12 @@ export function History() {
           <Col xs={24} lg={16}>
             <SingleSelect name="id" label="ID" options={displayIds || []} />
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={24}>
             <Changelog collection={collection} id={realId} />
           </Col>
-        </Row>
+        </JazzRow>
       </RowWrapper>
     </Form>
   );

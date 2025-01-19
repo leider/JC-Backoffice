@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
@@ -16,6 +16,7 @@ import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 interface AusgabenCardParams {
   onChange: (sum: number) => void;
@@ -50,7 +51,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     const kasse = new Kasse(form.getFieldValue("kasse"));
     return (
       kasse.istFreigegeben && (
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={18}>
             <Form.Item>
               <b>Abendkasse (ohne Gage):</b>
@@ -59,7 +60,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
           <Col span={6}>
             <NumberInputWithDirectValue value={kasse.ausgabenOhneGage} suffix="€" decimals={2} />
           </Col>
-        </Row>
+        </JazzRow>
       )
     );
   }
@@ -71,7 +72,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
     return (
       artist?.brauchtHotel && (
         <>
-          <Row gutter={12}>
+          <JazzRow>
             <Col span={18}>
               <Form.Item>
                 <b>Hotel:</b>
@@ -80,8 +81,8 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
             <Col span={6}>
               <NumberInputWithDirectValue value={unterkunft?.roomsTotalEUR || 0} suffix="€" decimals={2} />
             </Col>
-          </Row>
-          <Row gutter={12}>
+          </JazzRow>
+          <JazzRow>
             <Col span={18}>
               <Form.Item>
                 <b>Hotel (Transport):</b>
@@ -90,7 +91,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
             <Col span={6}>
               <NumberInputWithDirectValue value={unterkunft?.transportEUR || 0} suffix="€" decimals={2} />
             </Col>
-          </Row>
+          </JazzRow>
         </>
       )
     );
@@ -99,7 +100,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   const { lg } = useBreakpoint();
   return (
     <Collapsible suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={6}>
           <NumberInput name={["kosten", "gagenEUR"]} label={"Gagen"} decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
@@ -125,8 +126,8 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
             }}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col xs={24} sm={12}>
           <DynamicItem
             nameOfDepending={["kosten", "gagenEUR"]}
@@ -151,7 +152,7 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
             )}
           />
         </Col>
-      </Row>
+      </JazzRow>
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} onChange={updateSumme} />
       {new Technik(form.getFieldValue("technik")).fluegel && (
         <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />
@@ -169,9 +170,9 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
       <LabelCurrencyRow label="Lichttechniker (unbar)" path={["kosten", "lichttechniker"]} onChange={updateSumme} />
       {kassenZeile()}
       {hotelZeile()}
-      <Row gutter={12}>
+      <JazzRow>
         <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gageBAR"]} />
-      </Row>
+      </JazzRow>
       <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} disabled onChange={updateSumme} />
       <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} disabled onChange={updateSumme} />
       <LabelCurrencyRow label="Saalmiete" path={["kosten", "saalmiete"]} disabled onChange={updateSumme} />

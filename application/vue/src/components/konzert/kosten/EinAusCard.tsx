@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row, Table } from "antd";
+import { Col, Table } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow";
 
 interface AusgabenCardParams {
   einnahmen: number;
@@ -56,11 +57,11 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
 
   return (
     <Collapsible suffix="concert" label="Kostenübersicht / Break-Even" amount={kalk?.dealUeberschussTotal}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           <Table columns={columns} dataSource={data} size="small" pagination={false} />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

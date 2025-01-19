@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { allUsers, saveMailinglists } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import Users, { Mailingliste } from "jc-shared/user/users";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
@@ -11,6 +11,7 @@ import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import User from "jc-shared/user/user.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 class MailingListsWrapper {
   allLists: Mailingliste[] = [];
@@ -32,7 +33,7 @@ function MailingListsInternal({ users }: { users: User[] }) {
   ];
 
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={24}>
         <EditableTable<{ name?: string; users: string[] }>
           columnDescriptions={columnDescriptions}
@@ -41,7 +42,7 @@ function MailingListsInternal({ users }: { users: User[] }) {
           usersWithKann={usersAsOptions}
         />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }
 

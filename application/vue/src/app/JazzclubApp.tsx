@@ -49,6 +49,7 @@ function JazzclubApp() {
             Checkbox: { colorPrimary: success, colorPrimaryHover: success, colorPrimaryBorder: success },
             Tag: { algorithm: theme.defaultAlgorithm },
             Collapse: { contentPadding: !xl ? 4 : 12 },
+            Form: { itemMarginBottom: 12 },
           },
         }}
         locale={locale_de}

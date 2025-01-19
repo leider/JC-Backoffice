@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import React from "react";
 import EventCard from "@/components/konzert/allgemeines/EventCard";
 import ArtistCard from "@/components/konzert/allgemeines/ArtistCard";
@@ -9,12 +9,13 @@ import BearbeiterCard from "@/components/konzert/allgemeines/BearbeiterCard";
 import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterCard.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function TabAllgemeines() {
   const { optionen } = useJazzContext();
 
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col xs={24} lg={12}>
         <EventCard />
         <ArtistCard />
@@ -23,15 +24,15 @@ export default function TabAllgemeines() {
       <Col xs={24} lg={12}>
         <MitarbeiterCard />
         <KontaktCard kontakte={optionen!.agenturen} selector="agentur">
-          <Row gutter={12}>
+          <JazzRow>
             <Col span={12}>
               <NumberInput name={["kosten", "provisionAgentur"]} label="Provision" decimals={2} suffix="€" />
             </Col>
-          </Row>
+          </JazzRow>
         </KontaktCard>
         <VertragCard />
         <BearbeiterCard />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }

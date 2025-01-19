@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import React, { CSSProperties, useEffect, useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
@@ -19,6 +19,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export default function Preview() {
   const { url } = useParams();
@@ -60,14 +61,14 @@ export default function Preview() {
 
   const titleStyle: CSSProperties = { color: typeColor, textDecoration: konzert.kopf.abgesagt ? "line-through" : "" };
   return (
-    <div>
+    <>
       <JazzPageHeader
         title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
         style={titleStyle}
         dateString={konzert.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />
-      <Row gutter={12}>
+      <JazzRow>
         <Col xs={24} lg={12}>
           <GaesteInPreview konzert={konzert} url={url} />
           <StaffInPreview veranstaltung={konzert} />
@@ -90,8 +91,8 @@ export default function Preview() {
             </Collapsible>
           )}
         </Col>
-      </Row>
-    </div>
+      </JazzRow>
+    </>
   );
 }
 

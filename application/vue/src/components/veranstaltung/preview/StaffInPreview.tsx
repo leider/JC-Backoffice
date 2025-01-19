@@ -1,5 +1,5 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, List, Row } from "antd";
+import { Col, List } from "antd";
 import React, { useCallback, useMemo } from "react";
 import User from "jc-shared/user/user.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -9,6 +9,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
 import filter from "lodash/filter";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 function StaffList({
   header,
@@ -69,12 +70,12 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
 
   return (
     <Collapsible suffix="staff" label="Staff">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           <b>Get In:</b> {getIn}, <b>Transport:</b> {transport}
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <StaffList
             header="Abendverantwortlicher"
@@ -105,7 +106,7 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
             theUsers={allUsers}
           />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

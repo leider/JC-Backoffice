@@ -28,6 +28,8 @@ import sortedUniq from "lodash/sortedUniq";
 import forEach from "lodash/forEach";
 import filter from "lodash/filter";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
+import "./sendmail.css";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (isString(addressOrString)) {
@@ -215,30 +217,30 @@ export default function SendMail() {
     >
       <JazzPageHeader title="Mail Senden" buttons={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedVeranstaltungen" label="Veranstaltungen" options={veranstaltungenDescriptions} noAdd />
           </Col>
           <Col span={12}>
             <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} noAdd />
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedLists" label="Mailinglisten" options={mailingListsDescriptions} noAdd />
           </Col>
           <Col span={12}>
             <MitarbeiterMultiSelect name="selectedUsers" usersAsOptions={usersAsOptions} label="Users" />
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedUserGruppen" label="Benutzer mit Typ" options={userGruppen} noAdd />
           </Col>
           <Col span={12}>
             <MultiSelectWithTags name="selectedKann" label="User kann..." options={kannFilter} noAdd />
           </Col>
-        </Row>
+        </JazzRow>
         <Row gutter={12} style={{ marginBottom: 24 }}>
           <Col span={24}>
             <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
@@ -249,17 +251,17 @@ export default function SendMail() {
             ))}
           </Col>
         </Row>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             <TextField name="subject" label="Subject" required />
           </Col>
           <Col span={24}>
-            <UploaderForMail fileList={fileList} setFileList={setFileList} />
-          </Col>
-          <Col span={24}>
             <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />
           </Col>
-        </Row>
+          <Col span={24}>
+            <UploaderForMail fileList={fileList} setFileList={setFileList} />
+          </Col>
+        </JazzRow>
       </RowWrapper>
     </Form>
   );

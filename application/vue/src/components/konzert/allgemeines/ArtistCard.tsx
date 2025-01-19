@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -9,13 +9,14 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { TimeField } from "@/widgets/TimeField.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function ArtistCard() {
   const { optionen } = useJazzContext();
 
   return (
     <Collapsible suffix="allgemeines" label="Künstler">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={12}>
           <TextField name={["artist", "bandname"]} label="Bandname" />
         </Col>
@@ -25,8 +26,8 @@ export default function ArtistCard() {
         <Col span={6}>
           <NumberInput name={["artist", "numCrew"]} label="Crew" decimals={0} min={0} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <MultiSelectWithTags name={["artist", "name"]} label="Namen" options={optionen.artists} />
         </Col>
@@ -36,8 +37,8 @@ export default function ArtistCard() {
         <Col span={6}>
           <SingleSelect name={["kosten", "deal"]} label="Deal" options={Kosten.deals} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <DynamicItem
             nameOfDepending={"startDate"}
@@ -54,7 +55,7 @@ export default function ArtistCard() {
             options={["Band kommt selbst", "Band abholen (Auto)", "Band abholen (Transporter)"]}
           />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

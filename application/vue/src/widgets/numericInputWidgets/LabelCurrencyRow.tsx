@@ -1,6 +1,7 @@
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 import React from "react";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function LabelCurrencyRow({
   label,
@@ -14,7 +15,7 @@ export default function LabelCurrencyRow({
   disabled?: boolean;
 }) {
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={18}>
         <Form.Item>
           <b>{label}:</b>
@@ -23,6 +24,6 @@ export default function LabelCurrencyRow({
       <Col span={6}>
         <NumberInput name={path} decimals={2} suffix="€" onChange={onChange} disabled={disabled} />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }

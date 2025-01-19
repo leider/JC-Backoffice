@@ -1,6 +1,6 @@
 import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, List, Row } from "antd";
+import { Col, List } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { updateGastInSection } from "@/commons/loader.ts";
@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import { JazzRow } from "@/widgets/JazzRow";
 
 function AddOrRemoveGastButton({ konzert, item, art, add }: { konzert: Konzert; item: NameWithNumber; art: GastArt; add: boolean }) {
   const queryClient = useQueryClient();
@@ -90,17 +91,17 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
 
   return (
     <Collapsible suffix="gaeste" label="Gästeliste / Reservierungen">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           {gaesteliste.length > 0 && <GastResList source={gaesteliste} art="gast" />}
           {reservierungen.length > 0 && <GastResList source={reservierungen} art="res" />}
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={10} offset={14}>
           <ButtonGaesteliste />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

@@ -1,7 +1,7 @@
 import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import Renderer from "jc-shared/commons/renderer";
@@ -15,6 +15,7 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function WikiPage() {
   useDirtyBlocker(false);
@@ -117,11 +118,11 @@ export default function WikiPage() {
         ]}
       />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             {isEdit ? <MarkdownEditor name="content" canImages /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
           </Col>
-        </Row>
+        </JazzRow>
       </RowWrapper>
     </Form>
   );

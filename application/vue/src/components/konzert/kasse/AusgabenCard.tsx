@@ -1,6 +1,6 @@
 import React, { forwardRef, Ref, useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
@@ -10,6 +10,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
   const form = useFormInstance();
@@ -40,7 +41,7 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
 
   return (
     <Collapsible suffix="kasse" label="Ausgaben (Bar und mit Beleg)" noTopBorder={lg} amount={summe}>
-      <Row ref={ref} gutter={12}>
+      <JazzRow ref={ref}>
         <Col span={8}>
           <NumberInput
             name={["kasse", "ausgabeCateringEUR"]}
@@ -61,8 +62,8 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
             disabled={readonly}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <TextField name={["kasse", "ausgabeSonstiges1Text"]} label="Sonstiges" disabled={readonly} />
         </Col>
@@ -76,8 +77,8 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
             disabled={readonly}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <TextField name={["kasse", "ausgabeSonstiges2Text"]} label="Sonstiges" disabled={readonly} />
         </Col>
@@ -91,8 +92,8 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
             disabled={readonly}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <TextField name={["kasse", "ausgabeSonstiges3Text"]} label="Sonstiges" disabled={readonly} />
         </Col>
@@ -106,8 +107,8 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
             disabled={readonly}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8} offset={8}>
           <Form.Item label="&nbsp;">
             <ButtonWithIcon
@@ -131,7 +132,7 @@ const AusgabenCard = forwardRef(function AusgabenCard({ disabled }: KasseCardPro
             disabled={readonly}
           />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 });

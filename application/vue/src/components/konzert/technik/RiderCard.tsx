@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import { RiderComp } from "@/components/rider/RiderComp.tsx";
 import { useLocation } from "react-router";
 import ButtonForRider from "@/components/konzert/technik/ButtonForRider.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function RiderCard() {
   const { search } = useLocation();
@@ -33,7 +34,7 @@ Dein Jazzclub Team
 
   return (
     <Collapsible suffix="technik" label="Rider">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           <JazzPageHeader
             title=""
@@ -52,7 +53,7 @@ Dein Jazzclub Team
             <RiderComp />
           </Form.Item>
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

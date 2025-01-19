@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { ProgrammheftVeranstaltungenMonat } from "@/components/programmheft/ProgrammheftVeranstaltungenMonat.tsx";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
 import keys from "lodash/keys";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
   const { data: dataveranstaltungen } = useQuery({
@@ -35,10 +36,10 @@ export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit 
   }, [veranstaltungen]);
 
   return map(monate, (monat) => (
-    <Row gutter={12} key={monat}>
+    <JazzRow key={monat}>
       <Col span={24}>
         <ProgrammheftVeranstaltungenMonat monat={monat} veranstaltungen={veranstaltungenNachMonat[monat]} />
       </Col>
-    </Row>
+    </JazzRow>
   ));
 }

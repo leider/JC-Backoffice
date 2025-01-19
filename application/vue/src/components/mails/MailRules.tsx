@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
 import * as React from "react";
 import { useMemo } from "react";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import invokeMap from "lodash/invokeMap";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 class MailRulesWrapper {
   allRules: MailRule[] = [];
@@ -30,7 +31,7 @@ function MailRulesInternal() {
   ];
 
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={24}>
         <EditableTable<MailRuleUI>
           columnDescriptions={columnDescriptions}
@@ -38,7 +39,7 @@ function MailRulesInternal() {
           newRowFactory={(vals) => ({ ...vals, id: undefined })}
         />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }
 

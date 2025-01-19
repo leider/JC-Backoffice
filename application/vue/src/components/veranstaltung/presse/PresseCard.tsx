@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row, Tabs } from "antd";
+import { Col, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import Uploader from "@/widgets/Uploader.tsx";
@@ -15,6 +15,7 @@ import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
   const form = useFormInstance();
@@ -65,7 +66,7 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
 
   return (
     <Collapsible suffix="presse" label="Pressematerial" noTopBorder>
-      <Row gutter={12}>
+      <JazzRow>
         <Col xs={24} lg={12}>
           <CheckItem name={["presse", "checked"]} label="Ist so OK" />
           <TextField name={["presse", "jazzclubURL"]} label="URL-Suffix bei jazzclub.de" />
@@ -97,7 +98,7 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
         <Col xs={24} lg={12}>
           <PressePreview veranstaltung={verForPreview} />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

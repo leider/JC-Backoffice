@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
@@ -12,6 +12,7 @@ import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow.tsx
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function AusgabenCard() {
   const form = useFormInstance();
@@ -64,7 +65,7 @@ export default function AusgabenCard() {
   const { lg } = useBreakpoint();
   return (
     <Collapsible suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={6}>
           <NumberInput name={["kosten", "gagenEUR"]} label={"Gagen"} decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
@@ -87,7 +88,7 @@ export default function AusgabenCard() {
             }}
           />
         </Col>
-      </Row>
+      </JazzRow>
       {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
       <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />
       <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} onChange={updateSumme} />

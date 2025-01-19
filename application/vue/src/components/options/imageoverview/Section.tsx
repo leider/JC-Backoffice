@@ -3,13 +3,14 @@ import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
 import { useState } from "react";
-import { Button, Col, Collapse, Form, Image, Popover, Row, Space, theme, Typography } from "antd";
+import { Button, Col, Collapse, Form, Image, Popover, Space, theme, Typography } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import { imgFullsize } from "@/commons/loader.ts";
 import { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export type kindOfSection = "with" | "unused" | "notFound";
 
@@ -98,7 +99,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
               {(fields) =>
                 map(fields, (field) => {
                   return (
-                    <Row key={field.key} gutter={12}>
+                    <JazzRow key={field.key}>
                       <Col span={10}>
                         <TextField name={[field.name.toString(), "newname"]} label={undefined} />
                       </Col>
@@ -112,7 +113,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
                       <Col span={12}>
                         <VeranstaltungenRenderer name={[field.name.toString(), "veranstaltungen"]} />
                       </Col>
-                    </Row>
+                    </JazzRow>
                   );
                 })
               }

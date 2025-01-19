@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import { Button, Col, Divider, Row, Tabs, TabsProps, Typography } from "antd";
+import { Button, Col, Divider, Tabs, TabsProps, Typography } from "antd";
 import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -15,6 +15,7 @@ import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function Info() {
   const { filter: contextFilter } = useJazzContext();
@@ -72,14 +73,14 @@ export default function Info() {
   function Pressetexte() {
     return (
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           {map(veranstaltungen, (veranst) => (
             <Col lg={12} key={veranst.id}>
               <PressePreview veranstaltung={veranst} />
               <Divider />
             </Col>
           ))}
-        </Row>
+        </JazzRow>
       </RowWrapper>
     );
   }
@@ -87,7 +88,7 @@ export default function Info() {
   function Uebersicht() {
     return (
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             {map(veranstaltungen, (veranst) => (
               <p key={veranst.id}>
@@ -102,14 +103,14 @@ export default function Info() {
               </p>
             ))}
           </Col>
-        </Row>
+        </JazzRow>
         <Divider />
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             <Typography.Title level={4}>Bilder</Typography.Title>
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           {map(filter(veranstaltungen, "presse.image.length"), (veranst: Konzert) => (
             <Col lg={12} key={veranst.id}>
               <p>
@@ -123,7 +124,7 @@ export default function Info() {
               ))}
             </Col>
           ))}
-        </Row>
+        </JazzRow>
       </RowWrapper>
     );
   }

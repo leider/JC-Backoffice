@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
@@ -9,6 +9,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export default function AngebotCard() {
   const form = useFormInstance();
@@ -23,7 +24,7 @@ export default function AngebotCard() {
 
   function FreiRow({ nummer }: { nummer: number }) {
     return (
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={16}>
           <DynamicItem
             nameOfDepending={["angebot", `frei${nummer}EUR`]}
@@ -38,13 +39,13 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput name={["angebot", `frei${nummer}EUR`]} label="Betrag" decimals={2} suffix="€" disabled={readonly} />
         </Col>
-      </Row>
+      </JazzRow>
     );
   }
 
   return (
     <Collapsible suffix="angebot" label="Posten" noTopBorder={lg} amount={angebot.summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "saalmiete"]} label="Saalmiete" decimals={2} suffix={"€"} disabled={readonly} />
         </Col>
@@ -54,8 +55,8 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.saalmieteTotal} decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "tontechnikerAnzahl"]} label="Tontechniker (Anzahl)" decimals={0} disabled={readonly} />
         </Col>
@@ -71,8 +72,8 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.tontechnikerTotal} decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "lichttechnikerAnzahl"]} label="Lichttechniker (Anzahl)" decimals={0} disabled={readonly} />
         </Col>
@@ -88,8 +89,8 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.lichttechnikerTotal} decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "musikerAnzahl"]} label="Musiker (Anzahl)" decimals={0} disabled={readonly} />
         </Col>
@@ -99,13 +100,13 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.musikerTotal} decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "fluegel"]} label="Flügel (Einzelpreis)" decimals={2} suffix="€" disabled={readonly} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "barpersonalAnzahl"]} label="Bar Personal (Anzahl)" decimals={0} disabled={readonly} />
         </Col>
@@ -121,8 +122,8 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.barpersonalTotal} decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <NumberInput name={["angebot", "abenddienst"]} label="Abenddienst" decimals={2} suffix="€" disabled={readonly} />
         </Col>
@@ -132,7 +133,7 @@ export default function AngebotCard() {
         <Col span={8}>
           <NumberInput name={["angebot", "reinigungBar"]} label="Reinigung Bar" decimals={2} suffix="€" disabled={readonly} />
         </Col>
-      </Row>
+      </JazzRow>
       <FreiRow nummer={1} />
       <FreiRow nummer={2} />
       <FreiRow nummer={3} />

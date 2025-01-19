@@ -1,13 +1,14 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import React from "react";
 import TechnikCard from "@/components/vermietung/technik/TechnikCard.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function TabTechnik() {
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={24}>
         <TechnikCard />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }

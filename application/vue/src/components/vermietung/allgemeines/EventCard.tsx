@@ -1,16 +1,17 @@
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function EventCard() {
   return (
     <Collapsible suffix="allgemeines" label="Event" noTopBorder>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={8}>
           <CheckItem label="Ist bestätigt" name={["kopf", "confirmed"]} />
           <CheckItem label="Braucht Technik" name="brauchtTechnik" />
@@ -45,20 +46,20 @@ export default function EventCard() {
           <CheckItem label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
           <CheckItem label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <TextField name={["kopf", "titel"]} label="Titel" required />
         </Col>
         <Col span={8}>
           <NumberInput name={["saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <StartEndPickers />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

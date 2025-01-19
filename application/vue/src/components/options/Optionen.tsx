@@ -3,7 +3,7 @@ import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { Col, Row, Tabs, TabsProps } from "antd";
+import { Col, Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -12,6 +12,7 @@ import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -36,7 +37,7 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
 
   return (
     <>
-      <Row gutter={12}>
+      <JazzRow>
         <Col xs={24} lg={12}>
           <Collapsible suffix="allgemeines" label="Typen" noTopBorder>
             <EditableTable<{
@@ -75,15 +76,15 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
             />
           </Collapsible>
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <Collapsible suffix="technik" label="Backlines">
             <MultiSelectWithTags name="backlineJazzclub" label={"Jazzclub"} options={optionen.backlineJazzclub} />
             <MultiSelectWithTags name="backlineRockshop" label={"Rockshop"} options={optionen.backlineRockshop} />
           </Collapsible>
         </Col>
-      </Row>
+      </JazzRow>
     </>
   );
 }
@@ -119,13 +120,13 @@ export default function Optionen() {
       key: "artists",
       label: <TabLabel type="artists" title="Künstler" />,
       children: (
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             <Collapsible suffix="allgemeines" label="Künstler" noTopBorder>
               <MultiSelectWithTags name="artists" label={"Künstler"} options={data?.artists ?? []} />
             </Collapsible>
           </Col>
-        </Row>
+        </JazzRow>
       ),
     },
   ];
