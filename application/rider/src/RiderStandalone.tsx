@@ -4,7 +4,7 @@ import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveRider } from "@/loader.ts";
 import { RiderComp } from "jc-vue/src/components/rider/RiderComp.tsx";
-import ButtonWithIcon from "../../vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import ButtonWithIcon from "jc-vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { theme } from "antd";
 import { JazzPageHeader } from "jc-vue/src/widgets/JazzPageHeader.tsx";
 

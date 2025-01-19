@@ -24,7 +24,7 @@ export default function TabKasse() {
   const refStartinhalt: Ref<HTMLElement> = useRef(null);
   const refEndinhalt: Ref<HTMLElement> = useRef(null);
   const refAusgaben: Ref<HTMLDivElement> = useRef(null);
-  const refEinahmen: Ref<HTMLDivElement> = useRef(null);
+  const refEinnahmen: Ref<HTMLDivElement> = useRef(null);
   const refAnBank: Ref<HTMLElement> = useRef(null);
 
   function anfangsbestandChanged() {
@@ -56,7 +56,7 @@ export default function TabKasse() {
       title: "Eintritt der Kasse ausfüllen",
       description:
         "Fülle die Einnahmen aus Karte. Speichern nicht vergessen! Der Eintritt kann berechnet werden, wenn die anderen Felder gefüllt sind.",
-      target: refEinahmen.current ? () => refEinahmen.current! : undefined,
+      target: refEinnahmen.current ? () => refEinnahmen.current! : undefined,
     },
     {
       title: "Ausgabe an Bank ausfüllen",
@@ -71,10 +71,10 @@ export default function TabKasse() {
     },
   ];
   return (
-    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAnBank }}>
+    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
       <JazzRow>
         <Col xs={24} lg={12}>
-          <EinnahmenCard ref={refEinahmen} disabled={freigabe} />
+          <EinnahmenCard disabled={freigabe} />
           <KassenzettelFreigabe />
           <JazzRow>
             <Col span={8}>
@@ -89,10 +89,10 @@ export default function TabKasse() {
           </JazzRow>
         </Col>
         <Col xs={24} lg={12}>
-          <AusgabenCard ref={refAusgaben} disabled={freigabe} />
+          <AusgabenCard disabled={freigabe} />
         </Col>
       </JazzRow>
-      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)}></Tour>
+      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)} />
     </KassenContext.Provider>
   );
 }

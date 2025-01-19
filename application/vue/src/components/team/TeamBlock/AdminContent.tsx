@@ -12,6 +12,7 @@ import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 interface ContentProps {
   veranstaltung: Veranstaltung;
@@ -19,6 +20,7 @@ interface ContentProps {
 
 export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
   const [form] = Form.useForm();
+  const { xl } = useBreakpoint();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -86,7 +88,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
       onFinish={saveForm}
       layout="vertical"
       size="small"
-      style={{ margin: -12, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
+      style={{ margin: xl ? -12 : -8, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
     >
       <Row>
         <Col span={6}>

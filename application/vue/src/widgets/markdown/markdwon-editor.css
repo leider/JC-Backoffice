@@ -1,8 +1,9 @@
 @media (prefers-color-scheme: dark) {
   .markdown-border {
-      border-width: 1px;
-      border-style: solid;
-      border-color: #525252;  }
+    border-width: 1px;
+    border-style: solid;
+    border-color: #525252;
+  }
 }
 
 @media (prefers-color-scheme: light) {

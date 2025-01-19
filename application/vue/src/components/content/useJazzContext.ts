@@ -7,10 +7,11 @@ import { IUseProvideAuth } from "@/commons/auth.tsx";
 import { RouterContext } from "@/router/RouterContext.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
-import { App, theme } from "antd";
+import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -51,6 +52,7 @@ export const JazzContext = createContext<SharedGlobals>(emptyContext);
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
+  const { isDarkMode } = useContext(GlobalContext);
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
@@ -130,9 +132,6 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   useEffect(() => {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
-
-  const { token } = theme.useToken();
-  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
 
   return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty, memoizedId, setMemoizedId, isDarkMode };
 }

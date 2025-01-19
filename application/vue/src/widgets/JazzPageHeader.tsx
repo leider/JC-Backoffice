@@ -1,8 +1,8 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode, useMemo } from "react";
+import { PropsWithChildren, ReactElement, ReactNode, useContext, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
 import { ConfigProvider, theme } from "antd";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { GlobalContext } from "../app/GlobalContext.ts";
 
 export function JazzPageHeader({
   title,
@@ -24,7 +24,7 @@ export function JazzPageHeader({
   hasErrors?: boolean;
   style?: React.CSSProperties;
 } & PropsWithChildren) {
-  const { isDarkMode } = useJazzContext();
+  const { isDarkMode } = useContext(GlobalContext);
   const { token } = theme.useToken();
 
   const theHeader = useMemo(() => {

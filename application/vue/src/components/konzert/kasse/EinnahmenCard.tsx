@@ -1,4 +1,4 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -9,9 +9,11 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 
-const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Ref<HTMLDivElement> | undefined) {
+export default function EinnahmenCard({ disabled }: KasseCardProps) {
   const form = useFormInstance();
+  const { refEinnahmen } = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
 
   const [readonly, setReadonly] = useState<boolean>(false);
@@ -46,7 +48,7 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
 
   return (
     <Collapsible suffix="kasse" label="Einnahmen Abendkasse" noTopBorder amount={summe}>
-      <JazzRow ref={ref}>
+      <JazzRow ref={refEinnahmen}>
         <Col span={8}>
           <NumberInput
             name={["kasse", "einnahmeTicketsEUR"]}
@@ -110,6 +112,4 @@ const EinnahmenCard = forwardRef(function ({ disabled }: KasseCardProps, ref: Re
       </JazzRow>
     </Collapsible>
   );
-});
-
-export default EinnahmenCard;
+}

@@ -6,8 +6,9 @@ import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -27,6 +28,17 @@ function JazzclubApp() {
   const success = "#28a745";
   numeral.localeData("de").delimiters.thousands = ".";
   numeral.locale("de");
+
+  const algo = useMemo(() => {
+    const result = [darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm];
+    if (!xl) {
+      result.push(theme.compactAlgorithm);
+    }
+    return result;
+  }, [darkMode, xl]);
+
+  const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
@@ -42,9 +54,9 @@ function JazzclubApp() {
             colorLinkActive: "#2c4862",
             colorLinkHover: "#2c4862",
             linkHoverDecoration: "underline",
-            colorBgBase: darkMode ? "#101010" : "#fafafa",
+            colorBgBase,
           },
-          algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+          algorithm: algo,
           components: {
             Checkbox: { colorPrimary: success, colorPrimaryHover: success, colorPrimaryBorder: success },
             Tag: { algorithm: theme.defaultAlgorithm },
@@ -58,7 +70,9 @@ function JazzclubApp() {
         }}
       >
         <App>
-          <JazzContent />
+          <GlobalContext.Provider value={{ isDarkMode: darkMode }}>
+            <JazzContent />
+          </GlobalContext.Provider>
         </App>
       </ConfigProvider>
     </QueryClientProvider>
