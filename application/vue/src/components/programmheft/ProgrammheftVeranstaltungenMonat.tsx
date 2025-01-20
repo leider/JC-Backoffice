@@ -43,12 +43,12 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
       onChange={() => {
         setExpanded(!expanded);
       }}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+      expandIcon={({ isActive }) => (isActive ? <CaretDown color="white" /> : <CaretRight color="white" />)}
       items={[
         {
           key: monat,
           label: (
-            <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+            <Typography.Title level={4} style={{ margin: 0, color: "white" }}>
               {monat}
             </Typography.Title>
           ),
@@ -61,13 +61,13 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
               <Row>
                 {!!unbestaetigte.length && (
                   <Col span={12}>
-                    <h2>Es gibt noch unbestätigte Veranstaltungen</h2>
+                    <Typography.Title level={4}>Es gibt noch unbestätigte Veranstaltungen</Typography.Title>
                     <VeranstaltungenListe veranstaltungen={unbestaetigte} />
                   </Col>
                 )}
                 {!!ohnePresse.length && (
                   <Col span={12}>
-                    <h2>Hier fehlt der Pressetext</h2>
+                    <Typography.Title level={4}>Hier fehlt der Pressetext</Typography.Title>
                     <VeranstaltungenListe veranstaltungen={ohnePresse} />
                   </Col>
                 )}

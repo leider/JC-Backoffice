@@ -57,16 +57,7 @@ export default function Info() {
     const farbe = color("allgemeines");
     const active = activePage === type;
     return (
-      <b
-        style={{
-          margin: -16,
-          padding: 16,
-          backgroundColor: active ? farbe : "inherit",
-          color: active ? "#FFF" : farbe,
-        }}
-      >
-        {title}
-      </b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "white" : farbe }}>{title}</b>
     );
   }
 

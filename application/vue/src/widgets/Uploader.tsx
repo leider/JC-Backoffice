@@ -91,7 +91,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
       <Row>
         <Col>
           <Space align="end">
-            <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: "0" }} specialTagRender={tagRender} />
+            <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: 0 }} specialTagRender={tagRender} />
             <Upload {...uploadprops} accept={onlyImages ? "image/*" : undefined}>
               <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" type="default" />
             </Upload>

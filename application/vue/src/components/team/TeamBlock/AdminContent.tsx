@@ -1,5 +1,5 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { Col, Collapse, Form, Row } from "antd";
+import { Col, Collapse, Form, Row, Typography } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
@@ -92,7 +92,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     >
       <Row>
         <Col span={6}>
-          <h3
+          <Typography.Title
+            level={5}
             style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
             onClick={() => {
               setShowMitarbeiter(!showMitarbeiter);
@@ -102,7 +103,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
               <IconForSmallBlock iconName="UniversalAccess" color={textColor} />
               &nbsp;...
             </span>
-          </h3>
+          </Typography.Title>
         </Col>
         <Col span={18}>
           <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>

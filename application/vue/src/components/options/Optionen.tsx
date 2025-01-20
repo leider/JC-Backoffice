@@ -3,7 +3,7 @@ import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
 import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { Col, Tabs, TabsProps } from "antd";
+import { Col, Tabs, TabsProps, theme } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -105,9 +105,14 @@ export default function Optionen() {
 
   function TabLabel({ title, type }: { type: string; title: string }) {
     const { color } = colorsAndIconsForSections;
+    const { token } = theme.useToken();
     const active = activePage === type;
     const farbe = color("allgemeines");
-    return <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>{title}</b>;
+    return (
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? token.colorBgContainer : farbe }}>
+        {title}
+      </b>
+    );
   }
 
   const tabs: TabsProps["items"] = [

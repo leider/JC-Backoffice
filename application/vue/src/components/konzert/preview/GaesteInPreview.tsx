@@ -1,6 +1,6 @@
 import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, List } from "antd";
+import { Col, List, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { updateGastInSection } from "@/commons/loader.ts";
@@ -49,7 +49,11 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
     return (
       <List
         size="small"
-        header={<h2 style={{ margin: 0 }}>{art === "gast" ? "Gästeliste" : "Reservierungen"}</h2>}
+        header={
+          <Typography.Title level={3} style={{ margin: 0 }}>
+            {art === "gast" ? "Gästeliste" : "Reservierungen"}
+          </Typography.Title>
+        }
         dataSource={dataSource}
         renderItem={(item) => (
           <List.Item

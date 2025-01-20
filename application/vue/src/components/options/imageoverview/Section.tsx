@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
 import { useState } from "react";
-import { Button, Col, Collapse, Form, Image, Popover, Space, theme, Typography } from "antd";
+import { Button, Col, Collapse, ConfigProvider, Form, Image, Popover, Space, theme, Typography } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
@@ -34,9 +34,11 @@ function VeranstaltungenRenderer({ name }: { name: NamePath }) {
   }
 
   return (
-    <FormItem name={name} valuePropName="veranstaltungen" trigger={"onText"} style={{ marginBottom: 0 }}>
-      <InnerVeranstaltungenRenderer />
-    </FormItem>
+    <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
+      <FormItem name={name} valuePropName="veranstaltungen" trigger={"onText"}>
+        <InnerVeranstaltungenRenderer />
+      </FormItem>
+    </ConfigProvider>
   );
 }
 
@@ -80,44 +82,46 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
       onChange={() => {
         setExpanded(!expanded);
       }}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+      expandIcon={({ isActive }) => (isActive ? <CaretDown color={token.colorBgBase} /> : <CaretRight color={token.colorBgBase} />)}
       items={[
         {
           key: prefix,
           label: (
-            <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+            <Typography.Title level={4} style={{ margin: 0, color: token.colorBgBase }}>
               {title}
             </Typography.Title>
           ),
           extra: (
-            <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+            <Typography.Title level={4} style={{ margin: 0, color: token.colorBgBase }}>
               ({noOfImages || "..."})
             </Typography.Title>
           ),
           children: (
-            <Form.List name={prefix}>
-              {(fields) =>
-                map(fields, (field) => {
-                  return (
-                    <JazzRow key={field.key}>
-                      <Col span={10}>
-                        <TextField name={[field.name.toString(), "newname"]} label={undefined} />
-                      </Col>
-                      <Col span={2}>
-                        {prefix !== "notFound" && (
-                          <FormItem name={[field.name.toString(), "newname"]} style={{ marginBottom: 0 }}>
-                            <ImagePreview />
-                          </FormItem>
-                        )}
-                      </Col>
-                      <Col span={12}>
-                        <VeranstaltungenRenderer name={[field.name.toString(), "veranstaltungen"]} />
-                      </Col>
-                    </JazzRow>
-                  );
-                })
-              }
-            </Form.List>
+            <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
+              <Form.List name={prefix}>
+                {(fields) =>
+                  map(fields, (field) => {
+                    return (
+                      <JazzRow key={field.key}>
+                        <Col span={10}>
+                          <TextField name={[field.name.toString(), "newname"]} label={undefined} />
+                        </Col>
+                        <Col span={2}>
+                          {prefix !== "notFound" && (
+                            <FormItem name={[field.name.toString(), "newname"]}>
+                              <ImagePreview />
+                            </FormItem>
+                          )}
+                        </Col>
+                        <Col span={12}>
+                          <VeranstaltungenRenderer name={[field.name.toString(), "veranstaltungen"]} />
+                        </Col>
+                      </JazzRow>
+                    );
+                  })
+                }
+              </Form.List>
+            </ConfigProvider>
           ),
         },
       ]}

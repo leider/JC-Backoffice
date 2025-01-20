@@ -2,7 +2,7 @@ import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Form, Row, Tag, UploadFile } from "antd";
+import { Col, Form, Row, Tag, Typography, UploadFile } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS, userGruppen } from "jc-shared/user/user";
@@ -241,9 +241,11 @@ export default function SendMail() {
             <MultiSelectWithTags name="selectedKann" label="User kann..." options={kannFilter} noAdd />
           </Col>
         </JazzRow>
-        <Row gutter={12} style={{ marginBottom: 24 }}>
+        <Row gutter={12} style={{ marginBottom: 12 }}>
           <Col span={24}>
-            <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
+            <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+              Effektive Adressen:
+            </Typography.Title>
             {map(effectiveUsers, (u) => (
               <Tag key={u.email} color={"purple"}>
                 <b>{u.name}</b> ({u.email})

@@ -51,7 +51,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   function ImmediateEuro({ name }: { name: string }) {
     const fullName = ["kasse", isBeginn ? "startinhalt" : "endinhalt", name];
     return (
-      <Form.Item name={fullName} valuePropName="number" trigger="onNumber" style={{ marginBottom: 12 }}>
+      <Form.Item name={fullName} valuePropName="number" trigger="onNumber">
         <ImmediateEuroEmbedded name={name} />
       </Form.Item>
     );

@@ -35,7 +35,7 @@ function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
             onChange={() => {
               setExpanded(!expanded);
             }}
-            expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff" />)}
             items={[
               {
                 key: veranstaltung.id || "",
