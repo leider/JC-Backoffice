@@ -4,25 +4,24 @@ import numeral from "numeral";
 import { Tag, theme, Typography } from "antd";
 import dayjs from "dayjs";
 import { TagForUser } from "@/widgets/TagForUser.tsx";
-import React, { useMemo } from "react";
+import React from "react";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import map from "lodash/map";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   const token = theme.useToken().token;
-  const { xl } = useBreakpoint();
-  const isCompact = useMemo(() => !xl, [xl]);
+  const { isCompactMode } = useJazzContext();
 
   return ({ type, required }: Columns) => {
     switch (type) {
       case "boolean":
         return (val: boolean) =>
           val ? (
-            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompact ? 14 : undefined} />
+            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompactMode ? 14 : undefined} />
           ) : (
-            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompact ? 14 : undefined} />
+            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompactMode ? 14 : undefined} />
           );
       case "integer":
         return (val: number | null) => {

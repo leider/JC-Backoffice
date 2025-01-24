@@ -28,6 +28,7 @@ const emptyContext: SharedGlobals = {
   setIsDirty: noop,
   setMemoizedId: noop,
   isDarkMode: false,
+  isCompactMode: false,
 };
 
 type SharedGlobals = {
@@ -46,13 +47,14 @@ type SharedGlobals = {
   memoizedId?: string;
   setMemoizedId: (id?: string) => void;
   isDarkMode: boolean;
+  isCompactMode: boolean;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
-  const { isDarkMode } = useContext(GlobalContext);
+  const { isDarkMode, isCompactMode } = useContext(GlobalContext);
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
@@ -63,7 +65,16 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const context: Omit<
     SharedGlobals,
-    "showSuccess" | "showError" | "filter" | "setFilter" | "isDirty" | "setIsDirty" | "memoizedId" | "setMemoizedId" | "isDarkMode"
+    | "showSuccess"
+    | "showError"
+    | "filter"
+    | "setFilter"
+    | "isDirty"
+    | "setIsDirty"
+    | "memoizedId"
+    | "setMemoizedId"
+    | "isDarkMode"
+    | "isCompactMode"
   > = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
@@ -133,7 +144,19 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty, memoizedId, setMemoizedId, isDarkMode };
+  return {
+    ...exposedContext,
+    showSuccess,
+    showError,
+    filter,
+    setFilter,
+    isDirty,
+    setIsDirty,
+    memoizedId,
+    setMemoizedId,
+    isDarkMode,
+    isCompactMode,
+  };
 }
 
 export function useJazzContext() {

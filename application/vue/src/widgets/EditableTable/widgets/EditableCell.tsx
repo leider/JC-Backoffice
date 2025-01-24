@@ -11,7 +11,7 @@ import { TextField } from "@/widgets/TextField.tsx";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface EditableCellProps<T> extends Columns {
   record: T;
@@ -40,8 +40,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   const [editing, setEditing] = useState(false);
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
-  const { xl } = useBreakpoint();
-  const isCompact = useMemo(() => !xl, [xl]);
+  const { isCompactMode } = useJazzContext();
 
   const ref = useRef<any>(null); // eslint-disable-line  @typescript-eslint/no-explicit-any
 
@@ -64,7 +63,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   };
 
   const readonlyStyle = useMemo(() => {
-    if (isCompact) {
+    if (isCompactMode) {
       switch (type) {
         case "color":
           return { padding: "4px", paddingLeft: "4px" };
@@ -90,7 +89,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       default:
         return { padding: "6px", marginLeft: "6px" };
     }
-  }, [isCompact, type]);
+  }, [isCompactMode, type]);
 
   if (!editable) {
     return <td {...restProps}>{children}</td>;

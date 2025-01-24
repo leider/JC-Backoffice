@@ -23,6 +23,7 @@ const queryClient = new QueryClient({
 function JazzclubApp() {
   useUpdateApp();
   const { xl } = useBreakpoint();
+  const compactMode = useMemo(() => !xl, [xl]);
   const [darkMode, setDarkMode] = useState(darkModePreference.matches);
   darkModePreference.addEventListener("change", (e) => setDarkMode(e.matches));
   const success = "#28a745";
@@ -31,11 +32,11 @@ function JazzclubApp() {
 
   const algo = useMemo(() => {
     const result = [darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm];
-    if (!xl) {
+    if (compactMode) {
       result.push(theme.compactAlgorithm);
     }
     return result;
-  }, [darkMode, xl]);
+  }, [darkMode, compactMode]);
 
   const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
 
@@ -70,7 +71,7 @@ function JazzclubApp() {
         }}
       >
         <App>
-          <GlobalContext.Provider value={{ isDarkMode: darkMode }}>
+          <GlobalContext.Provider value={{ isDarkMode: darkMode, isCompactMode: compactMode }}>
             <JazzContent />
           </GlobalContext.Provider>
         </App>
