@@ -40,15 +40,17 @@ interface TeamBlockVermietungProps {
 }
 
 export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamBlockVermietungProps) {
-  const { memoizedId } = useJazzContext();
+  const { memoizedId, isDarkMode } = useJazzContext();
   const highlight = useMemo(() => vermietung.id === memoizedId, [memoizedId, vermietung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
   }, [highlight, initiallyOpen]);
 
+  const textColor = useMemo(() => vermietung.colorText(isDarkMode), [isDarkMode, vermietung]);
+
   return (
-    <ConfigProvider theme={{ token: { colorText: "#3d3d3d", fontSizeIcon: expanded ? 18 : 14 } }}>
+    <ConfigProvider theme={{ token: { colorText: textColor, fontSizeIcon: expanded ? 18 : 14 } }}>
       <Col span={24} id={vermietung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {vermietung.ghost ? (
           <div style={{ backgroundColor: vermietung.color, padding: "2px 16px" }}>
@@ -62,7 +64,7 @@ export default function TeamBlockVermietung({ vermietung, initiallyOpen }: TeamB
             onChange={() => {
               setExpanded(!expanded);
             }}
-            expandIcon={({ isActive }) => (isActive ? <CaretDown /> : <CaretRight />)}
+            expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
             items={[
               {
                 key: vermietung.id || "",

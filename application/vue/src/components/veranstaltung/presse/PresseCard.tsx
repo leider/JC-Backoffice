@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -16,6 +16,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
   const form = useFormInstance();
@@ -48,7 +49,9 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
   const [activePage, setActivePage] = useState<string>("final");
 
   function TabLabel(props: { kind: string; title: string }) {
+    const { isDarkMode } = useJazzContext();
     const farbe = color("presse");
+    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
     const active = activePage === props.kind;
     return (
       <b
@@ -56,7 +59,7 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
           margin: -16,
           padding: 16,
           backgroundColor: active ? farbe : "inherit",
-          color: active ? "#FFF" : farbe,
+          color: active ? brightText : farbe,
         }}
       >
         {props.title}

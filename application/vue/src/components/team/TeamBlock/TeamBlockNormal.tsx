@@ -13,14 +13,14 @@ interface TeamBlockAdminProps {
 }
 
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
-  const { memoizedId } = useJazzContext();
+  const { memoizedId, isDarkMode } = useJazzContext();
   const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
   }, [highlight, initiallyOpen]);
 
-  const textColor = useMemo(() => (veranstaltung.isVermietung ? undefined : "#fff"), [veranstaltung.isVermietung]);
+  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Button, ConfigProvider, Tooltip } from "antd";
 import { Link, To } from "react-router";
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { BaseButtonProps } from "antd/es/button/button";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function ButtonWithIconAndLink({
   to,
@@ -31,10 +32,12 @@ export default function ButtonWithIconAndLink({
   alwaysText?: boolean;
 }) {
   const { sm } = useBreakpoint();
+  const { isDarkMode } = useJazzContext();
 
+  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip title={tooltipTitle} color={color === "#FFF" ? "#333" : color}>
+      <Tooltip title={tooltipTitle} color={color === brightText ? "#333" : color}>
         <Link to={to}>
           <Button
             icon={icon && <IconForSmallBlock size={smallIcon ? 12 : 14} iconName={icon} />}
