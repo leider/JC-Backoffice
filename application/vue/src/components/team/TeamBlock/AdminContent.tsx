@@ -22,8 +22,7 @@ interface ContentProps {
 export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
   const { token } = theme.useToken();
   const [form] = Form.useForm();
-  const { isCompactMode, isDarkMode } = useJazzContext();
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
+  const { isCompactMode, isDarkMode, brightText } = useJazzContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);

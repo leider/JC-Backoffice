@@ -67,10 +67,10 @@ export default function AusgabenCard() {
     <Collapsible suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
       <JazzRow>
         <Col span={6}>
-          <NumberInput name={["kosten", "gagenEUR"]} label={"Gagen"} decimals={2} suffix={"€"} onChange={updateSumme} />
+          <NumberInput name={["kosten", "gagenEUR"]} label="Gagen" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
         <Col span={6}>
-          <SingleSelect name={["kosten", "gagenSteuer"]} label={"Steuer"} options={steuerSaetze} onChange={updateSumme} />
+          <SingleSelect name={["kosten", "gagenSteuer"]} label="Steuer" options={steuerSaetze} onChange={updateSumme} />
         </Col>
         <Col span={6}>
           <DynamicItem

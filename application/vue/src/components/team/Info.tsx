@@ -56,8 +56,7 @@ export default function Info() {
   function TabLabel({ title, type }: { type: string; title: string }) {
     const farbe = color("allgemeines");
     const active = activePage === type;
-    const { isDarkMode } = useJazzContext();
-    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
+    const { brightText } = useJazzContext();
     return (
       <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
     );
@@ -144,7 +143,7 @@ export default function Info() {
         tags={filterTags}
         buttons={[
           <a href={`/imgzip/${monatJahr!}`} key="imgzip">
-            <Button icon={<IconForSmallBlock size={16} iconName={"Download"} />}>Alle Bilder als ZIP</Button>
+            <Button icon={<IconForSmallBlock size={16} iconName="Download" />}>Alle Bilder als ZIP</Button>
           </a>,
         ]}
       />

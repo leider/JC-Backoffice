@@ -72,7 +72,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
         closable={false}
         maskClosable={false}
         footer={[
-          <ConfigProvider key={"dummykey"} theme={{ token: { colorPrimary: token.colorSuccess } }}>
+          <ConfigProvider key="dummykey" theme={{ token: { colorPrimary: token.colorSuccess } }}>
             <Button
               key="back"
               type="primary"

@@ -47,9 +47,9 @@ export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetCha
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
-      text={"Reset"}
+      text="Reset"
       onClick={resetChanges}
-      icon={"ArrowCounterclockwise"}
+      icon="ArrowCounterclockwise"
       disabled={disabled}
       type="default"
       color={token.colorSuccess}

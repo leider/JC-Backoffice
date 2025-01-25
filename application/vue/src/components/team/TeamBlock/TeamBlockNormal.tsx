@@ -1,18 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
-interface TeamBlockAdminProps {
-  veranstaltung: Konzert;
-  initiallyOpen: boolean;
-}
-
-export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
+export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { veranstaltung: Veranstaltung; initiallyOpen: boolean }) {
   const { memoizedId, isDarkMode } = useJazzContext();
   const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);

@@ -41,7 +41,7 @@ export default function ArtistCard() {
       <JazzRow>
         <Col span={12}>
           <DynamicItem
-            nameOfDepending={"startDate"}
+            nameOfDepending="startDate"
             renderWidget={(getFieldValue) => {
               const startDate = getFieldValue("startDate");
               return <TimeField name={["artist", "getInForMasterDate"]} label="Band Get-In (informativ)" baseValue={startDate} />;

@@ -180,7 +180,7 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
       >
         <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level }}>
           {item.img ? (
-            <img src={"/riderimg/" + item.img.src} width={item.img.width} height={item.img.height} alt={item.title} />
+            <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
           ) : (
             <div style={styleText}>{title}</div>
           )}

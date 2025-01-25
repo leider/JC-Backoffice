@@ -104,8 +104,8 @@ export const TextField: FunctionComponent<TTextField> = ({
       rules={rules}
       style={label ? { ...style } : { ...style, marginBottom: 0 }}
       initialValue={initialValue}
-      valuePropName={"textVal"}
-      trigger={"onText"}
+      valuePropName="textVal"
+      trigger="onText"
     >
       <TextInputEmbedded disabled={disabled} onChange={onChange} save={save} focus={focus} />
     </AntdForm.Item>

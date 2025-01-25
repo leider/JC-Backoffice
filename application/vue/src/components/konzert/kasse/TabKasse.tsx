@@ -78,13 +78,13 @@ export default function TabKasse() {
           <KassenzettelFreigabe />
           <JazzRow>
             <Col span={8}>
-              <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix={"€"} disabled />
+              <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix="€" disabled />
             </Col>
             <Col span={8}>
-              <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix={"€"} />
+              <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInput disabled name={"endbestandEUR"} label="Endbestand Berechnet" decimals={2} suffix={"€"} />
+              <NumberInput disabled name="endbestandEUR" label="Endbestand Berechnet" decimals={2} suffix="€" />
             </Col>
           </JazzRow>
         </Col>

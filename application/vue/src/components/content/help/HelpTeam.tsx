@@ -54,7 +54,7 @@ export default function HelpTeam() {
     pathname === "/team" && (
       <>
         <HelpSection
-          initiallyOpen={true}
+          initiallyOpen
           label={
             <span>
               <b>Veranstaltungen - Aktionen</b> Hier siehst Du alles in einer Übersicht. In der Titelzeile findest Du Knöpfe für Aktionen:

@@ -79,7 +79,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
           <Row gutter={8}>
             <Col span={24}>
               <Form.Item label={<b>Zeitraum für den Export:</b>} name="zeitraum">
-                <DatePicker.RangePicker format={"MMM YYYY"} picker="month" presets={rangePresets} />
+                <DatePicker.RangePicker format="MMM YYYY" picker="month" presets={rangePresets} />
               </Form.Item>
             </Col>
           </Row>

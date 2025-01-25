@@ -116,7 +116,7 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
                     <b>Telefon:</b>
                   </Col>
                   <Col span={16}>
-                    <a href={"tel:" + user.tel}> {user.tel}</a>
+                    <a href={`tel:${user.tel}`}> {user.tel}</a>
                   </Col>
                 </Row>
               </>

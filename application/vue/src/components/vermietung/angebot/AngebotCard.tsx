@@ -47,10 +47,10 @@ export default function AngebotCard() {
     <Collapsible suffix="angebot" label="Posten" noTopBorder={lg} amount={angebot.summe}>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "saalmiete"]} label="Saalmiete" decimals={2} suffix={"€"} disabled={readonly} />
+          <NumberInput name={["angebot", "saalmiete"]} label="Saalmiete" decimals={2} suffix="€" disabled={readonly} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", "saalmieteRabatt"]} label="Rabatt (optional)" decimals={0} suffix={"%"} disabled={readonly} />
+          <NumberInput name={["angebot", "saalmieteRabatt"]} label="Rabatt (optional)" decimals={0} suffix="%" disabled={readonly} />
         </Col>
         <Col span={8}>
           <NumberInputWithDirectValue label="Total" value={angebot.saalmieteTotal} decimals={2} suffix="€" />

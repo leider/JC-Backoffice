@@ -29,8 +29,7 @@ function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstalt
 
 export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const { isDarkMode } = useJazzContext();
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
+  const { brightText } = useJazzContext();
 
   const bestaetigte = useMemo(() => filter(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
   const unbestaetigte = useMemo(() => reject(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
@@ -39,7 +38,7 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
   const { token } = theme.useToken();
   return (
     <Collapse
-      size={"small"}
+      size="small"
       className="monat-header"
       style={{ backgroundColor: token.colorPrimary }}
       activeKey={expanded ? monat : undefined}

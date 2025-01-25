@@ -50,7 +50,7 @@ function EmbeddedPickers({
     <DatePicker.RangePicker
       id={id}
       allowClear={false}
-      format={"ddd DD.MM.YY"}
+      format="ddd DD.MM.YY"
       value={[start, end]}
       onCalendarChange={onCalendarChange}
       style={{ width: "100%" }}

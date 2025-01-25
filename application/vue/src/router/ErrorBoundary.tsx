@@ -18,7 +18,7 @@ export function ErrorBoundary() {
     console.log({ error });
     return (
       <Space direction="vertical" style={{ margin: "10rem" }}>
-        <Alert type="error" message={"Fehler"} description={<p>{"Oops"}</p>} />
+        <Alert type="error" message="Fehler" description={<p>Oops</p>} />
         <Button onClick={() => window.location.reload()}>{"Zurück"}</Button>
       </Space>
     );

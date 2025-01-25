@@ -45,14 +45,14 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
           <PreisprofilSelect optionen={optionen} onChange={updateSumme} />
         </Col>
         <Col span={4}>
-          <NumberInput name={["eintrittspreise", "preisprofil", "regulaer"]} label={"Reg"} decimals={2} suffix={"€"} disabled />
+          <NumberInput name={["eintrittspreise", "preisprofil", "regulaer"]} label="Reg" decimals={2} suffix="€" disabled />
         </Col>
         <Col span={4}>
           <DynamicItem
             nameOfDepending={["eintrittspreise", "preisprofil"]}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue label={"Erm"} decimals={2} suffix={"€"} value={eintritt.ermaessigt} />;
+              return <NumberInputWithDirectValue label="Erm" decimals={2} suffix="€" value={eintritt.ermaessigt} />;
             }}
           />
         </Col>
@@ -61,23 +61,23 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
             nameOfDepending={["eintrittspreise", "preisprofil"]}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue label={"Mitgl"} decimals={2} suffix={"€"} value={eintritt.mitglied} />;
+              return <NumberInputWithDirectValue label="Mitgl" decimals={2} suffix="€" value={eintritt.mitglied} />;
             }}
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <NumberInput name={["kasse", "einnahmenReservix"]} label={"Reservix"} decimals={2} suffix={"€"} onChange={updateSumme} />
+          <NumberInput name={["kasse", "einnahmenReservix"]} label="Reservix" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
       </JazzRow>
       <Flex justify="center">
         {freigabe ? (
-          <Typography.Text strong type={"success"}>
+          <Typography.Text strong type="success">
             Kasse ist freigegeben, verwende "Abendkasse"
           </Typography.Text>
         ) : (
-          <Typography.Text strong type={"danger"}>
+          <Typography.Text strong type="danger">
             Schätzung, da Kasse noch nicht freigegeben, verwende "Gäste (erw.)"
           </Typography.Text>
         )}
@@ -86,9 +86,9 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
         <Col span={8}>
           <NumberInput
             name={["eintrittspreise", "zuschuss"]}
-            label={"Zuschüsse (für alte Konzerte)"}
+            label="Zuschüsse (für alte Konzerte)"
             decimals={2}
-            suffix={"€"}
+            suffix="€"
             onChange={updateSumme}
             disabled
           />
@@ -96,7 +96,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
         <Col span={8}>
           <NumberInput
             name={["kasse", freigabe ? "einnahmeTicketsEUR" : "nix"]}
-            label={"Abendkasse (Tickets)"}
+            label="Abendkasse (Tickets)"
             decimals={2}
             disabled
             suffix="€"
@@ -105,7 +105,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
         <Col span={8}>
           <NumberInput
             name={["eintrittspreise", "erwarteteBesucher"]}
-            label={"Gäste (erw.)"}
+            label="Gäste (erw.)"
             decimals={0}
             onChange={updateSumme}
             disabled={!!freigabe}

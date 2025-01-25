@@ -32,7 +32,7 @@ export default function HelpKonzert() {
     pathname.startsWith("/konzert") && (
       <>
         <HelpSection
-          initiallyOpen={true}
+          initiallyOpen
           label={
             <span>
               <b>Konzert - Aktionen</b> Hier siehst Du alles in einer Übersicht. In der Titelzeile findest Du Knöpfe für Aktionen:

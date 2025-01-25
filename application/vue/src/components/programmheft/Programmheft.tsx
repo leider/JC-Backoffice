@@ -73,7 +73,7 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
         </Splitter.Panel>
         <Splitter.Panel collapsible>
           <EditableTable<Event>
-            name={"events"}
+            name="events"
             columnDescriptions={columnDescriptions}
             usersWithKann={usersAsOptions}
             newRowFactory={(vals) => new Event(vals)}

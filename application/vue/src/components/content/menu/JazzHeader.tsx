@@ -62,7 +62,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         {
           key: "allUsers",
           icon: <MenuIcon name="PersonLinesFill" />,
-          label: <Link to={"/users"}>Übersicht</Link>,
+          label: <Link to="/users">Übersicht</Link>,
         },
         {
           key: "preferences",
@@ -116,7 +116,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
       }}
     >
       <Link
-        to={"/"}
+        to="/"
         onClick={() => location.reload()}
         style={{
           height: "100%",
@@ -124,7 +124,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
           alignItems: "center",
         }}
       >
-        <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
+        <img src="/vue/img/logo_weiss.png" alt="Jazzclub Logo" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
         <ConfigProvider theme={{ components: { Menu: { subMenuItemSelectedColor: "white" } } }}>

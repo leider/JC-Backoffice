@@ -47,7 +47,7 @@ export default function AusgabenCard({ disabled }: KasseCardProps) {
             name={["kasse", "ausgabeCateringEUR"]}
             label="Catering"
             decimals={2}
-            suffix={"€"}
+            suffix="€"
             onChange={updateSumme}
             disabled={readonly}
           />
@@ -57,7 +57,7 @@ export default function AusgabenCard({ disabled }: KasseCardProps) {
             name={["kasse", "ausgabeHelferEUR"]}
             label="Personal"
             decimals={2}
-            suffix={"€"}
+            suffix="€"
             onChange={updateSumme}
             disabled={readonly}
           />

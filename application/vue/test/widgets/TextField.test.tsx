@@ -9,7 +9,7 @@ describe("Simple (Text) Input Widget", () => {
   describe("renders values when only standard properties are set as", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<TextField name={"test"} label={"testme"} />);
+        updateWidget(<TextField name="test" label="testme" />);
       });
     });
 
@@ -32,7 +32,7 @@ describe("Simple (Text) Input Widget", () => {
 
   describe("renders explicitly with initialValue as", () => {
     beforeEach(() => {
-      updateWidget(<TextField name={"test"} label={"testme"} initialValue={"initial"} />);
+      updateWidget(<TextField name="test" label="testme" initialValue="initial" />);
     });
 
     it("untouched if not set by form", () => {
@@ -47,7 +47,7 @@ describe("Simple (Text) Input Widget", () => {
 
   describe("renders disabled", () => {
     beforeEach(() => {
-      updateWidget(<TextField name={"test"} label={"testme"} disabled />);
+      updateWidget(<TextField name="test" label="testme" disabled />);
     });
 
     it("NOT prohibiting programmatic value changes", async () => {
@@ -62,7 +62,7 @@ describe("Simple (Text) Input Widget", () => {
   describe("executes callback on value change", () => {
     let tunnelVal: string | null;
     beforeEach(() => {
-      updateWidget(<TextField name={"test"} label={"testme"} onChange={(val) => (tunnelVal = val)} />);
+      updateWidget(<TextField name="test" label="testme" onChange={(val) => (tunnelVal = val)} />);
     });
 
     it("but not on initial rendering", async () => {

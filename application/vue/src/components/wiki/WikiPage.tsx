@@ -101,7 +101,7 @@ export default function WikiPage() {
       layout="vertical"
     >
       <JazzPageHeader
-        title={"Wiki " + realPage}
+        title={`Wiki ${realPage}`}
         breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
         buttons={[
           <Search key="Search" placeholder="Wiki durchsuchen..." onSearch={onSearch} style={{ width: 200 }} />,
