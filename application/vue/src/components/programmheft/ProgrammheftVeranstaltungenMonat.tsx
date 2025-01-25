@@ -11,6 +11,7 @@ import map from "lodash/map";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import filter from "lodash/filter";
 import reject from "lodash/reject";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstaltung[] }) {
   return (
@@ -28,6 +29,8 @@ function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstalt
 
 export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
   const [expanded, setExpanded] = useState<boolean>(false);
+  const { isDarkMode } = useJazzContext();
+  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
   const bestaetigte = useMemo(() => filter(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
   const unbestaetigte = useMemo(() => reject(veranstaltungen, "kopf.confirmed"), [veranstaltungen]);
@@ -43,12 +46,12 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
       onChange={() => {
         setExpanded(!expanded);
       }}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color="white" /> : <CaretRight color="white" />)}
+      expandIcon={({ isActive }) => (isActive ? <CaretDown color={brightText} /> : <CaretRight color={brightText} />)}
       items={[
         {
           key: monat,
           label: (
-            <Typography.Title level={4} style={{ margin: 0, color: "white" }}>
+            <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
               {monat}
             </Typography.Title>
           ),

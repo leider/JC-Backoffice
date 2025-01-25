@@ -56,8 +56,10 @@ export default function Info() {
   function TabLabel({ title, type }: { type: string; title: string }) {
     const farbe = color("allgemeines");
     const active = activePage === type;
+    const { isDarkMode } = useJazzContext();
+    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "white" : farbe }}>{title}</b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
     );
   }
 
