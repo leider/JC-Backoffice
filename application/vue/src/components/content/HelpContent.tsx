@@ -8,6 +8,7 @@ import { useLocation } from "react-router";
 import HelpTeam from "@/components/content/help/HelpTeam.tsx";
 import HelpKonzert from "@/components/content/help/HelpKonzert.tsx";
 import HelpWiki from "@/components/content/help/HelpWiki.tsx";
+import HelpPrefs from "@/components/content/help/HelpPrefs.tsx";
 
 export default function HelpContent() {
   const { pathname } = useLocation();
@@ -24,6 +25,7 @@ export default function HelpContent() {
       <Modal width={600} title="Hilfe" open={helpOpen} onCancel={() => setHelpOpen(false)} footer={null}>
         <Typography.Title level={4}>Hilfe für aktuelle Seite</Typography.Title>
         <p>Abhängig von Deinen Benutzerrechten sind einige Dinge für Dich nicht sichtbar oder aktiv.</p>
+        <HelpPrefs />
         <HelpVeranstaltungen />
         <HelpTeam />
         <HelpKonzert />
