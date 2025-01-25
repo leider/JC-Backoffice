@@ -16,12 +16,12 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 type ButtonProps = {
   disabled?: boolean;
 };
-function SaveOrSendButton({ disabled, isSend }: ButtonProps & { isSend: boolean }) {
+function SaveOrSendButton({ disabled, isSend, callback }: ButtonProps & { isSend?: boolean; callback?: () => void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
       text={isSend ? "Senden" : "Speichern"}
-      onClick="submit"
+      onClick={callback ? callback : "submit"}
       icon={isSend ? "Send" : "CheckSquare"}
       disabled={disabled}
       color={token.colorSuccess}
@@ -35,12 +35,12 @@ export function HelpWithKasseButton({ callback }: { callback: () => void }) {
   return <ButtonWithIcon alwaysText text="Abendkasse Hilfe" onClick={callback} icon="QuestionCircleFill" color={token.colorSuccess} />;
 }
 
-export function SaveButton({ disabled }: ButtonProps) {
-  return <SaveOrSendButton isSend={false} disabled={disabled} />;
+export function SaveButton({ disabled, callback }: ButtonProps & { callback?: () => void }) {
+  return <SaveOrSendButton disabled={disabled} callback={callback} />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
-  return <SaveOrSendButton isSend={true} disabled={disabled} />;
+  return <SaveOrSendButton isSend disabled={disabled} />;
 }
 
 export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {

@@ -13,6 +13,7 @@ import { TeamContext } from "@/components/team/TeamContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useInView } from "react-intersection-observer";
 
 interface ContentProps {
   veranstaltung: Veranstaltung;
@@ -79,19 +80,12 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
   }
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
-
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
+
+  const { inView, ref } = useInView({ triggerOnce: true });
+
   return (
-    <Form
-      form={form}
-      onValuesChange={() => {
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
-      }}
-      onFinish={saveForm}
-      layout="vertical"
-      size="small"
-      style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}
-    >
+    <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
       <Row>
         <Col span={6}>
           <Typography.Title
@@ -108,53 +102,67 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
           </Typography.Title>
         </Col>
         <Col span={18}>
-          <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
-            {showMitarbeiter && dirty ? (
-              <>
-                <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
-                  <ResetButton disabled={!dirty} resetChanges={setFormValue} />
-                  <SaveButton disabled={!dirty} />
-                </ConfigProvider>
-              </>
-            ) : (
-              <>
-                <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
-                <ButtonInAdminPanel type={forVermietung ? "angebot" : "gaeste"} veranstaltung={veranstaltung} />
-                {(!forVermietung || (veranstaltung as Vermietung).brauchtTechnik) && (
-                  <ButtonInAdminPanel type="technik" veranstaltung={veranstaltung} />
-                )}
-                <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
-                {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} />}
-                {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
-                {veranstaltung.brauchtPresse && <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />}
-                <ButtonPreview veranstaltung={veranstaltung} />
-              </>
-            )}
-          </Row>
+          {inView && (
+            <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
+              {showMitarbeiter && dirty ? (
+                <>
+                  <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
+                    <ResetButton disabled={!dirty} resetChanges={setFormValue} />
+                    <SaveButton disabled={!dirty} callback={() => form.submit()} />
+                  </ConfigProvider>
+                </>
+              ) : (
+                <>
+                  <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
+                  <ButtonInAdminPanel type={forVermietung ? "angebot" : "gaeste"} veranstaltung={veranstaltung} />
+                  {(!forVermietung || (veranstaltung as Vermietung).brauchtTechnik) && (
+                    <ButtonInAdminPanel type="technik" veranstaltung={veranstaltung} />
+                  )}
+                  <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
+                  {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} />}
+                  {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
+                  {veranstaltung.brauchtPresse && <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />}
+                  <ButtonPreview veranstaltung={veranstaltung} />
+                </>
+              )}
+            </Row>
+          )}
         </Col>
       </Row>
-      <Collapse
-        ghost
-        activeKey={showMitarbeiter ? "mitarbeiter" : ""}
-        items={[
-          {
-            showArrow: false,
-            key: "mitarbeiter",
-            children: (
-              <ConfigProvider theme={{ token: { colorBgBase: token.colorBgBase } }}>
-                <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
-                  <EditableStaffRows
-                    forVermietung={forVermietung}
-                    usersAsOptions={usersAsOptions}
-                    brauchtTechnik={brauchtTechnik}
-                    labelColor={textColor}
-                  />
-                </div>
-              </ConfigProvider>
-            ),
-          },
-        ]}
-      />
-    </Form>
+      {inView && (
+        <Collapse
+          ghost
+          activeKey={showMitarbeiter ? "mitarbeiter" : ""}
+          items={[
+            {
+              showArrow: false,
+              key: "mitarbeiter",
+              children: (
+                <Form
+                  form={form}
+                  onValuesChange={() => {
+                    setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+                  }}
+                  onFinish={saveForm}
+                  layout="vertical"
+                  size="small"
+                >
+                  <ConfigProvider theme={{ token: { colorBgBase: token.colorBgBase } }}>
+                    <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
+                      <EditableStaffRows
+                        forVermietung={forVermietung}
+                        usersAsOptions={usersAsOptions}
+                        brauchtTechnik={brauchtTechnik}
+                        labelColor={textColor}
+                      />
+                    </div>
+                  </ConfigProvider>
+                </Form>
+              ),
+            },
+          ]}
+        />
+      )}
+    </div>
   );
 }

@@ -33,11 +33,9 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
         ) : (
           <Collapse
             style={{ borderColor: backgroundColor }}
-            size={"small"}
+            size="small"
             activeKey={expanded ? veranstaltung.id : ""}
-            onChange={() => {
-              setExpanded(!expanded);
-            }}
+            onChange={() => setExpanded(!expanded)}
             expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
             items={[
               {
