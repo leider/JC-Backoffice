@@ -18,7 +18,7 @@ import keys from "lodash/keys";
 const { Content } = Layout;
 
 function TodaysConcert() {
-  const { todayKonzerte } = useJazzContext();
+  const { todayKonzerte, isDarkMode } = useJazzContext();
   const bestaetigte = useMemo(() => filter(todayKonzerte, "kopf.confirmed"), [todayKonzerte]);
 
   if (bestaetigte?.length ?? 0 > 0)
@@ -26,7 +26,11 @@ function TodaysConcert() {
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
           {map(bestaetigte, (konzert) => (
-            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl} style={{ color: "white" }}>
+            <Link
+              key={konzert.fullyQualifiedPreviewUrl}
+              to={konzert.fullyQualifiedPreviewUrl}
+              style={{ color: konzert.colorText(isDarkMode) }}
+            >
               <h2
                 style={{
                   marginBottom: 0,

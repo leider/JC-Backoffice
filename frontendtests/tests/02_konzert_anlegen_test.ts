@@ -11,6 +11,7 @@ Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.wait(0.5);
   I.see("Typ");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
+  I.click("OK");
   I.fillField('//input[@placeholder="Enddatum"]', "200320 20:00\t");
   I.click("OK");
   I.fillField("Titel", "Konzert #1");

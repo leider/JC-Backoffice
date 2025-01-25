@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { Col, Tabs, TabsProps, theme } from "antd";
+import { Col, Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -13,6 +13,7 @@ import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -105,13 +106,13 @@ export default function Optionen() {
 
   function TabLabel({ title, type }: { type: string; title: string }) {
     const { color } = colorsAndIconsForSections;
-    const { token } = theme.useToken();
+    const { isDarkMode } = useJazzContext();
     const active = activePage === type;
     const farbe = color("allgemeines");
+    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
+
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? token.colorBgContainer : farbe }}>
-        {title}
-      </b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
     );
   }
 

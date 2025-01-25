@@ -17,7 +17,7 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
 
   const color = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
-  const titleStyle = { margin: 0, color: color, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" };
+  const titleStyle = { margin: 0, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" };
 
   function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
     return (
@@ -28,7 +28,7 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
   }
 
   return (
-    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10 } }}>
+    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10, colorText: color } }}>
       {expanded ? (
         <>
           <T l={5} t={veranstaltung.datumForDisplayShort} />

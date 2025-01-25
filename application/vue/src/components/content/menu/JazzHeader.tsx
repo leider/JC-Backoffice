@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Menu } from "antd";
+import { ConfigProvider, Menu } from "antd";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
@@ -127,14 +127,16 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         <img src={"/vue/img/logo_weiss.png"} alt="Jazzclub Logo" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          items={currentUser.id ? items : []}
-          selectedKeys={[activeElement]}
-          style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
-        />
-        <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
+        <ConfigProvider theme={{ components: { Menu: { subMenuItemSelectedColor: "white" } } }}>
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            items={currentUser.id ? items : []}
+            selectedKeys={[activeElement]}
+            style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
+          />
+          <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
+        </ConfigProvider>
       </div>
       <Preferences isOpen={isOpen} setIsOpen={setIsOpen} />
     </Header>

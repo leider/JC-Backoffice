@@ -43,7 +43,7 @@ export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton isSend={true} disabled={disabled} />;
 }
 
-export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> }) {
+export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon

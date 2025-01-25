@@ -1,9 +1,9 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { Col, Collapse, Form, Row, Typography } from "antd";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Col, Collapse, ConfigProvider, Form, Row, theme, Typography } from "antd";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
-import { SaveButton } from "@/components/colored/JazzButtons.tsx";
+import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -19,8 +19,10 @@ interface ContentProps {
 }
 
 export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
+  const { token } = theme.useToken();
   const [form] = Form.useForm();
-  const { isCompactMode } = useJazzContext();
+  const { isCompactMode, isDarkMode } = useJazzContext();
+  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -33,16 +35,15 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     return veranstaltung.isVermietung;
   }, [veranstaltung]);
 
-  useEffect(
-    () => {
-      const deepCopy = veranstaltung.toJSON();
-      form.resetFields();
-      form.setFieldsValue(deepCopy);
-      setInitialValue(veranstaltung.toJSON());
-      setDirty(false);
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [veranstaltung],
-  );
+  const setFormValue = useCallback(() => {
+    const deepCopy = veranstaltung.toJSON();
+    form.resetFields();
+    form.setFieldsValue(deepCopy);
+    setInitialValue(veranstaltung.toJSON());
+    setDirty(false);
+  }, [form, veranstaltung]);
+
+  useEffect(setFormValue, [setFormValue]);
 
   useEffect(() => {
     setVeranstaltung(veranVermiet);
@@ -77,8 +78,9 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     });
   }
 
-  const textColor = useMemo(() => (veranstaltung.isVermietung ? "black" : "white"), [veranstaltung.isVermietung]);
+  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
+  const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   return (
     <Form
       form={form}
@@ -88,7 +90,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
       onFinish={saveForm}
       layout="vertical"
       size="small"
-      style={{ margin: isCompactMode ? -8 : -12, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
+      style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}
     >
       <Row>
         <Col span={6}>
@@ -108,7 +110,12 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
         <Col span={18}>
           <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
             {showMitarbeiter && dirty ? (
-              <SaveButton disabled={!dirty} />
+              <>
+                <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
+                  <ResetButton disabled={!dirty} resetChanges={setFormValue} />
+                  <SaveButton disabled={!dirty} />
+                </ConfigProvider>
+              </>
             ) : (
               <>
                 <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
@@ -134,9 +141,16 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
             showArrow: false,
             key: "mitarbeiter",
             children: (
-              <div style={{ padding: 8, margin: -8, marginTop: -12, backgroundColor: "white", borderColor: "white" }}>
-                <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
-              </div>
+              <ConfigProvider theme={{ token: { colorBgBase: token.colorBgBase } }}>
+                <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
+                  <EditableStaffRows
+                    forVermietung={forVermietung}
+                    usersAsOptions={usersAsOptions}
+                    brauchtTechnik={brauchtTechnik}
+                    labelColor={textColor}
+                  />
+                </div>
+              </ConfigProvider>
             ),
           },
         ]}
