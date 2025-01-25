@@ -2,15 +2,14 @@ import { NamePath } from "rc-field-form/es/interface";
 import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
-import { useState } from "react";
-import { Button, Col, Collapse, ConfigProvider, Form, Image, Popover, Space, theme, Typography } from "antd";
+import { Button, Col, ConfigProvider, Form, Image, Popover, Space } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import { imgFullsize } from "@/commons/loader.ts";
 import { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import Collapsible from "@/widgets/Collapsible.tsx";
 
 export type kindOfSection = "with" | "unused" | "notFound";
 
@@ -71,60 +70,33 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
     );
   }
 
-  const { token } = theme.useToken();
-
-  const [expanded, setExpanded] = useState<boolean>(false);
   return (
-    <Collapse
-      className="monat-header"
-      style={{ backgroundColor: token.colorPrimary }}
-      activeKey={expanded ? prefix : undefined}
-      onChange={() => {
-        setExpanded(!expanded);
-      }}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color={token.colorBgBase} /> : <CaretRight color={token.colorBgBase} />)}
-      items={[
-        {
-          key: prefix,
-          label: (
-            <Typography.Title level={4} style={{ margin: 0, color: token.colorBgBase }}>
-              {title}
-            </Typography.Title>
-          ),
-          extra: (
-            <Typography.Title level={4} style={{ margin: 0, color: token.colorBgBase }}>
-              ({noOfImages || "..."})
-            </Typography.Title>
-          ),
-          children: (
-            <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
-              <Form.List name={prefix}>
-                {(fields) =>
-                  map(fields, (field) => {
-                    return (
-                      <JazzRow key={field.key}>
-                        <Col span={10}>
-                          <TextField name={[field.name.toString(), "newname"]} label={undefined} />
-                        </Col>
-                        <Col span={2}>
-                          {prefix !== "notFound" && (
-                            <FormItem name={[field.name.toString(), "newname"]}>
-                              <ImagePreview />
-                            </FormItem>
-                          )}
-                        </Col>
-                        <Col span={12}>
-                          <VeranstaltungenRenderer name={[field.name.toString(), "veranstaltungen"]} />
-                        </Col>
-                      </JazzRow>
-                    );
-                  })
-                }
-              </Form.List>
-            </ConfigProvider>
-          ),
-        },
-      ]}
-    />
+    <Collapsible suffix="gaeste" label={title} noTopBorder uncollapsed amount={noOfImages ?? "..."}>
+      <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
+        <Form.List name={prefix}>
+          {(fields) =>
+            map(fields, (field) => {
+              return (
+                <JazzRow key={field.key}>
+                  <Col span={10}>
+                    <TextField name={[field.name.toString(), "newname"]} label={undefined} />
+                  </Col>
+                  <Col span={2}>
+                    {prefix !== "notFound" && (
+                      <FormItem name={[field.name.toString(), "newname"]}>
+                        <ImagePreview />
+                      </FormItem>
+                    )}
+                  </Col>
+                  <Col span={12}>
+                    <VeranstaltungenRenderer name={[field.name.toString(), "veranstaltungen"]} />
+                  </Col>
+                </JazzRow>
+              );
+            })
+          }
+        </Form.List>
+      </ConfigProvider>
+    </Collapsible>
   );
 }

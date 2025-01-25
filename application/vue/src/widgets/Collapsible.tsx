@@ -22,7 +22,7 @@ export default function Collapsible({
   uncollapsed?: boolean;
 }) {
   const { isDarkMode } = useJazzContext();
-  const [expanded, setExpanded] = useState<string>(uncollapsed ? "" : "content");
+  const [expanded, setExpanded] = useState<string | undefined>(uncollapsed ? undefined : "content");
 
   const { color } = colorsAndIconsForSections;
   const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
@@ -46,14 +46,16 @@ export default function Collapsible({
           label: (
             <Row>
               <Col flex={1}>
-                <Typography.Title style={{ margin: 0 }} level={5} color={brightText}>
+                <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
                   {label}
                 </Typography.Title>
               </Col>
               <Col flex="auto">&nbsp;</Col>
               {!isNil(amount) && (
                 <Col>
-                  <span style={{ fontSize: 18, color: brightText }}>{formatToGermanNumberString(amount)} €</span>
+                  <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
+                    {formatToGermanNumberString(amount)} €
+                  </Typography.Title>
                 </Col>
               )}
             </Row>
