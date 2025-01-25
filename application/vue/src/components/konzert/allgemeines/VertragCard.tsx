@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Button, Col, Form, Row, Select } from "antd";
+import { Button, Col, Form, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/konzert/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
@@ -11,6 +11,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function VertragCard() {
   const form = useFormInstance();
@@ -21,7 +22,7 @@ export default function VertragCard() {
   return (
     <Collapsible suffix="allgemeines" label="Vertrag">
       {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={9}>
           <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten} />
         </Col>
@@ -49,17 +50,17 @@ export default function VertragCard() {
             }}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <Uploader name={["vertrag", "datei"]} typ={"vertrag"} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <MarkdownEditor label={<b>Zusatzvereinbarungen:</b>} name={["vertrag", "zusatzvereinbarungen"]} />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

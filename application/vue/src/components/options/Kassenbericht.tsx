@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function Kassenbericht() {
   useDirtyBlocker(false);
@@ -27,7 +28,7 @@ export default function Kassenbericht() {
     <>
       <JazzPageHeader title="Kassenberichte" />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             {map(monate, (monat) => (
               <p key={monat.monatJahrKompakt}>
@@ -37,7 +38,7 @@ export default function Kassenbericht() {
               </p>
             ))}
           </Col>
-        </Row>
+        </JazzRow>
       </RowWrapper>
     </>
   );

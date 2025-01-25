@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
@@ -13,6 +13,7 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function PreviewVermietung() {
   const { url } = useParams();
@@ -50,7 +51,7 @@ export default function PreviewVermietung() {
         dateString={vermietung.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
       />
-      <Row gutter={12}>
+      <JazzRow>
         <Col xs={24} lg={12}>
           <StaffInPreview veranstaltung={vermietung} />
           <InfoInPreview veranstaltung={vermietung} />
@@ -63,7 +64,7 @@ export default function PreviewVermietung() {
             </Collapsible>
           </Col>
         )}
-      </Row>
+      </JazzRow>
     </div>
   );
 }

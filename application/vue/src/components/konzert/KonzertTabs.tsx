@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -14,6 +14,22 @@ import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+
+const TabLabel = ({ title, type, activePage }: { type: buttonType; title: string; activePage: string }) => {
+  const { icon, color } = colorsAndIconsForSections;
+  const { isDarkMode } = useJazzContext();
+  const active = activePage === type;
+
+  const farbe = color(type);
+  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
+
+  return (
+    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+      <IconForSmallBlock style={{ marginBottom: -3 }} iconName={icon(type)} />
+      &nbsp; {title}
+    </b>
+  );
+};
 
 export default function KonzertTabs() {
   const form = useFormInstance();
@@ -44,38 +60,30 @@ export default function KonzertTabs() {
     }
   }, [currentUser.id, onlyKasse, search, setSearch]);
 
-  const TabLabel = useCallback(
-    ({ title, type }: { type: buttonType; title: string }) => {
-      const { icon, color } = colorsAndIconsForSections;
-      const active = activePage === type;
-
-      const farbe = color(type);
-
-      return (
-        <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? "#FFF" : farbe }}>
-          <IconForSmallBlock style={{ marginBottom: -3 }} iconName={icon(type)} />
-          &nbsp; {title}
-        </b>
-      );
-    },
-    [activePage],
-  );
   useEffect(() => {
-    const kasseTab = { key: "kasse", label: <TabLabel type="kasse" title="Abendkasse" />, children: <TabKasse /> };
-    const gaesteTab = { key: "gaeste", label: <TabLabel type="gaeste" title="Gäste am Abend" />, children: <TabGaeste /> };
+    const kasseTab = { key: "kasse", label: <TabLabel type="kasse" title="Abendkasse" activePage={activePage} />, children: <TabKasse /> };
+    const gaesteTab = {
+      key: "gaeste",
+      label: <TabLabel type="gaeste" title="Gäste am Abend" activePage={activePage} />,
+      children: <TabGaeste />,
+    };
     const allTabs: TabsProps["items"] = [
-      { key: "allgemeines", label: <TabLabel type="allgemeines" title="Allgemeines" />, children: <TabAllgemeines /> },
+      {
+        key: "allgemeines",
+        label: <TabLabel type="allgemeines" title="Allgemeines" activePage={activePage} />,
+        children: <TabAllgemeines />,
+      },
       gaesteTab,
-      { key: "technik", label: <TabLabel type="technik" title="Technik" />, children: <TabTechnik /> },
-      { key: "ausgaben", label: <TabLabel type="ausgaben" title="Kalkulation" />, children: <TabKosten /> },
-      { key: "hotel", label: <TabLabel type="hotel" title="Hotel" />, children: <TabHotel /> },
+      { key: "technik", label: <TabLabel type="technik" title="Technik" activePage={activePage} />, children: <TabTechnik /> },
+      { key: "ausgaben", label: <TabLabel type="ausgaben" title="Kalkulation" activePage={activePage} />, children: <TabKosten /> },
+      { key: "hotel", label: <TabLabel type="hotel" title="Hotel" activePage={activePage} />, children: <TabHotel /> },
       kasseTab,
     ];
     if (onlyKasse) {
       return setTabs([gaesteTab, kasseTab]);
     }
     if (brauchtPresse) {
-      allTabs.push({ key: "presse", label: <TabLabel type="presse" title="Presse" />, children: <TabPresse /> });
+      allTabs.push({ key: "presse", label: <TabLabel type="presse" title="Presse" activePage={activePage} />, children: <TabPresse /> });
     }
     if (brauchtHotel) {
       setTabs(allTabs);
@@ -84,7 +92,7 @@ export default function KonzertTabs() {
       result.splice(4, 1);
       setTabs(result);
     }
-  }, [brauchtHotel, optionen, activePage, onlyKasse, TabLabel, brauchtPresse]);
+  }, [brauchtHotel, optionen, activePage, onlyKasse, brauchtPresse]);
 
   return (
     <Tabs

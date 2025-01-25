@@ -1,4 +1,4 @@
-import { App, Col, Flex, Form, Row, Typography } from "antd";
+import { App, Col, Flex, Form, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/commons/loader.ts";
 import React, { useMemo } from "react";
@@ -14,6 +14,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import numeral from "numeral";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export function KassenzettelFreigabe() {
   const form = useFormInstance();
@@ -72,7 +73,7 @@ export function KassenzettelFreigabe() {
 
   return (
     <>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={10}>
           <ButtonWithIcon
             block
@@ -111,8 +112,8 @@ export function KassenzettelFreigabe() {
               </>
             ))}
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           {numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00") ? (
             <Flex justify="center">
@@ -126,15 +127,15 @@ export function KassenzettelFreigabe() {
             <>&nbsp;</>
           )}
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={10}>
           <MuenzenScheineModal isBeginn={true} />
         </Col>
         <Col span={10} offset={4}>
           <MuenzenScheineModal isBeginn={false} />
         </Col>
-      </Row>
+      </JazzRow>
     </>
   );
 }

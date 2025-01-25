@@ -10,9 +10,9 @@ import dayjs from "dayjs";
 import times from "lodash/times.js";
 import { TerminEvent } from "../optionen/termin.js";
 import { colorVermietung } from "../optionen/optionValues.js";
-import Color from "color";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import map from "lodash/map.js";
+import tinycolor from "tinycolor2";
 
 export type MinimalVeranstaltung = Partial<Veranstaltung> & { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -82,7 +82,17 @@ export default abstract class Veranstaltung {
 
   get color(): string {
     const color = this.isVermietung ? colorVermietung : this.kopf.color;
-    return this.ghost ? new Color(color).lighten(this.isVermietung ? 0.05 : 0.5).hex() : color;
+    return this.ghost ? tinycolor(color).lighten(5).toHexString() : color;
+  }
+
+  colorText(darkMode: boolean): string {
+    const lightText = darkMode ? "#dcdcdc" : "#fff";
+    const darkText = darkMode ? "#666" : "#111";
+    const color = this.color;
+    if (Math.abs(tinycolor(lightText).getLuminance() - tinycolor(color).getLuminance()) < 0.3) {
+      return this.ghost ? tinycolor(darkText).lighten(30).toHexString() : darkText;
+    }
+    return this.ghost ? tinycolor(lightText).darken().toHexString() : lightText;
   }
 
   get initializedUrl(): string {
@@ -132,7 +142,7 @@ export default abstract class Veranstaltung {
       tooltip: this.tooltipInfos,
       linkTo: isOrgaTeam ? this.fullyQualifiedUrl : this.fullyQualifiedPreviewUrl,
       backgroundColor: color,
-      textColor: this.isVermietung ? "#111" : "#fff",
+      textColor: this.colorText(false),
       borderColor: !this.kopf.confirmed ? "#f8500d" : color,
     };
   }

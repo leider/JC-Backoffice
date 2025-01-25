@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { App, Button, Col, ConfigProvider, Form, Radio, Row, theme } from "antd";
+import { App, Button, Col, ConfigProvider, Form, Radio, theme } from "antd";
 import "easymde/dist/easymde.min.css";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
@@ -15,6 +15,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function InfoCard() {
   const form = useFormInstance();
@@ -91,7 +92,7 @@ export default function InfoCard() {
   const token = useToken().token;
   return (
     <Collapsible suffix="angebot" label="Infos">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
             <Form.Item name={["angebot", "status"]} initialValue="offen">
@@ -99,16 +100,16 @@ export default function InfoCard() {
             </Form.Item>
           </ConfigProvider>
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           {status === "abgerechnet" && (
             <TextField label="Rechnungsnummer" name={["angebot", "rechnungsnummer"]} required={status === "abgerechnet"} />
           )}
         </Col>
-      </Row>
+      </JazzRow>
       {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={6}>
           <SingleSelect name={"art"} label="Art" options={printOptions} />
         </Col>
@@ -160,7 +161,7 @@ export default function InfoCard() {
               </>
             ))}
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

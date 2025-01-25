@@ -1,10 +1,11 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider } from "antd";
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { riderFor } from "@/commons/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const url = useMemo(() => encodeURIComponent(veranstaltung.url || ""), [veranstaltung.url]);
@@ -17,7 +18,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
 
   return (
     <Collapsible suffix="technik" label="Technik">
-      <Row gutter={12}>
+      <JazzRow>
         {veranstaltung.technik.fluegel && (
           <Col span={24}>
             <b>Flügel stimmen!</b>
@@ -80,7 +81,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             </Col>
           )
         )}
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

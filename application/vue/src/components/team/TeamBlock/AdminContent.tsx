@@ -1,5 +1,5 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { Col, Collapse, Form, Row } from "antd";
+import { Col, Collapse, Form, Row, Typography } from "antd";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
@@ -12,6 +12,7 @@ import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface ContentProps {
   veranstaltung: Veranstaltung;
@@ -19,6 +20,7 @@ interface ContentProps {
 
 export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
   const [form] = Form.useForm();
+  const { isCompactMode } = useJazzContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [initialValue, setInitialValue] = useState<any>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -86,11 +88,12 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
       onFinish={saveForm}
       layout="vertical"
       size="small"
-      style={{ margin: -12, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
+      style={{ margin: isCompactMode ? -8 : -12, backgroundColor: veranstaltung.color, borderColor: veranstaltung.color }}
     >
       <Row>
         <Col span={6}>
-          <h3
+          <Typography.Title
+            level={5}
             style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
             onClick={() => {
               setShowMitarbeiter(!showMitarbeiter);
@@ -100,7 +103,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
               <IconForSmallBlock iconName="UniversalAccess" color={textColor} />
               &nbsp;...
             </span>
-          </h3>
+          </Typography.Title>
         </Col>
         <Col span={18}>
           <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>

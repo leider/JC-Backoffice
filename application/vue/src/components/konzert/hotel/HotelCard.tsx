@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
@@ -12,6 +12,7 @@ import { useWatch } from "antd/es/form/Form";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export default function HotelCard() {
   const form = useFormInstance();
@@ -65,7 +66,7 @@ export default function HotelCard() {
 
   return (
     <Collapsible suffix="hotel" label="Zimmer" amount={summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={12}>
           <StartEndDateOnlyPickers
             names={[
@@ -83,8 +84,8 @@ export default function HotelCard() {
             <TextArea rows={7} />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={3}>
           <NumberInput name={["unterkunft", "einzelNum"]} label="Einzel" decimals={0} onChange={updateSumme} />
         </Col>
@@ -103,12 +104,12 @@ export default function HotelCard() {
         <Col span={5}>
           <NumberInput name={["unterkunft", "suiteEUR"]} label="Preis" decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <CheckItem name={["hotelpreiseAlsDefault"]} label="Preise als Default übernehmen" />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

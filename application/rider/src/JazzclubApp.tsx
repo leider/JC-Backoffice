@@ -4,6 +4,7 @@ import { App, ConfigProvider, theme } from "antd";
 import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import { useState } from "react";
+import { GlobalContext } from "jc-vue/src/app/GlobalContext";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -45,7 +46,9 @@ function JazzclubApp() {
         }}
       >
         <App>
-          <JazzContent />
+          <GlobalContext.Provider value={{ isDarkMode: false, isCompactMode: false }}>
+            <JazzContent />
+          </GlobalContext.Provider>
         </App>
       </ConfigProvider>
     </QueryClientProvider>

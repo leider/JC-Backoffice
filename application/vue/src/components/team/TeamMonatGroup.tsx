@@ -13,6 +13,7 @@ import groupBy from "lodash/groupBy";
 import sortBy from "lodash/sortBy";
 import map from "lodash/map";
 import keys from "lodash/keys";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface MonatGroupProps {
   monat: string;
@@ -21,6 +22,7 @@ interface MonatGroupProps {
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
   const { veranstaltungenNachMonat } = useContext(TeamContext);
+  const { isDarkMode } = useJazzContext();
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
 
@@ -42,7 +44,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
 
-  const isDarkMode = useMemo(() => token.colorBgBase === "#101010", [token.colorBgBase]);
+  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
   return (
     <>
@@ -53,7 +55,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
             activeKey={expanded ? monat : ""}
             onChange={() => setExpanded(!expanded)}
             expandIcon={({ isActive }) =>
-              isActive ? <CaretDown size={14} style={{ color: "#FFF" }} /> : <CaretRight size={14} style={{ color: "#FFF" }} />
+              isActive ? <CaretDown size={14} style={{ color: brightText }} /> : <CaretRight size={14} style={{ color: brightText }} />
             }
             items={[
               {
@@ -63,7 +65,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                 label: (
                   <Row justify="space-between" align="bottom">
                     <Col>
-                      <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+                      <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                         {monat}
                       </Typography.Title>
                     </Col>

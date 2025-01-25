@@ -1,13 +1,14 @@
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { Link } from "react-router";
 import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function KommentarCard({ forVermietung = false }: { forVermietung?: boolean }) {
   return (
     <Collapsible suffix="allgemeines" label="Kommentar">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           {!forVermietung && (
             <b>
@@ -17,7 +18,7 @@ export default function KommentarCard({ forVermietung = false }: { forVermietung
           )}
           <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]} />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Checkbox, Col, Form, Row } from "antd";
+import { Checkbox, Col, Form } from "antd";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -12,6 +12,7 @@ import Konzert from "jc-shared/konzert/konzert.ts";
 import { EventTypeSelect } from "@/widgets/EventTypeSelects/EventTypeSelect.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export default function EventCard() {
   const form = useFormInstance();
@@ -49,7 +50,7 @@ export default function EventCard() {
 
   return (
     <Collapsible suffix="allgemeines" label="Event" noTopBorder>
-      <Row gutter={12}>
+      <JazzRow>
         <Checker label="Ist bestätigt" name={["kopf", "confirmed"]} disabled={!isBookingTeam} />
         <Checker label="Technik ist geklärt" name={["technik", "checked"]} />
         <Checker label="Braucht Presse" name="brauchtPresse" />
@@ -60,21 +61,21 @@ export default function EventCard() {
         <Checker label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
         <Checker label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
         <Checker label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <TextField name={["kopf", "titel"]} label="Titel" required />
         </Col>
         <Col span={12}>
           <EventTypeSelect />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={24}>
           <StartEndPickers />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={8}>
           <SingleSelect name={["kopf", "ort"]} label="Ort" options={orte.alleNamen()} onChange={ortChanged} />
         </Col>
@@ -84,8 +85,8 @@ export default function EventCard() {
         <Col span={8}>
           <NumberInput name={["kosten", "saalmiete"]} label="Saalmiete (alt)" decimals={2} suffix="€" disabled />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={7}>
           <SingleSelect name={["kopf", "kooperation"]} label="Koop (Rechnung)" options={optionen.kooperationen} />
         </Col>
@@ -100,7 +101,7 @@ export default function EventCard() {
         <Col span={8}>
           <SingleSelect name={["kopf", "genre"]} label="Genre" options={optionen.genres} />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

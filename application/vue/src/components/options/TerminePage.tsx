@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/commons/loader.ts";
 import * as React from "react";
 import { useMemo } from "react";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow";
 
 type TerminFlat = { dates: Date[]; beschreibung: string; typ?: TerminType };
 class TermineWrapper {
@@ -35,7 +36,7 @@ function TerminePageInternal() {
   ];
 
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={24}>
         <EditableTable<Termin>
           columnDescriptions={columnDescriptions}
@@ -43,7 +44,7 @@ function TerminePageInternal() {
           newRowFactory={(vals) => Object.assign({}, vals)}
         />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }
 

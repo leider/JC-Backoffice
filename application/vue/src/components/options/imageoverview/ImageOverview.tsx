@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useMemo } from "react";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { saveImagenames } from "@/commons/loader.ts";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.ts";
@@ -10,6 +10,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import filter from "lodash/filter";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function ImageOverview() {
   useDirtyBlocker(false);
@@ -49,13 +50,13 @@ export default function ImageOverview() {
   return (
     <Form form={form} onFinish={saveForm}>
       <JazzPageHeader title="Bilder bearbeiten" buttons={[<SaveButton key="save" />]} />
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           <Section prefix="with" title="Bilder ohne Probleme" noOfImages={noPerSection.with} />
           <Section prefix="unused" title="Unbenutzte Bilder" noOfImages={noPerSection.unused} />
           <Section prefix="notFound" title="Nicht gefundene Bilder" noOfImages={noPerSection.notFound} />
         </Col>
-      </Row>
+      </JazzRow>
     </Form>
   );
 }

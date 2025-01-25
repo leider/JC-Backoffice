@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import compact from "lodash/compact.js";
 import DatumUhrzeit from "./DatumUhrzeit.js";
 import isArray from "lodash/isArray.js";
 import isString from "lodash/isString.js";
@@ -80,4 +79,13 @@ function normalizeString(input: string): string {
     .toLowerCase();
 }
 
-export default { compact, isNumber, normalizeString, toObject, toObjectList, stringOrDateToDate, dropImage, pushImage, toArray };
+export default {
+  isNumber,
+  normalizeString,
+  toObject,
+  toObjectList,
+  stringOrDateToDate,
+  dropImage,
+  pushImage,
+  toArray,
+};

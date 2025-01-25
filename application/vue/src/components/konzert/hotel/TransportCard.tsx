@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Button, Col, ConfigProvider, Form, Row, theme } from "antd";
+import { Button, Col, ConfigProvider, Form, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -10,6 +10,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function TransportCard() {
   const form = useFormInstance();
@@ -57,14 +58,14 @@ ${currentUser.name}`);
   return (
     <>
       <Collapsible suffix="hotel" label="Transport" amount={summe} noTopBorder={lg}>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             <Form.Item label={<b>Anmerkungen:</b>} name={["unterkunft", "kommentar"]}>
               <TextArea rows={7} />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags
               name={["unterkunft", "sonstiges"]}
@@ -76,17 +77,17 @@ ${currentUser.name}`);
           <Col span={12}>
             <NumberInput name={["unterkunft", "transportEUR"]} label="Summe" decimals={2} suffix={"€"} onChange={updateSumme} />
           </Col>
-        </Row>
+        </JazzRow>
       </Collapsible>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={12}>
           <CheckItem name={["unterkunft", "angefragt"]} label="Hotel Angefragt" />
         </Col>
         <Col span={12}>
           <CheckItem name={["unterkunft", "bestaetigt"]} label="Hotel Bestätigt" />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
             <Button block icon={<IconForSmallBlock iconName={"EnvelopeOpen"} />} type="primary" onClick={sendMail}>
@@ -94,7 +95,7 @@ ${currentUser.name}`);
             </Button>
           </ConfigProvider>
         </Col>
-      </Row>
+      </JazzRow>
     </>
   );
 }

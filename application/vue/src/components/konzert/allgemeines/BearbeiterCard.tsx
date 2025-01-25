@@ -1,10 +1,11 @@
 import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import { ChangelistItem } from "jc-shared/konzert/konzert.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useWatch } from "antd/es/form/Form";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function BearbeiterCard() {
   const form = useFormInstance();
@@ -15,7 +16,7 @@ export default function BearbeiterCard() {
       <Collapsible suffix="allgemeines" label="Historie" uncollapsed>
         <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
         {map(changelist, (item: ChangelistItem, idx: number) => (
-          <Row gutter={12} key={idx}>
+          <JazzRow key={idx}>
             <Col span={24}>
               <details>
                 <summary>
@@ -24,7 +25,7 @@ export default function BearbeiterCard() {
                 <pre>{item.diff}</pre>
               </details>
             </Col>
-          </Row>
+          </JazzRow>
         ))}
       </Collapsible>
     )

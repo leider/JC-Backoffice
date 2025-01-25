@@ -1,4 +1,4 @@
-import { Col, Row, Tour, TourProps } from "antd";
+import { Col, Tour, TourProps } from "antd";
 import React, { Ref, useContext, useEffect, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/konzert/kasse/AusgabenCard";
@@ -9,6 +9,7 @@ import { useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { KassenContext } from "./KassenContext";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow";
 
 export interface KasseCardProps {
   disabled: boolean;
@@ -23,7 +24,7 @@ export default function TabKasse() {
   const refStartinhalt: Ref<HTMLElement> = useRef(null);
   const refEndinhalt: Ref<HTMLElement> = useRef(null);
   const refAusgaben: Ref<HTMLDivElement> = useRef(null);
-  const refEinahmen: Ref<HTMLDivElement> = useRef(null);
+  const refEinnahmen: Ref<HTMLDivElement> = useRef(null);
   const refAnBank: Ref<HTMLElement> = useRef(null);
 
   function anfangsbestandChanged() {
@@ -55,7 +56,7 @@ export default function TabKasse() {
       title: "Eintritt der Kasse ausfüllen",
       description:
         "Fülle die Einnahmen aus Karte. Speichern nicht vergessen! Der Eintritt kann berechnet werden, wenn die anderen Felder gefüllt sind.",
-      target: refEinahmen.current ? () => refEinahmen.current! : undefined,
+      target: refEinnahmen.current ? () => refEinnahmen.current! : undefined,
     },
     {
       title: "Ausgabe an Bank ausfüllen",
@@ -70,12 +71,12 @@ export default function TabKasse() {
     },
   ];
   return (
-    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAnBank }}>
-      <Row gutter={12}>
+    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
+      <JazzRow>
         <Col xs={24} lg={12}>
-          <EinnahmenCard ref={refEinahmen} disabled={freigabe} />
+          <EinnahmenCard disabled={freigabe} />
           <KassenzettelFreigabe />
-          <Row gutter={12}>
+          <JazzRow>
             <Col span={8}>
               <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix={"€"} disabled />
             </Col>
@@ -85,13 +86,13 @@ export default function TabKasse() {
             <Col span={8}>
               <NumberInput disabled name={"endbestandEUR"} label="Endbestand Berechnet" decimals={2} suffix={"€"} />
             </Col>
-          </Row>
+          </JazzRow>
         </Col>
         <Col xs={24} lg={12}>
-          <AusgabenCard ref={refAusgaben} disabled={freigabe} />
+          <AusgabenCard disabled={freigabe} />
         </Col>
-      </Row>
-      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)}></Tour>
+      </JazzRow>
+      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)} />
     </KassenContext.Provider>
   );
 }

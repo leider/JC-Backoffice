@@ -1,10 +1,11 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import React from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url?: string }) {
   function ButtonAbendkasse() {
@@ -31,12 +32,12 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
 
   return (
     <Collapsible suffix="kasse" label="Eintritt und Abendkasse">
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={24}>
           {konzert.eintrittspreise.frei ? (
             <p>Freier Eintritt (Sammelbox)</p>
           ) : (
-            <Row gutter={12}>
+            <JazzRow>
               <Col span={8}>
                 <b>{konzert.eintrittspreise.regulaer},00 €</b>
               </Col>
@@ -46,15 +47,15 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
               <Col span={8}>
                 <b>{konzert.eintrittspreise.mitglied},00 €</b>
               </Col>
-            </Row>
+            </JazzRow>
           )}
-          <Row gutter={12}>
+          <JazzRow>
             <Col span={10} offset={14}>
               <ButtonAbendkasse />
             </Col>
-          </Row>
+          </JazzRow>
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

@@ -3,14 +3,18 @@ import React from "react";
 import Dragger from "antd/lib/upload/Dragger";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import find from "lodash/find";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface UploaderParams {
   fileList: UploadFile[];
   setFileList: (value: ((prevState: UploadFile[]) => UploadFile[]) | UploadFile[]) => void;
 }
 
+const maxFileSize = 2097152; // 2 MB
+
 export default function UploaderForMail({ fileList, setFileList }: UploaderParams) {
   const { token } = theme.useToken();
+  const { showError } = useJazzContext();
 
   const uploadprops: UploadProps = {
     onRemove: (file) => {
@@ -20,6 +24,10 @@ export default function UploaderForMail({ fileList, setFileList }: UploaderParam
       setFileList(newFileList);
     },
     beforeUpload: (file) => {
+      if (file.size > maxFileSize) {
+        showError({ title: "Datei zu groß", text: "Die Datei darf maximal 20 Megabyte groß sein" });
+        return false;
+      }
       if (!find(fileList, { name: file.name })) {
         setFileList((prev) => [...prev, file]);
       }
@@ -31,16 +39,10 @@ export default function UploaderForMail({ fileList, setFileList }: UploaderParam
 
   return (
     <Space>
-      <Dragger {...uploadprops}>
-        <p className="ant-upload-drag-icon" style={{ color: token.colorText }}>
-          <IconForSmallBlock iconName="Upload" />
-        </p>
-        <p className="ant-upload-text" style={{ color: token.colorText }}>
-          Hier klicken oder ziehen für einen Anhang
-        </p>
-        <p className="ant-upload-hint" style={{ color: token.colorText }}>
-          Eine oder mehrere Dateien möglich.
-        </p>
+      <Dragger {...uploadprops} style={{ color: token.colorText }}>
+        <IconForSmallBlock iconName="Upload" />
+        <div>Für einen Anhang klicken oder Datei hierher ziehen</div>
+        <div>Eine oder mehrere Dateien möglich.</div>
       </Dragger>
     </Space>
   );

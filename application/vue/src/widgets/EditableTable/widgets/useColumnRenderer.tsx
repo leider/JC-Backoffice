@@ -8,18 +8,20 @@ import React from "react";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import map from "lodash/map";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   const token = theme.useToken().token;
+  const { isCompactMode } = useJazzContext();
 
   return ({ type, required }: Columns) => {
     switch (type) {
       case "boolean":
         return (val: boolean) =>
           val ? (
-            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} />
+            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompactMode ? 14 : undefined} />
           ) : (
-            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} />
+            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompactMode ? 14 : undefined} />
           );
       case "integer":
         return (val: number | null) => {

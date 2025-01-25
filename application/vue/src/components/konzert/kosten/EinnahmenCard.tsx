@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Flex, Row, Typography } from "antd";
+import { Col, Flex, Typography } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -11,6 +11,7 @@ import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/Numeri
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow";
 
 interface EinnahmenCardParams {
   onChange: (sum: number) => void;
@@ -39,7 +40,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
 
   return (
     <Collapsible suffix="ausgaben" label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder amount={summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={12}>
           <PreisprofilSelect optionen={optionen} onChange={updateSumme} />
         </Col>
@@ -64,12 +65,12 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
             }}
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <NumberInput name={["kasse", "einnahmenReservix"]} label={"Reservix"} decimals={2} suffix={"€"} onChange={updateSumme} />
         </Col>
-      </Row>
+      </JazzRow>
       <Flex justify="center">
         {freigabe ? (
           <Typography.Text strong type={"success"}>
@@ -81,7 +82,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
           </Typography.Text>
         )}
       </Flex>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={8}>
           <NumberInput
             name={["eintrittspreise", "zuschuss"]}
@@ -110,7 +111,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
             disabled={!!freigabe}
           />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

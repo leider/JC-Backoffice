@@ -1,5 +1,5 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
-import { Col, Form, Row } from "antd";
+import { Col, Form } from "antd";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
@@ -10,6 +10,7 @@ import find from "lodash/find";
 import map from "lodash/map";
 import sortedUniq from "lodash/sortedUniq";
 import compact from "lodash/compact";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 type KontaktCardProps = {
   kontakte: Kontakt[];
@@ -49,7 +50,7 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
       label={selector === "agentur" ? "Agentur" : "Hotel"}
       noTopBorder={noTopBorder}
     >
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={12}>
           <SingleSelect
             name={[`${selector}auswahl`]}
@@ -65,15 +66,15 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
             <TextArea rows={7} />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={12}>
           <TextField name={[selector, "telefon"]} label="Telefon" />
         </Col>
         <Col span={12}>
           <TextField name={[selector, "email"]} label="E-Mail" isEmail />
         </Col>
-      </Row>
+      </JazzRow>
       {children}
     </Collapsible>
   );

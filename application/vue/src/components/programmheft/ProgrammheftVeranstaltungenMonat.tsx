@@ -1,4 +1,4 @@
-import { Col, Collapse, ConfigProvider, Row, theme, Typography } from "antd";
+import { Col, Collapse, Row, theme, Typography } from "antd";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
@@ -43,35 +43,31 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
       onChange={() => {
         setExpanded(!expanded);
       }}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color="#fff" /> : <CaretRight color="#fff  " />)}
+      expandIcon={({ isActive }) => (isActive ? <CaretDown color="white" /> : <CaretRight color="white" />)}
       items={[
         {
           key: monat,
           label: (
-            <Typography.Title level={4} style={{ margin: 0, color: "#FFF" }}>
+            <Typography.Title level={4} style={{ margin: 0, color: "white" }}>
               {monat}
             </Typography.Title>
           ),
-          extra: (
-            <ConfigProvider theme={{ token: { fontSize: 11 } }}>
-              {headerTags([
-                { label: "Unbestätigte", color: !unbestaetigte.length },
-                { label: "Presse", color: !ohnePresse.length },
-              ])}
-            </ConfigProvider>
-          ),
+          extra: headerTags([
+            { label: "Unbestätigte", color: !unbestaetigte.length },
+            { label: "Presse", color: !ohnePresse.length },
+          ]),
           children: (
             <RowWrapper>
               <Row>
                 {!!unbestaetigte.length && (
                   <Col span={12}>
-                    <h2>Es gibt noch unbestätigte Veranstaltungen</h2>
+                    <Typography.Title level={4}>Es gibt noch unbestätigte Veranstaltungen</Typography.Title>
                     <VeranstaltungenListe veranstaltungen={unbestaetigte} />
                   </Col>
                 )}
                 {!!ohnePresse.length && (
                   <Col span={12}>
-                    <h2>Hier fehlt der Pressetext</h2>
+                    <Typography.Title level={4}>Hier fehlt der Pressetext</Typography.Title>
                     <VeranstaltungenListe veranstaltungen={ohnePresse} />
                   </Col>
                 )}

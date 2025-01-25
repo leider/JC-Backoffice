@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Col, Radio, Row } from "antd";
+import { Col, Radio } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import User from "jc-shared/user/user";
@@ -12,6 +12,7 @@ import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import map from "lodash/map";
 import filter from "lodash/filter";
+import { JazzRow } from "@/widgets/JazzRow";
 
 type accessrightsTypes = "isSuperuser" | "isBookingTeam" | "isOrgaTeam" | "isAbendkasse" | "everybody";
 
@@ -65,13 +66,13 @@ export default function Users() {
         }
       />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           {map(selectedUsers, (user) => (
             <Col key={user.id} xs={24} sm={12} md={8} xxl={6}>
               <UserPanel user={user} currentUser={currentUser || new User({})} />
             </Col>
           ))}
-        </Row>
+        </JazzRow>
       </RowWrapper>
     </>
   );

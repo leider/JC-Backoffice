@@ -2,7 +2,7 @@ import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { Col, Form, Row, Tag, UploadFile } from "antd";
+import { Col, Form, Row, Tag, Typography, UploadFile } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
 import User, { ABENDKASSE, BOOKING, KannSection, ORGA, SUPERUSERS, userGruppen } from "jc-shared/user/user";
@@ -28,6 +28,8 @@ import sortedUniq from "lodash/sortedUniq";
 import forEach from "lodash/forEach";
 import filter from "lodash/filter";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
+import "./sendmail.css";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (isString(addressOrString)) {
@@ -215,33 +217,35 @@ export default function SendMail() {
     >
       <JazzPageHeader title="Mail Senden" buttons={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
       <RowWrapper>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedVeranstaltungen" label="Veranstaltungen" options={veranstaltungenDescriptions} noAdd />
           </Col>
           <Col span={12}>
             <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} noAdd />
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedLists" label="Mailinglisten" options={mailingListsDescriptions} noAdd />
           </Col>
           <Col span={12}>
             <MitarbeiterMultiSelect name="selectedUsers" usersAsOptions={usersAsOptions} label="Users" />
           </Col>
-        </Row>
-        <Row gutter={12}>
+        </JazzRow>
+        <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags name="selectedUserGruppen" label="Benutzer mit Typ" options={userGruppen} noAdd />
           </Col>
           <Col span={12}>
             <MultiSelectWithTags name="selectedKann" label="User kann..." options={kannFilter} noAdd />
           </Col>
-        </Row>
-        <Row gutter={12} style={{ marginBottom: 24 }}>
+        </JazzRow>
+        <Row gutter={12} style={{ marginBottom: 12 }}>
           <Col span={24}>
-            <h4 style={{ marginTop: 0 }}>Effektive Adressen:</h4>
+            <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+              Effektive Adressen:
+            </Typography.Title>
             {map(effectiveUsers, (u) => (
               <Tag key={u.email} color={"purple"}>
                 <b>{u.name}</b> ({u.email})
@@ -249,17 +253,17 @@ export default function SendMail() {
             ))}
           </Col>
         </Row>
-        <Row gutter={12}>
+        <JazzRow>
           <Col span={24}>
             <TextField name="subject" label="Subject" required />
           </Col>
           <Col span={24}>
-            <UploaderForMail fileList={fileList} setFileList={setFileList} />
-          </Col>
-          <Col span={24}>
             <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />
           </Col>
-        </Row>
+          <Col span={24}>
+            <UploaderForMail fileList={fileList} setFileList={setFileList} />
+          </Col>
+        </JazzRow>
       </RowWrapper>
     </Form>
   );

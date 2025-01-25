@@ -11,6 +11,7 @@ import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -26,6 +27,8 @@ const emptyContext: SharedGlobals = {
   isDirty: false,
   setIsDirty: noop,
   setMemoizedId: noop,
+  isDarkMode: false,
+  isCompactMode: false,
 };
 
 type SharedGlobals = {
@@ -43,12 +46,16 @@ type SharedGlobals = {
   setIsDirty: (a: boolean) => void;
   memoizedId?: string;
   setMemoizedId: (id?: string) => void;
+  isDarkMode: boolean;
+  isCompactMode: boolean;
 };
 export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
+  const { isDarkMode, isCompactMode } = useContext(GlobalContext);
+
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
@@ -59,7 +66,16 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const context: Omit<
     SharedGlobals,
-    "showSuccess" | "showError" | "filter" | "setFilter" | "isDirty" | "setIsDirty" | "memoizedId" | "setMemoizedId"
+    | "showSuccess"
+    | "showError"
+    | "filter"
+    | "setFilter"
+    | "isDirty"
+    | "setIsDirty"
+    | "memoizedId"
+    | "setMemoizedId"
+    | "isDarkMode"
+    | "isCompactMode"
   > = useQueries({
     queries: [
       { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
@@ -97,7 +113,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     notification.success({
       message: title,
       description: text,
-      placement: "topLeft",
+      placement: "bottom",
       showProgress: true,
       duration: duration,
     });
@@ -115,7 +131,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     notification.error({
       message: title,
       description: text,
-      placement: "topLeft",
+      placement: "bottom",
       duration: 10,
       showProgress: true,
 
@@ -129,7 +145,19 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setCurrentUser(exposedContext.currentUser);
   }, [exposedContext.currentUser, setCurrentUser]);
 
-  return { ...exposedContext, showSuccess, showError, filter, setFilter, isDirty, setIsDirty, memoizedId, setMemoizedId };
+  return {
+    ...exposedContext,
+    showSuccess,
+    showError,
+    filter,
+    setFilter,
+    isDirty,
+    setIsDirty,
+    memoizedId,
+    setMemoizedId,
+    isDarkMode,
+    isCompactMode,
+  };
 }
 
 export function useJazzContext() {

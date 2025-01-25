@@ -1,4 +1,4 @@
-import { Button, Col, ConfigProvider, Form, Input, Modal, Row, theme } from "antd";
+import { Button, Col, ConfigProvider, Form, Input, Modal, theme } from "antd";
 import React, { useContext, useMemo, useState } from "react";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -9,6 +9,7 @@ import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -50,7 +51,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   function ImmediateEuro({ name }: { name: string }) {
     const fullName = ["kasse", isBeginn ? "startinhalt" : "endinhalt", name];
     return (
-      <Form.Item name={fullName} valuePropName="number" trigger="onNumber" style={{ marginBottom: 12 }}>
+      <Form.Item name={fullName} valuePropName="number" trigger="onNumber">
         <ImmediateEuroEmbedded name={name} />
       </Form.Item>
     );
@@ -87,7 +88,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
         ]}
       >
         {map(items, (item) => (
-          <Row key={item.name} gutter={0}>
+          <JazzRow key={item.name}>
             <Col span={8}>
               <Input disabled value={`${item.val} €`} variant="borderless" />
             </Col>
@@ -97,7 +98,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
             <Col span={8}>
               <ImmediateEuro name={item.name} />
             </Col>
-          </Row>
+          </JazzRow>
         ))}
       </Modal>
       <ButtonWithIcon

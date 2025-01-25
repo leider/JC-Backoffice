@@ -11,6 +11,7 @@ import { TextField } from "@/widgets/TextField.tsx";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface EditableCellProps<T> extends Columns {
   record: T;
@@ -39,6 +40,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   const [editing, setEditing] = useState(false);
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
+  const { isCompactMode } = useJazzContext();
 
   const ref = useRef<any>(null); // eslint-disable-line  @typescript-eslint/no-explicit-any
 
@@ -61,6 +63,20 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   };
 
   const readonlyStyle = useMemo(() => {
+    if (isCompactMode) {
+      switch (type) {
+        case "color":
+          return { padding: "4px", paddingLeft: "4px" };
+        case "user":
+          return { padding: "4px", paddingLeft: "0px" };
+        case "integer":
+          return { padding: "4px", marginRight: "4px" };
+        case "boolean":
+          return { padding: "4px", paddingTop: "6px", paddingBottom: "0px" };
+        default:
+          return { padding: "4px", marginLeft: "4px" };
+      }
+    }
     switch (type) {
       case "color":
         return { padding: "6px", paddingLeft: "4px" };
@@ -70,14 +86,10 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
         return { padding: "6px", marginRight: "6px" };
       case "boolean":
         return { padding: "6px", paddingTop: "8px", paddingBottom: "2px" };
-      case "date":
-        return { padding: "6px", marginLeft: "6px" };
-      case "text":
-        return { padding: "6px", marginLeft: "6px" };
       default:
         return { padding: "6px", marginLeft: "6px" };
     }
-  }, [type]);
+  }, [isCompactMode, type]);
 
   if (!editable) {
     return <td {...restProps}>{children}</td>;

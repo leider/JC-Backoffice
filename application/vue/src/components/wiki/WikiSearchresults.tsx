@@ -1,7 +1,7 @@
 import { searchWiki } from "@/commons/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { List } from "antd";
+import { List, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
@@ -24,7 +24,7 @@ export default function WikiSearchresults() {
     <>
       <JazzPageHeader title="Wiki Suchergebnisse" dateString={`für "${searchtext}"`} />
       {matches.length === 0 ? (
-        <h3>Keine Ergebnisse</h3>
+        <Typography.Title level={2}>Keine Ergebnisse</Typography.Title>
       ) : (
         <List
           size="small"

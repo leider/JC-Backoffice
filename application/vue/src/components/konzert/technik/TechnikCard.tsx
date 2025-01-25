@@ -11,6 +11,7 @@ import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function TechnikCard() {
   const { optionen } = useJazzContext();
@@ -39,7 +40,7 @@ export default function TechnikCard() {
 
   return (
     <Collapsible suffix="technik" label="Backline" noTopBorder amount={summe}>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={8}>
           <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />
         </Col>
@@ -64,18 +65,18 @@ export default function TechnikCard() {
             }}
           />
         </Col>
-      </Row>
-      <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
+      </JazzRow>
+      <Row gutter={12} align="bottom" style={{ marginBottom: 12 }}>
         <Col span={24}>
           <Uploader name={["technik", "dateirider"]} typ={"rider"} />
         </Col>
       </Row>
-      <Row gutter={12}>
+      <JazzRow>
         <Col span={16}>
           <MultiSelectWithTags name={["technik", "backlineJazzclub"]} label="Backline Jazzclub" options={backlineJazzclub} />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <MultiSelectWithTags name={["technik", "backlineRockshop"]} label="Backline Rockshop" options={backlineRockshop} />
         </Col>
@@ -89,8 +90,8 @@ export default function TechnikCard() {
             disabled
           />
         </Col>
-      </Row>
-      <Row gutter={12}>
+      </JazzRow>
+      <JazzRow>
         <Col span={16}>
           <TextField name={["technik", "technikAngebot1"]} label="Technik Zumietung" />
         </Col>
@@ -104,7 +105,7 @@ export default function TechnikCard() {
             disabled
           />
         </Col>
-      </Row>
+      </JazzRow>
     </Collapsible>
   );
 }

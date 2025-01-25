@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { orte as orteLoader, saveOrte } from "@/commons/loader.ts";
 import * as React from "react";
-import { Col, Row } from "antd";
+import { Col } from "antd";
 import Orte from "jc-shared/optionen/orte";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { JazzRow } from "@/widgets/JazzRow";
 
 function OrtePageInternal() {
   const columnDescriptions: Columns[] = [
@@ -17,7 +18,7 @@ function OrtePageInternal() {
   ];
 
   return (
-    <Row gutter={12}>
+    <JazzRow>
       <Col span={24}>
         <EditableTable<{ name: string; flaeche: number; pressename: string; presseIn: string }>
           columnDescriptions={columnDescriptions}
@@ -25,7 +26,7 @@ function OrtePageInternal() {
           newRowFactory={(val) => Object.assign({ flaeche: 0 }, val)}
         />
       </Col>
-    </Row>
+    </JazzRow>
   );
 }
 

@@ -1,7 +1,8 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode, useMemo } from "react";
+import { PropsWithChildren, ReactElement, ReactNode, useContext, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { theme } from "antd";
+import { ConfigProvider, theme } from "antd";
+import { GlobalContext } from "../app/GlobalContext.ts";
 
 export function JazzPageHeader({
   title,
@@ -23,6 +24,7 @@ export function JazzPageHeader({
   hasErrors?: boolean;
   style?: React.CSSProperties;
 } & PropsWithChildren) {
+  const { isDarkMode } = useContext(GlobalContext);
   const { token } = theme.useToken();
 
   const theHeader = useMemo(() => {
@@ -30,22 +32,24 @@ export function JazzPageHeader({
   }, [hasErrors, style, title, token.colorError]);
 
   return (
-    <PageHeader
-      title={theHeader}
-      extra={buttons}
-      footer={[
-        firstTag && firstTag,
-        dateString && (
-          <b key="datum" style={{ marginRight: 8 }}>
-            {dateString}
-          </b>
-        ),
-        tags && tags,
-      ]}
-      breadcrumb={breadcrumb ? breadcrumb : undefined}
-      style={{ ...style, paddingInline: 4 }}
-    >
-      {children}
-    </PageHeader>
+    <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
+      <PageHeader
+        title={theHeader}
+        extra={buttons}
+        footer={[
+          firstTag && firstTag,
+          dateString && (
+            <b key="datum" style={{ marginRight: 8 }}>
+              {dateString}
+            </b>
+          ),
+          tags && tags,
+        ]}
+        breadcrumb={breadcrumb ? breadcrumb : undefined}
+        style={{ ...style, paddingInline: 4 }}
+      >
+        {children}
+      </PageHeader>
+    </ConfigProvider>
   );
 }

@@ -2,12 +2,12 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Layout, Row, theme } from "antd";
 import { Link, useLocation } from "react-router";
-import { menuKeys } from "@/components/content/MenuNodes.tsx";
+import { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
 import { JazzContext, useCreateJazzContext, useJazzContext } from "@/components/content/useJazzContext.ts";
 import InnerContent from "@/components/content/InnerContent.tsx";
 import { useProvideAuth } from "@/commons/auth.tsx";
 import { AuthContext } from "@/commons/authConsts";
-import { JazzHeader } from "@/components/content/JazzHeader.tsx";
+import { JazzHeader } from "@/components/content/menu/JazzHeader.tsx";
 import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpFields.tsx";
 import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
@@ -26,7 +26,7 @@ function TodaysConcert() {
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
           {map(bestaetigte, (konzert) => (
-            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl} style={{ color: "#FFF" }}>
+            <Link key={konzert.fullyQualifiedPreviewUrl} to={konzert.fullyQualifiedPreviewUrl} style={{ color: "white" }}>
               <h2
                 style={{
                   marginBottom: 0,
