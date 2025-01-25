@@ -55,6 +55,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
   const { setCurrentUser } = useContext(RouterContext);
   const { isDarkMode, isCompactMode } = useContext(GlobalContext);
+
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes

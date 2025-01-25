@@ -6,9 +6,10 @@ import locale_de from "antd/locale/de_DE";
 import "numeral/locales/de";
 import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { GlobalContext } from "@/app/GlobalContext.ts";
+import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -22,10 +23,51 @@ const queryClient = new QueryClient({
 
 function JazzclubApp() {
   useUpdateApp();
+  const { getPreferences } = useJazzPrefs();
+  const [preferences, setPreferences] = useState<JazzPrefs>(getPreferences());
   const { xl } = useBreakpoint();
-  const compactMode = useMemo(() => !xl, [xl]);
-  const [darkMode, setDarkMode] = useState(darkModePreference.matches);
-  darkModePreference.addEventListener("change", (e) => setDarkMode(e.matches));
+
+  const compactMode = useMemo(() => {
+    const compactPref = preferences.compactPref;
+    const normal = compactPref === "normal";
+    if (normal) {
+      return false;
+    }
+    const compact = compactPref === "compact";
+    if (compact) {
+      return true;
+    }
+    return !xl;
+  }, [preferences.compactPref, xl]);
+  const [darkModeFromDevice, setDarkModeFromDevice] = useState(darkModePreference.matches);
+
+  const darkMode = useMemo(() => {
+    const darkPref = preferences.darkPref;
+    const dark = darkPref === "dark";
+    if (dark) {
+      return true;
+    }
+    const bright = darkPref === "bright";
+    if (bright) {
+      return false;
+    }
+    return darkModeFromDevice;
+  }, [darkModeFromDevice, preferences.darkPref]);
+
+  useEffect(() => {
+    const listener = (e: MediaQueryListEvent) => setDarkModeFromDevice(e?.matches);
+    darkModePreference.addEventListener("change", listener);
+    return () => darkModePreference.removeEventListener("change", listener);
+  }, []);
+
+  useEffect(() => {
+    const listener = () => {
+      setPreferences(getPreferences());
+    };
+    window.addEventListener("storage", listener);
+    return () => window.removeEventListener("storage", listener);
+  }, [getPreferences]);
+
   const success = "#28a745";
   numeral.localeData("de").delimiters.thousands = ".";
   numeral.locale("de");

@@ -10,6 +10,7 @@ import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { ItemType } from "antd/es/menu/interface";
 import { MenuIcon } from "./MenuIcon";
+import Preferences from "@/components/content/menu/Preferences.tsx";
 
 export function JazzHeader({ activeElement }: { activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
@@ -25,6 +26,8 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
       return new Accessrights();
     }
   }, [currentUser]);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const submenus = useMenuNodes(accessrights, subdirs);
 
@@ -60,6 +63,19 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
           key: "allUsers",
           icon: <MenuIcon name="PersonLinesFill" />,
           label: <Link to={"/users"}>Übersicht</Link>,
+        },
+        {
+          key: "preferences",
+          icon: <MenuIcon name="Sliders" />,
+          label: (
+            <a
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              Anzeige Einstellungen
+            </a>
+          ),
         },
         {
           key: "logout",
@@ -120,6 +136,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         />
         <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
       </div>
+      <Preferences isOpen={isOpen} setIsOpen={setIsOpen} />
     </Header>
   );
 }

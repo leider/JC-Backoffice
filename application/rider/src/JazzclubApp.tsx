@@ -46,7 +46,7 @@ function JazzclubApp() {
         }}
       >
         <App>
-          <GlobalContext.Provider value={{ isDarkMode: false }}>
+          <GlobalContext.Provider value={{ isDarkMode: false, isCompactMode: false }}>
             <JazzContent />
           </GlobalContext.Provider>
         </App>
