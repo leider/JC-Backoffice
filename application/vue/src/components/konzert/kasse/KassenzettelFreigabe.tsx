@@ -41,10 +41,10 @@ export function KassenzettelFreigabe() {
       content: (
         <Form form={innerForm} layout="vertical">
           <p>
-            <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
+            <IconForSmallBlock color="red" iconName="ExclamationCircleFill" /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-          <SingleSelect name="freigeber" label={"User für die Freigabe"} options={usersAsOptions} initialValue={currentUser.name} />
+          <SingleSelect name="freigeber" label="User für die Freigabe" options={usersAsOptions} initialValue={currentUser.name} />
         </Form>
       ),
       onOk: () => {
@@ -91,7 +91,7 @@ export function KassenzettelFreigabe() {
               <ButtonWithIcon
                 block
                 text="Kasse freigeben..."
-                icon={"Unlock"}
+                icon="Unlock"
                 onClick={freigeben}
                 disabled={
                   isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
@@ -117,7 +117,7 @@ export function KassenzettelFreigabe() {
         <Col span={24}>
           {numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00") ? (
             <Flex justify="center">
-              <Typography.Text strong type={"danger"}>
+              <Typography.Text strong type="danger">
                 ACHTUNG! Endbestände unplausibel
               </Typography.Text>
               &nbsp;
@@ -130,7 +130,7 @@ export function KassenzettelFreigabe() {
       </JazzRow>
       <JazzRow>
         <Col span={10}>
-          <MuenzenScheineModal isBeginn={true} />
+          <MuenzenScheineModal isBeginn />
         </Col>
         <Col span={10} offset={4}>
           <MuenzenScheineModal isBeginn={false} />

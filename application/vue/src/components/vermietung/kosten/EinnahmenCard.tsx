@@ -32,7 +32,7 @@ export default function EinnahmenCard() {
     <Collapsible suffix="ausgaben" label="Einnahmen" noTopBorder amount={summe}>
       <JazzRow>
         <Col span={12}>
-          <NumberInput name="saalmiete" label={"Saalmiete"} decimals={2} suffix={"€"} required />
+          <NumberInput name="saalmiete" label="Saalmiete" decimals={2} suffix="€" required />
         </Col>
       </JazzRow>
     </Collapsible>

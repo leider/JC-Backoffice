@@ -94,7 +94,7 @@ export function AddRemoveStaffButton({
     />
   ) : (
     <ButtonStaff
-      add={true}
+      add
       callback={async function () {
         mutate.mutate(true);
       }}

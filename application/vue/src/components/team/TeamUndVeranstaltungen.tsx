@@ -22,7 +22,7 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
           block: "center",
         });
       }
-    }, 10);
+    }, 1000);
   }, [memoizedId]);
 
   const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);

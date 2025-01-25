@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -36,11 +36,10 @@ export default function VermietungTabs() {
 
   function TabLabel({ title, type }: { type: buttonType; title: string }) {
     const { icon, color } = colorsAndIconsForSections;
-    const { isDarkMode } = useJazzContext();
+    const { brightText } = useJazzContext();
     const active = activePage === type;
 
     const farbe = color(type);
-    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
     return (
       <b

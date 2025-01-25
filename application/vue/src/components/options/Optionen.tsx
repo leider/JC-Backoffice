@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { Col, Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -59,8 +59,8 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
             />
           </Collapsible>
           <Collapsible suffix="allgemeines" label="Optionen">
-            <MultiSelectWithTags name="kooperationen" label={"Kooperationen"} options={optionen.kooperationen} />
-            <MultiSelectWithTags name="genres" label={"Genres"} options={optionen.genres} />
+            <MultiSelectWithTags name="kooperationen" label="Kooperationen" options={optionen.kooperationen} />
+            <MultiSelectWithTags name="genres" label="Genres" options={optionen.genres} />
           </Collapsible>
         </Col>
         <Col xs={24} lg={12}>
@@ -81,8 +81,8 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
       <JazzRow>
         <Col span={24}>
           <Collapsible suffix="technik" label="Backlines">
-            <MultiSelectWithTags name="backlineJazzclub" label={"Jazzclub"} options={optionen.backlineJazzclub} />
-            <MultiSelectWithTags name="backlineRockshop" label={"Rockshop"} options={optionen.backlineRockshop} />
+            <MultiSelectWithTags name="backlineJazzclub" label="Jazzclub" options={optionen.backlineJazzclub} />
+            <MultiSelectWithTags name="backlineRockshop" label="Rockshop" options={optionen.backlineRockshop} />
           </Collapsible>
         </Col>
       </JazzRow>
@@ -106,10 +106,9 @@ export default function Optionen() {
 
   function TabLabel({ title, type }: { type: string; title: string }) {
     const { color } = colorsAndIconsForSections;
-    const { isDarkMode } = useJazzContext();
+    const { brightText } = useJazzContext();
     const active = activePage === type;
     const farbe = color("allgemeines");
-    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
     return (
       <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
@@ -129,7 +128,7 @@ export default function Optionen() {
         <JazzRow>
           <Col span={24}>
             <Collapsible suffix="allgemeines" label="Künstler" noTopBorder>
-              <MultiSelectWithTags name="artists" label={"Künstler"} options={data?.artists ?? []} />
+              <MultiSelectWithTags name="artists" label="Künstler" options={data?.artists ?? []} />
             </Collapsible>
           </Col>
         </JazzRow>

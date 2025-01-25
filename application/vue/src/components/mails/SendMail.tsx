@@ -247,7 +247,7 @@ export default function SendMail() {
               Effektive Adressen:
             </Typography.Title>
             {map(effectiveUsers, (u) => (
-              <Tag key={u.email} color={"purple"}>
+              <Tag key={u.email} color="purple">
                 <b>{u.name}</b> ({u.email})
               </Tag>
             ))}

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Button, ConfigProvider, Tooltip } from "antd";
 import { Link, To } from "react-router";
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
@@ -32,9 +32,8 @@ export default function ButtonWithIconAndLink({
   alwaysText?: boolean;
 }) {
   const { sm } = useBreakpoint();
-  const { isDarkMode } = useJazzContext();
+  const { brightText } = useJazzContext();
 
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
       <Tooltip title={tooltipTitle} color={color === brightText ? "#333" : color}>

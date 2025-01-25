@@ -75,7 +75,7 @@ ${currentUser.name}`);
             />
           </Col>
           <Col span={12}>
-            <NumberInput name={["unterkunft", "transportEUR"]} label="Summe" decimals={2} suffix={"€"} onChange={updateSumme} />
+            <NumberInput name={["unterkunft", "transportEUR"]} label="Summe" decimals={2} suffix="€" onChange={updateSumme} />
           </Col>
         </JazzRow>
       </Collapsible>
@@ -90,7 +90,7 @@ ${currentUser.name}`);
       <JazzRow>
         <Col span={12}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
-            <Button block icon={<IconForSmallBlock iconName={"EnvelopeOpen"} />} type="primary" onClick={sendMail}>
+            <Button block icon={<IconForSmallBlock iconName="EnvelopeOpen" />} type="primary" onClick={sendMail}>
               &nbsp;Reservierungsmail
             </Button>
           </ConfigProvider>

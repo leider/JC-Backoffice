@@ -13,7 +13,7 @@ export default function HelpPrefs() {
 
   return (
     <HelpSection
-      initiallyOpen={true}
+      initiallyOpen
       label={
         <span>
           <b>Einstellungen</b>

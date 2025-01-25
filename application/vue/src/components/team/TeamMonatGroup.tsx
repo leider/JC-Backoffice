@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
-import Vermietung from "jc-shared/vermietung/vermietung.ts";
-import TeamBlockVermietung from "@/components/team/TeamBlock/TeamBlockVermietung.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import groupBy from "lodash/groupBy";
@@ -22,7 +19,7 @@ interface MonatGroupProps {
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
   const { veranstaltungenNachMonat } = useContext(TeamContext);
-  const { isDarkMode } = useJazzContext();
+  const { isDarkMode, brightText } = useJazzContext();
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
 
@@ -44,14 +41,12 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
 
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
-
   return (
     <>
       <Row gutter={0}>
         <Col span={24}>
           <Collapse
-            size={"small"}
+            size="small"
             activeKey={expanded ? monat : ""}
             onChange={() => setExpanded(!expanded)}
             expandIcon={({ isActive }) =>
@@ -104,13 +99,9 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
           <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
               return renderTeam ? (
-                <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
-              ) : veranstaltung.isVermietung ? (
-                <Row key={veranstaltung.id}>
-                  {<TeamBlockVermietung vermietung={veranstaltung as Vermietung} initiallyOpen={expanded} />}
-                </Row>
+                <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
               ) : (
-                <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung as Konzert} initiallyOpen={expanded} />}</Row>
+                <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
               );
             })}
           </Col>

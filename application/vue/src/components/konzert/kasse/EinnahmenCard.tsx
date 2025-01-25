@@ -54,7 +54,7 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             name={["kasse", "einnahmeTicketsEUR"]}
             label="Tickets (AK)"
             decimals={2}
-            suffix={"€"}
+            suffix="€"
             onChange={updateSumme}
             disabled={readonly}
           />
@@ -74,7 +74,7 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             name={["kasse", "einnahmeBankEUR"]}
             label="Bareinlage"
             decimals={2}
-            suffix={"€"}
+            suffix="€"
             onChange={updateSumme}
             disabled={readonly}
           />

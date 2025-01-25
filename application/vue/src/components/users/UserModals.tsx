@@ -88,7 +88,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         <JazzPageHeader title="Neuer Benutzer" />
         <Row gutter={8}>
           <Col span={24}>
-            <TextField name={"id"} label="User ID" required />
+            <TextField name="id" label="User ID" required />
             <Form.Item
               label={<b>Passwort:</b>}
               name="password"
@@ -103,7 +103,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             </Form.Item>
           </Col>
         </Row>
-        <EditFields isSuperUser={true} form={form} />
+        <EditFields isSuperUser form={form} />
       </Form>
     </Modal>
   );
@@ -183,11 +183,11 @@ function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormIns
   return (
     <Row gutter={8}>
       <Col span={24}>
-        <TextField name={"name"} label="Vollständiger Name" required />
-        <TextField name={"email"} label="E-Mail" isEmail required />
+        <TextField name="name" label="Vollständiger Name" required />
+        <TextField name="email" label="E-Mail" isEmail required />
         <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff oder Kasse gesucht" />
         <IchKannFields form={form} />
-        <TextField name={"tel"} label="Telefon" />
+        <TextField name="tel" label="Telefon" />
         <SingleSelect
           name="tshirt"
           label="T-Shirt"

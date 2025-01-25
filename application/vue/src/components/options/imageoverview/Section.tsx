@@ -34,7 +34,7 @@ function VeranstaltungenRenderer({ name }: { name: NamePath }) {
 
   return (
     <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
-      <FormItem name={name} valuePropName="veranstaltungen" trigger={"onText"}>
+      <FormItem name={name} valuePropName="veranstaltungen" trigger="onText">
         <InnerVeranstaltungenRenderer />
       </FormItem>
     </ConfigProvider>

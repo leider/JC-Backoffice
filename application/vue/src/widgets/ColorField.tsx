@@ -49,8 +49,8 @@ export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> 
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
       initialValue={initialValue}
-      valuePropName={"value"}
-      trigger={"onChange"}
+      valuePropName="value"
+      trigger="onChange"
     >
       <ColorInputEmbedded presets={presets} save={save} />
     </AntdForm.Item>
@@ -73,7 +73,7 @@ const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onC
 
   return (
     <ColorPicker
-      open={true}
+      open
       size="small"
       presets={
         presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined

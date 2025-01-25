@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -49,9 +49,8 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
   const [activePage, setActivePage] = useState<string>("final");
 
   function TabLabel(props: { kind: string; title: string }) {
-    const { isDarkMode } = useJazzContext();
+    const { brightText } = useJazzContext();
     const farbe = color("presse");
-    const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
     const active = activePage === props.kind;
     return (
       <b
@@ -90,10 +89,10 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
               },
             ]}
           />
-          <Uploader name={["presse", "image"]} typ={"pressefoto"} onlyImages />
+          <Uploader name={["presse", "image"]} typ="pressefoto" onlyImages />
           <SingleSelect
             name={["tempimage"]}
-            label={"Vorhandene Bilder übernehmen"}
+            label="Vorhandene Bilder übernehmen"
             options={allimages.data || []}
             onChange={imageUebernehmen}
           />

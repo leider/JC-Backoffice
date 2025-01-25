@@ -40,7 +40,7 @@ export default function InfoCard() {
       content: (
         <>
           <p>
-            <IconForSmallBlock color="red" iconName={"ExclamationCircleFill"} /> Nach dem Freigeben ist keine Änderung mehr möglich!
+            <IconForSmallBlock color="red" iconName="ExclamationCircleFill" /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird die Rechnung an die Buchhaltung gesendet.</p>
         </>
@@ -111,11 +111,11 @@ export default function InfoCard() {
       {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <JazzRow>
         <Col span={6}>
-          <SingleSelect name={"art"} label="Art" options={printOptions} />
+          <SingleSelect name="art" label="Art" options={printOptions} />
         </Col>
         <Col span={8}>
           <DynamicItem
-            nameOfDepending={"id"}
+            nameOfDepending="id"
             renderWidget={(getFieldValue) => {
               return (
                 <Form.Item label="&nbsp;">
@@ -139,7 +139,7 @@ export default function InfoCard() {
                 <ButtonWithIcon
                   block
                   text="Rechnung freigeben..."
-                  icon={"Unlock"}
+                  icon="Unlock"
                   onClick={freigeben}
                   disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
                 />

@@ -39,14 +39,14 @@ Dein Jazzclub Team
           <JazzPageHeader
             title=""
             buttons={[
-              <ButtonForRider key={"pdf"} icon={"Printer"} text="PDF" href={printref} />,
+              <ButtonForRider key="pdf" icon="Printer" text="PDF" href={printref} />,
               <ButtonForRider
-                key={"sendrider"}
-                icon={"EnvelopeFill"}
+                key="sendrider"
+                icon="EnvelopeFill"
                 text="Als E-Mail..."
                 href={`mailto:?subject=Rider für Jazzclub bearbeiten&body=${text}`}
               />,
-              <ButtonForRider key={"linkrider"} icon={"EyeFill"} text="Vorschau" href={href} />,
+              <ButtonForRider key="linkrider" icon="EyeFill" text="Vorschau" href={href} />,
             ]}
           />
           <Form.Item name="riderBoxes" valuePropName="targetBoxes" trigger="setTargetBoxes">

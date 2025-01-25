@@ -203,7 +203,7 @@ function InnerTable<T>({
   return (
     <TableContext.Provider value={tableContext}>
       <Table<TWithKey>
-        className={"editable-table"}
+        className="editable-table"
         components={components}
         bordered
         dataSource={rows}

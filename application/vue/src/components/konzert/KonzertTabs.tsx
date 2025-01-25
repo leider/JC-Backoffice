@@ -17,11 +17,10 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const TabLabel = ({ title, type, activePage }: { type: buttonType; title: string; activePage: string }) => {
   const { icon, color } = colorsAndIconsForSections;
-  const { isDarkMode } = useJazzContext();
+  const { brightText } = useJazzContext();
   const active = activePage === type;
 
   const farbe = color(type);
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
   return (
     <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>

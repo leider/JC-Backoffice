@@ -38,7 +38,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
         <Image
           key={img}
           src={`/imagepreview/${img}`}
-          width={"100%"}
+          width="100%"
           preview={{
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (

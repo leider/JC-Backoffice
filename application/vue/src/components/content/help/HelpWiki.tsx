@@ -19,7 +19,7 @@ export default function HelpWiki() {
   return (
     pathname.startsWith("/wiki") && (
       <HelpSection
-        initiallyOpen={true}
+        initiallyOpen
         label={
           <span>
             <b>Wiki</b> Schau selbst:

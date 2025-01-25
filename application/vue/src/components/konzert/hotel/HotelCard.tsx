@@ -74,7 +74,7 @@ export default function HotelCard() {
               ["unterkunft", "abreiseDate"],
             ]}
             label="An- und Abreise"
-            dependency={"startDate"}
+            dependency="startDate"
             onChange={updateSumme}
           />
           {anzahlNacht}
@@ -90,19 +90,19 @@ export default function HotelCard() {
           <NumberInput name={["unterkunft", "einzelNum"]} label="Einzel" decimals={0} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "einzelEUR"]} label="Preis" decimals={2} suffix={"€"} onChange={updateSumme} />
+          <NumberInput name={["unterkunft", "einzelEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
         <Col span={3}>
           <NumberInput name={["unterkunft", "doppelNum"]} label="Doppel" decimals={0} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "doppelEUR"]} label="Preis" decimals={2} suffix={"€"} onChange={updateSumme} />
+          <NumberInput name={["unterkunft", "doppelEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
         <Col span={3}>
           <NumberInput name={["unterkunft", "suiteNum"]} label="Suite" decimals={0} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "suiteEUR"]} label="Preis" decimals={2} suffix={"€"} onChange={updateSumme} />
+          <NumberInput name={["unterkunft", "suiteEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
       </JazzRow>
       <JazzRow>

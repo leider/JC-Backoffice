@@ -1,5 +1,5 @@
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions.ts";
 import isNil from "lodash/isNil";
@@ -21,11 +21,10 @@ export default function Collapsible({
   amount?: number;
   uncollapsed?: boolean;
 }) {
-  const { isDarkMode } = useJazzContext();
+  const { brightText } = useJazzContext();
   const [expanded, setExpanded] = useState<string | undefined>(uncollapsed ? undefined : "content");
 
   const { color } = colorsAndIconsForSections;
-  const brightText = useMemo(() => (isDarkMode ? "#dcdcdc" : "#fff"), [isDarkMode]);
 
   const farbe = color(suffix as buttonType);
   return (

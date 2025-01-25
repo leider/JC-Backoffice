@@ -73,7 +73,7 @@ export default function TeamCalendar() {
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         size="large"
-        closeIcon={"Schließen"}
+        closeIcon="Schließen"
       >
         <FullCalendar
           plugins={[dayGridPlugin, multiMonthPlugin]}

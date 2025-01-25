@@ -65,7 +65,7 @@ export default function TechnikCard() {
       </JazzRow>
       <Row gutter={12} align="bottom" style={{ marginBottom: 24 }}>
         <Col span={24}>
-          <Uploader name={["technik", "dateirider"]} typ={"rider"} />
+          <Uploader name={["technik", "dateirider"]} typ="rider" />
         </Col>
       </Row>
       <JazzRow>

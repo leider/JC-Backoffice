@@ -33,7 +33,7 @@ export default function VertragCard() {
         </Col>
         <Col span={6}>
           <DynamicItem
-            nameOfDepending={"id"}
+            nameOfDepending="id"
             renderWidget={(getFieldValue) => {
               return (
                 <Form.Item label="&nbsp;">
@@ -53,7 +53,7 @@ export default function VertragCard() {
       </JazzRow>
       <JazzRow>
         <Col span={24}>
-          <Uploader name={["vertrag", "datei"]} typ={"vertrag"} />
+          <Uploader name={["vertrag", "datei"]} typ="vertrag" />
         </Col>
       </JazzRow>
       <JazzRow>

@@ -4,7 +4,7 @@ import React from "react";
 
 export function ErsthelferSymbol({ inverted = false }: { inverted?: boolean }) {
   return (
-    <Tooltip title="Ersthelfer" color={"darkred"}>
+    <Tooltip title="Ersthelfer" color="darkred">
       {inverted ? (
         <MedicineBoxFilled style={{ color: "white", paddingLeft: 4, fontSize: 12 }} />
       ) : (

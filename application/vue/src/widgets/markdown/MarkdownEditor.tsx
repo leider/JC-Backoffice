@@ -84,7 +84,7 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
       <MDXEditor
         className={isDarkMode ? "dark-theme markdown-border" : "markdown-border"}
         ref={mdxEditorRef}
-        markdown={""}
+        markdown=""
         onChange={onChange}
         plugins={[
           toolbarPlugin({

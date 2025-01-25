@@ -160,6 +160,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   };
 }
 
-export function useJazzContext() {
-  return useContext(JazzContext);
+export function useJazzContext(): SharedGlobals & { brightText: string } {
+  const context = useContext(JazzContext);
+  const brightText = useMemo(() => (context.isDarkMode ? "#dcdcdc" : "#fff"), [context.isDarkMode]);
+  return { ...context, brightText };
 }
