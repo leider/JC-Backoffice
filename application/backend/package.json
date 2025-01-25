@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "adm-zip": "0.5.16",
-    "better-sqlite3": "11.5.0",
+    "better-sqlite3": "11.8.1",
     "bootstrap": "5.3.3",
     "compression": "1.7.5",
     "connect-history-api-fallback": "2.0.0",
@@ -19,7 +19,7 @@
     "jc-shared": "workspace:^",
     "morgan": "1.10.0",
     "multiparty": "4.2.3",
-    "nodemailer": "6.9.16",
+    "nodemailer": "6.10.0",
     "passport": "0.7.0",
     "passport-jwt": "4.0.1",
     "pug": "3.0.3",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/adm-zip": "0.5.7",
-    "@types/better-sqlite3": "7.6.11",
+    "@types/better-sqlite3": "7.6.12",
     "@types/body-parser": "1.19.5",
     "@types/compression": "1.7.5",
     "@types/connect-history-api-fallback": "1.5.4",

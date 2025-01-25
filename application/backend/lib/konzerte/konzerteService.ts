@@ -79,7 +79,7 @@ async function addAndSaveImages({ konzert, dateien, typ }: { konzert: Konzert; d
     return new Promise((resolve, reject) => {
       const readStream = fs.createReadStream(src);
       readStream.once("error", reject);
-      readStream.once("end", resolve);
+      readStream.once("end", () => resolve("whatever"));
       readStream.pipe(fs.createWriteStream(dest));
     });
   }
