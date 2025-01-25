@@ -21,17 +21,18 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
   }, [highlight, initiallyOpen]);
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
 
   return (
-    <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
+    <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor } }}>
       <Col span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
-          <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
+          <div style={{ padding: "2px 16px", backgroundColor }}>
             <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
           </div>
         ) : (
           <Collapse
-            style={{ borderColor: veranstaltung.color }}
+            style={{ borderColor: backgroundColor }}
             size={"small"}
             activeKey={expanded ? veranstaltung.id : ""}
             onChange={() => {
@@ -41,7 +42,7 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBl
             items={[
               {
                 key: veranstaltung.id || "",
-                style: { backgroundColor: veranstaltung.color },
+                style: { backgroundColor: backgroundColor },
                 label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
                 extra: <ButtonPreview veranstaltung={veranstaltung} />,
                 children: <TeamContent veranstaltung={veranstaltung} />,

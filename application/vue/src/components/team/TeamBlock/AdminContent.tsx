@@ -80,7 +80,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
-  const backgroundColor = veranstaltung.color;
+  const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   return (
     <Form
       form={form}

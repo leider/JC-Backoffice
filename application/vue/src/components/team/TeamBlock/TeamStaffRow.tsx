@@ -1,4 +1,4 @@
-import { Tag, theme } from "antd";
+import { ConfigProvider, Tag, theme } from "antd";
 import React, { useContext, useMemo } from "react";
 import { addOrRemoveUserToSection } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -21,7 +21,9 @@ interface TeamStaffRowProps {
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { usersAsOptions } = useContext(TeamContext);
+  const { isDarkMode } = useJazzContext();
   const { token } = theme.useToken();
+  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
   const staffCollection = useMemo(() => veranstaltung.staff.getStaffCollection(sectionName), [sectionName, veranstaltung.staff]);
 
@@ -40,16 +42,20 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
     map(usersWithKann, (user) => {
       const isCurrentUser = user.label === currentUser.name;
       return (
-        <Tag color={isCurrentUser ? token.colorSuccess : undefined} key={user.value}>
-          <span>
-            {user.label}
-            {ersthelfer(user) && <ErsthelferSymbol inverted={isCurrentUser} />}
-          </span>
-        </Tag>
+        <ConfigProvider key={user.value} theme={{ components: { Tag: { colorText: textColor } } }}>
+          <Tag color={isCurrentUser ? token.colorSuccess : undefined}>
+            <span>
+              {user.label}
+              {ersthelfer(user) && <ErsthelferSymbol inverted={isCurrentUser} />}
+            </span>
+          </Tag>
+        </ConfigProvider>
       );
     })
   ) : (
-    <span>{sectionName === "ersthelfer" ? "Du kannst als Ersthelfer beitragen?" : "Hier könnten wir Dich brauchen..."}</span>
+    <span style={{ color: textColor }}>
+      {sectionName === "ersthelfer" ? "Du kannst als Ersthelfer beitragen?" : "Hier könnten wir Dich brauchen..."}
+    </span>
   );
 }
 

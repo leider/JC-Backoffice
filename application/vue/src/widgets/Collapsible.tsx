@@ -1,6 +1,6 @@
 import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import React, { ReactNode, useMemo, useState } from "react";
-import { Col, Collapse, Row } from "antd";
+import { Col, Collapse, Row, Typography } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions.ts";
 import isNil from "lodash/isNil";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -46,9 +46,9 @@ export default function Collapsible({
           label: (
             <Row>
               <Col flex={1}>
-                <span style={{ fontSize: 18, color: brightText }}>
-                  <b>{label}</b>
-                </span>
+                <Typography.Title style={{ margin: 0 }} level={5} color={brightText}>
+                  {label}
+                </Typography.Title>
               </Col>
               <Col flex="auto">&nbsp;</Col>
               {!isNil(amount) && (
