@@ -42,27 +42,6 @@
   z-index: 0 !important;
 }
 
-/*transform fullcalendar's primary to light button*/
-.fc-toolbar .fc-button-primary {
-  color: #212529;
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
-}
-.fc-toolbar .fc-button-primary:disabled {
-  color: rgba(33, 37, 41, 0.56);
-  background-color: #f8f9fa;
-  border-color: #f8f9fa;
-}
-
-.fc-col-header-cell-cushion,
-.fc-daygrid-day-number {
-  color: #212529;
-}
-
-.fc-daygrid-event {
-  white-space: normal;
-}
-
 .ant-btn-primary {
   box-shadow: none;
 }
