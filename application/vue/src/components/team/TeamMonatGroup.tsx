@@ -69,7 +69,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                         text="Pressetexte"
                         to={{ pathname: `/team/${yymm}`, search: "tab=pressetexte" }}
                         icon="FileText"
-                        color="#FFF"
+                        color={brightText}
                         ghost
                         smallIcon
                         tooltipTitle="Pressetexte"
@@ -78,7 +78,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                         text="Übersicht"
                         to={{ pathname: `/team/${yymm}`, search: "tab=uebersicht" }}
                         icon="FileSpreadsheet"
-                        color="#FFF"
+                        color={brightText}
                         ghost
                         smallIcon
                         tooltipTitle="Übersicht"

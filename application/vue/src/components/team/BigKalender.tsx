@@ -9,6 +9,8 @@ import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
+import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
+import dayGridPlugin from "@fullcalendar/daygrid";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
@@ -56,7 +58,7 @@ export default function BigKalender() {
   const calRef = createRef<FullCalendar>();
   const { lg } = useBreakpoint();
   return (
-    <>
+    <WrapFullCalendar>
       <Form
         form={form}
         onChange={() => {
@@ -69,11 +71,12 @@ export default function BigKalender() {
         <Col span={24} style={{ zIndex: 0 }}>
           <FullCalendar
             ref={calRef}
-            plugins={[multiMonthPlugin]}
-            initialView="six"
+            plugins={[dayGridPlugin, multiMonthPlugin]}
+            initialView="twelve"
             locales={[deLocale]}
-            headerToolbar={{ left: "title", center: "four,six,twelve", right: "prev,today,next" }}
+            headerToolbar={{ left: "title", center: "four,six,twelve,weeks", right: "prev,today,next" }}
             titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
+            displayEventEnd
             views={{
               twelve: {
                 buttonText: "12 Monate",
@@ -90,6 +93,13 @@ export default function BigKalender() {
                 type: "multiMonth",
                 duration: { months: 6 },
               },
+              weeks: {
+                buttonText: "36 Wochen",
+                type: "dayGrid",
+                duration: { weeks: 36 },
+                displayEventTime: true,
+                eventTimeFormat: { hour: "2-digit", minute: "2-digit", meridiem: false },
+              },
             }}
             height="auto"
             multiMonthMaxColumns={4}
@@ -101,6 +111,6 @@ export default function BigKalender() {
           />
         </Col>
       </Row>
-    </>
+    </WrapFullCalendar>
   );
 }

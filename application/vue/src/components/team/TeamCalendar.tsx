@@ -12,6 +12,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import deLocale from "@fullcalendar/core/locales/de";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
+import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
 
 export default function TeamCalendar() {
   const { currentUser } = useJazzContext();
@@ -75,46 +76,49 @@ export default function TeamCalendar() {
         size="large"
         closeIcon="Schließen"
       >
-        <FullCalendar
-          plugins={[dayGridPlugin, multiMonthPlugin]}
-          initialView="one"
-          locales={[deLocale]}
-          headerToolbar={{ left: "title", center: "one,four,weeks", right: "prev,today,next" }}
-          titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
-          views={{
-            one: {
-              weekNumberFormat: { week: "short" },
-              fixedWeekCount: false,
-              showNonCurrentDates: false,
-              weekNumbers: true,
-              weekText: "KW",
-              buttonText: "1 Monat",
-              type: "multiMonth",
-              duration: { months: 1 },
-            },
-            four: {
-              weekNumberFormat: { week: "short" },
-              fixedWeekCount: false,
-              showNonCurrentDates: false,
-              weekNumbers: true,
-              weekText: "KW",
-              buttonText: "4 Monate",
-              type: "multiMonth",
-              duration: { months: 4 },
-            },
-            weeks: {
-              buttonText: "36 Wochen",
-              type: "dayGrid",
-              duration: { weeks: 36 },
-              displayEventTime: true,
-            },
-          }}
-          height="auto"
-          events={getEvents}
-          eventContent={renderEventContent}
-          eventDisplay="block"
-          showNonCurrentDates={false}
-        />
+        <WrapFullCalendar>
+          <FullCalendar
+            plugins={[dayGridPlugin, multiMonthPlugin]}
+            initialView="weeks"
+            locales={[deLocale]}
+            headerToolbar={{ left: "title", center: "one,four,weeks", right: "prev,today,next" }}
+            titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
+            views={{
+              one: {
+                weekNumberFormat: { week: "short" },
+                fixedWeekCount: false,
+                showNonCurrentDates: false,
+                weekNumbers: true,
+                weekText: "KW",
+                buttonText: "1 Monat",
+                type: "multiMonth",
+                duration: { months: 1 },
+              },
+              four: {
+                weekNumberFormat: { week: "short" },
+                fixedWeekCount: false,
+                showNonCurrentDates: false,
+                weekNumbers: true,
+                weekText: "KW",
+                buttonText: "4 Monate",
+                type: "multiMonth",
+                duration: { months: 4 },
+              },
+              weeks: {
+                buttonText: "36 Wochen",
+                type: "dayGrid",
+                duration: { weeks: 36 },
+                displayEventTime: true,
+                eventTimeFormat: { hour: "2-digit", minute: "2-digit", meridiem: false },
+              },
+            }}
+            height="auto"
+            events={getEvents}
+            eventContent={renderEventContent}
+            eventDisplay="block"
+            showNonCurrentDates={false}
+          />
+        </WrapFullCalendar>
       </Drawer>
     </>
   );
