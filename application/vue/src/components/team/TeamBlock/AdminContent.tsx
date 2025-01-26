@@ -1,5 +1,5 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { Col, Collapse, ConfigProvider, Form, Row, theme, Typography } from "antd";
+import { Col, Collapse, ConfigProvider, Form, Row, Typography } from "antd";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
@@ -20,7 +20,6 @@ interface ContentProps {
 }
 
 export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
-  const { token } = theme.useToken();
   const [form] = Form.useForm();
   const { isCompactMode, isDarkMode, brightText } = useJazzContext();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -129,24 +128,29 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
         </Col>
       </Row>
       {inView && (
-        <Collapse
-          ghost
-          activeKey={showMitarbeiter ? "mitarbeiter" : ""}
-          items={[
-            {
-              showArrow: false,
-              key: "mitarbeiter",
-              children: (
-                <Form
-                  form={form}
-                  onValuesChange={() => {
-                    setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
-                  }}
-                  onFinish={saveForm}
-                  layout="vertical"
-                  size="small"
-                >
-                  <ConfigProvider theme={{ token: { colorBgBase: token.colorBgBase } }}>
+        <ConfigProvider
+          theme={{
+            token: { colorBgBase: backgroundColor },
+            components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
+          }}
+        >
+          <Collapse
+            ghost
+            activeKey={showMitarbeiter ? "mitarbeiter" : ""}
+            items={[
+              {
+                showArrow: false,
+                key: "mitarbeiter",
+                children: (
+                  <Form
+                    form={form}
+                    onValuesChange={() => {
+                      setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+                    }}
+                    onFinish={saveForm}
+                    layout="vertical"
+                    size="small"
+                  >
                     <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
                       <EditableStaffRows
                         forVermietung={forVermietung}
@@ -155,12 +159,12 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
                         labelColor={textColor}
                       />
                     </div>
-                  </ConfigProvider>
-                </Form>
-              ),
-            },
-          ]}
-        />
+                  </Form>
+                ),
+              },
+            ]}
+          />
+        </ConfigProvider>
       )}
     </div>
   );

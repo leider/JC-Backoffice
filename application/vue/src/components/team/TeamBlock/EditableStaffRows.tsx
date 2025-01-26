@@ -1,4 +1,4 @@
-import { Form, Space } from "antd";
+import { ConfigProvider, Form, Space } from "antd";
 import React from "react";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
@@ -14,20 +14,30 @@ export interface MitarbeiterRowProps {
 
 const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label, labelColor }) => {
   return (
-    <Form.Item label={<b style={{ color: labelColor }}>{label}:</b>} style={{ marginBottom: 12 }}>
-      <Space.Compact block>
-        <DynamicItem
-          nameOfDepending={["staff", `${sectionName}NotNeeded`]}
-          renderWidget={(getFieldValue) => {
-            const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return <MitarbeiterMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
-          }}
-        />
-        <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
-          <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
-        </Form.Item>
-      </Space.Compact>
-    </Form.Item>
+    <ConfigProvider
+      theme={{
+        components: {
+          Form: { labelColor },
+          Select: { colorIcon: labelColor, colorText: labelColor },
+          Tag: { defaultColor: labelColor },
+        },
+      }}
+    >
+      <Form.Item label={<b>{label}:</b>}>
+        <Space.Compact block>
+          <DynamicItem
+            nameOfDepending={["staff", `${sectionName}NotNeeded`]}
+            renderWidget={(getFieldValue) => {
+              const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
+              return <MitarbeiterMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
+            }}
+          />
+          <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
+            <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
+          </Form.Item>
+        </Space.Compact>
+      </Form.Item>
+    </ConfigProvider>
   );
 };
 

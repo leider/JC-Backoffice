@@ -19,7 +19,12 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { vera
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
 
   return (
-    <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor } }}>
+    <ConfigProvider
+      theme={{
+        token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor },
+        components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
+      }}
+    >
       <Col span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ padding: "2px 16px", backgroundColor }}>
