@@ -44,7 +44,7 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
     () =>
       map(["Keys", "Drums", "Bass", "Guitar", "Extra"] as Category[], (key) => ({
         key,
-        label: key as string,
+        label: key === "Drums" ? "Drums / Percussion" : (key as string),
         children: <SourceContainer cat={key} sourceBoxes={sourceBoxes} dropCallback={itemDroppedOntoSource} />,
       })),
     [sourceBoxes, itemDroppedOntoSource],

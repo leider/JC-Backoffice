@@ -61,6 +61,15 @@ export const Inventory: InventoryElement[] = [
     level: 0,
     img: { src: "Drums.png", width: 200, height: 200 },
   },
+  {
+    category: "Drums",
+    id: "PercussionSet",
+    title: "Percussion Group",
+    width: 150,
+    height: 150,
+    level: 0,
+    img: { src: "PercussionSet.png", width: 150, height: 150 },
+  },
   { category: "Bass", id: "Markbass", title: 'Bass Amp Markbass 4x10"', width: 60, height: 48, level: 0, photo: { src: "Markbass.png" } },
   {
     category: "Bass",
