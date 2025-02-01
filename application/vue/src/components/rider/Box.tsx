@@ -178,7 +178,7 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
         trigger="click"
         onOpenChange={() => callback(item.id)}
       >
-        <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level }}>
+        <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
           {item.img ? (
             <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
           ) : (
