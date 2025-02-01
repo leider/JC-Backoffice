@@ -81,6 +81,7 @@ function JazzclubApp() {
   }, [darkMode, compactMode]);
 
   const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
+  const colorTextDisabled = useMemo(() => (darkMode ? "rgb(255,255,255,0.65)" : "rgb(0,0,0,0.65)"), [darkMode]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -88,6 +89,7 @@ function JazzclubApp() {
         theme={{
           token: {
             colorPrimary: "#337ab7",
+            colorTextDisabled,
             colorLink: "#337ab7",
             borderRadius: 0,
             fontSize: 12,
@@ -105,6 +107,7 @@ function JazzclubApp() {
             Tag: { algorithm: theme.defaultAlgorithm },
             Collapse: { contentPadding: !xl ? 4 : 12 },
             Form: { itemMarginBottom: 12 },
+            Slider: { handleColor: colorTextDisabled },
           },
         }}
         locale={locale_de}

@@ -1,11 +1,12 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
-import React, { CSSProperties, forwardRef } from "react";
+import React, { CSSProperties, forwardRef, useMemo } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 const ButtonWithIcon = forwardRef(function (
   {
@@ -42,6 +43,8 @@ const ButtonWithIcon = forwardRef(function (
   ref: any, // eslint-disable-line @typescript-eslint/no-explicit-any
 ) {
   const token = theme.useToken().token;
+  const { isDarkMode } = useJazzContext();
+  const colorDisabled = useMemo(() => (isDarkMode ? "rgb(255,255,255,0.45)" : "rgb(0,0,0,0.45)"), [isDarkMode]);
 
   const { sm } = useBreakpoint();
 
@@ -51,7 +54,7 @@ const ButtonWithIcon = forwardRef(function (
         token: {
           colorPrimary: color ?? token.colorPrimary,
           colorText: color ?? token.colorText,
-          colorTextDisabled: color ? tinycolor(color).brighten(20).desaturate(30).toHexString() : token.colorTextDisabled,
+          colorTextDisabled: color ? tinycolor(color).brighten(20).desaturate(30).toHexString() : colorDisabled,
         },
       }}
     >
