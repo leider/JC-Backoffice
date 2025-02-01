@@ -22,7 +22,8 @@ app.post("/", (req: Request, res: Response) => {
       if (DatumUhrzeit.forJSDate(rider?.startDate).istNach(new DatumUhrzeit())) {
         rider.boxes = req.body.boxes;
       }
-      store.saveRider(rider, req.user as User);
+      const anonymous = new User({ id: "anonymous", name: "Rider Anonymous" });
+      store.saveRider(rider, anonymous);
       return resToJson(res, rider);
     }
   }
