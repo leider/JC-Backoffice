@@ -126,7 +126,7 @@ export function TeamFilterEdit({
       }
       open={open}
     >
-      <Form form={form} autoComplete="off" size="small">
+      <Form form={form} autoComplete="off" size="small" colon={false}>
         <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
           <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
         </ConfigProvider>

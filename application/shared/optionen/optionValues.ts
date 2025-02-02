@@ -87,6 +87,7 @@ export default class OptionValues {
   agenturen: Kontakt[] = [];
   hotels: Kontakt[] = [];
   preisprofile: Preisprofil[] = [];
+  preisKlavierstimmer = 125;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(object?: any): OptionValues {

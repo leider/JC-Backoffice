@@ -14,6 +14,7 @@ import JazzFormAndHeader from "../content/JazzFormAndHeader";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { NumberInput } from "@/widgets/numericInputWidgets";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -61,6 +62,12 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
           <Collapsible suffix="allgemeines" label="Optionen">
             <MultiSelectWithTags name="kooperationen" label="Kooperationen" options={optionen.kooperationen} />
             <MultiSelectWithTags name="genres" label="Genres" options={optionen.genres} />
+            <NumberInput name="preisKlavierstimmer" label="Standardpreis Klavierstimmer" decimals={2} suffix="€" />
+            <p>
+              <b>
+                Achtung! Änderungen am Preis wirken sich NICHT auf bereits angelegte Veranstaltungen aus, die einen Preis gesetzt haben!
+              </b>
+            </p>
           </Collapsible>
         </Col>
         <Col xs={24} lg={12}>

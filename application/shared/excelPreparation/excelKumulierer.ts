@@ -5,18 +5,25 @@ import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
 import keys from "lodash/keys.js";
+import OptionValues from "../optionen/optionValues.js";
+import { unifySpende } from "./excelFormatters.js";
+import isString from "lodash/isString.js";
 
 type KeyNumber = { [index: string]: number };
 type KeyNumberString = { [index: string]: number | string };
 
 export interface Kennzahlen {
   name: string;
-  kennzahlen: KeyNumber;
+  kennzahlen: KeyNumberString;
 }
 
-export function prepareExcel(veranstaltung: Veranstaltung[]) {
-  const kumuliert: { [index: string]: KeyNumber } = veranstaltung.reduce((bestehende, ver) => {
-    const kennzahlen = ver.isVermietung ? kennzahlenFuerVermietung(ver as Vermietung) : kennzahlenFuerVeranstaltung(ver as Konzert);
+export function prepareExcel({ veranstaltungen, optionen }: { veranstaltungen: Veranstaltung[]; optionen: OptionValues }) {
+  const klavierStimmerDefault = optionen.preisKlavierstimmer;
+
+  const kumuliert: { [index: string]: KeyNumberString } = veranstaltungen.reduce((bestehende, ver) => {
+    const kennzahlen = ver.isVermietung
+      ? kennzahlenFuerVermietung(ver as Vermietung, klavierStimmerDefault)
+      : kennzahlenFuerKonzert(ver as Konzert, klavierStimmerDefault);
     integrateKennzahlen(kennzahlen, bestehende);
     return bestehende;
   }, {});
@@ -50,20 +57,24 @@ export function prepareExcel(veranstaltung: Veranstaltung[]) {
   return rows.concat(kumulierte);
 }
 
-function createRow(art: string, kumuliert: { [index: string]: KeyNumber }) {
+function createRow(art: string, kumuliert: { [index: string]: KeyNumberString }) {
   const row: KeyNumberString = { Art: art, Summe: 0 };
   const element = kumuliert[art];
   row.Summe = element
     ? keys(element).reduce((sum, key) => {
-        row[key] = element[key];
-        return sum + element[key];
+        const strOrNum = element[key];
+        row[key] = strOrNum;
+        if (isString(strOrNum)) {
+          return sum;
+        }
+        return sum + strOrNum;
       }, 0)
     : 0;
   delete kumuliert[art];
   return row;
 }
 
-function integrateKennzahlen(kennzahlen: Kennzahlen, bestehende: { [index: string]: KeyNumber }) {
+function integrateKennzahlen(kennzahlen: Kennzahlen, bestehende: { [index: string]: KeyNumberString }) {
   forEach(keys(kennzahlen.kennzahlen), (key) => {
     if (!bestehende[key]) {
       bestehende[key] = {};
@@ -80,16 +91,18 @@ function ausgabe(betrag?: number) {
   return (betrag ?? -0) * -1;
 }
 
-function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
-  const kasse = veranstaltung.kasse;
-  const kalk = new KonzertKalkulation(veranstaltung);
-  const kosten = veranstaltung.kosten;
-  const result: KeyNumber = {
+function kennzahlenFuerKonzert(konzert: Konzert, klavierStimmerDefault: number): Kennzahlen {
+  const kasse = konzert.kasse;
+  const kalk = new KonzertKalkulation(konzert);
+  const kosten = konzert.kosten;
+  const staff = konzert.staff;
+  const klavierStimmerStandard = konzert.technik.fluegel ? klavierStimmerDefault : 0;
+  const result: KeyNumberString = {
     "Eintritt Abendkasse Bar": einnahme(kasse.einnahmeTicketsEUR),
     "Einnahmen Reservix": einnahme(kasse.einnahmenReservix),
     "Bar Einnahmen": einnahme(kasse.einnahmeOhneBankUndTickets),
     "Bar Einlage": einnahme(kasse.einnahmeBankEUR),
-    Zuschüsse: einnahme(veranstaltung.eintrittspreise.zuschuss),
+    Zuschüsse: einnahme(konzert.eintrittspreise.zuschuss),
     Barausgaben: ausgabe(kasse.ausgabenOhneGage),
     "Bar an Bank": ausgabe(kasse.ausgabeBankEUR),
     Gagen: ausgabe(kosten.gagenTotalEUR),
@@ -97,23 +110,23 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
     "Provision Agentur": ausgabe(kosten.provisionAgentur),
     "Backline Rockshop": ausgabe(kosten.backlineEUR),
     "Technik Zumietung": ausgabe(kosten.technikAngebot1EUR),
-    Flügelstimmer: ausgabe(kosten.fluegelstimmerEUR),
+    Flügelstimmer: ausgabe(kosten.fluegelstimmerEUR || klavierStimmerStandard),
     "Saalmiete (extern)": ausgabe(kosten.saalmiete),
     Personal: ausgabe(kosten.personal),
-    Tontechniker: ausgabe(kosten.tontechniker),
-    Lichttechniker: ausgabe(kosten.lichttechniker),
+    Tontechniker: !staff.technikerVNotNeeded && !kosten.tontechniker ? "N/A" : ausgabe(kosten.tontechniker),
+    Lichttechniker: !staff.technikerNotNeeded && !kosten.lichttechniker ? "N/A" : ausgabe(kosten.lichttechniker),
     "Catering Musiker": ausgabe(kosten.cateringMusiker),
     "Catering Personal": ausgabe(kosten.cateringPersonal),
-    Hotel: ausgabe(veranstaltung.unterkunft.roomsTotalEUR),
-    "Hotel (Transport)": ausgabe(veranstaltung.unterkunft.transportEUR),
+    Hotel: ausgabe(konzert.unterkunft.roomsTotalEUR),
+    "Hotel (Transport)": ausgabe(konzert.unterkunft.transportEUR),
     KSK: ausgabe(kosten.ksk),
     GEMA: ausgabe(kalk.gema),
   };
   if (kasse.einnahmeSonstiges1EUR && kasse.einnahmeSonstiges1EUR !== 0) {
-    result[kasse.einnahmeSonstiges1Text || "Einnahme Sonstiges 1"] = einnahme(kasse.einnahmeSonstiges1EUR);
+    result[unifySpende(kasse.einnahmeSonstiges1Text) ?? "Einnahme Sonstiges 1"] = einnahme(kasse.einnahmeSonstiges1EUR);
   }
   if (kasse.einnahmeSonstiges2EUR && kasse.einnahmeSonstiges2EUR !== 0) {
-    result[kasse.einnahmeSonstiges2Text || "Einnahme Sonstiges 2"] = einnahme(kasse.einnahmeSonstiges2EUR);
+    result[unifySpende(kasse.einnahmeSonstiges2Text) ?? "Einnahme Sonstiges 2"] = einnahme(kasse.einnahmeSonstiges2EUR);
   }
   for (let i = 1; i < 7; i++) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,16 +135,18 @@ function kennzahlenFuerVeranstaltung(veranstaltung: Konzert): Kennzahlen {
       result[kostenAny[`werbung${i}Label`]] = ausgabe(kostenAny[`werbung${i}`]);
     }
   }
-  return { kennzahlen: result, name: `${veranstaltung.startDatumUhrzeit.mitUhrzeitNumerisch}/${veranstaltung.kopf.titel}` };
+  return { kennzahlen: result, name: `${konzert.startDatumUhrzeit.mitUhrzeitNumerisch}/${konzert.kopf.titel}` };
 }
 
-function kennzahlenFuerVermietung(vermietung: Vermietung): Kennzahlen {
+function kennzahlenFuerVermietung(vermietung: Vermietung, klavierStimmerDefault: number): Kennzahlen {
   const kosten = vermietung.kosten;
+  const klavierStimmerStandard = vermietung.technik.fluegel ? klavierStimmerDefault : 0;
+
   const result: KeyNumber = {
     Gagen: ausgabe(kosten.gagenTotalEUR),
     "Backline Rockshop": ausgabe(kosten.backlineEUR),
     "Technik Zumietung": ausgabe(kosten.technikAngebot1EUR),
-    Flügelstimmer: ausgabe(kosten.fluegelstimmerEUR),
+    Flügelstimmer: ausgabe(kosten.fluegelstimmerEUR || klavierStimmerStandard),
     Saalmiete: einnahme(vermietung.saalmiete),
     Personal: ausgabe(kosten.personal),
   };

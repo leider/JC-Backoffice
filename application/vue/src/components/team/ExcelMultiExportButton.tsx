@@ -1,5 +1,5 @@
 import { Col, DatePicker, Form, Row, TimeRangePickerProps } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
 import { konzerteBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
@@ -11,9 +11,12 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import filter from "lodash/filter";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 
 export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
+  const { optionen, filter: teamFilter } = useJazzContext();
 
   function SelectRangeForExcelModal({
     isOpen,
@@ -68,10 +71,12 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
       },
     });
 
-    async function okClicked() {
-      asExcelKalk(bestaetigte);
+    const bestaetigteFiltered = useMemo(() => filter(bestaetigte, applyTeamFilter(teamFilter)), [bestaetigte]);
+
+    const okClicked = useCallback(() => {
+      asExcelKalk({ veranstaltungen: bestaetigteFiltered, optionen });
       setIsOpen(false);
-    }
+    }, [bestaetigteFiltered, setIsOpen]);
 
     return (
       <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>

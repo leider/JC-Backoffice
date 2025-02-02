@@ -10,6 +10,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ItemType } from "antd/es/menu/interface";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -82,6 +83,7 @@ export function NewButtons() {
 
 export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
   const form = useFormInstance();
+  const { optionen } = useJazzContext();
   function getKonzert() {
     return new Konzert(form.getFieldsValue(true));
   }
@@ -163,7 +165,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     const konzert = getKonzert();
     const vermietung = getVermietung();
     if (e.key === "ExcelKalk") {
-      asExcelKalk([isVermietung ? vermietung : konzert]);
+      asExcelKalk({ veranstaltungen: [isVermietung ? vermietung : konzert], optionen });
     }
     if (e.key === "Pressefotos") {
       imgzipForVeranstaltung(konzert);
