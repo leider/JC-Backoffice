@@ -1,4 +1,4 @@
-import { Alert, Col, Divider, Form, FormInstance, Input, Modal, Row } from "antd";
+import { Alert, Col, Divider, Form, FormInstance, Input, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
 import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
@@ -8,11 +8,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import { useWatch } from "antd/es/form/Form";
 import isNil from "lodash/isNil";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
   const [form] = Form.useForm();
@@ -37,9 +37,15 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
   }
 
   return (
-    <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false}>
+    <JazzModal
+      open={isOpen}
+      onCancel={() => setIsOpen(false)}
+      onOk={saveForm}
+      closable={false}
+      maskClosable={false}
+      title="Passwort ändern"
+    >
       <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
-        <JazzPageHeader title="Passwort ändern" />
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
@@ -58,7 +64,7 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
           </Col>
         </Row>
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }
 export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
@@ -83,9 +89,8 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
   }
 
   return (
-    <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false}>
+    <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false} title="Neuer Benutzer">
       <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
-        <JazzPageHeader title="Neuer Benutzer" />
         <Row gutter={8}>
           <Col span={24}>
             <TextField name="id" label="User ID" required />
@@ -105,7 +110,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         </Row>
         <EditFields isSuperUser form={form} />
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }
 
@@ -154,13 +159,14 @@ export function EditUserModal({
   }
 
   return (
-    <Modal
+    <JazzModal
       open={isOpen}
       onCancel={() => setIsOpen(false)}
       onOk={saveForm}
       okButtonProps={{ disabled: !dirty }}
       closable={false}
       maskClosable={false}
+      title={user.id}
     >
       <Form
         form={form}
@@ -172,10 +178,9 @@ export function EditUserModal({
         layout="vertical"
         autoComplete="off"
       >
-        <JazzPageHeader title={user.id} />
         <EditFields isSuperUser={isSuperUser} form={form} />
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }
 

@@ -6,6 +6,11 @@ import keys from "lodash/keys.js";
 
 type SomeObject = { [index: string]: SomeObject };
 
+export type DiffType = "geändert" | "hinzugefügt" | "gelöscht";
+
+export type JazzDiff = {
+  [key in DiffType]?: object;
+};
 /**
  * this function will modify data!
  *
@@ -66,7 +71,7 @@ export function areDifferent<T extends object>(left?: T, right?: T, propertiesTo
   return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
 }
 
-export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): object {
+export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): JazzDiff {
   const a = withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore);
   const b = withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore);
   const diffAtoB = detailedDiff(a, b);

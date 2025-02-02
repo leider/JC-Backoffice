@@ -1,4 +1,4 @@
-import { Button, Col, ConfigProvider, Form, Input, Modal, theme } from "antd";
+import { Button, Col, ConfigProvider, Form, Input, theme } from "antd";
 import React, { useContext, useMemo, useState } from "react";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -10,6 +10,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -66,7 +67,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
 
   return (
     <>
-      <Modal
+      <JazzModal
         title={`Kasseninhalt ${isBeginn ? "zu Beginn" : "am Ende"}`}
         open={openModal}
         closable={false}
@@ -100,7 +101,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
             </Col>
           </JazzRow>
         ))}
-      </Modal>
+      </JazzModal>
       <ButtonWithIcon
         ref={isBeginn ? refStartinhalt : refEndinhalt}
         block

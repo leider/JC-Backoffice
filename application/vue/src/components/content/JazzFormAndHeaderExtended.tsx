@@ -101,6 +101,7 @@ export default function JazzFormAndHeaderExtended<T>({
           })
           .catch(noop)
       }
+      colon={false}
       layout="vertical"
       onKeyDown={(event) => {
         const target = event.target as HTMLInputElement;

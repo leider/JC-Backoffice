@@ -1,7 +1,6 @@
-import { App, Button, Dropdown, Form, Modal, Space, theme } from "antd";
+import { App, Button, Dropdown, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { asExcelKalk } from "@/commons/utilityFunctions.ts";
@@ -9,9 +8,9 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Changelog } from "@/components/history/Changelog.tsx";
 import { ItemType } from "antd/es/menu/interface";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 type ButtonProps = {
   disabled?: boolean;
@@ -84,6 +83,7 @@ export function NewButtons() {
 
 export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
   const form = useFormInstance();
+  const { optionen } = useJazzContext();
   function getKonzert() {
     return new Konzert(form.getFieldsValue(true));
   }
@@ -95,7 +95,6 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
   const { modal } = App.useApp();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [showHistory, setShowHistory] = useState(false);
 
   const deleteKonzert = useMutation({
     mutationFn: deleteKonzertWithId,
@@ -166,7 +165,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     const konzert = getKonzert();
     const vermietung = getVermietung();
     if (e.key === "ExcelKalk") {
-      asExcelKalk([isVermietung ? vermietung : konzert]);
+      asExcelKalk({ veranstaltungen: [isVermietung ? vermietung : konzert], optionen });
     }
     if (e.key === "Pressefotos") {
       imgzipForVeranstaltung(konzert);
@@ -188,25 +187,17 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
       navigate(`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${konzert.url}`);
     }
     if (e.key === "history") {
-      setShowHistory(true);
+      navigate(`/history?collection=${isVermietung ? "Vermietung" : "Veranstaltung"}&id=${decodeURIComponent(form.getFieldValue("id"))}`);
     }
   }
 
   return (
-    <>
-      <Modal width="90%" open={showHistory} onCancel={() => setShowHistory(false)} footer={null}>
-        <Form.Item name="id" valuePropName="id">
-          <Changelog collection={isVermietung ? "Vermietung" : "Veranstaltung"} />
-        </Form.Item>
-      </Modal>
-
-      <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>
-        <Button>
-          <Space>
-            Mehr... <IconForSmallBlock iconName="ChevronDown" />
-          </Space>
-        </Button>
-      </Dropdown>
-    </>
+    <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>
+      <Button>
+        <Space>
+          Mehr... <IconForSmallBlock iconName="ChevronDown" />
+        </Space>
+      </Button>
+    </Dropdown>
   );
 }

@@ -16,7 +16,7 @@ import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { HistoryType } from "jc-backend/rest/history.ts";
+import { historyFromRawRows } from "jc-shared/history/history.ts";
 import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
 
@@ -479,7 +479,7 @@ export async function historyIdsFor(collection: string) {
 
 export async function historyRowsFor(collection: string, id: string) {
   const result = await getForType("json", `/rest/history/${collection}/${encodeURIComponent(id)}`);
-  return result as HistoryType[];
+  return historyFromRawRows(result);
 }
 
 // Special

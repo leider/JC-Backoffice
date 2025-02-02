@@ -1,8 +1,9 @@
-import { Form, List, Modal, Radio } from "antd";
+import { Form, List, Radio } from "antd";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import React, { useEffect } from "react";
 import { CheckboxGroupProps } from "antd/es/checkbox";
 import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (x: boolean) => void }) {
   const [form] = Form.useForm<JazzPrefs>();
@@ -30,7 +31,7 @@ export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; se
   }
 
   return (
-    <Modal
+    <JazzModal
       open={isOpen}
       cancelButtonProps={{ type: "text" }}
       cancelText=" "
@@ -88,6 +89,6 @@ export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; se
           }}
         />
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }

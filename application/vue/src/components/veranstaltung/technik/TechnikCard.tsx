@@ -1,42 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
-import { TextField } from "@/widgets/TextField";
+import { TextField } from "@/widgets/TextField.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import CheckItem from "@/widgets/CheckItem";
-import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import Konzert from "jc-shared/konzert/konzert.ts";
+import CheckItem from "@/widgets/CheckItem.tsx";
+import MultiSelectWithTags from "@/widgets/MultiSelectWithTags.tsx";
 import Uploader from "@/widgets/Uploader.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
-import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useWatch } from "antd/es/form/Form";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import Konzert from "jc-shared/konzert/konzert.ts";
 
-export default function TechnikCard() {
+export default function TechnikCard({ fuerVermietung }: { fuerVermietung: boolean }) {
   const { optionen } = useJazzContext();
   const form = useFormInstance();
   const { backlineJazzclub, backlineRockshop } = optionen;
 
   const [summe, setSumme] = useState<number>(0);
+
+  const updateSumme = useCallback(() => {
+    const veranstaltung = fuerVermietung ? new Vermietung(form.getFieldsValue(true)) : new Konzert(form.getFieldsValue(true));
+    setSumme(veranstaltung.kosten.backlineUndTechnikEUR);
+  }, [form, fuerVermietung]);
+
+  useEffect(updateSumme, [updateSumme]);
+
+  const brauchtFluegel = useWatch(["technik", "fluegel"], { form, preserve: true });
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
+
   useEffect(() => {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    setSumme(konzert.kosten.backlineUndTechnikEUR);
-  }, [form]);
-
-  function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    setSumme(konzert.kosten.backlineUndTechnikEUR);
-  }
-
-  function updateFluegelKosten(e: CheckboxChangeEvent) {
-    if (!e.target.checked) {
+    if (brauchtFluegel === false) {
       form.setFieldValue(["kosten", "fluegelstimmerEUR"], 0);
-    } else {
-      form.setFieldValue(["kosten", "fluegelstimmerEUR"], 125);
+    } else if (brauchtFluegel === true && !fluegelstimmerEUR) {
+      // preis manuell oder bereits gesetzt
+      form.setFieldValue(["kosten", "fluegelstimmerEUR"], optionen.preisKlavierstimmer);
     }
     updateSumme();
-  }
+  }, [brauchtFluegel, fluegelstimmerEUR, form, optionen.preisKlavierstimmer, updateSumme]);
 
   return (
     <Collapsible suffix="technik" label="Backline" noTopBorder amount={summe}>
@@ -45,7 +48,7 @@ export default function TechnikCard() {
           <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />
         </Col>
         <Col span={8}>
-          <CheckItem name={["technik", "fluegel"]} label="Flügel stimmen" onChange={updateFluegelKosten} />
+          <CheckItem name={["technik", "fluegel"]} label="Flügel stimmen" />
         </Col>
         <Col span={8}>
           <DynamicItem

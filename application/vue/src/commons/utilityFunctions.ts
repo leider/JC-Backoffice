@@ -5,6 +5,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { prepareExcel } from "jc-shared/excelPreparation/excelKumulierer.ts";
 import forEach from "lodash/forEach";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import OptionValues from "jc-shared/optionen/optionValues.ts";
 
 const format = new Intl.NumberFormat("de-DE", {
   minimumFractionDigits: 2,
@@ -16,17 +17,20 @@ export function formatToGermanNumberString(amount: number): string {
   return format.format(amount);
 }
 
-export function asExcelKalk(veranstaltung: Veranstaltung[]) {
-  if (veranstaltung.length < 1) {
+export function asExcelKalk({ veranstaltungen, optionen }: { veranstaltungen: Veranstaltung[]; optionen: OptionValues }) {
+  if (veranstaltungen.length < 1) {
     return;
   }
   const book = utils.book_new();
-  const sheet = utils.json_to_sheet(prepareExcel(veranstaltung));
+  const sheet = utils.json_to_sheet(prepareExcel({ veranstaltungen, optionen }));
   sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];
   utils.book_append_sheet(book, sheet, "Übersicht");
 
-  forEach(veranstaltung, (ver) => {
-    const sheet = utils.json_to_sheet(ver.isVermietung ? createExcelDataVermietung(ver as Vermietung) : createExcelData(ver as Konzert));
+  forEach(veranstaltungen, (ver) => {
+    const rows = ver.isVermietung
+      ? createExcelDataVermietung({ vermietung: ver as Vermietung, optionen })
+      : createExcelData({ konzert: ver as Konzert, optionen });
+    const sheet = utils.json_to_sheet(rows);
     sheet["!cols"] = [{ wch: 30 }, { wch: 6 }, { wch: 10 }];
     utils.book_append_sheet(
       book,
@@ -38,8 +42,8 @@ export function asExcelKalk(veranstaltung: Veranstaltung[]) {
         .slice(0, 30) || "data",
     );
   });
-  const erste = veranstaltung[0];
-  const letzte = veranstaltung[veranstaltung.length - 1];
+  const erste = veranstaltungen[0];
+  const letzte = veranstaltungen[veranstaltungen.length - 1];
   const von = erste.startDatumUhrzeit.tagMonatJahrKompakt;
   const bis = letzte.startDatumUhrzeit.tagMonatJahrKompakt;
   const vonBisString = von === bis ? von : von + "-" + bis;

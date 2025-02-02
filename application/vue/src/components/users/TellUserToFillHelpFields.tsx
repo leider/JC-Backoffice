@@ -1,12 +1,13 @@
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import React, { useEffect, useState } from "react";
-import { Form, Modal } from "antd";
+import { Form } from "antd";
 import User from "jc-shared/user/user.ts";
 import { IchKannFields } from "@/components/users/UserModals.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { saveUser } from "@/commons/loader.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import isNil from "lodash/isNil";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export function TellUserToFillHelpFields() {
   const { currentUser } = useJazzContext();
@@ -39,7 +40,7 @@ export function TellUserToFillHelpFields() {
   }
 
   return (
-    <Modal
+    <JazzModal
       open={isOpen}
       cancelButtonProps={{ type: "text" }}
       cancelText=" "
@@ -63,6 +64,6 @@ export function TellUserToFillHelpFields() {
           nächsten Mal wieder.
         </em>
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }
