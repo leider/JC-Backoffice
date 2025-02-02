@@ -1,4 +1,4 @@
-import { Col, Collapse, CollapseProps, ConfigProvider, Form, FormInstance, Modal, Row, Space } from "antd";
+import { Col, Collapse, CollapseProps, ConfigProvider, Form, FormInstance, Row, Space } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import React from "react";
@@ -6,6 +6,7 @@ import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.t
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { EventTypeMultiSelect } from "@/widgets/EventTypeSelects/EventTypeMultiSelect.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export function TeamFilterEdit({
   form,
@@ -107,7 +108,7 @@ export function TeamFilterEdit({
   ];
 
   return (
-    <Modal
+    <JazzModal
       closable={false}
       footer={
         <Space>
@@ -130,6 +131,6 @@ export function TeamFilterEdit({
           <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
         </ConfigProvider>
       </Form>
-    </Modal>
+    </JazzModal>
   );
 }

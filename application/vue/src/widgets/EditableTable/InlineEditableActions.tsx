@@ -1,6 +1,7 @@
-import { ConfigProvider, Modal } from "antd";
+import { ConfigProvider } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useState } from "react";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export interface ActionCallbacks {
   copy: () => void;
@@ -20,7 +21,7 @@ export default function InlineEditableActions({ actions }: { actions: ActionCall
   return (
     <>
       <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
-        <Modal
+        <JazzModal
           title="Löschen"
           closable={false}
           open={open}
@@ -34,7 +35,7 @@ export default function InlineEditableActions({ actions }: { actions: ActionCall
         >
           <p>Die Zeile wird gelöscht.</p>
           <p>Bist Du sicher?.</p>
-        </Modal>
+        </JazzModal>
       </ConfigProvider>
       <ButtonWithIcon key="copy" type="text" icon="Files" onClick={actions.copy} tooltipTitle="Zeile Kopieren" tooltipPlacement="leftTop" />
       <ButtonWithIcon

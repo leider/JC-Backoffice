@@ -1,4 +1,3 @@
-import { Modal } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import * as React from "react";
@@ -6,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export function ShowOnCopy({ title }: { title: string }) {
   const { url } = useParams();
@@ -21,7 +21,7 @@ export function ShowOnCopy({ title }: { title: string }) {
   }, [id, url, startDate, done]);
 
   return (
-    <Modal
+    <JazzModal
       title={title}
       open={openCopyModal}
       onOk={() => {
@@ -35,6 +35,6 @@ export function ShowOnCopy({ title }: { title: string }) {
       <p>Du möchtest sicher Titel und Datum anpassen.</p>
       <TextField name={["kopf", "titel"]} label="Titel" required />
       <StartEndPickers />
-    </Modal>
+    </JazzModal>
   );
 }

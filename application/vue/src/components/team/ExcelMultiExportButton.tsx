@@ -1,4 +1,4 @@
-import { Col, DatePicker, Form, Modal, Row, TimeRangePickerProps } from "antd";
+import { Col, DatePicker, Form, Row, TimeRangePickerProps } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
@@ -10,6 +10,7 @@ import { useQueries } from "@tanstack/react-query";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import filter from "lodash/filter";
+import { JazzModal } from "@/widgets/JazzModal.tsx";
 
 export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
@@ -73,7 +74,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
     }
 
     return (
-      <Modal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
+      <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
         <Form form={form} layout="vertical" autoComplete="off">
           <JazzPageHeader title="Excel Export" />
           <Row gutter={8}>
@@ -84,7 +85,7 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
             </Col>
           </Row>
         </Form>
-      </Modal>
+      </JazzModal>
     );
   }
 

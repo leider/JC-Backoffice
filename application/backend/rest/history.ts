@@ -4,15 +4,15 @@ import { db, escape } from "../lib/persistence/sqlitePersistence.js";
 import groupBy from "lodash/groupBy.js";
 import map from "lodash/map.js";
 import keys from "lodash/keys.js";
+import { HistoryDBType } from "jc-shared/history/history.js";
 
 const app = express();
-
-export type HistoryType = { id: string; before: string; after: string; user: string; time: string };
 
 const mappedNames: { [idx: string]: string } = {
   Mailregeln: "mailstorehistory",
   Optionen: "optionenstorehistory",
   Programmheft: "kalenderstorehistory",
+  Rider: "riderstorehistory",
   User: "userstorehistory",
   Termine: "terminstorehistory",
   Veranstaltung: "veranstaltungenstorehistory",
@@ -20,6 +20,14 @@ const mappedNames: { [idx: string]: string } = {
 };
 
 app.get("/history/:collection/:id", async (req: Request, res: Response) => {
+  function prunePasswords(dataString: string) {
+    const pruned = JSON.parse(dataString);
+    return JSON.stringify({
+      ...pruned,
+      hashedPassword: pruned.hashedPassword ? `${pruned.hashedPassword.substring(0, 3)}XXX` : undefined,
+      salt: "YYY",
+    });
+  }
   const collection = req.params.collection;
   const id = req.params.id;
   if (collection === "undefined" || id === "undefined") {
@@ -27,7 +35,18 @@ app.get("/history/:collection/:id", async (req: Request, res: Response) => {
   }
   const history = mappedNames[collection];
   const query = `SELECT * FROM ${history} WHERE id = ${escape(id)} ORDER BY time DESC;`;
-  const result = db.prepare(query).all();
+  const result = db.prepare<HistoryDBType[], HistoryDBType>(query).all();
+
+  if (collection === "User") {
+    return resToJson(
+      res,
+      map(result, (record) => {
+        record.before = prunePasswords(record.before);
+        record.after = prunePasswords(record.after);
+        return record;
+      }),
+    );
+  }
 
   resToJson(res, result);
 });

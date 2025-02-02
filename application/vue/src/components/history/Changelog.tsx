@@ -1,52 +1,76 @@
 import { useQuery } from "@tanstack/react-query";
 import { historyRowsFor } from "@/commons/loader.ts";
-import React, { useMemo } from "react";
-import { differenceForAsObject } from "jc-shared/commons/comparingAndTransforming.ts";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import React, { useEffect, useState } from "react";
 import JsonView from "@uiw/react-json-view";
-import { HistoryType } from "jc-backend/rest/history.ts";
-import forEach from "lodash/forEach";
-import keys from "lodash/keys";
+import { lightTheme } from "@uiw/react-json-view/light";
+import { nordTheme } from "@uiw/react-json-view/nord";
+import { List } from "antd";
+import { DiffType } from "jc-shared/commons/comparingAndTransforming.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export function Changelog({ id, collection }: { collection: string; id?: string }) {
-  const { data: rows } = useQuery({
+function ChangeSection({ item, surrounding, expanded }: { item: { typ: DiffType; val: object }; surrounding: string; expanded: boolean }) {
+  const [collapsed, setCollapsed] = useState(true);
+  const { isDarkMode } = useJazzContext();
+  useEffect(() => {
+    setCollapsed(!expanded);
+  }, [expanded]);
+
+  return (
+    <List.Item
+      key={item.typ + surrounding}
+      actions={[
+        <ButtonWithIcon
+          key="button"
+          size="small"
+          icon={collapsed ? "PlusCircleFill" : "DashCircleFill"}
+          tooltipTitle={collapsed ? "Ausklappen" : "Zuklappen"}
+          onClick={() => setCollapsed(!collapsed)}
+        />,
+      ]}
+    >
+      <List.Item.Meta
+        title={item.typ}
+        description={
+          <JsonView
+            collapsed={collapsed}
+            value={item.val}
+            displayDataTypes={false}
+            displayObjectSize={false}
+            enableClipboard={true}
+            style={isDarkMode ? nordTheme : lightTheme}
+          />
+        }
+      />
+    </List.Item>
+  );
+}
+
+export function Changelog({ id, collection, expanded }: { collection: string; id?: string; expanded: boolean }) {
+  const { data: changelog } = useQuery({
     enabled: !!id,
     queryKey: ["history", collection, id],
     queryFn: () => historyRowsFor(collection, id!),
   });
 
-  const changelog = useMemo(() => {
-    const changelogObject: { [idx: string]: object } = {};
-    forEach(rows, (row) => {
-      const result: Omit<HistoryType, "id" | "before" | "after"> & {
-        before: { id?: string; changelist?: string };
-        after: { id?: string; changelist?: string };
-      } = {
-        before: {},
-        after: {},
-        user: "",
-        time: "",
-      };
-      Object.assign(result, row, {
-        before: JSON.parse(row.before),
-        after: JSON.parse(row.after),
-        time: DatumUhrzeit.forISOString(row.time).toLocalDateTimeString,
-      });
-      delete result.before.changelist;
-      delete result.after.changelist;
-      const header = result.user + " " + result.time;
-      if (!result.before.id && result.after.id) {
-        changelogObject[`NEUANLAGE - ${header}`] = differenceForAsObject(result.before, result.after);
-      } else if (result.before.id && keys(result.after).length === 1) {
-        changelogObject[`GELÖSCHT - ${header}`] = {};
-      } else {
-        changelogObject[header] = differenceForAsObject(result.before, result.after);
-      }
-    });
-    return changelogObject;
-  }, [rows]);
-
-  return keys(changelog).length === 0 ? undefined : (
-    <JsonView value={changelog} displayDataTypes={false} displayObjectSize={false} enableClipboard={false} quotes="" />
+  return (
+    <List
+      size="small"
+      dataSource={changelog?.rows}
+      renderItem={(item) => (
+        <List.Item key={item.header}>
+          <List.Item.Meta
+            title={item.header}
+            description={
+              <List
+                size="small"
+                dataSource={item.asList}
+                renderItem={(inner) => <ChangeSection item={inner} surrounding={item.header} expanded={expanded} />}
+              />
+            }
+          />
+        </List.Item>
+      )}
+    />
   );
 }

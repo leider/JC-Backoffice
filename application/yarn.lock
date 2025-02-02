@@ -1630,7 +1630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.1, @babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.11.1, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.18.0, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.22.6, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.6, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.24.4, @babel/runtime@npm:^7.24.7, @babel/runtime@npm:^7.24.8, @babel/runtime@npm:^7.25.7, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.10.1, @babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.11.1, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.18.0, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.0, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.6, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.24.4, @babel/runtime@npm:^7.24.7, @babel/runtime@npm:^7.24.8, @babel/runtime@npm:^7.25.7, @babel/runtime@npm:^7.26.0, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.26.7
   resolution: "@babel/runtime@npm:7.26.7"
   dependencies:
@@ -5487,16 +5487,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uiw/react-json-view@npm:1.12.2":
-  version: 1.12.2
-  resolution: "@uiw/react-json-view@npm:1.12.2"
-  dependencies:
-    "@babel/runtime": "npm:^7.22.6"
+"@uiw/react-json-view@npm:2.0.0-alpha.30":
+  version: 2.0.0-alpha.30
+  resolution: "@uiw/react-json-view@npm:2.0.0-alpha.30"
   peerDependencies:
     "@babel/runtime": ">=7.10.0"
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/4ac0e3da2a5bf892d5d3b128b8acfa752da0061446a1e4f8fd1dc42d7d7047f5b2153da5bfdbfada33cb7c509fb2c3edfe96c1ce0149352e6f8ade5a636bbcb6
+  checksum: 10c0/42a93debd57398c4d989f28ce4dac8bf549809a63f7000275c5877d09c45e0a9dbc809a01cf7161097cd2b0878546bcd79bac58ceff4787ccec7dd46ca3df449
   languageName: node
   linkType: hard
 
@@ -9513,7 +9511,7 @@ __metadata:
     "@types/react": "npm:18.3.18"
     "@types/react-dom": "npm:18.3.5"
     "@types/tinycolor2": "npm:1.4.6"
-    "@uiw/react-json-view": "npm:1.12.2"
+    "@uiw/react-json-view": "npm:2.0.0-alpha.30"
     "@vitejs/plugin-react": "npm:4.3.4"
     antd: "npm:5.23.2"
     axios: "npm:1.7.9"
