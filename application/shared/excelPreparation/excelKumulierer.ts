@@ -54,7 +54,8 @@ export function prepareExcel({ veranstaltungen, optionen }: { veranstaltungen: V
   ];
 
   const kumulierte = map(keys(kumuliert), (key) => createRow(key, kumuliert));
-  return rows.concat(kumulierte);
+  const keyNumberStrings = rows.concat(kumulierte);
+  return keyNumberStrings;
 }
 
 function createRow(art: string, kumuliert: { [index: string]: KeyNumberString }) {

@@ -3,7 +3,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import { asExcelKalk } from "@/commons/utilityFunctions.ts";
+import { asExcelKalkSingle } from "@/commons/utilityFunctions.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -165,7 +165,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     const konzert = getKonzert();
     const vermietung = getVermietung();
     if (e.key === "ExcelKalk") {
-      asExcelKalk({ veranstaltungen: [isVermietung ? vermietung : konzert], optionen });
+      asExcelKalkSingle({ veranstaltung: isVermietung ? vermietung : konzert, optionen });
     }
     if (e.key === "Pressefotos") {
       imgzipForVeranstaltung(konzert);
