@@ -3,6 +3,9 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import { excelRows, VeranstaltungExcelRow } from "jc-shared/excelPreparation/excelRowVeranstaltung.ts";
 import { createExcelData, SimpleExcelRow } from "jc-shared/excelPreparation/excelFormatters.ts";
+import map from "lodash/map";
+import times from "lodash/times";
+import truncate from "lodash/truncate";
 
 const red = "#e8838a";
 
@@ -97,28 +100,47 @@ export async function asExcelKalk({ veranstaltungen, optionen }: { veranstaltung
   const bis = letzte.startDatumUhrzeit.tagMonatJahrKompakt;
   const vonBisString = von === bis ? von : `${von}-${bis}`;
 
-  await writeXlsxFile(uebersichtRows, {
-    schema: schemaUebersicht,
+  const allSingles = map(veranstaltungen, (ver) => createExcelData({ veranstaltung: ver, optionen }));
+
+  const noOfSheets = allSingles.length;
+
+  const schemas = times(noOfSheets, () => schemaSingle);
+  const names = map(veranstaltungen, (ver) => {
+    const start = ver.startDatumUhrzeit;
+    return truncate(`${start.tag}.${start.monat}. ${ver.kopf.titel.replace(/[[\]/\\:*?]+/g, "-")}`, { length: 31 });
+  });
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  await writeXlsxFile([uebersichtRows, ...allSingles], {
+    schema: [schemaUebersicht, ...schemas],
+    sheets: ["Übersicht", ...names],
     fileName: `Kalkulation-${vonBisString}.xlsx`,
     stickyColumnsCount: 3,
   });
 }
 
-export async function asExcelKalkSingle({ veranstaltung, optionen }: { veranstaltung: Veranstaltung; optionen: OptionValues }) {
-  const schemaSingle: Schema<SimpleExcelRow> = [
-    { column: "Art", type: String, value: (row) => row.Art, width: 30 },
-    { column: "Einnahme", type: Number, format: "#,##0.00", value: (row) => row.Einnahme },
-    {
-      column: "Ausgabe",
-      type: Number,
-      format: "#,##0.00",
-      value: (row) => (row.Ausgabe === "N/A" ? 0 : row.Ausgabe),
-      getCellStyle: (row) => {
-        return row.Ausgabe === "N/A" ? { backgroundColor: red } : undefined;
-      },
+const schemaSingle: Schema<SimpleExcelRow> = [
+  {
+    column: "Art",
+    type: String,
+    value: (row) => row.Art,
+    width: 30,
+    getCellStyle: (row) => (/[0-9]{2}.[0-9]{2}.[0-9]{2}/.test(row.Art) ? { span: 3, fontWeight: "bold" } : undefined),
+  },
+  { column: "Einnahme", type: Number, format: "#,##0.00", value: (row) => row.Einnahme },
+  {
+    column: "Ausgabe",
+    type: Number,
+    format: "#,##0.00",
+    value: (row) => (row.Ausgabe === "N/A" ? 0 : row.Ausgabe),
+    getCellStyle: (row) => {
+      return row.Ausgabe === "N/A" ? { backgroundColor: red } : undefined;
     },
-  ];
+  },
+];
 
+export async function asExcelKalkSingle({ veranstaltung, optionen }: { veranstaltung: Veranstaltung; optionen: OptionValues }) {
   const rows = createExcelData({ veranstaltung, optionen });
 
   await writeXlsxFile(rows, {
