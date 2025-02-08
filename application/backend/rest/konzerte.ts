@@ -59,7 +59,8 @@ app.get("/konzerte/fortoday", (req, res) => {
 app.get("/konzert/:url", (req, res) => {
   const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
   resToJson(res, konzert);
 });
@@ -78,9 +79,10 @@ app.post("/konzert", [checkAbendkasse], (req: Request, res: Response) => {
         konzert.gaesteliste = req.body.gaesteliste;
         konzert.reservierungen = req.body.reservierungen;
         konzert.changelist = req.body.changelist;
-        return saveAndReply(req, res, konzert);
+        saveAndReply(req, res, konzert);
+        return;
       } else {
-        return res.status(403).send("Kasse darf nur bestehende speichern");
+        res.status(403).send("Kasse darf nur bestehende speichern");
       }
     }
   }
@@ -116,17 +118,18 @@ function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSe
 }
 
 app.post("/konzert/:url/addUserToSection", (req: Request, res: Response) => {
-  return addOrRemoveUserFromSection("addUserToSection", req, res);
+  addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
 app.post("/konzert/:url/removeUserFromSection", (req: Request, res: Response) => {
-  return addOrRemoveUserFromSection("removeUserFromSection", req, res);
+  addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
 app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
   const konzert = store.getKonzert(req.params.url);
   if (!konzert) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
   const { item, art }: { item: NameWithNumber; art: GastArt } = req.body;
   const liste: NameWithNumber[] = art === "gast" ? konzert.gaesteliste : konzert.reservierungen;
@@ -138,17 +141,20 @@ app.post("/upload", [checkOrgateam], async (req: Request, res: Response) => {
   const { fields, files } = await parseFormData(req);
 
   if (!files.datei || !fields.typ || !fields.id) {
-    return res.status(500).send("keine Datei, Typ oder ID");
+    res.status(500).send("keine Datei, Typ oder ID");
+    return;
   }
   const konzert = store.getKonzertForId((fields.id ?? [])[0]);
   if (!konzert) {
-    return res.sendStatus(500);
+    res.sendStatus(500);
+    return;
   }
   try {
     await konzerteService.addAndSaveImages({ konzert, dateien: files.datei, typ: fields.typ[0] as KonzertFileUploadType });
     saveAndReply(req, res, konzert);
   } catch (e) {
-    return res.status(500).send((e as Error).message);
+    res.status(500).send((e as Error).message);
+    return;
   }
 });
 

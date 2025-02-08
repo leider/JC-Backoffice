@@ -51,7 +51,8 @@ app.post("/wikipage/:subdir/:page", async (req, res) => {
 app.post("/wiki/upload", async (req, res) => {
   const { files } = await parseFormData(req);
   if (!files.datei || !files.datei.length) {
-    return res.status(500).send("keine Datei");
+    res.status(500).send("keine Datei");
+    return;
   }
   const datei = files.datei[0];
   try {
@@ -59,7 +60,8 @@ app.post("/wiki/upload", async (req, res) => {
     const url = encodeURI(`/wiki/${savedName}`);
     resToJson(res, { url });
   } catch (e) {
-    return res.status(500).send((e as Error).message);
+    res.status(500).send((e as Error).message);
+    return;
   }
 });
 

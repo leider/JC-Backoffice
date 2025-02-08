@@ -6,7 +6,7 @@ import { TeamUndVeranstaltungen } from "@/components/team/TeamUndVeranstaltungen
 
 export default function Veranstaltungen() {
   useDirtyBlocker(false);
-  document.title = "Veranstaltungen";
+  document.title = "SUPER Veranstaltungen";
 
   const { currentUser } = useJazzContext();
 
