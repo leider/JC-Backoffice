@@ -9,7 +9,7 @@ export default function useUpdateApp() {
           () => {
             r.update().catch(noop);
           },
-          60 * 60 * 1000, // one minute
+          60 * 1000, // one minute
         );
     },
   });
