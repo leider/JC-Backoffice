@@ -2,5 +2,8 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <includedPredefinedLibrary name="Node.js Core" />
+    <excludedPredefinedLibrary name="Dependencies from JC-Backoffice/runtime-deploy/backend/package.json" />
+    <excludedPredefinedLibrary name="Dependencies from JC-Backoffice/runtime-deploy/package.json" />
+    <excludedPredefinedLibrary name="Dependencies from JC-Backoffice/runtime-deploy/shared/package.json" />
   </component>
 </project>
