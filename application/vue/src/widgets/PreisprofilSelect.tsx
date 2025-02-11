@@ -51,7 +51,7 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
 
   const alleProfile = useMemo<Preisprofil[]>(() => {
     const result = [...optionen.preisprofile];
-    if (valueAsObject && find(optionen.preisprofile, { name: valueAsObject.name })) {
+    if (valueAsObject && !find(optionen.preisprofile, { name: valueAsObject.name })) {
       result.push({ ...valueAsObject, veraltet: true });
     }
     return result.sort((a, b) => (a.regulaer > b.regulaer ? 1 : -1));
