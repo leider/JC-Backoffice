@@ -11,7 +11,6 @@
       <excludeFolder url="file://$MODULE_DIR$/application/backend/static/rider" />
       <excludeFolder url="file://$MODULE_DIR$/application/backend/static/stylesheets" />
       <excludeFolder url="file://$MODULE_DIR$/application/backend/static/vue" />
-      <excludeFolder url="file://$MODULE_DIR$/runtime-deploy" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

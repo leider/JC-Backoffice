@@ -21,7 +21,7 @@ export const printoptions131 = {
 };
 
 export async function generatePdf(html: string, pdfOptions = printoptions) {
-  const browser = await puppeteer.launch({ headless: "shell", args: ["--no-sandbox", "--disable-web-security"] });
+  const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-web-security"] });
   const page = await browser.newPage();
   await page.emulateMediaType("screen");
   await page.setContent(html, {
