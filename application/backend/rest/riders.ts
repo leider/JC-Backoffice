@@ -16,7 +16,8 @@ app.post("/riders", [checkOrgateam], (req: Request, res: Response) => {
   if (req.body) {
     const rider = new Rider(req.body);
     store.saveRider(rider, req.user as User);
-    return resToJson(res, rider);
+    resToJson(res, rider);
+    return;
   }
 });
 

@@ -43,7 +43,8 @@ app.get("/vermietungen/:startYYYYMM/:endYYYYMM", (req, res) => {
 app.get("/vermietung/:url", (req: Request, res: Response) => {
   const vermietung = store.getVermietung(req.params.url);
   if (!vermietung) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
+    return;
   }
   resToJson(res, vermietung);
 });
@@ -79,11 +80,11 @@ function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSe
 }
 
 app.post("/vermietung/:url/addUserToSection", (req: Request, res: Response) => {
-  return addOrRemoveUserFromSection("addUserToSection", req, res);
+  addOrRemoveUserFromSection("addUserToSection", req, res);
 });
 
 app.post("/vermietung/:url/removeUserFromSection", (req: Request, res: Response) => {
-  return addOrRemoveUserFromSection("removeUserFromSection", req, res);
+  addOrRemoveUserFromSection("removeUserFromSection", req, res);
 });
 
 export default app;

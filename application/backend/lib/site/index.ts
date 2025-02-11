@@ -76,17 +76,20 @@ app.post("/refreshtoken", (req, res) => {
   const oldId = req.cookies["refresh-token"] as string;
   if (!oldId) {
     appLogger.warn("refreshToken without cookie called");
-    return res.sendStatus(401);
+    res.sendStatus(401);
+    return;
   }
   try {
     const refreshToken = refreshstore.forId(oldId);
     if (!refreshToken || DatumUhrzeit.forJSDate(refreshToken.expiresAt).istVor(new DatumUhrzeit())) {
-      return res.sendStatus(401);
+      res.sendStatus(401);
+      return;
     }
-    return createToken(req, res, refreshToken.userId);
+    createToken(req, res, refreshToken.userId);
+    return;
   } catch (e) {
     appLogger.error("(/refreshtoken)", e);
-    return res.sendStatus(401);
+    res.sendStatus(401);
   }
 });
 
@@ -105,20 +108,25 @@ app.post("/login", (req, res) => {
         appLogger.info("No Users found, initializing Database.");
         const firstUser = new User({ id: name, password: pass, gruppen: SUPERUSERS });
         usersService.saveNewUserWithPassword(firstUser, firstUser);
-        return createToken(req, res, name);
+        createToken(req, res, name);
+        return;
       }
-      return res.sendStatus(401);
+      res.sendStatus(401);
+      return;
     }
     if (hashPassword(pass, user.salt) === user.hashedPassword) {
       appLogger.info("Successful Login for: " + name);
-      return createToken(req, res, name);
+      createToken(req, res, name);
+      return;
     }
-    return res.sendStatus(401);
+    res.sendStatus(401);
+    return;
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   } catch (e: any) {
     appLogger.error("(/login) Login error for: " + name);
     appLogger.error(e?.message || "");
-    return res.sendStatus(401);
+    res.sendStatus(401);
+    return;
   }
 });
 
@@ -129,7 +137,8 @@ app.post("/logout", (req, res) => {
     httpOnly: true,
     secure: false,
   });
-  return res.clearCookie("refresh-token").send({});
+  res.clearCookie("refresh-token").send({});
+  return;
 });
 
 const uploadDir = conf.uploadDir;
@@ -138,13 +147,15 @@ const placeholder = path.join(__dirname, "../../static/upload/../No-Image-Placeh
 app.get("/imagepreview/:filename", (req, res, next) => {
   function sendOrHandleError(err: Error, buffer: Buffer) {
     if (err) {
-      return err.message === "Input file is missing" ? next() : next(err);
+      err.message === "Input file is missing" ? next() : next(err);
+      return;
     }
     res.send(buffer);
   }
 
   if (!fs.existsSync(uploadDir + "/" + req.params.filename)) {
-    return sharp(placeholder).toBuffer(sendOrHandleError);
+    sharp(placeholder).toBuffer(sendOrHandleError);
+    return;
   }
   sharp(uploadDir + "/" + req.params.filename)
     .resize({ width: 800 })
@@ -155,7 +166,8 @@ app.get("/ical/", (req, res) => {
   try {
     const konzerte = store.alle();
     if (!konzerte) {
-      return res.status(500).send();
+      res.status(500).send();
+      return;
     }
     const calendar: Calendar = {
       version: "2.0",
@@ -170,9 +182,11 @@ app.get("/ical/", (req, res) => {
       })),
     };
     const calString = new Builder(calendar).build();
-    return res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
+    res.type("ics").header("Content-Disposition", "inline; filename=events.ics").send(calString);
+    return;
   } catch {
-    return res.status(500).send();
+    res.status(500).send();
+    return;
   }
 });
 

@@ -1,0 +1,16 @@
+{
+  "name": "deploy-utils",
+  "version": "1.0.0",
+  "description": "internal",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "copyfiles": "2.4.1",
+    "prettier": "3.4.2",
+    "rimraf": "5.0.10"
+  },
+  "packageManager": "yarn@4.6.0",
+  "scripts": {
+    "copy2dist": "node create-runtime-deploy.js"
+  }
+}

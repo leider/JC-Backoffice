@@ -10,7 +10,8 @@ const app = express();
 app.get("/:url", (req: Request, res: Response) => {
   const rider = store.getRider(req.params.url);
   if (!rider || DatumUhrzeit.forJSDate(rider?.startDate).istVorOderAn(new DatumUhrzeit())) {
-    return res.sendStatus(403);
+    res.sendStatus(403);
+    return;
   }
   resToJson(res, rider);
 });

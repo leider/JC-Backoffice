@@ -22,9 +22,13 @@ function veranstaltungenForExport(fetcher: () => Konzert[], req: Request, res: R
   return res.type("csv").send(lines);
 }
 
-app.get("/zukuenftige/csv", (req, res) => veranstaltungenForExport(store.zukuenftigeMitGestern, req, res));
+app.get("/zukuenftige/csv", (req, res) => {
+  veranstaltungenForExport(store.zukuenftigeMitGestern, req, res);
+});
 
-app.get("/vergangene/csv", (req, res) => veranstaltungenForExport(store.vergangene, req, res));
+app.get("/vergangene/csv", (req, res) => {
+  veranstaltungenForExport(store.vergangene, req, res);
+});
 
 // app.get('/:url/fileexportStadtKarlsruhe', (req, res, next) => {
 //   fileexportStadtKarlsruhe.send(req.params.url, (err, result) => {
