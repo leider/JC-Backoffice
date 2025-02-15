@@ -3,7 +3,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
-import { asExcelKalkSingle } from "@/commons/utilityFunctions.ts";
+import { asExcelKalkSingle } from "@/commons/excel/single.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";

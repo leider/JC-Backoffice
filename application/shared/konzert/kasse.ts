@@ -38,6 +38,7 @@ export default class Kasse {
   kassenfreigabe? = "";
   kassenfreigabeAm?: Date;
   einnahmenReservix = 0; // darf nicht in kassenberechnung
+  anzahlReservix = 0; // darf nicht in kassenberechnung
   startinhalt: MuenzenScheine = {
     "10": undefined,
     "20": undefined,

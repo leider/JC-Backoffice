@@ -70,6 +70,13 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
         <Col span={12}>
           <NumberInput name={["kasse", "einnahmenReservix"]} label="Reservix" decimals={2} suffix="€" onChange={updateSumme} />
         </Col>
+        <Col span={12}>
+          <NumberInput
+            name={["kasse", "anzahlReservix"]}
+            label={'Anzahl Tickets (für Excel) - falls "0" Schnitt aus Eintritt'}
+            decimals={0}
+          />
+        </Col>
       </JazzRow>
       <Flex justify="center">
         {freigabe ? (

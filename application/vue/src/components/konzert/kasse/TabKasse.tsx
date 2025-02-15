@@ -11,10 +11,6 @@ import { KassenContext } from "./KassenContext";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
-export interface KasseCardProps {
-  disabled: boolean;
-}
-
 export default function TabKasse() {
   const form = useFormInstance();
   const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
@@ -33,8 +29,6 @@ export default function TabKasse() {
   }
 
   useEffect(anfangsbestandChanged, [form, anfangsbestandEUR]);
-
-  const freigabe = useWatch(["kasse", "kassenfreigabe"]);
 
   const toursteps: TourProps["steps"] = [
     {
@@ -74,7 +68,7 @@ export default function TabKasse() {
     <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
       <JazzRow>
         <Col xs={24} lg={12}>
-          <EinnahmenCard disabled={freigabe} />
+          <EinnahmenCard />
           <KassenzettelFreigabe />
           <JazzRow>
             <Col span={8}>
@@ -89,7 +83,7 @@ export default function TabKasse() {
           </JazzRow>
         </Col>
         <Col xs={24} lg={12}>
-          <AusgabenCard disabled={freigabe} />
+          <AusgabenCard />
         </Col>
       </JazzRow>
       <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)} />

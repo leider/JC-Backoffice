@@ -4,22 +4,18 @@ import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { TextField } from "@/widgets/TextField";
 import Kasse from "jc-shared/konzert/kasse";
-import { KasseCardProps } from "@/components/konzert/kasse/TabKasse";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
+import { useWatch } from "antd/es/form/Form";
 
-export default function EinnahmenCard({ disabled }: KasseCardProps) {
+export default function EinnahmenCard() {
   const form = useFormInstance();
   const { refEinnahmen } = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
-
-  const [readonly, setReadonly] = useState<boolean>(false);
-  useEffect(() => {
-    setReadonly(disabled);
-  }, [disabled]);
+  const freigabe = useWatch(["kasse", "kassenfreigabe"]);
 
   const [summe, setSumme] = useState<number>(0);
   useEffect(() => {
@@ -56,18 +52,18 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             decimals={2}
             suffix="€"
             onChange={updateSumme}
-            disabled={readonly}
+            disabled={freigabe}
           />
         </Col>
         <Col span={8}>
           <Form.Item label="&nbsp;">
-            <ButtonWithIcon block text="Berechnen..." color={color("kasse")} onClick={calculateTickets} alwaysText />
+            <ButtonWithIcon block text="Berechnen..." color={color("kasse")} onClick={calculateTickets} alwaysText disabled={freigabe} />
           </Form.Item>
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["kasse", "anzahlBesucherAK"]} label="Besucher gesamt" decimals={0} disabled={readonly} />
+          <NumberInput name={["kasse", "anzahlBesucherAK"]} label="Besucher gesamt" decimals={0} disabled={freigabe} />
         </Col>
         <Col span={8}>
           <NumberInput
@@ -76,13 +72,13 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             decimals={2}
             suffix="€"
             onChange={updateSumme}
-            disabled={readonly}
+            disabled={freigabe}
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["kasse", "einnahmeSonstiges1Text"]} label="Sonstiges" disabled={readonly} />
+          <TextField name={["kasse", "einnahmeSonstiges1Text"]} label="Sonstiges" disabled={freigabe} />
         </Col>
         <Col span={8}>
           <NumberInput
@@ -91,13 +87,13 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             decimals={2}
             suffix="€"
             onChange={updateSumme}
-            disabled={readonly}
+            disabled={freigabe}
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["kasse", "einnahmeSonstiges2Text"]} label="Sonstiges" disabled={readonly} />
+          <TextField name={["kasse", "einnahmeSonstiges2Text"]} label="Sonstiges" disabled={freigabe} />
         </Col>
         <Col span={8}>
           <NumberInput
@@ -106,7 +102,7 @@ export default function EinnahmenCard({ disabled }: KasseCardProps) {
             decimals={2}
             suffix="€"
             onChange={updateSumme}
-            disabled={readonly}
+            disabled={freigabe}
           />
         </Col>
       </JazzRow>
