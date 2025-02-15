@@ -1,11 +1,12 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "./types.ts";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
+import { useDraggable } from "@dnd-kit/core";
+import { v4 as uuidv4 } from "uuid";
+import { ItemTypes } from "@/components/rider/types.ts";
 
 const style: CSSProperties = {
   position: "absolute",
@@ -158,20 +159,21 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
       </>
     );
   }
-
-  const [, drag] = useDrag(
-    () => ({
-      type: ItemTypes.BOX,
-      item: item,
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    }),
-    [item],
-  );
-
+  const uuid = useMemo(() => uuidv4(), []);
+  const { attributes, listeners, setNodeRef } = useDraggable({ id: item.id + uuid, data: { type: ItemTypes.BOX, item } });
+  // const [, drag] = useDrag(
+  //   () => ({
+  //     type: ItemTypes.BOX,
+  //     item: item,
+  //     collect: (monitor) => ({
+  //       isDragging: monitor.isDragging(),
+  //     }),
+  //   }),
+  //   [item],
+  // );
+  //
   return (
-    <div ref={drag} style={{ ...style, left: item.left, top: item.top }}>
+    <div ref={setNodeRef} style={{ ...style, left: item.left, top: item.top }} {...attributes} {...listeners}>
       <Popover
         title={title}
         content={isExtra ? PopContentForExtras() : PopContent(item)}

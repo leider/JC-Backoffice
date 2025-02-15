@@ -1,14 +1,12 @@
 import type { CSSProperties, FC } from "react";
 import { useRef } from "react";
-import type { DropTargetMonitor } from "react-dnd";
-import { useDrop } from "react-dnd";
 
 import { Box } from "./Box.js";
-import type { DragItem } from "./types.ts";
 import { ItemTypes } from "./types.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import find from "lodash/find";
 import map from "lodash/map";
+import { DragEndEvent, DragStartEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 
 const style: CSSProperties = {
   width: 800,
@@ -48,35 +46,42 @@ export const TargetContainer: FC<{
 }> = ({ targetBoxes, setTargetBoxes }) => {
   const targetContainer = useRef<HTMLDivElement | null>(null);
 
-  const [, dropTarget] = useDrop(
-    () => ({
-      accept: [ItemTypes.SourceElement, ItemTypes.BOX],
-      drop: (item: DragItem, monitor: DropTargetMonitor<DragItem, undefined>) => {
-        const result = [...targetBoxes]; // copy existing items
-        const id = item.id;
-        if (find(result, { id })) {
-          // box has been moved
-          const delta = monitor.getDifferenceFromInitialOffset() || { x: 0, y: 0 };
-          const box = find(result, { id });
-          if (box) {
-            result.splice(result.indexOf(box), 1);
-            const newBox = { ...box, left: item.left + delta.x, top: item.top + delta.y };
-            result.push(newBox);
-            setTargetBoxes(result);
-          }
-          return undefined;
-        }
+  const { setNodeRef } = useDroppable({
+    id: "TargetContainer",
+  });
 
-        // box is new in target
-        const offset = monitor.getSourceClientOffset() || { x: 0, y: 0 };
-        const rect = targetContainer.current?.getBoundingClientRect() || { x: 0, y: 0 };
-        result.push({ ...item, left: offset.x - rect.x, top: offset.y - rect.y });
+  useDndMonitor({
+    onDragEnd(event: DragEndEvent) {
+      const { active, over, delta } = event;
+      if (over?.id !== "TargetContainer") {
+        return;
+      }
+      const result = [...targetBoxes]; // copy existing items
+
+      const { item, type } = active.data.current ?? {};
+      const id = item.id;
+      console.log({ item, type, delta, rect: active.rect, over, event });
+      console.log({ result, id });
+
+      if (type === ItemTypes.SourceElement) {
+        result.push({ ...item, left: delta.x, top: delta.y });
         setTargetBoxes(result);
+        return;
+      }
+
+      if (find(result, { id })) {
+        // box has been moved
+        const box = find(result, { id });
+        if (box) {
+          result.splice(result.indexOf(box), 1);
+          const newBox = { ...box, left: item.left + delta.x, top: item.top + delta.y };
+          result.push(newBox);
+          setTargetBoxes(result);
+        }
         return undefined;
-      },
-    }),
-    [targetBoxes],
-  );
+      }
+    },
+  });
 
   function boxChanged(id: string) {
     const result = [...targetBoxes]; // copy existing items
@@ -91,7 +96,7 @@ export const TargetContainer: FC<{
 
   return (
     <div ref={targetContainer} style={{ width: "100%", overflow: "scroll" }}>
-      <div ref={dropTarget} style={style}>
+      <div ref={setNodeRef} style={style}>
         {map(targetBoxes, (each) => (
           <Box key={each.id} item={each} callback={boxChanged} />
         ))}

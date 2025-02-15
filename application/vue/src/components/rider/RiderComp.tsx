@@ -1,9 +1,6 @@
 import type { FC } from "react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TargetContainer } from "./TargetContainer.tsx";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { TouchBackend } from "react-dnd-touch-backend";
 import { Col, Collapse, ConfigProvider, Row } from "antd";
 import { SourceContainer } from "./SourceContainer.tsx";
 import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
@@ -11,6 +8,7 @@ import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import reject from "lodash/reject";
+import { DndContext } from "@dnd-kit/core";
 
 export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }> = ({
   targetBoxes,
@@ -51,7 +49,7 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
   );
 
   return (
-    <DndProvider backend={isTouch ? TouchBackend : HTML5Backend}>
+    <DndContext>
       <Row gutter={16}>
         <Col span={4}>
           <ConfigProvider
@@ -70,6 +68,6 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
           <TargetContainer targetBoxes={targetBoxes!} setTargetBoxes={setTargetBoxes!} />
         </Col>
       </Row>
-    </DndProvider>
+    </DndContext>
   );
 };
