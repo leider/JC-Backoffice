@@ -68,7 +68,11 @@ export default class Eintrittspreise {
     return Math.max(this.regulaer - Math.abs(this.rabattMitglied), 0);
   }
 
+  get eintrittspreisSchnitt() {
+    return 0.8 * this.regulaer + 0.1 * this.ermaessigt + 0.1 * this.mitglied;
+  }
+
   get erwarteterEintritt(): number {
-    return this.erwarteteBesucher * (0.8 * this.regulaer + 0.1 * this.ermaessigt + 0.1 * this.mitglied);
+    return this.erwarteteBesucher * this.eintrittspreisSchnitt;
   }
 }

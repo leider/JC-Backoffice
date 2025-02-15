@@ -17,14 +17,11 @@ export type VeranstaltungExcelRow = {
   abendkasse?: number;
   reservix?: number;
   einnahmenBar?: number;
-  einlageBar?: number;
-  zuschuss?: number;
   ausgabenBar?: number;
   anBank?: number;
   gage?: number;
   deal?: number;
   provision?: number;
-  backline?: number;
   technik?: number;
   fluegel?: number;
   saalmiete?: number;
@@ -32,7 +29,6 @@ export type VeranstaltungExcelRow = {
   tontechniker?: number | "N/A";
   lichttechniker?: number | "N/A";
   cateringMusiker?: number;
-  cateringPersonal?: number;
   hotel?: number;
   hotelTransport?: number;
   ksk?: number;
@@ -54,6 +50,12 @@ export type VeranstaltungExcelRow = {
   werbung5Text?: string;
   werbung6?: number;
   werbung6Text?: string;
+  anzahlReservix?: number;
+  anzahlAbendkasse?: number;
+  anzahlBesucherAK?: number;
+  anzahlSpende?: number;
+  eintrittspreisSchnitt?: number;
+  kasseFreigegeben?: boolean;
 };
 
 function einnahme(betrag?: number) {
@@ -128,6 +130,7 @@ function excelRowVeranstaltung({
     const kosten = konzert.kosten;
     const staff = konzert.staff;
     const klavierStimmerStandard = konzert.technik.fluegel ? klavierStimmerDefault : 0;
+    const eintrittspreisSchnitt = konzert.eintrittspreise.eintrittspreisSchnitt;
     const result: VeranstaltungExcelRow = {
       rowNo: index + 2,
       datum: konzert.startDatumUhrzeit.toJSDate,
@@ -138,14 +141,11 @@ function excelRowVeranstaltung({
       abendkasse: einnahme(kasse.einnahmeTicketsEUR),
       reservix: einnahme(kasse.einnahmenReservix),
       einnahmenBar: einnahme(kasse.einnahmeOhneBankUndTickets),
-      einlageBar: einnahme(kasse.einnahmeBankEUR),
-      zuschuss: einnahme(konzert.eintrittspreise.zuschuss),
       ausgabenBar: ausgabe(kasse.ausgabenOhneGage),
       anBank: ausgabe(kasse.ausgabeBankEUR),
       gage: ausgabe(kosten.gagenTotalEUR),
       deal: ausgabe(kalk.dealAbsolutEUR),
       provision: ausgabe(kosten.provisionAgentur),
-      backline: ausgabe(kosten.backlineEUR),
       technik: ausgabe(kosten.technikAngebot1EUR),
       fluegel: ausgabe(kosten.fluegelstimmerEUR || klavierStimmerStandard),
       saalmiete: ausgabe(kosten.saalmiete),
@@ -153,11 +153,15 @@ function excelRowVeranstaltung({
       tontechniker: !staff.technikerVNotNeeded && !kosten.tontechniker ? "N/A" : ausgabe(kosten.tontechniker),
       lichttechniker: !staff.technikerNotNeeded && !kosten.lichttechniker ? "N/A" : ausgabe(kosten.lichttechniker),
       cateringMusiker: ausgabe(kosten.cateringMusiker),
-      cateringPersonal: ausgabe(kosten.cateringPersonal),
       hotel: ausgabe(konzert.unterkunft.roomsTotalEUR),
       hotelTransport: ausgabe(konzert.unterkunft.transportEUR),
       ksk: ausgabe(kosten.ksk),
       gema: ausgabe(kalk.gema),
+      eintrittspreisSchnitt: einnahme(eintrittspreisSchnitt),
+      anzahlReservix: einnahme(kasse.anzahlReservix || kasse.einnahmenReservix / (eintrittspreisSchnitt || 1)),
+      anzahlBesucherAK: einnahme(kasse.anzahlBesucherAK),
+      anzahlAbendkasse: einnahme(kasse.einnahmeTicketsEUR / (eintrittspreisSchnitt || 1)),
+      kasseFreigegeben: kasse.istFreigegeben,
     };
     if (kasse.einnahmeSonstiges1EUR && kasse.einnahmeSonstiges1EUR !== 0) {
       if (isSpende(kasse.einnahmeSonstiges1Text)) {
@@ -175,6 +179,8 @@ function excelRowVeranstaltung({
         result.einnahme2Text = kasse.einnahmeSonstiges2Text;
       }
     }
+    result.anzahlSpende = einnahme((result.spende ?? 0) / 10);
+
     return fillWerbung(result, kosten);
   }
 
@@ -190,7 +196,6 @@ function excelRowVeranstaltung({
       color: "#f6eee1",
       typ: "Vermietung",
       gage: ausgabe(kosten.gagenTotalEUR),
-      backline: ausgabe(kosten.backlineEUR),
       technik: ausgabe(kosten.technikAngebot1EUR),
       fluegel: ausgabe(kosten.fluegelstimmerEUR || klavierStimmerStandard),
       saalmiete: einnahme(vermietung.saalmiete),
