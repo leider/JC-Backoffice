@@ -1,16 +1,9 @@
 import type { CSSProperties, FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "./types.ts";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
-
-const style: CSSProperties = {
-  position: "absolute",
-  cursor: "move",
-};
 
 const styleInner: CSSProperties = {
   border: "0.2px solid gray",
@@ -25,7 +18,7 @@ const styleText: CSSProperties = {
   overflow: "hidden",
 };
 
-export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ item, callback }) => {
+export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = ({ item, callback }) => {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -120,7 +113,7 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
             <b>Kommentar:</b>
             <TextArea
               style={{ height: 150 }}
-              onChange={(e) => {
+              onBlur={(e) => {
                 item.comment = e.target.value;
                 setComment(item.comment);
               }}
@@ -158,26 +151,9 @@ export const Box: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ i
       </>
     );
   }
-
-  const [, drag] = useDrag(
-    () => ({
-      type: ItemTypes.BOX,
-      item: item,
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    }),
-    [item],
-  );
-
   return (
-    <div ref={drag} style={{ ...style, left: item.left, top: item.top }}>
-      <Popover
-        title={title}
-        content={isExtra ? PopContentForExtras() : PopContent(item)}
-        trigger="click"
-        onOpenChange={() => callback(item.id)}
-      >
+    <div>
+      <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="click" onOpenChange={callback}>
         <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
           {item.img ? (
             <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
