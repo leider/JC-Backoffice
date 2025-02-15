@@ -19,13 +19,23 @@ export function formatToGermanNumberString(amount: number): string {
   return format.format(amount);
 }
 
+const numCol = { type: Number, format: "#,##0.00", width: 22 };
+
 export async function asExcelKalk({ veranstaltungen, optionen }: { veranstaltungen: Veranstaltung[]; optionen: OptionValues }) {
   if (veranstaltungen.length < 1) {
     return;
   }
+
+  const urlRoot = window.location.origin + "/vue";
+
   const schemaUebersicht: Schema<VeranstaltungExcelRow> = [
     { column: "Datum", type: Date, format: "dd.mm.yyyy", value: (row) => row.datum, width: 12 },
-    { column: "Titel", type: String, value: (row) => row.titel, width: 30 },
+    {
+      column: "Titel (URL)",
+      type: "Formula",
+      value: (row) => `HYPERLINK("${row.url}", "${row.titel.replaceAll('"', '""')}")`,
+      width: 30,
+    },
     {
       column: "Typ",
       type: String,
@@ -33,66 +43,69 @@ export async function asExcelKalk({ veranstaltungen, optionen }: { veranstaltung
       width: 22,
       getCellStyle: (row) => ({ backgroundColor: row.color }),
     },
-    { column: "Eintritt Abendkasse Bar", type: Number, format: "#,##0.00", width: 22, value: (row) => row.abendkasse },
-    { column: "Einnahmen Reservix", type: Number, format: "#,##0.00", width: 22, value: (row) => row.reservix },
-    { column: "Bar Einnahmen", type: Number, format: "#,##0.00", width: 22, value: (row) => row.einnahmenBar },
-    { column: "Bar Einlage", type: Number, format: "#,##0.00", width: 22, value: (row) => row.einlageBar },
-    { column: "Zuschüsse", type: Number, format: "#,##0.00", width: 22, value: (row) => row.zuschuss },
-    { column: "Spende", type: Number, format: "#,##0.00", width: 22, value: (row) => row.spende },
-    { column: "Einnahme 1", type: Number, format: "#,##0.00", width: 22, value: (row) => row.einnahme1 },
-    { column: "(Text)", type: String, value: (row) => row.einnahme1Text },
-    { column: "Einnahme 2", type: Number, format: "#,##0.00", width: 22, value: (row) => row.einnahme2 },
-    { column: "(Text)", type: String, value: (row) => row.einnahme2Text },
-    { column: "Saalmiete", type: Number, format: "#,##0.00", width: 22, value: (row) => row.saalmiete },
-    { column: "Barausgaben", type: Number, format: "#,##0.00", width: 22, value: (row) => row.ausgabenBar },
-    { column: "Bar an Bank", type: Number, format: "#,##0.00", width: 22, value: (row) => row.anBank },
-    { column: "Gagen", type: Number, format: "#,##0.00", width: 22, value: (row) => row.gage },
-    { column: "Gagen (Deal)", type: Number, format: "#,##0.00", width: 22, value: (row) => row.deal },
-    { column: "Provision Agentur", type: Number, format: "#,##0.00", width: 22, value: (row) => row.provision },
-    { column: "Backline Rockshop", type: Number, format: "#,##0.00", width: 22, value: (row) => row.backline },
-    { column: "Technik Zumietung", type: Number, format: "#,##0.00", width: 22, value: (row) => row.technik },
-    { column: "Flügelstimmer", type: Number, format: "#,##0.00", width: 22, value: (row) => row.fluegel },
-    { column: "Personal", type: Number, format: "#,##0.00", width: 22, value: (row) => row.personal },
-    { column: "Hotel", type: Number, format: "#,##0.00", width: 22, value: (row) => row.hotel },
-    { column: "Hotel (Transport)", type: Number, format: "#,##0.00", width: 22, value: (row) => row.hotelTransport },
     {
-      column: "Tontechniker",
-      type: Number,
+      column: "Summe (Einnahmen)",
+      type: "Formula",
       format: "#,##0.00",
       width: 22,
+      value: (row) => `E${row.rowNo} + F${row.rowNo} + G${row.rowNo}`,
+    },
+    { ...numCol, column: "Eintritt Abendkasse Bar", value: (row) => row.abendkasse },
+    { ...numCol, column: "Einnahmen Reservix", value: (row) => row.reservix },
+    { ...numCol, column: "Bar Einnahmen", value: (row) => row.einnahmenBar },
+    { ...numCol, column: "Bar Einlage", value: (row) => row.einlageBar },
+    { ...numCol, column: "Zuschüsse", value: (row) => row.zuschuss },
+    { ...numCol, column: "Spende", value: (row) => row.spende },
+    { ...numCol, column: "Einnahme 1", value: (row) => row.einnahme1 },
+    { column: "(Text)", type: String, value: (row) => row.einnahme1Text },
+    { ...numCol, column: "Einnahme 2", value: (row) => row.einnahme2 },
+    { column: "(Text)", type: String, value: (row) => row.einnahme2Text },
+    { ...numCol, column: "Saalmiete", value: (row) => row.saalmiete },
+    { ...numCol, column: "Barausgaben", value: (row) => row.ausgabenBar },
+    { ...numCol, column: "Bar an Bank", value: (row) => row.anBank },
+    { ...numCol, column: "Gagen", value: (row) => row.gage },
+    { ...numCol, column: "Gagen (Deal)", value: (row) => row.deal },
+    { ...numCol, column: "Provision Agentur", value: (row) => row.provision },
+    { ...numCol, column: "Backline Rockshop", value: (row) => row.backline },
+    { ...numCol, column: "Technik Zumietung", value: (row) => row.technik },
+    { ...numCol, column: "Flügelstimmer", value: (row) => row.fluegel },
+    { ...numCol, column: "Personal", value: (row) => row.personal },
+    { ...numCol, column: "Hotel", value: (row) => row.hotel },
+    { ...numCol, column: "Hotel (Transport)", value: (row) => row.hotelTransport },
+    {
+      ...numCol,
+      column: "Tontechniker",
       value: (row) => (row.tontechniker === "N/A" ? 0 : row.tontechniker),
       getCellStyle: (row) => {
         return row.tontechniker === "N/A" ? { backgroundColor: red } : undefined;
       },
     },
     {
+      ...numCol,
       column: "Lichttechniker",
-      type: Number,
-      format: "#,##0.00",
-      width: 22,
       value: (row) => (row.lichttechniker === "N/A" ? 0 : row.lichttechniker),
       getCellStyle: (row) => {
         return row.tontechniker === "N/A" ? { backgroundColor: red } : undefined;
       },
     },
-    { column: "Catering Musiker", type: Number, format: "#,##0.00", width: 22, value: (row) => row.cateringMusiker },
-    { column: "Catering Personal", type: Number, format: "#,##0.00", width: 22, value: (row) => row.cateringPersonal },
-    { column: "KSK", type: Number, format: "#,##0.00", width: 22, value: (row) => row.ksk },
-    { column: "GEMA", type: Number, format: "#,##0.00", width: 22, value: (row) => row.gema },
-    { column: "Werbung 1", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung1 },
+    { ...numCol, column: "Catering Musiker", value: (row) => row.cateringMusiker },
+    { ...numCol, column: "Catering Personal", value: (row) => row.cateringPersonal },
+    { ...numCol, column: "KSK", value: (row) => row.ksk },
+    { ...numCol, column: "GEMA", value: (row) => row.gema },
+    { ...numCol, column: "Werbung 1", value: (row) => row.werbung1 },
     { column: "(Text)", type: String, value: (row) => row.werbung1Text },
-    { column: "Werbung 2", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung2 },
+    { ...numCol, column: "Werbung 2", value: (row) => row.werbung2 },
     { column: "(Text)", type: String, value: (row) => row.werbung2Text },
-    { column: "Werbung 3", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung3 },
+    { ...numCol, column: "Werbung 3", value: (row) => row.werbung3 },
     { column: "(Text)", type: String, value: (row) => row.werbung3Text },
-    { column: "Werbung 4", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung4 },
+    { ...numCol, column: "Werbung 4", value: (row) => row.werbung4 },
     { column: "(Text)", type: String, value: (row) => row.werbung4Text },
-    { column: "Werbung 5", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung5 },
+    { ...numCol, column: "Werbung 5", value: (row) => row.werbung5 },
     { column: "(Text)", type: String, value: (row) => row.werbung5Text },
-    { column: "Werbung 6", type: Number, format: "#,##0.00", width: 22, value: (row) => row.werbung6 },
+    { ...numCol, column: "Werbung 6", value: (row) => row.werbung6 },
     { column: "(Text)", type: String, value: (row) => row.werbung6Text },
   ];
-  const uebersichtRows = excelRows({ veranstaltungen, optionen });
+  const uebersichtRows = excelRows({ veranstaltungen, optionen, urlRoot });
 
   const erste = veranstaltungen[0];
   const letzte = veranstaltungen[veranstaltungen.length - 1];
@@ -110,10 +123,10 @@ export async function asExcelKalk({ veranstaltungen, optionen }: { veranstaltung
     return truncate(`${start.tag}.${start.monat}. ${ver.kopf.titel.replace(/[[\]/\\:*?]+/g, "-")}`, { length: 31 });
   });
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  await writeXlsxFile([uebersichtRows, ...allSingles], {
-    schema: [schemaUebersicht, ...schemas],
+  const allSchemas: Schema<unknown>[] = [schemaUebersicht, ...schemas];
+
+  await writeXlsxFile([uebersichtRows, allSingles], {
+    schema: allSchemas,
     sheets: ["Übersicht", ...names],
     fileName: `Kalkulation-${vonBisString}.xlsx`,
     stickyColumnsCount: 3,

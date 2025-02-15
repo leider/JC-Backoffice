@@ -8,8 +8,10 @@ import map from "lodash/map.js";
 import tinycolor from "tinycolor2";
 
 export type VeranstaltungExcelRow = {
+  rowNo: number;
   datum: Date;
   titel: string;
+  url: string;
   typ: string;
   color: string;
   abendkasse?: number;
@@ -94,12 +96,30 @@ function fillWerbung(row: VeranstaltungExcelRow, kosten: Kosten) {
   return row;
 }
 
-export function excelRows({ veranstaltungen, optionen }: { veranstaltungen: Veranstaltung[]; optionen: OptionValues }) {
+export function excelRows({
+  veranstaltungen,
+  optionen,
+  urlRoot,
+}: {
+  veranstaltungen: Veranstaltung[];
+  optionen: OptionValues;
+  urlRoot: string;
+}) {
   const klavierStimmerDefault = optionen.preisKlavierstimmer;
-  return map(veranstaltungen, (veranstaltung) => excelRowVeranstaltung({ veranstaltung, klavierStimmerDefault }));
+  return map(veranstaltungen, (veranstaltung, index) => excelRowVeranstaltung({ veranstaltung, klavierStimmerDefault, urlRoot, index }));
 }
 
-function excelRowVeranstaltung({ veranstaltung, klavierStimmerDefault }: { veranstaltung: Veranstaltung; klavierStimmerDefault: number }) {
+function excelRowVeranstaltung({
+  veranstaltung,
+  klavierStimmerDefault,
+  urlRoot,
+  index,
+}: {
+  veranstaltung: Veranstaltung;
+  klavierStimmerDefault: number;
+  urlRoot: string;
+  index: number;
+}) {
   return veranstaltung.isVermietung ? excelRowVermietung(veranstaltung as Vermietung) : excelRowKonzert(veranstaltung as Konzert);
 
   function excelRowKonzert(konzert: Konzert) {
@@ -109,8 +129,10 @@ function excelRowVeranstaltung({ veranstaltung, klavierStimmerDefault }: { veran
     const staff = konzert.staff;
     const klavierStimmerStandard = konzert.technik.fluegel ? klavierStimmerDefault : 0;
     const result: VeranstaltungExcelRow = {
+      rowNo: index + 2,
       datum: konzert.startDatumUhrzeit.toJSDate,
       titel: konzert.kopf.titel,
+      url: `${urlRoot}${konzert.fullyQualifiedUrl}`,
       typ: konzert.kopf.eventTypRich?.name ?? "",
       color: tinycolor(konzert.kopf.eventTypRich?.color ?? "#FFF").toHexString(),
       abendkasse: einnahme(kasse.einnahmeTicketsEUR),
@@ -161,8 +183,10 @@ function excelRowVeranstaltung({ veranstaltung, klavierStimmerDefault }: { veran
     const klavierStimmerStandard = vermietung.technik.fluegel ? klavierStimmerDefault : 0;
 
     const result: VeranstaltungExcelRow = {
+      rowNo: index + 2,
       datum: vermietung.startDatumUhrzeit.toJSDate,
       titel: vermietung.kopf.titel,
+      url: `${urlRoot}${vermietung.fullyQualifiedUrl}`,
       color: "#f6eee1",
       typ: "Vermietung",
       gage: ausgabe(kosten.gagenTotalEUR),
