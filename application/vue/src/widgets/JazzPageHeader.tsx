@@ -1,7 +1,7 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode, useContext, useMemo } from "react";
+import { PropsWithChildren, ReactNode, useContext, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { ConfigProvider, theme } from "antd";
+import { Breadcrumb, type BreadcrumbProps, ConfigProvider, theme } from "antd";
 import { GlobalContext } from "../app/GlobalContext.ts";
 
 export function JazzPageHeader({
@@ -20,7 +20,7 @@ export function JazzPageHeader({
   firstTag?: ReactNode;
   dateString?: string;
   tags?: ReactNode[];
-  breadcrumb?: ReactElement;
+  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
   hasErrors?: boolean;
   style?: React.CSSProperties;
 } & PropsWithChildren) {

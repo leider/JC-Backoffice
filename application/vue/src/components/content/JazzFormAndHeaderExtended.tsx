@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
-import { Form, FormInstance } from "antd";
+import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from "react";
+import { Breadcrumb, type BreadcrumbProps, Form, FormInstance } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
@@ -41,7 +41,7 @@ export default function JazzFormAndHeaderExtended<T>({
   form: FormInstance<T>;
   style?: React.CSSProperties;
   resetChanges?: () => Promise<unknown>;
-  breadcrumb?: ReactElement;
+  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   document.title = `JC-${title}`;
   const { isDirty, setIsDirty } = useJazzContext();

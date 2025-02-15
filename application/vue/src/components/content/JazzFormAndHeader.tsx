@@ -1,6 +1,6 @@
 import * as React from "react";
-import { PropsWithChildren, ReactElement, ReactNode } from "react";
-import { Form } from "antd";
+import { PropsWithChildren, ReactNode } from "react";
+import { Breadcrumb, type BreadcrumbProps, Form } from "antd";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 
 export default function JazzFormAndHeader<T>({
@@ -19,7 +19,7 @@ export default function JazzFormAndHeader<T>({
   additionalButtons?: ReactNode[];
   changedPropsToWatch?: string[];
   resetChanges?: () => Promise<unknown>;
-  breadcrumb?: ReactElement;
+  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   const [form] = Form.useForm<T>();
 
