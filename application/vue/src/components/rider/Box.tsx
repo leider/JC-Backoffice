@@ -113,7 +113,7 @@ export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = (
             <b>Kommentar:</b>
             <TextArea
               style={{ height: 150 }}
-              onBlur={(e) => {
+              onChange={(e) => {
                 item.comment = e.target.value;
                 setComment(item.comment);
               }}
@@ -153,7 +153,7 @@ export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = (
   }
   return (
     <div>
-      <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="click" onOpenChange={callback}>
+      <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="contextMenu" onOpenChange={callback}>
         <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
           {item.img ? (
             <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
