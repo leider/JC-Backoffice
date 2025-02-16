@@ -9,7 +9,7 @@ const style: CSSProperties = {
   cursor: "move",
 };
 
-export const DraggableBox: FC<{ item: BoxParams; callback: (id: string) => void }> = ({ item, callback }) => {
+export const DraggableBox: FC<{ item: BoxParams; callback: () => void }> = ({ item, callback }) => {
   const [disableDrag, setDisableDrag] = useState(false);
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: item.id,
@@ -22,10 +22,10 @@ export const DraggableBox: FC<{ item: BoxParams; callback: (id: string) => void 
     (open: boolean) => {
       setDisableDrag(open);
       if (!open) {
-        callback(item.id);
+        callback();
       }
     },
-    [callback, item.id],
+    [callback],
   );
 
   return (

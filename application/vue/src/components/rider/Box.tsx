@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from "react";
+import type { CSSProperties } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -18,7 +18,7 @@ const styleText: CSSProperties = {
   overflow: "hidden",
 };
 
-export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = ({ item, callback }) => {
+export function Box({ item, callback }: { item: BoxParams; callback: (open: boolean) => void }) {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -71,6 +71,7 @@ export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = (
       </Row>
     );
   }
+
   function PopContent(inv: InventoryElement) {
     return (
       <>
@@ -151,17 +152,16 @@ export const Box: FC<{ item: BoxParams; callback: (open: boolean) => void }> = (
       </>
     );
   }
+
   return (
-    <div>
-      <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="contextMenu" onOpenChange={callback}>
-        <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
-          {item.img ? (
-            <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
-          ) : (
-            <div style={styleText}>{title}</div>
-          )}
-        </div>
-      </Popover>
-    </div>
+    <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="contextMenu" onOpenChange={callback}>
+      <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
+        {item.img ? (
+          <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
+        ) : (
+          <div style={styleText}>{title}</div>
+        )}
+      </div>
+    </Popover>
   );
-};
+}

@@ -1,38 +1,25 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { TargetContainer } from "./TargetContainer.tsx";
-import { Col, Collapse, ConfigProvider, Row, Typography } from "antd";
-import { SourceContainer } from "./SourceContainer.tsx";
-import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
+import { Col, ConfigProvider, Row, Typography } from "antd";
+import { SourceContainerAll } from "./SourceContainer.tsx";
+import { Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import reject from "lodash/reject";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
 import noop from "lodash/noop";
 import { ItemTypes } from "./types.ts";
 import find from "lodash/find";
 import { Box } from "./Box.tsx";
 
-export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }> = ({
-  targetBoxes,
-  setTargetBoxes,
-}) => {
+export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }) {
   const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
 
   useEffect(() => {
     const boxIds = map(targetBoxes, "id");
     setSourceBoxes(filter(Inventory, (inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
   }, [targetBoxes]);
-
-  const sourceComponents = useMemo(
-    () =>
-      map(["Keys", "Drums", "Bass", "Guitar", "Extra"] as Category[], (key) => ({
-        key,
-        label: key === "Drums" ? "Drums / Percussion" : (key as string),
-        children: <SourceContainer cat={key} sourceBoxes={sourceBoxes} />,
-      })),
-    [sourceBoxes],
-  );
 
   const [dragging, setDragging] = useState<BoxParams | null>(null);
 
@@ -43,7 +30,10 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
   const onDragEnd = useCallback(
     (event: DragEndEvent) => {
       setDragging(null);
-      const { active, over, delta } = event;
+      const { active, over, delta, activatorEvent } = event;
+      if (delta.x === 0 && delta.y === 0) {
+        return;
+      }
       const { item, type } = active.data.current ?? {};
       const id = item.id;
 
@@ -51,10 +41,18 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
         setTargetBoxes?.(reject(targetBoxes, { id }));
         return;
       }
+      if (over?.id !== "TargetContainer") {
+        return; // dropped into nowhere
+      }
+
       const result = [...(targetBoxes ?? [])]; // copy existing items
 
       if (type === ItemTypes.SourceElement) {
-        result.push({ ...item, left: 50, top: 50 });
+        const actiEvenet = activatorEvent as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+        const rect = over.rect;
+        const calcX = delta.x - (rect.left - actiEvenet.x);
+        const calcY = actiEvenet.y - (rect.top - delta.y);
+        result.push({ ...item, left: calcX, top: calcY });
         setTargetBoxes?.(result);
         return;
       }
@@ -63,31 +61,20 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
         // box has been moved
         const box = find(result, { id });
         if (box) {
+          box.left = item.left + delta.x;
+          box.top = item.top + delta.y;
           result.splice(result.indexOf(box), 1);
-          const newBox = { ...box, left: item.left + delta.x, top: item.top + delta.y };
-          result.push(newBox);
+          result.push(box);
           setTargetBoxes?.(result);
         }
-        return undefined;
+        return;
       }
     },
     [setTargetBoxes, targetBoxes],
   );
 
-  const activationConstraint = {
-    delay: 100,
-    tolerance: 5,
-  };
-
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint,
-  });
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint,
-  });
-  const sensors = useSensors(mouseSensor, touchSensor);
   return (
-    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} sensors={sensors}>
+    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <DragOverlay>{dragging ? <Box item={dragging} callback={noop} /> : null}</DragOverlay>
       <Row gutter={16}>
         <Col span={4}>
@@ -100,7 +87,7 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
               },
             }}
           >
-            <Collapse defaultActiveKey="Keys" accordion items={sourceComponents} />
+            <SourceContainerAll sourceBoxes={sourceBoxes} />
           </ConfigProvider>
         </Col>
         <Col span={20}>
@@ -120,4 +107,4 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
       </Row>
     </DndContext>
   );
-};
+}
