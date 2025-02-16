@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { TargetContainer } from "./TargetContainer.tsx";
-import { Col, Collapse, ConfigProvider, Row } from "antd";
+import { Col, Collapse, ConfigProvider, Row, Typography } from "antd";
 import { SourceContainer } from "./SourceContainer.tsx";
 import { Category, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
@@ -105,6 +105,17 @@ export const RiderComp: FC<{ targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes:
         </Col>
         <Col span={20}>
           <TargetContainer targetBoxes={targetBoxes!} setTargetBoxes={setTargetBoxes!} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Typography.Title level={5}>Hilfe</Typography.Title>
+          <ul>
+            <li>Ziehe Elemente von links nach rechts</li>
+            <li>Zum Entfernen wieder nach links ziehen</li>
+            <li>Rechts kannst Du mit Rechtsklick bearbeiten</li>
+            <li>Speichern nicht vergessen!</li>
+          </ul>
         </Col>
       </Row>
     </DndContext>
