@@ -11,6 +11,7 @@ export default defineConfig(() => {
     build: {
       outDir: "../backend/static/rider",
       emptyOutDir: true,
+      chunkSizeWarningLimit: 5000,
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),

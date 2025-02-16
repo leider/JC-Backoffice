@@ -14,6 +14,7 @@ export default defineConfig(() => {
       outDir: "../backend/static/vue",
       emptyOutDir: false,
       sourcemap: false,
+      chunkSizeWarningLimit: 5000,
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),
