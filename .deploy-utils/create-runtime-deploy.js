@@ -13,6 +13,7 @@ if (!fs.existsSync(dest)) {
   fs.mkdirSync(dest);
 }
 
+rimraf.sync(path.join(dest, "application"));
 copyfiles(
   ["application/+(backend|batchjobs|shared)/**", dest],
   { all: true },
@@ -24,10 +25,12 @@ copyfiles(
         () => {
           process.chdir(path.join(dest, "application"));
           console.log("CWD:", process.cwd());
-          rimraf.sync("node_modules", { glob: true });
-          rimraf.sync("./**/*.ts", { glob: true });
-          rimraf.sync("./**/*.log", { glob: true });
-          rimraf.sync("./**/*.test.*", { glob: true });
+          rimraf.sync(
+            ["**/node_modules", "./**/*.ts", "./**/*.log", "./**/*.test.*"],
+            {
+              glob: true,
+            },
+          );
           childProcess.execSync("git add --all");
           console.log("SUCCESS!");
         },
