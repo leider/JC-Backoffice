@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import * as sin from "sinon";
 import "../initWinstonForTest";
-import "jc-backend/configure.js";
+import "../../configure.js";
 
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
-import { informAdmin } from "../../src/sendMailToAdmin.js";
-import userstore from "jc-backend/lib/users/userstore.js";
+import mailtransport from "../../lib/mailsender/mailtransport.js";
+import { informAdmin } from "../../batches/sendMailToAdmin.js";
+import userstore from "../../lib/users/userstore.js";
 import User from "jc-shared/user/user.js";
 import { sentMessageInfo } from "./testObjects.js";
 

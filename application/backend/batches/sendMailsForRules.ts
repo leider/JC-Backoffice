@@ -1,8 +1,8 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import MailRule from "jc-shared/mail/mailRule.js";
-import mailstore from "jc-backend/lib/mailsender/mailstore.js";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import mailstore from "../lib/mailsender/mailstore.js";
+import mailtransport from "../lib/mailsender/mailtransport.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
@@ -10,7 +10,7 @@ import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatt
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
-import { JobResult } from "./sendMailsNightly.js";
+import { JobResult } from "./index.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 
@@ -36,7 +36,7 @@ ${map(selected, (veranst) => {
   const mailmessage = new MailMessage({ subject: rule.subject(now) });
   mailmessage.body = markdownToSend;
   const mailAddress = MailMessage.formatEMailAddress(rule.name, rule.email);
-  logger.info(`Email Adresse für Presseregeln: ${formatMailAddresses([mailAddress])}`);
+  logger.debug(`Email Adresse für Presseregeln: ${formatMailAddresses([mailAddress])}`);
   mailmessage.to = [mailAddress];
   return mailtransport.sendMail(mailmessage);
 }

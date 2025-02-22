@@ -1,12 +1,12 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import { Event } from "jc-shared/programmheft/Event.js";
 
-import store from "jc-backend/lib/programmheft/kalenderstore.js";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import store from "../lib/programmheft/kalenderstore.js";
+import mailtransport from "../lib/mailsender/mailtransport.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import User from "jc-shared/user/user.js";
-import { JobResult } from "./sendMailsNightly.js";
-import userstore from "jc-backend/lib/users/userstore.js";
+import { JobResult } from "./index.js";
+import userstore from "../lib/users/userstore.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 

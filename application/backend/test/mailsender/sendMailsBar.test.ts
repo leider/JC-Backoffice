@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import * as sin from "sinon";
 import "../initWinstonForTest";
-import "jc-backend/configure.js";
+import "../../configure.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
-import vermietungenstore from "jc-backend/lib/vermietungen/vermietungenstore.js";
-import konzertestore from "jc-backend/lib/konzerte/konzertestore.js";
-import { checkBar } from "../../src/sendMailsNightlyBar.js";
-import userstore from "jc-backend/lib/users/userstore.js";
+import mailtransport from "../../lib/mailsender/mailtransport.js";
+import vermietungenstore from "../../lib/vermietungen/vermietungenstore.js";
+import konzertestore from "../../lib/konzerte/konzertestore.js";
+import { checkBar } from "../../batches/sendMailsNightlyBar.js";
+import userstore from "../../lib/users/userstore.js";
 import { testKonzerte, testUsers, testVermietungen } from "./testObjects.js";
 
 const sinon = sin.createSandbox();

@@ -46,7 +46,7 @@ async function sendMailInternal(mailMessage: MailMessage, isForDatev: boolean) {
   if (conf.doNotSendMails) {
     const withoutAttachments = JSON.parse(JSON.stringify(transportObject));
     delete withoutAttachments.attachments;
-    logger.info(JSON.stringify(withoutAttachments, null, 2));
+    logger.info("MAILSENDING\n" + JSON.stringify(withoutAttachments, null, 2));
     delete transportObject.to;
     transportObject.bcc = conf.doNotSendMails;
   }

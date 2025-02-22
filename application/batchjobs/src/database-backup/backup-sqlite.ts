@@ -1,36 +1,22 @@
 /* eslint-disable no-console, no-process-exit */
 import "jc-backend/configure.js";
-import Database from "better-sqlite3";
+import axios from "axios";
 import conf from "jc-shared/commons/simpleConfigure.js";
-import path from "node:path";
-import AdmZip from "adm-zip";
-import * as fs from "fs";
 
-const sqlitedb = conf.sqlitedb;
-const db = new Database(sqlitedb);
-
+console.log("Starting database backup...");
 const myArgs = process.argv.slice(2);
 
-const outfile = path.join(`${myArgs.length > 0 ? myArgs[0] : ""}`, `backup-JC-sqlite-${new Date().toJSON()}.db`);
-
-function zipIt(outfile: string) {
-  const zip = new AdmZip();
-  zip.addLocalFile(outfile);
-  zip.writeZip(outfile.replace(".db", ".zip"), (err) => {
-    if (err) {
-      console.log("backup failed during zipping:", err);
-      return process.exit(1);
-    }
-    fs.rmSync(outfile);
-  });
-}
-
-db.backup(outfile)
-  .then(() => {
-    zipIt(outfile);
-    console.log("backup successful");
+axios
+  .get(`${conf.publicUrlPrefix}/batches/backup-database?path=${encodeURIComponent(myArgs.length > 0 ? myArgs[0] : "")}`, {
+    headers: { Authorization: "Bearer " + conf.bearer },
+  })
+  .then((result) => {
+    console.log("Terminating backup..." + result.data.status);
   })
   .catch((err) => {
-    console.log("backup failed:", err);
-    process.exit(1);
+    console.error("Error during backup...");
+    console.error(err.message);
+  })
+  .finally(() => {
+    process.exit();
   });

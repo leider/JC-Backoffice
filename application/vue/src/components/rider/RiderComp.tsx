@@ -50,8 +50,9 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
       if (type === ItemTypes.SourceElement) {
         const actiEvenet = activatorEvent as any; // eslint-disable-line @typescript-eslint/no-explicit-any
         const rect = over.rect;
-        const calcX = delta.x - (rect.left - actiEvenet.x);
-        const calcY = actiEvenet.y - (rect.top - delta.y);
+        const calcX = delta.x - (rect.left - (actiEvenet.x - actiEvenet.offsetX));
+        const calcY = delta.y - (rect.top - (actiEvenet.y - actiEvenet.offsetY));
+
         result.push({ ...item, left: calcX, top: calcY });
         setTargetBoxes?.(result);
         return;
