@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
-    "@types/node": "22.13.5",
     "better-sqlite3": "11.8.1",
     "codeceptjs": "3.7.2",
     "codeceptjs-chai": "2.3.5",
