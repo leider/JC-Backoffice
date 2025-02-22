@@ -9241,8 +9241,6 @@ __metadata:
   dependencies:
     jc-backend: "workspace:^"
     jc-shared: "workspace:^"
-    vite: "npm:6.1.0"
-    vitest: "npm:3.0.5"
   languageName: unknown
   linkType: soft
 
