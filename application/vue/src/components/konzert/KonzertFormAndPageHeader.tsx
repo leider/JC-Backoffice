@@ -11,19 +11,20 @@ import { useForm, useWatch } from "antd/es/form/Form";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import JazzFormAndHeaderExtended from "@/components/content/JazzFormAndHeaderExtended.tsx";
 import dynamicHeaderTags from "@/components/colored/dynamicHeaderTags.tsx";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
-export default function KonzertFormAndPageHeader<T>({
+export default function KonzertFormAndPageHeader({
   data,
   saveForm,
   resetChanges,
   children,
 }: PropsWithChildren<{
-  data?: Partial<T>;
-  saveForm: (vals: T) => void;
+  data?: Partial<KonzertWithRiderBoxes>;
+  saveForm: (vals: KonzertWithRiderBoxes) => void;
   resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Konzert";
-  const [form] = useForm();
+  const [form] = useForm<KonzertWithRiderBoxes>();
   const { setKasseHelpOpen } = useContext(KonzertContext);
   const { optionen, currentUser, isDirty } = useJazzContext();
   const [search] = useSearchParams();
@@ -72,7 +73,7 @@ export default function KonzertFormAndPageHeader<T>({
   );
 
   return (
-    <JazzFormAndHeaderExtended
+    <JazzFormAndHeaderExtended<KonzertWithRiderBoxes>
       title={title}
       style={titleStyle}
       saveForm={saveForm}

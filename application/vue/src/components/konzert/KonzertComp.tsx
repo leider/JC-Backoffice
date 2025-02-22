@@ -1,37 +1,24 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useQueries } from "@tanstack/react-query";
-import { konzertForUrl, riderFor, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
+import { useQuery } from "@tanstack/react-query";
+import { konzertWithRiderForUrl, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertTabs from "@/components/konzert/KonzertTabs";
-import { BoxParams, Rider } from "jc-shared/rider/rider.ts";
+import { Rider } from "jc-shared/rider/rider.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { KonzertContext } from "./KonzertContext";
 import { ShowOnCopy } from "@/components/veranstaltung/ShowOnCopy.tsx";
 import KonzertFormAndPageHeader from "@/components/konzert/KonzertFormAndPageHeader.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
 export default function KonzertComp() {
   const { url } = useParams();
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
 
-  const { konzert, refetch } = useQueries({
-    queries: [
-      { queryKey: ["konzert", url], queryFn: () => konzertForUrl(url || "") },
-      { queryKey: ["rider", url], queryFn: () => riderFor(url || "") },
-    ],
-    combine: ([konzertQuery, riderQuery]) => {
-      if (konzertQuery.data && riderQuery.data) {
-        const konz = konzertQuery.data as Konzert & { riderBoxes: BoxParams[] };
-        konz.riderBoxes = riderQuery.data.boxes;
-        return { konzert: konz, refetch: konzertQuery.refetch };
-      } else {
-        return { konzert: undefined, refetch: undefined };
-      }
-    },
-  });
+  const { data: konzert, refetch } = useQuery({ queryKey: ["konzert", url], queryFn: () => konzertWithRiderForUrl(url || "") });
 
   const mutateKonzert = useJazzMutation<Konzert>({
     saveFunction: saveKonzert,
@@ -56,23 +43,23 @@ export default function KonzertComp() {
     }
   }, [currentUser.accessrights, currentUser.id, navigate, url]);
 
-  function saveForm(vals: Konzert & { riderBoxes?: BoxParams[] }) {
+  function saveForm(vals: KonzertWithRiderBoxes) {
+    const riderBoxes = vals.riderBoxes;
     const konz = new Konzert(vals);
     const id = konz?.id;
     if (!konz.id) {
       konz.initializeIdAndUrl();
     }
     if (!currentUser.accessrights.isOrgaTeam && id) {
-      // prevent saving of optionen for Kasse updates
+      // prevent saving of optionen and rider for Kasse / Gäste updates
       return mutateKonzert.mutate(konz);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const untypedKonzert = vals as any;
-    optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl);
+    const untypedKonzert = vals as { agenturauswahl?: string; hotelauswahl?: string; hotelpreiseAlsDefault?: boolean };
+    optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl ?? "");
     delete untypedKonzert.agenturauswahl;
     if (konz.artist.brauchtHotel) {
-      optionen.addOrUpdateKontakt("hotels", konz.hotel, untypedKonzert.hotelauswahl);
+      optionen.addOrUpdateKontakt("hotels", konz.hotel, untypedKonzert.hotelauswahl ?? "");
       delete untypedKonzert.hotelauswahl;
       if (untypedKonzert.hotelpreiseAlsDefault) {
         optionen.updateHotelpreise(konz.hotel, konz.unterkunft.zimmerPreise);
@@ -83,8 +70,7 @@ export default function KonzertComp() {
     optionen.updateBackline("Rockshop", konz.technik.backlineRockshop);
     optionen.updateCollection("artists", konz.artist.name);
     mutateOptionen.mutate(optionen);
-    const newrider = new Rider({ id: url, startDate: konz.startDate, boxes: vals.riderBoxes });
-    mutateRider.mutate(newrider);
+    mutateRider.mutate(new Rider({ id: url, startDate: konz.startDate, boxes: riderBoxes }));
     mutateKonzert.mutate(konz);
   }
 
