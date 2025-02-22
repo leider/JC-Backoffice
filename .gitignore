@@ -32,4 +32,3 @@ vite.config.d.ts
 vite.config.js
 .idea/dataSources
 .idea/dataSources.*
-backup*

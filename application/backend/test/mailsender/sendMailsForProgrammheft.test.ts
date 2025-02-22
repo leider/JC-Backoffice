@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import * as sin from "sinon";
 import "../initWinstonForTest";
-import "jc-backend/configure.js";
+import "../../configure.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import userstore from "jc-backend/lib/users/userstore.js";
-import kalenderstore from "jc-backend/lib/programmheft/kalenderstore.js";
+import userstore from "../../lib/users/userstore.js";
+import kalenderstore from "../../lib/programmheft/kalenderstore.js";
 import Kalender from "jc-shared/programmheft/kalender.js";
 import { Event } from "jc-shared/programmheft/Event.js";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
-import { EmailEvent, remindForProgrammheft } from "../../src/sendMailsForProgrammheft.js";
+import mailtransport from "../../lib/mailsender/mailtransport.js";
+import { EmailEvent, remindForProgrammheft } from "../../batches/sendMailsForProgrammheft.js";
 import User from "jc-shared/user/user.js";
 
 const sinon = sin.createSandbox();

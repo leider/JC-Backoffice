@@ -8,7 +8,7 @@ import passport from "passport";
 import "./initWinston.js";
 import restApp from "./rest/index.js";
 import siteApp from "./lib/site/index.js";
-import apicalls from "./apikey/apicalls.js";
+import batchendpoints from "./batches/batchendpoints.js";
 import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
 import passportApiKeyInitializer from "./lib/middleware/passportApiKeyInitializer.js";
@@ -28,7 +28,7 @@ function handle404(req: Request, res: Response): void {
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 function handle500(error: any, req: Request, res: Response, next: NextFunction): void {
-  const status = error.status || 500;
+  const status = error.status ?? 500;
   res.status(status);
   if (req.headers["content-type"] === "application/json") {
     res.send((error as Error)?.message);
@@ -59,7 +59,7 @@ export default function (app: express.Express, forDev?: boolean): void {
   const authenticatorJwt = passport.authenticate("jwt", { session: false });
   app.use("/rest/", authenticatorJwt, restApp);
   const authenticatorBearer = passport.authenticate("bearer", { session: false });
-  app.use("/api/", authenticatorBearer, apicalls);
+  app.use("/batches/", authenticatorBearer, batchendpoints);
   app.use("/ridersrest/", ridersrest);
   if (!forDev) {
     app.use(handle404);

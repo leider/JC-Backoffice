@@ -4,14 +4,14 @@ import Konzert from "jc-shared/konzert/konzert.js";
 
 import conf from "jc-shared/commons/simpleConfigure.js";
 
-import store from "jc-backend/lib/konzerte/konzertestore.js";
-import userstore from "jc-backend/lib/users/userstore.js";
-import mailtransport from "jc-backend/lib/mailsender/mailtransport.js";
+import store from "../lib/konzerte/konzertestore.js";
+import userstore from "../lib/users/userstore.js";
+import mailtransport from "../lib/mailsender/mailtransport.js";
 import Users from "jc-shared/user/users.js";
-import usersService from "jc-backend/lib/users/usersService.js";
+import usersService from "../lib/users/usersService.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import formatMailAddresses from "jc-shared/mail/formatMailAddresses.js";
-import { JobResult } from "./sendMailsNightly.js";
+import { JobResult } from "./index.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 
@@ -52,7 +52,7 @@ ${map(
   const validUsers = filter(new Users(users).getUsersKann("Kasse"), (user) => !!user.email && !!user.wantsEmailReminders);
   const adminAddresses = usersService.emailsAllerAdmins();
   const emails = map(validUsers, (user) => MailMessage.formatEMailAddress(user.name, user.email)).concat(adminAddresses);
-  logger.info(`Email Adressen für fehlende Kasse: ${formatMailAddresses(emails)}`);
+  logger.debug(`Email Adressen für fehlende Kasse: ${formatMailAddresses(emails)}`);
   message.bcc = emails;
   return mailtransport.sendMail(message);
 }

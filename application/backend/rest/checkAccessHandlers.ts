@@ -23,12 +23,3 @@ export async function checkCanEditUser(req: Request, res: Response, next: NextFu
   }
   next();
 }
-
-export async function checkAbendkasse(req: Request, res: Response, next: NextFunction) {
-  if (!(req.user as User).accessrights.isAbendkasse) {
-    res.sendStatus(403);
-    return;
-
-  }
-  next();
-}

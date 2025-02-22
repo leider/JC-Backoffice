@@ -26,7 +26,6 @@
     "passport-jwt": "4.0.1",
     "pug": "3.0.3",
     "puppeteer": "23.6.1",
-    "qr-image": "3.2.0",
     "sharp": "0.33.5",
     "superagent": "10.1.1",
     "winston": "3.17.0"
@@ -46,14 +45,14 @@
     "@types/passport-http-bearer": "1.0.41",
     "@types/passport-jwt": "4.0.1",
     "@types/pug": "2.0.10",
-    "@types/qr-image": "3.2.9",
     "@types/superagent": "8.1.9"
   },
   "scripts": {
+    "test": "../node_modules/.bin/vitest --run",
     "compile": "yarn sass && yarn tsc",
     "deploy": "yarn compile",
     "tsc": "../node_modules/typescript/bin/tsc",
-    "clean-ts": "rm -rf lib/**/*.js || rm -rf rest/*.js || rm -rf configure.js || rm -rf configureApp.js || rm -rf initWinston.js || rm -rf start.js || :",
+    "clean-ts": "rm -rf (apikey|batches|lib|rest|test)/**/*.js && rm -f (configure|configureApp|initWinston|start).js",
     "sass": "../node_modules/.bin/sass --silence-deprecation=color-functions,mixed-decls,import,global-builtin sass/jc-backoffice.scss static/stylesheets/screen.css --no-source-map"
   }
 }
