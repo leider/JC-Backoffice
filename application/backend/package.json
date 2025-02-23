@@ -38,7 +38,7 @@
     "@types/cookie-parser": "1.4.8",
     "@types/express": "5.0.0",
     "@types/express-serve-static-core": "5.0.6",
-    "@types/jsonwebtoken": "9.0.8",
+    "@types/jsonwebtoken": "9.0.9",
     "@types/multiparty": "4.2.1",
     "@types/nodemailer": "6.4.17",
     "@types/passport": "1.0.17",

@@ -71,7 +71,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
   }
 
   return (
-    <Collapsible suffix="gaeste" label={title} noTopBorder uncollapsed amount={noOfImages ?? "..."}>
+    <Collapsible suffix="gaeste" label={title} noTopBorder uncollapsed amount={noOfImages ?? "..."} noMoneySign>
       <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
         <Form.List name={prefix}>
           {(fields) =>

@@ -1,10 +1,9 @@
 import { Col } from "antd";
 import React, { CSSProperties, useEffect, useMemo, useState } from "react";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { konzertForUrl } from "@/commons/loader.ts";
+import { konzertWithRiderForUrl } from "@/commons/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import groupBy from "lodash/groupBy";
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
@@ -20,16 +19,17 @@ import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
 export default function Preview() {
   const { url } = useParams();
   const { data } = useQuery({
     queryKey: ["konzert", url],
-    queryFn: () => konzertForUrl(url || ""),
+    queryFn: () => konzertWithRiderForUrl(url || ""),
   });
   const { currentUser, optionen, setMemoizedId } = useJazzContext();
 
-  const konzert = useMemo(() => (data ? data : new Konzert()), [data]);
+  const konzert = useMemo(() => (data ? data : new KonzertWithRiderBoxes()), [data]);
 
   useEffect(() => {
     setMemoizedId(konzert.id);

@@ -19,6 +19,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { historyFromRawRows } from "jc-shared/history/history.ts";
 import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -115,23 +116,25 @@ export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "
   return handleVeranstaltungen(result);
 }
 
-export async function konzertForUrl(url: string): Promise<Konzert> {
+export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRiderBoxes> {
+  const emptyResult = new KonzertWithRiderBoxes();
   if (url === "new") {
-    return new Konzert();
+    return emptyResult;
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
     const result = await getForType("json", `/rest/konzert/${encodeURIComponent(realUrl)}`);
     if (result) {
-      const konzert = new Konzert(result);
+      const konzert = new KonzertWithRiderBoxes(result);
       konzert.reset();
       return konzert;
     } else {
-      return result;
+      return emptyResult;
     }
   }
-  const result = await getForType("json", `/rest/konzert/${encodeURIComponent(url)}`);
-  return result ? new Konzert(result) : result;
+  const konzert = await getForType("json", `/rest/konzert/${encodeURIComponent(url)}`);
+  const rider = await getForType("json", `/rest/riders/${url}`);
+  return konzert ? new KonzertWithRiderBoxes({ ...konzert, riderBoxes: rider.boxes }) : emptyResult;
 }
 
 export async function saveKonzert(konzert: Konzert) {
@@ -298,11 +301,6 @@ export async function saveProgrammheft(kalender: Kalender) {
 }
 
 // Rider
-export async function riderFor(url: string) {
-  const result = await getForType("json", `/rest/riders/${url}`);
-  return new Rider(result);
-}
-
 export async function saveRider(rider: Rider) {
   const result = await standardFetch({
     method: "POST",

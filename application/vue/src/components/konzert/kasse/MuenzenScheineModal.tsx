@@ -1,5 +1,5 @@
-import { Button, Col, ConfigProvider, Form, Input, theme } from "antd";
-import React, { useContext, useMemo, useState } from "react";
+import { Col, Form, Input, theme } from "antd";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -11,6 +11,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
 const items = [
   { name: "10", val: "0,10" },
@@ -27,32 +28,34 @@ const items = [
 export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
   const { token } = theme.useToken();
-  const form = useFormInstance();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { isDirty } = useJazzContext();
   const { refStartinhalt, refEndinhalt } = useContext(KassenContext);
   const [openModal, setOpenModal] = useState(false);
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
-  function sumForInhalt(startEnd: "startinhalt" | "endinhalt") {
-    const inhalt = form.getFieldValue(["kasse", startEnd]);
-    return map(items, "name").reduce((prev, curr) => {
-      return prev + (parseInt(curr, 10) * (inhalt[curr] ?? 0)) / 100;
-    }, 0);
-  }
+  const sumForInhalt = useCallback(
+    (startEnd: "startinhalt" | "endinhalt") => {
+      const inhalt = form.getFieldValue(["kasse", startEnd]);
+      return map(items, "name").reduce((prev, curr) => {
+        return prev + (parseInt(curr, 10) * (inhalt[curr] ?? 0)) / 100;
+      }, 0);
+    },
+    [form],
+  );
 
-  function updateAnfangsbestandEUR() {
-    form.setFieldValue(["kasse", "anfangsbestandEUR"], sumForInhalt("startinhalt"));
-  }
-
-  function updateEndbestandGezaehltEUR() {
-    form.setFieldValue(["kasse", "endbestandGezaehltEUR"], sumForInhalt("endinhalt"));
-  }
+  const updateBestandEUR = useCallback(() => {
+    form.setFieldValue(
+      ["kasse", isBeginn ? "anfangsbestandEUR" : "endbestandGezaehltEUR"],
+      sumForInhalt(isBeginn ? "startinhalt" : "endinhalt"),
+    );
+  }, [form, isBeginn, sumForInhalt]);
 
   function ImmediateEuro({ name }: { name: string }) {
-    const fullName = ["kasse", isBeginn ? "startinhalt" : "endinhalt", name];
+    const fullName = useMemo(() => ["kasse", isBeginn ? "startinhalt" : "endinhalt", name], [name]);
     return (
-      <Form.Item name={fullName} valuePropName="number" trigger="onNumber">
+      <Form.Item name={fullName} valuePropName="number">
         <ImmediateEuroEmbedded name={name} />
       </Form.Item>
     );
@@ -73,19 +76,24 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
         closable={false}
         maskClosable={false}
         footer={[
-          <ConfigProvider key="dummykey" theme={{ token: { colorPrimary: token.colorSuccess } }}>
-            <Button
-              key="back"
-              type="primary"
-              onClick={() => {
-                isBeginn ? updateAnfangsbestandEUR() : updateEndbestandGezaehltEUR();
-                isDirty ? form.submit() : undefined;
-                setOpenModal(false);
-              }}
-            >
-              Speichern & Schließen
-            </Button>
-          </ConfigProvider>,
+          isDirty && (
+            <ButtonWithIcon
+              text="Schließen ohne Speichern"
+              type="default"
+              key="closeOnly"
+              onClick={() => setOpenModal(false)}
+              color={token.colorSuccess}
+            />
+          ),
+          <ButtonWithIcon
+            text={isDirty ? "Speichern & Schließen" : "Schließen"}
+            key="close"
+            onClick={() => {
+              isDirty && form.submit();
+              setOpenModal(false);
+            }}
+            color={token.colorSuccess}
+          />,
         ]}
       >
         {map(items, (item) => (
@@ -94,13 +102,29 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
               <Input disabled value={`${item.val} €`} variant="borderless" />
             </Col>
             <Col span={8}>
-              <NumberInput name={["kasse", isBeginn ? "startinhalt" : "endinhalt", item.name]} decimals={0} disabled={!!freigabe} />
+              <NumberInput
+                name={["kasse", isBeginn ? "startinhalt" : "endinhalt", item.name]}
+                decimals={0}
+                disabled={!!freigabe}
+                onChange={updateBestandEUR}
+              />
             </Col>
             <Col span={8}>
               <ImmediateEuro name={item.name} />
             </Col>
           </JazzRow>
         ))}
+        <JazzRow>
+          <Col span={8} offset={16}>
+            <NumberInput
+              name={["kasse", isBeginn ? "anfangsbestandEUR" : "endbestandGezaehltEUR"]}
+              label="Summe"
+              decimals={2}
+              suffix="€"
+              disabled
+            />
+          </Col>
+        </JazzRow>
       </JazzModal>
       <ButtonWithIcon
         ref={isBeginn ? refStartinhalt : refEndinhalt}

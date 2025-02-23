@@ -1,5 +1,5 @@
 import { Col, Tour, TourProps } from "antd";
-import React, { Ref, useContext, useEffect, useRef } from "react";
+import React, { Ref, useContext, useMemo, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/konzert/kasse/AusgabenCard";
 import { KassenzettelFreigabe } from "@/components/konzert/kasse/KassenzettelFreigabe";
@@ -10,12 +10,12 @@ import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 import { KassenContext } from "./KassenContext";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
+import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 
 export default function TabKasse() {
   const form = useFormInstance();
   const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
-
-  const anfangsbestandEUR = useWatch(["kasse", "anfangsbestandEUR"], { form, preserve: true });
+  const kasseRaw = useWatch("kasse", { form, preserve: false });
 
   const refStartinhalt: Ref<HTMLElement> = useRef(null);
   const refEndinhalt: Ref<HTMLElement> = useRef(null);
@@ -23,12 +23,7 @@ export default function TabKasse() {
   const refEinnahmen: Ref<HTMLDivElement> = useRef(null);
   const refAnBank: Ref<HTMLElement> = useRef(null);
 
-  function anfangsbestandChanged() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
-    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
-  }
-
-  useEffect(anfangsbestandChanged, [form, anfangsbestandEUR]);
+  const endbestandEUR = useMemo(() => new Kasse(kasseRaw).endbestandEUR, [kasseRaw]);
 
   const toursteps: TourProps["steps"] = [
     {
@@ -78,7 +73,7 @@ export default function TabKasse() {
               <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInput disabled name="endbestandEUR" label="Endbestand Berechnet" decimals={2} suffix="€" />
+              <NumberInputWithDirectValue label="Endbestand Berechnet" value={endbestandEUR} suffix="€" decimals={2} />
             </Col>
           </JazzRow>
         </Col>

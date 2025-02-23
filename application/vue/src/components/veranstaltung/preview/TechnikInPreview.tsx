@@ -1,16 +1,16 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Divider } from "antd";
 import React, { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { riderFor } from "@/commons/loader.ts";
-import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
-export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Vermietung | KonzertWithRiderBoxes }) {
   const url = useMemo(() => encodeURIComponent(veranstaltung.url || ""), [veranstaltung.url]);
-  const riderQuery = useQuery({ enabled: !!url, queryKey: ["rider", "url"], queryFn: () => riderFor(url) });
-  const rider = useMemo(() => riderQuery.data, [riderQuery.data]);
+
+  const boxes = !veranstaltung.isVermietung ? ((veranstaltung as KonzertWithRiderBoxes).riderBoxes ?? []) : [];
+  const hasRiderBoxes = !!boxes.length;
 
   const printref = useMemo(() => {
     return window.location.href.replace("vue/konzert/preview", "pdf/rider");
@@ -25,7 +25,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             <Divider />
           </Col>
         )}
-        {veranstaltung.technik.backlineJazzclub.length > 0 && (
+        {!!veranstaltung.technik.backlineJazzclub.length && (
           <Col span={24}>
             <b>Backline Jazzclub:</b>
             <ul>
@@ -36,7 +36,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             <Divider />
           </Col>
         )}
-        {veranstaltung.technik.backlineRockshop.length > 0 && (
+        {!!veranstaltung.technik.backlineRockshop.length && (
           <Col span={24}>
             <b>Backline Rockshop:</b>
             <ul>
@@ -47,7 +47,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             <Divider />
           </Col>
         )}
-        {veranstaltung.technik.dateirider.length > 0 ? (
+        {veranstaltung.technik.dateirider.length ? (
           <Col span={24}>
             <b>Dateien:</b>
             <ul>
@@ -58,24 +58,20 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
                   </a>
                 </li>
               ))}
-              {(rider?.boxes.length || 0) > 0 && (
+              {hasRiderBoxes && (
                 <li key="riderurl">
-                  <a href={printref} target="_blank" rel="noreferrer">
-                    {`Rider-${url}.pdf`}
-                  </a>
+                  <a href={printref} target="_blank" rel="noreferrer">{`Rider-${url}.pdf`}</a>
                 </li>
               )}
             </ul>
           </Col>
         ) : (
-          (rider?.boxes.length || 0) > 0 && (
+          hasRiderBoxes && (
             <Col span={24}>
               <b>Dateien:</b>
               <ul>
                 <li key="riderurl">
-                  <a href={printref} target="_blank" rel="noreferrer">
-                    {`Rider-${url}.pdf`}
-                  </a>
+                  <a href={printref} target="_blank" rel="noreferrer">{`Rider-${url}.pdf`}</a>
                 </li>
               </ul>
             </Col>

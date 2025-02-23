@@ -13,6 +13,7 @@ export default function Collapsible({
   noTopBorder,
   suffix,
   uncollapsed = false,
+  noMoneySign = false,
 }: {
   suffix: string;
   label: string;
@@ -20,6 +21,7 @@ export default function Collapsible({
   noTopBorder?: boolean;
   amount?: number;
   uncollapsed?: boolean;
+  noMoneySign?: boolean;
 }) {
   const { brightText } = useJazzContext();
   const [expanded, setExpanded] = useState<string | undefined>(uncollapsed ? undefined : "content");
@@ -53,7 +55,7 @@ export default function Collapsible({
               {!isNil(amount) && (
                 <Col>
                   <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
-                    {formatToGermanNumberString(amount)} €
+                    {noMoneySign ? amount : `${formatToGermanNumberString(amount)} €`}
                   </Typography.Title>
                 </Col>
               )}
