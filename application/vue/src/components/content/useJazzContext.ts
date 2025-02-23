@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
 import { LoginState } from "@/commons/authConsts.ts";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
-import { RouterContext } from "@/router/RouterContext.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
 import { App } from "antd";
@@ -53,7 +52,6 @@ export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
-  const { setCurrentUser } = useContext(RouterContext);
   const { isDarkMode, isCompactMode } = useContext(GlobalContext);
 
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
@@ -140,10 +138,6 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   }
 
   const exposedContext = useMemo(() => (isAuthenticated ? context : emptyContext), [context, isAuthenticated]);
-
-  useEffect(() => {
-    setCurrentUser(exposedContext.currentUser);
-  }, [exposedContext.currentUser, setCurrentUser]);
 
   return {
     ...exposedContext,
