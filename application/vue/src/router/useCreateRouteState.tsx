@@ -171,8 +171,12 @@ const kassePattern = ["konzert/:url", "vermietung/preview"].join("|");
 const gaestePattern = ["konzert/:url"].join("|");
 
 const superuserPattern = ["/imageoverview", "/history"].join("|");
+
+const theRootToUse: RouteObject[] = [{ element: <JazzclubApp />, errorElement: <ErrorBoundary /> }];
+
 export function useCreateRouteState(): RouteState {
   const [currentUser, setCurrentUser] = useState<User>(new User({}));
+
   const routes = useMemo(() => {
     const isOrgaTeam = currentUser.id ? currentUser.accessrights.isOrgaTeam : true;
     const isSuperuser = currentUser.id ? currentUser.accessrights.isSuperuser : true;
@@ -200,9 +204,9 @@ export function useCreateRouteState(): RouteState {
       });
     }
 
-    const root = { ...allRoutes[0] };
-    root.children = newChildren;
-    return [root];
+    theRootToUse[0].children = newChildren;
+    return theRootToUse;
   }, [currentUser]);
+
   return { routes, setCurrentUser };
 }
