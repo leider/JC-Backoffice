@@ -135,6 +135,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
             selectedKeys={[activeElement]}
             style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
           />
+          <div style={{ width: 20 }}></div>
           <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
         </ConfigProvider>
       </div>
