@@ -21,7 +21,7 @@ function formatNumberTwoDigits(number: string | number): string {
 }
 
 export default class Kosten {
-  static deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
+  static readonly deals = ["ohne", "100%", "90%", "80%", "70%", "60%"];
 
   backlineEUR = 0;
   saalmiete = 0;

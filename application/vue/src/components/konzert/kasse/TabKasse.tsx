@@ -12,6 +12,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export default function TabKasse() {
   const form = useFormInstance();
   const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
