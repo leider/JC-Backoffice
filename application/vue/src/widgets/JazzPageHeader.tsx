@@ -37,13 +37,13 @@ export function JazzPageHeader({
         title={theHeader}
         extra={buttons}
         footer={[
-          firstTag && firstTag,
+          firstTag,
           dateString && (
             <b key="datum" style={{ marginRight: 8 }}>
               {dateString}
             </b>
           ),
-          tags && tags,
+          tags,
         ]}
         breadcrumb={breadcrumb ? breadcrumb : undefined}
         style={{ ...style, paddingInline: 4 }}

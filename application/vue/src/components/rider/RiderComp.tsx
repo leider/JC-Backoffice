@@ -68,7 +68,6 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
           result.push(box);
           setTargetBoxes?.(result);
         }
-        return;
       }
     },
     [setTargetBoxes, targetBoxes],

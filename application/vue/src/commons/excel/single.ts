@@ -10,7 +10,7 @@ const schemaSingle: Schema<SimpleExcelRow> = [
     type: String,
     value: (row) => row.Art,
     width: 30,
-    getCellStyle: (row) => (/[0-9]{2}.[0-9]{2}.[0-9]{2}/.test(row.Art) ? { span: 3, fontWeight: "bold" } : undefined),
+    getCellStyle: (row) => (/\d{2}.\d{2}.\d{2}/.test(row.Art) ? { span: 3, fontWeight: "bold" } : undefined),
   },
   { column: "Einnahme", type: Number, format: "#,##0.00", value: (row) => row.Einnahme },
   {

@@ -6,6 +6,8 @@ import react from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import lodash from "eslint-plugin-lodash";
+import perf from "eslint-plugin-react-perf";
+import sonarjs from "eslint-plugin-sonarjs";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -24,8 +26,15 @@ export default tseslint.config(
       "no-process-exit": "error",
       eqeqeq: "error",
       "react-refresh/only-export-components": "error",
+      "react-perf/jsx-no-new-object-as-prop": "off",
+      "react-perf/jsx-no-new-array-as-prop": "off",
+      "react-perf/jsx-no-new-function-as-prop": "off",
     },
-    plugins: { prettier, "react-refresh": reactRefresh },
+    plugins: {
+      prettier,
+      "react-refresh": reactRefresh,
+      "react-perf": perf,
+    },
     files: ["**/*.ts", "**/*.tsx"],
   },
   {
@@ -34,11 +43,13 @@ export default tseslint.config(
       react,
       "react-hooks": eslintPluginReactHooks,
       lodash,
+      sonarjs,
     },
     rules: {
       ...eslintPluginReactHooks.configs.recommended.rules,
       ...react.configs.recommended.rules,
       ...lodash.configs.recommended.rules,
+      ...sonarjs.configs.recommended.rules,
       "react/react-in-jsx-scope": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
