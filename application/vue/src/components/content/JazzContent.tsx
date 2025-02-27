@@ -21,7 +21,7 @@ function TodaysConcert() {
   const { todayKonzerte, isDarkMode } = useJazzContext();
   const bestaetigte = useMemo(() => filter(todayKonzerte, "kopf.confirmed"), [todayKonzerte]);
 
-  if (bestaetigte?.length ?? 0 > 0)
+  if (bestaetigte?.length)
     return (
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>

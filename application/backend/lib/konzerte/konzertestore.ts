@@ -68,6 +68,5 @@ export default {
   deleteKonzertById(id: string, user: User) {
     persistence.removeById(id, user);
     logger.info(`Konzert removed: ${JSON.stringify(id)}`);
-    return;
   },
 };

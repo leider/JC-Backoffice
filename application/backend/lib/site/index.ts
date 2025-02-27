@@ -138,7 +138,6 @@ app.post("/logout", (req, res) => {
     secure: false,
   });
   res.clearCookie("refresh-token").send({});
-  return;
 });
 
 const uploadDir = conf.uploadDir;

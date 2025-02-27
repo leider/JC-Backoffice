@@ -161,6 +161,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     { key: "history", label: "Änderungsverlauf", icon: <IconForSmallBlock iconName="GraphUp" /> },
   ];
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   function onMenuClick(e: { key: string }): void {
     const konzert = getKonzert();
     const vermietung = getVermietung();

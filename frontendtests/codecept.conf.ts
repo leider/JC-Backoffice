@@ -46,7 +46,7 @@ export const config: CodeceptJS.MainConfig = {
     },
   },
   include: {
-    I: "./steps_file",
+    filters: "./helpers/filters",
   },
   bootstrap: async () => {
     new SqliteHelper(config).createData("userstore", "admin");

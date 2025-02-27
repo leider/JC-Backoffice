@@ -112,11 +112,18 @@ export function TeamFilterEdit({
       closable={false}
       footer={
         <Space>
-          <ButtonWithIcon alwaysText type="default" text="Zurücksetzen" onClick={() => reset(form)} />
-          <ButtonWithIcon alwaysText type="default" text="Schließen" onClick={() => setOpen(false)} />
           <ButtonWithIcon
             alwaysText
-            text="Anwenden"
+            type="default"
+            text="Zurücksetzen"
+            onClick={() => {
+              reset(form);
+              setFilter(form.getFieldsValue(true));
+            }}
+          />
+          <ButtonWithIcon
+            alwaysText
+            text="Schließen"
             onClick={() => {
               setOpen(false);
               setFilter(form.getFieldsValue(true));
@@ -126,7 +133,7 @@ export function TeamFilterEdit({
       }
       open={open}
     >
-      <Form form={form} autoComplete="off" size="small" colon={false}>
+      <Form form={form} autoComplete="off" size="small" colon={false} onValuesChange={() => setFilter(form.getFieldsValue(true))}>
         <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
           <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
         </ConfigProvider>

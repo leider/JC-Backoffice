@@ -263,7 +263,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       name={name}
       valuePropName="value"
       trigger="onChange"
-      rules={[requiredFields && requiredValidator, uniqueValidator && uniqueValidator]}
+      rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
     >
       <InnerTable<T> columnDescriptions={columnDescriptions} usersWithKann={usersWithKann} newRowFactory={newRowFactory} />
     </Form.Item>

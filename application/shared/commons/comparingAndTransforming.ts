@@ -80,10 +80,10 @@ export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?
   if (!(keys(diffAtoB.updated || {}).length === 0 && keys(diffBtoA.updated || {}).length === 0)) {
     diff.geändert = { neu: diffAtoB.updated, alt: diffBtoA.updated };
   }
-  if (!(keys(diffAtoB.added || {}).length === 0)) {
+  if (keys(diffAtoB.added ?? {}).length) {
     diff.hinzugefügt = diffAtoB.added;
   }
-  if (!(keys(diffAtoB.deleted || {}).length === 0)) {
+  if (keys(diffAtoB.deleted ?? {}).length) {
     diff.gelöscht = diffAtoB.deleted;
   }
   return diff;
