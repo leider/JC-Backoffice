@@ -1,9 +1,9 @@
-import Sqlite = require("better-sqlite3");
-import serverConfig = require("../../config-it/server-config.json");
-import fs = require("fs");
-import path = require("path");
+import Sqlite from "better-sqlite3";
+import serverConfig from "../../config-it/server-config.json";
+import fs from "fs/promises";
+import path from "path";
 const url = serverConfig.sqlitedb;
-import Helper = require("@codeceptjs/helper");
+import Helper from "@codeceptjs/helper";
 
 function asSqliteString(obj) {
   return `${escape(JSON.stringify(obj))}`;
@@ -27,7 +27,7 @@ class SqliteHelper extends Helper {
       tables
         .filter(
           (table) =>
-            !table.name.startsWith("sqlite") && table.name !== "refreshstore"
+            !table.name.startsWith("sqlite") && table.name !== "refreshstore",
         )
         .forEach((table) => db.exec(`delete from ${table.name}`));
     });
@@ -49,10 +49,10 @@ class SqliteHelper extends Helper {
   }
 
   createData(collectionName, filename) {
-    doInSqlite((db) => {
-      const json = fs.readFileSync(
+    doInSqlite(async (db) => {
+      const json = await fs.readFile(
         `${__dirname}/../data/${collectionName}/${filename}.json`,
-        "utf8"
+        "utf8",
       );
       const object = JSON.parse(json);
       this.storeInCollection(db, collectionName, object);
@@ -78,12 +78,12 @@ class SqliteHelper extends Helper {
 
     const cols = ["id", "data"].concat(extraCols);
     const vals = [escape(object.id), asSqliteString(object)].concat(
-      extraCols.map((col) => escape(object[col]))
+      extraCols.map((col) => escape(object[col])),
     );
     db.exec(
       `REPLACE INTO ${collectionName} (${cols.join(",")}) VALUES (${vals.join(
-        ","
-      )});`
+        ",",
+      )});`,
     );
   }
 }
