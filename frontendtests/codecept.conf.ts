@@ -10,7 +10,7 @@ export const config: CodeceptJS.MainConfig = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: true,
+      show: false,
       keepCookies: true,
     },
     SqliteHelper: {
@@ -49,7 +49,6 @@ export const config: CodeceptJS.MainConfig = {
     filters: "./helpers/filters",
   },
   bootstrap: async () => {
-    console.log("bootstrap");
     new SqliteHelper(config).createData("userstore", "admin");
   },
   teardown: async () => {
