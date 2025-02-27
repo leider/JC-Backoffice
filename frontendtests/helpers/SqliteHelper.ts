@@ -1,6 +1,6 @@
 import Sqlite from "better-sqlite3";
 import serverConfig from "../../config-it/server-config.json";
-import fs from "fs/promises";
+import fs from "fs";
 import path from "path";
 const url = serverConfig.sqlitedb;
 import Helper from "@codeceptjs/helper";
@@ -49,8 +49,8 @@ class SqliteHelper extends Helper {
   }
 
   createData(collectionName, filename) {
-    doInSqlite(async (db) => {
-      const json = await fs.readFile(
+    doInSqlite((db) => {
+      const json = fs.readFileSync(
         `${__dirname}/../data/${collectionName}/${filename}.json`,
         "utf8",
       );

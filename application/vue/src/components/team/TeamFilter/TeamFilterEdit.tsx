@@ -121,10 +121,9 @@ export function TeamFilterEdit({
               setFilter(form.getFieldsValue(true));
             }}
           />
-          <ButtonWithIcon alwaysText type="default" text="Schließen" onClick={() => setOpen(false)} />
           <ButtonWithIcon
             alwaysText
-            text="Anwenden"
+            text="Schließen"
             onClick={() => {
               setOpen(false);
               setFilter(form.getFieldsValue(true));
