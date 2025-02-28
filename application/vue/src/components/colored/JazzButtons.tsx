@@ -11,11 +11,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ItemType } from "antd/es/menu/interface";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useCallback, useMemo } from "react";
+import { SizeType } from "antd/es/config-provider/SizeContext";
 
 type ButtonProps = {
   disabled?: boolean;
+  size?: SizeType;
 };
-function SaveOrSendButton({ disabled, isSend, callback }: ButtonProps & { isSend?: boolean; callback?: () => void }) {
+
+function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { isSend?: boolean; callback?: () => void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
@@ -24,6 +28,7 @@ function SaveOrSendButton({ disabled, isSend, callback }: ButtonProps & { isSend
       icon={isSend ? "Send" : "CheckSquare"}
       disabled={disabled}
       color={token.colorSuccess}
+      size={size}
     />
   );
 }
@@ -34,15 +39,15 @@ export function HelpWithKasseButton({ callback }: { callback: () => void }) {
   return <ButtonWithIcon alwaysText text="Abendkasse Hilfe" onClick={callback} icon="QuestionCircleFill" color={token.colorSuccess} />;
 }
 
-export function SaveButton({ disabled, callback }: ButtonProps & { callback?: () => void }) {
-  return <SaveOrSendButton disabled={disabled} callback={callback} />;
+export function SaveButton({ disabled, size, callback }: ButtonProps & { callback?: () => void }) {
+  return <SaveOrSendButton disabled={disabled} callback={callback} size={size} />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton isSend disabled={disabled} />;
 }
 
-export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
+export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
@@ -52,6 +57,7 @@ export function ResetButton({ disabled, resetChanges }: ButtonProps & { resetCha
       disabled={disabled}
       type="default"
       color={token.colorSuccess}
+      size={size}
     />
   );
 }
@@ -84,13 +90,9 @@ export function NewButtons() {
 export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
   const form = useFormInstance();
   const { optionen } = useJazzContext();
-  function getKonzert() {
-    return new Konzert(form.getFieldsValue(true));
-  }
+  const konzert = useMemo(() => new Konzert(form.getFieldsValue(true)), [form]);
 
-  function getVermietung() {
-    return new Vermietung(form.getFieldsValue(true));
-  }
+  const vermietung = useMemo(() => new Vermietung(form.getFieldsValue(true)), [form]);
 
   const { modal } = App.useApp();
   const navigate = useNavigate();
@@ -111,31 +113,29 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     },
   });
 
-  function colorExport() {
-    return isDirty ? "rgba(89,0,185,0.43)" : "#5900b9";
-  }
+  const colorExport = useMemo(() => (isDirty ? "rgba(89,0,185,0.43)" : "#5900b9"), [isDirty]);
 
   const konzertExport = {
     type: "group",
     key: "export",
-    label: <span style={{ color: colorExport() }}>Exportieren</span>,
+    label: <span style={{ color: colorExport }}>Exportieren</span>,
     children: [
       {
         key: "ExcelKalk",
-        label: <span style={{ color: colorExport() }}>Kalkulation (Excel)</span>,
-        icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkSpreadsheet" />,
+        label: <span style={{ color: colorExport }}>Kalkulation (Excel)</span>,
+        icon: <IconForSmallBlock color={colorExport} iconName="FileEarmarkSpreadsheet" />,
         disabled: isDirty,
       },
       {
         key: "Pressefotos",
-        label: <span style={{ color: colorExport() }}>Pressefotos (Zip)</span>,
-        icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkImage" />,
+        label: <span style={{ color: colorExport }}>Pressefotos (Zip)</span>,
+        icon: <IconForSmallBlock color={colorExport} iconName="FileEarmarkImage" />,
         disabled: isDirty,
       },
       {
         key: "Kassenzettel",
-        label: <span style={{ color: colorExport() }}>Kassenzettel (Pdf)</span>,
-        icon: <IconForSmallBlock color={colorExport()} iconName="Printer" />,
+        label: <span style={{ color: colorExport }}>Kassenzettel (Pdf)</span>,
+        icon: <IconForSmallBlock color={colorExport} iconName="Printer" />,
         disabled: isDirty,
       },
     ],
@@ -143,54 +143,58 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
 
   const vermietungExport = {
     key: "ExcelKalk",
-    label: <span style={{ color: colorExport() }}>Kalkulation (Excel)</span>,
-    icon: <IconForSmallBlock color={colorExport()} iconName="FileEarmarkSpreadsheet" />,
+    label: <span style={{ color: colorExport }}>Kalkulation (Excel)</span>,
+    icon: <IconForSmallBlock color={colorExport} iconName="FileEarmarkSpreadsheet" />,
     disabled: isDirty,
   };
 
   const items: ItemType[] = [
     {
       key: "delete",
-      label: <span style={{ color: getKonzert().kopf.confirmed ? "gray" : undefined }}>Löschen</span>,
-      icon: <IconForSmallBlock color={getKonzert().kopf.confirmed ? "gray" : undefined} iconName="Trash" />,
+      label: <span style={{ color: konzert.kopf.confirmed ? "gray" : undefined }}>Löschen</span>,
+      icon: <IconForSmallBlock color={konzert.kopf.confirmed ? "gray" : undefined} iconName="Trash" />,
       danger: true,
-      disabled: getKonzert().kopf.confirmed,
+      disabled: konzert.kopf.confirmed,
     },
     { key: "copy", label: "Kopieren", icon: <IconForSmallBlock iconName="Files" /> },
     (isVermietung ? vermietungExport : konzertExport) as ItemType,
     { key: "history", label: "Änderungsverlauf", icon: <IconForSmallBlock iconName="GraphUp" /> },
   ];
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  function onMenuClick(e: { key: string }): void {
-    const konzert = getKonzert();
-    const vermietung = getVermietung();
-    if (e.key === "ExcelKalk") {
-      asExcelKalkSingle({ veranstaltung: isVermietung ? vermietung : konzert, optionen });
-    }
-    if (e.key === "Pressefotos") {
-      imgzipForVeranstaltung(konzert);
-    }
-    if (e.key === "Kassenzettel") {
-      openKassenzettel(konzert);
-    }
-    if (e.key === "delete") {
-      modal.confirm({
-        type: "confirm",
-        title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
-        content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title.replace("JC-", "")}" löschen möchtest?`,
-        onOk: () => {
-          isVermietung ? deleteVermietung.mutate(konzert.id!) : deleteKonzert.mutate(vermietung.id!);
-        },
-      });
-    }
-    if (e.key === "copy") {
-      navigate(`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${konzert.url}`);
-    }
-    if (e.key === "history") {
-      navigate(`/history?collection=${isVermietung ? "Vermietung" : "Veranstaltung"}&id=${decodeURIComponent(form.getFieldValue("id"))}`);
-    }
-  }
+  const onMenuClick = useCallback(
+    (e: { key: string }): void => {
+      switch (e.key) {
+        case "ExcelKalk":
+          asExcelKalkSingle({ veranstaltung: isVermietung ? vermietung : konzert, optionen });
+          break;
+        case "Pressefotos":
+          imgzipForVeranstaltung(konzert);
+          break;
+        case "Kassenzettel":
+          openKassenzettel(konzert);
+          break;
+        case "delete":
+          modal.confirm({
+            type: "confirm",
+            title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
+            content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title.replace("JC-", "")}" löschen möchtest?`,
+            onOk: () => {
+              isVermietung ? deleteVermietung.mutate(konzert.id!) : deleteKonzert.mutate(vermietung.id!);
+            },
+          });
+          break;
+        case "copy":
+          navigate(`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${konzert.url}`);
+          break;
+        case "history":
+          navigate(
+            `/history?collection=${isVermietung ? "Vermietung" : "Veranstaltung"}&id=${decodeURIComponent(form.getFieldValue("id"))}`,
+          );
+          break;
+      }
+    },
+    [deleteKonzert, deleteVermietung, form, isVermietung, konzert, modal, navigate, optionen, vermietung],
+  );
 
   return (
     <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>

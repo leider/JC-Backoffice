@@ -134,8 +134,8 @@ export default function Programmheft() {
       data={kalender}
       saveForm={saveForm}
       additionalButtons={[
-        <ButtonWithIcon key="prev" icon="ArrowBarLeft" onClick={() => nextOrPrevious(false)} type="default" />,
-        <ButtonWithIcon key="next" icon="ArrowBarRight" onClick={() => nextOrPrevious(true)} type="default" />,
+        <ButtonWithIcon key="prev" icon="ArrowBarLeft" text="Voriges" onClick={() => nextOrPrevious(false)} type="default" />,
+        <ButtonWithIcon key="next" icon="ArrowBarRight" text="Nächstes" onClick={() => nextOrPrevious(true)} type="default" />,
         <ProgrammheftKopierenButton key="copy" />,
       ]}
       changedPropsToWatch={["events"]}

@@ -3,7 +3,6 @@ import * as React from "react";
 import { useMemo } from "react";
 import Accessrights from "jc-shared/user/accessrights.ts";
 import { ItemType } from "antd/es/menu/interface";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import map from "lodash/map";
 import { MenuIcon } from "@/components/content/menu/MenuIcon.tsx";
 
@@ -29,9 +28,6 @@ export enum menuKeys {
 }
 
 export default function useMenuNodes(accessrights: Accessrights, subdirs: string[]) {
-  const naechsterUngeraderMonat = useMemo(() => new DatumUhrzeit().naechsterUngeraderMonat, []);
-  const programmheftJahrMonat = useMemo(() => naechsterUngeraderMonat.format("YYYY/MM"), [naechsterUngeraderMonat]);
-
   const wikisubdirEntries = useMemo(
     () => map(subdirs, (dir) => ({ key: `wiki-${dir}`, label: <Link to={`/wiki/${dir}/`}>{dir}</Link> })),
     [subdirs],
@@ -46,7 +42,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
   const mailMenu = {
     key: menuKeys.mail,
     icon: <MenuIcon name="EnvelopeFill" />,
-    label: "Mails...",
+    label: "Mails",
     children: [
       {
         key: menuKeys.mailrules,
@@ -103,6 +99,11 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
       key: menuKeys.kassenbericht,
       label: <Link to="/kassenbericht">Kassenbericht</Link>,
     },
+    {
+      key: menuKeys.programmheft,
+      icon: <MenuIcon name="Calendar2Check" />,
+      label: <Link to={`/programmheft/`}>Programmheft</Link>,
+    },
   ];
   if (accessrights.isSuperuser) {
     optionenChildren.push(
@@ -119,7 +120,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
   const optionenMenu = {
     key: menuKeys.option,
     icon: <MenuIcon name="Toggles" />,
-    label: "Optionen...",
+    label: "Optionen",
     children: optionenChildren,
   };
 
@@ -129,18 +130,12 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     label: <Link to="/team">Team</Link>,
   };
 
-  const programmheftMenu = {
-    key: menuKeys.programmheft,
-    icon: <MenuIcon name="Calendar2Check" />,
-    label: <Link to={`/programmheft/${programmheftJahrMonat}`}>Programmheft</Link>,
-  };
-
   const wikiMenu = {
     key: menuKeys.wiki,
     icon: <MenuIcon name="Journals" />,
-    label: "Wiki...",
+    label: "Wiki",
     children: wikisubdirEntries,
   };
 
-  return { mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu };
+  return { mailMenu, optionenMenu, teamMenu, veranstaltungMenu, wikiMenu };
 }

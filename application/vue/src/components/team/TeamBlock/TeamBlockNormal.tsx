@@ -6,6 +6,7 @@ import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import { useInView } from "react-intersection-observer";
 
 export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { veranstaltung: Veranstaltung; initiallyOpen: boolean }) {
   const { memoizedId, isDarkMode } = useJazzContext();
@@ -18,19 +19,23 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { vera
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
 
+  const theme = useMemo(() => {
+    return {
+      token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor },
+      components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
+    };
+  }, [backgroundColor, expanded, textColor]);
+
+  const { inView, ref } = useInView({ triggerOnce: true });
+
   return (
-    <ConfigProvider
-      theme={{
-        token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor },
-        components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
-      }}
-    >
-      <Col span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
+    <ConfigProvider theme={theme}>
+      <Col ref={ref} span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ padding: "2px 16px", backgroundColor }}>
-            <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
+            <TeamBlockHeader veranstaltung={veranstaltung} />
           </div>
-        ) : (
+        ) : inView || expanded ? (
           <Collapse
             style={{ borderColor: backgroundColor }}
             size="small"
@@ -47,6 +52,10 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { vera
               },
             ]}
           />
+        ) : (
+          <div style={{ backgroundColor: backgroundColor }}>
+            <TeamBlockHeader veranstaltung={veranstaltung} />
+          </div>
         )}
       </Col>
     </ConfigProvider>

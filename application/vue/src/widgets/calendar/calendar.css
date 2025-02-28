@@ -1,5 +1,5 @@
 :root {
-  --fc-small-font-size: .85em;
+  --fc-small-font-size: 0.85em;
   --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
   --fc-neutral-text-color: #808080;
   --fc-border-color: #ddd;
@@ -28,15 +28,15 @@
 }
 
 .dark-calendar {
-  --fc-page-bg-color: #101010;
+  --fc-page-bg-color: rgb(61, 61, 61);
 
   --fc-button-text-color: #dcdcdc;
-  --fc-button-bg-color: #1a252f;
-  --fc-button-border-color: #30425a;
-  --fc-button-hover-bg-color: #2C3E50;
-  --fc-button-hover-border-color: #2C3E50;
-  --fc-button-active-bg-color: #2C3E50;
-  --fc-button-active-border-color: #2C3E50;
+  --fc-button-bg-color: rgb(36, 36, 36);
+  --fc-button-border-color: rgb(82, 82, 82);
+  --fc-button-hover-bg-color: rgb(82, 82, 82);
+  --fc-button-hover-border-color: rgb(82, 82, 82);
+  --fc-button-active-bg-color: rgb(82, 82, 82);
+  --fc-button-active-border-color: rgb(82, 82, 82);
 
   --fc-event-text-color: #dcdcdc;
 

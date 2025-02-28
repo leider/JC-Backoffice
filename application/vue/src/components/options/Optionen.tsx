@@ -15,6 +15,7 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 function TabOptionen({ optionen }: { optionen: OptionValues }) {
   const { lg } = useBreakpoint();
@@ -115,10 +116,14 @@ export default function Optionen() {
     const { color } = colorsAndIconsForSections;
     const { brightText } = useJazzContext();
     const active = activePage === type;
+
     const farbe = color("allgemeines");
 
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+        <IconForSmallBlock style={{ marginBottom: -3 }} iconName="CheckSquare" />
+        &nbsp; {title}
+      </b>
     );
   }
 

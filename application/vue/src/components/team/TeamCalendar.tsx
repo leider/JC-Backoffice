@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Drawer, theme } from "antd";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import ButtonIcal from "@/components/team/ButtonIcal.tsx";
@@ -13,6 +13,8 @@ import multiMonthPlugin from "@fullcalendar/multimonth";
 import deLocale from "@fullcalendar/core/locales/de";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 export default function TeamCalendar() {
   const { currentUser } = useJazzContext();
@@ -45,6 +47,7 @@ export default function TeamCalendar() {
   );
 
   const { lg } = useBreakpoint();
+  const initiaDate = useMemo(() => new DatumUhrzeit().minus({ wochen: 2 }).toJSDate, []);
   return (
     <>
       <ButtonWithIcon
@@ -74,7 +77,11 @@ export default function TeamCalendar() {
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         size="large"
-        closeIcon="Schließen"
+        closeIcon={
+          <div>
+            <IconForSmallBlock iconName="ChevronRight" />
+          </div>
+        }
       >
         <WrapFullCalendar>
           <FullCalendar
@@ -113,6 +120,7 @@ export default function TeamCalendar() {
               },
             }}
             height="auto"
+            initialDate={initiaDate}
             events={getEvents}
             eventContent={renderEventContent}
             eventDisplay="block"

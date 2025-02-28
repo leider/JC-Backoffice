@@ -24,5 +24,5 @@ export default function ProtectedComponent({
     () => (currentUser.accessrights.isOrgaTeam ? "/veranstaltungen" : "/team"),
     [currentUser.accessrights.isOrgaTeam],
   );
-  return showComp ? component : <Navigate to={{ pathname: forwardTo }} />;
+  return showComp ? component : <Navigate to={{ pathname: forwardTo }} replace />;
 }

@@ -11,6 +11,7 @@ import sortBy from "lodash/sortBy";
 import map from "lodash/map";
 import keys from "lodash/keys";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import tinycolor from "tinycolor2";
 
 interface MonatGroupProps {
   monat: string;
@@ -22,6 +23,19 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
   const { isDarkMode, brightText } = useJazzContext();
   const veranstaltungen = veranstaltungenNachMonat[monat];
   const { token } = theme.useToken();
+
+  const datumTextStyle = useMemo(() => {
+    return {
+      display: "block",
+      marginTop: 0,
+      marginBottom: 0,
+      backgroundColor: isDarkMode
+        ? tinycolor(token.colorPrimary).desaturate().darken().toHexString()
+        : tinycolor(token.colorPrimary).desaturate(20).brighten(20).toHexString(),
+      color: brightText,
+      paddingLeft: 16,
+    };
+  }, [brightText, isDarkMode, token.colorPrimary]);
 
   const byDay = useMemo(() => groupBy(veranstaltungen, "startDatumUhrzeit.tagMonatJahrKompakt"), [veranstaltungen]);
 
@@ -97,6 +111,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
       >
         {map(keys(byDay), (day, idx) => (
           <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
+            <Typography.Text style={datumTextStyle}>{DatumUhrzeit.forGermanString(day)?.format("dd, DD. MMMM")}</Typography.Text>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
               return renderTeam ? (
                 <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>

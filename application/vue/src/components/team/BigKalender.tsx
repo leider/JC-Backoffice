@@ -1,4 +1,4 @@
-import React, { createRef, useCallback } from "react";
+import React, { createRef, useCallback, useMemo } from "react";
 import { Checkbox, Col, Form, Row } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
@@ -11,6 +11,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
@@ -57,6 +58,7 @@ export default function BigKalender() {
 
   const calRef = createRef<FullCalendar>();
   const { lg } = useBreakpoint();
+  const initiaDate = useMemo(() => new DatumUhrzeit().minus({ wochen: 2 }).toJSDate, []);
   return (
     <WrapFullCalendar>
       <Form
@@ -104,6 +106,7 @@ export default function BigKalender() {
             height="auto"
             multiMonthMaxColumns={4}
             multiMonthMinWidth={500}
+            initialDate={initiaDate}
             eventSources={[getEvents]}
             eventContent={renderEventContent}
             eventDisplay="block"

@@ -9,45 +9,35 @@ interface HeaderProps {
   expanded?: boolean;
 }
 
+function UhrzeitOrt({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+  return (
+    <small>
+      <small style={{ fontWeight: 400 }}>
+        {veranstaltung.startDatumUhrzeit.uhrzeitKompakt +
+          " Uhr" +
+          (veranstaltung.kopf.ort === "Jazzclub" ? "" : `, ${veranstaltung.kopf.ort}`)}
+      </small>
+    </small>
+  );
+}
+
 export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps) {
   const { isDarkMode } = useJazzContext();
-  const isVermietung = useMemo(() => {
-    return veranstaltung.isVermietung;
-  }, [veranstaltung]);
 
   const color = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
 
-  const titleStyle = { margin: 0, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" };
-
-  function T({ l, t }: { l: 1 | 2 | 4 | 3 | 5 | undefined; t: string }) {
-    return (
-      <Title level={l} style={titleStyle}>
-        {t}
-      </Title>
-    );
-  }
+  const titleStyle = useMemo(
+    () => ({ margin: 0, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" }),
+    [veranstaltung.kopf.abgesagt],
+  );
 
   return (
     <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10, colorText: color } }}>
-      {expanded ? (
-        <>
-          <T l={5} t={veranstaltung.datumForDisplayShort} />
-          {!isVermietung && <T l={5} t={veranstaltung.kopf.presseIn} />}
-          <T l={3} t={veranstaltung.kopf.titel} />
-        </>
-      ) : (
-        <>
-          <Title level={4} style={titleStyle}>
-            {isVermietung ? `${veranstaltung.kopf.titel} (Vermietung)` : veranstaltung.kopf.titel}
-            <br />
-            <small>
-              <small style={{ fontWeight: 400 }}>
-                {veranstaltung.startDatumUhrzeit.wochentagTagMonatShort + (isVermietung ? "" : `, ${veranstaltung.kopf.ort}`)}
-              </small>
-            </small>
-          </Title>
-        </>
-      )}
+      <Title level={expanded ? 3 : 4} style={titleStyle}>
+        {veranstaltung.kopf.titel}
+        <br />
+        <UhrzeitOrt veranstaltung={veranstaltung} />
+      </Title>
     </ConfigProvider>
   );
 }

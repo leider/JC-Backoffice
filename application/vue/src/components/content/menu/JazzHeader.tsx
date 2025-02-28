@@ -32,7 +32,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
   const submenus = useMenuNodes(accessrights, subdirs);
 
   const items = useMemo(() => {
-    const { mailMenu, optionenMenu, programmheftMenu, teamMenu, veranstaltungMenu, wikiMenu } = submenus;
+    const { mailMenu, optionenMenu, teamMenu, veranstaltungMenu, wikiMenu } = submenus;
     const { isOrgaTeam, isSuperuser } = accessrights;
     const localItems: ItemType[] = [];
     if (isOrgaTeam) {
@@ -44,7 +44,6 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         localItems.push(mailMenu);
       }
       localItems.push(optionenMenu);
-      localItems.push(programmheftMenu);
     }
     if (subdirs.length > 0) {
       localItems.push(wikiMenu);
@@ -80,15 +79,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
         {
           key: "logout",
           icon: <MenuIcon name="PersonFillX" />,
-          label: (
-            <a
-              onClick={() => {
-                logout();
-              }}
-            >
-              Abmelden
-            </a>
-          ),
+          label: <a onClick={logout}>Abmelden</a>,
         },
       ],
       label: "Users",
@@ -134,6 +125,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
             items={currentUser.id ? items : []}
             selectedKeys={[activeElement]}
             style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
+            overflowedIndicator="Mehr..."
           />
           <div style={{ width: 40 }}></div>
           <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />

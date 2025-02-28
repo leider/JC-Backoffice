@@ -44,6 +44,8 @@ export default function JazzFormAndHeaderExtended<T>({
   breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   document.title = `JC-${title}`;
+  window.scroll({ top: 0 });
+
   const { isDirty, setIsDirty } = useJazzContext();
   const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
   const [loaded, setLoaded] = useState(false);

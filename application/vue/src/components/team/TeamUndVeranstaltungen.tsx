@@ -22,12 +22,15 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
           block: "center",
         });
       }
-    }, 200);
+    }, 1000);
   }, [memoizedId]);
 
   const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, filterTags, usersAsOptions } =
     useTeamVeranstaltungenCommons(periodsToShow);
+
+  const subState = useMemo(() => ({ veranstaltungenNachMonat, usersAsOptions }), [usersAsOptions, veranstaltungenNachMonat]);
+
   return (
     <Row gutter={8}>
       <Col span={24}>
@@ -53,7 +56,7 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
             <TeamCalendar key="cal" />,
           ]}
         />
-        <TeamContext.Provider value={{ veranstaltungenNachMonat, usersAsOptions }}>
+        <TeamContext.Provider value={subState}>
           {map(monate, (monat) => (
             <TeamMonatGroup key={monat} monat={monat} renderTeam={!forVeranstaltungen} />
           ))}

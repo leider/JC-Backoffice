@@ -48,8 +48,17 @@ export default function (app: express.Express, forDev?: boolean): void {
     app.use("/vue", history());
     app.use("/rider", history());
   }
-  app.use(express.static(path.join(__dirname, "static"), { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
-  app.use(express.static(conf.additionalstatic, { maxAge: 10 * 60 * 60 * 1000 })); // ten hours
+  app.use(
+    express.static(path.join(__dirname, "static"), {
+      maxAge: "10h",
+      setHeaders: (res, file) => {
+        if (file.includes("sw.js")) {
+          res.setHeader("Cache-Control", "public, max-age=0");
+        }
+      },
+    }),
+  );
+  app.use(express.static(conf.additionalstatic, { maxAge: "10h" }));
 
   app.use(passportInitializer);
   app.use(passportApiKeyInitializer);

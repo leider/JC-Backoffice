@@ -86,7 +86,7 @@ function InnerSelect({
       style={{ width: "100%" }}
       showSearch
       filterOption={filterOption}
-      placeholder="Tippen zum Suchen nach irgendwas"
+      placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}
       onChange={(val) => {
         onChange?.(val);
         save?.(true);

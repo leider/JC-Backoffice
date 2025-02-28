@@ -27,13 +27,17 @@ import SendMail from "@/components/mails/SendMail.tsx";
 import WikiPage from "@/components/wiki/WikiPage.tsx";
 import WikiSearchresults from "@/components/wiki/WikiSearchresults.tsx";
 import { History } from "@/components/history/History.tsx";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+
+const naechsterUngeraderMonat = new DatumUhrzeit().naechsterUngeraderMonat;
+const programmheftJahrMonat = naechsterUngeraderMonat.format("YYYY/MM");
 
 const routes = [
   {
     element: <JazzclubApp />,
     errorElement: <ErrorBoundary />,
     children: [
-      { path: "/", element: <Navigate to={{ pathname: "/veranstaltungen" }} /> },
+      { path: "/", element: <Navigate to={{ pathname: "/veranstaltungen" }} replace /> },
       { path: "/login", element: <Login /> },
       { path: "/team", element: <Team /> },
       { path: "/veranstaltungen", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<Veranstaltungen />} /> },
@@ -50,6 +54,7 @@ const routes = [
       { path: "/optionen", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<Optionen />} /> },
       { path: "/orte", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<OrtePage />} /> },
       { path: "/programmheft/:year/:month", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<Programmheft />} /> },
+      { path: "/programmheft/*", element: <Navigate to={{ pathname: `/programmheft/${programmheftJahrMonat}` }} replace /> },
       { path: "/kalender", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<KalenderPage />} /> },
       { path: "/termine", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<TerminePage />} /> },
       { path: "/kassenbericht", element: <ProtectedComponent allowed={["isOrgaTeam"]} component={<Kassenbericht />} /> },

@@ -58,7 +58,10 @@ export default function Info() {
     const active = activePage === type;
     const { brightText } = useJazzContext();
     return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>{title}</b>
+      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+        <IconForSmallBlock style={{ marginBottom: -3 }} iconName="CheckSquare" />
+        &nbsp; {title}
+      </b>
     );
   }
 

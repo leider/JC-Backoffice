@@ -38,11 +38,14 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
     return userWithKann.kann.includes("Ersthelfer");
   }
 
+  const textColorTheme = useMemo(() => ({ components: { Tag: { colorText: textColor } } }), [textColor]);
+  const textColorStyle = useMemo(() => ({ color: textColor }), [textColor]);
+
   return usersWithKann.length ? (
     map(usersWithKann, (user) => {
       const isCurrentUser = user.label === currentUser.name;
       return (
-        <ConfigProvider key={user.value} theme={{ components: { Tag: { colorText: textColor } } }}>
+        <ConfigProvider key={user.value} theme={textColorTheme}>
           <Tag color={isCurrentUser ? token.colorSuccess : undefined}>
             <span>
               {user.label}
@@ -53,7 +56,7 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
       );
     })
   ) : (
-    <span style={{ color: textColor }}>
+    <span style={textColorStyle}>
       {sectionName === "ersthelfer" ? "Du kannst als Ersthelfer beitragen?" : "Hier könnten wir Dich brauchen..."}
     </span>
   );

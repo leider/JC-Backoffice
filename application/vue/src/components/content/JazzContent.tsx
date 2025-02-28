@@ -19,7 +19,7 @@ const { Content } = Layout;
 
 function TodaysConcert() {
   const { todayKonzerte, isDarkMode } = useJazzContext();
-  const bestaetigte = useMemo(() => filter(todayKonzerte, "kopf.confirmed"), [todayKonzerte]);
+  const bestaetigte = useMemo(() => filter(todayKonzerte, { kopf: { confirmed: true, abgesagt: false } }), [todayKonzerte]);
 
   if (bestaetigte?.length)
     return (

@@ -77,9 +77,23 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
     });
   }
 
-  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const labelColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
-
+  const staffRowsTheme = useMemo(
+    () => ({
+      token: { colorBgBase: backgroundColor },
+      components: {
+        Collapse: {
+          contentBg: backgroundColor,
+          headerBg: backgroundColor,
+        },
+        Form: { labelColor },
+        Select: { colorIcon: labelColor, colorText: labelColor, colorTextPlaceholder: labelColor, selectorBg: backgroundColor },
+        Tag: { defaultColor: labelColor },
+      },
+    }),
+    [backgroundColor, labelColor],
+  );
   const { inView, ref } = useInView({ triggerOnce: true });
 
   return (
@@ -93,8 +107,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
               setShowMitarbeiter(!showMitarbeiter);
             }}
           >
-            <span style={{ color: textColor }}>
-              <IconForSmallBlock iconName="UniversalAccess" color={textColor} />
+            <span style={{ color: labelColor }}>
+              <IconForSmallBlock iconName="UniversalAccess" color={labelColor} />
               &nbsp;...
             </span>
           </Typography.Title>
@@ -105,8 +119,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
               {showMitarbeiter && dirty ? (
                 <>
                   <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
-                    <ResetButton disabled={!dirty} resetChanges={setFormValue} />
-                    <SaveButton disabled={!dirty} callback={() => form.submit()} />
+                    <ResetButton size="small" disabled={!dirty} resetChanges={setFormValue} />
+                    <SaveButton size="small" disabled={!dirty} callback={() => form.submit()} />
                   </ConfigProvider>
                 </>
               ) : (
@@ -128,12 +142,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
         </Col>
       </Row>
       {inView && (
-        <ConfigProvider
-          theme={{
-            token: { colorBgBase: backgroundColor },
-            components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
-          }}
-        >
+        <ConfigProvider theme={staffRowsTheme}>
           <Collapse
             ghost
             activeKey={showMitarbeiter ? "mitarbeiter" : ""}
@@ -152,12 +161,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
                     size="small"
                   >
                     <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
-                      <EditableStaffRows
-                        forVermietung={forVermietung}
-                        usersAsOptions={usersAsOptions}
-                        brauchtTechnik={brauchtTechnik}
-                        labelColor={textColor}
-                      />
+                      <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
                     </div>
                   </Form>
                 ),

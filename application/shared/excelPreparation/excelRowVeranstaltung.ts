@@ -53,6 +53,7 @@ export type VeranstaltungExcelRow = {
   anzahlReservix?: number;
   anzahlAbendkasse?: number;
   anzahlBesucherAK?: number;
+  anzahlBesucherErwartet?: number;
   anzahlSpende?: number;
   eintrittspreisSchnitt?: number;
   kasseFreigegeben?: boolean;
@@ -60,6 +61,10 @@ export type VeranstaltungExcelRow = {
 
 function einnahme(betrag?: number) {
   return betrag ?? 0;
+}
+
+function einnahmeGanzzahl(betrag?: number) {
+  return Math.round(betrag ?? 0);
 }
 
 function ausgabe(betrag?: number) {
@@ -130,7 +135,8 @@ function excelRowVeranstaltung({
     const kosten = konzert.kosten;
     const staff = konzert.staff;
     const klavierStimmerStandard = konzert.technik.fluegel ? klavierStimmerDefault : 0;
-    const eintrittspreisSchnitt = konzert.eintrittspreise.eintrittspreisSchnitt;
+    const eintrittspreise = konzert.eintrittspreise;
+    const eintrittspreisSchnitt = eintrittspreise.eintrittspreisSchnitt;
     const result: VeranstaltungExcelRow = {
       rowNo: index + 2,
       datum: konzert.startDatumUhrzeit.toJSDate,
@@ -158,9 +164,10 @@ function excelRowVeranstaltung({
       ksk: ausgabe(kosten.ksk),
       gema: ausgabe(kalk.gema),
       eintrittspreisSchnitt: einnahme(eintrittspreisSchnitt),
-      anzahlReservix: einnahme(kasse.anzahlReservix || kasse.einnahmenReservix / (eintrittspreisSchnitt || 1)),
-      anzahlBesucherAK: einnahme(kasse.anzahlBesucherAK),
-      anzahlAbendkasse: einnahme(kasse.einnahmeTicketsEUR / (eintrittspreisSchnitt || 1)),
+      anzahlReservix: einnahmeGanzzahl(kasse.anzahlReservix || kasse.einnahmenReservix / (eintrittspreisSchnitt || 1)),
+      anzahlBesucherAK: einnahmeGanzzahl(kasse.anzahlBesucherAK),
+      anzahlBesucherErwartet: einnahmeGanzzahl(eintrittspreise.erwarteteBesucher),
+      anzahlAbendkasse: einnahmeGanzzahl(kasse.einnahmeTicketsEUR / (eintrittspreisSchnitt || 1)),
       kasseFreigegeben: kasse.istFreigegeben,
     };
     if (kasse.einnahmeSonstiges1EUR && kasse.einnahmeSonstiges1EUR !== 0) {
@@ -179,7 +186,7 @@ function excelRowVeranstaltung({
         result.einnahme2Text = kasse.einnahmeSonstiges2Text;
       }
     }
-    result.anzahlSpende = einnahme((result.spende ?? 0) / 10);
+    result.anzahlSpende = einnahmeGanzzahl((result.spende ?? 0) / 10);
 
     return fillWerbung(result, kosten);
   }
