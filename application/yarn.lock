@@ -9434,7 +9434,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"jc-backend@workspace:^, jc-backend@workspace:backend":
+"jc-backend@workspace:backend":
   version: 0.0.0-use.local
   resolution: "jc-backend@workspace:backend"
   dependencies:
@@ -9473,15 +9473,6 @@ __metadata:
     sharp: "npm:0.33.5"
     superagent: "npm:10.1.1"
     winston: "npm:3.17.0"
-  languageName: unknown
-  linkType: soft
-
-"jc-batch@workspace:batchjobs":
-  version: 0.0.0-use.local
-  resolution: "jc-batch@workspace:batchjobs"
-  dependencies:
-    jc-backend: "workspace:^"
-    jc-shared: "workspace:^"
   languageName: unknown
   linkType: soft
 
