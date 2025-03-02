@@ -459,14 +459,22 @@ export async function deleteWikiPage(subdir: string, page: string) {
 }
 
 // Calendar
-export async function calendarEventSources(start: Date, end: Date, options?: TerminFilterOptions) {
+export async function calendarEventSources({
+  start,
+  end,
+  options,
+  isDarkMode,
+}: {
+  start: Date;
+  end: Date;
+  options?: TerminFilterOptions;
+  isDarkMode: boolean;
+}) {
+  const segments = [`/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
   if (options) {
-    return getForType(
-      "json",
-      `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&options=${JSON.stringify(options)}`,
-    );
+    segments.push(`&options=${JSON.stringify(options)}`);
   }
-  return getForType("json", `/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`);
+  return getForType("json", segments.join());
 }
 
 // History

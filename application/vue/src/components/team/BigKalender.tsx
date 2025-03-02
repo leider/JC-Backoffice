@@ -12,10 +12,12 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 export default function BigKalender() {
   document.title = "Übersichtskalender";
   const [form] = Form.useForm<TerminFilterOptions>();
+  const { isDarkMode } = useJazzContext();
 
   const getEvents = useCallback(
     (
@@ -29,7 +31,7 @@ export default function BigKalender() {
       async function doit() {
         try {
           const options = form.getFieldsValue(true);
-          const res = await calendarEventSources(info.start, info.end, options);
+          const res = await calendarEventSources({ start: info.start, end: info.end, options, isDarkMode });
           successCallback(res);
         } catch (e) {
           return failureCallback(e as Error);
@@ -37,7 +39,7 @@ export default function BigKalender() {
       }
       doit();
     },
-    [form],
+    [form, isDarkMode],
   );
 
   function IcalCheck() {

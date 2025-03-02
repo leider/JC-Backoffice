@@ -1,4 +1,5 @@
 import { IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { colorVermietung } from "jc-shared/optionen/optionValues.ts";
 
 export type buttonType = "allgemeines" | "gaeste" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 
@@ -13,7 +14,7 @@ const jazzColors = {
   presse: "#95c22e",
   staff: "#dea71f",
   technik: "#009285",
-  vermietung: "#f6eee1",
+  vermietung: colorVermietung,
 };
 
 const icons: { [index: string]: IconProps["iconName"] } = {

@@ -3,7 +3,7 @@ import Vermietung from "../vermietung/vermietung.js";
 import KonzertKalkulation from "../konzert/konzertKalkulation.js";
 import Veranstaltung from "../veranstaltung/veranstaltung.js";
 import Kosten from "../veranstaltung/kosten.js";
-import OptionValues from "../optionen/optionValues.js";
+import OptionValues, { colorVermietung } from "../optionen/optionValues.js";
 import map from "lodash/map.js";
 import tinycolor from "tinycolor2";
 
@@ -200,7 +200,7 @@ function excelRowVeranstaltung({
       datum: vermietung.startDatumUhrzeit.toJSDate,
       titel: vermietung.kopf.titel,
       url: `${urlRoot}${vermietung.fullyQualifiedUrl}`,
-      color: "#f6eee1",
+      color: colorVermietung,
       typ: "Vermietung",
       gage: ausgabe(kosten.gagenTotalEUR),
       technik: ausgabe(kosten.technikAngebot1EUR),

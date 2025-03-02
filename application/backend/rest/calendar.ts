@@ -1,5 +1,4 @@
 import express from "express";
-import groupBy from "lodash/groupBy.js";
 import flatMap from "lodash/flatMap.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
@@ -17,29 +16,24 @@ import { filterUnbestaetigteFuerJedermann } from "../lib/vermietungen/vermietung
 import { icalToTerminEvents, parseIcal } from "jc-shared/commons/iCalendarUtils.js";
 import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
-import { colorDefault, colorVermietung, TypMitMehr } from "jc-shared/optionen/optionValues.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
 
 const app = express();
 
-function asCalendarEvent(veranstaltung: Veranstaltung, user: User, typByName: { [key: string]: TypMitMehr[] }) {
-  const color = veranstaltung.isVermietung ? colorVermietung : (typByName[veranstaltung.kopf.eventTyp]?.[0].color ?? colorDefault);
-  return veranstaltung.asCalendarEvent(user.accessrights.isOrgaTeam, color);
+function asCalendarEvent(veranstaltung: Veranstaltung, user: User, darkMode: boolean) {
+  return veranstaltung.asCalendarEvent(user.accessrights.isOrgaTeam, darkMode);
 }
 
-function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
-  const optionen = optionenstore.get();
-  const typByName = groupBy(optionen?.typenPlus || [], "name");
-
+function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User, darkMode: boolean) {
   const konzerte = store.byDateRangeInAscendingOrder(start, end);
   const unbest = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
-  return map(unbest, (ver) => asCalendarEvent(ver, user, typByName));
+  return map(unbest, (ver) => asCalendarEvent(ver, user, darkMode));
 }
 
-function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
+function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User, darkMode: boolean) {
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(start, end);
-  return map(filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, {}));
+  return map(filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, darkMode));
 }
 
 async function termineForIcal(ical: Ical) {
@@ -62,11 +56,12 @@ app.get("/fullcalendarevents.json", async (req, res) => {
   const options: TerminFilterOptions | undefined = req.query.options
     ? (JSON.parse(req.query.options as string) as unknown as TerminFilterOptions)
     : undefined;
+  const darkMode: boolean = req.query.isDarkMode === "true";
 
   const cals = optionenstore.icals();
   const termine = termineAsEventsBetween(start, end, options);
-  const konzerte = eventsBetween(start, end, req.user as User);
-  const vermietungen = vermietungenBetween(start, end, req.user as User);
+  const konzerte = eventsBetween(start, end, req.user as User, darkMode);
+  const vermietungen = vermietungenBetween(start, end, req.user as User, darkMode);
 
   const icals = filter(cals?.icals, (ical) => (options ? options.icals?.includes(ical.typ) : true));
 
