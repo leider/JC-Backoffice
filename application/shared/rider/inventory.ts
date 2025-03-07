@@ -12,6 +12,35 @@ export interface InventoryElement {
   category: Category;
 }
 
+export const extraEckig: InventoryElement = {
+  category: "Extra",
+  id: "Extra Eckig 1",
+  title: "Eigener Inhalt",
+  width: 50,
+  height: 50,
+  level: 1,
+};
+
+export const extraRund: InventoryElement = {
+  category: "Extra",
+  id: "Extra Rund 2",
+  title: "Runder Inhalt",
+  width: 50,
+  height: 50,
+  level: 1,
+  isCircle: true,
+};
+
+const drums: InventoryElement = {
+  category: "Drums",
+  id: "DrumsYamaha",
+  title: "Drums (Yamaha)",
+  width: 200,
+  height: 200,
+  level: 0,
+  img: { src: "Drums.png", width: 200, height: 200 },
+};
+
 export const Inventory: InventoryElement[] = [
   {
     category: "Keys",
@@ -44,24 +73,9 @@ export const Inventory: InventoryElement[] = [
     img: { src: "Nord.png" },
     photo: { src: "NordStage.png" },
   },
-  {
-    category: "Drums",
-    id: "DrumsYamaha",
-    title: "Drums (Yamaha)",
-    width: 200,
-    height: 200,
-    level: 0,
-    img: { src: "Drums.png", width: 200, height: 200 },
-  },
-  {
-    category: "Drums",
-    id: "DrumsGretsch",
-    title: "Drums (Gretsch)",
-    width: 200,
-    height: 200,
-    level: 0,
-    img: { src: "Drums.png", width: 200, height: 200 },
-  },
+  { ...drums, id: "DrumsYamaha", title: "Drums (Yamaha)" },
+  { ...drums, id: "DrumsGretsch", title: "Drums (Gretsch)" },
+  { ...drums, id: "DrumsCustom", title: "Drums (Eigenes Set)" },
   {
     category: "Drums",
     id: "PercussionSet",
@@ -92,6 +106,6 @@ export const Inventory: InventoryElement[] = [
   },
   { category: "Guitar", id: "Jazzchorus", title: "Roland Jazzchorus", width: 55, height: 24, level: 0, photo: { src: "Roland.png" } },
   { category: "Guitar", id: "Polytone 12", title: 'Polytone Amp 12"', width: 40, height: 35, level: 0, photo: { src: "Polytone.png" } },
-  { category: "Extra", id: "Extra", title: "Eigener Inhalt", width: 50, height: 50, level: 1 },
-  { category: "Extra", id: "Extra", title: "Runder Inhalt", width: 50, height: 50, level: 1, isCircle: true },
+  extraEckig,
+  extraRund,
 ];

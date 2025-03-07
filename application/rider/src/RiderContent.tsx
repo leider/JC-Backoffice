@@ -4,7 +4,7 @@ import { RiderStandalone } from "@/RiderStandalone.tsx";
 
 const { Header, Content } = Layout;
 
-const JazzContent: React.FC = () => {
+const RiderContent: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -25,4 +25,4 @@ const JazzContent: React.FC = () => {
   );
 };
 
-export default JazzContent;
+export default RiderContent;

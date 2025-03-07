@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { TargetContainer } from "./TargetContainer.tsx";
-import { Col, ConfigProvider, Row, Typography } from "antd";
+import { Col, ConfigProvider, List, Row, Typography } from "antd";
 import { SourceContainerAll } from "./SourceContainer.tsx";
-import { Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
+import { extraEckig, extraRund, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
@@ -12,13 +12,21 @@ import noop from "lodash/noop";
 import { ItemTypes } from "./types.ts";
 import find from "lodash/find";
 import { Box } from "./Box.tsx";
+import { v4 as uuidv4 } from "uuid";
 
 export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }) {
   const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
 
   useEffect(() => {
     const boxIds = map(targetBoxes, "id");
-    setSourceBoxes(filter(Inventory, (inv) => !boxIds.includes(inv.id))); // remove added box from predefined sources
+    const sources = filter(Inventory, (inv) => !boxIds.includes(inv.id));
+    if (!find(sources, (elem) => elem.id.startsWith("Extra Eckig"))) {
+      sources.push({ ...extraEckig, id: "Extra Eckig" + uuidv4() });
+    }
+    if (!find(sources, (elem) => elem.id.startsWith("Extra Rund"))) {
+      sources.push({ ...extraRund, id: "Extra Rund" + uuidv4() });
+    }
+    setSourceBoxes(sources); // remove added box from predefined sources
   }, [targetBoxes]);
 
   const [dragging, setDragging] = useState<BoxParams | null>(null);
@@ -73,6 +81,8 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
     [setTargetBoxes, targetBoxes],
   );
 
+  const itemsWithComment = useMemo(() => filter(targetBoxes, (box) => !!box.comment), [targetBoxes]);
+
   return (
     <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <DragOverlay>{dragging ? <Box item={dragging} callback={noop} /> : null}</DragOverlay>
@@ -95,7 +105,7 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={24}>
+        <Col span={8}>
           <Typography.Title level={5}>Hilfe</Typography.Title>
           <ul>
             <li>Ziehe Elemente von links nach rechts</li>
@@ -103,6 +113,19 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
             <li>Rechts kannst Du mit Rechtsklick bearbeiten</li>
             <li>Speichern nicht vergessen!</li>
           </ul>
+        </Col>
+        <Col span={16}>
+          <Typography.Title level={5}>Infos</Typography.Title>
+          <List
+            itemLayout="horizontal"
+            dataSource={itemsWithComment}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta title={item.title} />
+                {item.comment}
+              </List.Item>
+            )}
+          />
         </Col>
       </Row>
     </DndContext>

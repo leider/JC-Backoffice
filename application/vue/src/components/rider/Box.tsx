@@ -10,14 +10,6 @@ const styleInner: CSSProperties = {
   backgroundColor: "white",
 };
 
-const styleText: CSSProperties = {
-  textAlign: "center",
-  fontSize: "10px",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-};
-
 export function Box({ item, callback }: { item: BoxParams; callback: (open: boolean) => void }) {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
@@ -26,6 +18,15 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
   const [title, setTitle] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const isExtra = useMemo(() => item.category === "Extra", [item]);
+
+  const styleText: CSSProperties = useMemo(
+    () => ({
+      textAlign: "center",
+      fontSize: "10px",
+      lineHeight: `${height}px`,
+    }),
+    [height],
+  );
 
   useEffect(() => {
     setDegree(item.degree);
@@ -159,7 +160,9 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
         {item.img ? (
           <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
         ) : (
-          <div style={styleText}>{title}</div>
+          <div style={styleText}>
+            <span style={{ display: "inline-block", verticalAlign: "middle", lineHeight: "normal" }}>{title}</span>
+          </div>
         )}
       </div>
     </Popover>

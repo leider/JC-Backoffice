@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import JazzContent from "@/JazzContent.tsx";
+import RiderContent from "@/RiderContent.tsx";
 import { App, ConfigProvider, theme } from "antd";
 import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
@@ -16,7 +16,7 @@ const queryClient = new QueryClient({
   },
 });
 
-function JazzclubApp() {
+function RiderApp() {
   const [darkMode, setDarkMode] = useState(darkModePreference.matches);
   darkModePreference.addEventListener("change", (e) => setDarkMode(e.matches));
   const success = "#28a745";
@@ -47,7 +47,7 @@ function JazzclubApp() {
       >
         <App>
           <GlobalContext.Provider value={{ isDarkMode: false, isCompactMode: false }}>
-            <JazzContent />
+            <RiderContent />
           </GlobalContext.Provider>
         </App>
       </ConfigProvider>
@@ -55,4 +55,4 @@ function JazzclubApp() {
   );
 }
 
-export default JazzclubApp;
+export default RiderApp;

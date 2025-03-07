@@ -18,10 +18,9 @@ html(style="-webkit-print-color-adjust: exact;")
             if box.img
               div(id=box.id, style=box.divStyleForImg): img(src=`${publicUrlPrefix}/riderimg/${box.img.src}`, style=box.imgStyle)
             else
-              div(id=box.id, style=box.divStyleForBox)
-                b(style="background-color: lightsalmon; color: white;") &uarr; Front &uarr;
-                br
-                b #{box.title}
+              div(id=box.id, style=box.divStyleForText)
+                span(style="display: inline-block; vertical-align: middle; line-height: normal;")
+                 b #{box.title}
     .row.mt-5
       .col-12
         h3 Infos

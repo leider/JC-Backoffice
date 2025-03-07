@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import JazzclubApp from "@/JazzclubApp.tsx";
+import RiderApp from "@/RiderApp.tsx";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<JazzclubApp />);
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<RiderApp />);

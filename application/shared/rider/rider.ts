@@ -36,6 +36,7 @@ export class PrintableBox implements BoxParams {
   top: number = 0;
   width: number = 0;
   img: { src: string; width?: number; height?: number } | undefined = undefined;
+  isCircle = false;
 
   constructor(params: BoxParams) {
     Object.assign(this, params);
@@ -48,8 +49,12 @@ export class PrintableBox implements BoxParams {
   get imgStyle() {
     return `width: ${this.img?.width}px; height: ${this.img?.height}px;`;
   }
-
-  get divStyleForBox() {
-    return this.divStyleForImg + "text-align: center; font-size: 10px; border: 0.2px solid gray;";
+  get divStyleForText() {
+    return (
+      this.divStyleForImg +
+      `line-height: ${this.height}px;` +
+      "text-align: center; font-size: 10px; border: 0.2px solid gray;" +
+      `border-radius: ${this.isCircle ? "50%" : 0};`
+    );
   }
 }

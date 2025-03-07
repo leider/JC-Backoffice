@@ -12,7 +12,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 const titel = "Jazzclub Konzert";
 export const RiderStandalone: FC = () => {
   const url = window.location.pathname.replace("/rider/", "");
-
+  document.title = titel;
   const queryClient = useQueryClient();
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
 

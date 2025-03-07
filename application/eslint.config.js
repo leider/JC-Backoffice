@@ -54,7 +54,18 @@ export default tseslint.config(
       "react/no-unescaped-entities": 0,
       "react/prop-types": 0,
       "react/display-name": 0,
+      "react/jsx-max-depth": 0,
+      "react/forbid-component-props": 0,
       "no-sync": "off",
+      "react/jsx-no-bind": "off",
+      "react/jsx-filename-extension": "off",
+      "react/jsx-no-literals": "off",
+      "react/require-default-props": "off",
+      "react/no-multi-comp": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/destructuring-assignment": "off",
+      "react/jsx-handler-names": "off",
+      "react/no-unstable-nested-components": "off",
       "lodash/prefer-lodash-method": [
         "error",
         {
