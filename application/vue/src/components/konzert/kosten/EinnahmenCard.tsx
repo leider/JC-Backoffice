@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Flex, Typography } from "antd";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
@@ -12,29 +10,14 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
+import useEinnahmen from "@/components/konzert/kosten/useEinnahmen.ts";
 
-interface EinnahmenCardParams {
-  readonly onChange: (sum: number) => void;
-}
-export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
+const preisprofilName = ["eintrittspreise", "preisprofil"];
+
+export default function EinnahmenCard() {
   const { optionen } = useJazzContext();
   const form = useFormInstance();
-
-  const [summe, setSumme] = useState<number>(0);
-  useEffect(
-    () => {
-      updateSumme();
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form],
-  );
-
-  function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    const kalk = new KonzertKalkulation(konzert);
-    const sum = konzert.eintrittspreise.zuschuss + kalk.erwarteterOderEchterEintritt;
-    setSumme(sum);
-    onChange(sum);
-  }
+  const summe = useEinnahmen();
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
@@ -42,14 +25,14 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
     <Collapsible amount={summe} label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder suffix="ausgaben">
       <JazzRow>
         <Col span={12}>
-          <PreisprofilSelect onChange={updateSumme} optionen={optionen} />
+          <PreisprofilSelect optionen={optionen} />
         </Col>
         <Col span={4}>
           <NumberInput decimals={2} disabled label="Reg" name={["eintrittspreise", "preisprofil", "regulaer"]} suffix="€" />
         </Col>
         <Col span={4}>
           <DynamicItem
-            nameOfDepending={["eintrittspreise", "preisprofil"]}
+            nameOfDepending={preisprofilName}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
               return <NumberInputWithDirectValue decimals={2} label="Erm" suffix="€" value={eintritt.ermaessigt} />;
@@ -58,7 +41,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
         </Col>
         <Col span={4}>
           <DynamicItem
-            nameOfDepending={["eintrittspreise", "preisprofil"]}
+            nameOfDepending={preisprofilName}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
               return <NumberInputWithDirectValue decimals={2} label="Mitgl" suffix="€" value={eintritt.mitglied} />;
@@ -68,7 +51,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <NumberInput decimals={2} label="Reservix" name={["kasse", "einnahmenReservix"]} onChange={updateSumme} suffix="€" />
+          <NumberInput decimals={2} label="Reservix" name={["kasse", "einnahmenReservix"]} suffix="€" />
         </Col>
         <Col span={12}>
           <NumberInput
@@ -91,14 +74,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
       </Flex>
       <JazzRow>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled
-            label="Zuschüsse (für alte Konzerte)"
-            name={["eintrittspreise", "zuschuss"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled label="Zuschüsse (für alte Konzerte)" name={["eintrittspreise", "zuschuss"]} suffix="€" />
         </Col>
         <Col span={8}>
           <NumberInput
@@ -110,13 +86,7 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
           />
         </Col>
         <Col span={8}>
-          <NumberInput
-            decimals={0}
-            disabled={!!freigabe}
-            label="Gäste (erw.)"
-            name={["eintrittspreise", "erwarteteBesucher"]}
-            onChange={updateSumme}
-          />
+          <NumberInput decimals={0} disabled={!!freigabe} label="Gäste (erw.)" name={["eintrittspreise", "erwarteteBesucher"]} />
         </Col>
       </JazzRow>
     </Collapsible>

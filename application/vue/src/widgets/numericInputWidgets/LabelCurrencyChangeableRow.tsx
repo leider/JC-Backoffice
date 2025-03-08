@@ -4,22 +4,14 @@ import React from "react";
 import { TextField } from "@/widgets/TextField.tsx";
 import { JazzRow } from "../JazzRow";
 
-export default function LabelCurrencyChangeableRow({
-  label,
-  path,
-  onChange,
-}: {
-  readonly label: string;
-  readonly path: string[];
-  readonly onChange: () => void;
-}) {
+export default function LabelCurrencyChangeableRow({ label, path }: { readonly label: string; readonly path: string[] }) {
   return (
     <JazzRow>
       <Col span={18}>
         <TextField initialValue={label} label={label} name={[path[0], path[1] + "Label"]} />
       </Col>
       <Col span={6}>
-        <NumberInput decimals={2} label="Betrag" name={path} onChange={onChange} suffix="€" />
+        <NumberInput decimals={2} label="Betrag" name={path} suffix="€" />
       </Col>
     </JazzRow>
   );

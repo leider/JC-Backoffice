@@ -73,6 +73,6 @@ export default class Eintrittspreise {
   }
 
   get erwarteterEintritt(): number {
-    return this.erwarteteBesucher * this.eintrittspreisSchnitt;
+    return this.erwarteteBesucher * (this.frei ? 10 : this.eintrittspreisSchnitt);
   }
 }

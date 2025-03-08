@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Table } from "antd";
+import { Col, Table, Typography } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import { ColumnType } from "antd/es/table";
@@ -8,23 +8,24 @@ import { formatToGermanNumberString } from "@/commons/utilityFunctions";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
+import useAusgaben from "@/components/konzert/kosten/useAusgaben.ts";
+import useEinnahmen from "@/components/konzert/kosten/useEinnahmen.ts";
 
-interface AusgabenCardParams {
-  readonly einnahmen: number;
-  readonly ausgaben: number;
-}
-export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) {
+export default function EinAusCard() {
   const form = useFormInstance();
-
-  const [kalk, setKalk] = useState<KonzertKalkulation>(new KonzertKalkulation(new Konzert()));
+  const ausgaben = useAusgaben();
+  const einnahmen = useEinnahmen();
 
   const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
   const deal = useWatch(["kosten", "deal"], { form, preserve: true });
 
-  useEffect(() => {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    setKalk(new KonzertKalkulation(konzert));
-  }, [einnahmen, ausgaben, form, brauchtHotel, deal]);
+  const kalk = useMemo(
+    () => {
+      const konzert = new Konzert(form.getFieldsValue(true));
+      return new KonzertKalkulation(konzert);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    [einnahmen, ausgaben, form, brauchtHotel, deal],
+  );
 
   function format(amount: number): string {
     return `${formatToGermanNumberString(amount)} €`;
@@ -57,6 +58,13 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
 
   return (
     <Collapsible amount={kalk?.dealUeberschussTotal} label="Kostenübersicht / Break-Even" suffix="concert">
+      <JazzRow>
+        <Col span={24}>
+          <Typography.Text strong type="danger">
+            Solange nicht freigegeben, sind die Werte eine Schätzung. Bei freiem Eintritt wird mit 10 € pro Gast gerechnet.
+          </Typography.Text>
+        </Col>
+      </JazzRow>
       <JazzRow>
         <Col span={24}>
           <Table columns={columns} dataSource={data} pagination={false} size="small" />

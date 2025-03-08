@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import Kasse from "jc-shared/konzert/kasse";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -14,101 +13,85 @@ import Technik from "jc-shared/veranstaltung/technik.ts";
 import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 import LabelCurrencyRow from "@/widgets/numericInputWidgets/LabelCurrencyRow";
 import LabelCurrencyChangeableRow from "@/widgets/numericInputWidgets/LabelCurrencyChangeableRow.tsx";
-import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import useAusgaben from "@/components/konzert/kosten/useAusgaben.ts";
+import { useWatch } from "antd/es/form/Form";
+import Kasse from "jc-shared/konzert/kasse.ts";
 
-interface AusgabenCardParams {
-  readonly onChange: (sum: number) => void;
-}
-export default function AusgabenCard({ onChange }: AusgabenCardParams) {
+function HotelZeile() {
   const form = useFormInstance();
+  const unterkunft = useWatch("unterkunft", { form, preserve: true });
+  const artist = useWatch("artist", { form, preserve: true });
 
-  const [summe, setSumme] = useState<number>(0);
-
-  const unterkunft = useWatch(["unterkunft"], { form, preserve: true });
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
-  const backlineEUR = useWatch(["kosten", "backlineEUR"], { form, preserve: true });
-  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], { form, preserve: true });
-  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
-
-  useEffect(
-    updateSumme, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form, unterkunft, brauchtHotel, backlineEUR, technikAngebot1EUR, fluegelstimmerEUR],
-  );
-
-  function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    const sum =
-      konzert.kasse.ausgabenOhneGage + konzert.kosten.totalEUR + (konzert.artist.brauchtHotel ? konzert.unterkunft.kostenTotalEUR : 0);
-    setSumme(sum);
-    onChange(sum);
-  }
-
-  const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
-
-  function kassenZeile() {
-    const kasse = new Kasse(form.getFieldValue("kasse"));
-    return (
-      kasse.istFreigegeben && (
+  return (
+    artist?.brauchtHotel && (
+      <>
         <JazzRow>
           <Col span={18}>
             <Form.Item>
-              <b>Abendkasse (ohne Gage):</b>
+              <b>Hotel:</b>
             </Form.Item>
           </Col>
           <Col span={6}>
-            <NumberInputWithDirectValue decimals={2} suffix="€" value={kasse.ausgabenOhneGage} />
+            <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.roomsTotalEUR || 0} />
           </Col>
         </JazzRow>
-      )
-    );
-  }
-  function hotelZeile() {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    const unterkunft = konzert?.unterkunft;
-    const artist = konzert?.artist;
+        <JazzRow>
+          <Col span={18}>
+            <Form.Item>
+              <b>Hotel (Transport):</b>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.transportEUR || 0} />
+          </Col>
+        </JazzRow>
+      </>
+    )
+  );
+}
 
-    return (
-      artist?.brauchtHotel && (
-        <>
-          <JazzRow>
-            <Col span={18}>
-              <Form.Item>
-                <b>Hotel:</b>
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.roomsTotalEUR || 0} />
-            </Col>
-          </JazzRow>
-          <JazzRow>
-            <Col span={18}>
-              <Form.Item>
-                <b>Hotel (Transport):</b>
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.transportEUR || 0} />
-            </Col>
-          </JazzRow>
-        </>
-      )
-    );
-  }
+function KassenZeile() {
+  const form = useFormInstance();
+  const kasseField = useWatch("kasse", { form, preserve: true });
+  const kasse = useMemo(() => {
+    return new Kasse(kasseField);
+  }, [kasseField]);
+  return (
+    kasse.istFreigegeben && (
+      <JazzRow>
+        <Col span={18}>
+          <Form.Item>
+            <b>Abendkasse (ohne Gage):</b>
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <NumberInputWithDirectValue decimals={2} suffix="€" value={kasse.ausgabenOhneGage} />
+        </Col>
+      </JazzRow>
+    )
+  );
+}
+
+const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
+
+export default function AusgabenCard() {
+  const form = useFormInstance();
+  const summe = useAusgaben();
 
   const { lg } = useBreakpoint();
   return (
     <Collapsible amount={summe} label="Kosten / Ausgaben" noTopBorder={lg} suffix="ausgaben">
       <JazzRow>
         <Col span={6}>
-          <NumberInput decimals={2} label="Gagen" name={["kosten", "gagenEUR"]} onChange={updateSumme} suffix="€" />
+          <NumberInput decimals={2} label="Gagen" name={["kosten", "gagenEUR"]} suffix="€" />
         </Col>
         <Col span={6}>
-          <SingleSelect label="Steuer" name={["kosten", "gagenSteuer"]} onChange={updateSumme} options={steuerSaetze} />
+          <SingleSelect label="Steuer" name={["kosten", "gagenSteuer"]} options={steuerSaetze} />
         </Col>
         <Col span={6}>
-          <SingleSelect label="Deal" name={["kosten", "deal"]} onChange={updateSumme} options={Kosten.deals} />
+          <SingleSelect label="Deal" name={["kosten", "deal"]} options={Kosten.deals} />
         </Col>
         <Col span={6}>
           <DynamicItem
@@ -153,29 +136,26 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
           />
         </Col>
       </JazzRow>
-      <LabelCurrencyRow label="Provision Agentur" onChange={updateSumme} path={["kosten", "provisionAgentur"]} />
+      <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />
       {new Technik(form.getFieldValue("technik")).fluegel ? (
-        <LabelCurrencyRow label="Flügelstimmer" onChange={updateSumme} path={["kosten", "fluegelstimmerEUR"]} />
+        <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} />
       ) : null}
-      <LabelCurrencyChangeableRow label="Werbung 1" onChange={updateSumme} path={["kosten", "werbung1"]} />
-      <LabelCurrencyChangeableRow label="Werbung 2" onChange={updateSumme} path={["kosten", "werbung2"]} />
-      <LabelCurrencyChangeableRow label="Werbung 3" onChange={updateSumme} path={["kosten", "werbung3"]} />
-      <LabelCurrencyChangeableRow label="Werbung 4" onChange={updateSumme} path={["kosten", "werbung4"]} />
-      <LabelCurrencyChangeableRow label="Werbung 5" onChange={updateSumme} path={["kosten", "werbung5"]} />
-      <LabelCurrencyChangeableRow label="Werbung 6" onChange={updateSumme} path={["kosten", "werbung6"]} />
-      <LabelCurrencyRow label="Catering Musiker (unbar)" onChange={updateSumme} path={["kosten", "cateringMusiker"]} />
-      <LabelCurrencyRow label="Catering Personal (unbar)" onChange={updateSumme} path={["kosten", "cateringPersonal"]} />
-      <LabelCurrencyRow label="Personal (unbar)" onChange={updateSumme} path={["kosten", "personal"]} />
-      <LabelCurrencyRow label="Tontechniker (unbar)" onChange={updateSumme} path={["kosten", "tontechniker"]} />
-      <LabelCurrencyRow label="Lichttechniker (unbar)" onChange={updateSumme} path={["kosten", "lichttechniker"]} />
-      {kassenZeile()}
-      {hotelZeile()}
+      <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} />
+      <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} />
+      <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} />
+      <LabelCurrencyRow label="Catering Musiker (unbar)" path={["kosten", "cateringMusiker"]} />
+      <LabelCurrencyRow label="Catering Personal (unbar)" path={["kosten", "cateringPersonal"]} />
+      <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} />
+      <LabelCurrencyRow label="Tontechniker (unbar)" path={["kosten", "tontechniker"]} />
+      <LabelCurrencyRow label="Lichttechniker (unbar)" path={["kosten", "lichttechniker"]} />
+      <KassenZeile />
+      <HotelZeile />
       <JazzRow>
         <CheckItem label="Gage in BAR an der Abendkasse" name={["kosten", "gageBAR"]} />
       </JazzRow>
-      <LabelCurrencyRow disabled label="Backline Rockshop" onChange={updateSumme} path={["kosten", "backlineEUR"]} />
-      <LabelCurrencyRow disabled label="Technik Zumietung" onChange={updateSumme} path={["kosten", "technikAngebot1EUR"]} />
-      <LabelCurrencyRow disabled label="Saalmiete" onChange={updateSumme} path={["kosten", "saalmiete"]} />
+      <LabelCurrencyRow disabled label="Backline Rockshop" path={["kosten", "backlineEUR"]} />
+      <LabelCurrencyRow disabled label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} />
+      <LabelCurrencyRow disabled label="Saalmiete" path={["kosten", "saalmiete"]} />
     </Collapsible>
   );
 }
