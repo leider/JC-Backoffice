@@ -15,7 +15,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
-const TabLabel = ({ title, type, activePage }: { type: buttonType; title: string; activePage: string }) => {
+function TabLabel({ title, type, activePage }: { readonly type: buttonType; readonly title: string; readonly activePage: string }) {
   const { icon, color } = colorsAndIconsForSections;
   const { brightText } = useJazzContext();
   const active = activePage === type;
@@ -28,7 +28,7 @@ const TabLabel = ({ title, type, activePage }: { type: buttonType; title: string
       &nbsp; {title}
     </b>
   );
-};
+}
 
 export default function KonzertTabs() {
   const form = useFormInstance();

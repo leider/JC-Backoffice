@@ -14,16 +14,49 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useInView } from "react-intersection-observer";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
-interface ContentProps {
-  veranstaltung: Veranstaltung;
+type ButtonsProps = {
+  readonly dirty: boolean;
+  readonly forVermietung: boolean;
+  readonly setFormValue: () => void;
+  readonly showMitarbeiter: boolean;
+  readonly veranstaltung: Veranstaltung;
+};
+
+function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermietung }: ButtonsProps) {
+  const form = useFormInstance();
+  const { brightText } = useJazzContext();
+
+  return (
+    <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
+      {showMitarbeiter && dirty ? (
+        <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
+          <ResetButton disabled={!dirty} resetChanges={setFormValue} size="small" />
+          <SaveButton callback={() => form.submit()} disabled={!dirty} size="small" />
+        </ConfigProvider>
+      ) : (
+        <>
+          <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
+          <ButtonInAdminPanel type={forVermietung ? "angebot" : "gaeste"} veranstaltung={veranstaltung} />
+          {!forVermietung || (veranstaltung as Vermietung).brauchtTechnik ? (
+            <ButtonInAdminPanel type="technik" veranstaltung={veranstaltung} />
+          ) : null}
+          <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
+          {veranstaltung.artist.brauchtHotel ? <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} /> : null}
+          {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
+          {veranstaltung.brauchtPresse ? <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} /> : null}
+          <ButtonPreview veranstaltung={veranstaltung} />
+        </>
+      )}
+    </Row>
+  );
 }
 
-export default function AdminContent({ veranstaltung: veranVermiet }: ContentProps) {
+export default function AdminContent({ veranstaltung: veranVermiet }: { readonly veranstaltung: Veranstaltung }) {
   const [form] = Form.useForm();
-  const { isCompactMode, isDarkMode, brightText } = useJazzContext();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [initialValue, setInitialValue] = useState<any>({});
+  const { isCompactMode, isDarkMode } = useJazzContext();
+  const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
   const [showMitarbeiter, setShowMitarbeiter] = useState<boolean>(false);
@@ -114,32 +147,18 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
           </Typography.Title>
         </Col>
         <Col span={18}>
-          {inView && (
-            <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
-              {showMitarbeiter && dirty ? (
-                <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
-                  <ResetButton disabled={!dirty} resetChanges={setFormValue} size="small" />
-                  <SaveButton callback={() => form.submit()} disabled={!dirty} size="small" />
-                </ConfigProvider>
-              ) : (
-                <>
-                  <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />
-                  <ButtonInAdminPanel type={forVermietung ? "angebot" : "gaeste"} veranstaltung={veranstaltung} />
-                  {(!forVermietung || (veranstaltung as Vermietung).brauchtTechnik) && (
-                    <ButtonInAdminPanel type="technik" veranstaltung={veranstaltung} />
-                  )}
-                  <ButtonInAdminPanel type="ausgaben" veranstaltung={veranstaltung} />
-                  {veranstaltung.artist.brauchtHotel && <ButtonInAdminPanel type="hotel" veranstaltung={veranstaltung} />}
-                  {!forVermietung && <ButtonInAdminPanel type="kasse" veranstaltung={veranstaltung} />}
-                  {veranstaltung.brauchtPresse && <ButtonInAdminPanel type="presse" veranstaltung={veranstaltung} />}
-                  <ButtonPreview veranstaltung={veranstaltung} />
-                </>
-              )}
-            </Row>
-          )}
+          {inView ? (
+            <Buttons
+              dirty={dirty}
+              forVermietung={forVermietung}
+              setFormValue={setFormValue}
+              showMitarbeiter={showMitarbeiter}
+              veranstaltung={veranstaltung}
+            />
+          ) : null}
         </Col>
       </Row>
-      {inView && (
+      {inView ? (
         <ConfigProvider theme={staffRowsTheme}>
           <Collapse
             activeKey={showMitarbeiter ? "mitarbeiter" : ""}
@@ -167,7 +186,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
             ]}
           />
         </ConfigProvider>
-      )}
+      ) : null}
     </div>
   );
 }

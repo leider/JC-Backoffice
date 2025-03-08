@@ -5,14 +5,14 @@ import { NamePath } from "rc-field-form/es/interface";
 import map from "lodash/map";
 
 interface SingleSelectParams {
-  name: NamePath;
-  label?: string;
-  options: string[];
-  onChange?: (val: string) => void;
-  initialValue?: string;
-  required?: boolean;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly name: NamePath;
+  readonly label?: string;
+  readonly options: string[];
+  readonly onChange?: (val: string) => void;
+  readonly initialValue?: string;
+  readonly required?: boolean;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 }
 
 export type LabelAndValue = { label: string; value: string };
@@ -26,13 +26,13 @@ function InnerSelect({
   focus,
   value,
 }: {
-  options: string[];
-  value?: string;
-  onChange?: (val: string) => void;
-  onSelect?: (val: string) => void;
-  allowClear?: boolean;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly options: string[];
+  readonly value?: string;
+  readonly onChange?: (val: string) => void;
+  readonly onSelect?: (val: string) => void;
+  readonly allowClear?: boolean;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 }) {
   const realOptions = useMemo(() => map(options, (opt) => ({ label: opt, value: opt })), [options]);
   const ref = useRef<RefSelectProps>(null);

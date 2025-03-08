@@ -8,20 +8,20 @@ import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
 
 type ButtonWithIconProps = {
-  icon?: IconProps["iconName"];
-  text?: string;
-  type?: BaseButtonProps["type"];
-  onClick?: (() => void) | "submit";
-  disabled?: boolean;
-  tooltipTitle?: string;
-  tooltipPlacement?: TooltipPlacement;
-  color?: string;
-  size?: SizeType;
-  block?: boolean;
-  loading?: boolean;
-  style?: CSSProperties;
-  testid?: string;
-  alwaysText?: boolean;
+  readonly icon?: IconProps["iconName"];
+  readonly text?: string;
+  readonly type?: BaseButtonProps["type"];
+  readonly onClick?: (() => void) | "submit";
+  readonly disabled?: boolean;
+  readonly tooltipTitle?: string;
+  readonly tooltipPlacement?: TooltipPlacement;
+  readonly color?: string;
+  readonly size?: SizeType;
+  readonly block?: boolean;
+  readonly loading?: boolean;
+  readonly style?: CSSProperties;
+  readonly testid?: string;
+  readonly alwaysText?: boolean;
 };
 
 const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonWithIconProps>(function ButtonWithIcon(
@@ -48,7 +48,7 @@ const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonW
           data-testid={testid}
           disabled={disabled}
           htmlType={onClick === "submit" ? "submit" : undefined}
-          icon={icon && <IconForSmallBlock iconName={icon} size={size === "small" ? 14 : 16} />}
+          icon={icon ? <IconForSmallBlock iconName={icon} size={size === "small" ? 14 : 16} /> : null}
           loading={loading}
           onClick={onClick && onClick !== "submit" ? onClick : undefined}
           ref={ref}
@@ -57,7 +57,7 @@ const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonW
           title={text}
           type={type || "primary"}
         >
-          {(sm || alwaysText) && text && text}
+          {(sm || alwaysText) && text ? text : null}
         </Button>
       </Tooltip>
     </ConfigProvider>

@@ -65,7 +65,7 @@ export default function TeamCalendar() {
         }
         extra={
           <>
-            {currentUser.accessrights.isOrgaTeam && (
+            {currentUser.accessrights.isOrgaTeam ? (
               <ButtonWithIconAndLink
                 color={token.colorPrimary}
                 icon="Calendar2Range"
@@ -74,7 +74,7 @@ export default function TeamCalendar() {
                 to="/kalenderuebersicht"
                 type="default"
               />
-            )}
+            ) : null}
             <ButtonIcal />
           </>
         }

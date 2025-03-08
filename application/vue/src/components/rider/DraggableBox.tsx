@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useCallback, useState } from "react";
+import React, { CSSProperties, useCallback, useState } from "react";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import { useDraggable } from "@dnd-kit/core";
 import { ItemTypes } from "./types.ts";
@@ -9,7 +9,7 @@ const style: CSSProperties = {
   cursor: "move",
 };
 
-export const DraggableBox: FC<{ item: BoxParams; callback: () => void }> = ({ item, callback }) => {
+export function DraggableBox({ item, callback }: { readonly item: BoxParams; readonly callback: () => void }) {
   const [disableDrag, setDisableDrag] = useState(false);
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: item.id,
@@ -33,4 +33,4 @@ export const DraggableBox: FC<{ item: BoxParams; callback: () => void }> = ({ it
       <Box callback={dialogOpenedOrClosed} item={item} />
     </div>
   );
-};
+}

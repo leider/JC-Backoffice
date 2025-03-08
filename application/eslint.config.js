@@ -62,16 +62,8 @@ export default tseslint.config(
       "react/jsx-no-literals": "off",
       "react/require-default-props": "off",
       "react/no-multi-comp": "off",
-      //"react/jsx-sort-props": "off",
-      "react/function-component-definition": "off",
-      "react/prefer-read-only-props": "off",
-      "react/jsx-no-leaked-render": "off",
-      "react/jsx-no-constructed-context-values": "off",
       "react/no-unused-prop-types": "off",
       "react/jsx-props-no-spreading": "off",
-      "react/destructuring-assignment": "off",
-      "react/jsx-handler-names": "off",
-      "react/no-unstable-nested-components": "off",
       "lodash/prefer-lodash-method": [
         "error",
         {

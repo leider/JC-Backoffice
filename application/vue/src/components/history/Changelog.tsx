@@ -9,7 +9,15 @@ import { DiffType } from "jc-shared/commons/comparingAndTransforming.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-function ChangeSection({ item, surrounding, expanded }: { item: { typ: DiffType; val: object }; surrounding: string; expanded: boolean }) {
+function ChangeSection({
+  item,
+  surrounding,
+  expanded,
+}: {
+  readonly item: { typ: DiffType; val: object };
+  readonly surrounding: string;
+  readonly expanded: boolean;
+}) {
   const [collapsed, setCollapsed] = useState(true);
   const { isDarkMode } = useJazzContext();
   useEffect(() => {
@@ -46,7 +54,7 @@ function ChangeSection({ item, surrounding, expanded }: { item: { typ: DiffType;
   );
 }
 
-export function Changelog({ id, collection, expanded }: { collection: string; id?: string; expanded: boolean }) {
+export function Changelog({ id, collection, expanded }: { readonly collection: string; readonly id?: string; readonly expanded: boolean }) {
   const { data: changelog } = useQuery({
     enabled: !!id,
     queryKey: ["history", collection, id],

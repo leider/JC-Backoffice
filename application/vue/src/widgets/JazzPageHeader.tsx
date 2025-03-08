@@ -15,14 +15,14 @@ export function JazzPageHeader({
   hasErrors,
   style,
 }: {
-  title: string | ReactNode;
-  buttons?: ReactNode[];
-  firstTag?: ReactNode;
-  dateString?: string;
-  tags?: ReactNode[];
-  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
-  hasErrors?: boolean;
-  style?: React.CSSProperties;
+  readonly title: string | ReactNode;
+  readonly buttons?: ReactNode[];
+  readonly firstTag?: ReactNode;
+  readonly dateString?: string;
+  readonly tags?: ReactNode[];
+  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
+  readonly hasErrors?: boolean;
+  readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
   const { isDarkMode } = useContext(GlobalContext);
   const { token } = theme.useToken();

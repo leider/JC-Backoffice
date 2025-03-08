@@ -18,11 +18,11 @@ function StaffList({
   staff,
   theUsers,
 }: {
-  header: string;
-  staff: Staff;
-  notNeeded: boolean;
-  parts: { verant?: StaffType; normal?: StaffType };
-  theUsers: User[];
+  readonly header: string;
+  readonly staff: Staff;
+  readonly notNeeded: boolean;
+  readonly parts: { verant?: StaffType; normal?: StaffType };
+  readonly theUsers: User[];
 }) {
   const usersForPart = useCallback(
     (partType: "verant" | "normal") => {
@@ -48,7 +48,7 @@ function StaffList({
       return (
         <>
           {user.name}
-          {user.kannErsthelfer && <ErsthelferSymbol />}
+          {user.kannErsthelfer ? <ErsthelferSymbol /> : null}
           &nbsp;
           <a href={`tel:${user.tel}`}>{user.tel}</a> <a href={`mailto:${user.email}`}>{user.email}</a>
         </>
@@ -59,7 +59,7 @@ function StaffList({
 
   return !notNeeded && <List dataSource={names} header={<b>{header + ":"}</b>} renderItem={renderItem} size="small" />;
 }
-export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export default function StaffInPreview({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   const { allUsers } = useJazzContext();
   const getIn = useMemo(() => {
     const getIn = veranstaltung.artist.getInForMasterDate;
@@ -86,14 +86,14 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
           />
           <StaffList
             header="Kasse"
-            notNeeded={veranstaltung.staff.kasseNotNeeded && veranstaltung.staff.kasseVNotNeeded}
+            notNeeded={veranstaltung.staff.kasseNotNeeded ? veranstaltung.staff.kasseVNotNeeded : false}
             parts={{ verant: "kasseV", normal: "kasse" }}
             staff={veranstaltung.staff}
             theUsers={allUsers}
           />
           <StaffList
             header="Technik"
-            notNeeded={veranstaltung.staff.technikerNotNeeded && veranstaltung.staff.technikerVNotNeeded}
+            notNeeded={veranstaltung.staff.technikerNotNeeded ? veranstaltung.staff.technikerVNotNeeded : false}
             parts={{ verant: "technikerV", normal: "techniker" }}
             staff={veranstaltung.staff}
             theUsers={allUsers}

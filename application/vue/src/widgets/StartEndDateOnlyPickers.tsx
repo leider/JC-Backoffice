@@ -7,10 +7,10 @@ import Aggregate from "@/widgets/Aggregate.tsx";
 import { useWatch } from "antd/es/form/Form";
 
 interface StartEndDateOnlyPickersProps {
-  names: NamePath[];
-  label?: string;
-  dependency?: NamePath;
-  onChange?: () => void;
+  readonly names: NamePath[];
+  readonly label?: string;
+  readonly dependency?: NamePath;
+  readonly onChange?: () => void;
 }
 
 function EmbeddedPickers({
@@ -20,11 +20,11 @@ function EmbeddedPickers({
   fireChange,
   dependency,
 }: {
-  id?: string;
-  onChange?: (val: (Date | undefined)[]) => void;
-  value?: Date[];
-  fireChange?: () => void;
-  dependency?: NamePath;
+  readonly id?: string;
+  readonly onChange?: (val: (Date | undefined)[]) => void;
+  readonly value?: Date[];
+  readonly fireChange?: () => void;
+  readonly dependency?: NamePath;
 }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());

@@ -10,7 +10,7 @@ import map from "lodash/map";
 import forEach from "lodash/forEach";
 import { TypMitMehr } from "jc-shared/optionen/optionValues.ts";
 
-export default function MitarbeiterCard({ forVermietung = false }: { forVermietung?: boolean }) {
+export default function MitarbeiterCard({ forVermietung = false }: { readonly forVermietung?: boolean }) {
   const { lg } = useBreakpoint();
   const form = useFormInstance();
   const { allUsers, optionen } = useJazzContext();

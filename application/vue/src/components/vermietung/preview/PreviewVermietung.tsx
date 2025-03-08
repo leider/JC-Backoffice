@@ -15,6 +15,19 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
+function EditButton({ url = "" }: { readonly url?: string }) {
+  const type: buttonType = "allgemeines";
+  const { color, icon } = colorsAndIconsForSections;
+  return (
+    <ButtonWithIconAndLink
+      color={color(type)}
+      icon={icon(type)}
+      text="Bearbeiten..."
+      to={`/vermietung/${encodeURIComponent(url)}?page=${type}`}
+    />
+  );
+}
+
 export default function PreviewVermietung() {
   const { url } = useParams();
   const { data } = useQuery({
@@ -31,23 +44,10 @@ export default function PreviewVermietung() {
     setMemoizedId(vermietung.id);
   }, [vermietung.id, setMemoizedId]);
 
-  function EditButton() {
-    const type: buttonType = "allgemeines";
-    const { color, icon } = colorsAndIconsForSections;
-    return (
-      <ButtonWithIconAndLink
-        color={color(type)}
-        icon={icon(type)}
-        text="Bearbeiten..."
-        to={`/vermietung/${encodeURIComponent(url ?? "")}?page=${type}`}
-      />
-    );
-  }
-
   return (
     <div>
       <JazzPageHeader
-        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" url={url} />]}
         dateString={vermietung.datumForDisplayShort}
         title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
       />
@@ -57,13 +57,13 @@ export default function PreviewVermietung() {
           <InfoInPreview veranstaltung={vermietung} />
           <TechnikInPreview veranstaltung={vermietung} />
         </Col>
-        {vermietung.brauchtPresse && (
+        {vermietung.brauchtPresse ? (
           <Col lg={12} xs={24}>
             <Collapsible label="Pressetext" suffix="presse">
               <PressePreview veranstaltung={vermietung} />
             </Collapsible>
           </Col>
-        )}
+        ) : null}
       </JazzRow>
     </div>
   );

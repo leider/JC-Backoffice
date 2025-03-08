@@ -14,7 +14,15 @@ import isNil from "lodash/isNil";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
-export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boolean; setIsOpen: (open: boolean) => void; user: User }) {
+export function ChangePasswordModal({
+  isOpen,
+  setIsOpen,
+  user,
+}: {
+  readonly isOpen: boolean;
+  readonly setIsOpen: (open: boolean) => void;
+  readonly user: User;
+}) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { showSuccess } = useJazzContext();
@@ -67,7 +75,7 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
     </JazzModal>
   );
 }
-export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
+export function NewUserModal({ isOpen, setIsOpen }: { readonly isOpen: boolean; readonly setIsOpen: (open: boolean) => void }) {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { showSuccess } = useJazzContext();
@@ -120,10 +128,10 @@ export function EditUserModal({
   user,
   isSuperUser,
 }: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  user: User;
-  isSuperUser: boolean;
+  readonly isOpen: boolean;
+  readonly setIsOpen: (open: boolean) => void;
+  readonly user: User;
+  readonly isSuperUser: boolean;
 }) {
   const [form] = Form.useForm<User>();
   const { showSuccess } = useJazzContext();
@@ -184,7 +192,7 @@ export function EditUserModal({
   );
 }
 
-function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormInstance<User> }) {
+function EditFields({ isSuperUser, form }: { readonly isSuperUser: boolean; readonly form: FormInstance<User> }) {
   return (
     <Row gutter={8}>
       <Col span={24}>
@@ -213,14 +221,14 @@ function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormIns
             "Ladies' XXL",
           ]}
         />
-        {isSuperUser && <SingleSelect label="Rechte" name="gruppen" options={userGruppen.concat("")} />}
-        {isSuperUser && <CheckItem label="Kassenfreigabe" name="kassenfreigabe" />}
+        {isSuperUser ? <SingleSelect label="Rechte" name="gruppen" options={userGruppen.concat("")} /> : null}
+        {isSuperUser ? <CheckItem label="Kassenfreigabe" name="kassenfreigabe" /> : null}
       </Col>
     </Row>
   );
 }
 
-export function IchKannFields({ form }: { form: FormInstance<User> }) {
+export function IchKannFields({ form }: { readonly form: FormInstance<User> }) {
   const kannErsthelfer = useWatch("kannErsthelfer", { form, preserve: true });
   const keinErsthelferGesetzt = useMemo(() => isNil(kannErsthelfer), [kannErsthelfer]);
   return (

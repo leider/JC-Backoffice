@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router";
 import React from "react";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
-const Login = () => {
+function Login() {
   const { login, loginState } = useAuth();
   const { search } = useLocation();
   const from = search.substring(1);
@@ -64,6 +64,6 @@ const Login = () => {
       </Row>
     </RowWrapper>
   );
-};
+}
 
 export default Login;

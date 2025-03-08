@@ -1,6 +1,5 @@
 import User from "jc-shared/user/user";
 import React, { useEffect, useState } from "react";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
@@ -9,8 +8,9 @@ import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import { ButtonInUsers } from "@/components/users/ButtonInUsers.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ErsthelferSymbol } from "@/widgets/ErsthelferSymbol.tsx";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
-export default function UserPanel({ user, currentUser }: { user: User; currentUser: User }) {
+export default function UserPanel({ user, currentUser }: { readonly user: User; readonly currentUser: User }) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [icon, setIcon] = useState<keyof typeof icons>("PersonBadge");
   const [editUserOpen, setEditUserOpen] = useState<boolean>(false);
@@ -56,16 +56,16 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
       <ChangePasswordModal isOpen={passwordOpen} setIsOpen={setPasswordOpen} user={user} />
       <Collapse
         activeKey={expanded ? user.id : undefined}
-        expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
+        expandIcon={expandIcon({ color: textColor })}
         items={[
           {
             key: user.id,
             style: self ? { backgroundColor: lightGreen } : undefined,
             extra: (
               <Space>
-                {canEdit && <ButtonInUsers callback={() => setEditUserOpen(true)} type="edit" />}
-                {canEdit && <ButtonInUsers callback={() => setPasswordOpen(true)} type="changepass" />}
-                {currentUser.accessrights.isSuperuser && !self && (
+                {canEdit ? <ButtonInUsers callback={() => setEditUserOpen(true)} type="edit" /> : null}
+                {canEdit ? <ButtonInUsers callback={() => setPasswordOpen(true)} type="changepass" /> : null}
+                {currentUser.accessrights.isSuperuser && !self ? (
                   <ButtonInUsers
                     callback={() => {
                       modal.confirm({
@@ -77,12 +77,13 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
                     }}
                     type="delete"
                   />
-                )}
+                ) : null}
               </Space>
             ),
             label: (
               <span>
-                <IconForSmallBlock iconName={icon} style={{ paddingTop: "4" }} /> {user.name} {user.kannErsthelfer && <ErsthelferSymbol />}
+                <IconForSmallBlock iconName={icon} style={{ paddingTop: "4" }} /> {user.name}{" "}
+                {user.kannErsthelfer ? <ErsthelferSymbol /> : null}
               </span>
             ),
             children: (

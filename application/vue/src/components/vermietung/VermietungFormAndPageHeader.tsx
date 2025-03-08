@@ -16,9 +16,9 @@ export default function VermietungFormAndPageHeader<T>({
   resetChanges,
   children,
 }: PropsWithChildren<{
-  data?: Partial<T>;
-  saveForm: (vals: T) => void;
-  resetChanges?: () => Promise<unknown>;
+  readonly data?: Partial<T>;
+  readonly saveForm: (vals: T) => void;
+  readonly resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Vermietung";
   const [form] = useForm();

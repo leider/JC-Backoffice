@@ -13,12 +13,12 @@ function InnerSelect({
   specialTagRender,
   value,
 }: {
-  id?: string;
-  realOptions: LabelAndValue[];
-  noAdd?: boolean;
-  onChange?: (value: string[]) => void;
-  value?: string[];
-  specialTagRender?: (props: CustomTagProps) => React.ReactElement;
+  readonly id?: string;
+  readonly realOptions: LabelAndValue[];
+  readonly noAdd?: boolean;
+  readonly onChange?: (value: string[]) => void;
+  readonly value?: string[];
+  readonly specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
   const filtered = useMemo(
     () => (noAdd ? filter(realOptions, (u) => !value?.includes(u.value)) : realOptions),
@@ -46,12 +46,12 @@ export default function MultiSelectWithTags({
   noAdd,
   specialTagRender,
 }: {
-  name: string[] | string;
-  label: string;
-  options: string[];
-  style?: CSSProperties;
-  noAdd?: boolean;
-  specialTagRender?: (props: CustomTagProps) => React.ReactElement;
+  readonly name: string[] | string;
+  readonly label: string;
+  readonly options: string[];
+  readonly style?: CSSProperties;
+  readonly noAdd?: boolean;
+  readonly specialTagRender?: (props: CustomTagProps) => React.ReactElement;
 }) {
   const realOptions = useMemo(() => map(options, (opt) => ({ label: opt, value: opt })), [options]);
 

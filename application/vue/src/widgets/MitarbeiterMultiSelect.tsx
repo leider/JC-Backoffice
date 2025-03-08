@@ -9,7 +9,7 @@ import filter from "lodash/filter";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
-function FullUserWithKanns({ user }: { user: UserWithKann }) {
+function FullUserWithKanns({ user }: { readonly user: UserWithKann }) {
   function colorFor(kann: KannSection) {
     switch (kann) {
       case "Kasse":
@@ -47,12 +47,12 @@ function InnerSelect({
   save,
   focus,
 }: {
-  usersAsOptions: UserWithKann[];
-  disabled?: boolean;
-  onChange?: (value: string[]) => void;
-  value?: string[];
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly usersAsOptions: UserWithKann[];
+  readonly disabled?: boolean;
+  readonly onChange?: (value: string[]) => void;
+  readonly value?: string[];
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 }) {
   const ref = useRef<RefSelectProps>(null);
   useEffect(() => {
@@ -105,12 +105,12 @@ export default function MitarbeiterMultiSelect({
   save,
   focus,
 }: {
-  name: string | string[];
-  usersAsOptions: UserWithKann[];
-  disabled?: boolean;
-  label?: string;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly name: string | string[];
+  readonly usersAsOptions: UserWithKann[];
+  readonly disabled?: boolean;
+  readonly label?: string;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 }) {
   return (
     <Form.Item label={label ? <b>{label + ":"}</b> : undefined} name={name} noStyle={!label}>

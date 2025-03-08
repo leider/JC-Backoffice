@@ -90,6 +90,6 @@ export type InlineCollectionEditableResult = {
  * Convenience wrapper component to create a test context which sets locales
  * for dayjs/numeral/antd to german.
  */
-export function AntdAndLocaleTestContext(props: PropsWithChildren<unknown>) {
-  return <ConfigProvider locale={localeDe}>{props.children}</ConfigProvider>;
+export function AntdAndLocaleTestContext({ children }: PropsWithChildren<unknown>) {
+  return <ConfigProvider locale={localeDe}>{children}</ConfigProvider>;
 }

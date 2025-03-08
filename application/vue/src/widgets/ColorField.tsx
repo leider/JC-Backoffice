@@ -1,13 +1,13 @@
 import { ColorPicker, Form as AntdForm } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
 
 type TColorField = {
-  name: string | string[];
-  label?: string;
-  required?: boolean;
-  initialValue?: string;
-  save?: (keepEditing?: boolean) => void;
+  readonly name: string | string[];
+  readonly label?: string;
+  readonly required?: boolean;
+  readonly initialValue?: string;
+  readonly save?: (keepEditing?: boolean) => void;
 };
 
 const colors: { [name: string]: string } = {
@@ -23,14 +23,14 @@ const colors: { [name: string]: string } = {
  * @param {TColorField} props
  * @return {*}  {React.ReactElement}
  */
-export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> = ({
+export function ColorField({
   name,
   label,
   required,
   initialValue,
   save,
   presets,
-}: TColorField & { presets?: boolean }): React.ReactElement => {
+}: TColorField & { readonly presets?: boolean }): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
@@ -55,16 +55,16 @@ export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> 
       <ColorInputEmbedded presets={presets} save={save} />
     </AntdForm.Item>
   );
-};
+}
 
 type TColorInputEmbedded = {
-  value?: string;
-  onChange?: (value: string) => void;
-  save?: (keepEditing?: boolean) => void;
-  presets?: boolean;
+  readonly value?: string;
+  readonly onChange?: (value: string) => void;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly presets?: boolean;
 };
 
-const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onChange, save, presets }: TColorInputEmbedded) => {
+function ColorInputEmbedded({ value, onChange, save, presets }: TColorInputEmbedded) {
   useEffect(() => {
     if (value && !value?.startsWith("#") && !value?.startsWith("rgb")) {
       onChange?.(colors[value.toLowerCase()] as string);
@@ -86,10 +86,17 @@ const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onC
       }}
       open
       presets={
-        presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
+        presets
+          ? [
+              {
+                label: "Schnellauswahl",
+                colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"],
+              },
+            ]
+          : undefined
       }
       size="small"
       value={value}
     />
   );
-};
+}

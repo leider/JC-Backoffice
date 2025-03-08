@@ -14,12 +14,12 @@ import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/Star
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface EditableCellProps<T> extends Columns {
-  record: T;
-  handleSave: (record: T, field: unknown) => void;
-  index?: number;
+  readonly record: T;
+  readonly handleSave: (record: T, field: unknown) => void;
+  readonly index?: number;
 }
 
-const EditableCell = <RecordType extends AnyObject = AnyObject>({
+function EditableCell<RecordType extends AnyObject = AnyObject>({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   title, // to not have it in restProps
   editable,
@@ -36,7 +36,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   index,
   initialValue,
   ...restProps
-}: React.PropsWithChildren<EditableCellProps<RecordType>>) => {
+}: React.PropsWithChildren<EditableCellProps<RecordType>>) {
   const [editing, setEditing] = useState(false);
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
@@ -136,7 +136,7 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
       Widget = <StartEndDateOnlyPickersInTable focus name={dataIndex} save={save} />;
       break;
     case "boolean":
-      Widget = <CheckItem focus focusByMouseClick={editByMouse && editing} name={dataIndex} required={required} save={save} />;
+      Widget = <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={dataIndex} required={required} save={save} />;
       break;
     default:
       Widget = filters ? (
@@ -162,6 +162,6 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
     Widget
   );
   return <td {...restProps}>{childNode}</td>;
-};
+}
 
 export default EditableCell;

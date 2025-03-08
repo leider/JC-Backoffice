@@ -1,14 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useInView } from "react-intersection-observer";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
-export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { veranstaltung: Veranstaltung; initiallyOpen: boolean }) {
+export default function TeamBlockNormal({
+  veranstaltung,
+  initiallyOpen,
+}: {
+  readonly veranstaltung: Veranstaltung;
+  readonly initiallyOpen: boolean;
+}) {
   const { memoizedId, isDarkMode } = useJazzContext();
   const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
@@ -38,7 +44,7 @@ export default function TeamBlockNormal({ veranstaltung, initiallyOpen }: { vera
         ) : inView || expanded ? (
           <Collapse
             activeKey={expanded ? veranstaltung.id : ""}
-            expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
+            expandIcon={expandIcon({ color: textColor })}
             items={[
               {
                 key: veranstaltung.id || "",

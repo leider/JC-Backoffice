@@ -14,7 +14,13 @@ import find from "lodash/find";
 import { Box } from "./Box.tsx";
 import { v4 as uuidv4 } from "uuid";
 
-export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }) {
+export function RiderComp({
+  targetBoxes,
+  setTargetBoxes,
+}: {
+  readonly targetBoxes?: BoxParams[];
+  readonly setTargetBoxes?: (boxes: BoxParams[]) => void;
+}) {
   const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
 
   useEffect(() => {

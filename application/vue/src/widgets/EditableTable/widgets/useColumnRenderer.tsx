@@ -58,6 +58,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
       case "startEnd":
         return function StartEndCol(val: string[] | null) {
           if (!isNil(val)) {
+            // eslint-disable-next-line react/destructuring-assignment
             return dayjs(val[0]).format("ll") + " - " + dayjs(val[1]).format("ll");
           }
           if (required) {
@@ -67,6 +68,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
         };
       case "user":
         return function UserCol(val: string[] | null) {
+          // eslint-disable-next-line react/destructuring-assignment
           if (isNil(val) || val.length === 0) {
             if (required) {
               return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;

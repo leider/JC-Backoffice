@@ -3,8 +3,8 @@ import * as React from "react";
 import map from "lodash/map";
 
 type LabelColor = {
-  label: string;
-  color: boolean;
+  readonly label: string;
+  readonly color: boolean;
 };
 
 export default function headerTags(labelsColors: LabelColor[], withStyle = false) {

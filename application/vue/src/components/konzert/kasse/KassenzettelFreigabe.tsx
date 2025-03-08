@@ -86,8 +86,8 @@ export function KassenzettelFreigabe() {
           />
         </Col>
         <Col offset={4} span={10}>
-          {vergangen &&
-            (!freigabe ? (
+          {vergangen ? (
+            !freigabe ? (
               <ButtonWithIcon
                 block
                 disabled={
@@ -110,7 +110,8 @@ export function KassenzettelFreigabe() {
                 />
                 <TextField disabled label="Durch" name={["kasse", "kassenfreigabe"]} />
               </>
-            ))}
+            )
+          ) : null}
         </Col>
       </JazzRow>
       <JazzRow>
@@ -121,7 +122,7 @@ export function KassenzettelFreigabe() {
                 ACHTUNG! Endbestände unplausibel
               </Typography.Text>
               &nbsp;
-              {darfFreigeben && <b>Freigabe nicht möglich.</b>}
+              {darfFreigeben ? <b>Freigabe nicht möglich.</b> : null}
             </Flex>
           ) : (
             <>&nbsp;</>

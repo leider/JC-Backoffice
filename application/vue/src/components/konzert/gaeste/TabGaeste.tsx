@@ -14,7 +14,7 @@ const columns: Columns[] = [
   { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
 ];
 
-function GaesteCard({ label, path }: { label: string; path: string }) {
+function GaesteCard({ label, path }: { readonly label: string; readonly path: string }) {
   const { lg } = useBreakpoint();
   return (
     <Collapsible label={label} noTopBorder={label === "gaesteliste" || lg} suffix="gaeste">

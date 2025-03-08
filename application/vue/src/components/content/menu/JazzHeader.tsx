@@ -12,7 +12,7 @@ import { ItemType } from "antd/es/menu/interface";
 import { MenuIcon } from "./MenuIcon";
 import Preferences from "@/components/content/menu/Preferences.tsx";
 
-export function JazzHeader({ activeElement }: { activeElement: string }) {
+export function JazzHeader({ activeElement }: { readonly activeElement: string }) {
   const { currentUser, wikisubdirs } = useJazzContext();
   const { logout } = useAuth();
   const subdirs = useMemo(() => {

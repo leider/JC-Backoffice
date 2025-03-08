@@ -6,7 +6,7 @@ import every from "lodash/every";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface AggregateProps<V = any> extends FormItemProps<V> {
-  names?: FormItemProps<V>["name"][];
+  readonly names?: FormItemProps<V>["name"][];
 }
 
 export default function Aggregate(props: AggregateProps) {

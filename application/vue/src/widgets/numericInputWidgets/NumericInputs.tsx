@@ -1,5 +1,5 @@
 import { Form } from "antd";
-import React, { FC, ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
 import { Rule } from "antd/es/form";
@@ -10,75 +10,68 @@ type NumberInputProps = {
    * The name of the input.
    * @type {(string | string[])}
    */
-  name: string | string[];
+  readonly name: string | string[];
 
   /**
    * The label of the input.
    * @type {string}
    */
-  label?: string;
+  readonly label?: string;
 
   /**
    * Whether the input value is required.
    * @type {boolean}
    */
-  required?: boolean;
+  readonly required?: boolean;
 
   /**
    * Whether the input is disabled.
    * @type {boolean}
    */
-  disabled?: boolean;
+  readonly disabled?: boolean;
 
   /**
    * The inital value.
    * @type {T}
    */
-  initialValue?: number;
+  readonly initialValue?: number;
 
   /**
    * Callback when the input value has vhanged.
    */
-  onChange?: (value: number | null) => void;
+  readonly onChange?: (value: number | null) => void;
 
-  decimals: number;
+  readonly decimals: number;
 
   /**
    * The lower limit.
    * @type {number}
    */
-  min?: number;
+  readonly min?: number;
 
   /**
    * The upper limit.
    * @type {number}
    */
-  max?: number;
+  readonly max?: number;
 
   /**
    * A boolean to tell if we want the lower limit to be exclusive.
    * @type {boolean}
    */
-  exclusiveMin?: boolean;
+  readonly exclusiveMin?: boolean;
 
   /**
    * A boolean to tell if we want the upper limit to be exclusive.
    * @type {boolean}
    */
-  exclusiveMax?: boolean;
-  suffix?: ReactNode;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly exclusiveMax?: boolean;
+  readonly suffix?: ReactNode;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 };
 
-/**
- * A widget for numeric values.
- *
- * You can set upper and lower limts to it, and tell if they should be inclusive or exclusive.
- * @param {NumberInputProps} props
- * @return {*}  {React.ReactElement}
- */
-export const NumberInput: FC<NumberInputProps> = ({
+export function NumberInput({
   decimals,
   required,
   suffix,
@@ -93,7 +86,7 @@ export const NumberInput: FC<NumberInputProps> = ({
   disabled,
   save,
   focus,
-}: NumberInputProps): React.ReactElement => {
+}: NumberInputProps) {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
   useEffect(() => {
@@ -124,24 +117,19 @@ export const NumberInput: FC<NumberInputProps> = ({
       />
     </Form.Item>
   );
-};
-
-interface NumberInputWithDirectValueParams {
-  value: number;
-  decimals: number;
-  suffix?: string;
-  label?: string;
 }
 
-export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = ({
-  decimals,
-  suffix,
-  value,
-  label,
-}: NumberInputWithDirectValueParams): React.ReactElement => {
+interface NumberInputWithDirectValueParams {
+  readonly value: number;
+  readonly decimals: number;
+  readonly suffix?: string;
+  readonly label?: string;
+}
+
+export function NumberInputWithDirectValue({ decimals, suffix, value, label }: NumberInputWithDirectValueParams) {
   return (
-    <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b>} noStyle={!label}>
+    <Form.Item label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : null} noStyle={!label}>
       <NumericInputEmbedded decimals={decimals} disabled number={value} onNumber={noop} suffix={suffix} />
     </Form.Item>
   );
-};
+}

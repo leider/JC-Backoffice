@@ -10,8 +10,8 @@ export default function ProtectedComponent({
   allowed,
   component,
 }: {
-  allowed: ("isOrgaTeam" | "isAbendkasse" | "isSuperuser")[];
-  component: JSX.Element;
+  readonly allowed: ("isOrgaTeam" | "isAbendkasse" | "isSuperuser")[];
+  readonly component: JSX.Element;
 }) {
   const { currentUser } = useJazzContext();
   const showComp = some(

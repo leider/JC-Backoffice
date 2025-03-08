@@ -17,7 +17,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
-function TabOptionen({ optionen }: { optionen: OptionValues }) {
+function TabOptionen({ optionen }: { readonly optionen: OptionValues }) {
   const { lg } = useBreakpoint();
 
   const columnsTypen: Columns[] = [
@@ -98,6 +98,21 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
   );
 }
 
+function TabLabel({ activePage, title, type }: { readonly activePage: string; readonly type: string; readonly title: string }) {
+  const { color } = colorsAndIconsForSections;
+  const { brightText } = useJazzContext();
+  const active = activePage === type;
+
+  const farbe = color("allgemeines");
+
+  return (
+    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+      <IconForSmallBlock iconName="CheckSquare" style={{ marginBottom: -3 }} />
+      &nbsp; {title}
+    </b>
+  );
+}
+
 export default function Optionen() {
   const { data, refetch } = useQuery({
     queryKey: ["optionen"],
@@ -112,30 +127,15 @@ export default function Optionen() {
 
   const [activePage, setActivePage] = useState<string>("optionen");
 
-  function TabLabel({ title, type }: { type: string; title: string }) {
-    const { color } = colorsAndIconsForSections;
-    const { brightText } = useJazzContext();
-    const active = activePage === type;
-
-    const farbe = color("allgemeines");
-
-    return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
-        <IconForSmallBlock iconName="CheckSquare" style={{ marginBottom: -3 }} />
-        &nbsp; {title}
-      </b>
-    );
-  }
-
   const tabs: TabsProps["items"] = [
     {
       key: "optionen",
-      label: <TabLabel title="Optionen" type="optionen" />,
+      label: <TabLabel activePage={activePage} title="Optionen" type="optionen" />,
       children: <TabOptionen optionen={data ?? new OptionValues()} />,
     },
     {
       key: "artists",
-      label: <TabLabel title="Künstler" type="artists" />,
+      label: <TabLabel activePage={activePage} title="Künstler" type="artists" />,
       children: (
         <JazzRow>
           <Col span={24}>

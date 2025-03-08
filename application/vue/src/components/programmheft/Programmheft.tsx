@@ -24,7 +24,7 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
 import invokeMap from "lodash/invokeMap";
 
-function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
+function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   const form = useFormInstance();
   const events = useWatch("events", { form, preserve: true });
 

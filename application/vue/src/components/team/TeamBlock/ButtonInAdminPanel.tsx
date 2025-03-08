@@ -5,8 +5,8 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ButtonInAdminPanelProps {
-  type: buttonType;
-  veranstaltung: Veranstaltung;
+  readonly type: buttonType;
+  readonly veranstaltung: Veranstaltung;
 }
 
 export function ButtonInAdminPanel({ type, veranstaltung }: ButtonInAdminPanelProps) {

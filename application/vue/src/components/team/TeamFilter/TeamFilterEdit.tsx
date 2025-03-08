@@ -13,9 +13,9 @@ export function TeamFilterEdit({
   open,
   setOpen,
 }: {
-  form: FormInstance<TeamFilterObject>;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  readonly form: FormInstance<TeamFilterObject>;
+  readonly open: boolean;
+  readonly setOpen: (open: boolean) => void;
 }) {
   const { setFilter } = useJazzContext();
 

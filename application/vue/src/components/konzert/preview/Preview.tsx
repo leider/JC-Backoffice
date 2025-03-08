@@ -21,6 +21,19 @@ import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
+function EditButton({ url = "" }: { readonly url?: string }) {
+  const type: buttonType = "allgemeines";
+  const { color, icon } = colorsAndIconsForSections;
+  return (
+    <ButtonWithIconAndLink
+      color={color(type)}
+      icon={icon(type)}
+      text="Bearbeiten..."
+      to={`/konzert/${encodeURIComponent(url)}?page=${type}`}
+    />
+  );
+}
+
 export default function Preview() {
   const { url } = useParams();
   const { data } = useQuery({
@@ -46,24 +59,12 @@ export default function Preview() {
     }
   }, [optionen, konzert]);
 
-  function EditButton() {
-    const type: buttonType = "allgemeines";
-    const { color, icon } = colorsAndIconsForSections;
-    return (
-      <ButtonWithIconAndLink
-        color={color(type)}
-        icon={icon(type)}
-        text="Bearbeiten..."
-        to={`/konzert/${encodeURIComponent(url ?? "")}?page=${type}`}
-      />
-    );
-  }
-
   const titleStyle: CSSProperties = { color: typeColor, textDecoration: konzert.kopf.abgesagt ? "line-through" : "" };
+
   return (
     <>
       <JazzPageHeader
-        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" url={url} />]}
         dateString={konzert.datumForDisplayShort}
         style={titleStyle}
         title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
@@ -80,23 +81,23 @@ export default function Preview() {
           <Collapsible label="Pressetext" suffix="presse">
             <PressePreview veranstaltung={konzert} />
           </Collapsible>
-          {konzert.agentur.name && (
+          {konzert.agentur.name ? (
             <Collapsible label="Agentur" suffix="allgemeines">
               <AddressBlock kontakt={konzert.agentur} />
             </Collapsible>
-          )}
-          {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 && (
+          ) : null}
+          {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 ? (
             <Collapsible label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`} suffix="hotel">
               <AddressBlock kontakt={konzert.hotel} />
             </Collapsible>
-          )}
+          ) : null}
         </Col>
       </JazzRow>
     </>
   );
 }
 
-function AddressBlock({ kontakt }: { kontakt: Kontakt }) {
+function AddressBlock({ kontakt }: { readonly kontakt: Kontakt }) {
   const lines: string[] = kontakt.adresse.match(/[^\r\n]+/g) || [];
   return (
     <address>

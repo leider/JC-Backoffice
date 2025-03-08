@@ -11,7 +11,7 @@ import { useTeamVeranstaltungenCommons } from "@/components/team/useTeamVeransta
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import map from "lodash/map";
 
-export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
+export function TeamUndVeranstaltungen({ periodsToShow }: { readonly periodsToShow: string[] }) {
   const { memoizedId } = useJazzContext();
   useEffect(() => {
     setTimeout(() => {

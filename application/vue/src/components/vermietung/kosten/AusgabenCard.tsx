@@ -89,7 +89,7 @@ export default function AusgabenCard() {
           />
         </Col>
       </JazzRow>
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
+      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik ? fluegelZeile() : null}
       <LabelCurrencyChangeableRow label="Werbung 1" onChange={updateSumme} path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" onChange={updateSumme} path={["kosten", "werbung2"]} />
       <LabelCurrencyChangeableRow label="Werbung 3" onChange={updateSumme} path={["kosten", "werbung3"]} />
@@ -97,12 +97,12 @@ export default function AusgabenCard() {
       <LabelCurrencyChangeableRow label="Werbung 5" onChange={updateSumme} path={["kosten", "werbung5"]} />
       <LabelCurrencyChangeableRow label="Werbung 6" onChange={updateSumme} path={["kosten", "werbung6"]} />
       <LabelCurrencyRow label="Personal (unbar)" onChange={updateSumme} path={["kosten", "personal"]} />
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && (
+      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik ? (
         <>
           <LabelCurrencyRow disabled label="Backline Rockshop" onChange={updateSumme} path={["kosten", "backlineEUR"]} />
           <LabelCurrencyRow disabled label="Technik Zumietung" onChange={updateSumme} path={["kosten", "technikAngebot1EUR"]} />
         </>
-      )}
+      ) : null}
     </Collapsible>
   );
 }

@@ -5,7 +5,7 @@ import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ContentProps {
-  veranstaltung: Veranstaltung;
+  readonly veranstaltung: Veranstaltung;
 }
 
 export default function TeamContent({ veranstaltung }: ContentProps) {

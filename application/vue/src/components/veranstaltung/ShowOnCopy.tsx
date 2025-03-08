@@ -7,7 +7,11 @@ import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
-export function ShowOnCopy({ title }: { title: string }) {
+function footer(_: unknown, { OkBtn }: { OkBtn: React.FC }) {
+  return <OkBtn />;
+}
+
+export function ShowOnCopy({ title }: { readonly title: string }) {
   const { url } = useParams();
   const form = useFormInstance();
   const [openCopyModal, setOpenCopyModal] = useState(false);
@@ -23,7 +27,7 @@ export function ShowOnCopy({ title }: { title: string }) {
   return (
     <JazzModal
       closable={false}
-      footer={(_, { OkBtn }) => <OkBtn />}
+      footer={footer}
       okText="Weiter"
       onOk={() => {
         setOpenCopyModal(false);

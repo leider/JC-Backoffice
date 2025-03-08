@@ -24,7 +24,7 @@ class MailingListsWrapper {
   }
 }
 
-function MailingListsInternal({ users }: { users: User[] }) {
+function MailingListsInternal({ users }: { readonly users: User[] }) {
   const usersAsOptions = useMemo(() => map(users, "asUserAsOption"), [users]);
 
   const columnDescriptions: Columns[] = [

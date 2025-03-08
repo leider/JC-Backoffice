@@ -1,5 +1,5 @@
 import { ConfigProvider, Form } from "antd";
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useCallback, useEffect } from "react";
 import "@mdxeditor/editor/style.css";
 import "./markdwon-editor.css";
 import {
@@ -60,7 +60,15 @@ async function imageUploadHandler(datei: File) {
   return url;
 }
 
-export function MarkdownEditor({ label, name, canImages = false }: { label?: string | ReactNode; name: NamePath; canImages?: boolean }) {
+export function MarkdownEditor({
+  label,
+  name,
+  canImages = false,
+}: {
+  readonly label?: string | ReactNode;
+  readonly name: NamePath;
+  readonly canImages?: boolean;
+}) {
   return (
     <Form.Item label={label} name={name}>
       <InnerEditor canImages={canImages} />
@@ -68,7 +76,15 @@ export function MarkdownEditor({ label, name, canImages = false }: { label?: str
   );
 }
 
-function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?: (value: string) => void; canImages: boolean }) {
+function InnerEditor({
+  value,
+  onChange,
+  canImages,
+}: {
+  readonly value?: string;
+  readonly onChange?: (value: string) => void;
+  readonly canImages: boolean;
+}) {
   const { isDarkMode } = useJazzContext();
 
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
@@ -79,6 +95,22 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
     }
   }, [value]);
 
+  const toolbarContents = useCallback(
+    () => (
+      <DiffSourceToggleWrapper options={["rich-text", "source"]}>
+        <UndoRedo />
+        <BlockTypeSelect />
+        <BoldItalicUnderlineToggles options={["Bold", "Italic"]} />
+        <ListsToggle options={["bullet", "number"]} />
+        <CreateLink />
+        <InsertTable />
+        <InsertThematicBreak />
+        {canImages ? <InsertImage /> : undefined}
+      </DiffSourceToggleWrapper>
+    ),
+    [canImages],
+  );
+
   return (
     <ConfigProvider theme={{ token: { colorText: "white" } }}>
       <MDXEditor
@@ -86,20 +118,7 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
         markdown=""
         onChange={onChange}
         plugins={[
-          toolbarPlugin({
-            toolbarContents: () => (
-              <DiffSourceToggleWrapper options={["rich-text", "source"]}>
-                <UndoRedo />
-                <BlockTypeSelect />
-                <BoldItalicUnderlineToggles options={["Bold", "Italic"]} />
-                <ListsToggle options={["bullet", "number"]} />
-                <CreateLink />
-                <InsertTable />
-                <InsertThematicBreak />
-                {canImages ? <InsertImage /> : undefined}
-              </DiffSourceToggleWrapper>
-            ),
-          }),
+          toolbarPlugin({ toolbarContents }),
           listsPlugin(),
           quotePlugin(),
           linkPlugin(),

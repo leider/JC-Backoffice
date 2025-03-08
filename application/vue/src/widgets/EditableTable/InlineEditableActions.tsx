@@ -16,7 +16,7 @@ export interface ActionCallbacks {
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function InlineEditableActions({ actions }: { actions: ActionCallbacks }): React.ReactElement {
+export default function InlineEditableActions({ actions }: { readonly actions: ActionCallbacks }): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -37,7 +37,14 @@ export default function InlineEditableActions({ actions }: { actions: ActionCall
           <p>Bist Du sicher?.</p>
         </JazzModal>
       </ConfigProvider>
-      <ButtonWithIcon icon="Files" key="copy" onClick={actions.copy} tooltipPlacement="leftTop" tooltipTitle="Zeile Kopieren" type="text" />
+      <ButtonWithIcon
+        icon="Files"
+        key="copy"
+        onClick={() => actions.copy()}
+        tooltipPlacement="leftTop"
+        tooltipTitle="Zeile Kopieren"
+        type="text"
+      />
       <ButtonWithIcon
         icon="Trash"
         key="delete"

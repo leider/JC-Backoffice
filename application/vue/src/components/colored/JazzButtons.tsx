@@ -15,11 +15,16 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
 type ButtonProps = {
-  disabled?: boolean;
-  size?: SizeType;
+  readonly disabled?: boolean;
+  readonly size?: SizeType;
 };
 
-function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { isSend?: boolean; callback?: () => void }) {
+function SaveOrSendButton({
+  disabled,
+  isSend,
+  size,
+  callback,
+}: ButtonProps & { readonly isSend?: boolean; readonly callback?: () => void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
@@ -33,13 +38,13 @@ function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { 
   );
 }
 
-export function HelpWithKasseButton({ callback }: { callback: () => void }) {
+export function HelpWithKasseButton({ callback }: { readonly callback: () => void }) {
   const token = theme.useToken().token;
 
   return <ButtonWithIcon alwaysText color={token.colorSuccess} icon="QuestionCircleFill" onClick={callback} text="Abendkasse Hilfe" />;
 }
 
-export function SaveButton({ disabled, size, callback }: ButtonProps & { callback?: () => void }) {
+export function SaveButton({ disabled, size, callback }: ButtonProps & { readonly callback?: () => void }) {
   return <SaveOrSendButton callback={callback} disabled={disabled} size={size} />;
 }
 
@@ -47,7 +52,7 @@ export function SendButton({ disabled }: ButtonProps) {
   return <SaveOrSendButton disabled={disabled} isSend />;
 }
 
-export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
+export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { readonly resetChanges: () => Promise<unknown> | void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
@@ -87,7 +92,11 @@ export function NewButtons() {
   );
 }
 
-export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
+export function MoreButton({
+  disabled,
+  isDirty,
+  isVermietung,
+}: ButtonProps & { readonly isDirty: boolean; readonly isVermietung?: boolean }) {
   const form = useFormInstance();
   const { optionen } = useJazzContext();
   const getKonzert = useCallback(() => new Konzert(form.getFieldsValue(true)), [form]);

@@ -14,6 +14,14 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import { JazzRow } from "@/widgets/JazzRow";
 
+function Checker({ name, label, disabled }: { readonly label: string; readonly name: string | string[]; readonly disabled?: boolean }) {
+  return (
+    <Col span={6}>
+      <CheckItem disabled={disabled} label={label} name={name} />
+    </Col>
+  );
+}
+
 export default function EventCard() {
   const form = useFormInstance();
   const { optionen, orte } = useJazzContext();
@@ -39,14 +47,6 @@ export default function EventCard() {
   }, [form, orte.orte]);
 
   useEffect(ortChanged, [ortChanged]);
-
-  function Checker({ name, label, disabled }: { label: string; name: string | string[]; disabled?: boolean }) {
-    return (
-      <Col span={6}>
-        <CheckItem disabled={disabled} label={label} name={name} />
-      </Col>
-    );
-  }
 
   return (
     <Collapsible label="Event" noTopBorder suffix="allgemeines">

@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +9,8 @@ import { JazzPageHeader } from "jc-vue/src/widgets/JazzPageHeader.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 const titel = "Jazzclub Konzert";
-export const RiderStandalone: FC = () => {
+
+export function RiderStandalone() {
   const url = window.location.pathname.replace("/rider/", "");
   document.title = titel;
   const queryClient = useQueryClient();
@@ -38,6 +38,7 @@ export const RiderStandalone: FC = () => {
       mutateRider.mutate(rider);
     }
   }
+
   const token = theme.useToken().token;
 
   return (
@@ -57,4 +58,4 @@ export const RiderStandalone: FC = () => {
       )}
     </>
   );
-};
+}

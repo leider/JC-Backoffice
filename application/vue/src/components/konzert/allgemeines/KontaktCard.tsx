@@ -13,9 +13,9 @@ import compact from "lodash/compact";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 type KontaktCardProps = {
-  kontakte: Kontakt[];
-  selector: "agentur" | "hotel";
-  noTopBorder?: boolean;
+  readonly kontakte: Kontakt[];
+  readonly selector: "agentur" | "hotel";
+  readonly noTopBorder?: boolean;
 };
 export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
   const form = useFormInstance();

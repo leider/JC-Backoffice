@@ -37,14 +37,14 @@ export default function HelpContent() {
         <HelpNeues />
       </JazzModal>
       <FloatButton.Group icon={<IconForSmallBlock iconName="QuestionLg" />} trigger="click">
-        {hasHelp && (
+        {hasHelp ? (
           <FloatButton
             icon={<IconForSmallBlock iconName="QuestionLg" />}
             onClick={() => {
               setHelpOpen(true);
             }}
           />
-        )}
+        ) : null}
         <FloatButton
           icon={<IconForSmallBlock iconName="InfoLg" />}
           onClick={() => {

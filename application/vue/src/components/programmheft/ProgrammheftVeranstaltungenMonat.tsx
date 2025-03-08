@@ -1,9 +1,8 @@
 import { Col, Collapse, Row, theme, Typography } from "antd";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Link } from "react-router";
 import headerTags from "@/components/colored/headerTags.tsx";
@@ -12,8 +11,9 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import filter from "lodash/filter";
 import reject from "lodash/reject";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
-function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstaltung[] }) {
+function VeranstaltungenListe({ veranstaltungen }: { readonly veranstaltungen: Veranstaltung[] }) {
   return (
     <ul>
       {map(veranstaltungen, (veranst) => (
@@ -27,7 +27,13 @@ function VeranstaltungenListe({ veranstaltungen }: { veranstaltungen: Veranstalt
   );
 }
 
-export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { monat: string; veranstaltungen: Konzert[] }) {
+export function ProgrammheftVeranstaltungenMonat({
+  monat,
+  veranstaltungen,
+}: {
+  readonly monat: string;
+  readonly veranstaltungen: Konzert[];
+}) {
   const [expanded, setExpanded] = useState<boolean>(false);
   const { brightText } = useJazzContext();
 
@@ -36,11 +42,19 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
   const ohnePresse = useMemo(() => reject(veranstaltungen, "presse.checked"), [veranstaltungen]);
 
   const { token } = theme.useToken();
+  const previewCol = useCallback(
+    (veranst: Veranstaltung) => (
+      <Col key={veranst.id} md={8} sm={12} xs={24} xxl={6}>
+        <PressePreview veranstaltung={veranst} />
+      </Col>
+    ),
+    [],
+  );
   return (
     <Collapse
       activeKey={expanded ? monat : undefined}
       className="monat-header"
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color={brightText} /> : <CaretRight color={brightText} />)}
+      expandIcon={expandIcon({})}
       items={[
         {
           key: monat,
@@ -69,13 +83,7 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
                   </Col>
                 )}
               </Row>
-              <Row gutter={[8, 8]}>
-                {map(bestaetigte, (veranst) => (
-                  <Col key={veranst.id} md={8} sm={12} xs={24} xxl={6}>
-                    <PressePreview veranstaltung={veranst} />
-                  </Col>
-                ))}
-              </Row>
+              <Row gutter={[8, 8]}>{map(bestaetigte, previewCol)}</Row>
             </RowWrapper>
           ),
         },

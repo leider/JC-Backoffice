@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
-export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" | "delete"; callback: () => void }) {
+export function ButtonInUsers({ type, callback }: { readonly type: "edit" | "changepass" | "delete"; readonly callback: () => void }) {
   const { useToken } = theme;
   const token = useToken().token;
 

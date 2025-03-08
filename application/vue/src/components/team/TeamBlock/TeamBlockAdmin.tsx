@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
@@ -8,8 +7,9 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
-function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+function Extras({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   const tagsForTitle = useMemo(() => {
     const confirmed = veranstaltung.kopf.confirmed;
     const technikOK = veranstaltung.technik.checked;
@@ -46,7 +46,13 @@ function Extras({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   );
 }
 
-export default function TeamBlockAdmin({ veranstaltung, initiallyOpen }: { veranstaltung: Veranstaltung; initiallyOpen: boolean }) {
+export default function TeamBlockAdmin({
+  veranstaltung,
+  initiallyOpen,
+}: {
+  readonly veranstaltung: Veranstaltung;
+  readonly initiallyOpen: boolean;
+}) {
   const { memoizedId, isDarkMode } = useJazzContext();
   const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
@@ -66,7 +72,7 @@ export default function TeamBlockAdmin({ veranstaltung, initiallyOpen }: { veran
         ) : (
           <Collapse
             activeKey={expanded ? veranstaltung.id : undefined}
-            expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
+            expandIcon={expandIcon({ color: textColor })}
             items={[
               {
                 key: veranstaltung.id || "",

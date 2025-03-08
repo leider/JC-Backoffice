@@ -12,9 +12,9 @@ import { useWatch } from "antd/es/form/Form";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface UploaderParams {
-  name: string[];
-  typ: KonzertFileUploadType;
-  onlyImages?: boolean;
+  readonly name: string[];
+  readonly typ: KonzertFileUploadType;
+  readonly onlyImages?: boolean;
 }
 
 const maxFileSize = 20971520; // 20 MB

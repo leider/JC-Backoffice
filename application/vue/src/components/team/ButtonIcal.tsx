@@ -12,7 +12,7 @@ export default function ButtonIcal() {
       key="cal"
       type="default"
     >
-      {sm && "ical..."}
+      {sm ? "ical..." : null}
     </Button>
   );
 }

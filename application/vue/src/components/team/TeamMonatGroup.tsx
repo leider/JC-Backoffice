@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
@@ -12,10 +11,11 @@ import map from "lodash/map";
 import keys from "lodash/keys";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import tinycolor from "tinycolor2";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
 interface MonatGroupProps {
-  monat: string;
-  renderTeam?: boolean;
+  readonly monat: string;
+  readonly renderTeam?: boolean;
 }
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
@@ -61,9 +61,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         <Col span={24}>
           <Collapse
             activeKey={expanded ? monat : ""}
-            expandIcon={({ isActive }) =>
-              isActive ? <CaretDown size={14} style={{ color: brightText }} /> : <CaretRight size={14} style={{ color: brightText }} />
-            }
+            expandIcon={expandIcon({ size: 14 })}
             items={[
               {
                 key: monat,

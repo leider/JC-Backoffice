@@ -19,8 +19,8 @@ export function TargetContainer({
   targetBoxes,
   setTargetBoxes,
 }: {
-  targetBoxes: BoxParams[];
-  setTargetBoxes: (boxes: BoxParams[]) => void;
+  readonly targetBoxes: BoxParams[];
+  readonly setTargetBoxes: (boxes: BoxParams[]) => void;
 }) {
   const { setNodeRef } = useDroppable({ id: "TargetContainer" });
 

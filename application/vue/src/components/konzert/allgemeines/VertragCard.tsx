@@ -21,7 +21,7 @@ export default function VertragCard() {
 
   return (
     <Collapsible label="Vertrag" suffix="allgemeines">
-      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {isDirty ? <b>Vor dem generieren musst Du speichern!</b> : null}
       <JazzRow>
         <Col span={9}>
           <SingleSelect label="Art" name={["vertrag", "art"]} options={Vertrag.arten} />

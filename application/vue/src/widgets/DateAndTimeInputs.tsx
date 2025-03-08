@@ -9,11 +9,11 @@ export default function DateInput({
   save,
   focus,
 }: {
-  name: string[];
-  label?: string;
-  required?: boolean;
-  save?: () => void;
-  focus?: boolean;
+  readonly name: string[];
+  readonly label?: string;
+  readonly required?: boolean;
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }) {
   return (
     <Form.Item
@@ -35,11 +35,11 @@ function InternalPicker({
   value,
   onChange,
 }: {
-  required?: boolean;
-  value?: string;
-  onChange?: (value: string | undefined) => void;
-  save?: () => void;
-  focus?: boolean;
+  readonly required?: boolean;
+  readonly value?: string;
+  readonly onChange?: (value: string | undefined) => void;
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }) {
   const [val, setVal] = useState<Dayjs | undefined>();
   useEffect(() => {

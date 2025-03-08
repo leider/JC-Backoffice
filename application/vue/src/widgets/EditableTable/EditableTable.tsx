@@ -22,18 +22,13 @@ import filter from "lodash/filter";
 type WithKey<T> = T & { key: string };
 
 interface EditableTableProps<T> {
-  name: NamePath;
-  columnDescriptions: Columns[];
-  usersWithKann?: UserWithKann[];
-  newRowFactory: (vals: T) => T;
+  readonly name: NamePath;
+  readonly columnDescriptions: Columns[];
+  readonly usersWithKann?: UserWithKann[];
+  readonly newRowFactory: (vals: T) => T;
 }
 
-interface EditableRowProps {
-  index: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>) {
   const [form] = Form.useForm();
   return (
     <Form component={false} form={form}>
@@ -42,7 +37,7 @@ const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
       </EditableContext.Provider>
     </Form>
   );
-};
+}
 
 function InnerTable<T>({
   value,
@@ -51,11 +46,11 @@ function InnerTable<T>({
   usersWithKann,
   newRowFactory,
 }: {
-  value?: T[];
-  onChange?: (val?: T[]) => void;
-  columnDescriptions?: Columns[];
-  usersWithKann?: UserWithKann[];
-  newRowFactory: (val: T) => T;
+  readonly value?: T[];
+  readonly onChange?: (val?: T[]) => void;
+  readonly columnDescriptions?: Columns[];
+  readonly usersWithKann?: UserWithKann[];
+  readonly newRowFactory: (val: T) => T;
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;

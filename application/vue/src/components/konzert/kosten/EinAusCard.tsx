@@ -10,8 +10,8 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
 interface AusgabenCardParams {
-  einnahmen: number;
-  ausgaben: number;
+  readonly einnahmen: number;
+  readonly ausgaben: number;
 }
 export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) {
   const form = useFormInstance();

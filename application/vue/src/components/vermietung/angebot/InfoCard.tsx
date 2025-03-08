@@ -108,7 +108,7 @@ export default function InfoCard() {
           )}
         </Col>
       </JazzRow>
-      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+      {isDirty ? <b>Vor dem generieren musst Du speichern!</b> : null}
       <JazzRow>
         <Col span={6}>
           <SingleSelect label="Art" name="art" options={printOptions} />
@@ -133,8 +133,8 @@ export default function InfoCard() {
           />
         </Col>
         <Col span={10}>
-          {vergangen &&
-            (!freigabe ? (
+          {vergangen ? (
+            !freigabe ? (
               <Form.Item label="&nbsp;">
                 <ButtonWithIcon
                   block
@@ -159,7 +159,8 @@ export default function InfoCard() {
                 </Form.Item>
                 <TextField disabled label="Durch" name={["angebot", "freigabe"]} />
               </>
-            ))}
+            )
+          ) : null}
         </Col>
       </JazzRow>
     </Collapsible>

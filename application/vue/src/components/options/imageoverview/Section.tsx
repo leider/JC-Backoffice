@@ -2,18 +2,17 @@ import { NamePath } from "rc-field-form/es/interface";
 import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";
-import { Button, Col, ConfigProvider, Form, Image, Popover, Space } from "antd";
+import { Button, Col, ConfigProvider, Form, Popover } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
-import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
-import { imgFullsize } from "@/commons/loader.ts";
 import { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import Collapsible from "@/widgets/Collapsible.tsx";
+import JazzImage from "@/widgets/JazzImage.tsx";
 
 export type kindOfSection = "with" | "unused" | "notFound";
 
-function VeranstaltungenRenderer({ name }: { name: NamePath }) {
+function VeranstaltungenRenderer({ name }: { readonly name: NamePath }) {
   function InnerVeranstaltungenRenderer({ veranstaltungen }: { veranstaltungen?: ImageOverviewVeranstaltung[] }) {
     return map(veranstaltungen, (v, index) => (
       <span key={v.id}>
@@ -41,35 +40,23 @@ function VeranstaltungenRenderer({ name }: { name: NamePath }) {
   );
 }
 
-export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; title: string; noOfImages: number }) {
-  function ImagePreview({ value }: { value?: string }) {
-    return (
-      <Popover
-        content={
-          <Image
-            key={value}
-            preview={{
-              src: `/upload/${value}`,
-              toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
-                <Space className="toolbar-wrapper" size={12}>
-                  <ButtonForImagePreview icon="Download" onClick={() => imgFullsize(value)} />
-                  <ButtonForImagePreview disabled={scale === 1} icon="ZoomOut" onClick={onZoomOut} />
-                  <ButtonForImagePreview disabled={scale === 50} icon="ZoomIn" onClick={onZoomIn} />
-                </Space>
-              ),
-            }}
-            src={`/imagepreview/${value}`}
-            width="400px"
-          />
-        }
-        placement="rightTop"
-        trigger="click"
-      >
-        <Button type="dashed">Vorschau</Button>
-      </Popover>
-    );
-  }
+function ImagePreview({ value }: { readonly value?: string }) {
+  return (
+    <Popover content={<JazzImage img={value ?? ""} width="400px" />} placement="rightTop" trigger="click">
+      <Button type="dashed">Vorschau</Button>
+    </Popover>
+  );
+}
 
+export function Section({
+  prefix,
+  title,
+  noOfImages,
+}: {
+  readonly prefix: kindOfSection;
+  readonly title: string;
+  readonly noOfImages: number;
+}) {
   return (
     <Collapsible amount={noOfImages ?? "..."} label={title} noMoneySign noTopBorder suffix="gaeste" uncollapsed>
       <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>

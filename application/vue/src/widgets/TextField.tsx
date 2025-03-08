@@ -1,5 +1,5 @@
 import { Form as AntdForm, Input, InputRef } from "antd";
-import { FunctionComponent, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Rule } from "antd/es/form";
 
 type TTextField = {
@@ -7,64 +7,58 @@ type TTextField = {
    * The name of the input.
    * @type {(string | string[])}
    */
-  name: string | string[];
+  readonly name: string | string[];
 
   /**
    * The label of the input.
    * @type {string}
    */
-  label?: string;
+  readonly label?: string;
 
   /**
    * Whether the input value is required.
    * @type {boolean}
    */
-  required?: boolean;
+  readonly required?: boolean;
 
   /**
    * Whether the input is disabled.
    * @type {boolean}
    */
-  disabled?: boolean;
-
-  /**
-   * Whether the value should be clearable when disabled.
-   * @type {boolean}
-   */
-  clearOnDisabled?: boolean;
+  readonly disabled?: boolean;
 
   /**
    * The inital value.
    * @type {T}
    */
-  initialValue?: string;
+  readonly initialValue?: string;
 
   /**
    * Callback when the input value has changed.
    */
-  onChange?: (value: string | null) => void;
+  readonly onChange?: (value: string | null) => void;
 
   /**
    * Indicates that the input must be a valid E-Mail
    * @type {boolean}
    */
-  isEmail?: boolean;
+  readonly isEmail?: boolean;
 
   /**
    * Callback function to generate a unique value.
    * @type {Rule}
    */
-  uniqueValuesValidator?: Rule;
-  style?: React.CSSProperties;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly uniqueValuesValidator?: Rule;
+  readonly style?: React.CSSProperties;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 };
 
 /**
  * @param {TTextField} props
  * @return {*}  {React.ReactElement}
  */
-export const TextField: FunctionComponent<TTextField> = ({
+export function TextField({
   required,
   uniqueValuesValidator,
   initialValue,
@@ -76,7 +70,7 @@ export const TextField: FunctionComponent<TTextField> = ({
   style,
   save,
   focus,
-}: TTextField): React.ReactElement => {
+}: TTextField): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
@@ -110,27 +104,19 @@ export const TextField: FunctionComponent<TTextField> = ({
       <TextInputEmbedded disabled={disabled} focus={focus} onChange={onChange} save={save} />
     </AntdForm.Item>
   );
-};
+}
 
 type TTextInputEmbedded = {
-  id?: string;
-  disabled?: boolean;
-  textVal?: string;
-  onText?: (value: string | null) => void;
-  onChange?: (value: string | null) => void;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly id?: string;
+  readonly disabled?: boolean;
+  readonly textVal?: string;
+  readonly onText?: (value: string | null) => void;
+  readonly onChange?: (value: string | null) => void;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 };
 
-const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
-  onText,
-  textVal,
-  disabled,
-  onChange,
-  id,
-  save,
-  focus,
-}: TTextInputEmbedded) => {
+function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focus }: TTextInputEmbedded) {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -164,4 +150,4 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
       value={textVal}
     />
   );
-};
+}

@@ -1,5 +1,5 @@
 import { Form as AntdForm, TimePicker } from "antd";
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Rule } from "antd/es/form";
 import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -9,44 +9,34 @@ type TTimeField = {
    * The name of the input.
    * @type {(string | string[])}
    */
-  name: string | string[];
+  readonly name: string | string[];
 
   /**
    * The base date value (used for date part)
    * @type {(Date)}
    */
-  baseValue: Date;
+  readonly baseValue: Date;
 
   /**
    * The label of the input.
    * @type {string}
    */
-  label?: string;
+  readonly label?: string;
 
   /**
    * Whether the input value is required.
    * @type {boolean}
    */
-  required?: boolean;
+  readonly required?: boolean;
 
   /**
    * The inital value.
    * @type {T}
    */
-  initialValue?: Date;
+  readonly initialValue?: Date;
 };
 
-/**
- * @param {TTimeField} props
- * @return {*}  {React.ReactElement}
- */
-export const TimeField: FunctionComponent<TTimeField> = ({
-  name,
-  label,
-  required,
-  initialValue,
-  baseValue,
-}: TTimeField): React.ReactElement => {
+export function TimeField({ name, label, required, initialValue, baseValue }: TTimeField) {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
     const rulesToSet: Rule[] = [];
@@ -69,17 +59,17 @@ export const TimeField: FunctionComponent<TTimeField> = ({
       <TimeFieldEmbedded baseValue={baseValue} />
     </AntdForm.Item>
   );
-};
+}
 
-const TimeFieldEmbedded = ({
+function TimeFieldEmbedded({
   baseValue,
   value,
   onChange,
 }: {
-  baseValue: Date;
-  value?: Date;
-  onChange?: (val: Date | undefined) => void;
-}) => {
+  readonly baseValue: Date;
+  readonly value?: Date;
+  readonly onChange?: (val: Date | undefined) => void;
+}) {
   const valDayjs = useMemo(() => {
     if (value) {
       return dayjs(value);
@@ -96,4 +86,4 @@ const TimeFieldEmbedded = ({
   }, [baseValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <TimePicker format="HH:mm" minuteStep={15} onChange={updateValue} value={valDayjs} />;
-};
+}

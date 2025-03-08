@@ -25,7 +25,24 @@ const items = [
   { name: "5000", val: "50,00" },
   { name: "10000", val: "100,00" },
 ];
-export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
+
+function ImmediateEuro({ isBeginn, name }: { readonly isBeginn: boolean; readonly name: string }) {
+  const fullName = useMemo(() => ["kasse", isBeginn ? "startinhalt" : "endinhalt", name], [isBeginn, name]);
+  return (
+    <Form.Item name={fullName} valuePropName="number">
+      <ImmediateEuroEmbedded name={name} />
+    </Form.Item>
+  );
+}
+
+function ImmediateEuroEmbedded({ name, number }: { readonly name: string; readonly number?: number }) {
+  const value = useMemo(() => {
+    return parseInt(name) * (number ?? 0) * 0.01;
+  }, [name, number]);
+  return <NumericInputEmbedded decimals={2} disabled number={value} suffix="€" />;
+}
+
+export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
   const { token } = theme.useToken();
   const form = useFormInstance<KonzertWithRiderBoxes>();
@@ -51,22 +68,6 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
       sumForInhalt(isBeginn ? "startinhalt" : "endinhalt"),
     );
   }, [form, isBeginn, sumForInhalt]);
-
-  function ImmediateEuro({ name }: { name: string }) {
-    const fullName = useMemo(() => ["kasse", isBeginn ? "startinhalt" : "endinhalt", name], [name]);
-    return (
-      <Form.Item name={fullName} valuePropName="number">
-        <ImmediateEuroEmbedded name={name} />
-      </Form.Item>
-    );
-  }
-
-  function ImmediateEuroEmbedded({ name, number }: { name: string; number?: number }) {
-    const value = useMemo(() => {
-      return parseInt(name) * (number ?? 0) * 0.01;
-    }, [name, number]);
-    return <NumericInputEmbedded decimals={2} disabled number={value} suffix="€" />;
-  }
 
   return (
     <>
@@ -110,7 +111,7 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
               />
             </Col>
             <Col span={8}>
-              <ImmediateEuro name={item.name} />
+              <ImmediateEuro isBeginn={isBeginn} name={item.name} />
             </Col>
           </JazzRow>
         ))}

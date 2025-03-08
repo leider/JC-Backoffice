@@ -15,9 +15,9 @@ import map from "lodash/map";
 import filter from "lodash/filter";
 
 type LabelColorProperty = {
-  label: string;
-  color: boolean | string;
-  prop?: NamePath;
+  readonly label: string;
+  readonly color: boolean | string;
+  readonly prop?: NamePath;
 };
 
 export default function TeamFilter() {

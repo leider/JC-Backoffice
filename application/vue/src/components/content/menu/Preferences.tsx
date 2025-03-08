@@ -5,7 +5,7 @@ import { CheckboxGroupProps } from "antd/es/checkbox";
 import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
-export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (x: boolean) => void }) {
+export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: boolean; readonly setIsOpen: (x: boolean) => void }) {
   const [form] = Form.useForm<JazzPrefs>();
   const { setPreferences, getPreferences } = useJazzPrefs();
 

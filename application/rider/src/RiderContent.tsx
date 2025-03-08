@@ -4,7 +4,7 @@ import { RiderStandalone } from "@/RiderStandalone.tsx";
 
 const { Header, Content } = Layout;
 
-const RiderContent: React.FC = () => {
+export default function RiderContent() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -23,6 +23,4 @@ const RiderContent: React.FC = () => {
       </Content>
     </Layout>
   );
-};
-
-export default RiderContent;
+}

@@ -6,7 +6,7 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 
-export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Vermietung | KonzertWithRiderBoxes }) {
+export default function TechnikInPreview({ veranstaltung }: { readonly veranstaltung: Vermietung | KonzertWithRiderBoxes }) {
   const url = useMemo(() => encodeURIComponent(veranstaltung.url || ""), [veranstaltung.url]);
 
   const boxes = !veranstaltung.isVermietung ? ((veranstaltung as KonzertWithRiderBoxes).riderBoxes ?? []) : [];
@@ -19,12 +19,12 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
   return (
     <Collapsible label="Technik" suffix="technik">
       <JazzRow>
-        {veranstaltung.technik.fluegel && (
+        {veranstaltung.technik.fluegel ? (
           <Col span={24}>
             <b>Flügel stimmen!</b>
             <Divider />
           </Col>
-        )}
+        ) : null}
         {!!veranstaltung.technik.backlineJazzclub.length && (
           <Col span={24}>
             <b>Backline Jazzclub:</b>
@@ -58,11 +58,11 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
                   </a>
                 </li>
               ))}
-              {hasRiderBoxes && (
+              {hasRiderBoxes ? (
                 <li key="riderurl">
                   <a href={printref} rel="noreferrer" target="_blank">{`Rider-${url}.pdf`}</a>
                 </li>
-              )}
+              ) : null}
             </ul>
           </Col>
         ) : (

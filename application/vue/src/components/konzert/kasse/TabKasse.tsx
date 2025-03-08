@@ -18,11 +18,11 @@ export default function TabKasse() {
   const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
   const kasseRaw = useWatch("kasse", { form, preserve: false });
 
-  const refStartinhalt: Ref<HTMLElement> = useRef(null);
-  const refEndinhalt: Ref<HTMLElement> = useRef(null);
+  const refStartinhalt: Ref<HTMLButtonElement> = useRef(null);
+  const refEndinhalt: Ref<HTMLButtonElement> = useRef(null);
   const refAusgaben: Ref<HTMLDivElement> = useRef(null);
   const refEinnahmen: Ref<HTMLDivElement> = useRef(null);
-  const refAnBank: Ref<HTMLElement> = useRef(null);
+  const refAnBank: Ref<HTMLButtonElement> = useRef(null);
 
   const endbestandEUR = useMemo(() => new Kasse(kasseRaw).endbestandEUR, [kasseRaw]);
 
@@ -60,8 +60,13 @@ export default function TabKasse() {
       target: refEndinhalt.current ? () => refEndinhalt.current! : undefined,
     },
   ];
+
+  const initialContext = useMemo(() => {
+    return { refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank };
+  }, []);
+
   return (
-    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
+    <KassenContext.Provider value={initialContext}>
       <JazzRow>
         <Col lg={12} xs={24}>
           <EinnahmenCard />

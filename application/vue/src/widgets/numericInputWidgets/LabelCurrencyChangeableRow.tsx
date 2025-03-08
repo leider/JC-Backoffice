@@ -4,7 +4,15 @@ import React from "react";
 import { TextField } from "@/widgets/TextField.tsx";
 import { JazzRow } from "../JazzRow";
 
-export default function LabelCurrencyChangeableRow({ label, path, onChange }: { label: string; path: string[]; onChange: () => void }) {
+export default function LabelCurrencyChangeableRow({
+  label,
+  path,
+  onChange,
+}: {
+  readonly label: string;
+  readonly path: string[];
+  readonly onChange: () => void;
+}) {
   return (
     <JazzRow>
       <Col span={18}>

@@ -7,14 +7,14 @@ export default function ButtonForImagePreview({
   onClick,
   disabled,
 }: {
-  icon: IconProps["iconName"];
-  onClick: () => void;
-  disabled?: boolean;
+  readonly icon: IconProps["iconName"];
+  readonly onClick: () => void;
+  readonly disabled?: boolean;
 }) {
   return (
     <Button
       disabled={disabled}
-      icon={icon && <IconForSmallBlock color="white" iconName={icon} size={14} />}
+      icon={icon ? <IconForSmallBlock color="white" iconName={icon} size={14} /> : null}
       onClick={onClick}
       type="text"
     />

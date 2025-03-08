@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Image, Space } from "antd";
 import Renderer from "jc-shared/commons/renderer.ts";
-import { imgFullsize } from "@/commons/loader.ts";
 import "./preview.css";
 import isEmpty from "lodash/isEmpty";
-import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import map from "lodash/map";
+import JazzImage from "@/widgets/JazzImage.tsx";
 
-export function PressePreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export function PressePreview({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   function updatePreview(veranstaltung: Veranstaltung) {
     const presse = veranstaltung.presse;
     const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
@@ -35,21 +33,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
       {map(veranstaltung.presse.image, (img) => (
-        <Image
-          key={img}
-          preview={{
-            src: `/upload/${img}`,
-            toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
-              <Space className="toolbar-wrapper" size={12}>
-                <ButtonForImagePreview icon="Download" onClick={() => imgFullsize(img)} />
-                <ButtonForImagePreview disabled={scale === 1} icon="ZoomOut" onClick={onZoomOut} />
-                <ButtonForImagePreview disabled={scale === 50} icon="ZoomIn" onClick={onZoomIn} />
-              </Space>
-            ),
-          }}
-          src={`/imagepreview/${img}`}
-          width="100%"
-        />
+        <JazzImage img={img} width="100%" />
       ))}
     </>
   );

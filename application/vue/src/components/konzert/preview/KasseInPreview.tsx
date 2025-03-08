@@ -7,29 +7,29 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
-export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url?: string }) {
-  function ButtonAbendkasse() {
-    const { color, icon } = colorsAndIconsForSections;
-    const { currentUser } = useJazzContext();
-    if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
-      return;
-    }
-    return (
-      <ButtonWithIconAndLink
-        alwaysText
-        block
-        color={color("kasse")}
-        icon={icon("kasse")}
-        text="Abendkasse"
-        to={{
-          pathname: `/konzert/${url}`,
-          search: "page=kasse",
-        }}
-        tooltipTitle="Abendkasse"
-      />
-    );
+function ButtonAbendkasse({ url = "" }: { readonly url?: string }) {
+  const { color, icon } = colorsAndIconsForSections;
+  const { currentUser } = useJazzContext();
+  if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
+    return;
   }
+  return (
+    <ButtonWithIconAndLink
+      alwaysText
+      block
+      color={color("kasse")}
+      icon={icon("kasse")}
+      text="Abendkasse"
+      to={{
+        pathname: `/konzert/${url}`,
+        search: "page=kasse",
+      }}
+      tooltipTitle="Abendkasse"
+    />
+  );
+}
 
+export default function KasseInPreview({ konzert, url }: { readonly konzert: Konzert; readonly url?: string }) {
   return (
     <Collapsible label="Eintritt und Abendkasse" suffix="kasse">
       <JazzRow>
@@ -51,7 +51,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
           )}
           <JazzRow>
             <Col offset={14} span={10}>
-              <ButtonAbendkasse />
+              <ButtonAbendkasse url={url} />
             </Col>
           </JazzRow>
         </Col>

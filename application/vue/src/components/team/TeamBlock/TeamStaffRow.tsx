@@ -15,8 +15,8 @@ import map from "lodash/map";
 import filter from "lodash/filter";
 
 interface TeamStaffRowProps {
-  sectionName: StaffType;
-  veranstaltung: Veranstaltung;
+  readonly sectionName: StaffType;
+  readonly veranstaltung: Veranstaltung;
 }
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
@@ -66,7 +66,7 @@ export function AddRemoveStaffButton({
   sectionName,
   veranstaltung,
   staffUpdated,
-}: TeamStaffRowProps & { staffUpdated: (veranst: Veranstaltung) => void }) {
+}: TeamStaffRowProps & { readonly staffUpdated: (veranst: Veranstaltung) => void }) {
   const { currentUser } = useJazzContext();
 
   const isIn = useMemo(

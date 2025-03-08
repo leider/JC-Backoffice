@@ -5,9 +5,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
 
 interface StartEndDateOnlyPickersProps {
-  name: NamePath[];
-  save?: () => void;
-  focus?: boolean;
+  readonly name: NamePath[];
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }
 
 function EmbeddedPickers({
@@ -16,10 +16,10 @@ function EmbeddedPickers({
   save,
   focus,
 }: {
-  onChange?: (val: (Date | undefined)[]) => void;
-  value?: Date[];
-  save?: () => void;
-  focus?: boolean;
+  readonly onChange?: (val: (Date | undefined)[]) => void;
+  readonly value?: Date[];
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());

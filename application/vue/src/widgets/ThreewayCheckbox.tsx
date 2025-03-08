@@ -6,8 +6,8 @@ export default function ThreewayCheckbox({
   label,
   disabled,
 }: Omit<CheckboxProps, "name"> & {
-  name: string[] | string;
-  label: string;
+  readonly name: string[] | string;
+  readonly label: string;
 }) {
   return (
     <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} trigger="onChecked" valuePropName="checked">
@@ -22,8 +22,8 @@ function InnerThreeway({
   checked,
   onChecked,
 }: Omit<CheckboxProps, "name"> & {
-  label: string;
-  onChecked?: (val: boolean | undefined) => void;
+  readonly label: string;
+  readonly onChecked?: (val: boolean | undefined) => void;
 }) {
   const [chegg, setChegg] = useState<boolean | undefined>(checked);
 

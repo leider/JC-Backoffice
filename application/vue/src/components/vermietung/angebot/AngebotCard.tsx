@@ -11,6 +11,25 @@ import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
+function FreiRow({ nummer, readonly }: { readonly nummer: number; readonly readonly: boolean }) {
+  return (
+    <JazzRow>
+      <Col span={16}>
+        <DynamicItem
+          nameOfDepending={["angebot", `frei${nummer}EUR`]}
+          renderWidget={(getFieldValue) => {
+            const betrag = getFieldValue(["angebot", `frei${nummer}EUR`]);
+            return <TextField disabled={readonly} label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} required={betrag > 0} />;
+          }}
+        />
+      </Col>
+      <Col span={8}>
+        <NumberInput decimals={2} disabled={readonly} label="Betrag" name={["angebot", `frei${nummer}EUR`]} suffix="€" />
+      </Col>
+    </JazzRow>
+  );
+}
+
 export default function AngebotCard() {
   const form = useFormInstance();
 
@@ -21,27 +40,6 @@ export default function AngebotCard() {
   const readonly = useMemo(() => !!angebot.freigabe, [angebot.freigabe]);
 
   const { lg } = useBreakpoint();
-
-  function FreiRow({ nummer }: { nummer: number }) {
-    return (
-      <JazzRow>
-        <Col span={16}>
-          <DynamicItem
-            nameOfDepending={["angebot", `frei${nummer}EUR`]}
-            renderWidget={(getFieldValue) => {
-              const betrag = getFieldValue(["angebot", `frei${nummer}EUR`]);
-              return (
-                <TextField disabled={readonly} label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} required={betrag > 0} />
-              );
-            }}
-          />
-        </Col>
-        <Col span={8}>
-          <NumberInput decimals={2} disabled={readonly} label="Betrag" name={["angebot", `frei${nummer}EUR`]} suffix="€" />
-        </Col>
-      </JazzRow>
-    );
-  }
 
   return (
     <Collapsible amount={angebot.summe} label="Posten" noTopBorder={lg} suffix="angebot">
@@ -134,9 +132,9 @@ export default function AngebotCard() {
           <NumberInput decimals={2} disabled={readonly} label="Reinigung Bar" name={["angebot", "reinigungBar"]} suffix="€" />
         </Col>
       </JazzRow>
-      <FreiRow nummer={1} />
-      <FreiRow nummer={2} />
-      <FreiRow nummer={3} />
+      <FreiRow nummer={1} readonly={readonly} />
+      <FreiRow nummer={2} readonly={readonly} />
+      <FreiRow nummer={3} readonly={readonly} />
     </Collapsible>
   );
 }

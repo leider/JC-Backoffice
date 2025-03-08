@@ -14,7 +14,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
 interface EinnahmenCardParams {
-  onChange: (sum: number) => void;
+  readonly onChange: (sum: number) => void;
 }
 export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   const { optionen } = useJazzContext();

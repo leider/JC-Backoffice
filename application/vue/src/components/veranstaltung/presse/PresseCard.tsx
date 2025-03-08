@@ -18,11 +18,30 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
+function TabLabel({ activePage, kind, title }: { readonly activePage: string; readonly kind: string; readonly title: string }) {
+  const { color } = colorsAndIconsForSections;
+
+  const { brightText } = useJazzContext();
+  const farbe = color("presse");
+  const active = activePage === kind;
+  return (
+    <b
+      style={{
+        margin: -16,
+        padding: 16,
+        backgroundColor: active ? farbe : "inherit",
+        color: active ? brightText : farbe,
+      }}
+    >
+      {title}
+    </b>
+  );
+}
+
+export default function PresseCard({ isVermietung }: { readonly isVermietung: boolean }) {
   const form = useFormInstance();
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
-  const { color } = colorsAndIconsForSections;
   const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
 
   const presseText = useWatch(["presse", "text"]);
@@ -48,24 +67,6 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
 
   const [activePage, setActivePage] = useState<string>("final");
 
-  function TabLabel(props: { kind: string; title: string }) {
-    const { brightText } = useJazzContext();
-    const farbe = color("presse");
-    const active = activePage === props.kind;
-    return (
-      <b
-        style={{
-          margin: -16,
-          padding: 16,
-          backgroundColor: active ? farbe : "inherit",
-          color: active ? brightText : farbe,
-        }}
-      >
-        {props.title}
-      </b>
-    );
-  }
-
   return (
     <Collapsible label="Pressematerial" noTopBorder suffix="presse">
       <JazzRow>
@@ -77,12 +78,12 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
             items={[
               {
                 key: "final",
-                label: <TabLabel kind="final" title="Finaler Text" />,
+                label: <TabLabel activePage={activePage} kind="final" title="Finaler Text" />,
                 children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "text"]} />,
               },
               {
                 key: "original",
-                label: <TabLabel kind="original" title="Originaler Text" />,
+                label: <TabLabel activePage={activePage} kind="original" title="Originaler Text" />,
                 children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]} />,
               },
             ]}

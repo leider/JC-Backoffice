@@ -6,12 +6,12 @@ import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMulti
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 export interface MitarbeiterRowProps {
-  sectionName: StaffType;
-  label?: string;
-  usersAsOptions: UserWithKann[];
+  readonly sectionName: StaffType;
+  readonly label?: string;
+  readonly usersAsOptions: UserWithKann[];
 }
 
-const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }) => {
+function StaffRow({ usersAsOptions, sectionName, label }: MitarbeiterRowProps) {
   return (
     <Form.Item label={<b>{label + ":"}</b>}>
       <Space.Compact block>
@@ -28,16 +28,16 @@ const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, 
       </Space.Compact>
     </Form.Item>
   );
-};
+}
 
 export default function EditableStaffRows({
   forVermietung,
   usersAsOptions,
   brauchtTechnik,
 }: {
-  forVermietung: boolean;
-  usersAsOptions: UserWithKann[];
-  brauchtTechnik: boolean;
+  readonly forVermietung: boolean;
+  readonly usersAsOptions: UserWithKann[];
+  readonly brauchtTechnik: boolean;
 }) {
   return (
     <>
@@ -48,12 +48,12 @@ export default function EditableStaffRows({
           <StaffRow label="Kasse (Unterstützung)" sectionName="kasse" usersAsOptions={usersAsOptions} />
         </>
       )}
-      {(!forVermietung || brauchtTechnik) && (
+      {!forVermietung || brauchtTechnik ? (
         <>
           <StaffRow label="Ton" sectionName="technikerV" usersAsOptions={usersAsOptions} />
           <StaffRow label="Licht" sectionName="techniker" usersAsOptions={usersAsOptions} />
         </>
-      )}
+      ) : null}
       {!forVermietung && <StaffRow label="Merchandise" sectionName="merchandise" usersAsOptions={usersAsOptions} />}
       <StaffRow label="Ersthelfer (als Gast)" sectionName="ersthelfer" usersAsOptions={usersAsOptions} />
     </>

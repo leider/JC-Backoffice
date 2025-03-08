@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import { MarkdownEditor } from "@/widgets/markdown/MarkdownEditor.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
-export default function KommentarCard({ forVermietung = false }: { forVermietung?: boolean }) {
+export default function KommentarCard({ forVermietung = false }: { readonly forVermietung?: boolean }) {
   return (
     <Collapsible label="Kommentar" suffix="allgemeines">
       <JazzRow>

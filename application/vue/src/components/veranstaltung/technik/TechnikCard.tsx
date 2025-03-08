@@ -14,7 +14,7 @@ import { useWatch } from "antd/es/form/Form";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 
-export default function TechnikCard({ fuerVermietung }: { fuerVermietung: boolean }) {
+export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietung: boolean }) {
   const { optionen } = useJazzContext();
   const form = useFormInstance();
   const { backlineJazzclub, backlineRockshop } = optionen;

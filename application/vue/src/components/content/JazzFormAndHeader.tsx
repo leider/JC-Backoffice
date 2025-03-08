@@ -13,13 +13,13 @@ export default function JazzFormAndHeader<T>({
   resetChanges,
   breadcrumb,
 }: PropsWithChildren<{
-  title: string;
-  data?: Partial<T>;
-  saveForm: (vals: T) => void;
-  additionalButtons?: ReactNode[];
-  changedPropsToWatch?: string[];
-  resetChanges?: () => Promise<unknown>;
-  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
+  readonly title: string;
+  readonly data?: Partial<T>;
+  readonly saveForm: (vals: T) => void;
+  readonly additionalButtons?: ReactNode[];
+  readonly changedPropsToWatch?: string[];
+  readonly resetChanges?: () => Promise<unknown>;
+  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   const [form] = Form.useForm<T>();
 

@@ -14,6 +14,22 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
+function IcalCheck() {
+  return (
+    <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b> Kalender</b>} name="icals">
+      <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
+    </Form.Item>
+  );
+}
+
+function TerminCheck() {
+  return (
+    <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b>Termine</b>} name="termine">
+      <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
+    </Form.Item>
+  );
+}
+
 export default function BigKalender() {
   document.title = "Übersichtskalender";
   const [form] = Form.useForm<TerminFilterOptions>();
@@ -41,22 +57,6 @@ export default function BigKalender() {
     },
     [form, isDarkMode],
   );
-
-  function IcalCheck() {
-    return (
-      <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b> Kalender</b>} name="icals">
-        <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
-      </Form.Item>
-    );
-  }
-
-  function TerminCheck() {
-    return (
-      <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b>Termine</b>} name="termine">
-        <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
-      </Form.Item>
-    );
-  }
 
   const calRef = createRef<FullCalendar>();
   const { lg } = useBreakpoint();

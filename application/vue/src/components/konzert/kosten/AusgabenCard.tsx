@@ -19,7 +19,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 interface AusgabenCardParams {
-  onChange: (sum: number) => void;
+  readonly onChange: (sum: number) => void;
 }
 export default function AusgabenCard({ onChange }: AusgabenCardParams) {
   const form = useFormInstance();
@@ -154,9 +154,9 @@ export default function AusgabenCard({ onChange }: AusgabenCardParams) {
         </Col>
       </JazzRow>
       <LabelCurrencyRow label="Provision Agentur" onChange={updateSumme} path={["kosten", "provisionAgentur"]} />
-      {new Technik(form.getFieldValue("technik")).fluegel && (
+      {new Technik(form.getFieldValue("technik")).fluegel ? (
         <LabelCurrencyRow label="Flügelstimmer" onChange={updateSumme} path={["kosten", "fluegelstimmerEUR"]} />
-      )}
+      ) : null}
       <LabelCurrencyChangeableRow label="Werbung 1" onChange={updateSumme} path={["kosten", "werbung1"]} />
       <LabelCurrencyChangeableRow label="Werbung 2" onChange={updateSumme} path={["kosten", "werbung2"]} />
       <LabelCurrencyChangeableRow label="Werbung 3" onChange={updateSumme} path={["kosten", "werbung3"]} />

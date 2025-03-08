@@ -8,9 +8,9 @@ export function TagForUser({
   usersAsOptions,
   hideErsthelfer,
 }: {
-  value: string;
-  usersAsOptions: UserWithKann[];
-  hideErsthelfer?: boolean;
+  readonly value: string;
+  readonly usersAsOptions: UserWithKann[];
+  readonly hideErsthelfer?: boolean;
 }) {
   const userWithKann = useMemo(() => find(usersAsOptions, { value: value }), [usersAsOptions, value]);
   const label = userWithKann?.label;
@@ -22,7 +22,7 @@ export function TagForUser({
   return (
     <>
       {label}
-      {ersthelfer && <ErsthelferSymbol />}
+      {ersthelfer ? <ErsthelferSymbol /> : null}
     </>
   );
 }

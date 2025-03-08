@@ -38,9 +38,9 @@ export default function HeftCalendar({
   initialDate,
   triggerRender,
 }: {
-  initialDate: string;
-  events: Event[];
-  triggerRender: boolean;
+  readonly initialDate: string;
+  readonly events: Event[];
+  readonly triggerRender: boolean;
 }) {
   const calRef = useRef<FullCalendar>(null);
   useEffect(() => {

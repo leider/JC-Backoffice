@@ -2,7 +2,15 @@ import React, { useMemo } from "react";
 import { theme } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export function ButtonStaff({ callback, add, disabled }: { add: boolean; callback: () => void; disabled?: boolean }) {
+export function ButtonStaff({
+  callback,
+  add,
+  disabled,
+}: {
+  readonly add: boolean;
+  readonly callback: () => void;
+  readonly disabled?: boolean;
+}) {
   const { useToken } = theme;
   const token = useToken().token;
 

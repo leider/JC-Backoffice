@@ -6,8 +6,8 @@ import find from "lodash/find";
 import map from "lodash/map";
 
 interface PreisprofilSelectParams {
-  optionen: OptionValues;
-  onChange?: (value?: Preisprofil) => void;
+  readonly optionen: OptionValues;
+  readonly onChange?: (value?: Preisprofil) => void;
 }
 
 export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSelectParams) {
@@ -25,12 +25,12 @@ export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSel
 }
 
 interface InternalPreisprofilSelectParams {
-  id?: string;
-  valueAsObject?: Preisprofil;
-  optionen: OptionValues;
-  onValueAsObject?: (value?: Preisprofil) => void;
-  onChange?: (value?: Preisprofil) => void;
-  disabled: boolean;
+  readonly id?: string;
+  readonly valueAsObject?: Preisprofil;
+  readonly optionen: OptionValues;
+  readonly onValueAsObject?: (value?: Preisprofil) => void;
+  readonly onChange?: (value?: Preisprofil) => void;
+  readonly disabled: boolean;
 }
 
 function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {

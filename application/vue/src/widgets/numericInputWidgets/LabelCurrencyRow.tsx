@@ -9,10 +9,10 @@ export default function LabelCurrencyRow({
   disabled,
   onChange,
 }: {
-  label: string;
-  path: string[];
-  onChange: () => void;
-  disabled?: boolean;
+  readonly label: string;
+  readonly path: string[];
+  readonly onChange: () => void;
+  readonly disabled?: boolean;
 }) {
   return (
     <JazzRow>

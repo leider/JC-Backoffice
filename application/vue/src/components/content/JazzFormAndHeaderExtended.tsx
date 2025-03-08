@@ -29,19 +29,19 @@ export default function JazzFormAndHeaderExtended<T>({
   resetChanges,
   breadcrumb,
 }: PropsWithChildren<{
-  title: string;
-  data?: Partial<T>;
-  saveForm: (vals: T) => void;
-  additionalButtons?: ReactNode[];
-  additionalButtonsLast?: ReactNode[];
-  changedPropsToWatch?: NamePath[];
-  dateString?: string;
-  firstTag?: ReactNode;
-  tags?: ReactNode[];
-  form: FormInstance<T>;
-  style?: React.CSSProperties;
-  resetChanges?: () => Promise<unknown>;
-  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
+  readonly title: string;
+  readonly data?: Partial<T>;
+  readonly saveForm: (vals: T) => void;
+  readonly additionalButtons?: ReactNode[];
+  readonly additionalButtonsLast?: ReactNode[];
+  readonly changedPropsToWatch?: NamePath[];
+  readonly dateString?: string;
+  readonly firstTag?: ReactNode;
+  readonly tags?: ReactNode[];
+  readonly form: FormInstance<T>;
+  readonly style?: React.CSSProperties;
+  readonly resetChanges?: () => Promise<unknown>;
+  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   document.title = `JC-${title}`;
   window.scroll({ top: 0 });
@@ -124,7 +124,7 @@ export default function JazzFormAndHeaderExtended<T>({
         title={title}
       />
       <RowWrapper>{children}</RowWrapper>
-      {changedPropsToWatch && <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} />}
+      {changedPropsToWatch ? <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} /> : null}
     </Form>
   );
 }

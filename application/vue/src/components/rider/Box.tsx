@@ -1,8 +1,8 @@
+/* eslint-disable react/no-unstable-nested-components */
 import type { CSSProperties } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const styleInner: CSSProperties = {
@@ -10,7 +10,7 @@ const styleInner: CSSProperties = {
   backgroundColor: "white",
 };
 
-export function Box({ item, callback }: { item: BoxParams; callback: (open: boolean) => void }) {
+export function Box({ item, callback }: { readonly item: BoxParams; readonly callback: (open: boolean) => void }) {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -73,14 +73,14 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
     );
   }
 
-  function PopContent(inv: InventoryElement) {
+  function PopContent() {
     return (
       <>
-        {inv.photo && (
+        {item.photo ? (
           <div>
-            <img alt="Popup Photo" src={`/riderimg/${inv.photo?.src}`} />
+            <img alt="Popup Photo" src={`/riderimg/${item.photo?.src}`} />
           </div>
-        )}
+        ) : null}
         <b>Kommentar:</b>
         <TextArea
           onChange={(e) => {
@@ -155,7 +155,7 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
   }
 
   return (
-    <Popover content={isExtra ? PopContentForExtras() : PopContent(item)} onOpenChange={callback} title={title} trigger="contextMenu">
+    <Popover content={isExtra ? <PopContentForExtras /> : <PopContent />} onOpenChange={callback} title={title} trigger="contextMenu">
       <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
         {item.img ? (
           <img alt={item.title} height={item.img.height} src={`/riderimg/${item.img.src}`} width={item.img.width} />

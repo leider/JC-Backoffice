@@ -19,9 +19,9 @@ export default function KonzertFormAndPageHeader({
   resetChanges,
   children,
 }: PropsWithChildren<{
-  data?: Partial<KonzertWithRiderBoxes>;
-  saveForm: (vals: KonzertWithRiderBoxes) => void;
-  resetChanges?: () => Promise<unknown>;
+  readonly data?: Partial<KonzertWithRiderBoxes>;
+  readonly saveForm: (vals: KonzertWithRiderBoxes) => void;
+  readonly resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Konzert";
   const [form] = useForm<KonzertWithRiderBoxes>();
