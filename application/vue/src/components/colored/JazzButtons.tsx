@@ -1,6 +1,7 @@
 import { App, Button, Dropdown, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import * as React from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { deleteKonzertWithId, deleteVermietungWithId, imgzipForVeranstaltung, openKassenzettel } from "@/commons/loader.ts";
 import { asExcelKalkSingle } from "@/commons/excel/single.ts";
@@ -11,7 +12,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ItemType } from "antd/es/menu/interface";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useCallback, useMemo } from "react";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
 type ButtonProps = {
@@ -90,9 +90,8 @@ export function NewButtons() {
 export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
   const form = useFormInstance();
   const { optionen } = useJazzContext();
-  const konzert = useMemo(() => new Konzert(form.getFieldsValue(true)), [form]);
-
-  const vermietung = useMemo(() => new Vermietung(form.getFieldsValue(true)), [form]);
+  const getKonzert = useCallback(() => new Konzert(form.getFieldsValue(true)), [form]);
+  const getVermietung = useCallback(() => new Vermietung(form.getFieldsValue(true)), [form]);
 
   const { modal } = App.useApp();
   const navigate = useNavigate();
@@ -151,10 +150,10 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
   const items: ItemType[] = [
     {
       key: "delete",
-      label: <span style={{ color: konzert.kopf.confirmed ? "gray" : undefined }}>Löschen</span>,
-      icon: <IconForSmallBlock color={konzert.kopf.confirmed ? "gray" : undefined} iconName="Trash" />,
+      label: <span style={{ color: getKonzert().kopf.confirmed ? "gray" : undefined }}>Löschen</span>,
+      icon: <IconForSmallBlock color={getKonzert().kopf.confirmed ? "gray" : undefined} iconName="Trash" />,
       danger: true,
-      disabled: konzert.kopf.confirmed,
+      disabled: getKonzert().kopf.confirmed,
     },
     { key: "copy", label: "Kopieren", icon: <IconForSmallBlock iconName="Files" /> },
     (isVermietung ? vermietungExport : konzertExport) as ItemType,
@@ -165,13 +164,13 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
     (e: { key: string }): void => {
       switch (e.key) {
         case "ExcelKalk":
-          asExcelKalkSingle({ veranstaltung: isVermietung ? vermietung : konzert, optionen });
+          asExcelKalkSingle({ veranstaltung: isVermietung ? getVermietung() : getKonzert(), optionen });
           break;
         case "Pressefotos":
-          imgzipForVeranstaltung(konzert);
+          imgzipForVeranstaltung(getKonzert());
           break;
         case "Kassenzettel":
-          openKassenzettel(konzert);
+          openKassenzettel(getKonzert());
           break;
         case "delete":
           modal.confirm({
@@ -179,12 +178,12 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
             title: `${isVermietung ? "Vermietung" : "Konzert"} löschen`,
             content: `Bist Du sicher, dass Du ${isVermietung ? "die Vermietung" : "das Konzert"} "${document.title.replace("JC-", "")}" löschen möchtest?`,
             onOk: () => {
-              isVermietung ? deleteVermietung.mutate(konzert.id!) : deleteKonzert.mutate(vermietung.id!);
+              isVermietung ? deleteVermietung.mutate(getKonzert().id!) : deleteKonzert.mutate(getVermietung().id!);
             },
           });
           break;
         case "copy":
-          navigate(`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${konzert.url}`);
+          navigate(`/${isVermietung ? "vermietung" : "konzert"}/copy-of-${getKonzert().url}`);
           break;
         case "history":
           navigate(
@@ -193,7 +192,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
           break;
       }
     },
-    [deleteKonzert, deleteVermietung, form, isVermietung, konzert, modal, navigate, optionen, vermietung],
+    [deleteKonzert, deleteVermietung, form, getKonzert, getVermietung, isVermietung, modal, navigate, optionen],
   );
 
   return (
