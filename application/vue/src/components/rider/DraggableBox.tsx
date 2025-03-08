@@ -29,8 +29,8 @@ export const DraggableBox: FC<{ item: BoxParams; callback: () => void }> = ({ it
   );
 
   return (
-    <div style={{ ...style, left: item.left, top: item.top }} ref={setNodeRef} {...attributes} {...listeners}>
-      <Box item={item} callback={dialogOpenedOrClosed} />
+    <div ref={setNodeRef} style={{ ...style, left: item.left, top: item.top }} {...attributes} {...listeners}>
+      <Box callback={dialogOpenedOrClosed} item={item} />
     </div>
   );
 };

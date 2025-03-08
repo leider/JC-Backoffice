@@ -38,14 +38,14 @@ export function ChangePasswordModal({ isOpen, setIsOpen, user }: { isOpen: boole
 
   return (
     <JazzModal
-      open={isOpen}
-      onCancel={() => setIsOpen(false)}
-      onOk={saveForm}
       closable={false}
       maskClosable={false}
+      onCancel={() => setIsOpen(false)}
+      onOk={saveForm}
+      open={isOpen}
       title="Passwort ändern"
     >
-      <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
+      <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
@@ -89,11 +89,11 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
   }
 
   return (
-    <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={saveForm} closable={false} maskClosable={false} title="Neuer Benutzer">
-      <Form form={form} onFinish={saveForm} layout="vertical" autoComplete="off">
+    <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={saveForm} open={isOpen} title="Neuer Benutzer">
+      <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
         <Row gutter={8}>
           <Col span={24}>
-            <TextField name="id" label="User ID" required />
+            <TextField label="User ID" name="id" required />
             <Form.Item
               label={<b>Passwort:</b>}
               name="password"
@@ -108,7 +108,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             </Form.Item>
           </Col>
         </Row>
-        <EditFields isSuperUser form={form} />
+        <EditFields form={form} isSuperUser />
       </Form>
     </JazzModal>
   );
@@ -160,25 +160,25 @@ export function EditUserModal({
 
   return (
     <JazzModal
-      open={isOpen}
-      onCancel={() => setIsOpen(false)}
-      onOk={saveForm}
-      okButtonProps={{ disabled: !dirty }}
       closable={false}
       maskClosable={false}
+      okButtonProps={{ disabled: !dirty }}
+      onCancel={() => setIsOpen(false)}
+      onOk={saveForm}
+      open={isOpen}
       title={user.id}
     >
       <Form
+        autoComplete="off"
         form={form}
+        layout="vertical"
         onValuesChange={() => {
           const current = form.getFieldsValue(true);
           logDiffForDirty(initialValue, current, false);
           setDirty(areDifferent(initialValue, current));
         }}
-        layout="vertical"
-        autoComplete="off"
       >
-        <EditFields isSuperUser={isSuperUser} form={form} />
+        <EditFields form={form} isSuperUser={isSuperUser} />
       </Form>
     </JazzModal>
   );
@@ -188,14 +188,14 @@ function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormIns
   return (
     <Row gutter={8}>
       <Col span={24}>
-        <TextField name="name" label="Vollständiger Name" required />
-        <TextField name="email" label="E-Mail" isEmail required />
-        <CheckItem name="wantsEmailReminders" label="Benachrichtigen, wenn Staff oder Kasse gesucht" />
+        <TextField label="Vollständiger Name" name="name" required />
+        <TextField isEmail label="E-Mail" name="email" required />
+        <CheckItem label="Benachrichtigen, wenn Staff oder Kasse gesucht" name="wantsEmailReminders" />
         <IchKannFields form={form} />
-        <TextField name="tel" label="Telefon" />
+        <TextField label="Telefon" name="tel" />
         <SingleSelect
-          name="tshirt"
           label="T-Shirt"
+          name="tshirt"
           options={[
             "",
             "S",
@@ -213,8 +213,8 @@ function EditFields({ isSuperUser, form }: { isSuperUser: boolean; form: FormIns
             "Ladies' XXL",
           ]}
         />
-        {isSuperUser && <SingleSelect name="gruppen" label="Rechte" options={userGruppen.concat("")} />}
-        {isSuperUser && <CheckItem name="kassenfreigabe" label="Kassenfreigabe" />}
+        {isSuperUser && <SingleSelect label="Rechte" name="gruppen" options={userGruppen.concat("")} />}
+        {isSuperUser && <CheckItem label="Kassenfreigabe" name="kassenfreigabe" />}
       </Col>
     </Row>
   );
@@ -232,28 +232,28 @@ export function IchKannFields({ form }: { form: FormInstance<User> }) {
         <Col span={24}>
           {keinErsthelferGesetzt ? (
             <Alert
+              description={<ThreewayCheckbox label="Ersthelfer" name="kannErsthelfer" />}
               message="Bitte sag uns, ob Du als Ersthelfer eingesetzt werden kannst."
-              description={<ThreewayCheckbox name="kannErsthelfer" label="Ersthelfer" />}
-              type="warning"
               showIcon
+              type="warning"
             />
           ) : (
-            <CheckItem name="kannErsthelfer" label="Ersthelfer" />
+            <CheckItem label="Ersthelfer" name="kannErsthelfer" />
           )}
         </Col>
       </Row>
       <Row gutter={8}>
         <Col span={5}>
-          <CheckItem name="kannKasse" label="Kasse" />
+          <CheckItem label="Kasse" name="kannKasse" />
         </Col>
         <Col span={5}>
-          <CheckItem name="kannTon" label="Ton" />
+          <CheckItem label="Ton" name="kannTon" />
         </Col>
         <Col span={5}>
-          <CheckItem name="kannLicht" label="Licht" />
+          <CheckItem label="Licht" name="kannLicht" />
         </Col>
         <Col span={9}>
-          <CheckItem name="kannMaster" label="Abendverantwortlicher" />
+          <CheckItem label="Abendverantwortlicher" name="kannMaster" />
         </Col>
       </Row>
     </>

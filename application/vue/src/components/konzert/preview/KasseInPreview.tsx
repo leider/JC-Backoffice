@@ -18,20 +18,20 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
       <ButtonWithIconAndLink
         alwaysText
         block
-        text="Abendkasse"
-        tooltipTitle="Abendkasse"
         color={color("kasse")}
         icon={icon("kasse")}
+        text="Abendkasse"
         to={{
           pathname: `/konzert/${url}`,
           search: "page=kasse",
         }}
+        tooltipTitle="Abendkasse"
       />
     );
   }
 
   return (
-    <Collapsible suffix="kasse" label="Eintritt und Abendkasse">
+    <Collapsible label="Eintritt und Abendkasse" suffix="kasse">
       <JazzRow>
         <Col span={24}>
           {konzert.eintrittspreise.frei ? (
@@ -50,7 +50,7 @@ export default function KasseInPreview({ konzert, url }: { konzert: Konzert; url
             </JazzRow>
           )}
           <JazzRow>
-            <Col span={10} offset={14}>
+            <Col offset={14} span={10}>
               <ButtonAbendkasse />
             </Col>
           </JazzRow>

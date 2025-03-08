@@ -138,16 +138,16 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
 
   return (
     <Input
-      ref={inputRef}
+      disabled={disabled}
       id={id}
       inputMode={decimals > 0 ? "decimal" : "numeric"}
       onBlur={handleBlur}
-      onFocus={handleFocus}
-      disabled={disabled}
-      value={value}
       onChange={({ target: { value: val } }) => setValue(val)}
-      suffix={suffix}
+      onFocus={handleFocus}
       onPressEnter={() => save?.()}
+      ref={inputRef}
+      suffix={suffix}
+      value={value}
     />
   );
 };

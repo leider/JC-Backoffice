@@ -28,8 +28,8 @@ function TodaysConcert() {
           {map(bestaetigte, (konzert) => (
             <Link
               key={konzert.fullyQualifiedPreviewUrl}
-              to={konzert.fullyQualifiedPreviewUrl}
               style={{ color: konzert.colorText(isDarkMode) }}
+              to={konzert.fullyQualifiedPreviewUrl}
             >
               <h2
                 style={{

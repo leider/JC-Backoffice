@@ -67,15 +67,13 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
   }
 
   return (
-    <Collapsible suffix="presse" label="Pressematerial" noTopBorder>
+    <Collapsible label="Pressematerial" noTopBorder suffix="presse">
       <JazzRow>
-        <Col xs={24} lg={12}>
-          <CheckItem name={["presse", "checked"]} label="Ist so OK" />
-          <TextField name={["presse", "jazzclubURL"]} label="URL-Suffix bei jazzclub.de" />
+        <Col lg={12} xs={24}>
+          <CheckItem label="Ist so OK" name={["presse", "checked"]} />
+          <TextField label="URL-Suffix bei jazzclub.de" name={["presse", "jazzclubURL"]} />
           <Tabs
             activeKey={activePage}
-            onChange={setActivePage}
-            type="card"
             items={[
               {
                 key: "final",
@@ -88,16 +86,18 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
                 children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]} />,
               },
             ]}
+            onChange={setActivePage}
+            type="card"
           />
-          <Uploader name={["presse", "image"]} typ="pressefoto" onlyImages />
+          <Uploader name={["presse", "image"]} onlyImages typ="pressefoto" />
           <SingleSelect
-            name={["tempimage"]}
             label="Vorhandene Bilder übernehmen"
-            options={allimages.data || []}
+            name={["tempimage"]}
             onChange={imageUebernehmen}
+            options={allimages.data || []}
           />
         </Col>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <PressePreview veranstaltung={verForPreview} />
         </Col>
       </JazzRow>

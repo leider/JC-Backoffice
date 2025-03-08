@@ -58,26 +58,21 @@ export default function TeamBlockAdmin({ veranstaltung, initiallyOpen }: { veran
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
-      <Col span={24} id={veranstaltung.id} style={highlight ? { border: "solid 4px" } : undefined}>
+      <Col id={veranstaltung.id} span={24} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
-            <TeamBlockHeader veranstaltung={veranstaltung} expanded={initiallyOpen} />
+            <TeamBlockHeader expanded={initiallyOpen} veranstaltung={veranstaltung} />
           </div>
         ) : (
           <Collapse
-            style={{ borderColor: veranstaltung.color }}
-            size="small"
             activeKey={expanded ? veranstaltung.id : undefined}
-            onChange={() => {
-              setExpanded(!expanded);
-            }}
             expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
             items={[
               {
                 key: veranstaltung.id || "",
                 style: { backgroundColor: veranstaltung.color },
                 className: "team-block",
-                label: <TeamBlockHeader veranstaltung={veranstaltung} expanded={expanded} />,
+                label: <TeamBlockHeader expanded={expanded} veranstaltung={veranstaltung} />,
                 extra: expanded && <Extras veranstaltung={veranstaltung} />,
                 children: (
                   <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
@@ -86,6 +81,11 @@ export default function TeamBlockAdmin({ veranstaltung, initiallyOpen }: { veran
                 ),
               },
             ]}
+            onChange={() => {
+              setExpanded(!expanded);
+            }}
+            size="small"
+            style={{ borderColor: veranstaltung.color }}
           />
         )}
       </Col>

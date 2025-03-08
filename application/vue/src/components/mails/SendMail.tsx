@@ -206,39 +206,39 @@ export default function SendMail() {
   return (
     <Form
       form={form}
+      layout="vertical"
+      onFinish={send}
       onValuesChange={() => {
         form
           .validateFields()
           .then((value) => setDirty(!!value.markdown))
           .catch((value) => setDirty(value.errorFields.length === 0 && !!value.values.markdown));
       }}
-      onFinish={send}
-      layout="vertical"
     >
-      <JazzPageHeader title="Mail Senden" buttons={[<SendButton key="save" disabled={!dirty || effectiveUsers.length === 0} />]} />
+      <JazzPageHeader buttons={[<SendButton disabled={!dirty || effectiveUsers.length === 0} key="save" />]} title="Mail Senden" />
       <RowWrapper>
         <JazzRow>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedVeranstaltungen" label="Veranstaltungen" options={veranstaltungenDescriptions} noAdd />
+            <MultiSelectWithTags label="Veranstaltungen" name="selectedVeranstaltungen" noAdd options={veranstaltungenDescriptions} />
           </Col>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedRules" label="Empfänger (aus Regeln)" options={rulesDescriptions} noAdd />
-          </Col>
-        </JazzRow>
-        <JazzRow>
-          <Col span={12}>
-            <MultiSelectWithTags name="selectedLists" label="Mailinglisten" options={mailingListsDescriptions} noAdd />
-          </Col>
-          <Col span={12}>
-            <MitarbeiterMultiSelect name="selectedUsers" usersAsOptions={usersAsOptions} label="Users" />
+            <MultiSelectWithTags label="Empfänger (aus Regeln)" name="selectedRules" noAdd options={rulesDescriptions} />
           </Col>
         </JazzRow>
         <JazzRow>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedUserGruppen" label="Benutzer mit Typ" options={userGruppen} noAdd />
+            <MultiSelectWithTags label="Mailinglisten" name="selectedLists" noAdd options={mailingListsDescriptions} />
           </Col>
           <Col span={12}>
-            <MultiSelectWithTags name="selectedKann" label="User kann..." options={kannFilter} noAdd />
+            <MitarbeiterMultiSelect label="Users" name="selectedUsers" usersAsOptions={usersAsOptions} />
+          </Col>
+        </JazzRow>
+        <JazzRow>
+          <Col span={12}>
+            <MultiSelectWithTags label="Benutzer mit Typ" name="selectedUserGruppen" noAdd options={userGruppen} />
+          </Col>
+          <Col span={12}>
+            <MultiSelectWithTags label="User kann..." name="selectedKann" noAdd options={kannFilter} />
           </Col>
         </JazzRow>
         <Row gutter={12} style={{ marginBottom: 12 }}>
@@ -247,7 +247,7 @@ export default function SendMail() {
               Effektive Adressen:
             </Typography.Title>
             {map(effectiveUsers, (u) => (
-              <Tag key={u.email} color="purple">
+              <Tag color="purple" key={u.email}>
                 <b>{u.name}</b> ({u.email})
               </Tag>
             ))}
@@ -255,7 +255,7 @@ export default function SendMail() {
         </Row>
         <JazzRow>
           <Col span={24}>
-            <TextField name="subject" label="Subject" required />
+            <TextField label="Subject" name="subject" required />
           </Col>
           <Col span={24}>
             <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />

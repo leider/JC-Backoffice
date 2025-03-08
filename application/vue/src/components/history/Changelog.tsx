@@ -18,29 +18,29 @@ function ChangeSection({ item, surrounding, expanded }: { item: { typ: DiffType;
 
   return (
     <List.Item
-      key={item.typ + surrounding}
       actions={[
         <ButtonWithIcon
-          key="button"
-          size="small"
           icon={collapsed ? "PlusCircleFill" : "DashCircleFill"}
-          tooltipTitle={collapsed ? "Ausklappen" : "Zuklappen"}
+          key="button"
           onClick={() => setCollapsed(!collapsed)}
+          size="small"
+          tooltipTitle={collapsed ? "Ausklappen" : "Zuklappen"}
         />,
       ]}
+      key={item.typ + surrounding}
     >
       <List.Item.Meta
-        title={item.typ}
         description={
           <JsonView
             collapsed={collapsed}
-            value={item.val}
             displayDataTypes={false}
             displayObjectSize={false}
             enableClipboard
             style={isDarkMode ? nordTheme : lightTheme}
+            value={item.val}
           />
         }
+        title={item.typ}
       />
     </List.Item>
   );
@@ -55,22 +55,22 @@ export function Changelog({ id, collection, expanded }: { collection: string; id
 
   return (
     <List
-      size="small"
       dataSource={changelog?.rows}
       renderItem={(item) => (
         <List.Item key={item.header}>
           <List.Item.Meta
-            title={item.header}
             description={
               <List
-                size="small"
                 dataSource={item.asList}
-                renderItem={(inner) => <ChangeSection item={inner} surrounding={item.header} expanded={expanded} />}
+                renderItem={(inner) => <ChangeSection expanded={expanded} item={inner} surrounding={item.header} />}
+                size="small"
               />
             }
+            title={item.header}
           />
         </List.Item>
       )}
+      size="small"
     />
   );
 }

@@ -33,13 +33,6 @@ export default function Collapsible({
     <Collapse
       activeKey={expanded}
       expandIcon={({ isActive }) => (isActive ? <CaretDown color={brightText} /> : <CaretRight color={brightText} />)}
-      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
-      style={{
-        marginTop: noTopBorder ? "" : "16px",
-        backgroundColor: farbe,
-        borderColor: farbe,
-        color: brightText,
-      }}
       items={[
         {
           key: "content",
@@ -47,14 +40,14 @@ export default function Collapsible({
           label: (
             <Row>
               <Col flex={1}>
-                <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
+                <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                   {label}
                 </Typography.Title>
               </Col>
               <Col flex="auto">&nbsp;</Col>
               {!isNil(amount) && (
                 <Col>
-                  <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
+                  <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                     {noMoneySign ? amount : `${formatToGermanNumberString(amount)} €`}
                   </Typography.Title>
                 </Col>
@@ -64,6 +57,13 @@ export default function Collapsible({
           children,
         },
       ]}
+      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
+      style={{
+        marginTop: noTopBorder ? "" : "16px",
+        backgroundColor: farbe,
+        borderColor: farbe,
+        color: brightText,
+      }}
     />
   );
 }

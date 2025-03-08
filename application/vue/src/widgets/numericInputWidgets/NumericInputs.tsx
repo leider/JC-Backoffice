@@ -102,25 +102,25 @@ export const NumberInput: FC<NumberInputProps> = ({
 
   return (
     <Form.Item
-      name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
-      rules={rules}
-      valuePropName="number"
-      trigger="onNumber"
-      style={label ? {} : { marginBottom: 0 }}
       initialValue={initialValue}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
+      name={name}
+      rules={rules}
+      style={label ? {} : { marginBottom: 0 }}
+      trigger="onNumber"
+      valuePropName="number"
     >
       <NumericInputEmbedded
         decimals={decimals}
         disabled={disabled}
-        min={min}
-        exclusiveMin={exclusiveMin}
         exclusiveMax={exclusiveMax}
-        max={max}
-        onChange={onChange}
-        suffix={suffix}
-        save={save}
+        exclusiveMin={exclusiveMin}
         focus={focus}
+        max={max}
+        min={min}
+        onChange={onChange}
+        save={save}
+        suffix={suffix}
       />
     </Form.Item>
   );
@@ -141,7 +141,7 @@ export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = 
 }: NumberInputWithDirectValueParams): React.ReactElement => {
   return (
     <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b>} noStyle={!label}>
-      <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} onNumber={noop} disabled />
+      <NumericInputEmbedded decimals={decimals} disabled number={value} onNumber={noop} suffix={suffix} />
     </Form.Item>
   );
 };

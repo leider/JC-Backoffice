@@ -36,10 +36,10 @@ export default function PreviewVermietung() {
     const { color, icon } = colorsAndIconsForSections;
     return (
       <ButtonWithIconAndLink
-        icon={icon(type)}
-        to={`/vermietung/${encodeURIComponent(url ?? "")}?page=${type}`}
         color={color(type)}
+        icon={icon(type)}
         text="Bearbeiten..."
+        to={`/vermietung/${encodeURIComponent(url ?? "")}?page=${type}`}
       />
     );
   }
@@ -47,19 +47,19 @@ export default function PreviewVermietung() {
   return (
     <div>
       <JazzPageHeader
-        title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
-        dateString={vermietung.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        dateString={vermietung.datumForDisplayShort}
+        title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
       />
       <JazzRow>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <StaffInPreview veranstaltung={vermietung} />
           <InfoInPreview veranstaltung={vermietung} />
           <TechnikInPreview veranstaltung={vermietung} />
         </Col>
         {vermietung.brauchtPresse && (
-          <Col xs={24} lg={12}>
-            <Collapsible suffix="presse" label="Pressetext">
+          <Col lg={12} xs={24}>
+            <Collapsible label="Pressetext" suffix="presse">
               <PressePreview veranstaltung={vermietung} />
             </Collapsible>
           </Col>

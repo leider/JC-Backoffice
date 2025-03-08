@@ -22,7 +22,7 @@ export default function LabelCurrencyRow({
         </Form.Item>
       </Col>
       <Col span={6}>
-        <NumberInput name={path} decimals={2} suffix="€" onChange={onChange} disabled={disabled} />
+        <NumberInput decimals={2} disabled={disabled} name={path} onChange={onChange} suffix="€" />
       </Col>
     </JazzRow>
   );

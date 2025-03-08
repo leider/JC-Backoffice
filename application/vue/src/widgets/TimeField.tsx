@@ -60,11 +60,11 @@ export const TimeField: FunctionComponent<TTimeField> = ({
 
   return (
     <AntdForm.Item
-      name={name}
+      initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
+      name={name}
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
-      initialValue={initialValue}
     >
       <TimeFieldEmbedded baseValue={baseValue} />
     </AntdForm.Item>
@@ -95,5 +95,5 @@ const TimeFieldEmbedded = ({
     updateValue(valDayjs);
   }, [baseValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <TimePicker format="HH:mm" minuteStep={15} value={valDayjs} onChange={updateValue} />;
+  return <TimePicker format="HH:mm" minuteStep={15} onChange={updateValue} value={valDayjs} />;
 };

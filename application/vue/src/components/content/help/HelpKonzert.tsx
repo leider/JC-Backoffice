@@ -33,20 +33,20 @@ export default function HelpKonzert() {
       <>
         <HelpSection
           initiallyOpen
+          items={konzertAktionen}
           label={
             <span>
               <b>Konzert - Aktionen</b> Hier siehst Du alles in einer Übersicht. In der Titelzeile findest Du Knöpfe für Aktionen:
             </span>
           }
-          items={konzertAktionen}
         />
         <HelpSection
+          items={konzert}
           label={
             <span>
               <b>Konzert:</b>
             </span>
           }
-          items={konzert}
         />
       </>
     )

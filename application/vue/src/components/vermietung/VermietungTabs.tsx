@@ -62,29 +62,29 @@ export default function VermietungTabs() {
     () => {
       const tabAllgemeines = {
         key: "allgemeines",
-        label: <TabLabel type="allgemeines" title="Allgemeines" />,
+        label: <TabLabel title="Allgemeines" type="allgemeines" />,
         children: <TabAllgemeines />,
       };
       const tabAngebot = {
         key: "angebot",
-        label: <TabLabel type="angebot" title="Angebot / Vertrag" />,
+        label: <TabLabel title="Angebot / Vertrag" type="angebot" />,
         children: <TabAngebot />,
       };
 
       const tabTechnik = {
         key: "technik",
-        label: <TabLabel type="technik" title="Technik" />,
+        label: <TabLabel title="Technik" type="technik" />,
         children: <TabTechnik />,
       };
       const tabKosten = {
         key: "ausgaben",
-        label: <TabLabel type="ausgaben" title="Kalkulation" />,
+        label: <TabLabel title="Kalkulation" type="ausgaben" />,
         children: <TabKosten />,
       };
 
       const tabPresse = {
         key: "presse",
-        label: <TabLabel type="presse" title="Presse" />,
+        label: <TabLabel title="Presse" type="presse" />,
         children: <TabPresse />,
       };
 
@@ -103,12 +103,12 @@ export default function VermietungTabs() {
 
   return (
     <Tabs
-      type="card"
       activeKey={activePage}
       items={tabs}
       onChange={(newPage) => {
         setSearch({ page: newPage });
       }}
+      type="card"
     />
   );
 }

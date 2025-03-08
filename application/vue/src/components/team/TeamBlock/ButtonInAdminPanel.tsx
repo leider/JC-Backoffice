@@ -13,10 +13,10 @@ export function ButtonInAdminPanel({ type, veranstaltung }: ButtonInAdminPanelPr
   const { color, icon } = colorsAndIconsForSections;
   return (
     <ButtonWithIconAndLink
-      icon={icon(type)}
-      tooltipTitle={capitalize(type)}
-      to={`${veranstaltung?.fullyQualifiedUrl}?page=${type}`}
       color={color(type)}
+      icon={icon(type)}
+      to={`${veranstaltung?.fullyQualifiedUrl}?page=${type}`}
+      tooltipTitle={capitalize(type)}
     />
   );
 }

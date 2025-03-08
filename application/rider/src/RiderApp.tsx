@@ -23,6 +23,10 @@ function RiderApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
+        form={{
+          validateMessages: { required: "Du musst einen Wert eingeben" },
+        }}
+        locale={locale_de}
         theme={{
           token: {
             colorPrimary: "#337ab7",
@@ -39,10 +43,6 @@ function RiderApp() {
             colorBgBase: darkMode ? "#101010" : "#fafafa",
           },
           algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        }}
-        locale={locale_de}
-        form={{
-          validateMessages: { required: "Du musst einen Wert eingeben" },
         }}
       >
         <App>

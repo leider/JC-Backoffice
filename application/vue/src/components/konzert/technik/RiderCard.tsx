@@ -33,23 +33,23 @@ Dein Jazzclub Team
   }, [href]);
 
   return (
-    <Collapsible suffix="technik" label="Rider">
+    <Collapsible label="Rider" suffix="technik">
       <JazzRow>
         <Col span={24}>
           <JazzPageHeader
-            title=""
             buttons={[
-              <ButtonForRider key="pdf" icon="Printer" text="PDF" href={printref} />,
+              <ButtonForRider href={printref} icon="Printer" key="pdf" text="PDF" />,
               <ButtonForRider
-                key="sendrider"
-                icon="EnvelopeFill"
-                text="Als E-Mail..."
                 href={`mailto:?subject=Rider für Jazzclub bearbeiten&body=${text}`}
+                icon="EnvelopeFill"
+                key="sendrider"
+                text="Als E-Mail..."
               />,
-              <ButtonForRider key="linkrider" icon="EyeFill" text="Vorschau" href={href} />,
+              <ButtonForRider href={href} icon="EyeFill" key="linkrider" text="Vorschau" />,
             ]}
+            title=""
           />
-          <Form.Item name="riderBoxes" valuePropName="targetBoxes" trigger="setTargetBoxes">
+          <Form.Item name="riderBoxes" trigger="setTargetBoxes" valuePropName="targetBoxes">
             <RiderComp />
           </Form.Item>
         </Col>

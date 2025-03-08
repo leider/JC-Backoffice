@@ -44,7 +44,7 @@ export default function BigKalender() {
 
   function IcalCheck() {
     return (
-      <Form.Item label={<b> Kalender</b>} name="icals" initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]}>
+      <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b> Kalender</b>} name="icals">
         <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
       </Form.Item>
     );
@@ -52,7 +52,7 @@ export default function BigKalender() {
 
   function TerminCheck() {
     return (
-      <Form.Item label={<b>Termine</b>} name="termine" initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]}>
+      <Form.Item initialValue={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} label={<b>Termine</b>} name="termine">
         <Checkbox.Group options={["Feiertag", "Ferien", "Sonstiges", "Vermietung"]} />
       </Form.Item>
     );
@@ -69,18 +69,26 @@ export default function BigKalender() {
           calRef.current?.getApi().refetchEvents();
         }}
       >
-        <JazzPageHeader title="Kalenderübersicht" buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} />
+        <JazzPageHeader buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} title="Kalenderübersicht" />
       </Form>
       <Row gutter={8}>
         <Col span={24} style={{ zIndex: 0 }}>
           <FullCalendar
-            ref={calRef}
-            plugins={[dayGridPlugin, multiMonthPlugin]}
+            displayEventEnd
+            eventContent={renderEventContent}
+            eventDisplay="block"
+            eventSources={[getEvents]}
+            headerToolbar={{ left: "title", center: "four,six,twelve,weeks", right: "prev,today,next" }}
+            height="auto"
+            initialDate={initiaDate}
             initialView="twelve"
             locales={[deLocale]}
-            headerToolbar={{ left: "title", center: "four,six,twelve,weeks", right: "prev,today,next" }}
+            multiMonthMaxColumns={4}
+            multiMonthMinWidth={500}
+            plugins={[dayGridPlugin, multiMonthPlugin]}
+            ref={calRef}
+            showNonCurrentDates={false}
             titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
-            displayEventEnd
             views={{
               twelve: {
                 buttonText: "12 Monate",
@@ -105,14 +113,6 @@ export default function BigKalender() {
                 eventTimeFormat: { hour: "2-digit", minute: "2-digit", meridiem: false },
               },
             }}
-            height="auto"
-            multiMonthMaxColumns={4}
-            multiMonthMinWidth={500}
-            initialDate={initiaDate}
-            eventSources={[getEvents]}
-            eventContent={renderEventContent}
-            eventDisplay="block"
-            showNonCurrentDates={false}
           />
         </Col>
       </Row>

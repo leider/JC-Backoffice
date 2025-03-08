@@ -34,7 +34,7 @@ function VeranstaltungenRenderer({ name }: { name: NamePath }) {
 
   return (
     <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
-      <FormItem name={name} valuePropName="veranstaltungen" trigger="onText">
+      <FormItem name={name} trigger="onText" valuePropName="veranstaltungen">
         <InnerVeranstaltungenRenderer />
       </FormItem>
     </ConfigProvider>
@@ -45,25 +45,25 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
   function ImagePreview({ value }: { value?: string }) {
     return (
       <Popover
-        trigger="click"
-        placement="rightTop"
         content={
           <Image
             key={value}
-            src={`/imagepreview/${value}`}
-            width="400px"
             preview={{
               src: `/upload/${value}`,
               toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
-                <Space size={12} className="toolbar-wrapper">
+                <Space className="toolbar-wrapper" size={12}>
                   <ButtonForImagePreview icon="Download" onClick={() => imgFullsize(value)} />
-                  <ButtonForImagePreview icon="ZoomOut" onClick={onZoomOut} disabled={scale === 1} />
-                  <ButtonForImagePreview icon="ZoomIn" onClick={onZoomIn} disabled={scale === 50} />
+                  <ButtonForImagePreview disabled={scale === 1} icon="ZoomOut" onClick={onZoomOut} />
+                  <ButtonForImagePreview disabled={scale === 50} icon="ZoomIn" onClick={onZoomIn} />
                 </Space>
               ),
             }}
+            src={`/imagepreview/${value}`}
+            width="400px"
           />
         }
+        placement="rightTop"
+        trigger="click"
       >
         <Button type="dashed">Vorschau</Button>
       </Popover>
@@ -71,7 +71,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
   }
 
   return (
-    <Collapsible suffix="gaeste" label={title} noTopBorder uncollapsed amount={noOfImages ?? "..."} noMoneySign>
+    <Collapsible amount={noOfImages ?? "..."} label={title} noMoneySign noTopBorder suffix="gaeste" uncollapsed>
       <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
         <Form.List name={prefix}>
           {(fields) =>
@@ -79,7 +79,7 @@ export function Section({ prefix, title, noOfImages }: { prefix: kindOfSection; 
               return (
                 <JazzRow key={field.key}>
                   <Col span={10}>
-                    <TextField name={[field.name.toString(), "newname"]} label={undefined} />
+                    <TextField label={undefined} name={[field.name.toString(), "newname"]} />
                   </Col>
                   <Col span={2}>
                     {prefix !== "notFound" && (

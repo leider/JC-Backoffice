@@ -32,7 +32,7 @@ export function TargetContainer({
     <div style={{ width: "100%", overflow: "scroll" }}>
       <div ref={setNodeRef} style={style}>
         {map(targetBoxes, (each) => (
-          <DraggableBox key={each.id} item={each} callback={boxChanged} />
+          <DraggableBox callback={boxChanged} item={each} key={each.id} />
         ))}
       </div>
     </div>

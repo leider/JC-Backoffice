@@ -99,15 +99,15 @@ export const TextField: FunctionComponent<TTextField> = ({
 
   return (
     <AntdForm.Item
-      name={name}
+      initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
+      name={name}
       rules={rules}
       style={label ? { ...style } : { ...style, marginBottom: 0 }}
-      initialValue={initialValue}
-      valuePropName="textVal"
       trigger="onText"
+      valuePropName="textVal"
     >
-      <TextInputEmbedded disabled={disabled} onChange={onChange} save={save} focus={focus} />
+      <TextInputEmbedded disabled={disabled} focus={focus} onChange={onChange} save={save} />
     </AntdForm.Item>
   );
 };
@@ -148,20 +148,20 @@ const TextInputEmbedded: FunctionComponent<TTextInputEmbedded> = ({
 
   return (
     <Input
-      ref={inputRef}
-      id={id}
       autoComplete="off"
       disabled={disabled}
-      value={textVal}
-      onChange={({ target: { value: nextValue } }) => {
-        changed(nextValue);
-        save?.(true);
-      }}
+      id={id}
       onBlur={({ target: { value: nextValue } }) => {
         changed(nextValue, true);
         save?.();
       }}
+      onChange={({ target: { value: nextValue } }) => {
+        changed(nextValue);
+        save?.(true);
+      }}
       onPressEnter={() => save?.()}
+      ref={inputRef}
+      value={textVal}
     />
   );
 };

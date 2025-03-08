@@ -22,29 +22,29 @@ export default function InlineEditableActions({ actions }: { actions: ActionCall
     <>
       <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
         <JazzModal
-          title="Löschen"
+          cancelText="Och nö"
           closable={false}
-          open={open}
+          okText="Löschen"
+          onCancel={() => setOpen(false)}
           onOk={() => {
             actions.delete();
             setOpen(false);
           }}
-          onCancel={() => setOpen(false)}
-          okText="Löschen"
-          cancelText="Och nö"
+          open={open}
+          title="Löschen"
         >
           <p>Die Zeile wird gelöscht.</p>
           <p>Bist Du sicher?.</p>
         </JazzModal>
       </ConfigProvider>
-      <ButtonWithIcon key="copy" type="text" icon="Files" onClick={actions.copy} tooltipTitle="Zeile Kopieren" tooltipPlacement="leftTop" />
+      <ButtonWithIcon icon="Files" key="copy" onClick={actions.copy} tooltipPlacement="leftTop" tooltipTitle="Zeile Kopieren" type="text" />
       <ButtonWithIcon
-        key="delete"
-        type="text"
         icon="Trash"
+        key="delete"
         onClick={() => setOpen(true)}
-        tooltipTitle="Zeile Löschen"
         tooltipPlacement="leftTop"
+        tooltipTitle="Zeile Löschen"
+        type="text"
       />
     </>
   );

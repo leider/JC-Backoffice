@@ -44,13 +44,13 @@ export const ColorField: FunctionComponent<TColorField & { presets?: boolean }> 
 
   return (
     <AntdForm.Item
-      name={name}
+      initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
+      name={name}
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
-      initialValue={initialValue}
-      valuePropName="value"
       trigger="onChange"
+      valuePropName="value"
     >
       <ColorInputEmbedded presets={presets} save={save} />
     </AntdForm.Item>
@@ -73,14 +73,8 @@ const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onC
 
   return (
     <ColorPicker
-      open
-      size="small"
-      presets={
-        presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
-      }
       defaultFormat="hex"
       format="hex"
-      value={value}
       onChange={(val) => {
         onChange?.(val.toHexString());
         save?.(true);
@@ -90,6 +84,12 @@ const ColorInputEmbedded: FunctionComponent<TColorInputEmbedded> = ({ value, onC
           save?.();
         }
       }}
+      open
+      presets={
+        presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
+      }
+      size="small"
+      value={value}
     />
   );
 };

@@ -13,10 +13,10 @@ export default function ButtonForImagePreview({
 }) {
   return (
     <Button
-      icon={icon && <IconForSmallBlock size={14} iconName={icon} color="white" />}
-      type="text"
-      onClick={onClick}
       disabled={disabled}
+      icon={icon && <IconForSmallBlock color="white" iconName={icon} size={14} />}
+      onClick={onClick}
+      type="text"
     />
   );
 }

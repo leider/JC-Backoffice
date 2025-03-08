@@ -36,12 +36,12 @@ function InternalCheckbox({
     <Checkbox
       autoFocus={focus}
       checked={checked}
+      disabled={disabled}
+      onBlur={() => save?.()}
       onChange={(e) => {
         onChange?.(e);
         save?.(true);
       }}
-      disabled={disabled}
-      onBlur={() => save?.()}
     >
       {label && <b>{label}</b>}
     </Checkbox>
@@ -66,11 +66,11 @@ export default function CheckItem({
   return (
     <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} valuePropName="checked">
       <InternalCheckbox
-        label={label}
+        disabled={disabled}
         focus={focus}
         focusByMouseClick={focusByMouseClick}
+        label={label}
         onChange={onChange}
-        disabled={disabled}
         save={save}
       />
     </Form.Item>

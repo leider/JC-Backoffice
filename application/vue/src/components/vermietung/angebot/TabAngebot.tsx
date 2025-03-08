@@ -8,10 +8,10 @@ import { JazzRow } from "@/widgets/JazzRow";
 export default function TabAngebot() {
   return (
     <JazzRow>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <AngebotCard />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <ZusaetzlicheInfosCard />
         <InfoCard />
       </Col>

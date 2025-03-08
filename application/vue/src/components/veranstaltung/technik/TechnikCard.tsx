@@ -42,13 +42,13 @@ export default function TechnikCard({ fuerVermietung }: { fuerVermietung: boolea
   }, [brauchtFluegel, fluegelstimmerEUR, form, optionen.preisKlavierstimmer, updateSumme]);
 
   return (
-    <Collapsible suffix="technik" label="Backline" noTopBorder amount={summe}>
+    <Collapsible amount={summe} label="Backline" noTopBorder suffix="technik">
       <JazzRow>
         <Col span={8}>
-          <CheckItem name={["technik", "checked"]} label="Technik ist geklärt" />
+          <CheckItem label="Technik ist geklärt" name={["technik", "checked"]} />
         </Col>
         <Col span={8}>
-          <CheckItem name={["technik", "fluegel"]} label="Flügel stimmen" />
+          <CheckItem label="Flügel stimmen" name={["technik", "fluegel"]} />
         </Col>
         <Col span={8}>
           <DynamicItem
@@ -57,55 +57,55 @@ export default function TechnikCard({ fuerVermietung }: { fuerVermietung: boolea
               const brauchtKlavier = getFieldValue(["technik", "fluegel"]);
               return (
                 <NumberInput
-                  name={["kosten", "fluegelstimmerEUR"]}
-                  label="Flügelstimmer"
                   decimals={2}
-                  suffix="€"
-                  onChange={updateSumme}
                   disabled={!brauchtKlavier}
+                  label="Flügelstimmer"
+                  name={["kosten", "fluegelstimmerEUR"]}
+                  onChange={updateSumme}
+                  suffix="€"
                 />
               );
             }}
           />
         </Col>
       </JazzRow>
-      <Row gutter={12} align="bottom" style={{ marginBottom: 12 }}>
+      <Row align="bottom" gutter={12} style={{ marginBottom: 12 }}>
         <Col span={24}>
           <Uploader name={["technik", "dateirider"]} typ="rider" />
         </Col>
       </Row>
       <JazzRow>
         <Col span={16}>
-          <MultiSelectWithTags name={["technik", "backlineJazzclub"]} label="Backline Jazzclub" options={backlineJazzclub} />
+          <MultiSelectWithTags label="Backline Jazzclub" name={["technik", "backlineJazzclub"]} options={backlineJazzclub} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <MultiSelectWithTags name={["technik", "backlineRockshop"]} label="Backline Rockshop" options={backlineRockshop} />
+          <MultiSelectWithTags label="Backline Rockshop" name={["technik", "backlineRockshop"]} options={backlineRockshop} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["kosten", "backlineEUR"]}
-            label="Betrag (alt, jetzt in Werbung eintragen)"
             decimals={2}
-            suffix="€"
-            onChange={updateSumme}
             disabled
+            label="Betrag (alt, jetzt in Werbung eintragen)"
+            name={["kosten", "backlineEUR"]}
+            onChange={updateSumme}
+            suffix="€"
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["technik", "technikAngebot1"]} label="Technik Zumietung" />
+          <TextField label="Technik Zumietung" name={["technik", "technikAngebot1"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["kosten", "technikAngebot1EUR"]}
-            label="Betrag (alt, jetzt in Werbung eintragen)"
             decimals={2}
-            suffix="€"
-            onChange={updateSumme}
             disabled
+            label="Betrag (alt, jetzt in Werbung eintragen)"
+            name={["kosten", "technikAngebot1EUR"]}
+            onChange={updateSumme}
+            suffix="€"
           />
         </Col>
       </JazzRow>

@@ -107,28 +107,28 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
       }}
     >
       <Link
-        to="/"
         onClick={() => location.reload()}
         style={{
           height: "100%",
           display: "flex",
           alignItems: "center",
         }}
+        to="/"
       >
-        <img src="/vue/img/logo_weiss.png" alt="Jazzclub Logo" />
+        <img alt="Jazzclub Logo" src="/vue/img/logo_weiss.png" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
         <ConfigProvider theme={{ components: { Menu: { subMenuItemSelectedColor: "white" } } }}>
           <Menu
-            theme="dark"
-            mode="horizontal"
             items={currentUser.id ? items : []}
+            mode="horizontal"
+            overflowedIndicator="Mehr..."
             selectedKeys={[activeElement]}
             style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
-            overflowedIndicator="Mehr..."
+            theme="dark"
           />
           <div style={{ width: 40 }} />
-          <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
+          <Menu items={userMenu ? [userMenu] : []} mode="horizontal" selectedKeys={[activeElement]} theme="dark" />
         </ConfigProvider>
       </div>
       <Preferences isOpen={isOpen} setIsOpen={setIsOpen} />

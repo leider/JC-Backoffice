@@ -63,26 +63,26 @@ export default function TabKasse() {
   return (
     <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
       <JazzRow>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <EinnahmenCard />
           <KassenzettelFreigabe />
           <JazzRow>
             <Col span={8}>
-              <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix="€" disabled />
+              <NumberInput decimals={2} disabled label="Anfangsbestand Kasse" name={["kasse", "anfangsbestandEUR"]} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix="€" />
+              <NumberInput decimals={2} disabled label="Endbestand Gezählt" name={["kasse", "endbestandGezaehltEUR"]} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInputWithDirectValue label="Endbestand Berechnet" value={endbestandEUR} suffix="€" decimals={2} />
+              <NumberInputWithDirectValue decimals={2} label="Endbestand Berechnet" suffix="€" value={endbestandEUR} />
             </Col>
           </JazzRow>
         </Col>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <AusgabenCard />
         </Col>
       </JazzRow>
-      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)} />
+      <Tour onClose={() => setKasseHelpOpen(false)} open={isKasseHelpOpen} steps={toursteps} />
     </KassenContext.Provider>
   );
 }

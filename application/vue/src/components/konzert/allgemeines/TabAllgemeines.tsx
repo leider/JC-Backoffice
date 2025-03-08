@@ -16,17 +16,17 @@ export default function TabAllgemeines() {
 
   return (
     <JazzRow>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <EventCard />
         <ArtistCard />
         <KommentarCard />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <MitarbeiterCard />
         <KontaktCard kontakte={optionen!.agenturen} selector="agentur">
           <JazzRow>
             <Col span={12}>
-              <NumberInput name={["kosten", "provisionAgentur"]} label="Provision" decimals={2} suffix="€" />
+              <NumberInput decimals={2} label="Provision" name={["kosten", "provisionAgentur"]} suffix="€" />
             </Col>
           </JazzRow>
         </KontaktCard>

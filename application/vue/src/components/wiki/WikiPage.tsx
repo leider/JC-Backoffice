@@ -91,36 +91,36 @@ export default function WikiPage() {
   return (
     <Form
       form={form}
+      layout="vertical"
+      onFinish={saveForm}
       onValuesChange={() => {
         const current = form.getFieldsValue(true);
         logDiffForDirty(initialValue, current, false);
         setDirty(areDifferent(initialValue, current));
         setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
       }}
-      onFinish={saveForm}
-      layout="vertical"
     >
       <JazzPageHeader
-        title={`Wiki ${realPage}`}
         breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
         buttons={[
-          <Search key="Search" placeholder="Wiki durchsuchen..." onSearch={onSearch} style={{ width: 200 }} />,
+          <Search key="Search" onSearch={onSearch} placeholder="Wiki durchsuchen..." style={{ width: 200 }} />,
           <Button
-            key="edit"
-            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
-            type="primary"
-            onClick={editOrUndo}
             disabled={!isSuperUser}
+            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
+            key="edit"
+            onClick={editOrUndo}
+            type="primary"
           >
             {isEdit ? "Undo" : "Bearbeiten"}
           </Button>,
-          <SaveButton key="save" disabled={!dirty} />,
+          <SaveButton disabled={!dirty} key="save" />,
         ]}
+        title={`Wiki ${realPage}`}
       />
       <RowWrapper>
         <JazzRow>
           <Col span={24}>
-            {isEdit ? <MarkdownEditor name="content" canImages /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
+            {isEdit ? <MarkdownEditor canImages name="content" /> : <div dangerouslySetInnerHTML={{ __html: rendered }} />}
           </Col>
         </JazzRow>
       </RowWrapper>

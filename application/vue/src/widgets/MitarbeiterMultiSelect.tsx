@@ -30,7 +30,7 @@ function FullUserWithKanns({ user }: { user: UserWithKann }) {
       {user.label}{" "}
       {map(user.kann, (kann) => {
         return (
-          <Tag key={kann} color={colorFor(kann)}>
+          <Tag color={colorFor(kann)} key={kann}>
             {kann === "Master" ? "Abendverantwortlicher" : kann}
           </Tag>
         );
@@ -77,22 +77,22 @@ function InnerSelect({
 
   return (
     <Select
-      ref={ref}
-      mode="multiple"
-      options={filtered}
-      tagRender={tagRender}
-      optionRender={renderInList}
       disabled={disabled}
-      style={{ width: "100%" }}
-      showSearch
       filterOption={filterOption}
-      placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}
+      mode="multiple"
+      onBlur={() => save?.()}
       onChange={(val) => {
         onChange?.(val);
         save?.(true);
       }}
+      optionRender={renderInList}
+      options={filtered}
+      placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}
+      ref={ref}
+      showSearch
+      style={{ width: "100%" }}
+      tagRender={tagRender}
       value={value}
-      onBlur={() => save?.()}
     />
   );
 }
@@ -114,7 +114,7 @@ export default function MitarbeiterMultiSelect({
 }) {
   return (
     <Form.Item label={label ? <b>{label + ":"}</b> : undefined} name={name} noStyle={!label}>
-      <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} save={save} focus={focus} />
+      <InnerSelect disabled={disabled} focus={focus} save={save} usersAsOptions={usersAsOptions} />
     </Form.Item>
   );
 }

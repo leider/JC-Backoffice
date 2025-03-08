@@ -7,10 +7,10 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function VertragspartnerCard() {
   return (
-    <Collapsible suffix="allgemeines" label="Vertragspartner">
+    <Collapsible label="Vertragspartner" suffix="allgemeines">
       <JazzRow>
         <Col span={24}>
-          <TextField name={["vertragspartner", "name"]} label="Name" />
+          <TextField label="Name" name={["vertragspartner", "name"]} />
           <Form.Item label={<b>Adresse:</b>} name={["vertragspartner", "adresse"]}>
             <TextArea rows={7} />
           </Form.Item>
@@ -18,10 +18,10 @@ export default function VertragspartnerCard() {
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <TextField name={["vertragspartner", "telefon"]} label="Telefon" />
+          <TextField label="Telefon" name={["vertragspartner", "telefon"]} />
         </Col>
         <Col span={12}>
-          <TextField name={["vertragspartner", "email"]} label="E-Mail" isEmail />
+          <TextField isEmail label="E-Mail" name={["vertragspartner", "email"]} />
         </Col>
       </JazzRow>
     </Collapsible>

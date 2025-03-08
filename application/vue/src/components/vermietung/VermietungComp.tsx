@@ -48,7 +48,7 @@ export default function VermietungComp() {
   }
 
   return (
-    <VermietungFormAndPageHeader data={data} saveForm={saveForm} resetChanges={refetch}>
+    <VermietungFormAndPageHeader data={data} resetChanges={refetch} saveForm={saveForm}>
       <ShowOnCopy title="Kopierte Vermietung" />
       <VermietungTabs />
     </VermietungFormAndPageHeader>

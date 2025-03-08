@@ -40,25 +40,25 @@ function EmbeddedPickers({
   return (
     <DatePicker.RangePicker
       allowClear={false}
-      format="ddd DD.MM.YY"
-      value={[start, end]}
-      onCalendarChange={onCalendarChange}
-      style={{ width: "100%" }}
-      needConfirm={focus}
       autoFocus={focus}
+      format="ddd DD.MM.YY"
+      needConfirm={focus}
+      onCalendarChange={onCalendarChange}
       onOpenChange={(open) => {
         if (!open) {
           save?.();
         }
       }}
+      style={{ width: "100%" }}
+      value={[start, end]}
     />
   );
 }
 
 export default function StartEndDateOnlyPickersInTable({ name, save, focus }: StartEndDateOnlyPickersProps) {
   return (
-    <Form.Item name={name} style={{ marginBottom: 0 }} hasFeedback>
-      <EmbeddedPickers save={save} focus={focus} />
+    <Form.Item hasFeedback name={name} style={{ marginBottom: 0 }}>
+      <EmbeddedPickers focus={focus} save={save} />
     </Form.Item>
   );
 }

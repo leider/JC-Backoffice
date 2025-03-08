@@ -41,8 +41,8 @@ export default function HelpVeranstaltungen() {
     {
       title: (
         <span>
-          Was sind die Aktionen in der Monatszeile? <ButtonWithIcon text="Pressetexte" size="small" type="default" icon="FileText" />
-          <ButtonWithIcon text="Übersicht" size="small" type="default" icon="FileSpreadsheet" />
+          Was sind die Aktionen in der Monatszeile? <ButtonWithIcon icon="FileText" size="small" text="Pressetexte" type="default" />
+          <ButtonWithIcon icon="FileSpreadsheet" size="small" text="Übersicht" type="default" />
         </span>
       ),
       content:
@@ -72,13 +72,13 @@ export default function HelpVeranstaltungen() {
     {
       title: (
         <span>
-          Und die Icons? <ButtonWithIcon color={color("allgemeines")} size="small" icon={icon("allgemeines")} />
-          <ButtonWithIcon color={color("gaeste")} size="small" icon={icon("gaeste")} />
-          <ButtonWithIcon color={color("technik")} size="small" icon={icon("technik")} />
-          <ButtonWithIcon color={color("ausgaben")} size="small" icon={icon("ausgaben")} />
-          <ButtonWithIcon color={color("hotel")} size="small" icon={icon("hotel")} />
-          <ButtonWithIcon color={color("kasse")} size="small" icon={icon("kasse")} />
-          <ButtonWithIcon color={token.colorSuccess} size="small" icon="EyeFill" />
+          Und die Icons? <ButtonWithIcon color={color("allgemeines")} icon={icon("allgemeines")} size="small" />
+          <ButtonWithIcon color={color("gaeste")} icon={icon("gaeste")} size="small" />
+          <ButtonWithIcon color={color("technik")} icon={icon("technik")} size="small" />
+          <ButtonWithIcon color={color("ausgaben")} icon={icon("ausgaben")} size="small" />
+          <ButtonWithIcon color={color("hotel")} icon={icon("hotel")} size="small" />
+          <ButtonWithIcon color={color("kasse")} icon={icon("kasse")} size="small" />
+          <ButtonWithIcon color={token.colorSuccess} icon="EyeFill" size="small" />
         </span>
       ),
       content: "Mit den Icons kannst Du direkt in eine Bearbeitungsseite springen, oder - beim Auge - auf die kompakte Übersicht.",
@@ -90,20 +90,20 @@ export default function HelpVeranstaltungen() {
       <>
         <HelpSection
           initiallyOpen
+          items={veranstaltungenAktionen}
           label={
             <span>
               <b>Veranstaltungen - Aktionen</b> Hier siehst Du alles in einer Übersicht. In der Titelzeile findest Du Knöpfe für Aktionen:
             </span>
           }
-          items={veranstaltungenAktionen}
         />
         <HelpSection
+          items={veranstaltungen}
           label={
             <span>
               <b>Veranstaltungen:</b>
             </span>
           }
-          items={veranstaltungen}
         />
       </>
     )

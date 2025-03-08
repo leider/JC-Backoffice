@@ -37,18 +37,18 @@ ${presse.fullyQualifiedJazzclubURL}`,
       {map(veranstaltung.presse.image, (img) => (
         <Image
           key={img}
-          src={`/imagepreview/${img}`}
-          width="100%"
           preview={{
             src: `/upload/${img}`,
             toolbarRender: (_, { transform: { scale }, actions: { onZoomOut, onZoomIn } }) => (
-              <Space size={12} className="toolbar-wrapper">
+              <Space className="toolbar-wrapper" size={12}>
                 <ButtonForImagePreview icon="Download" onClick={() => imgFullsize(img)} />
-                <ButtonForImagePreview icon="ZoomOut" onClick={onZoomOut} disabled={scale === 1} />
-                <ButtonForImagePreview icon="ZoomIn" onClick={onZoomIn} disabled={scale === 50} />
+                <ButtonForImagePreview disabled={scale === 1} icon="ZoomOut" onClick={onZoomOut} />
+                <ButtonForImagePreview disabled={scale === 50} icon="ZoomIn" onClick={onZoomIn} />
               </Space>
             ),
           }}
+          src={`/imagepreview/${img}`}
+          width="100%"
         />
       ))}
     </>

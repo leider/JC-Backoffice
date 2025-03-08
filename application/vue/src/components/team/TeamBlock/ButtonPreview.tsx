@@ -6,6 +6,6 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 export function ButtonPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const { token } = theme.useToken();
   return (
-    <ButtonWithIconAndLink icon="EyeFill" to={veranstaltung.fullyQualifiedPreviewUrl} tooltipTitle="Vorschau" color={token.colorSuccess} />
+    <ButtonWithIconAndLink color={token.colorSuccess} icon="EyeFill" to={veranstaltung.fullyQualifiedPreviewUrl} tooltipTitle="Vorschau" />
   );
 }

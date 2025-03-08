@@ -56,10 +56,10 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
   ];
 
   return (
-    <Collapsible suffix="concert" label="Kostenübersicht / Break-Even" amount={kalk?.dealUeberschussTotal}>
+    <Collapsible amount={kalk?.dealUeberschussTotal} label="Kostenübersicht / Break-Even" suffix="concert">
       <JazzRow>
         <Col span={24}>
-          <Table columns={columns} dataSource={data} size="small" pagination={false} />
+          <Table columns={columns} dataSource={data} pagination={false} size="small" />
         </Col>
       </JazzRow>
     </Collapsible>

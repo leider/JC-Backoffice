@@ -91,12 +91,12 @@ export default function InfoCard() {
   const { useToken } = theme;
   const token = useToken().token;
   return (
-    <Collapsible suffix="angebot" label="Infos">
+    <Collapsible label="Infos" suffix="angebot">
       <JazzRow>
         <Col span={24}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
-            <Form.Item name={["angebot", "status"]} initialValue="offen">
-              <Radio.Group optionType="button" buttonStyle="solid" options={statusse} disabled={!!freigabe} />
+            <Form.Item initialValue="offen" name={["angebot", "status"]}>
+              <Radio.Group buttonStyle="solid" disabled={!!freigabe} optionType="button" options={statusse} />
             </Form.Item>
           </ConfigProvider>
         </Col>
@@ -111,7 +111,7 @@ export default function InfoCard() {
       {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
       <JazzRow>
         <Col span={6}>
-          <SingleSelect name="art" label="Art" options={printOptions} />
+          <SingleSelect label="Art" name="art" options={printOptions} />
         </Col>
         <Col span={8}>
           <DynamicItem
@@ -121,9 +121,9 @@ export default function InfoCard() {
                 <Form.Item label="&nbsp;">
                   <Button
                     block
-                    type="primary"
                     disabled={isDirty || !getFieldValue("id")}
                     onClick={() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true)))}
+                    type="primary"
                   >
                     Generieren
                   </Button>
@@ -138,10 +138,10 @@ export default function InfoCard() {
               <Form.Item label="&nbsp;">
                 <ButtonWithIcon
                   block
-                  text="Rechnung freigeben..."
+                  disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
                   icon="Unlock"
                   onClick={freigeben}
-                  disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
+                  text="Rechnung freigeben..."
                 />
               </Form.Item>
             ) : (
@@ -149,15 +149,15 @@ export default function InfoCard() {
                 <Form.Item label="&nbsp;">
                   <ButtonWithIcon
                     block
+                    color="#c71c2c"
+                    disabled={isDirty || !darfFreigabeAufheben}
                     icon="Lock"
+                    onClick={freigabeAufheben}
                     text="Ist freigegeben"
                     type="primary"
-                    color="#c71c2c"
-                    onClick={freigabeAufheben}
-                    disabled={isDirty || !darfFreigabeAufheben}
                   />
                 </Form.Item>
-                <TextField name={["angebot", "freigabe"]} label="Durch" disabled />
+                <TextField disabled label="Durch" name={["angebot", "freigabe"]} />
               </>
             ))}
         </Col>

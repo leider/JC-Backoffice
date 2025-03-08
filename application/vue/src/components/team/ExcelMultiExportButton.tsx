@@ -86,8 +86,8 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
     }, [bestaetigteFiltered, exportType, setIsOpen]);
 
     return (
-      <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
-        <Form form={form} layout="vertical" autoComplete="off">
+      <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={okClicked} open={isOpen}>
+        <Form autoComplete="off" form={form} layout="vertical">
           <JazzPageHeader title="Excel Export" />
           <Row gutter={8}>
             <Col span={12}>
@@ -106,14 +106,14 @@ export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[]
 
   return (
     <>
-      <SelectRangeForExcelModal isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} alle={alle} />
+      <SelectRangeForExcelModal alle={alle} isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} />
       <ButtonWithIcon
-        text="Kalkulation (Excel)"
+        color="#5900b9"
         icon="FileEarmarkSpreadsheet"
         onClick={() => {
           setIsExcelExportOpen(true);
         }}
-        color="#5900b9"
+        text="Kalkulation (Excel)"
       />
     </>
   );

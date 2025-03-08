@@ -47,9 +47,9 @@ export default function TeamFilter() {
       if (isBoolean(color)) {
         return (
           <Tag
-            key={label}
-            color={color ? "success" : "error"}
             closeIcon={!!prop}
+            color={color ? "success" : "error"}
+            key={label}
             onClose={() => {
               if (prop) {
                 form.setFieldValue(prop, undefined);
@@ -63,9 +63,9 @@ export default function TeamFilter() {
       } else {
         return (
           <Tag
-            key={label}
-            color={color}
             closeIcon
+            color={color}
+            key={label}
             onClose={() => {
               const typen = filter(form.getFieldValue(["kopf", "eventTyp"]), (typ: string) => typ !== label);
               form.setFieldValue(["kopf", "eventTyp"], typen);
@@ -77,7 +77,7 @@ export default function TeamFilter() {
         );
       }
     }
-    return map(labelsColors, (tag) => <HeaderTag key={tag.label} label={tag.label} color={tag.color} prop={tag.prop} />);
+    return map(labelsColors, (tag) => <HeaderTag color={tag.color} key={tag.label} label={tag.label} prop={tag.prop} />);
   }
 
   const teamFilter = withoutNullOrUndefinedStrippedBy(filterObj);
@@ -113,22 +113,22 @@ export default function TeamFilter() {
 
   const result = [
     <span key="aktiveFilter">
-      <ButtonWithIcon alwaysText type="default" size="small" text="Filter..." onClick={() => setOpen(true)} />
-      <TeamFilterEdit form={form} setOpen={setOpen} open={open} />
+      <ButtonWithIcon alwaysText onClick={() => setOpen(true)} size="small" text="Filter..." type="default" />
+      <TeamFilterEdit form={form} open={open} setOpen={setOpen} />
     </span>,
   ];
   if (!isEmpty(taggies)) {
     result.push(
       <ButtonWithIcon
         alwaysText
-        type="default"
-        size="small"
         key="resetFilter"
-        text="Zurücksetzen"
         onClick={() => {
           reset(form);
           setFilter(form.getFieldsValue(true));
         }}
+        size="small"
+        text="Zurücksetzen"
+        type="default"
       />,
     );
   }

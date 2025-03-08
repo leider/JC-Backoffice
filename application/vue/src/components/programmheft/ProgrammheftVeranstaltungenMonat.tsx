@@ -38,13 +38,8 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
   const { token } = theme.useToken();
   return (
     <Collapse
-      size="small"
-      className="monat-header"
-      style={{ backgroundColor: token.colorPrimary }}
       activeKey={expanded ? monat : undefined}
-      onChange={() => {
-        setExpanded(!expanded);
-      }}
+      className="monat-header"
       expandIcon={({ isActive }) => (isActive ? <CaretDown color={brightText} /> : <CaretRight color={brightText} />)}
       items={[
         {
@@ -76,7 +71,7 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
               </Row>
               <Row gutter={[8, 8]}>
                 {map(bestaetigte, (veranst) => (
-                  <Col key={veranst.id} xs={24} sm={12} md={8} xxl={6}>
+                  <Col key={veranst.id} md={8} sm={12} xs={24} xxl={6}>
                     <PressePreview veranstaltung={veranst} />
                   </Col>
                 ))}
@@ -85,6 +80,11 @@ export function ProgrammheftVeranstaltungenMonat({ monat, veranstaltungen }: { m
           ),
         },
       ]}
+      onChange={() => {
+        setExpanded(!expanded);
+      }}
+      size="small"
+      style={{ backgroundColor: token.colorPrimary }}
     />
   );
 }

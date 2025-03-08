@@ -28,12 +28,12 @@ function InnerSelect({
   return (
     <Select
       id={id}
-      options={filtered}
       mode={noAdd ? "multiple" : "tags"}
-      value={value}
       onChange={onChange}
-      tagRender={specialTagRender}
+      options={filtered}
       style={{ width: "100%" }}
+      tagRender={specialTagRender}
+      value={value}
     />
   );
 }
@@ -57,7 +57,7 @@ export default function MultiSelectWithTags({
 
   return (
     <Form.Item label={<b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b>} name={name} style={style}>
-      <InnerSelect realOptions={realOptions} noAdd={noAdd} specialTagRender={specialTagRender} />
+      <InnerSelect noAdd={noAdd} realOptions={realOptions} specialTagRender={specialTagRender} />
     </Form.Item>
   );
 }

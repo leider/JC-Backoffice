@@ -52,12 +52,16 @@ export default function HeftCalendar({
   return (
     <WrapFullCalendar>
       <FullCalendar
-        ref={calRef}
-        plugins={[dayGridPlugin]}
-        initialView="weeks"
         buttonText={{ next: ">", prev: "<" }}
-        locales={[deLocale]}
+        contentHeight={900}
+        eventContent={renderEventContent}
+        events={events}
         headerToolbar={{ left: "title", center: "", right: "prev,next" }}
+        initialDate={initialDate}
+        initialView="weeks"
+        locales={[deLocale]}
+        plugins={[dayGridPlugin]}
+        ref={calRef}
         views={{
           weeks: {
             buttonText: "36 Wochen",
@@ -65,10 +69,6 @@ export default function HeftCalendar({
             duration: { weeks: 9 },
           },
         }}
-        contentHeight={900}
-        initialDate={initialDate}
-        events={events}
-        eventContent={renderEventContent}
       />
     </WrapFullCalendar>
   );

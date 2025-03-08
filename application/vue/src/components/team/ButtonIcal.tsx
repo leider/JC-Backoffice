@@ -7,10 +7,10 @@ export default function ButtonIcal() {
   const { sm } = useBreakpoint();
   return (
     <Button
-      key="cal"
-      icon={<IconForSmallBlock size={14} iconName="CalendarWeek" />}
-      type="default"
       href={`${window.location.origin.replace(/https|http/, "webcal")}/ical/`}
+      icon={<IconForSmallBlock iconName="CalendarWeek" size={14} />}
+      key="cal"
+      type="default"
     >
       {sm && "ical..."}
     </Button>

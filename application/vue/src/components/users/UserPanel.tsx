@@ -52,14 +52,10 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
   const lightGreen = useToken().token.colorSuccessBgHover;
   return (
     <>
-      <EditUserModal isOpen={editUserOpen} setIsOpen={setEditUserOpen} user={user} isSuperUser={currentUser.accessrights.isSuperuser} />
+      <EditUserModal isOpen={editUserOpen} isSuperUser={currentUser.accessrights.isSuperuser} setIsOpen={setEditUserOpen} user={user} />
       <ChangePasswordModal isOpen={passwordOpen} setIsOpen={setPasswordOpen} user={user} />
       <Collapse
-        size="small"
         activeKey={expanded ? user.id : undefined}
-        onChange={() => {
-          setExpanded(!expanded);
-        }}
         expandIcon={({ isActive }) => (isActive ? <CaretDown color={textColor} /> : <CaretRight color={textColor} />)}
         items={[
           {
@@ -67,11 +63,10 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
             style: self ? { backgroundColor: lightGreen } : undefined,
             extra: (
               <Space>
-                {canEdit && <ButtonInUsers type="edit" callback={() => setEditUserOpen(true)} />}
-                {canEdit && <ButtonInUsers type="changepass" callback={() => setPasswordOpen(true)} />}
+                {canEdit && <ButtonInUsers callback={() => setEditUserOpen(true)} type="edit" />}
+                {canEdit && <ButtonInUsers callback={() => setPasswordOpen(true)} type="changepass" />}
                 {currentUser.accessrights.isSuperuser && !self && (
                   <ButtonInUsers
-                    type="delete"
                     callback={() => {
                       modal.confirm({
                         type: "confirm",
@@ -80,6 +75,7 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
                         onOk: () => mutateDeletion.mutate(user),
                       });
                     }}
+                    type="delete"
                   />
                 )}
               </Space>
@@ -123,6 +119,10 @@ export default function UserPanel({ user, currentUser }: { user: User; currentUs
             ),
           },
         ]}
+        onChange={() => {
+          setExpanded(!expanded);
+        }}
+        size="small"
       />
     </>
   );

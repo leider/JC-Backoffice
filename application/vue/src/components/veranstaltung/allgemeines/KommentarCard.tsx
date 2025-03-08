@@ -7,7 +7,7 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function KommentarCard({ forVermietung = false }: { forVermietung?: boolean }) {
   return (
-    <Collapsible suffix="allgemeines" label="Kommentar">
+    <Collapsible label="Kommentar" suffix="allgemeines">
       <JazzRow>
         <Col span={24}>
           {!forVermietung && (

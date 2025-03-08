@@ -46,7 +46,7 @@ export default function KalenderPage() {
   }
 
   return (
-    <JazzFormAndHeader<FerienIcals> title="Kalender" data={data} saveForm={saveForm} resetChanges={refetch}>
+    <JazzFormAndHeader<FerienIcals> data={data} resetChanges={refetch} saveForm={saveForm} title="Kalender">
       <KalenderPageInternal />
     </JazzFormAndHeader>
   );

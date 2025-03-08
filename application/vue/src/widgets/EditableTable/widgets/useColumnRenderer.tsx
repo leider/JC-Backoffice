@@ -19,9 +19,9 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
       case "boolean":
         return function BooleanCol(val: boolean) {
           return val ? (
-            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompactMode ? 14 : undefined} />
+            <IconForSmallBlock color={token.colorSuccess} iconName="CheckSquareFill" size={isCompactMode ? 14 : undefined} />
           ) : (
-            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompactMode ? 14 : undefined} />
+            <IconForSmallBlock color={token.colorFillSecondary} iconName="Square" size={isCompactMode ? 14 : undefined} />
           );
         };
       case "integer":
@@ -37,12 +37,12 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
       case "color":
         return function ColorCol(val: string | null) {
           if (isNil(val) && required) {
-            return <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorError} />;
+            return <IconForSmallBlock color={token.colorError} iconName="SlashSquare" size="20" />;
           }
           return val ? (
             <div style={{ backgroundColor: val, width: 20, height: 20 }} />
           ) : (
-            <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorPrimary} />
+            <IconForSmallBlock color={token.colorPrimary} iconName="SlashSquare" size="20" />
           );
         };
       case "date":
@@ -77,7 +77,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
             <>
               {map(val, (each) => (
                 <Tag key={each}>
-                  <TagForUser value={each} usersAsOptions={usersWithKann ?? []} hideErsthelfer />
+                  <TagForUser hideErsthelfer usersAsOptions={usersWithKann ?? []} value={each} />
                 </Tag>
               ))}
             </>

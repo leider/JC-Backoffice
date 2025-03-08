@@ -10,13 +10,13 @@ export default function ArtistCard() {
   const { optionen } = useJazzContext();
 
   return (
-    <Collapsible suffix="allgemeines" label="Künstler">
+    <Collapsible label="Künstler" suffix="allgemeines">
       <JazzRow>
         <Col span={12}>
-          <MultiSelectWithTags name={["artist", "name"]} label="Namen" options={optionen.artists} />
+          <MultiSelectWithTags label="Namen" name={["artist", "name"]} options={optionen.artists} />
         </Col>
         <Col span={6}>
-          <NumberInput name={["kosten", "gagenEUR"]} label="Gage (Netto)" decimals={2} suffix="€" />
+          <NumberInput decimals={2} label="Gage (Netto)" name={["kosten", "gagenEUR"]} suffix="€" />
         </Col>
       </JazzRow>
     </Collapsible>

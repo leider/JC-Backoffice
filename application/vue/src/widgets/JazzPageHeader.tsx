@@ -34,7 +34,7 @@ export function JazzPageHeader({
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
       <PageHeader
-        title={theHeader}
+        breadcrumb={breadcrumb ? breadcrumb : undefined}
         extra={buttons}
         footer={[
           firstTag,
@@ -45,8 +45,8 @@ export function JazzPageHeader({
           ),
           tags,
         ]}
-        breadcrumb={breadcrumb ? breadcrumb : undefined}
         style={{ ...style, paddingInline: 4 }}
+        title={theHeader}
       >
         {children}
       </PageHeader>

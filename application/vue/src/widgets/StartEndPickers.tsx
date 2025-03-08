@@ -33,12 +33,12 @@ function EmbeddedPickers({ id, onChange, value }: { id?: string; onChange?: (val
 
   return (
     <DatePicker.RangePicker
-      id={id}
-      showTime
-      minuteStep={30 as IntRange<1, 59>}
       format={["ddd DD.MM.YY HH:mm", "DDMMYY HH:mm"]}
-      value={[start, end]}
+      id={id}
+      minuteStep={30 as IntRange<1, 59>}
       onCalendarChange={onCalendarChange}
+      showTime
+      value={[start, end]}
     />
   );
 }

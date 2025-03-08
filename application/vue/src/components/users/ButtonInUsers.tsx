@@ -15,14 +15,14 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
   const iconName = { edit: "PencilSquare", changepass: "KeyFill", delete: "Trash" };
 
   return (
-    <Tooltip title={text[type]} color={color}>
+    <Tooltip color={color} title={text[type]}>
       <span
         onClick={(event) => {
           event.stopPropagation();
           callback();
         }}
       >
-        <IconForSmallBlock size={16} color={color} iconName={iconName[type] as IconProps["iconName"]} />
+        <IconForSmallBlock color={color} iconName={iconName[type] as IconProps["iconName"]} size={16} />
       </span>
     </Tooltip>
   );

@@ -18,7 +18,7 @@ export function renderEventContent(eventInfo: EventContentArg) {
       }
     >
       {eventInfo.event.extendedProps?.linkTo ? (
-        <Link to={eventInfo.event.extendedProps?.linkTo} style={{ color: eventInfo.event.textColor }}>
+        <Link style={{ color: eventInfo.event.textColor }} to={eventInfo.event.extendedProps?.linkTo}>
           {showTime ? eventInfo.timeText : ""} {eventInfo.event.title}
         </Link>
       ) : (

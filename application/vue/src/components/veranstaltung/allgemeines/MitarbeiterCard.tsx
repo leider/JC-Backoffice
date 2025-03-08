@@ -51,8 +51,8 @@ export default function MitarbeiterCard({ forVermietung = false }: { forVermietu
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
   return (
-    <Collapsible suffix="allgemeines" label="Mitarbeiter" noTopBorder={lg}>
-      <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
+    <Collapsible label="Mitarbeiter" noTopBorder={lg} suffix="allgemeines">
+      <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
     </Collapsible>
   );
 }

@@ -10,8 +10,8 @@ export default function ThreewayCheckbox({
   label: string;
 }) {
   return (
-    <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} valuePropName="checked" trigger="onChecked">
-      <InnerThreeway label={label} disabled={disabled} />
+    <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} trigger="onChecked" valuePropName="checked">
+      <InnerThreeway disabled={disabled} label={label} />
     </Form.Item>
   );
 }
@@ -45,7 +45,7 @@ function InnerThreeway({
   }, [chegg, onChecked]);
 
   return (
-    <Checkbox indeterminate={chegg === undefined} checked={chegg} onChange={innerChange} disabled={disabled}>
+    <Checkbox checked={chegg} disabled={disabled} indeterminate={chegg === undefined} onChange={innerChange}>
       <b>{label}</b>
     </Checkbox>
   );

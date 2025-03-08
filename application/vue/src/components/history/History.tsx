@@ -61,43 +61,43 @@ export function History() {
   }, [id]);
 
   return (
-    <Form form={form} autoComplete="off">
+    <Form autoComplete="off" form={form}>
       <JazzPageHeader
-        title="Änderungsverlauf"
         buttons={[
           <Button
-            key="edit"
-            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
-            type="primary"
-            onClick={() => setExpanded(!expanded)}
             disabled={!id}
+            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
+            key="edit"
+            onClick={() => setExpanded(!expanded)}
+            type="primary"
           >
             {expanded ? "Alle zuklappen" : "Alle aufklappen"}
           </Button>,
         ]}
+        title="Änderungsverlauf"
       />
       <RowWrapper>
         <JazzRow>
-          <Col xs={24} lg={8}>
+          <Col lg={8} xs={24}>
             <SingleSelect
-              name="collection"
               label="Tabelle"
-              options={["Veranstaltung", "Vermietung", "Programmheft", "Termine", "Mailregeln", "Optionen", "User", "Rider"]}
+              name="collection"
               onChange={(value) => setSearch({ collection: value })}
+              options={["Veranstaltung", "Vermietung", "Programmheft", "Termine", "Mailregeln", "Optionen", "User", "Rider"]}
             />
           </Col>
-          <Col xs={24} lg={16}>
+          <Col lg={16} xs={24}>
             <SingleSelect
-              name="id"
               label="ID"
-              options={displayIds ?? []}
+              name="id"
               onChange={(value) => setSearch({ collection: search.get("collection") ?? "", id: value ? value.split(" (ge")[0] : "" })}
+              options={displayIds ?? []}
             />
           </Col>
         </JazzRow>
         <JazzRow>
           <Col span={24}>
-            <Changelog collection={collection} id={realId} expanded={expanded} />
+            <Changelog collection={collection} expanded={expanded} id={realId} />
           </Col>
         </JazzRow>
       </RowWrapper>

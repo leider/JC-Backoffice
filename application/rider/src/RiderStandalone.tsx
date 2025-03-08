@@ -43,13 +43,13 @@ export const RiderStandalone: FC = () => {
   return (
     <>
       <JazzPageHeader
-        title={`Rider für "${titel}" am ${start}`}
         buttons={[
-          <ButtonWithIcon key="save" text="Speichern" icon="CheckSquare" disabled={!isSuccess} color={token.colorSuccess} onClick={save} />,
+          <ButtonWithIcon color={token.colorSuccess} disabled={!isSuccess} icon="CheckSquare" key="save" onClick={save} text="Speichern" />,
         ]}
+        title={`Rider für "${titel}" am ${start}`}
       />
       {isSuccess ? (
-        <RiderComp targetBoxes={targetBoxes} setTargetBoxes={setTargetBoxes} />
+        <RiderComp setTargetBoxes={setTargetBoxes} targetBoxes={targetBoxes} />
       ) : (
         <h1>
           Falsche Daten oder Link abgelaufen - <small>Bitte URL prüfen</small>

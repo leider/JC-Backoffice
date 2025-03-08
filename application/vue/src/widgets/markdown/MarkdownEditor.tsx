@@ -83,7 +83,6 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
     <ConfigProvider theme={{ token: { colorText: "white" } }}>
       <MDXEditor
         className={isDarkMode ? "dark-theme markdown-border" : "markdown-border"}
-        ref={mdxEditorRef}
         markdown=""
         onChange={onChange}
         plugins={[
@@ -113,6 +112,7 @@ function InnerEditor({ value, onChange, canImages }: { value?: string; onChange?
           imagePlugin({ imageUploadHandler }),
           markdownShortcutPlugin(),
         ]}
+        ref={mdxEditorRef}
         translation={translationFunc}
       />
     </ConfigProvider>

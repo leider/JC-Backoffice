@@ -19,9 +19,9 @@ const Login = () => {
   }
   return (
     <RowWrapper>
-      <Row style={{ minHeight: "80vh" }} align="middle" justify="space-around">
+      <Row align="middle" justify="space-around" style={{ minHeight: "80vh" }}>
         <Col span={24}>
-          <Form labelCol={{ span: 6 }} wrapperCol={{ span: 12 }} name="login" requiredMark={false} onFinish={onFinish}>
+          <Form labelCol={{ span: 6 }} name="login" onFinish={onFinish} requiredMark={false} wrapperCol={{ span: 12 }}>
             <Form.Item
               label="Benutzername"
               name="username"
@@ -55,7 +55,7 @@ const Login = () => {
                 help: "Falsche Daten",
               })}
             >
-              <Button type="primary" htmlType="submit" loading={loginState === LoginState.PENDING}>
+              <Button htmlType="submit" loading={loginState === LoginState.PENDING} type="primary">
                 Anmelden
               </Button>
             </Form.Item>

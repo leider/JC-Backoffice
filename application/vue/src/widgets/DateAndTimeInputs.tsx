@@ -17,13 +17,13 @@ export default function DateInput({
 }) {
   return (
     <Form.Item
-      name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       colon={false}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
+      name={name}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
     >
-      <InternalPicker required={required} save={save} focus={focus} />
+      <InternalPicker focus={focus} required={required} save={save} />
     </Form.Item>
   );
 }
@@ -49,17 +49,17 @@ function InternalPicker({
   }, [value]);
   return (
     <DatePicker
-      value={val}
-      onChange={(date) => onChange!(date?.toISOString())}
+      autoFocus={focus}
       format={["ll", "L", "l", "DDMMYY"]}
-      required={required}
+      needConfirm={focus}
+      onChange={(date) => onChange!(date?.toISOString())}
       onOpenChange={(open) => {
         if (!open) {
           save?.();
         }
       }}
-      needConfirm={focus}
-      autoFocus={focus}
+      required={required}
+      value={val}
     />
   );
 }

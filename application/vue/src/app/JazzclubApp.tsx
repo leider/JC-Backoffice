@@ -86,6 +86,10 @@ function JazzclubApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
+        form={{
+          validateMessages: { required: "Du musst einen Wert eingeben" },
+        }}
+        locale={locale_de}
         theme={{
           token: {
             colorPrimary: "#337ab7",
@@ -109,10 +113,6 @@ function JazzclubApp() {
             Form: { itemMarginBottom: 12 },
             Slider: { handleColor: colorTextDisabled },
           },
-        }}
-        locale={locale_de}
-        form={{
-          validateMessages: { required: "Du musst einen Wert eingeben" },
         }}
       >
         <App>

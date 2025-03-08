@@ -76,7 +76,7 @@ export default function KonzertComp() {
 
   return (
     <KonzertContext.Provider value={{ isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen }}>
-      <KonzertFormAndPageHeader data={konzert} saveForm={saveForm} resetChanges={refetch}>
+      <KonzertFormAndPageHeader data={konzert} resetChanges={refetch} saveForm={saveForm}>
         <ShowOnCopy title="Kopiertes Konzert" />
         <KonzertTabs />
       </KonzertFormAndPageHeader>

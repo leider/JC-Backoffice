@@ -17,7 +17,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
   }, []);
 
   return (
-    <Collapsible suffix="technik" label="Technik">
+    <Collapsible label="Technik" suffix="technik">
       <JazzRow>
         {veranstaltung.technik.fluegel && (
           <Col span={24}>
@@ -53,14 +53,14 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
             <ul>
               {map(veranstaltung.technik.dateirider, (item) => (
                 <li key={item}>
-                  <a href={`/files/${item}`} target="_blank" rel="noreferrer">
+                  <a href={`/files/${item}`} rel="noreferrer" target="_blank">
                     {item}
                   </a>
                 </li>
               ))}
               {hasRiderBoxes && (
                 <li key="riderurl">
-                  <a href={printref} target="_blank" rel="noreferrer">{`Rider-${url}.pdf`}</a>
+                  <a href={printref} rel="noreferrer" target="_blank">{`Rider-${url}.pdf`}</a>
                 </li>
               )}
             </ul>
@@ -71,7 +71,7 @@ export default function TechnikInPreview({ veranstaltung }: { veranstaltung: Ver
               <b>Dateien:</b>
               <ul>
                 <li key="riderurl">
-                  <a href={printref} target="_blank" rel="noreferrer">{`Rider-${url}.pdf`}</a>
+                  <a href={printref} rel="noreferrer" target="_blank">{`Rider-${url}.pdf`}</a>
                 </li>
               </ul>
             </Col>

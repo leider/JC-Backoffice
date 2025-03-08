@@ -49,12 +49,12 @@ export default function ImageOverview() {
 
   return (
     <Form form={form} onFinish={saveForm}>
-      <JazzPageHeader title="Bilder bearbeiten" buttons={[<SaveButton key="save" />]} />
+      <JazzPageHeader buttons={[<SaveButton key="save" />]} title="Bilder bearbeiten" />
       <JazzRow>
         <Col span={24}>
-          <Section prefix="with" title="Bilder ohne Probleme" noOfImages={noPerSection.with} />
-          <Section prefix="unused" title="Unbenutzte Bilder" noOfImages={noPerSection.unused} />
-          <Section prefix="notFound" title="Nicht gefundene Bilder" noOfImages={noPerSection.notFound} />
+          <Section noOfImages={noPerSection.with} prefix="with" title="Bilder ohne Probleme" />
+          <Section noOfImages={noPerSection.unused} prefix="unused" title="Unbenutzte Bilder" />
+          <Section noOfImages={noPerSection.notFound} prefix="notFound" title="Nicht gefundene Bilder" />
         </Col>
       </JazzRow>
     </Form>

@@ -48,25 +48,25 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
     const dataSource = useMemo(() => source.sort((a, b) => a.name.localeCompare(b.name)), [source]);
     return (
       <List
-        size="small"
+        dataSource={dataSource}
         header={
           <Typography.Title level={3} style={{ margin: 0 }}>
             {art === "gast" ? "Gästeliste" : "Reservierungen"}
           </Typography.Title>
         }
-        dataSource={dataSource}
         renderItem={(item) => (
           <List.Item
-            style={{ paddingLeft: 0, paddingRight: 0 }}
             actions={[
-              <AddOrRemoveGastButton key="addGast" item={item} art={art} add konzert={konzert} />,
+              <AddOrRemoveGastButton add art={art} item={item} key="addGast" konzert={konzert} />,
               <b key="alreadyin">{item.alreadyIn}</b>,
-              <AddOrRemoveGastButton key="removeGast" item={item} art={art} add={false} konzert={konzert} />,
+              <AddOrRemoveGastButton add={false} art={art} item={item} key="removeGast" konzert={konzert} />,
             ]}
+            style={{ paddingLeft: 0, paddingRight: 0 }}
           >
-            <List.Item.Meta title={`${item.name} (${item.number} Karten)`} description={item.comment} />
+            <List.Item.Meta description={item.comment} title={`${item.name} (${item.number} Karten)`} />
           </List.Item>
         )}
+        size="small"
       />
     );
   }
@@ -81,28 +81,28 @@ export default function GaesteInPreview({ konzert, url }: { konzert: Konzert; ur
       <ButtonWithIconAndLink
         alwaysText
         block
-        text="Liste Bearbeiten..."
-        tooltipTitle="Gästeliste"
         color={color("gaeste")}
         icon={icon("gaeste")}
+        text="Liste Bearbeiten..."
         to={{
           pathname: `/konzert/${url}`,
           search: "page=gaeste",
         }}
+        tooltipTitle="Gästeliste"
       />
     );
   }
 
   return (
-    <Collapsible suffix="gaeste" label="Gästeliste / Reservierungen">
+    <Collapsible label="Gästeliste / Reservierungen" suffix="gaeste">
       <JazzRow>
         <Col span={24}>
-          {gaesteliste.length > 0 && <GastResList source={gaesteliste} art="gast" />}
-          {reservierungen.length > 0 && <GastResList source={reservierungen} art="res" />}
+          {gaesteliste.length > 0 && <GastResList art="gast" source={gaesteliste} />}
+          {reservierungen.length > 0 && <GastResList art="res" source={reservierungen} />}
         </Col>
       </JazzRow>
       <JazzRow>
-        <Col span={10} offset={14}>
+        <Col offset={14} span={10}>
           <ButtonGaesteliste />
         </Col>
       </JazzRow>

@@ -33,16 +33,16 @@ export function TeamFilterEdit({
           </Row>
           <Row gutter={8}>
             <Col span={8}>
-              <ThreewayCheckbox name="istKonzert" label="Ist Konzert" />
+              <ThreewayCheckbox label="Ist Konzert" name="istKonzert" />
             </Col>
             <Col span={8}>
-              <ThreewayCheckbox name={["kopf", "confirmed"]} label="Ist bestätigt" />
+              <ThreewayCheckbox label="Ist bestätigt" name={["kopf", "confirmed"]} />
             </Col>
             <Col span={8}>
-              <ThreewayCheckbox name={["kopf", "abgesagt"]} label="Ist abgesagt" />
+              <ThreewayCheckbox label="Ist abgesagt" name={["kopf", "abgesagt"]} />
             </Col>
             <Col span={8}>
-              <ThreewayCheckbox name="hotelBestaetigt" label="Hotel bestätigt" />
+              <ThreewayCheckbox label="Hotel bestätigt" name="hotelBestaetigt" />
             </Col>
           </Row>
         </>
@@ -55,22 +55,22 @@ export function TeamFilterEdit({
       children: (
         <Row gutter={8}>
           <Col span={8}>
-            <ThreewayCheckbox name={["presse", "checked"]} label="Presse OK" />
+            <ThreewayCheckbox label="Presse OK" name={["presse", "checked"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "kannAufHomePage"]} label="Ist auf Homepage" />
+            <ThreewayCheckbox label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "kannInSocialMedia"]} label="Kann Social Media" />
+            <ThreewayCheckbox label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["presse", "text"]} label="Text vorhanden" />
+            <ThreewayCheckbox label="Text vorhanden" name={["presse", "text"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["presse", "originalText"]} label="Originaltext vorhanden" />
+            <ThreewayCheckbox label="Originaltext vorhanden" name={["presse", "originalText"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["kopf", "fotografBestellen"]} label="Fotograf einladen" />
+            <ThreewayCheckbox label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
           </Col>
         </Row>
       ),
@@ -82,10 +82,10 @@ export function TeamFilterEdit({
       children: (
         <Row gutter={8}>
           <Col span={8}>
-            <ThreewayCheckbox name={["technik", "checked"]} label="Technik ist geklärt" />
+            <ThreewayCheckbox label="Technik ist geklärt" name={["technik", "checked"]} />
           </Col>
           <Col span={8}>
-            <ThreewayCheckbox name={["technik", "fluegel"]} label="Flügel stimmen" />
+            <ThreewayCheckbox label="Flügel stimmen" name={["technik", "fluegel"]} />
           </Col>
         </Row>
       ),
@@ -114,26 +114,26 @@ export function TeamFilterEdit({
         <Space>
           <ButtonWithIcon
             alwaysText
-            type="default"
-            text="Zurücksetzen"
             onClick={() => {
               reset(form);
               setFilter(form.getFieldsValue(true));
             }}
+            text="Zurücksetzen"
+            type="default"
           />
           <ButtonWithIcon
             alwaysText
-            text="Schließen"
             onClick={() => {
               setOpen(false);
               setFilter(form.getFieldsValue(true));
             }}
+            text="Schließen"
           />
         </Space>
       }
       open={open}
     >
-      <Form form={form} autoComplete="off" size="small" colon={false} onValuesChange={() => setFilter(form.getFieldsValue(true))}>
+      <Form autoComplete="off" colon={false} form={form} onValuesChange={() => setFilter(form.getFieldsValue(true))} size="small">
         <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
           <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
         </ConfigProvider>

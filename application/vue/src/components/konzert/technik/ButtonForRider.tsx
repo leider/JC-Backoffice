@@ -6,7 +6,7 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 export default function ButtonForRider({ icon, text, href }: { icon: IconProps["iconName"]; text: string; href: string }) {
   const { sm } = useBreakpoint();
   return (
-    <Button icon={<IconForSmallBlock size={16} iconName={icon} />} type="primary" href={href} target="_blank">
+    <Button href={href} icon={<IconForSmallBlock iconName={icon} size={16} />} target="_blank" type="primary">
       {sm && text}
     </Button>
   );

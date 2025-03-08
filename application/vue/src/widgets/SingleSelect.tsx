@@ -44,16 +44,16 @@ function InnerSelect({
 
   return (
     <Select
-      options={realOptions}
+      allowClear={allowClear}
+      onBlur={() => save?.()}
       onChange={(val) => {
         onChange?.(val);
         onSelect?.(val);
         save?.(true);
       }}
-      value={value}
+      options={realOptions}
       showSearch
-      allowClear={allowClear}
-      onBlur={() => save?.()}
+      value={value}
     />
   );
 }
@@ -61,15 +61,15 @@ function InnerSelect({
 export default function SingleSelect({ label, name, onChange, options, initialValue, required, save, focus }: SingleSelectParams) {
   return (
     <Form.Item
+      colon={false}
+      initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       name={name}
-      colon={false}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
-      initialValue={initialValue}
       validateTrigger="onSelect"
     >
-      <InnerSelect options={options} onChange={onChange} allowClear={!required} save={save} focus={focus} />
+      <InnerSelect allowClear={!required} focus={focus} onChange={onChange} options={options} save={save} />
     </Form.Item>
   );
 }

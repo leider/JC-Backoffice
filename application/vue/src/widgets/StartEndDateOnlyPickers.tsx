@@ -48,13 +48,13 @@ function EmbeddedPickers({
 
   return (
     <DatePicker.RangePicker
-      id={id}
       allowClear={false}
+      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
       format="ddd DD.MM.YY"
-      value={[start, end]}
+      id={id}
       onCalendarChange={onCalendarChange}
       style={{ width: "100%" }}
-      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
+      value={[start, end]}
     />
   );
 }
@@ -62,11 +62,10 @@ function EmbeddedPickers({
 export default function StartEndDateOnlyPickers({ names, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
   return (
     <Aggregate
-      label={label ? <b>{label + ":"}</b> : ""}
-      names={names}
-      style={label ? {} : { marginBottom: 0 }}
       dependencies={dependency ? [dependency] : undefined}
       hasFeedback
+      label={label ? <b>{label + ":"}</b> : ""}
+      names={names}
       rules={
         dependency
           ? [
@@ -88,8 +87,9 @@ export default function StartEndDateOnlyPickers({ names, label, dependency, onCh
             ]
           : []
       }
+      style={label ? {} : { marginBottom: 0 }}
     >
-      <EmbeddedPickers fireChange={onChange} dependency={dependency} />
+      <EmbeddedPickers dependency={dependency} fireChange={onChange} />
     </Aggregate>
   );
 }

@@ -17,12 +17,12 @@ const columns: Columns[] = [
 function GaesteCard({ label, path }: { label: string; path: string }) {
   const { lg } = useBreakpoint();
   return (
-    <Collapsible suffix="gaeste" label={label} noTopBorder={label === "gaesteliste" || lg}>
+    <Collapsible label={label} noTopBorder={label === "gaesteliste" || lg} suffix="gaeste">
       <JazzRow>
         <Col span={24}>
           <EditableTable<NameWithNumber>
-            name={path}
             columnDescriptions={columns}
+            name={path}
             newRowFactory={(vals) => {
               return Object.assign(
                 {
@@ -44,10 +44,10 @@ function GaesteCard({ label, path }: { label: string; path: string }) {
 export default function TabGaeste() {
   return (
     <JazzRow>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <GaesteCard label="Gästeliste" path="gaesteliste" />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <GaesteCard label="Reservierungen" path="reservierungen" />
       </Col>
     </JazzRow>

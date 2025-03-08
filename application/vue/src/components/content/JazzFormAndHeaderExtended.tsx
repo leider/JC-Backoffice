@@ -83,17 +83,15 @@ export default function JazzFormAndHeaderExtended<T>({
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
   const buttons: ReactNode[] = (additionalButtons ?? [])
-    .concat(resetChanges ? <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} /> : [])
-    .concat(<SaveButton key="save" disabled={!isDirty || hasErrors} />)
+    .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetChanges} /> : [])
+    .concat(<SaveButton disabled={!isDirty || hasErrors} key="save" />)
     .concat(additionalButtonsLast ?? []);
 
   return (
     <Form
+      colon={false}
       form={form}
-      onValuesChange={() => {
-        updateDirtyIfChanged();
-        checkErrors();
-      }}
+      layout="vertical"
       onFinish={() =>
         form
           .validateFields()
@@ -103,8 +101,6 @@ export default function JazzFormAndHeaderExtended<T>({
           })
           .catch(noop)
       }
-      colon={false}
-      layout="vertical"
       onKeyDown={(event) => {
         const target = event.target as HTMLInputElement;
         if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
@@ -112,16 +108,20 @@ export default function JazzFormAndHeaderExtended<T>({
           return false;
         }
       }}
+      onValuesChange={() => {
+        updateDirtyIfChanged();
+        checkErrors();
+      }}
     >
       <JazzPageHeader
-        title={title}
+        breadcrumb={breadcrumb}
         buttons={buttons}
-        hasErrors={hasErrors}
         dateString={dateString}
         firstTag={firstTag}
-        tags={tags}
-        breadcrumb={breadcrumb}
+        hasErrors={hasErrors}
         style={style}
+        tags={tags}
+        title={title}
       />
       <RowWrapper>{children}</RowWrapper>
       {changedPropsToWatch && <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} />}

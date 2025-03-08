@@ -22,18 +22,18 @@ export function ShowOnCopy({ title }: { title: string }) {
 
   return (
     <JazzModal
-      title={title}
-      open={openCopyModal}
+      closable={false}
+      footer={(_, { OkBtn }) => <OkBtn />}
+      okText="Weiter"
       onOk={() => {
         setOpenCopyModal(false);
         setDone(true);
       }}
-      okText="Weiter"
-      closable={false}
-      footer={(_, { OkBtn }) => <OkBtn />}
+      open={openCopyModal}
+      title={title}
     >
       <p>Du möchtest sicher Titel und Datum anpassen.</p>
-      <TextField name={["kopf", "titel"]} label="Titel" required />
+      <TextField label="Titel" name={["kopf", "titel"]} required />
       <StartEndPickers />
     </JazzModal>
   );

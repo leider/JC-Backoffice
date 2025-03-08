@@ -65,16 +65,16 @@ export default function HotelCard() {
   }
 
   return (
-    <Collapsible suffix="hotel" label="Zimmer" amount={summe}>
+    <Collapsible amount={summe} label="Zimmer" suffix="hotel">
       <JazzRow>
         <Col span={12}>
           <StartEndDateOnlyPickers
+            dependency="startDate"
+            label="An- und Abreise"
             names={[
               ["unterkunft", "anreiseDate"],
               ["unterkunft", "abreiseDate"],
             ]}
-            label="An- und Abreise"
-            dependency="startDate"
             onChange={updateSumme}
           />
           {anzahlNacht}
@@ -87,27 +87,27 @@ export default function HotelCard() {
       </JazzRow>
       <JazzRow>
         <Col span={3}>
-          <NumberInput name={["unterkunft", "einzelNum"]} label="Einzel" decimals={0} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Einzel" name={["unterkunft", "einzelNum"]} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "einzelEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "einzelEUR"]} onChange={updateSumme} suffix="€" />
         </Col>
         <Col span={3}>
-          <NumberInput name={["unterkunft", "doppelNum"]} label="Doppel" decimals={0} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Doppel" name={["unterkunft", "doppelNum"]} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "doppelEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "doppelEUR"]} onChange={updateSumme} suffix="€" />
         </Col>
         <Col span={3}>
-          <NumberInput name={["unterkunft", "suiteNum"]} label="Suite" decimals={0} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Suite" name={["unterkunft", "suiteNum"]} onChange={updateSumme} />
         </Col>
         <Col span={5}>
-          <NumberInput name={["unterkunft", "suiteEUR"]} label="Preis" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "suiteEUR"]} onChange={updateSumme} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={24}>
-          <CheckItem name={["hotelpreiseAlsDefault"]} label="Preise als Default übernehmen" />
+          <CheckItem label="Preise als Default übernehmen" name={["hotelpreiseAlsDefault"]} />
         </Col>
       </JazzRow>
     </Collapsible>

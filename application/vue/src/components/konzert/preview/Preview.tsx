@@ -51,10 +51,10 @@ export default function Preview() {
     const { color, icon } = colorsAndIconsForSections;
     return (
       <ButtonWithIconAndLink
-        icon={icon(type)}
-        to={`/konzert/${encodeURIComponent(url ?? "")}?page=${type}`}
         color={color(type)}
+        icon={icon(type)}
         text="Bearbeiten..."
+        to={`/konzert/${encodeURIComponent(url ?? "")}?page=${type}`}
       />
     );
   }
@@ -63,30 +63,30 @@ export default function Preview() {
   return (
     <>
       <JazzPageHeader
-        title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
-        style={titleStyle}
-        dateString={konzert.datumForDisplayShort}
         buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        dateString={konzert.datumForDisplayShort}
+        style={titleStyle}
+        title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
       />
       <JazzRow>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <GaesteInPreview konzert={konzert} url={url} />
           <StaffInPreview veranstaltung={konzert} />
           <KasseInPreview konzert={konzert} url={url} />
           <InfoInPreview veranstaltung={konzert} />
           <TechnikInPreview veranstaltung={konzert} />
         </Col>
-        <Col xs={24} lg={12}>
-          <Collapsible suffix="presse" label="Pressetext">
+        <Col lg={12} xs={24}>
+          <Collapsible label="Pressetext" suffix="presse">
             <PressePreview veranstaltung={konzert} />
           </Collapsible>
           {konzert.agentur.name && (
-            <Collapsible suffix="allgemeines" label="Agentur">
+            <Collapsible label="Agentur" suffix="allgemeines">
               <AddressBlock kontakt={konzert.agentur} />
             </Collapsible>
           )}
           {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 && (
-            <Collapsible suffix="hotel" label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`}>
+            <Collapsible label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`} suffix="hotel">
               <AddressBlock kontakt={konzert.hotel} />
             </Collapsible>
           )}

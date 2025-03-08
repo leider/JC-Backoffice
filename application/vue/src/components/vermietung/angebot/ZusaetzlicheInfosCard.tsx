@@ -6,7 +6,7 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function ZusaetzlicheInfosCard() {
   return (
-    <Collapsible suffix="angebot" label="Kommentar" noTopBorder>
+    <Collapsible label="Kommentar" noTopBorder suffix="angebot">
       <JazzRow>
         <Col span={24}>
           <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["angebot", "beschreibung"]} />

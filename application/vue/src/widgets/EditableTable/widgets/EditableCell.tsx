@@ -111,38 +111,38 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   let Widget;
   switch (type) {
     case "user":
-      Widget = <MitarbeiterMultiSelect name={dataIndex} usersAsOptions={usersWithKann ?? []} save={save} focus />;
+      Widget = <MitarbeiterMultiSelect focus name={dataIndex} save={save} usersAsOptions={usersWithKann ?? []} />;
       break;
     case "color":
-      Widget = <ColorField name={dataIndex} save={save} required={required} presets={presets} />;
+      Widget = <ColorField name={dataIndex} presets={presets} required={required} save={save} />;
       break;
     case "integer":
       Widget = (
         <NumberInput
           decimals={0}
+          focus
+          initialValue={(initialValue as number) ?? 0}
+          min={min as number}
           name={dataIndex}
           required={required}
-          min={min as number}
-          initialValue={(initialValue as number) ?? 0}
           save={save}
-          focus
         />
       );
       break;
     case "date":
-      Widget = <DateInput name={dataIndex} required={required} save={save} focus />;
+      Widget = <DateInput focus name={dataIndex} required={required} save={save} />;
       break;
     case "startEnd":
-      Widget = <StartEndDateOnlyPickersInTable name={dataIndex} save={save} focus />;
+      Widget = <StartEndDateOnlyPickersInTable focus name={dataIndex} save={save} />;
       break;
     case "boolean":
-      Widget = <CheckItem name={dataIndex} required={required} save={save} focus focusByMouseClick={editByMouse && editing} />;
+      Widget = <CheckItem focus focusByMouseClick={editByMouse && editing} name={dataIndex} required={required} save={save} />;
       break;
     default:
       Widget = filters ? (
-        <SingleSelect name={dataIndex} required={required} options={filters} save={save} focus />
+        <SingleSelect focus name={dataIndex} options={filters} required={required} save={save} />
       ) : (
-        <TextField name={dataIndex} required={required} save={save} focus />
+        <TextField focus name={dataIndex} required={required} save={save} />
       );
       break;
   }
@@ -150,11 +150,11 @@ const EditableCell = <RecordType extends AnyObject = AnyObject>({
   const childNode = !editing ? (
     <div
       data-testid={dataIndex + index}
-      tabIndex={0}
-      onFocus={type !== "color" ? toggleEdit : undefined}
       onClick={toggleEdit}
+      onFocus={type !== "color" ? toggleEdit : undefined}
       onMouseDown={() => setEditByMouse(true)}
       style={readonlyStyle}
+      tabIndex={0}
     >
       {children}
     </div>

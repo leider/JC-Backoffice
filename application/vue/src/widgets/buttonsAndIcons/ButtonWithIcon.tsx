@@ -42,20 +42,20 @@ const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonW
         },
       }}
     >
-      <Tooltip title={tooltipTitle} color={color} placement={tooltipPlacement || "top"}>
+      <Tooltip color={color} placement={tooltipPlacement || "top"} title={tooltipTitle}>
         <Button
-          ref={ref}
-          icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
-          type={type || "primary"}
-          onClick={onClick && onClick !== "submit" ? onClick : undefined}
+          block={block}
+          data-testid={testid}
           disabled={disabled}
           htmlType={onClick === "submit" ? "submit" : undefined}
-          size={size}
-          block={block}
-          title={text}
+          icon={icon && <IconForSmallBlock iconName={icon} size={size === "small" ? 14 : 16} />}
           loading={loading}
+          onClick={onClick && onClick !== "submit" ? onClick : undefined}
+          ref={ref}
+          size={size}
           style={style}
-          data-testid={testid}
+          title={text}
+          type={type || "primary"}
         >
           {(sm || alwaysText) && text && text}
         </Button>

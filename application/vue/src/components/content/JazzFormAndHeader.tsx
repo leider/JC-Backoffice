@@ -25,14 +25,14 @@ export default function JazzFormAndHeader<T>({
 
   return (
     <JazzFormAndHeaderExtended
-      title={title}
-      data={data}
-      saveForm={saveForm}
-      form={form}
       additionalButtons={additionalButtons}
-      changedPropsToWatch={changedPropsToWatch}
-      resetChanges={resetChanges}
       breadcrumb={breadcrumb}
+      changedPropsToWatch={changedPropsToWatch}
+      data={data}
+      form={form}
+      resetChanges={resetChanges}
+      saveForm={saveForm}
+      title={title}
     >
       {children}
     </JazzFormAndHeaderExtended>

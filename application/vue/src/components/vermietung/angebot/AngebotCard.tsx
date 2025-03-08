@@ -31,107 +31,107 @@ export default function AngebotCard() {
             renderWidget={(getFieldValue) => {
               const betrag = getFieldValue(["angebot", `frei${nummer}EUR`]);
               return (
-                <TextField label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} disabled={readonly} required={betrag > 0} />
+                <TextField disabled={readonly} label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} required={betrag > 0} />
               );
             }}
           />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", `frei${nummer}EUR`]} label="Betrag" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Betrag" name={["angebot", `frei${nummer}EUR`]} suffix="€" />
         </Col>
       </JazzRow>
     );
   }
 
   return (
-    <Collapsible suffix="angebot" label="Posten" noTopBorder={lg} amount={angebot.summe}>
+    <Collapsible amount={angebot.summe} label="Posten" noTopBorder={lg} suffix="angebot">
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "saalmiete"]} label="Saalmiete" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Saalmiete" name={["angebot", "saalmiete"]} suffix="€" />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", "saalmieteRabatt"]} label="Rabatt (optional)" decimals={0} suffix="%" disabled={readonly} />
+          <NumberInput decimals={0} disabled={readonly} label="Rabatt (optional)" name={["angebot", "saalmieteRabatt"]} suffix="%" />
         </Col>
         <Col span={8}>
-          <NumberInputWithDirectValue label="Total" value={angebot.saalmieteTotal} decimals={2} suffix="€" />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={angebot.saalmieteTotal} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "tontechnikerAnzahl"]} label="Tontechniker (Anzahl)" decimals={0} disabled={readonly} />
+          <NumberInput decimals={0} disabled={readonly} label="Tontechniker (Anzahl)" name={["angebot", "tontechnikerAnzahl"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["angebot", "tontechnikerBetrag"]}
+            decimals={2}
+            disabled={readonly}
             label="Tontechniker (Einzelpreis)"
-            decimals={2}
+            name={["angebot", "tontechnikerBetrag"]}
             suffix="€"
-            disabled={readonly}
           />
         </Col>
         <Col span={8}>
-          <NumberInputWithDirectValue label="Total" value={angebot.tontechnikerTotal} decimals={2} suffix="€" />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={angebot.tontechnikerTotal} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "lichttechnikerAnzahl"]} label="Lichttechniker (Anzahl)" decimals={0} disabled={readonly} />
+          <NumberInput decimals={0} disabled={readonly} label="Lichttechniker (Anzahl)" name={["angebot", "lichttechnikerAnzahl"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["angebot", "lichttechnikerBetrag"]}
+            decimals={2}
+            disabled={readonly}
             label="Lichttechniker (Einzelpreis)"
-            decimals={2}
+            name={["angebot", "lichttechnikerBetrag"]}
             suffix="€"
-            disabled={readonly}
           />
         </Col>
         <Col span={8}>
-          <NumberInputWithDirectValue label="Total" value={angebot.lichttechnikerTotal} decimals={2} suffix="€" />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={angebot.lichttechnikerTotal} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "musikerAnzahl"]} label="Musiker (Anzahl)" decimals={0} disabled={readonly} />
+          <NumberInput decimals={0} disabled={readonly} label="Musiker (Anzahl)" name={["angebot", "musikerAnzahl"]} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", "musikerGage"]} label="Musiker (Einzelpreis)" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Musiker (Einzelpreis)" name={["angebot", "musikerGage"]} suffix="€" />
         </Col>
         <Col span={8}>
-          <NumberInputWithDirectValue label="Total" value={angebot.musikerTotal} decimals={2} suffix="€" />
-        </Col>
-      </JazzRow>
-      <JazzRow>
-        <Col span={8}>
-          <NumberInput name={["angebot", "fluegel"]} label="Flügel (Einzelpreis)" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={angebot.musikerTotal} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "barpersonalAnzahl"]} label="Bar Personal (Anzahl)" decimals={0} disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Flügel (Einzelpreis)" name={["angebot", "fluegel"]} suffix="€" />
+        </Col>
+      </JazzRow>
+      <JazzRow>
+        <Col span={8}>
+          <NumberInput decimals={0} disabled={readonly} label="Bar Personal (Anzahl)" name={["angebot", "barpersonalAnzahl"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["angebot", "barpersonalBetrag"]}
-            label="Bar Personal (Einzelpreis)"
             decimals={2}
-            suffix="€"
             disabled={readonly}
+            label="Bar Personal (Einzelpreis)"
+            name={["angebot", "barpersonalBetrag"]}
+            suffix="€"
           />
         </Col>
         <Col span={8}>
-          <NumberInputWithDirectValue label="Total" value={angebot.barpersonalTotal} decimals={2} suffix="€" />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={angebot.barpersonalTotal} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["angebot", "abenddienst"]} label="Abenddienst" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Abenddienst" name={["angebot", "abenddienst"]} suffix="€" />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", "reinigungHaus"]} label="Reinigung Haus" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Reinigung Haus" name={["angebot", "reinigungHaus"]} suffix="€" />
         </Col>
         <Col span={8}>
-          <NumberInput name={["angebot", "reinigungBar"]} label="Reinigung Bar" decimals={2} suffix="€" disabled={readonly} />
+          <NumberInput decimals={2} disabled={readonly} label="Reinigung Bar" name={["angebot", "reinigungBar"]} suffix="€" />
         </Col>
       </JazzRow>
       <FreiRow nummer={1} />

@@ -62,7 +62,7 @@ export default tseslint.config(
       "react/jsx-no-literals": "off",
       "react/require-default-props": "off",
       "react/no-multi-comp": "off",
-      "react/jsx-sort-props": "off",
+      //"react/jsx-sort-props": "off",
       "react/function-component-definition": "off",
       "react/prefer-read-only-props": "off",
       "react/jsx-no-leaked-render": "off",

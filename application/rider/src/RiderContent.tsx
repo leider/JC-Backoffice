@@ -12,7 +12,7 @@ const RiderContent: React.FC = () => {
     <Layout>
       <Header style={{ position: "sticky", top: 0, zIndex: 1, width: "100%", paddingInline: "20px" }}>
         <div style={{ float: "left", width: "540px", height: "40px", margin: "12px 12px 0px 0px" }}>
-          <img src="/rider/img/logo_weiss.png" alt="Jazzclub Logo" />
+          <img alt="Jazzclub Logo" src="/rider/img/logo_weiss.png" />
         </div>
       </Header>
 

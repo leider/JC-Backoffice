@@ -73,7 +73,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
   const tagRender = (props: CustomTagProps) => {
     const content =
       typ === "pressefoto" ? (
-        <img src={`/imagepreview/${props.label}`} alt={props.label as string} width="100%" />
+        <img alt={props.label as string} src={`/imagepreview/${props.label}`} width="100%" />
       ) : (
         <a href={`/files/${props.label}`}>{props.label} </a>
       );
@@ -91,16 +91,16 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
       <Row>
         <Col>
           <Space align="end">
-            <MultiSelectWithTags name={name} label="Dateien" options={options} style={{ marginBottom: 0 }} specialTagRender={tagRender} />
+            <MultiSelectWithTags label="Dateien" name={name} options={options} specialTagRender={tagRender} style={{ marginBottom: 0 }} />
             <Upload {...uploadprops} accept={onlyImages ? "image/*" : undefined}>
               <ButtonWithIcon icon="FileEarmarkPlus" text="Auswählen" type="default" />
             </Upload>
             <ButtonWithIcon
-              text={uploading ? "Lädt..." : "Hochladen"}
-              icon="Upload"
-              onClick={saveFiles}
               disabled={fileList.length === 0}
+              icon="Upload"
               loading={uploading}
+              onClick={saveFiles}
+              text={uploading ? "Lädt..." : "Hochladen"}
             />
           </Space>
         </Col>

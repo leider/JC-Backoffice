@@ -10,7 +10,7 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function EventCard() {
   return (
-    <Collapsible suffix="allgemeines" label="Event" noTopBorder>
+    <Collapsible label="Event" noTopBorder suffix="allgemeines">
       <JazzRow>
         <Col span={8}>
           <CheckItem label="Ist bestätigt" name={["kopf", "confirmed"]} />
@@ -49,10 +49,10 @@ export default function EventCard() {
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["kopf", "titel"]} label="Titel" required />
+          <TextField label="Titel" name={["kopf", "titel"]} required />
         </Col>
         <Col span={8}>
-          <NumberInput name={["saalmiete"]} label="Saalmiete" decimals={2} suffix="€" />
+          <NumberInput decimals={2} label="Saalmiete" name={["saalmiete"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>

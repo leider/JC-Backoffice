@@ -102,13 +102,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
         <Col span={6}>
           <Typography.Title
             level={5}
-            style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
             onClick={() => {
               setShowMitarbeiter(!showMitarbeiter);
             }}
+            style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
           >
             <span style={{ color: labelColor }}>
-              <IconForSmallBlock iconName="UniversalAccess" color={labelColor} />
+              <IconForSmallBlock color={labelColor} iconName="UniversalAccess" />
               &nbsp;...
             </span>
           </Typography.Title>
@@ -118,8 +118,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
             <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
               {showMitarbeiter && dirty ? (
                 <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
-                  <ResetButton size="small" disabled={!dirty} resetChanges={setFormValue} />
-                  <SaveButton size="small" disabled={!dirty} callback={() => form.submit()} />
+                  <ResetButton disabled={!dirty} resetChanges={setFormValue} size="small" />
+                  <SaveButton callback={() => form.submit()} disabled={!dirty} size="small" />
                 </ConfigProvider>
               ) : (
                 <>
@@ -142,8 +142,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
       {inView && (
         <ConfigProvider theme={staffRowsTheme}>
           <Collapse
-            ghost
             activeKey={showMitarbeiter ? "mitarbeiter" : ""}
+            ghost
             items={[
               {
                 showArrow: false,
@@ -151,15 +151,15 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
                 children: (
                   <Form
                     form={form}
+                    layout="vertical"
+                    onFinish={saveForm}
                     onValuesChange={() => {
                       setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
                     }}
-                    onFinish={saveForm}
-                    layout="vertical"
                     size="small"
                   >
                     <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
-                      <EditableStaffRows forVermietung={forVermietung} usersAsOptions={usersAsOptions} brauchtTechnik={brauchtTechnik} />
+                      <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
                     </div>
                   </Form>
                 ),

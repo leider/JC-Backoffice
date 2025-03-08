@@ -25,7 +25,7 @@ export default function HelpSection({
                 dataSource={items}
                 renderItem={(item) => (
                   <List.Item>
-                    <List.Item.Meta title={item.title} description={item.description} />
+                    <List.Item.Meta description={item.description} title={item.title} />
                     {item.content}
                   </List.Item>
                 )}

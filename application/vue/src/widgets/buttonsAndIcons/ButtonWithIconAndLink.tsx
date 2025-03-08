@@ -36,16 +36,16 @@ export default function ButtonWithIconAndLink({
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip title={tooltipTitle} color={color === brightText ? "#333" : color}>
+      <Tooltip color={color === brightText ? "#333" : color} title={tooltipTitle}>
         <Link to={to}>
           <Button
-            icon={icon && <IconForSmallBlock size={smallIcon ? 12 : 14} iconName={icon} />}
-            type={type || "primary"}
-            size={text && !smallIcon ? undefined : "small"}
-            disabled={disabled}
             block={block}
-            title={text}
+            disabled={disabled}
             ghost={ghost}
+            icon={icon && <IconForSmallBlock iconName={icon} size={smallIcon ? 12 : 14} />}
+            size={text && !smallIcon ? undefined : "small"}
+            title={text}
+            type={type || "primary"}
           >
             {(sm || alwaysText) && text && text}
           </Button>

@@ -61,7 +61,7 @@ export default function MailRules() {
   }
 
   return (
-    <JazzFormAndHeader title="Mailing Regeln" data={mailRules} saveForm={saveForm} resetChanges={refetch}>
+    <JazzFormAndHeader data={mailRules} resetChanges={refetch} saveForm={saveForm} title="Mailing Regeln">
       <MailRulesInternal />
     </JazzFormAndHeader>
   );

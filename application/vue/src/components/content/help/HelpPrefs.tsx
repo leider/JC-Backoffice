@@ -14,12 +14,12 @@ export default function HelpPrefs() {
   return (
     <HelpSection
       initiallyOpen
+      items={wiki}
       label={
         <span>
           <b>Einstellungen</b>
         </span>
       }
-      items={wiki}
     />
   );
 }

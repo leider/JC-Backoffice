@@ -23,7 +23,7 @@ export default function HelpContent() {
 
   return (
     <>
-      <JazzModal width={600} title="Hilfe" open={helpOpen} onCancel={() => setHelpOpen(false)} footer={null}>
+      <JazzModal footer={null} onCancel={() => setHelpOpen(false)} open={helpOpen} title="Hilfe" width={600}>
         <Typography.Title level={4}>Hilfe für aktuelle Seite</Typography.Title>
         <p>Abhängig von Deinen Benutzerrechten sind einige Dinge für Dich nicht sichtbar oder aktiv.</p>
         <HelpPrefs />
@@ -32,11 +32,11 @@ export default function HelpContent() {
         <HelpKonzert />
         <HelpWiki />
       </JazzModal>
-      <JazzModal width={600} title="Neuigkeiten" open={infoOpen} onCancel={() => setInfoOpen(false)} footer={null}>
+      <JazzModal footer={null} onCancel={() => setInfoOpen(false)} open={infoOpen} title="Neuigkeiten" width={600}>
         <p>Dieser Dialog wird nach und nach mit Inhalten gefüllt...</p>
         <HelpNeues />
       </JazzModal>
-      <FloatButton.Group trigger="click" icon={<IconForSmallBlock iconName="QuestionLg" />}>
+      <FloatButton.Group icon={<IconForSmallBlock iconName="QuestionLg" />} trigger="click">
         {hasHelp && (
           <FloatButton
             icon={<IconForSmallBlock iconName="QuestionLg" />}

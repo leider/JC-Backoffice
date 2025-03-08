@@ -48,7 +48,7 @@ export default function ProgrammheftKopierenButton() {
     <Dropdown menu={{ items, onClick: onMenuClick }}>
       <Button type="default">
         <Space>
-          Anlegen wie <IconForSmallBlock size="10" iconName="ChevronDown" />
+          Anlegen wie <IconForSmallBlock iconName="ChevronDown" size="10" />
         </Space>
       </Button>
     </Dropdown>

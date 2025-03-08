@@ -63,27 +63,27 @@ function ProgrammheftInternal({ start }: { start: DatumUhrzeit }) {
   return (
     <>
       <Splitter
+        layout={lg ? "horizontal" : "vertical"}
         onResize={() => {
           setTriggerRender(!triggerRender);
         }}
-        layout={lg ? "horizontal" : "vertical"}
       >
-        <Splitter.Panel defaultSize="40%" min="20%" max="70%" style={{ zIndex: 0 }} collapsible>
-          <HeftCalendar initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} events={events} triggerRender={triggerRender} />
+        <Splitter.Panel collapsible defaultSize="40%" max="70%" min="20%" style={{ zIndex: 0 }}>
+          <HeftCalendar events={events} initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} triggerRender={triggerRender} />
         </Splitter.Panel>
         <Splitter.Panel collapsible>
           <EditableTable<Event>
-            name="events"
             columnDescriptions={columnDescriptions}
-            usersWithKann={usersAsOptions}
+            name="events"
             newRowFactory={(vals) => new Event(vals)}
+            usersWithKann={usersAsOptions}
           />
           <Row>
             <Col span={12}>
-              <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} type="default" text="Tag zurück" />
+              <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} text="Tag zurück" type="default" />
             </Col>
             <Col span={12}>
-              <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} type="default" text="Tag vor" />
+              <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} text="Tag vor" type="default" />
             </Col>
           </Row>
         </Splitter.Panel>
@@ -130,16 +130,16 @@ export default function Programmheft() {
 
   return (
     <JazzFormAndHeader
-      title={`Programmheft ${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
-      data={kalender}
-      saveForm={saveForm}
       additionalButtons={[
-        <ButtonWithIcon key="prev" icon="ArrowBarLeft" text="Voriges" onClick={() => nextOrPrevious(false)} type="default" />,
-        <ButtonWithIcon key="next" icon="ArrowBarRight" text="Nächstes" onClick={() => nextOrPrevious(true)} type="default" />,
+        <ButtonWithIcon icon="ArrowBarLeft" key="prev" onClick={() => nextOrPrevious(false)} text="Voriges" type="default" />,
+        <ButtonWithIcon icon="ArrowBarRight" key="next" onClick={() => nextOrPrevious(true)} text="Nächstes" type="default" />,
         <ProgrammheftKopierenButton key="copy" />,
       ]}
       changedPropsToWatch={["events"]}
+      data={kalender}
       resetChanges={refetch}
+      saveForm={saveForm}
+      title={`Programmheft ${start.monatJahrKompakt} - ${start.plus({ monate: 1 }).monatJahrKompakt}`}
     >
       <ProgrammheftInternal start={start} />
     </JazzFormAndHeader>

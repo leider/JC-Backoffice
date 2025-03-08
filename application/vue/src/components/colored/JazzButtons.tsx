@@ -23,12 +23,12 @@ function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { 
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
-      text={isSend ? "Senden" : "Speichern"}
-      onClick={callback ? callback : "submit"}
-      icon={isSend ? "Send" : "CheckSquare"}
-      disabled={disabled}
       color={token.colorSuccess}
+      disabled={disabled}
+      icon={isSend ? "Send" : "CheckSquare"}
+      onClick={callback ? callback : "submit"}
       size={size}
+      text={isSend ? "Senden" : "Speichern"}
     />
   );
 }
@@ -36,28 +36,28 @@ function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { 
 export function HelpWithKasseButton({ callback }: { callback: () => void }) {
   const token = theme.useToken().token;
 
-  return <ButtonWithIcon alwaysText text="Abendkasse Hilfe" onClick={callback} icon="QuestionCircleFill" color={token.colorSuccess} />;
+  return <ButtonWithIcon alwaysText color={token.colorSuccess} icon="QuestionCircleFill" onClick={callback} text="Abendkasse Hilfe" />;
 }
 
 export function SaveButton({ disabled, size, callback }: ButtonProps & { callback?: () => void }) {
-  return <SaveOrSendButton disabled={disabled} callback={callback} size={size} />;
+  return <SaveOrSendButton callback={callback} disabled={disabled} size={size} />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
-  return <SaveOrSendButton isSend disabled={disabled} />;
+  return <SaveOrSendButton disabled={disabled} isSend />;
 }
 
 export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
-      text="Reset"
-      onClick={resetChanges}
-      icon="ArrowCounterclockwise"
-      disabled={disabled}
-      type="default"
       color={token.colorSuccess}
+      disabled={disabled}
+      icon="ArrowCounterclockwise"
+      onClick={resetChanges}
       size={size}
+      text="Reset"
+      type="default"
     />
   );
 }
@@ -196,7 +196,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
   );
 
   return (
-    <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>
+    <Dropdown disabled={disabled} menu={{ items, onClick: onMenuClick }}>
       <Button>
         <Space>
           Mehr... <IconForSmallBlock iconName="ChevronDown" />

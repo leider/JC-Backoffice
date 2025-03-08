@@ -22,16 +22,16 @@ export default function WikiSearchresults() {
 
   return (
     <>
-      <JazzPageHeader title="Wiki Suchergebnisse" dateString={`für "${searchtext}"`} />
+      <JazzPageHeader dateString={`für "${searchtext}"`} title="Wiki Suchergebnisse" />
       {matches.length === 0 ? (
         <Typography.Title level={2}>Keine Ergebnisse</Typography.Title>
       ) : (
         <List
-          size="small"
           dataSource={matches}
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
+                description={item.text ? item.text : ""}
                 title={
                   <span>
                     <Link to={`/wiki/${item.pageName}`}>{item.pageName}</Link>
@@ -39,10 +39,10 @@ export default function WikiSearchresults() {
                     {!item.text ? " (im Dateinamen)" : ""}
                   </span>
                 }
-                description={item.text ? item.text : ""}
               />
             </List.Item>
           )}
+          size="small"
         />
       )}
     </>

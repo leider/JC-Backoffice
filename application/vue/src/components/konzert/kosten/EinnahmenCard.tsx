@@ -39,20 +39,20 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
   return (
-    <Collapsible suffix="ausgaben" label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder amount={summe}>
+    <Collapsible amount={summe} label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder suffix="ausgaben">
       <JazzRow>
         <Col span={12}>
-          <PreisprofilSelect optionen={optionen} onChange={updateSumme} />
+          <PreisprofilSelect onChange={updateSumme} optionen={optionen} />
         </Col>
         <Col span={4}>
-          <NumberInput name={["eintrittspreise", "preisprofil", "regulaer"]} label="Reg" decimals={2} suffix="€" disabled />
+          <NumberInput decimals={2} disabled label="Reg" name={["eintrittspreise", "preisprofil", "regulaer"]} suffix="€" />
         </Col>
         <Col span={4}>
           <DynamicItem
             nameOfDepending={["eintrittspreise", "preisprofil"]}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue label="Erm" decimals={2} suffix="€" value={eintritt.ermaessigt} />;
+              return <NumberInputWithDirectValue decimals={2} label="Erm" suffix="€" value={eintritt.ermaessigt} />;
             }}
           />
         </Col>
@@ -61,20 +61,20 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
             nameOfDepending={["eintrittspreise", "preisprofil"]}
             renderWidget={(getFieldValue) => {
               const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue label="Mitgl" decimals={2} suffix="€" value={eintritt.mitglied} />;
+              return <NumberInputWithDirectValue decimals={2} label="Mitgl" suffix="€" value={eintritt.mitglied} />;
             }}
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <NumberInput name={["kasse", "einnahmenReservix"]} label="Reservix" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput decimals={2} label="Reservix" name={["kasse", "einnahmenReservix"]} onChange={updateSumme} suffix="€" />
         </Col>
         <Col span={12}>
           <NumberInput
-            name={["kasse", "anzahlReservix"]}
-            label='Anzahl Tickets (für Excel) - falls "0" Schnitt aus Eintritt'
             decimals={0}
+            label='Anzahl Tickets (für Excel) - falls "0" Schnitt aus Eintritt'
+            name={["kasse", "anzahlReservix"]}
           />
         </Col>
       </JazzRow>
@@ -92,30 +92,30 @@ export default function EinnahmenCard({ onChange }: EinnahmenCardParams) {
       <JazzRow>
         <Col span={8}>
           <NumberInput
-            name={["eintrittspreise", "zuschuss"]}
+            decimals={2}
+            disabled
             label="Zuschüsse (für alte Konzerte)"
-            decimals={2}
-            suffix="€"
+            name={["eintrittspreise", "zuschuss"]}
             onChange={updateSumme}
-            disabled
+            suffix="€"
           />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["kasse", freigabe ? "einnahmeTicketsEUR" : "nix"]}
+            decimals={2}
+            disabled
             label="Abendkasse (Tickets)"
-            decimals={2}
-            disabled
+            name={["kasse", freigabe ? "einnahmeTicketsEUR" : "nix"]}
             suffix="€"
           />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["eintrittspreise", "erwarteteBesucher"]}
-            label="Gäste (erw.)"
             decimals={0}
-            onChange={updateSumme}
             disabled={!!freigabe}
+            label="Gäste (erw.)"
+            name={["eintrittspreise", "erwarteteBesucher"]}
+            onChange={updateSumme}
           />
         </Col>
       </JazzRow>

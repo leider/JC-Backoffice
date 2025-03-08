@@ -54,21 +54,21 @@ export default function VermietungFormAndPageHeader<T>({
 
   return (
     <JazzFormAndHeaderExtended
-      title={title}
-      saveForm={saveForm}
+      additionalButtons={[<MoreButton disabled={!id} isDirty={isDirty} isVermietung key="more" />]}
+      additionalButtonsLast={[<TeamCalendar key="cal" />]}
+      changedPropsToWatch={[["angebot", "freigabe"]]}
       data={data}
       dateString={displayDate}
-      resetChanges={resetChanges}
-      additionalButtons={[<MoreButton key="more" disabled={!id} isDirty={isDirty} isVermietung />]}
-      additionalButtonsLast={[<TeamCalendar key="cal" />]}
       firstTag={
-        <Tag key="verm" color="purple">
+        <Tag color="purple" key="verm">
           Vermietung
         </Tag>
       }
-      tags={tagsForTitle}
-      changedPropsToWatch={[["angebot", "freigabe"]]}
       form={form}
+      resetChanges={resetChanges}
+      saveForm={saveForm}
+      tags={tagsForTitle}
+      title={title}
     >
       {children}
     </JazzFormAndHeaderExtended>

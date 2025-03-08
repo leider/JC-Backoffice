@@ -16,10 +16,10 @@ export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSel
     <Form.Item
       label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}
       name={["eintrittspreise", "preisprofil"]}
-      valuePropName="valueAsObject"
       trigger="onValueAsObject"
+      valuePropName="valueAsObject"
     >
-      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} />
+      <InternalPreisprofilSelect disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} onChange={onChange} optionen={optionen} />
     </Form.Item>
   );
 }
@@ -72,5 +72,5 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
     onChange?.(selectedProfil);
   }
 
-  return <Select id={id} options={displayProfile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
+  return <Select disabled={disabled} id={id} onSelect={selectedToPreisprofil} options={displayProfile} value={valueAsString} />;
 }

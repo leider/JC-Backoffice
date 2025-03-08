@@ -59,7 +59,7 @@ export default function Info() {
     const { brightText } = useJazzContext();
     return (
       <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
-        <IconForSmallBlock style={{ marginBottom: -3 }} iconName="CheckSquare" />
+        <IconForSmallBlock iconName="CheckSquare" style={{ marginBottom: -3 }} />
         &nbsp; {title}
       </b>
     );
@@ -70,7 +70,7 @@ export default function Info() {
       <RowWrapper>
         <JazzRow>
           {map(veranstaltungen, (veranst) => (
-            <Col lg={12} key={veranst.id}>
+            <Col key={veranst.id} lg={12}>
               <PressePreview veranstaltung={veranst} />
               <Divider />
             </Col>
@@ -107,7 +107,7 @@ export default function Info() {
         </JazzRow>
         <JazzRow>
           {map(filter(veranstaltungen, "presse.image.length"), (veranst: Konzert) => (
-            <Col lg={12} key={veranst.id}>
+            <Col key={veranst.id} lg={12}>
               <p>
                 <b>{veranst.kopf.titelMitPrefix}</b>
               </p>
@@ -127,12 +127,12 @@ export default function Info() {
   const allTabs: TabsProps["items"] = [
     {
       key: "pressetexte",
-      label: <TabLabel type="pressetexte" title="Pressetexte" />,
+      label: <TabLabel title="Pressetexte" type="pressetexte" />,
       children: <Pressetexte />,
     },
     {
       key: "uebersicht",
-      label: <TabLabel type="uebersicht" title="Übersicht" />,
+      label: <TabLabel title="Übersicht" type="uebersicht" />,
       children: <Uebersicht />,
     },
   ];
@@ -142,21 +142,21 @@ export default function Info() {
   return (
     <>
       <JazzPageHeader
-        title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
-        tags={filterTags}
         buttons={[
           <a href={`/imgzip/${monatJahr!}`} key="imgzip">
-            <Button icon={<IconForSmallBlock size={16} iconName="Download" />}>Alle Bilder als ZIP</Button>
+            <Button icon={<IconForSmallBlock iconName="Download" size={16} />}>Alle Bilder als ZIP</Button>
           </a>,
         ]}
+        tags={filterTags}
+        title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
       />
       <Tabs
-        type="card"
         activeKey={activePage}
         items={allTabs}
         onChange={(newPage) => {
           setSearch({ tab: newPage });
         }}
+        type="card"
       />
     </>
   );
