@@ -6,56 +6,56 @@ import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMulti
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 
 export interface MitarbeiterRowProps {
-  sectionName: StaffType;
-  label?: string;
-  usersAsOptions: UserWithKann[];
+  readonly sectionName: StaffType;
+  readonly label?: string;
+  readonly usersAsOptions: UserWithKann[];
 }
 
-const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }) => {
+function StaffRow({ usersAsOptions, sectionName, label }: MitarbeiterRowProps) {
   return (
-    <Form.Item label={<b>{label}:</b>}>
+    <Form.Item label={<b>{label + ":"}</b>}>
       <Space.Compact block>
         <DynamicItem
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}
           renderWidget={(getFieldValue) => {
             const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return <MitarbeiterMultiSelect name={["staff", sectionName]} usersAsOptions={usersAsOptions} disabled={notNeeded} />;
+            return <MitarbeiterMultiSelect disabled={notNeeded} name={["staff", sectionName]} usersAsOptions={usersAsOptions} />;
           }}
         />
-        <Form.Item name={["staff", `${sectionName}NotNeeded`]} valuePropName="checked" noStyle>
+        <Form.Item name={["staff", `${sectionName}NotNeeded`]} noStyle valuePropName="checked">
           <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
         </Form.Item>
       </Space.Compact>
     </Form.Item>
   );
-};
+}
 
 export default function EditableStaffRows({
   forVermietung,
   usersAsOptions,
   brauchtTechnik,
 }: {
-  forVermietung: boolean;
-  usersAsOptions: UserWithKann[];
-  brauchtTechnik: boolean;
+  readonly forVermietung: boolean;
+  readonly usersAsOptions: UserWithKann[];
+  readonly brauchtTechnik: boolean;
 }) {
   return (
     <>
-      <StaffRow label="Abendverantwortlicher" usersAsOptions={usersAsOptions} sectionName="mod" />
+      <StaffRow label="Abendverantwortlicher" sectionName="mod" usersAsOptions={usersAsOptions} />
       {!forVermietung && (
         <>
-          <StaffRow usersAsOptions={usersAsOptions} label="Kasse (Verantwortlich)" sectionName="kasseV" />
-          <StaffRow usersAsOptions={usersAsOptions} label="Kasse (Unterstützung)" sectionName="kasse" />
+          <StaffRow label="Kasse (Verantwortlich)" sectionName="kasseV" usersAsOptions={usersAsOptions} />
+          <StaffRow label="Kasse (Unterstützung)" sectionName="kasse" usersAsOptions={usersAsOptions} />
         </>
       )}
-      {(!forVermietung || brauchtTechnik) && (
+      {!forVermietung || brauchtTechnik ? (
         <>
-          <StaffRow usersAsOptions={usersAsOptions} label="Ton" sectionName="technikerV" />
-          <StaffRow usersAsOptions={usersAsOptions} label="Licht" sectionName="techniker" />
+          <StaffRow label="Ton" sectionName="technikerV" usersAsOptions={usersAsOptions} />
+          <StaffRow label="Licht" sectionName="techniker" usersAsOptions={usersAsOptions} />
         </>
-      )}
-      {!forVermietung && <StaffRow label="Merchandise" usersAsOptions={usersAsOptions} sectionName="merchandise" />}
-      <StaffRow usersAsOptions={usersAsOptions} label="Ersthelfer (als Gast)" sectionName="ersthelfer" />
+      ) : null}
+      {!forVermietung && <StaffRow label="Merchandise" sectionName="merchandise" usersAsOptions={usersAsOptions} />}
+      <StaffRow label="Ersthelfer (als Gast)" sectionName="ersthelfer" usersAsOptions={usersAsOptions} />
     </>
   );
 }

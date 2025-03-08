@@ -15,6 +15,19 @@ import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
+function EditButton({ url = "" }: { readonly url?: string }) {
+  const type: buttonType = "allgemeines";
+  const { color, icon } = colorsAndIconsForSections;
+  return (
+    <ButtonWithIconAndLink
+      color={color(type)}
+      icon={icon(type)}
+      text="Bearbeiten..."
+      to={`/vermietung/${encodeURIComponent(url)}?page=${type}`}
+    />
+  );
+}
+
 export default function PreviewVermietung() {
   const { url } = useParams();
   const { data } = useQuery({
@@ -31,39 +44,26 @@ export default function PreviewVermietung() {
     setMemoizedId(vermietung.id);
   }, [vermietung.id, setMemoizedId]);
 
-  function EditButton() {
-    const type: buttonType = "allgemeines";
-    const { color, icon } = colorsAndIconsForSections;
-    return (
-      <ButtonWithIconAndLink
-        icon={icon(type)}
-        to={`/vermietung/${encodeURIComponent(url ?? "")}?page=${type}`}
-        color={color(type)}
-        text="Bearbeiten..."
-      />
-    );
-  }
-
   return (
     <div>
       <JazzPageHeader
-        title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
+        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" url={url} />]}
         dateString={vermietung.datumForDisplayShort}
-        buttons={[currentUser.accessrights.isOrgaTeam && <EditButton key="edit" />]}
+        title={`${vermietung.kopf.titelMitPrefix} ${vermietung.kopf.presseInEcht}`}
       />
       <JazzRow>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <StaffInPreview veranstaltung={vermietung} />
           <InfoInPreview veranstaltung={vermietung} />
           <TechnikInPreview veranstaltung={vermietung} />
         </Col>
-        {vermietung.brauchtPresse && (
-          <Col xs={24} lg={12}>
-            <Collapsible suffix="presse" label="Pressetext">
+        {vermietung.brauchtPresse ? (
+          <Col lg={12} xs={24}>
+            <Collapsible label="Pressetext" suffix="presse">
               <PressePreview veranstaltung={vermietung} />
             </Collapsible>
           </Col>
-        )}
+        ) : null}
       </JazzRow>
     </div>
   );

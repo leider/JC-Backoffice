@@ -4,7 +4,7 @@ import { App, ConfigProvider, theme } from "antd";
 import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import { useState } from "react";
-import { GlobalContext } from "jc-vue/src/app/GlobalContext";
+import { DefaultGlobalContext, GlobalContext } from "jc-vue/src/app/GlobalContext";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -23,6 +23,10 @@ function RiderApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
+        form={{
+          validateMessages: { required: "Du musst einen Wert eingeben" },
+        }}
+        locale={locale_de}
         theme={{
           token: {
             colorPrimary: "#337ab7",
@@ -40,13 +44,9 @@ function RiderApp() {
           },
           algorithm: darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
         }}
-        locale={locale_de}
-        form={{
-          validateMessages: { required: "Du musst einen Wert eingeben" },
-        }}
       >
         <App>
-          <GlobalContext.Provider value={{ isDarkMode: false, isCompactMode: false }}>
+          <GlobalContext.Provider value={DefaultGlobalContext}>
             <RiderContent />
           </GlobalContext.Provider>
         </App>

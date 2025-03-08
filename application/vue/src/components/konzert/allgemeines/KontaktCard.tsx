@@ -13,9 +13,9 @@ import compact from "lodash/compact";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 type KontaktCardProps = {
-  kontakte: Kontakt[];
-  selector: "agentur" | "hotel";
-  noTopBorder?: boolean;
+  readonly kontakte: Kontakt[];
+  readonly selector: "agentur" | "hotel";
+  readonly noTopBorder?: boolean;
 };
 export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
   const form = useFormInstance();
@@ -46,20 +46,20 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
   }
   return (
     <Collapsible
-      suffix={selector === "agentur" ? "allgemeines" : "hotel"}
       label={selector === "agentur" ? "Agentur" : "Hotel"}
       noTopBorder={noTopBorder}
+      suffix={selector === "agentur" ? "allgemeines" : "hotel"}
     >
       <JazzRow>
         <Col span={12}>
           <SingleSelect
-            name={[`${selector}auswahl`]}
-            label="Auswahl"
-            options={auswahlen}
             initialValue="[temporär]"
+            label="Auswahl"
+            name={[`${selector}auswahl`]}
             onChange={auswahlChanged}
+            options={auswahlen}
           />
-          <TextField name={[selector, "name"]} label="Name" />
+          <TextField label="Name" name={[selector, "name"]} />
         </Col>
         <Col span={12}>
           <Form.Item label={<b>Adresse:</b>} name={[selector, "adresse"]}>
@@ -69,10 +69,10 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <TextField name={[selector, "telefon"]} label="Telefon" />
+          <TextField label="Telefon" name={[selector, "telefon"]} />
         </Col>
         <Col span={12}>
-          <TextField name={[selector, "email"]} label="E-Mail" isEmail />
+          <TextField isEmail label="E-Mail" name={[selector, "email"]} />
         </Col>
       </JazzRow>
       {children}

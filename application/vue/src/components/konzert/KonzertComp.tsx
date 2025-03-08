@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { konzertWithRiderForUrl, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
@@ -74,9 +74,13 @@ export default function KonzertComp() {
     mutateKonzert.mutate(konz);
   }
 
+  const initialContext = useMemo(() => {
+    return { isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen };
+  }, [isKasseHelpOpen]);
+
   return (
-    <KonzertContext.Provider value={{ isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen }}>
-      <KonzertFormAndPageHeader data={konzert} saveForm={saveForm} resetChanges={refetch}>
+    <KonzertContext.Provider value={initialContext}>
+      <KonzertFormAndPageHeader data={konzert} resetChanges={refetch} saveForm={saveForm}>
         <ShowOnCopy title="Kopiertes Konzert" />
         <KonzertTabs />
       </KonzertFormAndPageHeader>

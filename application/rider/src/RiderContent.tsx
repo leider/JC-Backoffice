@@ -4,7 +4,7 @@ import { RiderStandalone } from "@/RiderStandalone.tsx";
 
 const { Header, Content } = Layout;
 
-const RiderContent: React.FC = () => {
+export default function RiderContent() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -12,7 +12,7 @@ const RiderContent: React.FC = () => {
     <Layout>
       <Header style={{ position: "sticky", top: 0, zIndex: 1, width: "100%", paddingInline: "20px" }}>
         <div style={{ float: "left", width: "540px", height: "40px", margin: "12px 12px 0px 0px" }}>
-          <img src="/rider/img/logo_weiss.png" alt="Jazzclub Logo" />
+          <img alt="Jazzclub Logo" src="/rider/img/logo_weiss.png" />
         </div>
       </Header>
 
@@ -23,6 +23,4 @@ const RiderContent: React.FC = () => {
       </Content>
     </Layout>
   );
-};
-
-export default RiderContent;
+}

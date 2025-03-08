@@ -22,27 +22,22 @@ import filter from "lodash/filter";
 type WithKey<T> = T & { key: string };
 
 interface EditableTableProps<T> {
-  name: NamePath;
-  columnDescriptions: Columns[];
-  usersWithKann?: UserWithKann[];
-  newRowFactory: (vals: T) => T;
+  readonly name: NamePath;
+  readonly columnDescriptions: Columns[];
+  readonly usersWithKann?: UserWithKann[];
+  readonly newRowFactory: (vals: T) => T;
 }
 
-interface EditableRowProps {
-  index: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>) {
   const [form] = Form.useForm();
   return (
-    <Form form={form} component={false}>
+    <Form component={false} form={form}>
       <EditableContext.Provider value={form}>
         <tr {...props} />
       </EditableContext.Provider>
     </Form>
   );
-};
+}
 
 function InnerTable<T>({
   value,
@@ -51,11 +46,11 @@ function InnerTable<T>({
   usersWithKann,
   newRowFactory,
 }: {
-  value?: T[];
-  onChange?: (val?: T[]) => void;
-  columnDescriptions?: Columns[];
-  usersWithKann?: UserWithKann[];
-  newRowFactory: (val: T) => T;
+  readonly value?: T[];
+  readonly onChange?: (val?: T[]) => void;
+  readonly columnDescriptions?: Columns[];
+  readonly usersWithKann?: UserWithKann[];
+  readonly newRowFactory: (val: T) => T;
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
@@ -148,12 +143,12 @@ function InnerTable<T>({
 
   const addButton = (
     <ButtonWithIcon
-      testid="add-in-table"
-      type="text"
       icon="PlusLg"
-      tooltipTitle="Neue Zeile"
       onClick={handleAdd}
       style={{ paddingTop: 0, paddingBlock: 0, height: "initial" }}
+      testid="add-in-table"
+      tooltipTitle="Neue Zeile"
+      type="text"
     />
   );
   defaultColumns.push({
@@ -203,13 +198,13 @@ function InnerTable<T>({
   return (
     <TableContext.Provider value={tableContext}>
       <Table<TWithKey>
-        className="editable-table"
-        components={components}
         bordered
-        dataSource={rows}
+        className="editable-table"
         columns={columns as ColumnTypes}
-        size="small"
+        components={components}
+        dataSource={rows}
         pagination={{ position: ["topRight"], defaultPageSize: 50, hideOnSinglePage: true }}
+        size="small"
       />
     </TableContext.Provider>
   );
@@ -261,11 +256,11 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
   return (
     <Form.Item
       name={name}
-      valuePropName="value"
-      trigger="onChange"
       rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
+      trigger="onChange"
+      valuePropName="value"
     >
-      <InnerTable<T> columnDescriptions={columnDescriptions} usersWithKann={usersWithKann} newRowFactory={newRowFactory} />
+      <InnerTable<T> columnDescriptions={columnDescriptions} newRowFactory={newRowFactory} usersWithKann={usersWithKann} />
     </Form.Item>
   );
 }

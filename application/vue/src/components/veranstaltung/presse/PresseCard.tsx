@@ -18,11 +18,30 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export default function PresseCard({ isVermietung }: { isVermietung: boolean }) {
+function TabLabel({ activePage, kind, title }: { readonly activePage: string; readonly kind: string; readonly title: string }) {
+  const { color } = colorsAndIconsForSections;
+
+  const { brightText } = useJazzContext();
+  const farbe = color("presse");
+  const active = activePage === kind;
+  return (
+    <b
+      style={{
+        margin: -16,
+        padding: 16,
+        backgroundColor: active ? farbe : "inherit",
+        color: active ? brightText : farbe,
+      }}
+    >
+      {title}
+    </b>
+  );
+}
+
+export default function PresseCard({ isVermietung }: { readonly isVermietung: boolean }) {
   const form = useFormInstance();
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
-  const { color } = colorsAndIconsForSections;
   const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
 
   const presseText = useWatch(["presse", "text"]);
@@ -48,56 +67,38 @@ export default function PresseCard({ isVermietung }: { isVermietung: boolean }) 
 
   const [activePage, setActivePage] = useState<string>("final");
 
-  function TabLabel(props: { kind: string; title: string }) {
-    const { brightText } = useJazzContext();
-    const farbe = color("presse");
-    const active = activePage === props.kind;
-    return (
-      <b
-        style={{
-          margin: -16,
-          padding: 16,
-          backgroundColor: active ? farbe : "inherit",
-          color: active ? brightText : farbe,
-        }}
-      >
-        {props.title}
-      </b>
-    );
-  }
-
   return (
-    <Collapsible suffix="presse" label="Pressematerial" noTopBorder>
+    <Collapsible label="Pressematerial" noTopBorder suffix="presse">
       <JazzRow>
-        <Col xs={24} lg={12}>
-          <CheckItem name={["presse", "checked"]} label="Ist so OK" />
-          <TextField name={["presse", "jazzclubURL"]} label="URL-Suffix bei jazzclub.de" />
+        <Col lg={12} xs={24}>
+          <CheckItem label="Ist so OK" name={["presse", "checked"]} />
+          <TextField label="URL-Suffix bei jazzclub.de" name={["presse", "jazzclubURL"]} />
           <Tabs
             activeKey={activePage}
-            onChange={setActivePage}
-            type="card"
             items={[
               {
                 key: "final",
-                label: <TabLabel kind="final" title="Finaler Text" />,
+                label: <TabLabel activePage={activePage} kind="final" title="Finaler Text" />,
                 children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "text"]} />,
               },
               {
                 key: "original",
-                label: <TabLabel kind="original" title="Originaler Text" />,
+                label: <TabLabel activePage={activePage} kind="original" title="Originaler Text" />,
                 children: <MarkdownEditor label={<b>Formatierter Text für die Pressemitteilung:</b>} name={["presse", "originalText"]} />,
               },
             ]}
+            onChange={setActivePage}
+            type="card"
           />
-          <Uploader name={["presse", "image"]} typ="pressefoto" onlyImages />
+          <Uploader name={["presse", "image"]} onlyImages typ="pressefoto" />
           <SingleSelect
-            name={["tempimage"]}
             label="Vorhandene Bilder übernehmen"
-            options={allimages.data || []}
+            name={["tempimage"]}
             onChange={imageUebernehmen}
+            options={allimages.data || []}
           />
         </Col>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <PressePreview veranstaltung={verForPreview} />
         </Col>
       </JazzRow>

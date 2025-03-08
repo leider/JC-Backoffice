@@ -29,19 +29,19 @@ export default function JazzFormAndHeaderExtended<T>({
   resetChanges,
   breadcrumb,
 }: PropsWithChildren<{
-  title: string;
-  data?: Partial<T>;
-  saveForm: (vals: T) => void;
-  additionalButtons?: ReactNode[];
-  additionalButtonsLast?: ReactNode[];
-  changedPropsToWatch?: NamePath[];
-  dateString?: string;
-  firstTag?: ReactNode;
-  tags?: ReactNode[];
-  form: FormInstance<T>;
-  style?: React.CSSProperties;
-  resetChanges?: () => Promise<unknown>;
-  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
+  readonly title: string;
+  readonly data?: Partial<T>;
+  readonly saveForm: (vals: T) => void;
+  readonly additionalButtons?: ReactNode[];
+  readonly additionalButtonsLast?: ReactNode[];
+  readonly changedPropsToWatch?: NamePath[];
+  readonly dateString?: string;
+  readonly firstTag?: ReactNode;
+  readonly tags?: ReactNode[];
+  readonly form: FormInstance<T>;
+  readonly style?: React.CSSProperties;
+  readonly resetChanges?: () => Promise<unknown>;
+  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   document.title = `JC-${title}`;
   window.scroll({ top: 0 });
@@ -83,17 +83,15 @@ export default function JazzFormAndHeaderExtended<T>({
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
   const buttons: ReactNode[] = (additionalButtons ?? [])
-    .concat(resetChanges ? <ResetButton key="cancel" disabled={!isDirty} resetChanges={resetChanges} /> : [])
-    .concat(<SaveButton key="save" disabled={!isDirty || hasErrors} />)
+    .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetChanges} /> : [])
+    .concat(<SaveButton disabled={!isDirty || hasErrors} key="save" />)
     .concat(additionalButtonsLast ?? []);
 
   return (
     <Form
+      colon={false}
       form={form}
-      onValuesChange={() => {
-        updateDirtyIfChanged();
-        checkErrors();
-      }}
+      layout="vertical"
       onFinish={() =>
         form
           .validateFields()
@@ -103,8 +101,6 @@ export default function JazzFormAndHeaderExtended<T>({
           })
           .catch(noop)
       }
-      colon={false}
-      layout="vertical"
       onKeyDown={(event) => {
         const target = event.target as HTMLInputElement;
         if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
@@ -112,19 +108,23 @@ export default function JazzFormAndHeaderExtended<T>({
           return false;
         }
       }}
+      onValuesChange={() => {
+        updateDirtyIfChanged();
+        checkErrors();
+      }}
     >
       <JazzPageHeader
-        title={title}
+        breadcrumb={breadcrumb}
         buttons={buttons}
-        hasErrors={hasErrors}
         dateString={dateString}
         firstTag={firstTag}
-        tags={tags}
-        breadcrumb={breadcrumb}
+        hasErrors={hasErrors}
         style={style}
+        tags={tags}
+        title={title}
       />
       <RowWrapper>{children}</RowWrapper>
-      {changedPropsToWatch && <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} />}
+      {changedPropsToWatch ? <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} /> : null}
     </Form>
   );
 }

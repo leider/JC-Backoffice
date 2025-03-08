@@ -1,83 +1,78 @@
 import { Input, InputRef } from "antd";
 import numeral from "numeral";
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import isEqual from "lodash/isEqual";
 
 interface INumericInputEmbedded {
-  id?: string;
+  readonly id?: string;
   /**
    * The number;
    * @type {(number | null)}
    * @memberof INumericInputEmbedded
    */
-  number?: number | null;
+  readonly number?: number | null;
 
   /**
    * The number of decimals.
    * @type {number}
    * @memberof INumericInputEmbedded
    */
-  decimals: number;
+  readonly decimals: number;
 
   /**
    * Whether the input is disabled.
    * @type {boolean}
    * @memberof INumericInputEmbedded
    */
-  disabled?: boolean;
+  readonly disabled?: boolean;
 
   /**
    * The minimum number.
    * @type {number}
    * @memberof INumericInputEmbedded
    */
-  min?: number;
+  readonly min?: number;
 
   /**
    * The maximum number.
    * @type {number}
    * @memberof INumericInputEmbedded
    */
-  max?: number;
+  readonly max?: number;
 
   /**
    * The exclusive minimum.
    * @type {boolean}
    * @memberof INumericInputEmbedded
    */
-  exclusiveMin?: boolean;
+  readonly exclusiveMin?: boolean;
 
   /**
    * The exclusive maximum.
    * @type {boolean}
    * @memberof INumericInputEmbedded
    */
-  exclusiveMax?: boolean;
+  readonly exclusiveMax?: boolean;
 
   /**
    * Callback for when the number is updated.
    * @memberof INumericInputEmbedded
    */
-  onNumber?: (value: number | null) => void;
+  readonly onNumber?: (value: number | null) => void;
 
   /**
    * Callback for when the number is changed.
    * @memberof INumericInputEmbedded
    */
-  onChange?: (value: number | null) => void;
-  suffix?: ReactNode;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
+  readonly onChange?: (value: number | null) => void;
+  readonly suffix?: ReactNode;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
 }
 
-/**
- * Numeric input component.
- * @param {INumericInputEmbedded} props
- * @return {*}  {React.ReactElement}
- */
-const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
+function NumericInputEmbedded({
   number,
   decimals,
   min,
@@ -91,7 +86,7 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
   id,
   save,
   focus,
-}: INumericInputEmbedded): React.ReactElement => {
+}: INumericInputEmbedded) {
   const [value, setValue] = useState<string | undefined>("");
 
   const { internalFormat, displayFormat } = useFormats(decimals);
@@ -138,18 +133,18 @@ const NumericInputEmbedded: FC<INumericInputEmbedded> = ({
 
   return (
     <Input
-      ref={inputRef}
+      disabled={disabled}
       id={id}
       inputMode={decimals > 0 ? "decimal" : "numeric"}
       onBlur={handleBlur}
-      onFocus={handleFocus}
-      disabled={disabled}
-      value={value}
       onChange={({ target: { value: val } }) => setValue(val)}
-      suffix={suffix}
+      onFocus={handleFocus}
       onPressEnter={() => save?.()}
+      ref={inputRef}
+      suffix={suffix}
+      value={value}
     />
   );
-};
+}
 
 export default NumericInputEmbedded;

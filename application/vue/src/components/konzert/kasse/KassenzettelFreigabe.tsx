@@ -44,7 +44,7 @@ export function KassenzettelFreigabe() {
             <IconForSmallBlock color="red" iconName="ExclamationCircleFill" /> Nach dem Freigeben ist keine Änderung mehr möglich!
           </p>
           <p>Du musst danach noch Speichern, dabei wird der Kassenzettel an die Buchhaltung gesendet.</p>
-          <SingleSelect name="freigeber" label="User für die Freigabe" options={usersAsOptions} initialValue={currentUser.name} />
+          <SingleSelect initialValue={currentUser.name} label="User für die Freigabe" name="freigeber" options={usersAsOptions} />
         </Form>
       ),
       onOk: () => {
@@ -77,40 +77,41 @@ export function KassenzettelFreigabe() {
         <Col span={10}>
           <ButtonWithIcon
             block
-            text="Kassenzettel"
-            icon="PrinterFill"
-            disabled={isDirty}
-            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
-            tooltipTitle="Kassenzettel als PDF"
             color={color("kasse")}
+            disabled={isDirty}
+            icon="PrinterFill"
+            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
+            text="Kassenzettel"
+            tooltipTitle="Kassenzettel als PDF"
           />
         </Col>
-        <Col span={10} offset={4}>
-          {vergangen &&
-            (!freigabe ? (
+        <Col offset={4} span={10}>
+          {vergangen ? (
+            !freigabe ? (
               <ButtonWithIcon
                 block
-                text="Kasse freigeben..."
-                icon="Unlock"
-                onClick={freigeben}
                 disabled={
                   isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
                 }
+                icon="Unlock"
+                onClick={freigeben}
+                text="Kasse freigeben..."
               />
             ) : (
               <>
                 <ButtonWithIcon
                   block
+                  color="#c71c2c"
+                  disabled={isDirty || !darfFreigabeAufheben}
                   icon="Lock"
+                  onClick={freigabeAufheben}
                   text="Kasse ist freigegeben"
                   type="primary"
-                  color="#c71c2c"
-                  onClick={freigabeAufheben}
-                  disabled={isDirty || !darfFreigabeAufheben}
                 />
-                <TextField name={["kasse", "kassenfreigabe"]} label="Durch" disabled />
+                <TextField disabled label="Durch" name={["kasse", "kassenfreigabe"]} />
               </>
-            ))}
+            )
+          ) : null}
         </Col>
       </JazzRow>
       <JazzRow>
@@ -121,7 +122,7 @@ export function KassenzettelFreigabe() {
                 ACHTUNG! Endbestände unplausibel
               </Typography.Text>
               &nbsp;
-              {darfFreigeben && <b>Freigabe nicht möglich.</b>}
+              {darfFreigeben ? <b>Freigabe nicht möglich.</b> : null}
             </Flex>
           ) : (
             <>&nbsp;</>
@@ -132,7 +133,7 @@ export function KassenzettelFreigabe() {
         <Col span={10}>
           <MuenzenScheineModal isBeginn />
         </Col>
-        <Col span={10} offset={4}>
+        <Col offset={4} span={10}>
           <MuenzenScheineModal isBeginn={false} />
         </Col>
       </JazzRow>

@@ -24,7 +24,7 @@ class MailingListsWrapper {
   }
 }
 
-function MailingListsInternal({ users }: { users: User[] }) {
+function MailingListsInternal({ users }: { readonly users: User[] }) {
   const usersAsOptions = useMemo(() => map(users, "asUserAsOption"), [users]);
 
   const columnDescriptions: Columns[] = [
@@ -65,7 +65,7 @@ export default function MailingLists() {
   }
 
   return (
-    <JazzFormAndHeader title="Mailinglisten" data={mailingLists} saveForm={saveForm} resetChanges={refetch}>
+    <JazzFormAndHeader data={mailingLists} resetChanges={refetch} saveForm={saveForm} title="Mailinglisten">
       <MailingListsInternal users={data ?? []} />
     </JazzFormAndHeader>
   );

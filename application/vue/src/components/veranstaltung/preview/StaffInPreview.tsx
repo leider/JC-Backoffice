@@ -18,11 +18,11 @@ function StaffList({
   staff,
   theUsers,
 }: {
-  header: string;
-  staff: Staff;
-  notNeeded: boolean;
-  parts: { verant?: StaffType; normal?: StaffType };
-  theUsers: User[];
+  readonly header: string;
+  readonly staff: Staff;
+  readonly notNeeded: boolean;
+  readonly parts: { verant?: StaffType; normal?: StaffType };
+  readonly theUsers: User[];
 }) {
   const usersForPart = useCallback(
     (partType: "verant" | "normal") => {
@@ -48,7 +48,7 @@ function StaffList({
       return (
         <>
           {user.name}
-          {user.kannErsthelfer && <ErsthelferSymbol />}
+          {user.kannErsthelfer ? <ErsthelferSymbol /> : null}
           &nbsp;
           <a href={`tel:${user.tel}`}>{user.tel}</a> <a href={`mailto:${user.email}`}>{user.email}</a>
         </>
@@ -57,9 +57,9 @@ function StaffList({
     return <List.Item>{item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}</List.Item>;
   }
 
-  return !notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
+  return !notNeeded && <List dataSource={names} header={<b>{header + ":"}</b>} renderItem={renderItem} size="small" />;
 }
-export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+export default function StaffInPreview({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   const { allUsers } = useJazzContext();
   const getIn = useMemo(() => {
     const getIn = veranstaltung.artist.getInForMasterDate;
@@ -69,7 +69,7 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
   const transport = useMemo(() => veranstaltung.artist.bandTransport ?? "nicht angegeben", [veranstaltung]);
 
   return (
-    <Collapsible suffix="staff" label="Staff">
+    <Collapsible label="Staff" suffix="staff">
       <JazzRow>
         <Col span={24}>
           <b>Get In:</b> {getIn}, <b>Transport:</b> {transport}
@@ -79,30 +79,30 @@ export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veran
         <Col span={24}>
           <StaffList
             header="Abendverantwortlicher"
-            staff={veranstaltung.staff}
-            parts={{ verant: "mod" }}
             notNeeded={veranstaltung.staff.modNotNeeded}
+            parts={{ verant: "mod" }}
+            staff={veranstaltung.staff}
             theUsers={allUsers}
           />
           <StaffList
             header="Kasse"
-            staff={veranstaltung.staff}
+            notNeeded={veranstaltung.staff.kasseNotNeeded ? veranstaltung.staff.kasseVNotNeeded : false}
             parts={{ verant: "kasseV", normal: "kasse" }}
-            notNeeded={veranstaltung.staff.kasseNotNeeded && veranstaltung.staff.kasseVNotNeeded}
+            staff={veranstaltung.staff}
             theUsers={allUsers}
           />
           <StaffList
             header="Technik"
-            staff={veranstaltung.staff}
+            notNeeded={veranstaltung.staff.technikerNotNeeded ? veranstaltung.staff.technikerVNotNeeded : false}
             parts={{ verant: "technikerV", normal: "techniker" }}
-            notNeeded={veranstaltung.staff.technikerNotNeeded && veranstaltung.staff.technikerVNotNeeded}
+            staff={veranstaltung.staff}
             theUsers={allUsers}
           />
           <StaffList
             header="Merchandise"
-            staff={veranstaltung.staff}
-            parts={{ normal: "merchandise" }}
             notNeeded={veranstaltung.staff.merchandiseNotNeeded}
+            parts={{ normal: "merchandise" }}
+            staff={veranstaltung.staff}
             theUsers={allUsers}
           />
         </Col>

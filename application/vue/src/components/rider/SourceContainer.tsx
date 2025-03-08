@@ -6,7 +6,7 @@ import filter from "lodash/filter";
 import { useDroppable } from "@dnd-kit/core";
 import map from "lodash/map";
 
-export function SourceContainerAll({ sourceBoxes }: { sourceBoxes: InventoryElement[] }) {
+export function SourceContainerAll({ sourceBoxes }: { readonly sourceBoxes: InventoryElement[] }) {
   const sourceComponents = useMemo(
     () =>
       map(["Keys", "Drums", "Bass", "Guitar", "Extra"] as Category[], (key) => ({
@@ -18,13 +18,13 @@ export function SourceContainerAll({ sourceBoxes }: { sourceBoxes: InventoryElem
   );
   const { setNodeRef } = useDroppable({ id: "SourceContainer" });
 
-  return <Collapse ref={setNodeRef} defaultActiveKey="Keys" accordion items={sourceComponents} />;
+  return <Collapse accordion defaultActiveKey="Keys" items={sourceComponents} ref={setNodeRef} />;
 }
 
-function SourceContainer({ cat, sourceBoxes }: { cat: Category; sourceBoxes: InventoryElement[] }) {
+function SourceContainer({ cat, sourceBoxes }: { readonly cat: Category; readonly sourceBoxes: InventoryElement[] }) {
   const boxes = useMemo(() => {
     return filter(sourceBoxes, { category: cat });
   }, [sourceBoxes, cat]);
 
-  return <List bordered size="small" dataSource={boxes} renderItem={(each) => <SourceElement item={each} />} />;
+  return <List bordered dataSource={boxes} renderItem={(each) => <SourceElement item={each} />} size="small" />;
 }

@@ -3,18 +3,18 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 
-export default function InverseCheckbox(props: CheckboxProps) {
+export default function InverseCheckbox({ checked, onChange, ...rest }: CheckboxProps) {
   const [inverseChecked, setInverseChecked] = useState<boolean>(false);
   useEffect(() => {
-    if (props.checked !== undefined) {
-      setInverseChecked(!props.checked);
+    if (checked !== undefined) {
+      setInverseChecked(!checked);
     }
-  }, [props.checked]);
+  }, [checked]);
 
   function privateOnChange(e: CheckboxChangeEvent) {
     e.target.checked = !e.target.checked;
-    props.onChange?.(e);
+    onChange?.(e);
   }
 
-  return <Checkbox {...props} checked={inverseChecked} onChange={privateOnChange} />;
+  return <Checkbox {...rest} checked={inverseChecked} onChange={privateOnChange} />;
 }

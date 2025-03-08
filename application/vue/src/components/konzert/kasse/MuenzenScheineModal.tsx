@@ -25,7 +25,24 @@ const items = [
   { name: "5000", val: "50,00" },
   { name: "10000", val: "100,00" },
 ];
-export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
+
+function ImmediateEuro({ isBeginn, name }: { readonly isBeginn: boolean; readonly name: string }) {
+  const fullName = useMemo(() => ["kasse", isBeginn ? "startinhalt" : "endinhalt", name], [isBeginn, name]);
+  return (
+    <Form.Item name={fullName} valuePropName="number">
+      <ImmediateEuroEmbedded name={name} />
+    </Form.Item>
+  );
+}
+
+function ImmediateEuroEmbedded({ name, number }: { readonly name: string; readonly number?: number }) {
+  const value = useMemo(() => {
+    return parseInt(name) * (number ?? 0) * 0.01;
+  }, [name, number]);
+  return <NumericInputEmbedded decimals={2} disabled number={value} suffix="€" />;
+}
+
+export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }) {
   const { color } = colorsAndIconsForSections;
   const { token } = theme.useToken();
   const form = useFormInstance<KonzertWithRiderBoxes>();
@@ -52,49 +69,33 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
     );
   }, [form, isBeginn, sumForInhalt]);
 
-  function ImmediateEuro({ name }: { name: string }) {
-    const fullName = useMemo(() => ["kasse", isBeginn ? "startinhalt" : "endinhalt", name], [name]);
-    return (
-      <Form.Item name={fullName} valuePropName="number">
-        <ImmediateEuroEmbedded name={name} />
-      </Form.Item>
-    );
-  }
-
-  function ImmediateEuroEmbedded({ name, number }: { name: string; number?: number }) {
-    const value = useMemo(() => {
-      return parseInt(name) * (number ?? 0) * 0.01;
-    }, [name, number]);
-    return <NumericInputEmbedded decimals={2} disabled suffix="€" number={value} />;
-  }
-
   return (
     <>
       <JazzModal
-        title={`Kasseninhalt ${isBeginn ? "zu Beginn" : "am Ende"}`}
-        open={openModal}
         closable={false}
-        maskClosable={false}
         footer={[
           isDirty && (
             <ButtonWithIcon
-              text="Schließen ohne Speichern"
-              type="default"
+              color={token.colorSuccess}
               key="closeOnly"
               onClick={() => setOpenModal(false)}
-              color={token.colorSuccess}
+              text="Schließen ohne Speichern"
+              type="default"
             />
           ),
           <ButtonWithIcon
-            text={isDirty ? "Speichern & Schließen" : "Schließen"}
+            color={token.colorSuccess}
             key="close"
             onClick={() => {
               isDirty && form.submit();
               setOpenModal(false);
             }}
-            color={token.colorSuccess}
+            text={isDirty ? "Speichern & Schließen" : "Schließen"}
           />,
         ]}
+        maskClosable={false}
+        open={openModal}
+        title={`Kasseninhalt ${isBeginn ? "zu Beginn" : "am Ende"}`}
       >
         {map(items, (item) => (
           <JazzRow key={item.name}>
@@ -103,40 +104,40 @@ export function MuenzenScheineModal({ isBeginn }: { isBeginn: boolean }) {
             </Col>
             <Col span={8}>
               <NumberInput
-                name={["kasse", isBeginn ? "startinhalt" : "endinhalt", item.name]}
                 decimals={0}
                 disabled={!!freigabe}
+                name={["kasse", isBeginn ? "startinhalt" : "endinhalt", item.name]}
                 onChange={updateBestandEUR}
               />
             </Col>
             <Col span={8}>
-              <ImmediateEuro name={item.name} />
+              <ImmediateEuro isBeginn={isBeginn} name={item.name} />
             </Col>
           </JazzRow>
         ))}
         <JazzRow>
-          <Col span={8} offset={16}>
+          <Col offset={16} span={8}>
             <NumberInput
-              name={["kasse", isBeginn ? "anfangsbestandEUR" : "endbestandGezaehltEUR"]}
-              label="Summe"
               decimals={2}
-              suffix="€"
               disabled
+              label="Summe"
+              name={["kasse", isBeginn ? "anfangsbestandEUR" : "endbestandGezaehltEUR"]}
+              suffix="€"
             />
           </Col>
         </JazzRow>
       </JazzModal>
       <ButtonWithIcon
-        ref={isBeginn ? refStartinhalt : refEndinhalt}
-        block
         alwaysText
-        text={isBeginn ? "Startinhalt" : "Endinhalt"}
+        block
+        color={color("kasse")}
         icon="CurrencyExchange"
         onClick={() => {
           setOpenModal(true);
         }}
+        ref={isBeginn ? refStartinhalt : refEndinhalt}
+        text={isBeginn ? "Startinhalt" : "Endinhalt"}
         tooltipTitle={isBeginn ? "Kasseninhalt zu Beginn" : "Kasseninhalt am Ende"}
-        color={color("kasse")}
       />
     </>
   );

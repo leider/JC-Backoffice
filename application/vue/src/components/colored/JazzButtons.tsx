@@ -15,49 +15,54 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 
 type ButtonProps = {
-  disabled?: boolean;
-  size?: SizeType;
+  readonly disabled?: boolean;
+  readonly size?: SizeType;
 };
 
-function SaveOrSendButton({ disabled, isSend, size, callback }: ButtonProps & { isSend?: boolean; callback?: () => void }) {
+function SaveOrSendButton({
+  disabled,
+  isSend,
+  size,
+  callback,
+}: ButtonProps & { readonly isSend?: boolean; readonly callback?: () => void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
-      text={isSend ? "Senden" : "Speichern"}
-      onClick={callback ? callback : "submit"}
-      icon={isSend ? "Send" : "CheckSquare"}
-      disabled={disabled}
       color={token.colorSuccess}
+      disabled={disabled}
+      icon={isSend ? "Send" : "CheckSquare"}
+      onClick={callback ? callback : "submit"}
       size={size}
+      text={isSend ? "Senden" : "Speichern"}
     />
   );
 }
 
-export function HelpWithKasseButton({ callback }: { callback: () => void }) {
+export function HelpWithKasseButton({ callback }: { readonly callback: () => void }) {
   const token = theme.useToken().token;
 
-  return <ButtonWithIcon alwaysText text="Abendkasse Hilfe" onClick={callback} icon="QuestionCircleFill" color={token.colorSuccess} />;
+  return <ButtonWithIcon alwaysText color={token.colorSuccess} icon="QuestionCircleFill" onClick={callback} text="Abendkasse Hilfe" />;
 }
 
-export function SaveButton({ disabled, size, callback }: ButtonProps & { callback?: () => void }) {
-  return <SaveOrSendButton disabled={disabled} callback={callback} size={size} />;
+export function SaveButton({ disabled, size, callback }: ButtonProps & { readonly callback?: () => void }) {
+  return <SaveOrSendButton callback={callback} disabled={disabled} size={size} />;
 }
 
 export function SendButton({ disabled }: ButtonProps) {
-  return <SaveOrSendButton isSend disabled={disabled} />;
+  return <SaveOrSendButton disabled={disabled} isSend />;
 }
 
-export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { resetChanges: () => Promise<unknown> | void }) {
+export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { readonly resetChanges: () => Promise<unknown> | void }) {
   const { token } = theme.useToken();
   return (
     <ButtonWithIcon
-      text="Reset"
-      onClick={resetChanges}
-      icon="ArrowCounterclockwise"
-      disabled={disabled}
-      type="default"
       color={token.colorSuccess}
+      disabled={disabled}
+      icon="ArrowCounterclockwise"
+      onClick={resetChanges}
       size={size}
+      text="Reset"
+      type="default"
     />
   );
 }
@@ -87,7 +92,11 @@ export function NewButtons() {
   );
 }
 
-export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { isDirty: boolean; isVermietung?: boolean }) {
+export function MoreButton({
+  disabled,
+  isDirty,
+  isVermietung,
+}: ButtonProps & { readonly isDirty: boolean; readonly isVermietung?: boolean }) {
   const form = useFormInstance();
   const { optionen } = useJazzContext();
   const getKonzert = useCallback(() => new Konzert(form.getFieldsValue(true)), [form]);
@@ -196,7 +205,7 @@ export function MoreButton({ disabled, isDirty, isVermietung }: ButtonProps & { 
   );
 
   return (
-    <Dropdown menu={{ items, onClick: onMenuClick }} disabled={disabled}>
+    <Dropdown disabled={disabled} menu={{ items, onClick: onMenuClick }}>
       <Button>
         <Space>
           Mehr... <IconForSmallBlock iconName="ChevronDown" />

@@ -10,11 +10,11 @@ export default function TabHotel() {
   const { optionen } = useJazzContext();
   return (
     <JazzRow>
-      <Col xs={24} lg={12}>
-        <KontaktCard kontakte={optionen!.hotels} selector="hotel" noTopBorder />
+      <Col lg={12} xs={24}>
+        <KontaktCard kontakte={optionen!.hotels} noTopBorder selector="hotel" />
         <HotelCard />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <TransportCard />
       </Col>
     </JazzRow>

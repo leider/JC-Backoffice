@@ -10,12 +10,12 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 export default function TabAllgemeines() {
   return (
     <JazzRow>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <EventCard />
         <ArtistCard />
         <KommentarCard forVermietung />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col lg={12} xs={24}>
         <MitarbeiterCard forVermietung />
         <VertragspartnerCard />
       </Col>

@@ -17,7 +17,7 @@ describe("Checkbox Widgets", () => {
   describe("Threeway renders", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<ThreewayCheckbox name="test" label="testme" />);
+        updateWidget(<ThreewayCheckbox label="testme" name="test" />);
       });
     });
 
@@ -51,7 +51,7 @@ describe("Checkbox Widgets", () => {
   describe("CheckItem renders", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<CheckItem name="test" label="testme" />);
+        updateWidget(<CheckItem label="testme" name="test" />);
       });
     });
 
@@ -81,7 +81,7 @@ describe("Checkbox Widgets", () => {
     beforeEach(async () => {
       await waitFor(() => {
         updateWidget(
-          <Form.Item name="test" label="testme" valuePropName="checked">
+          <Form.Item label="testme" name="test" valuePropName="checked">
             <InverseCheckbox />
           </Form.Item>,
         );

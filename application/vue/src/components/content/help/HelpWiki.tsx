@@ -20,12 +20,12 @@ export default function HelpWiki() {
     pathname.startsWith("/wiki") && (
       <HelpSection
         initiallyOpen
+        items={wiki}
         label={
           <span>
             <b>Wiki</b> Schau selbst:
           </span>
         }
-        items={wiki}
       />
     )
   );

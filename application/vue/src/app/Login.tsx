@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router";
 import React from "react";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
-const Login = () => {
+function Login() {
   const { login, loginState } = useAuth();
   const { search } = useLocation();
   const from = search.substring(1);
@@ -19,9 +19,9 @@ const Login = () => {
   }
   return (
     <RowWrapper>
-      <Row style={{ minHeight: "80vh" }} align="middle" justify="space-around">
+      <Row align="middle" justify="space-around" style={{ minHeight: "80vh" }}>
         <Col span={24}>
-          <Form labelCol={{ span: 6 }} wrapperCol={{ span: 12 }} name="login" requiredMark={false} onFinish={onFinish}>
+          <Form labelCol={{ span: 6 }} name="login" onFinish={onFinish} requiredMark={false} wrapperCol={{ span: 12 }}>
             <Form.Item
               label="Benutzername"
               name="username"
@@ -55,7 +55,7 @@ const Login = () => {
                 help: "Falsche Daten",
               })}
             >
-              <Button type="primary" htmlType="submit" loading={loginState === LoginState.PENDING}>
+              <Button htmlType="submit" loading={loginState === LoginState.PENDING} type="primary">
                 Anmelden
               </Button>
             </Form.Item>
@@ -64,6 +64,6 @@ const Login = () => {
       </Row>
     </RowWrapper>
   );
-};
+}
 
 export default Login;

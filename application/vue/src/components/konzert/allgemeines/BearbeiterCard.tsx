@@ -13,7 +13,7 @@ export default function BearbeiterCard() {
   const changelist = useWatch("changelist", { form, preserve: true });
   return (
     !!changelist?.length && (
-      <Collapsible suffix="allgemeines" label="Historie" uncollapsed>
+      <Collapsible label="Historie" suffix="allgemeines" uncollapsed>
         <h3>Obsolet, jetzt im Menu "Mehr... : Änderungsverlauf"</h3>
         {map(changelist, (item: ChangelistItem, idx: number) => (
           <JazzRow key={idx}>

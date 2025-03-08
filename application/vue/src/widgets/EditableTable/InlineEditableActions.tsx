@@ -16,35 +16,42 @@ export interface ActionCallbacks {
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function InlineEditableActions({ actions }: { actions: ActionCallbacks }): React.ReactElement {
+export default function InlineEditableActions({ actions }: { readonly actions: ActionCallbacks }): React.ReactElement {
   const [open, setOpen] = useState(false);
   return (
     <>
       <ConfigProvider theme={{ token: { colorPrimary: "#dc3545" } }}>
         <JazzModal
-          title="Löschen"
+          cancelText="Och nö"
           closable={false}
-          open={open}
+          okText="Löschen"
+          onCancel={() => setOpen(false)}
           onOk={() => {
             actions.delete();
             setOpen(false);
           }}
-          onCancel={() => setOpen(false)}
-          okText="Löschen"
-          cancelText="Och nö"
+          open={open}
+          title="Löschen"
         >
           <p>Die Zeile wird gelöscht.</p>
           <p>Bist Du sicher?.</p>
         </JazzModal>
       </ConfigProvider>
-      <ButtonWithIcon key="copy" type="text" icon="Files" onClick={actions.copy} tooltipTitle="Zeile Kopieren" tooltipPlacement="leftTop" />
       <ButtonWithIcon
-        key="delete"
-        type="text"
-        icon="Trash"
-        onClick={() => setOpen(true)}
-        tooltipTitle="Zeile Löschen"
+        icon="Files"
+        key="copy"
+        onClick={() => actions.copy()}
         tooltipPlacement="leftTop"
+        tooltipTitle="Zeile Kopieren"
+        type="text"
+      />
+      <ButtonWithIcon
+        icon="Trash"
+        key="delete"
+        onClick={() => setOpen(true)}
+        tooltipPlacement="leftTop"
+        tooltipTitle="Zeile Löschen"
+        type="text"
       />
     </>
   );

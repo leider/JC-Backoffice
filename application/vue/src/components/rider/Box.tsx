@@ -1,8 +1,8 @@
+/* eslint-disable react/no-unstable-nested-components */
 import type { CSSProperties } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Input, Popover, Radio, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { InventoryElement } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 
 const styleInner: CSSProperties = {
@@ -10,7 +10,7 @@ const styleInner: CSSProperties = {
   backgroundColor: "white",
 };
 
-export function Box({ item, callback }: { item: BoxParams; callback: (open: boolean) => void }) {
+export function Box({ item, callback }: { readonly item: BoxParams; readonly callback: (open: boolean) => void }) {
   const [degree, setDegree] = useState<number>(0);
   const [level, setLevel] = useState<number>(0);
   const [width, setWidth] = useState<number>(0);
@@ -43,8 +43,8 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
         <Col span={12}>
           <b>Drehen:</b>
           <Slider
-            min={0}
             max={359}
+            min={0}
             onChange={(deg) => {
               item.degree = deg;
               setDegree(deg);
@@ -55,39 +55,39 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
         <Col span={12}>
           <b>Ebene:</b>
           <Radio.Group
-            optionType="button"
             buttonStyle="solid"
+            onChange={(e) => {
+              item.level = e.target.value;
+              setLevel(item.level);
+            }}
+            optionType="button"
             options={[
               { label: "unten", value: 0 },
               { label: "mitte", value: 1 },
               { label: "oben", value: 2 },
             ]}
             value={level}
-            onChange={(e) => {
-              item.level = e.target.value;
-              setLevel(item.level);
-            }}
           />
         </Col>
       </Row>
     );
   }
 
-  function PopContent(inv: InventoryElement) {
+  function PopContent() {
     return (
       <>
-        {inv.photo && (
+        {item.photo ? (
           <div>
-            <img src={`/riderimg/${inv.photo?.src}`} alt="Popup Photo" />
+            <img alt="Popup Photo" src={`/riderimg/${item.photo?.src}`} />
           </div>
-        )}
+        ) : null}
         <b>Kommentar:</b>
         <TextArea
-          style={{ height: 150 }}
           onChange={(e) => {
             item.comment = e.target.value;
             setComment(item.comment);
           }}
+          style={{ height: 150 }}
           value={comment}
         />
         {RotateAndLevelRow()}
@@ -114,11 +114,11 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
           <Col span={24}>
             <b>Kommentar:</b>
             <TextArea
-              style={{ height: 150 }}
               onChange={(e) => {
                 item.comment = e.target.value;
                 setComment(item.comment);
               }}
+              style={{ height: 150 }}
               value={comment}
             />
           </Col>
@@ -127,8 +127,8 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
           <Col span={12}>
             <b>Breite:</b>
             <Slider
-              min={0}
               max={150}
+              min={0}
               onChange={(width) => {
                 item.width = width;
                 setWidth(width);
@@ -139,8 +139,8 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
           <Col span={12}>
             <b>Höhe:</b>
             <Slider
-              min={0}
               max={150}
+              min={0}
               onChange={(height) => {
                 item.height = height;
                 setHeight(height);
@@ -155,10 +155,10 @@ export function Box({ item, callback }: { item: BoxParams; callback: (open: bool
   }
 
   return (
-    <Popover title={title} content={isExtra ? PopContentForExtras() : PopContent(item)} trigger="contextMenu" onOpenChange={callback}>
+    <Popover content={isExtra ? <PopContentForExtras /> : <PopContent />} onOpenChange={callback} title={title} trigger="contextMenu">
       <div style={{ ...styleInner, width, height, rotate: `${degree}deg`, zIndex: level, borderRadius: item.isCircle ? "50%" : 0 }}>
         {item.img ? (
-          <img src={`/riderimg/${item.img.src}`} width={item.img.width} height={item.img.height} alt={item.title} />
+          <img alt={item.title} height={item.img.height} src={`/riderimg/${item.img.src}`} width={item.img.width} />
         ) : (
           <div style={styleText}>
             <span style={{ display: "inline-block", verticalAlign: "middle", lineHeight: "normal" }}>{title}</span>

@@ -6,7 +6,15 @@ import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import Aggregate from "@/widgets/Aggregate.tsx";
 
-function EmbeddedPickers({ id, onChange, value }: { id?: string; onChange?: (val: (Date | undefined)[]) => void; value?: Date[] }) {
+function EmbeddedPickers({
+  id,
+  onChange,
+  value,
+}: {
+  readonly id?: string;
+  readonly onChange?: (val: (Date | undefined)[]) => void;
+  readonly value?: Date[];
+}) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
@@ -33,12 +41,12 @@ function EmbeddedPickers({ id, onChange, value }: { id?: string; onChange?: (val
 
   return (
     <DatePicker.RangePicker
-      id={id}
-      showTime
-      minuteStep={30 as IntRange<1, 59>}
       format={["ddd DD.MM.YY HH:mm", "DDMMYY HH:mm"]}
-      value={[start, end]}
+      id={id}
+      minuteStep={30 as IntRange<1, 59>}
       onCalendarChange={onCalendarChange}
+      showTime
+      value={[start, end]}
     />
   );
 }

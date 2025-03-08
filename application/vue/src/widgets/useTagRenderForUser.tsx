@@ -12,8 +12,8 @@ export function useTagRenderForUser(usersAsOptions: UserWithKann[]) {
     };
 
     return (
-      <Tag onMouseDown={onPreventMouseDown} closable={closable} onClose={onClose}>
-        <TagForUser value={value} usersAsOptions={usersAsOptions} />
+      <Tag closable={closable} onClose={onClose} onMouseDown={onPreventMouseDown}>
+        <TagForUser usersAsOptions={usersAsOptions} value={value} />
       </Tag>
     );
   }

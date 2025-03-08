@@ -57,7 +57,7 @@ ${currentUser.name}`);
 
   return (
     <>
-      <Collapsible suffix="hotel" label="Transport" amount={summe} noTopBorder={lg}>
+      <Collapsible amount={summe} label="Transport" noTopBorder={lg} suffix="hotel">
         <JazzRow>
           <Col span={24}>
             <Form.Item label={<b>Anmerkungen:</b>} name={["unterkunft", "kommentar"]}>
@@ -68,29 +68,29 @@ ${currentUser.name}`);
         <JazzRow>
           <Col span={12}>
             <MultiSelectWithTags
-              name={["unterkunft", "sonstiges"]}
               label="Bus / Sonstiges"
-              options={["Parkgenehmigung", "Stromanschluss"]}
+              name={["unterkunft", "sonstiges"]}
               noAdd
+              options={["Parkgenehmigung", "Stromanschluss"]}
             />
           </Col>
           <Col span={12}>
-            <NumberInput name={["unterkunft", "transportEUR"]} label="Summe" decimals={2} suffix="€" onChange={updateSumme} />
+            <NumberInput decimals={2} label="Summe" name={["unterkunft", "transportEUR"]} onChange={updateSumme} suffix="€" />
           </Col>
         </JazzRow>
       </Collapsible>
       <JazzRow>
         <Col span={12}>
-          <CheckItem name={["unterkunft", "angefragt"]} label="Hotel Angefragt" />
+          <CheckItem label="Hotel Angefragt" name={["unterkunft", "angefragt"]} />
         </Col>
         <Col span={12}>
-          <CheckItem name={["unterkunft", "bestaetigt"]} label="Hotel Bestätigt" />
+          <CheckItem label="Hotel Bestätigt" name={["unterkunft", "bestaetigt"]} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={12}>
           <ConfigProvider theme={{ token: { colorPrimary: token.colorSuccess } }}>
-            <Button block icon={<IconForSmallBlock iconName="EnvelopeOpen" />} type="primary" onClick={sendMail}>
+            <Button block icon={<IconForSmallBlock iconName="EnvelopeOpen" />} onClick={sendMail} type="primary">
               &nbsp;Reservierungsmail
             </Button>
           </ConfigProvider>

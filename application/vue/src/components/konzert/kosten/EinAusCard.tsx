@@ -10,8 +10,8 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
 interface AusgabenCardParams {
-  einnahmen: number;
-  ausgaben: number;
+  readonly einnahmen: number;
+  readonly ausgaben: number;
 }
 export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) {
   const form = useFormInstance();
@@ -56,10 +56,10 @@ export default function EinAusCard({ einnahmen, ausgaben }: AusgabenCardParams) 
   ];
 
   return (
-    <Collapsible suffix="concert" label="Kostenübersicht / Break-Even" amount={kalk?.dealUeberschussTotal}>
+    <Collapsible amount={kalk?.dealUeberschussTotal} label="Kostenübersicht / Break-Even" suffix="concert">
       <JazzRow>
         <Col span={24}>
-          <Table columns={columns} dataSource={data} size="small" pagination={false} />
+          <Table columns={columns} dataSource={data} pagination={false} size="small" />
         </Col>
       </JazzRow>
     </Collapsible>

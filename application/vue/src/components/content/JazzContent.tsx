@@ -28,8 +28,8 @@ function TodaysConcert() {
           {map(bestaetigte, (konzert) => (
             <Link
               key={konzert.fullyQualifiedPreviewUrl}
-              to={konzert.fullyQualifiedPreviewUrl}
               style={{ color: konzert.colorText(isDarkMode) }}
+              to={konzert.fullyQualifiedPreviewUrl}
             >
               <h2
                 style={{
@@ -48,7 +48,8 @@ function TodaysConcert() {
       </Row>
     );
 }
-const JazzContent: React.FC = () => {
+
+export default function JazzContent() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -85,6 +86,4 @@ const JazzContent: React.FC = () => {
       </JazzContext.Provider>
     </AuthContext.Provider>
   );
-};
-
-export default JazzContent;
+}

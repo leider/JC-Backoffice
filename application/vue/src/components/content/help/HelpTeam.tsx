@@ -29,8 +29,8 @@ export default function HelpTeam() {
     {
       title: (
         <span>
-          Was sind die Aktionen in der Monatszeile? <ButtonWithIcon text="Pressetexte" size="small" type="default" icon="FileText" />
-          <ButtonWithIcon text="Übersicht" size="small" type="default" icon="FileSpreadsheet" />
+          Was sind die Aktionen in der Monatszeile? <ButtonWithIcon icon="FileText" size="small" text="Pressetexte" type="default" />
+          <ButtonWithIcon icon="FileSpreadsheet" size="small" text="Übersicht" type="default" />
         </span>
       ),
       content:
@@ -43,7 +43,7 @@ export default function HelpTeam() {
     {
       title: (
         <span>
-          Und das Auge? <ButtonWithIcon color={token.colorSuccess} size="small" icon="EyeFill" />
+          Und das Auge? <ButtonWithIcon color={token.colorSuccess} icon="EyeFill" size="small" />
         </span>
       ),
       content: "Mit dem Auge kannst Du direkt auf die kompakte Übersicht springen.",
@@ -55,20 +55,20 @@ export default function HelpTeam() {
       <>
         <HelpSection
           initiallyOpen
+          items={teamAktionen}
           label={
             <span>
               <b>Veranstaltungen - Aktionen</b> Hier siehst Du alles in einer Übersicht. In der Titelzeile findest Du Knöpfe für Aktionen:
             </span>
           }
-          items={teamAktionen}
         />
         <HelpSection
+          items={veranstaltungen}
           label={
             <span>
               <b>Veranstaltungen:</b>
             </span>
           }
-          items={veranstaltungen}
         />
       </>
     )

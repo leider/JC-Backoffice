@@ -43,66 +43,66 @@ export default function EinnahmenCard() {
   }
 
   return (
-    <Collapsible suffix="kasse" label="Einnahmen Abendkasse" noTopBorder amount={summe}>
+    <Collapsible amount={summe} label="Einnahmen Abendkasse" noTopBorder suffix="kasse">
       <JazzRow ref={refEinnahmen}>
         <Col span={8}>
           <NumberInput
-            name={["kasse", "einnahmeTicketsEUR"]}
-            label="Tickets (AK)"
             decimals={2}
-            suffix="€"
-            onChange={updateSumme}
             disabled={freigabe}
+            label="Tickets (AK)"
+            name={["kasse", "einnahmeTicketsEUR"]}
+            onChange={updateSumme}
+            suffix="€"
           />
         </Col>
         <Col span={8}>
           <Form.Item label="&nbsp;">
-            <ButtonWithIcon block text="Berechnen..." color={color("kasse")} onClick={calculateTickets} alwaysText disabled={freigabe} />
+            <ButtonWithIcon alwaysText block color={color("kasse")} disabled={freigabe} onClick={calculateTickets} text="Berechnen..." />
           </Form.Item>
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput name={["kasse", "anzahlBesucherAK"]} label="Besucher gesamt" decimals={0} disabled={freigabe} />
+          <NumberInput decimals={0} disabled={freigabe} label="Besucher gesamt" name={["kasse", "anzahlBesucherAK"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["kasse", "einnahmeBankEUR"]}
+            decimals={2}
+            disabled={freigabe}
             label="Bareinlage"
-            decimals={2}
-            suffix="€"
+            name={["kasse", "einnahmeBankEUR"]}
             onChange={updateSumme}
-            disabled={freigabe}
+            suffix="€"
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["kasse", "einnahmeSonstiges1Text"]} label="Sonstiges" disabled={freigabe} />
+          <TextField disabled={freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges1Text"]} />
         </Col>
         <Col span={8}>
           <NumberInput
+            decimals={2}
+            disabled={freigabe}
+            label="Betrag"
             name={["kasse", "einnahmeSonstiges1EUR"]}
-            label="Betrag"
-            decimals={2}
-            suffix="€"
             onChange={updateSumme}
-            disabled={freigabe}
+            suffix="€"
           />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField name={["kasse", "einnahmeSonstiges2Text"]} label="Sonstiges" disabled={freigabe} />
+          <TextField disabled={freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges2Text"]} />
         </Col>
         <Col span={8}>
           <NumberInput
-            name={["kasse", "einnahmeSonstiges2EUR"]}
-            label="Betrag"
             decimals={2}
-            suffix="€"
-            onChange={updateSumme}
             disabled={freigabe}
+            label="Betrag"
+            name={["kasse", "einnahmeSonstiges2EUR"]}
+            onChange={updateSumme}
+            suffix="€"
           />
         </Col>
       </JazzRow>

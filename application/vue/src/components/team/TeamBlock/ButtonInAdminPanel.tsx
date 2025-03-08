@@ -5,18 +5,18 @@ import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLi
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 interface ButtonInAdminPanelProps {
-  type: buttonType;
-  veranstaltung: Veranstaltung;
+  readonly type: buttonType;
+  readonly veranstaltung: Veranstaltung;
 }
 
 export function ButtonInAdminPanel({ type, veranstaltung }: ButtonInAdminPanelProps) {
   const { color, icon } = colorsAndIconsForSections;
   return (
     <ButtonWithIconAndLink
-      icon={icon(type)}
-      tooltipTitle={capitalize(type)}
-      to={`${veranstaltung?.fullyQualifiedUrl}?page=${type}`}
       color={color(type)}
+      icon={icon(type)}
+      to={`${veranstaltung?.fullyQualifiedUrl}?page=${type}`}
+      tooltipTitle={capitalize(type)}
     />
   );
 }

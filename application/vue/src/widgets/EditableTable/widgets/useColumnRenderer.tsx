@@ -17,14 +17,15 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   return ({ type, required }: Columns) => {
     switch (type) {
       case "boolean":
-        return (val: boolean) =>
-          val ? (
-            <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompactMode ? 14 : undefined} />
+        return function BooleanCol(val: boolean) {
+          return val ? (
+            <IconForSmallBlock color={token.colorSuccess} iconName="CheckSquareFill" size={isCompactMode ? 14 : undefined} />
           ) : (
-            <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompactMode ? 14 : undefined} />
+            <IconForSmallBlock color={token.colorFillSecondary} iconName="Square" size={isCompactMode ? 14 : undefined} />
           );
+        };
       case "integer":
-        return (val: number | null) => {
+        return function IntegerCol(val: number | null) {
           if (!isNil(val)) {
             return numeral(val).format("0");
           }
@@ -34,18 +35,18 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "0";
         };
       case "color":
-        return (val: string | null) => {
+        return function ColorCol(val: string | null) {
           if (isNil(val) && required) {
-            return <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorError} />;
+            return <IconForSmallBlock color={token.colorError} iconName="SlashSquare" size="20" />;
           }
           return val ? (
             <div style={{ backgroundColor: val, width: 20, height: 20 }} />
           ) : (
-            <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorPrimary} />
+            <IconForSmallBlock color={token.colorPrimary} iconName="SlashSquare" size="20" />
           );
         };
       case "date":
-        return (val: string | null) => {
+        return function DateCol(val: string | null) {
           if (!isNil(val)) {
             return dayjs(val).format("ll");
           }
@@ -55,8 +56,9 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "<Klick ...>";
         };
       case "startEnd":
-        return (val: string[] | null) => {
+        return function StartEndCol(val: string[] | null) {
           if (!isNil(val)) {
+            // eslint-disable-next-line react/destructuring-assignment
             return dayjs(val[0]).format("ll") + " - " + dayjs(val[1]).format("ll");
           }
           if (required) {
@@ -65,7 +67,8 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "<Klick ...>";
         };
       case "user":
-        return (val: string[] | null) => {
+        return function UserCol(val: string[] | null) {
+          // eslint-disable-next-line react/destructuring-assignment
           if (isNil(val) || val.length === 0) {
             if (required) {
               return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
@@ -76,14 +79,14 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
             <>
               {map(val, (each) => (
                 <Tag key={each}>
-                  <TagForUser value={each} usersAsOptions={usersWithKann ?? []} hideErsthelfer />
+                  <TagForUser hideErsthelfer usersAsOptions={usersWithKann ?? []} value={each} />
                 </Tag>
               ))}
             </>
           );
         };
       default:
-        return (val: string | null) => {
+        return function DefaultCol(val: string | null) {
           if (val) {
             return val;
           }

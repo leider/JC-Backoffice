@@ -20,11 +20,11 @@ export default function VertragCard() {
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
   return (
-    <Collapsible suffix="allgemeines" label="Vertrag">
-      {isDirty && <b>Vor dem generieren musst Du speichern!</b>}
+    <Collapsible label="Vertrag" suffix="allgemeines">
+      {isDirty ? <b>Vor dem generieren musst Du speichern!</b> : null}
       <JazzRow>
         <Col span={9}>
-          <SingleSelect name={["vertrag", "art"]} label="Art" options={Vertrag.arten} />
+          <SingleSelect label="Art" name={["vertrag", "art"]} options={Vertrag.arten} />
         </Col>
         <Col span={9}>
           <Form.Item label={<b>Sprache:</b>} name={["vertrag", "sprache"]}>
@@ -39,9 +39,9 @@ export default function VertragCard() {
                 <Form.Item label="&nbsp;">
                   <Button
                     block
-                    type="primary"
                     disabled={isDirty || !isBookingTeam || !getFieldValue("id")}
                     onClick={() => openVertrag(new Konzert(form.getFieldsValue(true)))}
+                    type="primary"
                   >
                     Generieren
                   </Button>

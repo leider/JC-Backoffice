@@ -6,9 +6,9 @@ export default function HelpSection({
   label,
   items,
 }: {
-  initiallyOpen?: boolean;
-  label: ReactNode;
-  items: { title: ReactNode; content: ReactNode; description?: string }[];
+  readonly initiallyOpen?: boolean;
+  readonly label: ReactNode;
+  readonly items: { title: ReactNode; content: ReactNode; description?: string }[];
 }) {
   return (
     <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0, headerPadding: 0 } } }}>
@@ -25,7 +25,7 @@ export default function HelpSection({
                 dataSource={items}
                 renderItem={(item) => (
                   <List.Item>
-                    <List.Item.Meta title={item.title} description={item.description} />
+                    <List.Item.Meta description={item.description} title={item.title} />
                     {item.content}
                   </List.Item>
                 )}

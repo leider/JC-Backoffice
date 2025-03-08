@@ -15,27 +15,27 @@ export default function ArtistCard() {
   const { optionen } = useJazzContext();
 
   return (
-    <Collapsible suffix="allgemeines" label="Künstler">
+    <Collapsible label="Künstler" suffix="allgemeines">
       <JazzRow>
         <Col span={12}>
-          <TextField name={["artist", "bandname"]} label="Bandname" />
+          <TextField label="Bandname" name={["artist", "bandname"]} />
         </Col>
         <Col span={6}>
-          <NumberInput name={["artist", "numMusiker"]} label="Musiker" decimals={0} min={0} />
+          <NumberInput decimals={0} label="Musiker" min={0} name={["artist", "numMusiker"]} />
         </Col>
         <Col span={6}>
-          <NumberInput name={["artist", "numCrew"]} label="Crew" decimals={0} min={0} />
+          <NumberInput decimals={0} label="Crew" min={0} name={["artist", "numCrew"]} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <MultiSelectWithTags name={["artist", "name"]} label="Namen" options={optionen.artists} />
+          <MultiSelectWithTags label="Namen" name={["artist", "name"]} options={optionen.artists} />
         </Col>
         <Col span={6}>
-          <NumberInput name={["kosten", "gagenEUR"]} label="Gage (Netto)" decimals={2} suffix="€" />
+          <NumberInput decimals={2} label="Gage (Netto)" name={["kosten", "gagenEUR"]} suffix="€" />
         </Col>
         <Col span={6}>
-          <SingleSelect name={["kosten", "deal"]} label="Deal" options={Kosten.deals} />
+          <SingleSelect label="Deal" name={["kosten", "deal"]} options={Kosten.deals} />
         </Col>
       </JazzRow>
       <JazzRow>
@@ -44,14 +44,14 @@ export default function ArtistCard() {
             nameOfDepending="startDate"
             renderWidget={(getFieldValue) => {
               const startDate = getFieldValue("startDate");
-              return <TimeField name={["artist", "getInForMasterDate"]} label="Band Get-In (informativ)" baseValue={startDate} />;
+              return <TimeField baseValue={startDate} label="Band Get-In (informativ)" name={["artist", "getInForMasterDate"]} />;
             }}
           />
         </Col>
         <Col span={12}>
           <SingleSelect
-            name={["artist", "bandTransport"]}
             label="Transport"
+            name={["artist", "bandTransport"]}
             options={["Band kommt selbst", "Band abholen (Auto)", "Band abholen (Transporter)"]}
           />
         </Col>

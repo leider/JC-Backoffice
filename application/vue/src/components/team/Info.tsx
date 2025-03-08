@@ -16,6 +16,79 @@ import map from "lodash/map";
 import filter from "lodash/filter";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+
+function TabLabel({ activePage, title, type }: { readonly type: string; readonly title: string; readonly activePage: string }) {
+  const { color } = colorsAndIconsForSections;
+  const farbe = color("allgemeines");
+  const active = activePage === type;
+  const { brightText } = useJazzContext();
+  return (
+    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+      <IconForSmallBlock iconName="CheckSquare" style={{ marginBottom: -3 }} />
+      &nbsp; {title}
+    </b>
+  );
+}
+
+function Pressetexte({ veranstaltungen }: { readonly veranstaltungen: Veranstaltung[] }) {
+  return (
+    <RowWrapper>
+      <JazzRow>
+        {map(veranstaltungen, (veranst) => (
+          <Col key={veranst.id} lg={12}>
+            <PressePreview veranstaltung={veranst} />
+            <Divider />
+          </Col>
+        ))}
+      </JazzRow>
+    </RowWrapper>
+  );
+}
+
+function Uebersicht({ veranstaltungen }: { readonly veranstaltungen: Veranstaltung[] }) {
+  return (
+    <RowWrapper>
+      <JazzRow>
+        <Col span={24}>
+          {map(veranstaltungen, (veranst) => (
+            <p key={veranst.id}>
+              <b>{veranst.kopf.titelMitPrefix}</b>
+              <br />
+              <b>
+                <i>{veranst.startDatumUhrzeit.wochentagTagMonat}</i>
+                {" // " + veranst.startDatumUhrzeit.uhrzeitKompakt + " Uhr"}
+                <br />
+              </b>
+              {veranst.kopf.presseInEcht}
+            </p>
+          ))}
+        </Col>
+      </JazzRow>
+      <Divider />
+      <JazzRow>
+        <Col span={24}>
+          <Typography.Title level={4}>Bilder</Typography.Title>
+        </Col>
+      </JazzRow>
+      <JazzRow>
+        {map(filter(veranstaltungen, "presse.image.length"), (veranst: Konzert) => (
+          <Col key={veranst.id} lg={12}>
+            <p>
+              <b>{veranst.kopf.titelMitPrefix}</b>
+            </p>
+            {map(veranst.presse.image, (img) => (
+              <span key={img}>
+                <img src={`/upload/${encodeURIComponent(img)}`} width="100%" />
+                <br />
+              </span>
+            ))}
+          </Col>
+        ))}
+      </JazzRow>
+    </RowWrapper>
+  );
+}
 
 export default function Info() {
   const { filter: contextFilter } = useJazzContext();
@@ -51,89 +124,16 @@ export default function Info() {
     [search],
   );
 
-  const { color } = colorsAndIconsForSections;
-
-  function TabLabel({ title, type }: { type: string; title: string }) {
-    const farbe = color("allgemeines");
-    const active = activePage === type;
-    const { brightText } = useJazzContext();
-    return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
-        <IconForSmallBlock style={{ marginBottom: -3 }} iconName="CheckSquare" />
-        &nbsp; {title}
-      </b>
-    );
-  }
-
-  function Pressetexte() {
-    return (
-      <RowWrapper>
-        <JazzRow>
-          {map(veranstaltungen, (veranst) => (
-            <Col lg={12} key={veranst.id}>
-              <PressePreview veranstaltung={veranst} />
-              <Divider />
-            </Col>
-          ))}
-        </JazzRow>
-      </RowWrapper>
-    );
-  }
-
-  function Uebersicht() {
-    return (
-      <RowWrapper>
-        <JazzRow>
-          <Col span={24}>
-            {map(veranstaltungen, (veranst) => (
-              <p key={veranst.id}>
-                <b>{veranst.kopf.titelMitPrefix}</b>
-                <br />
-                <b>
-                  {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
-                  <i>{veranst.startDatumUhrzeit.wochentagTagMonat}</i> // {veranst.startDatumUhrzeit.uhrzeitKompakt} Uhr
-                  <br />
-                </b>
-                {veranst.kopf.presseInEcht}
-              </p>
-            ))}
-          </Col>
-        </JazzRow>
-        <Divider />
-        <JazzRow>
-          <Col span={24}>
-            <Typography.Title level={4}>Bilder</Typography.Title>
-          </Col>
-        </JazzRow>
-        <JazzRow>
-          {map(filter(veranstaltungen, "presse.image.length"), (veranst: Konzert) => (
-            <Col lg={12} key={veranst.id}>
-              <p>
-                <b>{veranst.kopf.titelMitPrefix}</b>
-              </p>
-              {map(veranst.presse.image, (img) => (
-                <span key={img}>
-                  <img src={`/upload/${encodeURIComponent(img)}`} width="100%" />
-                  <br />
-                </span>
-              ))}
-            </Col>
-          ))}
-        </JazzRow>
-      </RowWrapper>
-    );
-  }
-
   const allTabs: TabsProps["items"] = [
     {
       key: "pressetexte",
-      label: <TabLabel type="pressetexte" title="Pressetexte" />,
-      children: <Pressetexte />,
+      label: <TabLabel activePage={activePage} title="Pressetexte" type="pressetexte" />,
+      children: <Pressetexte veranstaltungen={veranstaltungen} />,
     },
     {
       key: "uebersicht",
-      label: <TabLabel type="uebersicht" title="Übersicht" />,
-      children: <Uebersicht />,
+      label: <TabLabel activePage={activePage} title="Übersicht" type="uebersicht" />,
+      children: <Uebersicht veranstaltungen={veranstaltungen} />,
     },
   ];
 
@@ -142,21 +142,21 @@ export default function Info() {
   return (
     <>
       <JazzPageHeader
-        title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
-        tags={filterTags}
         buttons={[
           <a href={`/imgzip/${monatJahr!}`} key="imgzip">
-            <Button icon={<IconForSmallBlock size={16} iconName="Download" />}>Alle Bilder als ZIP</Button>
+            <Button icon={<IconForSmallBlock iconName="Download" size={16} />}>Alle Bilder als ZIP</Button>
           </a>,
         ]}
+        tags={filterTags}
+        title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
       />
       <Tabs
-        type="card"
         activeKey={activePage}
         items={allTabs}
         onChange={(newPage) => {
           setSearch({ tab: newPage });
         }}
+        type="card"
       />
     </>
   );

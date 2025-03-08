@@ -9,20 +9,20 @@ export default function LabelCurrencyRow({
   disabled,
   onChange,
 }: {
-  label: string;
-  path: string[];
-  onChange: () => void;
-  disabled?: boolean;
+  readonly label: string;
+  readonly path: string[];
+  readonly onChange: () => void;
+  readonly disabled?: boolean;
 }) {
   return (
     <JazzRow>
       <Col span={18}>
         <Form.Item>
-          <b>{label}:</b>
+          <b>{label + ":"}</b>
         </Form.Item>
       </Col>
       <Col span={6}>
-        <NumberInput name={path} decimals={2} suffix="€" onChange={onChange} disabled={disabled} />
+        <NumberInput decimals={2} disabled={disabled} name={path} onChange={onChange} suffix="€" />
       </Col>
     </JazzRow>
   );

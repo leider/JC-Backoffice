@@ -18,11 +18,11 @@ export default function TabKasse() {
   const { isKasseHelpOpen, setKasseHelpOpen } = useContext(KonzertContext);
   const kasseRaw = useWatch("kasse", { form, preserve: false });
 
-  const refStartinhalt: Ref<HTMLElement> = useRef(null);
-  const refEndinhalt: Ref<HTMLElement> = useRef(null);
+  const refStartinhalt: Ref<HTMLButtonElement> = useRef(null);
+  const refEndinhalt: Ref<HTMLButtonElement> = useRef(null);
   const refAusgaben: Ref<HTMLDivElement> = useRef(null);
   const refEinnahmen: Ref<HTMLDivElement> = useRef(null);
-  const refAnBank: Ref<HTMLElement> = useRef(null);
+  const refAnBank: Ref<HTMLButtonElement> = useRef(null);
 
   const endbestandEUR = useMemo(() => new Kasse(kasseRaw).endbestandEUR, [kasseRaw]);
 
@@ -60,29 +60,34 @@ export default function TabKasse() {
       target: refEndinhalt.current ? () => refEndinhalt.current! : undefined,
     },
   ];
+
+  const initialContext = useMemo(() => {
+    return { refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank };
+  }, []);
+
   return (
-    <KassenContext.Provider value={{ refStartinhalt, refEndinhalt, refAusgaben, refEinnahmen, refAnBank }}>
+    <KassenContext.Provider value={initialContext}>
       <JazzRow>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <EinnahmenCard />
           <KassenzettelFreigabe />
           <JazzRow>
             <Col span={8}>
-              <NumberInput name={["kasse", "anfangsbestandEUR"]} label="Anfangsbestand Kasse" decimals={2} suffix="€" disabled />
+              <NumberInput decimals={2} disabled label="Anfangsbestand Kasse" name={["kasse", "anfangsbestandEUR"]} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInput disabled name={["kasse", "endbestandGezaehltEUR"]} label="Endbestand Gezählt" decimals={2} suffix="€" />
+              <NumberInput decimals={2} disabled label="Endbestand Gezählt" name={["kasse", "endbestandGezaehltEUR"]} suffix="€" />
             </Col>
             <Col span={8}>
-              <NumberInputWithDirectValue label="Endbestand Berechnet" value={endbestandEUR} suffix="€" decimals={2} />
+              <NumberInputWithDirectValue decimals={2} label="Endbestand Berechnet" suffix="€" value={endbestandEUR} />
             </Col>
           </JazzRow>
         </Col>
-        <Col xs={24} lg={12}>
+        <Col lg={12} xs={24}>
           <AusgabenCard />
         </Col>
       </JazzRow>
-      <Tour steps={toursteps} open={isKasseHelpOpen} onClose={() => setKasseHelpOpen(false)} />
+      <Tour onClose={() => setKasseHelpOpen(false)} open={isKasseHelpOpen} steps={toursteps} />
     </KassenContext.Provider>
   );
 }

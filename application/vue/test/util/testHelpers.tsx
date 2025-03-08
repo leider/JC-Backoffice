@@ -9,18 +9,18 @@ import "numeral/locales/de";
 import * as numeral from "numeral";
 
 type FormWithProps = {
-  children: React.JSX.Element;
-  tunnel: { form?: FormInstance };
+  readonly children: React.JSX.Element;
+  readonly tunnel: { form?: FormInstance };
 };
 
 numeral.locale("de");
 numeral.localeData("de").delimiters.thousands = ".";
 
-export const FormWith: React.FC<FormWithProps> = (props) => {
+export function FormWith({ tunnel, children }: FormWithProps) {
   const [form] = Form.useForm();
-  props.tunnel.form = form;
-  return <Form form={form}>{props.children}</Form>;
-};
+  tunnel.form = form;
+  return <Form form={form}>{children}</Form>;
+}
 
 const tunnel: { form?: FormInstance } = {};
 

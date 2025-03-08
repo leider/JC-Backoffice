@@ -11,10 +11,10 @@ function InternalCheckbox({
   label,
   checked,
 }: CheckboxProps & {
-  label?: string;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
-  focusByMouseClick?: boolean;
+  readonly label?: string;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
+  readonly focusByMouseClick?: boolean;
 }) {
   const [consumed, setConsumed] = useState(false);
   useEffect(() => {
@@ -36,14 +36,14 @@ function InternalCheckbox({
     <Checkbox
       autoFocus={focus}
       checked={checked}
+      disabled={disabled}
+      onBlur={() => save?.()}
       onChange={(e) => {
         onChange?.(e);
         save?.(true);
       }}
-      disabled={disabled}
-      onBlur={() => save?.()}
     >
-      {label && <b>{label}</b>}
+      {label ? <b>{label}</b> : null}
     </Checkbox>
   );
 }
@@ -57,20 +57,20 @@ export default function CheckItem({
   focus,
   focusByMouseClick,
 }: Omit<CheckboxProps, "name"> & {
-  name: NamePath;
-  label?: string;
-  save?: (keepEditing?: boolean) => void;
-  focus?: boolean;
-  focusByMouseClick?: boolean;
+  readonly name: NamePath;
+  readonly label?: string;
+  readonly save?: (keepEditing?: boolean) => void;
+  readonly focus?: boolean;
+  readonly focusByMouseClick?: boolean;
 }) {
   return (
     <Form.Item name={name} style={label ? {} : { marginBottom: 0 }} valuePropName="checked">
       <InternalCheckbox
-        label={label}
+        disabled={disabled}
         focus={focus}
         focusByMouseClick={focusByMouseClick}
+        label={label}
         onChange={onChange}
-        disabled={disabled}
         save={save}
       />
     </Form.Item>

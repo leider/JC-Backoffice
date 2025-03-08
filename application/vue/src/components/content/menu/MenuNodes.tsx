@@ -102,7 +102,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
     {
       key: menuKeys.programmheft,
       icon: <MenuIcon name="Calendar2Check" />,
-      label: <Link to={`/programmheft/`}>Programmheft</Link>,
+      label: <Link to="/programmheft/">Programmheft</Link>,
     },
   ];
   if (accessrights.isSuperuser) {

@@ -7,39 +7,26 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
 
-const ButtonWithIcon = forwardRef(function (
-  {
-    icon,
-    onClick,
-    text,
-    type,
-    disabled,
-    tooltipTitle,
-    tooltipPlacement,
-    color,
-    size,
-    block,
-    loading,
-    style,
-    testid,
-    alwaysText = false,
-  }: {
-    icon?: IconProps["iconName"];
-    text?: string;
-    type?: BaseButtonProps["type"];
-    onClick?: (() => void) | "submit";
-    disabled?: boolean;
-    tooltipTitle?: string;
-    tooltipPlacement?: TooltipPlacement;
-    color?: string;
-    size?: SizeType;
-    block?: boolean;
-    loading?: boolean;
-    style?: CSSProperties;
-    testid?: string;
-    alwaysText?: boolean;
-  },
-  ref: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+type ButtonWithIconProps = {
+  readonly icon?: IconProps["iconName"];
+  readonly text?: string;
+  readonly type?: BaseButtonProps["type"];
+  readonly onClick?: (() => void) | "submit";
+  readonly disabled?: boolean;
+  readonly tooltipTitle?: string;
+  readonly tooltipPlacement?: TooltipPlacement;
+  readonly color?: string;
+  readonly size?: SizeType;
+  readonly block?: boolean;
+  readonly loading?: boolean;
+  readonly style?: CSSProperties;
+  readonly testid?: string;
+  readonly alwaysText?: boolean;
+};
+
+const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonWithIconProps>(function ButtonWithIcon(
+  { icon, onClick, text, type, disabled, tooltipTitle, tooltipPlacement, color, size, block, loading, style, testid, alwaysText = false },
+  ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
 ) {
   const token = theme.useToken().token;
 
@@ -55,22 +42,22 @@ const ButtonWithIcon = forwardRef(function (
         },
       }}
     >
-      <Tooltip title={tooltipTitle} color={color} placement={tooltipPlacement || "top"}>
+      <Tooltip color={color} placement={tooltipPlacement || "top"} title={tooltipTitle}>
         <Button
-          ref={ref}
-          icon={icon && <IconForSmallBlock size={size === "small" ? 14 : 16} iconName={icon} />}
-          type={type || "primary"}
-          onClick={onClick && onClick !== "submit" ? onClick : undefined}
+          block={block}
+          data-testid={testid}
           disabled={disabled}
           htmlType={onClick === "submit" ? "submit" : undefined}
-          size={size}
-          block={block}
-          title={text}
+          icon={icon ? <IconForSmallBlock iconName={icon} size={size === "small" ? 14 : 16} /> : null}
           loading={loading}
+          onClick={onClick && onClick !== "submit" ? onClick : undefined}
+          ref={ref}
+          size={size}
           style={style}
-          data-testid={testid}
+          title={text}
+          type={type || "primary"}
         >
-          {(sm || alwaysText) && text && text}
+          {(sm || alwaysText) && text ? text : null}
         </Button>
       </Tooltip>
     </ConfigProvider>

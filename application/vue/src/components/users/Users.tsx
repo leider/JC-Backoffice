@@ -42,9 +42,18 @@ export default function Users() {
     <>
       <NewUserModal isOpen={newUserOpen} setIsOpen={setNewUserOpen} />
       <JazzPageHeader
+        buttons={
+          currentUser.accessrights.isSuperuser
+            ? [<ButtonWithIcon icon="PersonPlus" key="usernew" onClick={() => setNewUserOpen(true)} text="Neuer Benutzer" type="default" />]
+            : undefined
+        }
         tags={[
           <Radio.Group
+            buttonStyle="solid"
+            defaultValue="everybody"
             key="usertags"
+            onChange={(event) => setSelectedButton(event.target.value)}
+            optionType="button"
             options={[
               radioOption("EmojiSunglasses", "Admin", "isSuperuser"),
               radioOption("PersonCheck", "Booking", "isBookingTeam"),
@@ -52,24 +61,15 @@ export default function Users() {
               radioOption("Wallet2", "Abendkasse", "isAbendkasse"),
               radioOption("PersonBadge", "Jeder", "everybody"),
             ]}
-            optionType="button"
-            buttonStyle="solid"
-            defaultValue="everybody"
-            onChange={(event) => setSelectedButton(event.target.value)}
           />,
         ]}
         title="Übersicht über die User"
-        buttons={
-          currentUser.accessrights.isSuperuser
-            ? [<ButtonWithIcon key="usernew" icon="PersonPlus" text="Neuer Benutzer" type="default" onClick={() => setNewUserOpen(true)} />]
-            : undefined
-        }
       />
       <RowWrapper>
         <JazzRow>
           {map(selectedUsers, (user) => (
-            <Col key={user.id} xs={24} sm={12} md={8} xxl={6}>
-              <UserPanel user={user} currentUser={currentUser || new User({})} />
+            <Col key={user.id} md={8} sm={12} xs={24} xxl={6}>
+              <UserPanel currentUser={currentUser || new User({})} user={user} />
             </Col>
           ))}
         </JazzRow>

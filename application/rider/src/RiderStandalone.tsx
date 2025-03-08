@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +9,8 @@ import { JazzPageHeader } from "jc-vue/src/widgets/JazzPageHeader.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 const titel = "Jazzclub Konzert";
-export const RiderStandalone: FC = () => {
+
+export function RiderStandalone() {
   const url = window.location.pathname.replace("/rider/", "");
   document.title = titel;
   const queryClient = useQueryClient();
@@ -38,18 +38,19 @@ export const RiderStandalone: FC = () => {
       mutateRider.mutate(rider);
     }
   }
+
   const token = theme.useToken().token;
 
   return (
     <>
       <JazzPageHeader
-        title={`Rider für "${titel}" am ${start}`}
         buttons={[
-          <ButtonWithIcon key="save" text="Speichern" icon="CheckSquare" disabled={!isSuccess} color={token.colorSuccess} onClick={save} />,
+          <ButtonWithIcon color={token.colorSuccess} disabled={!isSuccess} icon="CheckSquare" key="save" onClick={save} text="Speichern" />,
         ]}
+        title={`Rider für "${titel}" am ${start}`}
       />
       {isSuccess ? (
-        <RiderComp targetBoxes={targetBoxes} setTargetBoxes={setTargetBoxes} />
+        <RiderComp setTargetBoxes={setTargetBoxes} targetBoxes={targetBoxes} />
       ) : (
         <h1>
           Falsche Daten oder Link abgelaufen - <small>Bitte URL prüfen</small>
@@ -57,4 +58,4 @@ export const RiderStandalone: FC = () => {
       )}
     </>
   );
-};
+}

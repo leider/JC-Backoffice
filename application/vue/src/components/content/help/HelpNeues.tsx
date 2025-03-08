@@ -76,8 +76,8 @@ export default function HelpNeues() {
 
   return (
     <>
-      <HelpSection initiallyOpen label={<b>Neues</b>} items={brandNew} />
-      <HelpSection label={<b>Nicht ganz so Neues</b>} items={items} />
+      <HelpSection initiallyOpen items={brandNew} label={<b>Neues</b>} />
+      <HelpSection items={items} label={<b>Nicht ganz so Neues</b>} />
     </>
   );
 }

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
-export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" | "delete"; callback: () => void }) {
+export function ButtonInUsers({ type, callback }: { readonly type: "edit" | "changepass" | "delete"; readonly callback: () => void }) {
   const { useToken } = theme;
   const token = useToken().token;
 
@@ -15,14 +15,14 @@ export function ButtonInUsers({ type, callback }: { type: "edit" | "changepass" 
   const iconName = { edit: "PencilSquare", changepass: "KeyFill", delete: "Trash" };
 
   return (
-    <Tooltip title={text[type]} color={color}>
+    <Tooltip color={color} title={text[type]}>
       <span
         onClick={(event) => {
           event.stopPropagation();
           callback();
         }}
       >
-        <IconForSmallBlock size={16} color={color} iconName={iconName[type] as IconProps["iconName"]} />
+        <IconForSmallBlock color={color} iconName={iconName[type] as IconProps["iconName"]} size={16} />
       </span>
     </Tooltip>
   );

@@ -83,9 +83,15 @@ function JazzclubApp() {
   const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
   const colorTextDisabled = useMemo(() => (darkMode ? "rgb(255,255,255,0.65)" : "rgb(0,0,0,0.65)"), [darkMode]);
 
+  const initialContext = useMemo(() => ({ isDarkMode: darkMode, isCompactMode: compactMode }), [compactMode, darkMode]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
+        form={{
+          validateMessages: { required: "Du musst einen Wert eingeben" },
+        }}
+        locale={locale_de}
         theme={{
           token: {
             colorPrimary: "#337ab7",
@@ -110,13 +116,9 @@ function JazzclubApp() {
             Slider: { handleColor: colorTextDisabled },
           },
         }}
-        locale={locale_de}
-        form={{
-          validateMessages: { required: "Du musst einen Wert eingeben" },
-        }}
       >
         <App>
-          <GlobalContext.Provider value={{ isDarkMode: darkMode, isCompactMode: compactMode }}>
+          <GlobalContext.Provider value={initialContext}>
             <JazzContent />
           </GlobalContext.Provider>
         </App>

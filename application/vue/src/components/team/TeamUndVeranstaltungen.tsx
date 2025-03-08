@@ -11,7 +11,7 @@ import { useTeamVeranstaltungenCommons } from "@/components/team/useTeamVeransta
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import map from "lodash/map";
 
-export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: string[] }) {
+export function TeamUndVeranstaltungen({ periodsToShow }: { readonly periodsToShow: string[] }) {
   const { memoizedId } = useJazzContext();
   useEffect(() => {
     setTimeout(() => {
@@ -35,10 +35,8 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
     <Row gutter={8}>
       <Col span={24}>
         <JazzPageHeader
-          title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
-          tags={filterTags}
           buttons={[
-            forVeranstaltungen && <ExcelMultiExportButton key="excel" alle={veranstaltungen} />,
+            forVeranstaltungen && <ExcelMultiExportButton alle={veranstaltungen} key="excel" />,
             forVeranstaltungen && <NewButtons key="newButtons" />,
             <Dropdown
               key="periods"
@@ -55,6 +53,8 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { periodsToShow: strin
             </Dropdown>,
             <TeamCalendar key="cal" />,
           ]}
+          tags={filterTags}
+          title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
         <TeamContext.Provider value={subState}>
           {map(monate, (monat) => (

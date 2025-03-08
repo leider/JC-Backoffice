@@ -6,7 +6,7 @@ import every from "lodash/every";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface AggregateProps<V = any> extends FormItemProps<V> {
-  names?: FormItemProps<V>["name"][];
+  readonly names?: FormItemProps<V>["name"][];
 }
 
 export default function Aggregate(props: AggregateProps) {
@@ -17,9 +17,14 @@ export default function Aggregate(props: AggregateProps) {
   return (
     <>
       <Form.Item
-        name={firstName}
-        // Convert the values of names into an array passed to children
+        getValueFromEvent={(values) => {
+          // Set the form store values for names
+          const fieldData = map(names, (name, index) => ({ name, value: values?.[index] }));
+          form.setFields(fieldData);
+          return values?.[0];
+        }}
         getValueProps={() => {
+          // Convert the values of names into an array passed to children
           const value = map(names, (name) => form.getFieldValue(name));
           if (every(value, isNil)) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,12 +32,7 @@ export default function Aggregate(props: AggregateProps) {
           }
           return { value };
         }}
-        getValueFromEvent={(values) => {
-          // Set the form store values for names
-          const fieldData = map(names, (name, index) => ({ name, value: values?.[index] }));
-          form.setFields(fieldData);
-          return values?.[0];
-        }}
+        name={firstName}
         rules={map(rules, (rule) => {
           if (isObject(rule) && rule) {
             return {

@@ -7,7 +7,11 @@ import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
-export function ShowOnCopy({ title }: { title: string }) {
+function footer(_: unknown, { OkBtn }: { OkBtn: React.FC }) {
+  return <OkBtn />;
+}
+
+export function ShowOnCopy({ title }: { readonly title: string }) {
   const { url } = useParams();
   const form = useFormInstance();
   const [openCopyModal, setOpenCopyModal] = useState(false);
@@ -22,18 +26,18 @@ export function ShowOnCopy({ title }: { title: string }) {
 
   return (
     <JazzModal
-      title={title}
-      open={openCopyModal}
+      closable={false}
+      footer={footer}
+      okText="Weiter"
       onOk={() => {
         setOpenCopyModal(false);
         setDone(true);
       }}
-      okText="Weiter"
-      closable={false}
-      footer={(_, { OkBtn }) => <OkBtn />}
+      open={openCopyModal}
+      title={title}
     >
       <p>Du möchtest sicher Titel und Datum anpassen.</p>
-      <TextField name={["kopf", "titel"]} label="Titel" required />
+      <TextField label="Titel" name={["kopf", "titel"]} required />
       <StartEndPickers />
     </JazzModal>
   );

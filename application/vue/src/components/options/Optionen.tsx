@@ -17,7 +17,7 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
-function TabOptionen({ optionen }: { optionen: OptionValues }) {
+function TabOptionen({ optionen }: { readonly optionen: OptionValues }) {
   const { lg } = useBreakpoint();
 
   const columnsTypen: Columns[] = [
@@ -41,8 +41,8 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
   return (
     <>
       <JazzRow>
-        <Col xs={24} lg={12}>
-          <Collapsible suffix="allgemeines" label="Typen" noTopBorder>
+        <Col lg={12} xs={24}>
+          <Collapsible label="Typen" noTopBorder suffix="allgemeines">
             <EditableTable<{
               name: string;
               mod: boolean;
@@ -60,10 +60,10 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
               }}
             />
           </Collapsible>
-          <Collapsible suffix="allgemeines" label="Optionen">
-            <MultiSelectWithTags name="kooperationen" label="Kooperationen" options={optionen.kooperationen} />
-            <MultiSelectWithTags name="genres" label="Genres" options={optionen.genres} />
-            <NumberInput name="preisKlavierstimmer" label="Standardpreis Klavierstimmer" decimals={2} suffix="€" />
+          <Collapsible label="Optionen" suffix="allgemeines">
+            <MultiSelectWithTags label="Kooperationen" name="kooperationen" options={optionen.kooperationen} />
+            <MultiSelectWithTags label="Genres" name="genres" options={optionen.genres} />
+            <NumberInput decimals={2} label="Standardpreis Klavierstimmer" name="preisKlavierstimmer" suffix="€" />
             <p>
               <b>
                 Achtung! Änderungen am Preis wirken sich NICHT auf bereits angelegte Veranstaltungen aus, die einen Preis gesetzt haben!
@@ -71,8 +71,8 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
             </p>
           </Collapsible>
         </Col>
-        <Col xs={24} lg={12}>
-          <Collapsible suffix="ausgaben" label="Preisprofile" noTopBorder={lg}>
+        <Col lg={12} xs={24}>
+          <Collapsible label="Preisprofile" noTopBorder={lg} suffix="ausgaben">
             <p>
               <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
             </p>
@@ -88,13 +88,28 @@ function TabOptionen({ optionen }: { optionen: OptionValues }) {
       </JazzRow>
       <JazzRow>
         <Col span={24}>
-          <Collapsible suffix="technik" label="Backlines">
-            <MultiSelectWithTags name="backlineJazzclub" label="Jazzclub" options={optionen.backlineJazzclub} />
-            <MultiSelectWithTags name="backlineRockshop" label="Rockshop" options={optionen.backlineRockshop} />
+          <Collapsible label="Backlines" suffix="technik">
+            <MultiSelectWithTags label="Jazzclub" name="backlineJazzclub" options={optionen.backlineJazzclub} />
+            <MultiSelectWithTags label="Rockshop" name="backlineRockshop" options={optionen.backlineRockshop} />
           </Collapsible>
         </Col>
       </JazzRow>
     </>
+  );
+}
+
+function TabLabel({ activePage, title, type }: { readonly activePage: string; readonly type: string; readonly title: string }) {
+  const { color } = colorsAndIconsForSections;
+  const { brightText } = useJazzContext();
+  const active = activePage === type;
+
+  const farbe = color("allgemeines");
+
+  return (
+    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+      <IconForSmallBlock iconName="CheckSquare" style={{ marginBottom: -3 }} />
+      &nbsp; {title}
+    </b>
   );
 }
 
@@ -112,35 +127,20 @@ export default function Optionen() {
 
   const [activePage, setActivePage] = useState<string>("optionen");
 
-  function TabLabel({ title, type }: { type: string; title: string }) {
-    const { color } = colorsAndIconsForSections;
-    const { brightText } = useJazzContext();
-    const active = activePage === type;
-
-    const farbe = color("allgemeines");
-
-    return (
-      <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
-        <IconForSmallBlock style={{ marginBottom: -3 }} iconName="CheckSquare" />
-        &nbsp; {title}
-      </b>
-    );
-  }
-
   const tabs: TabsProps["items"] = [
     {
       key: "optionen",
-      label: <TabLabel type="optionen" title="Optionen" />,
+      label: <TabLabel activePage={activePage} title="Optionen" type="optionen" />,
       children: <TabOptionen optionen={data ?? new OptionValues()} />,
     },
     {
       key: "artists",
-      label: <TabLabel type="artists" title="Künstler" />,
+      label: <TabLabel activePage={activePage} title="Künstler" type="artists" />,
       children: (
         <JazzRow>
           <Col span={24}>
-            <Collapsible suffix="allgemeines" label="Künstler" noTopBorder>
-              <MultiSelectWithTags name="artists" label="Künstler" options={data?.artists ?? []} />
+            <Collapsible label="Künstler" noTopBorder suffix="allgemeines">
+              <MultiSelectWithTags label="Künstler" name="artists" options={data?.artists ?? []} />
             </Collapsible>
           </Col>
         </JazzRow>
@@ -153,8 +153,8 @@ export default function Optionen() {
   }
 
   return (
-    <JazzFormAndHeader<OptionValues> title="Optionen" data={data} saveForm={saveForm} resetChanges={refetch}>
-      <Tabs type="card" activeKey={activePage} items={tabs} onChange={setActivePage} />
+    <JazzFormAndHeader<OptionValues> data={data} resetChanges={refetch} saveForm={saveForm} title="Optionen">
+      <Tabs activeKey={activePage} items={tabs} onChange={setActivePage} type="card" />
     </JazzFormAndHeader>
   );
 }

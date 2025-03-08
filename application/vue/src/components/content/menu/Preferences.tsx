@@ -5,7 +5,7 @@ import { CheckboxGroupProps } from "antd/es/checkbox";
 import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
-export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (x: boolean) => void }) {
+export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: boolean; readonly setIsOpen: (x: boolean) => void }) {
   const [form] = Form.useForm<JazzPrefs>();
   const { setPreferences, getPreferences } = useJazzPrefs();
 
@@ -32,24 +32,23 @@ export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; se
 
   return (
     <JazzModal
-      open={isOpen}
       cancelButtonProps={{ type: "text" }}
       cancelText=" "
       okText="Schließen"
-      onOk={() => setIsOpen(false)}
       onCancel={() => setIsOpen(false)}
+      onOk={() => setIsOpen(false)}
+      open={isOpen}
     >
       <Form form={form} onValuesChange={saveForm}>
         <JazzPageHeader
-          title="Anzeige Einstellungen"
           buttons={[
             <span key="subtext">
               Hier legst Du fest, wie sich die <b>Anzeige für dieses Gerät</b> verhalten soll.
             </span>,
           ]}
+          title="Anzeige Einstellungen"
         />
         <List
-          size="small"
           dataSource={[
             {
               name: "darkPref",
@@ -67,26 +66,27 @@ export default function Preferences({ isOpen, setIsOpen }: { isOpen: boolean; se
           renderItem={(item) => {
             return (
               <List.Item
-                key={item.title}
                 actions={[
                   <Form.Item key={item.name} name={item.name}>
                     <Radio.Group
+                      block
+                      buttonStyle="solid"
+                      optionType="button"
+                      options={item.options}
                       style={{
                         display: "flex",
                         flexDirection: "column",
                       }}
-                      block
-                      options={item.options}
-                      optionType="button"
-                      buttonStyle="solid"
                     />
                   </Form.Item>,
                 ]}
+                key={item.title}
               >
-                <List.Item.Meta title={item.title} description={item.desc} />
+                <List.Item.Meta description={item.desc} title={item.title} />
               </List.Item>
             );
           }}
+          size="small"
         />
       </Form>
     </JazzModal>

@@ -19,35 +19,35 @@ export default function ButtonWithIconAndLink({
   smallIcon,
   alwaysText = false,
 }: {
-  to: To;
-  icon: IconProps["iconName"];
-  color: string;
-  block?: boolean;
-  tooltipTitle?: string;
-  text?: string;
-  disabled?: boolean;
-  type?: BaseButtonProps["type"];
-  ghost?: boolean;
-  smallIcon?: boolean;
-  alwaysText?: boolean;
+  readonly to: To;
+  readonly icon: IconProps["iconName"];
+  readonly color: string;
+  readonly block?: boolean;
+  readonly tooltipTitle?: string;
+  readonly text?: string;
+  readonly disabled?: boolean;
+  readonly type?: BaseButtonProps["type"];
+  readonly ghost?: boolean;
+  readonly smallIcon?: boolean;
+  readonly alwaysText?: boolean;
 }) {
   const { sm } = useBreakpoint();
   const { brightText } = useJazzContext();
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip title={tooltipTitle} color={color === brightText ? "#333" : color}>
+      <Tooltip color={color === brightText ? "#333" : color} title={tooltipTitle}>
         <Link to={to}>
           <Button
-            icon={icon && <IconForSmallBlock size={smallIcon ? 12 : 14} iconName={icon} />}
-            type={type || "primary"}
-            size={text && !smallIcon ? undefined : "small"}
-            disabled={disabled}
             block={block}
-            title={text}
+            disabled={disabled}
             ghost={ghost}
+            icon={icon ? <IconForSmallBlock iconName={icon} size={smallIcon ? 12 : 14} /> : null}
+            size={text && !smallIcon ? undefined : "small"}
+            title={text}
+            type={type || "primary"}
           >
-            {(sm || alwaysText) && text && text}
+            {(sm || alwaysText) && text ? text : null}
           </Button>
         </Link>
       </Tooltip>

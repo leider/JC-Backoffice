@@ -7,10 +7,10 @@ import Aggregate from "@/widgets/Aggregate.tsx";
 import { useWatch } from "antd/es/form/Form";
 
 interface StartEndDateOnlyPickersProps {
-  names: NamePath[];
-  label?: string;
-  dependency?: NamePath;
-  onChange?: () => void;
+  readonly names: NamePath[];
+  readonly label?: string;
+  readonly dependency?: NamePath;
+  readonly onChange?: () => void;
 }
 
 function EmbeddedPickers({
@@ -20,11 +20,11 @@ function EmbeddedPickers({
   fireChange,
   dependency,
 }: {
-  id?: string;
-  onChange?: (val: (Date | undefined)[]) => void;
-  value?: Date[];
-  fireChange?: () => void;
-  dependency?: NamePath;
+  readonly id?: string;
+  readonly onChange?: (val: (Date | undefined)[]) => void;
+  readonly value?: Date[];
+  readonly fireChange?: () => void;
+  readonly dependency?: NamePath;
 }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
@@ -48,13 +48,13 @@ function EmbeddedPickers({
 
   return (
     <DatePicker.RangePicker
-      id={id}
       allowClear={false}
+      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
       format="ddd DD.MM.YY"
-      value={[start, end]}
+      id={id}
       onCalendarChange={onCalendarChange}
       style={{ width: "100%" }}
-      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
+      value={[start, end]}
     />
   );
 }
@@ -62,11 +62,10 @@ function EmbeddedPickers({
 export default function StartEndDateOnlyPickers({ names, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
   return (
     <Aggregate
-      label={label ? <b>{label}:</b> : ""}
-      names={names}
-      style={label ? {} : { marginBottom: 0 }}
       dependencies={dependency ? [dependency] : undefined}
       hasFeedback
+      label={label ? <b>{label + ":"}</b> : ""}
+      names={names}
       rules={
         dependency
           ? [
@@ -88,8 +87,9 @@ export default function StartEndDateOnlyPickers({ names, label, dependency, onCh
             ]
           : []
       }
+      style={label ? {} : { marginBottom: 0 }}
     >
-      <EmbeddedPickers fireChange={onChange} dependency={dependency} />
+      <EmbeddedPickers dependency={dependency} fireChange={onChange} />
     </Aggregate>
   );
 }

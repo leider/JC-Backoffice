@@ -6,8 +6,8 @@ import find from "lodash/find";
 import map from "lodash/map";
 
 interface PreisprofilSelectParams {
-  optionen: OptionValues;
-  onChange?: (value?: Preisprofil) => void;
+  readonly optionen: OptionValues;
+  readonly onChange?: (value?: Preisprofil) => void;
 }
 
 export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSelectParams) {
@@ -16,21 +16,21 @@ export default function PreisprofilSelect({ optionen, onChange }: PreisprofilSel
     <Form.Item
       label={<b style={{ whiteSpace: "nowrap" }}>Preisprofil:</b>}
       name={["eintrittspreise", "preisprofil"]}
-      valuePropName="valueAsObject"
       trigger="onValueAsObject"
+      valuePropName="valueAsObject"
     >
-      <InternalPreisprofilSelect optionen={optionen} onChange={onChange} disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} />
+      <InternalPreisprofilSelect disabled={form.getFieldValue(["kasse", "kassenfreigabe"])} onChange={onChange} optionen={optionen} />
     </Form.Item>
   );
 }
 
 interface InternalPreisprofilSelectParams {
-  id?: string;
-  valueAsObject?: Preisprofil;
-  optionen: OptionValues;
-  onValueAsObject?: (value?: Preisprofil) => void;
-  onChange?: (value?: Preisprofil) => void;
-  disabled: boolean;
+  readonly id?: string;
+  readonly valueAsObject?: Preisprofil;
+  readonly optionen: OptionValues;
+  readonly onValueAsObject?: (value?: Preisprofil) => void;
+  readonly onChange?: (value?: Preisprofil) => void;
+  readonly disabled: boolean;
 }
 
 function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObject, onChange, disabled }: InternalPreisprofilSelectParams) {
@@ -72,5 +72,5 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
     onChange?.(selectedProfil);
   }
 
-  return <Select id={id} options={displayProfile} value={valueAsString} onSelect={selectedToPreisprofil} disabled={disabled} />;
+  return <Select disabled={disabled} id={id} onSelect={selectedToPreisprofil} options={displayProfile} value={valueAsString} />;
 }

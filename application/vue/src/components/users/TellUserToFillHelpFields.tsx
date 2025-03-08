@@ -41,15 +41,15 @@ export function TellUserToFillHelpFields() {
 
   return (
     <JazzModal
-      open={isOpen}
       cancelButtonProps={{ type: "text" }}
       cancelText=" "
-      okText="Danke"
-      onOk={saveForm}
       closable={false}
       maskClosable={false}
+      okText="Danke"
+      onOk={saveForm}
+      open={isOpen}
     >
-      <Form form={form} layout="vertical" autoComplete="off">
+      <Form autoComplete="off" form={form} layout="vertical">
         <JazzPageHeader title="Kleine Bitte" />
         {isNil(currentUser.kannErsthelfer) && (
           <p>

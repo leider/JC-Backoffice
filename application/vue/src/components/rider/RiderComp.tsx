@@ -14,7 +14,13 @@ import find from "lodash/find";
 import { Box } from "./Box.tsx";
 import { v4 as uuidv4 } from "uuid";
 
-export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxParams[]; setTargetBoxes?: (boxes: BoxParams[]) => void }) {
+export function RiderComp({
+  targetBoxes,
+  setTargetBoxes,
+}: {
+  readonly targetBoxes?: BoxParams[];
+  readonly setTargetBoxes?: (boxes: BoxParams[]) => void;
+}) {
   const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
 
   useEffect(() => {
@@ -84,8 +90,8 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
   const itemsWithComment = useMemo(() => filter(targetBoxes, (box) => !!box.comment), [targetBoxes]);
 
   return (
-    <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-      <DragOverlay>{dragging ? <Box item={dragging} callback={noop} /> : null}</DragOverlay>
+    <DndContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+      <DragOverlay>{dragging ? <Box callback={noop} item={dragging} /> : null}</DragOverlay>
       <Row gutter={16}>
         <Col span={4}>
           <ConfigProvider
@@ -101,7 +107,7 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
           </ConfigProvider>
         </Col>
         <Col span={20}>
-          <TargetContainer targetBoxes={targetBoxes!} setTargetBoxes={setTargetBoxes!} />
+          <TargetContainer setTargetBoxes={setTargetBoxes!} targetBoxes={targetBoxes!} />
         </Col>
       </Row>
       <Row gutter={16}>
@@ -117,8 +123,8 @@ export function RiderComp({ targetBoxes, setTargetBoxes }: { targetBoxes?: BoxPa
         <Col span={16}>
           <Typography.Title level={5}>Infos</Typography.Title>
           <List
-            itemLayout="horizontal"
             dataSource={itemsWithComment}
+            itemLayout="horizontal"
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta title={item.title} />

@@ -6,8 +6,8 @@ import find from "lodash/find";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 interface UploaderParams {
-  fileList: UploadFile[];
-  setFileList: (value: ((prevState: UploadFile[]) => UploadFile[]) | UploadFile[]) => void;
+  readonly fileList: UploadFile[];
+  readonly setFileList: (value: ((prevState: UploadFile[]) => UploadFile[]) | UploadFile[]) => void;
 }
 
 const maxFileSize = 2097152; // 2 MB

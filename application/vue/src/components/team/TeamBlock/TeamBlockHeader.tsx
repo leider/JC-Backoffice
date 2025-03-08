@@ -5,11 +5,11 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 const { Title } = Typography;
 interface HeaderProps {
-  veranstaltung: Veranstaltung;
-  expanded?: boolean;
+  readonly veranstaltung: Veranstaltung;
+  readonly expanded?: boolean;
 }
 
-function UhrzeitOrt({ veranstaltung }: { veranstaltung: Veranstaltung }) {
+function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   return (
     <small>
       <small style={{ fontWeight: 400 }}>

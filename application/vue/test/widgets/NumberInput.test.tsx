@@ -11,7 +11,7 @@ describe("Number Input Widget", () => {
   describe("renders values when only standard properties are set as", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} />);
+        updateWidget(<NumberInput decimals={0} label="testme" name="test" />);
       });
     });
 
@@ -34,7 +34,7 @@ describe("Number Input Widget", () => {
 
   describe("renders explicitly with initialValue as", () => {
     beforeEach(() => {
-      updateWidget(<NumberInput name="test" label="testme" initialValue={1} decimals={0} />);
+      updateWidget(<NumberInput decimals={0} initialValue={1} label="testme" name="test" />);
     });
 
     it("untouched if not set by form", () => {
@@ -57,7 +57,7 @@ describe("Number Input Widget", () => {
   describe("renders disabled", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} disabled />);
+        updateWidget(<NumberInput decimals={0} disabled label="testme" name="test" />);
       });
     });
 
@@ -73,7 +73,7 @@ describe("Number Input Widget", () => {
   describe("renders item without disable", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} />);
+        updateWidget(<NumberInput decimals={0} label="testme" name="test" />);
       });
     });
 
@@ -81,7 +81,7 @@ describe("Number Input Widget", () => {
       widget().setValueOnInputLabeled("testme", "3");
 
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} disabled />, true);
+        updateWidget(<NumberInput decimals={0} disabled label="testme" name="test" />, true);
       });
 
       await waitFor(() => {
@@ -93,7 +93,7 @@ describe("Number Input Widget", () => {
       widget().setValueOnInputLabeled("testme", "4");
 
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} initialValue={3} />, true);
+        updateWidget(<NumberInput decimals={0} initialValue={3} label="testme" name="test" />, true);
       });
 
       await waitFor(() => {
@@ -106,7 +106,7 @@ describe("Number Input Widget", () => {
     let tunnelVal: number | null;
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} onChange={(val) => (tunnelVal = val)} />);
+        updateWidget(<NumberInput decimals={0} label="testme" name="test" onChange={(val) => (tunnelVal = val)} />);
       });
     });
 
@@ -130,7 +130,7 @@ describe("Number Input Widget", () => {
   describe("handles long decimals", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={10} />);
+        updateWidget(<NumberInput decimals={10} label="testme" name="test" />);
       });
     });
 
@@ -162,7 +162,7 @@ describe("Number Input Widget", () => {
   describe("value is forced between min and max", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} min={2} max={7} />);
+        updateWidget(<NumberInput decimals={0} label="testme" max={7} min={2} name="test" />);
       });
     });
 
@@ -194,7 +194,7 @@ describe("Number Input Widget", () => {
   describe("value is forced between min and max exclusive (no decimals)", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={0} min={2} exclusiveMin max={7} exclusiveMax />);
+        updateWidget(<NumberInput decimals={0} exclusiveMax exclusiveMin label="testme" max={7} min={2} name="test" />);
       });
     });
 
@@ -226,7 +226,7 @@ describe("Number Input Widget", () => {
   describe("value is forced between min and max exclusive (two decimals)", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" decimals={2} min={2} exclusiveMin max={7} exclusiveMax />);
+        updateWidget(<NumberInput decimals={2} exclusiveMax exclusiveMin label="testme" max={7} min={2} name="test" />);
       });
     });
 
@@ -258,7 +258,7 @@ describe("Number Input Widget", () => {
   describe("when entering text", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput name="test" label="testme" initialValue={5} decimals={2} min={2} max={7} />);
+        updateWidget(<NumberInput decimals={2} initialValue={5} label="testme" max={7} min={2} name="test" />);
       });
     });
 

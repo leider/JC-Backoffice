@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import TeamBlockNormal from "@/components/team/TeamBlock/TeamBlockNormal.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
@@ -12,10 +11,11 @@ import map from "lodash/map";
 import keys from "lodash/keys";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import tinycolor from "tinycolor2";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
 interface MonatGroupProps {
-  monat: string;
-  renderTeam?: boolean;
+  readonly monat: string;
+  readonly renderTeam?: boolean;
 }
 
 export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroupProps) {
@@ -60,19 +60,15 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
       <Row gutter={0}>
         <Col span={24}>
           <Collapse
-            size="small"
             activeKey={expanded ? monat : ""}
-            onChange={() => setExpanded(!expanded)}
-            expandIcon={({ isActive }) =>
-              isActive ? <CaretDown size={14} style={{ color: brightText }} /> : <CaretRight size={14} style={{ color: brightText }} />
-            }
+            expandIcon={expandIcon({ size: 14 })}
             items={[
               {
                 key: monat,
                 className: "monat-header",
                 style: { backgroundColor: token.colorPrimary },
                 label: (
-                  <Row justify="space-between" align="bottom">
+                  <Row align="bottom" justify="space-between">
                     <Col>
                       <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                         {monat}
@@ -80,21 +76,21 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                     </Col>
                     <Col>
                       <ButtonWithIconAndLink
-                        text="Pressetexte"
-                        to={{ pathname: `/team/${yymm}`, search: "tab=pressetexte" }}
-                        icon="FileText"
                         color={brightText}
                         ghost
+                        icon="FileText"
                         smallIcon
+                        text="Pressetexte"
+                        to={{ pathname: `/team/${yymm}`, search: "tab=pressetexte" }}
                         tooltipTitle="Pressetexte"
                       />
                       <ButtonWithIconAndLink
-                        text="Übersicht"
-                        to={{ pathname: `/team/${yymm}`, search: "tab=uebersicht" }}
-                        icon="FileSpreadsheet"
                         color={brightText}
                         ghost
+                        icon="FileSpreadsheet"
                         smallIcon
+                        text="Übersicht"
+                        to={{ pathname: `/team/${yymm}`, search: "tab=uebersicht" }}
                         tooltipTitle="Übersicht"
                       />
                     </Col>
@@ -102,6 +98,8 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                 ),
               },
             ]}
+            onChange={() => setExpanded(!expanded)}
+            size="small"
           />
         </Col>
       </Row>
@@ -110,13 +108,17 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
         style={{ marginBottom: "18px", backgroundColor: isDarkMode ? "#3d3d3d" : "#d3d3d3", marginLeft: 0, marginRight: 0 }}
       >
         {map(keys(byDay), (day, idx) => (
-          <Col xs={24} sm={12} lg={8} xl={6} xxl={4} key={day + idx} style={{ marginBottom: "4px" }}>
+          <Col key={day + idx} lg={8} sm={12} style={{ marginBottom: "4px" }} xl={6} xs={24} xxl={4}>
             <Typography.Text style={datumTextStyle}>{DatumUhrzeit.forGermanString(day)?.format("dd, DD. MMMM")}</Typography.Text>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
               return renderTeam ? (
-                <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
+                <Row key={veranstaltung.id}>
+                  <TeamBlockNormal initiallyOpen={expanded} veranstaltung={veranstaltung} />
+                </Row>
               ) : (
-                <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
+                <Row key={veranstaltung.id}>
+                  <TeamBlockAdmin initiallyOpen={expanded} veranstaltung={veranstaltung} />
+                </Row>
               );
             })}
           </Col>

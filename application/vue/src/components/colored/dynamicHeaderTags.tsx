@@ -16,7 +16,7 @@ export type LabelPathDependsOn = {
 };
 
 export default function dynamicHeaderTags(labelsColors: LabelPathDependsOn[]) {
-  function HeaderTag({ tag: { label, labelNotOk, dependsOn, path, invertColor } }: { tag: LabelPathDependsOn }) {
+  function HeaderTag({ tag: { label, labelNotOk, dependsOn, path, invertColor } }: { readonly tag: LabelPathDependsOn }) {
     const { isDarkMode } = useJazzContext();
     const colorDisabled = useMemo(() => (isDarkMode ? "rgb(255,255,255,0.45)" : "rgb(0,0,0,0.45)"), [isDarkMode]);
 

@@ -10,8 +10,8 @@ export default function ProtectedComponent({
   allowed,
   component,
 }: {
-  allowed: ("isOrgaTeam" | "isAbendkasse" | "isSuperuser")[];
-  component: JSX.Element;
+  readonly allowed: ("isOrgaTeam" | "isAbendkasse" | "isSuperuser")[];
+  readonly component: JSX.Element;
 }) {
   const { currentUser } = useJazzContext();
   const showComp = some(
@@ -24,5 +24,5 @@ export default function ProtectedComponent({
     () => (currentUser.accessrights.isOrgaTeam ? "/veranstaltungen" : "/team"),
     [currentUser.accessrights.isOrgaTeam],
   );
-  return showComp ? component : <Navigate to={{ pathname: forwardTo }} replace />;
+  return showComp ? component : <Navigate replace to={{ pathname: forwardTo }} />;
 }

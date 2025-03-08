@@ -14,6 +14,14 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import { JazzRow } from "@/widgets/JazzRow";
 
+function Checker({ name, label, disabled }: { readonly label: string; readonly name: string | string[]; readonly disabled?: boolean }) {
+  return (
+    <Col span={6}>
+      <CheckItem disabled={disabled} label={label} name={name} />
+    </Col>
+  );
+}
+
 export default function EventCard() {
   const form = useFormInstance();
   const { optionen, orte } = useJazzContext();
@@ -40,18 +48,10 @@ export default function EventCard() {
 
   useEffect(ortChanged, [ortChanged]);
 
-  function Checker({ name, label, disabled }: { label: string; name: string | string[]; disabled?: boolean }) {
-    return (
-      <Col span={6}>
-        <CheckItem name={name} label={label} disabled={disabled} />
-      </Col>
-    );
-  }
-
   return (
-    <Collapsible suffix="allgemeines" label="Event" noTopBorder>
+    <Collapsible label="Event" noTopBorder suffix="allgemeines">
       <JazzRow>
-        <Checker label="Ist bestätigt" name={["kopf", "confirmed"]} disabled={!isBookingTeam} />
+        <Checker disabled={!isBookingTeam} label="Ist bestätigt" name={["kopf", "confirmed"]} />
         <Checker label="Technik ist geklärt" name={["technik", "checked"]} />
         <Checker label="Braucht Presse" name="brauchtPresse" />
         <Checker label="Presse OK" name={["presse", "checked"]} />
@@ -64,7 +64,7 @@ export default function EventCard() {
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <TextField name={["kopf", "titel"]} label="Titel" required />
+          <TextField label="Titel" name={["kopf", "titel"]} required />
         </Col>
         <Col span={12}>
           <EventTypeSelect />
@@ -77,21 +77,21 @@ export default function EventCard() {
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <SingleSelect name={["kopf", "ort"]} label="Ort" options={orte.alleNamen()} onChange={ortChanged} />
+          <SingleSelect label="Ort" name={["kopf", "ort"]} onChange={ortChanged} options={orte.alleNamen()} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kopf", "flaeche"]} label="Fläche" decimals={0} />
+          <NumberInput decimals={0} label="Fläche" name={["kopf", "flaeche"]} />
         </Col>
         <Col span={8}>
-          <NumberInput name={["kosten", "saalmiete"]} label="Saalmiete (alt)" decimals={2} suffix="€" disabled />
+          <NumberInput decimals={2} disabled label="Saalmiete (alt)" name={["kosten", "saalmiete"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={7}>
-          <SingleSelect name={["kopf", "kooperation"]} label="Koop (Rechnung)" options={optionen.kooperationen} />
+          <SingleSelect label="Koop (Rechnung)" name={["kopf", "kooperation"]} options={optionen.kooperationen} />
         </Col>
         <Col span={1}>
-          <Form.Item name={["kopf", "rechnungAnKooperation"]} label="&nbsp;" valuePropName="checked">
+          <Form.Item label="&nbsp;" name={["kopf", "rechnungAnKooperation"]} valuePropName="checked">
             <Checkbox />
           </Form.Item>
         </Col>
@@ -99,7 +99,7 @@ export default function EventCard() {
           <PreisprofilSelect optionen={optionen} />
         </Col>
         <Col span={8}>
-          <SingleSelect name={["kopf", "genre"]} label="Genre" options={optionen.genres} />
+          <SingleSelect label="Genre" name={["kopf", "genre"]} options={optionen.genres} />
         </Col>
       </JazzRow>
     </Collapsible>

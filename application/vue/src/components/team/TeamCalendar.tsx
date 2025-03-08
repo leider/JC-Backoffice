@@ -52,43 +52,49 @@ export default function TeamCalendar() {
     <>
       <ButtonWithIcon
         alwaysText
-        key="openCal"
         icon="ChevronLeft"
-        text={lg ? "Kalender..." : "Kal..."}
+        key="openCal"
         onClick={() => setDrawerOpen(true)}
+        text={lg ? "Kalender..." : "Kal..."}
       />
       <Drawer
-        extra={
-          <>
-            {currentUser.accessrights.isOrgaTeam && (
-              <ButtonWithIconAndLink
-                key="bigcal"
-                icon="Calendar2Range"
-                color={token.colorPrimary}
-                text="Kalenderübersicht"
-                type="default"
-                to="/kalenderuebersicht"
-              />
-            )}
-            <ButtonIcal />
-          </>
-        }
-        placement="right"
-        onClose={() => setDrawerOpen(false)}
-        open={drawerOpen}
-        size="large"
         closeIcon={
           <div>
             <IconForSmallBlock iconName="ChevronRight" />
           </div>
         }
+        extra={
+          <>
+            {currentUser.accessrights.isOrgaTeam ? (
+              <ButtonWithIconAndLink
+                color={token.colorPrimary}
+                icon="Calendar2Range"
+                key="bigcal"
+                text="Kalenderübersicht"
+                to="/kalenderuebersicht"
+                type="default"
+              />
+            ) : null}
+            <ButtonIcal />
+          </>
+        }
+        onClose={() => setDrawerOpen(false)}
+        open={drawerOpen}
+        placement="right"
+        size="large"
       >
         <WrapFullCalendar>
           <FullCalendar
-            plugins={[dayGridPlugin, multiMonthPlugin]}
+            eventContent={renderEventContent}
+            eventDisplay="block"
+            events={getEvents}
+            headerToolbar={{ left: "title", center: "one,four,weeks", right: "prev,today,next" }}
+            height="auto"
+            initialDate={initiaDate}
             initialView="weeks"
             locales={[deLocale]}
-            headerToolbar={{ left: "title", center: "one,four,weeks", right: "prev,today,next" }}
+            plugins={[dayGridPlugin, multiMonthPlugin]}
+            showNonCurrentDates={false}
             titleFormat={{ year: lg ? "numeric" : "2-digit", month: lg ? "long" : "short" }}
             views={{
               one: {
@@ -119,12 +125,6 @@ export default function TeamCalendar() {
                 eventTimeFormat: { hour: "2-digit", minute: "2-digit", meridiem: false },
               },
             }}
-            height="auto"
-            initialDate={initiaDate}
-            events={getEvents}
-            eventContent={renderEventContent}
-            eventDisplay="block"
-            showNonCurrentDates={false}
           />
         </WrapFullCalendar>
       </Drawer>

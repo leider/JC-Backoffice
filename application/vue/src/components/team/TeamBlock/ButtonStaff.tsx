@@ -2,7 +2,15 @@ import React, { useMemo } from "react";
 import { theme } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 
-export function ButtonStaff({ callback, add, disabled }: { add: boolean; callback: () => void; disabled?: boolean }) {
+export function ButtonStaff({
+  callback,
+  add,
+  disabled,
+}: {
+  readonly add: boolean;
+  readonly callback: () => void;
+  readonly disabled?: boolean;
+}) {
   const { useToken } = theme;
   const token = useToken().token;
 
@@ -12,12 +20,12 @@ export function ButtonStaff({ callback, add, disabled }: { add: boolean; callbac
 
   return (
     <ButtonWithIcon
-      size="small"
-      icon={add ? "PlusCircleFill" : "DashCircleFill"}
-      onClick={callback}
-      tooltipTitle={add ? "Zusagen" : "Absagen"}
       color={color}
       disabled={disabled}
+      icon={add ? "PlusCircleFill" : "DashCircleFill"}
+      onClick={callback}
+      size="small"
+      tooltipTitle={add ? "Zusagen" : "Absagen"}
     />
   );
 }

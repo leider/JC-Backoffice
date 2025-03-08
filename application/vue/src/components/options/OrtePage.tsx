@@ -47,7 +47,7 @@ export default function OrtePage() {
   }
 
   return (
-    <JazzFormAndHeader<Orte> title="Orte" data={data} saveForm={saveForm} resetChanges={refetch}>
+    <JazzFormAndHeader<Orte> data={data} resetChanges={refetch} saveForm={saveForm} title="Orte">
       <OrtePageInternal />
     </JazzFormAndHeader>
   );

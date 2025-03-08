@@ -15,14 +15,14 @@ export function JazzPageHeader({
   hasErrors,
   style,
 }: {
-  title: string | ReactNode;
-  buttons?: ReactNode[];
-  firstTag?: ReactNode;
-  dateString?: string;
-  tags?: ReactNode[];
-  breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
-  hasErrors?: boolean;
-  style?: React.CSSProperties;
+  readonly title: string | ReactNode;
+  readonly buttons?: ReactNode[];
+  readonly firstTag?: ReactNode;
+  readonly dateString?: string;
+  readonly tags?: ReactNode[];
+  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
+  readonly hasErrors?: boolean;
+  readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
   const { isDarkMode } = useContext(GlobalContext);
   const { token } = theme.useToken();
@@ -34,7 +34,7 @@ export function JazzPageHeader({
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
       <PageHeader
-        title={theHeader}
+        breadcrumb={breadcrumb ? breadcrumb : undefined}
         extra={buttons}
         footer={[
           firstTag,
@@ -45,8 +45,8 @@ export function JazzPageHeader({
           ),
           tags,
         ]}
-        breadcrumb={breadcrumb ? breadcrumb : undefined}
         style={{ ...style, paddingInline: 4 }}
+        title={theHeader}
       >
         {children}
       </PageHeader>

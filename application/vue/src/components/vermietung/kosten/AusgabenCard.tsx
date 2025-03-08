@@ -59,18 +59,18 @@ export default function AusgabenCard() {
 
   function fluegelZeile() {
     const verm = new Vermietung(form.getFieldsValue(true));
-    return verm.technik.fluegel && <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} onChange={updateSumme} />;
+    return verm.technik.fluegel && <LabelCurrencyRow label="Flügelstimmer" onChange={updateSumme} path={["kosten", "fluegelstimmerEUR"]} />;
   }
 
   const { lg } = useBreakpoint();
   return (
-    <Collapsible suffix="ausgaben" label="Kosten / Ausgaben" noTopBorder={lg} amount={summe}>
+    <Collapsible amount={summe} label="Kosten / Ausgaben" noTopBorder={lg} suffix="ausgaben">
       <JazzRow>
         <Col span={6}>
-          <NumberInput name={["kosten", "gagenEUR"]} label="Gagen" decimals={2} suffix="€" onChange={updateSumme} />
+          <NumberInput decimals={2} label="Gagen" name={["kosten", "gagenEUR"]} onChange={updateSumme} suffix="€" />
         </Col>
         <Col span={6}>
-          <SingleSelect name={["kosten", "gagenSteuer"]} label="Steuer" options={steuerSaetze} onChange={updateSumme} />
+          <SingleSelect label="Steuer" name={["kosten", "gagenSteuer"]} onChange={updateSumme} options={steuerSaetze} />
         </Col>
         <Col span={6}>
           <DynamicItem
@@ -81,7 +81,7 @@ export default function AusgabenCard() {
                   nameOfDepending={["kosten", "gagenSteuer"]}
                   renderWidget={() => {
                     const kosten = new Kosten(getFieldValue(["kosten"]));
-                    return <NumberInputWithDirectValue label="Total" value={kosten.gagenTotalEUR} decimals={2} suffix="€" />;
+                    return <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={kosten.gagenTotalEUR} />;
                   }}
                 />
               );
@@ -89,20 +89,20 @@ export default function AusgabenCard() {
           />
         </Col>
       </JazzRow>
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && fluegelZeile()}
-      <LabelCurrencyChangeableRow label="Werbung 1" path={["kosten", "werbung1"]} onChange={updateSumme} />
-      <LabelCurrencyChangeableRow label="Werbung 2" path={["kosten", "werbung2"]} onChange={updateSumme} />
-      <LabelCurrencyChangeableRow label="Werbung 3" path={["kosten", "werbung3"]} onChange={updateSumme} />
-      <LabelCurrencyChangeableRow label="Werbung 4" path={["kosten", "werbung4"]} onChange={updateSumme} />
-      <LabelCurrencyChangeableRow label="Werbung 5" path={["kosten", "werbung5"]} onChange={updateSumme} />
-      <LabelCurrencyChangeableRow label="Werbung 6" path={["kosten", "werbung6"]} onChange={updateSumme} />
-      <LabelCurrencyRow label="Personal (unbar)" path={["kosten", "personal"]} onChange={updateSumme} />
-      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik && (
+      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik ? fluegelZeile() : null}
+      <LabelCurrencyChangeableRow label="Werbung 1" onChange={updateSumme} path={["kosten", "werbung1"]} />
+      <LabelCurrencyChangeableRow label="Werbung 2" onChange={updateSumme} path={["kosten", "werbung2"]} />
+      <LabelCurrencyChangeableRow label="Werbung 3" onChange={updateSumme} path={["kosten", "werbung3"]} />
+      <LabelCurrencyChangeableRow label="Werbung 4" onChange={updateSumme} path={["kosten", "werbung4"]} />
+      <LabelCurrencyChangeableRow label="Werbung 5" onChange={updateSumme} path={["kosten", "werbung5"]} />
+      <LabelCurrencyChangeableRow label="Werbung 6" onChange={updateSumme} path={["kosten", "werbung6"]} />
+      <LabelCurrencyRow label="Personal (unbar)" onChange={updateSumme} path={["kosten", "personal"]} />
+      {new Vermietung(form.getFieldsValue(true)).brauchtTechnik ? (
         <>
-          <LabelCurrencyRow label="Backline Rockshop" path={["kosten", "backlineEUR"]} onChange={updateSumme} disabled />
-          <LabelCurrencyRow label="Technik Zumietung" path={["kosten", "technikAngebot1EUR"]} onChange={updateSumme} disabled />
+          <LabelCurrencyRow disabled label="Backline Rockshop" onChange={updateSumme} path={["kosten", "backlineEUR"]} />
+          <LabelCurrencyRow disabled label="Technik Zumietung" onChange={updateSumme} path={["kosten", "technikAngebot1EUR"]} />
         </>
-      )}
+      ) : null}
     </Collapsible>
   );
 }

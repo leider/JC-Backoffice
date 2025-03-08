@@ -72,7 +72,7 @@ export default function TerminePage() {
   }
 
   return (
-    <JazzFormAndHeader title="Termine" data={termine} saveForm={saveForm} resetChanges={refetch}>
+    <JazzFormAndHeader data={termine} resetChanges={refetch} saveForm={saveForm} title="Termine">
       <TerminePageInternal />
     </JazzFormAndHeader>
   );

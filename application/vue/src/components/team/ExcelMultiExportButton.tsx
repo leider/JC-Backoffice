@@ -16,104 +16,105 @@ import { asExcelAuslastung } from "@/commons/excel/auslastung.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { asExcelKalk } from "@/commons/excel/multiKalk.ts";
 
-export default function ExcelMultiExportButton({ alle }: { alle: Veranstaltung[] }) {
-  const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
+function SelectRangeForExcelModal({
+  isOpen,
+  setIsOpen,
+  alle,
+}: {
+  readonly isOpen: boolean;
+  readonly setIsOpen: (open: boolean) => void;
+  readonly alle: { startDate: Date }[];
+}) {
+  const [form] = useForm();
   const { optionen, filter: teamFilter } = useJazzContext();
 
-  function SelectRangeForExcelModal({
-    isOpen,
-    setIsOpen,
-    alle,
-  }: {
-    isOpen: boolean;
-    setIsOpen: (open: boolean) => void;
-    alle: { startDate: Date }[];
-  }) {
-    const [form] = useForm();
-    const [first, setFirst] = useState<Dayjs>(dayjs());
-    const [last, setLast] = useState<Dayjs>(dayjs());
-    useEffect(() => {
-      if (alle.length > 0) {
-        setFirst(dayjs(alle[0].startDate));
-        setLast(dayjs(alle[alle.length - 1].startDate));
+  const [first, setFirst] = useState<Dayjs>(dayjs());
+  const [last, setLast] = useState<Dayjs>(dayjs());
+  useEffect(() => {
+    if (alle.length > 0) {
+      setFirst(dayjs(alle[0].startDate));
+      setLast(dayjs(alle[alle.length - 1].startDate));
+    }
+  }, [alle]);
+
+  useEffect(() => {
+    if (isOpen) {
+      form.setFieldsValue({ zeitraum: [dayjs().month(0).add(-1, "year"), dayjs().month(12).add(-1, "year")], exportType: "Kalkulation" });
+    }
+  }, [form, first, last, isOpen]);
+
+  const rangePresets: TimeRangePickerProps["presets"] = [
+    { label: "Letztes Kalenderjahr", value: [dayjs().month(0).add(-1, "year"), dayjs().month(12).add(-1, "year")] },
+    { label: "Aktuelles Kalenderjahr", value: [dayjs().month(0), dayjs().month(12)] },
+    { label: "Letzte 12 Monate", value: [dayjs().add(-12, "month"), dayjs()] },
+    { label: "Letzte 6 Monate", value: [dayjs().add(-6, "month"), dayjs()] },
+    { label: "Wie angezeigt", value: [first, last] },
+  ];
+
+  const zeitraum = useWatch("zeitraum", { form, preserve: true });
+  const exportType = useWatch("exportType", { form, preserve: true });
+
+  const fromTo = useMemo(() => {
+    const [from, to] = (zeitraum as [Dayjs, Dayjs]) || [dayjs(), dayjs()];
+    return [from.format("YYYYMM"), to.format("YYYYMM")];
+  }, [zeitraum]);
+
+  const bestaetigte = useQueries({
+    queries: [
+      { enabled: isOpen, queryKey: ["konzert", fromTo], queryFn: () => konzerteBetweenYYYYMM(fromTo[0], fromTo[1]) },
+      { enabled: isOpen, queryKey: ["vermietung", fromTo], queryFn: () => vermietungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
+    ],
+    combine: ([a, b]) => {
+      if (a?.data && b?.data) {
+        return filter(sortBy([...a.data, ...b.data], "startDate"), "kopf.confirmed");
       }
-    }, [alle]);
+      return [];
+    },
+  });
 
-    useEffect(() => {
-      if (isOpen) {
-        form.setFieldsValue({ zeitraum: [dayjs().month(0).add(-1, "year"), dayjs().month(12).add(-1, "year")], exportType: "Kalkulation" });
-      }
-    }, [form, first, last, isOpen]);
+  const bestaetigteFiltered = useMemo(() => filter(bestaetigte, applyTeamFilter(teamFilter)), [bestaetigte, teamFilter]);
 
-    const rangePresets: TimeRangePickerProps["presets"] = [
-      { label: "Letztes Kalenderjahr", value: [dayjs().month(0).add(-1, "year"), dayjs().month(12).add(-1, "year")] },
-      { label: "Aktuelles Kalenderjahr", value: [dayjs().month(0), dayjs().month(12)] },
-      { label: "Letzte 12 Monate", value: [dayjs().add(-12, "month"), dayjs()] },
-      { label: "Letzte 6 Monate", value: [dayjs().add(-6, "month"), dayjs()] },
-      { label: "Wie angezeigt", value: [first, last] },
-    ];
+  const okClicked = useCallback(() => {
+    if (exportType === "Kalkulation") {
+      asExcelKalk({ veranstaltungen: bestaetigteFiltered, optionen });
+    } else {
+      asExcelAuslastung({ veranstaltungen: bestaetigteFiltered, optionen });
+    }
+    setIsOpen(false);
+  }, [bestaetigteFiltered, exportType, optionen, setIsOpen]);
 
-    const zeitraum = useWatch("zeitraum", { form, preserve: true });
-    const exportType = useWatch("exportType", { form, preserve: true });
+  return (
+    <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={okClicked} open={isOpen}>
+      <Form autoComplete="off" form={form} layout="vertical">
+        <JazzPageHeader title="Excel Export" />
+        <Row gutter={8}>
+          <Col span={12}>
+            <Form.Item label={<b>Zeitraum für den Export:</b>} name="zeitraum">
+              <DatePicker.RangePicker format="MMM YYYY" picker="month" presets={rangePresets} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <SingleSelect label="Art des Exports" name="exportType" options={["Kalkulation", "Auslastung"]} />
+          </Col>
+        </Row>
+      </Form>
+    </JazzModal>
+  );
+}
 
-    const fromTo = useMemo(() => {
-      const [from, to] = (zeitraum as [Dayjs, Dayjs]) || [dayjs(), dayjs()];
-      return [from.format("YYYYMM"), to.format("YYYYMM")];
-    }, [zeitraum]);
-
-    const bestaetigte = useQueries({
-      queries: [
-        { enabled: isOpen, queryKey: ["konzert", fromTo], queryFn: () => konzerteBetweenYYYYMM(fromTo[0], fromTo[1]) },
-        { enabled: isOpen, queryKey: ["vermietung", fromTo], queryFn: () => vermietungenBetweenYYYYMM(fromTo[0], fromTo[1]) },
-      ],
-      combine: ([a, b]) => {
-        if (a?.data && b?.data) {
-          return filter(sortBy([...a.data, ...b.data], "startDate"), "kopf.confirmed");
-        }
-        return [];
-      },
-    });
-
-    const bestaetigteFiltered = useMemo(() => filter(bestaetigte, applyTeamFilter(teamFilter)), [bestaetigte]);
-
-    const okClicked = useCallback(() => {
-      if (exportType === "Kalkulation") {
-        asExcelKalk({ veranstaltungen: bestaetigteFiltered, optionen });
-      } else {
-        asExcelAuslastung({ veranstaltungen: bestaetigteFiltered, optionen });
-      }
-      setIsOpen(false);
-    }, [bestaetigteFiltered, exportType, setIsOpen]);
-
-    return (
-      <JazzModal open={isOpen} onCancel={() => setIsOpen(false)} onOk={okClicked} closable={false} maskClosable={false}>
-        <Form form={form} layout="vertical" autoComplete="off">
-          <JazzPageHeader title="Excel Export" />
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item label={<b>Zeitraum für den Export:</b>} name="zeitraum">
-                <DatePicker.RangePicker format="MMM YYYY" picker="month" presets={rangePresets} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <SingleSelect label="Art des Exports" name="exportType" options={["Kalkulation", "Auslastung"]} />
-            </Col>
-          </Row>
-        </Form>
-      </JazzModal>
-    );
-  }
+export default function ExcelMultiExportButton({ alle }: { readonly alle: Veranstaltung[] }) {
+  const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
 
   return (
     <>
-      <SelectRangeForExcelModal isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} alle={alle} />
+      <SelectRangeForExcelModal alle={alle} isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} />
       <ButtonWithIcon
-        text="Kalkulation (Excel)"
+        color="#5900b9"
         icon="FileEarmarkSpreadsheet"
         onClick={() => {
           setIsExcelExportOpen(true);
         }}
-        color="#5900b9"
+        text="Kalkulation (Excel)"
       />
     </>
   );

@@ -5,9 +5,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
 
 interface StartEndDateOnlyPickersProps {
-  name: NamePath[];
-  save?: () => void;
-  focus?: boolean;
+  readonly name: NamePath[];
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }
 
 function EmbeddedPickers({
@@ -16,10 +16,10 @@ function EmbeddedPickers({
   save,
   focus,
 }: {
-  onChange?: (val: (Date | undefined)[]) => void;
-  value?: Date[];
-  save?: () => void;
-  focus?: boolean;
+  readonly onChange?: (val: (Date | undefined)[]) => void;
+  readonly value?: Date[];
+  readonly save?: () => void;
+  readonly focus?: boolean;
 }) {
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
@@ -40,25 +40,25 @@ function EmbeddedPickers({
   return (
     <DatePicker.RangePicker
       allowClear={false}
-      format="ddd DD.MM.YY"
-      value={[start, end]}
-      onCalendarChange={onCalendarChange}
-      style={{ width: "100%" }}
-      needConfirm={focus}
       autoFocus={focus}
+      format="ddd DD.MM.YY"
+      needConfirm={focus}
+      onCalendarChange={onCalendarChange}
       onOpenChange={(open) => {
         if (!open) {
           save?.();
         }
       }}
+      style={{ width: "100%" }}
+      value={[start, end]}
     />
   );
 }
 
 export default function StartEndDateOnlyPickersInTable({ name, save, focus }: StartEndDateOnlyPickersProps) {
   return (
-    <Form.Item name={name} style={{ marginBottom: 0 }} hasFeedback>
-      <EmbeddedPickers save={save} focus={focus} />
+    <Form.Item hasFeedback name={name} style={{ marginBottom: 0 }}>
+      <EmbeddedPickers focus={focus} save={save} />
     </Form.Item>
   );
 }

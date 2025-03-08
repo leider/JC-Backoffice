@@ -19,9 +19,9 @@ export default function KonzertFormAndPageHeader({
   resetChanges,
   children,
 }: PropsWithChildren<{
-  data?: Partial<KonzertWithRiderBoxes>;
-  saveForm: (vals: KonzertWithRiderBoxes) => void;
-  resetChanges?: () => Promise<unknown>;
+  readonly data?: Partial<KonzertWithRiderBoxes>;
+  readonly saveForm: (vals: KonzertWithRiderBoxes) => void;
+  readonly resetChanges?: () => Promise<unknown>;
 }>) {
   document.title = "Konzert";
   const [form] = useForm<KonzertWithRiderBoxes>();
@@ -74,20 +74,20 @@ export default function KonzertFormAndPageHeader({
 
   return (
     <JazzFormAndHeaderExtended<KonzertWithRiderBoxes>
-      title={title}
-      style={titleStyle}
-      saveForm={saveForm}
-      data={data}
-      dateString={displayDate}
-      resetChanges={resetChanges}
-      additionalButtons={[isOrga && <MoreButton key="more" disabled={!id} isDirty={isDirty} />]}
+      additionalButtons={[isOrga && <MoreButton disabled={!id} isDirty={isDirty} key="more" />]}
       additionalButtonsLast={[
-        isKassenseite && <HelpWithKasseButton key="helpKasse" callback={() => setKasseHelpOpen(true)} />,
+        isKassenseite && <HelpWithKasseButton callback={() => setKasseHelpOpen(true)} key="helpKasse" />,
         <TeamCalendar key="cal" />,
       ]}
-      tags={tagsForTitle}
       changedPropsToWatch={[["kasse", "kassenfreigabe"], "agenturauswahl"]}
+      data={data}
+      dateString={displayDate}
       form={form}
+      resetChanges={resetChanges}
+      saveForm={saveForm}
+      style={titleStyle}
+      tags={tagsForTitle}
+      title={title}
     >
       {children}
     </JazzFormAndHeaderExtended>

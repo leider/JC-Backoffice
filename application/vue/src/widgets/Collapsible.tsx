@@ -1,10 +1,10 @@
-import { CaretDown, CaretRight } from "react-bootstrap-icons";
 import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions.ts";
 import isNil from "lodash/isNil";
 import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
 export default function Collapsible({
   amount,
@@ -15,13 +15,13 @@ export default function Collapsible({
   uncollapsed = false,
   noMoneySign = false,
 }: {
-  suffix: string;
-  label: string;
-  children: ReactNode;
-  noTopBorder?: boolean;
-  amount?: number;
-  uncollapsed?: boolean;
-  noMoneySign?: boolean;
+  readonly suffix: string;
+  readonly label: string;
+  readonly children: ReactNode;
+  readonly noTopBorder?: boolean;
+  readonly amount?: number;
+  readonly uncollapsed?: boolean;
+  readonly noMoneySign?: boolean;
 }) {
   const { brightText } = useJazzContext();
   const [expanded, setExpanded] = useState<string | undefined>(uncollapsed ? undefined : "content");
@@ -32,14 +32,7 @@ export default function Collapsible({
   return (
     <Collapse
       activeKey={expanded}
-      expandIcon={({ isActive }) => (isActive ? <CaretDown color={brightText} /> : <CaretRight color={brightText} />)}
-      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
-      style={{
-        marginTop: noTopBorder ? "" : "16px",
-        backgroundColor: farbe,
-        borderColor: farbe,
-        color: brightText,
-      }}
+      expandIcon={expandIcon({})}
       items={[
         {
           key: "content",
@@ -47,14 +40,14 @@ export default function Collapsible({
           label: (
             <Row>
               <Col flex={1}>
-                <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
+                <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                   {label}
                 </Typography.Title>
               </Col>
               <Col flex="auto">&nbsp;</Col>
               {!isNil(amount) && (
                 <Col>
-                  <Typography.Title style={{ margin: 0, color: brightText }} level={4}>
+                  <Typography.Title level={4} style={{ margin: 0, color: brightText }}>
                     {noMoneySign ? amount : `${formatToGermanNumberString(amount)} €`}
                   </Typography.Title>
                 </Col>
@@ -64,6 +57,13 @@ export default function Collapsible({
           children,
         },
       ]}
+      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
+      style={{
+        marginTop: noTopBorder ? "" : "16px",
+        backgroundColor: farbe,
+        borderColor: farbe,
+        color: brightText,
+      }}
     />
   );
 }
