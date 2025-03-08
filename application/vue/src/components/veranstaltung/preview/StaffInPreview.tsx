@@ -57,7 +57,7 @@ function StaffList({
     return <List.Item>{item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}</List.Item>;
   }
 
-  return !notNeeded && <List size="small" header={<b>{header}:</b>} dataSource={names} renderItem={renderItem} />;
+  return !notNeeded && <List size="small" header={<b>{header + ":"}</b>} dataSource={names} renderItem={renderItem} />;
 }
 export default function StaffInPreview({ veranstaltung }: { veranstaltung: Veranstaltung }) {
   const { allUsers } = useJazzContext();

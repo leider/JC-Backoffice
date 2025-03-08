@@ -13,7 +13,7 @@ export interface MitarbeiterRowProps {
 
 const StaffRow: React.FC<MitarbeiterRowProps> = ({ usersAsOptions, sectionName, label }) => {
   return (
-    <Form.Item label={<b>{label}:</b>}>
+    <Form.Item label={<b>{label + ":"}</b>}>
       <Space.Compact block>
         <DynamicItem
           nameOfDepending={["staff", `${sectionName}NotNeeded`]}

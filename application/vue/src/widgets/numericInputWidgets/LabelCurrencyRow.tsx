@@ -18,7 +18,7 @@ export default function LabelCurrencyRow({
     <JazzRow>
       <Col span={18}>
         <Form.Item>
-          <b>{label}:</b>
+          <b>{label + ":"}</b>
         </Form.Item>
       </Col>
       <Col span={6}>

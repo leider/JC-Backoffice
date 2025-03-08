@@ -114,9 +114,13 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
             <Typography.Text style={datumTextStyle}>{DatumUhrzeit.forGermanString(day)?.format("dd, DD. MMMM")}</Typography.Text>
             {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => {
               return renderTeam ? (
-                <Row key={veranstaltung.id}>{<TeamBlockNormal veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
+                <Row key={veranstaltung.id}>
+                  <TeamBlockNormal veranstaltung={veranstaltung} initiallyOpen={expanded} />
+                </Row>
               ) : (
-                <Row key={veranstaltung.id}>{<TeamBlockAdmin veranstaltung={veranstaltung} initiallyOpen={expanded} />}</Row>
+                <Row key={veranstaltung.id}>
+                  <TeamBlockAdmin veranstaltung={veranstaltung} initiallyOpen={expanded} />
+                </Row>
               );
             })}
           </Col>

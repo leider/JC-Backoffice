@@ -113,7 +113,7 @@ export default function MitarbeiterMultiSelect({
   focus?: boolean;
 }) {
   return (
-    <Form.Item label={label ? <b>{label}:</b> : undefined} name={name} noStyle={!label}>
+    <Form.Item label={label ? <b>{label + ":"}</b> : undefined} name={name} noStyle={!label}>
       <InnerSelect usersAsOptions={usersAsOptions} disabled={disabled} save={save} focus={focus} />
     </Form.Item>
   );

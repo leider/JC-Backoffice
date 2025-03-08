@@ -103,7 +103,7 @@ export const NumberInput: FC<NumberInputProps> = ({
   return (
     <Form.Item
       name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : undefined}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       rules={rules}
       valuePropName="number"
       trigger="onNumber"
@@ -140,7 +140,7 @@ export const NumberInputWithDirectValue: FC<NumberInputWithDirectValueParams> = 
   label,
 }: NumberInputWithDirectValueParams): React.ReactElement => {
   return (
-    <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label}:</b>} noStyle={!label}>
+    <Form.Item label={label && <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b>} noStyle={!label}>
       <NumericInputEmbedded decimals={decimals} suffix={suffix} number={value} onNumber={noop} disabled />
     </Form.Item>
   );

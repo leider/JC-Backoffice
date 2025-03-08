@@ -17,14 +17,15 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   return ({ type, required }: Columns) => {
     switch (type) {
       case "boolean":
-        return (val: boolean) =>
-          val ? (
+        return function BooleanCol(val: boolean) {
+          return val ? (
             <IconForSmallBlock iconName="CheckSquareFill" color={token.colorSuccess} size={isCompactMode ? 14 : undefined} />
           ) : (
             <IconForSmallBlock iconName="Square" color={token.colorFillSecondary} size={isCompactMode ? 14 : undefined} />
           );
+        };
       case "integer":
-        return (val: number | null) => {
+        return function IntegerCol(val: number | null) {
           if (!isNil(val)) {
             return numeral(val).format("0");
           }
@@ -34,7 +35,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "0";
         };
       case "color":
-        return (val: string | null) => {
+        return function ColorCol(val: string | null) {
           if (isNil(val) && required) {
             return <IconForSmallBlock size="20" iconName="SlashSquare" color={token.colorError} />;
           }
@@ -45,7 +46,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           );
         };
       case "date":
-        return (val: string | null) => {
+        return function DateCol(val: string | null) {
           if (!isNil(val)) {
             return dayjs(val).format("ll");
           }
@@ -55,7 +56,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "<Klick ...>";
         };
       case "startEnd":
-        return (val: string[] | null) => {
+        return function StartEndCol(val: string[] | null) {
           if (!isNil(val)) {
             return dayjs(val[0]).format("ll") + " - " + dayjs(val[1]).format("ll");
           }
@@ -65,7 +66,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           return "<Klick ...>";
         };
       case "user":
-        return (val: string[] | null) => {
+        return function UserCol(val: string[] | null) {
           if (isNil(val) || val.length === 0) {
             if (required) {
               return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
@@ -83,7 +84,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           );
         };
       default:
-        return (val: string | null) => {
+        return function DefaultCol(val: string | null) {
           if (val) {
             return val;
           }

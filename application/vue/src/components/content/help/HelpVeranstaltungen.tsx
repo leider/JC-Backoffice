@@ -72,16 +72,13 @@ export default function HelpVeranstaltungen() {
     {
       title: (
         <span>
-          Und die Icons?{" "}
-          <>
-            <ButtonWithIcon color={color("allgemeines")} size="small" icon={icon("allgemeines")} />
-            <ButtonWithIcon color={color("gaeste")} size="small" icon={icon("gaeste")} />
-            <ButtonWithIcon color={color("technik")} size="small" icon={icon("technik")} />
-            <ButtonWithIcon color={color("ausgaben")} size="small" icon={icon("ausgaben")} />
-            <ButtonWithIcon color={color("hotel")} size="small" icon={icon("hotel")} />
-            <ButtonWithIcon color={color("kasse")} size="small" icon={icon("kasse")} />
-            <ButtonWithIcon color={token.colorSuccess} size="small" icon="EyeFill" />
-          </>
+          Und die Icons? <ButtonWithIcon color={color("allgemeines")} size="small" icon={icon("allgemeines")} />
+          <ButtonWithIcon color={color("gaeste")} size="small" icon={icon("gaeste")} />
+          <ButtonWithIcon color={color("technik")} size="small" icon={icon("technik")} />
+          <ButtonWithIcon color={color("ausgaben")} size="small" icon={icon("ausgaben")} />
+          <ButtonWithIcon color={color("hotel")} size="small" icon={icon("hotel")} />
+          <ButtonWithIcon color={color("kasse")} size="small" icon={icon("kasse")} />
+          <ButtonWithIcon color={token.colorSuccess} size="small" icon="EyeFill" />
         </span>
       ),
       content: "Mit den Icons kannst Du direkt in eine Bearbeitungsseite springen, oder - beim Auge - auf die kompakte Übersicht.",

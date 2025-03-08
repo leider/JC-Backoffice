@@ -61,7 +61,7 @@ function InnerSelect({
 export default function SingleSelect({ label, name, onChange, options, initialValue, required, save, focus }: SingleSelectParams) {
   return (
     <Form.Item
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : undefined}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       name={name}
       colon={false}
       rules={[{ required: required }]}

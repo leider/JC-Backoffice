@@ -61,7 +61,7 @@ export const TimeField: FunctionComponent<TTimeField> = ({
   return (
     <AntdForm.Item
       name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : ""}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
       initialValue={initialValue}

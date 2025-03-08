@@ -13,7 +13,7 @@ export default function KommentarCard({ forVermietung = false }: { forVermietung
           {!forVermietung && (
             <b>
               Reservierungen und Gästeliste jetzt unter
-              <Link to={`?page=gaeste`}> diesem Tab!</Link>
+              <Link to="?page=gaeste"> diesem Tab!</Link>
             </b>
           )}
           <MarkdownEditor label={<b>Zusätzliche Infos:</b>} name={["kopf", "beschreibung"]} />

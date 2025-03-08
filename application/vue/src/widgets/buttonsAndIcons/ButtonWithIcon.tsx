@@ -7,39 +7,26 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
 
-const ButtonWithIcon = forwardRef(function (
-  {
-    icon,
-    onClick,
-    text,
-    type,
-    disabled,
-    tooltipTitle,
-    tooltipPlacement,
-    color,
-    size,
-    block,
-    loading,
-    style,
-    testid,
-    alwaysText = false,
-  }: {
-    icon?: IconProps["iconName"];
-    text?: string;
-    type?: BaseButtonProps["type"];
-    onClick?: (() => void) | "submit";
-    disabled?: boolean;
-    tooltipTitle?: string;
-    tooltipPlacement?: TooltipPlacement;
-    color?: string;
-    size?: SizeType;
-    block?: boolean;
-    loading?: boolean;
-    style?: CSSProperties;
-    testid?: string;
-    alwaysText?: boolean;
-  },
-  ref: any, // eslint-disable-line @typescript-eslint/no-explicit-any
+type ButtonWithIconProps = {
+  icon?: IconProps["iconName"];
+  text?: string;
+  type?: BaseButtonProps["type"];
+  onClick?: (() => void) | "submit";
+  disabled?: boolean;
+  tooltipTitle?: string;
+  tooltipPlacement?: TooltipPlacement;
+  color?: string;
+  size?: SizeType;
+  block?: boolean;
+  loading?: boolean;
+  style?: CSSProperties;
+  testid?: string;
+  alwaysText?: boolean;
+};
+
+const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonWithIconProps>(function ButtonWithIcon(
+  { icon, onClick, text, type, disabled, tooltipTitle, tooltipPlacement, color, size, block, loading, style, testid, alwaysText = false },
+  ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
 ) {
   const token = theme.useToken().token;
 

@@ -62,7 +62,7 @@ function EmbeddedPickers({
 export default function StartEndDateOnlyPickers({ names, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
   return (
     <Aggregate
-      label={label ? <b>{label}:</b> : ""}
+      label={label ? <b>{label + ":"}</b> : ""}
       names={names}
       style={label ? {} : { marginBottom: 0 }}
       dependencies={dependency ? [dependency] : undefined}

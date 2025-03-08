@@ -117,12 +117,10 @@ export default function AdminContent({ veranstaltung: veranVermiet }: ContentPro
           {inView && (
             <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
               {showMitarbeiter && dirty ? (
-                <>
-                  <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
-                    <ResetButton size="small" disabled={!dirty} resetChanges={setFormValue} />
-                    <SaveButton size="small" disabled={!dirty} callback={() => form.submit()} />
-                  </ConfigProvider>
-                </>
+                <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
+                  <ResetButton size="small" disabled={!dirty} resetChanges={setFormValue} />
+                  <SaveButton size="small" disabled={!dirty} callback={() => form.submit()} />
+                </ConfigProvider>
               ) : (
                 <>
                   <ButtonInAdminPanel type="allgemeines" veranstaltung={veranstaltung} />

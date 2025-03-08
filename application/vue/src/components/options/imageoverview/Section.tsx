@@ -26,7 +26,7 @@ function VeranstaltungenRenderer({ name }: { name: NamePath }) {
           >
             {v.titel}
           </Link>
-        </b>{" "}
+        </b>
         ({v.startDate}){index !== veranstaltungen!.length - 1 ? ", " : ""}
       </span>
     ));

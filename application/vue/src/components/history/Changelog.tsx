@@ -37,7 +37,7 @@ function ChangeSection({ item, surrounding, expanded }: { item: { typ: DiffType;
             value={item.val}
             displayDataTypes={false}
             displayObjectSize={false}
-            enableClipboard={true}
+            enableClipboard
             style={isDarkMode ? nordTheme : lightTheme}
           />
         }

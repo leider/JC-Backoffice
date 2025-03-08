@@ -1,6 +1,6 @@
 import { waitFor } from "@testing-library/react";
 import { formWidgetHelper } from "../util/testHelpers";
-import { TextField } from "../../src/widgets/TextField";
+import { TextField } from "@/widgets/TextField.tsx";
 import { beforeEach, describe, expect, it } from "vitest";
 
 const { widget, updateWidget, form } = formWidgetHelper;

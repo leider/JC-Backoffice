@@ -127,7 +127,7 @@ export function JazzHeader({ activeElement }: { activeElement: string }) {
             style={{ flex: "auto", minWidth: 0, flexGrow: 2 }}
             overflowedIndicator="Mehr..."
           />
-          <div style={{ width: 40 }}></div>
+          <div style={{ width: 40 }} />
           <Menu theme="dark" mode="horizontal" items={userMenu ? [userMenu] : []} selectedKeys={[activeElement]} />
         </ConfigProvider>
       </div>

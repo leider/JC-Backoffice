@@ -100,7 +100,7 @@ export const TextField: FunctionComponent<TTextField> = ({
   return (
     <AntdForm.Item
       name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : ""}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
       rules={rules}
       style={label ? { ...style } : { ...style, marginBottom: 0 }}
       initialValue={initialValue}

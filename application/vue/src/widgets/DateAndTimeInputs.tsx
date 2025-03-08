@@ -18,7 +18,7 @@ export default function DateInput({
   return (
     <Form.Item
       name={name}
-      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label}:</b> : undefined}
+      label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       colon={false}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
