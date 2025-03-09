@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { konzertWithRiderForUrl, saveKonzert, saveOptionen, saveRider } from "@/commons/loader.ts";
+import { konzertWithRiderForUrl, saveKonzert, saveOptionen, saveRider } from "@/rest/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import KonzertTabs from "@/components/konzert/KonzertTabs";
 import { Rider } from "jc-shared/rider/rider.ts";

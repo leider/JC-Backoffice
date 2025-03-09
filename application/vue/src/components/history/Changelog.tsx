@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { historyRowsFor } from "@/commons/loader.ts";
+import { historyRowsFor } from "@/rest/loader.ts";
 import React, { useEffect, useState } from "react";
 import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import { nordTheme } from "@uiw/react-json-view/nord";
 import { List } from "antd";
-import { DiffType } from "jc-shared/commons/comparingAndTransforming.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
+import { HistoryRow } from "@/rest/historyObject.ts";
 
 function ChangeSection({
   item,
   surrounding,
   expanded,
 }: {
-  readonly item: { typ: DiffType; val: object };
+  readonly item: HistoryRow;
   readonly surrounding: string;
   readonly expanded: boolean;
 }) {
@@ -35,7 +35,7 @@ function ChangeSection({
           tooltipTitle={collapsed ? "Ausklappen" : "Zuklappen"}
         />,
       ]}
-      key={item.typ + surrounding}
+      key={item + surrounding}
     >
       <List.Item.Meta
         description={
@@ -45,10 +45,23 @@ function ChangeSection({
             displayObjectSize={false}
             enableClipboard
             style={isDarkMode ? nordTheme : lightTheme}
-            value={item.val}
+            value={item.neu}
           />
         }
-        title={item.typ}
+        title="Nachher"
+      />
+      <List.Item.Meta
+        description={
+          <JsonView
+            collapsed={collapsed}
+            displayDataTypes={false}
+            displayObjectSize={false}
+            enableClipboard
+            style={isDarkMode ? nordTheme : lightTheme}
+            value={item.alt}
+          />
+        }
+        title="Vorher"
       />
     </List.Item>
   );

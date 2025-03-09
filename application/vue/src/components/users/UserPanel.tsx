@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
-import { deleteUser } from "@/commons/loader.ts";
+import { deleteUser } from "@/rest/loader.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import { ButtonInUsers } from "@/components/users/ButtonInUsers.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

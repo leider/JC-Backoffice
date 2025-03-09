@@ -7,7 +7,7 @@ import Uploader from "@/widgets/Uploader.tsx";
 import "easymde/dist/easymde.min.css";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { imagenames } from "@/commons/loader.ts";
+import { imagenames } from "@/rest/loader.ts";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";

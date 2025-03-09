@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useEffect, useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
-import { konzerteForTeam, vermietungenForTeam } from "@/commons/loader.ts";
+import { konzerteForTeam, vermietungenForTeam } from "@/rest/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import sortBy from "lodash/sortBy";
 import reverse from "lodash/reverse";

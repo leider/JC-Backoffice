@@ -1,7 +1,7 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider, Form, Row, Typography } from "antd";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { saveKonzert, saveVermietung } from "@/commons/loader.ts";
+import { saveKonzert, saveVermietung } from "@/rest/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
 import EditableStaffRows from "@/components/team/TeamBlock/EditableStaffRows.tsx";

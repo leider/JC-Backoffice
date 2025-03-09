@@ -6,7 +6,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { DynamicItem } from "@/widgets/DynamicItem.tsx";
-import { openAngebotRechnung } from "@/commons/loader.ts";
+import { openAngebotRechnung } from "@/rest/loader.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TextField } from "@/widgets/TextField.tsx";

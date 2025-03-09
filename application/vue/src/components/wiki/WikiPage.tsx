@@ -1,4 +1,4 @@
-import { saveWikiPage, wikiPage } from "@/commons/loader.ts";
+import { saveWikiPage, wikiPage } from "@/rest/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Input } from "antd";

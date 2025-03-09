@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
-import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/commons/loader.ts";
+import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/rest/loader.ts";
 import { LoginState } from "@/commons/authConsts.ts";
 import { IUseProvideAuth } from "@/commons/auth.tsx";
 import OptionValues from "jc-shared/optionen/optionValues.ts";

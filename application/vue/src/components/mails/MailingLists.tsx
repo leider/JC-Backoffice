@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, saveMailinglists } from "@/commons/loader.ts";
+import { allUsers, saveMailinglists } from "@/rest/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col } from "antd";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { mailRules as mailRulesRestCall, saveMailRules } from "@/commons/loader.ts";
+import { mailRules as mailRulesRestCall, saveMailRules } from "@/rest/loader.ts";
 import * as React from "react";
 import { useMemo } from "react";
 import { Col } from "antd";

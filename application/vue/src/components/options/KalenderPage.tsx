@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { kalender, saveKalender } from "@/commons/loader.ts";
+import { kalender, saveKalender } from "@/rest/loader.ts";
 import * as React from "react";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";

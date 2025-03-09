@@ -3,7 +3,7 @@ import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { Button, Col, Form } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { historyIdsFor } from "@/commons/loader.ts";
+import { historyIdsFor } from "@/rest/loader.ts";
 import React, { useEffect, useMemo, useState } from "react";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -19,15 +19,8 @@ export function History() {
   const [search, setSearch] = useSearchParams();
   const [expanded, setExpanded] = useState(false);
 
-  const collection = useWatch(["collection"], {
-    form,
-    preserve: true,
-  });
-
-  const id: string = useWatch(["id"], {
-    form,
-    preserve: true,
-  });
+  const collection = useWatch(["collection"], { form, preserve: true });
+  const id: string = useWatch(["id"], { form, preserve: true });
 
   useEffect(() => {
     const coll = search.get("collection");

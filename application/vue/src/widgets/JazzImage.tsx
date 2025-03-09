@@ -2,7 +2,7 @@ import { Image, Space } from "antd";
 import React, { useCallback } from "react";
 import type { ToolbarRenderInfoType } from "rc-image/lib/Preview";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
-import { imgFullsize } from "@/commons/loader.ts";
+import { imgFullsize } from "@/rest/loader.ts";
 
 export default function JazzImage({ img, width }: { readonly img: string; readonly width: string }) {
   const toolbarRender = useCallback<

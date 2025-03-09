@@ -1,5 +1,5 @@
 import { Alert, Col, Divider, Form, FormInstance, Input, Row } from "antd";
-import { changePassword, saveNewUser, saveUser } from "@/commons/loader.ts";
+import { changePassword, saveNewUser, saveUser } from "@/rest/loader.ts";
 import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";

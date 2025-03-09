@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useQuery } from "@tanstack/react-query";
-import { konzerteBetweenYYYYMM } from "@/commons/loader.ts";
+import { konzerteBetweenYYYYMM } from "@/rest/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";

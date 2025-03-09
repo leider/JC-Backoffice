@@ -2,7 +2,7 @@ import { Col, DatePicker, Form, Row, TimeRangePickerProps } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, useWatch } from "antd/es/form/Form";
 import dayjs, { Dayjs } from "dayjs";
-import { konzerteBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/commons/loader.ts";
+import { konzerteBetweenYYYYMM, vermietungenBetweenYYYYMM } from "@/rest/loader.ts";
 import sortBy from "lodash/sortBy";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { useQueries } from "@tanstack/react-query";

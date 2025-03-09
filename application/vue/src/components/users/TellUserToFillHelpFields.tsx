@@ -4,7 +4,7 @@ import { Form } from "antd";
 import User from "jc-shared/user/user.ts";
 import { IchKannFields } from "@/components/users/UserModals.tsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveUser } from "@/commons/loader.ts";
+import { saveUser } from "@/rest/loader.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import isNil from "lodash/isNil";
 import { JazzModal } from "@/widgets/JazzModal.tsx";

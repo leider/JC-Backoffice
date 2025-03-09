@@ -1,6 +1,6 @@
 import { ConfigProvider, Tag, theme } from "antd";
 import React, { useContext, useMemo } from "react";
-import { addOrRemoveUserToSection } from "@/commons/loader.ts";
+import { addOrRemoveUserToSection } from "@/rest/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeamContext } from "@/components/team/TeamContext.ts";

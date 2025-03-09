@@ -3,7 +3,7 @@ import { Checkbox, Col, Form, Row } from "antd";
 import deLocale from "@fullcalendar/core/locales/de";
 import FullCalendar from "@fullcalendar/react";
 import { EventInput } from "@fullcalendar/core";
-import { calendarEventSources } from "@/commons/loader.ts";
+import { calendarEventSources } from "@/rest/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";

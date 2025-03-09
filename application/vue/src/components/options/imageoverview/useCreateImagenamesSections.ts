@@ -5,7 +5,7 @@ import flatMap from "lodash/flatMap";
 import intersection from "lodash/intersection";
 import differenceBy from "lodash/differenceBy";
 import { useQueries } from "@tanstack/react-query";
-import { imagenames as imagenamesQuery, konzerteForTeam } from "@/commons/loader.ts";
+import { imagenames as imagenamesQuery, konzerteForTeam } from "@/rest/loader.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
 

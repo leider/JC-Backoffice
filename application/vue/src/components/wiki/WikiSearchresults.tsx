@@ -1,4 +1,4 @@
-import { searchWiki } from "@/commons/loader.ts";
+import { searchWiki } from "@/rest/loader.ts";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { List, Typography } from "antd";

@@ -3,7 +3,7 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
-import { updateGastInSection } from "@/commons/loader.ts";
+import { updateGastInSection } from "@/rest/loader.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";

@@ -6,11 +6,6 @@ import keys from "lodash/keys.js";
 
 type SomeObject = { [index: string]: SomeObject };
 
-export type DiffType = "geändert" | "hinzugefügt" | "gelöscht";
-
-export type JazzDiff = {
-  [key in DiffType]?: object;
-};
 /**
  * this function will modify data!
  *
@@ -19,6 +14,9 @@ export type JazzDiff = {
 function stripNullOrUndefined<T extends object>(data: T): T {
   if (!data) {
     return data;
+  }
+  if (Array.isArray(data)) {
+    data.sort();
   }
   forEach(keys(data), (key) => {
     const dataCasted = data as T & SomeObject;
@@ -71,22 +69,14 @@ export function areDifferent<T extends object>(left?: T, right?: T, propertiesTo
   return areDifferentForHistoryEntries(left, right, propertiesToIgnore);
 }
 
-export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): JazzDiff {
+export function differenceForAsObject(left = {}, right = {}, propertiesToIgnore?: string[]): { neu: object; alt: object } {
   const a = withoutNullOrUndefinedStrippedBy(left, propertiesToIgnore);
   const b = withoutNullOrUndefinedStrippedBy(right, propertiesToIgnore);
   const diffAtoB = detailedDiff(a, b);
   const diffBtoA = detailedDiff(b, a);
-  const diff: { geändert?: object; hinzugefügt?: object; gelöscht?: object } = {};
-  if (!(keys(diffAtoB.updated || {}).length === 0 && keys(diffBtoA.updated || {}).length === 0)) {
-    diff.geändert = { neu: diffAtoB.updated, alt: diffBtoA.updated };
-  }
-  if (keys(diffAtoB.added ?? {}).length) {
-    diff.hinzugefügt = diffAtoB.added;
-  }
-  if (keys(diffAtoB.deleted ?? {}).length) {
-    diff.gelöscht = diffAtoB.deleted;
-  }
-  return diff;
+  const mergedNeu = Object.assign(diffAtoB.updated ?? {}, diffAtoB.added ?? {});
+  const mergedAlt = Object.assign(diffBtoA.updated ?? {}, diffAtoB.deleted ?? {});
+  return { neu: mergedNeu, alt: mergedAlt };
 }
 
 export function logDiffForDirty<T extends object>(initial?: T, current?: T, enable = false) {

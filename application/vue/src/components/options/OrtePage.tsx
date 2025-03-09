@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { orte as orteLoader, saveOrte } from "@/commons/loader.ts";
+import { orte as orteLoader, saveOrte } from "@/rest/loader.ts";
 import * as React from "react";
 import { Col } from "antd";
 import Orte from "jc-shared/optionen/orte";

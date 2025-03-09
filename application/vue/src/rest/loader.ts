@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, Method } from "axios";
 
-import User from "jc-shared/user/user";
-import Kalender from "jc-shared/programmheft/kalender";
-import OptionValues from "jc-shared/optionen/optionValues";
-import Orte from "jc-shared/optionen/orte";
-import { Mailingliste } from "jc-shared/user/users";
-import MailRule from "jc-shared/mail/mailRule";
-import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin";
-import FerienIcals from "jc-shared/optionen/ferienIcals";
+import User from "jc-shared/user/user.ts";
+import Kalender from "jc-shared/programmheft/kalender.ts";
+import OptionValues from "jc-shared/optionen/optionValues.ts";
+import Orte from "jc-shared/optionen/orte.ts";
+import { Mailingliste } from "jc-shared/user/users.ts";
+import MailRule from "jc-shared/mail/mailRule.ts";
+import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
+import FerienIcals from "jc-shared/optionen/ferienIcals.ts";
 import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -16,10 +16,11 @@ import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { historyFromRawRows } from "jc-shared/history/history.ts";
+import { HistoryObjectOverview } from "jc-shared/history/history.ts";
 import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import { historyFromRawRows } from "@/rest/historyObject.ts";
 
 type ContentType = "json" | "pdf" | "zip" | "other";
 
@@ -480,7 +481,7 @@ export async function calendarEventSources({
 // History
 export async function historyIdsFor(collection: string) {
   const result = await getForType("json", `/rest/history/${collection}`);
-  return result as { id: string; time: string; state: string }[];
+  return result as HistoryObjectOverview[];
 }
 
 export async function historyRowsFor(collection: string, id: string) {

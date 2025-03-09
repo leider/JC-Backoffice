@@ -5,7 +5,7 @@ import ButtonIcal from "@/components/team/ButtonIcal.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { EventInput } from "@fullcalendar/core";
-import { calendarEventSources } from "@/commons/loader.ts";
+import { calendarEventSources } from "@/rest/loader.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";

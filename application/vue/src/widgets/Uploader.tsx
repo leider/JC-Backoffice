@@ -2,7 +2,7 @@ import { Col, Popover, Row, Space, Tag, Upload, UploadFile, UploadProps } from "
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags.tsx";
 import React, { useCallback, useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
-import { uploadFile } from "@/commons/loader.ts";
+import { uploadFile } from "@/rest/loader.ts";
 import { CustomTagProps } from "rc-select/lib/BaseSelect";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";

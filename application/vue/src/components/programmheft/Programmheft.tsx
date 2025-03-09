@@ -1,4 +1,4 @@
-import { kalenderFor, saveProgrammheft } from "@/commons/loader.ts";
+import { kalenderFor, saveProgrammheft } from "@/rest/loader.ts";
 import * as React from "react";
 import { useCallback, useMemo, useState } from "react";
 import { Col, Row, Splitter } from "antd";

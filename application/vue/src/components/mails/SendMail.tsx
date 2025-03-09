@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/commons/loader.ts";
+import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/rest/loader.ts";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Tag, Typography, UploadFile } from "antd";

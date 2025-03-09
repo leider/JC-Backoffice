@@ -4,7 +4,7 @@ import { Button, Col, Form, Select } from "antd";
 import SingleSelect from "@/widgets/SingleSelect";
 import Vertrag from "jc-shared/konzert/vertrag";
 import { DynamicItem } from "@/widgets/DynamicItem";
-import { openVertrag } from "@/commons/loader.ts";
+import { openVertrag } from "@/rest/loader.ts";
 import Uploader from "@/widgets/Uploader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";

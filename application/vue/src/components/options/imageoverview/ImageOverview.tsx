@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useMemo } from "react";
 import { Col, Form } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
-import { saveImagenames } from "@/commons/loader.ts";
+import { saveImagenames } from "@/rest/loader.ts";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.ts";
 import { Section } from "@/components/options/imageoverview/Section.tsx";
 import { useCreateImagenamesSections } from "@/components/options/imageoverview/useCreateImagenamesSections.ts";

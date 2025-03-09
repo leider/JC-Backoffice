@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { optionen as optionenLoader, saveOptionen } from "@/commons/loader.ts";
+import { optionen as optionenLoader, saveOptionen } from "@/rest/loader.ts";
 import * as React from "react";
 import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";

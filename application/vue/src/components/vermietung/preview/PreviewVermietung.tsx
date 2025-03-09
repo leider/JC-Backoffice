@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { vermietungForUrl } from "@/commons/loader.ts";
+import { vermietungForUrl } from "@/rest/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";

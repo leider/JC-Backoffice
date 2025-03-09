@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { saveVermietung, vermietungForUrl } from "@/commons/loader.ts";
+import { saveVermietung, vermietungForUrl } from "@/rest/loader.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import VermietungTabs from "@/components/vermietung/VermietungTabs.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";

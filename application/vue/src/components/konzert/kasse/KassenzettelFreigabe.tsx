@@ -1,6 +1,6 @@
 import { App, Col, Flex, Form, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { openKassenzettel } from "@/commons/loader.ts";
+import { openKassenzettel } from "@/rest/loader.ts";
 import React, { useMemo } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";

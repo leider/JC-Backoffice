@@ -3,7 +3,7 @@ import React, { CSSProperties, useEffect, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { konzertWithRiderForUrl } from "@/commons/loader.ts";
+import { konzertWithRiderForUrl } from "@/rest/loader.ts";
 import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.tsx";
 import groupBy from "lodash/groupBy";
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
