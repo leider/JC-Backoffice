@@ -58,7 +58,7 @@ export function TellUserToFillHelpFields() {
         )}
 
         <p>Bitte sag uns kurz, in welchen Bereichen Du helfen kannst und willst...</p>
-        <IchKannFields form={form} />
+        <IchKannFields />
         <em>
           Damit wir erkennen, dass Du nichts ankreuzen willst, musst Du einmal etwas an- und wieder abwählen; sonst kommt der Dialog beim
           nächsten Mal wieder.

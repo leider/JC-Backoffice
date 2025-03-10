@@ -1,47 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
 import dayjs from "dayjs";
-import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import Konzert from "jc-shared/konzert/konzert.ts";
 import { useWatch } from "antd/es/form/Form";
 import StartEndDateOnlyPickers from "@/widgets/StartEndDateOnlyPickers.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import { JazzRow } from "@/widgets/JazzRow";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import useHotelSummierer from "@/components/konzert/hotel/useHotelSummierer.ts";
 
 export default function HotelCard() {
-  const form = useFormInstance();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { optionen } = useJazzContext();
 
-  const [summe, setSumme] = useState<number>(0);
-  const [anzahlNacht, setAnzahlNacht] = useState<string>("");
+  const hotelName = useWatch(["hotel", "name"], { form, preserve: true });
+  const eventStartDate = useWatch("startDate", { form, preserve: true });
+  const anreiseDate = useWatch(["unterkunft", "anreiseDate"], { form, preserve: true });
 
-  const hotelName = useWatch(["hotel", "name"]);
-
-  const eventStartDate = useWatch(["startDate"], {
-    form,
-    preserve: true,
-  });
-
-  useEffect(
-    () => {
-      const start = dayjs(eventStartDate);
-      if (start) {
-        const hotelDatum: Date = form.getFieldValue(["unterkunft", "anreiseDate"]);
-        if (!dayjs(hotelDatum).isAfter(start.subtract(7, "day"))) {
-          const end = start.add(1, "day");
-          form.setFieldValue(["unterkunft", "anreiseDate"], start);
-          form.setFieldValue(["unterkunft", "abreiseDate"], end);
-        }
+  useEffect(() => {
+    const start = dayjs(eventStartDate);
+    if (start) {
+      if (!dayjs(anreiseDate).isAfter(start.subtract(7, "day"))) {
+        const end = start.add(1, "day");
+        form.setFieldValue(["unterkunft", "anreiseDate"], start);
+        form.setFieldValue(["unterkunft", "abreiseDate"], end);
       }
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [eventStartDate],
-  );
+    }
+  }, [anreiseDate, eventStartDate, form]);
 
   useEffect(
     () => {
@@ -56,16 +46,10 @@ export default function HotelCard() {
     [hotelName],
   );
 
-  useEffect(updateSumme, [form]);
-
-  function updateSumme() {
-    const konzert = new Konzert(cloneDeep(form.getFieldsValue(true)));
-    setSumme(konzert.unterkunft.roomsTotalEUR);
-    setAnzahlNacht(konzert.unterkunft.anzNacht);
-  }
+  const { anzNacht, roomsTotalEUR } = useHotelSummierer();
 
   return (
-    <Collapsible amount={summe} label="Zimmer" suffix="hotel">
+    <Collapsible amount={roomsTotalEUR} label="Zimmer" suffix="hotel">
       <JazzRow>
         <Col span={12}>
           <StartEndDateOnlyPickers
@@ -75,9 +59,8 @@ export default function HotelCard() {
               ["unterkunft", "anreiseDate"],
               ["unterkunft", "abreiseDate"],
             ]}
-            onChange={updateSumme}
           />
-          {anzahlNacht}
+          {anzNacht}
         </Col>
         <Col span={12}>
           <Form.Item label={<b>Kommentar:</b>} name={["unterkunft", "kommentar"]}>
@@ -87,22 +70,22 @@ export default function HotelCard() {
       </JazzRow>
       <JazzRow>
         <Col span={3}>
-          <NumberInput decimals={0} label="Einzel" name={["unterkunft", "einzelNum"]} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Einzel" name={["unterkunft", "einzelNum"]} />
         </Col>
         <Col span={5}>
-          <NumberInput decimals={2} label="Preis" name={["unterkunft", "einzelEUR"]} onChange={updateSumme} suffix="€" />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "einzelEUR"]} suffix="€" />
         </Col>
         <Col span={3}>
-          <NumberInput decimals={0} label="Doppel" name={["unterkunft", "doppelNum"]} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Doppel" name={["unterkunft", "doppelNum"]} />
         </Col>
         <Col span={5}>
-          <NumberInput decimals={2} label="Preis" name={["unterkunft", "doppelEUR"]} onChange={updateSumme} suffix="€" />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "doppelEUR"]} suffix="€" />
         </Col>
         <Col span={3}>
-          <NumberInput decimals={0} label="Suite" name={["unterkunft", "suiteNum"]} onChange={updateSumme} />
+          <NumberInput decimals={0} label="Suite" name={["unterkunft", "suiteNum"]} />
         </Col>
         <Col span={5}>
-          <NumberInput decimals={2} label="Preis" name={["unterkunft", "suiteEUR"]} onChange={updateSumme} suffix="€" />
+          <NumberInput decimals={2} label="Preis" name={["unterkunft", "suiteEUR"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>

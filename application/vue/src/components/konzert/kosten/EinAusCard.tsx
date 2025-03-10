@@ -16,8 +16,8 @@ export default function EinAusCard() {
   const ausgaben = useAusgaben();
   const einnahmen = useEinnahmen();
 
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
-  const deal = useWatch(["kosten", "deal"], { form, preserve: true });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { preserve: true });
+  const deal = useWatch(["kosten", "deal"], { preserve: true });
 
   const kalk = useMemo(
     () => {

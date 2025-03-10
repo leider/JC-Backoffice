@@ -6,10 +6,8 @@ import KonzertKalkulation from "jc-shared/konzert/konzertKalkulation.ts";
 
 export default function useEinnahmen() {
   const form = useFormInstance();
-  const preisprofil = useWatch(["eintrittspreise", "preisprofil"], { form, preserve: true });
-  const einnahmenReservix = useWatch(["kasse", "einnahmenReservix"], { form, preserve: true });
-  const zuschuss = useWatch(["eintrittspreise", "zuschuss"], { form, preserve: true });
-  const erwarteteBesucher = useWatch(["eintrittspreise", "erwarteteBesucher"], { form, preserve: true });
+  const einnahmenReservix = useWatch(["kasse", "einnahmenReservix"], { preserve: true });
+  const eintrittspreise = useWatch("eintrittspreise", { preserve: true });
 
   return useMemo(
     () => {
@@ -18,6 +16,6 @@ export default function useEinnahmen() {
       return konzert.eintrittspreise.zuschuss + kalk.erwarteterOderEchterEintritt;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [preisprofil, einnahmenReservix, zuschuss, erwarteteBesucher],
+    [einnahmenReservix, eintrittspreise],
   );
 }

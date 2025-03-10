@@ -60,7 +60,10 @@ export function withoutNullOrUndefinedStrippedBy<T extends object>(data: T, prop
 }
 
 export function areDifferentForHistoryEntries<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
-  return !!keys(differenceForAsObject(left, right, propertiesToIgnore)).length;
+  const { neu, alt } = differenceForAsObject(left, right, propertiesToIgnore);
+  const neuNotEmpty = !!keys(neu).length;
+  const altNotEmpty = !!keys(alt).length;
+  return neuNotEmpty || altNotEmpty;
 }
 export function areDifferent<T extends object>(left?: T, right?: T, propertiesToIgnore?: string[]) {
   if (!left || !keys(left).length) {

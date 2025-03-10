@@ -15,17 +15,17 @@ import { useSearchParams } from "react-router";
 import find from "lodash/find";
 
 export function History() {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<{ collection: string; id: string }>();
   const [search, setSearch] = useSearchParams();
   const [expanded, setExpanded] = useState(false);
 
-  const collection = useWatch(["collection"], { form, preserve: true });
-  const id: string = useWatch(["id"], { form, preserve: true });
+  const collection = useWatch("collection", { form, preserve: true });
+  const id = useWatch("id", { form, preserve: true });
 
   useEffect(() => {
     const coll = search.get("collection");
     if (coll !== collection) {
-      form.setFieldsValue({ collection: coll });
+      form.setFieldsValue({ collection: coll ?? "" });
     }
   }, [collection, form, search]);
 

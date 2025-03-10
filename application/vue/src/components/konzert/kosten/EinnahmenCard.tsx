@@ -7,22 +7,24 @@ import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useWatch } from "antd/es/form/Form";
-import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import useEinnahmen from "@/components/konzert/kosten/useEinnahmen.ts";
+import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 
 const preisprofilName = ["eintrittspreise", "preisprofil"];
 
 export default function EinnahmenCard() {
   const { optionen } = useJazzContext();
-  const form = useFormInstance();
   const summe = useEinnahmen();
-
-  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
+  const { istFreigegeben } = useKassenSaldierer();
 
   return (
-    <Collapsible amount={summe} label={`Einnahmen / Eintritt / Zuschuss${!freigabe ? " (Schätzung)" : ""}`} noTopBorder suffix="ausgaben">
+    <Collapsible
+      amount={summe}
+      label={`Einnahmen / Eintritt / Zuschuss${!istFreigegeben ? " (Schätzung)" : ""}`}
+      noTopBorder
+      suffix="ausgaben"
+    >
       <JazzRow>
         <Col span={12}>
           <PreisprofilSelect optionen={optionen} />
@@ -62,7 +64,7 @@ export default function EinnahmenCard() {
         </Col>
       </JazzRow>
       <Flex justify="center">
-        {freigabe ? (
+        {istFreigegeben ? (
           <Typography.Text strong type="success">
             Kasse ist freigegeben, verwende "Abendkasse"
           </Typography.Text>
@@ -81,12 +83,12 @@ export default function EinnahmenCard() {
             decimals={2}
             disabled
             label="Abendkasse (Tickets)"
-            name={["kasse", freigabe ? "einnahmeTicketsEUR" : "nix"]}
+            name={["kasse", istFreigegeben ? "einnahmeTicketsEUR" : "nix"]}
             suffix="€"
           />
         </Col>
         <Col span={8}>
-          <NumberInput decimals={0} disabled={!!freigabe} label="Gäste (erw.)" name={["eintrittspreise", "erwarteteBesucher"]} />
+          <NumberInput decimals={0} disabled={!!istFreigegeben} label="Gäste (erw.)" name={["eintrittspreise", "erwarteteBesucher"]} />
         </Col>
       </JazzRow>
     </Collapsible>

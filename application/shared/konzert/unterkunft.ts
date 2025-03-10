@@ -41,7 +41,7 @@ export default class Unterkunft {
       delete object.transportText;
       delete object.name;
       Object.assign(this, object, {
-        kommentar: object.kommentar || kuenstlerListe.join("\r\n"),
+        kommentar: object.kommentar ?? kuenstlerListe.join("\r\n"),
         sonstiges: Misc.toArray(object.sonstiges),
         einzelNum: object.einzelNum ?? 0,
         doppelNum: object.doppelNum ?? 0,
@@ -51,8 +51,8 @@ export default class Unterkunft {
         suiteEUR: object.suiteEUR ?? 0,
         transportEUR: object.transportEUR ?? 0,
       });
-      this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) || veranstaltungstagAsDatumUhrzeit.toJSDate;
-      this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) || veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
+      this.anreiseDate = Misc.stringOrDateToDate(object.anreiseDate) ?? veranstaltungstagAsDatumUhrzeit.toJSDate;
+      this.abreiseDate = Misc.stringOrDateToDate(object.abreiseDate) ?? veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;
     } else {
       this.anreiseDate = veranstaltungstagAsDatumUhrzeit.toJSDate;
       this.abreiseDate = veranstaltungstagAsDatumUhrzeit.plus({ tage: 1 }).toJSDate;

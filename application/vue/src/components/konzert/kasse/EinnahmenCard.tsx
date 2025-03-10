@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -10,25 +10,18 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 import { useWatch } from "antd/es/form/Form";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 
 export default function EinnahmenCard() {
-  const form = useFormInstance();
+  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
   const { refEinnahmen } = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
-  const freigabe = useWatch(["kasse", "kassenfreigabe"]);
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
-  const [summe, setSumme] = useState<number>(0);
-  useEffect(() => {
-    updateSumme();
-  });
+  const { einnahmeTotalEUR } = useKassenSaldierer();
 
-  function updateSumme() {
-    const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
-    setSumme(kasse.einnahmeTotalEUR);
-    form.setFieldValue("endbestandEUR", kasse.endbestandEUR);
-  }
-
-  function calculateTickets() {
+  const calculateTickets = useCallback(() => {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     const tickets =
       kasse.endbestandGezaehltEUR -
@@ -39,71 +32,42 @@ export default function EinnahmenCard() {
       kasse.ausgabeBankEUR;
 
     form.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
-    updateSumme();
-  }
+  }, [form]);
 
   return (
-    <Collapsible amount={summe} label="Einnahmen Abendkasse" noTopBorder suffix="kasse">
+    <Collapsible amount={einnahmeTotalEUR} label="Einnahmen Abendkasse" noTopBorder suffix="kasse">
       <JazzRow ref={refEinnahmen}>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled={freigabe}
-            label="Tickets (AK)"
-            name={["kasse", "einnahmeTicketsEUR"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled={!!freigabe} label="Tickets (AK)" name={["kasse", "einnahmeTicketsEUR"]} suffix="€" />
         </Col>
         <Col span={8}>
           <Form.Item label="&nbsp;">
-            <ButtonWithIcon alwaysText block color={color("kasse")} disabled={freigabe} onClick={calculateTickets} text="Berechnen..." />
+            <ButtonWithIcon alwaysText block color={color("kasse")} disabled={!!freigabe} onClick={calculateTickets} text="Berechnen..." />
           </Form.Item>
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={8}>
-          <NumberInput decimals={0} disabled={freigabe} label="Besucher gesamt" name={["kasse", "anzahlBesucherAK"]} />
+          <NumberInput decimals={0} disabled={!!freigabe} label="Besucher gesamt" name={["kasse", "anzahlBesucherAK"]} />
         </Col>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled={freigabe}
-            label="Bareinlage"
-            name={["kasse", "einnahmeBankEUR"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled={!!freigabe} label="Bareinlage" name={["kasse", "einnahmeBankEUR"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField disabled={freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges1Text"]} />
+          <TextField disabled={!!freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges1Text"]} />
         </Col>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled={freigabe}
-            label="Betrag"
-            name={["kasse", "einnahmeSonstiges1EUR"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled={!!freigabe} label="Betrag" name={["kasse", "einnahmeSonstiges1EUR"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col span={16}>
-          <TextField disabled={freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges2Text"]} />
+          <TextField disabled={!!freigabe} label="Sonstiges" name={["kasse", "einnahmeSonstiges2Text"]} />
         </Col>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled={freigabe}
-            label="Betrag"
-            name={["kasse", "einnahmeSonstiges2EUR"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled={!!freigabe} label="Betrag" name={["kasse", "einnahmeSonstiges2EUR"]} suffix="€" />
         </Col>
       </JazzRow>
     </Collapsible>

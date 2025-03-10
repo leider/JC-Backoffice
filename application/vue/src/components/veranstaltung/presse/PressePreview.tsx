@@ -33,7 +33,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
       {map(veranstaltung.presse.image, (img) => (
-        <JazzImage img={img} width="100%" />
+        <JazzImage img={img} key={img} width="100%" />
       ))}
     </>
   );

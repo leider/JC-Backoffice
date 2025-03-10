@@ -28,8 +28,8 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
 
   useEffect(updateSumme, [updateSumme]);
 
-  const brauchtFluegel = useWatch(["technik", "fluegel"], { form, preserve: true });
-  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
+  const brauchtFluegel = useWatch(["technik", "fluegel"], { preserve: true });
+  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { preserve: true });
 
   useEffect(() => {
     if (brauchtFluegel === false) {
@@ -61,7 +61,6 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
                   disabled={!brauchtKlavier}
                   label="Flügelstimmer"
                   name={["kosten", "fluegelstimmerEUR"]}
-                  onChange={updateSumme}
                   suffix="€"
                 />
               );
@@ -84,14 +83,7 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
           <MultiSelectWithTags label="Backline Rockshop" name={["technik", "backlineRockshop"]} options={backlineRockshop} />
         </Col>
         <Col span={8}>
-          <NumberInput
-            decimals={2}
-            disabled
-            label="Betrag (alt, jetzt in Werbung eintragen)"
-            name={["kosten", "backlineEUR"]}
-            onChange={updateSumme}
-            suffix="€"
-          />
+          <NumberInput decimals={2} disabled label="Betrag (alt, jetzt in Werbung eintragen)" name={["kosten", "backlineEUR"]} suffix="€" />
         </Col>
       </JazzRow>
       <JazzRow>
@@ -104,7 +96,6 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
             disabled
             label="Betrag (alt, jetzt in Werbung eintragen)"
             name={["kosten", "technikAngebot1EUR"]}
-            onChange={updateSumme}
             suffix="€"
           />
         </Col>

@@ -20,45 +20,22 @@ function FluegelZeile() {
   return verm.technik.fluegel && <LabelCurrencyRow label="Flügelstimmer" path={["kosten", "fluegelstimmerEUR"]} />;
 }
 
+const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
+
 export default function AusgabenCard() {
   const form = useFormInstance();
 
-  const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { form, preserve: true });
-  const backlineEUR = useWatch(["kosten", "backlineEUR"], { form, preserve: true });
-  const technikAngebot1EUR = useWatch(["kosten", "technikAngebot1EUR"], { form, preserve: true });
   const brauchtTechnik = useWatch("brauchtTechnik", { form, preserve: true });
-  const werbung1 = useWatch(["kosten", "werbung1"], { form, preserve: true });
-  const werbung2 = useWatch(["kosten", "werbung2"], { form, preserve: true });
-  const werbung3 = useWatch(["kosten", "werbung3"], { form, preserve: true });
-  const personal = useWatch(["kosten", "personal"], { form, preserve: true });
-  const gagenEUR = useWatch(["kosten", "gagenEUR"], { form, preserve: true });
-  const gagenSteuer = useWatch(["kosten", "gagenSteuer"], { form, preserve: true });
+  const kosten = useWatch("kosten", { form, preserve: true });
 
-  const summe = useMemo(
-    () => {
-      const verm = new Vermietung(form.getFieldsValue(true));
-      const sum = verm.kosten.totalEUR;
-      if (!brauchtTechnik) {
-        return sum - verm.kosten.backlineUndTechnikEUR;
-      }
-      return sum;
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      form,
-      backlineEUR,
-      technikAngebot1EUR,
-      fluegelstimmerEUR,
-      brauchtTechnik,
-      werbung1,
-      werbung2,
-      werbung3,
-      personal,
-      gagenEUR,
-      gagenSteuer,
-    ],
-  );
-
-  const steuerSaetze = ["ohne", "7% MWSt.", "19% MWSt.", "18,8% Ausland"];
+  const summe = useMemo(() => {
+    const k = new Kosten(kosten);
+    const sum = k.totalEUR;
+    if (!brauchtTechnik) {
+      return sum - k.backlineUndTechnikEUR;
+    }
+    return sum;
+  }, [brauchtTechnik, kosten]);
 
   const { lg } = useBreakpoint();
   return (

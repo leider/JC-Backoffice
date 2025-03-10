@@ -10,9 +10,11 @@ import MitarbeiterCard from "@/components/veranstaltung/allgemeines/MitarbeiterC
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function TabAllgemeines() {
   const { optionen } = useJazzContext();
+  const changelist = useWatch("changelist", { preserve: true });
 
   return (
     <JazzRow>
@@ -31,7 +33,7 @@ export default function TabAllgemeines() {
           </JazzRow>
         </KontaktCard>
         <VertragCard />
-        <BearbeiterCard />
+        {!!changelist?.length && <BearbeiterCard />}
       </Col>
     </JazzRow>
   );

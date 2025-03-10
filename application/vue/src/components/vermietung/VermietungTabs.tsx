@@ -11,7 +11,6 @@ import TabPresse from "@/components/vermietung/presse/TabPresse.tsx";
 import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
-import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 function TabLabel({ activePage, title, type }: { readonly activePage: buttonType; readonly type: buttonType; readonly title: string }) {
   const { icon, color } = colorsAndIconsForSections;
@@ -35,7 +34,6 @@ function TabLabel({ activePage, title, type }: { readonly activePage: buttonType
 }
 
 export default function VermietungTabs() {
-  const form = useFormInstance();
   const { optionen } = useJazzContext();
 
   const [search, setSearch] = useSearchParams();
@@ -52,8 +50,8 @@ export default function VermietungTabs() {
     }
   }, [search, setSearch]);
 
-  const brauchtTechnik = useWatch("brauchtTechnik", { form, preserve: true });
-  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
+  const brauchtTechnik = useWatch("brauchtTechnik", { preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { preserve: true });
 
   useEffect(() => {
     const tabAllgemeines = {

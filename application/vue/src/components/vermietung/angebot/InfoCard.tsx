@@ -18,7 +18,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export default function InfoCard() {
-  const form = useFormInstance();
+  const form = useFormInstance<Vermietung>();
   const { currentUser, isDirty } = useJazzContext();
 
   const status = useWatch(["angebot", "status"], { form, preserve: true });

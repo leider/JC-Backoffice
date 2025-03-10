@@ -13,7 +13,6 @@ import { useSearchParams } from "react-router";
 import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
-import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 function TabLabel({ title, type, activePage }: { readonly type: buttonType; readonly title: string; readonly activePage: string }) {
   const { icon, color } = colorsAndIconsForSections;
@@ -31,7 +30,6 @@ function TabLabel({ title, type, activePage }: { readonly type: buttonType; read
 }
 
 export default function KonzertTabs() {
-  const form = useFormInstance();
   const { optionen } = useJazzContext();
 
   const [search, setSearch] = useSearchParams();
@@ -40,8 +38,8 @@ export default function KonzertTabs() {
   const { currentUser } = useJazzContext();
   const onlyKasse = useMemo(() => !currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
-  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { form, preserve: true });
-  const brauchtPresse = useWatch("brauchtPresse", { form, preserve: true });
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { preserve: true });
 
   useEffect(() => {
     const page = search.get("page") ?? "";

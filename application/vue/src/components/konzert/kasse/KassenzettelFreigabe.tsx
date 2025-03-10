@@ -15,22 +15,24 @@ import numeral from "numeral";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow";
+import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 
 export function KassenzettelFreigabe() {
-  const form = useFormInstance();
+  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
   const { currentUser, allUsers, isDirty } = useJazzContext();
+  const { endbestandEUR } = useKassenSaldierer();
 
   const { modal } = App.useApp();
   const usersAsOptions = useMemo(() => map(allUsers, "name"), [allUsers]);
 
-  const startDate = useWatch("startDate", { form, preserve: true });
+  const startDate = useWatch("startDate", { preserve: true });
   const vergangen = useMemo(() => {
     return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
   }, [startDate]);
 
-  const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
-  const endbestandEUR = useWatch("endbestandEUR", { form, preserve: true });
-  const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { form, preserve: true });
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { preserve: true });
+  const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { preserve: true });
 
   const [innerForm] = useForm();
 

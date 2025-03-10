@@ -1,4 +1,4 @@
-import { Alert, Col, Divider, Form, FormInstance, Input, Row } from "antd";
+import { Alert, Col, Divider, Form, Input, Row } from "antd";
 import { changePassword, saveNewUser, saveUser } from "@/rest/loader.ts";
 import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
@@ -116,7 +116,7 @@ export function NewUserModal({ isOpen, setIsOpen }: { readonly isOpen: boolean; 
             </Form.Item>
           </Col>
         </Row>
-        <EditFields form={form} isSuperUser />
+        <EditFields />
       </Form>
     </JazzModal>
   );
@@ -126,12 +126,10 @@ export function EditUserModal({
   isOpen,
   setIsOpen,
   user,
-  isSuperUser,
 }: {
   readonly isOpen: boolean;
   readonly setIsOpen: (open: boolean) => void;
   readonly user: User;
-  readonly isSuperUser: boolean;
 }) {
   const [form] = Form.useForm<User>();
   const { showSuccess } = useJazzContext();
@@ -186,20 +184,22 @@ export function EditUserModal({
           setDirty(areDifferent(initialValue, current));
         }}
       >
-        <EditFields form={form} isSuperUser={isSuperUser} />
+        <EditFields />
       </Form>
     </JazzModal>
   );
 }
 
-function EditFields({ isSuperUser, form }: { readonly isSuperUser: boolean; readonly form: FormInstance<User> }) {
+function EditFields() {
+  const { currentUser } = useJazzContext();
+  const isSuperUser = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
   return (
     <Row gutter={8}>
       <Col span={24}>
         <TextField label="Vollständiger Name" name="name" required />
         <TextField isEmail label="E-Mail" name="email" required />
         <CheckItem label="Benachrichtigen, wenn Staff oder Kasse gesucht" name="wantsEmailReminders" />
-        <IchKannFields form={form} />
+        <IchKannFields />
         <TextField label="Telefon" name="tel" />
         <SingleSelect
           label="T-Shirt"
@@ -228,8 +228,8 @@ function EditFields({ isSuperUser, form }: { readonly isSuperUser: boolean; read
   );
 }
 
-export function IchKannFields({ form }: { readonly form: FormInstance<User> }) {
-  const kannErsthelfer = useWatch("kannErsthelfer", { form, preserve: true });
+export function IchKannFields() {
+  const kannErsthelfer = useWatch("kannErsthelfer", { preserve: true });
   const keinErsthelferGesetzt = useMemo(() => isNil(kannErsthelfer), [kannErsthelfer]);
   return (
     <>

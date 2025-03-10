@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
@@ -17,15 +17,15 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import useAusgaben from "@/components/konzert/kosten/useAusgaben.ts";
 import { useWatch } from "antd/es/form/Form";
-import Kasse from "jc-shared/konzert/kasse.ts";
+import useHotelSummierer from "@/components/konzert/hotel/useHotelSummierer.ts";
+import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 
 function HotelZeile() {
-  const form = useFormInstance();
-  const unterkunft = useWatch("unterkunft", { form, preserve: true });
-  const artist = useWatch("artist", { form, preserve: true });
+  const { roomsTotalEUR, transportEUR } = useHotelSummierer();
+  const brauchtHotel = useWatch(["artist", "brauchtHotel"], { preserve: true });
 
   return (
-    artist?.brauchtHotel && (
+    brauchtHotel && (
       <>
         <JazzRow>
           <Col span={18}>
@@ -34,7 +34,7 @@ function HotelZeile() {
             </Form.Item>
           </Col>
           <Col span={6}>
-            <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.roomsTotalEUR || 0} />
+            <NumberInputWithDirectValue decimals={2} suffix="€" value={roomsTotalEUR || 0} />
           </Col>
         </JazzRow>
         <JazzRow>
@@ -44,7 +44,7 @@ function HotelZeile() {
             </Form.Item>
           </Col>
           <Col span={6}>
-            <NumberInputWithDirectValue decimals={2} suffix="€" value={unterkunft?.transportEUR || 0} />
+            <NumberInputWithDirectValue decimals={2} suffix="€" value={transportEUR || 0} />
           </Col>
         </JazzRow>
       </>
@@ -53,13 +53,9 @@ function HotelZeile() {
 }
 
 function KassenZeile() {
-  const form = useFormInstance();
-  const kasseField = useWatch("kasse", { form, preserve: true });
-  const kasse = useMemo(() => {
-    return new Kasse(kasseField);
-  }, [kasseField]);
+  const { istFreigegeben, ausgabenOhneGage } = useKassenSaldierer();
   return (
-    kasse.istFreigegeben && (
+    istFreigegeben && (
       <JazzRow>
         <Col span={18}>
           <Form.Item>
@@ -67,7 +63,7 @@ function KassenZeile() {
           </Form.Item>
         </Col>
         <Col span={6}>
-          <NumberInputWithDirectValue decimals={2} suffix="€" value={kasse.ausgabenOhneGage} />
+          <NumberInputWithDirectValue decimals={2} suffix="€" value={ausgabenOhneGage} />
         </Col>
       </JazzRow>
     )
