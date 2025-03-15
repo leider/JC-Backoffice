@@ -48,7 +48,7 @@ export default function InlineEditableActions({ actions }: { readonly actions: A
       <ButtonWithIcon
         icon="Trash"
         key="delete"
-        onClick={() => setOpen(true)}
+        onClick={() => actions.delete()}
         tooltipPlacement="leftTop"
         tooltipTitle="Zeile Löschen"
         type="text"

@@ -8,7 +8,7 @@ export default function useCheckErrors(form: FormInstance, loaded: boolean) {
       return;
     }
     form
-      .validateFields()
+      .validateFields({ recursive: true })
       .then(() => {
         setHasErrors(false);
       })

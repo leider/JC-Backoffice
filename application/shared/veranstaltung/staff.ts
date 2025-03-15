@@ -64,6 +64,10 @@ export default class Staff {
     return (!this.kasseNotNeeded && this.kasse.length === 0) || (!this.kasseVNotNeeded && this.kasseV.length === 0);
   }
 
+  get masterFehlt(): boolean {
+    return !this.modNotNeeded && this.mod.length === 0;
+  }
+
   addUserToSection(user: User, section: StaffType): void {
     this.getStaffCollection(section).push(user.id);
   }

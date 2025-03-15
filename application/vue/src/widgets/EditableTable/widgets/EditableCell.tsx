@@ -129,6 +129,19 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
         />
       );
       break;
+    case "twoDecimals":
+      Widget = (
+        <NumberInput
+          decimals={2}
+          focus
+          initialValue={(initialValue as number) ?? 0}
+          min={min as number}
+          name={dataIndex}
+          required={required}
+          save={save}
+        />
+      );
+      break;
     case "date":
       Widget = <DateInput focus name={dataIndex} required={required} save={save} />;
       break;

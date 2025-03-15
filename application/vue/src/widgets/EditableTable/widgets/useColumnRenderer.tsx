@@ -34,6 +34,16 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
           }
           return "0";
         };
+      case "twoDecimals":
+        return function IntegerCol(val: number | null) {
+          if (!isNil(val)) {
+            return numeral(val).format("0.00");
+          }
+          if (required) {
+            return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
+          }
+          return "0,00";
+        };
       case "color":
         return function ColorCol(val: string | null) {
           if (isNil(val) && required) {

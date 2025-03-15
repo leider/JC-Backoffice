@@ -1,4 +1,4 @@
-import { Form, Table, type TableProps } from "antd";
+import { Form, Table, type TableProps, Typography } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
@@ -18,6 +18,9 @@ import map from "lodash/map";
 import forEach from "lodash/forEach";
 import reject from "lodash/reject";
 import filter from "lodash/filter";
+import compact from "lodash/compact";
+import keys from "lodash/keys";
+import uniq from "lodash/uniq";
 
 type WithKey<T> = T & { key: string };
 
@@ -194,6 +197,8 @@ function InnerTable<T>({
     };
   });
 
+  const hidePagination = useMemo(() => rows.length < 50, [rows.length]);
+
   const tableContext = useCreateTableContext();
   return (
     <TableContext.Provider value={tableContext}>
@@ -203,23 +208,36 @@ function InnerTable<T>({
         columns={columns as ColumnTypes}
         components={components}
         dataSource={rows}
-        pagination={{ position: ["topRight"], defaultPageSize: 50, hideOnSinglePage: true }}
+        pagination={{ position: ["topRight"], defaultPageSize: 50, hideOnSinglePage: hidePagination }}
+        scroll={{ y: 500 }}
         size="small"
       />
     </TableContext.Provider>
   );
 }
 
+function DulicatesInfo({ duplInfo }: { readonly duplInfo: { [idx: string]: unknown[] } }) {
+  if (keys(duplInfo).length === 0) {
+    return undefined;
+  }
+  return (
+    <>
+      <Typography.Text type="danger">Du hast doppelte Einträge!</Typography.Text>
+      {" " + JSON.stringify(duplInfo, null, 2)}
+    </>
+  );
+}
 export default function EditableTable<T>({ name, columnDescriptions, usersWithKann, newRowFactory }: EditableTableProps<T>) {
-  const requiredFields = useMemo(() => filter(columnDescriptions, "required"), [columnDescriptions]);
+  const requiredFields = useMemo(() => map(filter(columnDescriptions, "required"), "dataIndex") as string[], [columnDescriptions]);
 
   const requiredValidator = useMemo(() => {
     return {
-      validator: (_, value: T[]) => {
+      validator: (_, rows: T[]) => {
         let broken = false;
-        forEach(value, (row) => {
-          forEach(requiredFields, (field) => {
-            if (isNil(row[field.dataIndex as keyof T])) {
+        forEach(requiredFields, (field) => {
+          forEach(rows, (row) => {
+            const val = row[field as keyof T];
+            if (isNil(val) || val === "") {
               broken = true;
             }
           });
@@ -230,23 +248,28 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
     } as ValidatorRule;
   }, [requiredFields]);
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  function duplicates(values: any[]) {
-    return filter(values, (item, index) => index !== values.indexOf(item));
+  function duplicates(values: unknown[]) {
+    const compacted = compact(values);
+    return filter(compacted, (item, index) => index !== compacted.indexOf(item));
   }
 
   const uniqueFields = useMemo(() => filter(columnDescriptions, "uniqueValues"), [columnDescriptions]);
 
+  const [duplInfo, setDuplInfo] = useState<{ [idx: string]: unknown[] }>({});
   const uniqueValidator = useMemo(() => {
     return {
       validator: (_, value: T[]) => {
         let broken = false;
+        const details: { [idx: string]: unknown[] } = {};
         forEach(uniqueFields, (field) => {
           const valsToCheck = map(value, (row) => row[field.dataIndex as keyof T]);
-          if (duplicates(valsToCheck).length) {
+          const dupes = duplicates(valsToCheck);
+          if (dupes.length) {
             broken = true;
+            details[field.title as string] = uniq(dupes);
           }
         });
+        setDuplInfo(details);
         return broken ? Promise.reject(new Error()) : Promise.resolve();
       },
       message: "Prüfe alle Felder auf Duplikate",
@@ -254,13 +277,16 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
   }, [uniqueFields]);
 
   return (
-    <Form.Item
-      name={name}
-      rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
-      trigger="onChange"
-      valuePropName="value"
-    >
-      <InnerTable<T> columnDescriptions={columnDescriptions} newRowFactory={newRowFactory} usersWithKann={usersWithKann} />
-    </Form.Item>
+    <>
+      <DulicatesInfo duplInfo={duplInfo} />
+      <Form.Item
+        name={name}
+        rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
+        trigger="onChange"
+        valuePropName="value"
+      >
+        <InnerTable<T> columnDescriptions={columnDescriptions} newRowFactory={newRowFactory} usersWithKann={usersWithKann} />
+      </Form.Item>
+    </>
   );
 }

@@ -14,6 +14,7 @@ import { checkStaff } from "./sendMailsStaffReminder.js";
 import { checkBar } from "./sendMailsNightlyBar.js";
 import { informAdmin, JobType } from "./sendMailToAdmin.js";
 import map from "lodash/map.js";
+import { checkMaster } from "./sendMailsMasterFehlt.js";
 
 const logger = loggers.get("application");
 const app = express();
@@ -38,6 +39,7 @@ async function nightlyMails() {
     remindForProgrammheft(now),
     checkStaff(now),
     checkBar(now),
+    checkMaster(now),
   ]);
 
   const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar"];

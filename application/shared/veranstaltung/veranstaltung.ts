@@ -13,6 +13,7 @@ import { colorVermietung } from "../optionen/optionValues.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import map from "lodash/map.js";
 import tinycolor from "tinycolor2";
+import User from "../user/user.js";
 
 export type MinimalVeranstaltung = Partial<Veranstaltung> & { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -28,6 +29,7 @@ export default abstract class Veranstaltung {
   staff = new Staff();
   technik = new Technik();
   brauchtPresse = true;
+  booker?: User[] = [];
 
   constructor(
     object?: RecursivePartial<Omit<Veranstaltung, "startDate" | "endDate"> & { startDate: string | Date; endDate: string | Date }>,
@@ -46,6 +48,7 @@ export default abstract class Veranstaltung {
         presse: new Presse(object.presse),
         staff: new Staff(object.staff),
         technik: new Technik(object.technik),
+        booker: object.booker,
       });
     } else {
       this.startDate = new DatumUhrzeit().setUhrzeit(20, 0).toJSDate;

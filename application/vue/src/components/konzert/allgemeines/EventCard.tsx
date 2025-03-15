@@ -13,6 +13,11 @@ import { EventTypeSelect } from "@/widgets/EventTypeSelects/EventTypeSelect.tsx"
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import { JazzRow } from "@/widgets/JazzRow";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
+import filter from "lodash/filter";
+import map from "lodash/map";
+import { useWatch } from "antd/es/form/Form";
+import { useParams } from "react-router";
 
 function Checker({ name, label, disabled }: { readonly label: string; readonly name: string | string[]; readonly disabled?: boolean }) {
   return (
@@ -23,10 +28,20 @@ function Checker({ name, label, disabled }: { readonly label: string; readonly n
 }
 
 export default function EventCard() {
-  const form = useFormInstance();
-  const { optionen, orte } = useJazzContext();
+  const form = useFormInstance<Konzert>();
+  const { currentUser, optionen, orte, allUsers } = useJazzContext();
+  const { url } = useParams();
+  const id = useWatch("id", { preserve: true });
 
-  const { currentUser } = useJazzContext();
+  useEffect(() => {
+    if ((url?.endsWith("new") || url?.includes("copy-of")) && currentUser) {
+      form.setFieldValue("booker", [currentUser.id]);
+    }
+  }, [currentUser, form, id, url]);
+
+  // eslint-disable-next-line lodash/prop-shorthand
+  const bookersOnly = useMemo(() => filter(allUsers, (u) => u.accessrights.isBookingTeam), [allUsers]);
+  const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);
 
@@ -61,6 +76,9 @@ export default function EventCard() {
         <Checker label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
         <Checker label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
         <Checker label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
+        <Col span={12}>
+          <MitarbeiterMultiSelect label="Booker" name="booker" usersAsOptions={bookersAsOptions} />
+        </Col>
       </JazzRow>
       <JazzRow>
         <Col span={12}>

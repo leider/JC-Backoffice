@@ -9,6 +9,7 @@ const user1 = new User({
   email: "user1@jazzclub.de",
   gruppen: ORGA,
   kannKasse: true,
+  kannMaster: true,
   wantsEmailReminders: true,
 });
 const user2 = new User({
@@ -62,7 +63,7 @@ const konzert1 = new Konzert({
   endDate: "2019-04-29T23:00:00.000Z",
   url: "konzert1",
   kopf: { titel: "Konzert 1", ort: "Jazzclub", confirmed: true },
-  staff: { kasseNotNeeded: false },
+  staff: { kasseNotNeeded: false, modNotNeeded: false },
   presse: { checked: true },
   eintrittspreise: { erwarteteBesucher: 10 },
 });
