@@ -16,6 +16,7 @@ export type Columns = {
   min?: number | string;
   pattern?: RegExp;
   uniqueValues?: boolean;
+  multiline?: boolean;
 };
 
 export type ColType = "color" | "user" | "date" | "startEnd" | "text" | "integer" | "twoDecimals" | "boolean";

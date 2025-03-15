@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnyObject } from "antd/es/_util/type";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
@@ -12,11 +11,14 @@ import SingleSelect from "@/widgets/SingleSelect.tsx";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import { NamePath } from "rc-field-form/es/interface";
 
 interface EditableCellProps<T> extends Columns {
   readonly record: T;
   readonly handleSave: (record: T, field: unknown) => void;
   readonly index?: number;
+  readonly surroundingName: NamePath;
 }
 
 function EditableCell<RecordType extends AnyObject = AnyObject>({
@@ -35,16 +37,24 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   min,
   index,
   initialValue,
+  surroundingName,
+  multiline,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) {
   const [editing, setEditing] = useState(false);
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
   const { isCompactMode } = useJazzContext();
+  const name = useMemo(() => {
+    const prefix = !Array.isArray(surroundingName) ? [surroundingName] : surroundingName;
+    const suffix = !Array.isArray(dataIndex) ? [dataIndex] : dataIndex;
+    return [...prefix, index, ...suffix];
+  }, [dataIndex, index, surroundingName]);
 
   const ref = useRef<any>(null); // eslint-disable-line  @typescript-eslint/no-explicit-any
 
-  const form = useContext(EditableContext)!;
+  const form = useFormInstance(); //useContext(EditableContext)!;
+  const [backupValue, setBackupValue] = useState<unknown>(undefined);
 
   useEffect(() => {
     if (editing) {
@@ -52,15 +62,33 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     }
   }, [editing]);
 
-  const save = async (keepEditing?: boolean) => {
-    try {
-      const values = await form.validateFields();
-      !keepEditing && toggleEdit();
-      handleSave(record, values);
-    } catch {
-      /* empty */
+  const toggleEdit = useCallback(() => {
+    const willNowEdit = !editing;
+    if (willNowEdit) {
+      endEdit({
+        endEditing: () => {
+          setEditing(false);
+        },
+      });
     }
-  };
+    setEditing(willNowEdit);
+    setBackupValue(record[dataIndex]);
+  }, [dataIndex, editing, endEdit, record]);
+
+  const save = useCallback(
+    (keepEditing?: boolean) => {
+      const val = form.getFieldValue(name);
+      !keepEditing && toggleEdit();
+      if (val === backupValue) {
+        !keepEditing && setBackupValue(undefined);
+        return;
+      }
+      const res: { [_: string]: unknown } = {};
+      res[dataIndex] = val;
+      handleSave(record, res);
+    },
+    [backupValue, dataIndex, form, handleSave, name, record, toggleEdit],
+  );
 
   const readonlyStyle = useMemo(() => {
     if (isCompactMode) {
@@ -72,7 +100,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
         case "integer":
           return { padding: "4px", marginRight: "4px" };
         case "boolean":
-          return { padding: "4px", paddingTop: "6px", paddingBottom: "0px" };
+          return { paddingRight: "6px", paddingTop: "6px", paddingBottom: "0px", paddingLeft: "0px" };
         default:
           return { padding: "4px", marginLeft: "4px" };
       }
@@ -85,7 +113,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
       case "integer":
         return { padding: "6px", marginRight: "6px" };
       case "boolean":
-        return { padding: "6px", paddingTop: "8px", paddingBottom: "2px" };
+        return { paddingRight: "16px", paddingTop: "8px", paddingBottom: "2px", paddingLeft: "0px" };
       default:
         return { padding: "6px", marginLeft: "6px" };
     }
@@ -95,26 +123,13 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     return <td {...restProps}>{children}</td>;
   }
 
-  function toggleEdit() {
-    const willNowEdit = !editing;
-    if (willNowEdit) {
-      endEdit({
-        endEditing: () => {
-          setEditing(false);
-        },
-      });
-    }
-    setEditing(willNowEdit);
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  }
-
   let Widget;
   switch (type) {
     case "user":
-      Widget = <MitarbeiterMultiSelect focus name={dataIndex} save={save} usersAsOptions={usersWithKann ?? []} />;
+      Widget = <MitarbeiterMultiSelect focus name={name} save={save} usersAsOptions={usersWithKann ?? []} />;
       break;
     case "color":
-      Widget = <ColorField name={dataIndex} presets={presets} required={required} save={save} />;
+      Widget = <ColorField name={name} presets={presets} required={required} save={save} />;
       break;
     case "integer":
       Widget = (
@@ -123,7 +138,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
           focus
           initialValue={(initialValue as number) ?? 0}
           min={min as number}
-          name={dataIndex}
+          name={name}
           required={required}
           save={save}
         />
@@ -136,26 +151,26 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
           focus
           initialValue={(initialValue as number) ?? 0}
           min={min as number}
-          name={dataIndex}
+          name={name}
           required={required}
           save={save}
         />
       );
       break;
     case "date":
-      Widget = <DateInput focus name={dataIndex} required={required} save={save} />;
+      Widget = <DateInput focus name={name} required={required} save={save} />;
       break;
     case "startEnd":
-      Widget = <StartEndDateOnlyPickersInTable focus name={dataIndex} save={save} />;
+      Widget = <StartEndDateOnlyPickersInTable focus name={name} save={save} />;
       break;
     case "boolean":
-      Widget = <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={dataIndex} required={required} save={save} />;
+      Widget = <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={name} required={required} save={save} />;
       break;
     default:
       Widget = filters ? (
-        <SingleSelect focus name={dataIndex} options={filters} required={required} save={save} />
+        <SingleSelect focus name={name} options={filters} required={required} save={save} />
       ) : (
-        <TextField focus name={dataIndex} required={required} save={save} />
+        <TextField focus multiline={multiline} name={name} required={required} save={save} />
       );
       break;
   }
