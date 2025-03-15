@@ -77,7 +77,7 @@ export default function EventCard() {
         <Checker label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />
         <Checker label="Kann Social Media" name={["kopf", "kannInSocialMedia"]} />
         <Col span={12}>
-          <MitarbeiterMultiSelect label="Booker" name="booker" singleEntry usersAsOptions={bookersAsOptions} />
+          <MitarbeiterMultiSelect label="Booker" name="booker" usersAsOptions={bookersAsOptions} />
         </Col>
       </JazzRow>
       <JazzRow>
