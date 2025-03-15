@@ -99,7 +99,7 @@ export default function JazzFormAndHeaderExtended<T>({
             setIsDirty(false);
             saveForm(form.getFieldsValue(true));
           })
-          .catch(noop)
+          .catch(checkErrors)
       }
       onKeyDown={(event) => {
         const target = event.target as HTMLInputElement;

@@ -75,6 +75,15 @@ function preisprofileInitial(): Preisprofil[] {
   ];
 }
 
+function sortKontakte(kontakte?: Kontakt[]) {
+  if (!kontakte) {
+    return [];
+  }
+  return map(kontakte, (kontakt: Kontakt) => new Kontakt(kontakt)).sort((a: Kontakt, b: Kontakt) =>
+    a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
+  );
+}
+
 export default class OptionValues {
   id = "instance";
   hotelpreise: Hotelpreise[] = [];
@@ -112,11 +121,11 @@ export default class OptionValues {
           }
           return a.regulaer > b.regulaer ? 1 : -1;
         }),
-        typenPlus: (object.typenPlus ?? [])
-          //.map((typ: string) => ({ name: typ, color: colorForTyp(typ) }))
-          .sort((a: TypMitMehr, b: TypMitMehr) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase())),
-        agenturen: map(object.agenturen, (agentur: Kontakt) => new Kontakt(agentur)),
-        hotels: map(object.hotels, (hotel: Kontakt) => new Kontakt(hotel)),
+        typenPlus: (object.typenPlus ?? []).sort((a: TypMitMehr, b: TypMitMehr) =>
+          a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
+        ),
+        agenturen: sortKontakte(object.agenturen),
+        hotels: sortKontakte(object.hotels),
       });
     }
   }

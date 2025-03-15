@@ -3,100 +3,15 @@ import { optionen as optionenLoader, saveOptionen } from "@/rest/loader.ts";
 import * as React from "react";
 import { useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
-import { Col, Tabs, TabsProps } from "antd";
+import { Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
-import Collapsible from "@/widgets/Collapsible.tsx";
-import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "../content/JazzFormAndHeader";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
-import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { NumberInput } from "@/widgets/numericInputWidgets";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
-
-function TabOptionen({ optionen }: { readonly optionen: OptionValues }) {
-  const { lg } = useBreakpoint();
-
-  const columnsTypen: Columns[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", width: "150px" },
-    { type: "boolean", title: "Master", dataIndex: "mod" },
-    { type: "boolean", title: "Kasse1", dataIndex: "kasseV" },
-    { type: "boolean", title: "Kasse2", dataIndex: "kasse" },
-    { type: "boolean", title: "Tech1", dataIndex: "technikerV" },
-    { type: "boolean", title: "Tech2", dataIndex: "techniker" },
-    { type: "boolean", title: "Merch", dataIndex: "merchandise" },
-    { type: "color", title: "Farbe", dataIndex: "color" },
-  ];
-
-  const columnsPreisprofile: Columns[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
-    { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
-    { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
-    { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
-  ];
-
-  return (
-    <>
-      <JazzRow>
-        <Col lg={12} xs={24}>
-          <Collapsible label="Typen" noTopBorder suffix="allgemeines">
-            <EditableTable<{
-              name: string;
-              mod: boolean;
-              kasseV: boolean;
-              kasse: boolean;
-              technikerV: boolean;
-              techniker: boolean;
-              merchandise: boolean;
-              color: string;
-            }>
-              columnDescriptions={columnsTypen}
-              name="typenPlus"
-              newRowFactory={(val) => {
-                return Object.assign({}, val);
-              }}
-            />
-          </Collapsible>
-          <Collapsible label="Optionen" suffix="allgemeines">
-            <MultiSelectWithTags label="Kooperationen" name="kooperationen" options={optionen.kooperationen} />
-            <MultiSelectWithTags label="Genres" name="genres" options={optionen.genres} />
-            <NumberInput decimals={2} label="Standardpreis Klavierstimmer" name="preisKlavierstimmer" suffix="€" />
-            <p>
-              <b>
-                Achtung! Änderungen am Preis wirken sich NICHT auf bereits angelegte Veranstaltungen aus, die einen Preis gesetzt haben!
-              </b>
-            </p>
-          </Collapsible>
-        </Col>
-        <Col lg={12} xs={24}>
-          <Collapsible label="Preisprofile" noTopBorder={lg} suffix="ausgaben">
-            <p>
-              <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
-            </p>
-            <EditableTable<{ name: string; regulaer: number; rabattErmaessigt: number; rabattMitglied: number }>
-              columnDescriptions={columnsPreisprofile}
-              name="preisprofile"
-              newRowFactory={(val) => {
-                return Object.assign({ regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 }, val);
-              }}
-            />
-          </Collapsible>
-        </Col>
-      </JazzRow>
-      <JazzRow>
-        <Col span={24}>
-          <Collapsible label="Backlines" suffix="technik">
-            <MultiSelectWithTags label="Jazzclub" name="backlineJazzclub" options={optionen.backlineJazzclub} />
-            <MultiSelectWithTags label="Rockshop" name="backlineRockshop" options={optionen.backlineRockshop} />
-          </Collapsible>
-        </Col>
-      </JazzRow>
-    </>
-  );
-}
+import TabOptionen from "@/components/options/TabOptionen.tsx";
+import TabArtists from "@/components/options/TabArtists.tsx";
+import TabHotels from "@/components/options/TabHotels.tsx";
 
 function TabLabel({ activePage, title, type }: { readonly activePage: string; readonly type: string; readonly title: string }) {
   const { color } = colorsAndIconsForSections;
@@ -131,20 +46,17 @@ export default function Optionen() {
     {
       key: "optionen",
       label: <TabLabel activePage={activePage} title="Optionen" type="optionen" />,
-      children: <TabOptionen optionen={data ?? new OptionValues()} />,
+      children: <TabOptionen />,
     },
     {
       key: "artists",
       label: <TabLabel activePage={activePage} title="Künstler" type="artists" />,
-      children: (
-        <JazzRow>
-          <Col span={24}>
-            <Collapsible label="Künstler" noTopBorder suffix="allgemeines">
-              <MultiSelectWithTags label="Künstler" name="artists" options={data?.artists ?? []} />
-            </Collapsible>
-          </Col>
-        </JazzRow>
-      ),
+      children: <TabArtists />,
+    },
+    {
+      key: "hotels",
+      label: <TabLabel activePage={activePage} title="Hotels" type="hotels" />,
+      children: <TabHotels />,
     },
   ];
 

@@ -18,4 +18,4 @@ export type Columns = {
   uniqueValues?: boolean;
 };
 
-export type ColType = "color" | "user" | "date" | "startEnd" | "text" | "integer" | "boolean";
+export type ColType = "color" | "user" | "date" | "startEnd" | "text" | "integer" | "twoDecimals" | "boolean";
