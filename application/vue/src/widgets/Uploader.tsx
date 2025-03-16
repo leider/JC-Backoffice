@@ -42,7 +42,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
     try {
       const newVeranstaltung = await uploadFile(formData);
       setFileList([]);
-      const strings = name.reduce((prev, curr) => prev[curr], newVeranstaltung);
+      const strings = name.reduce((prev, curr) => (prev as any)[curr], newVeranstaltung);
       form.setFieldValue(name, strings);
     } catch {
       // eslint-disable-next-line no-console

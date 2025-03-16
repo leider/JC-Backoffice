@@ -72,4 +72,9 @@ app.post("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
   resToJson(res, users);
 });
 
+app.get("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
+  const users = userstore.allUsers();
+  resToJson(res, map(users, "withoutPass"));
+});
+
 export default app;

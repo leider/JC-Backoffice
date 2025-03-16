@@ -1,5 +1,6 @@
 import Accessrights from "./accessrights.js";
 import isNil from "lodash/isNil.js";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export type KannSection = "Kasse" | "Ton" | "Licht" | "Master" | "Ersthelfer";
 
@@ -49,9 +50,8 @@ export default class User {
     return result;
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSONWithoutPass(): any {
-    const result = this.toJSON();
+  get withoutPass() {
+    const result = cloneDeep(this);
     delete result.hashedPassword;
     delete result.salt;
     return result;
