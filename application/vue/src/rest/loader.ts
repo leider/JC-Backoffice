@@ -122,12 +122,7 @@ export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRi
 }
 
 export async function saveKonzert(konzert: Konzert) {
-  const result = await post({
-    url: "/rest/konzert",
-    data: konzert.toJSON(),
-
-    resType: konzert,
-  });
+  const result = await post({ url: "/rest/konzert", data: konzert });
   return new Konzert(result);
 }
 
@@ -193,7 +188,7 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
 }
 
 export async function saveVermietung(vermietung: Vermietung) {
-  const result = await post({ url: "/rest/vermietung", data: vermietung.toJSON(), resType: vermietung });
+  const result = await post({ url: "/rest/vermietung", data: vermietung });
   return new Vermietung(result);
 }
 
@@ -217,20 +212,20 @@ export async function allUsers(): Promise<User[]> {
 }
 
 export async function saveUser(user: User) {
-  const result = await post({ url: "/rest/user", data: user.toJSON(), resType: user });
+  const result = await post({ url: "/rest/user", data: user });
   return new User(result);
 }
 
 export async function deleteUser(user: User) {
-  return loeschen({ url: "/rest/user", data: user.toJSON() });
+  return loeschen({ url: "/rest/user", data: user });
 }
 
 export async function saveNewUser(user: User) {
-  return standardFetch({ method: "PUT", url: "/rest/user", data: user.toJSON() });
+  return standardFetch({ method: "PUT", url: "/rest/user", data: user });
 }
 
 export async function changePassword(user: User) {
-  const result = await post({ url: "/rest/user/changePassword", data: user.toJSON(), resType: user });
+  const result = await post({ url: "/rest/user/changePassword", data: user });
   return new User(result);
 }
 
@@ -259,21 +254,21 @@ export async function saveRider(rider: Rider) {
 // Optionen & Termine
 export async function optionen(): Promise<OptionValues> {
   const result = await get({ url: "/rest/optionen", resType: new OptionValues() });
-  return result ? new OptionValues(result) : result;
+  return new OptionValues(result);
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  const result = await post({ url: "/rest/optionen", data: optionen.toJSON(), resType: optionen });
+  const result = await post({ url: "/rest/optionen", data: optionen });
   return new OptionValues(result);
 }
 
 export async function orte() {
   const result = await get({ url: "/rest/orte", resType: new Orte() });
-  return result ? new Orte(result) : result;
+  return new Orte(result);
 }
 
 export async function saveOrte(orte: Orte) {
-  const result = await post({ url: "/rest/orte", data: orte.toJSON(), resType: orte });
+  const result = await post({ url: "/rest/orte", data: orte });
   return new Orte(result);
 }
 

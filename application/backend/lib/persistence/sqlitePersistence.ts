@@ -5,6 +5,7 @@ import User from "jc-shared/user/user.js";
 import { areDifferentForHistoryEntries } from "jc-shared/commons/comparingAndTransforming.js";
 import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
+import isString from "lodash/isString.js";
 
 export const db = new Database(conf.sqlitedb);
 const scriptLogger = loggers.get("scripts");
@@ -14,8 +15,11 @@ function asSqliteString(obj: object) {
   return `${escape(JSON.stringify(obj))}`;
 }
 
-export function escape(str = "") {
-  return `'${str.replaceAll("'", "''")}'`;
+export function escape(str: string | Date = "") {
+  if (isString(str)) {
+    return `'${str.replaceAll("'", "''")}'`;
+  }
+  return `'${str.toJSON().replaceAll("'", "''")}'`;
 }
 
 export function execWithTry(command: string) {
@@ -93,11 +97,10 @@ class Persistence {
     return ["id", "data"].concat(this.extraCols);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private createValsForSave(object: { [ind: string]: any } & { id: string }) {
+  private createValsForSave(object: { [ind: string]: string | Date } & { id: string }) {
     return [escape(object.id), asSqliteString(object)].concat(
       map(this.extraCols, (col) => {
-        return object[col]?.toJSON ? escape(object[col].toJSON()) : escape(object[col]);
+        return escape(object[col]);
       }),
     );
   }

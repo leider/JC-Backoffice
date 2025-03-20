@@ -9,11 +9,6 @@ export default class Presse {
   checked = false;
   jazzclubURL = "";
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Presse>) {
     if (object && keys(object).length) {
       Object.assign(this, object, {

@@ -50,11 +50,6 @@ export default class Kosten {
   tontechniker = 0;
   lichttechniker = 0;
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Kosten>) {
     if (object && keys(object).length) {
       Object.assign(this, object);

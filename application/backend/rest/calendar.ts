@@ -18,7 +18,7 @@ import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
-import { identity } from "lodash";
+import identity from "lodash/identity.js";
 
 const app = express();
 

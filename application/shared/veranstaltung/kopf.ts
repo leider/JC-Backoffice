@@ -20,11 +20,6 @@ export default class Kopf {
   kannAufHomePage = false;
   kannInSocialMedia = false;
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Kopf>) {
     if (object && keys(object).length) {
       Object.assign(this, object);

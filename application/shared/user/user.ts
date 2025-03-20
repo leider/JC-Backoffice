@@ -43,15 +43,9 @@ export default class User {
     });
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    const result = Object.assign({}, this);
-    delete result.accessrightsTransient;
-    return result;
-  }
-
   get withoutPass() {
     const result = cloneDeep(this);
+    delete result.accessrightsTransient;
     delete result.hashedPassword;
     delete result.salt;
     return result;
@@ -105,10 +99,7 @@ export default class User {
   }
 
   get accessrights(): Accessrights {
-    if (!this.accessrightsTransient) {
-      this.accessrightsTransient = new Accessrights(this);
-    }
-    return this.accessrightsTransient;
+    return new Accessrights(this);
   }
 
   get asUserAsOption() {

@@ -42,6 +42,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
     try {
       const newVeranstaltung = await uploadFile(formData);
       setFileList([]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const strings = name.reduce((prev, curr) => (prev as any)[curr], newVeranstaltung);
       form.setFieldValue(name, strings);
     } catch {

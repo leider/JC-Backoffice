@@ -140,11 +140,6 @@ export default class MailRule {
     return new MailRule(object);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: Partial<MailRule>) {
     if (object) {
       Object.assign(this, object);
