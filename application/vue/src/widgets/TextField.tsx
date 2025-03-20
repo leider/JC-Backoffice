@@ -52,7 +52,6 @@ type TTextField = {
   readonly style?: React.CSSProperties;
   readonly save?: (keepEditing?: boolean) => void;
   readonly focus?: boolean;
-  readonly multiline?: boolean;
 };
 
 /**
@@ -71,7 +70,6 @@ export function TextField({
   style,
   save,
   focus,
-  multiline,
 }: TTextField): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
@@ -103,7 +101,7 @@ export function TextField({
       trigger="onText"
       valuePropName="textVal"
     >
-      <TextInputEmbedded disabled={disabled} focus={focus} multiline={multiline} onChange={onChange} save={save} />
+      <TextInputEmbedded disabled={disabled} focus={focus} onChange={onChange} save={save} />
     </AntdForm.Item>
   );
 }
@@ -116,10 +114,9 @@ type TTextInputEmbedded = {
   readonly onChange?: (value: string | null) => void;
   readonly save?: (keepEditing?: boolean) => void;
   readonly focus?: boolean;
-  readonly multiline?: boolean;
 };
 
-function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focus, multiline }: TTextInputEmbedded) {
+function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focus }: TTextInputEmbedded) {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -135,24 +132,7 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
     }
   }, [focus]);
 
-  return multiline ? (
-    <Input.TextArea
-      autoComplete="off"
-      autoSize
-      disabled={disabled}
-      id={id}
-      onBlur={({ target: { value: nextValue } }) => {
-        changed(nextValue, true);
-        save?.();
-      }}
-      onChange={({ target: { value: nextValue } }) => {
-        changed(nextValue);
-      }}
-      onPressEnter={() => save?.()}
-      ref={inputRef}
-      value={textVal}
-    />
-  ) : (
+  return (
     <Input
       autoComplete="off"
       disabled={disabled}
@@ -163,6 +143,7 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
       }}
       onChange={({ target: { value: nextValue } }) => {
         changed(nextValue);
+        save?.(true);
       }}
       onPressEnter={() => save?.()}
       ref={inputRef}

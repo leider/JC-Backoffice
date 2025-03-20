@@ -18,12 +18,10 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
     switch (type) {
       case "boolean":
         return function BooleanCol(val: boolean) {
-          return (
-            <IconForSmallBlock
-              color={val ? token.colorSuccess : token.colorFillSecondary}
-              iconName={val ? "CheckSquareFill" : "Square"}
-              size={isCompactMode ? 14 : undefined}
-            />
+          return val ? (
+            <IconForSmallBlock color={token.colorSuccess} iconName="CheckSquareFill" size={isCompactMode ? 14 : undefined} />
+          ) : (
+            <IconForSmallBlock color={token.colorFillSecondary} iconName="Square" size={isCompactMode ? 14 : undefined} />
           );
         };
       case "integer":
@@ -100,12 +98,12 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
       default:
         return function DefaultCol(val: string | null) {
           if (val) {
-            return <Typography.Text style={{ whiteSpace: "pre-wrap" }}>{val}</Typography.Text>;
+            return val;
           }
           if (required) {
-            return <Typography.Text type="danger">Wert eingeben</Typography.Text>;
+            return <Typography.Text type="danger"> Wert eingeben</Typography.Text>;
           }
-          return <Typography.Text type="secondary">{"<Klick ...>"}</Typography.Text>;
+          return "<Klick ...>";
         };
     }
   };

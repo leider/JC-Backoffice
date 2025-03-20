@@ -1,5 +1,6 @@
 import { Form, Table, type TableProps, Typography } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
+import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
@@ -31,7 +32,14 @@ interface EditableTableProps<T> {
 }
 
 function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>) {
-  return <tr {...props} />;
+  const [form] = Form.useForm();
+  return (
+    <Form component={false} form={form}>
+      <EditableContext.Provider value={form}>
+        <tr {...props} />
+      </EditableContext.Provider>
+    </Form>
+  );
 }
 
 function InnerTable<T>({
@@ -40,40 +48,27 @@ function InnerTable<T>({
   columnDescriptions,
   usersWithKann,
   newRowFactory,
-  surroundingName,
 }: {
   readonly value?: T[];
   readonly onChange?: (val?: T[]) => void;
   readonly columnDescriptions?: Columns[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (val: T) => T;
-  readonly surroundingName: NamePath;
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
   const [rows, setRows] = useState<TWithKey[]>([]);
 
   useEffect(() => {
-    const changes = compact(map(rows, (row, idx) => (row === value?.[idx] ? undefined : idx)));
-    if (rows.length && changes.length === 0) {
-      return;
-    }
-    if (changes.length === 1 && value) {
-      const idx = changes[0];
-      const changedRow = value[idx];
-      (changedRow as TWithKey).key = "row" + idx;
-      rows.splice(idx, 1, changedRow as TWithKey);
-      return;
-    }
     const withKey: TWithKey[] = map(value, (row, index) => {
       (row as TWithKey).key = "row" + index;
       return row as TWithKey;
     });
     setRows(withKey);
-  }, [rows, value]);
+  }, [value]);
 
   function newKey() {
-    const numbers = map(rows, (row) => Number.parseInt(row.key.replace("row", ""), 10));
+    const numbers = map(rows, (row) => Number.parseInt(row.key.replace("key", ""), 10));
     return Math.max(...numbers) + 1;
   }
 
@@ -82,6 +77,9 @@ function InnerTable<T>({
   };
 
   const handleCopy = (key: React.Key) => {
+    if (!rows) {
+      return;
+    }
     const current = find(rows, { key: key }) as WithKey<T>;
     if (!current) {
       return;
@@ -93,8 +91,8 @@ function InnerTable<T>({
   };
 
   const handleAdd = () => {
-    const newData = newRowFactory({} as T) as TWithKey;
-    newData.key = "" + newKey();
+    const newData = newRowFactory({} as T);
+    (newData as TWithKey).key = "" + newKey();
     onChange?.([newData, ...rows]);
   };
 
@@ -105,7 +103,7 @@ function InnerTable<T>({
     const newRow = newRowFactory({ ...row, ...field });
     (newRow as TWithKey).key = row.key;
     newData.splice(index, 1, newRow as TWithKey);
-    setRows(newData);
+    onChange?.(newData);
   };
 
   const renderByType = useColumnRenderer(usersWithKann);
@@ -143,8 +141,6 @@ function InnerTable<T>({
       width: widthForType(item),
       min: item.min,
       initialValue: item.initialValue,
-      surroundingName,
-      multiline: item.multiline,
     };
   });
 
@@ -197,8 +193,6 @@ function InnerTable<T>({
         width: col.width,
         min: col.min,
         initialValue: col.initialValue,
-        surroundingName,
-        multiline: col.multiline,
       }),
     };
   });
@@ -289,15 +283,9 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
         name={name}
         rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
         trigger="onChange"
-        validateDebounce={500}
         valuePropName="value"
       >
-        <InnerTable<T>
-          columnDescriptions={columnDescriptions}
-          newRowFactory={newRowFactory}
-          surroundingName={name}
-          usersWithKann={usersWithKann}
-        />
+        <InnerTable<T> columnDescriptions={columnDescriptions} newRowFactory={newRowFactory} usersWithKann={usersWithKann} />
       </Form.Item>
     </>
   );
