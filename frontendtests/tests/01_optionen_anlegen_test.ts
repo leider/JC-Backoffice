@@ -14,13 +14,13 @@ Scenario("Erzeuge Typen und Orte", ({ I }) => {
   I.amOnPage("/vue/orte");
   I.click(`(//button[@data-testid="add-in-table"])`);
   I.click('div[data-testid="name0"]');
-  I.fillField("#orte_0_name", "Jazzclub");
+  I.fillField("#name", "Jazzclub");
   I.pressKey("Tab");
-  I.fillField("#orte_0_flaeche", "300");
+  I.fillField("#flaeche", "300");
   I.pressKey("Tab");
-  I.fillField("#orte_0_pressename", "Jazzclub");
+  I.fillField("#pressename", "Jazzclub");
   I.pressKey("Tab");
-  I.fillField("#orte_0_presseIn", "Im Jazzclub");
+  I.fillField("#presseIn", "Im Jazzclub");
   I.pressKey("Enter");
   I.click("Speichern");
 });
