@@ -35,6 +35,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   min,
   index,
   initialValue,
+  multiline,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) {
   const [editing, setEditing] = useState(false);
@@ -42,9 +43,11 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   const { endEdit } = useTableContext();
   const { isCompactMode } = useJazzContext();
 
-  const ref = useRef<any>(null); // eslint-disable-line  @typescript-eslint/no-explicit-any
+  const ref = useRef<HTMLElement>(null);
 
   const form = useContext(EditableContext)!;
+
+  const [backupVal, setBackupVal] = useState<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   useEffect(() => {
     if (editing) {
@@ -54,8 +57,12 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
 
   const save = async (keepEditing?: boolean) => {
     try {
-      const values = await form.validateFields();
+      const values: any = await form.validateFields(); // eslint-disable-line @typescript-eslint/no-explicit-any
       !keepEditing && toggleEdit();
+      setBackupVal(undefined);
+      if (backupVal[dataIndex] === values[dataIndex]) {
+        return;
+      }
       handleSave(record, values);
     } catch {
       /* empty */
@@ -105,6 +112,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
       });
     }
     setEditing(willNowEdit);
+    setBackupVal({ [dataIndex]: record[dataIndex] });
     form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   }
 
@@ -155,7 +163,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
       Widget = filters ? (
         <SingleSelect focus name={dataIndex} options={filters} required={required} save={save} />
       ) : (
-        <TextField focus name={dataIndex} required={required} save={save} />
+        <TextField focus multiline={multiline} name={dataIndex} required={required} save={save} />
       );
       break;
   }

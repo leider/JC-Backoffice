@@ -1,5 +1,5 @@
 import { Form, Table, type TableProps, Typography } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
@@ -44,13 +44,13 @@ function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTab
 
 function InnerTable<T>({
   value,
-  onChange,
+  onTable,
   columnDescriptions,
   usersWithKann,
   newRowFactory,
 }: {
   readonly value?: T[];
-  readonly onChange?: (val?: T[]) => void;
+  readonly onTable?: (val?: T[]) => void;
   readonly columnDescriptions?: Columns[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (val: T) => T;
@@ -73,7 +73,7 @@ function InnerTable<T>({
   }
 
   const handleDelete = (key: React.Key) => {
-    onChange?.(reject(rows, ["key", key]));
+    onTable?.(reject(rows, ["key", key]));
   };
 
   const handleCopy = (key: React.Key) => {
@@ -86,25 +86,28 @@ function InnerTable<T>({
     }
     const copied = cloneDeep(current);
     copied.key = "" + newKey();
-    rows.splice(rows.indexOf(current), 0, copied);
-    onChange?.(rows);
+    const clone = cloneDeep(rows);
+    clone.splice(clone.indexOf(current), 0, copied);
+    onTable?.(clone);
   };
 
   const handleAdd = () => {
     const newData = newRowFactory({} as T);
     (newData as TWithKey).key = "" + newKey();
-    onChange?.([newData, ...rows]);
+    onTable?.([newData, ...rows]);
   };
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSave = (row: TWithKey, field: any) => {
-    const newData = [...(rows ?? [])];
-    const index = findIndex(newData, ["key", row.key]);
-    const newRow = newRowFactory({ ...row, ...field });
-    (newRow as TWithKey).key = row.key;
-    newData.splice(index, 1, newRow as TWithKey);
-    onChange?.(newData);
-  };
+  const handleSave = useCallback(
+    (row: TWithKey, field: object) => {
+      const newData = [...(rows ?? [])];
+      const index = findIndex(newData, ["key", row.key]);
+      const newRow = newRowFactory({ ...row, ...field });
+      (newRow as TWithKey).key = row.key;
+      newData.splice(index, 1, newRow as TWithKey);
+      onTable?.(newData);
+    },
+    [newRowFactory, onTable, rows],
+  );
 
   const renderByType = useColumnRenderer(usersWithKann);
 
@@ -124,25 +127,30 @@ function InnerTable<T>({
     }
   }
 
-  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & Columns)[] = map(columnDescriptions, (item, index) => {
-    return {
-      editable: item.editable ?? true,
-      dataIndex: item.dataIndex,
-      title: item.title,
-      type: item.type,
-      index: index,
-      required: item.required,
-      filters: item.filters,
-      presets: item.presets,
-      usersWithKann: usersWithKann,
-      render: renderByType(item),
-      align: item.type === "integer" ? "end" : item.type === "boolean" ? "center" : "start",
-      onCell: undefined,
-      width: widthForType(item),
-      min: item.min,
-      initialValue: item.initialValue,
-    };
-  });
+  const defaultColumns: (Omit<ColumnTypes[number], "filters"> & Columns)[] = useMemo(
+    () =>
+      map(columnDescriptions, (item, index) => {
+        return {
+          editable: item.editable ?? true,
+          dataIndex: item.dataIndex,
+          title: item.title,
+          type: item.type,
+          index: index,
+          required: item.required,
+          filters: item.filters,
+          presets: item.presets,
+          usersWithKann: usersWithKann,
+          render: renderByType(item),
+          align: item.type === "integer" ? "end" : item.type === "boolean" ? "center" : "start",
+          onCell: undefined,
+          width: widthForType(item),
+          min: item.min,
+          initialValue: item.initialValue,
+          multiline: item.multiline,
+        };
+      }),
+    [columnDescriptions, renderByType, usersWithKann],
+  );
 
   const addButton = (
     <ButtonWithIcon
@@ -171,31 +179,36 @@ function InnerTable<T>({
     },
   };
 
-  const columns = map(defaultColumns, (col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      filters: undefined, // disable filter dropdown
-      onCell: (record: TWithKey) => ({
-        index: rows.indexOf(record),
-        record,
-        editable: col.editable,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        handleSave,
-        type: col.type,
-        required: col.required,
-        presets: col.presets,
-        filters: col.filters,
-        usersWithKann: col.usersWithKann,
-        width: col.width,
-        min: col.min,
-        initialValue: col.initialValue,
+  const columns = useMemo(
+    () =>
+      map(defaultColumns, (col) => {
+        if (!col.editable) {
+          return col;
+        }
+        return {
+          ...col,
+          filters: undefined, // disable filter dropdown
+          onCell: (record: TWithKey) => ({
+            index: rows.indexOf(record),
+            record,
+            editable: col.editable,
+            dataIndex: col.dataIndex,
+            title: col.title,
+            handleSave,
+            type: col.type,
+            required: col.required,
+            presets: col.presets,
+            filters: col.filters,
+            usersWithKann: col.usersWithKann,
+            width: col.width,
+            min: col.min,
+            initialValue: col.initialValue,
+            multiline: col.multiline,
+          }),
+        };
       }),
-    };
-  });
+    [defaultColumns, handleSave, rows],
+  );
 
   const hidePagination = useMemo(() => rows.length < 50, [rows.length]);
 
@@ -209,7 +222,7 @@ function InnerTable<T>({
         components={components}
         dataSource={rows}
         pagination={{ position: ["topRight"], defaultPageSize: 50, hideOnSinglePage: hidePagination }}
-        scroll={{ y: 500 }}
+        scroll={{ y: "60vh" }}
         size="small"
       />
     </TableContext.Provider>
@@ -282,7 +295,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       <Form.Item
         name={name}
         rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
-        trigger="onChange"
+        trigger="onTable"
         valuePropName="value"
       >
         <InnerTable<T> columnDescriptions={columnDescriptions} newRowFactory={newRowFactory} usersWithKann={usersWithKann} />

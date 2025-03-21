@@ -24,7 +24,7 @@ export default function TabHotels() {
 
   const columnsAdresse: Columns[] = [
     { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
-    { type: "text", title: "Adresse", dataIndex: "adresse" },
+    { type: "text", title: "Adresse", dataIndex: "adresse", multiline: true },
     { type: "text", title: "E-Mail", dataIndex: "email" },
     { type: "text", title: "Telefon", dataIndex: "telefon" },
     { type: "text", title: "Ansprechpartner", dataIndex: "ansprechpartner" },
