@@ -23,7 +23,7 @@ export default {
   },
 
   save: function save(termin: Termin, user: User) {
-    persistence.save(termin.toJSON(), user);
+    persistence.save(termin, user);
     return termin;
   },
 

@@ -7,7 +7,7 @@ import map from "lodash/map.js";
 
 const receiver = "leider";
 
-export type JobType = "Programmheft" | "Presse" | "Kasse" | "Bar" | "Photo" | "Fluegel" | "TextFehlt" | "Staff";
+export type JobType = "Programmheft" | "Presse" | "Kasse" | "Bar" | "Photo" | "Fluegel" | "TextFehlt" | "Staff" | "Master";
 
 export async function informAdmin(allResults: { type: JobType; jobResult: JobResult }[]) {
   const user = userstore.forId(receiver);

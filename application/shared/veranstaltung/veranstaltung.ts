@@ -56,8 +56,6 @@ export default abstract class Veranstaltung {
     }
   }
 
-  abstract toJSON(): object;
-
   abstract get isVermietung(): boolean;
 
   get fullyQualifiedUrl(): string {

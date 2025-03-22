@@ -15,10 +15,6 @@ export default class Artist {
   getInForMasterDate?: Date;
   bandTransport?: BandTransport;
 
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: Omit<Artist, "getInForMasterDate"> & { getInForMasterDate: string | Date }) {
     if (object && keys(object).length !== 0) {
       const getIn = Misc.stringOrDateToDate(object.getInForMasterDate);

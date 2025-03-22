@@ -6,7 +6,6 @@ import toLower from "lodash/fp/toLower.js";
 import prop from "lodash/fp/prop.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import map from "lodash/map.js";
-import invokeMap from "lodash/invokeMap.js";
 
 const sortByNameCaseInsensitive = sortBy(flowRight(toLower, prop("name")));
 
@@ -22,21 +21,11 @@ export class Ort {
       Object.assign(this, object);
     }
   }
-
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
 }
 
 export default class Orte {
   id = "orte";
   orte: Ort[] = [];
-
-  toJSON(): object {
-    return Object.assign({}, this, {
-      orte: invokeMap(this.orte, "toJSON"),
-    });
-  }
 
   constructor(object?: RecursivePartial<Orte>) {
     if (object && object.orte) {

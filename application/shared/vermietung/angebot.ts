@@ -31,11 +31,6 @@ export default class Angebot {
   freigabeAm?: Date;
   rechnungsnummer?: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: Omit<Angebot, "freigabeAm"> & { freigabeAm?: Date | string }) {
     if (object && keys(object).length) {
       Object.assign(this, object, {

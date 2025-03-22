@@ -18,11 +18,6 @@ export default class Unterkunft {
   anreiseDate: Date;
   abreiseDate: Date;
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(
     object:
       | RecursivePartial<

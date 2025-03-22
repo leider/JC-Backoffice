@@ -20,11 +20,6 @@ export default class Vertrag {
     return ["Deutsch", "Englisch", "Regional"];
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Vertrag>) {
     if (object && keys(object).length !== 0) {
       Object.assign(this, object, {

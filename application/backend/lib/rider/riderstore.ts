@@ -12,7 +12,7 @@ export default {
   },
 
   saveRider: function saveRider(object: Rider, user: User) {
-    persistence.save(object.toJSON() as Rider, user);
+    persistence.save(object, user);
     return object;
   },
 };

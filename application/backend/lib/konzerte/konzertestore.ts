@@ -60,8 +60,7 @@ export default {
   },
 
   saveKonzert(konzert: Konzert, user: User) {
-    const object = konzert.toJSON();
-    persistence.save(object as { id: string }, user);
+    persistence.save(konzert as { id: string }, user);
     return konzert;
   },
 

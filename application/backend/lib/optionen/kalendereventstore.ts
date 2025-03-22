@@ -12,7 +12,7 @@ export default {
   },
 
   save: function save(event: KalenderEvents) {
-    persistence.save(event.toJSON(), new User({ name: "System" }));
+    persistence.save(event, new User({ name: "System" }));
     return event;
   },
 };

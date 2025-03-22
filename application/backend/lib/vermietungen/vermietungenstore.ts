@@ -60,8 +60,7 @@ export default {
   },
 
   saveVermietung: function saveVermietung(vermietung: Vermietung, user: User) {
-    const object = vermietung.toJSON();
-    persistence.save(object as { id: string }, user);
+    persistence.save(vermietung as { id: string }, user);
     return vermietung;
   },
 

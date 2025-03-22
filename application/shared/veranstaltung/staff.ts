@@ -22,10 +22,6 @@ export default class Staff {
   merchandiseNotNeeded = true;
   ersthelferNotNeeded = false;
 
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Staff>) {
     if (object && keys(object).length) {
       Object.assign(this, object, {

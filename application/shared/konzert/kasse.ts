@@ -64,10 +64,6 @@ export default class Kasse {
     "10000": undefined,
   };
   endbestandGezaehltEUR = 0;
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
 
   constructor(object?: RecursivePartial<Omit<Kasse, "kassenfreigabeAm"> & { kassenfreigabeAm?: Date | string }>) {
     if (object && keys(object).length !== 0) {

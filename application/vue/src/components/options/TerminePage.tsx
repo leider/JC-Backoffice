@@ -6,7 +6,6 @@ import { Col } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
-import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
@@ -22,9 +21,6 @@ class TermineWrapper {
       beschreibung: termin.beschreibung ?? "",
       typ: termin.typ,
     }));
-  }
-  toJSON(): object {
-    return cloneDeep(this);
   }
 }
 

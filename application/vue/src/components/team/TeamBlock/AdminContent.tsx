@@ -15,6 +15,7 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useInView } from "react-intersection-observer";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
+import cloneDeep from "lodash/cloneDeep";
 
 type ButtonsProps = {
   readonly dirty: boolean;
@@ -68,10 +69,10 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
   }, [veranstaltung]);
 
   const setFormValue = useCallback(() => {
-    const deepCopy = veranstaltung.toJSON();
+    const deepCopy = cloneDeep(veranstaltung);
     form.resetFields();
     form.setFieldsValue(deepCopy);
-    setInitialValue(veranstaltung.toJSON());
+    setInitialValue(cloneDeep(veranstaltung));
     setDirty(false);
   }, [form, veranstaltung]);
 

@@ -10,11 +10,6 @@ export default class Technik {
   checked = false;
   fluegel = false;
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Technik>) {
     if (object && keys(object).length) {
       Object.assign(this, object, {

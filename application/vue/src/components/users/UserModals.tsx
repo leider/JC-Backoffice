@@ -13,6 +13,7 @@ import { useWatch } from "antd/es/form/Form";
 import isNil from "lodash/isNil";
 import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import cloneDeep from "lodash/cloneDeep";
 
 export function ChangePasswordModal({
   isOpen,
@@ -36,7 +37,7 @@ export function ChangePasswordModal({
   });
 
   useEffect(() => {
-    form.setFieldsValue(user.toJSONWithoutPass());
+    form.setFieldsValue(cloneDeep(user));
   }, [form, user]);
   async function saveForm() {
     form.validateFields().then(async () => {
@@ -137,9 +138,9 @@ export function EditUserModal({
   const [dirty, setDirty] = useState<boolean>(false);
 
   function initializeForm() {
-    const deepCopy = user.toJSONWithoutPass();
+    const deepCopy = cloneDeep(user);
     form.setFieldsValue(deepCopy);
-    const initial = user.toJSONWithoutPass();
+    const initial = cloneDeep(user);
     setInitialValue(initial);
     setDirty(areDifferent(initial, deepCopy));
     form.validateFields();

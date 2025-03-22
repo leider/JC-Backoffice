@@ -21,7 +21,7 @@ export default {
   },
 
   save: function save(mailRule: MailRule, user: User) {
-    persistence.save(mailRule.toJSON(), user);
+    persistence.save(mailRule, user);
     return mailRule;
   },
 

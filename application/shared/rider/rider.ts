@@ -19,10 +19,6 @@ export class Rider {
       boxes: object?.boxes || [],
     });
   }
-
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
 }
 
 export class PrintableBox implements BoxParams {

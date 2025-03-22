@@ -45,7 +45,7 @@ export default function WikiPage() {
   }, [data]);
 
   const mutateContent = useJazzMutation({
-    saveFunction: (content: string) => saveWikiPage(subdir!, realPage, content),
+    saveFunction: (data: { content: string }) => saveWikiPage(subdir!, realPage, data),
     queryKey: "wiki",
     successMessage: "Die Seite wurde gespeichert",
   });
@@ -73,7 +73,7 @@ export default function WikiPage() {
   }
   function saveForm() {
     form.validateFields().then(async () => {
-      mutateContent.mutate(form.getFieldValue("content"));
+      mutateContent.mutate(form.getFieldsValue(true));
       setWikipage(form.getFieldValue("content"));
     });
   }

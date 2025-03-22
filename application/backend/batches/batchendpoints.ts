@@ -42,7 +42,7 @@ async function nightlyMails() {
     checkMaster(now),
   ]);
 
-  const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar"];
+  const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar", "Master"];
   const typedResults = map(results, (jobResult, index) => ({ type: jobtypes[index], jobResult }));
   return informAdmin(typedResults);
 }

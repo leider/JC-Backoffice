@@ -1,5 +1,6 @@
 import Accessrights from "./accessrights.js";
 import isNil from "lodash/isNil.js";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export type KannSection = "Kasse" | "Ton" | "Licht" | "Master" | "Ersthelfer";
 
@@ -42,16 +43,9 @@ export default class User {
     });
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    const result = Object.assign({}, this);
+  get withoutPass() {
+    const result = cloneDeep(this);
     delete result.accessrightsTransient;
-    return result;
-  }
-
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSONWithoutPass(): any {
-    const result = this.toJSON();
     delete result.hashedPassword;
     delete result.salt;
     return result;
@@ -105,10 +99,7 @@ export default class User {
   }
 
   get accessrights(): Accessrights {
-    if (!this.accessrightsTransient) {
-      this.accessrightsTransient = new Accessrights(this);
-    }
-    return this.accessrightsTransient;
+    return new Accessrights(this);
   }
 
   get asUserAsOption() {

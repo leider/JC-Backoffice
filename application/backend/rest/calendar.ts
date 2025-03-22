@@ -3,7 +3,7 @@ import flatMap from "lodash/flatMap.js";
 
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import { Ical } from "jc-shared/optionen/ferienIcals.js";
-import { TerminFilterOptions } from "jc-shared/optionen/termin.js";
+import { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.js";
 import User from "jc-shared/user/user.js";
 
 import store from "../lib/konzerte/konzertestore.js";
@@ -18,6 +18,7 @@ import kalenderEventsService from "../lib/optionen/kalenderEventsService.js";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.js";
 import map from "lodash/map.js";
 import filter from "lodash/filter.js";
+import identity from "lodash/identity.js";
 
 const app = express();
 
@@ -67,7 +68,7 @@ app.get("/fullcalendarevents.json", async (req, res) => {
 
   const termineForIcals = await Promise.all(map(icals, termineForIcal));
   const events = termine
-    .concat(flatMap(termineForIcals, (x) => x))
+    .concat(flatMap(termineForIcals, identity<TerminEvent[]>))
     .concat(konzerte)
     .concat(vermietungen);
   resToJson(res, events);

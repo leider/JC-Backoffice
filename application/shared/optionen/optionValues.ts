@@ -103,10 +103,6 @@ export default class OptionValues {
     return new OptionValues(object);
   }
 
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: Partial<OptionValues>) {
     if (object) {
       Object.assign(this, object, {

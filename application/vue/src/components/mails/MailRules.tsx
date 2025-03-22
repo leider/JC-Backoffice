@@ -6,20 +6,15 @@ import { Col } from "antd";
 import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
-import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
-import invokeMap from "lodash/invokeMap";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 class MailRulesWrapper {
   allRules: MailRule[] = [];
 
   constructor(rules?: MailRule[]) {
-    this.allRules = invokeMap(rules, "toJSON");
-  }
-  toJSON(): object {
-    return cloneDeep(this);
+    this.allRules = rules ?? [];
   }
 }
 
