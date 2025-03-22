@@ -12,17 +12,15 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import filter from "lodash/filter";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
+type ImageOverviewForm = { with: ImageOverviewRow[]; notFound: ImageOverviewRow[]; unused: ImageOverviewRow[] };
+
 function isChanged(v: ImageOverviewRow) {
   return v.newname !== v.image;
 }
 
 export default function ImageOverview() {
   useDirtyBlocker(false);
-  const [form] = Form.useForm<{
-    with: ImageOverviewRow[];
-    notFound: ImageOverviewRow[];
-    unused: ImageOverviewRow[];
-  }>();
+  const [form] = Form.useForm<ImageOverviewForm>();
 
   const mutateImages = useJazzMutation({
     saveFunction: saveImagenames,
@@ -42,10 +40,8 @@ export default function ImageOverview() {
   }, [form, sections]);
 
   function saveForm() {
-    const formValues = form.getFieldsValue(true);
-    const changedRows: ImageOverviewRow[] = filter(formValues.with, isChanged)
-      .concat(filter(formValues.notFound, isChanged))
-      .concat(filter(formValues.unused, isChanged));
+    const sects: ImageOverviewForm = form.getFieldsValue(true);
+    const changedRows = filter(sects.with.concat(sects.notFound).concat(sects.unused), isChanged);
     form.validateFields().then(async () => {
       mutateImages.mutate(changedRows);
     });

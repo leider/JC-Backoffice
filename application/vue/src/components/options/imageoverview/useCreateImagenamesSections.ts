@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import Konzert, { ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
+import Konzert, { ImageOverviewRow, ImageOverviewVeranstaltung } from "jc-shared/konzert/konzert.ts";
 import uniq from "lodash/uniq";
 import flatMap from "lodash/flatMap";
 import intersection from "lodash/intersection";
@@ -39,7 +39,7 @@ export function useCreateImagenamesSections() {
   );
 
   const toImageOverviewRow = useCallback(
-    (im: string) => ({ image: im, newname: im, veranstaltungen: elementsWithImage(im) }),
+    (im: string) => ({ image: im, newname: im, veranstaltungen: elementsWithImage(im) }) as ImageOverviewRow,
     [elementsWithImage],
   );
 
