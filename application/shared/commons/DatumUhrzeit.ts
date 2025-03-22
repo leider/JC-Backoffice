@@ -13,24 +13,15 @@ import timezone from "dayjs/plugin/timezone.js";
 import conf from "./simpleConfigure.js";
 
 dayjs.extend(customParseFormat);
-
 dayjs.extend(duration);
-
 dayjs.extend(isSameOrBefore);
-
 dayjs.extend(isoWeek);
-
 dayjs.extend(localizedFormat);
-
 dayjs.extend(advancedFormat);
-
 dayjs.extend(weekOfYear);
-
 dayjs.locale("de");
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
 dayjs.tz.setDefault("Europe/Berlin");
 
 export type AdditionOptions = {
