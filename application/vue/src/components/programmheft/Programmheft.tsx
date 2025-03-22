@@ -23,6 +23,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
 import invokeMap from "lodash/invokeMap";
+import sortBy from "lodash/sortBy";
 
 function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   const form = useFormInstance();
@@ -38,9 +39,8 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   const moveEvents = useCallback(
     (offset: number) => {
       function moveEventsBy(events: Event[], options: AdditionOptions) {
-        const result = invokeMap(events, "cloneAndMoveBy", options);
-        result.sort((a, b) => a.start.localeCompare(b.start));
-        return result;
+        const result: Event[] = invokeMap(events, "cloneAndMoveBy", options);
+        return sortBy(result, "start");
       }
 
       const newEvents = moveEventsBy(events, { tage: offset });

@@ -4,6 +4,7 @@ import { Event } from "./Event.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import map from "lodash/map.js";
 import invokeMap from "lodash/invokeMap.js";
+import sortBy from "lodash/sortBy.js";
 
 export default class Kalender {
   id: string;
@@ -31,9 +32,8 @@ export default class Kalender {
     const thisDatum = DatumUhrzeit.forYYYYslashMM(this.id);
     const otherDatum = DatumUhrzeit.forYYYYslashMM(otherKalId);
     const differenz = otherDatum.differenzInMonaten(thisDatum);
-    const result = invokeMap(this.events, "cloneAndMoveBy", { monate: differenz });
-    result.sort((a, b) => a.start.localeCompare(b.start));
-    return result;
+    const result: Event[] = invokeMap(this.events, "cloneAndMoveBy", { monate: differenz });
+    return sortBy(result, ["start"]);
   }
 
   sortEvents() {

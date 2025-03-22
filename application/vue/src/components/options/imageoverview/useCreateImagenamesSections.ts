@@ -8,6 +8,7 @@ import { useQueries } from "@tanstack/react-query";
 import { imagenames as imagenamesQuery, konzerteForTeam } from "@/rest/loader.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
+import sortBy from "lodash/sortBy";
 
 function suitableForImageOverview(veranstaltung: Konzert): ImageOverviewVeranstaltung {
   return {
@@ -46,7 +47,7 @@ export function useCreateImagenamesSections() {
   return useMemo(() => {
     const convertString = (a: string): string => a.replace(/\s/g, "_");
 
-    const imagenamesOfVeranstaltungen = uniq(flatMap(veranstaltungen, "images")).sort() as string[];
+    const imagenamesOfVeranstaltungen = sortBy(uniq(flatMap(veranstaltungen, "images") as string[]));
 
     return {
       with: map(intersection(imagenames, imagenamesOfVeranstaltungen), toImageOverviewRow),

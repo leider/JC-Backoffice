@@ -9,6 +9,7 @@ import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIcons
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { JazzRow } from "@/widgets/JazzRow";
+import sortBy from "lodash/sortBy";
 
 function AddOrRemoveGastButton({
   konzert,
@@ -42,7 +43,7 @@ function AddOrRemoveGastButton({
 }
 
 function GastResList({ source, art, konzert }: { readonly konzert: Konzert; readonly source: NameWithNumber[]; readonly art: GastArt }) {
-  const dataSource = useMemo(() => source.sort((a, b) => a.name.localeCompare(b.name)), [source]);
+  const dataSource = useMemo(() => sortBy(source, "name"), [source]);
   return (
     <List
       dataSource={dataSource}
