@@ -163,7 +163,6 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
       }}
       onChange={({ target: { value: nextValue } }) => {
         changed(nextValue);
-        save?.(true);
       }}
       onPressEnter={() => save?.()}
       ref={inputRef}
