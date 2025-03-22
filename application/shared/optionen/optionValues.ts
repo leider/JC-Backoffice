@@ -106,11 +106,11 @@ export default class OptionValues {
   constructor(object?: Partial<OptionValues>) {
     if (object) {
       Object.assign(this, object, {
-        kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
-        genres: sortByNameCaseInsensitive(object.genres || []),
-        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
-        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
-        artists: sortByNameCaseInsensitive(object.artists || []),
+        kooperationen: sortByNameCaseInsensitive(object.kooperationen),
+        genres: sortByNameCaseInsensitive(object.genres),
+        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub),
+        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop),
+        artists: sortByNameCaseInsensitive(object.artists),
         preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) => {
           if (a.regulaer === b.regulaer) {
             return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
@@ -126,8 +126,13 @@ export default class OptionValues {
     }
   }
 
-  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection: string): void {
-    if (!(selection || "[temporär]").match(/\[temporär]/)) {
+  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection?: string): void {
+    if ("[temporär]" !== selection) {
+      if (!kontakt.name) {
+        // we do nothing if name not given
+        return;
+      }
+
       const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
       remove(ourCollection, (k) => k.name === kontakt.name);
       ourCollection.push(kontakt);
