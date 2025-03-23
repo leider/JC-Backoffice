@@ -14,10 +14,6 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 type ImageOverviewForm = { with: ImageOverviewRow[]; notFound: ImageOverviewRow[]; unused: ImageOverviewRow[] };
 
-function isChanged(v: ImageOverviewRow) {
-  return v.newname !== v.image;
-}
-
 export default function ImageOverview() {
   useDirtyBlocker(false);
   const [form] = Form.useForm<ImageOverviewForm>();
@@ -41,7 +37,7 @@ export default function ImageOverview() {
 
   function saveForm() {
     const sects: ImageOverviewForm = form.getFieldsValue(true);
-    const changedRows = filter(sects.with.concat(sects.notFound).concat(sects.unused), isChanged);
+    const changedRows = filter(sects.with.concat(sects.notFound).concat(sects.unused), (v) => v.newname !== v.image);
     form.validateFields().then(async () => {
       mutateImages.mutate(changedRows);
     });

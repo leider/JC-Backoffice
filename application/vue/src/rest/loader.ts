@@ -73,12 +73,7 @@ export async function uploadFile(data: FormData) {
 }
 
 export async function uploadWikiImage(data: FormData) {
-  return await post({
-    url: "/rest/wiki/upload",
-    data,
-
-    resType: { url: "" },
-  });
+  return await post({ url: "/rest/wiki/upload", data, resType: { url: "" } });
 }
 
 function handleVeranstaltungen(result?: Konzert[]): Konzert[] {
@@ -127,29 +122,19 @@ export async function saveKonzert(konzert: Konzert) {
 }
 
 export async function deleteKonzertWithId(id: string) {
-  return loeschen({
-    url: "/rest/konzert",
-    data: { id },
-  });
+  return loeschen({ url: "/rest/konzert", data: { id } });
 }
 
 // Staff
 export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
-  const result = await post({
-    url: `/rest${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
-    data: { section },
-    resType: veranstaltung,
-  });
+  const action = add ? "addUserToSection" : "removeUserFromSection";
+  const result = await post({ url: `/rest${veranstaltung.fullyQualifiedUrl}/${action}`, data: { section }, resType: veranstaltung });
   return veranstaltung.isVermietung ? new Vermietung(result) : new Konzert(result);
 }
 
 // Gäste
 export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
-  const result = await post({
-    url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`,
-    data: { item, art },
-    resType: konzert,
-  });
+  const result = await post({ url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`, data: { item, art }, resType: konzert });
   return new Konzert(result);
 }
 
@@ -352,10 +337,7 @@ export async function searchWiki(suchtext: string) {
 }
 
 export async function deleteWikiPage(subdir: string, page: string) {
-  return loeschen({
-    url: `/rest/wikipage/${subdir}/${page}`,
-    data: { data: "" },
-  });
+  return loeschen({ url: `/rest/wikipage/${subdir}/${page}`, data: { data: "" } });
 }
 
 // Calendar

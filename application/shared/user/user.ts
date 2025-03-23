@@ -26,7 +26,6 @@ export default class User {
   mailinglisten: string[] = [];
   wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
-  accessrightsTransient?: Accessrights; // transient
 
   kannKasse?: boolean;
   kannTon?: boolean;
@@ -35,7 +34,6 @@ export default class User {
   kannErsthelfer?: boolean;
 
   constructor(object: Partial<User>) {
-    delete this.accessrightsTransient;
     this.id = object.id!;
     Object.assign(this, object, {
       kassenfreigabe: object.kassenfreigabe || object.rechte?.includes("kassenfreigabe"),
@@ -45,7 +43,6 @@ export default class User {
 
   get withoutPass() {
     const result = cloneDeep(this);
-    delete result.accessrightsTransient;
     delete result.hashedPassword;
     delete result.salt;
     return result;
