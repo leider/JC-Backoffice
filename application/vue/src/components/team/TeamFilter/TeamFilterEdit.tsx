@@ -1,12 +1,15 @@
 import { Col, Collapse, CollapseProps, ConfigProvider, Form, FormInstance, Row, Space } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
-import React from "react";
+import React, { useMemo } from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { EventTypeMultiSelect } from "@/widgets/EventTypeSelects/EventTypeMultiSelect.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
+import filter from "lodash/filter";
+import map from "lodash/map";
 
 export function TeamFilterEdit({
   form,
@@ -17,7 +20,11 @@ export function TeamFilterEdit({
   readonly open: boolean;
   readonly setOpen: (open: boolean) => void;
 }) {
-  const { setFilter } = useJazzContext();
+  const { allUsers, setFilter } = useJazzContext();
+
+  // eslint-disable-next-line lodash/prop-shorthand
+  const bookersOnly = useMemo(() => filter(allUsers, (u) => u.accessrights.isBookingTeam), [allUsers]);
+  const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
 
   const items: CollapseProps["items"] = [
     {
@@ -29,6 +36,11 @@ export function TeamFilterEdit({
           <Row gutter={8}>
             <Col span={24}>
               <EventTypeMultiSelect />
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col span={24}>
+              <MitarbeiterMultiSelect label="Booker" name="booker" usersAsOptions={bookersAsOptions} />
             </Col>
           </Row>
           <Row gutter={8}>

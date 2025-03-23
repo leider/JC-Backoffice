@@ -3,6 +3,8 @@ import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";
 import { withoutNullOrUndefinedStrippedBy } from "jc-shared/commons/comparingAndTransforming.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
+import intersection from "lodash/intersection";
+import compact from "lodash/compact";
 
 export type TeamFilterObject = {
   istKonzert?: boolean;
@@ -20,6 +22,7 @@ export type TeamFilterObject = {
     kannInSocialMedia?: boolean;
     eventTyp?: string[];
   };
+  booker?: string[];
   technik?: { checked?: boolean; fluegel?: boolean };
 };
 
@@ -58,6 +61,14 @@ function filterKopf(ver: Veranstaltung, filterObj: TeamFilterObject) {
   return pred1 && pred2 && pred3 && pred4 && pred5 && pred6;
 }
 
+function filterBooker(ver: Veranstaltung, filterObj: TeamFilterObject) {
+  const filter = filterObj?.booker;
+  if (isEmpty(filter)) {
+    return true;
+  }
+  return !isEmpty(compact(intersection(filter, ver.booker)));
+}
+
 function filterTechnik(ver: Veranstaltung, filterObj: TeamFilterObject) {
   const filter = filterObj.technik;
   if (isEmpty(filter)) {
@@ -84,6 +95,13 @@ export default function applyTeamFilter(filterOri: TeamFilterObject) {
   return (ver: Veranstaltung) => {
     if (!ver || !filter) return true;
     const artFilter = isNil(filter.istKonzert) ? true : ver.isVermietung === !filter.istKonzert;
-    return artFilter && filterPresse(ver, filter) && filterKopf(ver, filter) && filterTechnik(ver, filter) && filterUnterkunft(ver, filter);
+    return (
+      artFilter &&
+      filterPresse(ver, filter) &&
+      filterKopf(ver, filter) &&
+      filterBooker(ver, filter) &&
+      filterTechnik(ver, filter) &&
+      filterUnterkunft(ver, filter)
+    );
   };
 }

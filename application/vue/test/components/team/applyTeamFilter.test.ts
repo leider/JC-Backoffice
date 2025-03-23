@@ -30,13 +30,11 @@ const hotelNichtBestatigt = new Konzert({
   unterkunft: { bestaetigt: false },
 });
 
-const mitEventTyp1 = new Konzert({
-  kopf: { titel: "mitEventTyp1", eventTyp: "eventTyp1" },
-});
+const mitEventTyp1 = new Konzert({ kopf: { titel: "mitEventTyp1", eventTyp: "eventTyp1" } });
+const mitEventTyp2 = new Konzert({ kopf: { titel: "mitEventTyp2", eventTyp: "eventTyp2" } });
 
-const mitEventTyp2 = new Konzert({
-  kopf: { titel: "mitEventTyp2", eventTyp: "eventTyp2" },
-});
+const booker1 = new Konzert({ kopf: { titel: "booker1" }, booker: ["user1"] });
+const booker2 = new Konzert({ kopf: { titel: "booker2" }, booker: ["user2"] });
 
 const alleKonzerte = [
   neutral,
@@ -55,6 +53,8 @@ const alleKonzerte = [
   hotelNichtBestatigt,
   mitEventTyp1,
   mitEventTyp2,
+  booker1,
+  booker2,
 ];
 
 function checkResult(teamFilter: (ver: Veranstaltung) => boolean) {
@@ -187,5 +187,20 @@ describe("applyTeamFilter", () => {
   it("should return for eventTyp", () => {
     const filter = applyTeamFilter({ kopf: { eventTyp: ["eventTyp1", "eventTyp2"] } });
     expect(checkResult(filter)).to.eql(["mitEventTyp1", "mitEventTyp2"]);
+  });
+
+  it("should return for one eventTyp", () => {
+    const filter = applyTeamFilter({ kopf: { eventTyp: ["eventTyp1"] } });
+    expect(checkResult(filter)).to.eql(["mitEventTyp1"]);
+  });
+
+  it("should return for booker1", () => {
+    const filter = applyTeamFilter({ booker: ["user1"] });
+    expect(checkResult(filter)).to.eql(["booker1"]);
+  });
+
+  it("should return for many bookers", () => {
+    const filter = applyTeamFilter({ booker: ["user1", "user2"] });
+    expect(checkResult(filter)).to.eql(["booker1", "booker2"]);
   });
 });

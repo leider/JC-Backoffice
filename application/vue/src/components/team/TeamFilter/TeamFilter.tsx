@@ -31,11 +31,30 @@ export default function TeamFilter() {
     form.setFieldsValue(filterObj);
   }, [filterObj, form]);
 
+  const closeBooleanTagForProp = useCallback(
+    (prop?: NamePath) => () => {
+      if (prop) {
+        form.setFieldValue(prop, undefined);
+        setFilter(form.getFieldsValue(true));
+      }
+    },
+    [form, setFilter],
+  );
+
+  const closePropTag = useCallback(
+    (label: string, prop?: NamePath) => () => {
+      const values = filter(form.getFieldValue(prop), (value: string) => value !== label);
+      form.setFieldValue(prop, values);
+      setFilter(form.getFieldsValue(true));
+    },
+    [form, setFilter],
+  );
+
   const eventTypTag = useCallback(
     (typ: string) => {
       const result = find(optionen.typenPlus, ["name", typ]);
       if (result) {
-        return { label: result.name, color: result.color };
+        return { label: result.name, color: result.color, prop: ["kopf", "eventTyp"] };
       }
       return undefined;
     },
@@ -44,38 +63,15 @@ export default function TeamFilter() {
 
   function headerTagsForFilters(labelsColors: LabelColorProperty[]) {
     function HeaderTag({ label, color, prop }: LabelColorProperty) {
-      if (isBoolean(color)) {
-        return (
-          <Tag
-            closeIcon={!!prop}
-            color={color ? "success" : "error"}
-            key={label}
-            onClose={() => {
-              if (prop) {
-                form.setFieldValue(prop, undefined);
-                setFilter(form.getFieldsValue(true));
-              }
-            }}
-          >
-            {label}
-          </Tag>
-        );
-      } else {
-        return (
-          <Tag
-            closeIcon
-            color={color}
-            key={label}
-            onClose={() => {
-              const typen = filter(form.getFieldValue(["kopf", "eventTyp"]), (typ: string) => typ !== label);
-              form.setFieldValue(["kopf", "eventTyp"], typen);
-              setFilter(form.getFieldsValue(true));
-            }}
-          >
-            {label}
-          </Tag>
-        );
-      }
+      return isBoolean(color) ? (
+        <Tag closeIcon={!!prop} color={color ? "success" : "error"} key={label} onClose={closeBooleanTagForProp(prop)}>
+          {label}
+        </Tag>
+      ) : (
+        <Tag closeIcon color={color} key={label} onClose={closePropTag(label, prop)}>
+          {label}
+        </Tag>
+      );
     }
     return map(labelsColors, (tag) => <HeaderTag color={tag.color} key={tag.label} label={tag.label} prop={tag.prop} />);
   }
@@ -108,7 +104,8 @@ export default function TeamFilter() {
     pushIfSet(teamFilter.technik?.checked, "Technik ist geklärt", ["technik", "checked"]);
     pushIfSet(teamFilter.technik?.fluegel, "Flügel stimmen", ["technik", "fluegel"]);
     const eventTypTags = map(teamFilter.kopf?.eventTyp, (typ: string) => eventTypTag(typ)!);
-    return tags.concat(eventTypTags);
+    const bookerTags = map(teamFilter.booker, (booker: string) => ({ label: booker, color: "blue", prop: "booker" }));
+    return tags.concat(eventTypTags).concat(bookerTags);
   }, [eventTypTag, teamFilter]);
 
   const result = [
