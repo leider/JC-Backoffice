@@ -1,5 +1,6 @@
 import Accessrights from "./accessrights.js";
 import isNil from "lodash/isNil.js";
+import cloneDeep from "lodash/cloneDeep.js";
 
 export type KannSection = "Kasse" | "Ton" | "Licht" | "Master" | "Ersthelfer";
 
@@ -25,7 +26,6 @@ export default class User {
   mailinglisten: string[] = [];
   wantsEmailReminders?: boolean;
   password?: string; // take care to not persist!
-  accessrightsTransient?: Accessrights; // transient
 
   kannKasse?: boolean;
   kannTon?: boolean;
@@ -34,7 +34,6 @@ export default class User {
   kannErsthelfer?: boolean;
 
   constructor(object: Partial<User>) {
-    delete this.accessrightsTransient;
     this.id = object.id!;
     Object.assign(this, object, {
       kassenfreigabe: object.kassenfreigabe || object.rechte?.includes("kassenfreigabe"),
@@ -42,16 +41,8 @@ export default class User {
     });
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    const result = Object.assign({}, this);
-    delete result.accessrightsTransient;
-    return result;
-  }
-
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSONWithoutPass(): any {
-    const result = this.toJSON();
+  get withoutPass() {
+    const result = cloneDeep(this);
     delete result.hashedPassword;
     delete result.salt;
     return result;
@@ -105,10 +96,7 @@ export default class User {
   }
 
   get accessrights(): Accessrights {
-    if (!this.accessrightsTransient) {
-      this.accessrightsTransient = new Accessrights(this);
-    }
-    return this.accessrightsTransient;
+    return new Accessrights(this);
   }
 
   get asUserAsOption() {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/rest/loader.ts";
@@ -21,8 +21,8 @@ const emptyContext: SharedGlobals = {
   todayKonzerte: [],
   showSuccess: noop,
   showError: noop,
-  filter: {},
-  setFilter: noop,
+  teamFilter: {},
+  setTeamFilter: noop,
   isDirty: false,
   setIsDirty: noop,
   setMemoizedId: noop,
@@ -39,8 +39,8 @@ type SharedGlobals = {
   todayKonzerte: Konzert[];
   showSuccess: ({ text, title, duration }: { duration?: number; text?: React.ReactNode; title?: string }) => void;
   showError: ({ text, title, closeCallback }: { text?: string; title?: string; closeCallback?: () => void }) => void;
-  filter: TeamFilterObject;
-  setFilter: (filter: TeamFilterObject) => void;
+  teamFilter: TeamFilterObject;
+  setTeamFilter: (filter: TeamFilterObject) => void;
   isDirty: boolean;
   setIsDirty: (a: boolean) => void;
   memoizedId?: string;
@@ -59,6 +59,15 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
 
   const [filter, setFilter] = useState<TeamFilterObject>({});
+  useEffect(() => {
+    setFilter(JSON.parse(localStorage.getItem("teamFilter") ?? "{}"));
+  }, []);
+
+  const setTeamFilter = useCallback((filter: TeamFilterObject) => {
+    localStorage.setItem("teamFilter", JSON.stringify(filter));
+    setFilter(filter);
+  }, []);
+
   const [isDirty, setIsDirty] = useState(false);
   const [memoizedId, setMemoizedId] = useState<string | undefined>();
 
@@ -66,8 +75,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     SharedGlobals,
     | "showSuccess"
     | "showError"
-    | "filter"
-    | "setFilter"
+    | "teamFilter"
+    | "setTeamFilter"
     | "isDirty"
     | "setIsDirty"
     | "memoizedId"
@@ -143,8 +152,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     ...exposedContext,
     showSuccess,
     showError,
-    filter,
-    setFilter,
+    teamFilter: filter,
+    setTeamFilter,
     isDirty,
     setIsDirty,
     memoizedId,

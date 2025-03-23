@@ -1,31 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { allUsers, saveMailinglists } from "@/rest/loader.ts";
+import { allMailinglists, saveMailinglists } from "@/rest/loader.ts";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Col } from "antd";
-import Users, { Mailingliste } from "jc-shared/user/users";
+import { Mailingliste } from "jc-shared/user/users";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { Columns } from "@/widgets/EditableTable/types.ts";
-import cloneDeep from "lodash/cloneDeep";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
-import User from "jc-shared/user/user.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-class MailingListsWrapper {
-  allLists: Mailingliste[] = [];
-
-  constructor(lists?: Mailingliste[]) {
-    this.allLists = map(lists, (list) => ({ ...list })).sort((a, b) => a.name.localeCompare(b.name));
-  }
-  toJSON(): object {
-    return cloneDeep(this);
-  }
-}
-
-function MailingListsInternal({ users }: { readonly users: User[] }) {
-  const usersAsOptions = useMemo(() => map(users, "asUserAsOption"), [users]);
+function MailingListsInternal() {
+  const { allUsers } = useJazzContext();
+  const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
   const columnDescriptions: Columns[] = [
     { dataIndex: "name", title: "Name", type: "text", width: "150px", required: true, uniqueValues: true },
@@ -37,7 +26,7 @@ function MailingListsInternal({ users }: { readonly users: User[] }) {
       <Col span={24}>
         <EditableTable<{ name?: string; users: string[] }>
           columnDescriptions={columnDescriptions}
-          name="allLists"
+          name="lists"
           newRowFactory={(val) => Object.assign({ users: [] }, val)}
           usersWithKann={usersAsOptions}
         />
@@ -47,12 +36,7 @@ function MailingListsInternal({ users }: { readonly users: User[] }) {
 }
 
 export default function MailingLists() {
-  const { data, refetch } = useQuery({ queryKey: ["users"], queryFn: () => allUsers() });
-
-  const [mailingLists, setMailingLists] = useState<MailingListsWrapper>(new MailingListsWrapper([]));
-  useEffect(() => {
-    setMailingLists(new MailingListsWrapper(new Users(data ?? []).mailinglisten));
-  }, [data]);
+  const { data: mailingLists, refetch } = useQuery({ queryKey: ["mailinglists"], queryFn: allMailinglists });
 
   const mutateLists = useJazzMutation({
     saveFunction: saveMailinglists,
@@ -60,13 +44,13 @@ export default function MailingLists() {
     successMessage: "Die Listen wurden gespeichert",
   });
 
-  function saveForm(vals: MailingListsWrapper) {
-    mutateLists.mutate(vals.allLists);
+  function saveForm(vals: { lists: Mailingliste[] }) {
+    mutateLists.mutate(vals);
   }
 
   return (
     <JazzFormAndHeader data={mailingLists} resetChanges={refetch} saveForm={saveForm} title="Mailinglisten">
-      <MailingListsInternal users={data ?? []} />
+      <MailingListsInternal />
     </JazzFormAndHeader>
   );
 }

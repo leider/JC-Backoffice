@@ -1,23 +1,23 @@
-import { Col, Collapse, CollapseProps, ConfigProvider, Form, FormInstance, Row, Space } from "antd";
+import { Col, Collapse, CollapseProps, ConfigProvider, Row, Space } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
-import React from "react";
+import React, { useMemo } from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { EventTypeMultiSelect } from "@/widgets/EventTypeSelects/EventTypeMultiSelect.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
+import filter from "lodash/filter";
+import map from "lodash/map";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
-export function TeamFilterEdit({
-  form,
-  open,
-  setOpen,
-}: {
-  readonly form: FormInstance<TeamFilterObject>;
-  readonly open: boolean;
-  readonly setOpen: (open: boolean) => void;
-}) {
-  const { setFilter } = useJazzContext();
+export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; readonly setOpen: (open: boolean) => void }) {
+  const { allUsers, setTeamFilter } = useJazzContext();
+  const form = useFormInstance<TeamFilterObject>();
+
+  const bookersOnly = useMemo(() => filter(allUsers, "accessrights.isBookingTeam"), [allUsers]);
+  const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
 
   const items: CollapseProps["items"] = [
     {
@@ -29,6 +29,11 @@ export function TeamFilterEdit({
           <Row gutter={8}>
             <Col span={24}>
               <EventTypeMultiSelect />
+            </Col>
+          </Row>
+          <Row gutter={8}>
+            <Col span={24}>
+              <MitarbeiterMultiSelect label="Booker" name="booker" usersAsOptions={bookersAsOptions} />
             </Col>
           </Row>
           <Row gutter={8}>
@@ -116,7 +121,7 @@ export function TeamFilterEdit({
             alwaysText
             onClick={() => {
               reset(form);
-              setFilter(form.getFieldsValue(true));
+              setTeamFilter(form.getFieldsValue(true));
             }}
             text="Zurücksetzen"
             type="default"
@@ -125,7 +130,7 @@ export function TeamFilterEdit({
             alwaysText
             onClick={() => {
               setOpen(false);
-              setFilter(form.getFieldsValue(true));
+              setTeamFilter(form.getFieldsValue(true));
             }}
             text="Schließen"
           />
@@ -133,11 +138,9 @@ export function TeamFilterEdit({
       }
       open={open}
     >
-      <Form autoComplete="off" colon={false} form={form} onValuesChange={() => setFilter(form.getFieldsValue(true))} size="small">
-        <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
-          <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
-        </ConfigProvider>
-      </Form>
+      <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
+        <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
+      </ConfigProvider>
     </JazzModal>
   );
 }

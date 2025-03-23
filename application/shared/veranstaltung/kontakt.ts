@@ -8,11 +8,6 @@ export default class Kontakt {
   name = "";
   telefon = "";
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: RecursivePartial<Kontakt>) {
     if (object && keys(object).length) {
       Object.assign(this, object);

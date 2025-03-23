@@ -1,6 +1,5 @@
-import { useSearchParams } from "react-router";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, vermietungenForTeam } from "@/rest/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
@@ -9,37 +8,55 @@ import reverse from "lodash/reverse";
 import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
-import find from "lodash/find";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import capitalize from "lodash/capitalize";
 import keys from "lodash/keys";
 
-export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
-  const [search, setSearch] = useSearchParams();
-  const { allUsers, filter: teamFilter } = useJazzContext();
+export type Period = "zukuenftige" | "vergangene" | "alle";
+
+export const useTeamVeranstaltungenCommons = () => {
+  const [search, setSearch] = useState<Period>("zukuenftige");
+  const { allUsers, currentUser, teamFilter } = useJazzContext();
+
+  const periodsToShow = useMemo(
+    () => (currentUser.accessrights.isOrgaTeam ? ["zukuenftige", "vergangene", "alle"] : ["zukuenftige", "vergangene"]) as Period[],
+    [currentUser],
+  );
+
+  const setSelectedPeriod = useCallback((period: Period) => {
+    localStorage.setItem("veranstaltungenPeriod", period);
+    setSearch(period);
+  }, []);
+
+  useEffect(() => {
+    const period = (localStorage.getItem("veranstaltungenPeriod") ?? "zukuenftige") as Period;
+    if (periodsToShow.includes(period)) {
+      setSearch(period);
+    } else {
+      setSearch("zukuenftige");
+    }
+  }, [periodsToShow]);
 
   const [period, setPeriod] = useState<string>("Zukünftige");
 
   const periods = useMemo(() => {
     return map(periodsToShow, (period) => {
-      return { label: period === "zukuenftige" ? "Zukünftige" : capitalize(period), key: period, onClick: () => setSearch({ period }) };
+      return {
+        label: period === "zukuenftige" ? "Zukünftige" : capitalize(period),
+        key: period,
+        onClick: () => setSelectedPeriod(period),
+      };
     });
-  }, [periodsToShow, setSearch]);
+  }, [periodsToShow, setSelectedPeriod]);
 
-  const selectedPeriod: "zukuenftige" | "vergangene" | "alle" = useMemo(() => {
-    return (search.get("period") || periods[0].key) as "zukuenftige" | "vergangene" | "alle";
+  const selectedPeriod: Period = useMemo(() => {
+    return search || periods[0].key;
   }, [periods, search]);
 
   useEffect(() => {
-    const result = find(periods, ["key", search.get("period")]);
-    if (!result) {
-      setSearch({ period: periods[0].key });
-      setPeriod("Zukünftige");
-    } else {
-      setPeriod(result.label);
-    }
-  }, [periods, search, setSearch]);
+    setPeriod(selectedPeriod === "zukuenftige" ? "Zukünftige" : capitalize(selectedPeriod));
+  }, [selectedPeriod]);
 
   const queryResult = useQueries({
     queries: [

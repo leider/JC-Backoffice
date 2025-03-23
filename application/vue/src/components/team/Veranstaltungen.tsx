@@ -6,5 +6,5 @@ export default function Veranstaltungen() {
   useDirtyBlocker(false);
   document.title = "Veranstaltungen";
 
-  return <TeamUndVeranstaltungen periodsToShow={["zukuenftige", "vergangene", "alle"]} />;
+  return <TeamUndVeranstaltungen />;
 }

@@ -26,7 +26,7 @@ function SelectRangeForExcelModal({
   readonly alle: { startDate: Date }[];
 }) {
   const [form] = useForm();
-  const { optionen, filter: teamFilter } = useJazzContext();
+  const { optionen, teamFilter } = useJazzContext();
 
   const [first, setFirst] = useState<Dayjs>(dayjs());
   const [last, setLast] = useState<Dayjs>(dayjs());

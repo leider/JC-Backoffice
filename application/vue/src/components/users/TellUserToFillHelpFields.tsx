@@ -8,6 +8,7 @@ import { saveUser } from "@/rest/loader.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import isNil from "lodash/isNil";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
+import cloneDeep from "lodash/cloneDeep";
 
 export function TellUserToFillHelpFields() {
   const { currentUser } = useJazzContext();
@@ -26,8 +27,7 @@ export function TellUserToFillHelpFields() {
   useEffect(() => {
     if (currentUser.id) {
       if (currentUser.hatKeineKannsGefuellt || isNil(currentUser.kannErsthelfer)) {
-        const deepCopy = currentUser.toJSONWithoutPass();
-        form.setFieldsValue(deepCopy);
+        form.setFieldsValue(cloneDeep(currentUser));
         setIsOpen(true);
       }
     }

@@ -53,25 +53,6 @@ export default class Konzert extends Veranstaltung {
 
   unterkunft: Unterkunft;
 
-  toJSON(): object {
-    const result = {};
-    Object.assign(result, this, {
-      agentur: this.agentur.toJSON(),
-      artist: this.artist.toJSON(),
-      eintrittspreise: this.eintrittspreise.toJSON(),
-      hotel: this.hotel.toJSON(),
-      kasse: this.kasse.toJSON(),
-      kopf: this.kopf.toJSON(),
-      kosten: this.kosten.toJSON(),
-      presse: this.presse.toJSON(),
-      staff: this.staff.toJSON(),
-      technik: this.technik.toJSON(),
-      unterkunft: this.unterkunft.toJSON(),
-      vertrag: this.vertrag.toJSON(),
-    });
-    return result;
-  }
-
   constructor(object?: RecursivePartial<Omit<Konzert, "startDate" | "endDate"> & { startDate: string | Date; endDate: string | Date }>) {
     super(object);
     if (object) {

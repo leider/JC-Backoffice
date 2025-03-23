@@ -41,11 +41,6 @@ export default class Termin {
     this.id = object?.id ? object.id : encodeURIComponent(DatumUhrzeit.forJSDate(this.startDate).fuerCalendarWidget + this.beschreibung);
   }
 
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
-  toJSON(): any {
-    return Object.assign({}, this);
-  }
-
   static colorForType(typ: TerminType): string {
     return {
       Sonstiges: "#d6bdff",

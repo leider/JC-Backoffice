@@ -103,35 +103,34 @@ export default class OptionValues {
     return new OptionValues(object);
   }
 
-  toJSON(): object {
-    return Object.assign({}, this);
-  }
-
   constructor(object?: Partial<OptionValues>) {
     if (object) {
       Object.assign(this, object, {
-        kooperationen: sortByNameCaseInsensitive(object.kooperationen || []),
-        genres: sortByNameCaseInsensitive(object.genres || []),
-        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub || []),
-        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop || []),
-        artists: sortByNameCaseInsensitive(object.artists || []),
-        preisprofile: (object.preisprofile || preisprofileInitial()).sort((a: Preisprofil, b: Preisprofil) => {
+        kooperationen: sortByNameCaseInsensitive(object.kooperationen),
+        genres: sortByNameCaseInsensitive(object.genres),
+        backlineJazzclub: sortByNameCaseInsensitive(object.backlineJazzclub),
+        backlineRockshop: sortByNameCaseInsensitive(object.backlineRockshop),
+        artists: sortByNameCaseInsensitive(object.artists),
+        preisprofile: (object.preisprofile ?? preisprofileInitial()).sort((a, b) => {
           if (a.regulaer === b.regulaer) {
             return a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase());
           }
           return a.regulaer > b.regulaer ? 1 : -1;
         }),
-        typenPlus: (object.typenPlus ?? []).sort((a: TypMitMehr, b: TypMitMehr) =>
-          a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
-        ),
+        typenPlus: (object.typenPlus ?? []).sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase())),
         agenturen: sortKontakte(object.agenturen),
         hotels: sortKontakte(object.hotels),
       });
     }
   }
 
-  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection: string): void {
-    if (!(selection || "[temporär]").match(/\[temporär]/)) {
+  addOrUpdateKontakt(kontaktKey: "agenturen" | "hotels", kontakt: Kontakt, selection?: string): void {
+    if ("[temporär]" !== selection) {
+      if (!kontakt.name) {
+        // we do nothing if name not given
+        return;
+      }
+
       const ourCollection = kontaktKey === "agenturen" ? this.agenturen : this.hotels;
       remove(ourCollection, (k) => k.name === kontakt.name);
       ourCollection.push(kontakt);

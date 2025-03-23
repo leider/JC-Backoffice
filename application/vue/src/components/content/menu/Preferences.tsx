@@ -5,6 +5,18 @@ import { CheckboxGroupProps } from "antd/es/checkbox";
 import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
 
+const optionsHellDunkel: CheckboxGroupProps<string>["options"] = [
+  { label: "Hell", value: "bright" },
+  { label: "Dunkel", value: "dark" },
+  { label: "Automatisch", value: "auto" },
+];
+
+const optionsKompaktNormal: CheckboxGroupProps<string>["options"] = [
+  { label: "Normal", value: "normal" },
+  { label: "Kompakt", value: "compact" },
+  { label: "Automatisch", value: "auto" },
+];
+
 export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: boolean; readonly setIsOpen: (x: boolean) => void }) {
   const [form] = Form.useForm<JazzPrefs>();
   const { setPreferences, getPreferences } = useJazzPrefs();
@@ -13,18 +25,6 @@ export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: bo
     const prefs = getPreferences();
     form.setFieldsValue(prefs);
   }, [form, getPreferences]);
-
-  const optionsHellDunkel: CheckboxGroupProps<string>["options"] = [
-    { label: "Hell", value: "bright" },
-    { label: "Dunkel", value: "dark" },
-    { label: "Automatisch", value: "auto" },
-  ];
-
-  const optionsKompaktNormal: CheckboxGroupProps<string>["options"] = [
-    { label: "Normal", value: "normal" },
-    { label: "Kompakt", value: "compact" },
-    { label: "Automatisch", value: "auto" },
-  ];
 
   function saveForm() {
     setPreferences(form.getFieldsValue(true));

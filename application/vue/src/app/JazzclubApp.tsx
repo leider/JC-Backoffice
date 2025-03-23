@@ -93,6 +93,8 @@ function JazzclubApp() {
         }}
         locale={locale_de}
         theme={{
+          cssVar: true,
+          hashed: false,
           token: {
             colorPrimary: "#337ab7",
             colorTextDisabled,

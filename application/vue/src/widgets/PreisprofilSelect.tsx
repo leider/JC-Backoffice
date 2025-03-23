@@ -4,6 +4,7 @@ import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import map from "lodash/map";
+import sortBy from "lodash/sortBy";
 
 interface PreisprofilSelectParams {
   readonly optionen: OptionValues;
@@ -54,7 +55,7 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
     if (valueAsObject && !find(optionen.preisprofile, { name: valueAsObject.name })) {
       result.push({ ...valueAsObject, veraltet: true });
     }
-    return result.sort((a, b) => (a.regulaer > b.regulaer ? 1 : -1));
+    return sortBy(result, "regulaer");
   }, [optionen, valueAsObject]);
 
   const displayProfile = useMemo(() => {

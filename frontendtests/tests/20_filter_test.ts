@@ -100,4 +100,5 @@ Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   I.see("HotelNichtBestatigt");
   I.dontSee("HotelBestaetigt");
   I.dontSee("Neutral");
+  I.click(locate("button").withText("Zurücksetzen").inside(".ant-space-item"));
 });

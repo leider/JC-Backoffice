@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosRequestConfig, Method } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from "axios";
 
 import User from "jc-shared/user/user.ts";
 import Kalender from "jc-shared/programmheft/kalender.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import Orte from "jc-shared/optionen/orte.ts";
-import { Mailingliste } from "jc-shared/user/users.ts";
+import Users, { Mailingliste } from "jc-shared/user/users.ts";
 import MailRule from "jc-shared/mail/mailRule.ts";
-import Termin, { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
+import Termin, { TerminEvent, TerminFilterOptions } from "jc-shared/optionen/termin.ts";
 import FerienIcals from "jc-shared/optionen/ferienIcals.ts";
 import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import isMobile from "ismobilejs";
@@ -16,44 +15,39 @@ import { Rider } from "jc-shared/rider/rider.ts";
 import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { HistoryObjectOverview } from "jc-shared/history/history.ts";
+import { HistoryDBType, HistoryObjectOverview } from "jc-shared/history/history.ts";
 import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import { historyFromRawRows } from "@/rest/historyObject.ts";
+import { refreshTokenPost } from "@/rest/authenticationRequests.ts";
+import sortBy from "lodash/sortBy";
+import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
-type ContentType = "json" | "pdf" | "zip" | "other";
+type ContentType = "pdf" | "zip" | "other";
 
-type FetchParams = {
+type FetchParams<T, R> = {
+  urlPrefix?: string;
   url: string;
-  contentType: ContentType;
+  contentType?: ContentType;
   method: Method;
-  data?: any;
+  data?: T;
+  resType?: R;
 };
 
-export async function loginPost(name: string, pass: string) {
-  const token = await axios.post("/login", { name, pass });
-  return refreshTokenPost(token.data.token);
+async function get<T, R>(params: Omit<FetchParams<T, R>, "method">) {
+  return standardFetch({ ...params, method: "GET" });
 }
 
-export async function logoutManually() {
-  return axios.post("/logout");
+async function loeschen<T, R>(params: Omit<FetchParams<T, R>, "method">) {
+  return standardFetch({ ...params, method: "DELETE" });
 }
 
-export async function refreshTokenPost(tokenFromLogin?: string) {
-  let token = tokenFromLogin;
-  if (!tokenFromLogin) {
-    const result = await axios.post("/refreshToken");
-    token = result.data.token;
-  }
-  if (!token) {
-    return "";
-  }
-  axios.defaults.headers.Authorization = `Bearer ${token}`;
-  return token;
+async function post<T, R = T>(params: Omit<FetchParams<T, R>, "method">) {
+  return standardFetch<T, R>({ ...params, method: "POST" });
 }
 
-async function standardFetch(params: FetchParams) {
+async function standardFetch<T, R>({ urlPrefix = "/rest", url, method, data, contentType }: FetchParams<T, R>) {
   if (!axios.defaults.headers.Authorization) {
     await refreshTokenPost();
   } else {
@@ -65,55 +59,36 @@ async function standardFetch(params: FetchParams) {
       console.log("token veraltet");
     }
   }
-  const options: AxiosRequestConfig = {
-    url: params.url,
-    method: params.method,
-    data: params.data,
-    responseType: params.contentType !== "json" ? "blob" : "json",
-  };
-  const res = await axios(options);
+  const options: AxiosRequestConfig<T> = { url: urlPrefix + url, method: method, data: data, responseType: contentType ? "blob" : "json" };
+  const res = await axios<T, AxiosResponse<R>>(options);
   return res.data;
 }
 
-async function getForType(contentType: ContentType, url: string) {
-  return standardFetch({ contentType, url, method: "GET" });
-}
-
 export async function uploadFile(data: FormData) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/upload",
-    data,
-    contentType: "json",
-  });
+  const result = await post({ url: "/upload", data, resType: new Konzert() });
+  return new Konzert(result);
 }
 
 export async function uploadWikiImage(data: FormData) {
-  const res = await standardFetch({
-    method: "POST",
-    url: "/rest/wiki/upload",
-    data,
-    contentType: "json",
-  });
-  return res as { url: string };
+  return await post({ url: "/wiki/upload", data, resType: { url: "" } });
 }
 
-function handleVeranstaltungen(result?: any[]): Konzert[] {
-  return map(result, (each: any) => new Konzert(each)) || [];
+function handleVeranstaltungen(result?: Konzert[]): Konzert[] {
+  return map(result, (each) => new Konzert(each));
 }
 
 export async function konzerteBetweenYYYYMM(start: string, end: string) {
-  const result = await getForType("json", `/rest/konzerte/${start}/${end}`);
+  const result = await get({ url: `/konzerte/${start}/${end}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
 export async function konzerteForToday() {
-  const result = await getForType("json", `/rest/konzerte/fortoday`);
+  const result = await get({ url: `/konzerte/fortoday`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
-export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
-  const result = await getForType("json", `/rest/konzerte/${selector}`);
+export async function konzerteForTeam(selector: Period) {
+  const result = await get({ url: `/konzerte/${selector}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
@@ -124,7 +99,7 @@ export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRi
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
-    const result = await getForType("json", `/rest/konzert/${encodeURIComponent(realUrl)}`);
+    const result = await get({ url: `/konzert/${encodeURIComponent(realUrl)}`, resType: new Konzert() });
     if (result) {
       const konzert = new KonzertWithRiderBoxes(result);
       konzert.reset();
@@ -133,62 +108,45 @@ export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRi
       return emptyResult;
     }
   }
-  const konzert = await getForType("json", `/rest/konzert/${encodeURIComponent(url)}`);
-  const rider = await getForType("json", `/rest/riders/${url}`);
+  const konzert = await get({ url: `/konzert/${encodeURIComponent(url)}`, resType: new Konzert() });
+  const rider = await get({ url: `/riders/${url}`, resType: new Rider() });
   return konzert ? new KonzertWithRiderBoxes({ ...konzert, riderBoxes: rider.boxes }) : emptyResult;
 }
 
 export async function saveKonzert(konzert: Konzert) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/konzert",
-    data: konzert.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/konzert", data: konzert });
   return new Konzert(result);
 }
 
 export async function deleteKonzertWithId(id: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/konzert",
-    data: { id },
-    contentType: "json",
-  });
+  return loeschen({ url: "/konzert", data: { id } });
 }
 
 // Staff
 export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
-  return standardFetch({
-    method: "POST",
-    url: `/rest${veranstaltung.fullyQualifiedUrl}/${add ? "addUserToSection" : "removeUserFromSection"}`,
-    data: { section },
-    contentType: "json",
-  });
+  const action = add ? "addUserToSection" : "removeUserFromSection";
+  const result = await post({ url: `/rest${veranstaltung.fullyQualifiedUrl}/${action}`, data: { section }, resType: veranstaltung });
+  return veranstaltung.isVermietung ? new Vermietung(result) : new Konzert(result);
 }
 
 // Gäste
 export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
-  return standardFetch({
-    method: "POST",
-    url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`,
-    data: { item, art },
-    contentType: "json",
-  });
+  const result = await post({ url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`, data: { item, art }, resType: konzert });
+  return new Konzert(result);
 }
 
 // Vermietungen
-function handleVermietungen(result?: any[]): Vermietung[] {
-  return map(result, (each: any) => new Vermietung(each)) || [];
+function handleVermietungen(result?: Vermietung[]): Vermietung[] {
+  return map(result, (each) => new Vermietung(each));
 }
 
-export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
-  const result = await getForType("json", `/rest/vermietungen/${selector}`);
+export async function vermietungenForTeam(selector: Period) {
+  const result = await get({ url: `/vermietungen/${selector}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }
 
 export async function vermietungenBetweenYYYYMM(start: string, end: string) {
-  const result = await getForType("json", `/rest/vermietungen/${start}/${end}`);
+  const result = await get({ url: `/vermietungen/${start}/${end}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }
 
@@ -198,7 +156,7 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
-    const result = await getForType("json", `/rest/vermietung/${encodeURIComponent(realUrl)}`);
+    const result = await get({ url: `/vermietung/${encodeURIComponent(realUrl)}`, resType: new Vermietung() });
     if (result) {
       const vermietung = new Vermietung(result);
       vermietung.reset();
@@ -207,33 +165,23 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
       return result;
     }
   }
-  const result = await getForType("json", `/rest/vermietung/${encodeURIComponent(url)}`);
+  const result = await get({ url: `/vermietung/${encodeURIComponent(url)}`, resType: new Vermietung() });
   return result ? new Vermietung(result) : result;
 }
 
 export async function saveVermietung(vermietung: Vermietung) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/vermietung",
-    data: vermietung.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/vermietung", data: vermietung });
   return new Vermietung(result);
 }
 
 export async function deleteVermietungWithId(id: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/vermietung",
-    data: { id },
-    contentType: "json",
-  });
+  return loeschen({ url: "/vermietung", data: { id } });
 }
 
 // User
 export async function currentUser() {
   try {
-    const result = await getForType("json", "/rest/users/current");
+    const result = await get({ url: "/users/current", resType: {} as User });
     return new User(result);
   } catch {
     return new User({ id: "invalidUser" });
@@ -241,222 +189,152 @@ export async function currentUser() {
 }
 
 export async function allUsers(): Promise<User[]> {
-  const result = await getForType("json", "/rest/users");
-  return map(result?.users, (user: any) => new User(user)) || [];
+  const result = await get({ url: "/users", resType: [{} as User] });
+  return map(result, (user) => new User(user));
 }
 
 export async function saveUser(user: User) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/user",
-    data: user.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/user", data: user });
+  return new User(result);
 }
 
 export async function deleteUser(user: User) {
-  return standardFetch({
-    method: "DELETE",
-    url: "/rest/user",
-    data: user.toJSON(),
-    contentType: "json",
-  });
+  return loeschen({ url: "/user", data: user });
 }
 
 export async function saveNewUser(user: User) {
-  return standardFetch({
-    method: "PUT",
-    url: "/rest/user",
-    data: user.toJSON(),
-    contentType: "json",
-  });
+  return standardFetch({ method: "PUT", url: "/user", data: user });
 }
 
 export async function changePassword(user: User) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/user/changePassword",
-    data: user.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/user/changePassword", data: user });
+  return new User(result);
 }
 
 // Programmheft
 export async function kalenderFor(jahrMonat: string) {
-  const result = await getForType("json", `/rest/programmheft/${jahrMonat}`);
+  const result = await get({ url: `/programmheft/${jahrMonat}`, resType: new Kalender() });
   return result?.id ? new Kalender(result) : new Kalender({ id: jahrMonat });
 }
 
-export async function alleKalender(): Promise<Kalender[]> {
-  const result = await getForType("json", "/rest/programmheft/alle");
-  return result.length > 0 ? map(result, (r: any) => new Kalender(r)) : [];
+export async function alleKalender() {
+  const result = await get({ url: "/programmheft/alle", resType: [new Kalender()] });
+  return result.length > 0 ? map(result, (r) => new Kalender(r)) : [];
 }
 
 export async function saveProgrammheft(kalender: Kalender) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/programmheft",
-    data: kalender,
-    contentType: "json",
-  });
+  const result = await post({ url: "/programmheft", data: kalender });
+  return new Kalender(result);
 }
 
 // Rider
 export async function saveRider(rider: Rider) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/riders",
-    data: rider,
-    contentType: "json",
-  });
+  const result = await post({ url: "/riders", data: rider });
   return new Rider(result);
 }
 
 // Optionen & Termine
 export async function optionen(): Promise<OptionValues> {
-  const result = await getForType("json", "/rest/optionen");
-  return result ? new OptionValues(result) : result;
+  const result = await get({ url: "/optionen", resType: new OptionValues() });
+  return new OptionValues(result);
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/optionen",
-    data: optionen.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/optionen", data: optionen });
   return new OptionValues(result);
 }
 
 export async function orte() {
-  const result = await getForType("json", "/rest/orte");
-  return result ? new Orte(result) : result;
+  const result = await get({ url: "/orte", resType: new Orte() });
+  return new Orte(result);
 }
 
 export async function saveOrte(orte: Orte) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/orte",
-    data: orte.toJSON(),
-    contentType: "json",
-  });
+  const result = await post({ url: "/orte", data: orte });
+  return new Orte(result);
 }
 
-export async function termine(): Promise<Termin[]> {
-  const result = await getForType("json", "/rest/termine");
-  return map(result, (r: any) => new Termin(r)) ?? [];
+export async function termine() {
+  const result = await get({ url: "/termine", resType: [new Termin()] });
+  return map(result, (r) => new Termin(r)) ?? [];
 }
 
 export async function saveTermine(termine: Termin[]) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/termine",
-    data: termine,
-    contentType: "json",
-  });
-  return map(result, (r: any) => new Termin(r)) ?? [];
+  const result = await post({ url: "/termine", data: termine });
+  return map(result, (r) => new Termin(r)) ?? [];
 }
 
 export async function kalender() {
-  const result = await getForType("json", "/rest/kalender");
+  const result = await get({ url: "/kalender", resType: new FerienIcals() });
   return result ? new FerienIcals(result) : result;
 }
 
 export async function saveKalender(kalender: FerienIcals) {
-  const result = await standardFetch({
-    method: "POST",
-    url: "/rest/kalender",
-    data: kalender,
-    contentType: "json",
-  });
+  const result = await post({ url: "/kalender", data: kalender });
   return result ? new FerienIcals(result) : result;
 }
 
 // Image
 export async function imagenames() {
-  const result = await getForType("json", "/rest/imagenames");
-  return (result?.names as string[]) || [];
+  const result = await get({ url: "/imagenames", resType: { names: [""] } });
+  return result?.names ?? [];
 }
 
 export async function saveImagenames(rows: ImageOverviewRow[]) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/imagenames",
-    data: rows,
-    contentType: "json",
-  });
+  await post({ url: "/imagenames", data: rows, resType: { names: [""] } });
+  return rows;
 }
 
 //Mails intern
 export async function sendMail(formData: FormData) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/rundmail",
-    data: formData,
-    contentType: "json",
-  }) as Promise<SentMessageInfo>;
+  return post({ url: "/rundmail", data: formData, resType: {} as SentMessageInfo });
 }
 
-export async function saveMailinglists(lists: Mailingliste[]) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/mailinglisten",
-    data: lists,
-    contentType: "json",
-  });
+export async function allMailinglists() {
+  const result = await get({ url: "/mailinglisten", resType: [] as User[] });
+  return { lists: sortBy(new Users(result ?? []).mailinglisten, "name") };
+}
+
+export async function saveMailinglists({ lists }: { lists: Mailingliste[] }) {
+  const result = await post({ url: "/mailinglisten", data: lists, resType: [] as User[] });
+  return { lists: sortBy(new Users(result ?? []).mailinglisten, "name") };
 }
 
 // Mails für Veranstaltungen
-export async function mailRules(): Promise<MailRule[]> {
-  const result = await getForType("json", "/rest/mailrule");
-  return map(result, (each: any) => new MailRule(each)) || [];
+export async function mailRules() {
+  const result = await get({ url: "/mailrule", resType: [new MailRule()] });
+  return map(result, (each) => new MailRule(each));
 }
 
 export async function saveMailRules(rules: MailRule[]) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/mailrules",
-    data: rules,
-    contentType: "json",
-  });
+  return post({ url: "/mailrules", data: rules });
 }
 
 // Wiki
-export async function wikisubdirs(): Promise<{ dirs: string[] }> {
-  const json = await getForType("json", "/rest/wikidirs");
-  return json || { dirs: [] };
+export async function wikisubdirs() {
+  const json = await get({ url: "/wikidirs", resType: { dirs: [""] } });
+  return json ?? { dirs: [] };
 }
 
 export async function wikiPage(subdir: string, page: string) {
-  const result = await getForType("json", `/rest/wikipage/${subdir}/${page}`);
-  return result?.content || "";
+  const result = await get({ url: `/wikipage/${subdir}/${page}`, resType: { content: "" } });
+  return result?.content ?? "";
 }
 
-export async function saveWikiPage(subdir: string, page: string, content: string) {
-  return standardFetch({
-    method: "POST",
-    url: `/rest/wikipage/${subdir}/${page}`,
-    data: { content },
-    contentType: "json",
-  });
+export async function saveWikiPage(subdir: string, page: string, data: { content: string }) {
+  return post({ url: `/wikipage/${subdir}/${page}`, data });
 }
 
 export async function searchWiki(suchtext: string) {
-  return standardFetch({
-    method: "POST",
-    url: "/rest/wikipage/search",
+  return post({
+    url: "/wikipage/search",
     data: { suchtext },
-    contentType: "json",
+    resType: { searchtext: "", matches: [{ pageName: "", line: "", text: "" }] },
   });
 }
 
 export async function deleteWikiPage(subdir: string, page: string) {
-  return standardFetch({
-    method: "DELETE",
-    url: `/rest/wikipage/${subdir}/${page}`,
-    data: { data: "" },
-    contentType: "json",
-  });
+  return loeschen({ url: `/wikipage/${subdir}/${page}`, data: { data: "" } });
 }
 
 // Calendar
@@ -471,21 +349,21 @@ export async function calendarEventSources({
   options?: TerminFilterOptions;
   isDarkMode: boolean;
 }) {
-  const segments = [`/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
+  const segments = [`/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
   if (options) {
     segments.push(`&options=${JSON.stringify(options)}`);
   }
-  return getForType("json", segments.join());
+  return get({ url: segments.join(), resType: [{} as TerminEvent] });
 }
 
 // History
 export async function historyIdsFor(collection: string) {
-  const result = await getForType("json", `/rest/history/${collection}`);
+  const result = await get({ url: `/history/${collection}` });
   return result as HistoryObjectOverview[];
 }
 
 export async function historyRowsFor(collection: string, id: string) {
-  const result = await getForType("json", `/rest/history/${collection}/${encodeURIComponent(id)}`);
+  const result = await get({ url: `/history/${collection}/${encodeURIComponent(id)}`, resType: [{} as HistoryDBType] });
   return historyFromRawRows(result);
 }
 
@@ -508,15 +386,15 @@ export async function openAngebotRechnung(vermietung: Vermietung) {
   window.open(`/pdf/vermietungAngebot/${encodeURIComponent(filename)}?url=${encodeURIComponent(vermietung.url!)}&art=${vermietung.art}`);
 }
 
-export async function imgFullsize(url: any) {
-  const img = await getForType("other", `/upload/${url}`);
+export async function imgFullsize(url: string) {
+  const img = await get({ contentType: "other", url: `/upload/${url}`, resType: new Blob() });
   if (img) {
     showFile(img, url);
   }
 }
 
 export async function imgzipForVeranstaltung(konzert: Konzert) {
-  const zip = await getForType("zip", `/imgzipForVeranstaltung/${konzert.url}`);
+  const zip = await get({ contentType: "zip", url: `/imgzipForVeranstaltung/${konzert.url}`, resType: new Blob() });
   if (zip) {
     showFile(zip, `JazzClub_Bilder_${konzert.kopf.titel}.zip`);
   }

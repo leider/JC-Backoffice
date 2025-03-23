@@ -39,8 +39,7 @@ export default function EventCard() {
     }
   }, [currentUser, form, id, url]);
 
-  // eslint-disable-next-line lodash/prop-shorthand
-  const bookersOnly = useMemo(() => filter(allUsers, (u) => u.accessrights.isBookingTeam), [allUsers]);
+  const bookersOnly = useMemo(() => filter(allUsers, "accessrights.isBookingTeam"), [allUsers]);
   const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
 
   const isBookingTeam = useMemo(() => currentUser.accessrights.isBookingTeam, [currentUser.accessrights.isBookingTeam]);

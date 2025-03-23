@@ -1,42 +1,42 @@
 import User, { ABENDKASSE, BOOKING, ORGA, SUPERUSERS } from "./user.js";
 
 export default class Accessrights {
-  private user?: User;
+  private user: User;
 
   constructor(user?: User) {
-    this.user = user;
+    this.user = user ?? new User({});
   }
 
-  get member(): User | undefined {
+  get member(): User {
     return this.user;
   }
 
   get memberId(): string {
-    return this.member?.id || "";
+    return this.member.id || "";
   }
 
-  get gruppen(): string[] {
-    return [this.member?.gruppen ?? ""];
+  get gruppen(): typeof SUPERUSERS | typeof ORGA | typeof BOOKING | typeof ABENDKASSE | "" {
+    return this.member.gruppen ?? "";
   }
 
   get rechte(): string[] {
-    return this.member?.rechte || [];
+    return this.member.rechte;
   }
 
   get isSuperuser(): boolean {
-    return this.gruppen.includes(SUPERUSERS);
+    return this.gruppen === SUPERUSERS;
   }
 
   get isBookingTeam(): boolean {
-    return this.isSuperuser || this.gruppen.includes(BOOKING);
+    return this.isSuperuser || this.gruppen === BOOKING;
   }
 
   get isOrgaTeam(): boolean {
-    return this.isBookingTeam || this.gruppen.includes(ORGA);
+    return this.isBookingTeam || this.gruppen === ORGA;
   }
 
   get isAbendkasse(): boolean {
-    return this.isOrgaTeam || this.gruppen.includes(ABENDKASSE);
+    return this.isOrgaTeam || this.gruppen === ABENDKASSE;
   }
 
   get darfKasseFreigeben(): boolean {

@@ -4,6 +4,7 @@ import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 import store from "./konzertestore.js";
 import conf from "jc-shared/commons/simpleConfigure.js";
 import map from "lodash/map.js";
+import sortBy from "lodash/sortBy.js";
 
 async function renameImage(oldname: string, newname: string, konzertIds: string[], user: User) {
   function updateKonzert(id: string) {
@@ -31,6 +32,6 @@ export default {
 
   alleBildNamen: async function alleBildNamen() {
     const files = await fs.readdir(conf.uploadDir);
-    return files.sort();
+    return sortBy(files);
   },
 };

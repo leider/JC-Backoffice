@@ -25,7 +25,7 @@ export default {
   },
 
   save: function save(object: OptionValues | Orte | FerienIcals, user: User) {
-    persistence.save(object.toJSON ? object.toJSON() : object, user);
+    persistence.save(object, user);
     return object;
   },
 };

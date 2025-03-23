@@ -15,5 +15,6 @@ export function reset(form: FormInstance<TeamFilterObject>) {
       eventTyp: undefined,
     },
     technik: { checked: undefined, fluegel: undefined },
+    booker: [],
   });
 }

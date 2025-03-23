@@ -56,10 +56,10 @@ export default function KonzertComp() {
     }
 
     const untypedKonzert = vals as { agenturauswahl?: string; hotelauswahl?: string; hotelpreiseAlsDefault?: boolean };
-    optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl ?? "");
+    optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl);
     delete untypedKonzert.agenturauswahl;
     if (konz.artist.brauchtHotel) {
-      optionen.addOrUpdateKontakt("hotels", konz.hotel, untypedKonzert.hotelauswahl ?? "");
+      optionen.addOrUpdateKontakt("hotels", konz.hotel, untypedKonzert.hotelauswahl);
       delete untypedKonzert.hotelauswahl;
       if (untypedKonzert.hotelpreiseAlsDefault) {
         optionen.updateHotelpreise(konz.hotel, konz.unterkunft.zimmerPreise);

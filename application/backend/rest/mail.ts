@@ -13,7 +13,6 @@ import User from "jc-shared/user/user.js";
 import fs from "fs/promises";
 import parseFormData from "../lib/commons/parseFormData.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
-import invokeMap from "lodash/invokeMap.js";
 import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
 import filter from "lodash/filter.js";
@@ -21,15 +20,13 @@ import filter from "lodash/filter.js";
 const app = express();
 
 app.get("/mailrule", [checkSuperuser], (req: Request, res: Response) => {
-  const rules = mailstore.all();
-  const result = invokeMap(rules, "toJSON");
-  resToJson(res, result);
+  resToJson(res, mailstore.all());
 });
 
 app.post("/mailrules", [checkSuperuser], (req: Request, res: Response) => {
   const oldRules = mailstore.all();
   const newRules = misc.toObjectList(MailRule, req.body);
-  const { changed, deletedIds } = calculateChangedAndDeleted(invokeMap(newRules, "toJSON"), invokeMap(oldRules, "toJSON"));
+  const { changed, deletedIds } = calculateChangedAndDeleted(newRules, oldRules);
 
   mailstore.saveAll(changed, req.user as User);
   mailstore.removeAll(deletedIds, req.user as User);
@@ -70,6 +67,11 @@ app.post("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
 
   userstore.saveAll(users ?? [], req.user as User);
   resToJson(res, users);
+});
+
+app.get("/mailinglisten", [checkSuperuser], (req: Request, res: Response) => {
+  const users = userstore.allUsers();
+  resToJson(res, map(users, "withoutPass"));
 });
 
 export default app;
