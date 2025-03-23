@@ -22,8 +22,7 @@ export function TeamFilterEdit({
 }) {
   const { allUsers, setFilter } = useJazzContext();
 
-  // eslint-disable-next-line lodash/prop-shorthand
-  const bookersOnly = useMemo(() => filter(allUsers, (u) => u.accessrights.isBookingTeam), [allUsers]);
+  const bookersOnly = useMemo(() => filter(allUsers, "accessrights.isBookingTeam"), [allUsers]);
   const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
 
   const items: CollapseProps["items"] = [
