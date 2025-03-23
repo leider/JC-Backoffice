@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Form, Tag } from "antd";
+import { Form, FormInstance, Tag } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TeamFilterObject } from "./applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -20,6 +20,33 @@ type LabelColorProperty = {
   readonly prop?: NamePath;
 };
 
+function HeaderTag({ label, color, prop, form }: LabelColorProperty & { readonly form: FormInstance }) {
+  const { setFilter } = useJazzContext();
+
+  const closePropTag = useCallback(() => {
+    const values = filter(form.getFieldValue(prop), (value: string) => value !== label);
+    form.setFieldValue(prop, values);
+    setFilter(form.getFieldsValue(true));
+  }, [form, label, prop, setFilter]);
+
+  const closeBooleanTagForProp = useCallback(() => {
+    if (prop) {
+      form.setFieldValue(prop, undefined);
+      setFilter(form.getFieldsValue(true));
+    }
+  }, [form, prop, setFilter]);
+
+  return isBoolean(color) ? (
+    <Tag closeIcon={!!prop} color={color ? "success" : "error"} key={label} onClose={closeBooleanTagForProp}>
+      {label}
+    </Tag>
+  ) : (
+    <Tag closeIcon color={color} key={label} onClose={closePropTag}>
+      {label}
+    </Tag>
+  );
+}
+
 export default function TeamFilter() {
   const [open, setOpen] = useState(false);
 
@@ -31,49 +58,16 @@ export default function TeamFilter() {
     form.setFieldsValue(filterObj);
   }, [filterObj, form]);
 
-  const closeBooleanTagForProp = useCallback(
-    (prop?: NamePath) => () => {
-      if (prop) {
-        form.setFieldValue(prop, undefined);
-        setFilter(form.getFieldsValue(true));
-      }
-    },
-    [form, setFilter],
-  );
-
-  const closePropTag = useCallback(
-    (label: string, prop?: NamePath) => () => {
-      const values = filter(form.getFieldValue(prop), (value: string) => value !== label);
-      form.setFieldValue(prop, values);
-      setFilter(form.getFieldsValue(true));
-    },
-    [form, setFilter],
-  );
-
   const eventTypTag = useCallback(
     (typ: string) => {
-      const result = find(optionen.typenPlus, ["name", typ]);
-      if (result) {
-        return { label: result.name, color: result.color, prop: ["kopf", "eventTyp"] };
-      }
-      return undefined;
+      const result = find(optionen.typenPlus, ["name", typ]) ?? { name: "", color: "" };
+      return { label: result.name, color: result.color, prop: ["kopf", "eventTyp"] };
     },
     [optionen.typenPlus],
   );
 
   function headerTagsForFilters(labelsColors: LabelColorProperty[]) {
-    function HeaderTag({ label, color, prop }: LabelColorProperty) {
-      return isBoolean(color) ? (
-        <Tag closeIcon={!!prop} color={color ? "success" : "error"} key={label} onClose={closeBooleanTagForProp(prop)}>
-          {label}
-        </Tag>
-      ) : (
-        <Tag closeIcon color={color} key={label} onClose={closePropTag(label, prop)}>
-          {label}
-        </Tag>
-      );
-    }
-    return map(labelsColors, (tag) => <HeaderTag color={tag.color} key={tag.label} label={tag.label} prop={tag.prop} />);
+    return map(labelsColors, (tag) => <HeaderTag color={tag.color} form={form} key={tag.label} label={tag.label} prop={tag.prop} />);
   }
 
   const teamFilter = withoutNullOrUndefinedStrippedBy(filterObj);
@@ -103,7 +97,7 @@ export default function TeamFilter() {
     pushIfSet(teamFilter.kopf?.fotografBestellen, "Fotograf einladen", ["kopf", "fotografBestellen"]);
     pushIfSet(teamFilter.technik?.checked, "Technik ist geklärt", ["technik", "checked"]);
     pushIfSet(teamFilter.technik?.fluegel, "Flügel stimmen", ["technik", "fluegel"]);
-    const eventTypTags = map(teamFilter.kopf?.eventTyp, (typ: string) => eventTypTag(typ)!);
+    const eventTypTags = map(teamFilter.kopf?.eventTyp, eventTypTag);
     const bookerTags = map(teamFilter.booker, (booker: string) => ({ label: booker, color: "blue", prop: "booker" }));
     return tags.concat(eventTypTags).concat(bookerTags);
   }, [eventTypTag, teamFilter]);
@@ -111,7 +105,16 @@ export default function TeamFilter() {
   const result = [
     <span key="aktiveFilter">
       <ButtonWithIcon alwaysText onClick={() => setOpen(true)} size="small" text="Filter..." type="default" />
-      <TeamFilterEdit form={form} open={open} setOpen={setOpen} />
+      <Form
+        autoComplete="off"
+        colon={false}
+        form={form}
+        onValuesChange={() => setFilter(form.getFieldsValue(true))}
+        size="small"
+        style={{ display: "inline" }}
+      >
+        <TeamFilterEdit open={open} setOpen={setOpen} />
+      </Form>
     </span>,
   ];
   if (!isEmpty(taggies)) {

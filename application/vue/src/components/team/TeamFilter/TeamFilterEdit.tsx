@@ -1,4 +1,4 @@
-import { Col, Collapse, CollapseProps, ConfigProvider, Form, FormInstance, Row, Space } from "antd";
+import { Col, Collapse, CollapseProps, ConfigProvider, Row, Space } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
 import React, { useMemo } from "react";
@@ -10,17 +10,11 @@ import { JazzModal } from "@/widgets/JazzModal.tsx";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import filter from "lodash/filter";
 import map from "lodash/map";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
-export function TeamFilterEdit({
-  form,
-  open,
-  setOpen,
-}: {
-  readonly form: FormInstance<TeamFilterObject>;
-  readonly open: boolean;
-  readonly setOpen: (open: boolean) => void;
-}) {
+export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; readonly setOpen: (open: boolean) => void }) {
   const { allUsers, setFilter } = useJazzContext();
+  const form = useFormInstance<TeamFilterObject>();
 
   const bookersOnly = useMemo(() => filter(allUsers, "accessrights.isBookingTeam"), [allUsers]);
   const bookersAsOptions = useMemo(() => map(bookersOnly, "asUserAsOption"), [bookersOnly]);
@@ -144,11 +138,9 @@ export function TeamFilterEdit({
       }
       open={open}
     >
-      <Form autoComplete="off" colon={false} form={form} onValuesChange={() => setFilter(form.getFieldsValue(true))} size="small">
-        <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
-          <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
-        </ConfigProvider>
-      </Form>
+      <ConfigProvider theme={{ components: { Collapse: { contentPadding: 0 } } }}>
+        <Collapse defaultActiveKey={["Allgemein", "Erklärung"]} ghost items={items} />
+      </ConfigProvider>
     </JazzModal>
   );
 }
