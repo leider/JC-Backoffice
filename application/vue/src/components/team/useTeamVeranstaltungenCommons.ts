@@ -17,7 +17,7 @@ import keys from "lodash/keys";
 
 export const useTeamVeranstaltungenCommons = (periodsToShow: string[]) => {
   const [search, setSearch] = useSearchParams();
-  const { allUsers, filter: teamFilter } = useJazzContext();
+  const { allUsers, teamFilter } = useJazzContext();
 
   const [period, setPeriod] = useState<string>("Zukünftige");
 

@@ -91,7 +91,7 @@ function Uebersicht({ veranstaltungen }: { readonly veranstaltungen: Veranstaltu
 }
 
 export default function Info() {
-  const { filter: contextFilter } = useJazzContext();
+  const { teamFilter } = useJazzContext();
   const { monatJahr } = useParams(); // als yymm
   const [search, setSearch] = useSearchParams();
   const [activePage, setActivePage] = useState<string>("pressetexte");
@@ -109,7 +109,7 @@ export default function Info() {
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, end.yyyyMM),
   });
 
-  const veranstaltungen = useMemo(() => filter(data, applyTeamFilter(contextFilter)), [data, contextFilter]);
+  const veranstaltungen = useMemo(() => filter(data, applyTeamFilter(teamFilter)), [data, teamFilter]);
 
   useEffect(
     () => {

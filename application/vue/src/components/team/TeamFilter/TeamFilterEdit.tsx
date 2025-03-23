@@ -13,7 +13,7 @@ import map from "lodash/map";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; readonly setOpen: (open: boolean) => void }) {
-  const { allUsers, setFilter } = useJazzContext();
+  const { allUsers, setTeamFilter } = useJazzContext();
   const form = useFormInstance<TeamFilterObject>();
 
   const bookersOnly = useMemo(() => filter(allUsers, "accessrights.isBookingTeam"), [allUsers]);
@@ -121,7 +121,7 @@ export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; read
             alwaysText
             onClick={() => {
               reset(form);
-              setFilter(form.getFieldsValue(true));
+              setTeamFilter(form.getFieldsValue(true));
             }}
             text="Zurücksetzen"
             type="default"
@@ -130,7 +130,7 @@ export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; read
             alwaysText
             onClick={() => {
               setOpen(false);
-              setFilter(form.getFieldsValue(true));
+              setTeamFilter(form.getFieldsValue(true));
             }}
             text="Schließen"
           />
