@@ -10,9 +10,11 @@ import { TeamContext } from "@/components/team/TeamContext.ts";
 import { useTeamVeranstaltungenCommons } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import map from "lodash/map";
+import { useLocation } from "react-router";
 
-export function TeamUndVeranstaltungen({ periodsToShow }: { readonly periodsToShow: string[] }) {
+export function TeamUndVeranstaltungen() {
   const { memoizedId } = useJazzContext();
+  const { pathname } = useLocation();
   useEffect(() => {
     setTimeout(() => {
       const element = document.getElementById(memoizedId ?? "");
@@ -25,9 +27,9 @@ export function TeamUndVeranstaltungen({ periodsToShow }: { readonly periodsToSh
     }, 1000);
   }, [memoizedId]);
 
-  const forVeranstaltungen = useMemo(() => periodsToShow.includes("alle"), [periodsToShow]);
+  const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, filterTags, usersAsOptions } =
-    useTeamVeranstaltungenCommons(periodsToShow);
+    useTeamVeranstaltungenCommons();
 
   const subState = useMemo(() => ({ veranstaltungenNachMonat, usersAsOptions }), [usersAsOptions, veranstaltungenNachMonat]);
 

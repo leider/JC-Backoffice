@@ -22,6 +22,7 @@ import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import { historyFromRawRows } from "@/rest/historyObject.ts";
 import { refreshTokenPost } from "@/rest/authenticationRequests.ts";
 import sortBy from "lodash/sortBy";
+import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
 type ContentType = "pdf" | "zip" | "other";
 
@@ -86,7 +87,7 @@ export async function konzerteForToday() {
   return handleVeranstaltungen(result);
 }
 
-export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
+export async function konzerteForTeam(selector: Period) {
   const result = await get({ url: `/konzerte/${selector}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
@@ -139,7 +140,7 @@ function handleVermietungen(result?: Vermietung[]): Vermietung[] {
   return map(result, (each) => new Vermietung(each));
 }
 
-export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
+export async function vermietungenForTeam(selector: Period) {
   const result = await get({ url: `/vermietungen/${selector}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }

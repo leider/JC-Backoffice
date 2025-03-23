@@ -6,5 +6,5 @@ export default function Team() {
   useDirtyBlocker(false);
   document.title = "Team";
 
-  return <TeamUndVeranstaltungen periodsToShow={["zukuenftige", "vergangene"]} />;
+  return <TeamUndVeranstaltungen />;
 }
