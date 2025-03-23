@@ -26,6 +26,7 @@ import sortBy from "lodash/sortBy";
 type ContentType = "pdf" | "zip" | "other";
 
 type FetchParams<T, R> = {
+  urlPrefix?: string;
   url: string;
   contentType?: ContentType;
   method: Method;
@@ -45,7 +46,7 @@ async function post<T, R = T>(params: Omit<FetchParams<T, R>, "method">) {
   return standardFetch<T, R>({ ...params, method: "POST" });
 }
 
-async function standardFetch<T, R>(params: FetchParams<T, R>) {
+async function standardFetch<T, R>({ urlPrefix = "/rest", url, method, data, contentType }: FetchParams<T, R>) {
   if (!axios.defaults.headers.Authorization) {
     await refreshTokenPost();
   } else {
@@ -57,23 +58,18 @@ async function standardFetch<T, R>(params: FetchParams<T, R>) {
       console.log("token veraltet");
     }
   }
-  const options: AxiosRequestConfig<T> = {
-    url: params.url,
-    method: params.method,
-    data: params.data,
-    responseType: params.contentType ? "blob" : "json",
-  };
+  const options: AxiosRequestConfig<T> = { url: urlPrefix + url, method: method, data: data, responseType: contentType ? "blob" : "json" };
   const res = await axios<T, AxiosResponse<R>>(options);
   return res.data;
 }
 
 export async function uploadFile(data: FormData) {
-  const result = await post({ url: "/rest/upload", data, resType: new Konzert() });
+  const result = await post({ url: "/upload", data, resType: new Konzert() });
   return new Konzert(result);
 }
 
 export async function uploadWikiImage(data: FormData) {
-  return await post({ url: "/rest/wiki/upload", data, resType: { url: "" } });
+  return await post({ url: "/wiki/upload", data, resType: { url: "" } });
 }
 
 function handleVeranstaltungen(result?: Konzert[]): Konzert[] {
@@ -81,17 +77,17 @@ function handleVeranstaltungen(result?: Konzert[]): Konzert[] {
 }
 
 export async function konzerteBetweenYYYYMM(start: string, end: string) {
-  const result = await get({ url: `/rest/konzerte/${start}/${end}`, resType: [new Konzert()] });
+  const result = await get({ url: `/konzerte/${start}/${end}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
 export async function konzerteForToday() {
-  const result = await get({ url: `/rest/konzerte/fortoday`, resType: [new Konzert()] });
+  const result = await get({ url: `/konzerte/fortoday`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
 export async function konzerteForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
-  const result = await get({ url: `/rest/konzerte/${selector}`, resType: [new Konzert()] });
+  const result = await get({ url: `/konzerte/${selector}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
@@ -102,7 +98,7 @@ export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRi
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
-    const result = await get({ url: `/rest/konzert/${encodeURIComponent(realUrl)}`, resType: new Konzert() });
+    const result = await get({ url: `/konzert/${encodeURIComponent(realUrl)}`, resType: new Konzert() });
     if (result) {
       const konzert = new KonzertWithRiderBoxes(result);
       konzert.reset();
@@ -111,18 +107,18 @@ export async function konzertWithRiderForUrl(url: string): Promise<KonzertWithRi
       return emptyResult;
     }
   }
-  const konzert = await get({ url: `/rest/konzert/${encodeURIComponent(url)}`, resType: new Konzert() });
-  const rider = await get({ url: `/rest/riders/${url}`, resType: new Rider() });
+  const konzert = await get({ url: `/konzert/${encodeURIComponent(url)}`, resType: new Konzert() });
+  const rider = await get({ url: `/riders/${url}`, resType: new Rider() });
   return konzert ? new KonzertWithRiderBoxes({ ...konzert, riderBoxes: rider.boxes }) : emptyResult;
 }
 
 export async function saveKonzert(konzert: Konzert) {
-  const result = await post({ url: "/rest/konzert", data: konzert });
+  const result = await post({ url: "/konzert", data: konzert });
   return new Konzert(result);
 }
 
 export async function deleteKonzertWithId(id: string) {
-  return loeschen({ url: "/rest/konzert", data: { id } });
+  return loeschen({ url: "/konzert", data: { id } });
 }
 
 // Staff
@@ -144,12 +140,12 @@ function handleVermietungen(result?: Vermietung[]): Vermietung[] {
 }
 
 export async function vermietungenForTeam(selector: "zukuenftige" | "vergangene" | "alle") {
-  const result = await get({ url: `/rest/vermietungen/${selector}`, resType: [new Vermietung()] });
+  const result = await get({ url: `/vermietungen/${selector}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }
 
 export async function vermietungenBetweenYYYYMM(start: string, end: string) {
-  const result = await get({ url: `/rest/vermietungen/${start}/${end}`, resType: [new Vermietung()] });
+  const result = await get({ url: `/vermietungen/${start}/${end}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }
 
@@ -159,7 +155,7 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
   }
   if (url.startsWith("copy-of-")) {
     const realUrl = url.substring(8);
-    const result = await get({ url: `/rest/vermietung/${encodeURIComponent(realUrl)}`, resType: new Vermietung() });
+    const result = await get({ url: `/vermietung/${encodeURIComponent(realUrl)}`, resType: new Vermietung() });
     if (result) {
       const vermietung = new Vermietung(result);
       vermietung.reset();
@@ -168,23 +164,23 @@ export async function vermietungForUrl(url: string): Promise<Vermietung> {
       return result;
     }
   }
-  const result = await get({ url: `/rest/vermietung/${encodeURIComponent(url)}`, resType: new Vermietung() });
+  const result = await get({ url: `/vermietung/${encodeURIComponent(url)}`, resType: new Vermietung() });
   return result ? new Vermietung(result) : result;
 }
 
 export async function saveVermietung(vermietung: Vermietung) {
-  const result = await post({ url: "/rest/vermietung", data: vermietung });
+  const result = await post({ url: "/vermietung", data: vermietung });
   return new Vermietung(result);
 }
 
 export async function deleteVermietungWithId(id: string) {
-  return loeschen({ url: "/rest/vermietung", data: { id } });
+  return loeschen({ url: "/vermietung", data: { id } });
 }
 
 // User
 export async function currentUser() {
   try {
-    const result = await get({ url: "/rest/users/current", resType: {} as User });
+    const result = await get({ url: "/users/current", resType: {} as User });
     return new User(result);
   } catch {
     return new User({ id: "invalidUser" });
@@ -192,152 +188,152 @@ export async function currentUser() {
 }
 
 export async function allUsers(): Promise<User[]> {
-  const result = await get({ url: "/rest/users", resType: [{} as User] });
+  const result = await get({ url: "/users", resType: [{} as User] });
   return map(result, (user) => new User(user));
 }
 
 export async function saveUser(user: User) {
-  const result = await post({ url: "/rest/user", data: user });
+  const result = await post({ url: "/user", data: user });
   return new User(result);
 }
 
 export async function deleteUser(user: User) {
-  return loeschen({ url: "/rest/user", data: user });
+  return loeschen({ url: "/user", data: user });
 }
 
 export async function saveNewUser(user: User) {
-  return standardFetch({ method: "PUT", url: "/rest/user", data: user });
+  return standardFetch({ method: "PUT", url: "/user", data: user });
 }
 
 export async function changePassword(user: User) {
-  const result = await post({ url: "/rest/user/changePassword", data: user });
+  const result = await post({ url: "/user/changePassword", data: user });
   return new User(result);
 }
 
 // Programmheft
 export async function kalenderFor(jahrMonat: string) {
-  const result = await get({ url: `/rest/programmheft/${jahrMonat}`, resType: new Kalender() });
+  const result = await get({ url: `/programmheft/${jahrMonat}`, resType: new Kalender() });
   return result?.id ? new Kalender(result) : new Kalender({ id: jahrMonat });
 }
 
 export async function alleKalender() {
-  const result = await get({ url: "/rest/programmheft/alle", resType: [new Kalender()] });
+  const result = await get({ url: "/programmheft/alle", resType: [new Kalender()] });
   return result.length > 0 ? map(result, (r) => new Kalender(r)) : [];
 }
 
 export async function saveProgrammheft(kalender: Kalender) {
-  const result = await post({ url: "/rest/programmheft", data: kalender });
+  const result = await post({ url: "/programmheft", data: kalender });
   return new Kalender(result);
 }
 
 // Rider
 export async function saveRider(rider: Rider) {
-  const result = await post({ url: "/rest/riders", data: rider });
+  const result = await post({ url: "/riders", data: rider });
   return new Rider(result);
 }
 
 // Optionen & Termine
 export async function optionen(): Promise<OptionValues> {
-  const result = await get({ url: "/rest/optionen", resType: new OptionValues() });
+  const result = await get({ url: "/optionen", resType: new OptionValues() });
   return new OptionValues(result);
 }
 
 export async function saveOptionen(optionen: OptionValues) {
-  const result = await post({ url: "/rest/optionen", data: optionen });
+  const result = await post({ url: "/optionen", data: optionen });
   return new OptionValues(result);
 }
 
 export async function orte() {
-  const result = await get({ url: "/rest/orte", resType: new Orte() });
+  const result = await get({ url: "/orte", resType: new Orte() });
   return new Orte(result);
 }
 
 export async function saveOrte(orte: Orte) {
-  const result = await post({ url: "/rest/orte", data: orte });
+  const result = await post({ url: "/orte", data: orte });
   return new Orte(result);
 }
 
 export async function termine() {
-  const result = await get({ url: "/rest/termine", resType: [new Termin()] });
+  const result = await get({ url: "/termine", resType: [new Termin()] });
   return map(result, (r) => new Termin(r)) ?? [];
 }
 
 export async function saveTermine(termine: Termin[]) {
-  const result = await post({ url: "/rest/termine", data: termine });
+  const result = await post({ url: "/termine", data: termine });
   return map(result, (r) => new Termin(r)) ?? [];
 }
 
 export async function kalender() {
-  const result = await get({ url: "/rest/kalender", resType: new FerienIcals() });
+  const result = await get({ url: "/kalender", resType: new FerienIcals() });
   return result ? new FerienIcals(result) : result;
 }
 
 export async function saveKalender(kalender: FerienIcals) {
-  const result = await post({ url: "/rest/kalender", data: kalender });
+  const result = await post({ url: "/kalender", data: kalender });
   return result ? new FerienIcals(result) : result;
 }
 
 // Image
 export async function imagenames() {
-  const result = await get({ url: "/rest/imagenames", resType: { names: [""] } });
+  const result = await get({ url: "/imagenames", resType: { names: [""] } });
   return result?.names ?? [];
 }
 
 export async function saveImagenames(rows: ImageOverviewRow[]) {
-  await post({ url: "/rest/imagenames", data: rows, resType: { names: [""] } });
+  await post({ url: "/imagenames", data: rows, resType: { names: [""] } });
   return rows;
 }
 
 //Mails intern
 export async function sendMail(formData: FormData) {
-  return post({ url: "/rest/rundmail", data: formData, resType: {} as SentMessageInfo });
+  return post({ url: "/rundmail", data: formData, resType: {} as SentMessageInfo });
 }
 
 export async function allMailinglists() {
-  const result = await get({ url: "/rest/mailinglisten", resType: [] as User[] });
+  const result = await get({ url: "/mailinglisten", resType: [] as User[] });
   return { lists: sortBy(new Users(result ?? []).mailinglisten, "name") };
 }
 
 export async function saveMailinglists({ lists }: { lists: Mailingliste[] }) {
-  const result = await post({ url: "/rest/mailinglisten", data: lists, resType: [] as User[] });
+  const result = await post({ url: "/mailinglisten", data: lists, resType: [] as User[] });
   return { lists: sortBy(new Users(result ?? []).mailinglisten, "name") };
 }
 
 // Mails für Veranstaltungen
 export async function mailRules() {
-  const result = await get({ url: "/rest/mailrule", resType: [new MailRule()] });
+  const result = await get({ url: "/mailrule", resType: [new MailRule()] });
   return map(result, (each) => new MailRule(each));
 }
 
 export async function saveMailRules(rules: MailRule[]) {
-  return post({ url: "/rest/mailrules", data: rules });
+  return post({ url: "/mailrules", data: rules });
 }
 
 // Wiki
 export async function wikisubdirs() {
-  const json = await get({ url: "/rest/wikidirs", resType: { dirs: [""] } });
+  const json = await get({ url: "/wikidirs", resType: { dirs: [""] } });
   return json ?? { dirs: [] };
 }
 
 export async function wikiPage(subdir: string, page: string) {
-  const result = await get({ url: `/rest/wikipage/${subdir}/${page}`, resType: { content: "" } });
+  const result = await get({ url: `/wikipage/${subdir}/${page}`, resType: { content: "" } });
   return result?.content ?? "";
 }
 
 export async function saveWikiPage(subdir: string, page: string, data: { content: string }) {
-  return post({ url: `/rest/wikipage/${subdir}/${page}`, data });
+  return post({ url: `/wikipage/${subdir}/${page}`, data });
 }
 
 export async function searchWiki(suchtext: string) {
   return post({
-    url: "/rest/wikipage/search",
+    url: "/wikipage/search",
     data: { suchtext },
     resType: { searchtext: "", matches: [{ pageName: "", line: "", text: "" }] },
   });
 }
 
 export async function deleteWikiPage(subdir: string, page: string) {
-  return loeschen({ url: `/rest/wikipage/${subdir}/${page}`, data: { data: "" } });
+  return loeschen({ url: `/wikipage/${subdir}/${page}`, data: { data: "" } });
 }
 
 // Calendar
@@ -352,7 +348,7 @@ export async function calendarEventSources({
   options?: TerminFilterOptions;
   isDarkMode: boolean;
 }) {
-  const segments = [`/rest/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
+  const segments = [`/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
   if (options) {
     segments.push(`&options=${JSON.stringify(options)}`);
   }
@@ -361,12 +357,12 @@ export async function calendarEventSources({
 
 // History
 export async function historyIdsFor(collection: string) {
-  const result = await get({ url: `/rest/history/${collection}` });
+  const result = await get({ url: `/history/${collection}` });
   return result as HistoryObjectOverview[];
 }
 
 export async function historyRowsFor(collection: string, id: string) {
-  const result = await get({ url: `/rest/history/${collection}/${encodeURIComponent(id)}`, resType: [{} as HistoryDBType] });
+  const result = await get({ url: `/history/${collection}/${encodeURIComponent(id)}`, resType: [{} as HistoryDBType] });
   return historyFromRawRows(result);
 }
 
