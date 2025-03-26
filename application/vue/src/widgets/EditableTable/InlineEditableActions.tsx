@@ -16,7 +16,7 @@ export interface ActionCallbacks {
  * }} props
  * @return {*}  {React.ReactElement}
  */
-export default function InlineEditableActions({ actions }: { readonly actions: ActionCallbacks }): React.ReactElement {
+export default function InlineEditableActions({ actions }: { readonly actions: ActionCallbacks }) {
   const [open, setOpen] = useState(false);
   return (
     <>
