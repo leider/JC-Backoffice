@@ -3,7 +3,7 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import MailRule from "jc-shared/mail/mailRule.js";
 import mailstore from "../lib/mailsender/mailstore.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../simpleConfigure.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import { byDateRangeInAscendingOrder } from "./gigAndRentService.js";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.js";

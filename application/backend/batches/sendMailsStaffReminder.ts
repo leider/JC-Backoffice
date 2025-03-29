@@ -1,6 +1,6 @@
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../simpleConfigure.js";
 import userstore from "../lib/users/userstore.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import mixVeranstaltungenMitUsers, { VerMitUser } from "jc-shared/commons/mixVeranstaltungenMitUsers.js";

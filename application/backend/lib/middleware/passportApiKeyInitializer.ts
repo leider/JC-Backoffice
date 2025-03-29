@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy } from "passport-http-bearer";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import { loggers } from "winston";
 
 const appLogger = loggers.get("application");

@@ -1,8 +1,10 @@
 import * as React from "react";
 import { PropsWithChildren, ReactNode, useContext, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { Breadcrumb, type BreadcrumbProps, ConfigProvider, theme } from "antd";
+import { Breadcrumb, type BreadcrumbProps, ConfigProvider, theme, Typography } from "antd";
 import { GlobalContext } from "../app/GlobalContext.ts";
+import { useLocation } from "react-router";
+import "./JazzPageHeader.css";
 
 export function JazzPageHeader({
   title,
@@ -19,17 +21,29 @@ export function JazzPageHeader({
   readonly buttons?: ReactNode[];
   readonly firstTag?: ReactNode;
   readonly dateString?: string;
-  readonly tags?: ReactNode[];
+  readonly tags?: ReactNode | ReactNode[];
   readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
   readonly hasErrors?: boolean;
   readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
   const { isDarkMode } = useContext(GlobalContext);
-  const { token } = theme.useToken();
+  const { pathname } = useLocation();
+  const isCopy = useMemo(() => {
+    return pathname.includes("/copy-of-");
+  }, [pathname]);
+  const isNew = useMemo(() => {
+    return pathname.includes("/new");
+  }, [pathname]);
 
-  const theHeader = useMemo(() => {
-    return hasErrors ? <span style={{ color: token.colorError }}>Du hast noch Fehler!</span> : <span style={style}>{title}</span>;
-  }, [hasErrors, style, title, token.colorError]);
+  const subTitle = useMemo(
+    () => (
+      <b style={{ fontSize: "var(--ant-font-size-xl)" }}>
+        {`${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`}
+        {hasErrors ? <Typography.Text type="danger"> Du hast noch Fehler!</Typography.Text> : null}
+      </b>
+    ),
+    [hasErrors, isCopy, isNew],
+  );
 
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
@@ -46,7 +60,8 @@ export function JazzPageHeader({
           tags,
         ]}
         style={{ ...style, paddingInline: 4 }}
-        title={theHeader}
+        subTitle={subTitle}
+        title={<span style={style}>{title}</span>}
       >
         {children}
       </PageHeader>

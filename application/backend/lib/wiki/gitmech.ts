@@ -1,5 +1,5 @@
 import gitExec from "./gitExec.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import filter from "lodash/filter.js";
 
 const workTree = conf.wikipath;

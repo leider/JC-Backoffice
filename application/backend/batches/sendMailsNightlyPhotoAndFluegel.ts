@@ -1,7 +1,7 @@
 import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../simpleConfigure.js";
 import mailtransport from "../lib/mailsender/mailtransport.js";
 import usersService from "../lib/users/usersService.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";

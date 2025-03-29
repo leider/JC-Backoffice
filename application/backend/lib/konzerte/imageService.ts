@@ -2,7 +2,7 @@ import User from "jc-shared/user/user.js";
 import fs from "fs/promises";
 import { ImageOverviewRow } from "jc-shared/konzert/konzert.js";
 import store from "./konzertestore.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import map from "lodash/map.js";
 import sortBy from "lodash/sortBy.js";
 

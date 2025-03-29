@@ -16,6 +16,7 @@ import MailMessage from "jc-shared/mail/mailMessage.js";
 import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
 import filter from "lodash/filter.js";
+import conf from "../simpleConfigure.js";
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.post("/rundmail", [checkSuperuser], async (req: Request, res: Response) => {
   const user = req.user as User;
 
   const message = MailMessage.forJsonAndUser(JSON.parse((fields.message ?? [])[0]), user);
+  message.from = MailMessage.formatEMailAddress(`${user.name} via backoffice.jazzclub.de`, conf.senderAddress);
   if (files.dateien) {
     message.attachments = await Promise.all(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

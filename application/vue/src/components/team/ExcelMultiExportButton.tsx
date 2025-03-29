@@ -84,8 +84,8 @@ function SelectRangeForExcelModal({
   }, [bestaetigteFiltered, exportType, optionen, setIsOpen]);
 
   return (
-    <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={okClicked} open={isOpen}>
-      <Form autoComplete="off" form={form} layout="vertical">
+    <Form autoComplete="off" form={form} layout="vertical">
+      <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={okClicked} open={isOpen}>
         <JazzPageHeader title="Excel Export" />
         <Row gutter={8}>
           <Col span={12}>
@@ -97,8 +97,8 @@ function SelectRangeForExcelModal({
             <SingleSelect label="Art des Exports" name="exportType" options={["Kalkulation", "Auslastung"]} />
           </Col>
         </Row>
-      </Form>
-    </JazzModal>
+      </JazzModal>
+    </Form>
   );
 }
 

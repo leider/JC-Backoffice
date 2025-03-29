@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import Fs from "fs/promises";
 import childProcess from "child_process";
 import util from "util";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 
 const exec = util.promisify(childProcess.exec);
 

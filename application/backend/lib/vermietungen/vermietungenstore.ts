@@ -6,6 +6,7 @@ import pers from "../persistence/sqlitePersistence.js";
 import misc from "jc-shared/commons/misc.js";
 import Vermietung from "jc-shared/vermietung/vermietung.js";
 import User from "jc-shared/user/user.js";
+import conf from "../../simpleConfigure.js";
 
 const persistence = pers("vermietungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
@@ -26,20 +27,17 @@ function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhr
   return byDateRange(rangeFrom, rangeTo, "DESC");
 }
 
+function now() {
+  return DatumUhrzeit.forISOString(conf.nowForDevelopment);
+}
+
 export default {
   zukuenftigeMitGestern: function zukuenftigeMitGestern() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInAscendingOrder(now.minus({ tage: 1 }), now.plus({ jahre: 10 }));
-  },
-
-  zukuenftige: function zukuenftige() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }));
+    return byDateRangeInAscendingOrder(now().minus({ tage: 1 }), now().plus({ jahre: 10 }));
   },
 
   vergangene: function vergangene() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInDescendingOrder(now.minus({ monate: 12 }), now);
+    return byDateRangeInDescendingOrder(now().minus({ monate: 12 }), now());
   },
 
   alle: function alle() {
