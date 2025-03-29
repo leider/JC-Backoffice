@@ -10,7 +10,7 @@ export default function InnerContent() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    ref.current?.scroll({ top: 0 });
+    ref.current?.scroll?.({ top: 0 });
   });
 
   if (loginState === LoginState.UNKNOWN) {

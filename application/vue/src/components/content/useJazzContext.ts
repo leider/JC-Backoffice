@@ -106,6 +106,9 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       return emptyContext;
     },
   });
+  useEffect(() => {
+    console.log({ context });
+  }, [context]);
   const { notification } = App.useApp();
 
   function showSuccess({
