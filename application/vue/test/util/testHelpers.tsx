@@ -16,7 +16,7 @@ type FormWithProps = {
 numeral.locale("de");
 numeral.localeData("de").delimiters.thousands = ".";
 
-export function FormWith({ tunnel, children }: FormWithProps) {
+function FormWith({ tunnel, children }: FormWithProps) {
   const [form] = Form.useForm();
   tunnel.form = form;
   return <Form form={form}>{children}</Form>;

@@ -12,6 +12,7 @@ import { KassenContext } from "@/components/konzert/kasse/KassenContext.ts";
 import { useWatch } from "antd/es/form/Form";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
+import { JazzRowWithRef } from "@/widgets/JazzRowWithRef.tsx";
 
 export default function EinnahmenCard() {
   const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
@@ -36,7 +37,7 @@ export default function EinnahmenCard() {
 
   return (
     <Collapsible amount={einnahmeTotalEUR} label="Einnahmen Abendkasse" noTopBorder suffix="kasse">
-      <JazzRow ref={refEinnahmen}>
+      <JazzRowWithRef ref={refEinnahmen}>
         <Col span={8}>
           <NumberInput decimals={2} disabled={!!freigabe} label="Tickets (AK)" name={["kasse", "einnahmeTicketsEUR"]} suffix="€" />
         </Col>
@@ -45,7 +46,7 @@ export default function EinnahmenCard() {
             <ButtonWithIcon alwaysText block color={color("kasse")} disabled={!!freigabe} onClick={calculateTickets} text="Berechnen..." />
           </Form.Item>
         </Col>
-      </JazzRow>
+      </JazzRowWithRef>
       <JazzRow>
         <Col span={8}>
           <NumberInput decimals={0} disabled={!!freigabe} label="Besucher gesamt" name={["kasse", "anzahlBesucherAK"]} />

@@ -46,15 +46,15 @@ export function ChangePasswordModal({
   }
 
   return (
-    <JazzModal
-      closable={false}
-      maskClosable={false}
-      onCancel={() => setIsOpen(false)}
-      onOk={saveForm}
-      open={isOpen}
-      title="Passwort ändern"
-    >
-      <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
+    <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
+      <JazzModal
+        closable={false}
+        maskClosable={false}
+        onCancel={() => setIsOpen(false)}
+        onOk={saveForm}
+        open={isOpen}
+        title="Passwort ändern"
+      >
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
@@ -72,8 +72,8 @@ export function ChangePasswordModal({
             </Form.Item>
           </Col>
         </Row>
-      </Form>
-    </JazzModal>
+      </JazzModal>
+    </Form>
   );
 }
 export function NewUserModal({ isOpen, setIsOpen }: { readonly isOpen: boolean; readonly setIsOpen: (open: boolean) => void }) {
@@ -166,28 +166,28 @@ export function EditUserModal({
   }
 
   return (
-    <JazzModal
-      closable={false}
-      maskClosable={false}
-      okButtonProps={{ disabled: !dirty }}
-      onCancel={() => setIsOpen(false)}
-      onOk={saveForm}
-      open={isOpen}
-      title={user.id}
+    <Form
+      autoComplete="off"
+      form={form}
+      layout="vertical"
+      onValuesChange={() => {
+        const current = form.getFieldsValue(true);
+        logDiffForDirty(initialValue, current, false);
+        setDirty(areDifferent(initialValue, current));
+      }}
     >
-      <Form
-        autoComplete="off"
-        form={form}
-        layout="vertical"
-        onValuesChange={() => {
-          const current = form.getFieldsValue(true);
-          logDiffForDirty(initialValue, current, false);
-          setDirty(areDifferent(initialValue, current));
-        }}
+      <JazzModal
+        closable={false}
+        maskClosable={false}
+        okButtonProps={{ disabled: !dirty }}
+        onCancel={() => setIsOpen(false)}
+        onOk={saveForm}
+        open={isOpen}
+        title={user.id}
       >
         <EditFields />
-      </Form>
-    </JazzModal>
+      </JazzModal>
+    </Form>
   );
 }
 
