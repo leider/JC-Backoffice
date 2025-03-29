@@ -125,13 +125,13 @@ export async function deleteKonzertWithId(id: string) {
 // Staff
 export async function addOrRemoveUserToSection(veranstaltung: Veranstaltung, section: StaffType, add: boolean) {
   const action = add ? "addUserToSection" : "removeUserFromSection";
-  const result = await post({ url: `/rest${veranstaltung.fullyQualifiedUrl}/${action}`, data: { section }, resType: veranstaltung });
+  const result = await post({ url: `${veranstaltung.fullyQualifiedUrl}/${action}`, data: { section }, resType: veranstaltung });
   return veranstaltung.isVermietung ? new Vermietung(result) : new Konzert(result);
 }
 
 // Gäste
 export async function updateGastInSection(konzert: Konzert, item: NameWithNumber, art: GastArt) {
-  const result = await post({ url: `/rest${konzert.fullyQualifiedUrl}/updateGastInSection`, data: { item, art }, resType: konzert });
+  const result = await post({ url: `${konzert.fullyQualifiedUrl}/updateGastInSection`, data: { item, art }, resType: konzert });
   return new Konzert(result);
 }
 
