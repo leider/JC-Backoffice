@@ -1,5 +1,4 @@
 import { format, loggers, transports } from "winston";
-import { FileTransportInstance } from "winston/lib/winston/transports";
 
 const consoleformat = format.combine(
   format.colorize(),
@@ -18,7 +17,7 @@ const fileformat = format.combine(
   format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`),
 );
 
-function fileNamed(name: string): FileTransportInstance {
+function fileNamed(name: string) {
   return new transports.File({
     format: fileformat,
     filename: `../log/${name}.log`,

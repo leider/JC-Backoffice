@@ -89,6 +89,7 @@ export default tseslint.config(
       "sonarjs/no-invariant-returns": "off",
       "sonarjs/no-nested-conditional": "off",
       "sonarjs/no-nested-functions": "off",
+      "sonarjs/no-commented-code": "off",
     },
   },
   { ignores: ["**/*.js"], ...eslintPluginPrettierRecommended },

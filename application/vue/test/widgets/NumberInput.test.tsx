@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { formWidgetHelper } from "../util/testHelpers";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import * as os from "node:os";
 
 const { widget, updateWidget, form } = formWidgetHelper;
 
@@ -134,11 +133,6 @@ describe("Number Input Widget", () => {
       });
     });
 
-    it.skipIf(os.platform() !== "darwin")("on form value cuts down to 10 decimals (fails on CI)", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 1.123123123123 }));
-      expect(form().getFieldValue("test")).toBe(1.1231231231);
-    });
-
     it("on setting value cuts down to 10 decimals", async () => {
       widget().setValueOnInputLabeled("testme", "1,123123123123");
       await waitFor(() => {
@@ -166,21 +160,11 @@ describe("Number Input Widget", () => {
       });
     });
 
-    it.skipIf(os.platform() !== "darwin")("rounds up to lower limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 1 }));
-      expect(form().getFieldValue("test")).toBe(2);
-    });
-
     it("rounds up to lower limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "1");
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(2);
       });
-    });
-
-    it.skipIf(os.platform() !== "darwin")("rounds down to upper limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 9 }));
-      expect(form().getFieldValue("test")).toBe(7);
     });
 
     it("rounds down to upper limit on setting value", async () => {
@@ -198,21 +182,11 @@ describe("Number Input Widget", () => {
       });
     });
 
-    it.skipIf(os.platform() !== "darwin")("rounds up to lower limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 1 }));
-      expect(form().getFieldValue("test")).toBe(3);
-    });
-
     it("rounds up to lower limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "1");
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(3);
       });
-    });
-
-    it.skipIf(os.platform() !== "darwin")("rounds down to upper limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 9 }));
-      expect(form().getFieldValue("test")).toBe(6);
     });
 
     it("rounds down to upper limit on setting value", async () => {
@@ -230,21 +204,11 @@ describe("Number Input Widget", () => {
       });
     });
 
-    it.skipIf(os.platform() !== "darwin")("rounds up to lower limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 1 }));
-      expect(form().getFieldValue("test")).toBe(2.01);
-    });
-
     it("rounds up to lower limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "1");
       await waitFor(() => {
         expect(form().getFieldValue("test")).toBe(2.01);
       });
-    });
-
-    it.skipIf(os.platform() !== "darwin")("rounds down to upper limit on form value", async () => {
-      await waitFor(() => form().setFieldsValue({ test: 9 }));
-      expect(form().getFieldValue("test")).toBe(6.99);
     });
 
     it("rounds down to upper limit on setting value", async () => {

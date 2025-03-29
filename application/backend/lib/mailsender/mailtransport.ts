@@ -1,10 +1,10 @@
 import * as nodemailer from "nodemailer";
-import * as Mail from "nodemailer/lib/mailer";
 import * as winston from "winston";
 
 import conf from "../../simpleConfigure.js";
 import MailBodyRenderer from "./mailbodyRenderer.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
+import Mail from "nodemailer/lib/mailer/index.js";
 
 const logger = winston.loggers.get("application");
 
