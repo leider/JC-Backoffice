@@ -10,7 +10,6 @@ import weekOfYear from "dayjs/plugin/weekOfYear.js";
 import "dayjs/locale/de.js";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
-import conf from "./simpleConfigure.js";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(duration);
@@ -37,7 +36,7 @@ export default class DatumUhrzeit {
   private readonly val: Dayjs;
 
   constructor(dateTime?: Dayjs) {
-    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs(conf.nowForDevelopment);
+    this.val = dateTime && dateTime.isValid() ? dateTime : dayjs();
   }
 
   // Konstruktoren

@@ -5,7 +5,7 @@ import loggers from "./initWinston.js";
 import express from "express";
 import { createServer } from "http";
 import configureApp from "./configureApp.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "./simpleConfigure.js";
 
 const app = express();
 configureApp(app);

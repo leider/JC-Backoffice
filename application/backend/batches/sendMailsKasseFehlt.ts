@@ -2,7 +2,7 @@ import { loggers } from "winston";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../simpleConfigure.js";
 
 import store from "../lib/konzerte/konzertestore.js";
 import userstore from "../lib/users/userstore.js";

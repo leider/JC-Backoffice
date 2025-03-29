@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 
 export function genSalt(): string {
   const length = 64;

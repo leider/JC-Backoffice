@@ -9,6 +9,7 @@ import User from "jc-shared/user/user.js";
 
 const persistence = pers("veranstaltungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
+import conf from "../../simpleConfigure.js";
 
 function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: "ASC" | "DESC") {
   const result = persistence.listByField(
@@ -26,25 +27,21 @@ function byDateRangeInDescendingOrder(rangeFrom: DatumUhrzeit, rangeTo: DatumUhr
   return byDateRange(rangeFrom, rangeTo, "DESC");
 }
 
+function now() {
+  return DatumUhrzeit.forISOString(conf.nowForDevelopment);
+}
+
 export default {
   zukuenftigeMitGestern: function zukuenftigeMitGestern() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInAscendingOrder(now.minus({ tage: 1 }), now.plus({ jahre: 10 }));
-  },
-
-  zukuenftige: function zukuenftige() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInAscendingOrder(now, now.plus({ jahre: 10 }));
+    return byDateRangeInAscendingOrder(now().minus({ tage: 1 }), now().plus({ jahre: 10 }));
   },
 
   vergangene: function vergangene() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInDescendingOrder(now.minus({ monate: 24 }), now);
+    return byDateRangeInDescendingOrder(now().minus({ monate: 24 }), now());
   },
 
   alle: function alle() {
-    const now = new DatumUhrzeit();
-    return byDateRangeInDescendingOrder(now.minus({ jahre: 20 }), now.plus({ jahre: 10 }));
+    return byDateRangeInDescendingOrder(now().minus({ jahre: 20 }), now().plus({ jahre: 10 }));
   },
 
   byDateRangeInAscendingOrder,

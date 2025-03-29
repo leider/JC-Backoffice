@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import "jc-backend/configure.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import { toTransportObject } from "jc-backend/lib/mailsender/mailtransport.js";
 import MailMessage from "jc-shared/mail/mailMessage.js";
 import User from "jc-shared/user/user.js";
@@ -41,14 +41,12 @@ Error: "keiner"`);
   });
 
   it("uses the given sender in Name, but not in Address", () => {
-    const message = MailMessage.forJsonAndUser(
-      { subject: "", body: "", bcc: [] },
-      new User({ name: "Andreas von Jazzclub", email: "andreas@jazz.club" }),
-    );
+    const user = new User({ name: "Andreas von Jazzclub", email: "andreas@jazz.club" });
+    const message = MailMessage.forJsonAndUser({ subject: "", body: "", bcc: [] }, user);
     const res = toTransportObject(message, false);
     expect(res.from).to.eql({
       address: "sender@jazz.club",
-      name: "Andreas von Jazzclub via backoffice.jazzclub.de",
+      name: "Der Sender",
     });
     expect(res.replyTo).to.eql({
       address: "andreas@jazz.club",

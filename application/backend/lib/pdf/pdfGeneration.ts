@@ -3,7 +3,7 @@ import { NextFunction, Response } from "express";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import Konzert from "jc-shared/konzert/konzert.js";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import store from "../konzerte/konzertestore.js";
 import vermietungenstore from "../vermietungen/vermietungenstore.js";
 import konzerteService from "../konzerte/konzerteService.js";

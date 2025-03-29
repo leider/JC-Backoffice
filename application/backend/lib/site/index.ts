@@ -14,7 +14,7 @@ import store from "../konzerte/konzertestore.js";
 import { resToJson } from "../commons/replies.js";
 import userstore from "../users/userstore.js";
 import { hashPassword } from "../commons/hashPassword.js";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import refreshstore from "./refreshstore.js";
 import usersService from "../users/usersService.js";
 import User, { SUPERUSERS } from "jc-shared/user/user.js";

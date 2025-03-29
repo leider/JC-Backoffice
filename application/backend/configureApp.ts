@@ -13,7 +13,7 @@ import ridersrest from "./lib/rider/ridersrest.js";
 import passportInitializer from "./lib/middleware/passportInitializer.js";
 import passportApiKeyInitializer from "./lib/middleware/passportApiKeyInitializer.js";
 import { fileURLToPath } from "url";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "./simpleConfigure.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

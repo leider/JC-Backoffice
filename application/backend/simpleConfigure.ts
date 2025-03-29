@@ -1,5 +1,5 @@
 import path from "node:path";
-import { MailAddress } from "../mail/mailMessage.js";
+import { MailAddress } from "jc-shared/mail/mailMessage.js";
 import assign from "lodash/assign.js";
 
 export class SimpleConfigure {

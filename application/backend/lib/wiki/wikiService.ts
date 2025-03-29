@@ -6,7 +6,7 @@ import map from "lodash/map.js";
 import { UploadedFile } from "jc-shared/konzert/konzert.js";
 import fs from "fs";
 import path from "path";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 
 const wikiUploadDir = conf.wikiUploadDir;
 

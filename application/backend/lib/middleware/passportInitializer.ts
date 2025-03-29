@@ -1,7 +1,7 @@
 import passport from "passport";
 import { ExtractJwt, Strategy, VerifiedCallback } from "passport-jwt";
 
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import { loggers } from "winston";
 import store from "../users/userstore.js";
 

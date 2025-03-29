@@ -1,4 +1,4 @@
-import conf, { SimpleConfigure } from "jc-shared/commons/simpleConfigure.js";
+import conf, { SimpleConfigure } from "./simpleConfigure.js";
 import path, { dirname } from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";

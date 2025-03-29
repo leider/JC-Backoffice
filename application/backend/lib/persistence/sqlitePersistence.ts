@@ -1,5 +1,5 @@
 import Database, { SqliteError } from "better-sqlite3";
-import conf from "jc-shared/commons/simpleConfigure.js";
+import conf from "../../simpleConfigure.js";
 import { loggers } from "winston";
 import User from "jc-shared/user/user.js";
 import { areDifferentForHistoryEntries } from "jc-shared/commons/comparingAndTransforming.js";
