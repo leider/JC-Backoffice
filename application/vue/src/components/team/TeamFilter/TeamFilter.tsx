@@ -4,7 +4,6 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TeamFilterObject } from "./applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import isNil from "lodash/isNil";
-import isEmpty from "lodash/isEmpty";
 import { NamePath } from "rc-field-form/es/interface";
 import { TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
@@ -111,7 +110,7 @@ export default function TeamFilter() {
     return tags.concat(eventTypTags).concat(bookerTags);
   }, [createBookerTag, eventTypTag, teamFilter]);
 
-  const result = [
+  return (
     <span key="aktiveFilter">
       <ButtonWithIcon alwaysText onClick={() => setOpen(true)} size="small" text="Filter..." type="default" />
       <Form
@@ -124,23 +123,20 @@ export default function TeamFilter() {
       >
         <TeamFilterEdit open={open} setOpen={setOpen} />
       </Form>
-    </span>,
-  ];
-  if (!isEmpty(taggies)) {
-    result.push(
-      <ButtonWithIcon
-        alwaysText
-        key="resetFilter"
-        onClick={() => {
-          reset(form);
-          setTeamFilter(form.getFieldsValue(true));
-        }}
-        size="small"
-        text="Zurücksetzen"
-        type="default"
-      />,
-    );
-  }
-  result.push(...headerTagsForFilters(taggies));
-  return result;
+      {taggies.length ? (
+        <ButtonWithIcon
+          alwaysText
+          key="resetFilter"
+          onClick={() => {
+            reset(form);
+            setTeamFilter(form.getFieldsValue(true));
+          }}
+          size="small"
+          text="Zurücksetzen"
+          type="default"
+        />
+      ) : null}
+      {headerTagsForFilters(taggies)}
+    </span>
+  );
 }

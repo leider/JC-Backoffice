@@ -31,15 +31,15 @@ export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: bo
   }
 
   return (
-    <JazzModal
-      cancelButtonProps={{ type: "text" }}
-      cancelText=" "
-      okText="Schließen"
-      onCancel={() => setIsOpen(false)}
-      onOk={() => setIsOpen(false)}
-      open={isOpen}
-    >
-      <Form form={form} onValuesChange={saveForm}>
+    <Form form={form} onValuesChange={saveForm}>
+      <JazzModal
+        cancelButtonProps={{ type: "text" }}
+        cancelText=" "
+        okText="Schließen"
+        onCancel={() => setIsOpen(false)}
+        onOk={() => setIsOpen(false)}
+        open={isOpen}
+      >
         <JazzPageHeader
           buttons={[
             <span key="subtext">
@@ -88,7 +88,7 @@ export default function Preferences({ isOpen, setIsOpen }: { readonly isOpen: bo
           }}
           size="small"
         />
-      </Form>
-    </JazzModal>
+      </JazzModal>
+    </Form>
   );
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CSSProperties, PropsWithChildren, useContext, useMemo } from "react";
-import { useLocation, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { HelpWithKasseButton, MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 import groupBy from "lodash/groupBy";
@@ -29,14 +29,6 @@ export default function KonzertFormAndPageHeader({
   const { optionen, currentUser, isDirty } = useJazzContext();
   const [search] = useSearchParams();
 
-  const { pathname } = useLocation();
-  const isCopy = useMemo(() => {
-    return pathname.includes("/copy-of-");
-  }, [pathname]);
-  const isNew = useMemo(() => {
-    return pathname.includes("/new");
-  }, [pathname]);
-
   const isKassenseite = useMemo(() => search.get("page") === "kasse", [search]);
 
   const startDate = useWatch("startDate", { form, preserve: true });
@@ -46,9 +38,6 @@ export default function KonzertFormAndPageHeader({
   const id = useWatch(["id"], { form, preserve: true });
 
   const displayDate = useMemo(() => DatumUhrzeit.forJSDate(startDate).lesbareKurzform, [startDate]);
-  const title = useMemo(() => {
-    return `${titel ?? ""}${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`;
-  }, [isCopy, isNew, titel]);
 
   const titleStyle: CSSProperties = useMemo(() => {
     const typByName = groupBy(optionen?.typenPlus || [], "name");
@@ -87,7 +76,7 @@ export default function KonzertFormAndPageHeader({
       saveForm={saveForm}
       style={titleStyle}
       tags={tagsForTitle}
-      title={title}
+      title={titel}
     >
       {children}
     </JazzFormAndHeaderExtended>

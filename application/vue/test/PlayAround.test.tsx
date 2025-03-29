@@ -1,14 +1,17 @@
 import { render, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, it, beforeAll, afterAll, afterEach } from "vitest";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, it } from "vitest";
 import { JazzRouter } from "@/router/JazzRouter.tsx";
 import React from "react";
 import JazzclubApp from "@/app/JazzclubApp.tsx";
 import { server } from "./mockserver/node.js";
+import noop from "lodash/noop";
 
 describe("Playing Around", () => {
   beforeAll(() => {
     server.listen();
+  });
+  beforeEach(() => {
+    window.scroll = noop;
   });
 
   afterEach(() => {
