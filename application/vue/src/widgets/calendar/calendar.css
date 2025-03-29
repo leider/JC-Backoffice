@@ -1,64 +1,32 @@
-:root {
-  --fc-small-font-size: 0.85em;
-  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
-  --fc-neutral-text-color: #808080;
-  --fc-border-color: #ddd;
+.fc {
+  --fc-small-font-size: var(--ant-font-size-sm);
+  --fc-neutral-bg-color: var(--ant-color-fill-content);
+  --fc-border-color: var(--ant-color-bg-text-active);
 
-  --fc-event-bg-color: #6884a3;
-  --fc-event-border-color: #507088;
-  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+  --fc-event-bg-color: var(--ant-color-primary);
+  --fc-event-border-color: var(--ant-color-bg-text-active);
 
-  --fc-more-link-bg-color: #d0d0d0;
-  --fc-more-link-text-color: inherit;
+  --fc-more-link-bg-color: var(--ant-color-fill-content);
+  --fc-more-link-text-color: var(--ant-color-text-base);
 
-  --fc-event-resizer-thickness: 8px;
-  --fc-event-resizer-dot-total-width: 8px;
-  --fc-event-resizer-dot-border-width: 1px;
+  --fc-today-bg-color: var(--ant-color-warning-border);
+  --fc-page-bg-color: var(--ant-color-bg-base);
 
-  --fc-non-business-color: rgba(215, 215, 215, 0.3);
-  --fc-bg-event-color: rgb(143, 223, 130);
-  --fc-bg-event-opacity: 0.3;
-  --fc-highlight-color: rgba(188, 232, 241, 0.3);
-  --fc-today-bg-color: rgba(255, 220, 40, 0.15);
-  --fc-now-indicator-color: red;
+  --fc-button-text-color: var(--ant-color-text-base);
+  --fc-button-bg-color: var(--ant-color-bg-base);
+  --fc-button-hover-bg-color: var(--ant-color-border-bg);
+  --fc-button-border-color: var(--ant-color-icon);
+  --fc-button-hover-border-color: var(--ant-color-icon-hover);
+  --fc-button-active-bg-color: var(--ant-color-text-quaternary);
+  --fc-button-active-border-color: var(--ant-color-icon);
+
+  --fc-event-text-color: #fafafa;
+
+  a {
+    color: var(--ant-color-text-base);
+  }
 }
 
 .fc-daygrid-event {
   white-space: normal;
-}
-
-.dark-calendar {
-  --fc-page-bg-color: rgb(61, 61, 61);
-
-  --fc-button-text-color: #dcdcdc;
-  --fc-button-bg-color: rgb(36, 36, 36);
-  --fc-button-border-color: rgb(82, 82, 82);
-  --fc-button-hover-bg-color: rgb(82, 82, 82);
-  --fc-button-hover-border-color: rgb(82, 82, 82);
-  --fc-button-active-bg-color: rgb(82, 82, 82);
-  --fc-button-active-border-color: rgb(82, 82, 82);
-
-  --fc-event-text-color: #dcdcdc;
-
-  a {
-    color: #dcdcdc;
-  }
-}
-
-.bright-calendar {
-  --fc-page-bg-color: #fff;
-
-  --fc-button-text-color: #212529;
-  --fc-button-bg-color: #fefefe;
-  --fc-button-border-color: #aaa8a8;
-  --fc-button-hover-bg-color: #f8f9fa;
-  --fc-button-hover-border-color: #aaa8a8;
-  --fc-button-active-bg-color: #dfdede;
-  --fc-button-active-border-color: #636161;
-
-  --fc-event-text-color: #fff;
-
-  a {
-    color: #2c4862;
-  }
 }

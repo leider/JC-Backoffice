@@ -75,6 +75,7 @@ export function KassenzettelFreigabe() {
 
   return (
     <>
+      <Form.Item name={["kasse", "kassenfreigabe"]} noStyle />
       <JazzRow>
         <Col span={10}>
           <ButtonWithIcon

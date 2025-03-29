@@ -4,6 +4,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { Breadcrumb, type BreadcrumbProps, ConfigProvider, theme, Typography } from "antd";
 import { GlobalContext } from "../app/GlobalContext.ts";
 import { useLocation } from "react-router";
+import "./JazzPageHeader.css";
 
 export function JazzPageHeader({
   title,
