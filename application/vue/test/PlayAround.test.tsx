@@ -24,7 +24,7 @@ describe("Playing Around", () => {
 
   it("should first", async () => {
     //const user = userEvent.setup();
-    window.history.pushState({}, "Test page", "/vue");
+    //window.history.pushState({}, "Test page", "/vue");
 
     const { getByText } = render(<JazzclubApp />, { wrapper: JazzRouter });
     await waitFor(() => {
@@ -34,7 +34,7 @@ describe("Playing Around", () => {
 
   it("should second", async () => {
     //const user = userEvent.setup();
-    window.history.pushState({}, "Test page", "/vue/konzert/new");
+    window.history.pushState({}, "Test page", "/konzert/new");
 
     const { getByText } = render(<JazzclubApp />, { wrapper: JazzRouter });
     await waitFor(() => {

@@ -20,7 +20,7 @@ async function sendMail(kaputte: Veranstaltung[]) {
   const prefix = conf.publicUrlPrefix;
   function presseTemplateInternal(ver: Veranstaltung): string {
     // für interne Mails
-    return `### [${ver.kopf.titelMitPrefix}](${prefix}/vue${ver.fullyQualifiedUrl}?page=presse)
+    return `### [${ver.kopf.titelMitPrefix}](${prefix}${ver.fullyQualifiedUrl}?page=presse)
 #### ${ver.startDatumUhrzeit.fuerPresse} ${ver.kopf.presseInEcht}
 
 `;

@@ -14,6 +14,7 @@ import passportInitializer from "./lib/middleware/passportInitializer.js";
 import passportApiKeyInitializer from "./lib/middleware/passportApiKeyInitializer.js";
 import { fileURLToPath } from "url";
 import conf from "./simpleConfigure.js";
+import { ServeStaticOptions } from "serve-static";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -45,7 +46,8 @@ export default function (app: express.Express, forDev?: boolean): void {
   app.use(express.json());
   app.use(compress());
   if (!forDev) {
-    app.use("/vue", history());
+    app.use("/", history());
+    //app.use("/vue", history());
     app.use("/rider", history());
   }
   app.use(
@@ -56,7 +58,7 @@ export default function (app: express.Express, forDev?: boolean): void {
           res.setHeader("Cache-Control", "public, max-age=0");
         }
       },
-    }),
+    } as ServeStaticOptions),
   );
   app.use(express.static(conf.additionalstatic, { maxAge: "10h" }));
 

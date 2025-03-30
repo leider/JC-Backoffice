@@ -387,14 +387,14 @@ export async function openAngebotRechnung(vermietung: Vermietung) {
 }
 
 export async function imgFullsize(url: string) {
-  const img = await get({ contentType: "other", url: `/upload/${url}`, resType: new Blob() });
+  const img = await get({ contentType: "other", url: `/${url}`, urlPrefix: "/upload", resType: new Blob() });
   if (img) {
     showFile(img, url);
   }
 }
 
 export async function imgzipForVeranstaltung(konzert: Konzert) {
-  const zip = await get({ contentType: "zip", url: `/imgzipForVeranstaltung/${konzert.url}`, resType: new Blob() });
+  const zip = await get({ contentType: "zip", url: `/${konzert.url}`, urlPrefix: "/imgzipForVeranstaltung", resType: new Blob() });
   if (zip) {
     showFile(zip, `JazzClub_Bilder_${konzert.kopf.titel}.zip`);
   }

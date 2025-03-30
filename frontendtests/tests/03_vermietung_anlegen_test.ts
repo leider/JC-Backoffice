@@ -7,7 +7,7 @@ Before(({ I, login }) => {
 });
 
 Scenario("Erzeuge neue Vermietung", async ({ I }) => {
-  I.amOnPage("/vue/vermietung/new");
+  I.amOnPage("/vermietung/new");
   I.fillField("Saalmiete", "100");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
   I.click("OK");
@@ -40,7 +40,7 @@ Scenario("Erzeuge neue Vermietung", async ({ I }) => {
   I.assertEqual(res.startDate, "2020-03-20T17:30:00.000Z");
   I.assertEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
-  I.amOnPage("/vue/veranstaltungen");
+  I.amOnPage("/veranstaltungen");
   I.wait(0.5);
   I.see("Vermietung #1");
 });

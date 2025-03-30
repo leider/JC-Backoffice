@@ -40,7 +40,7 @@ describe("Check Kasse Mailsender", () => {
     ]);
     expect(message.body).to.include("## Bei folgenden Veranstaltungen der nächsten 14 Tage fehlt ein Abendverantwortlicher:");
     expect(message.body).to.include(
-      '<a href="http://localhost:1970/vue/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>',
+      '<a href="http://localhost:1970/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>',
     );
   });
 });
