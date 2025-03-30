@@ -112,7 +112,14 @@ export default function TeamFilter() {
 
   return (
     <span key="aktiveFilter">
-      <ButtonWithIcon alwaysText onClick={() => setOpen(true)} size="small" text="Filter..." type="default" />
+      <ButtonWithIcon
+        alwaysText
+        onClick={() => setOpen(true)}
+        size="small"
+        style={{ marginInlineEnd: "var(--ant-margin-xs)" }}
+        text="Filter..."
+        type="default"
+      />
       <Form
         autoComplete="off"
         colon={false}
@@ -132,6 +139,7 @@ export default function TeamFilter() {
             setTeamFilter(form.getFieldsValue(true));
           }}
           size="small"
+          style={{ marginInlineEnd: "var(--ant-margin-xs)" }}
           text="Zurücksetzen"
           type="default"
         />
