@@ -19,7 +19,7 @@ import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 
 export function KassenzettelFreigabe() {
-  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { currentUser, allUsers, isDirty } = useJazzContext();
   const { endbestandEUR } = useKassenSaldierer();
 

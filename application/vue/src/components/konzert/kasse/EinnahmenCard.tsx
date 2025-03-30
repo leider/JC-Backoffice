@@ -15,7 +15,7 @@ import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts
 import { JazzRowWithRef } from "@/widgets/JazzRowWithRef.tsx";
 
 export default function EinnahmenCard() {
-  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { refEinnahmen } = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });

@@ -16,7 +16,7 @@ import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts
 import { JazzRowWithRef } from "@/widgets/JazzRowWithRef.tsx";
 
 export default function AusgabenCard() {
-  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { refAnBank, refAusgaben } = useContext(KassenContext);
   const { color } = colorsAndIconsForSections;
 

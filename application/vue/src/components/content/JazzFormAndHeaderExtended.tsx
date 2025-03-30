@@ -54,8 +54,8 @@ export default function JazzFormAndHeaderExtended<T>({
 
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
-    logDiffForDirty(initialValue, curr, false);
-    const different = areDifferent(initialValue, curr, ["agenturauswahl", "hotelauswahl", "endbestandEUR"]);
+    logDiffForDirty(initialValue, curr, true);
+    const different = areDifferent(initialValue, curr, ["agenturauswahl", "hotelauswahl"]);
     setIsDirty(different);
     return different;
   }, [form, initialValue, setIsDirty]);
