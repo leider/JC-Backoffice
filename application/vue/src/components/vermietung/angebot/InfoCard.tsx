@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { App, Button, Col, ConfigProvider, Form, Radio, theme } from "antd";
 import "easymde/dist/easymde.min.css";
@@ -16,10 +16,12 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 export default function InfoCard() {
   const form = useFormInstance<Vermietung>();
   const { currentUser, isDirty } = useJazzContext();
+  const { checkDirty } = useContext(JazzFormContext);
 
   const status = useWatch(["angebot", "status"], { form, preserve: true });
 
@@ -29,6 +31,10 @@ export default function InfoCard() {
   }, [startDate]);
 
   const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
+  useEffect(() => {
+    checkDirty();
+  }, [checkDirty, freigabe]);
+
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 

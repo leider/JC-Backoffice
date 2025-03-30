@@ -1,7 +1,7 @@
 import { App, Col, Flex, Form, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/rest/loader.ts";
-import React, { useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -17,10 +17,12 @@ import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 export function KassenzettelFreigabe() {
-  const form = useFormInstance<KonzertWithRiderBoxes & { endbestandEUR: number }>();
+  const form = useFormInstance<KonzertWithRiderBoxes>();
   const { currentUser, allUsers, isDirty } = useJazzContext();
+  const { checkDirty } = useContext(JazzFormContext);
   const { endbestandEUR } = useKassenSaldierer();
 
   const { modal } = App.useApp();
@@ -33,6 +35,10 @@ export function KassenzettelFreigabe() {
 
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { preserve: true });
   const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { preserve: true });
+
+  useEffect(() => {
+    checkDirty();
+  }, [checkDirty, freigabe]);
 
   const [innerForm] = useForm();
 

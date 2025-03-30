@@ -45,7 +45,6 @@ export default function VermietungFormAndPageHeader<T>({
     <JazzFormAndHeaderExtended
       additionalButtons={[<MoreButton disabled={!id} isDirty={isDirty} isVermietung key="more" />]}
       additionalButtonsLast={[<TeamCalendar key="cal" />]}
-      changedPropsToWatch={[["angebot", "freigabe"]]}
       data={data}
       dateString={displayDate}
       firstTag={

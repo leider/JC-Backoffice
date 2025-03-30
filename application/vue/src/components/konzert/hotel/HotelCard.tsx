@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Col, Form } from "antd";
+import { Checkbox, Col, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import CheckItem from "@/widgets/CheckItem";
 import dayjs from "dayjs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
@@ -13,10 +12,12 @@ import find from "lodash/find";
 import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useHotelSummierer from "@/components/konzert/hotel/useHotelSummierer.ts";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
 
 export default function HotelCard() {
   const form = useFormInstance<KonzertWithRiderBoxes>();
   const { optionen } = useJazzContext();
+  const { hotelpreiseAlsDefault, setHotelpreiseAlsDefault } = useContext(KonzertContext);
 
   const hotelName = useWatch(["hotel", "name"], { form, preserve: true });
   const eventStartDate = useWatch("startDate", { form, preserve: true });
@@ -90,7 +91,9 @@ export default function HotelCard() {
       </JazzRow>
       <JazzRow>
         <Col span={24}>
-          <CheckItem label="Preise als Default übernehmen" name={["hotelpreiseAlsDefault"]} />
+          <Checkbox checked={hotelpreiseAlsDefault} onChange={(e) => setHotelpreiseAlsDefault(e.target.checked)}>
+            <b>Preise als Default übernehmen</b>
+          </Checkbox>
         </Col>
       </JazzRow>
     </Collapsible>
