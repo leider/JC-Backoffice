@@ -1,16 +1,17 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
-import { Col, Form } from "antd";
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import { Col, Form, Select } from "antd";
+import React, { PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
-import SingleSelect from "@/widgets/SingleSelect";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
 import map from "lodash/map";
 import sortedUniq from "lodash/sortedUniq";
 import compact from "lodash/compact";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 type KontaktCardProps = {
   readonly kontakte: Kontakt[];
@@ -19,12 +20,16 @@ type KontaktCardProps = {
 };
 export default function KontaktCard({ kontakte, selector, noTopBorder, children }: KontaktCardProps & PropsWithChildren) {
   const form = useFormInstance();
+  const jazzFormContext = useContext(JazzFormContext);
+  const { agenturauswahl, setAgenturauswahl, hotelauswahl, setHotelauswahl } = useContext(KonzertContext);
 
   const [auswahlen, setAuswahlen] = useState<string[]>([]);
   useEffect(() => {
     const names = sortedUniq(compact(map(kontakte, "name")));
     setAuswahlen(["[temporär]", "[neu]"].concat(names));
   }, [kontakte]);
+
+  const realOptions = useMemo(() => map(auswahlen, (opt) => ({ label: opt, value: opt })), [auswahlen]);
 
   function auswahlChanged(name: string) {
     if (name === "[temporär]") {
@@ -43,7 +48,14 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
       telefon: result.telefon,
     };
     form.setFieldsValue(values);
+    if (selector === "agentur") {
+      setAgenturauswahl(name);
+    } else if (selector === "hotel") {
+      setHotelauswahl(name);
+    }
+    jazzFormContext.checkDirty();
   }
+
   return (
     <Collapsible
       label={selector === "agentur" ? "Agentur" : "Hotel"}
@@ -52,13 +64,14 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
     >
       <JazzRow>
         <Col span={12}>
-          <SingleSelect
-            initialValue="[temporär]"
-            label="Auswahl"
-            name={[`${selector}auswahl`]}
-            onChange={auswahlChanged}
-            options={auswahlen}
-          />
+          <Form.Item label={<b>Auswahl:</b>}>
+            <Select
+              onChange={auswahlChanged}
+              options={realOptions}
+              showSearch
+              value={selector === "agentur" ? agenturauswahl : hotelauswahl}
+            />
+          </Form.Item>
           <TextField label="Name" name={[selector, "name"]} />
         </Col>
         <Col span={12}>

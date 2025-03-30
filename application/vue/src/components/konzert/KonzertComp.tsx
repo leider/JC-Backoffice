@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { konzertWithRiderForUrl, saveKonzert, saveOptionen, saveRider } from "@/rest/loader.ts";
@@ -17,6 +17,9 @@ import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 export default function KonzertComp() {
   const { url } = useParams();
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
+  const [agenturauswahl, setAgenturauswahl] = useState("[temporär]");
+  const [hotelauswahl, setHotelauswahl] = useState("[temporär]");
+  const [hotelpreiseAlsDefault, setHotelpreiseAlsDefault] = useState(false);
 
   const { data: konzert, refetch } = useQuery({ queryKey: ["konzert", url], queryFn: () => konzertWithRiderForUrl(url || "") });
 
@@ -31,6 +34,13 @@ export default function KonzertComp() {
 
   const { currentUser, optionen, setMemoizedId } = useJazzContext();
   const navigate = useNavigate();
+
+  const reloadAndResetAuswahlen = useCallback(() => {
+    setHotelauswahl("[temporär]");
+    setAgenturauswahl("[temporär]");
+    setHotelpreiseAlsDefault(false);
+    return refetch();
+  }, [refetch]);
 
   useEffect(() => {
     setMemoizedId(konzert?.id);
@@ -55,15 +65,11 @@ export default function KonzertComp() {
       return mutateKonzert.mutate(konz);
     }
 
-    const untypedKonzert = vals as { agenturauswahl?: string; hotelauswahl?: string; hotelpreiseAlsDefault?: boolean };
-    optionen.addOrUpdateKontakt("agenturen", konz.agentur, untypedKonzert.agenturauswahl);
-    delete untypedKonzert.agenturauswahl;
+    optionen.addOrUpdateKontakt("agenturen", konz.agentur, agenturauswahl);
     if (konz.artist.brauchtHotel) {
-      optionen.addOrUpdateKontakt("hotels", konz.hotel, untypedKonzert.hotelauswahl);
-      delete untypedKonzert.hotelauswahl;
-      if (untypedKonzert.hotelpreiseAlsDefault) {
+      optionen.addOrUpdateKontakt("hotels", konz.hotel, hotelauswahl);
+      if (hotelpreiseAlsDefault) {
         optionen.updateHotelpreise(konz.hotel, konz.unterkunft.zimmerPreise);
-        delete untypedKonzert.hotelpreiseAlsDefault;
       }
     }
     optionen.updateBackline("Jazzclub", konz.technik.backlineJazzclub);
@@ -75,12 +81,21 @@ export default function KonzertComp() {
   }
 
   const initialContext = useMemo(() => {
-    return { isKasseHelpOpen, setKasseHelpOpen: setIsKasseHelpOpen };
-  }, [isKasseHelpOpen]);
+    return {
+      isKasseHelpOpen,
+      setKasseHelpOpen: setIsKasseHelpOpen,
+      agenturauswahl,
+      setAgenturauswahl,
+      hotelauswahl,
+      setHotelauswahl,
+      hotelpreiseAlsDefault,
+      setHotelpreiseAlsDefault,
+    };
+  }, [agenturauswahl, hotelauswahl, hotelpreiseAlsDefault, isKasseHelpOpen]);
 
   return (
     <KonzertContext.Provider value={initialContext}>
-      <KonzertFormAndPageHeader data={konzert} resetChanges={refetch} saveForm={saveForm}>
+      <KonzertFormAndPageHeader data={konzert} resetChanges={reloadAndResetAuswahlen} saveForm={saveForm}>
         <ShowOnCopy title="Kopiertes Konzert" />
         <KonzertTabs />
       </KonzertFormAndPageHeader>

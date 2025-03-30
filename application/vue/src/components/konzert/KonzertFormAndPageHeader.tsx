@@ -68,7 +68,6 @@ export default function KonzertFormAndPageHeader({
         isKassenseite && <HelpWithKasseButton callback={() => setKasseHelpOpen(true)} key="helpKasse" />,
         <TeamCalendar key="cal" />,
       ]}
-      changedPropsToWatch={[["kasse", "kassenfreigabe"], "agenturauswahl"]}
       data={data}
       dateString={displayDate}
       form={form}

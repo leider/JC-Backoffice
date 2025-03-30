@@ -1,6 +1,6 @@
 import { kalenderFor, saveProgrammheft } from "@/rest/loader.ts";
 import * as React from "react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { Col, Row, Splitter } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
@@ -24,10 +24,12 @@ import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
 import invokeMap from "lodash/invokeMap";
 import sortBy from "lodash/sortBy";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   const form = useFormInstance();
   const events = useWatch("events", { form, preserve: true });
+  const { checkDirty } = useContext(JazzFormContext);
 
   const { allUsers } = useJazzContext();
   const usersAsOptions = useMemo(() => {
@@ -45,8 +47,9 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
 
       const newEvents = moveEventsBy(events, { tage: offset });
       form.setFieldValue("events", newEvents);
+      checkDirty();
     },
-    [events, form],
+    [checkDirty, events, form],
   );
 
   const columnDescriptions: Columns[] = [
@@ -135,7 +138,6 @@ export default function Programmheft() {
         <ButtonWithIcon icon="ArrowBarRight" key="next" onClick={() => nextOrPrevious(true)} text="Nächstes" type="default" />,
         <ProgrammheftKopierenButton key="copy" />,
       ]}
-      changedPropsToWatch={["events"]}
       data={kalender}
       resetChanges={refetch}
       saveForm={saveForm}

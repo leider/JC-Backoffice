@@ -8,7 +8,6 @@ export default function JazzFormAndHeader<T>({
   data,
   saveForm,
   additionalButtons,
-  changedPropsToWatch,
   children,
   resetChanges,
   breadcrumb,
@@ -17,7 +16,6 @@ export default function JazzFormAndHeader<T>({
   readonly data?: Partial<T>;
   readonly saveForm: (vals: T) => void;
   readonly additionalButtons?: ReactNode[];
-  readonly changedPropsToWatch?: string[];
   readonly resetChanges?: () => Promise<unknown>;
   readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
@@ -27,7 +25,6 @@ export default function JazzFormAndHeader<T>({
     <JazzFormAndHeaderExtended
       additionalButtons={additionalButtons}
       breadcrumb={breadcrumb}
-      changedPropsToWatch={changedPropsToWatch}
       data={data}
       form={form}
       resetChanges={resetChanges}

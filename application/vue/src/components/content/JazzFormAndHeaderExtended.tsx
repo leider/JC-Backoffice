@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode, useCallback, useEffect, useState } from "react";
+import { PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Breadcrumb, type BreadcrumbProps, Form, FormInstance } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -10,8 +10,8 @@ import { logDiffForDirty } from "jc-shared/commons/comparingAndTransforming.ts";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
 import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { NamePath } from "rc-field-form/es/interface";
 import noop from "lodash/noop";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 export default function JazzFormAndHeaderExtended<T>({
   title,
@@ -19,7 +19,6 @@ export default function JazzFormAndHeaderExtended<T>({
   saveForm,
   additionalButtons,
   additionalButtonsLast,
-  changedPropsToWatch,
   children,
   dateString,
   firstTag,
@@ -34,7 +33,6 @@ export default function JazzFormAndHeaderExtended<T>({
   readonly saveForm: (vals: T) => void;
   readonly additionalButtons?: ReactNode[];
   readonly additionalButtonsLast?: ReactNode[];
-  readonly changedPropsToWatch?: NamePath[];
   readonly dateString?: string;
   readonly firstTag?: ReactNode;
   readonly tags?: ReactNode[];
@@ -54,8 +52,8 @@ export default function JazzFormAndHeaderExtended<T>({
 
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
-    logDiffForDirty(initialValue, curr, true);
-    const different = areDifferent(initialValue, curr, ["agenturauswahl", "hotelauswahl"]);
+    logDiffForDirty(initialValue, curr, false);
+    const different = areDifferent(initialValue, curr);
     setIsDirty(different);
     return different;
   }, [form, initialValue, setIsDirty]);
@@ -87,44 +85,49 @@ export default function JazzFormAndHeaderExtended<T>({
     .concat(<SaveButton disabled={!isDirty || hasErrors} key="save" />)
     .concat(additionalButtonsLast ?? []);
 
+  const jazzFormContext = useMemo(() => {
+    return { checkDirty: updateDirtyIfChanged };
+  }, [updateDirtyIfChanged]);
+
   return (
-    <Form
-      colon={false}
-      form={form}
-      layout="vertical"
-      onFinish={() =>
-        form
-          .validateFields()
-          .then(async () => {
-            setIsDirty(false);
-            saveForm(form.getFieldsValue(true));
-          })
-          .catch(checkErrors)
-      }
-      onKeyDown={(event) => {
-        const target = event.target as HTMLInputElement;
-        if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
-          event.preventDefault();
-          return false;
+    <JazzFormContext.Provider value={jazzFormContext}>
+      <Form
+        colon={false}
+        form={form}
+        layout="vertical"
+        onFinish={() =>
+          form
+            .validateFields()
+            .then(async () => {
+              setIsDirty(false);
+              saveForm(form.getFieldsValue(true));
+            })
+            .catch(checkErrors)
         }
-      }}
-      onValuesChange={() => {
-        updateDirtyIfChanged();
-        checkErrors();
-      }}
-    >
-      <JazzPageHeader
-        breadcrumb={breadcrumb}
-        buttons={buttons}
-        dateString={dateString}
-        firstTag={firstTag}
-        hasErrors={hasErrors}
-        style={style}
-        tags={tags}
-        title={title}
-      />
-      <RowWrapper>{children}</RowWrapper>
-      {changedPropsToWatch ? <Form.Item dependencies={changedPropsToWatch} noStyle shouldUpdate={updateDirtyIfChanged} /> : null}
-    </Form>
+        onKeyDown={(event) => {
+          const target = event.target as HTMLInputElement;
+          if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
+            event.preventDefault();
+            return false;
+          }
+        }}
+        onValuesChange={() => {
+          updateDirtyIfChanged();
+          checkErrors();
+        }}
+      >
+        <JazzPageHeader
+          breadcrumb={breadcrumb}
+          buttons={buttons}
+          dateString={dateString}
+          firstTag={firstTag}
+          hasErrors={hasErrors}
+          style={style}
+          tags={tags}
+          title={title}
+        />
+        <RowWrapper>{children}</RowWrapper>
+      </Form>
+    </JazzFormContext.Provider>
   );
 }
