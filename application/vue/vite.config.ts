@@ -9,9 +9,9 @@ import express from "express";
 export default defineConfig(() => {
   return {
     root: __dirname,
-    base: "/vue/",
+    base: "/",
     build: {
-      outDir: "../backend/static/vue",
+      outDir: "../backend/static/",
       emptyOutDir: false,
       sourcemap: false,
       chunkSizeWarningLimit: 5000,
@@ -59,12 +59,12 @@ export default defineConfig(() => {
           theme_color: "#000000",
           icons: [
             {
-              src: "/vue/img/logo-square-192.png",
+              src: "/img/logo-square-192.png",
               sizes: "192x192",
               type: "image/png",
             },
             {
-              src: "/vue/img/logo-square-512.png",
+              src: "/img/logo-square-512.png",
               sizes: "512x512",
               type: "image/png",
             },

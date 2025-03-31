@@ -7,7 +7,7 @@ Before(({ I, login }) => {
 });
 
 Scenario("Erzeuge neues Konzert", async ({ I }) => {
-  I.amOnPage("/vue/konzert/new");
+  I.amOnPage("/konzert/new");
   I.wait(0.5);
   I.see("Typ");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
@@ -42,7 +42,7 @@ Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.assertDeepEqual(res.startDate, "2020-03-20T17:30:00.000Z");
   I.assertDeepEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
-  I.amOnPage("/vue/veranstaltungen");
+  I.amOnPage("/veranstaltungen");
   I.wait(0.5);
   I.see("Konzert #1");
 });
