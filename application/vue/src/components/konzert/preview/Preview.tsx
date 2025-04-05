@@ -36,7 +36,7 @@ function EditButton({ url = "" }: { readonly url?: string }) {
 
 export default function Preview() {
   const { url } = useParams();
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["konzert", url],
     queryFn: () => konzertWithRiderForUrl(url || ""),
   });
@@ -71,7 +71,7 @@ export default function Preview() {
       />
       <JazzRow>
         <Col lg={12} xs={24}>
-          <GaesteInPreview konzert={konzert} url={url} />
+          <GaesteInPreview konzert={konzert} refetch={refetch} />
           <StaffInPreview veranstaltung={konzert} />
           <KasseInPreview konzert={konzert} url={url} />
           <InfoInPreview veranstaltung={konzert} />
