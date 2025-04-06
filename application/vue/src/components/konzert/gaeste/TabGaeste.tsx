@@ -14,14 +14,20 @@ const columns: Columns[] = [
   { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
 ];
 
+const smallColumns: Columns[] = [
+  { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
+  { type: "integer", title: "Anzahl", required: true, dataIndex: "number" },
+  { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
+];
+
 function GaesteCard({ label, path }: { readonly label: string; readonly path: string }) {
-  const { lg } = useBreakpoint();
+  const { lg, sm } = useBreakpoint();
   return (
     <Collapsible label={label} noTopBorder={label === "gaesteliste" || lg} suffix="gaeste">
       <JazzRow>
         <Col span={24}>
           <EditableTable<NameWithNumber>
-            columnDescriptions={columns}
+            columnDescriptions={sm ? columns : smallColumns}
             name={path}
             newRowFactory={(vals) => {
               return Object.assign(
@@ -41,13 +47,13 @@ function GaesteCard({ label, path }: { readonly label: string; readonly path: st
   );
 }
 
-export default function TabGaeste() {
+export default function TabGaeste({ inModal = false }: { readonly inModal?: boolean }) {
   return (
     <JazzRow>
-      <Col lg={12} xs={24}>
+      <Col lg={inModal ? 24 : 12} xs={24}>
         <GaesteCard label="Gästeliste" path="gaesteliste" />
       </Col>
-      <Col lg={12} xs={24}>
+      <Col lg={inModal ? 24 : 12} xs={24}>
         <GaesteCard label="Reservierungen" path="reservierungen" />
       </Col>
     </JazzRow>

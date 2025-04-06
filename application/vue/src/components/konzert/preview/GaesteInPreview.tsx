@@ -3,13 +3,14 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
-import { updateGastInSection } from "@/rest/loader.ts";
+import { saveKonzert, updateGastInSection } from "@/rest/loader.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { JazzRow } from "@/widgets/JazzRow";
 import sortBy from "lodash/sortBy";
+import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import JazzDrawerWithForm from "@/components/content/JazzDrawerWithForm.tsx";
 
 function AddOrRemoveGastButton({
   konzert,
@@ -69,29 +70,8 @@ function GastResList({ source, art, konzert }: { readonly konzert: Konzert; read
   );
 }
 
-function ButtonGaesteliste({ url = "" }: { readonly url?: string }) {
-  const { color, icon } = colorsAndIconsForSections;
+export default function GaesteInPreview({ konzert, refetch }: { readonly konzert: Konzert; readonly refetch?: () => Promise<unknown> }) {
   const { currentUser } = useJazzContext();
-  if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
-    return;
-  }
-  return (
-    <ButtonWithIconAndLink
-      alwaysText
-      block
-      color={color("gaeste")}
-      icon={icon("gaeste")}
-      text="Liste Bearbeiten..."
-      to={{
-        pathname: `/konzert/${url}`,
-        search: "page=gaeste",
-      }}
-      tooltipTitle="Gästeliste"
-    />
-  );
-}
-
-export default function GaesteInPreview({ konzert, url }: { readonly konzert: Konzert; readonly url?: string }) {
   const [gaesteliste, setGaesteliste] = useState<NameWithNumber[]>([]);
   const [reservierungen, setReservierungen] = useState<NameWithNumber[]>([]);
 
@@ -104,17 +84,42 @@ export default function GaesteInPreview({ konzert, url }: { readonly konzert: Ko
     listChanged(konzert);
   }, [listChanged, konzert]);
 
+  const mutateKonzert = useJazzMutation<Konzert>({
+    saveFunction: saveKonzert,
+    queryKey: "konzert",
+    successMessage: "Das Konzert wurde gespeichert",
+  });
+
+  function saveForm(konz: Konzert) {
+    mutateKonzert.mutate(konz);
+  }
+
+  const canEdit = useMemo(
+    () => currentUser.id && currentUser.accessrights.isAbendkasse,
+    [currentUser.accessrights.isAbendkasse, currentUser.id],
+  );
   return (
     <Collapsible label="Gästeliste / Reservierungen" suffix="gaeste">
+      {canEdit ? (
+        <JazzRow>
+          <Col offset={14} span={10}>
+            <JazzDrawerWithForm<Konzert>
+              buttonText="Liste bearbeiten..."
+              buttonType="gaeste"
+              data={konzert}
+              resetChanges={refetch}
+              saveForm={saveForm}
+              title="Gästeliste bearbeiten"
+            >
+              <TabGaeste inModal />
+            </JazzDrawerWithForm>
+          </Col>
+        </JazzRow>
+      ) : null}
       <JazzRow>
         <Col span={24}>
           {gaesteliste.length > 0 && <GastResList art="gast" konzert={konzert} source={gaesteliste} />}
           {reservierungen.length > 0 && <GastResList art="res" konzert={konzert} source={reservierungen} />}
-        </Col>
-      </JazzRow>
-      <JazzRow>
-        <Col offset={14} span={10}>
-          <ButtonGaesteliste url={url} />
         </Col>
       </JazzRow>
     </Collapsible>

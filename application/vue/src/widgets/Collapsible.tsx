@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions.ts";
 import isNil from "lodash/isNil";
-import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 
@@ -28,7 +28,7 @@ export default function Collapsible({
 
   const { color } = colorsAndIconsForSections;
 
-  const farbe = color(suffix as buttonType);
+  const farbe = color(suffix as ButtonType);
   return (
     <Collapse
       activeKey={expanded}

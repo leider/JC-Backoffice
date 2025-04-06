@@ -8,7 +8,7 @@ import { PressePreview } from "@/components/veranstaltung/presse/PressePreview.t
 import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.tsx";
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
-import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
@@ -16,7 +16,7 @@ import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 function EditButton({ url = "" }: { readonly url?: string }) {
-  const type: buttonType = "allgemeines";
+  const type: ButtonType = "allgemeines";
   const { color, icon } = colorsAndIconsForSections;
   return (
     <ButtonWithIconAndLink

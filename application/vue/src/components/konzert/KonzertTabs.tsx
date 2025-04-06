@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Tabs, TabsProps } from "antd";
-import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TabAllgemeines from "@/components/konzert/allgemeines/TabAllgemeines";
 import TabTechnik from "@/components/konzert/technik/TabTechnik";
@@ -14,7 +14,7 @@ import TabGaeste from "@/components/konzert/gaeste/TabGaeste.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 
-function TabLabel({ title, type, activePage }: { readonly type: buttonType; readonly title: string; readonly activePage: string }) {
+function TabLabel({ title, type, activePage }: { readonly type: ButtonType; readonly title: string; readonly activePage: string }) {
   const { icon, color } = colorsAndIconsForSections;
   const { brightText } = useJazzContext();
   const active = activePage === type;

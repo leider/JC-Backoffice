@@ -11,7 +11,7 @@ import KasseInPreview from "@/components/konzert/preview/KasseInPreview.tsx";
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
 import GaesteInPreview from "@/components/konzert/preview/GaesteInPreview.tsx";
-import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
@@ -22,7 +22,7 @@ import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 
 function EditButton({ url = "" }: { readonly url?: string }) {
-  const type: buttonType = "allgemeines";
+  const type: ButtonType = "allgemeines";
   const { color, icon } = colorsAndIconsForSections;
   return (
     <ButtonWithIconAndLink
@@ -36,7 +36,7 @@ function EditButton({ url = "" }: { readonly url?: string }) {
 
 export default function Preview() {
   const { url } = useParams();
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["konzert", url],
     queryFn: () => konzertWithRiderForUrl(url || ""),
   });
@@ -71,9 +71,9 @@ export default function Preview() {
       />
       <JazzRow>
         <Col lg={12} xs={24}>
-          <GaesteInPreview konzert={konzert} url={url} />
+          <GaesteInPreview konzert={konzert} refetch={refetch} />
           <StaffInPreview veranstaltung={konzert} />
-          <KasseInPreview konzert={konzert} url={url} />
+          <KasseInPreview konzert={konzert} refetch={refetch} />
           <InfoInPreview veranstaltung={konzert} />
           <TechnikInPreview veranstaltung={konzert} />
         </Col>

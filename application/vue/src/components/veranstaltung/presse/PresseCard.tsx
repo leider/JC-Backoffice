@@ -17,23 +17,18 @@ import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
 function TabLabel({ activePage, kind, title }: { readonly activePage: string; readonly kind: string; readonly title: string }) {
-  const { color } = colorsAndIconsForSections;
+  const { color, icon } = colorsAndIconsForSections;
 
   const { brightText } = useJazzContext();
   const farbe = color("presse");
   const active = activePage === kind;
   return (
-    <b
-      style={{
-        margin: -16,
-        padding: 16,
-        backgroundColor: active ? farbe : "inherit",
-        color: active ? brightText : farbe,
-      }}
-    >
-      {title}
+    <b style={{ margin: -16, padding: 16, backgroundColor: active ? farbe : "inherit", color: active ? brightText : farbe }}>
+      <IconForSmallBlock iconName={icon("presse")} style={{ marginBottom: -3 }} />
+      &nbsp; {title}
     </b>
   );
 }

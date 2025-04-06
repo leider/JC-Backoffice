@@ -1,35 +1,66 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col } from "antd";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useJazzMutation } from "@/commons/useJazzMutation.ts";
+import { saveKonzert } from "@/rest/loader.ts";
+import TabKasse from "@/components/konzert/kasse/TabKasse.tsx";
+import { KonzertContext } from "../KonzertContext";
+import noop from "lodash/noop";
+import { HelpWithKasseButton } from "@/components/colored/JazzButtons.tsx";
+import JazzDrawerWithForm from "@/components/content/JazzDrawerWithForm.tsx";
 
-function ButtonAbendkasse({ url = "" }: { readonly url?: string }) {
-  const { color, icon } = colorsAndIconsForSections;
+function ButtonAbendkasse({ konzert, refetch }: { readonly konzert: Konzert; readonly refetch?: () => Promise<unknown> }) {
   const { currentUser } = useJazzContext();
+
+  const mutateKonzert = useJazzMutation<Konzert>({
+    saveFunction: saveKonzert,
+    queryKey: "konzert",
+    successMessage: "Das Konzert wurde gespeichert",
+  });
+
+  function saveForm(konz: Konzert) {
+    mutateKonzert.mutate(konz);
+  }
+
+  const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
+
+  const initialContext = useMemo(() => {
+    return {
+      isKasseHelpOpen,
+      setKasseHelpOpen: setIsKasseHelpOpen,
+      agenturauswahl: "",
+      setAgenturauswahl: noop,
+      hotelauswahl: "",
+      setHotelauswahl: noop,
+      hotelpreiseAlsDefault: false,
+      setHotelpreiseAlsDefault: noop,
+    };
+  }, [isKasseHelpOpen]);
+
   if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
     return;
   }
   return (
-    <ButtonWithIconAndLink
-      alwaysText
-      block
-      color={color("kasse")}
-      icon={icon("kasse")}
-      text="Abendkasse"
-      to={{
-        pathname: `/konzert/${url}`,
-        search: "page=kasse",
-      }}
-      tooltipTitle="Abendkasse"
-    />
+    <KonzertContext.Provider value={initialContext}>
+      <JazzDrawerWithForm<Konzert>
+        additionalButtons={[<HelpWithKasseButton callback={() => setIsKasseHelpOpen(true)} key="helpKasse" />]}
+        buttonText="Abendkasse"
+        buttonType="kasse"
+        data={konzert}
+        resetChanges={refetch}
+        saveForm={saveForm}
+        title="Abendkasse bearbeiten"
+      >
+        <TabKasse />
+      </JazzDrawerWithForm>
+    </KonzertContext.Provider>
   );
 }
 
-export default function KasseInPreview({ konzert, url }: { readonly konzert: Konzert; readonly url?: string }) {
+export default function KasseInPreview({ konzert, refetch }: { readonly konzert: Konzert; readonly refetch?: () => Promise<unknown> }) {
   return (
     <Collapsible label="Eintritt und Abendkasse" suffix="kasse">
       <JazzRow>
@@ -51,7 +82,7 @@ export default function KasseInPreview({ konzert, url }: { readonly konzert: Kon
           )}
           <JazzRow>
             <Col offset={14} span={10}>
-              <ButtonAbendkasse url={url} />
+              <ButtonAbendkasse konzert={konzert} refetch={refetch} />
             </Col>
           </JazzRow>
         </Col>
