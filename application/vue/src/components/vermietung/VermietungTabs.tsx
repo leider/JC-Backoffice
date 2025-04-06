@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Tabs, TabsProps } from "antd";
-import { buttonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
+import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useSearchParams } from "react-router";
 import TabAllgemeines from "@/components/vermietung/allgemeines/TabAllgemeines.tsx";
@@ -12,7 +12,7 @@ import TabAngebot from "@/components/vermietung/angebot/TabAngebot.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useWatch } from "antd/es/form/Form";
 
-function TabLabel({ activePage, title, type }: { readonly activePage: buttonType; readonly type: buttonType; readonly title: string }) {
+function TabLabel({ activePage, title, type }: { readonly activePage: ButtonType; readonly type: ButtonType; readonly title: string }) {
   const { icon, color } = colorsAndIconsForSections;
   const { brightText } = useJazzContext();
   const active = activePage === type;
@@ -37,11 +37,11 @@ export default function VermietungTabs() {
   const { optionen } = useJazzContext();
 
   const [search, setSearch] = useSearchParams();
-  const [activePage, setActivePage] = useState<buttonType>("allgemeines");
+  const [activePage, setActivePage] = useState<ButtonType>("allgemeines");
   const [tabs, setTabs] = useState<TabsProps["items"]>([]);
 
   useEffect(() => {
-    const page = (search.get("page") ?? "allgemeines") as buttonType;
+    const page = (search.get("page") ?? "allgemeines") as ButtonType;
     if (["allgemeines", "angebot", "technik", "ausgaben", "presse"].includes(page)) {
       setActivePage(page);
     } else {

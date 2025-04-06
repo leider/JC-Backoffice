@@ -1,7 +1,7 @@
 import { IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { colorVermietung } from "jc-shared/optionen/optionValues.ts";
 
-export type buttonType = "allgemeines" | "gaeste" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
+export type ButtonType = "allgemeines" | "gaeste" | "technik" | "ausgaben" | "hotel" | "kasse" | "presse" | "angebot";
 
 const jazzColors = {
   allgemeines: "#05498c",
@@ -29,11 +29,11 @@ const icons: { [index: string]: IconProps["iconName"] } = {
   angebot: "Basket",
 };
 
-function color(localType: buttonType): string {
+function color(localType: ButtonType): string {
   return jazzColors[localType];
 }
 
-function icon(localType: buttonType): IconProps["iconName"] {
+function icon(localType: ButtonType): IconProps["iconName"] {
   return icons[localType] as IconProps["iconName"];
 }
 export const colorsAndIconsForSections = { color, icon };
