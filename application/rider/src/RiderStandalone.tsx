@@ -5,7 +5,7 @@ import { riderFor, saveRider } from "@/loader.ts";
 import { RiderComp } from "jc-vue/src/components/rider/RiderComp.tsx";
 import ButtonWithIcon from "jc-vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { theme } from "antd";
-import { JazzPageHeader } from "jc-vue/src/widgets/JazzPageHeader.tsx";
+import { PageHeader } from "@ant-design/pro-layout";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 const titel = "Jazzclub Konzert";
@@ -43,8 +43,8 @@ export function RiderStandalone() {
 
   return (
     <>
-      <JazzPageHeader
-        buttons={[
+      <PageHeader
+        extra={[
           <ButtonWithIcon color={token.colorSuccess} disabled={!isSuccess} icon="CheckSquare" key="save" onClick={save} text="Speichern" />,
         ]}
         title={`Rider für "${titel}" am ${start}`}
