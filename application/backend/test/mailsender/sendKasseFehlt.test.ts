@@ -40,10 +40,10 @@ describe("Check Kasse Mailsender", () => {
     ]);
     expect(message.body).to.include("## Bei folgenden Veranstaltungen der nächsten 8 Tage fehlt noch jemand an der Kasse:");
     expect(message.body).to.include(
-      '<a href="http://localhost:1970/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>',
+      '<a href="http://localhost:1970/vue/veranstaltung/konzert1">Konzert 1 am Mo., 29. Apr. 2019 22:00 im Jazzclub Karlsruhe</a>',
     );
     expect(message.body).to.include(
-      '<a href="http://localhost:1970/veranstaltung/konzert2">Konzert 2 am Mi., 29. Mai 2019 22:00 im Jazzclub Karlsruhe</a>',
+      '<a href="http://localhost:1970/vue/veranstaltung/konzert2">Konzert 2 am Mi., 29. Mai 2019 22:00 im Jazzclub Karlsruhe</a>',
     );
   });
 });

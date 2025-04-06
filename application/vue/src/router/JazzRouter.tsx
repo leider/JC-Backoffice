@@ -71,6 +71,6 @@ const routes = [
 ];
 
 export function JazzRouter() {
-  const router = useMemo(() => createBrowserRouter(routes), []);
+  const router = useMemo(() => createBrowserRouter(routes, { basename: "/vue" }), []);
   return <RouterProvider router={router} />;
 }

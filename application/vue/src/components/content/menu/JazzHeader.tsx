@@ -115,7 +115,7 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
         }}
         to="/"
       >
-        <img alt="Jazzclub Logo" src="/img/logo_weiss.png" />
+        <img alt="Jazzclub Logo" src="/vue/img/logo_weiss.png" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
         <ConfigProvider theme={{ components: { Menu: { subMenuItemSelectedColor: "white" } } }}>

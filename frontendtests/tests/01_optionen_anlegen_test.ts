@@ -7,11 +7,11 @@ Before(({ login }) => {
 Scenario("Erzeuge Typen und Orte", ({ I }) => {
   I.deleteObjectInCollection("optionenstore", "instance");
   I.deleteObjectInCollection("optionenstore", "orte");
-  I.amOnPage("/optionen");
+  I.amOnPage("/vue/optionen");
   I.fillField("Kooperationen", "UI Test\n");
   I.click("Speichern");
 
-  I.amOnPage("/orte");
+  I.amOnPage("/vue/orte");
   I.click(`(//button[@data-testid="add-in-table"])`);
   I.click('div[data-testid="name0"]');
   I.fillField("#name", "Jazzclub");
