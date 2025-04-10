@@ -31,7 +31,7 @@ ${map(stuffToSend, (veranst) => veranst.kopf.titelMitPrefix + " am " + veranst.d
 
   const adminAddresses = usersService.emailsAllerAdmins();
   logger.debug(`Email Adressen für ${variables.subject}: ${formatMailAddresses(adminAddresses)}`);
-  message.to = [MailMessage.formatEMailAddress(variables.name, variables.email)];
+  message.to = MailMessage.formatEMailAddressCommaSeparated(variables.name, variables.email);
   message.bcc = adminAddresses;
   return mailtransport.sendMail(message);
 }
@@ -71,7 +71,7 @@ export async function checkFotograf(now: DatumUhrzeit) {
   const variables = {
     name: conf.fotografName,
     email: conf.fotografEmail,
-    subject: "Photographing for Jazzclub",
+    subject: "Fotografieren beim Jazzclub",
     firstLine: "## The following concerts may profit from a professional photographer:",
   };
   return checkForFilter(
