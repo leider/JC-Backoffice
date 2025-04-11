@@ -8,7 +8,7 @@
 /*.tgz
 /application/backend/**/*.js
 /application/backend/sass/out/jc-backoffice.css
-/application/backend/static/static/reporting/niklas.png
+/application/backend/static/reporting/niklas.png
 /application/backend/static/rider/
 /application/backend/static/stylesheets
 /application/backend/static/upload
