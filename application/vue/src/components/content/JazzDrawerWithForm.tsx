@@ -74,9 +74,19 @@ export default function JazzDrawerWithForm<T>({
     }
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
+  const onSave = useCallback(() => {
+    form
+      .validateFields()
+      .then(async () => {
+        setIsDirty(false);
+        saveForm(form.getFieldsValue(true));
+      })
+      .catch(checkErrors);
+  }, [checkErrors, form, saveForm, setIsDirty]);
+
   const buttons: ReactNode[] = (additionalButtons ?? [])
     .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetChanges} /> : [])
-    .concat(<SaveButton disabled={!isDirty || hasErrors} key="save" />)
+    .concat(<SaveButton callback={onSave} disabled={!isDirty || hasErrors} key="save" />)
     .concat(additionalButtonsLast ?? []);
 
   const jazzFormContext = useMemo(() => {
@@ -99,15 +109,6 @@ export default function JazzDrawerWithForm<T>({
           colon={false}
           form={form}
           layout="vertical"
-          onFinish={() =>
-            form
-              .validateFields()
-              .then(async () => {
-                setIsDirty(false);
-                saveForm(form.getFieldsValue(true));
-              })
-              .catch(checkErrors)
-          }
           onKeyDown={(event) => {
             const target = event.target as HTMLInputElement;
             if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
