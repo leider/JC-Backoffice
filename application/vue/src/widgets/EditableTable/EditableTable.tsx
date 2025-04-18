@@ -17,6 +17,7 @@ interface EditableTableProps<T> {
   readonly columnDescriptions: Columns[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (vals: T) => T;
+  readonly fixedMinHeight?: number;
 }
 
 function duplicates(values: string[]) {
@@ -24,7 +25,13 @@ function duplicates(values: string[]) {
   return filter(compacted, (item, index) => index !== compacted.indexOf(item));
 }
 
-export default function EditableTable<T>({ name, columnDescriptions, usersWithKann, newRowFactory }: EditableTableProps<T>) {
+export default function EditableTable<T>({
+  name,
+  columnDescriptions,
+  usersWithKann,
+  newRowFactory,
+  fixedMinHeight,
+}: EditableTableProps<T>) {
   const requiredFields = useMemo(() => map(filter(columnDescriptions, "required"), "dataIndex") as string[], [columnDescriptions]);
   const uniqueFields = useMemo(() => filter(columnDescriptions, "uniqueValues"), [columnDescriptions]);
   const [duplInfo, setDuplInfo] = useState<DuplInfo>([]);
@@ -83,6 +90,7 @@ export default function EditableTable<T>({ name, columnDescriptions, usersWithKa
       <EditableTableInner<T>
         columnDescriptions={columnDescriptions}
         duplInfo={duplInfo}
+        fixedMinHeight={fixedMinHeight}
         newRowFactory={newRowFactory}
         requiredErrors={requiredErrors}
         usersWithKann={usersWithKann}

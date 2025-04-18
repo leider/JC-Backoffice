@@ -1,5 +1,5 @@
 import { Form, Table, type TableProps, Typography } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
@@ -16,6 +16,7 @@ import map from "lodash/map";
 import reject from "lodash/reject";
 import flatMap from "lodash/flatMap";
 import keys from "lodash/keys";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 export type WithKey<T> = T & { key: string };
 
@@ -74,6 +75,7 @@ export default function EditableTableInner<T>({
   newRowFactory,
   duplInfo,
   requiredErrors,
+  fixedMinHeight,
 }: {
   readonly value?: T[];
   readonly onTable?: (val?: T[]) => void;
@@ -82,13 +84,13 @@ export default function EditableTableInner<T>({
   readonly newRowFactory: (val: T) => T;
   readonly duplInfo: DuplInfo;
   readonly requiredErrors: string[];
+  readonly fixedMinHeight?: number;
 }) {
   type TWithKey = WithKey<T>;
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
   const [rows, setRows] = useState<TWithKey[]>([]);
-  const [page, setPage] = useState(1);
   const tableContext = useCreateTableContext();
-  const hidePagination = useMemo(() => rows.length < 50, [rows.length]);
+  const { viewport } = useContext(GlobalContext);
 
   useEffect(() => {
     const withKey: TWithKey[] = map(value, (row, index) => {
@@ -132,7 +134,6 @@ export default function EditableTableInner<T>({
     const newData = newRowFactory({} as T);
     (newData as TWithKey).key = "" + newKey();
     onTable?.([newData, ...rows]);
-    setPage(1);
   }, [newKey, newRowFactory, onTable, rows]);
 
   const handleSave = useCallback(
@@ -228,26 +229,30 @@ export default function EditableTableInner<T>({
     [defaultColumns, handleSave, rows],
   );
 
+  const ref: Parameters<typeof Table>[0]["ref"] = React.useRef(null);
+
+  const scrollY = useMemo(
+    () => (fixedMinHeight ? fixedMinHeight : viewport.height - 50 - (ref?.current?.nativeElement.getBoundingClientRect().top ?? 0)),
+    [viewport.height, ref?.current?.nativeElement], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
   return (
-    <TableContext.Provider value={tableContext}>
-      <DulicatesInfo duplInfo={duplInfo} />
-      <Table<TWithKey>
-        bordered
-        className="editable-table"
-        columns={columns as ColumnTypes}
-        components={{ body: { row: EditableRow, cell: EditableCell } }}
-        dataSource={rows}
-        pagination={{
-          onChange: setPage,
-          current: page,
-          position: ["topRight"],
-          defaultPageSize: 50,
-          hideOnSinglePage: hidePagination,
-        }}
-        rowClassName={(record) => (hasRecordErrors(record) ? "table-row-error" : "")}
-        scroll={{ y: "60vh" }}
-        size="small"
-      />
-    </TableContext.Provider>
+    <div>
+      <TableContext.Provider value={tableContext}>
+        <DulicatesInfo duplInfo={duplInfo} />
+        <Table<TWithKey>
+          bordered
+          className="editable-table"
+          columns={columns as ColumnTypes}
+          components={{ body: { row: EditableRow, cell: EditableCell } }}
+          dataSource={rows}
+          pagination={false}
+          ref={ref}
+          rowClassName={(record) => (hasRecordErrors(record) ? "table-row-error" : "")}
+          scroll={{ y: scrollY }}
+          size="small"
+        />
+      </TableContext.Provider>
+    </div>
   );
 }
