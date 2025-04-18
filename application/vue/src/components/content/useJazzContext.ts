@@ -90,7 +90,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       { enabled: isAuthenticated, queryKey: ["currentUser"], queryFn: () => currentUser(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["optionen"], queryFn: () => optionenLoader(), refetchInterval },
       { enabled: isAuthenticated, queryKey: ["orte"], queryFn: () => orteLoader(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["konzert", "today"], queryFn: () => konzerteForToday() },
+      { enabled: isAuthenticated, queryKey: ["konzert", "today"], queryFn: () => konzerteForToday(), refetchInterval },
     ],
     combine: ([usersQuery, wikidirsQuery, currentQuery, optionenQuery, orteQuery, todayQuery]) => {
       if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data && todayQuery?.data) {

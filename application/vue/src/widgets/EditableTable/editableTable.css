@@ -1,7 +1,3 @@
-.editable-table .ant-table.ant-table-small .ant-table-tbody > tr > td {
-  padding: 0 !important;
-}
-
 .table-row-error {
   background-color: var(--ant-color-error-bg);
 }

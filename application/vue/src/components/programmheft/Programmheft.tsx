@@ -77,6 +77,7 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
         <Splitter.Panel collapsible>
           <EditableTable<Event>
             columnDescriptions={columnDescriptions}
+            fixedMinHeight={600}
             name="events"
             newRowFactory={(vals) => new Event(vals)}
             usersWithKann={usersAsOptions}

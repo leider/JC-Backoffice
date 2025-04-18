@@ -60,12 +60,24 @@ function JazzclubApp() {
     return () => darkModePreference.removeEventListener("change", listener);
   }, []);
 
+  const [viewport, setViewport] = useState<{ width: number; height: number }>({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
   useEffect(() => {
     const listener = () => {
       setPreferences(getPreferences());
     };
+    const resizeListener = () => {
+      setViewport({ width: window.innerWidth, height: window.innerHeight });
+    };
     window.addEventListener("storage", listener);
-    return () => window.removeEventListener("storage", listener);
+    window.addEventListener("resize", resizeListener);
+    return () => {
+      window.removeEventListener("storage", listener);
+      window.removeEventListener("resize", resizeListener);
+    };
   }, [getPreferences]);
 
   const success = "#28a745";
@@ -83,7 +95,7 @@ function JazzclubApp() {
   const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
   const colorTextDisabled = useMemo(() => (darkMode ? "rgb(255,255,255,0.65)" : "rgb(0,0,0,0.65)"), [darkMode]);
 
-  const initialContext = useMemo(() => ({ isDarkMode: darkMode, isCompactMode: compactMode }), [compactMode, darkMode]);
+  const initialContext = useMemo(() => ({ isDarkMode: darkMode, isCompactMode: compactMode, viewport }), [compactMode, darkMode, viewport]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -111,11 +123,13 @@ function JazzclubApp() {
           },
           algorithm: algo,
           components: {
+            Button: { primaryShadow: "none" },
             Checkbox: { colorPrimary: success, colorPrimaryHover: success, colorPrimaryBorder: success },
-            Tag: { algorithm: theme.defaultAlgorithm },
             Collapse: { contentPadding: !xl ? 4 : 12 },
-            Form: { itemMarginBottom: 12 },
+            Form: { itemMarginBottom: 12, verticalLabelPadding: 0 },
             Slider: { handleColor: colorTextDisabled },
+            Table: { cellPaddingBlockSM: 0, cellPaddingInlineSM: 0 },
+            Tag: { algorithm: theme.defaultAlgorithm },
           },
         }}
       >
