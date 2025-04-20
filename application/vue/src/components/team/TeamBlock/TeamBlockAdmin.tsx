@@ -8,6 +8,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
+import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 
 function Extras({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   const tagsForTitle = useMemo(() => {
@@ -68,7 +69,7 @@ export default function TeamBlockAdmin({
       <Col id={veranstaltung.id} span={24} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor: veranstaltung.color, padding: "2px 16px" }}>
-            <TeamBlockHeader expanded={initiallyOpen} veranstaltung={veranstaltung} />
+            <TeamBlockHeader veranstaltung={veranstaltung} />
           </div>
         ) : (
           <Collapse
@@ -79,13 +80,13 @@ export default function TeamBlockAdmin({
                 key: veranstaltung.id ?? "",
                 style: { backgroundColor: veranstaltung.color },
                 className: "team-block",
-                label: <TeamBlockHeader expanded={expanded} veranstaltung={veranstaltung} />,
-                extra: expanded && <Extras veranstaltung={veranstaltung} />,
-                children: expanded ? (
+                label: <TeamBlockHeader veranstaltung={veranstaltung} />,
+                extra: expanded ? <Extras veranstaltung={veranstaltung} /> : <ButtonPreview veranstaltung={veranstaltung} />,
+                children: (
                   <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
                     <AdminContent veranstaltung={veranstaltung} />
                   </ConfigProvider>
-                ) : null,
+                ),
               },
             ]}
             onChange={onChange}

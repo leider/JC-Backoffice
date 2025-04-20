@@ -173,11 +173,11 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
                 {
                   showArrow: false,
                   key: "mitarbeiter",
-                  children: showMitarbeiter ? (
+                  children: (
                     <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
                       <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
                     </div>
-                  ) : null,
+                  ),
                 },
               ]}
             />

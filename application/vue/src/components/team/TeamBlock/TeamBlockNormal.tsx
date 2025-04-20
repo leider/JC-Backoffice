@@ -50,9 +50,9 @@ export default function TeamBlockNormal({
               {
                 key: veranstaltung.id ?? "",
                 style: { backgroundColor: backgroundColor },
-                label: <TeamBlockHeader expanded={expanded} veranstaltung={veranstaltung} />,
+                label: <TeamBlockHeader veranstaltung={veranstaltung} />,
                 extra: <ButtonPreview veranstaltung={veranstaltung} />,
-                children: inView && expanded ? <TeamContent veranstaltung={veranstaltung} /> : null,
+                children: inView ? <TeamContent veranstaltung={veranstaltung} /> : null,
               },
             ]}
             onChange={onChange}
