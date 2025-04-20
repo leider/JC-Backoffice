@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
@@ -33,6 +33,7 @@ export default function TeamBlockNormal({
   }, [backgroundColor, expanded, textColor]);
 
   const { inView, ref } = useInView({ triggerOnce: true });
+  const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
 
   return (
     <ConfigProvider theme={theme}>
@@ -41,27 +42,23 @@ export default function TeamBlockNormal({
           <div style={{ padding: "2px 16px", backgroundColor }}>
             <TeamBlockHeader veranstaltung={veranstaltung} />
           </div>
-        ) : inView || expanded ? (
+        ) : (
           <Collapse
             activeKey={expanded ? veranstaltung.id : ""}
             expandIcon={expandIcon({ color: textColor })}
             items={[
               {
-                key: veranstaltung.id || "",
+                key: veranstaltung.id ?? "",
                 style: { backgroundColor: backgroundColor },
                 label: <TeamBlockHeader expanded={expanded} veranstaltung={veranstaltung} />,
                 extra: <ButtonPreview veranstaltung={veranstaltung} />,
-                children: <TeamContent veranstaltung={veranstaltung} />,
+                children: inView && expanded ? <TeamContent veranstaltung={veranstaltung} /> : null,
               },
             ]}
-            onChange={() => setExpanded(!expanded)}
+            onChange={onChange}
             size="small"
             style={{ borderColor: backgroundColor }}
           />
-        ) : (
-          <div style={{ backgroundColor: backgroundColor }}>
-            <TeamBlockHeader veranstaltung={veranstaltung} />
-          </div>
         )}
       </Col>
     </ConfigProvider>

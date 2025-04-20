@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Col, Form } from "antd";
 import { SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { saveImagenames } from "@/rest/loader.ts";
@@ -35,13 +35,13 @@ export default function ImageOverview() {
     form.setFieldsValue(sections);
   }, [form, sections]);
 
-  function saveForm() {
+  const saveForm = useCallback(() => {
     const sects: ImageOverviewForm = form.getFieldsValue(true);
     const changedRows = filter(sects.with.concat(sects.notFound).concat(sects.unused), (v) => v.newname !== v.image);
     form.validateFields().then(async () => {
       mutateImages.mutate(changedRows);
     });
-  }
+  }, [form, mutateImages]);
 
   return (
     <Form form={form} onFinish={saveForm}>

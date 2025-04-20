@@ -8,6 +8,7 @@ import { Col } from "antd";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useCallback } from "react";
 
 function KalenderPageInternal() {
   const columnDescriptions: Columns[] = [
@@ -23,10 +24,11 @@ function KalenderPageInternal() {
     },
   ];
 
+  const newIcalFactory = useCallback((vals: Ical) => Object.assign({}, vals), []);
   return (
     <JazzRow>
       <Col span={24}>
-        <EditableTable<Ical> columnDescriptions={columnDescriptions} name="icals" newRowFactory={(vals) => Object.assign({}, vals)} />
+        <EditableTable<Ical> columnDescriptions={columnDescriptions} name="icals" newRowFactory={newIcalFactory} />
       </Col>
     </JazzRow>
   );
@@ -41,9 +43,7 @@ export default function KalenderPage() {
     successMessage: "Die Kalender wurden gespeichert",
   });
 
-  function saveForm(vals: FerienIcals) {
-    mutateKalender.mutate(new FerienIcals(vals));
-  }
+  const saveForm = useCallback((vals: FerienIcals) => mutateKalender.mutate(new FerienIcals(vals)), [mutateKalender]);
 
   return (
     <JazzFormAndHeader<FerienIcals> data={data} resetChanges={refetch} saveForm={saveForm} title="Kalender">

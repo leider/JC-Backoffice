@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { saveVermietung, vermietungForUrl } from "@/rest/loader.ts";
@@ -39,13 +39,16 @@ export default function VermietungComp() {
     }
   }, [currentUser, navigate]);
 
-  function saveForm(vals: Vermietung) {
-    const vermiet = new Vermietung(vals);
-    if (!vermiet.id) {
-      vermiet.initializeIdAndUrl();
-    }
-    mutateVermietung.mutate(vermiet);
-  }
+  const saveForm = useCallback(
+    (vals: Vermietung) => {
+      const vermiet = new Vermietung(vals);
+      if (!vermiet.id) {
+        vermiet.initializeIdAndUrl();
+      }
+      mutateVermietung.mutate(vermiet);
+    },
+    [mutateVermietung],
+  );
 
   return (
     <VermietungFormAndPageHeader data={data} resetChanges={refetch} saveForm={saveForm}>

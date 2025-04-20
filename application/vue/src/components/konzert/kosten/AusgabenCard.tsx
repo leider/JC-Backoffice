@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
-import { DynamicItem } from "@/widgets/DynamicItem";
 import CheckItem from "@/widgets/CheckItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -76,6 +75,21 @@ export default function AusgabenCard() {
   const form = useFormInstance();
   const summe = useAusgaben();
 
+  const gagenEUR = useWatch(["kosten", "gagenEUR"], { preserve: true });
+  const gagenSteuer = useWatch(["kosten", "gagenSteuer"], { preserve: true });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const kosten = useMemo(() => new Kosten(form.getFieldValue("kosten")), [form, gagenEUR, gagenSteuer]);
+
+  const kskAnteil = useMemo(() => gagenEUR * 0.05, [gagenEUR]);
+
+  const einnahmenReservix = useWatch(["kasse", "einnahmenReservix"], { preserve: true });
+  const einnahmeTicketsEUR = useWatch(["kasse", "einnahmeTicketsEUR"], { preserve: true });
+  const konzertKalkulation = useMemo(
+    () => new KonzertKalkulation(new Konzert(form.getFieldsValue(true))),
+    [form, einnahmeTicketsEUR, einnahmenReservix], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
   const { lg } = useBreakpoint();
   return (
     <Collapsible amount={summe} label="Kosten / Ausgaben" noTopBorder={lg} suffix="ausgaben">
@@ -90,46 +104,15 @@ export default function AusgabenCard() {
           <SingleSelect label="Deal" name={["kosten", "deal"]} options={Kosten.deals} />
         </Col>
         <Col span={6}>
-          <DynamicItem
-            nameOfDepending={["kosten", "gagenEUR"]}
-            renderWidget={(getFieldValue) => {
-              return (
-                <DynamicItem
-                  nameOfDepending={["kosten", "gagenSteuer"]}
-                  renderWidget={() => {
-                    const kosten = new Kosten(getFieldValue(["kosten"]));
-                    return <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={kosten.gagenTotalEUR} />;
-                  }}
-                />
-              );
-            }}
-          />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={kosten.gagenTotalEUR} />
         </Col>
       </JazzRow>
       <JazzRow>
         <Col sm={12} xs={24}>
-          <DynamicItem
-            nameOfDepending={["kosten", "gagenEUR"]}
-            renderWidget={(getFieldValue) => {
-              const gagen = getFieldValue(["kosten", "gagenEUR"]);
-              const kskAnteil = gagen * 0.05;
-              return <NumberInputWithDirectValue decimals={2} label="KSK (auf Gagen netto ohne Deal)" suffix="€" value={kskAnteil} />;
-            }}
-          />
+          <NumberInputWithDirectValue decimals={2} label="KSK (auf Gagen netto ohne Deal)" suffix="€" value={kskAnteil} />
         </Col>
         <Col sm={12} xs={24}>
-          <DynamicItem
-            nameOfDepending={["kasse", "einnahmenReservix"]}
-            renderWidget={() => (
-              <DynamicItem
-                nameOfDepending={["kasse", "einnahmeTicketsEUR"]}
-                renderWidget={() => {
-                  const kalk = new KonzertKalkulation(new Konzert(form.getFieldsValue(true)));
-                  return <NumberInputWithDirectValue decimals={2} label="GEMA (auf Eintritt und Reservix)" suffix="€" value={kalk.gema} />;
-                }}
-              />
-            )}
-          />
+          <NumberInputWithDirectValue decimals={2} label="GEMA (auf Eintritt und Reservix)" suffix="€" value={konzertKalkulation.gema} />
         </Col>
       </JazzRow>
       <LabelCurrencyRow label="Provision Agentur" path={["kosten", "provisionAgentur"]} />

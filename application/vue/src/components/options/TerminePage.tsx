@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { saveTermine, termine as allTermine } from "@/rest/loader.ts";
 import * as React from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
@@ -31,14 +31,12 @@ function TerminePageInternal() {
     { dataIndex: "typ", title: "Typ", type: "text", width: "120px", filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"] },
   ];
 
+  const newRowFactory = useCallback((vals: Termin) => Object.assign({}, vals), []);
+
   return (
     <JazzRow>
       <Col span={24}>
-        <EditableTable<Termin>
-          columnDescriptions={columnDescriptions}
-          name="allTermine"
-          newRowFactory={(vals) => Object.assign({}, vals)}
-        />
+        <EditableTable<Termin> columnDescriptions={columnDescriptions} name="allTermine" newRowFactory={newRowFactory} />
       </Col>
     </JazzRow>
   );
@@ -57,15 +55,22 @@ export default function TerminePage() {
     successMessage: "Die Termine wurden gespeichert",
   });
 
-  function saveForm(vals: TermineWrapper) {
-    mutateTermine.mutate(
-      map(
-        vals.allTermine,
-        (each: TerminFlat) =>
-          new Termin({ startDate: each.dates[0], endDate: each.dates[1], beschreibung: each.beschreibung, typ: each.typ }),
+  const saveForm = useCallback(
+    (vals: TermineWrapper) =>
+      mutateTermine.mutate(
+        map(
+          vals.allTermine,
+          (each: TerminFlat) =>
+            new Termin({
+              startDate: each.dates[0],
+              endDate: each.dates[1],
+              beschreibung: each.beschreibung,
+              typ: each.typ,
+            }),
+        ),
       ),
-    );
-  }
+    [mutateTermine],
+  );
 
   return (
     <JazzFormAndHeader data={termine} resetChanges={refetch} saveForm={saveForm} title="Termine">

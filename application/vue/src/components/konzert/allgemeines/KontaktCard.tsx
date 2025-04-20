@@ -1,6 +1,6 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { Col, Form, Select } from "antd";
-import React, { PropsWithChildren, useContext, useEffect, useMemo, useState } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
@@ -31,30 +31,33 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
 
   const realOptions = useMemo(() => map(auswahlen, (opt) => ({ label: opt, value: opt })), [auswahlen]);
 
-  function auswahlChanged(name: string) {
-    if (name === "[temporär]") {
-      return;
-    }
-    const result = new Kontakt(find(kontakte, { name: name }));
-    const values: {
-      agentur?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
-      hotel?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
-    } = {};
-    values[selector] = {
-      adresse: result.adresse,
-      ansprechpartner: result.ansprechpartner,
-      email: result.email,
-      name: result.name,
-      telefon: result.telefon,
-    };
-    form.setFieldsValue(values);
-    if (selector === "agentur") {
-      setAgenturauswahl(name);
-    } else if (selector === "hotel") {
-      setHotelauswahl(name);
-    }
-    jazzFormContext.checkDirty();
-  }
+  const auswahlChanged = useCallback(
+    (name: string) => {
+      if (name === "[temporär]") {
+        return;
+      }
+      const result = new Kontakt(find(kontakte, { name: name }));
+      const values: {
+        agentur?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
+        hotel?: { adresse: string; ansprechpartner: string; email: string; name: string; telefon: string };
+      } = {};
+      values[selector] = {
+        adresse: result.adresse,
+        ansprechpartner: result.ansprechpartner,
+        email: result.email,
+        name: result.name,
+        telefon: result.telefon,
+      };
+      form.setFieldsValue(values);
+      if (selector === "agentur") {
+        setAgenturauswahl(name);
+      } else if (selector === "hotel") {
+        setHotelauswahl(name);
+      }
+      jazzFormContext.checkDirty();
+    },
+    [kontakte, selector, form, setAgenturauswahl, setHotelauswahl, jazzFormContext],
+  );
 
   return (
     <Collapsible

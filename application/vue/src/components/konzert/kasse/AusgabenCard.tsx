@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Form } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -25,11 +25,11 @@ export default function AusgabenCard() {
 
   const { lg } = useBreakpoint();
 
-  function calculateAnBank() {
+  const calculateAnBank = useCallback(() => {
     const kasse: Kasse = new Kasse(form.getFieldValue("kasse"));
     const anBank = kasse.einnahmeTotalEUR - kasse.ausgabenOhneGage;
     form.setFieldValue(["kasse", "ausgabeBankEUR"], anBank);
-  }
+  }, [form]);
 
   return (
     <Collapsible amount={ausgabenTotalEUR} label="Ausgaben (Bar und mit Beleg)" noTopBorder={lg} suffix="kasse">

@@ -4,7 +4,7 @@ import User, { userGruppen } from "jc-shared/user/user";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import CheckItem from "@/widgets/CheckItem";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -39,22 +39,17 @@ export function ChangePasswordModal({
   useEffect(() => {
     form.setFieldsValue(cloneDeep(user));
   }, [form, user]);
-  async function saveForm() {
-    form.validateFields().then(async () => {
-      mutatePassword.mutate(new User(form.getFieldsValue(true)));
-    });
-  }
+
+  const saveForm = useCallback(
+    async () => form.validateFields().then(async () => mutatePassword.mutate(new User(form.getFieldsValue(true)))),
+    [form, mutatePassword],
+  );
+
+  const close = useCallback(() => setIsOpen(false), [setIsOpen]);
 
   return (
     <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
-      <JazzModal
-        closable={false}
-        maskClosable={false}
-        onCancel={() => setIsOpen(false)}
-        onOk={saveForm}
-        open={isOpen}
-        title="Passwort ändern"
-      >
+      <JazzModal closable={false} maskClosable={false} onCancel={close} onOk={saveForm} open={isOpen} title="Passwort ändern">
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
@@ -90,15 +85,19 @@ export function NewUserModal({ isOpen, setIsOpen }: { readonly isOpen: boolean; 
     },
   });
 
-  async function saveForm() {
-    form.validateFields().then(async () => {
-      mutateNewUser.mutate(new User(form.getFieldsValue(true)));
-      setIsOpen(false);
-    });
-  }
+  const saveForm = useCallback(
+    async () =>
+      form.validateFields().then(async () => {
+        mutateNewUser.mutate(new User(form.getFieldsValue(true)));
+        setIsOpen(false);
+      }),
+    [form, mutateNewUser, setIsOpen],
+  );
+
+  const close = useCallback(() => setIsOpen(false), [setIsOpen]);
 
   return (
-    <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={saveForm} open={isOpen} title="Neuer Benutzer">
+    <JazzModal closable={false} maskClosable={false} onCancel={close} onOk={saveForm} open={isOpen} title="Neuer Benutzer">
       <Form autoComplete="off" form={form} layout="vertical" onFinish={saveForm}>
         <Row gutter={8}>
           <Col span={24}>
@@ -156,31 +155,27 @@ export function EditUserModal({
     },
   });
 
-  async function saveForm() {
+  const saveForm = useCallback(async () => {
     if (!dirty) {
       setIsOpen(false);
     }
-    form.validateFields().then(async () => {
-      mutateUser.mutate(new User(form.getFieldsValue(true)));
-    });
-  }
+    form.validateFields().then(async () => mutateUser.mutate(new User(form.getFieldsValue(true))));
+  }, [dirty, setIsOpen, form, mutateUser]);
+
+  const close = useCallback(() => setIsOpen(false), [setIsOpen]);
+  const onValuesChange = useCallback(() => {
+    const current = form.getFieldsValue(true);
+    logDiffForDirty(initialValue, current, false);
+    setDirty(areDifferent(initialValue, current));
+  }, [form, initialValue]);
 
   return (
-    <Form
-      autoComplete="off"
-      form={form}
-      layout="vertical"
-      onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
-      }}
-    >
+    <Form autoComplete="off" form={form} layout="vertical" onValuesChange={onValuesChange}>
       <JazzModal
         closable={false}
         maskClosable={false}
         okButtonProps={{ disabled: !dirty }}
-        onCancel={() => setIsOpen(false)}
+        onCancel={close}
         onOk={saveForm}
         open={isOpen}
         title={user.id}

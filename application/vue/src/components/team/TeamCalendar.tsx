@@ -48,15 +48,12 @@ export default function TeamCalendar() {
 
   const { lg } = useBreakpoint();
   const initiaDate = useMemo(() => new DatumUhrzeit().minus({ wochen: 2 }).toJSDate, []);
+
+  const openDrawer = useCallback(() => setDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
   return (
     <>
-      <ButtonWithIcon
-        alwaysText
-        icon="ChevronLeft"
-        key="openCal"
-        onClick={() => setDrawerOpen(true)}
-        text={lg ? "Kalender..." : "Kal..."}
-      />
+      <ButtonWithIcon alwaysText icon="ChevronLeft" key="openCal" onClick={openDrawer} text={lg ? "Kalender..." : "Kal..."} />
       <Drawer
         closeIcon={
           <div>
@@ -78,7 +75,7 @@ export default function TeamCalendar() {
             <ButtonIcal />
           </>
         }
-        onClose={() => setDrawerOpen(false)}
+        onClose={closeDrawer}
         open={drawerOpen}
         placement="right"
         size="large"

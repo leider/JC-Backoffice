@@ -1,5 +1,5 @@
 import { Form, Select } from "antd";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { RefSelectProps } from "antd/es/select";
 import { NamePath } from "rc-field-form/es/interface";
 import map from "lodash/map";
@@ -42,20 +42,17 @@ function InnerSelect({
     }
   }, [focus, options]);
 
-  return (
-    <Select
-      allowClear={allowClear}
-      onBlur={() => save?.()}
-      onChange={(val) => {
-        onChange?.(val);
-        onSelect?.(val);
-        save?.(true);
-      }}
-      options={realOptions}
-      showSearch
-      value={value}
-    />
+  const onBlur = useCallback(() => save?.(), [save]);
+  const onChangeHandler = useCallback(
+    (val: string) => {
+      onChange?.(val);
+      onSelect?.(val);
+      save?.(true);
+    },
+    [onChange, onSelect, save],
   );
+
+  return <Select allowClear={allowClear} onBlur={onBlur} onChange={onChangeHandler} options={realOptions} showSearch value={value} />;
 }
 
 export default function SingleSelect({ label, name, onChange, options, initialValue, required, save, focus }: SingleSelectParams) {

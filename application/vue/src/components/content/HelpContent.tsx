@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import HelpVeranstaltungen from "@/components/content/help/HelpVeranstaltungen.tsx";
 import HelpNeues from "@/components/content/help/HelpNeues.tsx";
 import { FloatButton, Typography } from "antd";
@@ -21,9 +21,14 @@ export default function HelpContent() {
     return pathname === "/veranstaltungen" || pathname === "/team" || pathname.startsWith("/konzert") || pathname.startsWith("/wiki");
   }, [pathname]);
 
+  const closeHelp = useCallback(() => setHelpOpen(false), []);
+  const openHelp = useCallback(() => setHelpOpen(true), []);
+  const closeInfo = useCallback(() => setInfoOpen(false), []);
+  const openInfo = useCallback(() => setInfoOpen(true), []);
+
   return (
     <>
-      <JazzModal footer={null} onCancel={() => setHelpOpen(false)} open={helpOpen} title="Hilfe" width={600}>
+      <JazzModal footer={null} onCancel={closeHelp} open={helpOpen} title="Hilfe" width={600}>
         <Typography.Title level={4}>Hilfe für aktuelle Seite</Typography.Title>
         <p>Abhängig von Deinen Benutzerrechten sind einige Dinge für Dich nicht sichtbar oder aktiv.</p>
         <HelpPrefs />
@@ -32,25 +37,13 @@ export default function HelpContent() {
         <HelpKonzert />
         <HelpWiki />
       </JazzModal>
-      <JazzModal footer={null} onCancel={() => setInfoOpen(false)} open={infoOpen} title="Neuigkeiten" width={600}>
+      <JazzModal footer={null} onCancel={closeInfo} open={infoOpen} title="Neuigkeiten" width={600}>
         <p>Dieser Dialog wird nach und nach mit Inhalten gefüllt...</p>
         <HelpNeues />
       </JazzModal>
       <FloatButton.Group icon={<IconForSmallBlock iconName="QuestionLg" />} trigger="click">
-        {hasHelp ? (
-          <FloatButton
-            icon={<IconForSmallBlock iconName="QuestionLg" />}
-            onClick={() => {
-              setHelpOpen(true);
-            }}
-          />
-        ) : null}
-        <FloatButton
-          icon={<IconForSmallBlock iconName="InfoLg" />}
-          onClick={() => {
-            setInfoOpen(true);
-          }}
-        />
+        {hasHelp ? <FloatButton icon={<IconForSmallBlock iconName="QuestionLg" />} onClick={openHelp} /> : null}
+        <FloatButton icon={<IconForSmallBlock iconName="InfoLg" />} onClick={openInfo} />
       </FloatButton.Group>
     </>
   );

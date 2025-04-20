@@ -1,7 +1,7 @@
 import { Button, Col, Form, Row, Input } from "antd";
 import { LoginState, useAuth } from "@/commons/authConsts.ts";
 import { Navigate, useLocation } from "react-router";
-import React from "react";
+import React, { useCallback } from "react";
 import { RowWrapper } from "@/widgets/RowWrapper.tsx";
 
 function Login() {
@@ -9,10 +9,7 @@ function Login() {
   const { search } = useLocation();
   const from = search.substring(1);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onFinish = (values: any) => {
-    login(values.username, values.password);
-  };
+  const onFinish = useCallback(({ username, password }: { username: string; password: string }) => login(username, password), [login]);
 
   if (loginState === LoginState.LOGGED_IN) {
     return <Navigate to={decodeURIComponent(from)} />;

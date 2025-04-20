@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Button, Col, ConfigProvider, Form, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -17,14 +17,16 @@ export default function TransportCard() {
 
   const [summe, setSumme] = useState<number>(0);
 
-  useEffect(updateSumme, [form]);
+  const updateSumme = useCallback(
+    function updateSumme() {
+      const konzert = new Konzert(form.getFieldsValue(true));
+      setSumme(konzert.unterkunft.transportEUR);
+    },
+    [form],
+  );
 
-  function updateSumme() {
-    const konzert = new Konzert(form.getFieldsValue(true));
-    setSumme(konzert.unterkunft.transportEUR);
-  }
   const { currentUser } = useJazzContext();
-  const sendMail = () => {
+  const sendMail = useCallback(() => {
     const konzert = new Konzert(form.getFieldsValue(true));
     const unterkunft = konzert.unterkunft;
     const email = encodeURIComponent(`${konzert.hotel.name}<${konzert.hotel.email}>`);
@@ -49,7 +51,9 @@ Mit freundlichen Grüßen,
 ${currentUser.name}`);
 
     window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + text;
-  };
+  }, [form, currentUser.name]);
+
+  useEffect(updateSumme, [updateSumme]);
 
   const { lg } = useBreakpoint();
   const { useToken } = theme;

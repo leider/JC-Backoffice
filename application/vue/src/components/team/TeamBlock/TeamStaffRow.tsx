@@ -1,5 +1,5 @@
 import { ConfigProvider, Tag, theme } from "antd";
-import React, { useContext, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { addOrRemoveUserToSection } from "@/rest/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -88,19 +88,8 @@ export function AddRemoveStaffButton({
     },
   });
 
-  return isIn ? (
-    <ButtonStaff
-      add={false}
-      callback={async function () {
-        mutate.mutate(false);
-      }}
-    />
-  ) : (
-    <ButtonStaff
-      add
-      callback={async function () {
-        mutate.mutate(true);
-      }}
-    />
-  );
+  const removeCallback = useCallback(async () => mutate.mutate(false), [mutate]);
+  const addCallback = useCallback(async () => mutate.mutate(true), [mutate]);
+
+  return isIn ? <ButtonStaff add={false} callback={removeCallback} /> : <ButtonStaff add callback={addCallback} />;
 }

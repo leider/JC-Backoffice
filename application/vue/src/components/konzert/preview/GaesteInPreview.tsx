@@ -31,20 +31,31 @@ function AddOrRemoveGastButton({
     },
   });
 
-  return (
-    <ButtonStaff
-      add={add}
-      callback={() => {
-        add ? item.alreadyIn++ : item.alreadyIn--;
-        mutate.mutate({ item, art });
-      }}
-      disabled={add ? item.alreadyIn >= item.number : item.alreadyIn <= 0}
-    />
-  );
+  const buttonClicked = useCallback(() => {
+    add ? item.alreadyIn++ : item.alreadyIn--;
+    mutate.mutate({ item, art });
+  }, [add, art, item, mutate]);
+
+  return <ButtonStaff add={add} callback={buttonClicked} disabled={add ? item.alreadyIn >= item.number : item.alreadyIn <= 0} />;
 }
 
 function GastResList({ source, art, konzert }: { readonly konzert: Konzert; readonly source: NameWithNumber[]; readonly art: GastArt }) {
   const dataSource = useMemo(() => sortBy(source, "name"), [source]);
+  const renderItem = useCallback(
+    (item: NameWithNumber) => (
+      <List.Item
+        actions={[
+          <AddOrRemoveGastButton add art={art} item={item} key="addGast" konzert={konzert} />,
+          <b key="alreadyin">{item.alreadyIn}</b>,
+          <AddOrRemoveGastButton add={false} art={art} item={item} key="removeGast" konzert={konzert} />,
+        ]}
+        style={{ paddingLeft: 0, paddingRight: 0 }}
+      >
+        <List.Item.Meta description={item.comment} title={`${item.name} (${item.number} Karten)`} />
+      </List.Item>
+    ),
+    [art, konzert],
+  );
   return (
     <List
       dataSource={dataSource}
@@ -53,18 +64,7 @@ function GastResList({ source, art, konzert }: { readonly konzert: Konzert; read
           {art === "gast" ? "Gästeliste" : "Reservierungen"}
         </Typography.Title>
       }
-      renderItem={(item) => (
-        <List.Item
-          actions={[
-            <AddOrRemoveGastButton add art={art} item={item} key="addGast" konzert={konzert} />,
-            <b key="alreadyin">{item.alreadyIn}</b>,
-            <AddOrRemoveGastButton add={false} art={art} item={item} key="removeGast" konzert={konzert} />,
-          ]}
-          style={{ paddingLeft: 0, paddingRight: 0 }}
-        >
-          <List.Item.Meta description={item.comment} title={`${item.name} (${item.number} Karten)`} />
-        </List.Item>
-      )}
+      renderItem={renderItem}
       size="small"
     />
   );
@@ -90,9 +90,7 @@ export default function GaesteInPreview({ konzert, refetch }: { readonly konzert
     successMessage: "Das Konzert wurde gespeichert",
   });
 
-  function saveForm(konz: Konzert) {
-    mutateKonzert.mutate(konz);
-  }
+  const saveForm = useCallback((konz: Konzert) => mutateKonzert.mutate(konz), [mutateKonzert]);
 
   const canEdit = useMemo(
     () => currentUser.id && currentUser.accessrights.isAbendkasse,

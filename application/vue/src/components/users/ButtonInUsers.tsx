@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { MouseEvent, useCallback, useMemo } from "react";
 import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
 
@@ -14,14 +14,17 @@ export function ButtonInUsers({ type, callback }: { readonly type: "edit" | "cha
   const text = { edit: "Bearbeiten", changepass: "Passwort ändern", delete: "löschen" };
   const iconName = { edit: "PencilSquare", changepass: "KeyFill", delete: "Trash" };
 
+  const click = useCallback(
+    (event: MouseEvent) => {
+      event.stopPropagation();
+      callback();
+    },
+    [callback],
+  );
+
   return (
     <Tooltip color={color} title={text[type]}>
-      <span
-        onClick={(event) => {
-          event.stopPropagation();
-          callback();
-        }}
-      >
+      <span onClick={click}>
         <IconForSmallBlock color={color} iconName={iconName[type] as IconProps["iconName"]} size={16} />
       </span>
     </Tooltip>

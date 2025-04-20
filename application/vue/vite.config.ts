@@ -49,6 +49,7 @@ export default defineConfig(() => {
         injectRegister: "auto",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
         workbox: {
+          cleanupOutdatedCaches: true,
           maximumFileSizeToCacheInBytes: 5000000,
         },
         manifest: {

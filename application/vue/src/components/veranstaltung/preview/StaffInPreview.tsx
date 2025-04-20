@@ -43,7 +43,7 @@ function StaffList({
     names.push({ user: new User({ name: "n.a." }), bold: false });
   }
 
-  function renderItem(item: { user: User; bold: boolean }) {
+  const renderItem = useCallback((item: { user: User; bold: boolean }) => {
     function renderUser(user: User) {
       return (
         <>
@@ -55,7 +55,7 @@ function StaffList({
       );
     }
     return <List.Item>{item.bold ? <b>{renderUser(item.user)}</b> : <span>{renderUser(item.user)}</span>}</List.Item>;
-  }
+  }, []);
 
   return !notNeeded && <List dataSource={names} header={<b>{header + ":"}</b>} renderItem={renderItem} size="small" />;
 }

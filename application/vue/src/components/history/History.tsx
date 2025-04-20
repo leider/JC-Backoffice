@@ -4,7 +4,7 @@ import SingleSelect from "@/widgets/SingleSelect.tsx";
 import { Button, Col, Form } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { historyIdsFor } from "@/rest/loader.ts";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Changelog } from "@/components/history/Changelog.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import { useWatch } from "antd/es/form/Form";
@@ -53,17 +53,17 @@ export function History() {
     return id ? id.split(" (ge")[0] : "";
   }, [id]);
 
+  const expandUnexpand = useCallback(() => setExpanded(!expanded), [expanded]);
+  const selectCollection = useCallback((value: string) => setSearch({ collection: value }), [setSearch]);
+  const selectId = useCallback(
+    (value: string) => setSearch({ collection: search.get("collection") ?? "", id: value ? value.split(" (ge")[0] : "" }),
+    [search, setSearch],
+  );
   return (
     <Form autoComplete="off" form={form}>
       <JazzPageHeader
         buttons={[
-          <Button
-            disabled={!id}
-            icon={<IconForSmallBlock iconName="FileEarmarkText" />}
-            key="edit"
-            onClick={() => setExpanded(!expanded)}
-            type="primary"
-          >
+          <Button disabled={!id} icon={<IconForSmallBlock iconName="FileEarmarkText" />} key="edit" onClick={expandUnexpand} type="primary">
             {expanded ? "Alle zuklappen" : "Alle aufklappen"}
           </Button>,
         ]}
@@ -75,17 +75,12 @@ export function History() {
             <SingleSelect
               label="Tabelle"
               name="collection"
-              onChange={(value) => setSearch({ collection: value })}
+              onChange={selectCollection}
               options={["Veranstaltung", "Vermietung", "Programmheft", "Termine", "Mailregeln", "Optionen", "User", "Rider"]}
             />
           </Col>
           <Col lg={16} xs={24}>
-            <SingleSelect
-              label="ID"
-              name="id"
-              onChange={(value) => setSearch({ collection: search.get("collection") ?? "", id: value ? value.split(" (ge")[0] : "" })}
-              options={displayIds ?? []}
-            />
+            <SingleSelect label="ID" name="id" onChange={selectId} options={displayIds ?? []} />
           </Col>
         </JazzRow>
         <JazzRow>

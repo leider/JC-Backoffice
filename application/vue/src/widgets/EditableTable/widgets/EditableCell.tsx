@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
 import { Columns } from "@/widgets/EditableTable/types.ts";
@@ -55,19 +55,38 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     }
   }, [editing]);
 
-  const save = async (keepEditing?: boolean) => {
-    try {
-      const values: any = await form.validateFields(); // eslint-disable-line @typescript-eslint/no-explicit-any
-      !keepEditing && toggleEdit();
-      setBackupVal(undefined);
-      if (backupVal[dataIndex] === values[dataIndex]) {
-        return;
-      }
-      handleSave(record, values);
-    } catch {
-      /* empty */
+  const onMouseDown = useCallback(() => setEditByMouse(true), []);
+
+  const toggleEdit = useCallback(() => {
+    const willNowEdit = !editing;
+    if (willNowEdit) {
+      endEdit({
+        endEditing: () => {
+          setEditing(false);
+        },
+      });
     }
-  };
+    setEditing(willNowEdit);
+    setBackupVal({ [dataIndex]: record[dataIndex] });
+    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
+  }, [editing, dataIndex, record, form, endEdit]);
+
+  const save = useCallback(
+    async (keepEditing?: boolean) => {
+      try {
+        const values: any = await form.validateFields(); // eslint-disable-line @typescript-eslint/no-explicit-any
+        !keepEditing && toggleEdit();
+        setBackupVal(undefined);
+        if (backupVal[dataIndex] === values[dataIndex]) {
+          return;
+        }
+        handleSave(record, values);
+      } catch {
+        /* empty */
+      }
+    },
+    [backupVal, dataIndex, form, handleSave, record, toggleEdit],
+  );
 
   const readonlyStyle = useMemo(() => {
     if (isCompactMode) {
@@ -100,20 +119,6 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
 
   if (!editable) {
     return <td {...restProps}>{children}</td>;
-  }
-
-  function toggleEdit() {
-    const willNowEdit = !editing;
-    if (willNowEdit) {
-      endEdit({
-        endEditing: () => {
-          setEditing(false);
-        },
-      });
-    }
-    setEditing(willNowEdit);
-    setBackupVal({ [dataIndex]: record[dataIndex] });
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
   }
 
   let Widget;
@@ -167,13 +172,12 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
       );
       break;
   }
-
   const childNode = !editing ? (
     <div
       data-testid={dataIndex + index}
       onClick={toggleEdit}
       onFocus={type !== "color" ? toggleEdit : undefined}
-      onMouseDown={() => setEditByMouse(true)}
+      onMouseDown={onMouseDown}
       style={readonlyStyle}
       tabIndex={0}
     >

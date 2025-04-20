@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tabs, TabsProps } from "antd";
 import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -93,14 +93,7 @@ export default function VermietungTabs() {
     setTabs(result);
   }, [activePage, optionen, brauchtTechnik, brauchtPresse]);
 
-  return (
-    <Tabs
-      activeKey={activePage}
-      items={tabs}
-      onChange={(newPage) => {
-        setSearch({ page: newPage });
-      }}
-      type="card"
-    />
-  );
+  const changeTab = useCallback((newPage: string) => setSearch({ page: newPage }), [setSearch]);
+
+  return <Tabs activeKey={activePage} items={tabs} onChange={changeTab} type="card" />;
 }

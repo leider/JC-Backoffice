@@ -1,7 +1,7 @@
 import { App, Col, Flex, Form, Typography } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { openKassenzettel } from "@/rest/loader.ts";
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import SingleSelect from "@/widgets/SingleSelect";
 import { TextField } from "@/widgets/TextField";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -42,7 +42,7 @@ export function KassenzettelFreigabe() {
 
   const [innerForm] = useForm();
 
-  function freigeben() {
+  const freigeben = useCallback(() => {
     modal.confirm({
       type: "confirm",
       title: "Kasse freigeben",
@@ -60,9 +60,9 @@ export function KassenzettelFreigabe() {
         form.setFieldValue(["kasse", "kassenfreigabeAm"], new Date());
       },
     });
-  }
+  }, [modal, innerForm, currentUser.name, usersAsOptions, form]);
 
-  function freigabeAufheben() {
+  const freigabeAufheben = useCallback(() => {
     form.setFieldValue(["kasse", "kassenfreigabe"], currentUser.name);
     modal.confirm({
       type: "confirm",
@@ -73,11 +73,13 @@ export function KassenzettelFreigabe() {
         form.setFieldValue(["kasse", "kassenfreigabeAm"], undefined);
       },
     });
-  }
+  }, [form, currentUser.name, modal]);
 
   const { color } = colorsAndIconsForSections;
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
+
+  const clickKassenzettel = useCallback(() => openKassenzettel(new Konzert(form.getFieldsValue(true))), [form]);
 
   return (
     <>
@@ -88,7 +90,7 @@ export function KassenzettelFreigabe() {
             color={color("kasse")}
             disabled={isDirty}
             icon="PrinterFill"
-            onClick={() => openKassenzettel(new Konzert(form.getFieldsValue(true)))}
+            onClick={clickKassenzettel}
             text="Kassenzettel"
             tooltipTitle="Kassenzettel als PDF"
           />

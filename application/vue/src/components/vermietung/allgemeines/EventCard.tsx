@@ -4,11 +4,14 @@ import { Col } from "antd";
 import { TextField } from "@/widgets/TextField";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function EventCard() {
+  const brauchtPresse = useWatch(["presse", "checked"], { preserve: true });
+  const brauchtTechnik = useWatch(["technik", "checked"], { preserve: true });
+
   return (
     <Collapsible label="Event" noTopBorder suffix="allgemeines">
       <JazzRow>
@@ -19,28 +22,18 @@ export default function EventCard() {
           <CheckItem label="Braucht Bar" name="brauchtBar" />
         </Col>
         <Col span={8}>
-          <DynamicItem
-            nameOfDepending="brauchtTechnik"
-            renderWidget={(getFieldValue) =>
-              getFieldValue("brauchtTechnik") && (
-                <>
-                  <CheckItem label="Technik ist geklärt" name={["technik", "checked"]} />
-                  <CheckItem label="Flügel stimmen" name={["technik", "fluegel"]} />
-                </>
-              )
-            }
-          />
-          <DynamicItem
-            nameOfDepending="brauchtPresse"
-            renderWidget={(getFieldValue) =>
-              getFieldValue("brauchtPresse") && (
-                <>
-                  <CheckItem label="Presse OK" name={["presse", "checked"]} />
-                  <CheckItem label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
-                </>
-              )
-            }
-          />
+          {brauchtTechnik ? (
+            <>
+              <CheckItem label="Technik ist geklärt" name={["technik", "checked"]} />
+              <CheckItem label="Flügel stimmen" name={["technik", "fluegel"]} />
+            </>
+          ) : null}
+          {brauchtPresse ? (
+            <>
+              <CheckItem label="Presse OK" name={["presse", "checked"]} />
+              <CheckItem label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
+            </>
+          ) : null}
         </Col>
         <Col span={8}>
           <CheckItem label="Ist auf Homepage" name={["kopf", "kannAufHomePage"]} />

@@ -110,34 +110,31 @@ export default function TeamFilter() {
     return tags.concat(eventTypTags).concat(bookerTags);
   }, [createBookerTag, eventTypTag, teamFilter]);
 
+  const openClicked = useCallback(() => setOpen(true), []);
+  const updateFilter = useCallback(() => setTeamFilter(form.getFieldsValue(true)), [form, setTeamFilter]);
+  const resetClicked = useCallback(() => {
+    reset(form);
+    setTeamFilter(form.getFieldsValue(true));
+  }, [form, setTeamFilter]);
+
   return (
     <span key="aktiveFilter">
       <ButtonWithIcon
         alwaysText
-        onClick={() => setOpen(true)}
+        onClick={openClicked}
         size="small"
         style={{ marginInlineEnd: "var(--ant-margin-xs)" }}
         text="Filter..."
         type="default"
       />
-      <Form
-        autoComplete="off"
-        colon={false}
-        form={form}
-        onValuesChange={() => setTeamFilter(form.getFieldsValue(true))}
-        size="small"
-        style={{ display: "inline" }}
-      >
+      <Form autoComplete="off" colon={false} form={form} onValuesChange={updateFilter} size="small" style={{ display: "inline" }}>
         <TeamFilterEdit open={open} setOpen={setOpen} />
       </Form>
       {taggies.length ? (
         <ButtonWithIcon
           alwaysText
           key="resetFilter"
-          onClick={() => {
-            reset(form);
-            setTeamFilter(form.getFieldsValue(true));
-          }}
+          onClick={resetClicked}
           size="small"
           style={{ marginInlineEnd: "var(--ant-margin-xs)" }}
           text="Zurücksetzen"

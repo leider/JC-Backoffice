@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { orte as orteLoader, saveOrte } from "@/rest/loader.ts";
 import * as React from "react";
 import { Col } from "antd";
-import Orte from "jc-shared/optionen/orte";
+import Orte, { Ort } from "jc-shared/optionen/orte";
 import EditableTable from "@/widgets/EditableTable/EditableTable";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow";
+import { useCallback } from "react";
 
 function OrtePageInternal() {
   const columnDescriptions: Columns[] = [
@@ -17,14 +18,12 @@ function OrtePageInternal() {
     { dataIndex: "presseIn", title: 'Für Presse mit "in"', type: "text", width: "30%", required: true },
   ];
 
+  const newOrtFactory = useCallback((val: Ort) => Object.assign({ flaeche: 0 }, val), []);
+
   return (
     <JazzRow>
       <Col span={24}>
-        <EditableTable<{ name: string; flaeche: number; pressename: string; presseIn: string }>
-          columnDescriptions={columnDescriptions}
-          name="orte"
-          newRowFactory={(val) => Object.assign({ flaeche: 0 }, val)}
-        />
+        <EditableTable<Ort> columnDescriptions={columnDescriptions} name="orte" newRowFactory={newOrtFactory} />
       </Col>
     </JazzRow>
   );
@@ -42,9 +41,7 @@ export default function OrtePage() {
     successMessage: "Die Orte wurden gespeichert",
   });
 
-  function saveForm(vals: Orte) {
-    mutateOrte.mutate(new Orte(vals));
-  }
+  const saveForm = useCallback((vals: Orte) => mutateOrte.mutate(new Orte(vals)), [mutateOrte]);
 
   return (
     <JazzFormAndHeader<Orte> data={data} resetChanges={refetch} saveForm={saveForm} title="Orte">

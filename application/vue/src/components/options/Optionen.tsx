@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { optionen as optionenLoader, saveOptionen } from "@/rest/loader.ts";
 import * as React from "react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import OptionValues from "jc-shared/optionen/optionValues";
 import { Tabs, TabsProps } from "antd";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
@@ -60,9 +60,7 @@ export default function Optionen() {
     },
   ];
 
-  function saveForm(vals: OptionValues) {
-    mutateOptionen.mutate(new OptionValues(vals));
-  }
+  const saveForm = useCallback((vals: OptionValues) => mutateOptionen.mutate(new OptionValues(vals)), [mutateOptionen]);
 
   return (
     <JazzFormAndHeader<OptionValues> data={data} resetChanges={refetch} saveForm={saveForm} title="Optionen">

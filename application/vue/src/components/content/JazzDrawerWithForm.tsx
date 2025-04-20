@@ -93,38 +93,40 @@ export default function JazzDrawerWithForm<T>({
     return { checkDirty: updateDirtyIfChanged };
   }, [updateDirtyIfChanged]);
 
+  const onClose = useCallback(() => setOpen(false), []);
+
+  const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLFormElement>) => {
+    const target = event.target as HTMLInputElement;
+    if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
+      event.preventDefault();
+      return false;
+    }
+  }, []);
+
+  const onValuesChange = useCallback(() => {
+    updateDirtyIfChanged();
+    checkErrors();
+  }, [checkErrors, updateDirtyIfChanged]);
+
+  const openDrawer = useCallback(() => setOpen(true), []);
+
   return (
     <JazzFormContext.Provider value={jazzFormContext}>
       <Drawer
         closable={!isDirty}
         extra={buttons}
         maskClosable={!isDirty}
-        onClose={() => setOpen(false)}
+        onClose={onClose}
         open={open}
         placement="top"
         size="large"
         title={title}
       >
-        <Form
-          colon={false}
-          form={form}
-          layout="vertical"
-          onKeyDown={(event) => {
-            const target = event.target as HTMLInputElement;
-            if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
-              event.preventDefault();
-              return false;
-            }
-          }}
-          onValuesChange={() => {
-            updateDirtyIfChanged();
-            checkErrors();
-          }}
-        >
+        <Form colon={false} form={form} layout="vertical" onKeyDown={onKeyDown} onValuesChange={onValuesChange}>
           <RowWrapper>{children}</RowWrapper>
         </Form>
       </Drawer>
-      <ButtonWithIcon alwaysText block color={color(buttonType)} icon={icon(buttonType)} onClick={() => setOpen(true)} text={buttonText} />
+      <ButtonWithIcon alwaysText block color={color(buttonType)} icon={icon(buttonType)} onClick={openDrawer} text={buttonText} />
     </JazzFormContext.Provider>
   );
 }

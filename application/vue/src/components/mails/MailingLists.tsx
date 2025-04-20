@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { allMailinglists, saveMailinglists } from "@/rest/loader.ts";
 import * as React from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import { Mailingliste } from "jc-shared/user/users";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
@@ -21,13 +21,15 @@ function MailingListsInternal() {
     { dataIndex: "users", title: "Users", type: "user", usersWithKann: usersAsOptions, required: true },
   ];
 
+  const newMailinglisteFactory = useCallback((val: Mailingliste) => Object.assign({ users: [] }, val), []);
+
   return (
     <JazzRow>
       <Col span={24}>
-        <EditableTable<{ name?: string; users: string[] }>
+        <EditableTable<Mailingliste>
           columnDescriptions={columnDescriptions}
           name="lists"
-          newRowFactory={(val) => Object.assign({ users: [] }, val)}
+          newRowFactory={newMailinglisteFactory}
           usersWithKann={usersAsOptions}
         />
       </Col>
@@ -44,9 +46,7 @@ export default function MailingLists() {
     successMessage: "Die Listen wurden gespeichert",
   });
 
-  function saveForm(vals: { lists: Mailingliste[] }) {
-    mutateLists.mutate(vals);
-  }
+  const saveForm = useCallback((vals: { lists: Mailingliste[] }) => mutateLists.mutate(vals), [mutateLists]);
 
   return (
     <JazzFormAndHeader data={mailingLists} resetChanges={refetch} saveForm={saveForm} title="Mailinglisten">

@@ -1,7 +1,7 @@
 import { TextField } from "@/widgets/TextField.tsx";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useWatch } from "antd/es/form/Form";
 import { JazzModal } from "@/widgets/JazzModal.tsx";
@@ -22,18 +22,13 @@ export function ShowOnCopy({ title }: { readonly title: string }) {
     setOpenCopyModal(!done && !id && !!startDate && !!url?.includes("copy-of"));
   }, [id, url, startDate, done]);
 
+  const close = useCallback(() => {
+    setOpenCopyModal(false);
+    setDone(true);
+  }, []);
+
   return (
-    <JazzModal
-      closable={false}
-      footer={footer}
-      okText="Weiter"
-      onOk={() => {
-        setOpenCopyModal(false);
-        setDone(true);
-      }}
-      open={openCopyModal}
-      title={title}
-    >
+    <JazzModal closable={false} footer={footer} okText="Weiter" onOk={close} open={openCopyModal} title={title}>
       <p>Du möchtest sicher Titel und Datum anpassen.</p>
       <TextField label="Titel" name={["kopf", "titel"]} required />
       <StartEndPickers />

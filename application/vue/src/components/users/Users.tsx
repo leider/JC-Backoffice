@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { Col, Radio } from "antd";
+import React, { useCallback, useMemo, useState } from "react";
+import { Col, Radio, RadioChangeEvent } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import User from "jc-shared/user/user";
@@ -38,13 +38,16 @@ export default function Users() {
 
   const selectedUsers = useMemo(() => filter(allUsers, (u) => u.accessrights[selectedButton]), [selectedButton, allUsers]);
 
+  const openNewUser = useCallback(() => setNewUserOpen(true), []);
+  const selectButton = useCallback((event: RadioChangeEvent) => setSelectedButton(event.target.value), []);
+
   return (
     <>
       <NewUserModal isOpen={newUserOpen} setIsOpen={setNewUserOpen} />
       <JazzPageHeader
         buttons={
           currentUser.accessrights.isSuperuser
-            ? [<ButtonWithIcon icon="PersonPlus" key="usernew" onClick={() => setNewUserOpen(true)} text="Neuer Benutzer" type="default" />]
+            ? [<ButtonWithIcon icon="PersonPlus" key="usernew" onClick={openNewUser} text="Neuer Benutzer" type="default" />]
             : undefined
         }
         tags={[
@@ -52,7 +55,7 @@ export default function Users() {
             buttonStyle="solid"
             defaultValue="everybody"
             key="usertags"
-            onChange={(event) => setSelectedButton(event.target.value)}
+            onChange={selectButton}
             optionType="button"
             options={[
               radioOption("EmojiSunglasses", "Admin", "isSuperuser"),

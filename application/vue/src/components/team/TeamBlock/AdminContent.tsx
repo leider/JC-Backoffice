@@ -28,13 +28,13 @@ type ButtonsProps = {
 function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermietung }: ButtonsProps) {
   const form = useFormInstance();
   const { brightText } = useJazzContext();
-
+  const save = useCallback(() => form.submit(), [form]);
   return (
     <Row justify="end" style={{ paddingTop: 2, paddingRight: 4 }}>
       {showMitarbeiter && dirty ? (
         <ConfigProvider theme={{ token: { colorBgBase: brightText } }}>
           <ResetButton disabled={!dirty} resetChanges={setFormValue} size="small" />
-          <SaveButton callback={() => form.submit()} disabled={!dirty} size="small" />
+          <SaveButton callback={save} disabled={!dirty} size="small" />
         </ConfigProvider>
       ) : (
         <>
@@ -64,9 +64,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   const { usersAsOptions } = useContext(TeamContext);
 
-  const forVermietung = useMemo(() => {
-    return veranstaltung.isVermietung;
-  }, [veranstaltung]);
+  const forVermietung = useMemo(() => veranstaltung.isVermietung, [veranstaltung]);
 
   const setFormValue = useCallback(() => {
     const deepCopy = cloneDeep(veranstaltung);
@@ -78,9 +76,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   useEffect(setFormValue, [setFormValue]);
 
-  useEffect(() => {
-    setVeranstaltung(veranVermiet);
-  }, [veranVermiet]);
+  useEffect(() => setVeranstaltung(veranVermiet), [veranVermiet]);
 
   const brauchtTechnik = useMemo(() => (veranstaltung as Vermietung).brauchtTechnik, [veranstaltung]);
 
@@ -96,7 +92,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     successMessage: "Die Vermietung wurde gespeichert",
   });
 
-  function saveForm() {
+  const saveForm = useCallback(() => {
     form.validateFields().then(async () => {
       const veranst = form.getFieldsValue(true);
       let result;
@@ -109,7 +105,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
       }
       setVeranstaltung(result);
     });
-  }
+  }, [form, forVermietung, mutateVermietung, mutateVeranstaltung]);
 
   const labelColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
@@ -122,34 +118,34 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
           headerBg: backgroundColor,
         },
         Form: { labelColor },
-        Select: { colorIcon: labelColor, colorText: labelColor, colorTextPlaceholder: labelColor, selectorBg: backgroundColor },
+        Select: {
+          colorIcon: labelColor,
+          colorText: labelColor,
+          colorTextPlaceholder: labelColor,
+          selectorBg: backgroundColor,
+        },
         Tag: { defaultColor: labelColor },
       },
     }),
     [backgroundColor, labelColor],
   );
+
+  const onValuesChange = useCallback(() => {
+    setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+  }, [form, initialValue]);
+
+  const onClick = useCallback(() => {
+    setShowMitarbeiter(!showMitarbeiter);
+  }, [showMitarbeiter]);
+
   const { inView, ref } = useInView({ triggerOnce: true });
 
   return (
     <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={saveForm}
-        onValuesChange={() => {
-          setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
-        }}
-        size="small"
-      >
+      <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange} size="small">
         <Row>
           <Col span={6}>
-            <Typography.Title
-              level={5}
-              onClick={() => {
-                setShowMitarbeiter(!showMitarbeiter);
-              }}
-              style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}
-            >
+            <Typography.Title level={5} onClick={onClick} style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}>
               <span style={{ color: labelColor }}>
                 <IconForSmallBlock color={labelColor} iconName="UniversalAccess" />
                 &nbsp;...
@@ -177,11 +173,11 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
                 {
                   showArrow: false,
                   key: "mitarbeiter",
-                  children: (
+                  children: showMitarbeiter ? (
                     <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
                       <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
                     </div>
-                  ),
+                  ) : null,
                 },
               ]}
             />

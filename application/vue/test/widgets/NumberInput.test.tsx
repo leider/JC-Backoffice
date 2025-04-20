@@ -105,6 +105,7 @@ describe("Number Input Widget", () => {
     let tunnelVal: number | null;
     beforeEach(async () => {
       await waitFor(() => {
+        // eslint-disable-next-line react/jsx-no-bind
         updateWidget(<NumberInput decimals={0} label="testme" name="test" onChange={(val) => (tunnelVal = val)} />);
       });
     });

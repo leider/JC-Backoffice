@@ -7,6 +7,7 @@ import find from "lodash/find.js";
 import Kontakt from "../veranstaltung/kontakt.js";
 import map from "lodash/map.js";
 import forEach from "lodash/forEach.js";
+import { Zimmerpreise } from "../konzert/unterkunft.js";
 
 const sortByNameCaseInsensitive = sortBy(toLower);
 
@@ -137,7 +138,7 @@ export default class OptionValues {
     }
   }
 
-  updateHotelpreise(hotel: Kontakt, zimmerPreise: { einzelEUR: number; doppelEUR: number; suiteEUR: number }): void {
+  updateHotelpreise(hotel: Kontakt, zimmerPreise: Zimmerpreise): void {
     if (find(this.hotels, { name: hotel.name })) {
       remove(this.hotelpreise, (p: Hotelpreise) => p.name === hotel.name);
       this.hotelpreise.push({ name: hotel.name, ...zimmerPreise });

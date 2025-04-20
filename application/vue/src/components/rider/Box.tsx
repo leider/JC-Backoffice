@@ -1,6 +1,5 @@
-import type { CSSProperties } from "react";
-import React, { useEffect, useMemo, useState } from "react";
-import { Col, Input, Popover, Radio, Row, Slider } from "antd";
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from "react";
+import { Col, Input, Popover, Radio, RadioChangeEvent, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 
@@ -18,28 +17,31 @@ type RotateAndLevelRowProps = {
 };
 
 function RotateAndLevelRow({ item, degree, setDegree, level, setLevel }: RotateAndLevelRowProps) {
+  const degreeChanged = useCallback(
+    (deg: number) => {
+      item.degree = deg;
+      setDegree(deg);
+    },
+    [item, setDegree],
+  );
+  const levelChanged = useCallback(
+    (e: RadioChangeEvent) => {
+      item.level = e.target.value;
+      setLevel(item.level);
+    },
+    [item, setLevel],
+  );
   return (
     <Row style={{ minWidth: 400 }}>
       <Col span={12}>
         <b>Drehen:</b>
-        <Slider
-          max={359}
-          min={0}
-          onChange={(deg) => {
-            item.degree = deg;
-            setDegree(deg);
-          }}
-          value={degree}
-        />
+        <Slider max={359} min={0} onChange={degreeChanged} value={degree} />
       </Col>
       <Col span={12}>
         <b>Ebene:</b>
         <Radio.Group
           buttonStyle="solid"
-          onChange={(e) => {
-            item.level = e.target.value;
-            setLevel(item.level);
-          }}
+          onChange={levelChanged}
           optionType="button"
           options={[
             { label: "unten", value: 0 },
@@ -59,6 +61,14 @@ type PopContentProps = {
 } & RotateAndLevelRowProps;
 
 function PopContent({ item, comment, setComment, degree, setDegree, level, setLevel }: PopContentProps) {
+  const commentChanged = useCallback(
+    (e: { target: { value: string } }) => {
+      item.comment = e.target.value;
+      setComment(item.comment);
+    },
+    [item, setComment],
+  );
+
   return (
     <>
       {item.photo ? (
@@ -67,14 +77,7 @@ function PopContent({ item, comment, setComment, degree, setDegree, level, setLe
         </div>
       ) : null}
       <b>Kommentar:</b>
-      <TextArea
-        onChange={(e) => {
-          item.comment = e.target.value;
-          setComment(item.comment);
-        }}
-        style={{ height: 150 }}
-        value={comment}
-      />
+      <TextArea onChange={commentChanged} style={{ height: 150 }} value={comment} />
       <RotateAndLevelRow degree={degree} item={item} level={level} setDegree={setDegree} setLevel={setLevel} />
     </>
   );
@@ -104,57 +107,60 @@ function PopContentForExtras({
   height,
   setHeight,
 }: PopContentForExtrasProps) {
+  const titleChanged = useCallback(
+    (e: { target: { value: string } }) => {
+      item.title = e.target.value;
+      setTitle(item.title);
+    },
+    [item, setTitle],
+  );
+
+  const commentChanged = useCallback(
+    (e: { target: { value: string } }) => {
+      item.comment = e.target.value;
+      setComment(item.comment);
+    },
+    [item, setComment],
+  );
+
+  const widthChanged = useCallback(
+    (width: number) => {
+      item.width = width;
+      setWidth(width);
+    },
+    [item, setWidth],
+  );
+
+  const heightChanged = useCallback(
+    (height: number) => {
+      item.height = height;
+      setHeight(height);
+    },
+    [item, setHeight],
+  );
+
   return (
     <>
       <Row>
         <Col span={24}>
           <b>Titel:</b>
-          <Input
-            onChange={(e) => {
-              item.title = e.target.value;
-              setTitle(item.title);
-            }}
-            value={title}
-          />
+          <Input onChange={titleChanged} value={title} />
         </Col>
       </Row>
       <Row>
         <Col span={24}>
           <b>Kommentar:</b>
-          <TextArea
-            onChange={(e) => {
-              item.comment = e.target.value;
-              setComment(item.comment);
-            }}
-            style={{ height: 150 }}
-            value={comment}
-          />
+          <TextArea onChange={commentChanged} style={{ height: 150 }} value={comment} />
         </Col>
       </Row>
       <Row>
         <Col span={12}>
           <b>Breite:</b>
-          <Slider
-            max={150}
-            min={0}
-            onChange={(width) => {
-              item.width = width;
-              setWidth(width);
-            }}
-            value={width}
-          />
+          <Slider max={150} min={0} onChange={widthChanged} value={width} />
         </Col>
         <Col span={12}>
           <b>Höhe:</b>
-          <Slider
-            max={150}
-            min={0}
-            onChange={(height) => {
-              item.height = height;
-              setHeight(height);
-            }}
-            value={height}
-          />
+          <Slider max={150} min={0} onChange={heightChanged} value={height} />
         </Col>
       </Row>
       <RotateAndLevelRow degree={degree} item={item} level={level} setDegree={setDegree} setLevel={setLevel} />

@@ -135,20 +135,27 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
     }
   }, [focus]);
 
+  const onBlur = useCallback(
+    ({ target: { value: nextValue } }: { target: { value: string } }) => {
+      changed(nextValue, true);
+      save?.();
+    },
+    [changed, save],
+  );
+
+  const onChangeHandler = useCallback(({ target: { value: nextValue } }: { target: { value: string } }) => changed(nextValue), [changed]);
+
+  const onPressEnter = useCallback(() => save?.(), [save]);
+
   return multiline ? (
     <Input.TextArea
       autoComplete="off"
       autoSize
       disabled={disabled}
       id={id}
-      onBlur={({ target: { value: nextValue } }) => {
-        changed(nextValue, true);
-        save?.();
-      }}
-      onChange={({ target: { value: nextValue } }) => {
-        changed(nextValue);
-      }}
-      onPressEnter={() => save?.()}
+      onBlur={onBlur}
+      onChange={onChangeHandler}
+      onPressEnter={onPressEnter}
       ref={inputRef}
       value={textVal}
     />
@@ -157,14 +164,9 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
       autoComplete="off"
       disabled={disabled}
       id={id}
-      onBlur={({ target: { value: nextValue } }) => {
-        changed(nextValue, true);
-        save?.();
-      }}
-      onChange={({ target: { value: nextValue } }) => {
-        changed(nextValue);
-      }}
-      onPressEnter={() => save?.()}
+      onBlur={onBlur}
+      onChange={onChangeHandler}
+      onPressEnter={onPressEnter}
       ref={inputRef}
       value={textVal}
     />

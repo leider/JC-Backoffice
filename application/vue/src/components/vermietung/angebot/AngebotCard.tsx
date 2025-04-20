@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 import Angebot from "jc-shared/vermietung/angebot.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -12,16 +11,12 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 
 function FreiRow({ nummer, readonly }: { readonly nummer: number; readonly readonly: boolean }) {
+  const betrag = useWatch(["angebot", `frei${nummer}EUR`], { preserve: true });
+
   return (
     <JazzRow>
       <Col span={16}>
-        <DynamicItem
-          nameOfDepending={["angebot", `frei${nummer}EUR`]}
-          renderWidget={(getFieldValue) => {
-            const betrag = getFieldValue(["angebot", `frei${nummer}EUR`]);
-            return <TextField disabled={readonly} label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} required={betrag > 0} />;
-          }}
-        />
+        <TextField disabled={readonly} label={`Freifeld ${nummer}`} name={["angebot", `frei${nummer}`]} required={betrag > 0} />
       </Col>
       <Col span={8}>
         <NumberInput decimals={2} disabled={readonly} label="Betrag" name={["angebot", `frei${nummer}EUR`]} suffix="€" />

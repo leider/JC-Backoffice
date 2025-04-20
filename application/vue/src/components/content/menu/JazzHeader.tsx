@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ConfigProvider, Menu } from "antd";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
 import useMenuNodes, { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -53,6 +53,9 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
 
   const [userMenu, setUserMenu] = useState<ItemType>();
   const { lg } = useBreakpoint();
+
+  const openPreferences = useCallback(() => setIsOpen(true), []);
+
   useEffect(() => {
     const userMenuStatic = {
       key: menuKeys.users,
@@ -66,15 +69,7 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
         {
           key: "preferences",
           icon: <MenuIcon name="Sliders" />,
-          label: (
-            <a
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              Anzeige Einstellungen
-            </a>
-          ),
+          label: <a onClick={openPreferences}>Anzeige Einstellungen</a>,
         },
         {
           key: "logout",
@@ -88,7 +83,9 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
     const id = currentUser.id;
     copiedUserMenu.label = (!lg && id && id.length > 10 ? id.substring(0, 8) + "..." : id) || "Users";
     setUserMenu(copiedUserMenu);
-  }, [currentUser.id, lg, logout]);
+  }, [currentUser.id, lg, logout, openPreferences]);
+
+  const reload = useCallback(() => location.reload(), []);
 
   return (
     <Header
@@ -107,7 +104,7 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
       }}
     >
       <Link
-        onClick={() => location.reload()}
+        onClick={reload}
         style={{
           height: "100%",
           display: "flex",

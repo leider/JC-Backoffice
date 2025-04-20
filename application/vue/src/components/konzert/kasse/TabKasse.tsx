@@ -1,5 +1,5 @@
 import { Col, Tour, TourProps } from "antd";
-import React, { Ref, useContext, useMemo, useRef } from "react";
+import React, { Ref, useCallback, useContext, useMemo, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";
 import AusgabenCard from "@/components/konzert/kasse/AusgabenCard";
 import { KassenzettelFreigabe } from "@/components/konzert/kasse/KassenzettelFreigabe";
@@ -70,6 +70,8 @@ export default function TabKasse() {
 
   const { toursteps, initialContext } = useInitialKasseContext();
 
+  const closeHelp = useCallback(() => setKasseHelpOpen(false), [setKasseHelpOpen]);
+
   return (
     <KassenContext.Provider value={initialContext}>
       <JazzRow>
@@ -92,7 +94,7 @@ export default function TabKasse() {
           <AusgabenCard />
         </Col>
       </JazzRow>
-      <Tour onClose={() => setKasseHelpOpen(false)} open={isKasseHelpOpen} steps={toursteps} />
+      <Tour onClose={closeHelp} open={isKasseHelpOpen} steps={toursteps} />
     </KassenContext.Provider>
   );
 }

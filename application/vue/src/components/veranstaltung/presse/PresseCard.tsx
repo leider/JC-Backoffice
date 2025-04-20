@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -53,12 +53,15 @@ export default function PresseCard({ isVermietung }: { readonly isVermietung: bo
     }
   }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
 
-  function imageUebernehmen(val: string) {
-    const name = ["presse", "image"];
-    const imagelist = form.getFieldValue(name);
-    form.setFieldValue(name, [...imagelist, val]);
-    form.setFieldValue(["tempimage"], null);
-  }
+  const imageUebernehmen = useCallback(
+    (val: string) => {
+      const name = ["presse", "image"];
+      const imagelist = form.getFieldValue(name);
+      form.setFieldValue(name, [...imagelist, val]);
+      form.setFieldValue(["tempimage"], null);
+    },
+    [form],
+  );
 
   const [activePage, setActivePage] = useState<string>("final");
 

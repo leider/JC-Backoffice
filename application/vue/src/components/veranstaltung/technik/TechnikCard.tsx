@@ -6,7 +6,6 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import CheckItem from "@/widgets/CheckItem.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags.tsx";
 import Uploader from "@/widgets/Uploader.tsx";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
@@ -41,6 +40,8 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
     updateSumme();
   }, [brauchtFluegel, fluegelstimmerEUR, form, optionen.preisKlavierstimmer, updateSumme]);
 
+  const brauchtKlavier = useWatch(["technik", "fluegel"], { preserve: true });
+
   return (
     <Collapsible amount={summe} label="Backline" noTopBorder suffix="technik">
       <JazzRow>
@@ -51,21 +52,7 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
           <CheckItem label="Flügel stimmen" name={["technik", "fluegel"]} />
         </Col>
         <Col span={8}>
-          <DynamicItem
-            nameOfDepending={["technik", "fluegel"]}
-            renderWidget={(getFieldValue) => {
-              const brauchtKlavier = getFieldValue(["technik", "fluegel"]);
-              return (
-                <NumberInput
-                  decimals={2}
-                  disabled={!brauchtKlavier}
-                  label="Flügelstimmer"
-                  name={["kosten", "fluegelstimmerEUR"]}
-                  suffix="€"
-                />
-              );
-            }}
-          />
+          <NumberInput decimals={2} disabled={!brauchtKlavier} label="Flügelstimmer" name={["kosten", "fluegelstimmerEUR"]} suffix="€" />
         </Col>
       </JazzRow>
       <Row align="bottom" gutter={12} style={{ marginBottom: 12 }}>

@@ -1,6 +1,6 @@
 import { saveWikiPage, wikiPage } from "@/rest/loader.ts";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, Input } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
@@ -65,20 +65,26 @@ export default function WikiPage() {
   useEffect(initializeForm, [form, wikipage]);
 
   const { Search } = Input;
-  function onSearch(value: string) {
-    if (value.length < 2) {
-      return;
-    }
-    navigate(`/wiki/searchresults/${value}`);
-  }
-  function saveForm() {
-    form.validateFields().then(async () => {
-      mutateContent.mutate(form.getFieldsValue(true));
-      setWikipage(form.getFieldValue("content"));
-    });
-  }
+  const onSearch = useCallback(
+    (value: string) => {
+      if (value.length < 2) {
+        return;
+      }
+      navigate(`/wiki/searchresults/${value}`);
+    },
+    [navigate],
+  );
 
-  function editOrUndo() {
+  const saveForm = useCallback(
+    () =>
+      form.validateFields().then(async () => {
+        mutateContent.mutate(form.getFieldsValue(true));
+        setWikipage(form.getFieldValue("content"));
+      }),
+    [form, mutateContent],
+  );
+
+  const editOrUndo = useCallback(() => {
     if (!isEdit) {
       setIsEdit(true);
     } else {
@@ -86,20 +92,17 @@ export default function WikiPage() {
       setDirty(false);
       setIsEdit(false);
     }
-  }
+  }, [isEdit, form, initialValue]);
+
+  const onValuesChange = useCallback(() => {
+    const current = form.getFieldsValue(true);
+    logDiffForDirty(initialValue, current, false);
+    setDirty(areDifferent(initialValue, current));
+    setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
+  }, [form, initialValue]);
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={saveForm}
-      onValuesChange={() => {
-        const current = form.getFieldsValue(true);
-        logDiffForDirty(initialValue, current, false);
-        setDirty(areDifferent(initialValue, current));
-        setDirty(areDifferent(initialValue, form.getFieldsValue(true)));
-      }}
-    >
+    <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange}>
       <JazzPageHeader
         breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
         buttons={[

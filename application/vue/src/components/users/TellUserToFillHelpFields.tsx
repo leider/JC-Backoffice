@@ -1,5 +1,5 @@
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Form } from "antd";
 import User from "jc-shared/user/user.ts";
 import { IchKannFields } from "@/components/users/UserModals.tsx";
@@ -33,11 +33,10 @@ export function TellUserToFillHelpFields() {
     }
   }, [currentUser, form]);
 
-  function saveForm() {
-    form.validateFields().then(async () => {
-      mutateUser.mutate(new User(form.getFieldsValue(true)));
-    });
-  }
+  const saveForm = useCallback(
+    () => form.validateFields().then(async () => mutateUser.mutate(new User(form.getFieldsValue(true)))),
+    [form, mutateUser],
+  );
 
   return (
     <JazzModal

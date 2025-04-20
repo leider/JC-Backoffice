@@ -49,7 +49,6 @@ export default function JazzFormAndHeaderExtended<T>({
   const [loaded, setLoaded] = useState(false);
   useDirtyBlocker(isDirty);
   const { hasErrors, checkErrors } = useCheckErrors(form, loaded);
-
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
     logDiffForDirty(initialValue, curr, false);
@@ -89,33 +88,34 @@ export default function JazzFormAndHeaderExtended<T>({
     return { checkDirty: updateDirtyIfChanged };
   }, [updateDirtyIfChanged]);
 
+  const onFinish = useCallback(
+    () =>
+      form
+        .validateFields()
+        .then(async () => {
+          setIsDirty(false);
+          saveForm(form.getFieldsValue(true));
+        })
+        .catch(checkErrors),
+    [checkErrors, form, saveForm, setIsDirty],
+  );
+
+  const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLFormElement>) => {
+    const target = event.target as HTMLInputElement;
+    if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
+      event.preventDefault();
+      return false;
+    }
+  }, []);
+
+  const onValuesChange = useCallback(() => {
+    updateDirtyIfChanged();
+    checkErrors();
+  }, [checkErrors, updateDirtyIfChanged]);
+
   return (
     <JazzFormContext.Provider value={jazzFormContext}>
-      <Form
-        colon={false}
-        form={form}
-        layout="vertical"
-        onFinish={() =>
-          form
-            .validateFields()
-            .then(async () => {
-              setIsDirty(false);
-              saveForm(form.getFieldsValue(true));
-            })
-            .catch(checkErrors)
-        }
-        onKeyDown={(event) => {
-          const target = event.target as HTMLInputElement;
-          if (event.key === "Enter" && target?.role !== "textbox" && event?.type === "textarea") {
-            event.preventDefault();
-            return false;
-          }
-        }}
-        onValuesChange={() => {
-          updateDirtyIfChanged();
-          checkErrors();
-        }}
-      >
+      <Form colon={false} form={form} layout="vertical" onFinish={onFinish} onKeyDown={onKeyDown} onValuesChange={onValuesChange}>
         <JazzPageHeader
           breadcrumb={breadcrumb}
           buttons={buttons}

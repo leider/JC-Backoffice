@@ -1,5 +1,5 @@
 import { DatePicker, Form } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 
 export default function DateInput({
@@ -47,17 +47,23 @@ function InternalPicker({
       setVal(dayjs(value));
     }
   }, [value]);
+  const onChangeCallback = useCallback((date: Dayjs) => onChange!(date?.toISOString()), [onChange]);
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        save?.();
+      }
+    },
+    [save],
+  );
+
   return (
     <DatePicker
       autoFocus={focus}
       format={["ll", "L", "l", "DDMMYY"]}
       needConfirm={focus}
-      onChange={(date) => onChange!(date?.toISOString())}
-      onOpenChange={(open) => {
-        if (!open) {
-          save?.();
-        }
-      }}
+      onChange={onChangeCallback}
+      onOpenChange={onOpenChange}
       required={required}
       value={val}
     />

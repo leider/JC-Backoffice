@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { historyRowsFor } from "@/rest/loader.ts";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import JsonView from "@uiw/react-json-view";
 import { lightTheme } from "@uiw/react-json-view/light";
 import { nordTheme } from "@uiw/react-json-view/nord";
@@ -24,13 +24,15 @@ function ChangeSection({
     setCollapsed(!expanded);
   }, [expanded]);
 
+  const switchCollapsed = useCallback(() => setCollapsed(!collapsed), [collapsed]);
+
   return (
     <List.Item
       actions={[
         <ButtonWithIcon
           icon={collapsed ? "PlusCircleFill" : "DashCircleFill"}
           key="button"
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={switchCollapsed}
           size="small"
           tooltipTitle={collapsed ? "Ausklappen" : "Zuklappen"}
         />,
@@ -67,6 +69,19 @@ function ChangeSection({
   );
 }
 
+function HistoryRowListItem({ item, expanded }: { readonly item: HistoryRow; readonly expanded: boolean }) {
+  const renderItem = useCallback(
+    (inner: HistoryRow) => <ChangeSection expanded={expanded} item={inner} surrounding={item.header} />,
+    [expanded, item.header],
+  );
+
+  return (
+    <List.Item key={item.header}>
+      <List.Item.Meta description={<List dataSource={item.asList} renderItem={renderItem} size="small" />} title={item.header} />
+    </List.Item>
+  );
+}
+
 export function Changelog({ id, collection, expanded }: { readonly collection: string; readonly id?: string; readonly expanded: boolean }) {
   const { data: changelog } = useQuery({
     enabled: !!id,
@@ -74,24 +89,7 @@ export function Changelog({ id, collection, expanded }: { readonly collection: s
     queryFn: () => historyRowsFor(collection, id!),
   });
 
-  return (
-    <List
-      dataSource={changelog?.rows}
-      renderItem={(item) => (
-        <List.Item key={item.header}>
-          <List.Item.Meta
-            description={
-              <List
-                dataSource={item.asList}
-                renderItem={(inner) => <ChangeSection expanded={expanded} item={inner} surrounding={item.header} />}
-                size="small"
-              />
-            }
-            title={item.header}
-          />
-        </List.Item>
-      )}
-      size="small"
-    />
-  );
+  const renderItem = useCallback((item: HistoryRow) => <HistoryRowListItem expanded={expanded} item={item} />, [expanded]);
+
+  return <List dataSource={changelog?.rows} renderItem={renderItem} size="small" />;
 }

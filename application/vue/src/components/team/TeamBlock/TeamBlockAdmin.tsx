@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import headerTags from "@/components/colored/headerTags.tsx";
@@ -61,6 +61,7 @@ export default function TeamBlockAdmin({
   }, [highlight, initiallyOpen]);
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
 
   return (
     <ConfigProvider theme={{ token: { fontSizeIcon: expanded ? 18 : 14 } }}>
@@ -75,21 +76,19 @@ export default function TeamBlockAdmin({
             expandIcon={expandIcon({ color: textColor })}
             items={[
               {
-                key: veranstaltung.id || "",
+                key: veranstaltung.id ?? "",
                 style: { backgroundColor: veranstaltung.color },
                 className: "team-block",
                 label: <TeamBlockHeader expanded={expanded} veranstaltung={veranstaltung} />,
                 extra: expanded && <Extras veranstaltung={veranstaltung} />,
-                children: (
+                children: expanded ? (
                   <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
                     <AdminContent veranstaltung={veranstaltung} />
                   </ConfigProvider>
-                ),
+                ) : null,
               },
             ]}
-            onChange={() => {
-              setExpanded(!expanded);
-            }}
+            onChange={onChange}
             size="small"
             style={{ borderColor: veranstaltung.color }}
           />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveRider } from "@/loader.ts";
@@ -32,12 +32,12 @@ export function RiderStandalone() {
     }
   }, [rider, isSuccess]);
 
-  function save() {
+  const save = useCallback(() => {
     if (rider) {
       rider.boxes = targetBoxes;
       mutateRider.mutate(rider);
     }
-  }
+  }, [mutateRider, rider, targetBoxes]);
 
   const token = theme.useToken().token;
 

@@ -1,6 +1,6 @@
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col } from "antd";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
@@ -21,9 +21,7 @@ function ButtonAbendkasse({ konzert, refetch }: { readonly konzert: Konzert; rea
     successMessage: "Das Konzert wurde gespeichert",
   });
 
-  function saveForm(konz: Konzert) {
-    mutateKonzert.mutate(konz);
-  }
+  const saveForm = useCallback((konz: Konzert) => mutateKonzert.mutate(konz), [mutateKonzert]);
 
   const [isKasseHelpOpen, setIsKasseHelpOpen] = useState(false);
 
@@ -40,13 +38,15 @@ function ButtonAbendkasse({ konzert, refetch }: { readonly konzert: Konzert; rea
     };
   }, [isKasseHelpOpen]);
 
+  const openKasseHelp = useCallback(() => setIsKasseHelpOpen(true), []);
+
   if (currentUser.id && !currentUser.accessrights.isAbendkasse) {
     return;
   }
   return (
     <KonzertContext.Provider value={initialContext}>
       <JazzDrawerWithForm<Konzert>
-        additionalButtons={[<HelpWithKasseButton callback={() => setIsKasseHelpOpen(true)} key="helpKasse" />]}
+        additionalButtons={[<HelpWithKasseButton callback={openKasseHelp} key="helpKasse" />]}
         buttonText="Abendkasse"
         buttonType="kasse"
         data={konzert}

@@ -1,6 +1,6 @@
 import { DatePicker } from "antd";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
 import Aggregate from "@/widgets/Aggregate.tsx";
@@ -39,17 +39,25 @@ function EmbeddedPickers({
   const eventStart: Date = useWatch([dependency]);
   const eventStartDayjs: Dayjs = useMemo(() => dayjs(eventStart), [eventStart]);
 
-  function onCalendarChange(dates: (Dayjs | null)[] | null) {
-    const startNew = dates?.[0];
-    const endNew = dates?.[1];
-    onChange?.([startNew?.toDate(), endNew?.toDate()]);
-    fireChange?.();
-  }
+  const onCalendarChange = useCallback(
+    (dates: (Dayjs | null)[] | null) => {
+      const startNew = dates?.[0];
+      const endNew = dates?.[1];
+      onChange?.([startNew?.toDate(), endNew?.toDate()]);
+      fireChange?.();
+    },
+    [onChange, fireChange],
+  );
+
+  const disabledDateCallback = useCallback(
+    (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))),
+    [eventStartDayjs],
+  );
 
   return (
     <DatePicker.RangePicker
       allowClear={false}
-      disabledDate={dependency ? (current: Dayjs) => !(current && current.isAfter(eventStartDayjs.subtract(7, "days"))) : undefined}
+      disabledDate={dependency ? disabledDateCallback : undefined}
       format="ddd DD.MM.YY"
       id={id}
       onCalendarChange={onCalendarChange}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Checkbox, Col, Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -13,6 +13,7 @@ import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useHotelSummierer from "@/components/konzert/hotel/useHotelSummierer.ts";
 import { KonzertContext } from "@/components/konzert/KonzertContext.ts";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export default function HotelCard() {
   const form = useFormInstance<KonzertWithRiderBoxes>();
@@ -48,6 +49,8 @@ export default function HotelCard() {
   );
 
   const { anzNacht, roomsTotalEUR } = useHotelSummierer();
+
+  const clickDefault = useCallback((e: CheckboxChangeEvent) => setHotelpreiseAlsDefault(e.target.checked), [setHotelpreiseAlsDefault]);
 
   return (
     <Collapsible amount={roomsTotalEUR} label="Zimmer" suffix="hotel">
@@ -91,7 +94,7 @@ export default function HotelCard() {
       </JazzRow>
       <JazzRow>
         <Col span={24}>
-          <Checkbox checked={hotelpreiseAlsDefault} onChange={(e) => setHotelpreiseAlsDefault(e.target.checked)}>
+          <Checkbox checked={hotelpreiseAlsDefault} onChange={clickDefault}>
             <b>Preise als Default übernehmen</b>
           </Checkbox>
         </Col>

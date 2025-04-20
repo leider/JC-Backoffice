@@ -1,6 +1,6 @@
 import { List } from "antd";
 import { ActiveUsers, AddRemoveStaffButton } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
@@ -10,9 +10,7 @@ interface ContentProps {
 
 export default function TeamContent({ veranstaltung }: ContentProps) {
   const [veranstaltungForStaff, setVeranstaltungForStaff] = useState<Veranstaltung>(veranstaltung);
-  function staffUpdated(veranst: Veranstaltung) {
-    setVeranstaltungForStaff(veranst);
-  }
+  const staffUpdated = useCallback((veranst: Veranstaltung) => setVeranstaltungForStaff(veranst), []);
 
   const activeRows = useMemo(() => {
     const staff = veranstaltung.staff;
@@ -59,21 +57,19 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
     return rows;
   }, [veranstaltung.staff]);
 
-  return veranstaltung.staff.noStaffNeeded ? (
-    <p>Niemand benötigt.</p>
-  ) : (
-    <List
-      dataSource={activeRows}
-      renderItem={(item) => (
-        <List.Item
-          extra={<AddRemoveStaffButton sectionName={item.sectionName} staffUpdated={staffUpdated} veranstaltung={veranstaltungForStaff} />}
-        >
-          <List.Item.Meta
-            description={<ActiveUsers sectionName={item.sectionName} veranstaltung={veranstaltungForStaff} />}
-            title={item.title}
-          />
-        </List.Item>
-      )}
-    />
+  const renderItem = useCallback(
+    (item: { title: string; sectionName: StaffType }) => (
+      <List.Item
+        extra={<AddRemoveStaffButton sectionName={item.sectionName} staffUpdated={staffUpdated} veranstaltung={veranstaltungForStaff} />}
+      >
+        <List.Item.Meta
+          description={<ActiveUsers sectionName={item.sectionName} veranstaltung={veranstaltungForStaff} />}
+          title={item.title}
+        />
+      </List.Item>
+    ),
+    [staffUpdated, veranstaltungForStaff],
   );
+
+  return veranstaltung.staff.noStaffNeeded ? <p>Niemand benötigt.</p> : <List dataSource={activeRows} renderItem={renderItem} />;
 }

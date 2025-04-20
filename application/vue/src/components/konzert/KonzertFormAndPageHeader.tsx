@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CSSProperties, PropsWithChildren, useContext, useMemo } from "react";
+import { CSSProperties, PropsWithChildren, useCallback, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { HelpWithKasseButton, MoreButton } from "@/components/colored/JazzButtons";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -61,11 +61,13 @@ export default function KonzertFormAndPageHeader({
     [],
   );
 
+  const openKasseHelp = useCallback(() => setKasseHelpOpen(true), [setKasseHelpOpen]);
+
   return (
     <JazzFormAndHeaderExtended<KonzertWithRiderBoxes>
       additionalButtons={[isOrga && <MoreButton disabled={!id} isDirty={isDirty} key="more" />]}
       additionalButtonsLast={[
-        isKassenseite && <HelpWithKasseButton callback={() => setKasseHelpOpen(true)} key="helpKasse" />,
+        isKassenseite && <HelpWithKasseButton callback={openKasseHelp} key="helpKasse" />,
         <TeamCalendar key="cal" />,
       ]}
       data={data}

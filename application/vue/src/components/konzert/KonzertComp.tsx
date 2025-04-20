@@ -53,32 +53,45 @@ export default function KonzertComp() {
     }
   }, [currentUser.accessrights, currentUser.id, navigate, url]);
 
-  function saveForm(vals: KonzertWithRiderBoxes) {
-    const riderBoxes = vals.riderBoxes;
-    const konz = new Konzert(vals);
-    const id = konz?.id;
-    if (!konz.id) {
-      konz.initializeIdAndUrl();
-    }
-    if (!currentUser.accessrights.isOrgaTeam && id) {
-      // prevent saving of optionen and rider for Kasse / Gäste updates
-      return mutateKonzert.mutate(konz);
-    }
-
-    optionen.addOrUpdateKontakt("agenturen", konz.agentur, agenturauswahl);
-    if (konz.artist.brauchtHotel) {
-      optionen.addOrUpdateKontakt("hotels", konz.hotel, hotelauswahl);
-      if (hotelpreiseAlsDefault) {
-        optionen.updateHotelpreise(konz.hotel, konz.unterkunft.zimmerPreise);
+  const saveForm = useCallback(
+    (vals: KonzertWithRiderBoxes) => {
+      const riderBoxes = vals.riderBoxes;
+      const konz = new Konzert(vals);
+      const id = konz?.id;
+      if (!konz.id) {
+        konz.initializeIdAndUrl();
       }
-    }
-    optionen.updateBackline("Jazzclub", konz.technik.backlineJazzclub);
-    optionen.updateBackline("Rockshop", konz.technik.backlineRockshop);
-    optionen.updateCollection("artists", konz.artist.name);
-    mutateOptionen.mutate(optionen);
-    mutateRider.mutate(new Rider({ id: url, startDate: konz.startDate, boxes: riderBoxes }));
-    mutateKonzert.mutate(konz);
-  }
+      if (!currentUser.accessrights.isOrgaTeam && id) {
+        // prevent saving of optionen and rider for Kasse / Gäste updates
+        return mutateKonzert.mutate(konz);
+      }
+
+      optionen.addOrUpdateKontakt("agenturen", konz.agentur, agenturauswahl);
+      if (konz.artist.brauchtHotel) {
+        optionen.addOrUpdateKontakt("hotels", konz.hotel, hotelauswahl);
+        if (hotelpreiseAlsDefault) {
+          optionen.updateHotelpreise(konz.hotel, konz.unterkunft.zimmerPreise);
+        }
+      }
+      optionen.updateBackline("Jazzclub", konz.technik.backlineJazzclub);
+      optionen.updateBackline("Rockshop", konz.technik.backlineRockshop);
+      optionen.updateCollection("artists", konz.artist.name);
+      mutateOptionen.mutate(optionen);
+      mutateRider.mutate(new Rider({ id: url, startDate: konz.startDate, boxes: riderBoxes }));
+      mutateKonzert.mutate(konz);
+    },
+    [
+      currentUser.accessrights.isOrgaTeam,
+      mutateKonzert,
+      optionen,
+      agenturauswahl,
+      hotelauswahl,
+      hotelpreiseAlsDefault,
+      mutateOptionen,
+      mutateRider,
+      url,
+    ],
+  );
 
   const initialContext = useMemo(() => {
     return {

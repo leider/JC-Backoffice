@@ -2,6 +2,9 @@ import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import keys from "lodash/keys.js";
+import { Hotelpreise } from "../optionen/optionValues.js";
+
+export type Zimmerpreise = Omit<Hotelpreise, "name">;
 
 export default class Unterkunft {
   einzelNum = 0;
@@ -98,7 +101,7 @@ export default class Unterkunft {
     return this.einzelNum * this.einzelEUR * naechte + this.doppelNum * this.doppelEUR * naechte + this.suiteNum * this.suiteEUR * naechte;
   }
 
-  get zimmerPreise(): { einzelEUR: number; doppelEUR: number; suiteEUR: number } {
+  get zimmerPreise(): Zimmerpreise {
     return { einzelEUR: this.einzelEUR, doppelEUR: this.doppelEUR, suiteEUR: this.suiteEUR };
   }
 }
