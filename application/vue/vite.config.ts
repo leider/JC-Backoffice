@@ -5,7 +5,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path, { resolve } from "path";
 import express from "express";
-import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
