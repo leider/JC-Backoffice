@@ -142,48 +142,50 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   return (
     <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
-      <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange} size="small">
-        <Row>
-          <Col span={6}>
-            <Typography.Title level={5} onClick={onClick} style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}>
-              <span style={{ color: labelColor }}>
-                <IconForSmallBlock color={labelColor} iconName="UniversalAccess" />
-                &nbsp;...
-              </span>
-            </Typography.Title>
-          </Col>
-          <Col span={18}>
-            {inView ? (
-              <Buttons
-                dirty={dirty}
-                forVermietung={forVermietung}
-                setFormValue={setFormValue}
-                showMitarbeiter={showMitarbeiter}
-                veranstaltung={veranstaltung}
+      <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
+        <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange} size="small">
+          <Row>
+            <Col span={6}>
+              <Typography.Title level={5} onClick={onClick} style={{ marginLeft: 8, marginBlockStart: 4, marginBlockEnd: 0 }}>
+                <span style={{ color: labelColor }}>
+                  <IconForSmallBlock color={labelColor} iconName="UniversalAccess" />
+                  &nbsp;...
+                </span>
+              </Typography.Title>
+            </Col>
+            <Col span={18}>
+              {inView ? (
+                <Buttons
+                  dirty={dirty}
+                  forVermietung={forVermietung}
+                  setFormValue={setFormValue}
+                  showMitarbeiter={showMitarbeiter}
+                  veranstaltung={veranstaltung}
+                />
+              ) : null}
+            </Col>
+          </Row>
+          {inView ? (
+            <ConfigProvider theme={staffRowsTheme}>
+              <Collapse
+                activeKey={showMitarbeiter ? "mitarbeiter" : ""}
+                ghost
+                items={[
+                  {
+                    showArrow: false,
+                    key: "mitarbeiter",
+                    children: (
+                      <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
+                        <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
+                      </div>
+                    ),
+                  },
+                ]}
               />
-            ) : null}
-          </Col>
-        </Row>
-        {inView ? (
-          <ConfigProvider theme={staffRowsTheme}>
-            <Collapse
-              activeKey={showMitarbeiter ? "mitarbeiter" : ""}
-              ghost
-              items={[
-                {
-                  showArrow: false,
-                  key: "mitarbeiter",
-                  children: (
-                    <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
-                      <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </ConfigProvider>
-        ) : null}
-      </Form>
+            </ConfigProvider>
+          ) : null}
+        </Form>
+      </ConfigProvider>
     </div>
   );
 }

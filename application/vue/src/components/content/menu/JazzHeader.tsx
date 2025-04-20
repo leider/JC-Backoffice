@@ -76,6 +76,11 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
           icon: <MenuIcon name="PersonFillX" />,
           label: <a onClick={logout}>Abmelden</a>,
         },
+        {
+          key: "version",
+          icon: <MenuIcon name="Clock" />,
+          label: `Version: ${__APP_VERSION__}`,
+        },
       ],
       label: "Users",
     };

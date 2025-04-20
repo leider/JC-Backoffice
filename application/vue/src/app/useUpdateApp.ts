@@ -3,6 +3,7 @@ import noop from "lodash/noop";
 
 export default function useUpdateApp() {
   useRegisterSW({
+    onNeedRefresh: window.location.reload,
     onRegisteredSW(_, r) {
       r &&
         setInterval(

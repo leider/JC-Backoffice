@@ -32,7 +32,7 @@ export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
 
   return (
     <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10, colorText: color } }}>
-      <Title level={4} style={titleStyle}>
+      <Title level={3} style={titleStyle}>
         {veranstaltung.kopf.titel}
         <br />
         <UhrzeitOrt veranstaltung={veranstaltung} />

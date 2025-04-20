@@ -5,14 +5,18 @@ import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path, { resolve } from "path";
 import express from "express";
+import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    define: {
+      __APP_VERSION__: JSON.stringify(new DatumUhrzeit().mitUhrzeitNumerisch),
+    },
     root: __dirname,
     base: "/vue/",
     build: {
       outDir: "../backend/static/vue",
-      emptyOutDir: false,
+      emptyOutDir: true,
       sourcemap: false,
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
