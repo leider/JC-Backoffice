@@ -1,5 +1,5 @@
 import User from "jc-shared/user/user";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { App, Col, Collapse, Row, Space, theme } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { ChangePasswordModal, EditUserModal } from "@/components/users/UserModals";
@@ -48,8 +48,21 @@ export default function UserPanel({ user, currentUser }: { readonly user: User; 
   const { useToken } = theme;
 
   const textColor = useToken().token.colorText;
-
   const lightGreen = useToken().token.colorSuccessBgHover;
+
+  const editUser = useCallback(() => setEditUserOpen(true), []);
+  const openPassword = useCallback(() => setPasswordOpen(true), []);
+  const deleteConfirm = useCallback(() => {
+    modal.confirm({
+      type: "confirm",
+      title: "User löschen",
+      content: `Bist Du sicher, dass Du den User "${user.name}" löschen möchtest?`,
+      onOk: () => mutateDeletion.mutate(user),
+    });
+  }, [modal, mutateDeletion, user]);
+
+  const expandUnexpand = useCallback(() => setExpanded(!expanded), [expanded]);
+
   return (
     <>
       <EditUserModal isOpen={editUserOpen} setIsOpen={setEditUserOpen} user={user} />
@@ -63,21 +76,9 @@ export default function UserPanel({ user, currentUser }: { readonly user: User; 
             style: self ? { backgroundColor: lightGreen } : undefined,
             extra: (
               <Space>
-                {canEdit ? <ButtonInUsers callback={() => setEditUserOpen(true)} type="edit" /> : null}
-                {canEdit ? <ButtonInUsers callback={() => setPasswordOpen(true)} type="changepass" /> : null}
-                {currentUser.accessrights.isSuperuser && !self ? (
-                  <ButtonInUsers
-                    callback={() => {
-                      modal.confirm({
-                        type: "confirm",
-                        title: "User löschen",
-                        content: `Bist Du sicher, dass Du den User "${user.name}" löschen möchtest?`,
-                        onOk: () => mutateDeletion.mutate(user),
-                      });
-                    }}
-                    type="delete"
-                  />
-                ) : null}
+                {canEdit ? <ButtonInUsers callback={editUser} type="edit" /> : null}
+                {canEdit ? <ButtonInUsers callback={openPassword} type="changepass" /> : null}
+                {currentUser.accessrights.isSuperuser && !self ? <ButtonInUsers callback={deleteConfirm} type="delete" /> : null}
               </Space>
             ),
             label: (
@@ -120,9 +121,7 @@ export default function UserPanel({ user, currentUser }: { readonly user: User; 
             ),
           },
         ]}
-        onChange={() => {
-          setExpanded(!expanded);
-        }}
+        onChange={expandUnexpand}
         size="small"
       />
     </>

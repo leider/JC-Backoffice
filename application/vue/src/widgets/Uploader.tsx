@@ -71,21 +71,24 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
     fileList,
   };
 
-  const tagRender = (props: CustomTagProps) => {
-    const content =
-      typ === "pressefoto" ? (
-        <img alt={props.label as string} src={`/imagepreview/${props.label}`} width="100%" />
-      ) : (
-        <a href={`/files/${props.label}`}>{props.label} </a>
+  const tagRender = useCallback(
+    (props: CustomTagProps) => {
+      const content =
+        typ === "pressefoto" ? (
+          <img alt={props.label as string} src={`/imagepreview/${props.label}`} width="100%" />
+        ) : (
+          <a href={`/files/${props.label}`}>{props.label} </a>
+        );
+      return (
+        <Popover content={content} title={typ === "pressefoto" ? "Vorschau" : "Klick zur Ansicht / Download"}>
+          <Tag closable={props.closable} onClose={props.onClose}>
+            {props.label}
+          </Tag>
+        </Popover>
       );
-    return (
-      <Popover content={content} title={typ === "pressefoto" ? "Vorschau" : "Klick zur Ansicht / Download"}>
-        <Tag closable={props.closable} onClose={props.onClose}>
-          {props.label}
-        </Tag>
-      </Popover>
-    );
-  };
+    },
+    [typ],
+  );
 
   return (
     id && (

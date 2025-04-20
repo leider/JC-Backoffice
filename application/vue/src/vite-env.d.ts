@@ -5,6 +5,7 @@ declare module "virtual:pwa-register" {
 
   export function registerSW(options?: RegisterSWOptions): (reloadPage?: boolean) => Promise<void>;
 }
+
 declare module "virtual:pwa-register/react" {
   import type { Dispatch, SetStateAction } from "react";
   import type { RegisterSWOptions } from "vite-plugin-pwa/types";
@@ -17,3 +18,5 @@ declare module "virtual:pwa-register/react" {
     updateServiceWorker: (reloadPage?: boolean) => Promise<void>;
   };
 }
+
+declare const __APP_VERSION__: string;

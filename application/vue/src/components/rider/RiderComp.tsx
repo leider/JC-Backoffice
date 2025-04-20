@@ -89,6 +89,15 @@ export function RiderComp({
 
   const itemsWithComment = useMemo(() => filter(targetBoxes, (box) => !!box.comment), [targetBoxes]);
 
+  const renderItem = useCallback(
+    (item: BoxParams) => (
+      <List.Item>
+        <List.Item.Meta title={item.title} />
+        {item.comment}
+      </List.Item>
+    ),
+    [],
+  );
   return (
     <DndContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <DragOverlay>{dragging ? <Box callback={noop} item={dragging} /> : null}</DragOverlay>
@@ -122,16 +131,7 @@ export function RiderComp({
         </Col>
         <Col span={16}>
           <Typography.Title level={5}>Infos</Typography.Title>
-          <List
-            dataSource={itemsWithComment}
-            itemLayout="horizontal"
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta title={item.title} />
-                {item.comment}
-              </List.Item>
-            )}
-          />
+          <List dataSource={itemsWithComment} itemLayout="horizontal" renderItem={renderItem} />
         </Col>
       </Row>
     </DndContext>

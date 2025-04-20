@@ -1,9 +1,9 @@
 import { Form, Space } from "antd";
 import React from "react";
 import InverseCheckbox from "@/widgets/InverseCheckbox.tsx";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
+import { useWatch } from "antd/es/form/Form";
 
 export interface MitarbeiterRowProps {
   readonly sectionName: StaffType;
@@ -12,16 +12,12 @@ export interface MitarbeiterRowProps {
 }
 
 function StaffRow({ usersAsOptions, sectionName, label }: MitarbeiterRowProps) {
+  const notNeeded = useWatch(["staff", `${sectionName}NotNeeded`], { preserve: true });
+
   return (
     <Form.Item label={<b>{label + ":"}</b>}>
       <Space.Compact block>
-        <DynamicItem
-          nameOfDepending={["staff", `${sectionName}NotNeeded`]}
-          renderWidget={(getFieldValue) => {
-            const notNeeded = getFieldValue(["staff", `${sectionName}NotNeeded`]);
-            return <MitarbeiterMultiSelect disabled={notNeeded} name={["staff", sectionName]} usersAsOptions={usersAsOptions} />;
-          }}
-        />
+        <MitarbeiterMultiSelect disabled={notNeeded} name={["staff", sectionName]} usersAsOptions={usersAsOptions} />
         <Form.Item name={["staff", `${sectionName}NotNeeded`]} noStyle valuePropName="checked">
           <InverseCheckbox style={{ marginLeft: "5px", marginTop: "5px" }} />
         </Form.Item>

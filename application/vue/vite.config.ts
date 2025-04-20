@@ -5,14 +5,19 @@ import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path, { resolve } from "path";
 import express from "express";
+import dayjs from "dayjs";
+
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
+    define: {
+      __APP_VERSION__: JSON.stringify(dayjs().format("DD.MM.YY HH:mm")),
+    },
     root: __dirname,
     base: "/vue/",
     build: {
       outDir: "../backend/static/vue",
-      emptyOutDir: false,
+      emptyOutDir: true,
       sourcemap: false,
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
@@ -49,6 +54,7 @@ export default defineConfig(() => {
         injectRegister: "auto",
         includeAssets: ["/img/favicon.ico", "/img/logo-square-180.png"],
         workbox: {
+          cleanupOutdatedCaches: true,
           maximumFileSizeToCacheInBytes: 5000000,
         },
         manifest: {

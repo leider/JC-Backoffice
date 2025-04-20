@@ -3,7 +3,6 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import SingleSelect from "@/widgets/SingleSelect";
-import { DynamicItem } from "@/widgets/DynamicItem";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
@@ -37,6 +36,12 @@ export default function AusgabenCard() {
     return sum;
   }, [brauchtTechnik, kosten]);
 
+  const gagenEUR = useWatch(["kosten", "gagenEUR"], { preserve: true });
+  const gagenSteuer = useWatch(["kosten", "gagenSteuer"], { preserve: true });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const kostenObject = useMemo(() => new Kosten(form.getFieldValue("kosten")), [form, gagenEUR, gagenSteuer]);
+
   const { lg } = useBreakpoint();
   return (
     <Collapsible amount={summe} label="Kosten / Ausgaben" noTopBorder={lg} suffix="ausgaben">
@@ -48,20 +53,7 @@ export default function AusgabenCard() {
           <SingleSelect label="Steuer" name={["kosten", "gagenSteuer"]} options={steuerSaetze} />
         </Col>
         <Col span={6}>
-          <DynamicItem
-            nameOfDepending={["kosten", "gagenEUR"]}
-            renderWidget={(getFieldValue) => {
-              return (
-                <DynamicItem
-                  nameOfDepending={["kosten", "gagenSteuer"]}
-                  renderWidget={() => {
-                    const kosten = new Kosten(getFieldValue(["kosten"]));
-                    return <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={kosten.gagenTotalEUR} />;
-                  }}
-                />
-              );
-            }}
-          />
+          <NumberInputWithDirectValue decimals={2} label="Total" suffix="€" value={kostenObject.gagenTotalEUR} />
         </Col>
       </JazzRow>
       {brauchtTechnik ? <FluegelZeile /> : null}

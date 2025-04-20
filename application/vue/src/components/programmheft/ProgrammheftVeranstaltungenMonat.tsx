@@ -50,6 +50,9 @@ export function ProgrammheftVeranstaltungenMonat({
     ),
     [],
   );
+
+  const expandUnexpand = useCallback(() => setExpanded(!expanded), [expanded]);
+
   return (
     <Collapse
       activeKey={expanded ? monat : undefined}
@@ -88,9 +91,7 @@ export function ProgrammheftVeranstaltungenMonat({
           ),
         },
       ]}
-      onChange={() => {
-        setExpanded(!expanded);
-      }}
+      onChange={expandUnexpand}
       size="small"
       style={{ backgroundColor: token.colorPrimary }}
     />

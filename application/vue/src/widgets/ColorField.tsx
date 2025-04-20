@@ -1,6 +1,7 @@
 import { ColorPicker, Form as AntdForm } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
+import { AggregationColor } from "antd/es/color-picker/color";
 
 type TColorField = {
   readonly name: string | string[];
@@ -71,29 +72,31 @@ function ColorInputEmbedded({ value, onChange, save, presets }: TColorInputEmbed
     }
   }, [value, onChange]);
 
+  const onChangeCallback = useCallback(
+    (val: AggregationColor) => {
+      onChange?.(val.toHexString());
+      save?.(true);
+    },
+    [onChange, save],
+  );
+
+  const onOpenChange = useCallback(() => {
+    (open: boolean) => {
+      if (!open) {
+        save?.();
+      }
+    };
+  }, [save]);
+
   return (
     <ColorPicker
       defaultFormat="hex"
       format="hex"
-      onChange={(val) => {
-        onChange?.(val.toHexString());
-        save?.(true);
-      }}
-      onOpenChange={(open) => {
-        if (!open) {
-          save?.();
-        }
-      }}
+      onChange={onChangeCallback}
+      onOpenChange={onOpenChange}
       open
       presets={
-        presets
-          ? [
-              {
-                label: "Schnellauswahl",
-                colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"],
-              },
-            ]
-          : undefined
+        presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
       }
       size="small"
       value={value}

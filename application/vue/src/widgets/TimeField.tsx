@@ -1,5 +1,5 @@
 import { Form as AntdForm, TimePicker } from "antd";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Rule } from "antd/es/form";
 import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -77,9 +77,10 @@ function TimeFieldEmbedded({
     return undefined;
   }, [value]);
 
-  function updateValue(val?: Dayjs) {
-    onChange!(val ? DatumUhrzeit.forJSDate(baseValue).setUhrzeit(val.hour(), val.minute()).toJSDate : undefined);
-  }
+  const updateValue = useCallback(
+    (val?: Dayjs) => onChange!(val ? DatumUhrzeit.forJSDate(baseValue).setUhrzeit(val.hour(), val.minute()).toJSDate : undefined),
+    [onChange, baseValue],
+  );
 
   useEffect(() => {
     updateValue(valDayjs);

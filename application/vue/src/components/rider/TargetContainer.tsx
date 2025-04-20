@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { CSSProperties, useCallback } from "react";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
 import { useDroppable } from "@dnd-kit/core";
@@ -24,9 +24,7 @@ export function TargetContainer({
 }) {
   const { setNodeRef } = useDroppable({ id: "TargetContainer" });
 
-  function boxChanged() {
-    setTargetBoxes(cloneDeep(targetBoxes));
-  }
+  const boxChanged = useCallback(() => setTargetBoxes(cloneDeep(targetBoxes)), [setTargetBoxes, targetBoxes]);
 
   return (
     <div style={{ width: "100%", overflow: "scroll" }}>

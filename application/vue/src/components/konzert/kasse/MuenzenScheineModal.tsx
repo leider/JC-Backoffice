@@ -69,6 +69,13 @@ export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }
     );
   }, [form, isBeginn, sumForInhalt]);
 
+  const closeModalNoSave = useCallback(() => setOpenModal(false), []);
+  const closeModalSave = useCallback(() => {
+    isDirty && form.submit();
+    setOpenModal(false);
+  }, [form, isDirty]);
+  const openInhaltModal = useCallback(() => setOpenModal(true), []);
+
   return (
     <>
       <JazzModal
@@ -78,7 +85,7 @@ export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }
             <ButtonWithIcon
               color={token.colorSuccess}
               key="closeOnly"
-              onClick={() => setOpenModal(false)}
+              onClick={closeModalNoSave}
               text="Schließen ohne Speichern"
               type="default"
             />
@@ -86,10 +93,7 @@ export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }
           <ButtonWithIcon
             color={token.colorSuccess}
             key="close"
-            onClick={() => {
-              isDirty && form.submit();
-              setOpenModal(false);
-            }}
+            onClick={closeModalSave}
             text={isDirty ? "Speichern & Schließen" : "Schließen"}
           />,
         ]}
@@ -132,9 +136,7 @@ export function MuenzenScheineModal({ isBeginn }: { readonly isBeginn: boolean }
         block
         color={color("kasse")}
         icon="CurrencyExchange"
-        onClick={() => {
-          setOpenModal(true);
-        }}
+        onClick={openInhaltModal}
         ref={isBeginn ? refStartinhalt : refEndinhalt}
         text={isBeginn ? "Startinhalt" : "Endinhalt"}
         tooltipTitle={isBeginn ? "Kasseninhalt zu Beginn" : "Kasseninhalt am Ende"}

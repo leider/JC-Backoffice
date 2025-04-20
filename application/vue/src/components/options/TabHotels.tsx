@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Col } from "antd";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
@@ -7,6 +7,8 @@ import { Columns } from "@/widgets/EditableTable/types.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
+import Kontakt from "jc-shared/veranstaltung/kontakt";
+import { Hotelpreise } from "jc-shared/optionen/optionValues.ts";
 
 export default function TabHotels() {
   const form = useFormInstance();
@@ -30,37 +32,22 @@ export default function TabHotels() {
     { type: "text", title: "Ansprechpartner", dataIndex: "ansprechpartner" },
   ];
 
+  const newKontaktFactory = useCallback((val: Kontakt) => Object.assign({}, val), []);
+  const newPreiseFactory = useCallback((val: Hotelpreise) => Object.assign({}, val), []);
+
   return (
     <JazzRow>
       <Col lg={12} xs={24}>
         <Collapsible label="Hotels" noTopBorder suffix="allgemeines">
-          <EditableTable<{ name: string; adresse: string; email: string; telefon: string; ansprechpartner: string }>
-            columnDescriptions={columnsAdresse}
-            name="hotels"
-            newRowFactory={(val) => {
-              return Object.assign({}, val);
-            }}
-          />
+          <EditableTable<Kontakt> columnDescriptions={columnsAdresse} name="hotels" newRowFactory={newKontaktFactory} />
         </Collapsible>
         <Collapsible label="Hotelpreise" suffix="allgemeines">
-          <EditableTable<{ name: string; einzelEUR: number; doppelEUR: number; suiteEUR: number }>
-            columnDescriptions={columnsPreise}
-            name="hotelpreise"
-            newRowFactory={(val) => {
-              return Object.assign({}, val);
-            }}
-          />
+          <EditableTable<Hotelpreise> columnDescriptions={columnsPreise} name="hotelpreise" newRowFactory={newPreiseFactory} />
         </Collapsible>
       </Col>
       <Col lg={12} xs={24}>
         <Collapsible label="Agenturen" noTopBorder suffix="allgemeines">
-          <EditableTable<{ name: string; adresse: string; email: string; telefon: string; ansprechpartner: string }>
-            columnDescriptions={columnsAdresse}
-            name="agenturen"
-            newRowFactory={(val) => {
-              return Object.assign({}, val);
-            }}
-          />
+          <EditableTable<Kontakt> columnDescriptions={columnsAdresse} name="agenturen" newRowFactory={newKontaktFactory} />
         </Collapsible>
       </Col>
     </JazzRow>

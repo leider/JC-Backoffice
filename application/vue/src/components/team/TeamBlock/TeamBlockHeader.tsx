@@ -6,7 +6,6 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 const { Title } = Typography;
 interface HeaderProps {
   readonly veranstaltung: Veranstaltung;
-  readonly expanded?: boolean;
 }
 
 function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
@@ -21,7 +20,7 @@ function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }
   );
 }
 
-export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps) {
+export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
   const { isDarkMode } = useJazzContext();
 
   const color = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
@@ -33,7 +32,7 @@ export default function TeamBlockHeader({ veranstaltung, expanded }: HeaderProps
 
   return (
     <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10, colorText: color } }}>
-      <Title level={expanded ? 3 : 4} style={titleStyle}>
+      <Title level={3} style={titleStyle}>
         {veranstaltung.kopf.titel}
         <br />
         <UhrzeitOrt veranstaltung={veranstaltung} />

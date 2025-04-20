@@ -59,16 +59,12 @@ export default function BigKalender() {
   );
 
   const calRef = createRef<FullCalendar>();
+  const refetch = useCallback(() => calRef.current?.getApi().refetchEvents(), [calRef]);
   const { lg } = useBreakpoint();
   const initiaDate = useMemo(() => new DatumUhrzeit().minus({ wochen: 2 }).toJSDate, []);
   return (
     <WrapFullCalendar>
-      <Form
-        form={form}
-        onChange={() => {
-          calRef.current?.getApi().refetchEvents();
-        }}
-      >
+      <Form form={form} onChange={refetch}>
         <JazzPageHeader buttons={[<IcalCheck key="icals" />, <TerminCheck key="termine" />]} title="Kalenderübersicht" />
       </Form>
       <Row gutter={8}>

@@ -1,5 +1,5 @@
 import { Form, Select, Tag } from "antd";
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType, RefSelectProps } from "antd/es/select";
@@ -61,17 +61,29 @@ function InnerSelect({
     }
   }, [focus, usersAsOptions]);
 
-  const renderInList = (row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />;
+  const renderInList = useCallback((row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />, []);
 
   const tagRender = useTagRenderForUser(usersAsOptions);
-  const filterOption = (searchString: string, row?: UserWithKann) =>
-    row?.value.toLowerCase().includes(searchString.toLowerCase()) ||
-    row?.label.toLowerCase().includes(searchString.toLowerCase()) ||
-    map(row?.kann, (k) => (k === "Master" ? "Abendverantwortlicher" : k))
-      .join(",")
-      .toLowerCase()
-      .includes(searchString.toLowerCase()) ||
-    false;
+  const filterOption = useCallback(
+    (searchString: string, row?: UserWithKann) =>
+      row?.value.toLowerCase().includes(searchString.toLowerCase()) ||
+      row?.label.toLowerCase().includes(searchString.toLowerCase()) ||
+      map(row?.kann, (k) => (k === "Master" ? "Abendverantwortlicher" : k))
+        .join(",")
+        .toLowerCase()
+        .includes(searchString.toLowerCase()) ||
+      false,
+    [],
+  );
+
+  const onBlur = useCallback(() => save?.(), [save]);
+  const onChangeWithSave = useCallback(
+    (val: string[]) => {
+      onChange?.(val);
+      save?.(true);
+    },
+    [onChange, save],
+  );
 
   const filtered = filter(usersAsOptions, (u) => !value?.includes(u.value));
 
@@ -80,11 +92,8 @@ function InnerSelect({
       disabled={disabled}
       filterOption={filterOption}
       mode="multiple"
-      onBlur={() => save?.()}
-      onChange={(val) => {
-        onChange?.(val);
-        save?.(true);
-      }}
+      onBlur={onBlur}
+      onChange={onChangeWithSave}
       optionRender={renderInList}
       options={filtered}
       placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}

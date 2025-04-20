@@ -1,6 +1,6 @@
 import { DatePicker, Form } from "antd";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "rc-field-form/es/interface";
 
@@ -31,11 +31,23 @@ function EmbeddedPickers({
     }
   }, [value]);
 
-  function onCalendarChange(dates: (Dayjs | null)[] | null) {
-    const startNew = dates?.[0];
-    const endNew = dates?.[1];
-    onChange?.([startNew?.toDate(), endNew?.toDate()]);
-  }
+  const onCalendarChange = useCallback(
+    (dates: (Dayjs | null)[] | null) => {
+      const startNew = dates?.[0];
+      const endNew = dates?.[1];
+      onChange?.([startNew?.toDate(), endNew?.toDate()]);
+    },
+    [onChange],
+  );
+
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        save?.();
+      }
+    },
+    [save],
+  );
 
   return (
     <DatePicker.RangePicker
@@ -44,11 +56,7 @@ function EmbeddedPickers({
       format="ddd DD.MM.YY"
       needConfirm={focus}
       onCalendarChange={onCalendarChange}
-      onOpenChange={(open) => {
-        if (!open) {
-          save?.();
-        }
-      }}
+      onOpenChange={onOpenChange}
       style={{ width: "100%" }}
       value={[start, end]}
     />

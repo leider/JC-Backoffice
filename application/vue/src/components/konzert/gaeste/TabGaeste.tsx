@@ -1,5 +1,5 @@
 import { Col } from "antd";
-import React from "react";
+import React, { useCallback } from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
@@ -22,25 +22,22 @@ const smallColumns: Columns[] = [
 
 function GaesteCard({ label, path }: { readonly label: string; readonly path: string }) {
   const { lg, sm } = useBreakpoint();
+  const newRowFactory = useCallback((vals: NameWithNumber) => {
+    return Object.assign(
+      {
+        name: null,
+        comment: null,
+        number: 1,
+        alreadyIn: 0,
+      },
+      vals,
+    );
+  }, []);
   return (
     <Collapsible label={label} noTopBorder={label === "gaesteliste" || lg} suffix="gaeste">
       <JazzRow>
         <Col span={24}>
-          <EditableTable<NameWithNumber>
-            columnDescriptions={sm ? columns : smallColumns}
-            name={path}
-            newRowFactory={(vals) => {
-              return Object.assign(
-                {
-                  name: null,
-                  comment: null,
-                  number: 1,
-                  alreadyIn: 0,
-                },
-                vals,
-              );
-            }}
-          />
+          <EditableTable<NameWithNumber> columnDescriptions={sm ? columns : smallColumns} name={path} newRowFactory={newRowFactory} />
         </Col>
       </JazzRow>
     </Collapsible>

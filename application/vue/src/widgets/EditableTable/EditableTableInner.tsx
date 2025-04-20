@@ -236,6 +236,8 @@ export default function EditableTableInner<T>({
     [viewport.height, ref?.current?.nativeElement], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  const rowClassName = useCallback((record: WithKey<T>) => (hasRecordErrors(record) ? "table-row-error" : ""), [hasRecordErrors]);
+
   return (
     <div>
       <TableContext.Provider value={tableContext}>
@@ -248,7 +250,7 @@ export default function EditableTableInner<T>({
           dataSource={rows}
           pagination={false}
           ref={ref}
-          rowClassName={(record) => (hasRecordErrors(record) ? "table-row-error" : "")}
+          rowClassName={rowClassName}
           scroll={{ y: scrollY }}
           size="small"
         />

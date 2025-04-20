@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, mailRules as mailRulesRestCall, sendMail } from "@/rest/loader.ts";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Form, Row, Tag, Typography, UploadFile } from "antd";
 import { SendButton } from "@/components/colored/JazzButtons";
 import MailRule from "jc-shared/mail/mailRule";
@@ -95,7 +95,7 @@ export default function SendMail() {
     selectedKann: string[];
   }>();
 
-  function initializeForm() {
+  const initializeForm = useCallback(() => {
     document.title = "Manuelle Nachricht";
     form.setFieldsValue({
       subject: "",
@@ -108,8 +108,9 @@ export default function SendMail() {
       selectedKann: [],
     });
     form.validateFields();
-  }
-  useEffect(initializeForm, [form]);
+  }, [form]);
+
+  useEffect(initializeForm, [initializeForm]);
 
   const selectedVeranstaltungenInForm = useWatch("selectedVeranstaltungen", { form });
   const selectedRulesInForm = useWatch("selectedRules", { form });
@@ -158,7 +159,9 @@ export default function SendMail() {
     );
   }, [selectedUsers, selectedLists, selectedRules, allUsers, selectedKannInForm, selectedUserGruppenInForm, users]);
 
-  function send() {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const send = useCallback(() => {
     form.validateFields().then(async () => {
       const mail = form.getFieldsValue(true);
       const selectedVeranstaltungen = filter(veranstaltungen, (ver) =>
@@ -200,21 +203,17 @@ export default function SendMail() {
       });
       navigate("/");
     });
-  }
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  }, [form, veranstaltungen, effectiveUsers, fileList, initializeForm, showSuccess, navigate]);
+
+  const onValuesChange = useCallback(() => {
+    form
+      .validateFields()
+      .then((value) => setDirty(!!value.markdown))
+      .catch((value) => setDirty(value.errorFields.length === 0 && !!value.values.markdown));
+  }, [form]);
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={send}
-      onValuesChange={() => {
-        form
-          .validateFields()
-          .then((value) => setDirty(!!value.markdown))
-          .catch((value) => setDirty(value.errorFields.length === 0 && !!value.values.markdown));
-      }}
-    >
+    <Form form={form} layout="vertical" onFinish={send} onValuesChange={onValuesChange}>
       <JazzPageHeader buttons={[<SendButton disabled={!dirty || effectiveUsers.length === 0} key="save" />]} title="Mail Senden" />
       <RowWrapper>
         <JazzRow>

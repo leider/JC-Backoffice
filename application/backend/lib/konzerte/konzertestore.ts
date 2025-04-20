@@ -10,6 +10,8 @@ import User from "jc-shared/user/user.js";
 const persistence = pers("veranstaltungenstore", ["startDate", "endDate", "url"]);
 const logger = winston.loggers.get("transactions");
 import conf from "../../simpleConfigure.js";
+import optionenstore from "../optionen/optionenstore.js";
+import groupBy from "lodash/groupBy.js";
 
 function byDateRange(rangeFrom: DatumUhrzeit, rangeTo: DatumUhrzeit, sortOrder: "ASC" | "DESC") {
   const result = persistence.listByField(
@@ -57,6 +59,11 @@ export default {
   },
 
   saveKonzert(konzert: Konzert, user: User) {
+    // update eventTypRich on save
+    const optionen = optionenstore.get();
+    const typByName = groupBy(optionen?.typenPlus || [], "name");
+    konzert.kopf.eventTypRich = typByName[konzert.kopf.eventTyp]?.[0];
+
     persistence.save(konzert as { id: string }, user);
     return konzert;
   },

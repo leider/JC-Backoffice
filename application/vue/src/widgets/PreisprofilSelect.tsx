@@ -1,5 +1,5 @@
 import { Form, Select } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import OptionValues, { Preisprofil } from "jc-shared/optionen/optionValues";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import find from "lodash/find";
@@ -67,11 +67,14 @@ function InternalPreisprofilSelect({ id, onValueAsObject, optionen, valueAsObjec
     setValueAsString(valueAsObject?.name);
   }, [valueAsObject]);
 
-  function selectedToPreisprofil(profilName: string) {
-    const selectedProfil = find(alleProfile, { name: profilName });
-    onValueAsObject?.(selectedProfil);
-    onChange?.(selectedProfil);
-  }
+  const selectedToPreisprofil = useCallback(
+    (profilName: string) => {
+      const selectedProfil = find(alleProfile, { name: profilName });
+      onValueAsObject?.(selectedProfil);
+      onChange?.(selectedProfil);
+    },
+    [alleProfile, onValueAsObject, onChange],
+  );
 
   return <Select disabled={disabled} id={id} onSelect={selectedToPreisprofil} options={displayProfile} value={valueAsString} />;
 }

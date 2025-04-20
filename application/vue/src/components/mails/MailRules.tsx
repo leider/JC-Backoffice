@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { mailRules as mailRulesRestCall, saveMailRules } from "@/rest/loader.ts";
 import * as React from "react";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
@@ -25,14 +25,11 @@ function MailRulesInternal() {
     { dataIndex: "rule", title: "Regel", type: "text", width: "250px", filters: allMailrules },
   ];
 
+  const newRuleFactory = useCallback((vals: MailRuleUI) => ({ ...vals, id: undefined }), []);
   return (
     <JazzRow>
       <Col span={24}>
-        <EditableTable<MailRuleUI>
-          columnDescriptions={columnDescriptions}
-          name="allRules"
-          newRowFactory={(vals) => ({ ...vals, id: undefined })}
-        />
+        <EditableTable<MailRuleUI> columnDescriptions={columnDescriptions} name="allRules" newRowFactory={newRuleFactory} />
       </Col>
     </JazzRow>
   );
@@ -51,9 +48,7 @@ export default function MailRules() {
     successMessage: "Die Regeln wurden gespeichert",
   });
 
-  function saveForm(vals: MailRulesWrapper) {
-    mutateRules.mutate(vals.allRules);
-  }
+  const saveForm = useCallback((vals: MailRulesWrapper) => mutateRules.mutate(vals.allRules), [mutateRules]);
 
   return (
     <JazzFormAndHeader data={mailRules} resetChanges={refetch} saveForm={saveForm} title="Mailing Regeln">

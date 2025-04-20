@@ -1,6 +1,6 @@
 import { searchWiki } from "@/rest/loader.ts";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { List, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
@@ -20,30 +20,31 @@ export default function WikiSearchresults() {
     }
   }, [data]);
 
+  const renderItem = useCallback(
+    (item: { pageName: string; line: string; text: string }) => (
+      <List.Item>
+        <List.Item.Meta
+          description={item.text ? item.text : ""}
+          title={
+            <span>
+              <Link to={`/wiki/${item.pageName}`}>{item.pageName}</Link>
+              {item.line ? " (in Zeile " + item.line + ")" : ""}
+              {!item.text ? " (im Dateinamen)" : ""}
+            </span>
+          }
+        />
+      </List.Item>
+    ),
+    [],
+  );
+
   return (
     <>
       <JazzPageHeader dateString={`für "${searchtext}"`} title="Wiki Suchergebnisse" />
       {matches.length === 0 ? (
         <Typography.Title level={2}>Keine Ergebnisse</Typography.Title>
       ) : (
-        <List
-          dataSource={matches}
-          renderItem={(item) => (
-            <List.Item>
-              <List.Item.Meta
-                description={item.text ? item.text : ""}
-                title={
-                  <span>
-                    <Link to={`/wiki/${item.pageName}`}>{item.pageName}</Link>
-                    {item.line ? " (in Zeile " + item.line + ")" : ""}
-                    {!item.text ? " (im Dateinamen)" : ""}
-                  </span>
-                }
-              />
-            </List.Item>
-          )}
-          size="small"
-        />
+        <List dataSource={matches} renderItem={renderItem} size="small" />
       )}
     </>
   );

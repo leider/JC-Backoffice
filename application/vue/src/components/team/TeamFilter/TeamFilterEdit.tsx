@@ -1,7 +1,7 @@
 import { Col, Collapse, CollapseProps, ConfigProvider, Row, Space } from "antd";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import ThreewayCheckbox from "@/widgets/ThreewayCheckbox.tsx";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { EventTypeMultiSelect } from "@/widgets/EventTypeSelects/EventTypeMultiSelect.tsx";
@@ -112,28 +112,23 @@ export function TeamFilterEdit({ open, setOpen }: { readonly open: boolean; read
     },
   ];
 
+  const resetClicked = useCallback(() => {
+    reset(form);
+    setTeamFilter(form.getFieldsValue(true));
+  }, [form, setTeamFilter]);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    setTeamFilter(form.getFieldsValue(true));
+  }, [form, setOpen, setTeamFilter]);
+
   return (
     <JazzModal
       closable={false}
       footer={
         <Space>
-          <ButtonWithIcon
-            alwaysText
-            onClick={() => {
-              reset(form);
-              setTeamFilter(form.getFieldsValue(true));
-            }}
-            text="Zurücksetzen"
-            type="default"
-          />
-          <ButtonWithIcon
-            alwaysText
-            onClick={() => {
-              setOpen(false);
-              setTeamFilter(form.getFieldsValue(true));
-            }}
-            text="Schließen"
-          />
+          <ButtonWithIcon alwaysText onClick={resetClicked} text="Zurücksetzen" type="default" />
+          <ButtonWithIcon alwaysText onClick={close} text="Schließen" />
         </Space>
       }
       open={open}

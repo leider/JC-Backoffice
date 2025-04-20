@@ -110,20 +110,22 @@ function NumericInputEmbedded({
 
   const sanitizeLocalInput = useSanitizeLocalInput(updateValue, internalFormat, minLimit, maxLimit);
 
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = ({ target: { value: widgetInput } }) => {
-    const result = widgetInput ? numeral(widgetInput).value() || 0 : null;
-    sanitizeLocalInput(result, widgetInput);
-    save?.();
-  };
+  const handleBlur: React.FocusEventHandler<HTMLInputElement> = useCallback(
+    ({ target: { value: widgetInput } }) => {
+      const result = widgetInput ? numeral(widgetInput).value() || 0 : null;
+      sanitizeLocalInput(result, widgetInput);
+      save?.();
+    },
+    [sanitizeLocalInput, save],
+  );
+
   useEffect(() => {
     if (focus && value) {
       inputRef.current?.focus();
     }
   }, [focus, value]);
 
-  function handleFocus() {
-    inputRef.current?.focus({ cursor: "all" });
-  }
+  const handleFocus = useCallback(() => inputRef.current?.focus({ cursor: "all" }), []);
 
   useEffect(() => {
     sanitizeLocalInput(number);
@@ -131,15 +133,17 @@ function NumericInputEmbedded({
 
   const inputRef = useRef<InputRef>(null);
 
+  const onChangeHandler = useCallback(({ target: { value: val } }: { target: { value: string } }) => setValue(val), []);
+  const onPressEnter = useCallback(() => save?.(), [save]);
   return (
     <Input
       disabled={disabled}
       id={id}
       inputMode={decimals > 0 ? "decimal" : "numeric"}
       onBlur={handleBlur}
-      onChange={({ target: { value: val } }) => setValue(val)}
+      onChange={onChangeHandler}
       onFocus={handleFocus}
-      onPressEnter={() => save?.()}
+      onPressEnter={onPressEnter}
       ref={inputRef}
       suffix={suffix}
       value={value}

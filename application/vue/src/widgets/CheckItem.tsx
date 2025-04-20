@@ -1,6 +1,7 @@
 import { Checkbox, CheckboxProps, Form } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NamePath } from "rc-field-form/es/interface";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 function InternalCheckbox({
   focus,
@@ -32,17 +33,17 @@ function InternalCheckbox({
     }
   }, [consumed]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const onBlur = useCallback(() => save?.(), [save]);
+  const onChangeCallback = useCallback(
+    (e: CheckboxChangeEvent) => {
+      onChange?.(e);
+      save?.(true);
+    },
+    [onChange, save],
+  );
+
   return (
-    <Checkbox
-      autoFocus={focus}
-      checked={checked}
-      disabled={disabled}
-      onBlur={() => save?.()}
-      onChange={(e) => {
-        onChange?.(e);
-        save?.(true);
-      }}
-    >
+    <Checkbox autoFocus={focus} checked={checked} disabled={disabled} onBlur={onBlur} onChange={onChangeCallback}>
       {label ? <b>{label}</b> : null}
     </Checkbox>
   );

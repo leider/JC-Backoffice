@@ -62,6 +62,7 @@ describe("Simple (Text) Input Widget", () => {
   describe("executes callback on value change", () => {
     let tunnelVal: string | null;
     beforeEach(() => {
+      // eslint-disable-next-line react/jsx-no-bind
       updateWidget(<TextField label="testme" name="test" onChange={(val) => (tunnelVal = val)} />);
     });
 

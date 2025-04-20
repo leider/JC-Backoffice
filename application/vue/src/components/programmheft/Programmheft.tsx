@@ -63,14 +63,17 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   const [triggerRender, setTriggerRender] = useState(true);
 
   const { lg } = useBreakpoint();
+
+  const plusOneDay = useCallback(() => moveEvents(1), [moveEvents]);
+  const minusOneDay = useCallback(() => moveEvents(-1), [moveEvents]);
+  const onResize = useCallback(() => {
+    setTriggerRender(!triggerRender);
+  }, [triggerRender]);
+  const newRowFactory = useCallback((vals: Event) => new Event(vals), []);
+
   return (
     <>
-      <Splitter
-        layout={lg ? "horizontal" : "vertical"}
-        onResize={() => {
-          setTriggerRender(!triggerRender);
-        }}
-      >
+      <Splitter layout={lg ? "horizontal" : "vertical"} onResize={onResize}>
         <Splitter.Panel collapsible defaultSize="40%" max="70%" min="20%" style={{ zIndex: 0 }}>
           <HeftCalendar events={events} initialDate={start.minus({ monate: 2 }).fuerCalendarWidget} triggerRender={triggerRender} />
         </Splitter.Panel>
@@ -79,15 +82,15 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
             columnDescriptions={columnDescriptions}
             fixedMinHeight={600}
             name="events"
-            newRowFactory={(vals) => new Event(vals)}
+            newRowFactory={newRowFactory}
             usersWithKann={usersAsOptions}
           />
           <Row>
             <Col span={12}>
-              <ButtonWithIcon block icon="DashCircleFill" onClick={() => moveEvents(-1)} text="Tag zurück" type="default" />
+              <ButtonWithIcon block icon="DashCircleFill" onClick={minusOneDay} text="Tag zurück" type="default" />
             </Col>
             <Col span={12}>
-              <ButtonWithIcon block icon="PlusCircleFill" onClick={() => moveEvents(1)} text="Tag vor" type="default" />
+              <ButtonWithIcon block icon="PlusCircleFill" onClick={plusOneDay} text="Tag vor" type="default" />
             </Col>
           </Row>
         </Splitter.Panel>
@@ -117,11 +120,14 @@ export default function Programmheft() {
     successMessage: "Das Programmheft wurde gespeichert",
   });
 
-  function saveForm(vals: Kalender) {
-    const kalenderNew = new Kalender(vals);
-    kalenderNew.migrated = true;
-    mutateContent.mutate(kalenderNew);
-  }
+  const saveForm = useCallback(
+    (vals: Kalender) => {
+      const kalenderNew = new Kalender(vals);
+      kalenderNew.migrated = true;
+      mutateContent.mutate(kalenderNew);
+    },
+    [mutateContent],
+  );
 
   const navigate = useNavigate();
   const nextOrPrevious = useCallback(
@@ -132,11 +138,14 @@ export default function Programmheft() {
     [navigate, start],
   );
 
+  const right = useCallback(() => nextOrPrevious(true), [nextOrPrevious]);
+  const left = useCallback(() => nextOrPrevious(false), [nextOrPrevious]);
+
   return (
     <JazzFormAndHeader
       additionalButtons={[
-        <ButtonWithIcon icon="ArrowBarLeft" key="prev" onClick={() => nextOrPrevious(false)} text="Voriges" type="default" />,
-        <ButtonWithIcon icon="ArrowBarRight" key="next" onClick={() => nextOrPrevious(true)} text="Nächstes" type="default" />,
+        <ButtonWithIcon icon="ArrowBarLeft" key="prev" onClick={left} text="Voriges" type="default" />,
+        <ButtonWithIcon icon="ArrowBarRight" key="next" onClick={right} text="Nächstes" type="default" />,
         <ProgrammheftKopierenButton key="copy" />,
       ]}
       data={kalender}

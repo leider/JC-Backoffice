@@ -83,9 +83,11 @@ function SelectRangeForExcelModal({
     setIsOpen(false);
   }, [bestaetigteFiltered, exportType, optionen, setIsOpen]);
 
+  const close = useCallback(() => setIsOpen(false), [setIsOpen]);
+
   return (
     <Form autoComplete="off" form={form} layout="vertical">
-      <JazzModal closable={false} maskClosable={false} onCancel={() => setIsOpen(false)} onOk={okClicked} open={isOpen}>
+      <JazzModal closable={false} maskClosable={false} onCancel={close} onOk={okClicked} open={isOpen}>
         <JazzPageHeader title="Excel Export" />
         <Row gutter={8}>
           <Col span={12}>
@@ -104,18 +106,11 @@ function SelectRangeForExcelModal({
 
 export default function ExcelMultiExportButton({ alle }: { readonly alle: Veranstaltung[] }) {
   const [isExcelExportOpen, setIsExcelExportOpen] = useState<boolean>(false);
-
+  const openExport = useCallback(() => setIsExcelExportOpen(true), []);
   return (
     <>
       <SelectRangeForExcelModal alle={alle} isOpen={isExcelExportOpen} setIsOpen={setIsExcelExportOpen} />
-      <ButtonWithIcon
-        color="#5900b9"
-        icon="FileEarmarkSpreadsheet"
-        onClick={() => {
-          setIsExcelExportOpen(true);
-        }}
-        text="Kalkulation (Excel)"
-      />
+      <ButtonWithIcon color="#5900b9" icon="FileEarmarkSpreadsheet" onClick={openExport} text="Kalkulation (Excel)" />
     </>
   );
 }

@@ -57,7 +57,6 @@ export default tseslint.config(
       "react/forbid-component-props": "off",
       "react/no-danger": "off",
       "no-sync": "off",
-      "react/jsx-no-bind": "off",
       "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
       "react/jsx-no-literals": "off",
       "react/require-default-props": "off",

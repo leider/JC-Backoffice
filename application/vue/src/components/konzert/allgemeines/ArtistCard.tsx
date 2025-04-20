@@ -8,11 +8,12 @@ import React from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { TimeField } from "@/widgets/TimeField.tsx";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import { useWatch } from "antd/es/form/Form";
 
 export default function ArtistCard() {
   const { optionen } = useJazzContext();
+  const startDate = useWatch("startDate", { preserve: true });
 
   return (
     <Collapsible label="Künstler" suffix="allgemeines">
@@ -40,13 +41,7 @@ export default function ArtistCard() {
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <DynamicItem
-            nameOfDepending="startDate"
-            renderWidget={(getFieldValue) => {
-              const startDate = getFieldValue("startDate");
-              return <TimeField baseValue={startDate} label="Band Get-In (informativ)" name={["artist", "getInForMasterDate"]} />;
-            }}
-          />
+          <TimeField baseValue={startDate} label="Band Get-In (informativ)" name={["artist", "getInForMasterDate"]} />;
         </Col>
         <Col span={12}>
           <SingleSelect

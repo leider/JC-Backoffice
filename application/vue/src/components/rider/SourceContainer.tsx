@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Collapse, List } from "antd";
 import { SourceElement } from "./SourceElement.tsx";
 import { Category, InventoryElement } from "jc-shared/rider/inventory.ts";
@@ -26,5 +26,7 @@ function SourceContainer({ cat, sourceBoxes }: { readonly cat: Category; readonl
     return filter(sourceBoxes, { category: cat });
   }, [sourceBoxes, cat]);
 
-  return <List bordered dataSource={boxes} renderItem={(each) => <SourceElement item={each} />} size="small" />;
+  const renderItem = useCallback((each: InventoryElement) => <SourceElement item={each} />, []);
+
+  return <List bordered dataSource={boxes} renderItem={renderItem} size="small" />;
 }

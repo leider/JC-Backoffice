@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import { Col, Collapse, Row, Typography } from "antd";
 import { formatToGermanNumberString } from "@/commons/utilityFunctions.ts";
 import isNil from "lodash/isNil";
@@ -25,7 +25,7 @@ export default function Collapsible({
 }) {
   const { brightText } = useJazzContext();
   const [expanded, setExpanded] = useState<string | undefined>(uncollapsed ? undefined : "content");
-
+  const onChange = useCallback((key: string[]) => setExpanded(Array.isArray(key) ? key[0] : key), []);
   const { color } = colorsAndIconsForSections;
 
   const farbe = color(suffix as ButtonType);
@@ -57,7 +57,7 @@ export default function Collapsible({
           children,
         },
       ]}
-      onChange={(key) => setExpanded(Array.isArray(key) ? key[0] : key)}
+      onChange={onChange}
       style={{
         marginTop: noTopBorder ? "" : "16px",
         backgroundColor: farbe,

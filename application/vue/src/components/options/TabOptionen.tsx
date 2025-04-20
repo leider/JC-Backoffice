@@ -1,5 +1,5 @@
 import * as React from "react";
-import OptionValues from "jc-shared/optionen/optionValues";
+import OptionValues, { Preisprofil, TypMitMehr } from "jc-shared/optionen/optionValues";
 import { Col } from "antd";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
@@ -9,7 +9,7 @@ import { Columns } from "@/widgets/EditableTable/types.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export default function TabOptionen() {
   const { lg } = useBreakpoint();
@@ -34,27 +34,17 @@ export default function TabOptionen() {
     { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
   ];
 
+  const typMitMehrFactory = useCallback((val: TypMitMehr) => Object.assign({}, val), []);
+  const preisProfilFactory = useCallback((val: Preisprofil) => {
+    return Object.assign({ regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 }, val);
+  }, []);
+
   return (
     <>
       <JazzRow>
         <Col lg={12} xs={24}>
           <Collapsible label="Typen" noTopBorder suffix="allgemeines">
-            <EditableTable<{
-              name: string;
-              mod: boolean;
-              kasseV: boolean;
-              kasse: boolean;
-              technikerV: boolean;
-              techniker: boolean;
-              merchandise: boolean;
-              color: string;
-            }>
-              columnDescriptions={columnsTypen}
-              name="typenPlus"
-              newRowFactory={(val) => {
-                return Object.assign({}, val);
-              }}
-            />
+            <EditableTable<TypMitMehr> columnDescriptions={columnsTypen} name="typenPlus" newRowFactory={typMitMehrFactory} />
           </Collapsible>
           <Collapsible label="Optionen" suffix="allgemeines">
             <MultiSelectWithTags label="Kooperationen" name="kooperationen" options={optionen.kooperationen} />
@@ -72,13 +62,7 @@ export default function TabOptionen() {
             <p>
               <b>Achtung! Änderungen hier wirken sich NICHT auf bereits angelegte Veranstaltungen aus!</b>
             </p>
-            <EditableTable<{ name: string; regulaer: number; rabattErmaessigt: number; rabattMitglied: number }>
-              columnDescriptions={columnsPreisprofile}
-              name="preisprofile"
-              newRowFactory={(val) => {
-                return Object.assign({ regulaer: 0, rabattErmaessigt: 0, rabattMitglied: 0 }, val);
-              }}
-            />
+            <EditableTable<Preisprofil> columnDescriptions={columnsPreisprofile} name="preisprofile" newRowFactory={preisProfilFactory} />
           </Collapsible>
         </Col>
       </JazzRow>

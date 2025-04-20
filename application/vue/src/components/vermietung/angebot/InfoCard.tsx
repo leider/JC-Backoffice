@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { App, Button, Col, ConfigProvider, Form, Radio, theme } from "antd";
 import "easymde/dist/easymde.min.css";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { AngebotStatus } from "jc-shared/vermietung/angebot.ts";
 import SingleSelect from "@/widgets/SingleSelect.tsx";
-import { DynamicItem } from "@/widgets/DynamicItem.tsx";
 import { openAngebotRechnung } from "@/rest/loader.ts";
 import { icons } from "@/widgets/buttonsAndIcons/Icons.tsx";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
@@ -39,36 +38,40 @@ export default function InfoCard() {
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 
   const { modal } = App.useApp();
-  function freigeben() {
-    modal.confirm({
-      type: "confirm",
-      title: "Rechnung freigeben",
-      content: (
-        <>
-          <p>
-            <IconForSmallBlock color="red" iconName="ExclamationCircleFill" /> Nach dem Freigeben ist keine Änderung mehr möglich!
-          </p>
-          <p>Du musst danach noch Speichern, dabei wird die Rechnung an die Buchhaltung gesendet.</p>
-        </>
-      ),
-      onOk: () => {
-        form.setFieldValue(["angebot", "freigabe"], currentUser.name);
-        form.setFieldValue(["angebot", "freigabeAm"], new Date());
-      },
-    });
-  }
+  const freigeben = useCallback(
+    () =>
+      modal.confirm({
+        type: "confirm",
+        title: "Rechnung freigeben",
+        content: (
+          <>
+            <p>
+              <IconForSmallBlock color="red" iconName="ExclamationCircleFill" /> Nach dem Freigeben ist keine Änderung mehr möglich!
+            </p>
+            <p>Du musst danach noch Speichern, dabei wird die Rechnung an die Buchhaltung gesendet.</p>
+          </>
+        ),
+        onOk: () => {
+          form.setFieldValue(["angebot", "freigabe"], currentUser.name);
+          form.setFieldValue(["angebot", "freigabeAm"], new Date());
+        },
+      }),
+    [modal, form, currentUser.name],
+  );
 
-  function freigabeAufheben() {
-    modal.confirm({
-      type: "confirm",
-      title: "Freigabe rückgängig",
-      content: "Bist Du sicher?",
-      onOk: () => {
-        form.setFieldValue(["angebot", "freigabe"], "");
-        form.setFieldValue(["angebot", "freigabeAm"], undefined);
-      },
-    });
-  }
+  const freigabeAufheben = useCallback(
+    () =>
+      modal.confirm({
+        type: "confirm",
+        title: "Freigabe rückgängig",
+        content: "Bist Du sicher?",
+        onOk: () => {
+          form.setFieldValue(["angebot", "freigabe"], "");
+          form.setFieldValue(["angebot", "freigabeAm"], undefined);
+        },
+      }),
+    [modal, form],
+  );
 
   const statusse = useMemo(() => {
     function radioOption(icon: keyof typeof icons, label: string, value: AngebotStatus) {
@@ -93,6 +96,10 @@ export default function InfoCard() {
   const printOptions = useMemo(() => {
     return status === "abgerechnet" ? ["Angebot", "Vertrag", "Rechnung"] : ["Angebot", "Vertrag"];
   }, [status]);
+
+  const id = useWatch("id", { preserve: true });
+
+  const createAngebotRechnung = useCallback(() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true))), [form]);
 
   const { useToken } = theme;
   const token = useToken().token;
@@ -120,23 +127,11 @@ export default function InfoCard() {
           <SingleSelect label="Art" name="art" options={printOptions} />
         </Col>
         <Col span={8}>
-          <DynamicItem
-            nameOfDepending="id"
-            renderWidget={(getFieldValue) => {
-              return (
-                <Form.Item label="&nbsp;">
-                  <Button
-                    block
-                    disabled={isDirty || !getFieldValue("id")}
-                    onClick={() => openAngebotRechnung(new Vermietung(form.getFieldsValue(true)))}
-                    type="primary"
-                  >
-                    Generieren
-                  </Button>
-                </Form.Item>
-              );
-            }}
-          />
+          <Form.Item label="&nbsp;">
+            <Button block disabled={isDirty || !id} onClick={createAngebotRechnung} type="primary">
+              Generieren
+            </Button>
+          </Form.Item>
         </Col>
         <Col span={10}>
           {vergangen ? (

@@ -1,22 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Flex, Typography } from "antd";
 import PreisprofilSelect from "@/widgets/PreisprofilSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
-import { DynamicItem } from "@/widgets/DynamicItem";
 import Eintrittspreise from "jc-shared/konzert/eintrittspreise";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzRow } from "@/widgets/JazzRow";
 import useEinnahmen from "@/components/konzert/kosten/useEinnahmen.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
+import { useWatch } from "antd/es/form/Form";
+import useFormInstance from "antd/es/form/hooks/useFormInstance";
 
 const preisprofilName = ["eintrittspreise", "preisprofil"];
 
 export default function EinnahmenCard() {
+  const form = useFormInstance();
   const { optionen } = useJazzContext();
   const summe = useEinnahmen();
   const { istFreigegeben } = useKassenSaldierer();
+
+  const preisprofil = useWatch(preisprofilName, { preserve: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const eintrittspreise = useMemo(() => new Eintrittspreise(form.getFieldValue("eintrittspreise")), [form, preisprofil]);
 
   return (
     <Collapsible
@@ -33,22 +39,10 @@ export default function EinnahmenCard() {
           <NumberInput decimals={2} disabled label="Reg" name={["eintrittspreise", "preisprofil", "regulaer"]} suffix="€" />
         </Col>
         <Col span={4}>
-          <DynamicItem
-            nameOfDepending={preisprofilName}
-            renderWidget={(getFieldValue) => {
-              const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue decimals={2} label="Erm" suffix="€" value={eintritt.ermaessigt} />;
-            }}
-          />
+          <NumberInputWithDirectValue decimals={2} label="Erm" suffix="€" value={eintrittspreise.ermaessigt} />
         </Col>
         <Col span={4}>
-          <DynamicItem
-            nameOfDepending={preisprofilName}
-            renderWidget={(getFieldValue) => {
-              const eintritt = new Eintrittspreise(getFieldValue("eintrittspreise"));
-              return <NumberInputWithDirectValue decimals={2} label="Mitgl" suffix="€" value={eintritt.mitglied} />;
-            }}
-          />
+          <NumberInputWithDirectValue decimals={2} label="Mitgl" suffix="€" value={eintrittspreise.mitglied} />
         </Col>
       </JazzRow>
       <JazzRow>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router";
 import { colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { Button, Col, Divider, Tabs, TabsProps, Typography } from "antd";
@@ -139,6 +139,7 @@ export default function Info() {
 
   const filterTags = TeamFilter();
 
+  const onChange = useCallback((newPage: string) => setSearch({ tab: newPage }), [setSearch]);
   return (
     <>
       <JazzPageHeader
@@ -150,14 +151,7 @@ export default function Info() {
         tags={filterTags}
         title={`Infos für ${veranstaltungen[0]?.startDatumUhrzeit.monatJahrKompakt}`}
       />
-      <Tabs
-        activeKey={activePage}
-        items={allTabs}
-        onChange={(newPage) => {
-          setSearch({ tab: newPage });
-        }}
-        type="card"
-      />
+      <Tabs activeKey={activePage} items={allTabs} onChange={onChange} type="card" />
     </>
   );
 }

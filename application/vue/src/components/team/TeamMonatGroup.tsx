@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -39,13 +39,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
 
   const byDay = useMemo(() => groupBy(veranstaltungen, "startDatumUhrzeit.tagMonatJahrKompakt"), [veranstaltungen]);
 
-  const initiallyExpanded = useMemo(() => {
-    const jetzt = new DatumUhrzeit();
-    const ersterDesMonats = DatumUhrzeit.forMonatLangJahrKompakt(monat);
-    return ersterDesMonats.istVor(jetzt.plus({ monate: 1 })) && ersterDesMonats.istNach(jetzt.minus({ monate: 1 }));
-  }, [monat]);
-
-  const [expanded, setExpanded] = useState<boolean>(initiallyExpanded);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const [yymm, setYymm] = useState<string>("");
   useEffect(() => {
@@ -55,6 +49,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
     setExpanded(minDatum.istVor(jetzt.plus({ monate: 1 })) && minDatum.istNach(jetzt.minus({ monate: 1 })));
   }, [veranstaltungen]);
 
+  const expandUnexpand = useCallback(() => setExpanded(!expanded), [expanded]);
   return (
     <>
       <Row gutter={0}>
@@ -98,7 +93,7 @@ export default function TeamMonatGroup({ monat, renderTeam = false }: MonatGroup
                 ),
               },
             ]}
-            onChange={() => setExpanded(!expanded)}
+            onChange={expandUnexpand}
             size="small"
           />
         </Col>
