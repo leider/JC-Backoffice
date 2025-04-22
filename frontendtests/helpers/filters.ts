@@ -13,7 +13,7 @@ export const setCheck = async (name, jaNein, expand = false) => {
 };
 
 export const setAndCheck = async (name, title, expand = false) => {
-  I.see("Neutral");
+  I.waitForText("Neutral");
   I.see(title);
 
   if (expand) {
