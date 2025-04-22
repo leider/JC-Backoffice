@@ -10,7 +10,7 @@ export const config: CodeceptJS.MainConfig = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: false,
+      show: true,
       keepCookies: true,
     },
     SqliteHelper: {
@@ -21,7 +21,7 @@ export const config: CodeceptJS.MainConfig = {
     },
   },
   plugins: {
-    autoLogin: {
+    auth: {
       enabled: true,
       saveToFile: true,
       inject: "login",

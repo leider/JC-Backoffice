@@ -4,7 +4,6 @@ import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
-import { useInView } from "react-intersection-observer";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 
 export default function TeamBlockCommons({
@@ -23,7 +22,18 @@ export default function TeamBlockCommons({
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
-  }, [highlight, initiallyOpen]);
+    if (highlight) {
+      setTimeout(() => {
+        const element = document.getElementById(memoizedId ?? "");
+        if (element) {
+          element?.scrollIntoView({
+            behavior: "auto",
+            block: "center",
+          });
+        }
+      }, 2000);
+    }
+  }, [highlight, initiallyOpen, memoizedId]);
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
@@ -36,12 +46,11 @@ export default function TeamBlockCommons({
     };
   }, [backgroundColor, expanded, textColor]);
 
-  const { inView, ref } = useInView({ triggerOnce: true });
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
 
   return (
     <ConfigProvider theme={theme}>
-      <Col id={veranstaltung.id} ref={ref} span={24} style={highlight ? { border: "solid 4px" } : undefined}>
+      <Col id={veranstaltung.id} span={24} style={highlight ? { border: "solid 4px" } : undefined}>
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={veranstaltung} />
@@ -56,7 +65,7 @@ export default function TeamBlockCommons({
                 className: "team-block",
                 label: <TeamBlockHeader veranstaltung={veranstaltung} />,
                 extra: expanded ? (extrasExpanded ?? extrasComponent) : extrasComponent,
-                children: inView ? contentComponent : null,
+                children: contentComponent,
               },
             ]}
             onChange={onChange}
