@@ -6,6 +6,10 @@ import { GlobalContext } from "../app/GlobalContext.ts";
 import { useLocation } from "react-router";
 import "./JazzPageHeader.css";
 
+function SubTitle({ isCopy, isNew }: { readonly isNew: boolean; readonly isCopy: boolean }) {
+  return <b style={{ fontSize: "var(--ant-font-size-xl)" }}>{`${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`}</b>;
+}
+
 export function JazzPageHeader({
   title,
   children,
@@ -35,11 +39,6 @@ export function JazzPageHeader({
     return pathname.includes("/new");
   }, [pathname]);
 
-  const subTitle = useMemo(
-    () => <b style={{ fontSize: "var(--ant-font-size-xl)" }}>{`${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`}</b>,
-    [isCopy, isNew],
-  );
-
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
       {hasErrors ? (
@@ -60,7 +59,7 @@ export function JazzPageHeader({
           tags,
         ]}
         style={{ ...style, paddingInline: 4 }}
-        subTitle={subTitle}
+        subTitle={<SubTitle isCopy={isCopy} isNew={isNew} />}
         title={<span style={style}>{title}</span>}
       >
         {children}

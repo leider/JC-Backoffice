@@ -13,4 +13,8 @@ window.addEventListener("unhandledrejection", (e: PromiseRejectionEvent) => {
   console.error(e);
 });
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<JazzRouter />);
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <JazzRouter />
+  </React.StrictMode>,
+);
