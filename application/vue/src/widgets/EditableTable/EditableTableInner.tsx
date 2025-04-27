@@ -1,4 +1,4 @@
-import { Form, Table, type TableProps, Typography } from "antd";
+import { Alert, ConfigProvider, Form, Table, type TableProps } from "antd";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
@@ -20,21 +20,22 @@ import { GlobalContext } from "@/app/GlobalContext.ts";
 
 export type WithKey<T> = T & { key: string };
 
+function DuplicatesDetails({ duplInfo }: { readonly duplInfo: DuplInfo }) {
+  return map(duplInfo, (info) => (
+    <li>
+      <b>{info.name}:</b> {info.vals.join(", ")}
+    </li>
+  ));
+}
+
 function DulicatesInfo({ duplInfo }: { readonly duplInfo: DuplInfo }) {
   if (keys(duplInfo).length === 0) {
     return undefined;
   }
   return (
-    <>
-      <Typography.Text type="danger">Du hast doppelte Einträge!</Typography.Text>
-      <ul>
-        {map(duplInfo, (info) => (
-          <li>
-            <b>{info.name}:</b> {info.vals}
-          </li>
-        ))}
-      </ul>
-    </>
+    <ConfigProvider theme={{ components: { Alert: { withDescriptionPadding: "10px" } } }}>
+      <Alert description={<DuplicatesDetails duplInfo={duplInfo} />} message="Du hast doppelte Einträge!" showIcon type="error" />
+    </ConfigProvider>
   );
 }
 

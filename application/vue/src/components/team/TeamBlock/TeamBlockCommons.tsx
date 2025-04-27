@@ -23,7 +23,18 @@ export default function TeamBlockCommons({
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
-  }, [highlight, initiallyOpen]);
+    if (highlight) {
+      setTimeout(() => {
+        const element = document.getElementById(memoizedId ?? "");
+        if (element) {
+          element?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 2000);
+    }
+  }, [highlight, initiallyOpen, memoizedId]);
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
