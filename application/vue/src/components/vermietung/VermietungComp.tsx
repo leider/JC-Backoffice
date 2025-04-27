@@ -13,7 +13,7 @@ import VermietungFormAndPageHeader from "@/components/vermietung/VermietungFormA
 export default function VermietungComp() {
   const { url } = useParams();
 
-  const { data, refetch } = useQuery({
+  const { data: vermietung, refetch } = useQuery({
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url ?? ""),
   });
@@ -25,12 +25,12 @@ export default function VermietungComp() {
     forwardForNew: true,
   });
 
-  const { currentUser, setMemoizedId } = useJazzContext();
+  const { currentUser, setMemoizedVeranstaltung } = useJazzContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setMemoizedId(data?.id);
-  }, [data?.id, setMemoizedId]);
+    setMemoizedVeranstaltung(vermietung);
+  }, [vermietung, setMemoizedVeranstaltung]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
@@ -51,7 +51,7 @@ export default function VermietungComp() {
   );
 
   return (
-    <VermietungFormAndPageHeader data={data} resetChanges={refetch} saveForm={saveForm}>
+    <VermietungFormAndPageHeader data={vermietung} resetChanges={refetch} saveForm={saveForm}>
       <ShowOnCopy title="Kopierte Vermietung" />
       <VermietungTabs />
     </VermietungFormAndPageHeader>

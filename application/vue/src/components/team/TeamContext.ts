@@ -7,4 +7,5 @@ export const TeamContext = createContext<{
     [index: string]: Veranstaltung[];
   };
   usersAsOptions: UserWithKann[];
-}>({ veranstaltungenNachMonat: {}, usersAsOptions: [] });
+  period: string;
+}>({ veranstaltungenNachMonat: {}, usersAsOptions: [], period: "zukuenftige" });

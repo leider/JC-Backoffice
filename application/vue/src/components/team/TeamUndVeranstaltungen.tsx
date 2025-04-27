@@ -21,7 +21,10 @@ export function TeamUndVeranstaltungen() {
   const { pathname } = useLocation();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered } = useTeamVeranstaltungenCommons();
-  const subState = useMemo(() => ({ veranstaltungenNachMonat, usersAsOptions }), [usersAsOptions, veranstaltungenNachMonat]);
+  const subState = useMemo(
+    () => ({ veranstaltungenNachMonat, usersAsOptions, period }),
+    [usersAsOptions, veranstaltungenNachMonat, period],
+  );
 
   return (
     <Row gutter={8}>

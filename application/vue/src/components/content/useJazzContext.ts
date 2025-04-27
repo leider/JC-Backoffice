@@ -11,6 +11,7 @@ import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.t
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { GlobalContext } from "@/app/GlobalContext.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -25,7 +26,7 @@ const emptyContext: SharedGlobals = {
   setTeamFilter: noop,
   isDirty: false,
   setIsDirty: noop,
-  setMemoizedId: noop,
+  setMemoizedVeranstaltung: noop,
   isDarkMode: false,
   isCompactMode: false,
 };
@@ -43,8 +44,8 @@ type SharedGlobals = {
   setTeamFilter: (filter: TeamFilterObject) => void;
   isDirty: boolean;
   setIsDirty: (a: boolean) => void;
-  memoizedId?: string;
-  setMemoizedId: (id?: string) => void;
+  memoizedVeranstaltung?: Veranstaltung;
+  setMemoizedVeranstaltung: (veranst?: Veranstaltung) => void;
   isDarkMode: boolean;
   isCompactMode: boolean;
 };
@@ -69,7 +70,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   }, []);
 
   const [isDirty, setIsDirty] = useState(false);
-  const [memoizedId, setMemoizedId] = useState<string | undefined>();
+  const [memoizedVeranstaltung, setMemoizedVeranstaltung] = useState<Veranstaltung | undefined>();
 
   const context: Omit<
     SharedGlobals,
@@ -79,8 +80,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     | "setTeamFilter"
     | "isDirty"
     | "setIsDirty"
-    | "memoizedId"
-    | "setMemoizedId"
+    | "memoizedVeranstaltung"
+    | "setMemoizedVeranstaltung"
     | "isDarkMode"
     | "isCompactMode"
   > = useQueries({
@@ -156,8 +157,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setTeamFilter,
     isDirty,
     setIsDirty,
-    memoizedId,
-    setMemoizedId,
+    memoizedVeranstaltung: memoizedVeranstaltung,
+    setMemoizedVeranstaltung: setMemoizedVeranstaltung,
     isDarkMode,
     isCompactMode,
   };

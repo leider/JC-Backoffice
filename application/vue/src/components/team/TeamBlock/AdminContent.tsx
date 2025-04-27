@@ -56,7 +56,8 @@ function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermi
 
 export default function AdminContent({ veranstaltung: veranVermiet }: { readonly veranstaltung: Veranstaltung }) {
   const [form] = Form.useForm();
-  const { isCompactMode, isDarkMode } = useJazzContext();
+  const { isCompactMode, isDarkMode, memoizedVeranstaltung } = useJazzContext();
+  const { period } = useContext(TeamContext);
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
@@ -139,6 +140,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
   }, [showMitarbeiter]);
 
   const { inView, ref } = useInView({ triggerOnce: true });
+  const renderWhenInView = useMemo(() => {
+    return (
+      inView ||
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.id
+    );
+  }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 
   return (
     <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
@@ -154,7 +162,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
               </Typography.Title>
             </Col>
             <Col span={18}>
-              {inView ? (
+              {renderWhenInView ? (
                 <Buttons
                   dirty={dirty}
                   forVermietung={forVermietung}
@@ -165,7 +173,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
               ) : null}
             </Col>
           </Row>
-          {inView ? (
+          {renderWhenInView ? (
             <ConfigProvider theme={staffRowsTheme}>
               <Collapse
                 activeKey={showMitarbeiter ? "mitarbeiter" : ""}

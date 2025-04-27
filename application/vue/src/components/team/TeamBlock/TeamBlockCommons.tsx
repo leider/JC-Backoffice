@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Col, Collapse, ConfigProvider } from "antd";
 import TeamBlockHeader from "@/components/team/TeamBlock/TeamBlockHeader.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -6,6 +6,7 @@ import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 import { useInView } from "react-intersection-observer";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
+import { TeamContext } from "@/components/team/TeamContext.ts";
 
 export default function TeamBlockCommons({
   veranstaltung,
@@ -18,23 +19,24 @@ export default function TeamBlockCommons({
   readonly contentComponent: ReactNode;
   readonly extrasExpanded?: ReactNode;
 }) {
-  const { memoizedId, isDarkMode } = useJazzContext();
-  const highlight = useMemo(() => veranstaltung.id === memoizedId, [memoizedId, veranstaltung.id]);
+  const { memoizedVeranstaltung, isDarkMode } = useJazzContext();
+  const { period } = useContext(TeamContext);
+  const highlight = useMemo(() => veranstaltung.id === memoizedVeranstaltung?.id, [memoizedVeranstaltung, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
     if (highlight) {
       setTimeout(() => {
-        const element = document.getElementById(memoizedId ?? "");
+        const element = document.getElementById(memoizedVeranstaltung?.id ?? "");
         if (element) {
           element?.scrollIntoView({
             behavior: "smooth",
             block: "center",
           });
         }
-      }, 2000);
+      }, 1000);
     }
-  }, [highlight, initiallyOpen, memoizedId]);
+  }, [highlight, initiallyOpen, memoizedVeranstaltung]);
 
   const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
@@ -47,8 +49,16 @@ export default function TeamBlockCommons({
     };
   }, [backgroundColor, expanded, textColor]);
 
-  const { inView, ref } = useInView({ triggerOnce: true });
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
+
+  const { inView, ref } = useInView({ triggerOnce: true });
+  const renderWhenInView = useMemo(() => {
+    return (
+      inView ||
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.id
+    );
+  }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 
   return (
     <ConfigProvider theme={theme}>
@@ -67,7 +77,7 @@ export default function TeamBlockCommons({
                 className: "team-block",
                 label: <TeamBlockHeader veranstaltung={veranstaltung} />,
                 extra: expanded ? (extrasExpanded ?? extrasComponent) : extrasComponent,
-                children: inView ? contentComponent : null,
+                children: renderWhenInView ? contentComponent : null,
               },
             ]}
             onChange={onChange}

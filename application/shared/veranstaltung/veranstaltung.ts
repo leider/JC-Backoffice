@@ -135,6 +135,14 @@ export default abstract class Veranstaltung {
     return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
   }
 
+  isDisplayedAbove(other?: Veranstaltung, reverse = false): boolean {
+    if (!other) {
+      return false;
+    }
+    const result = this.startDatumUhrzeit.istVor(other?.startDatumUhrzeit);
+    return reverse ? !result : result;
+  }
+
   // eslint-disable-next-line lodash/prefer-constant
   get tooltipInfos(): string {
     return "";
