@@ -40,13 +40,13 @@ export default function Preview() {
     queryKey: ["konzert", url],
     queryFn: () => konzertWithRiderForUrl(url || ""),
   });
-  const { currentUser, optionen, setMemoizedId } = useJazzContext();
+  const { currentUser, optionen, setMemoizedVeranstaltung } = useJazzContext();
 
   const konzert = useMemo(() => (data ? data : new KonzertWithRiderBoxes()), [data]);
 
   useEffect(() => {
-    setMemoizedId(konzert.id);
-  }, [konzert.id, setMemoizedId]);
+    setMemoizedVeranstaltung(konzert);
+  }, [konzert, setMemoizedVeranstaltung]);
 
   const [typeColor, setTypeColor] = useState<string | undefined>("");
 

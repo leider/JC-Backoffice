@@ -338,18 +338,8 @@ export async function deleteWikiPage(subdir: string, page: string) {
 }
 
 // Calendar
-export async function calendarEventSources({
-  start,
-  end,
-  options,
-  isDarkMode,
-}: {
-  start: Date;
-  end: Date;
-  options?: TerminFilterOptions;
-  isDarkMode: boolean;
-}) {
-  const segments = [`/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}&darkMode=${isDarkMode}`];
+export async function calendarEventSources({ start, end, options }: { start: Date; end: Date; options?: TerminFilterOptions }) {
+  const segments = [`/fullcalendarevents.json?start=${start.toISOString()}&end=${end.toISOString()}`];
   if (options) {
     segments.push(`&options=${JSON.stringify(options)}`);
   }

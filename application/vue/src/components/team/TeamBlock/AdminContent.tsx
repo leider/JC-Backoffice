@@ -56,7 +56,8 @@ function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermi
 
 export default function AdminContent({ veranstaltung: veranVermiet }: { readonly veranstaltung: Veranstaltung }) {
   const [form] = Form.useForm();
-  const { isCompactMode, isDarkMode } = useJazzContext();
+  const { isCompactMode, memoizedVeranstaltung } = useJazzContext();
+  const { period } = useContext(TeamContext);
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
@@ -82,13 +83,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   const mutateVeranstaltung = useJazzMutation({
     saveFunction: saveKonzert,
-    queryKey: "konzert",
+    queryKey: `konzert${veranstaltung.id}`,
     successMessage: "Das Konzert wurde gespeichert",
   });
 
   const mutateVermietung = useJazzMutation({
     saveFunction: saveVermietung,
-    queryKey: "vermietung",
+    queryKey: `vermietung${veranstaltung.id}`,
     successMessage: "Die Vermietung wurde gespeichert",
   });
 
@@ -107,12 +108,15 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     });
   }, [form, forVermietung, mutateVermietung, mutateVeranstaltung]);
 
-  const labelColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const labelColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const staffRowsTheme = useMemo(
     () => ({
       token: { colorBgBase: backgroundColor },
       components: {
+        Checkbox: {
+          colorBgContainer: backgroundColor,
+        },
         Collapse: {
           contentBg: backgroundColor,
           headerBg: backgroundColor,
@@ -124,7 +128,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
           colorTextPlaceholder: labelColor,
           selectorBg: backgroundColor,
         },
-        Tag: { defaultColor: labelColor },
+        Tag: { defaultColor: labelColor, defaultBg: backgroundColor },
       },
     }),
     [backgroundColor, labelColor],
@@ -139,6 +143,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
   }, [showMitarbeiter]);
 
   const { inView, ref } = useInView({ triggerOnce: true });
+  const renderWhenInView = useMemo(() => {
+    return (
+      inView ||
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.id
+    );
+  }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 
   return (
     <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
@@ -154,7 +165,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
               </Typography.Title>
             </Col>
             <Col span={18}>
-              {inView ? (
+              {renderWhenInView ? (
                 <Buttons
                   dirty={dirty}
                   forVermietung={forVermietung}
@@ -165,7 +176,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
               ) : null}
             </Col>
           </Row>
-          {inView ? (
+          {renderWhenInView ? (
             <ConfigProvider theme={staffRowsTheme}>
               <Collapse
                 activeKey={showMitarbeiter ? "mitarbeiter" : ""}

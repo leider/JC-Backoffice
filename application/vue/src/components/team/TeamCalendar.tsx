@@ -17,7 +17,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 export default function TeamCalendar() {
-  const { currentUser, isDarkMode } = useJazzContext();
+  const { currentUser } = useJazzContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const token = theme.useToken().token;
 
@@ -35,7 +35,7 @@ export default function TeamCalendar() {
     ) => {
       async function doit() {
         try {
-          const res = await calendarEventSources({ start: info.start, end: info.end, isDarkMode });
+          const res = await calendarEventSources({ start: info.start, end: info.end });
           successCallback(res as EventInput[]);
         } catch (e) {
           return failureCallback(e as Error);
@@ -43,7 +43,7 @@ export default function TeamCalendar() {
       }
       doit();
     },
-    [isDarkMode],
+    [],
   );
 
   const { lg } = useBreakpoint();

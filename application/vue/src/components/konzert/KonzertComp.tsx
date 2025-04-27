@@ -32,7 +32,7 @@ export default function KonzertComp() {
   const mutateOptionen = useJazzMutation<OptionValues>({ saveFunction: saveOptionen, queryKey: "optionen" });
   const mutateRider = useJazzMutation<Rider>({ saveFunction: saveRider, queryKey: "rider" });
 
-  const { currentUser, optionen, setMemoizedId } = useJazzContext();
+  const { currentUser, optionen, setMemoizedVeranstaltung } = useJazzContext();
   const navigate = useNavigate();
 
   const reloadAndResetAuswahlen = useCallback(() => {
@@ -43,8 +43,8 @@ export default function KonzertComp() {
   }, [refetch]);
 
   useEffect(() => {
-    setMemoizedId(konzert?.id);
-  }, [konzert?.id, setMemoizedId]);
+    setMemoizedVeranstaltung(konzert);
+  }, [konzert, setMemoizedVeranstaltung]);
 
   useEffect(() => {
     const accessrights = currentUser.accessrights;
