@@ -21,7 +21,7 @@ export const config: CodeceptJS.MainConfig = {
     },
   },
   plugins: {
-    autoLogin: {
+    auth: {
       enabled: true,
       saveToFile: true,
       inject: "login",
