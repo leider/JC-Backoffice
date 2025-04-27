@@ -56,7 +56,7 @@ function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermi
 
 export default function AdminContent({ veranstaltung: veranVermiet }: { readonly veranstaltung: Veranstaltung }) {
   const [form] = Form.useForm();
-  const { isCompactMode, isDarkMode, memoizedVeranstaltung } = useJazzContext();
+  const { isCompactMode, memoizedVeranstaltung } = useJazzContext();
   const { period } = useContext(TeamContext);
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
@@ -83,13 +83,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   const mutateVeranstaltung = useJazzMutation({
     saveFunction: saveKonzert,
-    queryKey: "konzert",
+    queryKey: `konzert${veranstaltung.id}`,
     successMessage: "Das Konzert wurde gespeichert",
   });
 
   const mutateVermietung = useJazzMutation({
     saveFunction: saveVermietung,
-    queryKey: "vermietung",
+    queryKey: `vermietung${veranstaltung.id}`,
     successMessage: "Die Vermietung wurde gespeichert",
   });
 
@@ -108,12 +108,15 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     });
   }, [form, forVermietung, mutateVermietung, mutateVeranstaltung]);
 
-  const labelColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const labelColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const staffRowsTheme = useMemo(
     () => ({
       token: { colorBgBase: backgroundColor },
       components: {
+        Checkbox: {
+          colorBgContainer: backgroundColor,
+        },
         Collapse: {
           contentBg: backgroundColor,
           headerBg: backgroundColor,
@@ -125,7 +128,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
           colorTextPlaceholder: labelColor,
           selectorBg: backgroundColor,
         },
-        Tag: { defaultColor: labelColor },
+        Tag: { defaultColor: labelColor, defaultBg: backgroundColor },
       },
     }),
     [backgroundColor, labelColor],

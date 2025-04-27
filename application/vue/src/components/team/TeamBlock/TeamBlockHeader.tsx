@@ -1,7 +1,6 @@
 import { ConfigProvider, Typography } from "antd";
 import React, { useMemo } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 const { Title } = Typography;
 interface HeaderProps {
@@ -21,9 +20,7 @@ function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }
 }
 
 export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
-  const { isDarkMode } = useJazzContext();
-
-  const color = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const color = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
 
   const titleStyle = useMemo(
     () => ({ margin: 0, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" }),

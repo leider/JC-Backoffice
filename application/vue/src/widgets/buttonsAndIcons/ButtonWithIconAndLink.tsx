@@ -44,6 +44,7 @@ export default function ButtonWithIconAndLink({
             ghost={ghost}
             icon={icon ? <IconForSmallBlock iconName={icon} size={smallIcon ? 12 : 14} /> : null}
             size={text && !smallIcon ? undefined : "small"}
+            style={ghost ? { color, borderColor: color } : undefined}
             title={text}
             type={type || "primary"}
           >

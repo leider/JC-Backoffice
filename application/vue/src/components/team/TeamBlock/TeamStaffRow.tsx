@@ -21,9 +21,9 @@ interface TeamStaffRowProps {
 
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { usersAsOptions } = useContext(TeamContext);
-  const { isDarkMode } = useJazzContext();
   const { token } = theme.useToken();
-  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const textColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const color = useMemo(() => veranstaltung.color, [veranstaltung]);
 
   const staffCollection = useMemo(() => veranstaltung.staff.getStaffCollection(sectionName), [sectionName, veranstaltung.staff]);
 
@@ -38,7 +38,10 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
     return userWithKann.kann.includes("Ersthelfer");
   }
 
-  const textColorTheme = useMemo(() => ({ components: { Tag: { colorText: textColor } } }), [textColor]);
+  const textColorTheme = useMemo(
+    () => ({ components: { Tag: { defaultColor: textColor, defaultBg: color, colorBorder: textColor } } }),
+    [color, textColor],
+  );
   const textColorStyle = useMemo(() => ({ color: textColor }), [textColor]);
 
   return usersWithKann.length ? (
@@ -79,10 +82,10 @@ export function AddRemoveStaffButton({
     mutationFn: async (add: boolean) => addOrRemoveUserToSection(veranstaltung, sectionName, add),
     onSuccess: (data) => {
       if (veranstaltung.isVermietung) {
-        queryClient.invalidateQueries({ queryKey: ["vermietung"] });
+        queryClient.invalidateQueries({ queryKey: [`vermietung${veranstaltung.id}`] });
         staffUpdated(new Vermietung(data));
       } else {
-        queryClient.invalidateQueries({ queryKey: ["konzert"] });
+        queryClient.invalidateQueries({ queryKey: [`konzert${veranstaltung.id}`] });
         staffUpdated(new Konzert(data));
       }
     },

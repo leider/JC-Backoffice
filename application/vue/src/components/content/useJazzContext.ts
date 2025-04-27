@@ -12,6 +12,7 @@ import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { GlobalContext } from "@/app/GlobalContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import useCreateCssVars from "@/components/colored/useCreateCssVars.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -164,8 +165,10 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   };
 }
 
+const brightText = "var(--jazz-global-bright-text)";
+
 export function useJazzContext(): SharedGlobals & { brightText: string } {
   const context = useContext(JazzContext);
-  const brightText = useMemo(() => (context.isDarkMode ? "#dcdcdc" : "#fff"), [context.isDarkMode]);
+  useCreateCssVars(context);
   return { ...context, brightText };
 }

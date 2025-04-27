@@ -19,7 +19,7 @@ export default function TeamBlockCommons({
   readonly contentComponent: ReactNode;
   readonly extrasExpanded?: ReactNode;
 }) {
-  const { memoizedVeranstaltung, isDarkMode } = useJazzContext();
+  const { memoizedVeranstaltung } = useJazzContext();
   const { period } = useContext(TeamContext);
   const highlight = useMemo(() => veranstaltung.id === memoizedVeranstaltung?.id, [memoizedVeranstaltung, veranstaltung.id]);
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
@@ -38,7 +38,7 @@ export default function TeamBlockCommons({
     }
   }, [highlight, initiallyOpen, memoizedVeranstaltung]);
 
-  const textColor = useMemo(() => veranstaltung.colorText(isDarkMode), [isDarkMode, veranstaltung]);
+  const textColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
 
