@@ -62,7 +62,12 @@ export default function TeamBlockCommons({
 
   return (
     <ConfigProvider theme={theme}>
-      <Col id={veranstaltung.id} ref={ref} span={24} style={highlight ? { border: "solid 4px" } : undefined}>
+      <Col
+        id={veranstaltung.id}
+        ref={ref}
+        span={24}
+        style={highlight ? { border: `solid 4px ${textColor}`, boxShadow: "0 0 40px var(--ant-color-text-secondary)" } : undefined}
+      >
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor, padding: "2px 16px" }}>
             <TeamBlockHeader veranstaltung={veranstaltung} />
