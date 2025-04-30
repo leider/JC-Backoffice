@@ -6,12 +6,12 @@ import { EventInput } from "@fullcalendar/core";
 import { calendarEventSources } from "@/rest/loader.ts";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import { TerminFilterOptions } from "jc-shared/optionen/termin.ts";
-import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import useRenderEventContent from "@/components/team/useRenderEventContent.tsx";
 
 function IcalCheck() {
   return (
@@ -32,6 +32,7 @@ function TerminCheck() {
 export default function BigKalender() {
   document.title = "Übersichtskalender";
   const [form] = Form.useForm<TerminFilterOptions>();
+  const renderEventContent = useRenderEventContent();
 
   const getEvents = useCallback(
     (
