@@ -1,8 +1,8 @@
 import * as React from "react";
-import { PropsWithChildren, ReactNode, useContext, useMemo } from "react";
+import { PropsWithChildren, ReactNode, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
 import { Alert, Breadcrumb, type BreadcrumbProps, ConfigProvider, theme } from "antd";
-import { GlobalContext } from "../app/GlobalContext.ts";
+import { useGlobalContext } from "../app/GlobalContext.ts";
 import { useLocation } from "react-router";
 import "./JazzPageHeader.css";
 
@@ -30,7 +30,7 @@ export function JazzPageHeader({
   readonly hasErrors?: boolean;
   readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
-  const { isDarkMode } = useContext(GlobalContext);
+  const { isDarkMode } = useGlobalContext();
   const { pathname } = useLocation();
   const isCopy = useMemo(() => {
     return pathname.includes("/copy-of-");

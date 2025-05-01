@@ -1,11 +1,11 @@
 import { Tooltip } from "antd";
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router";
 import { EventContentArg } from "@fullcalendar/core";
-import { GlobalContext } from "@/app/GlobalContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 
 export default function useRenderEventContent() {
-  const { isTouch } = useContext(GlobalContext);
+  const { isTouch } = useGlobalContext();
 
   return useCallback(
     (eventInfo: EventContentArg) => {
