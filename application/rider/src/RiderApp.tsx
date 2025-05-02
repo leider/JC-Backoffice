@@ -4,7 +4,7 @@ import { App, ConfigProvider, theme } from "antd";
 import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
 import { useState } from "react";
-import { DefaultGlobalContext, GlobalContext } from "@/app/GlobalContext.ts";
+import { DefaultGlobalContext, GlobalContext } from "jc-vue/src/app/GlobalContext";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 

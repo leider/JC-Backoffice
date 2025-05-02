@@ -10,7 +10,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { GlobalContext } from "@/app/GlobalContext.ts";
 import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
-import useIsTouchScreen from "@/commons/useIsTouchScreen.ts";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -24,7 +23,6 @@ const queryClient = new QueryClient({
 
 function JazzclubApp() {
   useUpdateApp();
-  const isTouch = useIsTouchScreen();
   const { getPreferences } = useJazzPrefs();
   const [preferences, setPreferences] = useState<JazzPrefs>(getPreferences());
   const { xl } = useBreakpoint();
@@ -97,10 +95,7 @@ function JazzclubApp() {
   const colorBgBase = useMemo(() => (darkMode ? "#101010" : "#fafafa"), [darkMode]);
   const colorTextDisabled = useMemo(() => (darkMode ? "rgb(255,255,255,0.65)" : "rgb(0,0,0,0.65)"), [darkMode]);
 
-  const initialContext = useMemo(
-    () => ({ isDarkMode: darkMode, isCompactMode: compactMode, viewport, isTouch }),
-    [compactMode, darkMode, viewport, isTouch],
-  );
+  const initialContext = useMemo(() => ({ isDarkMode: darkMode, isCompactMode: compactMode, viewport }), [compactMode, darkMode, viewport]);
 
   return (
     <QueryClientProvider client={queryClient}>
