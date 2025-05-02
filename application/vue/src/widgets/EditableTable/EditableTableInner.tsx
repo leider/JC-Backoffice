@@ -1,5 +1,5 @@
 import { Alert, ConfigProvider, Form, Table, type TableProps } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
@@ -16,7 +16,7 @@ import map from "lodash/map";
 import reject from "lodash/reject";
 import flatMap from "lodash/flatMap";
 import keys from "lodash/keys";
-import { useGlobalContext } from "@/app/GlobalContext.ts";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 export type WithKey<T> = T & { key: string };
 
@@ -91,7 +91,7 @@ export default function EditableTableInner<T>({
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
   const [rows, setRows] = useState<TWithKey[]>([]);
   const tableContext = useCreateTableContext();
-  const { viewport } = useGlobalContext();
+  const { viewport } = useContext(GlobalContext);
 
   useEffect(() => {
     const withKey: TWithKey[] = map(value, (row, index) => {

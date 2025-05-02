@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, ConfigProvider, Tooltip } from "antd";
 import { Link, To } from "react-router";
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { BaseButtonProps } from "antd/es/button/button";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useGlobalContext } from "@/app/GlobalContext.ts";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 export default function ButtonWithIconAndLink({
   to,
@@ -32,7 +32,7 @@ export default function ButtonWithIconAndLink({
   readonly smallIcon?: boolean;
   readonly alwaysText?: boolean;
 }) {
-  const { isTouch } = useGlobalContext();
+  const { isTouch } = useContext(GlobalContext);
   const { sm } = useBreakpoint();
   const { brightText } = useJazzContext();
 

@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RiderContent from "@/RiderContent.tsx";
 import { App, ConfigProvider, theme } from "antd";
-import "jc-vue/src/app/JC-styles.css";
+import "../../vue/src/app/JC-styles.css";
 import locale_de from "antd/locale/de_DE";
-import { DefaultGlobalContext, GlobalContext } from "jc-vue/src/app/GlobalContext.ts";
+import { DefaultGlobalContext, GlobalContext } from "@/app/GlobalContext.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {

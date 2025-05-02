@@ -61,7 +61,6 @@ export function ResetButton({ disabled, size, resetChanges }: ButtonProps & { re
       icon="ArrowCounterclockwise"
       onClick={resetChanges}
       size={size}
-      style={{ backgroundColor: token.colorBgBase }}
       text="Reset"
       type="default"
     />

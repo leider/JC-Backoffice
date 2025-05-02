@@ -1,12 +1,12 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
-import React, { CSSProperties, forwardRef } from "react";
+import React, { CSSProperties, forwardRef, useContext } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
 import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
-import { useGlobalContext } from "../../app/GlobalContext.ts";
+import { GlobalContext } from "@/app/GlobalContext.ts";
 
 type ButtonWithIconProps = {
   readonly icon?: IconProps["iconName"];
@@ -29,7 +29,7 @@ const ButtonWithIcon = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonW
   { icon, onClick, text, type, disabled, tooltipTitle, tooltipPlacement, color, size, block, loading, style, testid, alwaysText = false },
   ref?: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
 ) {
-  const { isTouch } = useGlobalContext();
+  const { isTouch } = useContext(GlobalContext);
   const token = theme.useToken().token;
 
   const { sm } = useBreakpoint();
