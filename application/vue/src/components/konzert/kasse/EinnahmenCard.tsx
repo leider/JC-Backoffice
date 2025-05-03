@@ -13,10 +13,12 @@ import { useWatch } from "antd/es/form/Form";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 import { JazzRowWithRef } from "@/widgets/JazzRowWithRef.tsx";
+import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
 export default function EinnahmenCard() {
   const form = useFormInstance<KonzertWithRiderBoxes>();
   const { refEinnahmen } = useContext(KassenContext);
+  const { checkDirty } = useContext(JazzFormContext);
   const { color } = colorsAndIconsForSections;
   const freigabe = useWatch(["kasse", "kassenfreigabe"], { form, preserve: true });
 
@@ -33,7 +35,8 @@ export default function EinnahmenCard() {
       kasse.ausgabeBankEUR;
 
     form.setFieldValue(["kasse", "einnahmeTicketsEUR"], tickets);
-  }, [form]);
+    checkDirty();
+  }, [checkDirty, form]);
 
   return (
     <Collapsible amount={einnahmeTotalEUR} label="Einnahmen Abendkasse" noTopBorder suffix="kasse">
