@@ -10,7 +10,7 @@ import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { GlobalContext } from "@/app/GlobalContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import useCreateCssVars from "@/components/colored/useCreateCssVars.ts";
 
@@ -54,7 +54,7 @@ export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
-  const { isDarkMode, isCompactMode } = useContext(GlobalContext);
+  const { isDarkMode, isCompactMode } = useGlobalContext();
 
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 

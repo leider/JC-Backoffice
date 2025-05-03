@@ -1,12 +1,12 @@
-import React, { MouseEvent, useCallback, useContext, useMemo } from "react";
+import React, { MouseEvent, useCallback, useMemo } from "react";
 import { theme, Tooltip } from "antd";
 import { IconForSmallBlock, IconProps } from "@/widgets/buttonsAndIcons/Icon.tsx";
-import { GlobalContext } from "@/app/GlobalContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 
 export function ButtonInUsers({ type, callback }: { readonly type: "edit" | "changepass" | "delete"; readonly callback: () => void }) {
   const { useToken } = theme;
   const token = useToken().token;
-  const { isTouch } = useContext(GlobalContext);
+  const { isTouch } = useGlobalContext();
 
   const colors = useMemo(
     () => ({ edit: token.colorText, changepass: token.colorSuccess, delete: token.colorError }),
