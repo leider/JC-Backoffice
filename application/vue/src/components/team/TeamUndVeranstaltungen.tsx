@@ -12,6 +12,7 @@ import map from "lodash/map";
 import { useLocation } from "react-router";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import Lazy from "@/components/team/Lazy.tsx";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -19,6 +20,7 @@ function Monate({ monate }: { monate: string[] }) {
 
 export function TeamUndVeranstaltungen() {
   const { pathname } = useLocation();
+  const { isTouch } = useGlobalContext();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered } = useTeamVeranstaltungenCommons();
   const subState = useMemo(
@@ -52,10 +54,10 @@ export function TeamUndVeranstaltungen() {
           title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
         <TeamContext.Provider value={subState}>
-          {filtered.length > 20 ? (
-            <Lazy component={<Monate monate={monate} />} loadingComponent={<Spin fullscreen size="large" spinning tip="Mooooment..." />} />
-          ) : (
+          {filtered.length <= 20 || isTouch ? (
             <Monate monate={monate} />
+          ) : (
+            <Lazy component={<Monate monate={monate} />} loadingComponent={<Spin fullscreen size="large" spinning tip="Mooooment..." />} />
           )}
         </TeamContext.Provider>
       </Col>
