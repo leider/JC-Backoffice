@@ -5,6 +5,7 @@ import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { BaseButtonProps } from "antd/es/button/button";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 
 export default function ButtonWithIconAndLink({
   to,
@@ -31,12 +32,13 @@ export default function ButtonWithIconAndLink({
   readonly smallIcon?: boolean;
   readonly alwaysText?: boolean;
 }) {
+  const { isTouch } = useGlobalContext();
   const { sm } = useBreakpoint();
   const { brightText } = useJazzContext();
 
   return (
     <ConfigProvider theme={{ token: { colorPrimary: color } }}>
-      <Tooltip color={color === brightText ? "#333" : color} title={tooltipTitle}>
+      <Tooltip color={color === brightText ? "#333" : color} title={isTouch ? null : tooltipTitle}>
         <Link to={to}>
           <Button
             block={block}
@@ -44,6 +46,7 @@ export default function ButtonWithIconAndLink({
             ghost={ghost}
             icon={icon ? <IconForSmallBlock iconName={icon} size={smallIcon ? 12 : 14} /> : null}
             size={text && !smallIcon ? undefined : "small"}
+            style={ghost ? { color, borderColor: color } : undefined}
             title={text}
             type={type || "primary"}
           >

@@ -77,6 +77,7 @@ menuToClick.add(["Team"]);
 
 Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   I.click(current.menu);
+  I.wait(1);
   filters.setAndCheck("Ist bestätigt", "Bestätigt", true);
   filters.setAndCheck("Ist abgesagt", "Cancelled");
   filters.setAndCheck("Presse OK", "PresseOK");
@@ -87,6 +88,7 @@ Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   filters.setAndCheck("Fotograf einladen", "FotografEinladen");
   filters.setAndCheck("Technik ist geklärt", "TechnikChecked");
   filters.setAndCheck("Flügel stimmen", "Fluegel");
+
   I.see("Neutral");
   I.see("HotelBestatigt");
   I.see("HotelNichtBestatigt");
@@ -100,5 +102,6 @@ Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   I.see("HotelNichtBestatigt");
   I.dontSee("HotelBestaetigt");
   I.dontSee("Neutral");
+
   I.click(locate("button").withText("Zurücksetzen").inside(".ant-space-item"));
 });

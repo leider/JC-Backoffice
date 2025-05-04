@@ -3,25 +3,22 @@
   "version": "1.0.0",
   "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
-    "better-sqlite3": "11.8.1",
+    "better-sqlite3": "11.9.1",
     "codeceptjs": "3.7.3",
     "codeceptjs-chai": "2.3.5",
     "cross-env": "7.0.3",
-    "eslint": "9.23.0",
-    "eslint-config-prettier": "10.1.1",
+    "eslint": "9.25.1",
+    "eslint-config-prettier": "10.1.2",
     "eslint-plugin-codeceptjs": "1.3.0",
     "eslint-plugin-lodash": "8.0.0",
-    "eslint-plugin-prettier": "5.2.5",
+    "eslint-plugin-prettier": "5.2.6",
     "eslint-plugin-sonarjs": "3.0.2",
     "jiti": "2.4.2",
-    "playwright": "1.51.1",
+    "playwright": "1.52.0",
     "prettier": "3.5.3",
     "ts-node": "10.9.2",
-    "typescript": "5.8.2",
-    "typescript-eslint": "8.28.0"
-  },
-  "resolutions": {
-    "@types/node": "20.16.10"
+    "typescript": "5.8.3",
+    "typescript-eslint": "8.31.0"
   },
   "scripts": {
     "startTestserver": "cross-env CONF=config-it node ../application/start",
@@ -30,5 +27,5 @@
     "tsc": "./node_modules/.bin/tsc",
     "eslint": "./node_modules/.bin/eslint ."
   },
-  "packageManager": "yarn@4.8.0"
+  "packageManager": "yarn@4.9.1"
 }

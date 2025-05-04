@@ -7,7 +7,6 @@ import sortBy from "lodash/sortBy";
 import reverse from "lodash/reverse";
 import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
-import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import map from "lodash/map";
 import filter from "lodash/filter";
 import capitalize from "lodash/capitalize";
@@ -18,7 +17,6 @@ export type Period = "zukuenftige" | "vergangene" | "alle";
 export const useTeamVeranstaltungenCommons = () => {
   const [search, setSearch] = useState<Period>("zukuenftige");
   const { allUsers, currentUser, teamFilter } = useJazzContext();
-
   const periodsToShow = useMemo(
     () => (currentUser.accessrights.isOrgaTeam ? ["zukuenftige", "vergangene", "alle"] : ["zukuenftige", "vergangene"]) as Period[],
     [currentUser],
@@ -60,8 +58,8 @@ export const useTeamVeranstaltungenCommons = () => {
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
-      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 2 },
+      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 30 },
+      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 30 },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {
@@ -79,22 +77,18 @@ export const useTeamVeranstaltungenCommons = () => {
 
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
-    [index: string]: Veranstaltung[];
-  }>({});
-  const [monate, setMonate] = useState<string[]>([]);
+  const filtered = useMemo(() => filter(veranstaltungen, applyTeamFilter(teamFilter)), [teamFilter, veranstaltungen]);
 
-  useEffect(() => {
+  const veranstaltungenNachMonat = useMemo(() => {
     if (veranstaltungen.length === 0) {
-      return;
+      return {};
     }
-    const filtered = filter(veranstaltungen, applyTeamFilter(teamFilter));
-    const result = groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
-    setVeranstaltungenNachMonat(result);
-    setMonate(keys(result));
-  }, [teamFilter, veranstaltungen]);
+    return groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
+  }, [veranstaltungen.length, filtered]);
 
-  const filterTags = TeamFilter();
+  const monate = useMemo(() => {
+    return keys(veranstaltungenNachMonat);
+  }, [veranstaltungenNachMonat]);
 
-  return { period, usersAsOptions, veranstaltungenNachMonat, filterTags, monate, periods, veranstaltungen };
+  return { period, usersAsOptions, veranstaltungenNachMonat, monate, periods, veranstaltungen, filtered };
 };

@@ -34,15 +34,15 @@ export default function PreviewVermietung() {
     queryKey: ["vermietung", url],
     queryFn: () => vermietungForUrl(url || ""),
   });
-  const { currentUser, setMemoizedId } = useJazzContext();
+  const { currentUser, setMemoizedVeranstaltung } = useJazzContext();
 
   const vermietung = useMemo(() => (data ? data : new Vermietung()), [data]);
 
   document.title = vermietung.kopf.titelMitPrefix;
 
   useEffect(() => {
-    setMemoizedId(vermietung.id);
-  }, [vermietung.id, setMemoizedId]);
+    setMemoizedVeranstaltung(vermietung);
+  }, [vermietung, setMemoizedVeranstaltung]);
 
   return (
     <div>

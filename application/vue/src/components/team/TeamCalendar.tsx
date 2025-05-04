@@ -11,15 +11,16 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import multiMonthPlugin from "@fullcalendar/multimonth";
 import deLocale from "@fullcalendar/core/locales/de";
-import { renderEventContent } from "@/components/team/renderCalendarEventContents.tsx";
 import WrapFullCalendar from "@/widgets/calendar/WrapFullCalendar.tsx";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
+import useRenderEventContent from "@/components/team/useRenderEventContent.tsx";
 
 export default function TeamCalendar() {
-  const { currentUser, isDarkMode } = useJazzContext();
+  const { currentUser } = useJazzContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const token = theme.useToken().token;
+  const renderEventContent = useRenderEventContent();
 
   const getEvents = useCallback(
     (
@@ -35,7 +36,7 @@ export default function TeamCalendar() {
     ) => {
       async function doit() {
         try {
-          const res = await calendarEventSources({ start: info.start, end: info.end, isDarkMode });
+          const res = await calendarEventSources({ start: info.start, end: info.end });
           successCallback(res as EventInput[]);
         } catch (e) {
           return failureCallback(e as Error);
@@ -43,7 +44,7 @@ export default function TeamCalendar() {
       }
       doit();
     },
-    [isDarkMode],
+    [],
   );
 
   const { lg } = useBreakpoint();

@@ -1,5 +1,5 @@
-import { Form, Table, type TableProps, Typography } from "antd";
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Alert, ConfigProvider, Form, Table, type TableProps } from "antd";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
@@ -16,25 +16,26 @@ import map from "lodash/map";
 import reject from "lodash/reject";
 import flatMap from "lodash/flatMap";
 import keys from "lodash/keys";
-import { GlobalContext } from "@/app/GlobalContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
 
 export type WithKey<T> = T & { key: string };
+
+function DuplicatesDetails({ duplInfo }: { readonly duplInfo: DuplInfo }) {
+  return map(duplInfo, (info) => (
+    <li>
+      <b>{info.name}:</b> {info.vals.join(", ")}
+    </li>
+  ));
+}
 
 function DulicatesInfo({ duplInfo }: { readonly duplInfo: DuplInfo }) {
   if (keys(duplInfo).length === 0) {
     return undefined;
   }
   return (
-    <>
-      <Typography.Text type="danger">Du hast doppelte Einträge!</Typography.Text>
-      <ul>
-        {map(duplInfo, (info) => (
-          <li>
-            <b>{info.name}:</b> {info.vals}
-          </li>
-        ))}
-      </ul>
-    </>
+    <ConfigProvider theme={{ components: { Alert: { withDescriptionPadding: "10px" } } }}>
+      <Alert description={<DuplicatesDetails duplInfo={duplInfo} />} message="Du hast doppelte Einträge!" showIcon type="error" />
+    </ConfigProvider>
   );
 }
 
@@ -90,7 +91,7 @@ export default function EditableTableInner<T>({
   type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
   const [rows, setRows] = useState<TWithKey[]>([]);
   const tableContext = useCreateTableContext();
-  const { viewport } = useContext(GlobalContext);
+  const { viewport } = useGlobalContext();
 
   useEffect(() => {
     const withKey: TWithKey[] = map(value, (row, index) => {

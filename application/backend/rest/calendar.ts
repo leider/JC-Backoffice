@@ -22,19 +22,19 @@ import identity from "lodash/identity.js";
 
 const app = express();
 
-function asCalendarEvent(veranstaltung: Veranstaltung, user: User, darkMode: boolean) {
-  return veranstaltung.asCalendarEvent(user.accessrights.isOrgaTeam, darkMode);
+function asCalendarEvent(veranstaltung: Veranstaltung, user: User) {
+  return veranstaltung.asCalendarEvent(user.accessrights.isOrgaTeam);
 }
 
-function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User, darkMode: boolean) {
+function eventsBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   const konzerte = store.byDateRangeInAscendingOrder(start, end);
   const unbest = konzerteService.filterUnbestaetigteFuerJedermann(konzerte, user);
-  return map(unbest, (ver) => asCalendarEvent(ver, user, darkMode));
+  return map(unbest, (ver) => asCalendarEvent(ver, user));
 }
 
-function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User, darkMode: boolean) {
+function vermietungenBetween(start: DatumUhrzeit, end: DatumUhrzeit, user: User) {
   const vermietungen = vermietungenstore.byDateRangeInAscendingOrder(start, end);
-  return map(filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user, darkMode));
+  return map(filterUnbestaetigteFuerJedermann(vermietungen, user), (ver) => asCalendarEvent(ver, user));
 }
 
 async function termineForIcal(ical: Ical) {
@@ -57,12 +57,11 @@ app.get("/fullcalendarevents.json", async (req, res) => {
   const options: TerminFilterOptions | undefined = req.query.options
     ? (JSON.parse(req.query.options as string) as unknown as TerminFilterOptions)
     : undefined;
-  const darkMode: boolean = req.query.isDarkMode === "true";
 
   const cals = optionenstore.icals();
   const termine = termineAsEventsBetween(start, end, options);
-  const konzerte = eventsBetween(start, end, req.user as User, darkMode);
-  const vermietungen = vermietungenBetween(start, end, req.user as User, darkMode);
+  const konzerte = eventsBetween(start, end, req.user as User);
+  const vermietungen = vermietungenBetween(start, end, req.user as User);
 
   const icals = filter(cals?.icals, (ical) => (options ? options.icals?.includes(ical.typ) : true));
 

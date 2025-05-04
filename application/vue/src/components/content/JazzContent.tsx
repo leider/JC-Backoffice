@@ -18,35 +18,34 @@ import keys from "lodash/keys";
 const { Content } = Layout;
 
 function TodaysConcert() {
-  const { todayKonzerte, isDarkMode } = useJazzContext();
+  const { todayKonzerte } = useJazzContext();
   const bestaetigte = useMemo(() => filter(todayKonzerte, { kopf: { confirmed: true, abgesagt: false } }), [todayKonzerte]);
 
-  if (bestaetigte?.length)
+  if (bestaetigte?.length) {
     return (
       <Row gutter={6} style={{ marginTop: 8 }}>
         <Col span={24}>
-          {map(bestaetigte, (konzert) => (
-            <Link
-              key={konzert.fullyQualifiedPreviewUrl}
-              style={{ color: konzert.colorText(isDarkMode) }}
-              to={konzert.fullyQualifiedPreviewUrl}
-            >
-              <h2
-                style={{
-                  marginBottom: 0,
-                  marginTop: 0,
-                  textAlign: "center",
-                  backgroundColor: konzert.color,
-                  textDecoration: konzert.kopf.abgesagt ? "line-through" : "",
-                }}
-              >
-                {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}
-              </h2>
-            </Link>
-          ))}
+          {map(bestaetigte, (konzert) => {
+            return (
+              <Link key={konzert.fullyQualifiedPreviewUrl} style={{ color: konzert.colorText() }} to={konzert.fullyQualifiedPreviewUrl}>
+                <h2
+                  style={{
+                    marginBottom: 0,
+                    marginTop: 0,
+                    textAlign: "center",
+                    backgroundColor: konzert.color,
+                    textDecoration: konzert.kopf.abgesagt ? "line-through" : "",
+                  }}
+                >
+                  {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}
+                </h2>
+              </Link>
+            );
+          })}
         </Col>
       </Row>
     );
+  }
 }
 
 export default function JazzContent() {

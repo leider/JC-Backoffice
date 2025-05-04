@@ -10,7 +10,9 @@ import { App } from "antd";
 import { TeamFilterObject } from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import noop from "lodash/noop";
 import Konzert from "jc-shared/konzert/konzert.ts";
-import { GlobalContext } from "@/app/GlobalContext.ts";
+import { useGlobalContext } from "@/app/GlobalContext.ts";
+import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
+import useCreateCssVars from "@/components/colored/useCreateCssVars.ts";
 
 const emptyContext: SharedGlobals = {
   currentUser: new User({}),
@@ -25,7 +27,7 @@ const emptyContext: SharedGlobals = {
   setTeamFilter: noop,
   isDirty: false,
   setIsDirty: noop,
-  setMemoizedId: noop,
+  setMemoizedVeranstaltung: noop,
   isDarkMode: false,
   isCompactMode: false,
 };
@@ -43,8 +45,8 @@ type SharedGlobals = {
   setTeamFilter: (filter: TeamFilterObject) => void;
   isDirty: boolean;
   setIsDirty: (a: boolean) => void;
-  memoizedId?: string;
-  setMemoizedId: (id?: string) => void;
+  memoizedVeranstaltung?: Veranstaltung;
+  setMemoizedVeranstaltung: (veranst?: Veranstaltung) => void;
   isDarkMode: boolean;
   isCompactMode: boolean;
 };
@@ -52,7 +54,7 @@ export const JazzContext = createContext<SharedGlobals>(emptyContext);
 
 export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const { loginState } = auth;
-  const { isDarkMode, isCompactMode } = useContext(GlobalContext);
+  const { isDarkMode, isCompactMode } = useGlobalContext();
 
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
@@ -69,7 +71,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   }, []);
 
   const [isDirty, setIsDirty] = useState(false);
-  const [memoizedId, setMemoizedId] = useState<string | undefined>();
+  const [memoizedVeranstaltung, setMemoizedVeranstaltung] = useState<Veranstaltung | undefined>();
 
   const context: Omit<
     SharedGlobals,
@@ -79,8 +81,8 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     | "setTeamFilter"
     | "isDirty"
     | "setIsDirty"
-    | "memoizedId"
-    | "setMemoizedId"
+    | "memoizedVeranstaltung"
+    | "setMemoizedVeranstaltung"
     | "isDarkMode"
     | "isCompactMode"
   > = useQueries({
@@ -156,15 +158,17 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     setTeamFilter,
     isDirty,
     setIsDirty,
-    memoizedId,
-    setMemoizedId,
+    memoizedVeranstaltung: memoizedVeranstaltung,
+    setMemoizedVeranstaltung: setMemoizedVeranstaltung,
     isDarkMode,
     isCompactMode,
   };
 }
 
+const brightText = "var(--jazz-global-bright-text)";
+
 export function useJazzContext(): SharedGlobals & { brightText: string } {
   const context = useContext(JazzContext);
-  const brightText = useMemo(() => (context.isDarkMode ? "#dcdcdc" : "#fff"), [context.isDarkMode]);
+  useCreateCssVars(context);
   return { ...context, brightText };
 }

@@ -1,5 +1,6 @@
 import DatumUhrzeit from "../commons/DatumUhrzeit.js";
 import Misc from "../commons/misc.js";
+import misc from "../commons/misc.js";
 import Artist from "./artist.js";
 import Kopf from "./kopf.js";
 import Kosten from "./kosten.js";
@@ -9,10 +10,8 @@ import Technik from "./technik.js";
 import dayjs from "dayjs";
 import times from "lodash/times.js";
 import { TerminEvent } from "../optionen/termin.js";
-import { colorVermietung } from "../optionen/optionValues.js";
 import { RecursivePartial } from "../commons/advancedTypes.js";
 import map from "lodash/map.js";
-import tinycolor from "tinycolor2";
 
 export type MinimalVeranstaltung = Partial<Veranstaltung> & { id: string; startDate: Date; kopf: Kopf; url: string; ghost: boolean };
 export default abstract class Veranstaltung {
@@ -81,23 +80,11 @@ export default abstract class Veranstaltung {
   }
 
   get color(): string {
-    const color = this.isVermietung ? colorVermietung : this.kopf.color;
-    return this.ghost ? tinycolor(color).brighten(5).toHexString() : color;
+    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? "vermietung")}-color${this.ghost ? "-ghost)" : ")"}`;
   }
 
-  colorText(darkMode: boolean): string {
-    const lightText = darkMode ? "#dcdcdc" : "#ffffff";
-    const darkText = darkMode ? "#666666" : "#111111";
-    const lightGhost = tinycolor(lightText).darken().toHexString();
-    const darkGhost = tinycolor(darkText).lighten(40).toHexString();
-
-    const color = this.color;
-
-    if (this.ghost) {
-      return tinycolor.readability(color, lightGhost) > 2 ? lightGhost : darkGhost;
-    } else {
-      return tinycolor.readability(color, lightText) > 2 ? lightText : darkText;
-    }
+  colorText(): string {
+    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? "vermietung")}-text-color${this.ghost ? "-ghost)" : ")"}`;
   }
 
   get initializedUrl(): string {
@@ -131,15 +118,20 @@ export default abstract class Veranstaltung {
     return this.startDatumUhrzeit.tagMonatJahrLang;
   }
 
-  get istVergangen(): boolean {
-    return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
+  isDisplayedAbove(other?: Veranstaltung, reverse = false): boolean {
+    if (!other) {
+      return false;
+    }
+    const result = this.startDatumUhrzeit.istVor(other?.startDatumUhrzeit);
+    return reverse ? !result : result;
   }
 
   // eslint-disable-next-line lodash/prefer-constant
   get tooltipInfos(): string {
     return "";
   }
-  asCalendarEvent(isOrgaTeam: boolean, darkMode: boolean): TerminEvent {
+
+  asCalendarEvent(isOrgaTeam: boolean): TerminEvent {
     return {
       start: this.startDate.toISOString(),
       end: this.endDate.toISOString(),
@@ -147,7 +139,7 @@ export default abstract class Veranstaltung {
       tooltip: this.tooltipInfos,
       linkTo: isOrgaTeam ? this.fullyQualifiedUrl : this.fullyQualifiedPreviewUrl,
       backgroundColor: this.color,
-      textColor: this.colorText(darkMode),
+      textColor: this.colorText(),
       borderColor: !this.kopf.confirmed ? "#f8500d" : this.color,
     };
   }
