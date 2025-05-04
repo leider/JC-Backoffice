@@ -1,4 +1,4 @@
-const { OrtePage } = require("./pages/OrtePage");
+import { OrtePage } from "./pages/OrtePage";
 
 Feature("Optionen anlegen");
 
@@ -29,7 +29,7 @@ Scenario("Orte erzeugen, ändern und löschen", async ({ I }) => {
   const expectedPresseName = "JazzclubPresseName";
   const expectedPresseIn = "Im Jazzclub";
 
-  let expectedOrt = {
+  const expectedOrt = {
     name: expectedName,
     flaeche: expectedFlaeche,
     pressename: expectedPresseName,
@@ -43,7 +43,7 @@ Scenario("Orte erzeugen, ändern und löschen", async ({ I }) => {
   await ortePage.verifyOrtInStore(0, expectedOrt);
   ortePage.verifyOrtInTable(0, expectedOrt);
 
-  let expectedSecondOrtName = "Tollhaus";
+  const expectedSecondOrtName = "Tollhaus";
   ortePage.copyOrt(expectedSecondOrtName);
 
   const expectedOrt2 = {
