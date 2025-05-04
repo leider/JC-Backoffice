@@ -1,4 +1,4 @@
-import { OrtePage } from "./pages/OrtePage";
+const { OrtePage } = require("./pages/OrtePage");
 
 Feature("Optionen anlegen");
 
