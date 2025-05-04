@@ -47,6 +47,7 @@ export const config: CodeceptJS.MainConfig = {
   },
   include: {
     filters: "./helpers/filters",
+    ortePage: "./pages/OrtePage",
   },
   bootstrap: async () => {
     new SqliteHelper(config).createData("userstore", "admin");

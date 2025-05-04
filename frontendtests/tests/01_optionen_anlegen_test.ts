@@ -1,5 +1,3 @@
-import { OrtePage } from "./pages/OrtePage";
-
 Feature("Optionen anlegen");
 
 Before(({ I, login }) => {
@@ -21,9 +19,7 @@ Scenario("Erzeuge Optionen", async ({ I }) => {
   I.assertDeepEqual(resOptionStore.kooperationen, ["UI Test"]);
 });
 
-Scenario("Orte erzeugen, ändern und löschen", async ({ I }) => {
-  const ortePage = new OrtePage();
-
+Scenario("Orte erzeugen, ändern und löschen", async ({ I, ortePage }) => {
   const expectedName = "Jazzclub";
   const expectedFlaeche = 300;
   const expectedPresseName = "JazzclubPresseName";
