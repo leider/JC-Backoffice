@@ -1,4 +1,4 @@
-import { OrtePage } from "../pages/OrtePage";
+import { OrtePage } from "./pages/OrtePage";
 
 Feature("Optionen anlegen");
 
@@ -21,8 +21,8 @@ Scenario("Erzeuge Optionen", async ({ I }) => {
   I.assertDeepEqual(resOptionStore.kooperationen, ["UI Test"]);
 });
 
-Scenario("Orte erzeugen und ändern", async ({ I }) => {
-  const page = new OrtePage();
+Scenario("Orte erzeugen, ändern und löschen", async ({ I }) => {
+  const ortePage = new OrtePage();
 
   const expectedName = "Jazzclub";
   const expectedFlaeche = 300;
@@ -38,8 +38,22 @@ Scenario("Orte erzeugen und ändern", async ({ I }) => {
 
   I.amOnPage("/vue/orte");
 
-  page.addOrt(expectedOrt);
+  ortePage.addOrt(expectedOrt);
 
-  await page.verifyOrtInStore(expectedOrt);
-  page.verifyOrtInTable(expectedOrt);
+  await ortePage.verifyOrtInStore(0, expectedOrt);
+  ortePage.verifyOrtInTable(0, expectedOrt);
+
+  let expectedSecondOrtName = "Tollhaus";
+  ortePage.copyOrt(expectedSecondOrtName);
+
+  const expectedOrt2 = {
+    ...expectedOrt,
+    name: expectedSecondOrtName,
+  };
+  ortePage.verifyOrtInTable(1, expectedOrt2);
+  await ortePage.verifyOrtInStore(1, expectedOrt2);
+
+  ortePage.deleteOrt(1);
+  await ortePage.verifyOrtInStore(0, expectedOrt);
+  await ortePage.verifyOrtSizeInStore(1);
 });
