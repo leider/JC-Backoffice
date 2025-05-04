@@ -77,7 +77,7 @@ export class OrtePage {
   }
 
   deleteOrt(number: number) {
-    this.I.click('[data-row-key="row' + number + "] button span .bi-trash");
+    this.I.click('[data-row-key="row' + number + '"] button span .bi-trash');
 
     this.I.click(this.buttons.speichern);
   }
