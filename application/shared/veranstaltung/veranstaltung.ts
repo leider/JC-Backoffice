@@ -118,6 +118,11 @@ export default abstract class Veranstaltung {
     return this.startDatumUhrzeit.tagMonatJahrLang;
   }
 
+  // used in pug file !
+  get istVergangen(): boolean {
+    return this.startDatumUhrzeit.istVor(new DatumUhrzeit());
+  }
+
   isDisplayedAbove(other?: Veranstaltung, reverse = false): boolean {
     if (!other) {
       return false;
