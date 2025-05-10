@@ -80,7 +80,7 @@ export default abstract class Veranstaltung {
   }
 
   private colorFor(infix: string): string {
-    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? this.kopf.eventTyp ?? "vermietung")}${infix}${this.ghost ? "-ghost)" : ")"}`;
+    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? "vermietung")}${infix}${this.ghost ? "-ghost)" : ")"}`;
   }
 
   get color(): string {
