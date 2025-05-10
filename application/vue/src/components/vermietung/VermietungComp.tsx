@@ -29,7 +29,7 @@ export default function VermietungComp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setMemoizedVeranstaltung(vermietung);
+    setMemoizedVeranstaltung({ veranstaltung: vermietung, highlight: true });
   }, [vermietung, setMemoizedVeranstaltung]);
 
   useEffect(() => {

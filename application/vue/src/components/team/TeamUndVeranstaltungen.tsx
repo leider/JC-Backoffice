@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Button, Col, Dropdown, Row, Space, Spin } from "antd";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
@@ -13,6 +13,7 @@ import { useLocation } from "react-router";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import Lazy from "@/components/team/Lazy.tsx";
 import { useGlobalContext } from "@/app/GlobalContext.ts";
+import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -20,6 +21,7 @@ function Monate({ monate }: { monate: string[] }) {
 
 export function TeamUndVeranstaltungen() {
   const { pathname } = useLocation();
+  const { memoizedVeranstaltung, setMemoizedVeranstaltung } = useJazzContext();
   const { isTouch } = useGlobalContext();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered } = useTeamVeranstaltungenCommons();
@@ -27,6 +29,12 @@ export function TeamUndVeranstaltungen() {
     () => ({ veranstaltungenNachMonat, usersAsOptions, period }),
     [usersAsOptions, veranstaltungenNachMonat, period],
   );
+
+  useEffect(() => {
+    if (!memoizedVeranstaltung) {
+      setMemoizedVeranstaltung({ veranstaltung: veranstaltungen[0], highlight: false });
+    }
+  }, [memoizedVeranstaltung, setMemoizedVeranstaltung, veranstaltungen]);
 
   return (
     <Row gutter={8}>

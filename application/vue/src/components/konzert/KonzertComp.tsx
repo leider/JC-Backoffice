@@ -43,7 +43,7 @@ export default function KonzertComp() {
   }, [refetch]);
 
   useEffect(() => {
-    setMemoizedVeranstaltung(konzert);
+    setMemoizedVeranstaltung({ veranstaltung: konzert, highlight: true });
   }, [konzert, setMemoizedVeranstaltung]);
 
   useEffect(() => {

@@ -146,8 +146,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
   const renderWhenInView = useMemo(() => {
     return (
       inView ||
-      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
-      veranstaltung.id === memoizedVeranstaltung?.id
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung?.veranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id
     );
   }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 
