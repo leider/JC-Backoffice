@@ -108,7 +108,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     });
   }, [form, forVermietung, mutateVermietung, mutateVeranstaltung]);
 
-  const labelColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const labelColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const staffRowsTheme = useMemo(
     () => ({

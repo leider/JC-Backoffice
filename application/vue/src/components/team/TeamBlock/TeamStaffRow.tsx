@@ -22,7 +22,7 @@ interface TeamStaffRowProps {
 export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { usersAsOptions } = useContext(TeamContext);
   const { token } = theme.useToken();
-  const textColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const textColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const color = useMemo(() => veranstaltung.color, [veranstaltung]);
 
   const staffCollection = useMemo(() => veranstaltung.staff.getStaffCollection(sectionName), [sectionName, veranstaltung.staff]);

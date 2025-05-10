@@ -38,7 +38,7 @@ export default function TeamBlockCommons({
     }
   }, [highlight, initiallyOpen, memoizedVeranstaltung]);
 
-  const textColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const textColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
 

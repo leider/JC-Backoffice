@@ -13,7 +13,7 @@ export default function TabAllgemeines() {
       <Col lg={12} xs={24}>
         <EventCard />
         <ArtistCard />
-        <KommentarCard forVermietung />
+        <KommentarCard />
       </Col>
       <Col lg={12} xs={24}>
         <MitarbeiterCard forVermietung />

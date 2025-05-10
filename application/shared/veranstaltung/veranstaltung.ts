@@ -79,16 +79,20 @@ export default abstract class Veranstaltung {
     return map(ghostResults, (each) => this.asNew(each as MinimalVeranstaltung));
   }
 
-  get color(): string {
-    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? "vermietung")}-color${this.ghost ? "-ghost)" : ")"}`;
+  private colorFor(infix: string): string {
+    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? this.kopf.eventTyp ?? "vermietung")}${infix}${this.ghost ? "-ghost)" : ")"}`;
   }
 
-  colorText(): string {
-    return `var(--jazz-${misc.normalizeString(this.kopf.eventTypRich?.name ?? "vermietung")}-text-color${this.ghost ? "-ghost)" : ")"}`;
+  get color(): string {
+    return this.colorFor("-color");
+  }
+
+  get colorText(): string {
+    return this.colorFor("-text-color");
   }
 
   get initializedUrl(): string {
-    return DatumUhrzeit.forJSDate(this.startDate).fuerCalendarWidget + "-" + Misc.normalizeString(this.kopf.titel || this.id || "");
+    return DatumUhrzeit.forJSDate(this.startDate).fuerCalendarWidget + "-" + Misc.normalizeString(this.kopf.titel ?? this.id ?? "");
   }
 
   initializeIdAndUrl(): void {
@@ -144,7 +148,7 @@ export default abstract class Veranstaltung {
       tooltip: this.tooltipInfos,
       linkTo: isOrgaTeam ? this.fullyQualifiedUrl : this.fullyQualifiedPreviewUrl,
       backgroundColor: this.color,
-      textColor: this.colorText(),
+      textColor: this.colorText,
       borderColor: !this.kopf.confirmed ? "#f8500d" : this.color,
     };
   }

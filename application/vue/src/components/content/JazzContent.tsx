@@ -24,11 +24,11 @@ function TodaysConcert() {
   if (bestaetigte?.length) {
     return (
       <Row gutter={6} style={{ marginTop: 8 }}>
-        <Col span={24}>
-          {map(bestaetigte, (konzert) => {
-            return (
-              <Link key={konzert.fullyQualifiedPreviewUrl} style={{ color: konzert.colorText() }} to={konzert.fullyQualifiedPreviewUrl}>
-                <h2
+        {map(bestaetigte, (konzert) => {
+          return (
+            <Col key={konzert.fullyQualifiedPreviewUrl} md={12} sm={24}>
+              <Link style={{ color: konzert.colorText }} to={konzert.fullyQualifiedPreviewUrl}>
+                <h3
                   style={{
                     marginBottom: 0,
                     marginTop: 0,
@@ -38,11 +38,11 @@ function TodaysConcert() {
                   }}
                 >
                   {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}
-                </h2>
+                </h3>
               </Link>
-            );
-          })}
-        </Col>
+            </Col>
+          );
+        })}
       </Row>
     );
   }
