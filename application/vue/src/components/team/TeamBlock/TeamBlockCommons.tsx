@@ -21,13 +21,16 @@ export default function TeamBlockCommons({
 }) {
   const { memoizedVeranstaltung } = useJazzContext();
   const { period } = useContext(TeamContext);
-  const highlight = useMemo(() => veranstaltung.id === memoizedVeranstaltung?.id, [memoizedVeranstaltung, veranstaltung.id]);
+  const highlight = useMemo(
+    () => veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id && !!memoizedVeranstaltung?.highlight,
+    [memoizedVeranstaltung, veranstaltung.id],
+  );
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
     if (highlight) {
       setTimeout(() => {
-        const element = document.getElementById(memoizedVeranstaltung?.id ?? "");
+        const element = document.getElementById(memoizedVeranstaltung?.veranstaltung?.id ?? "");
         if (element) {
           element?.scrollIntoView({
             behavior: "smooth",
@@ -38,7 +41,7 @@ export default function TeamBlockCommons({
     }
   }, [highlight, initiallyOpen, memoizedVeranstaltung]);
 
-  const textColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const textColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
 
@@ -55,8 +58,8 @@ export default function TeamBlockCommons({
   const renderWhenInView = useMemo(() => {
     return (
       inView ||
-      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
-      veranstaltung.id === memoizedVeranstaltung?.id
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung?.veranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id
     );
   }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 
@@ -66,7 +69,7 @@ export default function TeamBlockCommons({
         id={veranstaltung.id}
         ref={ref}
         span={24}
-        style={highlight ? { border: `solid 4px ${textColor}`, boxShadow: "0 0 40px var(--ant-color-text-secondary)" } : undefined}
+        style={highlight ? { border: `solid 4px white`, boxShadow: "0 0 40px var(--ant-color-text-secondary)" } : undefined}
       >
         {veranstaltung.ghost ? (
           <div style={{ backgroundColor, padding: "2px 16px" }}>

@@ -30,10 +30,6 @@ function createVars(typenPlus: { name: string; color: string }[], isDarkMode: bo
     const cssVars: { [key: string]: string } = {};
     cssVars[`--jazz-${qualifier}-text-color`] = colorText({ color: type.color, darkMode: isDarkMode, ghost: false });
     cssVars[`--jazz-${qualifier}-text-color-ghost`] = colorText({ color: type.color, darkMode: isDarkMode, ghost: true });
-    // cssVars[`--jazz-${qualifier}-text-color-light`] = colorText({ color: type.color, darkMode: false, ghost: false });
-    // cssVars[`--jazz-${qualifier}-text-color-dark`] = colorText({ color: type.color, darkMode: true, ghost: false });
-    // cssVars[`--jazz-${qualifier}-text-color-light-ghost`] = colorText({ color: type.color, darkMode: false, ghost: true });
-    // cssVars[`--jazz-${qualifier}-text-color-dark-ghost`] = colorText({ color: type.color, darkMode: true, ghost: true });
     cssVars[`--jazz-${qualifier}-color`] = type.color;
     cssVars[`--jazz-${qualifier}-color-ghost`] = tinycolor(type.color).brighten(5).toHexString();
     for (const [key, value] of Object.entries(cssVars)) {

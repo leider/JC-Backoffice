@@ -20,7 +20,7 @@ function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }
 }
 
 export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
-  const color = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const color = useMemo(() => veranstaltung.colorText, [veranstaltung]);
 
   const titleStyle = useMemo(
     () => ({ margin: 0, textDecoration: veranstaltung.kopf.abgesagt ? "line-through" : "" }),

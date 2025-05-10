@@ -58,8 +58,8 @@ export const useTeamVeranstaltungenCommons = () => {
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod), staleTime: 1000 * 60 * 30 },
-      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod), staleTime: 1000 * 60 * 30 },
+      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod) },
+      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod) },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {

@@ -40,7 +40,7 @@ export default function KonzertFormAndPageHeader({
   const displayDate = useMemo(() => DatumUhrzeit.forJSDate(startDate).lesbareKurzform, [startDate]);
 
   const titleStyle: CSSProperties = useMemo(() => {
-    const typByName = groupBy(optionen?.typenPlus || [], "name");
+    const typByName = groupBy(optionen?.typenPlus ?? [], "name");
     const typeColor = typByName[eventTyp]?.[0].color ?? colorDefault;
     return { color: typeColor, textDecoration: abgesagt ? "line-through" : "" };
   }, [abgesagt, eventTyp, optionen?.typenPlus]);

@@ -108,7 +108,7 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     });
   }, [form, forVermietung, mutateVermietung, mutateVeranstaltung]);
 
-  const labelColor = useMemo(() => veranstaltung.colorText(), [veranstaltung]);
+  const labelColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const staffRowsTheme = useMemo(
     () => ({
@@ -146,8 +146,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
   const renderWhenInView = useMemo(() => {
     return (
       inView ||
-      veranstaltung.isDisplayedAbove(memoizedVeranstaltung, period === "Vergangene") ||
-      veranstaltung.id === memoizedVeranstaltung?.id
+      veranstaltung.isDisplayedAbove(memoizedVeranstaltung?.veranstaltung, period === "Vergangene") ||
+      veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id
     );
   }, [inView, memoizedVeranstaltung, period, veranstaltung]);
 

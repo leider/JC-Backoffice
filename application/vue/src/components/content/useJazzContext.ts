@@ -32,6 +32,7 @@ const emptyContext: SharedGlobals = {
   isCompactMode: false,
 };
 
+type VeranstaltungAndHighlight = { veranstaltung?: Veranstaltung; highlight: boolean };
 type SharedGlobals = {
   currentUser: User;
   wikisubdirs: string[];
@@ -45,8 +46,8 @@ type SharedGlobals = {
   setTeamFilter: (filter: TeamFilterObject) => void;
   isDirty: boolean;
   setIsDirty: (a: boolean) => void;
-  memoizedVeranstaltung?: Veranstaltung;
-  setMemoizedVeranstaltung: (veranst?: Veranstaltung) => void;
+  memoizedVeranstaltung?: VeranstaltungAndHighlight;
+  setMemoizedVeranstaltung: (veranstHighlight?: VeranstaltungAndHighlight) => void;
   isDarkMode: boolean;
   isCompactMode: boolean;
 };
@@ -71,7 +72,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   }, []);
 
   const [isDirty, setIsDirty] = useState(false);
-  const [memoizedVeranstaltung, setMemoizedVeranstaltung] = useState<Veranstaltung | undefined>();
+  const [memoizedVeranstaltung, setMemoizedVeranstaltung] = useState<VeranstaltungAndHighlight | undefined>();
 
   const context: Omit<
     SharedGlobals,

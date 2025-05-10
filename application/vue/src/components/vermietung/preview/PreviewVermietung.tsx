@@ -41,7 +41,7 @@ export default function PreviewVermietung() {
   document.title = vermietung.kopf.titelMitPrefix;
 
   useEffect(() => {
-    setMemoizedVeranstaltung(vermietung);
+    setMemoizedVeranstaltung({ veranstaltung: vermietung, highlight: true });
   }, [vermietung, setMemoizedVeranstaltung]);
 
   return (

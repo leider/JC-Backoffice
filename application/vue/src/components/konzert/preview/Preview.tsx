@@ -45,7 +45,7 @@ export default function Preview() {
   const konzert = useMemo(() => (data ? data : new KonzertWithRiderBoxes()), [data]);
 
   useEffect(() => {
-    setMemoizedVeranstaltung(konzert);
+    setMemoizedVeranstaltung({ veranstaltung: konzert, highlight: true });
   }, [konzert, setMemoizedVeranstaltung]);
 
   const [typeColor, setTypeColor] = useState<string | undefined>("");

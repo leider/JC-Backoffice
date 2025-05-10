@@ -32,6 +32,7 @@ import { uploadWikiImage } from "@/rest/loader.ts";
 import { NamePath } from "rc-field-form/es/interface";
 import reduce from "lodash/reduce";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import isNil from "lodash/isNil";
 
 function translationFunc(key: string, defaultValue: string, more?: { [idx: string]: string }) {
   const parts = key.split(".");
@@ -90,7 +91,7 @@ function InnerEditor({
   const mdxEditorRef = React.useRef<MDXEditorMethods>(null);
 
   useEffect(() => {
-    if (value) {
+    if (!isNil(value)) {
       mdxEditorRef.current?.setMarkdown(value);
     }
   }, [value]);
