@@ -55,17 +55,6 @@ type NumberInputProps = {
    */
   readonly max?: number;
 
-  /**
-   * A boolean to tell if we want the lower limit to be exclusive.
-   * @type {boolean}
-   */
-  readonly exclusiveMin?: boolean;
-
-  /**
-   * A boolean to tell if we want the upper limit to be exclusive.
-   * @type {boolean}
-   */
-  readonly exclusiveMax?: boolean;
   readonly suffix?: ReactNode;
   readonly save?: (keepEditing?: boolean) => void;
   readonly focus?: boolean;
@@ -77,9 +66,7 @@ export function NumberInput({
   suffix,
   label,
   max,
-  exclusiveMax,
   min,
-  exclusiveMin,
   name,
   onChange,
   initialValue,
@@ -106,8 +93,6 @@ export function NumberInput({
       <NumericInputEmbedded
         decimals={decimals}
         disabled={disabled}
-        exclusiveMax={exclusiveMax}
-        exclusiveMin={exclusiveMin}
         focus={focus}
         max={max}
         min={min}

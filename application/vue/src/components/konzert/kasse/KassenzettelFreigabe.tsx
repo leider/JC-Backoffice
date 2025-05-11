@@ -19,28 +19,22 @@ import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import useKassenSaldierer from "@/components/konzert/kasse/useKassenSaldierer.ts";
 import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
-export function KassenzettelFreigabe() {
+function FreigabeButton({
+  freigabe,
+  endbestandEUR,
+  endbestandGezaehltEUR,
+}: {
+  readonly freigabe: boolean;
+  readonly endbestandEUR: number;
+  readonly endbestandGezaehltEUR: number;
+}) {
+  const { modal } = App.useApp();
+  const [innerForm] = useForm();
   const form = useFormInstance<KonzertWithRiderBoxes>();
   const { currentUser, allUsers, isDirty } = useJazzContext();
-  const { checkDirty } = useContext(JazzFormContext);
-  const { endbestandEUR } = useKassenSaldierer();
-
-  const { modal } = App.useApp();
   const usersAsOptions = useMemo(() => map(allUsers, "name"), [allUsers]);
-
-  const startDate = useWatch("startDate", { preserve: true });
-  const vergangen = useMemo(() => {
-    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
-  }, [startDate]);
-
-  const freigabe = useWatch(["kasse", "kassenfreigabe"], { preserve: true });
-  const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { preserve: true });
-
-  useEffect(() => {
-    checkDirty();
-  }, [checkDirty, freigabe]);
-
-  const [innerForm] = useForm();
+  const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
+  const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
 
   const freigeben = useCallback(() => {
     modal.confirm({
@@ -75,9 +69,50 @@ export function KassenzettelFreigabe() {
     });
   }, [form, currentUser.name, modal]);
 
-  const { color } = colorsAndIconsForSections;
+  return !freigabe ? (
+    <ButtonWithIcon
+      block
+      disabled={isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")}
+      icon="Unlock"
+      onClick={freigeben}
+      text="Kasse freigeben..."
+    />
+  ) : (
+    <>
+      <ButtonWithIcon
+        block
+        color="#c71c2c"
+        disabled={isDirty || !darfFreigabeAufheben}
+        icon="Lock"
+        onClick={freigabeAufheben}
+        text="Kasse ist freigegeben"
+        type="primary"
+      />
+      <TextField disabled label="Durch" name={["kasse", "kassenfreigabe"]} />
+    </>
+  );
+}
+
+export function KassenzettelFreigabe() {
+  const form = useFormInstance<KonzertWithRiderBoxes>();
+  const { currentUser, isDirty } = useJazzContext();
+  const { checkDirty } = useContext(JazzFormContext);
+  const { endbestandEUR } = useKassenSaldierer();
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
-  const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
+
+  const startDate = useWatch("startDate", { preserve: true });
+  const vergangen = useMemo(() => {
+    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
+  }, [startDate]);
+
+  const freigabe = useWatch(["kasse", "kassenfreigabe"], { preserve: true });
+  const endbestandGezaehltEUR = useWatch(["kasse", "endbestandGezaehltEUR"], { preserve: true });
+
+  useEffect(() => {
+    checkDirty();
+  }, [checkDirty, freigabe]);
+
+  const { color } = colorsAndIconsForSections;
 
   const clickKassenzettel = useCallback(() => openKassenzettel(new Konzert(form.getFieldsValue(true))), [form]);
 
@@ -97,30 +132,7 @@ export function KassenzettelFreigabe() {
         </Col>
         <Col offset={4} span={10}>
           {vergangen ? (
-            !freigabe ? (
-              <ButtonWithIcon
-                block
-                disabled={
-                  isDirty || !darfFreigeben || numeral(endbestandEUR).format("0.00") !== numeral(endbestandGezaehltEUR).format("0.00")
-                }
-                icon="Unlock"
-                onClick={freigeben}
-                text="Kasse freigeben..."
-              />
-            ) : (
-              <>
-                <ButtonWithIcon
-                  block
-                  color="#c71c2c"
-                  disabled={isDirty || !darfFreigabeAufheben}
-                  icon="Lock"
-                  onClick={freigabeAufheben}
-                  text="Kasse ist freigegeben"
-                  type="primary"
-                />
-                <TextField disabled label="Durch" name={["kasse", "kassenfreigabe"]} />
-              </>
-            )
+            <FreigabeButton endbestandEUR={endbestandEUR} endbestandGezaehltEUR={endbestandGezaehltEUR} freigabe={freigabe} />
           ) : null}
         </Col>
       </JazzRow>

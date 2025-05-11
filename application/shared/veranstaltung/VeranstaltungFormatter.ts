@@ -17,11 +17,14 @@ export default class VeranstaltungFormatter {
     }
 
     const eintrittspreise = (this.veranstaltung as Konzert).eintrittspreise;
-    const eintrittspreiseText = eintrittspreise.istKooperation
-      ? `Gemäß Kooperationspartner (${this.veranstaltung.kopf.kooperationspartnerText})`
-      : eintrittspreise.frei
+    let eintrittspreiseText: string;
+    if (eintrittspreise.istKooperation) {
+      eintrittspreiseText = `Gemäß Kooperationspartner (${this.veranstaltung.kopf.kooperationspartnerText})`;
+    } else {
+      eintrittspreiseText = eintrittspreise.frei
         ? "freier Eintritt"
         : `${eintrittspreise.regulaer},- (Ermässigt: ${eintrittspreise.ermaessigt},-, Mitglieder: ${eintrittspreise.mitglied},-) €`;
+    }
 
     return `### ${this.veranstaltung.kopf.titelMitPrefix}
 #### ${this.veranstaltung.startDatumUhrzeit.fuerPresse} ${this.veranstaltung.kopf.presseInEcht}

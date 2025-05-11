@@ -9,7 +9,7 @@ Before(({ I, login }) => {
 
 Scenario("Kopiere Konzert", async ({ I }) => {
   I.amOnPage("/vue/konzert/copy-of-Kopiervorlage?page=allgemeines");
-  I.wait(0.5);
+  I.waitForText("Titel");
   I.click("Weiter");
   I.fillField("Titel", "Kopiertes Konzert");
   I.click("Speichern");

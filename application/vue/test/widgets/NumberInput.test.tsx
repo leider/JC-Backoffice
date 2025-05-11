@@ -179,21 +179,21 @@ describe("Number Input Widget", () => {
   describe("value is forced between min and max exclusive (no decimals)", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput decimals={0} exclusiveMax exclusiveMin label="testme" max={7} min={2} name="test" />);
+        updateWidget(<NumberInput decimals={0} label="testme" max={7} min={2} name="test" />);
       });
     });
 
     it("rounds up to lower limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "1");
       await waitFor(() => {
-        expect(form().getFieldValue("test")).toBe(3);
+        expect(form().getFieldValue("test")).toBe(2);
       });
     });
 
     it("rounds down to upper limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "9");
       await waitFor(() => {
-        expect(form().getFieldValue("test")).toBe(6);
+        expect(form().getFieldValue("test")).toBe(7);
       });
     });
   });
@@ -201,21 +201,21 @@ describe("Number Input Widget", () => {
   describe("value is forced between min and max exclusive (two decimals)", () => {
     beforeEach(async () => {
       await waitFor(() => {
-        updateWidget(<NumberInput decimals={2} exclusiveMax exclusiveMin label="testme" max={7} min={2} name="test" />);
+        updateWidget(<NumberInput decimals={2} label="testme" max={7} min={2} name="test" />);
       });
     });
 
     it("rounds up to lower limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "1");
       await waitFor(() => {
-        expect(form().getFieldValue("test")).toBe(2.01);
+        expect(form().getFieldValue("test")).toBe(2);
       });
     });
 
     it("rounds down to upper limit on setting value", async () => {
       widget().setValueOnInputLabeled("testme", "9");
       await waitFor(() => {
-        expect(form().getFieldValue("test")).toBe(6.99);
+        expect(form().getFieldValue("test")).toBe(7);
       });
     });
   });

@@ -50,7 +50,7 @@ export async function setDate(input: HTMLElement, date: Date | string) {
     keyCode: 13,
   });
   // Keep the format in sync with the DateInput component
-  const value = date; // dayjs(date).format("ll");
+  const value = date;
   fireEvent.change(input, {
     target: {
       value,

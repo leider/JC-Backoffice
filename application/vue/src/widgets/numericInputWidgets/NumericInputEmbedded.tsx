@@ -43,20 +43,6 @@ interface INumericInputEmbedded {
   readonly max?: number;
 
   /**
-   * The exclusive minimum.
-   * @type {boolean}
-   * @memberof INumericInputEmbedded
-   */
-  readonly exclusiveMin?: boolean;
-
-  /**
-   * The exclusive maximum.
-   * @type {boolean}
-   * @memberof INumericInputEmbedded
-   */
-  readonly exclusiveMax?: boolean;
-
-  /**
    * Callback for when the number is updated.
    * @memberof INumericInputEmbedded
    */
@@ -77,8 +63,6 @@ function NumericInputEmbedded({
   decimals,
   min,
   max,
-  exclusiveMin,
-  exclusiveMax,
   disabled,
   onChange,
   onNumber,
@@ -90,7 +74,7 @@ function NumericInputEmbedded({
   const [value, setValue] = useState<string | undefined>("");
 
   const { internalFormat, displayFormat } = useFormats(decimals);
-  const { minLimit, maxLimit } = useLimits(decimals, min, max, exclusiveMin, exclusiveMax);
+  const { minLimit, maxLimit } = useLimits(decimals, min, max);
 
   const updateValue = useCallback(
     (newValue: number | null, originalStringFromWidget?: string | null) => {

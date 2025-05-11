@@ -23,7 +23,16 @@ export default function dynamicHeaderTags(labelsColors: LabelPathDependsOn[]) {
     const prerequisite: boolean = useWatch(dependsOn, { preserve: true });
     const showTag: boolean = (dependsOn && prerequisite) || !dependsOn;
     const isOptional = !showTag;
-    const color = isOptional ? undefined : (invertColor ? !isOK : isOK) ? "success" : "error";
+    let color: undefined | string;
+    if (isOptional) {
+      color = undefined;
+    } else {
+      if (invertColor ? !isOK : isOK) {
+        color = "success";
+      } else {
+        color = "error";
+      }
+    }
     const theLabel = isOK ? label : (labelNotOk ?? label);
     return (
       <Tag color={color} style={isOptional ? { color: colorDisabled } : {}}>
