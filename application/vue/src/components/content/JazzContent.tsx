@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
-import { Col, Layout, Row, theme } from "antd";
-import { Link, useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import { Layout, theme } from "antd";
+import { useLocation } from "react-router";
 import { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
-import { JazzContext, useCreateJazzContext, useJazzContext } from "@/components/content/useJazzContext.ts";
+import { JazzContext, useCreateJazzContext } from "@/components/content/useJazzContext.ts";
 import InnerContent from "@/components/content/InnerContent.tsx";
 import { useProvideAuth } from "@/commons/auth.tsx";
 import { AuthContext } from "@/commons/authConsts";
@@ -11,42 +11,10 @@ import { JazzHeader } from "@/components/content/menu/JazzHeader.tsx";
 import { TellUserToFillHelpFields } from "@/components/users/TellUserToFillHelpFields.tsx";
 import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
-import map from "lodash/map";
-import filter from "lodash/filter";
 import keys from "lodash/keys";
+import TodaysConcert from "@/components/content/TodaysConcert.tsx";
 
 const { Content } = Layout;
-
-function TodaysConcert() {
-  const { todayKonzerte } = useJazzContext();
-  const bestaetigte = useMemo(() => filter(todayKonzerte, { kopf: { confirmed: true, abgesagt: false } }), [todayKonzerte]);
-
-  if (bestaetigte?.length) {
-    return (
-      <Row gutter={6} style={{ marginTop: 8 }}>
-        {map(bestaetigte, (konzert) => {
-          return (
-            <Col key={konzert.fullyQualifiedPreviewUrl} md={12} xs={24}>
-              <Link style={{ color: konzert.colorText }} to={konzert.fullyQualifiedPreviewUrl}>
-                <h3
-                  style={{
-                    marginBottom: 0,
-                    marginTop: 0,
-                    textAlign: "center",
-                    backgroundColor: konzert.color,
-                    textDecoration: konzert.kopf.abgesagt ? "line-through" : "",
-                  }}
-                >
-                  {konzert.startDatumUhrzeit.wochentagUhrzeitKompakt}: {konzert.kopf.titel}
-                </h3>
-              </Link>
-            </Col>
-          );
-        })}
-      </Row>
-    );
-  }
-}
 
 export default function JazzContent() {
   const {
