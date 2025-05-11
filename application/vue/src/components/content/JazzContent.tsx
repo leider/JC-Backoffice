@@ -26,7 +26,7 @@ function TodaysConcert() {
       <Row gutter={6} style={{ marginTop: 8 }}>
         {map(bestaetigte, (konzert) => {
           return (
-            <Col key={konzert.fullyQualifiedPreviewUrl} md={12} sm={24}>
+            <Col key={konzert.fullyQualifiedPreviewUrl} md={12} xs={24}>
               <Link style={{ color: konzert.colorText }} to={konzert.fullyQualifiedPreviewUrl}>
                 <h3
                   style={{
