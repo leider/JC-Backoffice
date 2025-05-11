@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
-import { Checkbox, Col, Form } from "antd";
+import { Checkbox, CheckboxProps, Col, Form } from "antd";
 import { TextField } from "@/widgets/TextField";
 import SingleSelect from "@/widgets/SingleSelect";
 import { NumberInput } from "@/widgets/numericInputWidgets";
@@ -18,11 +18,22 @@ import filter from "lodash/filter";
 import map from "lodash/map";
 import { useWatch } from "antd/es/form/Form";
 import { useParams } from "react-router";
+import { usePresseCheckedCallback } from "@/components/veranstaltung/presse/usePresseCheckedCallback.tsx";
 
-function Checker({ name, label, disabled }: { readonly label: string; readonly name: string | string[]; readonly disabled?: boolean }) {
+function Checker({
+  name,
+  label,
+  disabled,
+  onChange,
+}: {
+  readonly label: string;
+  readonly name: string | string[];
+  readonly disabled?: boolean;
+  readonly onChange?: CheckboxProps["onChange"];
+}) {
   return (
     <Col span={6}>
-      <CheckItem disabled={disabled} label={label} name={name} />
+      <CheckItem disabled={disabled} label={label} name={name} onChange={onChange} />
     </Col>
   );
 }
@@ -30,6 +41,7 @@ function Checker({ name, label, disabled }: { readonly label: string; readonly n
 export default function EventCard() {
   const form = useFormInstance<Konzert>();
   const { currentUser, optionen, orte, allUsers } = useJazzContext();
+  const { presseChecked } = usePresseCheckedCallback(false);
   const { url } = useParams();
   const id = useWatch("id", { preserve: true });
 
@@ -68,7 +80,7 @@ export default function EventCard() {
         <Checker disabled={!isBookingTeam} label="Ist bestätigt" name={["kopf", "confirmed"]} />
         <Checker label="Technik ist geklärt" name={["technik", "checked"]} />
         <Checker label="Braucht Presse" name="brauchtPresse" />
-        <Checker label="Presse OK" name={["presse", "checked"]} />
+        <Checker label="Presse OK" name={["presse", "checked"]} onChange={presseChecked} />
         <Checker label="Ist abgesagt" name={["kopf", "abgesagt"]} />
         <Checker label="Braucht Hotel" name={["artist", "brauchtHotel"]} />
         <Checker label="Flügel stimmen" name={["technik", "fluegel"]} />
