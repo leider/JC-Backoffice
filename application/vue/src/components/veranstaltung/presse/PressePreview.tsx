@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Renderer from "jc-shared/commons/renderer.ts";
-import "./preview.css";
 import isEmpty from "lodash/isEmpty";
 import VeranstaltungFormatter from "jc-shared/veranstaltung/VeranstaltungFormatter.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import map from "lodash/map";
 import JazzImage from "@/widgets/JazzImage.tsx";
 
-export function PressePreview({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
+export function PressePreview({
+  veranstaltung,
+  smallImages = false,
+}: {
+  readonly veranstaltung: Veranstaltung;
+  readonly smallImages?: boolean;
+}) {
   function updatePreview(veranstaltung: Veranstaltung) {
     const presse = veranstaltung.presse;
     const textToUse = isEmpty(presse.text) ? presse.originalText : presse.text;
@@ -33,7 +38,7 @@ ${presse.fullyQualifiedJazzclubURL}`,
     <>
       <div dangerouslySetInnerHTML={{ __html: preview }} />
       {map(veranstaltung.presse.image, (img) => (
-        <JazzImage img={img} key={img} width="100%" />
+        <JazzImage img={img} key={img} width={smallImages ? "10%" : "100%"} />
       ))}
     </>
   );

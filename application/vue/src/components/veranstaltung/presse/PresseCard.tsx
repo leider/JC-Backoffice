@@ -18,6 +18,7 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import { usePresseCheckedCallback } from "@/components/veranstaltung/presse/usePresseCheckedCallback.tsx";
 
 function TabLabel({ activePage, kind, title }: { readonly activePage: string; readonly kind: string; readonly title: string }) {
   const { color, icon } = colorsAndIconsForSections;
@@ -35,6 +36,7 @@ function TabLabel({ activePage, kind, title }: { readonly activePage: string; re
 
 export default function PresseCard({ isVermietung }: { readonly isVermietung: boolean }) {
   const form = useFormInstance();
+  const { presseChecked } = usePresseCheckedCallback(isVermietung);
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
   const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
@@ -69,7 +71,7 @@ export default function PresseCard({ isVermietung }: { readonly isVermietung: bo
     <Collapsible label="Pressematerial" noTopBorder suffix="presse">
       <JazzRow>
         <Col lg={12} xs={24}>
-          <CheckItem label="Ist so OK" name={["presse", "checked"]} />
+          <CheckItem label="Ist so OK" name={["presse", "checked"]} onChange={presseChecked} />
           <TextField label="URL-Suffix bei jazzclub.de" name={["presse", "jazzclubURL"]} />
           <Tabs
             activeKey={activePage}

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-nested-conditional*/
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import isEmpty from "lodash/isEmpty";
 import isNil from "lodash/isNil";

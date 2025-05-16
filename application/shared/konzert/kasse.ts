@@ -70,7 +70,7 @@ export default class Kasse {
       const ak = object.anzahlBesucherAK ?? 0;
       Object.assign(this, object, {
         kassenfreigabeAm: Misc.stringOrDateToDate(object.kassenfreigabeAm),
-        anzahlBesucherAK: isString(ak) ? parseInt(ak) : isNaN(ak) ? 0 : ak,
+        anzahlBesucherAK: isString(ak) ? parseInt(ak) : ak,
         startinhalt: {
           "10": object.startinhalt?.["10"],
           "20": object.startinhalt?.["20"],

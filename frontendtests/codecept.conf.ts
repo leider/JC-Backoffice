@@ -1,5 +1,21 @@
 import SqliteHelper from "./helpers/SqliteHelper";
 
+const reporters = {
+  "codeceptjs-cli-reporter": {
+    stdout: "-",
+    options: {
+      verbose: false,
+      steps: true,
+      noreverse: true,
+      debug: false,
+    },
+  },
+};
+
+if (process.env.IJ_CODECEPTJS_MOCHA_MULTI) {
+  reporters["codeceptjs-intellij-reporter"] = { stdout: "-" };
+}
+
 export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
@@ -20,6 +36,7 @@ export const config: CodeceptJS.MainConfig = {
       require: "codeceptjs-chai",
     },
   },
+  mocha: { reporterOptions: reporters },
   plugins: {
     auth: {
       enabled: true,

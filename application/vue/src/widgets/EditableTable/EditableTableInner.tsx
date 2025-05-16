@@ -66,6 +66,17 @@ function widthForType({ width, type }: Columns) {
   }
 }
 
+function alignForType(item: Columns) {
+  switch (item.type) {
+    case "integer":
+      return "end";
+    case "boolean":
+      return "center";
+    default:
+      return "start";
+  }
+}
+
 export type DuplInfo = { name: string; vals: string[]; keys: string[] }[];
 
 export default function EditableTableInner<T>({
@@ -169,7 +180,7 @@ export default function EditableTableInner<T>({
         presets: item.presets,
         usersWithKann: usersWithKann,
         render: renderByType(item),
-        align: item.type === "integer" ? "end" : item.type === "boolean" ? "center" : "start",
+        align: alignForType(item),
         onCell: undefined,
         width: widthForType(item),
         min: item.min,

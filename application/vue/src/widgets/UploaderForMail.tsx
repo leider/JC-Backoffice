@@ -31,7 +31,7 @@ export default function UploaderForMail({ fileList, setFileList }: UploaderParam
       if (!find(fileList, { name: file.name })) {
         setFileList((prev) => [...prev, file]);
       }
-      return false;
+      return true;
     },
     fileList,
     multiple: true,

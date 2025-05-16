@@ -14,7 +14,7 @@ import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useSearchParams } from "react-router";
 import find from "lodash/find";
 
-export function History() {
+export default function History() {
   const [form] = Form.useForm<{ collection: string; id: string }>();
   const [search, setSearch] = useSearchParams();
   const [expanded, setExpanded] = useState(false);

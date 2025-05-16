@@ -7,10 +7,12 @@ import CheckItem from "@/widgets/CheckItem";
 import StartEndPickers from "@/widgets/StartEndPickers.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import { usePresseCheckedCallback } from "@/components/veranstaltung/presse/usePresseCheckedCallback.tsx";
 
 export default function EventCard() {
-  const brauchtPresse = useWatch(["presse", "checked"], { preserve: true });
+  const brauchtPresse = useWatch("brauchtPresse", { preserve: true });
   const brauchtTechnik = useWatch(["technik", "checked"], { preserve: true });
+  const { presseChecked } = usePresseCheckedCallback(true);
 
   return (
     <Collapsible label="Event" noTopBorder suffix="allgemeines">
@@ -30,7 +32,7 @@ export default function EventCard() {
           ) : null}
           {brauchtPresse ? (
             <>
-              <CheckItem label="Presse OK" name={["presse", "checked"]} />
+              <CheckItem label="Presse OK" name={["presse", "checked"]} onChange={presseChecked} />
               <CheckItem label="Fotograf einladen" name={["kopf", "fotografBestellen"]} />
             </>
           ) : null}

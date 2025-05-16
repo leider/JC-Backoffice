@@ -8,7 +8,7 @@ Before(({ I, login }) => {
 
 Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.amOnPage("/vue/konzert/new");
-  I.wait(0.5);
+  I.waitForText("Typ");
   I.see("Typ");
   I.fillField('//input[@placeholder="Startdatum"]', "200320 18:30\t");
   I.click("OK");

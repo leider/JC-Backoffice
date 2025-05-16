@@ -17,22 +17,9 @@ import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
 
-export default function InfoCard() {
+function FreigabeButton({ freigabe }: { readonly freigabe: boolean }) {
   const form = useFormInstance<Vermietung>();
   const { currentUser, isDirty } = useJazzContext();
-  const { checkDirty } = useContext(JazzFormContext);
-
-  const status = useWatch(["angebot", "status"], { form, preserve: true });
-
-  const startDate = useWatch("startDate", { form, preserve: true });
-  const vergangen = useMemo(() => {
-    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
-  }, [startDate]);
-
-  const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
-  useEffect(() => {
-    checkDirty();
-  }, [checkDirty, freigabe]);
 
   const darfFreigeben = useMemo(() => currentUser.accessrights.darfKasseFreigeben, [currentUser.accessrights.darfKasseFreigeben]);
   const darfFreigabeAufheben = useMemo(() => currentUser.accessrights.isSuperuser, [currentUser.accessrights.isSuperuser]);
@@ -72,6 +59,50 @@ export default function InfoCard() {
       }),
     [modal, form],
   );
+  return !freigabe ? (
+    <Form.Item label="&nbsp;">
+      <ButtonWithIcon
+        block
+        disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
+        icon="Unlock"
+        onClick={freigeben}
+        text="Rechnung freigeben..."
+      />
+    </Form.Item>
+  ) : (
+    <>
+      <Form.Item label="&nbsp;">
+        <ButtonWithIcon
+          block
+          color="#c71c2c"
+          disabled={isDirty || !darfFreigabeAufheben}
+          icon="Lock"
+          onClick={freigabeAufheben}
+          text="Ist freigegeben"
+          type="primary"
+        />
+      </Form.Item>
+      <TextField disabled label="Durch" name={["angebot", "freigabe"]} />
+    </>
+  );
+}
+
+export default function InfoCard() {
+  const form = useFormInstance<Vermietung>();
+  const { isDirty } = useJazzContext();
+  const { checkDirty } = useContext(JazzFormContext);
+
+  const status = useWatch(["angebot", "status"], { form, preserve: true });
+
+  const startDate = useWatch("startDate", { form, preserve: true });
+  const vergangen = useMemo(() => {
+    return DatumUhrzeit.forJSDate(startDate).istVor(new DatumUhrzeit());
+  }, [startDate]);
+
+  const freigabe = useWatch(["angebot", "freigabe"], { form, preserve: true });
+  useEffect(() => {
+    checkDirty();
+  }, [checkDirty, freigabe]);
 
   const statusse = useMemo(() => {
     function radioOption(icon: keyof typeof icons, label: string, value: AngebotStatus) {
@@ -133,36 +164,7 @@ export default function InfoCard() {
             </Button>
           </Form.Item>
         </Col>
-        <Col span={10}>
-          {vergangen ? (
-            !freigabe ? (
-              <Form.Item label="&nbsp;">
-                <ButtonWithIcon
-                  block
-                  disabled={status !== "abgerechnet" || isDirty || !darfFreigeben}
-                  icon="Unlock"
-                  onClick={freigeben}
-                  text="Rechnung freigeben..."
-                />
-              </Form.Item>
-            ) : (
-              <>
-                <Form.Item label="&nbsp;">
-                  <ButtonWithIcon
-                    block
-                    color="#c71c2c"
-                    disabled={isDirty || !darfFreigabeAufheben}
-                    icon="Lock"
-                    onClick={freigabeAufheben}
-                    text="Ist freigegeben"
-                    type="primary"
-                  />
-                </Form.Item>
-                <TextField disabled label="Durch" name={["angebot", "freigabe"]} />
-              </>
-            )
-          ) : null}
-        </Col>
+        <Col span={10}>{vergangen ? <FreigabeButton freigabe={!!freigabe} /> : null}</Col>
       </JazzRow>
     </Collapsible>
   );

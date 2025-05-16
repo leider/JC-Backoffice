@@ -66,7 +66,7 @@ export default function Uploader({ name, typ, onlyImages = false }: UploaderPara
         return false;
       }
       setFileList([...fileList, file]);
-      return false;
+      return true;
     },
     fileList,
   };

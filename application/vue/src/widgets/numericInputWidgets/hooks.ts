@@ -21,7 +21,12 @@ export const useFormats = (decimals: number, isPercentageType?: boolean, transfo
   const { internalFormat, displayFormat } = useMemo(() => {
     const defaultFormat = "0,0." + "0".repeat(decimals);
 
-    const internalFormat = isPercentageType ? "0,0." + "0".repeat(decimals + (transformToPercentage ? 2 : 0)) : defaultFormat;
+    let internalFormat: string;
+    if (isPercentageType) {
+      internalFormat = "0,0." + "0".repeat(decimals + (transformToPercentage ? 2 : 0));
+    } else {
+      internalFormat = defaultFormat;
+    }
 
     const displayFormat = defaultFormat;
 
@@ -38,20 +43,14 @@ export const useFormats = (decimals: number, isPercentageType?: boolean, transfo
  * @param decimals Number of decimal places
  * @param {number} initialMin The lower limit
  * @param {number} imitialMax The upper limit
- * @param {boolean} exclusiveMin A boolean to tell, if we want the lower limit to be exclusive
- * @param {boolean} exclusiveMax If true, we subtract the smallest possible number from the initial limit
  * @returns The calculated limits based on the hooks arguments
  */
-export const useLimits = (decimals: number, initialMin?: number, imitialMax?: number, exclusiveMin?: boolean, exclusiveMax?: boolean) => {
+export const useLimits = (decimals: number, initialMin?: number, imitialMax?: number) => {
   const { minLimit, maxLimit } = useMemo(() => {
-    const minimalIncrement = Math.pow(10, -1 * decimals);
-
-    const minLimit = initialMin === undefined ? undefined : initialMin + (exclusiveMin ? minimalIncrement : 0);
-
-    const maxLimit = imitialMax === undefined ? undefined : imitialMax - (exclusiveMax ? minimalIncrement : 0);
-
+    const minLimit = initialMin === undefined ? undefined : initialMin;
+    const maxLimit = imitialMax === undefined ? undefined : imitialMax;
     return { minLimit, maxLimit };
-  }, [initialMin, imitialMax, exclusiveMin, exclusiveMax, decimals]);
+  }, [initialMin, imitialMax]);
 
   return { minLimit, maxLimit };
 };
