@@ -82,7 +82,7 @@ Before(({ login }) => {
 });
 
 const menuToClick = new DataTable(["menu"]);
-//menuToClick.add(["Team"]);
+menuToClick.add(["Team"]);
 menuToClick.add(["Veranstaltungen"]);
 
 Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
