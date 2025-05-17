@@ -33,7 +33,7 @@ Scenario("Orte erzeugen, ändern und löschen", async ({ I, ortePage }) => {
   };
 
   I.amOnPage("/vue/orte");
-  I.waitForText("Orte");
+  I.waitForText("Orte", 2);
 
   ortePage.addOrt(expectedOrt);
   ortePage.verifyOrtInTable(0, expectedOrt);

@@ -51,6 +51,6 @@ Scenario("Erzeuge neues Konzert", async ({ I }) => {
   I.assertDeepEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
   I.amOnPage("/vue/veranstaltungen");
-  I.wait(0.5);
+  I.waitForText("Veranstaltungen");
   I.see("Konzert #1");
 });
