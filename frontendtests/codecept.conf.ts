@@ -68,6 +68,8 @@ export const config: CodeceptJS.MainConfig = {
   include: {
     filters: "./helpers/filters",
     ortePage: "./pages/OrtePage",
+    konzertPage: "./pages/KonzertPage",
+    konzertGaestePage: "./pages/KonzertGaestePage",
   },
   bootstrap: async () => {
     new SqliteHelper(config).createData("userstore", "admin");
