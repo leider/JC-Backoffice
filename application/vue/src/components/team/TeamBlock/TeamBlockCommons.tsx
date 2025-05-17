@@ -19,8 +19,9 @@ export default function TeamBlockCommons({
   readonly contentComponent: ReactNode;
   readonly extrasExpanded?: ReactNode;
 }) {
+  const isAdmin = !!extrasExpanded;
   const { memoizedVeranstaltung } = useJazzContext();
-  const { period } = useContext(TeamContext);
+  const { calcHeight } = useContext(TeamContext);
   const highlight = useMemo(
     () => veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id && !!memoizedVeranstaltung?.highlight,
     [memoizedVeranstaltung, veranstaltung.id],
@@ -41,6 +42,8 @@ export default function TeamBlockCommons({
     }
   }, [highlight, initiallyOpen, memoizedVeranstaltung]);
 
+  const placeholderHeight = calcHeight({ expanded, isAdmin, veranstaltung });
+
   const textColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
   const backgroundColor = useMemo(() => veranstaltung.color, [veranstaltung.color]);
   const onChange = useCallback(() => setExpanded(!expanded), [expanded]);
@@ -55,13 +58,10 @@ export default function TeamBlockCommons({
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
 
   const { inView, ref } = useInView({ triggerOnce: true });
-  const renderWhenInView = useMemo(() => {
-    return (
-      inView ||
-      veranstaltung.isDisplayedAbove(memoizedVeranstaltung?.veranstaltung, period === "Vergangene") ||
-      veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id
-    );
-  }, [inView, memoizedVeranstaltung, period, veranstaltung]);
+  const renderWhenInView = useMemo(
+    () => inView || veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id,
+    [inView, memoizedVeranstaltung, veranstaltung],
+  );
 
   return (
     <ConfigProvider theme={theme}>
@@ -69,29 +69,41 @@ export default function TeamBlockCommons({
         id={veranstaltung.id}
         ref={ref}
         span={24}
-        style={highlight ? { border: `solid 4px white`, boxShadow: "0 0 40px var(--ant-color-text-secondary)" } : undefined}
+        style={
+          highlight
+            ? {
+                border: `solid 4px white`,
+                boxShadow: "0 0 40px var(--ant-color-text-secondary)",
+              }
+            : undefined
+        }
       >
-        {veranstaltung.ghost ? (
-          <div style={{ backgroundColor, padding: "2px 16px" }}>
-            <TeamBlockHeader veranstaltung={veranstaltung} />
-          </div>
+        {renderWhenInView ? (
+          // eslint-disable-next-line sonarjs/no-nested-conditional
+          veranstaltung.ghost ? (
+            <div style={{ backgroundColor, padding: "2px 16px" }}>
+              <TeamBlockHeader veranstaltung={veranstaltung} />
+            </div>
+          ) : (
+            <Collapse
+              activeKey={expanded ? veranstaltung.id : undefined}
+              expandIcon={expandIcon({ color: textColor })}
+              items={[
+                {
+                  key: veranstaltung.id ?? "",
+                  className: "team-block",
+                  label: <TeamBlockHeader veranstaltung={veranstaltung} />,
+                  extra: expanded ? (extrasExpanded ?? extrasComponent) : extrasComponent,
+                  children: renderWhenInView ? contentComponent : null,
+                },
+              ]}
+              onChange={onChange}
+              size="small"
+              style={{ borderColor: backgroundColor }}
+            />
+          )
         ) : (
-          <Collapse
-            activeKey={expanded ? veranstaltung.id : undefined}
-            expandIcon={expandIcon({ color: textColor })}
-            items={[
-              {
-                key: veranstaltung.id ?? "",
-                className: "team-block",
-                label: <TeamBlockHeader veranstaltung={veranstaltung} />,
-                extra: expanded ? (extrasExpanded ?? extrasComponent) : extrasComponent,
-                children: renderWhenInView ? contentComponent : null,
-              },
-            ]}
-            onChange={onChange}
-            size="small"
-            style={{ borderColor: backgroundColor }}
-          />
+          <div style={{ height: placeholderHeight }} />
         )}
       </Col>
     </ConfigProvider>
