@@ -42,6 +42,6 @@ Scenario("Erzeuge neue Vermietung", async ({ I }) => {
   I.assertEqual(res.endDate, "2020-03-20T19:00:00.000Z");
 
   I.amOnPage("/vue/veranstaltungen");
-  I.waitForText("Vermietung #1");
+  I.waitForText("Vermietung #1", 2);
   I.see("Vermietung #1");
 });

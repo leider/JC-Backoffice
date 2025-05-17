@@ -9,6 +9,7 @@ Before(({ I, login }) => {
 
 Scenario("Erzeuge Optionen", async ({ I }) => {
   I.amOnPage("/vue/optionen");
+  I.waitForText("Kooperationen");
   I.fillField("Kooperationen", "UI Test\n");
   I.click("Speichern");
 
