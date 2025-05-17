@@ -2,7 +2,7 @@ let count = 0;
 const start = new Date("2020-03-20T17:30:00.000Z");
 const end = new Date("2020-03-20T19:00:00.000Z");
 
-function addDaysTo(date: Date, days: number) {
+function addDaysTo(date, days) {
   const result = new Date(date.valueOf());
   result.setDate(result.getDate() + days);
   return result;
