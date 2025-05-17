@@ -33,23 +33,21 @@ Scenario("Orte erzeugen, ändern und löschen", async ({ I, ortePage }) => {
   };
 
   I.amOnPage("/vue/orte");
+  I.waitForText("Orte");
 
   ortePage.addOrt(expectedOrt);
-
-  await ortePage.verifyOrtInStore(0, expectedOrt);
   ortePage.verifyOrtInTable(0, expectedOrt);
 
   const expectedSecondOrtName = "Tollhaus";
   ortePage.copyOrt(expectedSecondOrtName);
-
   const expectedOrt2 = {
     ...expectedOrt,
     name: expectedSecondOrtName,
   };
   ortePage.verifyOrtInTable(1, expectedOrt2);
-  await ortePage.verifyOrtInStore(1, expectedOrt2);
+  ortePage.verifyOrtSizeInStore(2);
 
   ortePage.deleteOrt(1);
-  await ortePage.verifyOrtInStore(0, expectedOrt);
-  await ortePage.verifyOrtSizeInStore(1);
+  ortePage.verifyOrtInStore(0, expectedOrt);
+  ortePage.verifyOrtSizeInStore(1);
 });

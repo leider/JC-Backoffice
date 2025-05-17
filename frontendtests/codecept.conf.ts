@@ -26,7 +26,7 @@ export const config: CodeceptJS.MainConfig = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: false,
+      show: true,
       keepCookies: true,
     },
     SqliteHelper: {
@@ -46,6 +46,7 @@ export const config: CodeceptJS.MainConfig = {
         admin: {
           login: (I) => {
             I.amOnPage("/");
+            I.waitForText("Benutzername");
             I.fillField("Benutzername", "admin");
             I.fillField("Passwort", "admin");
             I.click("Anmelden");
