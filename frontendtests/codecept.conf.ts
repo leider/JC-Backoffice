@@ -16,6 +16,9 @@ if (process.env.IJ_CODECEPTJS_MOCHA_MULTI) {
   reporters["codeceptjs-intellij-reporter"] = { stdout: "-" };
 }
 
+const showBrowser = true;
+const CI = !!process.env.CI;
+
 export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
@@ -26,7 +29,7 @@ export const config: CodeceptJS.MainConfig = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: true,
+      show: showBrowser && !CI,
       keepCookies: true,
     },
     SqliteHelper: {
