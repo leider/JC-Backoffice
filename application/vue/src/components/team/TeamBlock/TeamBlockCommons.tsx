@@ -29,6 +29,9 @@ export default function TeamBlockCommons({
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
     setExpanded(initiallyOpen || highlight);
+  }, [highlight, initiallyOpen]);
+
+  useEffect(() => {
     if (highlight) {
       setTimeout(() => {
         const element = document.getElementById(memoizedVeranstaltung?.veranstaltung?.id ?? "");
@@ -40,7 +43,7 @@ export default function TeamBlockCommons({
         }
       }, 1000);
     }
-  }, [highlight, initiallyOpen, memoizedVeranstaltung]);
+  }, [highlight, memoizedVeranstaltung]);
 
   const placeholderHeight = calcHeight({ expanded, isAdmin, veranstaltung });
 
