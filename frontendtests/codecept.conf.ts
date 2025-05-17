@@ -16,6 +16,9 @@ if (process.env.IJ_CODECEPTJS_MOCHA_MULTI) {
   reporters["codeceptjs-intellij-reporter"] = { stdout: "-" };
 }
 
+const showBrowser = true;
+const CI = !!process.env.CI;
+
 export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
@@ -26,7 +29,7 @@ export const config: CodeceptJS.MainConfig = {
       browser: "chromium",
       url: "http://localhost:1970",
       locale: "de",
-      show: false,
+      show: showBrowser && !CI,
       keepCookies: true,
     },
     SqliteHelper: {
@@ -46,6 +49,7 @@ export const config: CodeceptJS.MainConfig = {
         admin: {
           login: (I) => {
             I.amOnPage("/");
+            I.waitForText("Benutzername");
             I.fillField("Benutzername", "admin");
             I.fillField("Passwort", "admin");
             I.click("Anmelden");
@@ -53,8 +57,7 @@ export const config: CodeceptJS.MainConfig = {
           },
           check: (I) => {
             I.amOnPage("/");
-            I.wait(0.5);
-            I.see("Team");
+            I.waitForText("Team");
           },
           fetch: () => "yes",
           restore: () => {},

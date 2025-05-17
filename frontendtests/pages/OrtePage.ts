@@ -8,12 +8,12 @@ const buttons = {
 const tableCells = (column: string, index = 0): string =>
   `[data-testid="${column}${index}"]`;
 
-export function addOrt(ort: {
+export async function addOrt(ort: {
   name: string;
   flaeche: number;
   pressename: string;
   presseIn: string;
-}): void {
+}) {
   I.click(buttons.addInTable);
   I.click('[data-testid="name0"]');
   I.fillField("#name", ort.name);
@@ -47,7 +47,7 @@ export async function verifyOrtInStore(
   });
 }
 
-export function verifyOrtInTable(
+export async function verifyOrtInTable(
   rowNumber: number,
   ort: {
     name: string;
@@ -55,14 +55,14 @@ export function verifyOrtInTable(
     pressename: string;
     presseIn: string;
   },
-): void {
+) {
   I.see(ort.name, tableCells("name", rowNumber));
   I.see(ort.flaeche.toString(), tableCells("flaeche", rowNumber));
   I.see(ort.pressename, tableCells("pressename", rowNumber));
   I.see(ort.presseIn, tableCells("presseIn", rowNumber));
 }
 
-export function copyOrt(newName: string) {
+export async function copyOrt(newName: string) {
   I.click("button span .bi-files");
 
   I.click('[data-row-key="row1"] td:first-child');
@@ -72,7 +72,7 @@ export function copyOrt(newName: string) {
   I.click(buttons.speichern);
 }
 
-export function deleteOrt(number: number) {
+export async function deleteOrt(number: number) {
   I.click('[data-row-key="row' + number + '"] button span .bi-trash');
 
   I.click(buttons.speichern);

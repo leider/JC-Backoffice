@@ -1,7 +1,17 @@
+let count = 0;
+const start = new Date("2020-03-20T17:30:00.000Z");
+const end = new Date("2020-03-20T19:00:00.000Z");
+
+function addDaysTo(date, days) {
+  const result = new Date(date.valueOf());
+  result.setDate(result.getDate() + days);
+  return result;
+}
 function konzertHaving(object, name) {
+  count++;
   const empty = {
-    startDate: "2020-03-20T17:30:00.000Z",
-    endDate: "2020-03-20T19:00:00.000Z",
+    startDate: addDaysTo(start, count).toISOString(),
+    endDate: addDaysTo(end, count).toISOString(),
     kopf: {
       beschreibung: "",
       eventTyp: "Club Konzert",
@@ -72,8 +82,8 @@ Before(({ login }) => {
 });
 
 const menuToClick = new DataTable(["menu"]);
-menuToClick.add(["Veranstaltungen"]);
 menuToClick.add(["Team"]);
+menuToClick.add(["Veranstaltungen"]);
 
 Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   I.click(current.menu);

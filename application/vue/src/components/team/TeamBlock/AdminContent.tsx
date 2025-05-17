@@ -13,7 +13,6 @@ import { TeamContext } from "@/components/team/TeamContext.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useInView } from "react-intersection-observer";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import cloneDeep from "lodash/cloneDeep";
 
@@ -56,8 +55,7 @@ function Buttons({ showMitarbeiter, dirty, setFormValue, veranstaltung, forVermi
 
 export default function AdminContent({ veranstaltung: veranVermiet }: { readonly veranstaltung: Veranstaltung }) {
   const [form] = Form.useForm();
-  const { isCompactMode, memoizedVeranstaltung } = useJazzContext();
-  const { period } = useContext(TeamContext);
+  const { isCompactMode } = useJazzContext();
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
   const [veranstaltung, setVeranstaltung] = useState<Veranstaltung>(veranVermiet);
@@ -142,17 +140,8 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     setShowMitarbeiter(!showMitarbeiter);
   }, [showMitarbeiter]);
 
-  const { inView, ref } = useInView({ triggerOnce: true });
-  const renderWhenInView = useMemo(() => {
-    return (
-      inView ||
-      veranstaltung.isDisplayedAbove(memoizedVeranstaltung?.veranstaltung, period === "Vergangene") ||
-      veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id
-    );
-  }, [inView, memoizedVeranstaltung, period, veranstaltung]);
-
   return (
-    <div ref={ref} style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
+    <div style={{ margin: isCompactMode ? -8 : -12, backgroundColor: backgroundColor, borderColor: backgroundColor }}>
       <ConfigProvider theme={{ token: { fontSizeIcon: 10 } }}>
         <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange} size="small">
           <Row>
@@ -165,36 +154,32 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
               </Typography.Title>
             </Col>
             <Col span={18}>
-              {renderWhenInView ? (
-                <Buttons
-                  dirty={dirty}
-                  forVermietung={forVermietung}
-                  setFormValue={setFormValue}
-                  showMitarbeiter={showMitarbeiter}
-                  veranstaltung={veranstaltung}
-                />
-              ) : null}
+              <Buttons
+                dirty={dirty}
+                forVermietung={forVermietung}
+                setFormValue={setFormValue}
+                showMitarbeiter={showMitarbeiter}
+                veranstaltung={veranstaltung}
+              />
             </Col>
           </Row>
-          {renderWhenInView ? (
-            <ConfigProvider theme={staffRowsTheme}>
-              <Collapse
-                activeKey={showMitarbeiter ? "mitarbeiter" : ""}
-                ghost
-                items={[
-                  {
-                    showArrow: false,
-                    key: "mitarbeiter",
-                    children: (
-                      <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
-                        <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
-                      </div>
-                    ),
-                  },
-                ]}
-              />
-            </ConfigProvider>
-          ) : null}
+          <ConfigProvider theme={staffRowsTheme}>
+            <Collapse
+              activeKey={showMitarbeiter ? "mitarbeiter" : ""}
+              ghost
+              items={[
+                {
+                  showArrow: false,
+                  key: "mitarbeiter",
+                  children: (
+                    <div style={{ padding: 8, margin: -8, marginTop: -12 }}>
+                      <EditableStaffRows brauchtTechnik={brauchtTechnik} forVermietung={forVermietung} usersAsOptions={usersAsOptions} />
+                    </div>
+                  ),
+                },
+              ]}
+            />
+          </ConfigProvider>
         </Form>
       </ConfigProvider>
     </div>
