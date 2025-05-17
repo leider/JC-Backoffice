@@ -32,7 +32,7 @@ Scenario("Orte erzeugen, ändern und löschen", async ({ I, ortePage }) => {
     presseIn: expectedPresseIn,
   };
 
-  I.amOnPage("/vue/orte");
+  ortePage.goToOrte();
 
   ortePage.addOrt(expectedOrt);
 

@@ -8,6 +8,10 @@ const buttons = {
 const tableCells = (column: string, index = 0): string =>
   `[data-testid="${column}${index}"]`;
 
+export function goToOrte() {
+  I.amOnPage("/vue/orte");
+}
+
 export function addOrt(ort: {
   name: string;
   flaeche: number;
