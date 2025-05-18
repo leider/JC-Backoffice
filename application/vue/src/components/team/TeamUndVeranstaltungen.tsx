@@ -12,7 +12,7 @@ import map from "lodash/map";
 import { useLocation } from "react-router";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import useCountWrappedLines from "@/components/team/useCountWrappedLines.ts";
+import useCalcHeight from "@/components/team/useCalcHeight.ts";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -21,11 +21,11 @@ function Monate({ monate }: { monate: string[] }) {
 export function TeamUndVeranstaltungen() {
   const { pathname } = useLocation();
   const { memoizedVeranstaltung, setMemoizedVeranstaltung } = useJazzContext();
-  const calcHeight = useCountWrappedLines();
+  const calcHeight = useCalcHeight();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
   const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions } = useTeamVeranstaltungenCommons();
 
-  const subState = useMemo(
+  const teamContext = useMemo(
     () => ({ veranstaltungenNachMonat, usersAsOptions, period, calcHeight }),
     [usersAsOptions, veranstaltungenNachMonat, period, calcHeight],
   );
@@ -61,7 +61,7 @@ export function TeamUndVeranstaltungen() {
           tags={<TeamFilter key="TeamFilter" />}
           title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
-        <TeamContext.Provider value={subState}>
+        <TeamContext.Provider value={teamContext}>
           <Monate monate={monate} />
         </TeamContext.Provider>
       </Col>

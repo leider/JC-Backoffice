@@ -25,8 +25,6 @@ function useColWidth() {
   return width / 2;
 }
 
-const arrowWidth = 26;
-const devWidth = 15;
 const tagsWidth = 70;
 const previewWidth = 21;
 const buttonsHeight = 26;
@@ -47,11 +45,10 @@ function calcNoOfLines(text: string, context: CanvasRenderingContext2D, width: n
     },
     { lines: [], currentLine: "" },
   );
-
   return (currentLine ? [...lines, currentLine] : lines).length;
 }
 
-export default function useCountWrappedLines() {
+export default function useCalcHeight() {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   const colWidth = useColWidth();
@@ -61,9 +58,11 @@ export default function useCountWrappedLines() {
     context.font = "normal 600 " + (isCompactMode ? "18px" : "20px") + " Montserrat, Helvetica, Arial, sans-serif";
   }
 
+  const collapseArrowWidth = useMemo(() => (isCompactMode ? 25 : 31), [isCompactMode]);
+
   const textLineHeight = useMemo(() => (isCompactMode ? 26 : 28), [isCompactMode]);
   const staffHeight = useMemo(() => (isCompactMode ? 58 : 68), [isCompactMode]);
-  const staffExtraHeight = useMemo(() => (isCompactMode ? 16 : 24), [isCompactMode]);
+  const staffExtraHeight = useMemo(() => (isCompactMode ? 14 : 24), [isCompactMode]);
   const tagsHeight = useMemo(() => (isCompactMode ? 19 : 20), [isCompactMode]);
 
   return useCallback(
@@ -71,21 +70,24 @@ export default function useCountWrappedLines() {
       if (!context) {
         return 1;
       }
-      const delta = (expanded && isAdmin ? tagsWidth : previewWidth) + arrowWidth + devWidth;
+      const expandedAndNotGhost = expanded && !veranstaltung.ghost;
+      const previewEyeWidth = veranstaltung.ghost ? 0 : previewWidth;
+
+      const delta = collapseArrowWidth + (expandedAndNotGhost && isAdmin ? tagsWidth : previewEyeWidth);
       const text = veranstaltung.kopf.titel;
       const noOfLines = calcNoOfLines(text, context, colWidth - delta);
       const height = (noOfLines + 1) * textLineHeight + 2;
-      if (!expanded) {
+      if (!expandedAndNotGhost) {
         return height;
       }
-      if (!isAdmin) {
-        const noOfStaff = veranstaltung.staff.noOfRowsNeeded;
-        return noOfStaff ? noOfStaff * staffHeight + height + staffExtraHeight : staffHeight + height;
-      } else {
+      if (isAdmin) {
         const noOfTags = createTaggies(veranstaltung).length;
         return Math.max(noOfTags * tagsHeight, height) + buttonsHeight;
+      } else {
+        const noOfStaff = veranstaltung.staff.noOfRowsNeeded;
+        return noOfStaff ? noOfStaff * staffHeight + height + staffExtraHeight : staffHeight + height - 2;
       }
     },
-    [colWidth, context, staffExtraHeight, staffHeight, tagsHeight, textLineHeight],
+    [colWidth, collapseArrowWidth, context, staffExtraHeight, staffHeight, tagsHeight, textLineHeight],
   );
 }

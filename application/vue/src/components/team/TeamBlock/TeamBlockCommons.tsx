@@ -7,7 +7,8 @@ import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 import { useInView } from "react-intersection-observer";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
-import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
+
+const DEBUG_PREVIEW_HEIGHT = false;
 
 export default function TeamBlockCommons({
   veranstaltung,
@@ -22,7 +23,7 @@ export default function TeamBlockCommons({
 }) {
   const isAdmin = !!extrasExpanded;
   const { memoizedVeranstaltung } = useJazzContext();
-  const { calcHeight } = useContext(TeamContext);
+  const { calcHeight, period } = useContext(TeamContext);
   const highlight = useMemo(
     () => veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id && !!memoizedVeranstaltung?.highlight,
     [memoizedVeranstaltung, veranstaltung.id],
@@ -61,8 +62,7 @@ export default function TeamBlockCommons({
 
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
 
-  const period = (localStorage.getItem("veranstaltungenPeriod") ?? "zukuenftige") as Period;
-  const { inView, ref } = useInView({ triggerOnce: period !== "alle" });
+  const { inView, ref } = useInView({ triggerOnce: period !== "Alle" });
   const renderWhenInView = useMemo(
     () => inView || veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id,
     [inView, memoizedVeranstaltung, veranstaltung],
@@ -83,6 +83,11 @@ export default function TeamBlockCommons({
             : undefined
         }
       >
+        {DEBUG_PREVIEW_HEIGHT && (
+          <div
+            style={{ backgroundColor: "black", height: placeholderHeight, width: 20, position: "absolute", top: 0, left: 0, zIndex: 100 }}
+          />
+        )}
         {renderWhenInView ? (
           // eslint-disable-next-line sonarjs/no-nested-conditional
           veranstaltung.ghost ? (
