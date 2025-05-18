@@ -7,6 +7,7 @@ import { expandIcon } from "@/widgets/collapseExpandIcon.tsx";
 import { useInView } from "react-intersection-observer";
 import { ButtonPreview } from "@/components/team/TeamBlock/ButtonPreview.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
+import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
 export default function TeamBlockCommons({
   veranstaltung,
@@ -60,7 +61,8 @@ export default function TeamBlockCommons({
 
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
 
-  const { inView, ref } = useInView({ triggerOnce: true });
+  const period = (localStorage.getItem("veranstaltungenPeriod") ?? "zukuenftige") as Period;
+  const { inView, ref } = useInView({ triggerOnce: period !== "alle" });
   const renderWhenInView = useMemo(
     () => inView || veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id,
     [inView, memoizedVeranstaltung, veranstaltung],
@@ -106,7 +108,7 @@ export default function TeamBlockCommons({
             />
           )
         ) : (
-          <div style={{ height: placeholderHeight }} />
+          <div style={{ backgroundColor, height: placeholderHeight }} />
         )}
       </Col>
     </ConfigProvider>
