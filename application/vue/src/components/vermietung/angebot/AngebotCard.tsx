@@ -4,7 +4,6 @@ import { Col } from "antd";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import { NumberInputWithDirectValue } from "@/widgets/numericInputWidgets/NumericInputs.tsx";
 import Angebot from "jc-shared/vermietung/angebot.ts";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TextField } from "@/widgets/TextField.tsx";
 import { useWatch } from "antd/es/form/Form";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
@@ -27,17 +26,12 @@ function FreiRow({ nummer, readonly }: { readonly nummer: number; readonly reado
 
 export default function AngebotCard() {
   const form = useFormInstance();
-
   const angFields = useWatch("angebot", { form, preserve: true });
-
   const angebot = useMemo(() => new Angebot(angFields), [angFields]);
-
   const readonly = useMemo(() => !!angebot.freigabe, [angebot.freigabe]);
 
-  const { lg } = useBreakpoint();
-
   return (
-    <Collapsible amount={angebot.summe} label="Posten" noTopBorder={lg} suffix="angebot">
+    <Collapsible amount={angebot.summe} label="Posten" noTopBorder suffix="angebot">
       <JazzRow>
         <Col span={8}>
           <NumberInput decimals={2} disabled={readonly} label="Saalmiete" name={["angebot", "saalmiete"]} suffix="€" />

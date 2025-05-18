@@ -30,6 +30,7 @@ import filter from "lodash/filter";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import "./sendmail.css";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 function mailAddressOrStringAsText(addressOrString: string | { name: string; address: string }) {
   if (isString(addressOrString)) {
@@ -215,55 +216,57 @@ export default function SendMail() {
   return (
     <Form form={form} layout="vertical" onFinish={send} onValuesChange={onValuesChange}>
       <JazzPageHeader buttons={[<SendButton disabled={!dirty || effectiveUsers.length === 0} key="save" />]} title="Mail Senden" />
-      <RowWrapper>
-        <JazzRow>
-          <Col span={12}>
-            <MultiSelectWithTags label="Veranstaltungen" name="selectedVeranstaltungen" noAdd options={veranstaltungenDescriptions} />
-          </Col>
-          <Col span={12}>
-            <MultiSelectWithTags label="Empfänger (aus Regeln)" name="selectedRules" noAdd options={rulesDescriptions} />
-          </Col>
-        </JazzRow>
-        <JazzRow>
-          <Col span={12}>
-            <MultiSelectWithTags label="Mailinglisten" name="selectedLists" noAdd options={mailingListsDescriptions} />
-          </Col>
-          <Col span={12}>
-            <MitarbeiterMultiSelect label="Users" name="selectedUsers" usersAsOptions={usersAsOptions} />
-          </Col>
-        </JazzRow>
-        <JazzRow>
-          <Col span={12}>
-            <MultiSelectWithTags label="Benutzer mit Typ" name="selectedUserGruppen" noAdd options={userGruppen} />
-          </Col>
-          <Col span={12}>
-            <MultiSelectWithTags label="User kann..." name="selectedKann" noAdd options={kannFilter} />
-          </Col>
-        </JazzRow>
-        <Row gutter={12} style={{ marginBottom: 12 }}>
-          <Col span={24}>
-            <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
-              Effektive Adressen:
-            </Typography.Title>
-            {map(effectiveUsers, (u) => (
-              <Tag color="purple" key={u.email}>
-                <b>{u.name}</b> ({u.email})
-              </Tag>
-            ))}
-          </Col>
-        </Row>
-        <JazzRow>
-          <Col span={24}>
-            <TextField label="Subject" name="subject" required />
-          </Col>
-          <Col span={24}>
-            <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />
-          </Col>
-          <Col span={24}>
-            <UploaderForMail fileList={fileList} setFileList={setFileList} />
-          </Col>
-        </JazzRow>
-      </RowWrapper>
+      <ScrollingContent>
+        <RowWrapper>
+          <JazzRow>
+            <Col span={12}>
+              <MultiSelectWithTags label="Veranstaltungen" name="selectedVeranstaltungen" noAdd options={veranstaltungenDescriptions} />
+            </Col>
+            <Col span={12}>
+              <MultiSelectWithTags label="Empfänger (aus Regeln)" name="selectedRules" noAdd options={rulesDescriptions} />
+            </Col>
+          </JazzRow>
+          <JazzRow>
+            <Col span={12}>
+              <MultiSelectWithTags label="Mailinglisten" name="selectedLists" noAdd options={mailingListsDescriptions} />
+            </Col>
+            <Col span={12}>
+              <MitarbeiterMultiSelect label="Users" name="selectedUsers" usersAsOptions={usersAsOptions} />
+            </Col>
+          </JazzRow>
+          <JazzRow>
+            <Col span={12}>
+              <MultiSelectWithTags label="Benutzer mit Typ" name="selectedUserGruppen" noAdd options={userGruppen} />
+            </Col>
+            <Col span={12}>
+              <MultiSelectWithTags label="User kann..." name="selectedKann" noAdd options={kannFilter} />
+            </Col>
+          </JazzRow>
+          <Row gutter={12} style={{ marginBottom: 12 }}>
+            <Col span={24}>
+              <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+                Effektive Adressen:
+              </Typography.Title>
+              {map(effectiveUsers, (u) => (
+                <Tag color="purple" key={u.email}>
+                  <b>{u.name}</b> ({u.email})
+                </Tag>
+              ))}
+            </Col>
+          </Row>
+          <JazzRow>
+            <Col span={24}>
+              <TextField label="Subject" name="subject" required />
+            </Col>
+            <Col span={24}>
+              <MarkdownEditor label={<b>Anschreiben:</b>} name="markdown" />
+            </Col>
+            <Col span={24}>
+              <UploaderForMail fileList={fileList} setFileList={setFileList} />
+            </Col>
+          </JazzRow>
+        </RowWrapper>
+      </ScrollingContent>
     </Form>
   );
 }

@@ -13,6 +13,7 @@ import { useLocation } from "react-router";
 import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useCalcHeight from "@/components/team/useCalcHeight.ts";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -62,7 +63,9 @@ export function TeamUndVeranstaltungen() {
           title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
         <TeamContext.Provider value={teamContext}>
-          <Monate monate={monate} />
+          <ScrollingContent>
+            <Monate monate={monate} />
+          </ScrollingContent>
         </TeamContext.Provider>
       </Col>
     </Row>

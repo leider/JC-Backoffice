@@ -6,6 +6,7 @@ import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import { Columns } from "@/widgets/EditableTable/types.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 const columns: Columns[] = [
   { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
@@ -46,13 +47,15 @@ function GaesteCard({ label, path }: { readonly label: string; readonly path: st
 
 export default function TabGaeste({ inModal = false }: { readonly inModal?: boolean }) {
   return (
-    <JazzRow>
-      <Col lg={inModal ? 24 : 12} xs={24}>
-        <GaesteCard label="Gästeliste" path="gaesteliste" />
-      </Col>
-      <Col lg={inModal ? 24 : 12} xs={24}>
-        <GaesteCard label="Reservierungen" path="reservierungen" />
-      </Col>
-    </JazzRow>
+    <ScrollingContent>
+      <JazzRow>
+        <Col lg={inModal ? 24 : 12} xs={24}>
+          <GaesteCard label="Gästeliste" path="gaesteliste" />
+        </Col>
+        <Col lg={inModal ? 24 : 12} xs={24}>
+          <GaesteCard label="Reservierungen" path="reservierungen" />
+        </Col>
+      </JazzRow>
+    </ScrollingContent>
   );
 }

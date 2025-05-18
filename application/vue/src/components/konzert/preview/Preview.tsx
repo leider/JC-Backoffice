@@ -20,6 +20,7 @@ import { colorDefault } from "jc-shared/optionen/optionValues.ts";
 import map from "lodash/map";
 import { JazzRow } from "@/widgets/JazzRow";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 function EditButton({ url = "" }: { readonly url?: string }) {
   const type: ButtonType = "allgemeines";
@@ -69,30 +70,32 @@ export default function Preview() {
         style={titleStyle}
         title={`${konzert.kopf.titel} ${konzert.kopf.presseInEcht}`}
       />
-      <JazzRow>
-        <Col lg={12} xs={24}>
-          <GaesteInPreview konzert={konzert} refetch={refetch} />
-          <StaffInPreview veranstaltung={konzert} />
-          <KasseInPreview konzert={konzert} refetch={refetch} />
-          <InfoInPreview veranstaltung={konzert} />
-          <TechnikInPreview veranstaltung={konzert} />
-        </Col>
-        <Col lg={12} xs={24}>
-          <Collapsible label="Pressetext" suffix="presse">
-            <PressePreview veranstaltung={konzert} />
-          </Collapsible>
-          {konzert.agentur.name ? (
-            <Collapsible label="Agentur" suffix="allgemeines">
-              <AddressBlock kontakt={konzert.agentur} />
+      <ScrollingContent>
+        <JazzRow>
+          <Col lg={12} xs={24}>
+            <GaesteInPreview konzert={konzert} refetch={refetch} />
+            <StaffInPreview veranstaltung={konzert} />
+            <KasseInPreview konzert={konzert} refetch={refetch} />
+            <InfoInPreview veranstaltung={konzert} />
+            <TechnikInPreview veranstaltung={konzert} />
+          </Col>
+          <Col lg={12} xs={24}>
+            <Collapsible label="Pressetext" suffix="presse">
+              <PressePreview veranstaltung={konzert} />
             </Collapsible>
-          ) : null}
-          {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 ? (
-            <Collapsible label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`} suffix="hotel">
-              <AddressBlock kontakt={konzert.hotel} />
-            </Collapsible>
-          ) : null}
-        </Col>
-      </JazzRow>
+            {konzert.agentur.name ? (
+              <Collapsible label="Agentur" suffix="allgemeines">
+                <AddressBlock kontakt={konzert.agentur} />
+              </Collapsible>
+            ) : null}
+            {konzert.artist.brauchtHotel && konzert.unterkunft.anzahlZimmer > 0 ? (
+              <Collapsible label={`Hotel: ${konzert.unterkunft.anzahlZimmer} Zimmer für ${konzert.unterkunft.anzNacht}`} suffix="hotel">
+                <AddressBlock kontakt={konzert.hotel} />
+              </Collapsible>
+            ) : null}
+          </Col>
+        </JazzRow>
+      </ScrollingContent>
     </>
   );
 }

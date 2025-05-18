@@ -6,19 +6,22 @@ import EventCard from "@/components/vermietung/allgemeines/EventCard.tsx";
 import ArtistCard from "@/components/vermietung/allgemeines/ArtistCard.tsx";
 import VertragspartnerCard from "@/components/vermietung/allgemeines/VertragspartnerCard.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 export default function TabAllgemeines() {
   return (
-    <JazzRow>
-      <Col lg={12} xs={24}>
-        <EventCard />
-        <ArtistCard />
-        <KommentarCard />
-      </Col>
-      <Col lg={12} xs={24}>
-        <MitarbeiterCard forVermietung />
-        <VertragspartnerCard />
-      </Col>
-    </JazzRow>
+    <ScrollingContent>
+      <JazzRow>
+        <Col lg={12} xs={24}>
+          <EventCard />
+          <ArtistCard />
+          <KommentarCard />
+        </Col>
+        <Col lg={12} xs={24}>
+          <MitarbeiterCard forVermietung />
+          <VertragspartnerCard />
+        </Col>
+      </JazzRow>
+    </ScrollingContent>
   );
 }

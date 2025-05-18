@@ -11,30 +11,33 @@ import { NumberInput } from "@/widgets/numericInputWidgets";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useWatch } from "antd/es/form/Form";
+import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 export default function TabAllgemeines() {
   const { optionen } = useJazzContext();
   const changelist = useWatch("changelist", { preserve: true });
 
   return (
-    <JazzRow>
-      <Col lg={12} xs={24}>
-        <EventCard />
-        <ArtistCard />
-        <KommentarCard />
-      </Col>
-      <Col lg={12} xs={24}>
-        <MitarbeiterCard />
-        <KontaktCard kontakte={optionen!.agenturen} selector="agentur">
-          <JazzRow>
-            <Col span={12}>
-              <NumberInput decimals={2} label="Provision" name={["kosten", "provisionAgentur"]} suffix="€" />
-            </Col>
-          </JazzRow>
-        </KontaktCard>
-        <VertragCard />
-        {!!changelist?.length && <BearbeiterCard />}
-      </Col>
-    </JazzRow>
+    <ScrollingContent>
+      <JazzRow>
+        <Col lg={12} xs={24}>
+          <EventCard />
+          <ArtistCard />
+          <KommentarCard />
+        </Col>
+        <Col lg={12} xs={24}>
+          <MitarbeiterCard />
+          <KontaktCard kontakte={optionen!.agenturen} selector="agentur">
+            <JazzRow>
+              <Col span={12}>
+                <NumberInput decimals={2} label="Provision" name={["kosten", "provisionAgentur"]} suffix="€" />
+              </Col>
+            </JazzRow>
+          </KontaktCard>
+          <VertragCard />
+          {!!changelist?.length && <BearbeiterCard />}
+        </Col>
+      </JazzRow>
+    </ScrollingContent>
   );
 }
