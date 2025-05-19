@@ -20,7 +20,7 @@ export default function ScrollingContent({ children }: PropsWithChildren) {
   return xs ? (
     children
   ) : (
-    <div ref={ref} style={{ maxHeight: contentHeight, overflowY: "auto" }}>
+    <div ref={ref} style={{ maxHeight: contentHeight, overflowX: "clip", overflowY: "auto" }}>
       {children}
     </div>
   );

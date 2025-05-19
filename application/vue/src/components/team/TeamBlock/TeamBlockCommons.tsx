@@ -23,7 +23,7 @@ export default function TeamBlockCommons({
 }) {
   const isAdmin = !!extrasExpanded;
   const { memoizedVeranstaltung } = useJazzContext();
-  const { calcHeight, period } = useContext(TeamContext);
+  const { calcHeight, period, noOfVeranstaltungen } = useContext(TeamContext);
   const highlight = useMemo(
     () => veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id && !!memoizedVeranstaltung?.highlight,
     [memoizedVeranstaltung, veranstaltung.id],
@@ -62,7 +62,7 @@ export default function TeamBlockCommons({
 
   const extrasComponent = <ButtonPreview veranstaltung={veranstaltung} />;
 
-  const { inView, ref } = useInView({ triggerOnce: period !== "Alle" });
+  const { inView, ref } = useInView({ triggerOnce: period !== "Alle" || noOfVeranstaltungen < 50 });
   const renderWhenInView = useMemo(
     () => inView || veranstaltung.id === memoizedVeranstaltung?.veranstaltung?.id,
     [inView, memoizedVeranstaltung, veranstaltung],

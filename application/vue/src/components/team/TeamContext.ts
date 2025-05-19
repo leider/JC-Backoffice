@@ -8,15 +8,19 @@ const calcHeight = () => {
 };
 
 export const TeamContext = createContext<{
+  alleErsthelfer: string[];
   veranstaltungenNachMonat: {
     [index: string]: Veranstaltung[];
   };
   usersAsOptions: UserWithKann[];
   period: string;
+  noOfVeranstaltungen: number;
   calcHeight: ({ expanded, isAdmin, veranstaltung }: { expanded: boolean; isAdmin: boolean; veranstaltung: Veranstaltung }) => number;
 }>({
   veranstaltungenNachMonat: {},
   usersAsOptions: [],
   period: "zukuenftige",
   calcHeight,
+  noOfVeranstaltungen: 0,
+  alleErsthelfer: [],
 });

@@ -81,13 +81,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
 
   const mutateVeranstaltung = useJazzMutation({
     saveFunction: saveKonzert,
-    queryKey: `konzert${veranstaltung.id}`,
+    queryKey: veranstaltung.id ?? "",
     successMessage: "Das Konzert wurde gespeichert",
   });
 
   const mutateVermietung = useJazzMutation({
     saveFunction: saveVermietung,
-    queryKey: `vermietung${veranstaltung.id}`,
+    queryKey: veranstaltung.id ?? "",
     successMessage: "Die Vermietung wurde gespeichert",
   });
 

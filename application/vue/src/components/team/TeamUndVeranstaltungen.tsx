@@ -14,6 +14,7 @@ import TeamFilter from "@/components/team/TeamFilter/TeamFilter.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useCalcHeight from "@/components/team/useCalcHeight.ts";
 import ScrollingContent from "@/components/content/ScrollingContent.tsx";
+import filter from "lodash/filter";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -24,12 +25,16 @@ export function TeamUndVeranstaltungen() {
   const { memoizedVeranstaltung, setMemoizedVeranstaltung } = useJazzContext();
   const calcHeight = useCalcHeight();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
-  const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions } = useTeamVeranstaltungenCommons();
+  const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered } = useTeamVeranstaltungenCommons();
 
-  const teamContext = useMemo(
-    () => ({ veranstaltungenNachMonat, usersAsOptions, period, calcHeight }),
-    [usersAsOptions, veranstaltungenNachMonat, period, calcHeight],
-  );
+  const teamContext = useMemo(() => {
+    const alleErsthelfer = map(
+      filter(usersAsOptions, (u) => u.kann.includes("Ersthelfer")),
+      "value",
+    );
+
+    return { veranstaltungenNachMonat, usersAsOptions, period, calcHeight, noOfVeranstaltungen: filtered.length, alleErsthelfer };
+  }, [veranstaltungenNachMonat, usersAsOptions, period, calcHeight, filtered.length]);
 
   useEffect(() => {
     if (!memoizedVeranstaltung) {

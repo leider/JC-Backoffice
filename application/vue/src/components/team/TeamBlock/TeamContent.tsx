@@ -1,15 +1,19 @@
 import { List, theme } from "antd";
 import { ActiveUsers, AddRemoveStaffButton } from "@/components/team/TeamBlock/TeamStaffRow.tsx";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
+import CheckSquareTwoTone from "@ant-design/icons/lib/icons/CheckSquareTwoTone";
+import { WarningTwoTone } from "@ant-design/icons";
+import { TeamContext } from "@/components/team/TeamContext.ts";
+import intersection from "lodash/intersection";
 
 interface ContentProps {
   readonly veranstaltung: Veranstaltung;
 }
 
 export default function TeamContent({ veranstaltung }: ContentProps) {
+  const { alleErsthelfer } = useContext(TeamContext);
   const [veranstaltungForStaff, setVeranstaltungForStaff] = useState<Veranstaltung>(veranstaltung);
   const staffUpdated = useCallback((veranst: Veranstaltung) => setVeranstaltungForStaff(veranst), []);
   const { useToken } = theme;
@@ -18,6 +22,7 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
   const activeRows = useMemo(() => {
     const staff = veranstaltung.staff;
     const rows: { title: string; sectionName: StaffType; empty: boolean }[] = [];
+    const hatErsthelfer = intersection(staff.allNames, alleErsthelfer).length;
     if (!staff.modNotNeeded) {
       rows.push({
         title: "Abendverantwortlicher",
@@ -61,10 +66,10 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
       });
     }
     if (!staff.ersthelferNotNeeded) {
-      rows.push({ title: "Ersthelfer (als Gast)", sectionName: "ersthelfer", empty: !staff.ersthelfer });
+      rows.push({ title: "Ersthelfer (als Gast)", sectionName: "ersthelfer", empty: !hatErsthelfer });
     }
     return rows;
-  }, [veranstaltung.staff]);
+  }, [alleErsthelfer, veranstaltung.staff]);
 
   const renderItem = useCallback(
     (item: { title: string; sectionName: StaffType; empty: boolean }) => (
@@ -74,9 +79,9 @@ export default function TeamContent({ veranstaltung }: ContentProps) {
         <List.Item.Meta
           avatar={
             item.empty ? (
-              <IconForSmallBlock color={token.colorError} iconName="ExclamationTriangle" style={{ backgroundColor: "lightgrey" }} />
+              <WarningTwoTone style={{ fontSize: 16 }} twoToneColor={token.colorError} />
             ) : (
-              <IconForSmallBlock color={token.colorSuccess} iconName="CheckLg" />
+              <CheckSquareTwoTone style={{ fontSize: 16 }} twoToneColor={token.colorSuccess} />
             )
           }
           description={<ActiveUsers sectionName={item.sectionName} veranstaltung={veranstaltungForStaff} />}

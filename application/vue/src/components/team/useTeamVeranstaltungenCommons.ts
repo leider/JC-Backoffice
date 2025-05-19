@@ -11,6 +11,7 @@ import map from "lodash/map";
 import filter from "lodash/filter";
 import capitalize from "lodash/capitalize";
 import keys from "lodash/keys";
+import forEach from "lodash/forEach";
 
 export type Period = "zukuenftige" | "vergangene" | "alle";
 
@@ -80,11 +81,15 @@ export const useTeamVeranstaltungenCommons = () => {
   const filtered = useMemo(() => filter(veranstaltungen, applyTeamFilter(teamFilter)), [teamFilter, veranstaltungen]);
 
   const veranstaltungenNachMonat = useMemo(() => {
-    if (veranstaltungen.length === 0) {
+    if (filtered.length === 0) {
       return {};
     }
-    return groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
-  }, [veranstaltungen.length, filtered]);
+    const groups = groupBy(filtered, "startDatumUhrzeit.monatLangJahrKompakt");
+    forEach(keys(groups), (group) => {
+      groups[group] = sortBy(groups[group], "startDate");
+    });
+    return groups;
+  }, [filtered]);
 
   const monate = useMemo(() => {
     return keys(veranstaltungenNachMonat);
