@@ -5,13 +5,13 @@ const buttons = {
   speichern: "Speichern",
 };
 
-export function goToGaestePage(dateString: string, konzertTitle: string) {
-  I.amOnPage(
-    "/vue/konzert/" + dateString + "-" + konzertTitle + "?page=gaeste",
-  );
+export async function goToGaestePage() {
+  I.click(locate('div[role="tab"]').withText("Gäste am Abend"));
+
+  I.waitForText("Gästeliste");
 }
 
-export function addGaesteListe(guest: {
+export async function addGaesteListe(guest: {
   name: string;
   comment: string;
   number: number;
@@ -28,26 +28,23 @@ export function addGaesteListe(guest: {
   I.click(buttons.speichern);
 }
 
-// export async function verifyGuestInStore(
-//   title: string,
-//   guest: {
-//     name: string;
-//     comment: string;
-//     number: number;
-//     alreadyIn: number;
-//   },
-// ): Promise<void> {
-//   const res = await I.loadObjectInCollection(
-//     "veranstaltungenstore",
-//     title + " am 20. März 2020",
-//   );
-//
-//   I.assertDeepEqual(res.gaesteliste, [
-//     {
-//       name: guest.name,
-//       comment: guest.comment,
-//       number: guest.number,
-//       alreadyIn: guest.alreadyIn,
-//     },
-//   ]);
-// }
+export async function verifyGuestInStore(
+  title: string,
+  guest: {
+    name: string;
+    comment: string;
+    number: number;
+    alreadyIn: number;
+  },
+  index: number = 0,
+) {
+  const res = await I.loadObjectInCollection("veranstaltungenstore", title);
+
+  I.assertDeepEqual(res.gaesteliste[index], {
+    name: guest.name,
+    comment: guest.comment,
+    number: guest.number,
+    alreadyIn: guest.alreadyIn,
+    key: "row" + index,
+  });
+}

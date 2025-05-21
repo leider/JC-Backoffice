@@ -59,6 +59,26 @@ class SqliteHelper extends Helper {
     });
   }
 
+  createDataWithReplacer(
+    collectionName: string,
+    filename: string,
+    replacer: Map<string, string>,
+  ) {
+    doInSqlite((db) => {
+      let json = fs.readFileSync(
+        `${__dirname}/../data/${collectionName}/${filename}.json`,
+        "utf8",
+      );
+
+      replacer.forEach((value, key) => {
+        json = json.replaceAll("[" + key + "]", value);
+      });
+
+      const object = JSON.parse(json);
+      this.storeInCollection(db, collectionName, object);
+    });
+  }
+
   createObject(collectionName, object) {
     doInSqlite((db) => {
       this.storeInCollection(db, collectionName, object);

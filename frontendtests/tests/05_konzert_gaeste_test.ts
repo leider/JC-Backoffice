@@ -4,20 +4,24 @@ Before(({ login }) => {
   login("admin");
 });
 
-Scenario("Kopiere Konzert", async ({ I, konzertPage, konzertGaestePage }) => {
-  let konzertTitle = "GaesteBeispiel";
-  konzertPage.createExampleKonzert(konzertTitle);
+Scenario(
+  "Erstelle Gast in Gästeliste",
+  async ({ konzertPage, konzertGaestePage }) => {
+    const konzertTitle = "GaesteBeispiel";
+    await konzertPage.createExampleKonzert(konzertTitle);
 
-  konzertGaestePage.goToGaestePage("2020-03-20", konzertTitle);
+    await konzertPage.goToEditKonzert(konzertTitle);
+    await konzertGaestePage.goToGaestePage();
 
-  const guest = {
-    name: "Stefan Rinderle",
-    comment: "Kommt später",
-    number: 1,
-    alreadyIn: 0,
-  };
+    const guest = {
+      name: "Stefan Rinderle",
+      comment: "Kommt später",
+      number: 1,
+      alreadyIn: 0,
+    };
 
-  konzertGaestePage.addGaesteListe(guest);
+    await konzertGaestePage.addGaesteListe(guest);
 
-  // konzertGaestePage.verifyGuestInStore(konzertTitle, guest);
-});
+    await konzertGaestePage.verifyGuestInStore(konzertTitle, guest);
+  },
+);
