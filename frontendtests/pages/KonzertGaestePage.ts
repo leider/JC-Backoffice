@@ -32,11 +32,28 @@ export async function setAlreadyIn(row: number, value: number) {
   I.click('[data-testid="alreadyIn' + row + '"]');
   I.fillField("#alreadyIn", value);
 
-  // I.wait(5);
+  I.pressKey("Tab");
+
+  I.click(buttons.speichern);
+}
+
+export async function changeGuestName(row: number, value: string) {
+  I.click('[data-testid="name' + row + '"]');
+  I.fillField("#name", value);
 
   I.pressKey("Tab");
 
-  // I.wait(5);
+  I.click(buttons.speichern);
+}
+
+export async function copyGuest(row: number) {
+  I.click('[data-row-key="row' + row + '"] .bi-files');
+
+  I.click(buttons.speichern);
+}
+
+export async function deleteRow(row: number) {
+  I.click('[data-row-key="row' + row + '"] .bi-trash');
 
   I.click(buttons.speichern);
 }
@@ -60,4 +77,13 @@ export async function verifyGuestInStore(
     alreadyIn: guest.alreadyIn,
     key: "row" + index,
   });
+}
+
+export async function verifyGuestStoreEmpty(konzertTitle: string) {
+  const res = await I.loadObjectInCollection(
+    "veranstaltungenstore",
+    konzertTitle,
+  );
+
+  I.assertEmpty(res.gaesteliste);
 }
