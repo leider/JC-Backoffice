@@ -1,0 +1,27 @@
+{
+  "startDate": "2020-03-20T17:30:00.000Z",
+  "endDate": "2020-03-20T19:00:00.000Z",
+  "id": "[title]",
+  "url": "[title]",
+  "kopf": {
+    "titel": "[title]",
+    "beschreibung": "",
+    "eventTyp": "Club Konzert",
+    "flaeche": 100,
+    "kooperation": "",
+    "ort": "Jazzclub",
+    "pressename": "Jazzclub Karlsruhe",
+    "presseIn": "im Jazzclub Karlsruhe",
+    "genre": "",
+    "confirmed": false,
+    "rechnungAnKooperation": false,
+    "abgesagt": false,
+    "fotografBestellen": false,
+    "kannAufHomePage": false,
+    "kannInSocialMedia": false
+  },
+  "artist": {},
+  "presse": {},
+  "technik": {},
+  "unterkunft": {}
+}
