@@ -53,7 +53,7 @@
     "deploy": "yarn workspaces foreach --all -p run deploy",
     "develop": "yarn compile && cd vue && yarn dev",
     "dev": "cd vue && yarn dev",
-    "eslint": "./node_modules/.bin/eslint (backend|batchjobs|rider|shared|vue)/**/*.ts*",
+    "eslint": "./node_modules/.bin/eslint .",
     "eslint-fix": "./node_modules/.bin/eslint (backend|batchjobs|rider|shared|vue)/**/*.ts* --fix",
     "start": "node start",
     "test": "yarn workspaces foreach --all -p run test",
