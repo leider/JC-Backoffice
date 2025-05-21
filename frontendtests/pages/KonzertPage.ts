@@ -4,9 +4,10 @@ export async function createExampleKonzert(title: string) {
   I.createData("optionenstore", "optionen");
   I.createData("optionenstore", "orte");
 
-  I.createDataWithReplacer("veranstaltungenstore", "Replacervorlage", {
-    title,
-  });
+  const replacer = new Map<string, string>();
+  replacer.set("title", title);
+
+  I.createDataWithReplacer("veranstaltungenstore", "Replacervorlage", replacer);
 }
 
 export async function goToEditKonzert(konzertTitle: string) {
