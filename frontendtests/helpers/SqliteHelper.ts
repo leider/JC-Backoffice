@@ -62,19 +62,17 @@ class SqliteHelper extends Helper {
   createDataWithReplacer(
     collectionName: string,
     filename: string,
-    replacer: Map<string, string>,
+    replacer: object,
   ) {
     doInSqlite((db) => {
-      let json = fs.readFileSync(
-        `${__dirname}/../data/${collectionName}/${filename}.json`,
-        "utf8",
+      const json = JSON.parse(
+        fs.readFileSync(
+          `${__dirname}/../data/${collectionName}/${filename}.json`,
+          "utf8",
+        ),
       );
 
-      replacer.forEach((value, key) => {
-        json = json.replaceAll("[" + key + "]", value);
-      });
-
-      const object = JSON.parse(json);
+      const object = Object.assign(json, replacer);
       this.storeInCollection(db, collectionName, object);
     });
   }
