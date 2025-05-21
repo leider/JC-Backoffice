@@ -28,6 +28,19 @@ export async function addGaesteListe(guest: {
   I.click(buttons.speichern);
 }
 
+export async function setAlreadyIn(row: number, value: number) {
+  I.click('[data-testid="alreadyIn' + row + '"]');
+  I.fillField("#alreadyIn", value);
+
+  // I.wait(5);
+
+  I.pressKey("Tab");
+
+  // I.wait(5);
+
+  I.click(buttons.speichern);
+}
+
 export async function verifyGuestInStore(
   title: string,
   guest: {
