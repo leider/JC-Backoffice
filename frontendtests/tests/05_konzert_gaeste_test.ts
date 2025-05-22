@@ -8,10 +8,10 @@ Scenario(
   "Erstelle Gast in Gästeliste und setze alreadyIn",
   async ({ konzertPage, konzertGaestePage }) => {
     const konzertTitle = "GaesteCreate";
-    await konzertPage.createExampleKonzert(konzertTitle);
-    await konzertPage.goToEditKonzert(konzertTitle);
+    konzertPage.createExampleKonzert(konzertTitle);
+    konzertPage.goToEditKonzert(konzertTitle);
 
-    await konzertGaestePage.goToGaestePage();
+    konzertGaestePage.goToGaestePage();
 
     const guest = {
       name: "Stefan Rinderle",
@@ -30,6 +30,8 @@ Scenario(
       ...guest,
       alreadyIn: 1,
     });
+
+    konzertPage.deleteKonzert(konzertTitle);
   },
 );
 
@@ -37,10 +39,10 @@ Scenario(
   "Erstelle Gast danach kopieren und löschen",
   async ({ konzertPage, konzertGaestePage }) => {
     const konzertTitle = "GaesteCopyDelete";
-    await konzertPage.createExampleKonzert(konzertTitle);
-    await konzertPage.goToEditKonzert(konzertTitle);
+    konzertPage.createExampleKonzert(konzertTitle);
+    konzertPage.goToEditKonzert(konzertTitle);
 
-    await konzertGaestePage.goToGaestePage();
+    konzertGaestePage.goToGaestePage();
 
     const guest = {
       name: "Stefan Rinderle",
@@ -70,6 +72,8 @@ Scenario(
     await konzertGaestePage.deleteGuestRow(0);
 
     await konzertGaestePage.verifyGuestStoreEmpty(konzertTitle);
+
+    konzertPage.deleteKonzert(konzertTitle);
   },
 );
 
@@ -77,10 +81,10 @@ Scenario(
   "Erstelle Reservierung und setze alreadyIn",
   async ({ konzertPage, konzertGaestePage }) => {
     const konzertTitle = "ReservationCreate";
-    await konzertPage.createExampleKonzert(konzertTitle);
-    await konzertPage.goToEditKonzert(konzertTitle);
+    konzertPage.createExampleKonzert(konzertTitle);
+    konzertPage.goToEditKonzert(konzertTitle);
 
-    await konzertGaestePage.goToGaestePage();
+    konzertGaestePage.goToGaestePage();
 
     const guest = {
       name: "Stefan Rinderle",
@@ -99,6 +103,8 @@ Scenario(
       ...guest,
       alreadyIn: 10,
     });
+
+    konzertPage.deleteKonzert(konzertTitle);
   },
 );
 
@@ -106,10 +112,10 @@ Scenario(
   "Erstelle Reservierung danach kopieren und löschen",
   async ({ konzertPage, konzertGaestePage }) => {
     const konzertTitle = "ReservationCopyDelete";
-    await konzertPage.createExampleKonzert(konzertTitle);
-    await konzertPage.goToEditKonzert(konzertTitle);
+    konzertPage.createExampleKonzert(konzertTitle);
+    konzertPage.goToEditKonzert(konzertTitle);
 
-    await konzertGaestePage.goToGaestePage();
+    konzertGaestePage.goToGaestePage();
 
     const guest = {
       name: "Stefan Rinderle",
@@ -147,5 +153,7 @@ Scenario(
     await konzertGaestePage.deleteReservationRow(0);
 
     await konzertGaestePage.verifyReservationStoreEmpty(konzertTitle);
+
+    konzertPage.deleteKonzert(konzertTitle);
   },
 );

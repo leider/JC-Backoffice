@@ -1,6 +1,6 @@
 const { I } = inject();
 
-export async function createExampleKonzert(title: string) {
+export function createExampleKonzert(title: string) {
   I.createData("optionenstore", "optionen");
   I.createData("optionenstore", "orte");
 
@@ -10,7 +10,7 @@ export async function createExampleKonzert(title: string) {
   I.createDataWithReplacer("veranstaltungenstore", "Replacervorlage", replacer);
 }
 
-export async function goToEditKonzert(konzertTitle: string) {
+export function goToEditKonzert(konzertTitle: string) {
   I.amOnPage("/vue/veranstaltungen");
   I.waitForText(konzertTitle);
 
@@ -18,4 +18,8 @@ export async function goToEditKonzert(konzertTitle: string) {
 
   I.click(".bi-keyboard");
   I.waitForText("Allgemein");
+}
+
+export function deleteKonzert(konzertTitle: string) {
+  I.deleteObjectInCollection("veranstaltungenstore", konzertTitle);
 }

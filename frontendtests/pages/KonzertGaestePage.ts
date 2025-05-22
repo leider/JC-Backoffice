@@ -12,7 +12,7 @@ async function executeActionInTab(tabIdentifier: string, action: () => void) {
   await within(locate(".ant-collapse-item").withText(tabIdentifier), action);
 }
 
-export async function goToGaestePage() {
+export function goToGaestePage() {
   I.click(locate('div[role="tab"]').withText("Gäste am Abend"));
 
   I.waitForText(guestTabIdentifier);
