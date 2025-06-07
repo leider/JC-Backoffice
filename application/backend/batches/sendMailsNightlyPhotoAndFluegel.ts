@@ -72,7 +72,7 @@ export async function checkFotograf(now: DatumUhrzeit) {
     name: conf.fotografName,
     email: conf.fotografEmail,
     subject: "Fotografieren beim Jazzclub",
-    firstLine: "## The following concerts may profit from a professional photographer:",
+    firstLine: "## Bei folgenden Veranstaltungen würden wir uns auf einen professionellen Fotografen freuen:",
   };
   return checkForFilter(
     (ver: Veranstaltung) => {
