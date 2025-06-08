@@ -15,9 +15,9 @@ import useCalcHeight from "@/components/team/useCalcHeight.ts";
 import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 import filter from "lodash/filter";
 import { TeamPeriodsSelector } from "@/components/team/TeamPeriodsSelector.tsx";
+import TeamTable from "@/components/team/TeamTable.tsx";
 
 function Monate({ monate }: { monate: string[] }) {
-  console.log({ monate });
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
 }
 
@@ -33,7 +33,6 @@ export function TeamUndVeranstaltungen() {
       filter(usersAsOptions, (u) => u.kann.includes("Ersthelfer")),
       "value",
     );
-    console.log({ period });
     return { veranstaltungenNachMonat, usersAsOptions, period, calcHeight, noOfVeranstaltungen: filtered.length, alleErsthelfer };
   }, [veranstaltungenNachMonat, usersAsOptions, period, calcHeight, filtered.length]);
 
@@ -57,9 +56,7 @@ export function TeamUndVeranstaltungen() {
           title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
         <TeamContext.Provider value={teamContext}>
-          <ScrollingContent>
-            <Monate monate={monate} />
-          </ScrollingContent>
+          <ScrollingContent>{period === "Alle" ? <TeamTable /> : <Monate monate={monate} />}</ScrollingContent>
         </TeamContext.Provider>
       </Col>
     </Row>

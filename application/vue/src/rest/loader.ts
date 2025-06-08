@@ -91,6 +91,7 @@ const transformer = {
   Zukünftige: "zukuenftige",
   Vergangene: "vergangene",
   Alle: "alle",
+  "Alle (voll)": "alle",
 };
 export async function konzerteForTeam(selector: Period) {
   const result = await get({ url: `/konzerte/${transformer[selector]}`, resType: [new Konzert()] });

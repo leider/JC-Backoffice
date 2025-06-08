@@ -10,7 +10,10 @@ export function TeamPeriodsSelector() {
   const [period, setPeriod] = useState<Period>("Zukünftige");
 
   const periodsToShow = useMemo(
-    () => (currentUser.accessrights.isOrgaTeam ? ["Zukünftige", "Vergangene", "Alle"] : ["Zukünftige", "Vergangene"]) as Period[],
+    () =>
+      (currentUser.accessrights.isOrgaTeam
+        ? ["Zukünftige", "Vergangene", "Alle", "Alle (voll)"]
+        : ["Zukünftige", "Vergangene"]) as Period[],
     [currentUser],
   );
 

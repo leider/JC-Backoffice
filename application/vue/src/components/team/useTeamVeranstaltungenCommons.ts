@@ -12,7 +12,7 @@ import filter from "lodash/filter";
 import keys from "lodash/keys";
 import forEach from "lodash/forEach";
 
-export type Period = "Zukünftige" | "Vergangene" | "Alle";
+export type Period = "Zukünftige" | "Vergangene" | "Alle" | "Alle (voll)";
 
 export const useTeamVeranstaltungenCommons = () => {
   const { allUsers, teamFilter } = useJazzContext();
@@ -67,9 +67,7 @@ export const useTeamVeranstaltungenCommons = () => {
     return groups;
   }, [filtered]);
 
-  const monate = useMemo(() => {
-    return keys(veranstaltungenNachMonat);
-  }, [veranstaltungenNachMonat]);
+  const monate = useMemo(() => keys(veranstaltungenNachMonat), [veranstaltungenNachMonat]);
 
   return { period, usersAsOptions, veranstaltungenNachMonat, monate, veranstaltungen, filtered };
 };
