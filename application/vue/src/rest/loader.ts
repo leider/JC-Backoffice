@@ -87,8 +87,14 @@ export async function konzerteForToday() {
   return handleVeranstaltungen(result);
 }
 
+const transformer = {
+  Zukünftige: "zukuenftige",
+  Vergangene: "vergangene",
+  Alle: "alle",
+  "Alle (voll)": "alle",
+};
 export async function konzerteForTeam(selector: Period) {
-  const result = await get({ url: `/konzerte/${selector}`, resType: [new Konzert()] });
+  const result = await get({ url: `/konzerte/${transformer[selector]}`, resType: [new Konzert()] });
   return handleVeranstaltungen(result);
 }
 
@@ -141,7 +147,7 @@ function handleVermietungen(result?: Vermietung[]): Vermietung[] {
 }
 
 export async function vermietungenForTeam(selector: Period) {
-  const result = await get({ url: `/vermietungen/${selector}`, resType: [new Vermietung()] });
+  const result = await get({ url: `/vermietungen/${transformer[selector]}`, resType: [new Vermietung()] });
   return handleVermietungen(result);
 }
 

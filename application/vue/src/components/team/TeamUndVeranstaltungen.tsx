@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from "react";
-import { Button, Col, Dropdown, Row, Space } from "antd";
+import { Col, Row } from "antd";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
 import { NewButtons } from "@/components/colored/JazzButtons.tsx";
-import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import TeamCalendar from "@/components/team/TeamCalendar.tsx";
 import TeamMonatGroup from "@/components/team/TeamMonatGroup.tsx";
 import { TeamContext } from "@/components/team/TeamContext.ts";
@@ -15,6 +14,8 @@ import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useCalcHeight from "@/components/team/useCalcHeight.ts";
 import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 import filter from "lodash/filter";
+import { TeamPeriodsSelector } from "@/components/team/TeamPeriodsSelector.tsx";
+import TeamTable from "@/components/team/TeamTable.tsx";
 
 function Monate({ monate }: { monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
@@ -25,14 +26,13 @@ export function TeamUndVeranstaltungen() {
   const { memoizedVeranstaltung, setMemoizedVeranstaltung } = useJazzContext();
   const calcHeight = useCalcHeight();
   const forVeranstaltungen = useMemo(() => pathname === "/veranstaltungen", [pathname]);
-  const { period, periods, veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered } = useTeamVeranstaltungenCommons();
+  const { veranstaltungen, veranstaltungenNachMonat, monate, usersAsOptions, filtered, period } = useTeamVeranstaltungenCommons();
 
   const teamContext = useMemo(() => {
     const alleErsthelfer = map(
       filter(usersAsOptions, (u) => u.kann.includes("Ersthelfer")),
       "value",
     );
-
     return { veranstaltungenNachMonat, usersAsOptions, period, calcHeight, noOfVeranstaltungen: filtered.length, alleErsthelfer };
   }, [veranstaltungenNachMonat, usersAsOptions, period, calcHeight, filtered.length]);
 
@@ -49,28 +49,14 @@ export function TeamUndVeranstaltungen() {
           buttons={[
             forVeranstaltungen && <ExcelMultiExportButton alle={veranstaltungen} key="excel" />,
             forVeranstaltungen && <NewButtons key="newButtons" />,
-            <Dropdown
-              key="periods"
-              menu={{
-                items: periods,
-              }}
-            >
-              <Button>
-                <Space>
-                  {period}
-                  <IconForSmallBlock iconName="ChevronDown" />
-                </Space>
-              </Button>
-            </Dropdown>,
+            <TeamPeriodsSelector key="selector" />,
             <TeamCalendar key="cal" />,
           ]}
           tags={<TeamFilter key="TeamFilter" />}
           title={forVeranstaltungen ? "Veranstaltungen" : "Team"}
         />
         <TeamContext.Provider value={teamContext}>
-          <ScrollingContent>
-            <Monate monate={monate} />
-          </ScrollingContent>
+          <ScrollingContent>{period === "Alle" ? <TeamTable /> : <Monate monate={monate} />}</ScrollingContent>
         </TeamContext.Provider>
       </Col>
     </Row>
