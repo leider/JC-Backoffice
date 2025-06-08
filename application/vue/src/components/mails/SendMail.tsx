@@ -46,7 +46,7 @@ export default function SendMail() {
 
   const { mailRules, veranstaltungen } = useQueries({
     queries: [
-      { queryKey: ["konzert", "zukuenftige"], queryFn: () => konzerteForTeam("zukuenftige") },
+      { queryKey: ["konzert", "zukuenftige"], queryFn: () => konzerteForTeam("Zukünftige") },
       { queryKey: ["mailRules"], queryFn: mailRulesRestCall },
     ],
     combine: ([a, b]) => {

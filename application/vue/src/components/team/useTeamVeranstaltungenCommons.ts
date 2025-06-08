@@ -1,5 +1,5 @@
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { konzerteForTeam, vermietungenForTeam } from "@/rest/loader.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
@@ -9,58 +9,34 @@ import applyTeamFilter from "@/components/team/TeamFilter/applyTeamFilter.ts";
 import groupBy from "lodash/groupBy";
 import map from "lodash/map";
 import filter from "lodash/filter";
-import capitalize from "lodash/capitalize";
 import keys from "lodash/keys";
 import forEach from "lodash/forEach";
 
-export type Period = "zukuenftige" | "vergangene" | "alle";
+export type Period = "Zukünftige" | "Vergangene" | "Alle";
 
 export const useTeamVeranstaltungenCommons = () => {
-  const [search, setSearch] = useState<Period>("zukuenftige");
-  const { allUsers, currentUser, teamFilter } = useJazzContext();
-  const periodsToShow = useMemo(
-    () => (currentUser.accessrights.isOrgaTeam ? ["zukuenftige", "vergangene", "alle"] : ["zukuenftige", "vergangene"]) as Period[],
-    [currentUser],
-  );
+  const { allUsers, teamFilter } = useJazzContext();
 
-  const setSelectedPeriod = useCallback((period: Period) => {
-    localStorage.setItem("veranstaltungenPeriod", period);
-    setSearch(period);
-  }, []);
+  const [period, setPeriod] = useState<Period>("Zukünftige");
 
   useEffect(() => {
-    const period = (localStorage.getItem("veranstaltungenPeriod") ?? "zukuenftige") as Period;
-    if (periodsToShow.includes(period)) {
-      setSearch(period);
-    } else {
-      setSearch("zukuenftige");
-    }
-  }, [periodsToShow]);
-
-  const [period, setPeriod] = useState<string>("Zukünftige");
-
-  const periods = useMemo(() => {
-    return map(periodsToShow, (period) => {
-      return {
-        label: period === "zukuenftige" ? "Zukünftige" : capitalize(period),
-        key: period,
-        onClick: () => setSelectedPeriod(period),
-      };
-    });
-  }, [periodsToShow, setSelectedPeriod]);
-
-  const selectedPeriod: Period = useMemo(() => {
-    return search || periods[0].key;
-  }, [periods, search]);
-
-  useEffect(() => {
-    setPeriod(selectedPeriod === "zukuenftige" ? "Zukünftige" : capitalize(selectedPeriod));
-  }, [selectedPeriod]);
+    setPeriod((localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period);
+    const listener = () => {
+      const newPeriod = (localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period;
+      if (period !== newPeriod) {
+        setPeriod(newPeriod);
+      }
+    };
+    window.addEventListener("storage", listener);
+    return () => {
+      window.removeEventListener("storage", listener);
+    };
+  }, [period]);
 
   const queryResult = useQueries({
     queries: [
-      { queryKey: ["konzert", selectedPeriod], queryFn: () => konzerteForTeam(selectedPeriod) },
-      { queryKey: ["vermietung", selectedPeriod], queryFn: () => vermietungenForTeam(selectedPeriod) },
+      { queryKey: ["konzert", period], queryFn: () => konzerteForTeam(period) },
+      { queryKey: ["vermietung", period], queryFn: () => vermietungenForTeam(period) },
     ],
     combine: ([a, b]) => {
       if (a?.data && b?.data) {
@@ -73,8 +49,8 @@ export const useTeamVeranstaltungenCommons = () => {
   const veranstaltungen = useMemo(() => {
     const additionals = queryResult.flatMap((res) => res.createGhostsForOverview() as Veranstaltung[]);
     const sortedAscending = sortBy(queryResult.concat(additionals), "startDate") as Veranstaltung[];
-    return selectedPeriod !== "zukuenftige" ? reverse(sortedAscending) : sortedAscending;
-  }, [queryResult, selectedPeriod]);
+    return period !== "Zukünftige" ? reverse(sortedAscending) : sortedAscending;
+  }, [queryResult, period]);
 
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
@@ -95,5 +71,5 @@ export const useTeamVeranstaltungenCommons = () => {
     return keys(veranstaltungenNachMonat);
   }, [veranstaltungenNachMonat]);
 
-  return { period, usersAsOptions, veranstaltungenNachMonat, monate, periods, veranstaltungen, filtered };
+  return { period, usersAsOptions, veranstaltungenNachMonat, monate, veranstaltungen, filtered };
 };
