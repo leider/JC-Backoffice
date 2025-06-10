@@ -37,7 +37,7 @@ Scenario(
     await loginPage.login("admin", "admin");
 
     konzertPage.openKonzertCollapsable(konzertTitle);
-    konzertPage.openRequiredPeople(konzertTitle);
+    konzertPage.openRequiredPeople();
 
     I.waitForText("Kasse (Verantwortlich)", 2);
     I.see(userName);
