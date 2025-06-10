@@ -9,6 +9,7 @@ export function goToAdminBenutzer() {
 }
 
 export function createBenutzer(identifier: string) {
+  I.waitForText("Neuer Benutzer");
   I.click("Neuer Benutzer");
 
   I.fillField("#id", identifier);
