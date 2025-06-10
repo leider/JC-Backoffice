@@ -70,6 +70,8 @@ export const config: CodeceptJS.MainConfig = {
     ortePage: "./pages/OrtePage",
     konzertPage: "./pages/KonzertPage",
     konzertGaestePage: "./pages/KonzertGaestePage",
+    adminPage: "./pages/AdminPage",
+    loginPage: "./pages/LoginPage",
   },
   bootstrap: async () => {
     new SqliteHelper(config).createData("userstore", "admin");
