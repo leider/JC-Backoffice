@@ -37,7 +37,7 @@ export function deleteKonzert(konzertTitle: string) {
   I.deleteObjectInCollection("veranstaltungenstore", konzertTitle);
 }
 
-export function openRequiredPeople(konzertTitle: string) {
+export function openRequiredPeople() {
   I.click(".bi-universal-access");
 }
 
