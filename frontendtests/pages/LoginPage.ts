@@ -6,7 +6,7 @@ export async function login(userName: string, password: string) {
   I.fillField("Benutzername", userName);
   I.fillField("Passwort", password);
   I.click("Anmelden");
-  I.wait(0.5);
+  I.wait(1);
 }
 
 export async function logout(userName: string) {
