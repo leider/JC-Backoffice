@@ -8,13 +8,10 @@ import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
 import { loadRulesAndProcess } from "./sendMailsForRules.js";
 import { checkFluegel, checkFotograf } from "./sendMailsNightlyPhotoAndFluegel.js";
 import { checkPressetexte } from "./sendMailsPressetextFehlt.js";
-import { checkKasse } from "./sendMailsKasseFehlt.js";
 import { remindForProgrammheft } from "./sendMailsForProgrammheft.js";
-import { checkStaff } from "./sendMailsStaffReminder.js";
 import { checkBar } from "./sendMailsNightlyBar.js";
 import { informAdmin, JobType } from "./sendMailToAdmin.js";
 import map from "lodash/map.js";
-import { checkMaster } from "./sendMailsMasterFehlt.js";
 
 const logger = loggers.get("application");
 const app = express();
@@ -35,14 +32,24 @@ async function nightlyMails() {
     checkFluegel(now),
     checkFotograf(now),
     checkPressetexte(now),
-    checkKasse(now),
+    //checkKasse(now),
     remindForProgrammheft(now),
-    checkStaff(now),
+    //checkStaff(now),
     checkBar(now),
-    checkMaster(now),
+    //checkMaster(now),
   ]);
 
-  const jobtypes: JobType[] = ["Presse", "Fluegel", "Photo", "TextFehlt", "Kasse", "Programmheft", "Staff", "Bar", "Master"];
+  const jobtypes: JobType[] = [
+    "Presse",
+    "Fluegel",
+    "Photo",
+    "TextFehlt",
+    //"Kasse",
+    "Programmheft",
+    //"Staff",
+    "Bar",
+    //"Master"
+  ];
   const typedResults = map(results, (jobResult, index) => ({ type: jobtypes[index], jobResult }));
   return informAdmin(typedResults);
 }
