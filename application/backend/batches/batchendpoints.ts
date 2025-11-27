@@ -38,14 +38,14 @@ async function nightlyMails() {
   ]);
 
   const jobtypes: JobType[] = [
-    "Presse",
-    "Fluegel",
-    "Photo",
+    //"Presse",
+    //"Fluegel",
+    //"Photo",
     "TextFehlt",
     //"Kasse",
     "Programmheft",
     //"Staff",
-    "Bar",
+    //"Bar",
     //"Master"
   ];
   const typedResults = map(results, (jobResult, index) => ({ type: jobtypes[index], jobResult }));
