@@ -5,8 +5,6 @@ import { db } from "../lib/persistence/sqlitePersistence.js";
 import AdmZip from "adm-zip";
 import fs from "fs/promises";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.js";
-import { loadRulesAndProcess } from "./sendMailsForRules.js";
-import { checkPressetexte } from "./sendMailsPressetextFehlt.js";
 import { remindForProgrammheft } from "./sendMailsForProgrammheft.js";
 import { informAdmin, JobType } from "./sendMailToAdmin.js";
 import map from "lodash/map.js";
@@ -29,7 +27,7 @@ async function nightlyMails() {
     //loadRulesAndProcess(now),
     //checkFluegel(now),
     //checkFotograf(now),
-    checkPressetexte(now),
+    //checkPressetexte(now),
     //checkKasse(now),
     remindForProgrammheft(now),
     //checkStaff(now),
@@ -41,7 +39,7 @@ async function nightlyMails() {
     //"Presse",
     //"Fluegel",
     //"Photo",
-    "TextFehlt",
+    //"TextFehlt",
     //"Kasse",
     "Programmheft",
     //"Staff",
