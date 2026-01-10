@@ -186,6 +186,9 @@ export default function EditableTableInner<T>({
         min: item.min,
         initialValue: item.initialValue,
         multiline: item.multiline,
+
+        // PERFORMANCE CHANGE 1: prevent unnecessary cell re-renders [web:2]
+        shouldCellUpdate: (record: TWithKey, prevRecord: TWithKey) => record !== prevRecord,
       };
     });
     result.push({
@@ -202,6 +205,8 @@ export default function EditableTableInner<T>({
       dataIndex: "operation",
       width: "70px",
       align: "end",
+      // PERFORMANCE CHANGE 1 (continued): keep operation column consistent
+      shouldCellUpdate: (record: TWithKey, prevRecord: TWithKey) => record !== prevRecord,
       // @ts-expect-error I do not know why this is bad here
       render: (_: unknown, record: TWithKey) => (
         <InlineEditableActions actions={{ delete: () => handleDelete(record.key), copy: () => handleCopy(record.key) }} />
@@ -219,8 +224,10 @@ export default function EditableTableInner<T>({
         return {
           ...col,
           filters: undefined, // disable filter dropdown
-          onCell: (record: TWithKey) => ({
-            index: rows.indexOf(record),
+
+          // PERFORMANCE CHANGE 2: use antd-provided index instead of rows.indexOf(record) [web:2]
+          onCell: (record: TWithKey, index?: number) => ({
+            index: index ?? 0,
             record,
             editable: col.editable,
             dataIndex: col.dataIndex,
@@ -238,7 +245,7 @@ export default function EditableTableInner<T>({
           }),
         };
       }),
-    [defaultColumns, handleSave, rows],
+    [defaultColumns, handleSave],
   );
 
   const ref: Parameters<typeof Table>[0]["ref"] = React.useRef(null);
