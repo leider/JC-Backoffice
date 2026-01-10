@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
 import { AnyObject } from "antd/es/_util/type";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import MitarbeiterMultiSelect from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { useTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { ColorField } from "@/widgets/ColorField.tsx";
@@ -13,35 +13,26 @@ import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-interface EditableCellProps<T> extends Columns {
+export interface EditableCellProps<T> {
   readonly record: T;
-  readonly handleSave: (record: T, field: unknown) => void;
+  readonly handleSave: (record: T, field: object) => void;
   readonly index?: number;
+  readonly column: JazzColumn;
 }
 
 function EditableCell<RecordType extends AnyObject = AnyObject>({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  title, // to not have it in restProps
-  editable,
   children,
-  dataIndex,
   record,
   handleSave,
-  type,
-  required,
-  presets,
-  usersWithKann,
-  filters,
-  min,
   index,
-  initialValue,
-  multiline,
+  column,
   ...restProps
 }: React.PropsWithChildren<EditableCellProps<RecordType>>) {
   const [editing, setEditing] = useState(false);
   const [editByMouse, setEditByMouse] = useState(false);
   const { endEdit } = useTableContext();
   const { isCompactMode } = useJazzContext();
+  const { editable, dataIndex, type, required, presets, usersWithKann, dropdownchoices, min, initialValue, multiline } = column ?? {};
 
   const ref = useRef<HTMLElement>(null);
 
@@ -74,13 +65,13 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   const save = useCallback(
     async (keepEditing?: boolean) => {
       try {
-        const values: any = await form.validateFields(); // eslint-disable-line @typescript-eslint/no-explicit-any
+        const value = form.getFieldValue(dataIndex);
         !keepEditing && toggleEdit();
         setBackupVal(undefined);
-        if (backupVal[dataIndex] === values[dataIndex]) {
+        if (backupVal[dataIndex] === value) {
           return;
         }
-        handleSave(record, values);
+        handleSave(record, { [dataIndex]: value });
       } catch {
         /* empty */
       }
@@ -165,8 +156,8 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
       Widget = <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={dataIndex} required={required} save={save} />;
       break;
     default:
-      Widget = filters ? (
-        <SingleSelect focus name={dataIndex} options={filters} required={required} save={save} />
+      Widget = dropdownchoices ? (
+        <SingleSelect focus name={dataIndex} options={dropdownchoices} required={required} save={save} />
       ) : (
         <TextField focus multiline={multiline} name={dataIndex} required={required} save={save} />
       );

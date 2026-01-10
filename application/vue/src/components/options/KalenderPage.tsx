@@ -3,7 +3,7 @@ import { kalender, saveKalender } from "@/rest/loader.ts";
 import * as React from "react";
 import FerienIcals, { Ical } from "jc-shared/optionen/ferienIcals";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import { Col } from "antd";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
@@ -11,7 +11,7 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { useCallback } from "react";
 
 function KalenderPageInternal() {
-  const columnDescriptions: Columns[] = [
+  const columnDescriptions: JazzColumn[] = [
     { dataIndex: "name", title: "Name", type: "text", width: "20%", required: true, uniqueValues: true },
     { dataIndex: "url", title: "URL", type: "text", required: true, uniqueValues: true },
     {
@@ -20,7 +20,7 @@ function KalenderPageInternal() {
       type: "text",
       width: "120px",
       required: true,
-      filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
+      dropdownchoices: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"],
     },
   ];
 

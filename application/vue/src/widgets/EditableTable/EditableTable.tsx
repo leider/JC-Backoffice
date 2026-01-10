@@ -4,7 +4,7 @@ import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { NamePath, ValidatorRule } from "rc-field-form/es/interface";
 import isNil from "lodash/isNil";
 import "./editableTable.css";
-import { Columns } from "./types";
+import { JazzColumn } from "./types";
 import map from "lodash/map";
 import forEach from "lodash/forEach";
 import filter from "lodash/filter";
@@ -14,7 +14,7 @@ import EditableTableInner, { DuplInfo, WithKey } from "@/widgets/EditableTable/E
 
 interface EditableTableProps<T> {
   readonly name: NamePath;
-  readonly columnDescriptions: Columns[];
+  readonly columnDescriptions: JazzColumn[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (vals: T) => T;
   readonly fixedMinHeight?: number;

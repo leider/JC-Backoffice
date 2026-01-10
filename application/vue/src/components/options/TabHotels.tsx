@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { Col } from "antd";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import useCheckErrors from "@/commons/useCheckErrors.ts";
@@ -17,14 +17,14 @@ export default function TabHotels() {
     checkErrors();
   }, [checkErrors]);
 
-  const columnsPreise: Columns[] = [
+  const columnsPreise: JazzColumn[] = [
     { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
     { type: "twoDecimals", title: "Einzel", required: true, dataIndex: "einzelEUR", min: 0 },
     { type: "twoDecimals", title: "Doppel", required: true, dataIndex: "doppelEUR", min: 0 },
     { type: "twoDecimals", title: "Suite", required: true, dataIndex: "suiteEUR", min: 0 },
   ];
 
-  const columnsAdresse: Columns[] = [
+  const columnsAdresse: JazzColumn[] = [
     { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
     { type: "text", title: "Adresse", dataIndex: "adresse", multiline: true },
     { type: "text", title: "E-Mail", dataIndex: "email" },

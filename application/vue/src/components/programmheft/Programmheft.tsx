@@ -17,7 +17,7 @@ import cloneDeep from "lodash/cloneDeep";
 import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
@@ -52,7 +52,7 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
     [checkDirty, events, form],
   );
 
-  const columnDescriptions: Columns[] = [
+  const columnDescriptions: JazzColumn[] = [
     { dataIndex: "was", title: "Was", type: "text", width: "20%", required: true },
     { dataIndex: "start", title: "Wann", type: "date", required: true },
     { dataIndex: "farbe", title: "Farbe", type: "color", required: true, presets: true },

@@ -5,7 +5,7 @@ import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import Termin, { TerminType } from "jc-shared/optionen/termin";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
@@ -25,10 +25,10 @@ class TermineWrapper {
 }
 
 function TerminePageInternal() {
-  const columnDescriptions: Columns[] = [
+  const columnDescriptions: JazzColumn[] = [
     { dataIndex: ["dates"], title: "Start und Ende", type: "startEnd", required: true },
     { dataIndex: "beschreibung", title: "Beschreibung", type: "text", required: true },
-    { dataIndex: "typ", title: "Typ", type: "text", width: "120px", filters: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"] },
+    { dataIndex: "typ", title: "Typ", type: "text", width: "120px", dropdownchoices: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"] },
   ];
 
   const newRowFactory = useCallback((vals: Termin) => Object.assign({}, vals), []);

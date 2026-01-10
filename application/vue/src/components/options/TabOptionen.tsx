@@ -5,7 +5,7 @@ import Collapsible from "@/widgets/Collapsible.tsx";
 import MultiSelectWithTags from "@/widgets/MultiSelectWithTags";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import { NumberInput } from "@/widgets/numericInputWidgets";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
@@ -16,7 +16,7 @@ export default function TabOptionen() {
   const form = useFormInstance<OptionValues>();
   const optionen = useMemo(() => form.getFieldsValue(true), [form]);
 
-  const columnsTypen: Columns[] = [
+  const columnsTypen: JazzColumn[] = [
     { type: "text", title: "Name", required: true, dataIndex: "name", width: "150px" },
     { type: "boolean", title: "Master", dataIndex: "mod" },
     { type: "boolean", title: "Kasse1", dataIndex: "kasseV" },
@@ -27,7 +27,7 @@ export default function TabOptionen() {
     { type: "color", title: "Farbe", dataIndex: "color" },
   ];
 
-  const columnsPreisprofile: Columns[] = [
+  const columnsPreisprofile: JazzColumn[] = [
     { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
     { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
     { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },

@@ -1,14 +1,14 @@
 import { Alert, ConfigProvider, Form, Table, type TableProps } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
-import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
+import EditableCell, { EditableCellProps } from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import InlineEditableActions from "@/widgets/EditableTable/InlineEditableActions.tsx";
 import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import "./editableTable.css";
-import { Columns } from "./types";
+import { JazzColumn } from "./types";
 import useColumnRenderer from "@/widgets/EditableTable/widgets/useColumnRenderer.tsx";
 import findIndex from "lodash/findIndex";
 import find from "lodash/find";
@@ -17,6 +17,7 @@ import reject from "lodash/reject";
 import flatMap from "lodash/flatMap";
 import keys from "lodash/keys";
 import { useGlobalContext } from "@/app/GlobalContext.ts";
+import { ColumnType } from "antd/es/table/interface";
 
 export type WithKey<T> = T & { key: string };
 
@@ -50,7 +51,7 @@ function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTab
   );
 }
 
-function widthForType({ width, type }: Columns) {
+function widthForType({ width, type }: JazzColumn) {
   if (width) {
     return width;
   }
@@ -66,7 +67,7 @@ function widthForType({ width, type }: Columns) {
   }
 }
 
-function alignForType(item: Columns) {
+function alignForType(item: JazzColumn) {
   switch (item.type) {
     case "integer":
       return "end";
@@ -91,7 +92,7 @@ export default function EditableTableInner<T>({
 }: {
   readonly value?: T[];
   readonly onTable?: (val?: T[]) => void;
-  readonly columnDescriptions?: Columns[];
+  readonly columnDescriptions?: JazzColumn[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (val: T) => T;
   readonly duplInfo: DuplInfo;
@@ -167,28 +168,19 @@ export default function EditableTableInner<T>({
 
   const renderByType = useColumnRenderer(usersWithKann);
 
+  const shouldCellUpdate = useCallback((record: TWithKey, prevRecord: TWithKey) => record !== prevRecord, []);
+
   const defaultColumns = useMemo(() => {
-    const result = map(columnDescriptions, (item, index) => {
+    const result: (JazzColumn & ColumnType<TWithKey>)[] = map(columnDescriptions, (item, index) => {
       return {
+        ...item,
         editable: item.editable ?? true,
-        dataIndex: item.dataIndex,
-        title: item.title,
-        type: item.type,
         index: index,
-        required: item.required,
-        filters: item.filters,
-        presets: item.presets,
-        usersWithKann: usersWithKann,
+        usersWithKann,
         render: renderByType(item),
         align: alignForType(item),
-        onCell: undefined,
         width: widthForType(item),
-        min: item.min,
-        initialValue: item.initialValue,
-        multiline: item.multiline,
-
-        // PERFORMANCE CHANGE 1: prevent unnecessary cell re-renders [web:2]
-        shouldCellUpdate: (record: TWithKey, prevRecord: TWithKey) => record !== prevRecord,
+        shouldCellUpdate,
       };
     });
     result.push({
@@ -205,44 +197,34 @@ export default function EditableTableInner<T>({
       dataIndex: "operation",
       width: "70px",
       align: "end",
-      // PERFORMANCE CHANGE 1 (continued): keep operation column consistent
-      shouldCellUpdate: (record: TWithKey, prevRecord: TWithKey) => record !== prevRecord,
-      // @ts-expect-error I do not know why this is bad here
+      shouldCellUpdate,
       render: (_: unknown, record: TWithKey) => (
         <InlineEditableActions actions={{ delete: () => handleDelete(record.key), copy: () => handleCopy(record.key) }} />
       ),
     });
     return result;
-  }, [columnDescriptions, handleAdd, handleCopy, handleDelete, renderByType, usersWithKann]);
+  }, [columnDescriptions, handleAdd, handleCopy, handleDelete, renderByType, shouldCellUpdate, usersWithKann]);
 
-  const columns = useMemo(
+  type Override<T, R> = Omit<T, keyof R> & R; // override keys in T with keys in R
+  const columns: Override<ColumnType<TWithKey>, { onCell?: (record: TWithKey, index?: number) => EditableCellProps<TWithKey> }>[] = useMemo(
     () =>
       map(defaultColumns, (col) => {
         if (!col.editable) {
-          return col;
+          return { ...col, onCell: undefined };
         }
         return {
           ...col,
-          filters: undefined, // disable filter dropdown
 
           // PERFORMANCE CHANGE 2: use antd-provided index instead of rows.indexOf(record) [web:2]
-          onCell: (record: TWithKey, index?: number) => ({
-            index: index ?? 0,
-            record,
-            editable: col.editable,
-            dataIndex: col.dataIndex,
-            title: col.title,
-            handleSave,
-            type: col.type,
-            required: col.required,
-            presets: col.presets,
-            filters: col.filters,
-            usersWithKann: col.usersWithKann,
-            width: col.width,
-            min: col.min,
-            initialValue: col.initialValue,
-            multiline: col.multiline,
-          }),
+          onCell: (record: TWithKey, index?: number) => {
+            const result: EditableCellProps<TWithKey> = {
+              index: index ?? 0,
+              record,
+              handleSave,
+              column: col,
+            };
+            return result;
+          },
         };
       }),
     [defaultColumns, handleSave],

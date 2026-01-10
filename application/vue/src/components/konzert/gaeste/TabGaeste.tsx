@@ -4,18 +4,18 @@ import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
 import { NameWithNumber } from "jc-shared/konzert/konzert.ts";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
-const columns: Columns[] = [
+const columns: JazzColumn[] = [
   { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
   { type: "text", title: "Kommentar", dataIndex: "comment" },
   { type: "integer", title: "Anzahl", required: true, dataIndex: "number" },
   { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
 ];
 
-const smallColumns: Columns[] = [
+const smallColumns: JazzColumn[] = [
   { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
   { type: "integer", title: "Anzahl", required: true, dataIndex: "number" },
   { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
