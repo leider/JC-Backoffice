@@ -13,7 +13,7 @@ import CheckItem from "@/widgets/CheckItem.tsx";
 import StartEndDateOnlyPickersInTable from "@/widgets/EditableTable/widgets/StartEndDateOnlyPickersInTable.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 
-export interface EditableCellProps<T> {
+export interface EditableCellProps<T> extends React.HTMLAttributes<HTMLElement> {
   readonly record: T;
   readonly handleSave: (record: T, field: object) => void;
   readonly index?: number;
@@ -83,7 +83,7 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     if (isCompactMode) {
       switch (type) {
         case "color":
-          return { padding: "4px", paddingLeft: "4px" };
+          return { padding: "2px 4px 0px 4px" };
         case "user":
           return { padding: "4px", paddingLeft: "0px" };
         case "integer":
@@ -91,12 +91,12 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
         case "boolean":
           return { padding: "4px", paddingTop: "6px", paddingBottom: "0px" };
         default:
-          return { padding: "4px", marginLeft: "4px" };
+          return { padding: "5px", marginLeft: "4px" };
       }
     }
     switch (type) {
       case "color":
-        return { padding: "6px", paddingLeft: "4px" };
+        return { padding: "6px 4px 0px 4px" };
       case "user":
         return { padding: "6px", paddingLeft: "0px" };
       case "integer":
@@ -177,7 +177,12 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   ) : (
     Widget
   );
-  return <td {...restProps}>{childNode}</td>;
+
+  return (
+    <td {...restProps} style={{ ...restProps.style, verticalAlign: "top" }}>
+      {childNode}
+    </td>
+  );
 }
 
 export default EditableCell;
