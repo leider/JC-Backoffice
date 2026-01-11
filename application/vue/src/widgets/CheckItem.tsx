@@ -1,6 +1,6 @@
 import { Checkbox, CheckboxProps, Form } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 function InternalCheckbox({

@@ -1,12 +1,12 @@
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import React, { CSSProperties, forwardRef } from "react";
 import { Button, ConfigProvider, theme, Tooltip } from "antd";
-import { BaseButtonProps } from "antd/es/button/button";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { TooltipPlacement } from "antd/es/tooltip";
 import tinycolor from "tinycolor2";
 import { useGlobalContext } from "../../app/GlobalContext.ts";
+import { BaseButtonProps } from "antd/es/button/Button";
 
 type ButtonWithIconProps = {
   readonly icon?: IconProps["iconName"];

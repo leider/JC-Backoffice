@@ -117,6 +117,7 @@ export default function TeamMonatGroup({ monat }: MonatGroupProps) {
             ]}
             onChange={expandUnexpand}
             size="small"
+            styles={{ body: { padding: 0 } }}
           />
         </Col>
       </Row>

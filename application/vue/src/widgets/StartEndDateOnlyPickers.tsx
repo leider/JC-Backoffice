@@ -2,7 +2,7 @@ import { DatePicker } from "antd";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import Aggregate from "@/widgets/Aggregate.tsx";
 import { useWatch } from "antd/es/form/Form";
 

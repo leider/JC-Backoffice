@@ -3,7 +3,7 @@ import MultiSelectWithTags from "@/widgets/MultiSelectWithTags.tsx";
 import React, { useCallback, useEffect, useState } from "react";
 import { RcFile } from "antd/es/upload";
 import { uploadFile } from "@/rest/loader.ts";
-import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import type { CustomTagProps } from "@rc-component/select/es/BaseSelect";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import forEach from "lodash/forEach";

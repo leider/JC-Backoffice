@@ -1,10 +1,10 @@
 import { Tag } from "antd";
 import * as React from "react";
 import { useMemo } from "react";
-import { NamePath } from "rc-field-form/es/interface";
 import { useWatch } from "antd/es/form/Form";
 import map from "lodash/map";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
+import { NamePath } from "antd/es/form/interface";
 
 export type LabelPathDependsOn = {
   label: string;

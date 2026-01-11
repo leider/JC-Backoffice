@@ -1,5 +1,5 @@
 import { DatePicker } from "antd";
-import { IntRange } from "rc-picker/lib/interface";
+import { IntRange } from "@rc-component/picker/es/interface";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";

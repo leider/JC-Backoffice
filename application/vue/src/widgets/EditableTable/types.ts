@@ -1,6 +1,6 @@
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import React from "react";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 
 export type Columns = {
   editable?: boolean;
