@@ -2,7 +2,7 @@ import { DatePicker, Form } from "antd";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 
 interface StartEndDateOnlyPickersProps {
   readonly name: NamePath[];

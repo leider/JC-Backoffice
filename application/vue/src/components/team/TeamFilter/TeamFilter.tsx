@@ -4,7 +4,7 @@ import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import { TeamFilterObject } from "./applyTeamFilter.ts";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import isNil from "lodash/isNil";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import { TeamFilterEdit } from "@/components/team/TeamFilter/TeamFilterEdit.tsx";
 import { reset } from "@/components/team/TeamFilter/resetTeamFilter.ts";
 import isBoolean from "lodash/isBoolean";

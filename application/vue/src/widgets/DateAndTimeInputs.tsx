@@ -47,7 +47,7 @@ function InternalPicker({
       setVal(dayjs(value));
     }
   }, [value]);
-  const onChangeCallback = useCallback((date: Dayjs) => onChange!(date?.toISOString()), [onChange]);
+  const onChangeCallback = useCallback((date: Dayjs | null) => onChange!(date?.toISOString()), [onChange]);
   const onOpenChange = useCallback(
     (open: boolean) => {
       if (!open) {

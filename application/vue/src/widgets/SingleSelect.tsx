@@ -1,7 +1,7 @@
 import { Form, Select } from "antd";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { RefSelectProps } from "antd/es/select";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import map from "lodash/map";
 
 interface SingleSelectParams {

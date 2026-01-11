@@ -74,11 +74,11 @@ function TimeFieldEmbedded({
     if (value) {
       return dayjs(value);
     }
-    return undefined;
+    return null;
   }, [value]);
 
   const updateValue = useCallback(
-    (val?: Dayjs) => onChange!(val ? DatumUhrzeit.forJSDate(baseValue).setUhrzeit(val.hour(), val.minute()).toJSDate : undefined),
+    (val: Dayjs | null) => onChange!(val ? DatumUhrzeit.forJSDate(baseValue).setUhrzeit(val.hour(), val.minute()).toJSDate : undefined),
     [onChange, baseValue],
   );
 

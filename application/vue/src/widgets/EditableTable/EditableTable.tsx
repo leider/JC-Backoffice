@@ -1,7 +1,8 @@
 import { Form } from "antd";
 import React, { useMemo, useState } from "react";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
-import { NamePath, ValidatorRule } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
+import { ValidatorRule } from "@rc-component/form/lib/interface";
 import isNil from "lodash/isNil";
 import "./editableTable.css";
 import { JazzColumn } from "./types";

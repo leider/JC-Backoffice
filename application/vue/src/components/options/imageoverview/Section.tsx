@@ -1,4 +1,4 @@
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import { Link } from "react-router";
 import FormItem from "antd/es/form/FormItem";
 import * as React from "react";

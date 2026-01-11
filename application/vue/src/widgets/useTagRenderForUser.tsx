@@ -1,4 +1,4 @@
-import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import type { CustomTagProps } from "@rc-component/select/es/BaseSelect";
 import React, { useCallback } from "react";
 import { Tag } from "antd";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";

@@ -29,7 +29,7 @@ import {
 import forEach from "lodash/forEach";
 import { translations } from "@/widgets/markdown/markdown-translations.ts";
 import { uploadWikiImage } from "@/rest/loader.ts";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
 import reduce from "lodash/reduce";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import isNil from "lodash/isNil";
