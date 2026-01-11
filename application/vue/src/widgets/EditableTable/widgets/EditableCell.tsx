@@ -20,7 +20,27 @@ export interface EditableCellProps<T> extends React.HTMLAttributes<HTMLElement> 
   readonly column: JazzColumn;
 }
 
-function EditableCell<RecordType extends AnyObject = AnyObject>({
+type ChildNodeProps = {
+  readonly children: React.ReactNode;
+  readonly dataTestId: string;
+  readonly editing: boolean;
+  readonly onClick: React.MouseEventHandler<HTMLDivElement>;
+  readonly onFocus?: React.FocusEventHandler<HTMLDivElement>;
+  readonly onMouseDown: React.MouseEventHandler<HTMLDivElement>;
+  readonly readonlyStyle: React.CSSProperties;
+  readonly widget: React.ReactNode;
+};
+
+function ChildNode({ children, dataTestId, editing, onClick, onFocus, onMouseDown, readonlyStyle, widget }: ChildNodeProps) {
+  if (editing) return widget;
+  return (
+    <div data-testid={dataTestId} onClick={onClick} onFocus={onFocus} onMouseDown={onMouseDown} style={readonlyStyle} tabIndex={0}>
+      {children}
+    </div>
+  );
+}
+
+export default function EditableCell<RecordType extends AnyObject = AnyObject>({
   children,
   record,
   handleSave,
@@ -35,7 +55,6 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
   const { editable, dataIndex, type, required, presets, usersWithKann, dropdownchoices, min, initialValue, multiline } = column ?? {};
 
   const ref = useRef<HTMLElement>(null);
-
   const form = useContext(EditableContext)!;
 
   const [backupVal, setBackupVal] = useState<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -66,11 +85,9 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     async (keepEditing?: boolean) => {
       try {
         const value = form.getFieldValue(dataIndex);
-        !keepEditing && toggleEdit();
+        if (keepEditing !== true) toggleEdit();
         setBackupVal(undefined);
-        if (backupVal[dataIndex] === value) {
-          return;
-        }
+        if (backupVal?.[dataIndex] === value) return;
         handleSave(record, { [dataIndex]: value });
       } catch {
         /* empty */
@@ -108,81 +125,66 @@ function EditableCell<RecordType extends AnyObject = AnyObject>({
     }
   }, [isCompactMode, type]);
 
-  if (!editable) {
-    return <td {...restProps}>{children}</td>;
-  }
+  const Widget = useMemo(() => {
+    switch (type) {
+      case "user":
+        return <MitarbeiterMultiSelect focus name={dataIndex} save={save} usersAsOptions={usersWithKann ?? []} />;
+      case "color":
+        return <ColorField name={dataIndex} presets={presets} required={required} save={save} />;
+      case "integer":
+        return (
+          <NumberInput
+            decimals={0}
+            focus
+            initialValue={(initialValue as number) ?? 0}
+            min={min as number}
+            name={dataIndex}
+            required={required}
+            save={save}
+          />
+        );
+      case "twoDecimals":
+        return (
+          <NumberInput
+            decimals={2}
+            focus
+            initialValue={(initialValue as number) ?? 0}
+            min={min as number}
+            name={dataIndex}
+            required={required}
+            save={save}
+          />
+        );
+      case "date":
+        return <DateInput focus name={dataIndex} required={required} save={save} />;
+      case "startEnd":
+        return <StartEndDateOnlyPickersInTable focus name={dataIndex} save={save} />;
+      case "boolean":
+        return <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={dataIndex} required={required} save={save} />;
+      default:
+        return dropdownchoices ? (
+          <SingleSelect focus name={dataIndex} options={dropdownchoices} required={required} save={save} />
+        ) : (
+          <TextField focus multiline={multiline} name={dataIndex} required={required} save={save} />
+        );
+    }
+  }, [dataIndex, dropdownchoices, editByMouse, editing, initialValue, min, multiline, presets, required, save, type, usersWithKann]);
 
-  let Widget;
-  switch (type) {
-    case "user":
-      Widget = <MitarbeiterMultiSelect focus name={dataIndex} save={save} usersAsOptions={usersWithKann ?? []} />;
-      break;
-    case "color":
-      Widget = <ColorField name={dataIndex} presets={presets} required={required} save={save} />;
-      break;
-    case "integer":
-      Widget = (
-        <NumberInput
-          decimals={0}
-          focus
-          initialValue={(initialValue as number) ?? 0}
-          min={min as number}
-          name={dataIndex}
-          required={required}
-          save={save}
-        />
-      );
-      break;
-    case "twoDecimals":
-      Widget = (
-        <NumberInput
-          decimals={2}
-          focus
-          initialValue={(initialValue as number) ?? 0}
-          min={min as number}
-          name={dataIndex}
-          required={required}
-          save={save}
-        />
-      );
-      break;
-    case "date":
-      Widget = <DateInput focus name={dataIndex} required={required} save={save} />;
-      break;
-    case "startEnd":
-      Widget = <StartEndDateOnlyPickersInTable focus name={dataIndex} save={save} />;
-      break;
-    case "boolean":
-      Widget = <CheckItem focus focusByMouseClick={editByMouse ? editing : false} name={dataIndex} required={required} save={save} />;
-      break;
-    default:
-      Widget = dropdownchoices ? (
-        <SingleSelect focus name={dataIndex} options={dropdownchoices} required={required} save={save} />
-      ) : (
-        <TextField focus multiline={multiline} name={dataIndex} required={required} save={save} />
-      );
-      break;
-  }
-  const childNode = !editing ? (
-    <div
-      data-testid={dataIndex + index}
-      onClick={toggleEdit}
-      onFocus={type !== "color" ? toggleEdit : undefined}
-      onMouseDown={onMouseDown}
-      style={readonlyStyle}
-      tabIndex={0}
-    >
-      {children}
-    </div>
-  ) : (
-    Widget
-  );
-
-  return (
+  return editable ? (
     <td {...restProps} style={{ ...restProps.style, verticalAlign: "top" }}>
-      {childNode}
+      <ChildNode
+        dataTestId={dataIndex + index}
+        editing={editing}
+        onClick={toggleEdit}
+        onFocus={type !== "color" ? toggleEdit : undefined}
+        onMouseDown={onMouseDown}
+        readonlyStyle={readonlyStyle}
+        widget={Widget}
+      >
+        {children}
+      </ChildNode>
     </td>
+  ) : (
+    <td {...restProps}>{children}</td>
   );
 }
-
-export default EditableCell;
