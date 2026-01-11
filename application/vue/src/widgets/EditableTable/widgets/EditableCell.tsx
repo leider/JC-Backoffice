@@ -20,26 +20,6 @@ export interface EditableCellProps<T> extends React.HTMLAttributes<HTMLElement> 
   readonly column: JazzColumn;
 }
 
-type ChildNodeProps = {
-  readonly children: React.ReactNode;
-  readonly dataTestId: string;
-  readonly editing: boolean;
-  readonly onClick: React.MouseEventHandler<HTMLDivElement>;
-  readonly onFocus?: React.FocusEventHandler<HTMLDivElement>;
-  readonly onMouseDown: React.MouseEventHandler<HTMLDivElement>;
-  readonly readonlyStyle: React.CSSProperties;
-  readonly widget: React.ReactNode;
-};
-
-function ChildNode({ children, dataTestId, editing, onClick, onFocus, onMouseDown, readonlyStyle, widget }: ChildNodeProps) {
-  if (editing) return widget;
-  return (
-    <div data-testid={dataTestId} onClick={onClick} onFocus={onFocus} onMouseDown={onMouseDown} style={readonlyStyle} tabIndex={0}>
-      {children}
-    </div>
-  );
-}
-
 export default function EditableCell<RecordType extends AnyObject = AnyObject>({
   children,
   record,
@@ -54,46 +34,66 @@ export default function EditableCell<RecordType extends AnyObject = AnyObject>({
   const { isCompactMode } = useJazzContext();
   const { editable, dataIndex, type, required, presets, usersWithKann, dropdownchoices, min, initialValue, multiline } = column ?? {};
 
-  const ref = useRef<HTMLElement>(null);
+  const readonlyRef = useRef<HTMLDivElement>(null);
   const form = useContext(EditableContext)!;
 
-  const [backupVal, setBackupVal] = useState<any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+  const backupValRef = useRef<any>(undefined); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   useEffect(() => {
-    if (editing) {
-      ref.current?.focus();
-    }
+    if (!editing) return;
+    // If a widget doesn't manage focus itself, at least keep focus inside the cell.
+    // Most widgets already receive `focus`, so this is a fallback.
+    readonlyRef.current?.focus();
   }, [editing]);
 
   const onMouseDown = useCallback(() => setEditByMouse(true), []);
 
-  const toggleEdit = useCallback(() => {
-    const willNowEdit = !editing;
-    if (willNowEdit) {
-      endEdit({
-        endEditing: () => {
-          setEditing(false);
-        },
-      });
-    }
-    setEditing(willNowEdit);
-    setBackupVal({ [dataIndex]: record[dataIndex] });
-    form.setFieldsValue({ [dataIndex]: record[dataIndex] });
-  }, [editing, dataIndex, record, form, endEdit]);
+  const startEdit = useCallback(() => {
+    endEdit({
+      endEditing: () => {
+        setEditing(false);
+      },
+    });
+
+    setEditing(true);
+    backupValRef.current = record[dataIndex];
+
+    // AntD: prefer setting a single field value.
+    form.setFieldValue(dataIndex, record[dataIndex]);
+  }, [dataIndex, endEdit, form, record]);
+
+  const endEditLocal = useCallback(() => {
+    setEditing(false);
+  }, []);
 
   const save = useCallback(
     async (keepEditing?: boolean) => {
       try {
         const value = form.getFieldValue(dataIndex);
-        if (keepEditing !== true) toggleEdit();
-        setBackupVal(undefined);
-        if (backupVal?.[dataIndex] === value) return;
+
+        if (keepEditing !== true) {
+          endEditLocal();
+        }
+
+        if (backupValRef.current === value) return;
+
+        backupValRef.current = undefined;
         handleSave(record, { [dataIndex]: value });
       } catch {
         /* empty */
       }
     },
-    [backupVal, dataIndex, form, handleSave, record, toggleEdit],
+    [dataIndex, endEditLocal, form, handleSave, record],
+  );
+
+  const onEditorBlurCapture = useCallback(
+    (e: React.FocusEvent<HTMLElement>) => {
+      // Save when focus leaves the *cell*. If focus moves to another element inside the cell, do nothing.
+      const next = e.relatedTarget as Node | null;
+      if (next && e.currentTarget.contains(next)) return;
+      save();
+    },
+    [save],
   );
 
   const readonlyStyle = useMemo(() => {
@@ -126,6 +126,22 @@ export default function EditableCell<RecordType extends AnyObject = AnyObject>({
   }, [isCompactMode, type]);
 
   const Widget = useMemo(() => {
+    if (!editing) {
+      return (
+        <div
+          data-testid={dataIndex + index}
+          onClick={startEdit}
+          onFocus={type !== "color" ? startEdit : undefined}
+          onMouseDown={onMouseDown}
+          ref={readonlyRef}
+          style={readonlyStyle}
+          tabIndex={0}
+        >
+          {children}
+        </div>
+      );
+    }
+
     switch (type) {
       case "user":
         return <MitarbeiterMultiSelect focus name={dataIndex} save={save} usersAsOptions={usersWithKann ?? []} />;
@@ -168,21 +184,34 @@ export default function EditableCell<RecordType extends AnyObject = AnyObject>({
           <TextField focus multiline={multiline} name={dataIndex} required={required} save={save} />
         );
     }
-  }, [dataIndex, dropdownchoices, editByMouse, editing, initialValue, min, multiline, presets, required, save, type, usersWithKann]);
+  }, [
+    children,
+    dataIndex,
+    dropdownchoices,
+    editByMouse,
+    editing,
+    index,
+    initialValue,
+    min,
+    multiline,
+    onMouseDown,
+    presets,
+    readonlyStyle,
+    required,
+    save,
+    startEdit,
+    type,
+    usersWithKann,
+  ]);
 
   return editable ? (
     <td {...restProps} style={{ ...restProps.style, verticalAlign: "top" }}>
-      <ChildNode
-        dataTestId={dataIndex + index}
-        editing={editing}
-        onClick={toggleEdit}
-        onFocus={type !== "color" ? toggleEdit : undefined}
-        onMouseDown={onMouseDown}
-        readonlyStyle={readonlyStyle}
-        widget={Widget}
-      >
-        {children}
-      </ChildNode>
+      {editing ? (
+        <div onBlurCapture={onEditorBlurCapture}>{Widget}</div>
+      ) : (
+        // Keep this wrapper out of the tab order; the inner div is already tabIndex=0.
+        <div tabIndex={-1}>{Widget}</div>
+      )}
     </td>
   ) : (
     <td {...restProps}>{children}</td>
