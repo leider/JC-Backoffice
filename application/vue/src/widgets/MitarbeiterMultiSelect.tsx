@@ -1,11 +1,12 @@
-import { Form, Select, Tag } from "antd";
-import React, { useCallback, useEffect, useRef } from "react";
+import { Form, Select, Tag, Tooltip } from "antd";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
 import { BaseOptionType, RefSelectProps } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 import map from "lodash/map";
 import filter from "lodash/filter";
+import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
@@ -90,15 +91,16 @@ function InnerSelect({
   return (
     <Select
       disabled={disabled}
-      filterOption={filterOption}
       mode="multiple"
       onBlur={onBlur}
       onChange={onChangeWithSave}
       optionRender={renderInList}
-      options={filtered}
+      options={usersAsOptions}
       placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}
       ref={ref}
-      showSearch
+      showSearch={{
+        filterOption,
+      }}
       style={{ width: "100%" }}
       tagRender={tagRender}
       value={value}

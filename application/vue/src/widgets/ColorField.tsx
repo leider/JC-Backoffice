@@ -43,6 +43,10 @@ export function ColorField({
     setRules(rulesToSet);
   }, [required]);
 
+  useEffect(() => {
+    console.log({ name });
+  }, [name]);
+
   return (
     <AntdForm.Item
       initialValue={initialValue}
@@ -53,7 +57,7 @@ export function ColorField({
       trigger="onChange"
       valuePropName="value"
     >
-      <ColorInputEmbedded presets={presets} save={save} />
+      <ColorInputEmbedded presets={presets} />
     </AntdForm.Item>
   );
 }
@@ -94,7 +98,6 @@ function ColorInputEmbedded({ value, onChange, save, presets }: TColorInputEmbed
       format="hex"
       onChange={onChangeCallback}
       onOpenChange={onOpenChange}
-      open
       presets={
         presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
       }

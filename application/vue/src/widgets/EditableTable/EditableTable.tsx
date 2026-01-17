@@ -82,20 +82,26 @@ export default function EditableTable<T>({
   }, [uniqueFields]);
 
   return (
-    <Form.Item
-      name={name}
-      rules={[requiredFields && requiredValidator, uniqueFields && uniqueValidator]}
-      trigger="onTable"
-      valuePropName="value"
-    >
-      <EditableTableInner<T>
-        columnDescriptions={columnDescriptions}
-        duplInfo={duplInfo}
-        fixedMinHeight={fixedMinHeight}
-        newRowFactory={newRowFactory}
-        requiredErrors={requiredErrors}
-        usersWithKann={usersWithKann}
-      />
-    </Form.Item>
+    <Form.List name={name}>
+      {(fields, { add, remove }, { errors }) => {
+        return (
+          <>
+            <EditableTableInner<T>
+              columnDescriptions={columnDescriptions}
+              duplInfo={duplInfo}
+              fields={fields}
+              fixedMinHeight={fixedMinHeight}
+              name={name}
+              newRowFactory={newRowFactory}
+              onAdd={add}
+              onRemove={remove}
+              requiredErrors={requiredErrors}
+              usersWithKann={usersWithKann}
+            />
+            <Form.ErrorList errors={errors} />
+          </>
+        );
+      }}
+    </Form.List>
   );
 }

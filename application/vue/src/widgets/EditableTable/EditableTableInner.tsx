@@ -1,23 +1,20 @@
-import { Alert, ConfigProvider, Form, Table, type TableProps } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { EditableContext } from "@/widgets/EditableTable/EditableContext.tsx";
+import { Alert, ConfigProvider, Form, FormListFieldData, Table, type TableProps } from "antd";
+import React, { useCallback, useMemo } from "react";
 import EditableCell, { EditableCellProps } from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { TableContext, useCreateTableContext } from "@/widgets/EditableTable/useTableContext.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import InlineEditableActions from "@/widgets/EditableTable/InlineEditableActions.tsx";
-import cloneDeep from "lodash/cloneDeep";
 import ButtonWithIcon from "@/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
 import "./editableTable.css";
 import { JazzColumn } from "./types";
 import useColumnRenderer from "@/widgets/EditableTable/widgets/useColumnRenderer.tsx";
-import findIndex from "lodash/findIndex";
-import find from "lodash/find";
 import map from "lodash/map";
-import reject from "lodash/reject";
 import flatMap from "lodash/flatMap";
 import keys from "lodash/keys";
 import { useGlobalContext } from "@/app/GlobalContext.ts";
 import { ColumnType } from "antd/es/table/interface";
+import type { NamePath } from "antd/es/form/interface";
+import type { StoreValue } from "@rc-component/form/lib/interface";
 
 export type WithKey<T> = T & { key: string };
 
@@ -37,17 +34,6 @@ function DulicatesInfo({ duplInfo }: { readonly duplInfo: DuplInfo }) {
     <ConfigProvider theme={{ components: { Alert: { withDescriptionPadding: "10px" } } }}>
       <Alert description={<DuplicatesDetails duplInfo={duplInfo} />} message="Du hast doppelte Einträge!" showIcon type="error" />
     </ConfigProvider>
-  );
-}
-
-function EditableRow(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>) {
-  const [form] = Form.useForm();
-  return (
-    <Form component={false} form={form}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
   );
 }
 
@@ -81,108 +67,72 @@ function alignForType(item: JazzColumn) {
 export type DuplInfo = { name: string; vals: string[]; keys: string[] }[];
 
 export default function EditableTableInner<T>({
-  value,
-  onTable,
+  fields,
   columnDescriptions,
   usersWithKann,
   newRowFactory,
   duplInfo,
   requiredErrors,
   fixedMinHeight,
+  onAdd,
+  onRemove,
+  name,
 }: {
-  readonly value?: T[];
-  readonly onTable?: (val?: T[]) => void;
+  readonly name: NamePath;
+  readonly fields?: FormListFieldData[];
   readonly columnDescriptions?: JazzColumn[];
   readonly usersWithKann?: UserWithKann[];
   readonly newRowFactory: (val: T) => T;
   readonly duplInfo: DuplInfo;
   readonly requiredErrors: string[];
   readonly fixedMinHeight?: number;
+  readonly onAdd?: (defaultValue?: StoreValue, insertIndex?: number) => void;
+  readonly onRemove?: (index: number | number[]) => void;
 }) {
   type TWithKey = WithKey<T>;
-  type ColumnTypes = Exclude<TableProps<TWithKey>["columns"], undefined>;
-  const [rows, setRows] = useState<TWithKey[]>([]);
+  type ColumnTypes = Exclude<TableProps<FormListFieldData>["columns"], undefined>;
+
   const tableContext = useCreateTableContext();
   const { viewport } = useGlobalContext();
 
-  useEffect(() => {
-    const withKey: TWithKey[] = map(value, (row, index) => {
-      (row as TWithKey).key = "row" + index;
-      return row as TWithKey;
-    });
-    setRows(withKey);
-  }, [value]);
-
-  const newKey = useCallback(() => {
-    const numbers = map(rows, (row) => Number.parseInt(row.key.replace("key", ""), 10));
-    return Math.max(...numbers) + 1;
-  }, [rows]);
-
+  // Build dataSource from fields - use form context to get actual values
+  const form = Form.useFormInstance();
   const handleDelete = useCallback(
-    (key: React.Key) => {
-      onTable?.(reject(rows, ["key", key]));
+    (key: React.Key, fieldIndex?: number) => {
+      onRemove?.(fieldIndex ?? 0);
     },
-    [onTable, rows],
+    [onRemove],
   );
 
   const handleCopy = useCallback(
-    (key: React.Key) => {
-      if (!rows) {
-        return;
-      }
-      const current = find(rows, { key: key }) as WithKey<T>;
-      if (!current) {
-        return;
-      }
-      const copied = cloneDeep(current);
-      copied.key = "" + newKey();
-      const clone = cloneDeep(rows);
-      clone.splice(rows.indexOf(current), 0, copied);
-      onTable?.(clone);
+    (row: TWithKey, index: number) => {
+      const copied = form.getFieldValue([name, index]);
+      onAdd?.(copied, index);
     },
-    [newKey, onTable, rows],
+    [form, name, onAdd],
   );
 
   const handleAdd = useCallback(() => {
-    const newData = newRowFactory({} as T);
-    (newData as TWithKey).key = "" + newKey();
-    onTable?.([newData, ...rows]);
-  }, [newKey, newRowFactory, onTable, rows]);
-
-  const handleSave = useCallback(
-    (row: TWithKey, field: object) => {
-      const newData = [...(rows ?? [])];
-      const index = findIndex(newData, ["key", row.key]);
-      const newRow = newRowFactory({ ...row, ...field });
-      (newRow as TWithKey).key = row.key;
-      newData.splice(index, 1, newRow as TWithKey);
-      onTable?.(newData);
-    },
-    [newRowFactory, onTable, rows],
-  );
-
-  const hasRecordErrors = useCallback(
-    (record: TWithKey) => flatMap(map(duplInfo, "keys")).includes(record.key) || requiredErrors.includes(record.key),
-    [duplInfo, requiredErrors],
-  );
+    const emptyRow = newRowFactory({} as T);
+    // Form.List add() handles empty object insertion
+    onAdd?.(emptyRow, 0);
+  }, [newRowFactory, onAdd]);
 
   const renderByType = useColumnRenderer(usersWithKann);
 
   const shouldCellUpdate = useCallback((record: TWithKey, prevRecord: TWithKey) => record !== prevRecord, []);
 
   const defaultColumns = useMemo(() => {
-    const result: (JazzColumn & ColumnType<TWithKey>)[] = map(columnDescriptions, (item, index) => {
-      return {
-        ...item,
-        editable: item.editable ?? true,
-        index: index,
-        usersWithKann,
-        render: renderByType(item),
-        align: alignForType(item),
-        width: widthForType(item),
-        shouldCellUpdate,
-      };
-    });
+    const result: (JazzColumn & ColumnType<TWithKey>)[] = map(columnDescriptions, (item) => ({
+      ...item,
+      editable: item.editable ?? true,
+      usersWithKann,
+      render: renderByType(item),
+      align: alignForType(item),
+      width: widthForType(item),
+      //shouldCellUpdate,
+    }));
+
     result.push({
       title: (
         <ButtonWithIcon
@@ -198,15 +148,25 @@ export default function EditableTableInner<T>({
       width: "70px",
       align: "end",
       shouldCellUpdate,
-      render: (_: unknown, record: TWithKey) => (
-        <InlineEditableActions actions={{ delete: () => handleDelete(record.key), copy: () => handleCopy(record.key) }} />
+      render: (_: unknown, record: TWithKey, index: number) => (
+        <InlineEditableActions
+          actions={{
+            delete: () => handleDelete(record.key, index),
+            copy: () => handleCopy(record, index),
+          }}
+        />
       ),
     });
     return result;
-  }, [columnDescriptions, handleAdd, handleCopy, handleDelete, renderByType, shouldCellUpdate, usersWithKann]);
+  }, [columnDescriptions, handleAdd, handleDelete, handleCopy, renderByType, shouldCellUpdate, usersWithKann]);
 
-  type Override<T, R> = Omit<T, keyof R> & R; // override keys in T with keys in R
-  const columns: Override<ColumnType<TWithKey>, { onCell?: (record: TWithKey, index?: number) => EditableCellProps<TWithKey> }>[] = useMemo(
+  type Override<T, R> = Omit<T, keyof R> & R;
+  const columns: Override<
+    ColumnType<TWithKey>,
+    {
+      onCell?: (record: TWithKey, index?: number) => Partial<EditableCellProps<TWithKey>>;
+    }
+  >[] = useMemo(
     () =>
       map(defaultColumns, (col) => {
         if (!col.editable) {
@@ -218,40 +178,36 @@ export default function EditableTableInner<T>({
           // PERFORMANCE CHANGE 2: use antd-provided index instead of rows.indexOf(record) [web:2]
           onCell: (record: TWithKey, index?: number) => {
             const result: EditableCellProps<TWithKey> = {
+              name,
               index: index ?? 0,
               record,
-              handleSave,
               column: col,
             };
             return result;
           },
         };
       }),
-    [defaultColumns, handleSave],
+    [defaultColumns, name],
   );
 
-  const ref: Parameters<typeof Table>[0]["ref"] = React.useRef(null);
-
+  const ref = React.useRef<any>(null);
   const scrollY = useMemo(
-    () => (fixedMinHeight ? fixedMinHeight : viewport.height - 50 - (ref?.current?.nativeElement.getBoundingClientRect().top ?? 0)),
-    [viewport.height, ref?.current?.nativeElement], // eslint-disable-line react-hooks/exhaustive-deps
+    () => fixedMinHeight || viewport.height - 50 - (ref.current?.nativeElement?.getBoundingClientRect().top ?? 0),
+    [viewport.height, fixedMinHeight, ref],
   );
-
-  const rowClassName = useCallback((record: WithKey<T>) => (hasRecordErrors(record) ? "table-row-error" : ""), [hasRecordErrors]);
 
   return (
     <div>
       <TableContext.Provider value={tableContext}>
         <DulicatesInfo duplInfo={duplInfo} />
-        <Table<TWithKey>
+        <Table<FormListFieldData>
           bordered
           className="editable-table"
           columns={columns as ColumnTypes}
-          components={{ body: { row: EditableRow, cell: EditableCell } }}
-          dataSource={rows}
+          components={{ body: { cell: EditableCell } }}
+          dataSource={fields}
           pagination={false}
           ref={ref}
-          rowClassName={rowClassName}
           scroll={{ y: scrollY }}
           size="small"
         />

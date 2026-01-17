@@ -4,7 +4,7 @@ import { FormInstance } from "antd";
 export default function useCheckErrors(form: FormInstance, loaded: boolean) {
   const [hasErrors, setHasErrors] = useState(false);
   const checkErrors = useCallback(() => {
-    if (!loaded) {
+    if (true || !loaded) {
       return;
     }
     form
@@ -14,6 +14,7 @@ export default function useCheckErrors(form: FormInstance, loaded: boolean) {
       })
       .catch((reason: { errorFields: unknown[] }) => {
         setHasErrors(loaded && !!reason.errorFields?.length);
+        console.log({ errors: reason.errorFields });
       });
   }, [form, loaded]);
 

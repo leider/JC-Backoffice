@@ -121,7 +121,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     title?: string;
   }) {
     notification.success({
-      message: title,
+      title,
       description: text,
       placement: "bottom",
       showProgress: true,
@@ -139,7 +139,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     closeCallback?: () => void;
   }) {
     notification.error({
-      message: title,
+      title,
       description: text,
       placement: "bottom",
       duration: 10,

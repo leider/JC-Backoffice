@@ -41,11 +41,6 @@ export function JazzPageHeader({
 
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
-      {hasErrors ? (
-        <ConfigProvider theme={{ components: { Alert: { defaultPadding: "20px 10px 10px 10px" } } }}>
-          <Alert banner message="Du hast noch Fehler!" type="error" />
-        </ConfigProvider>
-      ) : null}
       <PageHeader
         breadcrumb={breadcrumb ? breadcrumb : undefined}
         extra={buttons}
@@ -58,8 +53,13 @@ export function JazzPageHeader({
           ),
           tags,
         ]}
-        style={{ ...style, paddingInline: 4 }}
-        subTitle={<SubTitle isCopy={isCopy} isNew={isNew} />}
+        style={{ ...style, paddingInline: 4, backgroundColor: hasErrors ? "var(--ant-color-error-bg)" : undefined }}
+        subTitle={
+          <>
+            <SubTitle isCopy={isCopy} isNew={isNew} />
+            {hasErrors ? <Alert showIcon styles={{ root: { border: "none" } }} title="Du hast noch Fehler!" type="error" /> : null}
+          </>
+        }
         title={<span style={style}>{title}</span>}
       >
         {children}
