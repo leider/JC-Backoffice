@@ -1,22 +1,25 @@
 import { useCallback, useState } from "react";
 import { FormInstance } from "antd";
+import { ValidateErrorEntity } from "@rc-component/form/lib/interface";
 
 export default function useCheckErrors(form: FormInstance, loaded: boolean) {
-  const [hasErrors, setHasErrors] = useState(false);
-  const checkErrors = useCallback(() => {
-    if (true || !loaded) {
-      return;
-    }
-    form
-      .validateFields({ recursive: true })
-      .then(() => {
-        setHasErrors(false);
-      })
-      .catch((reason: { errorFields: unknown[] }) => {
-        setHasErrors(loaded && !!reason.errorFields?.length);
-        console.log({ errors: reason.errorFields });
-      });
-  }, [form, loaded]);
+  const [validateError, setValidateError] = useState<ValidateErrorEntity | undefined>();
+  const checkErrors = useCallback(
+    (keys?: string[]) => {
+      if (!loaded) {
+        return;
+      }
+      form
+        .validateFields(keys, { recursive: true, validateOnly: false })
+        .then(() => {
+          setValidateError(undefined);
+        })
+        .catch((errorEntity: ValidateErrorEntity) => {
+          setValidateError(errorEntity);
+        });
+    },
+    [form, loaded],
+  );
 
-  return { hasErrors, checkErrors };
+  return { validateError, checkErrors };
 }

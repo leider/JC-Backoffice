@@ -41,7 +41,7 @@ export default function ArtistCard() {
       </JazzRow>
       <JazzRow>
         <Col span={12}>
-          <TimeField baseValue={startDate} label="Band Get-In (informativ)" name={["artist", "getInForMasterDate"]} />;
+          <TimeField baseValue={startDate} label="Band Get-In (informativ)" name={["artist", "getInForMasterDate"]} />
         </Col>
         <Col span={12}>
           <SingleSelect

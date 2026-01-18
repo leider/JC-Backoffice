@@ -1,6 +1,7 @@
-import { Form as AntdForm, Input, InputRef } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Form as AntdForm, Input } from "antd";
+import { useCallback, useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 type TTextField = {
   /**
@@ -50,9 +51,8 @@ type TTextField = {
    */
   readonly uniqueValuesValidator?: Rule;
   readonly style?: React.CSSProperties;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
   readonly multiline?: boolean;
+  readonly useInTable?: boolean;
 };
 
 /**
@@ -69,8 +69,7 @@ export function TextField({
   disabled,
   onChange,
   style,
-  save,
-  focus,
+  useInTable,
   multiline,
 }: TTextField): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
@@ -98,12 +97,13 @@ export function TextField({
       initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
       name={name}
+      noStyle={useInTable}
       rules={rules}
       style={label ? { ...style } : { ...style, marginBottom: 0 }}
       trigger="onText"
       valuePropName="textVal"
     >
-      <TextInputEmbedded disabled={disabled} focus={focus} multiline={multiline} onChange={onChange} save={save} />
+      <TextInputEmbedded disabled={disabled} multiline={multiline} onChange={onChange} useInTable={useInTable} />
     </AntdForm.Item>
   );
 }
@@ -114,12 +114,11 @@ type TTextInputEmbedded = {
   readonly textVal?: string;
   readonly onText?: (value: string | null) => void;
   readonly onChange?: (value: string | null) => void;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
   readonly multiline?: boolean;
 };
 
-function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focus, multiline }: TTextInputEmbedded) {
+function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable, multiline }: TTextInputEmbedded) {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -128,47 +127,27 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, save, focu
     },
     [onChange, onText],
   );
-  const inputRef = useRef<InputRef>(null);
-  useEffect(() => {
-    if (focus) {
-      inputRef.current?.focus();
-    }
-  }, [focus]);
 
   const onBlur = useCallback(
     ({ target: { value: nextValue } }: { target: { value: string } }) => {
       changed(nextValue, true);
-      save?.();
     },
-    [changed, save],
+    [changed],
   );
+
+  const style = useFormItemInTableStyle(useInTable);
 
   const onChangeHandler = useCallback(({ target: { value: nextValue } }: { target: { value: string } }) => changed(nextValue), [changed]);
 
-  const onPressEnter = useCallback(() => save?.(), [save]);
+  const props = {
+    autoComplete: "off",
+    disabled,
+    id,
+    onBlur,
+    onChange: onChangeHandler,
+    style: style,
+    value: textVal,
+  };
 
-  return multiline ? (
-    <Input.TextArea
-      autoComplete="off"
-      autoSize
-      disabled={disabled}
-      id={id}
-      onBlur={onBlur}
-      onChange={onChangeHandler}
-      onPressEnter={onPressEnter}
-      ref={inputRef}
-      value={textVal}
-    />
-  ) : (
-    <Input
-      autoComplete="off"
-      disabled={disabled}
-      id={id}
-      onBlur={onBlur}
-      onChange={onChangeHandler}
-      onPressEnter={onPressEnter}
-      ref={inputRef}
-      value={textVal}
-    />
-  );
+  return multiline ? <Input.TextArea {...props} autoSize /> : <Input {...props} />;
 }

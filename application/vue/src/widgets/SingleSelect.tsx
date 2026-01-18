@@ -1,8 +1,8 @@
 import { Form, Select } from "antd";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { RefSelectProps } from "antd/es/select";
+import React, { useCallback, useMemo } from "react";
 import { NamePath } from "antd/es/form/interface";
 import map from "lodash/map";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 interface SingleSelectParams {
   readonly name: NamePath;
@@ -11,8 +11,7 @@ interface SingleSelectParams {
   readonly onChange?: (val: string) => void;
   readonly initialValue?: string;
   readonly required?: boolean;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }
 
 export type LabelAndValue = { label: string; value: string };
@@ -22,8 +21,7 @@ function InnerSelect({
   onChange,
   onSelect,
   allowClear,
-  save,
-  focus,
+  useInTable,
   value,
 }: {
   readonly options: string[];
@@ -31,42 +29,43 @@ function InnerSelect({
   readonly onChange?: (val: string) => void;
   readonly onSelect?: (val: string) => void;
   readonly allowClear?: boolean;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }) {
+  const style = useFormItemInTableStyle(useInTable);
   const realOptions = useMemo(() => map(options, (opt) => ({ label: opt, value: opt })), [options]);
-  const ref = useRef<RefSelectProps>(null);
-  useEffect(() => {
-    if (focus && options) {
-      ref.current?.focus();
-    }
-  }, [focus, options]);
-
-  const onBlur = useCallback(() => save?.(), [save]);
   const onChangeHandler = useCallback(
     (val: string) => {
       onChange?.(val);
       onSelect?.(val);
-      save?.(true);
     },
-    [onChange, onSelect, save],
+    [onChange, onSelect],
   );
 
-  return <Select allowClear={allowClear} onBlur={onBlur} onChange={onChangeHandler} options={realOptions} showSearch value={value} />;
+  return (
+    <Select
+      allowClear={allowClear}
+      onChange={onChangeHandler}
+      options={realOptions}
+      showSearch
+      style={{ ...style, width: "100%" }}
+      value={value}
+    />
+  );
 }
 
-export default function SingleSelect({ label, name, onChange, options, initialValue, required, save, focus }: SingleSelectParams) {
+export default function SingleSelect({ label, name, onChange, options, initialValue, required, useInTable }: SingleSelectParams) {
   return (
     <Form.Item
       colon={false}
       initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       name={name}
+      noStyle={useInTable}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
       validateTrigger="onSelect"
     >
-      <InnerSelect allowClear={!required} focus={focus} onChange={onChange} options={options} save={save} />
+      <InnerSelect allowClear={!required} onChange={onChange} options={options} useInTable={useInTable} />
     </Form.Item>
   );
 }

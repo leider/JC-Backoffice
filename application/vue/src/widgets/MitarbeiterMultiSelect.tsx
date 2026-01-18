@@ -1,12 +1,11 @@
-import { Form, Select, Tag, Tooltip } from "antd";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Form, Select, Tag } from "antd";
+import React, { useCallback } from "react";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import { KannSection } from "jc-shared/user/user.ts";
-import { BaseOptionType, RefSelectProps } from "antd/es/select";
+import { BaseOptionType } from "antd/es/select";
 import { useTagRenderForUser } from "@/widgets/useTagRenderForUser.tsx";
 import map from "lodash/map";
-import filter from "lodash/filter";
-import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 export type UserWithKann = LabelAndValue & { kann: KannSection[] };
 
@@ -44,24 +43,17 @@ function InnerSelect({
   usersAsOptions,
   disabled,
   onChange,
+  useInTable,
   value,
-  save,
-  focus,
 }: {
   readonly usersAsOptions: UserWithKann[];
   readonly disabled?: boolean;
   readonly onChange?: (value: string[]) => void;
-  readonly value?: string[];
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
-}) {
-  const ref = useRef<RefSelectProps>(null);
-  useEffect(() => {
-    if (focus && usersAsOptions) {
-      ref.current?.focus();
-    }
-  }, [focus, usersAsOptions]);
+  readonly useInTable?: boolean;
 
+  readonly value?: string[];
+}) {
+  const style = useFormItemInTableStyle(useInTable);
   const renderInList = useCallback((row: { data: BaseOptionType }) => <FullUserWithKanns user={row.data as UserWithKann} />, []);
 
   const tagRender = useTagRenderForUser(usersAsOptions);
@@ -77,31 +69,16 @@ function InnerSelect({
     [],
   );
 
-  const onBlur = useCallback(() => save?.(), [save]);
-  const onChangeWithSave = useCallback(
-    (val: string[]) => {
-      onChange?.(val);
-      save?.(true);
-    },
-    [onChange, save],
-  );
-
-  const filtered = filter(usersAsOptions, (u) => !value?.includes(u.value));
-
   return (
     <Select
       disabled={disabled}
       mode="multiple"
-      onBlur={onBlur}
-      onChange={onChangeWithSave}
+      onChange={onChange}
       optionRender={renderInList}
       options={usersAsOptions}
       placeholder={disabled ? "" : "Tippen zum Suchen nach irgendwas"}
-      ref={ref}
-      showSearch={{
-        filterOption,
-      }}
-      style={{ width: "100%" }}
+      showSearch={{ filterOption }}
+      style={{ ...style, width: "100%" }}
       tagRender={tagRender}
       value={value}
     />
@@ -113,19 +90,17 @@ export default function MitarbeiterMultiSelect({
   usersAsOptions,
   disabled,
   label,
-  save,
-  focus,
+  useInTable,
 }: {
   readonly name: string | string[];
   readonly usersAsOptions: UserWithKann[];
   readonly disabled?: boolean;
   readonly label?: string;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }) {
   return (
     <Form.Item label={label ? <b>{label + ":"}</b> : undefined} name={name} noStyle={!label}>
-      <InnerSelect disabled={disabled} focus={focus} save={save} usersAsOptions={usersAsOptions} />
+      <InnerSelect disabled={disabled} useInTable={useInTable} usersAsOptions={usersAsOptions} />
     </Form.Item>
   );
 }

@@ -42,7 +42,7 @@ export default function JazzDrawerWithForm<T>({
   const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
   const [loaded, setLoaded] = useState(false);
   useDirtyBlocker(isDirty);
-  const { hasErrors, checkErrors } = useCheckErrors(form, loaded);
+  const { validateError, checkErrors } = useCheckErrors(form, loaded);
 
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
@@ -86,7 +86,7 @@ export default function JazzDrawerWithForm<T>({
 
   const buttons: ReactNode[] = (additionalButtons ?? [])
     .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetChanges} /> : [])
-    .concat(<SaveButton callback={onSave} disabled={!isDirty || hasErrors} key="save" />)
+    .concat(<SaveButton callback={onSave} disabled={!isDirty || !!validateError} key="save" />)
     .concat(additionalButtonsLast ?? []);
 
   const jazzFormContext = useMemo(() => {

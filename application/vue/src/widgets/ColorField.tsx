@@ -8,7 +8,7 @@ type TColorField = {
   readonly label?: string;
   readonly required?: boolean;
   readonly initialValue?: string;
-  readonly save?: (keepEditing?: boolean) => void;
+  readonly useInTable?: boolean;
 };
 
 const colors: { [name: string]: string } = {
@@ -29,7 +29,7 @@ export function ColorField({
   label,
   required,
   initialValue,
-  save,
+  useInTable,
   presets,
 }: TColorField & { readonly presets?: boolean }): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
@@ -43,21 +43,18 @@ export function ColorField({
     setRules(rulesToSet);
   }, [required]);
 
-  useEffect(() => {
-    console.log({ name });
-  }, [name]);
-
   return (
     <AntdForm.Item
       initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
       name={name}
+      noStyle={useInTable}
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
       trigger="onChange"
       valuePropName="value"
     >
-      <ColorInputEmbedded presets={presets} />
+      <ColorInputEmbedded presets={presets} useInTable={useInTable} />
     </AntdForm.Item>
   );
 }
@@ -67,9 +64,10 @@ type TColorInputEmbedded = {
   readonly onChange?: (value: string) => void;
   readonly save?: (keepEditing?: boolean) => void;
   readonly presets?: boolean;
+  readonly useInTable?: boolean;
 };
 
-function ColorInputEmbedded({ value, onChange, save, presets }: TColorInputEmbedded) {
+function ColorInputEmbedded({ value, onChange, save, presets, useInTable }: TColorInputEmbedded) {
   useEffect(() => {
     if (value && !value?.startsWith("#") && !value?.startsWith("rgb")) {
       onChange?.(colors[value.toLowerCase()] as string);
@@ -102,6 +100,7 @@ function ColorInputEmbedded({ value, onChange, save, presets }: TColorInputEmbed
         presets ? [{ label: "Schnellauswahl", colors: ["#b22222", "#ff7f50", "#0000ff", "#1e90ff", "#008000", "#9acd32"] }] : undefined
       }
       size="small"
+      style={useInTable ? { borderWidth: 0, paddingTop: 8 } : undefined}
       value={value}
     />
   );

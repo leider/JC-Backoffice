@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { useFormats, useLimits, useSanitizeLocalInput } from "./hooks";
 import isEqual from "lodash/isEqual";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 interface INumericInputEmbedded {
   readonly id?: string;
@@ -54,23 +55,11 @@ interface INumericInputEmbedded {
    */
   readonly onChange?: (value: number | null) => void;
   readonly suffix?: ReactNode;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }
 
-function NumericInputEmbedded({
-  number,
-  decimals,
-  min,
-  max,
-  disabled,
-  onChange,
-  onNumber,
-  suffix,
-  id,
-  save,
-  focus,
-}: INumericInputEmbedded) {
+function NumericInputEmbedded({ number, decimals, min, max, disabled, onChange, onNumber, suffix, id, useInTable }: INumericInputEmbedded) {
+  const style = useFormItemInTableStyle(useInTable);
   const [value, setValue] = useState<string | undefined>("");
 
   const { internalFormat, displayFormat } = useFormats(decimals);
@@ -98,17 +87,13 @@ function NumericInputEmbedded({
     ({ target: { value: widgetInput } }) => {
       const result = widgetInput ? numeral(widgetInput).value() || 0 : null;
       sanitizeLocalInput(result, widgetInput);
-      save?.();
     },
-    [sanitizeLocalInput, save],
+    [sanitizeLocalInput],
   );
-
-  useEffect(() => {
-    if (focus && value) {
-      inputRef.current?.focus();
-    }
-  }, [focus, value]);
-
+  const selectAll = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    target.select();
+  }, []);
   const handleFocus = useCallback(() => inputRef.current?.focus({ cursor: "all" }), []);
 
   useEffect(() => {
@@ -118,7 +103,6 @@ function NumericInputEmbedded({
   const inputRef = useRef<InputRef>(null);
 
   const onChangeHandler = useCallback(({ target: { value: val } }: { target: { value: string } }) => setValue(val), []);
-  const onPressEnter = useCallback(() => save?.(), [save]);
   return (
     <Input
       disabled={disabled}
@@ -126,9 +110,10 @@ function NumericInputEmbedded({
       inputMode={decimals > 0 ? "decimal" : "numeric"}
       onBlur={handleBlur}
       onChange={onChangeHandler}
+      onClick={selectAll}
       onFocus={handleFocus}
-      onPressEnter={onPressEnter}
-      ref={inputRef}
+      style={style}
+      styles={{ input: { textAlign: "end" } }}
       suffix={suffix}
       value={value}
     />

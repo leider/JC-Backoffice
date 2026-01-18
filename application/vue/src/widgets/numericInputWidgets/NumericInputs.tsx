@@ -56,8 +56,7 @@ type NumberInputProps = {
   readonly max?: number;
 
   readonly suffix?: ReactNode;
-  readonly save?: (keepEditing?: boolean) => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 };
 
 export function NumberInput({
@@ -71,8 +70,7 @@ export function NumberInput({
   onChange,
   initialValue,
   disabled,
-  save,
-  focus,
+  useInTable,
 }: NumberInputProps) {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
 
@@ -85,6 +83,7 @@ export function NumberInput({
       initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       name={name}
+      noStyle={useInTable}
       rules={rules}
       style={label ? {} : { marginBottom: 0 }}
       trigger="onNumber"
@@ -93,12 +92,11 @@ export function NumberInput({
       <NumericInputEmbedded
         decimals={decimals}
         disabled={disabled}
-        focus={focus}
         max={max}
         min={min}
         onChange={onChange}
-        save={save}
         suffix={suffix}
+        useInTable={useInTable}
       />
     </Form.Item>
   );

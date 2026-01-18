@@ -53,11 +53,11 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
   );
 
   const columnDescriptions: JazzColumn[] = [
-    { dataIndex: "was", title: "Was", type: "text", width: "20%", required: true },
-    { dataIndex: "start", title: "Wann", type: "date", required: true },
-    { dataIndex: "farbe", title: "Farbe", type: "color", required: true, presets: true },
+    { dataIndex: "was", title: "Was", type: "text", width: "300px", required: true },
+    { dataIndex: "start", title: "Wann", type: "date", width: "120px", required: true },
+    { dataIndex: "farbe", title: "Farbe", type: "color", width: "50px", required: true, presets: true },
     { dataIndex: "users", title: "Users", type: "user", required: true },
-    { dataIndex: "emailOffset", title: "Tage vorher", type: "integer" },
+    { dataIndex: "emailOffset", title: "Tage vorher", type: "integer", width: "80px" },
   ];
 
   const [triggerRender, setTriggerRender] = useState(true);
