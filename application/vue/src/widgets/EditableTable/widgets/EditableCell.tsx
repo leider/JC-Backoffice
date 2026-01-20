@@ -18,7 +18,7 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function EditableCell({ index, column, uniqueRule, usersWithKann }: EditableCellProps) {
-  const { dataIndex, type, required, presets, dropdownchoices, min, initialValue, multiline } = column ?? {};
+  const { dataIndex, editable = true, type, required, presets, dropdownchoices, min, initialValue, multiline } = column ?? {};
   const itemName = ["" + index, dataIndex];
 
   switch (type) {
@@ -48,7 +48,14 @@ export default function EditableCell({ index, column, uniqueRule, usersWithKann 
       return dropdownchoices ? (
         <SingleSelect name={itemName} options={dropdownchoices} required={required} useInTable />
       ) : (
-        <TextField multiline={multiline} name={itemName} required={required} uniqueValuesValidator={uniqueRule} useInTable />
+        <TextField
+          editable={editable}
+          multiline={multiline}
+          name={itemName}
+          required={required}
+          uniqueValuesValidator={uniqueRule}
+          useInTable
+        />
       );
   }
 }

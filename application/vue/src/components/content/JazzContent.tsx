@@ -13,6 +13,7 @@ import HelpContent from "@/components/content/HelpContent.tsx";
 import find from "lodash/find";
 import keys from "lodash/keys";
 import TodaysConcert from "@/components/content/TodaysConcert.tsx";
+import { JazzCrumbs } from "@/components/content/JazzCrumbs.tsx";
 
 const { Content } = Layout;
 
@@ -45,6 +46,7 @@ export default function JazzContent() {
             <div style={{ background: colorBgContainer }}>
               <TellUserToFillHelpFields />
               <TodaysConcert />
+              <JazzCrumbs activeKey={activeElement} />
               <InnerContent />
             </div>
           </Content>

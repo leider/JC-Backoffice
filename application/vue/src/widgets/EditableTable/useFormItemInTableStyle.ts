@@ -6,5 +6,5 @@ export function useFormItemInTableStyle(useInTable?: boolean) {
 
   const isError = useMemo(() => status === "error", [status]);
 
-  return useInTable ? { background: isError ? "var(--ant-color-error-bg)" : "inherit", borderWidth: isError ? undefined : 0 } : undefined;
+  return useInTable ? { background: "inherit", borderWidth: isError ? undefined : 0 } : undefined;
 }

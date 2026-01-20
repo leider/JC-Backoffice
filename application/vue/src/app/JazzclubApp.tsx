@@ -132,7 +132,6 @@ function JazzclubApp() {
             Collapse: { contentPadding: !xl ? 4 : 12 },
             Form: { itemMarginBottom: 12, verticalLabelPadding: 0 },
             Slider: { handleColor: colorTextDisabled },
-            Table: { cellPaddingBlockSM: 0, cellPaddingInlineSM: 0 },
             Tag: { algorithm: theme.defaultAlgorithm },
           },
         }}

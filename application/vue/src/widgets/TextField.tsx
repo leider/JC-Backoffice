@@ -1,7 +1,8 @@
-import { Form as AntdForm, Input } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { Form as AntdForm, Input, Tooltip } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
 import { Rule } from "antd/es/form";
 import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
+import { ExclamationCircle } from "react-bootstrap-icons";
 
 type TTextField = {
   /**
@@ -9,42 +10,35 @@ type TTextField = {
    * @type {(string | string[])}
    */
   readonly name: string | string[];
-
   /**
    * The label of the input.
    * @type {string}
    */
   readonly label?: string;
-
   /**
    * Whether the input value is required.
    * @type {boolean}
    */
   readonly required?: boolean;
-
   /**
    * Whether the input is disabled.
    * @type {boolean}
    */
   readonly disabled?: boolean;
-
   /**
    * The inital value.
    * @type {T}
    */
   readonly initialValue?: string;
-
   /**
    * Callback when the input value has changed.
    */
   readonly onChange?: (value: string | null) => void;
-
   /**
    * Indicates that the input must be a valid E-Mail
    * @type {boolean}
    */
   readonly isEmail?: boolean;
-
   /**
    * Callback function to generate a unique value.
    * @type {Rule}
@@ -53,6 +47,7 @@ type TTextField = {
   readonly style?: React.CSSProperties;
   readonly multiline?: boolean;
   readonly useInTable?: boolean;
+  readonly editable?: boolean;
 };
 
 /**
@@ -71,6 +66,7 @@ export function TextField({
   style,
   useInTable,
   multiline,
+  editable,
 }: TTextField): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
@@ -94,6 +90,22 @@ export function TextField({
 
   return (
     <AntdForm.Item
+      hasFeedback={
+        useInTable
+          ? {
+              icons: ({ errors }) => {
+                return {
+                  error: (
+                    <Tooltip mouseLeaveDelay={0} title={errors?.join()}>
+                      <ExclamationCircle />
+                    </Tooltip>
+                  ),
+                  success: <span />,
+                };
+              },
+            }
+          : undefined
+      }
       initialValue={initialValue}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : ""}
       name={name}
@@ -103,7 +115,7 @@ export function TextField({
       trigger="onText"
       valuePropName="textVal"
     >
-      <TextInputEmbedded disabled={disabled} multiline={multiline} onChange={onChange} useInTable={useInTable} />
+      <TextInputEmbedded disabled={disabled} editable={editable} multiline={multiline} onChange={onChange} useInTable={useInTable} />
     </AntdForm.Item>
   );
 }
@@ -116,9 +128,10 @@ type TTextInputEmbedded = {
   readonly onChange?: (value: string | null) => void;
   readonly useInTable?: boolean;
   readonly multiline?: boolean;
+  readonly editable?: boolean;
 };
 
-function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable, multiline }: TTextInputEmbedded) {
+function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable, multiline, editable }: TTextInputEmbedded) {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -149,5 +162,9 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable
     value: textVal,
   };
 
-  return multiline ? <Input.TextArea {...props} autoSize /> : <Input {...props} />;
+  if (multiline) {
+    return <Input.TextArea {...props} autoSize />;
+  } else {
+    return editable ? <Input {...props} /> : <div style={{ padding: "5px 11px" }}>{textVal}</div>;
+  }
 }

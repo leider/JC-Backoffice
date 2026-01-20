@@ -64,6 +64,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
 
   const optionenChildren: ItemType[] = [
     {
+      key: "optionen_orte",
       type: "group",
       label: "Optionen und Orte",
       children: [
@@ -80,6 +81,7 @@ export default function useMenuNodes(accessrights: Accessrights, subdirs: string
       ],
     },
     {
+      key: "kalender_termine",
       type: "group",
       label: "Kalender und Termine",
       children: [

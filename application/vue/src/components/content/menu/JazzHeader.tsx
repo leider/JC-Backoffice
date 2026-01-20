@@ -1,55 +1,24 @@
 import { Link } from "react-router";
 import { ConfigProvider, Menu } from "antd";
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "antd/es/layout/layout";
-import useMenuNodes, { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
+import { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
-import Accessrights from "jc-shared/user/accessrights.ts";
 import { useAuth } from "@/commons/authConsts.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import { ItemType } from "antd/es/menu/interface";
 import { MenuIcon } from "./MenuIcon";
 import Preferences from "@/components/content/menu/Preferences.tsx";
+import { useCreateMenuItems } from "@/components/content/menu/useCreateMenuItems.tsx";
 
 export function JazzHeader({ activeElement }: { readonly activeElement: string }) {
-  const { currentUser, wikisubdirs } = useJazzContext();
+  const { currentUser } = useJazzContext();
   const { logout } = useAuth();
-  const subdirs = useMemo(() => {
-    return wikisubdirs;
-  }, [wikisubdirs]);
-
-  const accessrights = useMemo(() => {
-    if (currentUser.id) {
-      return currentUser.accessrights;
-    } else {
-      return new Accessrights();
-    }
-  }, [currentUser]);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const submenus = useMenuNodes(accessrights, subdirs);
-
-  const items = useMemo(() => {
-    const { mailMenu, optionenMenu, teamMenu, veranstaltungMenu, wikiMenu } = submenus;
-    const { isOrgaTeam, isSuperuser } = accessrights;
-    const localItems: ItemType[] = [];
-    if (isOrgaTeam) {
-      localItems.push(veranstaltungMenu);
-    }
-    localItems.push(teamMenu);
-    if (isOrgaTeam) {
-      if (isSuperuser) {
-        localItems.push(mailMenu);
-      }
-      localItems.push(optionenMenu);
-    }
-    if (subdirs.length > 0) {
-      localItems.push(wikiMenu);
-    }
-    return localItems;
-  }, [accessrights, subdirs.length, submenus]);
+  const items = useCreateMenuItems();
 
   const [userMenu, setUserMenu] = useState<ItemType>();
   const { lg } = useBreakpoint();

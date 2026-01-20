@@ -12,6 +12,8 @@ import type { NamePath } from "antd/es/form/interface";
 import type { StoreValue, ValidatorRule } from "@rc-component/form/lib/interface";
 import some from "lodash/some";
 import { Reference } from "@rc-component/table/lib";
+import { EditOutlined } from "@ant-design/icons";
+
 function alignForType(item: JazzColumn) {
   switch (item.type) {
     case "integer":
@@ -96,6 +98,12 @@ export default function EditableTableInner<T>({
         render: (_: unknown, record: FormListFieldData, index: number) => (
           <EditableCell column={{ ...item }} index={index} uniqueRule={ruleForDupes(item)} usersWithKann={usersWithKann} />
         ),
+        title: (
+          <span>
+            {item.title}&nbsp;
+            {(item.editable ?? true) ? <EditOutlined style={{ color: "var(--ant-color-text-tertiary)" }} /> : undefined}
+          </span>
+        ),
       };
     });
     result.push({
@@ -110,7 +118,7 @@ export default function EditableTableInner<T>({
         />
       ),
       dataIndex: "operation",
-      width: "70px",
+      width: "120px",
       align: "end",
       render: (_: unknown, record: FormListFieldData, index: number) => (
         <InlineEditableActions
@@ -132,7 +140,7 @@ export default function EditableTableInner<T>({
   }, []);
 
   const scrollY = useMemo(() => {
-    return fixedMinHeight || viewport.height - 40 - top;
+    return fixedMinHeight || viewport.height - 50 - top;
   }, [viewport.height, fixedMinHeight, top]);
 
   return (
@@ -144,6 +152,7 @@ export default function EditableTableInner<T>({
       ref={ref}
       scroll={{ y: scrollY }}
       size="small"
+      styles={{ body: { cell: { padding: 0, verticalAlign: "top" } }, header: { cell: {} } }}
     />
   );
 }
