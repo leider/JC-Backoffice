@@ -12,8 +12,8 @@ import { useCallback } from "react";
 
 function KalenderPageInternal() {
   const columnDescriptions: JazzColumn[] = [
-    { dataIndex: "name", title: "Name", type: "text", width: "20%", required: true, uniqueValues: true },
-    { dataIndex: "url", title: "URL", type: "text", required: true, uniqueValues: true },
+    { dataIndex: "name", title: "Name", type: "text", width: "120px", required: true, uniqueValues: true },
+    { dataIndex: "url", title: "URL", type: "text", width: "400px", required: true, uniqueValues: true },
     {
       dataIndex: "typ",
       title: "Typ",

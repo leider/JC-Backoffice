@@ -47,7 +47,6 @@ type TTextField = {
   readonly style?: React.CSSProperties;
   readonly multiline?: boolean;
   readonly useInTable?: boolean;
-  readonly editable?: boolean;
 };
 
 /**
@@ -66,7 +65,6 @@ export function TextField({
   style,
   useInTable,
   multiline,
-  editable,
 }: TTextField): React.ReactElement {
   const [rules, setRules] = useState<Rule[] | undefined>(undefined);
   useEffect(() => {
@@ -115,7 +113,7 @@ export function TextField({
       trigger="onText"
       valuePropName="textVal"
     >
-      <TextInputEmbedded disabled={disabled} editable={editable} multiline={multiline} onChange={onChange} useInTable={useInTable} />
+      <TextInputEmbedded disabled={disabled} multiline={multiline} onChange={onChange} useInTable={useInTable} />
     </AntdForm.Item>
   );
 }
@@ -128,10 +126,9 @@ type TTextInputEmbedded = {
   readonly onChange?: (value: string | null) => void;
   readonly useInTable?: boolean;
   readonly multiline?: boolean;
-  readonly editable?: boolean;
 };
 
-function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable, multiline, editable }: TTextInputEmbedded) {
+function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable, multiline }: TTextInputEmbedded) {
   const changed = useCallback(
     (text: string, trim?: boolean) => {
       const trimmedValue = trim ? text.trim() : text;
@@ -165,6 +162,6 @@ function TextInputEmbedded({ onText, textVal, disabled, onChange, id, useInTable
   if (multiline) {
     return <Input.TextArea {...props} autoSize />;
   } else {
-    return editable ? <Input {...props} /> : <div style={{ padding: "5px 11px" }}>{textVal}</div>;
+    return <Input {...props} />;
   }
 }

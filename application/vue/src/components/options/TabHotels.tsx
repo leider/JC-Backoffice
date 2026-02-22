@@ -18,18 +18,18 @@ export default function TabHotels() {
   }, [checkErrors]);
 
   const columnsPreise: JazzColumn[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
-    { type: "twoDecimals", title: "Einzel", required: true, dataIndex: "einzelEUR", min: 0 },
-    { type: "twoDecimals", title: "Doppel", required: true, dataIndex: "doppelEUR", min: 0 },
-    { type: "twoDecimals", title: "Suite", required: true, dataIndex: "suiteEUR", min: 0 },
+    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true, width: "120px" },
+    { type: "twoDecimals", title: "Einzel", required: true, dataIndex: "einzelEUR", min: 0, width: "120px" },
+    { type: "twoDecimals", title: "Doppel", required: true, dataIndex: "doppelEUR", min: 0, width: "120px" },
+    { type: "twoDecimals", title: "Suite", required: true, dataIndex: "suiteEUR", min: 0, width: "120px" },
   ];
 
   const columnsAdresse: JazzColumn[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
-    { type: "text", title: "Adresse", dataIndex: "adresse", multiline: true },
-    { type: "text", title: "E-Mail", dataIndex: "email" },
-    { type: "text", title: "Telefon", dataIndex: "telefon" },
-    { type: "text", title: "Ansprechpartner", dataIndex: "ansprechpartner" },
+    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true, width: "120px" },
+    { type: "text", title: "Adresse", dataIndex: "adresse", multiline: true, width: "120px" },
+    { type: "text", title: "E-Mail", dataIndex: "email", width: "180px" },
+    { type: "text", title: "Telefon", dataIndex: "telefon", width: "120px" },
+    { type: "text", title: "Ansprechpartner", dataIndex: "ansprechpartner", width: "140px" },
   ];
 
   const newKontaktFactory = useCallback((val: Kontakt) => Object.assign({}, val), []);

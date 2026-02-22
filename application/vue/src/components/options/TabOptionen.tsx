@@ -17,21 +17,21 @@ export default function TabOptionen() {
   const optionen = useMemo(() => form.getFieldsValue(true), [form]);
 
   const columnsTypen: JazzColumn[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", width: "150px" },
-    { type: "boolean", title: "Master", dataIndex: "mod" },
-    { type: "boolean", title: "Kasse1", dataIndex: "kasseV" },
-    { type: "boolean", title: "Kasse2", dataIndex: "kasse" },
-    { type: "boolean", title: "Tech1", dataIndex: "technikerV" },
-    { type: "boolean", title: "Tech2", dataIndex: "techniker" },
-    { type: "boolean", title: "Merch", dataIndex: "merchandise" },
-    { type: "color", title: "Farbe", dataIndex: "color" },
+    { type: "text", title: "Name", required: true, dataIndex: "name", width: "120px" },
+    { type: "boolean", title: "Master", dataIndex: "mod", width: "40px" },
+    { type: "boolean", title: "Kasse1", dataIndex: "kasseV", width: "40px" },
+    { type: "boolean", title: "Kasse2", dataIndex: "kasse", width: "40px" },
+    { type: "boolean", title: "Tech1", dataIndex: "technikerV", width: "40px" },
+    { type: "boolean", title: "Tech2", dataIndex: "techniker", width: "40px" },
+    { type: "boolean", title: "Merch", dataIndex: "merchandise", width: "40px" },
+    { type: "color", title: "Farbe", dataIndex: "color", width: "40px" },
   ];
 
   const columnsPreisprofile: JazzColumn[] = [
-    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true },
-    { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0 },
-    { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "120px", min: 0, initialValue: 0 },
-    { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "120px", min: 0, initialValue: 0 },
+    { type: "text", title: "Name", required: true, dataIndex: "name", uniqueValues: true, width: "80px" },
+    { type: "integer", title: "Regulär", required: true, dataIndex: "regulaer", min: 0, width: "80px" },
+    { type: "integer", title: "Rabatt ermäßigt", required: true, dataIndex: "rabattErmaessigt", width: "100px", min: 0, initialValue: 0 },
+    { type: "integer", title: "Rabatt Mitglied", required: true, dataIndex: "rabattMitglied", width: "100px", min: 0, initialValue: 0 },
   ];
 
   const typMitMehrFactory = useCallback((val: TypMitMehr) => Object.assign({}, val), []);

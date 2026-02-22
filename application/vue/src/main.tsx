@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import isUndefined from "lodash/isUndefined";
 
@@ -13,7 +13,9 @@ import isUndefined from "lodash/isUndefined";
   const { JazzRouter } = await import("./router/JazzRouter.tsx");
   ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-      <JazzRouter />
+      <Suspense fallback={<div>Loading app...</div>}>
+        <JazzRouter />
+      </Suspense>
     </React.StrictMode>,
   );
 })();

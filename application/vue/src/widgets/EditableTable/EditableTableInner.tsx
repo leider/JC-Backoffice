@@ -90,6 +90,19 @@ export default function EditableTableInner<T>({
     [form, name],
   );
 
+  const addButton = useMemo(() => {
+    return (
+      <ButtonWithIcon
+        icon="PlusLg"
+        onClick={handleAdd}
+        style={{ paddingTop: 0, paddingBlock: 0, height: "initial" }}
+        testid="add-in-table"
+        tooltipTitle="Neue Zeile"
+        type="text"
+      />
+    );
+  }, [handleAdd]);
+
   const columns = useMemo(() => {
     const result: ColumnType<FormListFieldData>[] = map(columnDescriptions, (item) => {
       return {
@@ -107,18 +120,9 @@ export default function EditableTableInner<T>({
       };
     });
     result.push({
-      title: (
-        <ButtonWithIcon
-          icon="PlusLg"
-          onClick={handleAdd}
-          style={{ paddingTop: 0, paddingBlock: 0, height: "initial" }}
-          testid="add-in-table"
-          tooltipTitle="Neue Zeile"
-          type="text"
-        />
-      ),
+      title: addButton,
       dataIndex: "operation",
-      width: "120px",
+      width: "70px",
       align: "end",
       render: (_: unknown, record: FormListFieldData, index: number) => (
         <InlineEditableActions
@@ -130,7 +134,7 @@ export default function EditableTableInner<T>({
       ),
     });
     return result;
-  }, [columnDescriptions, handleAdd, handleCopy, handleDelete, ruleForDupes, usersWithKann]);
+  }, [addButton, columnDescriptions, handleCopy, handleDelete, ruleForDupes, usersWithKann]);
 
   const ref = useRef<Reference>(null);
 

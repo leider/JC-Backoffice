@@ -26,8 +26,8 @@ class TermineWrapper {
 
 function TerminePageInternal() {
   const columnDescriptions: JazzColumn[] = [
-    { dataIndex: ["dates"], title: "Start und Ende", type: "startEnd", width: "220px", required: true },
-    { dataIndex: "beschreibung", title: "Beschreibung", type: "text", required: true },
+    { dataIndex: "dates", title: "Start und Ende", type: "startEnd", width: "220px", required: true },
+    { dataIndex: "beschreibung", title: "Beschreibung", type: "text", width: "220px", required: true },
     { dataIndex: "typ", title: "Typ", type: "text", width: "120px", dropdownchoices: ["Sonstiges", "Feiertag", "Ferien", "Vermietung"] },
   ];
 

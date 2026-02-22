@@ -9,10 +9,10 @@ import { JazzRow } from "@/widgets/JazzRow.tsx";
 import ScrollingContent from "@/components/content/ScrollingContent.tsx";
 
 const columns: JazzColumn[] = [
-  { type: "text", title: "Name", required: true, dataIndex: "name", width: "40%" },
-  { type: "text", title: "Kommentar", dataIndex: "comment" },
-  { type: "integer", title: "Anzahl", required: true, dataIndex: "number" },
-  { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn" },
+  { type: "text", title: "Name", required: true, dataIndex: "name", width: "120px" },
+  { type: "text", title: "Kommentar", dataIndex: "comment", width: "200px" },
+  { type: "integer", title: "Anzahl", required: true, dataIndex: "number", width: "60px" },
+  { type: "integer", title: "Erledigt", required: true, dataIndex: "alreadyIn", width: "60px" },
 ];
 
 const smallColumns: JazzColumn[] = [
