@@ -214,7 +214,7 @@ export default function SendMail() {
   }, [form]);
 
   return (
-    <Form form={form} layout="vertical" onFinish={send} onValuesChange={onValuesChange}>
+    <Form form={form} layout="vertical" onFinish={send} onValuesChange={onValuesChange} variant="underlined">
       <JazzPageHeader buttons={[<SendButton disabled={!dirty || effectiveUsers.length === 0} key="save" />]} title="Mail Senden" />
       <ScrollingContent>
         <RowWrapper>

@@ -56,7 +56,7 @@ export default function TeamBlockCommons({
   const theme = useMemo(() => {
     return {
       token: { fontSizeIcon: expanded ? 18 : 14, colorText: textColor, colorBgBase: backgroundColor },
-      components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor } },
+      components: { Collapse: { contentBg: backgroundColor, headerBg: backgroundColor, borderlessContentPadding: "4px 12px 12px" } },
     };
   }, [backgroundColor, expanded, textColor]);
 
@@ -97,6 +97,7 @@ export default function TeamBlockCommons({
           ) : (
             <Collapse
               activeKey={expanded ? veranstaltung.id : undefined}
+              bordered={false}
               expandIcon={expandIcon({ color: textColor })}
               items={[
                 {
@@ -109,7 +110,7 @@ export default function TeamBlockCommons({
               ]}
               onChange={onChange}
               size="small"
-              style={{ borderColor: backgroundColor }}
+              styles={{ body: { marginTop: 16 } }}
             />
           )
         ) : (

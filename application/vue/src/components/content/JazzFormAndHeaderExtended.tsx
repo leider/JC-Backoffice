@@ -12,6 +12,8 @@ import cloneDeep from "lodash/cloneDeep";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import noop from "lodash/noop";
 import { JazzFormContext } from "@/components/content/useJazzFormContext.ts";
+import debounce from "lodash/debounce";
+import keys from "lodash/keys";
 
 export default function JazzFormAndHeaderExtended<T>({
   title,
@@ -48,7 +50,7 @@ export default function JazzFormAndHeaderExtended<T>({
   const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
   const [loaded, setLoaded] = useState(false);
   useDirtyBlocker(isDirty);
-  const { hasErrors, checkErrors } = useCheckErrors(form, loaded);
+  const { validateError, checkErrors } = useCheckErrors(form, loaded);
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
     logDiffForDirty(initialValue, curr, false);
@@ -56,13 +58,6 @@ export default function JazzFormAndHeaderExtended<T>({
     setIsDirty(different);
     return different;
   }, [form, initialValue, setIsDirty]);
-
-  useEffect(() => {
-    if (data) {
-      const initial = cloneDeep(data);
-      setInitialValue(initial);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (initialValue) {
@@ -79,10 +74,35 @@ export default function JazzFormAndHeaderExtended<T>({
     }
   }, [form, initialValue, updateDirtyIfChanged, checkErrors]);
 
-  const buttons: ReactNode[] = (additionalButtons ?? [])
-    .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetChanges} /> : [])
-    .concat(<SaveButton disabled={!isDirty || hasErrors} key="save" />)
-    .concat(additionalButtonsLast ?? []);
+  const debouncedCheckErrors = useMemo(
+    () =>
+      debounce((keys?: string[]) => {
+        updateDirtyIfChanged();
+        checkErrors(keys);
+      }, 50),
+    [checkErrors, updateDirtyIfChanged],
+  );
+
+  const onValuesChanged = useCallback(
+    (changedValues: Partial<T>) => {
+      debouncedCheckErrors(keys(changedValues));
+    },
+    [debouncedCheckErrors],
+  );
+
+  const resetAndCheckErrors = useCallback(() => {
+    resetChanges?.();
+    debouncedCheckErrors();
+  }, [debouncedCheckErrors, resetChanges]);
+
+  const buttons: ReactNode[] = useMemo(
+    () =>
+      (additionalButtons ?? [])
+        .concat(resetChanges ? <ResetButton disabled={!isDirty} key="cancel" resetChanges={resetAndCheckErrors} /> : [])
+        .concat(<SaveButton disabled={!isDirty || !!validateError} key="save" />)
+        .concat(additionalButtonsLast ?? []),
+    [additionalButtons, additionalButtonsLast, validateError, isDirty, resetAndCheckErrors, resetChanges],
+  );
 
   const jazzFormContext = useMemo(() => {
     return { checkDirty: updateDirtyIfChanged };
@@ -108,23 +128,33 @@ export default function JazzFormAndHeaderExtended<T>({
     }
   }, []);
 
-  const onValuesChange = useCallback(() => {
-    updateDirtyIfChanged();
-    checkErrors();
-  }, [checkErrors, updateDirtyIfChanged]);
+  useEffect(() => {
+    if (data) {
+      const initial = cloneDeep(data);
+      setInitialValue(initial);
+    }
+  }, [data]);
 
   return (
     <JazzFormContext.Provider value={jazzFormContext}>
-      <Form colon={false} form={form} layout="vertical" onFinish={onFinish} onKeyDown={onKeyDown} onValuesChange={onValuesChange}>
+      <Form
+        colon={false}
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        onKeyDown={onKeyDown}
+        onValuesChange={onValuesChanged}
+        variant="underlined"
+      >
         <JazzPageHeader
           breadcrumb={breadcrumb}
           buttons={buttons}
           dateString={dateString}
           firstTag={firstTag}
-          hasErrors={hasErrors}
           style={style}
           tags={tags}
           title={title}
+          validateError={validateError}
         />
         <RowWrapper>{children}</RowWrapper>
       </Form>

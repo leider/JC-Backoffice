@@ -3,7 +3,7 @@ import { Button, ConfigProvider, Tooltip } from "antd";
 import { Link, To } from "react-router";
 import { IconForSmallBlock, IconProps } from "./Icon.tsx";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
-import { BaseButtonProps } from "antd/es/button/button";
+import { BaseButtonProps } from "antd/es/button/Button";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import { useGlobalContext } from "@/app/GlobalContext.ts";
 

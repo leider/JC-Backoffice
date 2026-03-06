@@ -17,7 +17,7 @@ import cloneDeep from "lodash/cloneDeep";
 import User from "jc-shared/user/user.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import useFormInstance from "antd/es/form/hooks/useFormInstance";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
@@ -52,12 +52,12 @@ function ProgrammheftInternal({ start }: { readonly start: DatumUhrzeit }) {
     [checkDirty, events, form],
   );
 
-  const columnDescriptions: Columns[] = [
-    { dataIndex: "was", title: "Was", type: "text", width: "20%", required: true },
-    { dataIndex: "start", title: "Wann", type: "date", required: true },
-    { dataIndex: "farbe", title: "Farbe", type: "color", required: true, presets: true },
+  const columnDescriptions: JazzColumn[] = [
+    { dataIndex: "was", title: "Was", type: "text", width: "300px", required: true },
+    { dataIndex: "start", title: "Wann", type: "date", width: "120px", required: true },
+    { dataIndex: "farbe", title: "Farbe", type: "color", width: "50px", required: true, presets: true },
     { dataIndex: "users", title: "Users", type: "user", required: true },
-    { dataIndex: "emailOffset", title: "Tage vorher", type: "integer" },
+    { dataIndex: "emailOffset", title: "Tage vorher", type: "integer", width: "80px" },
   ];
 
   const [triggerRender, setTriggerRender] = useState(true);

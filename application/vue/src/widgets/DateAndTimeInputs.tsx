@@ -1,70 +1,59 @@
 import { DatePicker, Form } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 export default function DateInput({
   name,
   label,
   required,
-  save,
-  focus,
+  useInTable,
 }: {
   readonly name: string[];
   readonly label?: string;
   readonly required?: boolean;
-  readonly save?: () => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }) {
   return (
     <Form.Item
       colon={false}
       label={label ? <b style={{ whiteSpace: "nowrap" }}>{label + ":"}</b> : undefined}
       name={name}
+      noStyle={useInTable}
       rules={[{ required: required }]}
       style={label ? {} : { marginBottom: 0 }}
     >
-      <InternalPicker focus={focus} required={required} save={save} />
+      <InternalPicker required={required} useInTable={useInTable} />
     </Form.Item>
   );
 }
 
 function InternalPicker({
   required,
-  focus,
-  save,
   value,
   onChange,
+  useInTable,
 }: {
   readonly required?: boolean;
   readonly value?: string;
   readonly onChange?: (value: string | undefined) => void;
-  readonly save?: () => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }) {
+  const style = useFormItemInTableStyle(useInTable);
   const [val, setVal] = useState<Dayjs | undefined>();
   useEffect(() => {
     if (value) {
       setVal(dayjs(value));
     }
   }, [value]);
-  const onChangeCallback = useCallback((date: Dayjs) => onChange!(date?.toISOString()), [onChange]);
-  const onOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        save?.();
-      }
-    },
-    [save],
-  );
+  const onChangeCallback = useCallback((date: Dayjs | null) => onChange!(date?.toISOString()), [onChange]);
 
   return (
     <DatePicker
-      autoFocus={focus}
       format={["ll", "L", "l", "DDMMYY"]}
-      needConfirm={focus}
       onChange={onChangeCallback}
-      onOpenChange={onOpenChange}
       required={required}
+      style={{ ...style, width: "100%" }}
       value={val}
     />
   );

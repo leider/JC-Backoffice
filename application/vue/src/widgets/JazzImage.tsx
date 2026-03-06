@@ -1,6 +1,6 @@
 import { Image, Space } from "antd";
 import React, { useCallback } from "react";
-import type { ToolbarRenderInfoType } from "rc-image/lib/Preview";
+import type { ToolbarRenderInfoType } from "@rc-component/image/es/Preview";
 import ButtonForImagePreview from "@/components/veranstaltung/presse/ButtonForImagePreview.tsx";
 import { imgFullsize } from "@/rest/loader.ts";
 

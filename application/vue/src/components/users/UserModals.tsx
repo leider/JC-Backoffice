@@ -229,16 +229,14 @@ export function IchKannFields() {
   const keinErsthelferGesetzt = useMemo(() => isNil(kannErsthelfer), [kannErsthelfer]);
   return (
     <>
-      <Divider orientation="left" orientationMargin="0">
-        Ich kann helfen bei...
-      </Divider>
+      <Divider titlePlacement="start">Ich kann helfen bei...</Divider>
       <Row gutter={8}>
         <Col span={24}>
           {keinErsthelferGesetzt ? (
             <Alert
               description={<ThreewayCheckbox label="Ersthelfer" name="kannErsthelfer" />}
-              message="Bitte sag uns, ob Du als Ersthelfer eingesetzt werden kannst."
               showIcon
+              title="Bitte sag uns, ob Du als Ersthelfer eingesetzt werden kannst."
               type="warning"
             />
           ) : (

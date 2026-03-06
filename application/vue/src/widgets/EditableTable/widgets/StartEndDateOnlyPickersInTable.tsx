@@ -2,25 +2,24 @@ import { DatePicker, Form } from "antd";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { NamePath } from "rc-field-form/es/interface";
+import { NamePath } from "antd/es/form/interface";
+import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
 interface StartEndDateOnlyPickersProps {
   readonly name: NamePath[];
-  readonly save?: () => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }
 
 function EmbeddedPickers({
   onChange,
   value,
-  save,
-  focus,
+  useInTable,
 }: {
   readonly onChange?: (val: (Date | undefined)[]) => void;
   readonly value?: Date[];
-  readonly save?: () => void;
-  readonly focus?: boolean;
+  readonly useInTable?: boolean;
 }) {
+  const style = useFormItemInTableStyle(useInTable);
   const [start, setStart] = useState<Dayjs>(dayjs());
   const [end, setEnd] = useState<Dayjs>(dayjs());
 
@@ -40,33 +39,21 @@ function EmbeddedPickers({
     [onChange],
   );
 
-  const onOpenChange = useCallback(
-    (open: boolean) => {
-      if (!open) {
-        save?.();
-      }
-    },
-    [save],
-  );
-
   return (
     <DatePicker.RangePicker
       allowClear={false}
-      autoFocus={focus}
       format="ddd DD.MM.YY"
-      needConfirm={focus}
       onCalendarChange={onCalendarChange}
-      onOpenChange={onOpenChange}
-      style={{ width: "100%" }}
+      style={{ ...style, width: "100%" }}
       value={[start, end]}
     />
   );
 }
 
-export default function StartEndDateOnlyPickersInTable({ name, save, focus }: StartEndDateOnlyPickersProps) {
+export default function StartEndDateOnlyPickersInTable({ name, useInTable }: StartEndDateOnlyPickersProps) {
   return (
     <Form.Item hasFeedback name={name} style={{ marginBottom: 0 }}>
-      <EmbeddedPickers focus={focus} save={save} />
+      <EmbeddedPickers useInTable={useInTable} />
     </Form.Item>
   );
 }

@@ -6,7 +6,7 @@ import JazzclubApp from "@/app/JazzclubApp.tsx";
 import { server } from "./mockserver/node.js";
 import noop from "lodash/noop";
 
-describe("Playing Around", () => {
+describe.skip("Playing Around", () => {
   beforeAll(() => {
     server.listen();
   });

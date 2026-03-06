@@ -5,7 +5,7 @@ import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import MailRule, { allMailrules, MailRuleUI } from "jc-shared/mail/mailRule";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
@@ -19,10 +19,10 @@ class MailRulesWrapper {
 }
 
 function MailRulesInternal() {
-  const columnDescriptions: Columns[] = [
+  const columnDescriptions: JazzColumn[] = [
     { dataIndex: "name", title: "Name", type: "text", required: true, uniqueValues: true },
     { dataIndex: "email", title: "E-Mail", type: "text", width: "30%", required: true },
-    { dataIndex: "rule", title: "Regel", type: "text", width: "250px", filters: allMailrules },
+    { dataIndex: "rule", title: "Regel", type: "text", width: "250px", dropdownchoices: allMailrules },
   ];
 
   const newRuleFactory = useCallback((vals: MailRuleUI) => ({ ...vals, id: undefined }), []);

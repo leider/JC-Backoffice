@@ -1,6 +1,6 @@
 import { Form, Select } from "antd";
 import React, { CSSProperties, useMemo } from "react";
-import type { CustomTagProps } from "rc-select/lib/BaseSelect";
+import type { CustomTagProps } from "@rc-component/select/es/BaseSelect";
 import { LabelAndValue } from "@/widgets/SingleSelect.tsx";
 import map from "lodash/map";
 import filter from "lodash/filter";

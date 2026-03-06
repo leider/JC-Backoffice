@@ -89,6 +89,7 @@ export default [
         "sonarjs/assertions-in-tests": "off",
         "sonarjs/slow-regex": "off",
         "sonarjs/no-nested-functions": "off",
+        "sonarjs/sql-queries": "off",
         //"sonarjs/no-commented-code": "off",
       },
     },

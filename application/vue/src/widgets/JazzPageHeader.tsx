@@ -1,10 +1,15 @@
 import * as React from "react";
 import { PropsWithChildren, ReactNode, useMemo } from "react";
 import { PageHeader } from "@ant-design/pro-layout";
-import { Alert, Breadcrumb, type BreadcrumbProps, ConfigProvider, theme } from "antd";
+import { Breadcrumb, type BreadcrumbProps, ConfigProvider, Tag, theme } from "antd";
 import { useGlobalContext } from "../app/GlobalContext.ts";
 import { useLocation } from "react-router";
 import "./JazzPageHeader.css";
+import { ValidateErrorEntity } from "@rc-component/form/lib/interface";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import map from "lodash/map";
+import flatMap from "lodash/flatMap";
+import uniq from "lodash/uniq";
 
 function SubTitle({ isCopy, isNew }: { readonly isNew: boolean; readonly isCopy: boolean }) {
   return <b style={{ fontSize: "var(--ant-font-size-xl)" }}>{`${isNew ? " (Neu)" : ""}${isCopy ? " (Kopie)" : ""}`}</b>;
@@ -18,7 +23,7 @@ export function JazzPageHeader({
   dateString,
   tags,
   breadcrumb,
-  hasErrors,
+  validateError,
   style,
 }: {
   readonly title: string | ReactNode;
@@ -27,7 +32,7 @@ export function JazzPageHeader({
   readonly dateString?: string;
   readonly tags?: ReactNode | ReactNode[];
   readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
-  readonly hasErrors?: boolean;
+  readonly validateError?: ValidateErrorEntity;
   readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
   const { isDarkMode } = useGlobalContext();
@@ -39,27 +44,57 @@ export function JazzPageHeader({
     return pathname.includes("/new");
   }, [pathname]);
 
+  const footer = useMemo(() => {
+    return [
+      firstTag,
+      dateString && (
+        <b key="datum" style={{ marginRight: 8 }}>
+          {dateString}
+        </b>
+      ),
+      tags,
+    ];
+  }, [dateString, firstTag, tags]);
+
+  const errorAvatar = useMemo(
+    () =>
+      validateError
+        ? {
+            icon: <ExclamationCircleOutlined style={{ fontSize: 32 }} />,
+            style: { backgroundColor: "var(--ant-color-error)" },
+          }
+        : undefined,
+    [validateError],
+  );
+
+  const errorTags = useMemo(() => {
+    if (validateError) {
+      const uniqErrors = uniq(flatMap(validateError.errorFields, "errors"));
+      return map(uniqErrors, (error) => (
+        <Tag color="error" icon={<ExclamationCircleOutlined />} key="errorTag" variant="solid">
+          {error}
+        </Tag>
+      ));
+    }
+    return [];
+  }, [validateError]);
+
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
-      {hasErrors ? (
-        <ConfigProvider theme={{ components: { Alert: { defaultPadding: "20px 10px 10px 10px" } } }}>
-          <Alert banner message="Du hast noch Fehler!" type="error" />
-        </ConfigProvider>
-      ) : null}
       <PageHeader
+        avatar={errorAvatar}
         breadcrumb={breadcrumb ? breadcrumb : undefined}
         extra={buttons}
-        footer={[
-          firstTag,
-          dateString && (
-            <b key="datum" style={{ marginRight: 8 }}>
-              {dateString}
-            </b>
-          ),
-          tags,
-        ]}
-        style={{ ...style, paddingInline: 4 }}
+        footer={footer}
+        style={{
+          ...style,
+          paddingInline: 4,
+          borderBottomColor: validateError ? "var(--ant-color-error)" : "none",
+          borderBottomWidth: validateError ? "var(--ant-line-width)" : "0",
+          borderBottomStyle: validateError ? "inset" : "none",
+        }}
         subTitle={<SubTitle isCopy={isCopy} isNew={isNew} />}
+        tags={errorTags}
         title={<span style={style}>{title}</span>}
       >
         {children}

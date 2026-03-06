@@ -5,7 +5,7 @@ import { useCallback, useMemo } from "react";
 import { Col } from "antd";
 import { Mailingliste } from "jc-shared/user/users";
 import EditableTable from "@/widgets/EditableTable/EditableTable.tsx";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import JazzFormAndHeader from "@/components/content/JazzFormAndHeader.tsx";
 import { useJazzMutation } from "@/commons/useJazzMutation.ts";
 import map from "lodash/map";
@@ -16,7 +16,7 @@ function MailingListsInternal() {
   const { allUsers } = useJazzContext();
   const usersAsOptions = useMemo(() => map(allUsers, "asUserAsOption"), [allUsers]);
 
-  const columnDescriptions: Columns[] = [
+  const columnDescriptions: JazzColumn[] = [
     { dataIndex: "name", title: "Name", type: "text", width: "150px", required: true, uniqueValues: true },
     { dataIndex: "users", title: "Users", type: "user", usersWithKann: usersAsOptions, required: true },
   ];

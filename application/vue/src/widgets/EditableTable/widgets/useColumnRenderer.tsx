@@ -5,7 +5,7 @@ import { Tag, theme, Typography } from "antd";
 import dayjs from "dayjs";
 import { TagForUser } from "@/widgets/TagForUser.tsx";
 import React from "react";
-import { Columns } from "@/widgets/EditableTable/types.ts";
+import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import map from "lodash/map";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -14,7 +14,7 @@ export default function useColumnRenderer(usersWithKann?: UserWithKann[]) {
   const token = theme.useToken().token;
   const { isCompactMode } = useJazzContext();
 
-  return ({ type, required }: Columns) => {
+  return ({ type, required }: JazzColumn) => {
     switch (type) {
       case "boolean":
         return function BooleanCol(val: boolean) {

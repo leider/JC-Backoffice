@@ -1,4 +1,4 @@
-import { CustomTagProps } from "rc-select/lib/BaseSelect";
+import type { CustomTagProps } from "@rc-component/select/es/BaseSelect";
 import React, { useCallback } from "react";
 import { Tag } from "antd";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
@@ -10,8 +10,10 @@ export function useTagRenderForUser(usersAsOptions: UserWithKann[]) {
     event.stopPropagation();
   }, []);
 
-  function tagRender({ value, closable, onClose }: CustomTagProps) {
-    return (
+  function tagRender({ isMaxTag, value, closable, onClose }: CustomTagProps) {
+    return isMaxTag ? (
+      <Tag>Es gibt mehr...</Tag>
+    ) : (
       <Tag closable={closable} onClose={onClose} onMouseDown={onPreventMouseDown}>
         <TagForUser usersAsOptions={usersAsOptions} value={value} />
       </Tag>
