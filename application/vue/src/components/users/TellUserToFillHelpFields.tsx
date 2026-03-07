@@ -28,7 +28,9 @@ export function TellUserToFillHelpFields() {
     if (currentUser.id) {
       if (currentUser.hatKeineKannsGefuellt || isNil(currentUser.kannErsthelfer)) {
         form.setFieldsValue(cloneDeep(currentUser));
-        setIsOpen(true);
+        setTimeout(() => {
+          setIsOpen(true);
+        }, 0);
       }
     }
   }, [currentUser, form]);

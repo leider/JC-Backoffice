@@ -18,6 +18,7 @@ numeral.localeData("de").delimiters.thousands = ".";
 
 function FormWith({ tunnel, children }: FormWithProps) {
   const [form] = Form.useForm();
+  // eslint-disable-next-line react-hooks/immutability
   tunnel.form = form;
   return <Form form={form}>{children}</Form>;
 }

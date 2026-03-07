@@ -12,25 +12,25 @@ import JazzImage from "@/widgets/JazzImage.tsx";
 
 export type kindOfSection = "with" | "unused" | "notFound";
 
-function VeranstaltungenRenderer({ name }: { readonly name: NamePath }) {
-  function InnerVeranstaltungenRenderer({ veranstaltungen }: { veranstaltungen?: ImageOverviewVeranstaltung[] }) {
-    return map(veranstaltungen, (v, index) => (
-      <span key={v.id}>
-        <b>
-          <Link
-            to={{
-              pathname: `/konzert/${v.url}`,
-              search: "page=presse",
-            }}
-          >
-            {v.titel}
-          </Link>
-        </b>
-        ({v.startDate}){index !== veranstaltungen!.length - 1 ? ", " : ""}
-      </span>
-    ));
-  }
+function InnerVeranstaltungenRenderer({ veranstaltungen }: { veranstaltungen?: ImageOverviewVeranstaltung[] }) {
+  return map(veranstaltungen, (v, index) => (
+    <span key={v.id}>
+      <b>
+        <Link
+          to={{
+            pathname: `/konzert/${v.url}`,
+            search: "page=presse",
+          }}
+        >
+          {v.titel}
+        </Link>
+      </b>
+      ({v.startDate}){index !== veranstaltungen!.length - 1 ? ", " : ""}
+    </span>
+  ));
+}
 
+function VeranstaltungenRenderer({ name }: { readonly name: NamePath }) {
   return (
     <ConfigProvider theme={{ components: { Form: { itemMarginBottom: 0 } } }}>
       <FormItem name={name} trigger="onText" valuePropName="veranstaltungen">

@@ -1,7 +1,7 @@
 import Konzert, { GastArt, NameWithNumber } from "jc-shared/konzert/konzert.ts";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, List, Typography } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { ButtonStaff } from "@/components/team/TeamBlock/ButtonStaff.tsx";
 import { saveKonzert, updateGastInSection } from "@/rest/loader.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -32,6 +32,7 @@ function AddOrRemoveGastButton({
   });
 
   const buttonClicked = useCallback(() => {
+    // eslint-disable-next-line react-hooks/immutability
     add ? item.alreadyIn++ : item.alreadyIn--;
     mutate.mutate({ item, art });
   }, [add, art, item, mutate]);
@@ -70,19 +71,10 @@ function GastResList({ source, art, konzert }: { readonly konzert: Konzert; read
   );
 }
 
-export default function GaesteInPreview({ konzert, refetch }: { readonly konzert: Konzert; readonly refetch?: () => Promise<unknown> }) {
+export function GaesteInPreview({ konzert, refetch }: { readonly konzert: Konzert; readonly refetch?: () => Promise<unknown> }) {
   const { currentUser } = useJazzContext();
-  const [gaesteliste, setGaesteliste] = useState<NameWithNumber[]>([]);
-  const [reservierungen, setReservierungen] = useState<NameWithNumber[]>([]);
 
-  const listChanged = useCallback((konz: Konzert) => {
-    setGaesteliste(konz.gaesteliste);
-    setReservierungen(konz.reservierungen);
-  }, []);
-
-  useEffect(() => {
-    listChanged(konzert);
-  }, [listChanged, konzert]);
+  const { gaesteliste, reservierungen } = konzert;
 
   const mutateKonzert = useJazzMutation<Konzert>({
     saveFunction: saveKonzert,

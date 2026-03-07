@@ -1,8 +1,7 @@
 import { Col } from "antd";
 import { ProgrammheftVeranstaltungenMonat } from "@/components/programmheft/ProgrammheftVeranstaltungenMonat.tsx";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import Konzert from "jc-shared/konzert/konzert.ts";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { konzerteBetweenYYYYMM } from "@/rest/loader.ts";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -12,27 +11,14 @@ import keys from "lodash/keys";
 import { JazzRow } from "@/widgets/JazzRow.tsx";
 
 export function ProgrammheftVeranstaltungenRow({ start }: { start: DatumUhrzeit }) {
-  const { data: dataveranstaltungen } = useQuery({
+  const { data: veranstaltungen } = useQuery({
     queryKey: ["konzert", `${start.yyyyMM}`],
     queryFn: () => konzerteBetweenYYYYMM(start.yyyyMM, start.plus({ monate: 2 }).yyyyMM),
   });
 
-  const [veranstaltungen, setVeranstaltungen] = useState<Konzert[]>([]);
-  const [veranstaltungenNachMonat, setVeranstaltungenNachMonat] = useState<{
-    [index: string]: Konzert[];
-  }>({});
-  const [monate, setMonate] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (dataveranstaltungen) {
-      setVeranstaltungen(dataveranstaltungen);
-    }
-  }, [dataveranstaltungen]);
-
-  useEffect(() => {
+  const { veranstaltungenNachMonat, monate } = useMemo(() => {
     const result = groupBy(veranstaltungen, "startDatumUhrzeit.monatLangJahrKompakt");
-    setVeranstaltungenNachMonat(result);
-    setMonate(keys(result));
+    return { veranstaltungenNachMonat: result, monate: keys(result) };
   }, [veranstaltungen]);
 
   return map(monate, (monat) => (

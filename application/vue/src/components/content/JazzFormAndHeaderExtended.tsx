@@ -43,6 +43,7 @@ export default function JazzFormAndHeaderExtended<T>({
   readonly resetChanges?: () => Promise<unknown>;
   readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
+  // eslint-disable-next-line react-hooks/immutability
   document.title = `JC-${title}`;
   window.scroll({ top: 0 });
 

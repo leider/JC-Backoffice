@@ -21,7 +21,7 @@ function ChangeSection({
   const [collapsed, setCollapsed] = useState(true);
   const { isDarkMode } = useJazzContext();
   useEffect(() => {
-    setCollapsed(!expanded);
+    setTimeout(() => setCollapsed(!expanded), 0);
   }, [expanded]);
 
   const switchCollapsed = useCallback(() => setCollapsed(!collapsed), [collapsed]);

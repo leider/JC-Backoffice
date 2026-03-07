@@ -1,5 +1,5 @@
 import { ColorPicker, Form as AntdForm } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Rule } from "antd/es/form";
 import { AggregationColor } from "antd/es/color-picker/color";
 
@@ -32,15 +32,14 @@ export function ColorField({
   useInTable,
   presets,
 }: TColorField & { readonly presets?: boolean }): React.ReactElement {
-  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
-  useEffect(() => {
+  const rules = useMemo(() => {
     const rulesToSet: Rule[] = [];
     if (required) {
       rulesToSet.push({
         required: true,
       });
     }
-    setRules(rulesToSet);
+    return rulesToSet;
   }, [required]);
 
   return (

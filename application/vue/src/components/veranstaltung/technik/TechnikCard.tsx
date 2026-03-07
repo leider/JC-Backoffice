@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Row } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -18,17 +18,13 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
   const form = useFormInstance();
   const { backlineJazzclub, backlineRockshop } = optionen;
 
-  const [summe, setSumme] = useState<number>(0);
-
-  const updateSumme = useCallback(() => {
-    const veranstaltung = fuerVermietung ? new Vermietung(form.getFieldsValue(true)) : new Konzert(form.getFieldsValue(true));
-    setSumme(veranstaltung.kosten.backlineUndTechnikEUR);
-  }, [form, fuerVermietung]);
-
-  useEffect(updateSumme, [updateSumme]);
-
   const brauchtFluegel = useWatch(["technik", "fluegel"], { preserve: true });
   const fluegelstimmerEUR = useWatch(["kosten", "fluegelstimmerEUR"], { preserve: true });
+
+  const summe = useMemo(() => {
+    const veranstaltung = fuerVermietung ? new Vermietung(form.getFieldsValue(true)) : new Konzert(form.getFieldsValue(true));
+    return veranstaltung.kosten.backlineUndTechnikEUR;
+  }, [form, fuerVermietung, fluegelstimmerEUR]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (brauchtFluegel === false) {
@@ -37,8 +33,7 @@ export default function TechnikCard({ fuerVermietung }: { readonly fuerVermietun
       // preis manuell oder bereits gesetzt
       form.setFieldValue(["kosten", "fluegelstimmerEUR"], optionen.preisKlavierstimmer);
     }
-    updateSumme();
-  }, [brauchtFluegel, fluegelstimmerEUR, form, optionen.preisKlavierstimmer, updateSumme]);
+  }, [brauchtFluegel, fluegelstimmerEUR, form, optionen.preisKlavierstimmer]);
 
   const brauchtKlavier = useWatch(["technik", "fluegel"], { preserve: true });
 

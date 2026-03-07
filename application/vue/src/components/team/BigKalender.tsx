@@ -30,6 +30,7 @@ function TerminCheck() {
 }
 
 export default function BigKalender() {
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Übersichtskalender";
   const [form] = Form.useForm<TerminFilterOptions>();
   const renderEventContent = useRenderEventContent();

@@ -24,6 +24,7 @@ export default function ImageOverview() {
     successMessage: "Gespeichert",
   });
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Bilder bearbeiten";
   const sections = useCreateImagenamesSections();
 

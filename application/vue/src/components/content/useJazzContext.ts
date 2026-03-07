@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import User from "jc-shared/user/user.ts";
 import { useQueries } from "@tanstack/react-query";
 import { allUsers, currentUser, konzerteForToday, optionen as optionenLoader, orte as orteLoader, wikisubdirs } from "@/rest/loader.ts";
@@ -61,10 +61,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
 
-  const [filter, setFilter] = useState<TeamFilterObject>({});
-  useEffect(() => {
-    setFilter(JSON.parse(localStorage.getItem("teamFilter") ?? "{}"));
-  }, []);
+  const [filter, setFilter] = useState<TeamFilterObject>(JSON.parse(localStorage.getItem("teamFilter") ?? "{}"));
 
   const setTeamFilter = useCallback((filter: TeamFilterObject) => {
     localStorage.setItem("teamFilter", JSON.stringify(filter));

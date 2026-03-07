@@ -136,15 +136,17 @@ export function EditUserModal({
   const [initialValue, setInitialValue] = useState<object>({});
   const [dirty, setDirty] = useState<boolean>(false);
 
-  function initializeForm() {
+  useEffect(() => {
     const deepCopy = cloneDeep(user);
     form.setFieldsValue(deepCopy);
     const initial = cloneDeep(user);
-    setInitialValue(initial);
-    setDirty(areDifferent(initial, deepCopy));
+    setTimeout(() => {
+      setInitialValue(initial);
+      setDirty(areDifferent(initial, deepCopy));
+    }, 0);
     form.validateFields();
-  }
-  useEffect(initializeForm, [form, user]);
+  }, [form, user]);
+
   const queryClient = useQueryClient();
   const mutateUser = useMutation({
     mutationFn: saveUser,

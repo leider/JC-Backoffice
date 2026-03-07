@@ -23,6 +23,7 @@ export default function Users() {
   const { currentUser, allUsers } = useJazzContext();
   const [selectedButton, setSelectedButton] = useState<accessrightsTypes>("everybody");
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Userübersicht";
 
   function radioOption(icon: keyof typeof icons, label: string, value: string) {

@@ -39,10 +39,15 @@ export default function JazzDrawerWithForm<T>({
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm<T>();
   const { isDirty, setIsDirty } = useJazzContext();
-  const [initialValue, setInitialValue] = useState<Partial<T> | undefined>();
   const [loaded, setLoaded] = useState(false);
   useDirtyBlocker(isDirty);
   const { validateError, checkErrors } = useCheckErrors(form, loaded);
+
+  const initialValue = useMemo(() => {
+    if (data) {
+      return cloneDeep(data);
+    }
+  }, [data]);
 
   const updateDirtyIfChanged = useCallback(() => {
     const curr = form.getFieldsValue(true);
@@ -51,13 +56,6 @@ export default function JazzDrawerWithForm<T>({
     setIsDirty(different);
     return different;
   }, [form, initialValue, setIsDirty]);
-
-  useEffect(() => {
-    if (data) {
-      const initial = cloneDeep(data);
-      setInitialValue(initial);
-    }
-  }, [data]);
 
   useEffect(() => {
     if (initialValue) {

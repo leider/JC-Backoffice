@@ -14,17 +14,12 @@ import forEach from "lodash/forEach";
 
 export type Period = "Zukünftige" | "Vergangene" | "Alle" | "Alle (voll)";
 
-const ALL_PERIODS: Period[] = ["Zukünftige", "Vergangene", "Alle", "Alle (voll)"];
-
 export const useTeamVeranstaltungenCommons = () => {
   const { allUsers, teamFilter } = useJazzContext();
 
-  const [period, setPeriod] = useState<Period>("Zukünftige");
+  const [period, setPeriod] = useState<Period>((localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period);
 
   useEffect(() => {
-    const per = (localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period;
-    setPeriod(ALL_PERIODS.includes(per) ? per : "Zukünftige");
-
     function listener() {
       const newPeriod = (localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period;
       if (period !== newPeriod) {

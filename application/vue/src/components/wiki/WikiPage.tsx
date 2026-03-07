@@ -36,6 +36,7 @@ export default function WikiPage() {
 
   const navigate = useNavigate();
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = `Wiki | ${realPage}`;
 
   useEffect(() => {

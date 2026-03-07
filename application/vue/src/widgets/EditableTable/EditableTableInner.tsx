@@ -140,6 +140,7 @@ export default function EditableTableInner<T>({
 
   const [top, setTop] = useState(0);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTop(ref.current?.nativeElement?.getBoundingClientRect().top ?? 0);
   }, []);
 

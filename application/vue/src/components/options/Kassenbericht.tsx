@@ -12,6 +12,7 @@ export default function Kassenbericht() {
   useDirtyBlocker(false);
   const [monate, setMonate] = useState<DatumUhrzeit[]>([]);
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Kassenbericht";
 
   useEffect(() => {

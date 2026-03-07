@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/immutability */
 import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Input, Popover, Radio, RadioChangeEvent, Row, Slider } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -187,12 +188,14 @@ export function Box({ item, callback }: { readonly item: BoxParams; readonly cal
   );
 
   useEffect(() => {
-    setDegree(item.degree);
-    setLevel(item.level || 0);
-    setWidth(item.width);
-    setHeight(item.height);
-    setTitle(item.title);
-    setComment(item.comment || "");
+    setTimeout(() => {
+      setDegree(item.degree);
+      setLevel(item.level || 0);
+      setWidth(item.width);
+      setHeight(item.height);
+      setTitle(item.title);
+      setComment(item.comment || "");
+    }, 0);
   }, [item]);
 
   return (

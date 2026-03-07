@@ -1,4 +1,4 @@
-import writeXlsxFile, { Schema } from "write-excel-file";
+import writeXlsxFile, { Schema } from "write-excel-file/browser";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import OptionValues from "jc-shared/optionen/optionValues.ts";
 import { createExcelData, SimpleExcelRow } from "jc-shared/excelPreparation/excelFormatters.ts";

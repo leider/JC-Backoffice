@@ -31,9 +31,9 @@ async function init() {
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     } catch (e: any) {
       if (/fatal: your current branch 'master' does not have any commits yet/.test(e.message)) {
-        throw new Error(`Please add an initial commit to the repository: ${workTree}`);
+        throw new Error(`Please add an initial commit to the repository: ${workTree}`, { cause: e });
       }
-      throw new Error(`${e.message} in ${workTree}`);
+      throw new Error(`${e.message} in ${workTree}`, { cause: e });
     }
   }
 }

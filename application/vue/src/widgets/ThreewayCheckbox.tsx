@@ -1,5 +1,5 @@
 import { Checkbox, CheckboxProps, Form } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 
 export default function ThreewayCheckbox({
   name,
@@ -25,27 +25,20 @@ function InnerThreeway({
   readonly label: string;
   readonly onChecked?: (val: boolean | undefined) => void;
 }) {
-  const [chegg, setChegg] = useState<boolean | undefined>(checked);
-
-  useEffect(() => {
-    setChegg(checked);
-  }, [checked, chegg]);
-
   const innerChange = useCallback(() => {
     let val;
-    if (chegg === undefined) {
+    if (checked === undefined) {
       val = true;
-    } else if (chegg) {
+    } else if (checked) {
       val = false;
-    } else if (!chegg) {
+    } else if (!checked) {
       val = undefined;
     }
-    setChegg(val);
     onChecked?.(val);
-  }, [chegg, onChecked]);
+  }, [checked, onChecked]);
 
   return (
-    <Checkbox checked={chegg} disabled={disabled} indeterminate={chegg === undefined} onChange={innerChange}>
+    <Checkbox checked={checked} disabled={disabled} indeterminate={checked === undefined} onChange={innerChange}>
       <b>{label}</b>
     </Checkbox>
   );

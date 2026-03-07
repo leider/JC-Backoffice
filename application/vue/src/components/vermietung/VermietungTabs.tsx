@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
-import { Tabs, TabsProps } from "antd";
+import { useCallback, useMemo } from "react";
+import { Tabs } from "antd";
 import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useSearchParams } from "react-router";
@@ -34,26 +34,22 @@ function TabLabel({ activePage, title, type }: { readonly activePage: ButtonType
 }
 
 export default function VermietungTabs() {
-  const { optionen } = useJazzContext();
-
   const [search, setSearch] = useSearchParams();
-  const [activePage, setActivePage] = useState<ButtonType>("allgemeines");
-  const [tabs, setTabs] = useState<TabsProps["items"]>([]);
 
-  useEffect(() => {
+  const activePage = useMemo(() => {
     const page = (search.get("page") ?? "allgemeines") as ButtonType;
     if (["allgemeines", "angebot", "technik", "ausgaben", "presse"].includes(page)) {
-      setActivePage(page);
+      return page;
     } else {
-      setActivePage("allgemeines");
       setSearch({ page: "allgemeines" }, { replace: true });
+      return "allgemeines";
     }
   }, [search, setSearch]);
 
   const brauchtTechnik = useWatch("brauchtTechnik", { preserve: true });
   const brauchtPresse = useWatch("brauchtPresse", { preserve: true });
 
-  useEffect(() => {
+  const tabs = useMemo(() => {
     const tabAllgemeines = {
       key: "allgemeines",
       label: <TabLabel activePage={activePage} title="Allgemeines" type="allgemeines" />,
@@ -90,8 +86,8 @@ export default function VermietungTabs() {
     if (brauchtPresse) {
       result.push(tabPresse);
     }
-    setTabs(result);
-  }, [activePage, optionen, brauchtTechnik, brauchtPresse]);
+    return result;
+  }, [activePage, brauchtTechnik, brauchtPresse]);
 
   const changeTab = useCallback((newPage: string) => setSearch({ page: newPage }), [setSearch]);
 

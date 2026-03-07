@@ -1,7 +1,7 @@
 import { DatePicker } from "antd";
 import { IntRange } from "@rc-component/picker/es/interface";
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 import Aggregate from "@/widgets/Aggregate.tsx";
@@ -15,15 +15,8 @@ function EmbeddedPickers({
   readonly onChange?: (val: (Date | undefined)[]) => void;
   readonly value?: Date[];
 }) {
-  const [start, setStart] = useState<Dayjs>(dayjs());
-  const [end, setEnd] = useState<Dayjs>(dayjs());
-
-  useEffect(() => {
-    if (value) {
-      setStart(dayjs(value[0]));
-      setEnd(dayjs(value[1]));
-    }
-  }, [value]);
+  const start = useMemo(() => dayjs(value?.[0]), [value]);
+  const end = useMemo(() => dayjs(value?.[1]), [value]);
 
   const onCalendarChange = useCallback(
     (dates: (Dayjs | null)[] | null) => {
@@ -56,7 +49,7 @@ function EmbeddedPickers({
 
 export default function StartEndPickers() {
   return (
-    <Aggregate label={<b style={{ whiteSpace: "nowrap" }}>Datum und Uhrzeit:</b>} names={["startDate", "endDate"]} required>
+    <Aggregate label={<b style={{ whiteSpace: "nowrap" }}>Datum und Uhrzeit:</b>} left="startDate" required right="endDate">
       <EmbeddedPickers />
     </Aggregate>
   );

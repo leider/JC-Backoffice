@@ -19,7 +19,7 @@ export function ShowOnCopy({ title }: { readonly title: string }) {
   const startDate = useWatch("startDate", { preserve: true });
 
   useEffect(() => {
-    setOpenCopyModal(!done && !id && !!startDate && !!url?.includes("copy-of"));
+    setTimeout(() => setOpenCopyModal(!done && !id && !!startDate && !!url?.includes("copy-of")), 0);
   }, [id, url, startDate, done]);
 
   const close = useCallback(() => {

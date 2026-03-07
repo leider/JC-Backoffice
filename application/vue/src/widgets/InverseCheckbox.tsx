@@ -1,13 +1,12 @@
 import { Checkbox, CheckboxProps } from "antd";
-import { useCallback, useEffect, useState } from "react";
 import * as React from "react";
+import { useCallback, useMemo } from "react";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export default function InverseCheckbox({ checked, onChange, ...rest }: CheckboxProps) {
-  const [inverseChecked, setInverseChecked] = useState<boolean>(false);
-  useEffect(() => {
+  const inverseChecked = useMemo(() => {
     if (checked !== undefined) {
-      setInverseChecked(!checked);
+      return !checked;
     }
   }, [checked]);
 

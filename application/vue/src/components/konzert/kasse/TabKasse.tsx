@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/refs */
+
 import { Col, Tour, TourProps } from "antd";
 import React, { Ref, useCallback, useContext, useMemo, useRef } from "react";
 import EinnahmenCard from "@/components/konzert/kasse/EinnahmenCard";

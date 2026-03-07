@@ -4,6 +4,7 @@ import { TeamUndVeranstaltungen } from "@/components/team/TeamUndVeranstaltungen
 
 export default function Team() {
   useDirtyBlocker(false);
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Team";
 
   return <TeamUndVeranstaltungen />;

@@ -1,5 +1,5 @@
 import { Form as AntdForm, Input, Tooltip } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Rule } from "antd/es/form";
 import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 import { ExclamationCircle } from "react-bootstrap-icons";
@@ -66,8 +66,7 @@ export function TextField({
   useInTable,
   multiline,
 }: TTextField): React.ReactElement {
-  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
-  useEffect(() => {
+  const rules = useMemo(() => {
     const rulesToSet: Rule[] = [];
     if (required) {
       rulesToSet.push({
@@ -83,7 +82,7 @@ export function TextField({
         message: "Die Eingabe ist keine gültige E-Mail Adresse",
       });
     }
-    setRules(rulesToSet);
+    return rulesToSet;
   }, [required, isEmail, uniqueValuesValidator]);
 
   return (

@@ -1,6 +1,6 @@
 import Kontakt from "jc-shared/veranstaltung/kontakt.ts";
 import { Col, Form, Select } from "antd";
-import React, { PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { PropsWithChildren, useCallback, useContext, useMemo } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { TextField } from "@/widgets/TextField";
 import TextArea from "antd/es/input/TextArea";
@@ -23,10 +23,9 @@ export default function KontaktCard({ kontakte, selector, noTopBorder, children 
   const jazzFormContext = useContext(JazzFormContext);
   const { agenturauswahl, setAgenturauswahl, hotelauswahl, setHotelauswahl } = useContext(KonzertContext);
 
-  const [auswahlen, setAuswahlen] = useState<string[]>([]);
-  useEffect(() => {
+  const auswahlen = useMemo(() => {
     const names = sortedUniq(compact(map(kontakte, "name")));
-    setAuswahlen(["[temporär]", "[neu]"].concat(names));
+    return ["[temporär]", "[neu]"].concat(names);
   }, [kontakte]);
 
   const realOptions = useMemo(() => map(auswahlen, (opt) => ({ label: opt, value: opt })), [auswahlen]);

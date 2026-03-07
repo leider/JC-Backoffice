@@ -10,7 +10,7 @@ import StaffInPreview from "@/components/veranstaltung/preview/StaffInPreview.ts
 import KasseInPreview from "@/components/konzert/preview/KasseInPreview.tsx";
 import InfoInPreview from "@/components/veranstaltung/preview/InfoInPreview.tsx";
 import TechnikInPreview from "@/components/veranstaltung/preview/TechnikInPreview.tsx";
-import GaesteInPreview from "@/components/konzert/preview/GaesteInPreview.tsx";
+import { GaesteInPreview } from "@/components/konzert/preview/GaesteInPreview.tsx";
 import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import ButtonWithIconAndLink from "@/widgets/buttonsAndIcons/ButtonWithIconAndLink.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -51,6 +51,7 @@ export default function Preview() {
 
   const [typeColor, setTypeColor] = useState<string | undefined>("");
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = konzert.kopf.titelMitPrefix;
 
   useEffect(() => {

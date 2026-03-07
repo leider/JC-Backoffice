@@ -1,6 +1,6 @@
 import { DatePicker, Form } from "antd";
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "antd/es/form/interface";
 import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
@@ -20,15 +20,9 @@ function EmbeddedPickers({
   readonly useInTable?: boolean;
 }) {
   const style = useFormItemInTableStyle(useInTable);
-  const [start, setStart] = useState<Dayjs>(dayjs());
-  const [end, setEnd] = useState<Dayjs>(dayjs());
 
-  useEffect(() => {
-    if (value) {
-      setStart(dayjs(value[0]));
-      setEnd(dayjs(value[1]));
-    }
-  }, [value]);
+  const start = useMemo(() => dayjs(value?.[0]), [value]);
+  const end = useMemo(() => dayjs(value?.[1]), [value]);
 
   const onCalendarChange = useCallback(
     (dates: (Dayjs | null)[] | null) => {

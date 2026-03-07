@@ -23,6 +23,7 @@ export default function KonzertFormAndPageHeader({
   readonly saveForm: (vals: KonzertWithRiderBoxes) => void;
   readonly resetChanges?: () => Promise<unknown>;
 }>) {
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Konzert";
   const [form] = useForm<KonzertWithRiderBoxes>();
   const { setKasseHelpOpen } = useContext(KonzertContext);

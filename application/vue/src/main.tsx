@@ -6,7 +6,7 @@ import isUndefined from "lodash/isUndefined";
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   if (isUndefined(Intl.Segmenter)) {
-    await import("@formatjs/intl-segmenter/polyfill");
+    await import("@formatjs/intl-segmenter/polyfill.js");
   }
 
   // Now it's safe to use Intl.Segmenter

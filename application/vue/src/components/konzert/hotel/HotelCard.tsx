@@ -59,10 +59,8 @@ export default function HotelCard() {
           <StartEndDateOnlyPickers
             dependency="startDate"
             label="An- und Abreise"
-            names={[
-              ["unterkunft", "anreiseDate"],
-              ["unterkunft", "abreiseDate"],
-            ]}
+            left={["unterkunft", "anreiseDate"]}
+            right={["unterkunft", "abreiseDate"]}
           />
           {anzNacht}
         </Col>

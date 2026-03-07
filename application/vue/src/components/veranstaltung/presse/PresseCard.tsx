@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Collapsible from "@/widgets/Collapsible.tsx";
 import { Col, Tabs } from "antd";
 import { TextField } from "@/widgets/TextField.tsx";
@@ -39,21 +39,19 @@ export default function PresseCard({ isVermietung }: { readonly isVermietung: bo
   const { presseChecked } = usePresseCheckedCallback(isVermietung);
   const allimages = useQuery({ queryKey: ["imagenames"], queryFn: () => imagenames() });
 
-  const [verForPreview, setVerForPreview] = useState<Konzert | Vermietung>(isVermietung ? new Vermietung() : new Konzert());
-
   const presseText = useWatch(["presse", "text"]);
   const presseOriText = useWatch(["presse", "originalText"]);
   const url = useWatch(["presse", "jazzclubURL"]);
   const image = useWatch(["presse", "image"]);
   const ok = useWatch(["presse", "checked"]);
 
-  useEffect(() => {
+  const verForPreview = useMemo(() => {
     if (isVermietung) {
-      setVerForPreview(new Vermietung(form.getFieldsValue(true)));
+      return new Vermietung(form.getFieldsValue(true));
     } else {
-      setVerForPreview(new Konzert(form.getFieldsValue(true)));
+      return new Konzert(form.getFieldsValue(true));
     }
-  }, [presseText, url, image, ok, presseOriText, isVermietung, form]);
+  }, [presseText, url, image, ok, presseOriText, isVermietung, form]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const imageUebernehmen = useCallback(
     (val: string) => {

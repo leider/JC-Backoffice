@@ -1,13 +1,14 @@
 import { DatePicker } from "antd";
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { NamePath } from "antd/es/form/interface";
 import Aggregate from "@/widgets/Aggregate.tsx";
 import { useWatch } from "antd/es/form/Form";
 
 interface StartEndDateOnlyPickersProps {
-  readonly names: NamePath[];
+  readonly left: NamePath;
+  readonly right: NamePath;
   readonly label?: string;
   readonly dependency?: NamePath;
   readonly onChange?: () => void;
@@ -26,15 +27,8 @@ function EmbeddedPickers({
   readonly fireChange?: () => void;
   readonly dependency?: NamePath;
 }) {
-  const [start, setStart] = useState<Dayjs>(dayjs());
-  const [end, setEnd] = useState<Dayjs>(dayjs());
-
-  useEffect(() => {
-    if (value) {
-      setStart(dayjs(value[0]));
-      setEnd(dayjs(value[1]));
-    }
-  }, [value]);
+  const start = useMemo(() => dayjs(value?.[0]), [value]);
+  const end = useMemo(() => dayjs(value?.[1]), [value]);
 
   const eventStart: Date = useWatch([dependency]);
   const eventStartDayjs: Dayjs = useMemo(() => dayjs(eventStart), [eventStart]);
@@ -67,13 +61,14 @@ function EmbeddedPickers({
   );
 }
 
-export default function StartEndDateOnlyPickers({ names, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
+export default function StartEndDateOnlyPickers({ left, right, label, dependency, onChange }: StartEndDateOnlyPickersProps) {
   return (
     <Aggregate
       dependencies={dependency ? [dependency] : undefined}
       hasFeedback
       label={label ? <b>{label + ":"}</b> : ""}
-      names={names}
+      left={left}
+      right={right}
       rules={
         dependency
           ? [
@@ -87,7 +82,7 @@ export default function StartEndDateOnlyPickers({ names, label, dependency, onCh
               }),
               ({ getFieldValue }) => ({
                 validator: (_, value) => {
-                  const end = getFieldValue(names[1]);
+                  const end = getFieldValue(right);
                   const difference = dayjs(end).diff(dayjs(value));
                   return difference ? Promise.resolve() : Promise.reject(new Error("Muss mindestens 1 Nacht sein"));
                 },

@@ -19,6 +19,7 @@ export default function VermietungFormAndPageHeader<T>({
   readonly saveForm: (vals: T) => void;
   readonly resetChanges?: () => Promise<unknown>;
 }>) {
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Vermietung";
   const [form] = useForm();
   const { isDirty } = useJazzContext();

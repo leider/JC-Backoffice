@@ -28,13 +28,11 @@ function SelectRangeForExcelModal({
   const [form] = useForm();
   const { optionen, teamFilter } = useJazzContext();
 
-  const [first, setFirst] = useState<Dayjs>(dayjs());
-  const [last, setLast] = useState<Dayjs>(dayjs());
-  useEffect(() => {
+  const { first, last } = useMemo(() => {
     if (alle.length > 0) {
-      setFirst(dayjs(alle[0].startDate));
-      setLast(dayjs(alle[alle.length - 1].startDate));
+      return { first: dayjs(alle[0].startDate), last: dayjs(alle[alle.length - 1].startDate) };
     }
+    return { first: dayjs(), last: dayjs() };
   }, [alle]);
 
   useEffect(() => {

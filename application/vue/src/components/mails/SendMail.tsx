@@ -83,6 +83,7 @@ export default function SendMail() {
   const [effectiveUsers, setEffectiveUsers] = useState<{ name: string; email: string }[]>([]);
 
   const [dirty, setDirty] = useState<boolean>(false);
+  // eslint-disable-next-line react-hooks/immutability
   document.title = "Mail Senden";
 
   const [form] = Form.useForm<{

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Button, Dropdown, Space } from "antd";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
@@ -7,7 +7,7 @@ import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
 export function TeamPeriodsSelector() {
   const { currentUser } = useJazzContext();
-  const [period, setPeriod] = useState<Period>("Zukünftige");
+  const [period, setPeriod] = useState<Period | undefined>();
 
   const periodsToShow = useMemo(
     () =>
@@ -19,11 +19,11 @@ export function TeamPeriodsSelector() {
 
   const items = useMemo(() => map(periodsToShow, (period) => ({ label: period, key: period })), [periodsToShow]);
 
-  useEffect(() => {
+  const periodInButton = useMemo(() => {
     const per = (localStorage.getItem("veranstaltungenPeriod") ?? "Zukünftige") as Period;
     const adaptedPeriod = periodsToShow.includes(per) ? per : "Zukünftige";
-    setPeriod(adaptedPeriod);
-  }, [periodsToShow]);
+    return period ?? adaptedPeriod;
+  }, [period, periodsToShow]);
 
   const onClick = useCallback(({ key }: { key: string }) => {
     setPeriod(key as Period);
@@ -35,7 +35,7 @@ export function TeamPeriodsSelector() {
     <Dropdown key="periods" menu={{ items, onClick }}>
       <Button>
         <Space>
-          {period}
+          {periodInButton}
           <IconForSmallBlock iconName="ChevronDown" />
         </Space>
       </Button>

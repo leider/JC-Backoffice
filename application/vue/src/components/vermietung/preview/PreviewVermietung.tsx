@@ -38,6 +38,7 @@ export default function PreviewVermietung() {
 
   const vermietung = useMemo(() => (data ? data : new Vermietung()), [data]);
 
+  // eslint-disable-next-line react-hooks/immutability
   document.title = vermietung.kopf.titelMitPrefix;
 
   useEffect(() => {

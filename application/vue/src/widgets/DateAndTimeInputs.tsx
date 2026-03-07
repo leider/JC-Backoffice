@@ -1,5 +1,5 @@
 import { DatePicker, Form } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { useFormItemInTableStyle } from "@/widgets/EditableTable/useFormItemInTableStyle.ts";
 
@@ -40,10 +40,9 @@ function InternalPicker({
   readonly useInTable?: boolean;
 }) {
   const style = useFormItemInTableStyle(useInTable);
-  const [val, setVal] = useState<Dayjs | undefined>();
-  useEffect(() => {
+  const val = useMemo(() => {
     if (value) {
-      setVal(dayjs(value));
+      return dayjs(value);
     }
   }, [value]);
   const onChangeCallback = useCallback((date: Dayjs | null) => onChange!(date?.toISOString()), [onChange]);

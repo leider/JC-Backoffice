@@ -1,8 +1,7 @@
 import { Form } from "antd";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useMemo } from "react";
 
 import NumericInputEmbedded from "./NumericInputEmbedded";
-import { Rule } from "antd/es/form";
 import noop from "lodash/noop";
 
 type NumberInputProps = {
@@ -72,10 +71,8 @@ export function NumberInput({
   disabled,
   useInTable,
 }: NumberInputProps) {
-  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
-
-  useEffect(() => {
-    setRules([{ required: required }]);
+  const rules = useMemo(() => {
+    return [{ required: required }];
   }, [required]);
 
   return (

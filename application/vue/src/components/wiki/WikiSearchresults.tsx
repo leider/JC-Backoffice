@@ -1,6 +1,6 @@
 import { searchWiki } from "@/rest/loader.ts";
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { List, Typography } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
@@ -12,13 +12,8 @@ export default function WikiSearchresults() {
     queryKey: ["wiki", `${searchtext}`],
     queryFn: () => searchWiki(searchtext!),
   });
-  const [matches, setMatches] = useState<{ pageName: string; line: string; text: string }[]>([]);
 
-  useEffect(() => {
-    if (data) {
-      setMatches(data.matches);
-    }
-  }, [data]);
+  const matches = useMemo(() => data?.matches, [data]);
 
   const renderItem = useCallback(
     (item: { pageName: string; line: string; text: string }) => (
@@ -41,7 +36,7 @@ export default function WikiSearchresults() {
   return (
     <>
       <JazzPageHeader dateString={`für "${searchtext}"`} title="Wiki Suchergebnisse" />
-      {matches.length === 0 ? (
+      {matches?.length === 0 ? (
         <Typography.Title level={2}>Keine Ergebnisse</Typography.Title>
       ) : (
         <List dataSource={matches} renderItem={renderItem} size="small" />

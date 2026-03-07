@@ -8,6 +8,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import lodash from "eslint-plugin-lodash";
 import perf from "eslint-plugin-react-perf";
 import sonarjs from "eslint-plugin-sonarjs";
+import { fixupPluginRules } from "@eslint/compat";
 
 export default [
   { ignores: [".yarn/**", "**/assets/**", "**/*.js"] },
@@ -43,9 +44,9 @@ export default [
     {
       files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
       plugins: {
-        react,
+        react: fixupPluginRules(react),
         "react-hooks": eslintPluginReactHooks,
-        lodash,
+        lodash: fixupPluginRules(lodash),
         sonarjs,
       },
       rules: {

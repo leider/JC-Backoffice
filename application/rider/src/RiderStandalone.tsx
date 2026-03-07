@@ -12,6 +12,7 @@ const titel = "Jazzclub Konzert";
 
 export function RiderStandalone() {
   const url = window.location.pathname.replace("/rider/", "");
+  // eslint-disable-next-line react-hooks/immutability
   document.title = titel;
   const queryClient = useQueryClient();
   const [targetBoxes, setTargetBoxes] = useState<BoxParams[]>([]);
@@ -34,6 +35,7 @@ export function RiderStandalone() {
 
   const save = useCallback(() => {
     if (rider) {
+      // eslint-disable-next-line react-hooks/immutability
       rider.boxes = targetBoxes;
       mutateRider.mutate(rider);
     }

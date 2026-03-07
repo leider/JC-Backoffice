@@ -1,5 +1,5 @@
 import { Form as AntdForm, TimePicker } from "antd";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Rule } from "antd/es/form";
 import dayjs, { Dayjs } from "dayjs";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
@@ -37,15 +37,14 @@ type TTimeField = {
 };
 
 export function TimeField({ name, label, required, initialValue, baseValue }: TTimeField) {
-  const [rules, setRules] = useState<Rule[] | undefined>(undefined);
-  useEffect(() => {
+  const rules = useMemo(() => {
     const rulesToSet: Rule[] = [];
     if (required) {
       rulesToSet.push({
         required: true,
       });
     }
-    setRules(rulesToSet);
+    return rulesToSet;
   }, [required]);
 
   return (

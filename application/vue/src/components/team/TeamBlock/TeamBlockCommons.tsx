@@ -30,7 +30,9 @@ export default function TeamBlockCommons({
   );
   const [expanded, setExpanded] = useState<boolean>(initiallyOpen || highlight);
   useEffect(() => {
-    setExpanded(initiallyOpen || highlight);
+    setTimeout(() => {
+      setExpanded(initiallyOpen || highlight);
+    }, 0);
   }, [highlight, initiallyOpen]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Tabs, TabsProps } from "antd";
 import { ButtonType, colorsAndIconsForSections } from "@/widgets/buttonsAndIcons/colorsIconsForSections.ts";
 import { IconForSmallBlock } from "@/widgets/buttonsAndIcons/Icon.tsx";
@@ -30,34 +30,29 @@ function TabLabel({ title, type, activePage }: { readonly type: ButtonType; read
 }
 
 export default function KonzertTabs() {
-  const { optionen } = useJazzContext();
-
   const [search, setSearch] = useSearchParams();
-  const [activePage, setActivePage] = useState<string>("allgemeines");
-  const [tabs, setTabs] = useState<TabsProps["items"]>([]);
   const { currentUser } = useJazzContext();
   const onlyKasse = useMemo(() => !currentUser.accessrights.isOrgaTeam, [currentUser.accessrights.isOrgaTeam]);
 
   const brauchtHotel = useWatch(["artist", "brauchtHotel"], { preserve: true });
   const brauchtPresse = useWatch("brauchtPresse", { preserve: true });
 
-  useEffect(() => {
+  const activePage = useMemo(() => {
     const page = search.get("page") ?? "";
     if (currentUser.id && onlyKasse) {
       const pageWanted = ["kasse", "gaeste"].includes(page) ? page : "kasse";
-      setActivePage(pageWanted);
       setSearch({ page: pageWanted }, { replace: true });
-      return;
+      return pageWanted;
     }
     if (["allgemeines", "gaeste", "technik", "ausgaben", "hotel", "kasse", "presse"].includes(page)) {
-      setActivePage(page);
+      return page;
     } else {
-      setActivePage("allgemeines");
       setSearch({ page: "allgemeines" }, { replace: true });
+      return "allgemeines";
     }
   }, [currentUser.id, onlyKasse, search, setSearch]);
 
-  useEffect(() => {
+  const tabs = useMemo(() => {
     const kasseTab = { key: "kasse", label: <TabLabel activePage={activePage} title="Abendkasse" type="kasse" />, children: <TabKasse /> };
     const gaesteTab = {
       key: "gaeste",
@@ -77,19 +72,19 @@ export default function KonzertTabs() {
       kasseTab,
     ];
     if (onlyKasse) {
-      return setTabs([gaesteTab, kasseTab]);
+      return [gaesteTab, kasseTab];
     }
     if (brauchtPresse) {
       allTabs.push({ key: "presse", label: <TabLabel activePage={activePage} title="Presse" type="presse" />, children: <TabPresse /> });
     }
     if (brauchtHotel) {
-      setTabs(allTabs);
+      return allTabs;
     } else {
       const result = [...(allTabs || [])];
       result.splice(4, 1);
-      setTabs(result);
+      return result;
     }
-  }, [brauchtHotel, optionen, activePage, onlyKasse, brauchtPresse]);
+  }, [brauchtHotel, activePage, onlyKasse, brauchtPresse]);
 
   const changeTab = useCallback((newPage: string) => setSearch({ page: newPage }), [setSearch]);
   return <Tabs activeKey={activePage} items={tabs} onChange={changeTab} type="card" />;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Layout, theme } from "antd";
 import { useLocation } from "react-router";
 import { menuKeys } from "@/components/content/menu/MenuNodes.tsx";
@@ -21,19 +21,18 @@ export default function JazzContent() {
     token: { colorBgContainer },
   } = theme.useToken();
   const { pathname } = useLocation();
-  const [activeElement, setActiveElement] = useState<string>("");
   const auth = useProvideAuth();
   const context = useCreateJazzContext(auth);
 
-  useEffect(() => {
+  const activeElement = useMemo(() => {
     const result = find(keys(menuKeys), (key) => pathname.search(key) > 0);
     if (pathname.search("preview") > 0) {
-      return setActiveElement("team");
+      return "team";
     }
     if (pathname.search("vermietung|konzert") > 0) {
-      return setActiveElement("veranstaltung");
+      return "veranstaltung";
     }
-    setActiveElement(result || "");
+    return result || "";
   }, [pathname]);
 
   return (

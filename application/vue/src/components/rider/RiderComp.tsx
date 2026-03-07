@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { TargetContainer } from "./TargetContainer.tsx";
 import { Col, ConfigProvider, List, Row, Typography } from "antd";
 import { SourceContainerAll } from "./SourceContainer.tsx";
-import { extraEckig, extraRund, Inventory, InventoryElement } from "jc-shared/rider/inventory.ts";
+import { extraEckig, extraRund, Inventory } from "jc-shared/rider/inventory.ts";
 import { BoxParams } from "jc-shared/rider/rider.ts";
 import map from "lodash/map";
 import filter from "lodash/filter";
@@ -21,9 +21,7 @@ export function RiderComp({
   readonly targetBoxes?: BoxParams[];
   readonly setTargetBoxes?: (boxes: BoxParams[]) => void;
 }) {
-  const [sourceBoxes, setSourceBoxes] = useState<InventoryElement[]>(Inventory);
-
-  useEffect(() => {
+  const sourceBoxes = useMemo(() => {
     const boxIds = map(targetBoxes, "id");
     const sources = filter(Inventory, (inv) => !boxIds.includes(inv.id));
     if (!find(sources, (elem) => elem.id.startsWith("Extra Eckig"))) {
@@ -32,7 +30,7 @@ export function RiderComp({
     if (!find(sources, (elem) => elem.id.startsWith("Extra Rund"))) {
       sources.push({ ...extraRund, id: "Extra Rund" + uuidv4() });
     }
-    setSourceBoxes(sources); // remove added box from predefined sources
+    return sources; // remove added box from predefined sources
   }, [targetBoxes]);
 
   const [dragging, setDragging] = useState<BoxParams | null>(null);
