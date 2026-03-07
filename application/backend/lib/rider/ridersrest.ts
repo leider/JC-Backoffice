@@ -8,7 +8,7 @@ import User from "jc-shared/user/user.js";
 const app = express();
 
 app.get("/:url", (req: Request, res: Response) => {
-  const rider = store.getRider(req.params.url);
+  const rider = store.getRider(req.params.url as string);
   if (!rider || DatumUhrzeit.forJSDate(rider?.startDate).istVorOderAn(new DatumUhrzeit())) {
     res.sendStatus(403);
     return;

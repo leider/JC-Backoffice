@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js v18
+      - name: Use Node.js v24
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "24.x"
           cache: "yarn"
       - name: set timezone Berlin
         uses: szenius/set-timezone@v2.0
