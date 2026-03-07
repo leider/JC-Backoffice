@@ -10,7 +10,7 @@ import { areDifferent } from "jc-shared/commons/comparingAndTransforming.js";
 const app = express();
 
 app.get("/riders/:url", (req: Request, res: Response) => {
-  resToJson(res, store.getRider(req.params.url) ?? {});
+  resToJson(res, store.getRider(req.params.url as string) ?? {});
 });
 
 app.post("/riders", [checkOrgateam], (req: Request, res: Response) => {

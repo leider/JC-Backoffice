@@ -40,7 +40,7 @@ app.get("/vermietungen/:startYYYYMM/:endYYYYMM", (req, res) => {
 });
 
 app.get("/vermietung/:url", (req: Request, res: Response) => {
-  const vermietung = store.getVermietung(req.params.url);
+  const vermietung = store.getVermietung(req.params.url as string);
   if (!vermietung) {
     res.sendStatus(404);
     return;
@@ -70,7 +70,7 @@ app.delete("/vermietung", [checkOrgateam], (req: Request, res: Response) => {
 });
 
 function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
-  const vermietung = store.getVermietung(req.params.url);
+  const vermietung = store.getVermietung(req.params.url as string);
   if (!vermietung) {
     return res.sendStatus(404);
   }

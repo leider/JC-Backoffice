@@ -108,7 +108,7 @@ app.delete("/konzert", [checkOrgateam], (req: Request, res: Response) => {
 });
 
 function addOrRemoveUserFromSection(func: "addUserToSection" | "removeUserFromSection", req: Request, res: Response) {
-  const konzert = store.getKonzert(req.params.url);
+  const konzert = store.getKonzert(req.params.url as string);
   if (!konzert) {
     return res.sendStatus(404);
   }
@@ -125,7 +125,7 @@ app.post("/konzert/:url/removeUserFromSection", (req: Request, res: Response) =>
 });
 
 app.post("/konzert/:url/updateGastInSection", (req: Request, res: Response) => {
-  const konzert = store.getKonzert(req.params.url);
+  const konzert = store.getKonzert(req.params.url as string);
   if (!konzert) {
     res.sendStatus(404);
     return;
