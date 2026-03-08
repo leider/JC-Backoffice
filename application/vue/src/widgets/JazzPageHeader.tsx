@@ -1,12 +1,11 @@
 import * as React from "react";
 import { PropsWithChildren, ReactNode, useMemo } from "react";
-import { PageHeader } from "@ant-design/pro-layout";
-import { Breadcrumb, type BreadcrumbProps, ConfigProvider, Tag, theme } from "antd";
+import { Avatar, ConfigProvider, Flex, Tag, theme, Typography } from "antd";
 import { useGlobalContext } from "../app/GlobalContext.ts";
 import { useLocation } from "react-router";
 import "./JazzPageHeader.css";
 import { ValidateErrorEntity } from "@rc-component/form/lib/interface";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import ExclamationCircleOutlined from "@ant-design/icons/ExclamationCircleOutlined";
 import map from "lodash/map";
 import flatMap from "lodash/flatMap";
 import uniq from "lodash/uniq";
@@ -22,7 +21,6 @@ export function JazzPageHeader({
   firstTag,
   dateString,
   tags,
-  breadcrumb,
   validateError,
   style,
 }: {
@@ -31,7 +29,6 @@ export function JazzPageHeader({
   readonly firstTag?: ReactNode;
   readonly dateString?: string;
   readonly tags?: ReactNode | ReactNode[];
-  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
   readonly validateError?: ValidateErrorEntity;
   readonly style?: React.CSSProperties;
 } & PropsWithChildren) {
@@ -81,24 +78,39 @@ export function JazzPageHeader({
 
   return (
     <ConfigProvider theme={{ components: { Tag: { algorithm: isDarkMode ? theme.darkAlgorithm : undefined } } }}>
-      <PageHeader
-        avatar={errorAvatar}
-        breadcrumb={breadcrumb ? breadcrumb : undefined}
-        extra={buttons}
-        footer={footer}
+      <Flex
         style={{
           ...style,
+          marginTop: 12,
           paddingInline: 4,
           borderBottomColor: validateError ? "var(--ant-color-error)" : "none",
           borderBottomWidth: validateError ? "var(--ant-line-width)" : "0",
           borderBottomStyle: validateError ? "inset" : "none",
         }}
-        subTitle={<SubTitle isCopy={isCopy} isNew={isNew} />}
-        tags={errorTags}
-        title={<span style={style}>{title}</span>}
+        vertical
       >
-        {children}
-      </PageHeader>
+        <Flex justify="space-between" wrap>
+          <Flex align="center" gap={12} justify="flex-start">
+            {errorAvatar ? <Avatar {...errorAvatar} /> : null}
+            <Typography.Title level={1} style={{ margin: "0px 12px 0px 0px" }}>
+              <span style={style}>{title}</span>
+            </Typography.Title>
+            <SubTitle isCopy={isCopy} isNew={isNew} />
+            {errorTags ? errorTags : null}
+          </Flex>
+          <span>
+            <div className="ant-space-gap-row-small ant-space-gap-col-small" style={{ display: "inline-flex", whiteSpace: "unset" }}>
+              {buttons}
+            </div>
+          </span>
+        </Flex>
+        <div style={{ marginBlockStart: 16, padding: 4 }}>
+          <Flex justify="flex-start" wrap>
+            {footer}
+          </Flex>
+        </div>
+      </Flex>
+      {children}
     </ConfigProvider>
   );
 }

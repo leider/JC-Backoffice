@@ -3,8 +3,8 @@ import { ActiveUsers, AddRemoveStaffButton } from "@/components/team/TeamBlock/T
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
-import CheckSquareTwoTone from "@ant-design/icons/lib/icons/CheckSquareTwoTone";
-import { WarningTwoTone } from "@ant-design/icons";
+import CheckSquareTwoTone from "@ant-design/icons/CheckSquareTwoTone";
+import WarningTwoTone from "@ant-design/icons/WarningTwoTone";
 import { TeamContext } from "@/components/team/TeamContext.ts";
 import intersection from "lodash/intersection";
 

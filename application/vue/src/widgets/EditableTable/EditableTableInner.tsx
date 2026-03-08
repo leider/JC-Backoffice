@@ -12,7 +12,7 @@ import type { NamePath } from "antd/es/form/interface";
 import type { StoreValue, ValidatorRule } from "@rc-component/form/lib/interface";
 import some from "lodash/some";
 import { Reference } from "@rc-component/table/lib";
-import { EditOutlined } from "@ant-design/icons";
+import EditOutlined from "@ant-design/icons/EditOutlined";
 
 function alignForType(item: JazzColumn) {
   switch (item.type) {

@@ -3,7 +3,7 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, Input } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Renderer from "jc-shared/commons/renderer";
 import { areDifferent } from "@/commons/comparingAndTransforming";
 import { SaveButton } from "@/components/colored/JazzButtons";
@@ -105,7 +105,6 @@ export default function WikiPage() {
   return (
     <Form form={form} layout="vertical" onFinish={saveForm} onValuesChange={onValuesChange}>
       <JazzPageHeader
-        breadcrumb={<Link to={`/wiki/${subdir}/`}>{subdir}</Link>}
         buttons={[
           <Search key="Search" onSearch={onSearch} placeholder="Wiki durchsuchen..." style={{ width: 200 }} />,
           <Button

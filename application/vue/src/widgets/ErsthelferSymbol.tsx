@@ -1,5 +1,6 @@
 import { Tooltip } from "antd";
-import { MedicineBoxFilled, MedicineBoxOutlined } from "@ant-design/icons";
+import MedicineBoxFilled from "@ant-design/icons/MedicineBoxFilled";
+import MedicineBoxOutlined from "@ant-design/icons/MedicineBoxOutlined";
 import React from "react";
 import { useGlobalContext } from "@/app/GlobalContext.ts";
 

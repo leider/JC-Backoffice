@@ -4,8 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { riderFor, saveRider } from "@/loader.ts";
 import { RiderComp } from "jc-vue/src/components/rider/RiderComp.tsx";
 import ButtonWithIcon from "jc-vue/src/widgets/buttonsAndIcons/ButtonWithIcon.tsx";
-import { theme } from "antd";
-import { PageHeader } from "@ant-design/pro-layout";
+import { Flex, theme, Typography } from "antd";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts";
 
 const titel = "Jazzclub Konzert";
@@ -45,12 +44,16 @@ export function RiderStandalone() {
 
   return (
     <>
-      <PageHeader
-        extra={[
-          <ButtonWithIcon color={token.colorSuccess} disabled={!isSuccess} icon="CheckSquare" key="save" onClick={save} text="Speichern" />,
-        ]}
-        title={`Rider für "${titel}" am ${start}`}
-      />
+      <Flex justify="space-between" wrap>
+        <Typography.Title level={1} style={{ margin: "0px 12px 0px 0px" }}>
+          <span>{`Rider für "${titel}" am ${start}`}</span>
+        </Typography.Title>
+      </Flex>
+      <span>
+        <div className="ant-space-gap-row-small ant-space-gap-col-small" style={{ display: "inline-flex", whiteSpace: "unset" }}>
+          <ButtonWithIcon color={token.colorSuccess} disabled={!isSuccess} icon="CheckSquare" key="save" onClick={save} text="Speichern" />
+        </div>
+      </span>
       {isSuccess ? (
         <RiderComp setTargetBoxes={setTargetBoxes} targetBoxes={targetBoxes} />
       ) : (

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PropsWithChildren, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { Breadcrumb, type BreadcrumbProps, Form, FormInstance } from "antd";
+import { Form, FormInstance } from "antd";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
 import { useDirtyBlocker } from "@/commons/useDirtyBlocker.tsx";
@@ -28,7 +28,6 @@ export default function JazzFormAndHeaderExtended<T>({
   form,
   style,
   resetChanges,
-  breadcrumb,
 }: PropsWithChildren<{
   readonly title: string;
   readonly data?: Partial<T>;
@@ -41,7 +40,6 @@ export default function JazzFormAndHeaderExtended<T>({
   readonly form: FormInstance<T>;
   readonly style?: React.CSSProperties;
   readonly resetChanges?: () => Promise<unknown>;
-  readonly breadcrumb?: Partial<BreadcrumbProps> | React.ReactElement<typeof Breadcrumb>;
 }>) {
   // eslint-disable-next-line react-hooks/immutability
   document.title = `JC-${title}`;
@@ -148,7 +146,6 @@ export default function JazzFormAndHeaderExtended<T>({
         variant="underlined"
       >
         <JazzPageHeader
-          breadcrumb={breadcrumb}
           buttons={buttons}
           dateString={dateString}
           firstTag={firstTag}
