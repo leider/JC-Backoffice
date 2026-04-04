@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { JazzColumn } from "@/widgets/EditableTable/types.ts";
 import MitarbeiterMultiSelect, { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import { ColorField } from "@/widgets/ColorField.tsx";
@@ -17,7 +17,7 @@ export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   readonly usersWithKann?: UserWithKann[];
 }
 
-export default function EditableCell({ index, column, uniqueRule, usersWithKann }: EditableCellProps) {
+function EditableCell({ index, column, uniqueRule, usersWithKann }: EditableCellProps) {
   const { dataIndex, type, required, presets, dropdownchoices, min, initialValue, multiline } = column ?? {};
   const itemName = ["" + index, dataIndex];
 
@@ -52,3 +52,5 @@ export default function EditableCell({ index, column, uniqueRule, usersWithKann 
       );
   }
 }
+
+export default memo(EditableCell);

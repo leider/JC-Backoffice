@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { ConfigProvider, Menu } from "antd";
 import * as React from "react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Header } from "antd/es/layout/layout";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -16,6 +16,8 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
   const { items, userMenu } = useCreateMenuItems({ setIsOpen, sm });
 
   const reload = useCallback(() => location.reload(), []);
+
+  const menuTheme = useMemo(() => ({ components: { Menu: { subMenuItemSelectedColor: "white" as const } } }), []);
 
   return (
     <Header
@@ -45,7 +47,7 @@ export function JazzHeader({ activeElement }: { readonly activeElement: string }
         <img alt="Jazzclub Logo" src="/vue/img/logo_weiss.png" />
       </Link>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "calc(100% - 64px)" }}>
-        <ConfigProvider theme={{ components: { Menu: { subMenuItemSelectedColor: "white" } } }}>
+        <ConfigProvider theme={menuTheme}>
           <Menu
             items={currentUser.id ? items : []}
             mode="horizontal"

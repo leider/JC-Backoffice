@@ -1,15 +1,17 @@
-import React from "react";
+import React, { memo } from "react";
 import TeamContent from "@/components/team/TeamBlock/TeamContent.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import TeamBlockCommons from "@/components/team/TeamBlock/TeamBlockCommons.tsx";
 
-export default function TeamBlockNormal({
-  veranstaltung,
-  initiallyOpen,
-}: {
+type TeamBlockNormalProps = {
   readonly veranstaltung: Veranstaltung;
   readonly initiallyOpen: boolean;
-}) {
+  /** Busts memo when global highlight / memoized veranstaltung changes (see TeamMonatGroup). */
+  readonly blockSyncKey: string;
+};
+
+function TeamBlockNormal({ veranstaltung, initiallyOpen, blockSyncKey }: TeamBlockNormalProps) {
+  void blockSyncKey;
   return (
     <TeamBlockCommons
       contentComponent={<TeamContent veranstaltung={veranstaltung} />}
@@ -18,3 +20,5 @@ export default function TeamBlockNormal({
     />
   );
 }
+
+export default memo(TeamBlockNormal);

@@ -48,24 +48,6 @@ export function useProvideAuth(): IUseProvideAuth {
     refetchIntervalInBackground: true,
   });
 
-  async function login(username: string, password: string) {
-    setLoginState(LoginState.PENDING);
-    try {
-      await loginPost(username, password);
-      setLoginState(LoginState.LOGGED_IN);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error?.response?.status === 401) {
-        if (!location.pathname.startsWith("/login")) {
-          window.location.reload();
-        }
-        setLoginState(LoginState.CREDENTIALS_INVALID);
-      } else {
-        logout();
-      }
-    }
-  }
-
   const logout = useCallback(async () => {
     try {
       setLoginState(LoginState.LOGGED_OUT);
@@ -81,6 +63,27 @@ export function useProvideAuth(): IUseProvideAuth {
       }
     }
   }, [location.pathname, navigate, queryClient]);
+
+  const login = useCallback(
+    async (username: string, password: string) => {
+      setLoginState(LoginState.PENDING);
+      try {
+        await loginPost(username, password);
+        setLoginState(LoginState.LOGGED_IN);
+      } catch (error: unknown) {
+        const status = (error as { response?: { status?: number } })?.response?.status;
+        if (status === 401) {
+          if (!location.pathname.startsWith("/login")) {
+            window.location.reload();
+          }
+          setLoginState(LoginState.CREDENTIALS_INVALID);
+        } else {
+          await logout();
+        }
+      }
+    },
+    [location.pathname, logout],
+  );
 
   useEffect(() => {
     if (error) {
@@ -102,9 +105,12 @@ export function useProvideAuth(): IUseProvideAuth {
     doit();
   }, [loginState, logout]);
 
-  return {
-    loginState,
-    login,
-    logout,
-  };
+  return useMemo(
+    () => ({
+      loginState,
+      login,
+      logout,
+    }),
+    [loginState, login, logout],
+  );
 }

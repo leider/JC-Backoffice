@@ -12,7 +12,6 @@ import Konzert, { GastArt, ImageOverviewRow, NameWithNumber } from "jc-shared/ko
 import isMobile from "ismobilejs";
 import Vermietung from "jc-shared/vermietung/vermietung.ts";
 import { Rider } from "jc-shared/rider/rider.ts";
-import * as jose from "jose";
 import { StaffType } from "jc-shared/veranstaltung/staff.ts";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { HistoryDBType, HistoryObjectOverview } from "jc-shared/history/history.ts";
@@ -20,7 +19,7 @@ import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import { historyFromRawRows } from "@/rest/historyObject.ts";
-import { refreshTokenPost } from "@/rest/authenticationRequests.ts";
+import { ensureValidAccessToken } from "@/rest/authenticationRequests.ts";
 import sortBy from "lodash/sortBy";
 import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
@@ -48,17 +47,7 @@ async function post<T, R = T>(params: Omit<FetchParams<T, R>, "method">) {
 }
 
 async function standardFetch<T, R>({ urlPrefix = "/rest", url, method, data, contentType }: FetchParams<T, R>) {
-  if (!axios.defaults.headers.Authorization) {
-    await refreshTokenPost();
-  } else {
-    const token = (axios.defaults.headers.Authorization as string).replace("Bearer ", "");
-    const decoded = jose.decodeJwt<{ exp: number }>(token);
-    if (decoded.exp * 1000 - Date.now() < 0) {
-      await refreshTokenPost();
-      // eslint-disable-next-line no-console
-      console.log("token veraltet");
-    }
-  }
+  await ensureValidAccessToken();
   const options: AxiosRequestConfig<T> = { url: urlPrefix + url, method: method, data: data, responseType: contentType ? "blob" : "json" };
   const res = await axios<T, AxiosResponse<R>>(options);
   return res.data;

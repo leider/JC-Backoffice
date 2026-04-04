@@ -1,5 +1,5 @@
 import { ConfigProvider, Typography } from "antd";
-import React, { useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 
 const { Title } = Typography;
@@ -7,7 +7,7 @@ interface HeaderProps {
   readonly veranstaltung: Veranstaltung;
 }
 
-function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
+const UhrzeitOrt = memo(function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }) {
   return (
     <small>
       <small style={{ fontWeight: 400 }}>
@@ -17,9 +17,11 @@ function UhrzeitOrt({ veranstaltung }: { readonly veranstaltung: Veranstaltung }
       </small>
     </small>
   );
-}
+});
 
-export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
+const headerTheme = { token: { fontSize: 12, lineHeight: 10 } as const };
+
+function TeamBlockHeaderInner({ veranstaltung }: HeaderProps) {
   const color = useMemo(() => veranstaltung.colorText, [veranstaltung]);
 
   const titleStyle = useMemo(
@@ -27,8 +29,10 @@ export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
     [veranstaltung.kopf.abgesagt],
   );
 
+  const themeWithColor = useMemo(() => ({ ...headerTheme, token: { ...headerTheme.token, colorText: color } }), [color]);
+
   return (
-    <ConfigProvider theme={{ token: { fontSize: 12, lineHeight: 10, colorText: color } }}>
+    <ConfigProvider theme={themeWithColor}>
       <Title level={3} style={titleStyle}>
         {veranstaltung.kopf.titel}
         <br />
@@ -37,3 +41,6 @@ export default function TeamBlockHeader({ veranstaltung }: HeaderProps) {
     </ConfigProvider>
   );
 }
+
+const TeamBlockHeader = memo(TeamBlockHeaderInner);
+export default TeamBlockHeader;

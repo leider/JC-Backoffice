@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, memo } from "react";
 import { ConfigProvider, Table, TableProps } from "antd";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { TeamContext } from "@/components/team/TeamContext.ts";
@@ -10,28 +10,6 @@ import { Link } from "react-router";
 import { TableRef } from "antd/es/table";
 import { useJazzContext } from "@/components/content/useJazzContext.ts";
 import "./teamTable.css";
-const columns: TableProps<VeranstaltungAsRow>["columns"] = [
-  {
-    title: "Typ",
-    dataIndex: "typ",
-    render: (value: TypInRow) => <span style={{ color: value.color }}>{value.name}</span>,
-    sorter: (a, b) => a.typ.name.localeCompare(b.typ.name),
-  },
-  {
-    title: "Datum",
-    dataIndex: "datum",
-    render: (value: string, record) => (
-      <span style={record.name !== "" ? { display: "block", textAlign: "right" } : { fontWeight: "bold" }}>{value}</span>
-    ),
-    sorter: (a, b) => a.isoDate.localeCompare(b.isoDate),
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    filterSearch: true,
-    render: (value: string, record) => <Link to={record.url}>{value}</Link>,
-  },
-];
 
 type TypInRow = { name: string; color: string };
 
@@ -43,6 +21,39 @@ type VeranstaltungAsRow = {
   typ: TypInRow;
   url: string;
 };
+
+const TypCell = memo(function TypCell({ value }: { readonly value: TypInRow }) {
+  return <span style={{ color: value.color }}>{value.name}</span>;
+});
+
+const DatumCell = memo(function DatumCell({ record, value }: { readonly record: VeranstaltungAsRow; readonly value: string }) {
+  return <span style={record.name !== "" ? { display: "block", textAlign: "right" } : { fontWeight: "bold" }}>{value}</span>;
+});
+
+const NameCell = memo(function NameCell({ value, url }: { readonly url: string; readonly value: string }) {
+  return <Link to={url}>{value}</Link>;
+});
+
+const columns: TableProps<VeranstaltungAsRow>["columns"] = [
+  {
+    title: "Typ",
+    dataIndex: "typ",
+    render: (value: TypInRow) => <TypCell value={value} />,
+    sorter: (a, b) => a.typ.name.localeCompare(b.typ.name),
+  },
+  {
+    title: "Datum",
+    dataIndex: "datum",
+    render: (value: string, record) => <DatumCell record={record} value={value} />,
+    sorter: (a, b) => a.isoDate.localeCompare(b.isoDate),
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    filterSearch: true,
+    render: (value: string, record) => <NameCell url={record.url} value={value} />,
+  },
+];
 
 function veranstaltungToRow(veranstaltung: Veranstaltung): VeranstaltungAsRow {
   return {
@@ -90,8 +101,13 @@ export default function TeamTable() {
 
   const rowClassName = useCallback((record: VeranstaltungAsRow) => (record.key === memoId ? "table-row-highlight" : ""), [memoId]);
 
+  const tableTheme = useMemo(
+    () => ({ components: { Table: { cellPaddingBlockSM: 2, cellPaddingInlineSM: 8 } } }),
+    [],
+  );
+
   return (
-    <ConfigProvider theme={{ components: { Table: { cellPaddingBlockSM: 2, cellPaddingInlineSM: 8 } } }}>
+    <ConfigProvider theme={tableTheme}>
       <Table bordered columns={columns} dataSource={data} pagination={false} ref={tableRef} rowClassName={rowClassName} size="small" />
     </ConfigProvider>
   );

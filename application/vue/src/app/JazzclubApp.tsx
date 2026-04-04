@@ -3,8 +3,6 @@ import JazzContent from "@/components/content/JazzContent.tsx";
 import { App, ConfigProvider, theme } from "antd";
 import "./JC-styles.css";
 import locale_de from "antd/locale/de_DE";
-import "numeral/locales/de";
-import numeral from "numeral";
 import useUpdateApp from "@/app/useUpdateApp.ts";
 import React, { useEffect, useMemo, useState } from "react";
 import useBreakpoint from "antd/es/grid/hooks/useBreakpoint";
@@ -13,6 +11,9 @@ import useJazzPrefs, { JazzPrefs } from "@/app/useJazzPrefs.ts";
 import useIsTouchScreen from "@/commons/useIsTouchScreen.ts";
 
 const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
+
+const jazzAntdForm = { validateMessages: { required: "Du musst einen Wert eingeben" } };
+const COLOR_SUCCESS = "#28a745";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -71,20 +72,26 @@ function JazzclubApp() {
     const listener = () => {
       setPreferences(getPreferences());
     };
+    let rafId = 0;
     const resizeListener = () => {
-      setViewport({ width: window.innerWidth, height: window.innerHeight });
+      if (rafId !== 0) {
+        return;
+      }
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        setViewport({ width: window.innerWidth, height: window.innerHeight });
+      });
     };
     window.addEventListener("storage", listener);
     window.addEventListener("resize", resizeListener);
     return () => {
       window.removeEventListener("storage", listener);
       window.removeEventListener("resize", resizeListener);
+      if (rafId !== 0) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, [getPreferences]);
-
-  const success = "#28a745";
-  numeral.localeData("de").delimiters.thousands = ".";
-  numeral.locale("de");
 
   const algo = useMemo(() => {
     const result = [darkMode ? theme.darkAlgorithm : theme.defaultAlgorithm];
@@ -102,40 +109,39 @@ function JazzclubApp() {
     [compactMode, darkMode, viewport, isTouch],
   );
 
+  const antdTheme = useMemo(
+    () => ({
+      hashed: false,
+      token: {
+        colorPrimary: "#337ab7",
+        colorTextDisabled,
+        colorLink: "#337ab7",
+        borderRadius: 0,
+        fontSize: 12,
+        fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
+        colorError: "#c71c2c",
+        colorSuccess: COLOR_SUCCESS,
+        colorLinkActive: "#2c4862",
+        colorLinkHover: "#2c4862",
+        linkHoverDecoration: "underline" as const,
+        colorBgBase,
+      },
+      algorithm: algo,
+      components: {
+        Button: { primaryShadow: "none" },
+        Checkbox: { colorPrimary: COLOR_SUCCESS, colorPrimaryHover: COLOR_SUCCESS, colorPrimaryBorder: COLOR_SUCCESS },
+        Collapse: { contentPadding: !xl ? 4 : 12 },
+        Form: { itemMarginBottom: 12, verticalLabelPadding: 0 },
+        Slider: { handleColor: colorTextDisabled },
+        Tag: { algorithm: theme.defaultAlgorithm },
+      },
+    }),
+    [algo, colorBgBase, colorTextDisabled, xl],
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider
-        form={{
-          validateMessages: { required: "Du musst einen Wert eingeben" },
-        }}
-        locale={locale_de}
-        theme={{
-          hashed: false,
-          token: {
-            colorPrimary: "#337ab7",
-            colorTextDisabled,
-            colorLink: "#337ab7",
-            borderRadius: 0,
-            fontSize: 12,
-            fontFamily: "Montserrat, Helvetica, Arial, sans-serif",
-            colorError: "#c71c2c",
-            colorSuccess: success,
-            colorLinkActive: "#2c4862",
-            colorLinkHover: "#2c4862",
-            linkHoverDecoration: "underline",
-            colorBgBase,
-          },
-          algorithm: algo,
-          components: {
-            Button: { primaryShadow: "none" },
-            Checkbox: { colorPrimary: success, colorPrimaryHover: success, colorPrimaryBorder: success },
-            Collapse: { contentPadding: !xl ? 4 : 12 },
-            Form: { itemMarginBottom: 12, verticalLabelPadding: 0 },
-            Slider: { handleColor: colorTextDisabled },
-            Tag: { algorithm: theme.defaultAlgorithm },
-          },
-        }}
-      >
+      <ConfigProvider form={jazzAntdForm} locale={locale_de} theme={antdTheme}>
         <App>
           <GlobalContext.Provider value={initialContext}>
             <JazzContent />
