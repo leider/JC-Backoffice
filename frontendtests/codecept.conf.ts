@@ -48,10 +48,11 @@ export const config: CodeceptJS.MainConfig = {
       users: {
         admin: {
           login: (I) => {
-            I.amOnPage("/");
+            I.amOnPage("/vue/login");
             I.waitForText("Benutzername");
-            I.fillField("Benutzername", "admin");
-            I.fillField("Passwort", "admin");
+            I.waitForElement("#login_username", 10);
+            I.fillField("#login_username", "admin");
+            I.fillField("#login_password", "admin");
             I.click("Anmelden");
             I.wait(0.5);
           },

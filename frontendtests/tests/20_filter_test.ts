@@ -86,7 +86,14 @@ menuToClick.add(["Team"]);
 menuToClick.add(["Veranstaltungen"]);
 
 Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
-  I.click(current.menu);
+  // Menu click is unreliable (horizontal overflow). Direct routes avoid that.
+  // Login check already lands on /vue/veranstaltungen; goto same URL again triggers Playwright
+  // "Navigation … is interrupted by another navigation to the same URL".
+  const path = new URL(await I.grabCurrentUrl()).pathname.replace(/\/$/, "") || "/";
+  const target = current.menu === "Team" ? "/vue/team" : "/vue/veranstaltungen";
+  if (path !== target) {
+    I.amOnPage(target);
+  }
   I.wait(1);
   filters.setAndCheck("Ist bestätigt", "Bestätigt", true);
   filters.setAndCheck("Ist abgesagt", "Cancelled");
