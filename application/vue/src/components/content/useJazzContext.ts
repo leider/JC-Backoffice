@@ -177,17 +177,7 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
       isDarkMode,
       isCompactMode,
     }),
-    [
-      exposedContext,
-      showSuccess,
-      showError,
-      filter,
-      setTeamFilter,
-      isDirty,
-      memoizedVeranstaltung,
-      isDarkMode,
-      isCompactMode,
-    ],
+    [exposedContext, showSuccess, showError, filter, setTeamFilter, isDirty, memoizedVeranstaltung, isDarkMode, isCompactMode],
   );
 }
 

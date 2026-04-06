@@ -28,7 +28,11 @@ export default function ProtectedComponent({
   }
 
   const showComp =
-    !!currentUser.id && some(map(allowed, (each) => currentUser.accessrights[each]), identity);
+    !!currentUser.id &&
+    some(
+      map(allowed, (each) => currentUser.accessrights[each]),
+      identity,
+    );
 
   return showComp ? component : <Navigate replace to={{ pathname: forwardTo }} />;
 }

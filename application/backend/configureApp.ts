@@ -10,7 +10,8 @@ import restApp from "./rest/index.js";
 import siteApp from "./lib/site/index.js";
 import batchendpoints from "./batches/batchendpoints.js";
 import ridersrest from "./lib/rider/ridersrest.js";
-import passportInitializer from "./lib/middleware/passportInitializer.js";
+import createSessionMiddleware from "./lib/middleware/createSessionMiddleware.js";
+import requireSessionUser from "./lib/middleware/requireSessionUser.js";
 import passportApiKeyInitializer from "./lib/middleware/passportApiKeyInitializer.js";
 import { fileURLToPath } from "url";
 import conf from "./simpleConfigure.js";
@@ -41,6 +42,7 @@ export default function (app: express.Express, forDev?: boolean): void {
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");
   app.use(cookieParser());
+  app.use(createSessionMiddleware());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(compress());
@@ -60,13 +62,11 @@ export default function (app: express.Express, forDev?: boolean): void {
   );
   app.use(express.static(conf.additionalstatic, { maxAge: "10h" }));
 
-  app.use(passportInitializer);
   app.use(passportApiKeyInitializer);
   app.use(secureAgainstClickjacking);
   app.use("/", siteApp);
 
-  const authenticatorJwt = passport.authenticate("jwt", { session: false });
-  app.use("/rest/", authenticatorJwt, restApp);
+  app.use("/rest/", requireSessionUser, restApp);
   const authenticatorBearer = passport.authenticate("bearer", { session: false });
   app.use("/batches/", authenticatorBearer, batchendpoints);
   app.use("/ridersrest/", ridersrest);

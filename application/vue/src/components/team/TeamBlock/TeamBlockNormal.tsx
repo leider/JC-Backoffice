@@ -10,8 +10,7 @@ type TeamBlockNormalProps = {
   readonly blockSyncKey: string;
 };
 
-function TeamBlockNormal({ veranstaltung, initiallyOpen, blockSyncKey }: TeamBlockNormalProps) {
-  void blockSyncKey;
+function TeamBlockNormal({ veranstaltung, initiallyOpen }: TeamBlockNormalProps) {
   return (
     <TeamBlockCommons
       contentComponent={<TeamContent veranstaltung={veranstaltung} />}

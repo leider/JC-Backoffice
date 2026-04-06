@@ -1,35 +1,15 @@
-import axios from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { LoginState } from "./authConsts";
 import { useLocation, useNavigate } from "react-router";
-import { loginPost, logoutManually, refreshTokenPost } from "@/rest/authenticationRequests";
+import { checkSession, loginPost, logoutManually } from "@/rest/authenticationRequests";
 
 export interface IUseProvideAuth {
-  /**
-   * The current login state.
-   * @type {LoginState}
-   * @memberof IUseProvideAuth
-   */
   loginState: LoginState;
-
-  /**
-   * Function to login with.
-   * @memberof IUseProvideAuth
-   */
   login: (username: string, password: string) => Promise<void>;
-
-  /**
-   * Function to logout with.
-   * @memberof IUseProvideAuth
-   */
   logout: () => Promise<void>;
 }
 
-/**
- * Provider hook that creates auth object and handles state
- * @return {*}  {IUseProvideAuth}
- */
 export function useProvideAuth(): IUseProvideAuth {
   const [loginState, setLoginState] = useState(LoginState.UNKNOWN);
 
@@ -37,21 +17,10 @@ export function useProvideAuth(): IUseProvideAuth {
   const location = useLocation();
 
   const queryClient = useQueryClient();
-  const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
-  const refetchInterval = 10 * 60 * 1000;
-
-  const { error } = useQuery({
-    enabled: isAuthenticated,
-    queryKey: ["refreshToken"],
-    queryFn: () => refreshTokenPost(),
-    refetchInterval,
-    refetchIntervalInBackground: true,
-  });
 
   const logout = useCallback(async () => {
     try {
       setLoginState(LoginState.LOGGED_OUT);
-      delete axios.defaults.headers.Authorization;
       await logoutManually();
     } catch {
       // so what?
@@ -86,24 +55,19 @@ export function useProvideAuth(): IUseProvideAuth {
   );
 
   useEffect(() => {
-    if (error) {
-      logout();
-    }
-  }, [error, logout]);
-
-  useEffect(() => {
-    async function doit() {
-      if (loginState === LoginState.UNKNOWN) {
-        try {
-          await refreshTokenPost();
-          setLoginState(LoginState.LOGGED_IN);
-        } catch {
-          logout();
-        }
+    async function bootstrap() {
+      if (loginState !== LoginState.UNKNOWN) {
+        return;
+      }
+      const ok = await checkSession();
+      if (ok) {
+        setLoginState(LoginState.LOGGED_IN);
+      } else {
+        setLoginState(LoginState.LOGGED_OUT);
       }
     }
-    doit();
-  }, [loginState, logout]);
+    bootstrap();
+  }, [loginState]);
 
   return useMemo(
     () => ({

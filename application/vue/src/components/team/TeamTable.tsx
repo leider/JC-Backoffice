@@ -101,10 +101,7 @@ export default function TeamTable() {
 
   const rowClassName = useCallback((record: VeranstaltungAsRow) => (record.key === memoId ? "table-row-highlight" : ""), [memoId]);
 
-  const tableTheme = useMemo(
-    () => ({ components: { Table: { cellPaddingBlockSM: 2, cellPaddingInlineSM: 8 } } }),
-    [],
-  );
+  const tableTheme = useMemo(() => ({ components: { Table: { cellPaddingBlockSM: 2, cellPaddingInlineSM: 8 } } }), []);
 
   return (
     <ConfigProvider theme={tableTheme}>

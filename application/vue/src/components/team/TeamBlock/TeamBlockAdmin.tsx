@@ -10,8 +10,7 @@ type TeamBlockAdminProps = {
   readonly blockSyncKey: string;
 };
 
-function TeamBlockAdmin({ veranstaltung, initiallyOpen, blockSyncKey }: TeamBlockAdminProps) {
-  void blockSyncKey;
+function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   return (
     <TeamBlockCommons
       contentComponent={<AdminContent veranstaltung={veranstaltung} />}

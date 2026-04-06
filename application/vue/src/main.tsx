@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import isUndefined from "lodash/isUndefined";
 import "@/app/setupNumeralDe.ts";
+import "@/rest/authenticationRequests.ts";
 
 (async () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

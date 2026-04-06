@@ -138,12 +138,7 @@ export default function EditableTableInner<T>({
         ...item,
         align: alignForType(item),
         render: (_: unknown, record: FormListFieldData, index: number) => (
-          <EditableCell
-            column={item}
-            index={index}
-            uniqueRule={uniqueRuleByDataIndex.get(colKey)}
-            usersWithKann={usersWithKann}
-          />
+          <EditableCell column={item} index={index} uniqueRule={uniqueRuleByDataIndex.get(colKey)} usersWithKann={usersWithKann} />
         ),
         title: (
           <span>

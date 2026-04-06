@@ -19,7 +19,6 @@ import { SentMessageInfo } from "nodemailer/lib/smtp-transport";
 import map from "lodash/map";
 import KonzertWithRiderBoxes from "jc-shared/konzert/konzertWithRiderBoxes.ts";
 import { historyFromRawRows } from "@/rest/historyObject.ts";
-import { ensureValidAccessToken } from "@/rest/authenticationRequests.ts";
 import sortBy from "lodash/sortBy";
 import { Period } from "@/components/team/useTeamVeranstaltungenCommons.ts";
 
@@ -47,7 +46,6 @@ async function post<T, R = T>(params: Omit<FetchParams<T, R>, "method">) {
 }
 
 async function standardFetch<T, R>({ urlPrefix = "/rest", url, method, data, contentType }: FetchParams<T, R>) {
-  await ensureValidAccessToken();
   const options: AxiosRequestConfig<T> = { url: urlPrefix + url, method: method, data: data, responseType: contentType ? "blob" : "json" };
   const res = await axios<T, AxiosResponse<R>>(options);
   return res.data;
