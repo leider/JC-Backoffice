@@ -16,7 +16,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import filter from "lodash/filter.js";
 import map from "lodash/map.js";
-import { SESSION_COOKIE_NAME } from "../middleware/createSessionMiddleware.js";
+import { SESSION_COOKIE_NAME, sessionCookieClearOptions } from "../middleware/createSessionMiddleware.js";
 import conf from "../../simpleConfigure.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -93,7 +93,7 @@ app.post("/logout", (req, res) => {
     if (err) {
       appLogger.error("(/logout)", err);
     }
-    res.clearCookie(SESSION_COOKIE_NAME, { path: "/" });
+    res.clearCookie(SESSION_COOKIE_NAME, sessionCookieClearOptions());
     res.send({});
   });
 });

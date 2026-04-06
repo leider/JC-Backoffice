@@ -39,6 +39,10 @@ function handle500(error: any, req: Request, res: Response, next: NextFunction):
 }
 
 export default function (app: express.Express, forDev?: boolean): void {
+  // Production: HTTP Node behind HTTPS nginx — trust X-Forwarded-* (one hop).
+  if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+  }
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");
   app.use(cookieParser());
