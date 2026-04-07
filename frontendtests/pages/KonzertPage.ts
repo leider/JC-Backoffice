@@ -21,6 +21,7 @@ export function goToEditKonzert(konzertTitle: string) {
 }
 
 export function openKonzertCollapsable(konzertTitle: string) {
+  I.waitForInvisible(".ant-modal-wrap", 5);
   // Ant Design Collapse no longer wraps label text in .ant-collapse-header-text.
   I.click(locate(".ant-collapse-header").withText(konzertTitle));
 }
@@ -43,12 +44,8 @@ export function openRequiredPeople() {
 }
 
 export function addRequiredKassePeople(konzertTitle: string) {
-  I.amOnPage("/vue/veranstaltungen");
-  I.waitForText(konzertTitle);
-
-  this.openKonzertCollapsable(konzertTitle);
-
-  this.openRequiredPeople(konzertTitle);
+  // Open full edit mode first; preview mode has no save button.
+  this.goToEditKonzert(konzertTitle);
 
   setRequiredPeople("Kasse (Verantwortlich)");
   setRequiredPeople("Kasse (Unterstützung)");

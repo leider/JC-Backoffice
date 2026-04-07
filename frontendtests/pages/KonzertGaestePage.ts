@@ -13,9 +13,9 @@ async function executeActionInTab(tabIdentifier: string, action: () => void) {
 }
 
 export function goToGaestePage() {
-  I.click(locate('div[role="tab"]').withText("Gäste am Abend"));
-
-  I.waitForText(guestTabIdentifier);
+  I.waitForElement('[id$="-tab-gaeste"]', 5);
+  I.click('[id$="-tab-gaeste"]');
+  I.waitForText(guestTabIdentifier, 5);
 }
 
 export async function addGaesteListe(guest: {
@@ -28,7 +28,7 @@ export async function addGaesteListe(guest: {
     I.click(buttons.addInTable);
   });
 
-  fillGuestDataInRow(guest);
+  fillGuestDataInRow(guest, "gaesteliste");
 }
 
 export async function addReservation(guest: {
@@ -41,7 +41,7 @@ export async function addReservation(guest: {
     I.click(buttons.addInTable);
   });
 
-  fillGuestDataInRow(guest);
+  fillGuestDataInRow(guest, "reservierungen");
 }
 
 function fillGuestDataInRow(guest: {
@@ -49,57 +49,44 @@ function fillGuestDataInRow(guest: {
   comment: string;
   number: number;
   alreadyIn: number;
-}) {
-  I.click('[data-testid="name0"]');
-  I.fillField("#name", guest.name);
+}, path: "gaesteliste" | "reservierungen") {
+  I.waitForElement(`#${path}_0_name`, 5);
+  I.fillField(`#${path}_0_name`, guest.name);
+  I.seeInField(`#${path}_0_name`, guest.name);
   I.pressKey("Tab");
-  I.fillField("#comment", guest.comment);
+  I.fillField(`#${path}_0_comment`, guest.comment);
+  I.seeInField(`#${path}_0_comment`, guest.comment);
   I.pressKey("Tab");
-  I.fillField("#number", guest.number);
+  I.fillField(`#${path}_0_number`, guest.number.toString());
+  I.seeInField(`#${path}_0_number`, guest.number.toString());
 
   I.click(buttons.speichern);
 }
 
 export async function setGuestAlreadyIn(row: number, value: number) {
-  await executeActionInTab(guestTabIdentifier, () => {
-    I.click('[data-testid="alreadyIn' + row + '"]');
-  });
-
-  I.fillField("#alreadyIn", value);
+  I.fillField(`#gaesteliste_${row}_alreadyIn`, value.toString());
   I.pressKey("Tab");
 
   I.click(buttons.speichern);
 }
 
 export async function setReservationAlreadyIn(row: number, value: number) {
-  await executeActionInTab(reservationTabIdentifier, () => {
-    I.click('[data-testid="alreadyIn' + row + '"]');
-  });
-
-  I.fillField("#alreadyIn", value);
+  I.fillField(`#reservierungen_${row}_alreadyIn`, value.toString());
   I.pressKey("Tab");
 
   I.click(buttons.speichern);
 }
 
 export async function changeGuestName(row: number, value: string) {
-  await executeActionInTab(guestTabIdentifier, () => {
-    I.click('[data-testid="name' + row + '"]');
-  });
-
-  changeName(value);
+  changeName(value, `#gaesteliste_${row}_name`);
 }
 
 export async function changeReservationName(row: number, value: string) {
-  await executeActionInTab(reservationTabIdentifier, () => {
-    I.click('[data-testid="name' + row + '"]');
-  });
-
-  changeName(value);
+  changeName(value, `#reservierungen_${row}_name`);
 }
 
-function changeName(value: string) {
-  I.fillField("#name", value);
+function changeName(value: string, fieldId: string) {
+  I.fillField(fieldId, value);
 
   I.pressKey("Tab");
 
@@ -108,7 +95,7 @@ function changeName(value: string) {
 
 export async function copyGuest(row: number) {
   await executeActionInTab(guestTabIdentifier, () => {
-    I.click('[data-row-key="row' + row + '"] .bi-files');
+    I.click(locate(".bi-files").at(row + 1));
   });
 
   I.click(buttons.speichern);
@@ -116,7 +103,7 @@ export async function copyGuest(row: number) {
 
 export async function copyReservation(row: number) {
   await executeActionInTab(reservationTabIdentifier, () => {
-    I.click('[data-row-key="row' + row + '"] .bi-files');
+    I.click(locate(".bi-files").at(row + 1));
   });
 
   I.click(buttons.speichern);
@@ -124,7 +111,7 @@ export async function copyReservation(row: number) {
 
 export async function deleteGuestRow(row: number) {
   await executeActionInTab(guestTabIdentifier, () => {
-    I.click('[data-row-key="row' + row + '"] .bi-trash');
+    I.click(locate(".bi-trash").at(row + 1));
   });
 
   I.click(buttons.speichern);
@@ -132,7 +119,7 @@ export async function deleteGuestRow(row: number) {
 
 export async function deleteReservationRow(row: number) {
   await executeActionInTab(reservationTabIdentifier, () => {
-    I.click('[data-row-key="row' + row + '"] .bi-trash');
+    I.click(locate(".bi-trash").at(row + 1));
   });
 
   I.click(buttons.speichern);
@@ -155,7 +142,6 @@ export async function verifyGuestInStore(
     comment: guest.comment,
     number: guest.number,
     alreadyIn: guest.alreadyIn,
-    key: "row" + index,
   });
 }
 
@@ -176,7 +162,6 @@ export async function verifyReservationInStore(
     comment: guest.comment,
     number: guest.number,
     alreadyIn: guest.alreadyIn,
-    key: "row" + index,
   });
 }
 

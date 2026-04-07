@@ -23,7 +23,9 @@ export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
   //retry: 4,
-  timeout: 10,
+  // 10s is too low for full user-create/login/relogin end-to-end flows and causes
+  // noisy non-terminated timeout errors even on successful runs.
+  timeout: 30,
   helpers: {
     Playwright: {
       browser: "chromium",
