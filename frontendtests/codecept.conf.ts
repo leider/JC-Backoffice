@@ -22,7 +22,7 @@ const CI = !!process.env.CI;
 export const config: CodeceptJS.MainConfig = {
   tests: "./tests/*_test.ts",
   output: "./output",
-  retry: 4,
+  //retry: 4,
   timeout: 10,
   helpers: {
     Playwright: {
