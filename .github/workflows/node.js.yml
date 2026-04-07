@@ -50,7 +50,14 @@ jobs:
           ./node_modules/.bin/codeceptjs info
           ./startTestserver.sh
           trap './stopTestserver.sh' EXIT
-          ./node_modules/.bin/codeceptjs run --verbose
+          set +e
+          ./node_modules/.bin/codeceptjs run
+          TEST_EXIT=$?
+          if [ $TEST_EXIT -ne 0 ]; then
+            echo "UI tests failed - rerunning failed tests with verbose logging"
+            ./node_modules/.bin/codeceptjs run-rerun --verbose
+          fi
+          exit $TEST_EXIT
       - name: Archive UI test results
         if: always()
         uses: actions/upload-artifact@v4
