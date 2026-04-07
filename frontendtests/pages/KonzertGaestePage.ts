@@ -44,12 +44,15 @@ export async function addReservation(guest: {
   fillGuestDataInRow(guest, "reservierungen");
 }
 
-function fillGuestDataInRow(guest: {
-  name: string;
-  comment: string;
-  number: number;
-  alreadyIn: number;
-}, path: "gaesteliste" | "reservierungen") {
+function fillGuestDataInRow(
+  guest: {
+    name: string;
+    comment: string;
+    number: number;
+    alreadyIn: number;
+  },
+  path: "gaesteliste" | "reservierungen",
+) {
   I.waitForElement(`#${path}_0_name`, 5);
   I.fillField(`#${path}_0_name`, guest.name);
   I.seeInField(`#${path}_0_name`, guest.name);

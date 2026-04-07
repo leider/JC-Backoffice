@@ -57,12 +57,15 @@ export const config: CodeceptJS.MainConfig = {
             // Depending on existing cookie/bootstrap timing, login can either show form
             // or immediately land in the app shell. Accept both.
             for (let attempt = 0; attempt < 20; attempt++) {
-              const teamVisible = await I.grabNumberOfVisibleElements(locate("*").withText("Team"));
+              const teamVisible = await I.grabNumberOfVisibleElements(
+                locate("*").withText("Team"),
+              );
               if (teamVisible > 0) {
                 return;
               }
 
-              const userVisible = await I.grabNumberOfVisibleElements("#login_username");
+              const userVisible =
+                await I.grabNumberOfVisibleElements("#login_username");
               if (userVisible > 0) {
                 I.fillField("#login_username", "admin");
                 I.fillField("#login_password", "admin");
@@ -74,7 +77,9 @@ export const config: CodeceptJS.MainConfig = {
               I.wait(0.25);
             }
 
-            throw new Error("Login state did not stabilize (neither Team nor login form visible)");
+            throw new Error(
+              "Login state did not stabilize (neither Team nor login form visible)",
+            );
           },
           check: (I) => {
             // Contract: logged in means the app shell with "Team" is visible.

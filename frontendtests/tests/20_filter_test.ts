@@ -90,7 +90,8 @@ Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   // Login check already lands on /vue/veranstaltungen; goto same URL again triggers Playwright
   // "Navigation … is interrupted by another navigation to the same URL".
 
-  const path = new URL(await I.grabCurrentUrl()).pathname.replace(/\/$/, "") || "/";
+  const path =
+    new URL(await I.grabCurrentUrl()).pathname.replace(/\/$/, "") || "/";
   const target = current.menu === "Team" ? "/vue/team" : "/vue/veranstaltungen";
   if (path !== target) {
     I.amOnPage(target);

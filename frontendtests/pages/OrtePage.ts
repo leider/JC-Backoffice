@@ -5,9 +5,6 @@ const buttons = {
   speichern: "Speichern",
 };
 
-const tableCells = (column: string, index = 0): string =>
-  `[data-testid="${column}${index}"]`;
-
 export async function addOrt(ort: {
   name: string;
   flaeche: number;

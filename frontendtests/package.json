@@ -4,7 +4,7 @@
   "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
     "better-sqlite3": "12.6.2",
-    "codeceptjs": "3.7.5",
+    "codeceptjs": "3.7.6",
     "codeceptjs-chai": "2.3.5",
     "codeceptjs-intellij-reporter": "0.0.2",
     "cross-env": "7.0.3",
@@ -29,5 +29,5 @@
     "tsc": "./node_modules/.bin/tsc",
     "eslint": "./node_modules/.bin/eslint ."
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.13.0"
 }

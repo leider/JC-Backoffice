@@ -73,9 +73,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     setDirty(false);
   }, [form, veranstaltung]);
 
-  useEffect(setFormValue, [setFormValue]);
+  useEffect(() => {
+    queueMicrotask(setFormValue);
+  }, [setFormValue]);
 
-  useEffect(() => setVeranstaltung(veranVermiet), [veranVermiet]);
+  useEffect(() => {
+    queueMicrotask(() => setVeranstaltung(veranVermiet));
+  }, [veranVermiet]);
   const brauchtTechnik = useMemo(() => (veranstaltung as Vermietung).brauchtTechnik, [veranstaltung]);
 
   const mutateVeranstaltung = useJazzMutation({
