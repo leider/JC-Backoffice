@@ -47,7 +47,10 @@ jobs:
           yarn eslint
           yarn playwright install chromium
           yarn tsc
-          ./startRunStop.sh
+          ./node_modules/.bin/codeceptjs info
+          ./startTestserver.sh
+          trap './stopTestserver.sh' EXIT
+          ./node_modules/.bin/codeceptjs run --verbose
       - name: Archive UI test results
         if: always()
         uses: actions/upload-artifact@v4
