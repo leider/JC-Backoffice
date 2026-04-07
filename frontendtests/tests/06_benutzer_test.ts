@@ -1,7 +1,7 @@
 Feature("Admin Benutzer");
 
-Before(({ login }) => {
-  login("admin");
+Before(async ({ login }) => {
+  await login("admin");
 });
 
 Scenario(

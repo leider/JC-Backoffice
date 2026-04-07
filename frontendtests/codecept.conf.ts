@@ -31,6 +31,8 @@ export const config: CodeceptJS.MainConfig = {
       locale: "de",
       show: showBrowser && !CI,
       keepCookies: true,
+      // "load" races with React Router client redirects; domcontentloaded avoids interrupted goto noise.
+      waitForNavigation: "domcontentloaded",
     },
     SqliteHelper: {
       require: "./helpers/SqliteHelper",
@@ -43,24 +45,40 @@ export const config: CodeceptJS.MainConfig = {
   plugins: {
     auth: {
       enabled: true,
-      saveToFile: true,
+      saveToFile: false,
       inject: "login",
       users: {
         admin: {
-          login: (I) => {
+          login: async (I) => {
             I.amOnPage("/vue/login");
-            I.waitForText("Benutzername");
-            I.waitForElement("#login_username", 10);
-            I.fillField("#login_username", "admin");
-            I.fillField("#login_password", "admin");
-            I.click("Anmelden");
-            I.wait(0.5);
+
+            // Depending on existing cookie/bootstrap timing, login can either show form
+            // or immediately land in the app shell. Accept both.
+            for (let attempt = 0; attempt < 20; attempt++) {
+              const teamVisible = await I.grabNumberOfVisibleElements(locate("*").withText("Team"));
+              if (teamVisible > 0) {
+                return;
+              }
+
+              const userVisible = await I.grabNumberOfVisibleElements("#login_username");
+              if (userVisible > 0) {
+                I.fillField("#login_username", "admin");
+                I.fillField("#login_password", "admin");
+                I.click("Anmelden");
+                I.waitForText("Team", 5);
+                return;
+              }
+
+              I.wait(0.25);
+            }
+
+            throw new Error("Login state did not stabilize (neither Team nor login form visible)");
           },
           check: (I) => {
-            I.amOnPage("/");
-            I.waitForText("Team");
+            // Contract: logged in means the app shell with "Team" is visible.
+            I.waitForText("Team", 5);
           },
-          fetch: () => "yes",
+          fetch: () => undefined,
           restore: () => {},
         },
       },

@@ -21,7 +21,8 @@ export function goToEditKonzert(konzertTitle: string) {
 }
 
 export function openKonzertCollapsable(konzertTitle: string) {
-  I.click(locate("span.ant-collapse-header-text").withText(konzertTitle));
+  // Ant Design Collapse no longer wraps label text in .ant-collapse-header-text.
+  I.click(locate(".ant-collapse-header").withText(konzertTitle));
 }
 
 export function setConfirmed(konzertTitle: string) {

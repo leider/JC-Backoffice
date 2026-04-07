@@ -77,8 +77,8 @@ BeforeSuite(({ I }) => {
   });
 });
 
-Before(({ login }) => {
-  login("admin");
+Before(async ({ login }) => {
+  await login("admin");
 });
 
 const menuToClick = new DataTable(["menu"]);
@@ -89,6 +89,7 @@ Data(menuToClick).Scenario("Viele'", async ({ I, current, filters }) => {
   // Menu click is unreliable (horizontal overflow). Direct routes avoid that.
   // Login check already lands on /vue/veranstaltungen; goto same URL again triggers Playwright
   // "Navigation … is interrupted by another navigation to the same URL".
+
   const path = new URL(await I.grabCurrentUrl()).pathname.replace(/\/$/, "") || "/";
   const target = current.menu === "Team" ? "/vue/team" : "/vue/veranstaltungen";
   if (path !== target) {

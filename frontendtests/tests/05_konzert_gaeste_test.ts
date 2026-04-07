@@ -1,7 +1,7 @@
 Feature("Konzert Gäste");
 
-Before(({ login }) => {
-  login("admin");
+Before(async ({ login }) => {
+  await login("admin");
 });
 
 Scenario(

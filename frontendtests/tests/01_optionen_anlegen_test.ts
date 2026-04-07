@@ -1,7 +1,7 @@
 Feature("Optionen anlegen");
 
-Before(({ I, login }) => {
-  login("admin");
+Before(async ({ I, login }) => {
+  await login("admin");
 
   I.deleteObjectInCollection("optionenstore", "instance");
   I.deleteObjectInCollection("optionenstore", "orte");

@@ -1,7 +1,7 @@
 const { I } = inject();
 
 const buttons = {
-  addInTable: '(//button[@data-testid="add-in-table"])',
+  addInTable: '[data-testid="add-in-table"]',
   speichern: "Speichern",
 };
 
@@ -14,15 +14,15 @@ export async function addOrt(ort: {
   pressename: string;
   presseIn: string;
 }) {
+  I.waitForElement(buttons.addInTable, 5);
   I.click(buttons.addInTable);
-  I.click('[data-testid="name0"]');
-  I.fillField("#name", ort.name);
-  I.pressKey("Tab");
-  I.fillField("#flaeche", ort.flaeche.toString());
-  I.pressKey("Tab");
-  I.fillField("#pressename", ort.pressename);
-  I.pressKey("Tab");
-  I.fillField("#presseIn", ort.presseIn);
+
+  // EditableTable now uses inline fields with generated ids like "orte_0_name".
+  I.waitForElement('input[id$="_name"]', 5);
+  I.fillField(locate('input[id$="_name"]').first(), ort.name);
+  I.fillField('input[id$="_flaeche"]', ort.flaeche.toString());
+  I.fillField('input[id$="_pressename"]', ort.pressename);
+  I.fillField('input[id$="_presseIn"]', ort.presseIn);
   I.pressKey("Enter");
 
   I.click(buttons.speichern);
