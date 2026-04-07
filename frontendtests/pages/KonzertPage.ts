@@ -29,7 +29,7 @@ export function openKonzertCollapsable(konzertTitle: string) {
 export function setConfirmed(konzertTitle: string) {
   this.goToEditKonzert(konzertTitle);
 
-  I.click("Ist bestätigt");
+  setCheckboxByLabel("Ist bestätigt");
 
   I.click("Speichern");
   I.waitForText("Speichern erfolgreich");
@@ -70,10 +70,15 @@ export function assignCurrentUserToRole(
 }
 
 function setRequiredPeople(identifier: string) {
+  setCheckboxByLabel(identifier);
+}
+
+function setCheckboxByLabel(identifier: string) {
   I.waitForText(identifier);
 
   const formItem = locate(".ant-form-item").withDescendant(
     locate("label").withText(identifier),
   );
+  I.scrollTo(formItem);
   I.click(formItem.find(".ant-checkbox"));
 }
