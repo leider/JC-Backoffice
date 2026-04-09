@@ -15,6 +15,5 @@ Scenario("Kopiere Konzert", async ({ I }) => {
   I.fillField("Titel", "Kopiertes Konzert");
   I.click("Speichern");
   I.amOnPage("/vue/veranstaltungen");
-  I.wait(0.5);
-  I.see("Kopiertes Konzert");
+  I.waitForText("Kopiertes Konzert", 5);
 });

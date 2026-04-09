@@ -51,11 +51,15 @@ jobs:
           ./startTestserver.sh
           trap './stopTestserver.sh' EXIT
           set +e
-          ./node_modules/.bin/codeceptjs run
-          TEST_EXIT=$?
+          ./node_modules/.bin/codeceptjs run 2>&1 | tee output/first_run.log
+          TEST_EXIT=${PIPESTATUS[0]}
           if [ $TEST_EXIT -ne 0 ]; then
-            echo "UI tests failed - rerunning failed tests with verbose logging"
-            ./node_modules/.bin/codeceptjs run-rerun --verbose
+            FAILED=$(grep '◯ File:' output/first_run.log | sed 's|.*file://||' | sort -u)
+            if [ -n "$FAILED" ]; then
+              echo "UI tests failed - rerunning only failed test files with verbose logging"
+              ./node_modules/.bin/codeceptjs run --verbose $FAILED
+              TEST_EXIT=$?
+            fi
           fi
           exit $TEST_EXIT
       - name: Archive UI test results
