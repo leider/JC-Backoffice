@@ -1,5 +1,5 @@
 import { ConfigProvider, Tag, theme } from "antd";
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { memo, useCallback, useContext, useMemo } from "react";
 import { addOrRemoveUserToSection } from "@/rest/loader.ts";
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,7 +19,7 @@ interface TeamStaffRowProps {
   readonly veranstaltung: Veranstaltung;
 }
 
-export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
+export const ActiveUsers = memo(function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
   const { usersAsOptions } = useContext(TeamContext);
   const { token } = theme.useToken();
   const textColor = useMemo(() => veranstaltung.colorText, [veranstaltung]);
@@ -63,9 +63,9 @@ export function ActiveUsers({ sectionName, veranstaltung }: TeamStaffRowProps) {
       {sectionName === "ersthelfer" ? "Du kannst als Ersthelfer beitragen?" : "Hier könnten wir Dich brauchen..."}
     </span>
   );
-}
+});
 
-export function AddRemoveStaffButton({
+export const AddRemoveStaffButton = memo(function AddRemoveStaffButton({
   sectionName,
   veranstaltung,
   staffUpdated,
@@ -95,4 +95,4 @@ export function AddRemoveStaffButton({
   const addCallback = useCallback(async () => mutate.mutate(true), [mutate]);
 
   return isIn ? <ButtonStaff add={false} callback={removeCallback} /> : <ButtonStaff add callback={addCallback} />;
-}
+});

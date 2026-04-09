@@ -7,9 +7,4 @@ export const handlers = [
       name: "Test User",
     });
   }),
-  http.post("/refreshToken", () => {
-    return HttpResponse.json({
-      token: "testuser",
-    });
-  }),
 ];

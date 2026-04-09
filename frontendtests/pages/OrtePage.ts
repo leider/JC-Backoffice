@@ -1,12 +1,9 @@
 const { I } = inject();
 
 const buttons = {
-  addInTable: '(//button[@data-testid="add-in-table"])',
+  addInTable: '[data-testid="add-in-table"]',
   speichern: "Speichern",
 };
-
-const tableCells = (column: string, index = 0): string =>
-  `[data-testid="${column}${index}"]`;
 
 export async function addOrt(ort: {
   name: string;
@@ -14,16 +11,29 @@ export async function addOrt(ort: {
   pressename: string;
   presseIn: string;
 }) {
-  I.click(buttons.addInTable);
-  I.click('[data-testid="name0"]');
-  I.fillField("#name", ort.name);
+  const existingRows = await I.grabNumberOfVisibleElements(
+    'tr[data-row-key^="row"]',
+  );
+  if (existingRows < 1) {
+    I.waitForElement(buttons.addInTable, 5);
+    I.click(buttons.addInTable);
+  } else {
+    I.click('[data-row-key="row0"] td:first-child');
+  }
+
+  I.waitForElement("#orte_0_name", 5);
+  I.fillField("#orte_0_name", ort.name);
+  I.seeInField("#orte_0_name", ort.name);
   I.pressKey("Tab");
-  I.fillField("#flaeche", ort.flaeche.toString());
+  I.fillField("#orte_0_flaeche", ort.flaeche.toString());
+  I.seeInField("#orte_0_flaeche", ort.flaeche.toString());
   I.pressKey("Tab");
-  I.fillField("#pressename", ort.pressename);
+  I.fillField("#orte_0_pressename", ort.pressename);
+  I.seeInField("#orte_0_pressename", ort.pressename);
   I.pressKey("Tab");
-  I.fillField("#presseIn", ort.presseIn);
-  I.pressKey("Enter");
+  I.fillField("#orte_0_presseIn", ort.presseIn);
+  I.seeInField("#orte_0_presseIn", ort.presseIn);
+  I.pressKey("Tab");
 
   I.click(buttons.speichern);
 }
@@ -41,7 +51,6 @@ export async function verifyOrtInStore(
   I.assertDeepEqual(resOrte.orte[index], {
     name: ort.name,
     flaeche: ort.flaeche,
-    key: "row" + index,
     pressename: ort.pressename,
     presseIn: ort.presseIn,
   });
@@ -56,24 +65,27 @@ export async function verifyOrtInTable(
     presseIn: string;
   },
 ) {
-  I.see(ort.name, tableCells("name", rowNumber));
-  I.see(ort.flaeche.toString(), tableCells("flaeche", rowNumber));
-  I.see(ort.pressename, tableCells("pressename", rowNumber));
-  I.see(ort.presseIn, tableCells("presseIn", rowNumber));
+  const resOrte = await I.loadObjectInCollection("optionenstore", "orte");
+  I.assertDeepEqual(resOrte.orte[rowNumber], {
+    name: ort.name,
+    flaeche: ort.flaeche,
+    pressename: ort.pressename,
+    presseIn: ort.presseIn,
+  });
 }
 
 export async function copyOrt(newName: string) {
   I.click("button span .bi-files");
 
-  I.click('[data-row-key="row1"] td:first-child');
-  I.fillField("#name", newName);
+  I.waitForElement("#orte_1_name", 5);
+  I.fillField("#orte_1_name", newName);
 
   I.pressKey("Tab");
   I.click(buttons.speichern);
 }
 
 export async function deleteOrt(number: number) {
-  I.click('[data-row-key="row' + number + '"] button span .bi-trash');
+  I.click(locate(".bi-trash").at(number + 1));
 
   I.click(buttons.speichern);
 }

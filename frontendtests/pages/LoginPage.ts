@@ -1,12 +1,14 @@
 const { I } = inject();
 
 export async function login(userName: string, password: string) {
-  I.amOnPage("/");
+  I.amOnPage("/vue/login");
   I.waitForText("Benutzername");
-  I.fillField("Benutzername", userName);
-  I.fillField("Passwort", password);
+  I.waitForElement("#login_username", 10);
+  I.fillField("#login_username", userName);
+  I.fillField("#login_password", password);
   I.click("Anmelden");
-  I.wait(1);
+  // Wait until login form is gone; destination page/modal can vary by user state.
+  I.waitForInvisible("#login_username", 10);
 }
 
 export async function logout(userName: string) {

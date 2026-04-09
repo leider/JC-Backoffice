@@ -51,7 +51,15 @@ export default defineConfig(() => {
         },
       },
     },
-    test: { environment: "jsdom", setupFiles: resolve(__dirname, "test/setup.ts") },
+    test: {
+      environment: "jsdom",
+      setupFiles: resolve(__dirname, "test/setup.ts"),
+      server: {
+        deps: {
+          inline: ["antd"],
+        },
+      },
+    },
     plugins: [
       react(),
 

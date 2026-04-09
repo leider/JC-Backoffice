@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import { Col, Row } from "antd";
 import { JazzPageHeader } from "@/widgets/JazzPageHeader.tsx";
 import ExcelMultiExportButton from "@/components/team/ExcelMultiExportButton.tsx";
@@ -17,9 +17,9 @@ import filter from "lodash/filter";
 import { TeamPeriodsSelector } from "@/components/team/TeamPeriodsSelector.tsx";
 import TeamTable from "@/components/team/TeamTable.tsx";
 
-function Monate({ monate }: { monate: string[] }) {
+const Monate = memo(function Monate({ monate }: { readonly monate: string[] }) {
   return map(monate, (monat) => <TeamMonatGroup key={monat} monat={monat} />);
-}
+});
 
 export function TeamUndVeranstaltungen() {
   const { pathname } = useLocation();

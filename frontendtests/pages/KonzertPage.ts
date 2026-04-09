@@ -11,23 +11,29 @@ export function createExampleKonzert(title: string) {
 }
 
 export function goToEditKonzert(konzertTitle: string) {
-  I.amOnPage("/vue/veranstaltungen");
-  I.waitForText(konzertTitle);
+  waitForVeranstaltungenReady();
+  I.waitForText(konzertTitle, 5);
 
   this.openKonzertCollapsable(konzertTitle);
 
+  I.waitForElement(".bi-keyboard", 5);
   I.click(".bi-keyboard");
-  I.waitForText("Allgemein");
+  I.waitForText("Allgemein", 5);
 }
 
 export function openKonzertCollapsable(konzertTitle: string) {
-  I.click(locate("span.ant-collapse-header-text").withText(konzertTitle));
+  I.waitForInvisible(".ant-modal-wrap", 5);
+  // Ant Design Collapse no longer wraps label text in .ant-collapse-header-text.
+  const header = locate(".ant-collapse-header").withText(konzertTitle);
+  I.waitForElement(header, 5);
+  I.scrollTo(header);
+  I.click(header);
 }
 
 export function setConfirmed(konzertTitle: string) {
   this.goToEditKonzert(konzertTitle);
 
-  I.click("Ist bestätigt");
+  setCheckboxByLabel("Ist bestätigt");
 
   I.click("Speichern");
   I.waitForText("Speichern erfolgreich");
@@ -38,16 +44,19 @@ export function deleteKonzert(konzertTitle: string) {
 }
 
 export function openRequiredPeople() {
+  I.waitForElement(".bi-universal-access", 5);
   I.click(".bi-universal-access");
+  I.waitForElement(
+    locate(".ant-form-item").withDescendant(
+      locate("b").withText("Kasse (Verantwortlich)"),
+    ),
+    5,
+  );
 }
 
 export function addRequiredKassePeople(konzertTitle: string) {
-  I.amOnPage("/vue/veranstaltungen");
-  I.waitForText(konzertTitle);
-
-  this.openKonzertCollapsable(konzertTitle);
-
-  this.openRequiredPeople(konzertTitle);
+  // Open full edit mode first; preview mode has no save button.
+  this.goToEditKonzert(konzertTitle);
 
   setRequiredPeople("Kasse (Verantwortlich)");
   setRequiredPeople("Kasse (Unterstützung)");
@@ -66,16 +75,29 @@ export function assignCurrentUserToRole(
   const formItem = locate(".ant-list-item").withDescendant(
     locate(".ant-list-item-meta-title").withText(role),
   );
-  I.click(formItem.find(".bi-plus-circle-fill"));
+  I.waitForElement(formItem, 5);
+  const addButton = formItem.find(".bi-plus-circle-fill");
+  I.waitForElement(addButton, 5);
+  I.click(addButton);
 
-  I.waitForText(userName, 1, formItem);
+  I.waitForText(userName, 5, formItem);
 }
 
 function setRequiredPeople(identifier: string) {
-  I.waitForText(identifier);
+  setCheckboxByLabel(identifier);
+}
+
+function setCheckboxByLabel(identifier: string) {
+  I.waitForText(identifier, 5);
 
   const formItem = locate(".ant-form-item").withDescendant(
     locate("label").withText(identifier),
   );
+  I.scrollTo(formItem);
   I.click(formItem.find(".ant-checkbox"));
+}
+
+function waitForVeranstaltungenReady() {
+  I.amOnPage("/vue/veranstaltungen");
+  I.waitForInvisible(".ant-modal-wrap", 5);
 }

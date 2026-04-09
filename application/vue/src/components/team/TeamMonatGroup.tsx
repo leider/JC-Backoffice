@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { memo, useCallback, useContext, useMemo, useState } from "react";
 import { Col, Collapse, Row, theme, Typography } from "antd";
 import TeamBlockAdmin from "@/components/team/TeamBlock/TeamBlockAdmin.tsx";
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit";
@@ -20,10 +20,20 @@ interface MonatGroupProps {
   readonly renderTeam?: boolean;
 }
 
-function Monat({ expanded, veranstaltungen }: { expanded: boolean; veranstaltungen: Veranstaltung[] }) {
+type MonatProps = {
+  readonly expanded: boolean;
+  readonly veranstaltungen: Veranstaltung[];
+};
+
+const Monat = memo(function Monat({ expanded, veranstaltungen }: MonatProps) {
   const { pathname } = useLocation();
-  const { isDarkMode, brightText } = useJazzContext();
+  const { isDarkMode, brightText, memoizedVeranstaltung } = useJazzContext();
   const { token } = theme.useToken();
+
+  const blockSyncKey = useMemo(
+    () => `${memoizedVeranstaltung?.veranstaltung?.id ?? ""}:${memoizedVeranstaltung?.highlight ? 1 : 0}`,
+    [memoizedVeranstaltung?.highlight, memoizedVeranstaltung?.veranstaltung?.id],
+  );
 
   const datumTextStyle = useMemo(() => {
     return {
@@ -48,12 +58,12 @@ function Monat({ expanded, veranstaltungen }: { expanded: boolean; veranstaltung
       <Typography.Text style={datumTextStyle}>{DatumUhrzeit.forGermanString(day)?.format("dd, DD. MMMM")}</Typography.Text>
       {map(sortBy(byDay[day], "startDatumUhrzeit.toISOString"), (veranstaltung) => (
         <Row key={veranstaltung.id}>
-          <CompToRender initiallyOpen={expanded} veranstaltung={veranstaltung} />
+          <CompToRender blockSyncKey={blockSyncKey} initiallyOpen={expanded} veranstaltung={veranstaltung} />
         </Row>
       ))}
     </Col>
   ));
-}
+});
 
 export default function TeamMonatGroup({ monat }: MonatGroupProps) {
   const { veranstaltungenNachMonat } = useContext(TeamContext);

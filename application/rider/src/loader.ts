@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { Rider } from "jc-shared/rider/rider.ts";
 
+axios.defaults.withCredentials = true;
+
 type FetchParams = {
   url: string;
   method: Method;

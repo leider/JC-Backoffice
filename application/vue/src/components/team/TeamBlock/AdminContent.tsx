@@ -1,6 +1,6 @@
 import Konzert from "jc-shared/konzert/konzert.ts";
 import { Col, Collapse, ConfigProvider, Form, Row, Typography } from "antd";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { saveKonzert, saveVermietung } from "@/rest/loader.ts";
 import { areDifferent } from "@/commons/comparingAndTransforming.ts";
 import { ResetButton, SaveButton } from "@/components/colored/JazzButtons.tsx";
@@ -73,6 +73,13 @@ export default function AdminContent({ veranstaltung: veranVermiet }: { readonly
     setDirty(false);
   }, [form, veranstaltung]);
 
+  useEffect(() => {
+    queueMicrotask(setFormValue);
+  }, [setFormValue]);
+
+  useEffect(() => {
+    queueMicrotask(() => setVeranstaltung(veranVermiet));
+  }, [veranVermiet]);
   const brauchtTechnik = useMemo(() => (veranstaltung as Vermietung).brauchtTechnik, [veranstaltung]);
 
   const mutateVeranstaltung = useJazzMutation({

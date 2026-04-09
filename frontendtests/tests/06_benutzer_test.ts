@@ -1,7 +1,7 @@
 Feature("Admin Benutzer");
 
-Before(({ login }) => {
-  login("admin");
+Before(async ({ login }) => {
+  await login("admin");
 });
 
 Scenario(
@@ -23,9 +23,14 @@ Scenario(
     await loginPage.logout("admin");
 
     await loginPage.login(userName, userName);
+    I.waitForText("Kleine Bitte", 5);
+    I.click("Ersthelfer");
+    I.click("Kasse");
     I.click("Danke");
+    I.waitForInvisible(".ant-modal-wrap", 5);
 
-    I.waitForText(konzertTitle, 2);
+    I.amOnPage("/vue/veranstaltungen");
+    I.waitForText(konzertTitle, 5);
     konzertPage.assignCurrentUserToRole(
       konzertTitle,
       "Kasse (Verantwortlich)",
@@ -36,10 +41,16 @@ Scenario(
 
     await loginPage.login("admin", "admin");
 
+    I.amOnPage("/vue/veranstaltungen");
+    I.waitForText(konzertTitle, 5);
+
     konzertPage.openKonzertCollapsable(konzertTitle);
     konzertPage.openRequiredPeople();
 
-    I.waitForText("Kasse (Verantwortlich)", 2);
-    I.see(userName);
+    const kasseVerantwortlichRow = locate(".ant-form-item").withDescendant(
+      locate("b").withText("Kasse (Verantwortlich)"),
+    );
+    I.waitForElement(kasseVerantwortlichRow, 5);
+    I.waitForText(`Testuser ${userName}`, 5, kasseVerantwortlichRow);
   },
 );

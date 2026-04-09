@@ -60,6 +60,9 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   const isAuthenticated = useMemo(() => loginState === LoginState.LOGGED_IN, [loginState]);
 
   const refetchInterval = 30 * 60 * 1000; // 30 minutes
+  const staleUsers = 2 * 60 * 1000;
+  const staleSlow = 5 * 60 * 1000;
+  const staleToday = 60 * 1000;
 
   const [filter, setFilter] = useState<TeamFilterObject>(JSON.parse(localStorage.getItem("teamFilter") ?? "{}"));
 
@@ -85,12 +88,18 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
     | "isCompactMode"
   > = useQueries({
     queries: [
-      { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["currentUser"], queryFn: () => currentUser(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["optionen"], queryFn: () => optionenLoader(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["orte"], queryFn: () => orteLoader(), refetchInterval },
-      { enabled: isAuthenticated, queryKey: ["konzert", "today"], queryFn: () => konzerteForToday(), refetchInterval },
+      { enabled: isAuthenticated, queryKey: ["users"], queryFn: () => allUsers(), refetchInterval, staleTime: staleUsers },
+      { enabled: isAuthenticated, queryKey: ["wikidirs"], queryFn: () => wikisubdirs(), refetchInterval, staleTime: staleSlow },
+      { enabled: isAuthenticated, queryKey: ["currentUser"], queryFn: () => currentUser(), refetchInterval, staleTime: staleUsers },
+      { enabled: isAuthenticated, queryKey: ["optionen"], queryFn: () => optionenLoader(), refetchInterval, staleTime: staleSlow },
+      { enabled: isAuthenticated, queryKey: ["orte"], queryFn: () => orteLoader(), refetchInterval, staleTime: staleSlow },
+      {
+        enabled: isAuthenticated,
+        queryKey: ["konzert", "today"],
+        queryFn: () => konzerteForToday(),
+        refetchInterval,
+        staleTime: staleToday,
+      },
     ],
     combine: ([usersQuery, wikidirsQuery, currentQuery, optionenQuery, orteQuery, todayQuery]) => {
       if (usersQuery?.data && wikidirsQuery?.data && currentQuery?.data && optionenQuery?.data && orteQuery?.data && todayQuery?.data) {
@@ -108,59 +117,68 @@ export function useCreateJazzContext(auth: IUseProvideAuth): SharedGlobals {
   });
   const { notification } = App.useApp();
 
-  function showSuccess({
-    text = "Die Änderungen wurden gespeichert",
-    title = "Speichern erfolgreich",
-    duration = 3,
-  }: {
-    duration?: number;
-    text?: React.ReactNode;
-    title?: string;
-  }) {
-    notification.success({
-      title,
-      description: text,
-      placement: "bottom",
-      showProgress: true,
-      duration: duration,
-    });
-  }
+  const showSuccess = useCallback(
+    ({
+      text = "Die Änderungen wurden gespeichert",
+      title = "Speichern erfolgreich",
+      duration = 3,
+    }: {
+      duration?: number;
+      text?: React.ReactNode;
+      title?: string;
+    }) => {
+      notification.success({
+        title,
+        description: text,
+        placement: "bottom",
+        showProgress: true,
+        duration: duration,
+      });
+    },
+    [notification],
+  );
 
-  function showError({
-    text = "Etwas ist schiefgegangen",
-    title = "Problem",
-    closeCallback,
-  }: {
-    text?: string;
-    title?: string;
-    closeCallback?: () => void;
-  }) {
-    notification.error({
-      title,
-      description: text,
-      placement: "bottom",
-      duration: 10,
-      showProgress: true,
+  const showError = useCallback(
+    ({
+      text = "Etwas ist schiefgegangen",
+      title = "Problem",
+      closeCallback,
+    }: {
+      text?: string;
+      title?: string;
+      closeCallback?: () => void;
+    }) => {
+      notification.error({
+        title,
+        description: text,
+        placement: "bottom",
+        duration: 10,
+        showProgress: true,
 
-      onClose: closeCallback,
-    });
-  }
+        onClose: closeCallback,
+      });
+    },
+    [notification],
+  );
 
   const exposedContext = useMemo(() => (isAuthenticated ? context : emptyContext), [context, isAuthenticated]);
 
-  return {
-    ...exposedContext,
-    showSuccess,
-    showError,
-    teamFilter: filter,
-    setTeamFilter,
-    isDirty,
-    setIsDirty,
-    memoizedVeranstaltung: memoizedVeranstaltung,
-    setMemoizedVeranstaltung: setMemoizedVeranstaltung,
-    isDarkMode,
-    isCompactMode,
-  };
+  return useMemo(
+    () => ({
+      ...exposedContext,
+      showSuccess,
+      showError,
+      teamFilter: filter,
+      setTeamFilter,
+      isDirty,
+      setIsDirty,
+      memoizedVeranstaltung,
+      setMemoizedVeranstaltung,
+      isDarkMode,
+      isCompactMode,
+    }),
+    [exposedContext, showSuccess, showError, filter, setTeamFilter, isDirty, memoizedVeranstaltung, isDarkMode, isCompactMode],
+  );
 }
 
 const brightText = "var(--jazz-global-bright-text)";
@@ -168,5 +186,5 @@ const brightText = "var(--jazz-global-bright-text)";
 export function useJazzContext(): SharedGlobals & { brightText: string } {
   const context = useContext(JazzContext);
   useCreateCssVars(context);
-  return { ...context, brightText };
+  return useMemo(() => ({ ...context, brightText }), [context]);
 }

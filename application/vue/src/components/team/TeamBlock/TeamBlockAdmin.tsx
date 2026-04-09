@@ -1,16 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
 import AdminContent from "@/components/team/TeamBlock/AdminContent.tsx";
 import Veranstaltung from "jc-shared/veranstaltung/veranstaltung.ts";
 import { TeamBlockAdminExtras } from "@/components/team/TeamBlock/TeamBlockAdminExtras.tsx";
 import TeamBlockCommons from "@/components/team/TeamBlock/TeamBlockCommons.tsx";
 
-export default function TeamBlockAdmin({
-  veranstaltung,
-  initiallyOpen,
-}: {
+type TeamBlockAdminProps = {
   readonly veranstaltung: Veranstaltung;
   readonly initiallyOpen: boolean;
-}) {
+  readonly blockSyncKey: string;
+};
+
+function TeamBlockAdmin({ veranstaltung, initiallyOpen }: TeamBlockAdminProps) {
   return (
     <TeamBlockCommons
       contentComponent={<AdminContent veranstaltung={veranstaltung} />}
@@ -20,3 +20,5 @@ export default function TeamBlockAdmin({
     />
   );
 }
+
+export default memo(TeamBlockAdmin);

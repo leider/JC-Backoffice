@@ -1,5 +1,6 @@
 import { Form, FormListFieldData, Table, type TableProps } from "antd";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Rule } from "antd/es/form";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import EditableCell from "@/widgets/EditableTable/widgets/EditableCell.tsx";
 import { UserWithKann } from "@/widgets/MitarbeiterMultiSelect.tsx";
 import InlineEditableActions from "@/widgets/EditableTable/InlineEditableActions.tsx";
@@ -13,6 +14,24 @@ import type { StoreValue, ValidatorRule } from "@rc-component/form/lib/interface
 import some from "lodash/some";
 import { Reference } from "@rc-component/table/lib";
 import EditOutlined from "@ant-design/icons/EditOutlined";
+
+function dataIndexKey(dataIndex: JazzColumn["dataIndex"]): string {
+  return Array.isArray(dataIndex) ? dataIndex.join(".") : String(dataIndex);
+}
+
+const EditableRowActions = memo(function EditableRowActions({
+  rowIndex,
+  onCopyRow,
+  onRemoveAt,
+}: {
+  readonly rowIndex: number;
+  readonly onCopyRow: (index: number) => void;
+  readonly onRemoveAt: (index: number) => void;
+}) {
+  const onCopy = useCallback(() => onCopyRow(rowIndex), [onCopyRow, rowIndex]);
+  const onDelete = useCallback(() => onRemoveAt(rowIndex), [onRemoveAt, rowIndex]);
+  return <InlineEditableActions onCopy={onCopy} onDelete={onDelete} />;
+});
 
 function alignForType(item: JazzColumn) {
   switch (item.type) {
@@ -50,9 +69,9 @@ export default function EditableTableInner<T>({
 
   // Build dataSource from fields - use form context to get actual values
   const form = Form.useFormInstance();
-  const handleDelete = useCallback(
-    (index?: number) => {
-      onRemove?.(index ?? 0);
+  const removeAt = useCallback(
+    (index: number) => {
+      onRemove?.(index);
     },
     [onRemove],
   );
@@ -104,12 +123,22 @@ export default function EditableTableInner<T>({
   }, [handleAdd]);
 
   const columns = useMemo(() => {
+    const uniqueRuleByDataIndex = new Map<string, Rule | undefined>();
+    if (columnDescriptions) {
+      for (const item of columnDescriptions) {
+        if (item.uniqueValues) {
+          uniqueRuleByDataIndex.set(dataIndexKey(item.dataIndex), ruleForDupes(item));
+        }
+      }
+    }
+
     const result: ColumnType<FormListFieldData>[] = map(columnDescriptions, (item) => {
+      const colKey = dataIndexKey(item.dataIndex);
       return {
         ...item,
         align: alignForType(item),
         render: (_: unknown, record: FormListFieldData, index: number) => (
-          <EditableCell column={{ ...item }} index={index} uniqueRule={ruleForDupes(item)} usersWithKann={usersWithKann} />
+          <EditableCell column={item} index={index} uniqueRule={uniqueRuleByDataIndex.get(colKey)} usersWithKann={usersWithKann} />
         ),
         title: (
           <span>
@@ -125,16 +154,11 @@ export default function EditableTableInner<T>({
       width: "70px",
       align: "end",
       render: (_: unknown, record: FormListFieldData, index: number) => (
-        <InlineEditableActions
-          actions={{
-            delete: () => handleDelete(index),
-            copy: () => handleCopy(index),
-          }}
-        />
+        <EditableRowActions onCopyRow={handleCopy} onRemoveAt={removeAt} rowIndex={index} />
       ),
     });
     return result;
-  }, [addButton, columnDescriptions, handleCopy, handleDelete, ruleForDupes, usersWithKann]);
+  }, [addButton, columnDescriptions, handleCopy, removeAt, ruleForDupes, usersWithKann]);
 
   const ref = useRef<Reference>(null);
 

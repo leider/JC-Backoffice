@@ -1,7 +1,7 @@
 Feature("Konzert anlegen");
 
-Before(({ I, login }) => {
-  login("admin");
+Before(async ({ I, login }) => {
+  await login("admin");
   I.createData("optionenstore", "optionen");
   I.createData("optionenstore", "orte");
 });

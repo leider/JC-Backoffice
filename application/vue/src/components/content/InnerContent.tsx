@@ -11,7 +11,7 @@ export default function InnerContent() {
 
   useEffect(() => {
     ref.current?.scroll?.({ top: 0 });
-  });
+  }, [pathname, search]);
 
   if (loginState === LoginState.UNKNOWN) {
     return <Spin size="large" />;
