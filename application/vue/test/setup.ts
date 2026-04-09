@@ -23,11 +23,13 @@ afterEach(async () => {
     profilerStats.renders = 0;
     profilerStats.totalMs = 0;
   }
-  // Drain pending React scheduler work (setImmediate) before JSDOM tears down window
-  await new Promise<void>((r) => {
-    setTimeout(r, 0);
-  });
   cleanup();
+  // Drain React scheduler's chained setImmediate callbacks before JSDOM tears down window
+  for (let i = 0; i < 10; i++) {
+    await new Promise<void>((r) => {
+      setImmediate(r);
+    });
+  }
 });
 
 vi.mock("@/commons/useDirtyBlocker", () => ({
