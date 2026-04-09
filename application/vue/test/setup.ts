@@ -30,6 +30,11 @@ afterEach(async () => {
       setImmediate(r);
     });
   }
+  // AntD rc-component/motion queues setTimeout callbacks for CSS animations.
+  // Let them fire while JSDOM is still alive to avoid "HTMLElement is not defined".
+  await new Promise<void>((r) => {
+    setTimeout(r, 50);
+  });
 });
 
 vi.mock("@/commons/useDirtyBlocker", () => ({
