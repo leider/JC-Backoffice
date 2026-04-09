@@ -30,12 +30,12 @@ jobs:
         run: |
           cd application
           yarn deploy
-      - name: Upload workspace
-        uses: actions/upload-artifact@v6
+      - name: Upload build output
+        run: tar czf /tmp/build-output.tar.gz --exclude='node_modules' -C application .
+      - uses: actions/upload-artifact@v6
         with:
-          name: workspace
-          path: application/
-          include-hidden-files: true
+          name: build-output
+          path: /tmp/build-output.tar.gz
           retention-days: 1
 
   test:
@@ -47,17 +47,17 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "24.x"
+          cache: "yarn"
       - name: set timezone Berlin
         run: sudo timedatectl set-timezone Europe/Berlin
-      - name: Download workspace
+      - name: Download build output
         uses: actions/download-artifact@v7
         with:
-          name: workspace
-          path: application/
-      - name: Restore permissions and Yarn state
+          name: build-output
+      - name: Extract build output and install
         run: |
+          tar xzf build-output.tar.gz -C application
           cd application
-          chmod -R +x node_modules/.bin
           yarn install --immutable
       - name: test
         run: |
@@ -73,13 +73,18 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: "24.x"
+          cache: "yarn"
       - name: set timezone Berlin
         run: sudo timedatectl set-timezone Europe/Berlin
-      - name: Download workspace
+      - name: Download build output
         uses: actions/download-artifact@v7
         with:
-          name: workspace
-          path: application/
+          name: build-output
+      - name: Extract build output and install
+        run: |
+          tar xzf build-output.tar.gz -C application
+          cd application
+          yarn install --immutable
       - name: UI Tests
         run: |
           cd frontendtests
