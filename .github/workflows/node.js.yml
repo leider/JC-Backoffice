@@ -54,9 +54,10 @@ jobs:
         with:
           name: workspace
           path: application/
-      - name: Restore Yarn state
+      - name: Restore permissions and Yarn state
         run: |
           cd application
+          chmod -R +x node_modules/.bin
           yarn install --immutable
       - name: test
         run: |
