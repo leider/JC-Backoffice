@@ -64,6 +64,10 @@ export default function (app: express.Express, forDev?: boolean): void {
     express.static(path.join(__dirname, "static"), {
       maxAge: "10h",
       setHeaders: (res, file) => {
+        if (file.endsWith("index.html") || file.endsWith("manifest.webmanifest")) {
+          res.setHeader("Cache-Control", "no-cache");
+          return;
+        }
         if (file.includes("sw.js")) {
           res.setHeader("Cache-Control", "public, max-age=0");
         }
