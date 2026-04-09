@@ -98,7 +98,7 @@ const server = setupServer(
 
 // --- Test harness ---
 
-function Harness() {
+function Harness({ route = "/veranstaltungen" }: { readonly route?: string } = {}) {
   const [teamFilter, setTeamFilter] = useState<TeamFilterObject>({});
 
   const jazzContextValue = useMemo(
@@ -140,7 +140,7 @@ function Harness() {
       <AntdAndLocaleTestContext>
         <GlobalContext.Provider value={globalContextValue}>
           <JazzContext.Provider value={jazzContextValue}>
-            <MemoryRouter initialEntries={["/veranstaltungen"]}>
+            <MemoryRouter initialEntries={[route]}>
               <TeamUndVeranstaltungen />
             </MemoryRouter>
           </JazzContext.Provider>
@@ -306,4 +306,19 @@ describe("Filter in der Übersicht (Veranstaltungen) – component test", () => 
       seeInTable("HotelNichtBestatigt");
     });
   }, 30000);
+
+  it("Team page (/team) shows the same data and filters work identically", async () => {
+    render(<Harness route="/team" />);
+    await waitForDataLoaded();
+
+    seeInTable("Bestätigt");
+    seeInTable("Cancelled");
+    seeInTable("PresseOK");
+
+    const dialog = await openFilterDialogAndExpand();
+
+    await setAndCheck(dialog, "Ist bestätigt", "Bestätigt");
+    await setAndCheck(dialog, "Ist abgesagt", "Cancelled");
+    await setAndCheck(dialog, "Presse OK", "PresseOK");
+  }, 60000);
 });
