@@ -27,40 +27,36 @@ beforeEach(() => {
 });
 
 describe("Vermietung anlegen – component test", () => {
-  it(
-    "creates a new Vermietung with title and Saalmiete, then saves",
-    async () => {
-      const user = userEvent.setup();
+  it("creates a new Vermietung with title and Saalmiete, then saves", async () => {
+    const user = userEvent.setup();
 
-      render(
-        <TestHarness initialPath="/vermietung/new?page=allgemeines" orte={fixtureOrte}>
-          <Routes>
-            <Route element={<VermietungComp />} path="/vermietung/:url" />
-          </Routes>
-        </TestHarness>,
-      );
+    render(
+      <TestHarness initialPath="/vermietung/new?page=allgemeines" orte={fixtureOrte}>
+        <Routes>
+          <Route element={<VermietungComp />} path="/vermietung/:url" />
+        </Routes>
+      </TestHarness>,
+    );
 
-      await waitFor(() => expect(screen.getByText("Event")).toBeInTheDocument(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText("Event")).toBeInTheDocument(), { timeout: 5000 });
 
-      await typeInto(user, "#kopf_titel", "Vermietung #1");
-      await typeInto(user, "#saalmiete", "100");
+    await typeInto(user, "#kopf_titel", "Vermietung #1");
+    await typeInto(user, "#saalmiete", "100");
 
-      await waitFor(
-        () => {
-          const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-          expect(saveBtn).toBeTruthy();
-          expect(saveBtn.disabled).toBe(false);
-        },
-        { timeout: 5000 },
-      );
+    await waitFor(
+      () => {
+        const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        expect(saveBtn).toBeTruthy();
+        expect(saveBtn.disabled).toBe(false);
+      },
+      { timeout: 5000 },
+    );
 
-      await user.click(document.querySelector('button[type="submit"]')!);
+    await user.click(document.querySelector('button[type="submit"]')!);
 
-      await waitFor(() => expect(capturedVermietung).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedVermietung).toBeDefined(), { timeout: 5000 });
 
-      const kopf = capturedVermietung!.kopf as Record<string, unknown>;
-      expect(kopf.titel).toBe("Vermietung #1");
-    },
-    60000,
-  );
+    const kopf = capturedVermietung!.kopf as Record<string, unknown>;
+    expect(kopf.titel).toBe("Vermietung #1");
+  }, 60000);
 });

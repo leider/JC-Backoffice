@@ -1,8 +1,13 @@
+/* eslint-disable no-console */
 import { vi } from "vitest";
 
 import { expect, afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
+import noop from "lodash/noop";
+import constant from "lodash/constant";
+import some from "lodash/some";
+import isString from "lodash/isString";
 
 expect.extend(matchers);
 
@@ -22,7 +27,7 @@ afterEach(async () => {
 });
 
 vi.mock("@/commons/useDirtyBlocker", () => ({
-  useDirtyBlocker: () => {},
+  useDirtyBlocker: noop,
 }));
 
 // Deep antd/es/ imports create separate module instances under Vitest,
@@ -47,33 +52,32 @@ vi.mock("antd/es/form/Form", async () => {
   };
 });
 
-
 vi.mock("@mdxeditor/editor", () => ({
-  MDXEditor: () => null,
+  MDXEditor: constant(null),
   MDXEditorMethods: undefined,
-  headingsPlugin: () => ({}),
-  listsPlugin: () => ({}),
-  quotePlugin: () => ({}),
-  thematicBreakPlugin: () => ({}),
-  markdownShortcutPlugin: () => ({}),
-  toolbarPlugin: () => ({}),
-  diffSourcePlugin: () => ({}),
-  DiffSourceToggleWrapper: ({ children }: any) => children,
-  BoldItalicUnderlineToggles: () => null,
-  UndoRedo: () => null,
-  ListsToggle: () => null,
-  BlockTypeSelect: () => null,
-  CreateLink: () => null,
-  InsertImage: () => null,
-  InsertTable: () => null,
-  InsertThematicBreak: () => null,
-  linkPlugin: () => ({}),
-  linkDialogPlugin: () => ({}),
-  imagePlugin: () => ({}),
-  tablePlugin: () => ({}),
-  codeBlockPlugin: () => ({}),
-  codeMirrorPlugin: () => ({}),
-  sandpackPlugin: () => ({}),
+  headingsPlugin: constant({}),
+  listsPlugin: constant({}),
+  quotePlugin: constant({}),
+  thematicBreakPlugin: constant({}),
+  markdownShortcutPlugin: constant({}),
+  toolbarPlugin: constant({}),
+  diffSourcePlugin: constant({}),
+  DiffSourceToggleWrapper: ({ children }: { children: React.ReactNode }) => children,
+  BoldItalicUnderlineToggles: constant(null),
+  UndoRedo: constant(null),
+  ListsToggle: constant(null),
+  BlockTypeSelect: constant(null),
+  CreateLink: constant(null),
+  InsertImage: constant(null),
+  InsertTable: constant(null),
+  InsertThematicBreak: constant(null),
+  linkPlugin: constant({}),
+  linkDialogPlugin: constant({}),
+  imagePlugin: constant({}),
+  tablePlugin: constant({}),
+  codeBlockPlugin: constant({}),
+  codeMirrorPlugin: constant({}),
+  sandpackPlugin: constant({}),
   SandpackConfig: undefined,
 }));
 
@@ -86,11 +90,11 @@ global.ResizeObserver = class ResizeObserver {
 // AntD Table virtual scroll (rc-virtual-list) measures the container via
 // offsetHeight / clientHeight / scrollHeight which JSDOM leaves at 0.
 // Without these mocks any re-render causes the virtual list to unmount all rows.
-Object.defineProperty(HTMLElement.prototype, "offsetHeight", { configurable: true, get: () => 800 });
-Object.defineProperty(HTMLElement.prototype, "clientHeight", { configurable: true, get: () => 800 });
-Object.defineProperty(HTMLElement.prototype, "scrollHeight", { configurable: true, get: () => 800 });
-Object.defineProperty(HTMLElement.prototype, "offsetWidth", { configurable: true, get: () => 1400 });
-Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, get: () => 1400 });
+Object.defineProperty(HTMLElement.prototype, "offsetHeight", { configurable: true, get: constant(800) });
+Object.defineProperty(HTMLElement.prototype, "clientHeight", { configurable: true, get: constant(800) });
+Object.defineProperty(HTMLElement.prototype, "scrollHeight", { configurable: true, get: constant(800) });
+Object.defineProperty(HTMLElement.prototype, "offsetWidth", { configurable: true, get: constant(1400) });
+Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, get: constant(1400) });
 Element.prototype.getBoundingClientRect = vi.fn(
   () =>
     ({
@@ -102,7 +106,7 @@ Element.prototype.getBoundingClientRect = vi.fn(
       right: 1400,
       x: 0,
       y: 0,
-      toJSON: () => ({}),
+      toJSON: noop,
     }) as DOMRect,
 );
 
@@ -124,7 +128,7 @@ Object.defineProperty(window, "matchMedia", {
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 // Stub canvas so JSDOM doesn't log "Not implemented: HTMLCanvasElement's getContext()"
-HTMLCanvasElement.prototype.getContext = (() => null) as never;
+HTMLCanvasElement.prototype.getContext = constant(null) as never;
 
 // JSDOM doesn't support pseudo-elements in getComputedStyle and logs "Not implemented".
 // Dropping the pseudo arg silences the warning without changing observable behavior.
@@ -132,15 +136,10 @@ const _origGCS = window.getComputedStyle;
 window.getComputedStyle = ((elt: Element) => _origGCS(elt)) as typeof window.getComputedStyle;
 
 // Filter known JSDOM/AntD noise from test output
-const suppressedPatterns = [
-  /not wrapped in act/,
-  /Could not parse CSS stylesheet/,
-  /Not implemented/,
-  /`maskClosable` is deprecated/,
-];
+const suppressedPatterns = [/not wrapped in act/, /Could not parse CSS stylesheet/, /Not implemented/, /`maskClosable` is deprecated/];
 
 function isSuppressed(args: unknown[]): boolean {
-  return suppressedPatterns.some((p) => typeof args[0] === "string" && p.test(args[0]));
+  return some(args, (_val, i) => i === 0 && isString(args[0]) && some(suppressedPatterns, (p) => p.test(args[0] as string)));
 }
 
 const _origError = console.error;
@@ -156,7 +155,7 @@ console.warn = (...args: unknown[]) => {
 // bypassing console. Intercept that channel too.
 const _origStderrWrite = process.stderr.write.bind(process.stderr) as typeof process.stderr.write;
 process.stderr.write = ((chunk: string | Uint8Array, ...rest: unknown[]) => {
-  const str = typeof chunk === "string" ? chunk : new TextDecoder().decode(chunk);
-  if (suppressedPatterns.some((p) => p.test(str))) return true;
-  return (_origStderrWrite as Function)(chunk, ...rest);
+  const str = isString(chunk) ? chunk : new TextDecoder().decode(chunk);
+  if (some(suppressedPatterns, (p) => p.test(str))) return true;
+  return (_origStderrWrite as (...a: unknown[]) => boolean)(chunk, ...rest);
 }) as typeof process.stderr.write;

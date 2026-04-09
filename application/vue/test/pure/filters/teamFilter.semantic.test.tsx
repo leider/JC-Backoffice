@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { useMemo, useState } from "react";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
@@ -9,12 +9,14 @@ import User from "jc-shared/user/user";
 import OptionValues from "jc-shared/optionen/optionValues";
 import Orte from "jc-shared/optionen/orte";
 import Konzert from "jc-shared/konzert/konzert";
+import some from "lodash/some";
+import every from "lodash/every";
+import noop from "lodash/noop";
 import { TeamUndVeranstaltungen } from "../../../src/components/team/TeamUndVeranstaltungen";
 import { JazzContext } from "../../../src/components/content/useJazzContext";
 import { GlobalContext } from "../../../src/app/GlobalContext";
 import { TeamFilterObject } from "../../../src/components/team/TeamFilter/applyTeamFilter";
 import { AntdAndLocaleTestContext } from "../../util/testHelper";
-import noop from "lodash/noop";
 
 // --- fixture factory (mirrors frontendtests/tests/20_filter_test.ts) ---
 
@@ -120,6 +122,7 @@ function Harness() {
     [teamFilter, setTeamFilter],
   );
 
+  // eslint-disable-next-line react/hook-use-state
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -131,11 +134,6 @@ function Harness() {
     () => ({ isDarkMode: false, isCompactMode: false, viewport: { width: 1400, height: 900 }, isTouch: false }),
     [],
   );
-
-  const scrollMock = useCallback(() => {}, []);
-  if (typeof window.scroll !== "function" || !window.scroll.toString().includes("native")) {
-    window.scroll = scrollMock;
-  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -161,7 +159,7 @@ afterAll(() => server.close());
 beforeEach(() => {
   count = 0;
   localStorage.setItem("veranstaltungenPeriod", "Alle");
-  window.scroll = noop;
+  window.scroll = vi.fn();
 });
 
 // --- fast native DOM helpers (avoid slow getByRole / queryAllByRole) ---
@@ -172,11 +170,11 @@ function linkTextsInTable(): string[] {
 }
 
 function seeInTable(name: string) {
-  expect(linkTextsInTable().some((t) => t.includes(name))).toBe(true);
+  expect(some(linkTextsInTable(), (t) => t.includes(name))).toBe(true);
 }
 
 function dontSeeInTable(name: string) {
-  expect(linkTextsInTable().every((t) => !t.includes(name))).toBe(true);
+  expect(every(linkTextsInTable(), (t) => !t.includes(name))).toBe(true);
 }
 
 async function waitForDataLoaded() {
@@ -239,81 +237,73 @@ async function setAndCheck(dialog: HTMLElement, checkboxLabel: string, expectedT
 // --- tests ---
 
 describe("Filter in der Übersicht (Veranstaltungen) – component test", () => {
-  it(
-    "renders all Konzerte, then setAndCheck for every boolean filter",
-    async () => {
-      render(<Harness />);
-      await waitForDataLoaded();
+  it("renders all Konzerte, then setAndCheck for every boolean filter", async () => {
+    render(<Harness />);
+    await waitForDataLoaded();
 
-      for (const name of [
-        "Neutral",
-        "Bestätigt",
-        "Cancelled",
-        "PresseOK",
-        "KannAufHomepage",
-        "KannAufSocialMedia",
-        "TextVorhanden",
-        "OriginaltextVorhanden",
-        "FotografEinladen",
-        "TechnikChecked",
-        "Fluegel",
-        "HotelBestatigt",
-        "HotelNichtBestatigt",
-      ]) {
-        seeInTable(name);
-      }
+    for (const name of [
+      "Neutral",
+      "Bestätigt",
+      "Cancelled",
+      "PresseOK",
+      "KannAufHomepage",
+      "KannAufSocialMedia",
+      "TextVorhanden",
+      "OriginaltextVorhanden",
+      "FotografEinladen",
+      "TechnikChecked",
+      "Fluegel",
+      "HotelBestatigt",
+      "HotelNichtBestatigt",
+    ]) {
+      seeInTable(name);
+    }
 
-      const dialog = await openFilterDialogAndExpand();
+    const dialog = await openFilterDialogAndExpand();
 
-      await setAndCheck(dialog, "Ist bestätigt", "Bestätigt");
-      await setAndCheck(dialog, "Ist abgesagt", "Cancelled");
-      await setAndCheck(dialog, "Presse OK", "PresseOK");
-      await setAndCheck(dialog, "Ist auf Homepage", "KannAufHomepage");
-      await setAndCheck(dialog, "Kann Social Media", "KannAufSocialMedia");
-      await setAndCheck(dialog, "Text vorhanden", "TextVorhanden");
-      await setAndCheck(dialog, "Originaltext vorhanden", "OriginaltextVorhanden");
-      await setAndCheck(dialog, "Fotograf einladen", "FotografEinladen");
-      await setAndCheck(dialog, "Technik ist geklärt", "TechnikChecked");
-      await setAndCheck(dialog, "Flügel stimmen", "Fluegel");
-    },
-    120000,
-  );
+    await setAndCheck(dialog, "Ist bestätigt", "Bestätigt");
+    await setAndCheck(dialog, "Ist abgesagt", "Cancelled");
+    await setAndCheck(dialog, "Presse OK", "PresseOK");
+    await setAndCheck(dialog, "Ist auf Homepage", "KannAufHomepage");
+    await setAndCheck(dialog, "Kann Social Media", "KannAufSocialMedia");
+    await setAndCheck(dialog, "Text vorhanden", "TextVorhanden");
+    await setAndCheck(dialog, "Originaltext vorhanden", "OriginaltextVorhanden");
+    await setAndCheck(dialog, "Fotograf einladen", "FotografEinladen");
+    await setAndCheck(dialog, "Technik ist geklärt", "TechnikChecked");
+    await setAndCheck(dialog, "Flügel stimmen", "Fluegel");
+  }, 120000);
 
-  it(
-    "filters Hotel bestätigt / nicht bestätigt (tri-state)",
-    async () => {
-      render(<Harness />);
-      await waitForDataLoaded();
+  it("filters Hotel bestätigt / nicht bestätigt (tri-state)", async () => {
+    render(<Harness />);
+    await waitForDataLoaded();
 
+    seeInTable("HotelBestatigt");
+    seeInTable("HotelNichtBestatigt");
+
+    const dialog = await openFilterDialogAndExpand();
+
+    // true → only confirmed hotel
+    clickCheckbox(dialog, "Hotel bestätigt");
+    await waitFor(() => {
+      seeInTable("HotelBestatigt");
+      dontSeeInTable("HotelNichtBestatigt");
+      dontSeeInTable("Neutral");
+    });
+
+    // false → only unconfirmed hotel
+    clickCheckbox(dialog, "Hotel bestätigt");
+    await waitFor(() => {
+      seeInTable("HotelNichtBestatigt");
+      dontSeeInTable("HotelBestatigt");
+      dontSeeInTable("Neutral");
+    });
+
+    // back to undefined → all visible
+    clickCheckbox(dialog, "Hotel bestätigt");
+    await waitFor(() => {
+      seeInTable("Neutral");
       seeInTable("HotelBestatigt");
       seeInTable("HotelNichtBestatigt");
-
-      const dialog = await openFilterDialogAndExpand();
-
-      // true → only confirmed hotel
-      clickCheckbox(dialog, "Hotel bestätigt");
-      await waitFor(() => {
-        seeInTable("HotelBestatigt");
-        dontSeeInTable("HotelNichtBestatigt");
-        dontSeeInTable("Neutral");
-      });
-
-      // false → only unconfirmed hotel
-      clickCheckbox(dialog, "Hotel bestätigt");
-      await waitFor(() => {
-        seeInTable("HotelNichtBestatigt");
-        dontSeeInTable("HotelBestatigt");
-        dontSeeInTable("Neutral");
-      });
-
-      // back to undefined → all visible
-      clickCheckbox(dialog, "Hotel bestätigt");
-      await waitFor(() => {
-        seeInTable("Neutral");
-        seeInTable("HotelBestatigt");
-        seeInTable("HotelNichtBestatigt");
-      });
-    },
-    30000,
-  );
+    });
+  }, 30000);
 });

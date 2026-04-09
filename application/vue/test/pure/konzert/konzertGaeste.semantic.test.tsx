@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { Route, Routes } from "react-router";
+import find from "lodash/find";
 import KonzertComp from "../../../src/components/konzert/KonzertComp";
 import { fixtureOptionen, fixtureOrte, futureEndDate, futureStartDate, TestHarness, typeInto } from "../harness";
 
@@ -61,119 +62,111 @@ beforeEach(() => {
 });
 
 describe("Konzert Gäste – component test", () => {
-  it(
-    "adds a guest to the Gästeliste and saves",
-    async () => {
-      const user = userEvent.setup();
+  it("adds a guest to the Gästeliste and saves", async () => {
+    const user = userEvent.setup();
 
-      render(
-        <TestHarness initialPath="/konzert/GaesteTest?page=gaeste" optionen={fixtureOptionen} orte={fixtureOrte}>
-          <Routes>
-            <Route element={<KonzertComp />} path="/konzert/:url" />
-          </Routes>
-        </TestHarness>,
-      );
+    render(
+      <TestHarness initialPath="/konzert/GaesteTest?page=gaeste" optionen={fixtureOptionen} orte={fixtureOrte}>
+        <Routes>
+          <Route element={<KonzertComp />} path="/konzert/:url" />
+        </Routes>
+      </TestHarness>,
+    );
 
-      await waitFor(() => expect(screen.getByText("Gästeliste")).toBeInTheDocument(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText("Gästeliste")).toBeInTheDocument(), { timeout: 5000 });
 
-      // Let useEffect chain settle before interacting with EditableTable
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 500));
-      });
+    // Let useEffect chain settle before interacting with EditableTable
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
 
-      const gaesteSection = document.querySelector(".ant-collapse-item") as HTMLElement;
-      expect(gaesteSection).toBeTruthy();
-      const addBtn = gaesteSection.querySelector('[data-testid="add-in-table"]') as HTMLButtonElement;
-      expect(addBtn).toBeTruthy();
-      fireEvent.click(addBtn);
+    const gaesteSection = document.querySelector(".ant-collapse-item") as HTMLElement;
+    expect(gaesteSection).toBeTruthy();
+    const addBtn = gaesteSection.querySelector('[data-testid="add-in-table"]') as HTMLButtonElement;
+    expect(addBtn).toBeTruthy();
+    fireEvent.click(addBtn);
 
-      await waitFor(() => expect(document.querySelector("#gaesteliste_0_name")).toBeTruthy());
+    await waitFor(() => expect(document.querySelector("#gaesteliste_0_name")).toBeTruthy());
 
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 500));
-      });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
 
-      await typeInto(user, "#gaesteliste_0_name", "Stefan Rinderle");
-      await typeInto(user, "#gaesteliste_0_comment", "Kommt später");
-      await typeInto(user, "#gaesteliste_0_number", "2");
-      await user.click(document.querySelector("#gaesteliste_0_name")!);
+    await typeInto(user, "#gaesteliste_0_name", "Stefan Rinderle");
+    await typeInto(user, "#gaesteliste_0_comment", "Kommt später");
+    await typeInto(user, "#gaesteliste_0_number", "2");
+    await user.click(document.querySelector("#gaesteliste_0_name")!);
 
-      await waitFor(
-        () => {
-          const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-          expect(saveBtn).toBeTruthy();
-          expect(saveBtn.disabled).toBe(false);
-        },
-        { timeout: 5000 },
-      );
+    await waitFor(
+      () => {
+        const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        expect(saveBtn).toBeTruthy();
+        expect(saveBtn.disabled).toBe(false);
+      },
+      { timeout: 5000 },
+    );
 
-      await user.click(document.querySelector('button[type="submit"]')!);
+    await user.click(document.querySelector('button[type="submit"]')!);
 
-      await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
 
-      const gaesteliste = capturedKonzert!.gaesteliste as Array<Record<string, unknown>>;
-      expect(gaesteliste).toHaveLength(1);
-      expect(gaesteliste[0].name).toBe("Stefan Rinderle");
-      expect(gaesteliste[0].number).toBe(2);
-    },
-    60000,
-  );
+    const gaesteliste = capturedKonzert!.gaesteliste as Array<Record<string, unknown>>;
+    expect(gaesteliste).toHaveLength(1);
+    expect(gaesteliste[0].name).toBe("Stefan Rinderle");
+    expect(gaesteliste[0].number).toBe(2);
+  }, 60000);
 
-  it(
-    "adds a reservation and saves",
-    async () => {
-      const user = userEvent.setup();
+  it("adds a reservation and saves", async () => {
+    const user = userEvent.setup();
 
-      render(
-        <TestHarness initialPath="/konzert/GaesteTest?page=gaeste" optionen={fixtureOptionen} orte={fixtureOrte}>
-          <Routes>
-            <Route element={<KonzertComp />} path="/konzert/:url" />
-          </Routes>
-        </TestHarness>,
-      );
+    render(
+      <TestHarness initialPath="/konzert/GaesteTest?page=gaeste" optionen={fixtureOptionen} orte={fixtureOrte}>
+        <Routes>
+          <Route element={<KonzertComp />} path="/konzert/:url" />
+        </Routes>
+      </TestHarness>,
+    );
 
-      await waitFor(() => expect(screen.getByText("Reservierungen")).toBeInTheDocument(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText("Reservierungen")).toBeInTheDocument(), { timeout: 5000 });
 
-      // Let useEffect chain settle before interacting with EditableTable
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 500));
-      });
+    // Let useEffect chain settle before interacting with EditableTable
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
 
-      const sections = document.querySelectorAll(".ant-collapse-item");
-      const reservierungSection = Array.from(sections).find((s) => s.textContent?.includes("Reservierungen"));
-      expect(reservierungSection).toBeTruthy();
-      const addBtn = reservierungSection!.querySelector('[data-testid="add-in-table"]') as HTMLButtonElement;
-      expect(addBtn).toBeTruthy();
-      fireEvent.click(addBtn);
+    const sections = document.querySelectorAll(".ant-collapse-item");
+    const reservierungSection = find(Array.from(sections), (s) => s.textContent?.includes("Reservierungen"));
+    expect(reservierungSection).toBeTruthy();
+    const addBtn = reservierungSection!.querySelector('[data-testid="add-in-table"]') as HTMLButtonElement;
+    expect(addBtn).toBeTruthy();
+    fireEvent.click(addBtn);
 
-      await waitFor(() => expect(document.querySelector("#reservierungen_0_name")).toBeTruthy());
+    await waitFor(() => expect(document.querySelector("#reservierungen_0_name")).toBeTruthy());
 
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 500));
-      });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
 
-      await typeInto(user, "#reservierungen_0_name", "Stefan Rinderle");
-      await typeInto(user, "#reservierungen_0_number", "12");
-      await user.click(document.querySelector("#reservierungen_0_name")!);
+    await typeInto(user, "#reservierungen_0_name", "Stefan Rinderle");
+    await typeInto(user, "#reservierungen_0_number", "12");
+    await user.click(document.querySelector("#reservierungen_0_name")!);
 
-      await waitFor(
-        () => {
-          const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-          expect(saveBtn).toBeTruthy();
-          expect(saveBtn.disabled).toBe(false);
-        },
-        { timeout: 5000 },
-      );
+    await waitFor(
+      () => {
+        const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        expect(saveBtn).toBeTruthy();
+        expect(saveBtn.disabled).toBe(false);
+      },
+      { timeout: 5000 },
+    );
 
-      await user.click(document.querySelector('button[type="submit"]')!);
+    await user.click(document.querySelector('button[type="submit"]')!);
 
-      await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
 
-      const reservierungen = capturedKonzert!.reservierungen as Array<Record<string, unknown>>;
-      expect(reservierungen).toHaveLength(1);
-      expect(reservierungen[0].name).toBe("Stefan Rinderle");
-      expect(reservierungen[0].number).toBe(12);
-    },
-    60000,
-  );
+    const reservierungen = capturedKonzert!.reservierungen as Array<Record<string, unknown>>;
+    expect(reservierungen).toHaveLength(1);
+    expect(reservierungen[0].name).toBe("Stefan Rinderle");
+    expect(reservierungen[0].number).toBe(12);
+  }, 60000);
 });

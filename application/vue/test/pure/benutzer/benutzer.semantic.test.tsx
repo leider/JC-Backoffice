@@ -29,42 +29,38 @@ beforeEach(() => {
 });
 
 describe("Admin Benutzer – component test", () => {
-  it(
-    "creates a new user via the NewUserModal",
-    async () => {
-      const user = userEvent.setup();
+  it("creates a new user via the NewUserModal", async () => {
+    const user = userEvent.setup();
 
-      render(
-        <TestHarness allUsers={existingUsers}>
-          <Users />
-        </TestHarness>,
-      );
+    render(
+      <TestHarness allUsers={existingUsers}>
+        <Users />
+      </TestHarness>,
+    );
 
-      await waitFor(() => expect(screen.getByText("Übersicht über die User")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText("Übersicht über die User")).toBeInTheDocument());
 
-      fireEvent.click(screen.getByText("Neuer Benutzer"));
+    fireEvent.click(screen.getByText("Neuer Benutzer"));
 
-      await waitFor(() => {
-        const modalTitle = document.querySelector(".ant-modal-title");
-        expect(modalTitle?.textContent).toContain("Neuer Benutzer");
-      });
+    await waitFor(() => {
+      const modalTitle = document.querySelector(".ant-modal-title");
+      expect(modalTitle?.textContent).toContain("Neuer Benutzer");
+    });
 
-      await typeInto(user, "#id", "testhelfer");
-      await typeInto(user, "input#password", "testhelfer");
-      await typeInto(user, "#name", "Testuser testhelfer");
-      await typeInto(user, "#email", "testhelfer@google.com");
-      await typeInto(user, "#tel", "01797591061");
+    await typeInto(user, "#id", "testhelfer");
+    await typeInto(user, "input#password", "testhelfer");
+    await typeInto(user, "#name", "Testuser testhelfer");
+    await typeInto(user, "#email", "testhelfer@google.com");
+    await typeInto(user, "#tel", "01797591061");
 
-      const okBtn = document.querySelector(".ant-modal-footer .ant-btn-primary") as HTMLButtonElement;
-      expect(okBtn).toBeTruthy();
-      await user.click(okBtn);
+    const okBtn = document.querySelector(".ant-modal-footer .ant-btn-primary") as HTMLButtonElement;
+    expect(okBtn).toBeTruthy();
+    await user.click(okBtn);
 
-      await waitFor(() => expect(capturedNewUser).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedNewUser).toBeDefined(), { timeout: 5000 });
 
-      expect(capturedNewUser!.id).toBe("testhelfer");
-      expect(capturedNewUser!.name).toBe("Testuser testhelfer");
-      expect(capturedNewUser!.email).toBe("testhelfer@google.com");
-    },
-    60000,
-  );
+    expect(capturedNewUser!.id).toBe("testhelfer");
+    expect(capturedNewUser!.name).toBe("Testuser testhelfer");
+    expect(capturedNewUser!.email).toBe("testhelfer@google.com");
+  }, 60000);
 });

@@ -1,4 +1,5 @@
-import { Fragment, Profiler, PropsWithChildren, useMemo, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import { Profiler, PropsWithChildren, useMemo, useState } from "react";
 import { expect } from "vitest";
 import { fireEvent, waitFor } from "@testing-library/react";
 import { UserEvent } from "@testing-library/user-event";
@@ -78,10 +79,10 @@ export const fixtureOrte = new Orte({
 });
 
 type HarnessProps = {
-  initialPath?: string;
-  optionen?: OptionValues;
-  orte?: Orte;
-  allUsers?: User[];
+  readonly initialPath?: string;
+  readonly optionen?: OptionValues;
+  readonly orte?: Orte;
+  readonly allUsers?: User[];
 };
 
 export function TestHarness({ children, initialPath = "/", optionen, orte, allUsers }: PropsWithChildren<HarnessProps>) {
@@ -108,6 +109,7 @@ export function TestHarness({ children, initialPath = "/", optionen, orte, allUs
     [isDirty, optionen, orte, allUsers],
   );
 
+  // eslint-disable-next-line react/hook-use-state
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -132,7 +134,7 @@ export function TestHarness({ children, initialPath = "/", optionen, orte, allUs
                     {children}
                   </Profiler>
                 ) : (
-                  <Fragment>{children}</Fragment>
+                  children
                 )}
               </MemoryRouter>
             </JazzContext.Provider>

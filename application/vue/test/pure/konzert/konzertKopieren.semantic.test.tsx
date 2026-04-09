@@ -57,51 +57,47 @@ beforeEach(() => {
 });
 
 describe("Konzert kopieren – component test", () => {
-  it(
-    "copies a Konzert, changes the title in the copy modal, and saves",
-    async () => {
-      render(
-        <TestHarness initialPath="/konzert/copy-of-Kopiervorlage?page=allgemeines" optionen={fixtureOptionen} orte={fixtureOrte}>
-          <Routes>
-            <Route element={<KonzertComp />} path="/konzert/:url" />
-          </Routes>
-        </TestHarness>,
-      );
+  it("copies a Konzert, changes the title in the copy modal, and saves", async () => {
+    render(
+      <TestHarness initialPath="/konzert/copy-of-Kopiervorlage?page=allgemeines" optionen={fixtureOptionen} orte={fixtureOrte}>
+        <Routes>
+          <Route element={<KonzertComp />} path="/konzert/:url" />
+        </Routes>
+      </TestHarness>,
+    );
 
-      // Let the useEffect chain in JazzFormAndHeaderExtended fully settle
-      // so that useWatch("startDate") returns a value and ShowOnCopy can open the modal
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 1000));
-      });
+    // Let the useEffect chain in JazzFormAndHeaderExtended fully settle
+    // so that useWatch("startDate") returns a value and ShowOnCopy can open the modal
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 1000));
+    });
 
-      await waitFor(() => expect(screen.getByText("Kopiertes Konzert")).toBeInTheDocument(), { timeout: 10000 });
-      expect(screen.getByText("Weiter")).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("Kopiertes Konzert")).toBeInTheDocument(), { timeout: 10000 });
+    expect(screen.getByText("Weiter")).toBeInTheDocument();
 
-      const modalTitelInput = document.querySelector(".ant-modal #kopf_titel") as HTMLInputElement;
-      if (modalTitelInput) {
-        fireEvent.focus(modalTitelInput);
-        fireEvent.change(modalTitelInput, { target: { value: "Kopiertes Konzert" } });
-        fireEvent.blur(modalTitelInput);
-      }
+    const modalTitelInput = document.querySelector(".ant-modal #kopf_titel") as HTMLInputElement;
+    if (modalTitelInput) {
+      fireEvent.focus(modalTitelInput);
+      fireEvent.change(modalTitelInput, { target: { value: "Kopiertes Konzert" } });
+      fireEvent.blur(modalTitelInput);
+    }
 
-      fireEvent.click(screen.getByText("Weiter"));
+    fireEvent.click(screen.getByText("Weiter"));
 
-      await waitFor(
-        () => {
-          const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-          expect(saveBtn).toBeTruthy();
-          expect(saveBtn.disabled).toBe(false);
-        },
-        { timeout: 10000 },
-      );
+    await waitFor(
+      () => {
+        const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        expect(saveBtn).toBeTruthy();
+        expect(saveBtn.disabled).toBe(false);
+      },
+      { timeout: 10000 },
+    );
 
-      fireEvent.click(document.querySelector('button[type="submit"]')!);
+    fireEvent.click(document.querySelector('button[type="submit"]')!);
 
-      await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
 
-      const kopf = capturedKonzert!.kopf as Record<string, unknown>;
-      expect(kopf.titel).toBe("Kopiertes Konzert");
-    },
-    60000,
-  );
+    const kopf = capturedKonzert!.kopf as Record<string, unknown>;
+    expect(kopf.titel).toBe("Kopiertes Konzert");
+  }, 60000);
 });

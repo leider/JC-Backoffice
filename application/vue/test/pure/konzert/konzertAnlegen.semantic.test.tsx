@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { Route, Routes } from "react-router";
+import find from "lodash/find";
 import KonzertComp from "../../../src/components/konzert/KonzertComp";
 import { fixtureOptionen, fixtureOrte, TestHarness, typeInto } from "../harness";
 
@@ -35,56 +36,52 @@ async function selectAntdOption(inputEl: HTMLElement, optionText: string) {
   fireEvent.mouseDown(clickTarget);
   await waitFor(() => {
     const options = document.querySelectorAll(".ant-select-item-option");
-    const match = Array.from(options).find((o) => o.textContent?.includes(optionText));
+    const match = find(Array.from(options), (o) => o.textContent?.includes(optionText));
     expect(match).toBeTruthy();
     fireEvent.click(match!);
   });
 }
 
 describe("Konzert anlegen – component test", () => {
-  it(
-    "creates a new Konzert with title and type, then saves",
-    async () => {
-      const user = userEvent.setup();
+  it("creates a new Konzert with title and type, then saves", async () => {
+    const user = userEvent.setup();
 
-      render(
-        <TestHarness initialPath="/konzert/new?page=allgemeines" optionen={fixtureOptionen} orte={fixtureOrte}>
-          <Routes>
-            <Route element={<KonzertComp />} path="/konzert/:url" />
-          </Routes>
-        </TestHarness>,
-      );
+    render(
+      <TestHarness initialPath="/konzert/new?page=allgemeines" optionen={fixtureOptionen} orte={fixtureOrte}>
+        <Routes>
+          <Route element={<KonzertComp />} path="/konzert/:url" />
+        </Routes>
+      </TestHarness>,
+    );
 
-      await waitFor(() => expect(screen.getByText("Event")).toBeInTheDocument(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText("Event")).toBeInTheDocument(), { timeout: 5000 });
 
-      await typeInto(user, "#kopf_titel", "Konzert #1");
+    await typeInto(user, "#kopf_titel", "Konzert #1");
 
-      await waitFor(() => expect(document.querySelector("#kopf_eventTyp")).toBeTruthy());
-      await selectAntdOption(document.querySelector("#kopf_eventTyp")!, "Club Konzert");
+    await waitFor(() => expect(document.querySelector("#kopf_eventTyp")).toBeTruthy());
+    await selectAntdOption(document.querySelector("#kopf_eventTyp")!, "Club Konzert");
 
-      await waitFor(
-        () => {
-          const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
-          expect(saveBtn).toBeTruthy();
-          expect(saveBtn.disabled).toBe(false);
-        },
-        { timeout: 5000 },
-      );
+    await waitFor(
+      () => {
+        const saveBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+        expect(saveBtn).toBeTruthy();
+        expect(saveBtn.disabled).toBe(false);
+      },
+      { timeout: 5000 },
+    );
 
-      await user.click(document.querySelector('button[type="submit"]')!);
+    await user.click(document.querySelector('button[type="submit"]')!);
 
-      await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
+    await waitFor(() => expect(capturedKonzert).toBeDefined(), { timeout: 5000 });
 
-      const kopf = capturedKonzert!.kopf as Record<string, unknown>;
-      expect(kopf.titel).toBe("Konzert #1");
-      expect(kopf.eventTyp).toBe("Club Konzert");
-      expect(kopf.ort).toBe("Jazzclub");
-      expect(kopf.pressename).toBe("Jazzclub Karlsruhe");
-      expect(kopf.presseIn).toBe("im Jazzclub Karlsruhe");
-      expect(kopf.flaeche).toBe(100);
-      expect(capturedKonzert!.startDate).toBeDefined();
-      expect(capturedKonzert!.endDate).toBeDefined();
-    },
-    60000,
-  );
+    const kopf = capturedKonzert!.kopf as Record<string, unknown>;
+    expect(kopf.titel).toBe("Konzert #1");
+    expect(kopf.eventTyp).toBe("Club Konzert");
+    expect(kopf.ort).toBe("Jazzclub");
+    expect(kopf.pressename).toBe("Jazzclub Karlsruhe");
+    expect(kopf.presseIn).toBe("im Jazzclub Karlsruhe");
+    expect(kopf.flaeche).toBe(100);
+    expect(capturedKonzert!.startDate).toBeDefined();
+    expect(capturedKonzert!.endDate).toBeDefined();
+  }, 60000);
 });
