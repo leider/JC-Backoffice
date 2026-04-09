@@ -33,6 +33,11 @@ type FetchParams<T, R> = {
   resType?: R;
 };
 
+let navigateToOffline: (() => void) | undefined;
+export function setNavigate(nav: (path: string) => void) {
+  navigateToOffline = () => nav("/offline");
+}
+
 async function get<T, R>(params: Omit<FetchParams<T, R>, "method">) {
   return standardFetch({ ...params, method: "GET" });
 }
@@ -47,8 +52,21 @@ async function post<T, R = T>(params: Omit<FetchParams<T, R>, "method">) {
 
 async function standardFetch<T, R>({ urlPrefix = "/rest", url, method, data, contentType }: FetchParams<T, R>) {
   const options: AxiosRequestConfig<T> = { url: urlPrefix + url, method: method, data: data, responseType: contentType ? "blob" : "json" };
-  const res = await axios<T, AxiosResponse<R>>(options);
-  return res.data;
+  try {
+    const res = await axios<T, AxiosResponse<R>>(options);
+    return res.data;
+  } catch (error) {
+    const hasResponse = !!(error as { response?: unknown }).response;
+    const isOnOffline = window.location.pathname.endsWith("offline");
+
+    if (!hasResponse) {
+      // Kein Backend erreichbar → Offline-Route
+      if (!isOnOffline) {
+        navigateToOffline?.();
+      }
+    }
+    throw error;
+  }
 }
 
 export async function uploadFile(data: FormData) {

@@ -6,6 +6,7 @@ import { ErrorBoundary } from "@/router/ErrorBoundary.tsx"; // Keep (critical)
 import DatumUhrzeit from "jc-shared/commons/DatumUhrzeit.ts"; // Pure util
 // ProtectedComponent stays static (small wrapper)
 import ProtectedComponent from "@/router/ProtectedComponent.tsx";
+import Offline from "@/components/content/Offline.tsx";
 
 const Login = lazy(() => import("@/app/Login.tsx"));
 const Team = lazy(() => import("@/components/team/Team.tsx"));
@@ -117,6 +118,7 @@ const routes = [
         path: "/history",
         element: <ProtectedComponent allowed={["isSuperuser"]} component={<History />} />,
       },
+      { path: "offline", element: <Offline /> },
       { path: "/*", element: <Navigate replace to="/" /> },
     ],
   },

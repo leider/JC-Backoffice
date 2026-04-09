@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { LoginState } from "./authConsts";
 import { useLocation, useNavigate } from "react-router";
 import { checkSession, loginPost, logoutManually } from "@/rest/authenticationRequests";
+import { setNavigate } from "@/rest/loader.ts";
 
 export interface IUseProvideAuth {
   loginState: LoginState;
@@ -15,6 +16,7 @@ export function useProvideAuth(): IUseProvideAuth {
 
   const navigate = useNavigate();
   const location = useLocation();
+  setNavigate(navigate);
 
   const queryClient = useQueryClient();
 
