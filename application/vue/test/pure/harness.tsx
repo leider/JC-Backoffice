@@ -1,6 +1,6 @@
-import { PropsWithChildren, useMemo, useState } from "react";
+import { Fragment, Profiler, PropsWithChildren, useMemo, useState } from "react";
 import { expect } from "vitest";
-import { waitFor } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { UserEvent } from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router";
@@ -14,18 +14,45 @@ import { JazzContext } from "../../src/components/content/useJazzContext";
 import { GlobalContext } from "../../src/app/GlobalContext";
 import noop from "lodash/noop";
 
+export const profilerEnabled = !!process.env.PROFILE;
+export const profilerStats = { renders: 0, totalMs: 0 };
+
+function onRender(_id: string, _phase: string, actualDuration: number) {
+  profilerStats.renders++;
+  profilerStats.totalMs += actualDuration;
+}
+
 export const futureStartDate = "2099-01-15T17:30:00.000Z";
 export const futureEndDate = "2099-01-15T19:00:00.000Z";
 
 /**
- * Wait for a DOM element to appear, clear it, and type a value.
- * Handles editable-table fields where re-renders replace DOM nodes.
+ * Wait for a DOM element to appear, set its value, and dispatch
+ * focus/change/blur so AntD Form picks up the new value.
+ * Uses fireEvent instead of userEvent.type() to avoid the per-character
+ * keystroke simulation that dominates test runtime.
  */
 export async function typeInto(user: UserEvent, selector: string, value: string) {
   await waitFor(() => expect(document.querySelector(selector)).toBeTruthy());
   const el = document.querySelector(selector) as HTMLInputElement;
-  await user.clear(el);
-  await user.type(el, value);
+
+  // AntD InputNumber and Select have custom internal event handling
+  // that doesn't respond to fireEvent.change — fall back to user.type()
+  if (el.closest(".ant-input-number") || el.closest(".ant-select")) {
+    await user.clear(el);
+    await user.type(el, value);
+    return;
+  }
+
+  fireEvent.focus(el);
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
+  if (nativeInputValueSetter) {
+    nativeInputValueSetter.call(el, value);
+  } else {
+    el.value = value;
+  }
+  fireEvent.input(el, { target: { value } });
+  fireEvent.change(el, { target: { value } });
+  fireEvent.blur(el);
 }
 
 export const fixtureOptionen = new OptionValues({
@@ -99,7 +126,15 @@ export function TestHarness({ children, initialPath = "/", optionen, orte, allUs
         <App>
           <GlobalContext.Provider value={globalContextValue}>
             <JazzContext.Provider value={jazzContextValue}>
-              <MemoryRouter initialEntries={[initialPath]}>{children}</MemoryRouter>
+              <MemoryRouter initialEntries={[initialPath]}>
+                {profilerEnabled ? (
+                  <Profiler id="test" onRender={onRender}>
+                    {children}
+                  </Profiler>
+                ) : (
+                  <Fragment>{children}</Fragment>
+                )}
+              </MemoryRouter>
             </JazzContext.Provider>
           </GlobalContext.Provider>
         </App>

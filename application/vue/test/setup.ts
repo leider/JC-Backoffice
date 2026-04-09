@@ -10,7 +10,14 @@ expect.extend(matchers);
 
 import "@testing-library/jest-dom/vitest";
 
-afterEach(() => {
+afterEach(async () => {
+  const { profilerEnabled, profilerStats } = await import("./pure/harness");
+  if (profilerEnabled && profilerStats.renders > 0) {
+    const avg = (profilerStats.totalMs / profilerStats.renders).toFixed(1);
+    console.log(`⏱ ${profilerStats.renders} renders, ${profilerStats.totalMs.toFixed(0)}ms total, ${avg}ms avg`);
+    profilerStats.renders = 0;
+    profilerStats.totalMs = 0;
+  }
   cleanup();
 });
 
