@@ -24,7 +24,13 @@ function secureAgainstClickjacking(req: Request, res: Response, next: NextFuncti
 }
 
 function handle404(req: Request, res: Response): void {
-  res.redirect("/");
+  const accepts = req.headers.accept || "";
+  const isDocumentNavigation = req.method === "GET" && accepts.includes("text/html");
+  if (isDocumentNavigation) {
+    res.redirect("/");
+    return;
+  }
+  res.sendStatus(404);
 }
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
@@ -39,9 +45,9 @@ function handle500(error: any, req: Request, res: Response, next: NextFunction):
 }
 
 export default function (app: express.Express, forDev?: boolean): void {
-  // Production: HTTP Node behind HTTPS nginx — trust X-Forwarded-* (one hop).
+  // Production behind reverse proxies (and optional CDN): trust forwarded headers.
   if (process.env.NODE_ENV === "production") {
-    app.set("trust proxy", 1);
+    app.set("trust proxy", true);
   }
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");
