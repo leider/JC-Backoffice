@@ -6,6 +6,7 @@
     "dev": "vite --port 1969",
     "deploy": "vite build",
     "test": "../node_modules/.bin/vitest --run",
+    "test:pure": "../node_modules/.bin/vitest --run --dir test/pure",
     "serve": "rm -rf  ../backend/static/vue && vite preview --port 1969"
   },
   "devDependencies": {
