@@ -14,16 +14,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use Node.js v24
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "24.x"
           cache: "yarn"
       - name: set timezone Berlin
-        uses: szenius/set-timezone@v2.0
-        with:
-          timezoneLinux: "Europe/Berlin"
+        run: sudo timedatectl set-timezone Europe/Berlin
       - name: install
         run: |
           cd application
@@ -50,6 +48,7 @@ jobs:
           ./node_modules/.bin/codeceptjs info
           ./startTestserver.sh
           trap './stopTestserver.sh' EXIT
+          mkdir -p output
           set +e
           ./node_modules/.bin/codeceptjs run 2>&1 | tee output/first_run.log
           TEST_EXIT=${PIPESTATUS[0]}
@@ -64,10 +63,10 @@ jobs:
           exit $TEST_EXIT
       - name: Archive UI test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ui-build-results
           path: frontendtests/output
       - name: Download all workflow run artifacts
         if: always()
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
