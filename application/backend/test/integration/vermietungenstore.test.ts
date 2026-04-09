@@ -34,7 +34,6 @@ describe("vermietungenstore – save/load round-trip", () => {
         confirmed: false,
         abgesagt: false,
       },
-      spipiMiete: 200,
     });
 
     store.saveVermietung(vermietung, testUser);
