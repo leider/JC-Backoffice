@@ -28,3 +28,4 @@ node_modules/
 vite.config.d.ts
 vite.config.js
 workspace.xml
+/application/vitest.setup.js

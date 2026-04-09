@@ -1,5 +1,6 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import type { PluginOption } from "vite";
 
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
@@ -73,7 +74,7 @@ export default defineConfig(() => {
         gzipSize: true,
         brotliSize: true,
         template: "treemap",
-      }),
+      }) as unknown as PluginOption,
       //splitVendorChunkPlugin(),
       {
         name: "vite-plugin-cache-control",
