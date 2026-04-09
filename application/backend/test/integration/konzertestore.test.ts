@@ -6,7 +6,7 @@ import konzertestore from "../../lib/konzerte/konzertestore.js";
 import optionenstore from "../../lib/optionen/optionenstore.js";
 import { db } from "../../lib/persistence/sqlitePersistence.js";
 import Konzert from "jc-shared/konzert/konzert.js";
-import OptionValues from "jc-shared/optionen/optionValues.js";
+import OptionValues, { TypMitMehr } from "jc-shared/optionen/optionValues.js";
 import User from "jc-shared/user/user.js";
 
 const testUser = new User({ id: "test-admin", name: "Test Admin", gruppen: "superusers" });
@@ -34,7 +34,7 @@ describe("konzertestore – save/load round-trip", () => {
             techniker: true,
             merchandise: false,
           },
-        ] as unknown as OptionValues["typenPlus"],
+        ] as TypMitMehr[],
       }),
       testUser,
     );
